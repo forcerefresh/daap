@@ -1,13 +1,11 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@import "../node_modules/normalize.css/normalize.css";
+@import "../node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css";
+@import "../node_modules/@blueprintjs/core/lib/css/blueprint.css";
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body,
+html {
+  height: 100%;
+}
+#root {
+  height: 100%;
 }
