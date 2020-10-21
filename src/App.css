@@ -6,12 +6,3 @@
   background: green;
   color: white;
 }
-.selected {
-  background: lightskyblue !important;
-}
-
-.slide {
-  background: lightgray;
-  margin: 5px;
-  display: flex;
-}

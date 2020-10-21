@@ -7,6 +7,8 @@ import {
   SELECT_SLIDES,
   ADD_LAYERS_TO_SELECTION,
   DELETE_LAYERS,
+  ACTIVATE_LAYER,
+  SELECT_LAYERS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { cloneDeep, uniq } from "lodash-es";
@@ -34,12 +36,29 @@ export function selection(
     case ACTIVATE_SLIDE: {
       const activeSlideId = action.payload;
 
-      return { ...state, activeSlideId };
+      // reset layerSelection (selectedLayerIds: [])
+      return {
+        ...state,
+        activeSlideId,
+        selectedLayerIds: [],
+        activeLayerId: null,
+      };
+    }
+    case ACTIVATE_LAYER: {
+      const activeLayerId = action.payload;
+
+      // reset layerSelection (selectedLayerIds: [])
+      return { ...state, activeLayerId /*selectedObjectIds: []*/ };
     }
     case SELECT_SLIDES: {
       const selectedSlideIds = action.payload;
 
       return { ...state, selectedSlideIds };
+    }
+    case SELECT_LAYERS: {
+      const selectedLayerIds = action.payload;
+
+      return { ...state, selectedLayerIds };
     }
 
     case ADD_SLIDES_TO_SELECTION: {
@@ -94,6 +113,11 @@ export function selection(
           $apply: (selIds: string[]) => uniq(selIds.concat(addLayerIds)),
         },
       });
+    }
+    case DELETE_LAYERS: {
+      const selectedLayerIds = action.payload;
+
+      return { ...state, selectedLayerIds };
     }
     default:
       return state;

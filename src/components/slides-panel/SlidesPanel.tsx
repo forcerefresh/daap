@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import cx from "classnames";
 import {
   Button,
   NavbarGroup,
@@ -9,28 +10,84 @@ import {
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import "./SlidesPanel.scss";
-import { addNewSlide } from "../../store/actions/actions";
+import {
+  addNewSlide,
+  deleteSlideThree,
+  selectSlides,
+  activateSlide,
+  addSlidesToSelection,
+  removeSlidesFromSelection,
+} from "../../store/actions/actions";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
-  const { allSlides, slideById, addNewSlide } = props;
+  const {
+    allSlides,
+    slideById,
+    selectedSlideIds,
+    activeSlideId,
+    _addNewSlide,
+    _deleteSlideThree,
+    _activateSlide,
+    _selectSlides,
+    _addSlidesToSelection,
+    _removeSlidesFromSelection,
+  } = props;
 
   console.log(allSlides);
   return (
     <div className="panel">
       <NavbarGroup>
         <Button
-          onClick={() => addNewSlide()}
+          onClick={() => _addNewSlide()}
           className={Classes.MINIMAL}
           icon="add"
           text="Add slide"
         />
       </NavbarGroup>
-      <div>
+      <div className="slides-holder">
         {allSlides.map((slideId) => {
-          return <div>{slideById[slideId].name}</div>;
+          return (
+            <div
+              onClick={() => {
+                _activateSlide(slideId);
+                _selectSlides([slideId]);
+              }}
+              className={cx(
+                "slide",
+                {
+                  selected: selectedSlideIds.indexOf(slideId) !== -1,
+                },
+                { active: activeSlideId === slideId }
+              )}
+            >
+              <Button
+                minimal
+                onClick={() => _deleteSlideThree(slideId)}
+                icon="delete"
+              />
+              {/*<Button minimal onClick={() => _selectSlides([slideId])} icon="selection"/>*/}
+              <Button
+                minimal
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  _addSlidesToSelection([slideId]);
+                }}
+                icon="plus"
+              />
+              <Button
+                minimal
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  _removeSlidesFromSelection([slideId]);
+                }}
+                icon="minus"
+              />
+              {slideById[slideId].name}
+            </div>
+          );
         })}
       </div>
     </div>
@@ -38,12 +95,22 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides } = state;
-  return { allSlides: slides.allSlides, slideById: slides.slideById };
+  const { slides, selection } = state;
+  return {
+    allSlides: slides.allSlides,
+    slideById: slides.slideById,
+    selectedSlideIds: selection.selectedSlideIds,
+    activeSlideId: selection.activeSlideId,
+  };
 };
 
 const mapDispatchToProps = {
-  addNewSlide: () => addNewSlide(),
+  _addNewSlide: () => addNewSlide(),
+  _deleteSlideThree: (id: string): any => deleteSlideThree(id),
+  _activateSlide: (id: string): any => activateSlide(id),
+  _selectSlides: (ids: string[]): any => selectSlides(ids),
+  _addSlidesToSelection: addSlidesToSelection,
+  _removeSlidesFromSelection: removeSlidesFromSelection,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

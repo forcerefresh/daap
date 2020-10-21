@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import {
   addNewSlide,
-  deleteSlideDeep,
+  deleteSlideThree,
   addNewLayer,
   activateSlide,
   selectSlides,
@@ -17,6 +17,7 @@ import { v4 as uuid } from "uuid";
 import cx from "classnames";
 import { ILayer } from "./store/reducers/layers";
 import SlidesPanel from "./components/slides-panel/SlidesPanel";
+import LayersPanel from "./components/layers-panel/LayersPanel";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,7 +57,7 @@ function App() {
     dispatch(removeSlidesFromSelection([slideId]));
   };
   const _deleteSlide = (id: string) => {
-    dispatch(deleteSlideDeep(id));
+    dispatch(deleteSlideThree(id));
   };
 
   const _addLayerToSelection = (layerId: string) => {
@@ -71,6 +72,7 @@ function App() {
   return (
     <div className="App bp3-dark">
       <SlidesPanel />
+      <LayersPanel />
       <div style={{ marginLeft: "300px", marginRight: "300px" }}>
         <p>Slides:</p>
         {Object.values(slides.slideById).map((slide) => (

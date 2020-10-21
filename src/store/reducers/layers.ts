@@ -1,5 +1,11 @@
 import { omit, without } from "lodash-es";
-import { ActionTypes, ADD_LAYER, DELETE_SLIDE } from "../actions/actions";
+import {
+  ActionTypes,
+  ADD_LAYER,
+  ADD_OBJECT,
+  DELETE_SLIDE,
+} from "../actions/actions";
+import update from "immutability-helper";
 
 export interface ILayer {
   id: string;
@@ -7,6 +13,7 @@ export interface ILayer {
   name: string;
   isVisible: boolean;
   hasTimeline: boolean;
+  objectIds: string[];
 }
 
 export interface ILayers {
@@ -29,6 +36,17 @@ export function layers(
         },
         allLayers: [...state.allLayers, layer.id],
       });
+    case ADD_OBJECT:
+      const object = action.payload;
+      return update(state, {
+        layerById: {
+          [object.layerId]: {
+            objectIds: { $push: [object.id] },
+            //nextLayerIdCounter: (idx) => idx + 1,
+          },
+        },
+      });
+
     case DELETE_SLIDE:
       const deleteId = action.payload.slideId;
       const layersToDeleteIds: string[] = Object.values(state.layerById)

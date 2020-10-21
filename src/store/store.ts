@@ -8,6 +8,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { ISlides, slides } from "./reducers/slides";
 import { ILayers, layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
+import { IObjects, objects } from "./reducers/objects";
 /*
 const reduxDevTools =
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
@@ -16,11 +17,13 @@ const reduxDevTools =
 export interface IStore {
   slides: ISlides;
   layers: ILayers;
+  objects: IObjects;
   selection: ISelection;
 }
 const rootReducer = combineReducers({
   slides,
   layers,
+  objects,
   selection,
 });
 export const store = createStore(

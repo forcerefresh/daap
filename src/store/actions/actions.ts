@@ -2,6 +2,13 @@ import { ISlide } from "../reducers/slides";
 import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
+import { Action, AnyAction } from "@reduxjs/toolkit";
+import { difference, differenceWith, isEqual } from "lodash-es";
+import { IObject } from "../reducers/objects";
+
+export interface Dispatch<A extends Action = AnyAction> {
+  <T extends A>(action: T): T | undefined;
+}
 
 // **** SLIDES ACTION
 
@@ -48,7 +55,7 @@ export interface DeleteSlideAction {
   payload: DeleteSlideActionPayload;
 }
 
-export function deleteSlideDeep(slideId: string) {
+export function deleteSlideThree(slideId: string) {
   return function (dispatch: any, getState: () => IStore) {
     const layerIds = getState().slides.slideById[slideId].layerIds;
     dispatch(deleteLayers(layerIds));
@@ -82,6 +89,7 @@ export function addNewLayer(slideId: string): any {
       name: `Layer ${nextId}`,
       isVisible: true,
       hasTimeline: true,
+      objectIds: [],
     };
 
     dispatch(addLayer(layer));
@@ -135,10 +143,47 @@ export interface ActivateSlideAction {
   payload: string;
 }
 
-export function activateSlide(slideId: string): ActivateSlideAction {
+function _activateSlide(slideId: string): ActivateSlideAction {
   return {
     type: ACTIVATE_SLIDE,
     payload: slideId,
+  };
+}
+
+export function activateSlide(slideId: string) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (getState().selection.activeSlideId === slideId) {
+      console.log("aaaa ");
+      return;
+    }
+    dispatch(_activateSlide(slideId));
+  };
+}
+
+// ****
+
+// ****
+export const ACTIVATE_LAYER = "Activate layer";
+
+export interface ActivateLayerAction {
+  type: typeof ACTIVATE_LAYER;
+  payload: string;
+}
+
+function _activateLayer(layerId: string): ActivateLayerAction {
+  return {
+    type: ACTIVATE_LAYER,
+    payload: layerId,
+  };
+}
+
+export function activateLayer(layerId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (getState().selection.activeLayerId === layerId) {
+      console.log("same layer ");
+      return;
+    }
+    dispatch(_activateLayer(layerId));
   };
 }
 
@@ -150,14 +195,56 @@ export interface SelectSlidesAction {
   payload: string[];
 }
 
-export function selectSlides(slides: string[]): SelectSlidesAction {
+function _selectSlides(slides: string[]): SelectSlidesAction {
   return {
     type: SELECT_SLIDES,
     payload: slides,
   };
 }
 
+export function selectSlides(slideIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (
+      differenceWith(slideIds, getState().selection.selectedSlideIds, isEqual)
+        .length === 0
+    ) {
+      return;
+    }
+
+    dispatch(_selectSlides(slideIds));
+  };
+}
+
 // ****
+export const SELECT_LAYERS = "Select layers";
+
+export interface SelectLayersAction {
+  type: typeof SELECT_LAYERS;
+  payload: string[];
+}
+
+function _selectLayers(layers: string[]): SelectLayersAction {
+  return {
+    type: SELECT_LAYERS,
+    payload: layers,
+  };
+}
+
+export function selectLayers(layerIds: string[]): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (
+      differenceWith(layerIds, getState().selection.selectedLayerIds, isEqual)
+        .length === 0
+    ) {
+      return;
+    }
+
+    dispatch(_selectLayers(layerIds));
+  };
+}
+
+// ****
+
 export const ADD_SLIDES_TO_SELECTION = "Add slides to selection";
 
 export interface AddSlidesToSelectionAction {
@@ -209,6 +296,46 @@ export function addLayersToSelection(
   };
 }
 
+// **** OBJECTS
+
+export const ADD_OBJECT = "Add object";
+
+export interface AddObjectAction {
+  type: typeof ADD_OBJECT;
+  payload: IObject;
+}
+
+export function addNewObject(layerId: string, type: string): any {
+  return function (dispatch: any, getState: () => IStore) {
+    /*const nextId = getState().slides.slideById[slideId].nextLayerIdCounter;
+
+    const layer = {
+      id: uuid(),
+      slideId,
+      name: `Layer ${nextId}`,
+      isVisible: true,
+      hasTimeline: true,
+    };*/
+
+    const object: IObject = {
+      id: uuid(),
+      layerId,
+      type: type,
+      isVisible: true,
+      hasTimeline: false,
+    };
+
+    dispatch(addObject(object));
+  };
+}
+
+export function addObject(object: IObject): AddObjectAction {
+  return {
+    type: ADD_OBJECT,
+    payload: object,
+  };
+}
+
 export type ActionTypes =
   //slide
   | AddSlideAction
@@ -224,4 +351,8 @@ export type ActionTypes =
   | AddSlidesToSelectionAction
   | RemoveSlidesFromSelectionAction
   //activate slide
-  | ActivateSlideAction;
+  | ActivateSlideAction
+  | ActivateLayerAction
+  | SelectLayersAction
+  //object
+  | AddObjectAction;
