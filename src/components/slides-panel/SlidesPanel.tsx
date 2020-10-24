@@ -65,7 +65,10 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             >
               <Button
                 minimal
-                onClick={() => _deleteSlideThree(slideId)}
+                onClick={(event: any) => {
+                  event.stopPropagation();
+                  _deleteSlideThree(slideId);
+                }}
                 icon="delete"
               />
               {/*<Button minimal onClick={() => _selectSlides([slideId])} icon="selection"/>*/}

@@ -18,6 +18,7 @@ import cx from "classnames";
 import { ILayer } from "./store/reducers/layers";
 import SlidesPanel from "./components/slides-panel/SlidesPanel";
 import LayersPanel from "./components/layers-panel/LayersPanel";
+import PropertiesPanel from "./components/properties-panel/PropertiesPanel";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ function App() {
     <div className="App bp3-dark">
       <SlidesPanel />
       <LayersPanel />
+      <PropertiesPanel />
       <div style={{ marginLeft: "300px", marginRight: "300px" }}>
         <p>Slides:</p>
         {Object.values(slides.slideById).map((slide) => (

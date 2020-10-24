@@ -9,6 +9,7 @@ import { ISlides, slides } from "./reducers/slides";
 import { ILayers, layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
 import { IObjects, objects } from "./reducers/objects";
+import initialState from "./initial-state.json";
 /*
 const reduxDevTools =
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
@@ -28,5 +29,6 @@ const rootReducer = combineReducers({
 });
 export const store = createStore(
   rootReducer,
+  // initialState as IStore,
   composeWithDevTools(applyMiddleware(thunk))
 );

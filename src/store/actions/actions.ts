@@ -4,7 +4,8 @@ import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { difference, differenceWith, isEqual } from "lodash-es";
-import { IObject } from "../reducers/objects";
+import { IObject, ObjectType } from "../../objects/types";
+import { InputType, TextProperties } from "../../inputs/types";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -180,10 +181,35 @@ function _activateLayer(layerId: string): ActivateLayerAction {
 export function activateLayer(layerId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().selection.activeLayerId === layerId) {
-      console.log("same layer ");
+      console.log("layer is already active");
       return;
     }
     dispatch(_activateLayer(layerId));
+  };
+}
+
+// ****
+export const ACTIVATE_OBJECT = "Activate object";
+
+export interface ActivateObjectAction {
+  type: typeof ACTIVATE_OBJECT;
+  payload: string;
+}
+
+function _activateObject(objectId: string): ActivateObjectAction {
+  return {
+    type: ACTIVATE_OBJECT,
+    payload: objectId,
+  };
+}
+
+export function activateObject(objectId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (getState().selection.activeObjectId === objectId) {
+      console.log("object is already active ");
+      return;
+    }
+    dispatch(_activateObject(objectId));
   };
 }
 
@@ -317,12 +343,39 @@ export function addNewObject(layerId: string, type: string): any {
       hasTimeline: true,
     };*/
 
-    const object: IObject = {
+    const object: IObject<TextProperties> = {
       id: uuid(),
       layerId,
-      type: type,
+      type: ObjectType.IMAGE,
       isVisible: true,
       hasTimeline: false,
+      definition: {
+        id: uuid(),
+        type: ObjectType.IMAGE,
+        properties: {
+          color: {
+            displayName: "Color",
+            propertyName: "color",
+            inputType: InputType.COLOR,
+            value: null,
+            defaultValue: { r: 33, g: 22, b: 11, a: 0.5 },
+          },
+          size: {
+            displayName: "Font size",
+            propertyName: "string",
+            inputType: InputType.NUMBER,
+            value: 1,
+            defaultValue: 1,
+          },
+          weight: {
+            displayName: "Weight",
+            propertyName: "string",
+            inputType: InputType.TEXT,
+            value: "2",
+            defaultValue: "3",
+          },
+        },
+      },
     };
 
     dispatch(addObject(object));
@@ -336,6 +389,29 @@ export function addObject(object: IObject): AddObjectAction {
   };
 }
 
+// ***
+export const UPDATE_OBJECT = "Update object";
+
+export interface UpdateObjectAction {
+  type: typeof UPDATE_OBJECT;
+  payload: IObject;
+}
+
+export function updateObject(object: IObject): any {
+  return function (dispatch: any, getState: () => IStore) {
+    console.log(object);
+    dispatch(_updateObject(object));
+  };
+}
+
+export function _updateObject(object: IObject): UpdateObjectAction {
+  return {
+    type: UPDATE_OBJECT,
+    payload: object,
+  };
+}
+
+// ***
 export type ActionTypes =
   //slide
   | AddSlideAction
@@ -355,4 +431,6 @@ export type ActionTypes =
   | ActivateLayerAction
   | SelectLayersAction
   //object
-  | AddObjectAction;
+  | AddObjectAction
+  | ActivateObjectAction
+  | UpdateObjectAction;

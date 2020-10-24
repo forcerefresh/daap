@@ -16,6 +16,7 @@ import {
   activateLayer,
   selectLayers,
   addNewObject,
+  activateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
@@ -29,6 +30,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     objectById,
     activeSlideId,
     activeLayerId,
+    activeObjectId,
     selectedLayerIds,
     _addNewLayer,
     _addLayersToSelection,
@@ -36,6 +38,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _activateLayer,
     _selectLayers,
     _addNewObject,
+    _activateObject,
   } = props;
 
   console.log(activeLayerId);
@@ -73,7 +76,16 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                 {layer.name}
               </div>
               {layer.objectIds.map((objectId) => {
-                return <div>{objectById[objectId].type}</div>;
+                return (
+                  <div
+                    onClick={() => _activateObject(objectId)}
+                    className={cx({
+                      [css.active]: activeObjectId === objectId,
+                    })}
+                  >
+                    {objectById[objectId].type}
+                  </div>
+                );
               })}
             </>
           );
@@ -87,17 +99,19 @@ const mapStateToProps = (state: IStore) => {
   const { slides, layers, objects, selection } = state;
   let layerArr: ILayer[] | null = null;
 
+  console.log({ ...selection });
   if (selection.activeSlideId) {
     const layerIds = slides.slideById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId) => layers.layerById[layerId]);
   }
 
-  layers.allLayers.map((layerId: string) => {});
+  // layers.allLayers.map((layerId: string) => {});
   return {
     layerArr,
     objectById: objects.objectById,
     activeSlideId: selection.activeSlideId,
     activeLayerId: selection.activeLayerId,
+    activeObjectId: selection.activeObjectId,
     selectedLayerIds: selection.selectedLayerIds,
   };
 };
@@ -109,6 +123,7 @@ const mapDispatchToProps = {
   _activateLayer: (layerId: string) => activateLayer(layerId),
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (layerId: string, type: string) => addNewObject(layerId, type),
+  _activateObject: (objectId: string) => activateObject(objectId),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

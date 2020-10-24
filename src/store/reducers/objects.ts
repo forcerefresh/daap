@@ -1,16 +1,9 @@
 import { omit, without } from "lodash-es";
-import { ActionTypes, ADD_OBJECT } from "../actions/actions";
-
-export interface IObject {
-  id: string;
-  layerId: string;
-  type: string; // Object type
-  isVisible: boolean;
-  hasTimeline: boolean;
-}
+import { IObject } from "../../objects/types";
+import { ActionTypes, ADD_OBJECT, UPDATE_OBJECT } from "../actions/actions";
 
 export interface IObjects {
-  objectById: { [id: string]: IObject };
+  objectById: { [id: string]: IObject<{}> };
   allObjects: string[];
 }
 
@@ -19,7 +12,7 @@ export function objects(
   action: ActionTypes
 ) {
   switch (action.type) {
-    case ADD_OBJECT:
+    case ADD_OBJECT: {
       const object = action.payload;
 
       return Object.assign({}, state, {
@@ -29,6 +22,17 @@ export function objects(
         },
         allObjects: [...state.allObjects, object.id],
       });
+    }
+    case UPDATE_OBJECT: {
+      const object = action.payload;
+      console.log(object  );
+      return Object.assign({}, state, {
+        objectById: {
+          ...state.objectById,
+          ...{ [object.id]: { ...object } },
+        },
+      });
+    }
     default:
       return state;
   }
