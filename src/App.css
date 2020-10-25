@@ -6,3 +6,8 @@
   background: green;
   color: white;
 }
+
+body,
+html {
+  overflow: hidden;
+}

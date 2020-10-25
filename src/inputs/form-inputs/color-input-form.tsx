@@ -6,19 +6,23 @@ import { isEqual } from "lodash-es";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const { displayName, value, defaultValue, onChange } = props;
-  console.log(value);
+
+  const _color = (value || defaultValue) as RGBColor;
+
   const [state, setState] = useState<{
     displayColorPicker: boolean;
+    initialColor: RGBColor;
     color: RGBColor;
   }>({
     displayColorPicker: false,
-    color: (value || defaultValue) as RGBColor,
+    color: _color,
+    initialColor: _color,
   });
 
   // update state when props.value is changed
   useEffect(() => {
-    if (!isEqual(value || defaultValue, state.color)) {
-      setState({ ...state, color: (value || defaultValue) as RGBColor });
+    if (!isEqual(_color, state.color)) {
+      setState({ ...state, color: _color, initialColor: _color });
     }
   }, [value, defaultValue]);
 
@@ -32,7 +36,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const handleChange = (color: any) => {
     setState({ ...state, color: color.rgb });
-    onChange(color.rgb);
   };
 
   const { color } = state;
@@ -40,14 +43,20 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
   };
 
-  console.log(value);
-  console.log(defaultValue);
-  console.log(state);
-
-  //o nKeyPress={this.handleKeyPress}
-
-  useEventListener("keypress", (event: any) => {
-    console.log(event);
+  useEventListener("keydown", (event: any) => {
+    if (event.keyCode === 27) {
+      setState({
+        ...state,
+        color: state.initialColor,
+        displayColorPicker: false,
+      });
+    } else if (event.keyCode === 13) {
+      onChange(state.color);
+      setState({
+        ...state,
+        displayColorPicker: false,
+      });
+    }
   });
 
   return (
@@ -56,14 +65,20 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         <div className={styles.color} style={style} />
       </div>
       {state.displayColorPicker ? (
-        <div
-          className={styles.popover}
-          onKeyPress={(event) => {
-            console.log(event);
-          }}
-        >
+        <div className={styles.popover}>
           <div className={styles.cover} onClick={handleClose} />
-          <SketchPicker color={state.color} onChange={handleChange} />
+          <div
+            onMouseUp={(event: any) => {
+              // event.stopPropagation();
+              //event.cancelBubble = true;
+            }}
+            onMouseDown={(event: any) => {
+              // event.stopPropagation();
+              //event.cancelBubble = true;
+            }}
+          >
+            <SketchPicker color={state.color} onChange={handleChange} />
+          </div>
         </div>
       ) : null}
     </div>

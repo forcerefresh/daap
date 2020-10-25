@@ -59,6 +59,13 @@ export interface DeleteSlideAction {
 export function deleteSlideThree(slideId: string) {
   return function (dispatch: any, getState: () => IStore) {
     const layerIds = getState().slides.slideById[slideId].layerIds;
+    const objectIds = getState().objects.allObjects.filter(
+      (objectId) =>
+        layerIds.indexOf(getState().objects.objectById[objectId].layerId) !== -1
+    );
+
+    console.log(objectIds);
+    dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
     dispatch(deleteSlide(slideId));
   };
@@ -346,9 +353,36 @@ export function addNewObject(layerId: string, type: string): any {
     const object: IObject<TextProperties> = {
       id: uuid(),
       layerId,
-      type: ObjectType.IMAGE,
+      type: ObjectType.TEXT,
       isVisible: true,
-      hasTimeline: false,
+      hasTimeline: true,
+      timeline: {
+        keyFrames: [
+          {
+            time: 1000,
+            properties: {
+              left: 0,
+              top: 0,
+            },
+          },
+          {
+            time: 4000,
+            properties: {
+              left: 500,
+              top: 100,
+            },
+          },
+        ],
+      },
+      left: 100,
+      leftType: "px",
+      width: 300,
+      widthType: "px",
+      top: 100,
+      topType: "px",
+      height: 100,
+      heightType: "px",
+
       definition: {
         id: uuid(),
         type: ObjectType.IMAGE,
@@ -358,9 +392,9 @@ export function addNewObject(layerId: string, type: string): any {
             propertyName: "color",
             inputType: InputType.COLOR,
             value: null,
-            defaultValue: { r: 33, g: 22, b: 11, a: 0.5 },
+            defaultValue: { r: 0, g: 0, b: 0, a: 1 },
           },
-          size: {
+          fontSize: {
             displayName: "Font size",
             propertyName: "string",
             inputType: InputType.NUMBER,
@@ -389,6 +423,24 @@ export function addObject(object: IObject): AddObjectAction {
   };
 }
 
+// ***
+// ******
+
+export const DELETE_OBJECTS = "Delete objects";
+
+export interface DeleteObjectsAction {
+  type: typeof DELETE_OBJECTS;
+  payload: string[];
+}
+
+export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
+  return {
+    type: DELETE_OBJECTS,
+    payload: objectIds,
+  };
+}
+
+// ****
 // ***
 export const UPDATE_OBJECT = "Update object";
 
@@ -433,4 +485,5 @@ export type ActionTypes =
   //object
   | AddObjectAction
   | ActivateObjectAction
-  | UpdateObjectAction;
+  | UpdateObjectAction
+  | DeleteObjectsAction;

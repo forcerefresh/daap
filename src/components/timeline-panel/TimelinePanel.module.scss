@@ -1,0 +1,29 @@
+.timeline {
+  position: absolute;
+  z-index: 1;
+  left: 10px;
+  //top: 250px;
+  height: 280px;
+  bottom: 10px;
+  width: 650px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  background: black;
+}
+
+.timelineRow {
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: row;
+}
+
+.timelineHeader {
+  width: 200px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.active {
+  background: #444;
+}

@@ -40,6 +40,6 @@ export interface IColorInput {
 // Full form for text
 export interface TextProperties {
   color: IColorInput;
-  size: INumberInput;
+  fontSize: INumberInput;
   weight: ITextInput;
 }

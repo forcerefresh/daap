@@ -1,6 +1,11 @@
 import { omit, without } from "lodash-es";
 import { IObject } from "../../objects/types";
-import { ActionTypes, ADD_OBJECT, UPDATE_OBJECT } from "../actions/actions";
+import {
+  ActionTypes,
+  ADD_OBJECT,
+  DELETE_OBJECTS,
+  UPDATE_OBJECT,
+} from "../actions/actions";
 
 export interface IObjects {
   objectById: { [id: string]: IObject<{}> };
@@ -25,7 +30,7 @@ export function objects(
     }
     case UPDATE_OBJECT: {
       const object = action.payload;
-      console.log(object  );
+      console.log(object);
       return Object.assign({}, state, {
         objectById: {
           ...state.objectById,
@@ -33,6 +38,11 @@ export function objects(
         },
       });
     }
+    case DELETE_OBJECTS:
+      const objectIds = action.payload;
+      const objectById = omit(state.objectById, objectIds);
+      const allObjects = without(state.allObjects, ...objectIds);
+      return { ...state, objectById, allObjects };
     default:
       return state;
   }

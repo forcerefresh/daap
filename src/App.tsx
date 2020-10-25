@@ -19,6 +19,8 @@ import { ILayer } from "./store/reducers/layers";
 import SlidesPanel from "./components/slides-panel/SlidesPanel";
 import LayersPanel from "./components/layers-panel/LayersPanel";
 import PropertiesPanel from "./components/properties-panel/PropertiesPanel";
+import Preview from "./preview/Preview";
+import TimelinePanel from "./components/timeline-panel/TimelinePanel";
 
 function App() {
   const dispatch = useDispatch();
@@ -75,6 +77,8 @@ function App() {
       <SlidesPanel />
       <LayersPanel />
       <PropertiesPanel />
+      {/*<Preview />*/}
+      <TimelinePanel />
       <div style={{ marginLeft: "300px", marginRight: "300px" }}>
         <p>Slides:</p>
         {Object.values(slides.slideById).map((slide) => (

@@ -10,6 +10,7 @@ import {
   ACTIVATE_LAYER,
   SELECT_LAYERS,
   ACTIVATE_OBJECT,
+  DELETE_OBJECTS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { cloneDeep, uniq } from "lodash-es";
@@ -41,8 +42,10 @@ export function selection(
       return {
         ...state,
         activeSlideId,
-        selectedLayerIds: [],
         activeLayerId: null,
+        selectedLayerIds: [],
+        activeObjectId: null,
+        selectedObjectIds: [],
       };
     }
     case ACTIVATE_LAYER: {
@@ -89,7 +92,7 @@ export function selection(
     }
     case DELETE_LAYERS: {
       const layerIds = action.payload;
-      return update(state, {  
+      return update(state, {
         activeLayerId: {
           $apply: (activeId) =>
             layerIds.indexOf(activeId as string) === -1 ? activeId : null,
@@ -103,8 +106,17 @@ export function selection(
     case DELETE_SLIDE: {
       console.log(action);
       return update(state, {
+        activeObjectId: {
+          $apply: (activeId) => null,
+        },
+        selectedObjectIds: {
+          $apply: () => [],
+        },
         activeLayerId: {
           $apply: (activeId) => null,
+        },
+        selectedLayerIds: {
+          $apply: () => [],
         },
         activeSlideId: {
           $apply: (activeId) => {
@@ -129,9 +141,21 @@ export function selection(
       });
     }
     case DELETE_LAYERS: {
-      const selectedLayerIds = action.payload;
+      return { ...state }; // TODO, selectedLayerIds };
+    }
+    case DELETE_OBJECTS: {
+      const deletedObjectIds = action.payload;
 
-      return { ...state, selectedLayerIds };
+      return update(state, {
+        activeObjectId: {
+          $apply: (activeId) => {
+            return deletedObjectIds.indexOf(activeId as string) !== -1
+              ? null
+              : activeId;
+          },
+        },
+      });
+      return;
     }
     default:
       return state;
