@@ -55,14 +55,14 @@
         "timeline": {
           "keyFrames": [
             {
-              "time": 1000,
+              "time": 100,
               "properties": {
                 "left": 0,
                 "top": 0
               }
             },
             {
-              "time": 4000,
+              "time": 400,
               "properties": {
                 "left": 500,
                 "top": 100
@@ -120,14 +120,14 @@
         "timeline": {
           "keyFrames": [
             {
-              "time": 1000,
+              "time": 10,
               "properties": {
                 "left": 0,
                 "top": 0
               }
             },
             {
-              "time": 4000,
+              "time": 40,
               "properties": {
                 "left": 500,
                 "top": 100
@@ -185,14 +185,14 @@
         "timeline": {
           "keyFrames": [
             {
-              "time": 1000,
+              "time": 70,
               "properties": {
                 "left": 0,
                 "top": 0
               }
             },
             {
-              "time": 4000,
+              "time": 40,
               "properties": {
                 "left": 500,
                 "top": 100

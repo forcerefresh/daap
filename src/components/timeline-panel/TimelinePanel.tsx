@@ -23,7 +23,12 @@ export const TimelinePanel: React.FC<ITimelinePanel> = (props) => {
             })}
           >
             <div className={css.timelineHeader}> {object.type}</div>
-            <div className={css.timelineContent}>Content</div>
+            <div
+              className={css.timelineContent}
+              style={{ marginLeft: object.timeline.keyFrames[0].time + "px" }}
+            >
+              Content
+            </div>
           </div>
         );
       })}
