@@ -1,7 +1,7 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
-import { IColorInput, IUpdateInput } from "../types";
+import { IColorInput, IUpdateInput } from "../../types";
 import { RGBColor, SketchPicker } from "react-color";
-import styles from "./color-input-form.module.scss";
+import styles from "./color-input.module.scss";
 import { isEqual } from "lodash-es";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {

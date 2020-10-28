@@ -1,0 +1,34 @@
+.mainLayout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  background: rgb(30, 30, 30);
+
+  .toolbar {
+    width: 68px;
+    background: rgb(51, 51, 51);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+    flex: 0 0 68px;
+  }
+
+  .properties {
+    width: 340px;
+    min-width: 340px;
+    background: rgb(37, 37, 38);
+    box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+    flex: 0 0 340px;
+  }
+
+  .center {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    .content {
+      flex-grow: 1;
+    }
+    .timeline {
+      height: 200px;
+    }
+  }
+}

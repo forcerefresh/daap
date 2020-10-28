@@ -12,26 +12,33 @@ type ITimelinePanel = typeof mapDispatchToProps &
 export const TimelinePanel: React.FC<ITimelinePanel> = (props) => {
   const { objectArr, activeObjectId } = props;
   return (
-    <div className={css.timeline}>
-      <div>Header</div>
-
-      {objectArr?.map((object) => {
-        return (
-          <div
-            className={cx(css.timelineRow, {
-              [css.active]: activeObjectId === object.id,
+    <div className={css.wrapper}>
+      <div className={css.timeline}>
+        <div className={css.timelineHeader}>HEADER</div>
+        <div className={css.timelineBody}>
+          <div className={css.timelineLeft}>
+            {objectArr?.map((object) => {
+              return <div> {object.definition.type}</div>;
             })}
-          >
-            <div className={css.timelineHeader}> {object.type}</div>
-            <div
-              className={css.timelineContent}
-              style={{ marginLeft: object.timeline.keyFrames[0].time + "px" }}
-            >
-              Content
-            </div>
           </div>
-        );
-      })}
+          <div className={css.timelineRight}>
+            {objectArr?.map((object) => {
+              return (
+                <div className={css.timelineLine}>
+                  <div
+                    className={css.timelineContent}
+                    style={{
+                      marginLeft: object.timeline.keyFrames[0].time + "px",
+                    }}
+                  >
+                    {object.definition.type}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

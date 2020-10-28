@@ -6,6 +6,7 @@ import {
   NavbarHeading,
   NavbarDivider,
   Classes,
+  Icon,
 } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -44,15 +45,17 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   console.log(activeLayerId);
   return (
     <div className={css.layerPanel}>
-      <NavbarGroup>
+      <div className={css.panelHeader}>
+        LAYERS PANEL
         <Button
+          intent="success"
           disabled={!activeSlideId}
           onClick={() => _addNewLayer(activeSlideId as string)}
-          className={Classes.MINIMAL}
+          className={css.addNewLayer}
+          small={true}
           icon="add"
-          text="Add layer"
-        />
-      </NavbarGroup>
+        ></Button>
+      </div>
       <div className={css.slidesHolder}>
         {layerArr?.map((layer) => {
           return (

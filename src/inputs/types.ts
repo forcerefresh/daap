@@ -37,9 +37,18 @@ export interface IColorInput {
   defaultValue: RGBColor | null;
 }
 
+export interface ISelectInput {
+  inputType: InputType.SELECT;
+  displayName: string;
+  propertyName: string;
+  value: string;
+  defaultValue: string | null;
+  options: { value: string; label: string }[];
+}
+
 // Full form for text
 export interface TextProperties {
   color: IColorInput;
   fontSize: INumberInput;
-  weight: ITextInput;
+  weight: ISelectInput;
 }

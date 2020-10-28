@@ -1,7 +1,8 @@
 import React from "react";
-import { ColorInputForm } from "./form-inputs/color-input-form";
-import { NumberInputForm } from "./form-inputs/numberInputForm";
-import { TextInputForm } from "./form-inputs/textInputForm";
+import { ColorInputForm } from "./form-inputs/color-input/color-input";
+import { NumberInputForm } from "./form-inputs/number-input/number-input";
+import { SelectInputForm } from "./form-inputs/select-input/select-input";
+import { TextInputForm } from "./form-inputs/text-input/text-input";
 import { InputType } from "./types";
 
 export function getInputForm<T>(
@@ -18,6 +19,9 @@ export function getInputForm<T>(
     }
     case InputType.COLOR: {
       return <ColorInputForm {...inputProps} onChange={onChange} />;
+    }
+    case InputType.SELECT: {
+      return <SelectInputForm {...inputProps} onChange={onChange} />;
     }
   }
 }

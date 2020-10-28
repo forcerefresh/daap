@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
 import {
   addNewSlide,
   deleteSlideThree,
@@ -21,6 +21,7 @@ import LayersPanel from "./components/layers-panel/LayersPanel";
 import PropertiesPanel from "./components/properties-panel/PropertiesPanel";
 import Preview from "./preview/Preview";
 import TimelinePanel from "./components/timeline-panel/TimelinePanel";
+import Editor from "./pages/editor/Editor";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,54 +74,8 @@ function App() {
   console.log();
 
   return (
-    <div className="App bp3-dark">
-      <SlidesPanel />
-      <LayersPanel />
-      <PropertiesPanel />
-      {/*<Preview />*/}
-      <TimelinePanel />
-      <div style={{ marginLeft: "300px", marginRight: "300px" }}>
-        <p>Slides:</p>
-        {Object.values(slides.slideById).map((slide) => (
-          <>
-            <div
-              className={cx("slide", {
-                selected: selectedSlideIds.indexOf(slide.id) !== -1,
-              })}
-            >
-              <div
-                key={slide.id}
-                className={cx({ active: activeSlideId === slide.id })}
-              >
-                {slide.name}
-              </div>
-              <button onClick={() => _deleteSlide(slide.id)}>X</button>
-              <button onClick={() => _activateSlide(slide.id)}>Active</button>
-              <button onClick={() => _selectSlide(slide.id)}>Select</button>
-              <button onClick={() => _addSlideToSelection(slide.id)}>
-                + Select
-              </button>
-              <button onClick={() => _removeSlideFromSelection(slide.id)}>
-                - Select
-              </button>
-              <button onClick={() => _addLayer(slide.id)}>Add Layer</button>
-            </div>
-
-            {filtersLayers(layers, slide.id).map((layer) => (
-              <div
-                className={cx("layer", {
-                  selected: selectedLayerIds.indexOf(layer.id) !== -1,
-                })}
-              >
-                {layer.name}
-                <button onClick={() => _addLayerToSelection(layer.id)}>
-                  + Selection
-                </button>
-              </div>
-            ))}
-          </>
-        ))}
-      </div>
+    <div className="bp3-dark" style={{ height: "100%" }}>
+      <Editor />
     </div>
   );
 }
