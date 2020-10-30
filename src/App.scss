@@ -1,5 +1,24 @@
-
 body,
 html {
   overflow: hidden;
+  color: #ccc;
+
+  .bp3-dark {
+    color: #ccc;
+  }
+}
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(73, 73, 73) rgb(30, 30, 30);
+}
+*::-webkit-scrollbar {
+  width: 14px;
+}
+*::-webkit-scrollbar-track {
+  background: rgb(30, 30, 30);
+}
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(73, 73, 73);
+  border-radius: 20px;
+  border: 3px solid rgb(30, 30, 30);
 }

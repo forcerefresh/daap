@@ -1,0 +1,129 @@
+import { Card, Elevation } from "@blueprintjs/core";
+import React, { Component } from "react";
+import cx from "classnames";
+import { connect } from "react-redux";
+import { IStore } from "../../../store/store";
+import css from "./AddPanel.module.scss";
+import { addNewObject } from "../../../store/actions/actions";
+
+interface IAddPanelProps {
+  onRequestClose: () => void;
+}
+
+export type IAddPanelMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  IAddPanelProps;
+
+export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
+  const { _addNewObject, activeLayerId, onRequestClose } = props;
+
+  return (
+    <div className={cx("bp3-dark", css.addPanel)}>
+      <Card
+        interactive={!!activeLayerId}
+        elevation={Elevation.TWO}
+        className={cx(css.card)}
+        onClick={() => {
+          if (activeLayerId) {
+            _addNewObject(activeLayerId, "text");
+            onRequestClose();
+          }
+        }}
+      >
+        <h1>Text</h1>
+        <p>Place text content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Image</h1>
+        <p>Place image content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Video</h1>
+        <p>Place video content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Vector</h1>
+        <p>Place vector content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Animation</h1>
+        <p>Place animation content</p>
+      </Card>
+
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other</h1>
+        <p>Place other content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other</h1>
+        <p>Place other content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other</h1>
+        <p>Place other content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other</h1>
+        <p>Place other content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other</h1>
+        <p>Place other content</p>
+      </Card>
+      <Card
+        interactive={true}
+        elevation={Elevation.TWO}
+        className={cx(css.card, css.disabled)}
+      >
+        <h1>Other </h1>
+        <p>Place other content</p>
+      </Card>
+    </div>
+  );
+};
+
+const mapStateToProps = (state: IStore) => ({
+  activeLayerId: state.selection.activeLayerId,
+});
+
+const mapDispatchToProps = {
+  _addNewObject: (layerId: string, type: string) => addNewObject(layerId, type),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPanel);

@@ -1,0 +1,22 @@
+.toolbar {
+  text-align: center;
+  padding: 8px 0px;
+  color: gray;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+
+    .bp3-button {
+      width: 68px;
+      height: 68px;
+    }
+  }
+
+  .buttonGroupsHolder > * + * {
+    margin-top: 0px;
+  }
+}

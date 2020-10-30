@@ -11,9 +11,10 @@ import {
   SELECT_LAYERS,
   ACTIVATE_OBJECT,
   DELETE_OBJECTS,
+  REMOVE_LAYERS_FROM_SELECTION,
 } from "../actions/actions";
 import update from "immutability-helper";
-import { cloneDeep, uniq } from "lodash-es";
+import { uniq } from "lodash-es";
 
 export interface ISelection {
   activeSlideId: string | null;
@@ -137,6 +138,16 @@ export function selection(
       return update(state, {
         selectedLayerIds: {
           $apply: (selIds: string[]) => uniq(selIds.concat(addLayerIds)),
+        },
+      });
+    }
+    case REMOVE_LAYERS_FROM_SELECTION: {
+      const removeLayerIds = action.payload;
+
+      return update(state, {
+        selectedLayerIds: {
+          $apply: (selIds: string[]) =>
+            selIds.filter((id) => removeLayerIds.indexOf(id) === -1),
         },
       });
     }

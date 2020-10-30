@@ -9,7 +9,6 @@ import {
 } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import "./SlidesPanel.scss";
 import {
   addNewSlide,
   deleteSlideThree,
@@ -18,6 +17,8 @@ import {
   addSlidesToSelection,
   removeSlidesFromSelection,
 } from "../../store/actions/actions";
+
+import css from "./SlidesPanel.module.scss";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -36,59 +37,62 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _removeSlidesFromSelection,
   } = props;
 
+  const onSlideClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    slideId: string
+  ) => {
+    if (event.ctrlKey) {
+      selectedSlideIds.indexOf(slideId) === -1
+        ? _addSlidesToSelection([slideId])
+        : _removeSlidesFromSelection([slideId]);
+    } else {
+      _activateSlide(slideId);
+      _selectSlides([slideId]);
+    }
+  };
+
   console.log(allSlides);
   return (
-    <div className="panel">
-      <NavbarGroup>
+    <div className={css.panel}>
+      <div className={css.panelHeader}>
+        SLIDES PANEL
         <Button
+          minimal
           onClick={() => _addNewSlide()}
-          className={Classes.MINIMAL}
+          className={css.addNewSlide}
+          small={true}
           icon="add"
-          text="Add slide"
-        />
-      </NavbarGroup>
-      <div className="slides-holder">
+        ></Button>
+      </div>
+      <div className={css.slidesHolder}>
         {allSlides.map((slideId) => {
           return (
             <div
-              onClick={() => {
-                _activateSlide(slideId);
-                _selectSlides([slideId]);
-              }}
+              key={slideId}
+              onClick={(event) => onSlideClick(event, slideId)}
               className={cx(
-                "slide",
+                css.slide,
                 {
-                  selected: selectedSlideIds.indexOf(slideId) !== -1,
+                  [css.selected]:
+                    selectedSlideIds.length > 0 /*1*/ &&
+                    selectedSlideIds.indexOf(slideId) !== -1,
                 },
-                { active: activeSlideId === slideId }
+                {
+                  [css.active]: activeSlideId === slideId,
+                }
               )}
             >
+              {slideById[slideId].name}
               <Button
                 minimal
                 onClick={(event: any) => {
                   event.stopPropagation();
                   _deleteSlideThree(slideId);
                 }}
+                className={css.deleteSlide}
+                small={true}
                 icon="delete"
-              />
-              {/*<Button minimal onClick={() => _selectSlides([slideId])} icon="selection"/>*/}
-              <Button
-                minimal
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  _addSlidesToSelection([slideId]);
-                }}
-                icon="plus"
-              />
-              <Button
-                minimal
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  _removeSlidesFromSelection([slideId]);
-                }}
-                icon="minus"
-              />
-              {slideById[slideId].name}
+              ></Button>
             </div>
           );
         })}

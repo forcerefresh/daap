@@ -1,17 +1,9 @@
 .layerPanel {
-  //z-index: 1;
-  // position: absolute;
-  ////right: 10px;
-  //top: 10px;
-  //bottom: 300px;
-  //width: 250px;
-  //border: 1px solid lightgray;
-  //border-radius: 5px;
-  //display: flex;
-  //flex-direction: column;
-  //background: black;
+  height: 25vh;
+  display: flex;
+  flex-direction: column;
 
-  > input,
+  input,
   button,
   textarea,
   :focus {
@@ -19,6 +11,8 @@
   }
 
   .panelHeader {
+    display: flex;
+    align-items: center;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
     padding: 5px;
@@ -26,9 +20,13 @@
     color: gray;
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
 
-    .addNewLayer {
-      float: right;
-      margin-top: -2px;
+    > *:first-child {
+      flex-grow: 1;
+    }
+
+    .slideName {
+      color: #1f82c0;
+      margin-left: 10px;
     }
   }
 
@@ -38,15 +36,86 @@
   }
 
   .layer {
-    padding: 1 0px 10px;
-    margin: 5px;
+    border: 1px solid #252526;
+
+    &:hover .deleteLayer {
+      :global {
+        .bp3-icon-delete {
+          color: gray !important;
+        }
+      }
+    }
+
+    &:hover .objectCount {
+      display: block;
+    }
+  }
+
+  .layerInner {
+    padding: 8px;
+    border-bottom: 1px solid #353536;
     display: flex;
+    align-items: center;
+    > *:first-child {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
+
+    .layerToggle {
+      margin-right: 5px;
+      &.layerOpen {
+        transform: rotate(90deg);
+      }
+    }
+    .objectCount {
+      display: none;
+      color: #858181;
+      margin-left: 10px;
+    }
+    .layerName {
+      //color: green;
+    }
+  }
+
+  .deleteLayer {
+    float: right;
+
+    margin: -4px;
+    color: #555;
+    :global {
+      .bp3-icon-delete {
+        color: #444 !important;
+      }
+    }
+  }
+
+  .objectHolder {
+    padding-left: 57px !important;
+    padding: 3px;
+    border-bottom: 1px solid #444;
+
+    &.active {
+      border-top: 1px solid #1f82c0;
+      border-bottom: 1px solid #1f82c0;
+    }
+  }
+
+  .active {
+    border: 1px solid #444;
+    background: #444;
+    :global {
+      .bp3-icon-delete {
+        color: #555 !important;
+      }
+    }
   }
 
   .selected {
-    color: blue;
+    border: 1px solid #1f82c0;
   }
-  .active {
-    background: #444;
+
+  .selected + .selected {
+    border-top: 1px solid #252526;
   }
 }

@@ -52,3 +52,7 @@ export interface TextProperties {
   fontSize: INumberInput;
   weight: ISelectInput;
 }
+
+export interface TextValue {
+  value: string;
+}

@@ -239,6 +239,8 @@ export function selectSlides(slideIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (
       differenceWith(slideIds, getState().selection.selectedSlideIds, isEqual)
+        .length === 0 &&
+      differenceWith(getState().selection.selectedSlideIds, slideIds, isEqual)
         .length === 0
     ) {
       return;
@@ -329,6 +331,23 @@ export function addLayersToSelection(
   };
 }
 
+// ***
+export const REMOVE_LAYERS_FROM_SELECTION = "Remove layers from selection";
+
+export interface RemoveLayersFromSelectionAction {
+  type: typeof REMOVE_LAYERS_FROM_SELECTION;
+  payload: string[];
+}
+
+export function removeLayersFromSelection(
+  layerIds: string[]
+): RemoveLayersFromSelectionAction {
+  return {
+    type: REMOVE_LAYERS_FROM_SELECTION,
+    payload: layerIds,
+  };
+}
+
 // **** OBJECTS
 
 export const ADD_OBJECT = "Add object";
@@ -340,16 +359,6 @@ export interface AddObjectAction {
 
 export function addNewObject(layerId: string, type: string): any {
   return function (dispatch: any, getState: () => IStore) {
-    /*const nextId = getState().slides.slideById[slideId].nextLayerIdCounter;
-
-    const layer = {
-      id: uuid(),
-      slideId,
-      name: `Layer ${nextId}`,
-      isVisible: true,
-      hasTimeline: true,
-    };*/
-
     const object: IObject<TextProperties> = {
       id: uuid(),
       layerId,
@@ -382,7 +391,6 @@ export function addNewObject(layerId: string, type: string): any {
       topType: "px",
       height: 100,
       heightType: "px",
-
       definition: {
         id: uuid(),
         type: ObjectType.IMAGE,
@@ -477,25 +485,31 @@ export function _updateObject(object: IObject): UpdateObjectAction {
 
 // ***
 export type ActionTypes =
-  //slide
+  // slide
   | AddSlideAction
   | DeleteSlideAction
-  //layer
+
+  // layer
   | AddLayerAction
   | DeleteLayersAction
-  //select layer
+
+  // object
+  | AddObjectAction
+  | UpdateObjectAction
+  | DeleteObjectsAction
+
+  // layer selection
   | SelectLayerAction
+  | SelectLayersAction
   | AddLayersToSelectionAction
-  //select slide
+  | RemoveLayersFromSelectionAction
+
+  // slide selection
   | SelectSlidesAction
   | AddSlidesToSelectionAction
   | RemoveSlidesFromSelectionAction
-  //activate slide
+
+  // activate
   | ActivateSlideAction
   | ActivateLayerAction
-  | SelectLayersAction
-  //object
-  | AddObjectAction
-  | ActivateObjectAction
-  | UpdateObjectAction
-  | DeleteObjectsAction;
+  | ActivateObjectAction;

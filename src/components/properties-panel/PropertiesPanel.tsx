@@ -13,7 +13,6 @@ import { IObject } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./PropertiesPanel.module.scss";
-import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -53,20 +52,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       </div>
       <div className={css.propertiesHolder}>
         {object && renderProperties(object.definition.properties)}
-      </div>
-      <div>
-        <div className={css.previewButtons}>
-          <Button intent="success" large icon="desktop" />
-          <Button intent="success" large>
-            <TabletPreviewIcon
-              style={{ width: "16px", height: "16px", fill: "white" }}
-            />
-          </Button>
-          <Button intent="success" large icon="mobile-phone" />
-        </div>
-        <Button intent="primary" large style={{ width: "100%" }}>
-          SAVE
-        </Button>
       </div>
     </div>
   );
