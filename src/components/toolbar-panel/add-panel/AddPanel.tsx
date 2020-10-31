@@ -5,6 +5,8 @@ import { connect } from "react-redux";
 import { IStore } from "../../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../../store/actions/actions";
+import { ReactComponent as DrawTextboxIcon } from "../../../assets/icons/draw-textbox.svg";
+import { ReactComponent as AddTextboxIcon } from "../../../assets/icons/add-textbox2.svg";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -19,101 +21,149 @@ export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
-      <Card
-        interactive={!!activeLayerId}
-        elevation={Elevation.TWO}
-        className={cx(css.card, { [css.disabled]: !activeLayerId })}
-        onClick={() => {
-          if (activeLayerId) {
-            _addNewObject(activeLayerId, "text");
-            onRequestClose();
-          }
-        }}
-      >
-        <h1>Text</h1>
-        <p>Place text content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Image</h1>
-        <p>Place image content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Video</h1>
-        <p>Place video content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Vector</h1>
-        <p>Place vector content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Animation</h1>
-        <p>Place animation content</p>
-      </Card>
-
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other</h1>
-        <p>Place other content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other</h1>
-        <p>Place other content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other</h1>
-        <p>Place other content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other</h1>
-        <p>Place other content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other</h1>
-        <p>Place other content</p>
-      </Card>
-      <Card
-        interactive={true}
-        elevation={Elevation.TWO}
-        className={cx(css.card, css.disabled)}
-      >
-        <h1>Other </h1>
-        <p>Place other content</p>
-      </Card>
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Text</h1>
+          <p>Add text content</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, "text");
+              onRequestClose();
+            }
+          }}
+        >
+          <AddTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>ADD TEXT BOX</h3>
+          <p>Add empty text field to active layer</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, "text");
+              onRequestClose();
+            }
+          }}
+        >
+          <DrawTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>DRAW TEXT BOX</h3>
+          <p>Draw text box using text tool</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, "text");
+              onRequestClose();
+            }
+          }}
+        >
+          <DrawTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>CHOSE STYLE</h3>
+          <p>Pick predefined style from</p>
+        </Card>
+      </div>
+      <div>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Image</h1>
+          <p>Place image content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Video</h1>
+          <p>Place video content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Vector</h1>
+          <p>Place vector content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Animation</h1>
+          <p>Place animation content</p>
+        </Card>
+      </div>
+      <div>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other</h1>
+          <p>Place other content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other</h1>
+          <p>Place other content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other</h1>
+          <p>Place other content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other</h1>
+          <p>Place other content</p>
+        </Card>
+      </div>
+      <div>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other</h1>
+          <p>Place other content</p>
+        </Card>
+        <Card
+          interactive={true}
+          elevation={Elevation.TWO}
+          className={cx(css.card, css.disabled)}
+        >
+          <h1>Other </h1>
+          <p>Place other content</p>
+        </Card>
+      </div>
     </div>
   );
 };
