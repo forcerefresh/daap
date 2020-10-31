@@ -6,6 +6,7 @@ import { Action, AnyAction } from "@reduxjs/toolkit";
 import { difference, differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { InputType, TextProperties } from "../../inputs/types";
+import { createObject } from "../../objects/create-object-factory";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -359,7 +360,7 @@ export interface AddObjectAction {
 
 export function addNewObject(layerId: string, type: string): any {
   return function (dispatch: any, getState: () => IStore) {
-    const object: IObject<TextProperties> = {
+    /*const object: IObject<TextProperties> = {
       id: uuid(),
       layerId,
       type: ObjectType.TEXT,
@@ -430,9 +431,11 @@ export function addNewObject(layerId: string, type: string): any {
           },
         },
       },
-    };
+    };*/
 
-    dispatch(addObject(object));
+    const object = createObject(ObjectType.TEXT);
+
+    dispatch(addObject({ ...object, layerId }));
   };
 }
 
