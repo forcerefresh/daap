@@ -20,6 +20,7 @@ export interface ISelection {
   activeSlideId: string | null;
   activeLayerId: string | null;
   activeObjectId: string | null;
+
   selectedSlideIds: string[];
   selectedLayerIds: string[];
   selectedObjectIds: string[];
@@ -150,9 +151,6 @@ export function selection(
             selIds.filter((id) => removeLayerIds.indexOf(id) === -1),
         },
       });
-    }
-    case DELETE_LAYERS: {
-      return { ...state }; // TODO, selectedLayerIds };
     }
     case DELETE_OBJECTS: {
       const deletedObjectIds = action.payload;

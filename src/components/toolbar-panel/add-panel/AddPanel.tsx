@@ -22,7 +22,7 @@ export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <Card
         interactive={!!activeLayerId}
         elevation={Elevation.TWO}
-        className={cx(css.card)}
+        className={cx(css.card, { [css.disabled]: !activeLayerId })}
         onClick={() => {
           if (activeLayerId) {
             _addNewObject(activeLayerId, "text");

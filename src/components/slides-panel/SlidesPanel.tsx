@@ -112,7 +112,7 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _addNewSlide: () => addNewSlide(),
+  _addNewSlide: addNewSlide,
   _deleteSlideThree: (id: string): any => deleteSlideThree(id),
   _activateSlide: (id: string): any => activateSlide(id),
   _selectSlides: (ids: string[]): any => selectSlides(ids),

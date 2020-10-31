@@ -16,6 +16,7 @@
     - Create wizard your your users (for website developers)
 - Helper
   - Toolbar configuration
-    - Auto sugestion which option are best for end user - **V2**
+    - Auto suggestion which option are best for end user - **V2**
   - Undo/redo
+    - Slogan: No worries about any mistake, event accidental
   - Auto save - **V2**

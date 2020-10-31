@@ -7,7 +7,7 @@ import { IStore } from "../../store/store";
 
 export const ActionPanel = () => {
   return (
-    <div>
+    <div className={css.actionPanel}>
       <div className={css.previewButtons}>
         <Button intent="success" large icon="desktop" />
         <Button intent="success" large>

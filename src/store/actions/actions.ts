@@ -91,7 +91,7 @@ export function addNewLayer(slideId: string): any {
   return function (dispatch: any, getState: () => IStore) {
     const nextId = getState().slides.slideById[slideId].nextLayerIdCounter;
 
-    const layer = {
+    const layer: ILayer = {
       id: uuid(),
       slideId,
       name: `Layer ${nextId}`,
@@ -393,7 +393,7 @@ export function addNewObject(layerId: string, type: string): any {
       heightType: "px",
       definition: {
         id: uuid(),
-        type: ObjectType.IMAGE,
+        type: ObjectType.TEXT,
         properties: {
           color: {
             displayName: "Color",
@@ -411,7 +411,7 @@ export function addNewObject(layerId: string, type: string): any {
           },
           weight: {
             displayName: "Weight",
-            propertyName: "string",
+            propertyName: "weight",
             inputType: InputType.SELECT,
             value: "2",
             defaultValue: "3",

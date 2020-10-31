@@ -102,6 +102,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         {layerArr?.map((layer) => {
           return (
             <div
+              key={layer.id}
               className={cx(css.layer, {
                 [css.selected]:
                   selectedLayerIds.length > 0 /*1*/ &&
@@ -177,14 +178,12 @@ const mapStateToProps = (state: IStore) => {
   let layerArr: ILayer[] | null = null;
   let slide: ISlide | null = null;
 
-  console.log({ ...selection });
   if (selection.activeSlideId) {
     const layerIds = slides.slideById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId) => layers.layerById[layerId]);
     slide = slides.slideById[selection.activeSlideId];
   }
 
-  // layers.allLayers.map((layerId: string) => {});
   return {
     layerArr,
     slide,

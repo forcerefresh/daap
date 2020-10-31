@@ -3,6 +3,7 @@ import {
   ActionTypes,
   ADD_LAYER,
   ADD_OBJECT,
+  DELETE_LAYERS,
   DELETE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
@@ -26,7 +27,7 @@ export function layers(
   action: ActionTypes
 ) {
   switch (action.type) {
-    case ADD_LAYER:
+    case ADD_LAYER: {
       const layer = action.payload;
 
       return Object.assign({}, state, {
@@ -36,18 +37,26 @@ export function layers(
         },
         allLayers: [...state.allLayers, layer.id],
       });
-    case ADD_OBJECT:
+    }
+    case ADD_OBJECT: {
       const object = action.payload;
       return update(state, {
         layerById: {
           [object.layerId]: {
             objectIds: { $push: [object.id] },
-            //nextLayerIdCounter: (idx) => idx + 1,
+            //nextObjectIdCounter: (idx) => idx + 1,
           },
         },
       });
+    }
+    case DELETE_LAYERS: {
+      const layersToDeleteIds = action.payload;
 
-    case DELETE_SLIDE:
+      const layerById = omit(state.layerById, layersToDeleteIds);
+      const allLayers = without(state.allLayers, ...layersToDeleteIds);
+      return { ...state, layerById, allLayers };
+    }
+    case DELETE_SLIDE: {
       const deleteId = action.payload.slideId;
       const layersToDeleteIds: string[] = Object.values(state.layerById)
         .filter((layer) => layer.slideId === deleteId)
@@ -56,6 +65,7 @@ export function layers(
       const layerById = omit(state.layerById, layersToDeleteIds);
       const allLayers = without(state.allLayers, ...layersToDeleteIds);
       return { ...state, layerById, allLayers };
+    }
     default:
       return state;
   }

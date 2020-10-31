@@ -80,7 +80,7 @@
         "heightType": "px",
         "definition": {
           "id": "ac46eebb-6f79-4df1-982e-5599a9708c2b",
-          "type": "image",
+          "type": "text",
           "properties": {
             "color": {
               "displayName": "Color",
@@ -145,7 +145,7 @@
         "heightType": "px",
         "definition": {
           "id": "04776c80-ee8f-4870-bcd2-cce275f0cc37",
-          "type": "image",
+          "type": "text",
           "properties": {
             "color": {
               "displayName": "Color",
@@ -210,7 +210,7 @@
         "heightType": "px",
         "definition": {
           "id": "f5127676-9f14-45d5-969b-2cf3f6cf8e49",
-          "type": "image",
+          "type": "text",
           "properties": {
             "color": {
               "displayName": "Color",

@@ -1,11 +1,13 @@
-import { omit, without } from "lodash-es";
+import { forIn, omit, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
   ADD_SLIDE,
+  DELETE_LAYERS,
   DELETE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
+import { EmptyID } from "../types";
 
 export interface ISlide {
   id: string;
@@ -55,15 +57,33 @@ export function slides(
           },
         },
       });
+    }
+    case DELETE_LAYERS: {
+      const deleteLayerIds = action.payload;
 
-      /*const slideId = layer.slideId;
-      const slide = { ...state.slideById[slideId] };
-      slide.layerIds.push(layer.id);
+      // find slideId by first delte layer id (all delet layer ids belong to one slide)
+      let slideId: string = EmptyID;
+      forIn(state.slideById, function (slide, _slideId) {
+        if (slide.layerIds.indexOf(deleteLayerIds[0]) !== -1) {
+          slideId = _slideId;
+        }
+      });
 
-      return {
-        ...state,
-        ...{ slideById: { ...state.slideById, ...{ [slide.id]: slide } } },
-      };*/
+      if (slideId === EmptyID) return state;
+
+      return update(state, {
+        slideById: {
+          [slideId]: {
+            layerIds: {
+              $apply: (_layerIds: string[]) =>
+                without(
+                  state.slideById[slideId as string].layerIds,
+                  ...deleteLayerIds
+                ),
+            },
+          },
+        },
+      });
     }
     default:
       return state;
