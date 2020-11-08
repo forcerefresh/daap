@@ -3,10 +3,10 @@ import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
-import { difference, differenceWith, isEqual } from "lodash-es";
+import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
-import { InputType, TextProperties } from "../../inputs/types";
 import { createObject } from "../../objects/create-object-factory";
+import { IStageSize } from "../reducers/stage";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -27,13 +27,15 @@ export interface AddSlideAction {
 
 export function addNewSlide(): any {
   return function (dispatch: any, getState: () => IStore) {
-    const slide = {
+    const slide: ISlide = {
       id: uuid(),
       name: `Slide ${getState().slides.nextSlideIdCounter}`,
       layerIds: [],
       nextLayerIdCounter: 0,
     };
     dispatch(addSlide(slide));
+    dispatch(activateSlide(slide.id));
+    dispatch(selectSlides([slide.id]));
   };
 }
 
@@ -65,7 +67,6 @@ export function deleteSlideThree(slideId: string) {
         layerIds.indexOf(getState().objects.objectById[objectId].layerId) !== -1
     );
 
-    console.log(objectIds);
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
     dispatch(deleteSlide(slideId));
@@ -102,6 +103,7 @@ export function addNewLayer(slideId: string): any {
     };
 
     dispatch(addLayer(layer));
+    dispatch(activateLayer(layer.id));
   };
 }
 
@@ -358,84 +360,15 @@ export interface AddObjectAction {
   payload: IObject;
 }
 
-export function addNewObject(layerId: string, type: string): any {
+export function addNewObject(
+  layerId: string,
+  type: string,
+  objectProps: Partial<IObject>
+): any {
   return function (dispatch: any, getState: () => IStore) {
-    /*const object: IObject<TextProperties> = {
-      id: uuid(),
-      layerId,
-      type: ObjectType.TEXT,
-      isVisible: true,
-      hasTimeline: true,
-      timeline: {
-        keyFrames: [
-          {
-            time: 1000,
-            properties: {
-              left: 0,
-              top: 0,
-            },
-          },
-          {
-            time: 4000,
-            properties: {
-              left: 500,
-              top: 100,
-            },
-          },
-        ],
-      },
-      left: 100,
-      leftType: "px",
-      width: 300,
-      widthType: "px",
-      top: 100,
-      topType: "px",
-      height: 100,
-      heightType: "px",
-      definition: {
-        id: uuid(),
-        type: ObjectType.TEXT,
-        properties: {
-          color: {
-            displayName: "Color",
-            propertyName: "color",
-            inputType: InputType.COLOR,
-            value: null,
-            defaultValue: { r: 0, g: 0, b: 0, a: 1 },
-          },
-          fontSize: {
-            displayName: "Font size",
-            propertyName: "string",
-            inputType: InputType.NUMBER,
-            value: 1,
-            defaultValue: 1,
-          },
-          weight: {
-            displayName: "Weight",
-            propertyName: "weight",
-            inputType: InputType.SELECT,
-            value: "2",
-            defaultValue: "3",
-            options: [
-              { value: "100", label: "100	Thin" },
-              { value: "200", label: "200	Extra Light" },
-              { value: "300", label: "300	Light" },
-              { value: "400", label: "400	Normal" },
-              { value: "500", label: "500	Medium" },
-              { value: "600", label: "600	Semi Bold" },
-              { value: "700", label: "700	Bold" },
-              { value: "800", label: "800	Extra Bold" },
-              { value: "900", label: "900	Black" },
-              { value: "950", label: "950	Extra Black" },
-            ],
-          },
-        },
-      },
-    };*/
-
-    const object = createObject(ObjectType.TEXT);
-
+    const object = createObject(ObjectType.TEXT, objectProps);
     dispatch(addObject({ ...object, layerId }));
+    dispatch(activateObject(object.id));
   };
 }
 
@@ -486,6 +419,38 @@ export function _updateObject(object: IObject): UpdateObjectAction {
   };
 }
 
+// ******
+
+export const SET_STAGE_SIZE = "Set stage size";
+
+export interface SetStageSizeAction {
+  type: typeof SET_STAGE_SIZE;
+  payload: IStageSize;
+}
+
+export function setStageSize(stageSize: IStageSize): SetStageSizeAction {
+  return {
+    type: SET_STAGE_SIZE,
+    payload: stageSize,
+  };
+}
+
+// ******
+
+export const SET_STAGE_ZOOM = "Set stage zoom";
+
+export interface SetStageZoomAction {
+  type: typeof SET_STAGE_ZOOM;
+  payload: number;
+}
+
+export function setStageZoom(zoom: number): SetStageZoomAction {
+  return {
+    type: SET_STAGE_ZOOM,
+    payload: zoom,
+  };
+}
+
 // ***
 export type ActionTypes =
   // slide
@@ -515,4 +480,8 @@ export type ActionTypes =
   // activate
   | ActivateSlideAction
   | ActivateLayerAction
-  | ActivateObjectAction;
+  | ActivateObjectAction
+
+  //stage
+  | SetStageSizeAction
+  | SetStageZoomAction;

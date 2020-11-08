@@ -1,5 +1,5 @@
 import { Button, Icon, Portal } from "@blueprintjs/core";
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
@@ -13,6 +13,8 @@ enum VisiblePanel {
   Add = "add",
   None = "none",
 }
+
+const ICON_SIZE = 36;
 
 export const ToolbarPanel = () => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
@@ -32,7 +34,7 @@ export const ToolbarPanel = () => {
               togglePanel(VisiblePanel.Add);
             }}
           >
-            <Icon icon="add" iconSize={42} color={"gray"} />
+            <Icon icon="add" iconSize={ICON_SIZE} color={"gray"} />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.Add && (
@@ -45,29 +47,29 @@ export const ToolbarPanel = () => {
         <div>
           <Button minimal>
             <SelectToolIcon
-              style={{ width: "36px", height: "36px", fill: "gray" }}
+              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
             />
           </Button>
 
           <Button minimal>
-            <Icon icon="undo" iconSize={42} color={"gray"} />
+            <Icon icon="undo" iconSize={ICON_SIZE} color={"gray"} />
           </Button>
         </div>
         <div>
           <Button minimal>
             <TextToolIcon
-              style={{ width: "42px", height: "42px", fill: "gray" }}
+              style={{ width: "42px", height: ICON_SIZE + "px", fill: "gray" }}
             />
           </Button>
           <Button minimal>
             <ImageToolIcon
-              style={{ width: "42px", height: "42px", fill: "gray" }}
+              style={{ width: "42px", height: ICON_SIZE + "px", fill: "gray" }}
             />
           </Button>
           <Button minimal>
             <Icon
               icon="group-objects"
-              iconSize={32}
+              iconSize={ICON_SIZE}
               style={{ padding: "16px" }}
             />
           </Button>

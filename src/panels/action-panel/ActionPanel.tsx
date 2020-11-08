@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import { Button, NavbarGroup, Text } from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";

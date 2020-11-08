@@ -48,7 +48,6 @@ export function slides(
     case ADD_LAYER: {
       const layer = action.payload;
 
-      console.log(state.slideById[layer.slideId].nextLayerIdCounter);
       return update(state, {
         slideById: {
           [layer.slideId]: {
@@ -61,7 +60,7 @@ export function slides(
     case DELETE_LAYERS: {
       const deleteLayerIds = action.payload;
 
-      // find slideId by first delte layer id (all delet layer ids belong to one slide)
+      // find slideId by first delete layer id (all delete layer ids belong to one slide)
       let slideId: string = EmptyID;
       forIn(state.slideById, function (slide, _slideId) {
         if (slide.layerIds.indexOf(deleteLayerIds[0]) !== -1) {

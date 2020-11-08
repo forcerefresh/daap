@@ -1,13 +1,6 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import cx from "classnames";
-import {
-  Button,
-  NavbarGroup,
-  NavbarHeading,
-  NavbarDivider,
-  Classes,
-  Icon,
-} from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -19,11 +12,13 @@ import {
   addNewObject,
   activateObject,
   removeLayersFromSelection,
+  deleteObjects,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/slides";
 import { isEmpty } from "lodash-es";
+import { IObject } from "../../objects/types";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -43,8 +38,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _deleteLayers,
     _activateLayer,
     _selectLayers,
-    _addNewObject,
     _activateObject,
+    _deleteObjects,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -159,7 +154,19 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           [css.active]: activeObjectId === objectId,
                         })}
                       >
-                        {objectById[objectId].type}
+                        <div>{objectById[objectId].type}</div>
+                        <div>
+                          <Button
+                            minimal
+                            onClick={(event: any) => {
+                              event.stopPropagation();
+                              _deleteObjects([objectId]);
+                            }}
+                            className={css.deleteObject}
+                            small={true}
+                            icon="delete"
+                          ></Button>
+                        </div>
                       </div>
                     );
                   })}
@@ -203,8 +210,13 @@ const mapDispatchToProps = {
   _deleteLayers: (layerIds: string[]) => deleteLayers(layerIds),
   _activateLayer: (layerId: string) => activateLayer(layerId),
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
-  _addNewObject: (layerId: string, type: string) => addNewObject(layerId, type),
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>
+  ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),
+  _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

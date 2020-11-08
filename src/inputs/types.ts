@@ -9,6 +9,7 @@ export enum InputType {
 
 export interface IUpdateInput {
   onChange: (config: RGBColor | string | number) => void;
+  onInput?: (config: RGBColor | string | number) => void;
 }
 
 //  number input
@@ -49,7 +50,7 @@ export interface ISelectInput {
 // Full form for text
 export interface TextProperties {
   color: IColorInput;
-  fontSize: INumberInput;
+  fontSize: ITextInput;
   weight: ISelectInput;
 }
 

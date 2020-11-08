@@ -12,10 +12,13 @@ type Exclude<T, U> = T extends U ? never : T;
  */
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
-export function createObject(type: ObjectType.TEXT): Omit<IObject, "layerId"> {
+export function createObject(
+  type: ObjectType.TEXT,
+  objectProps: Partial<IObject>
+): Omit<IObject, "layerId"> {
   switch (type) {
     case ObjectType.TEXT: {
-      return createTextObject();
+      return { ...objectProps, ...createTextObject() };
     }
     /*case ObjectType.IMAGE: {
       return createImageObject();
@@ -81,9 +84,9 @@ function createTextObject(): Omit<
         fontSize: {
           displayName: "Font size",
           propertyName: "string",
-          inputType: InputType.NUMBER,
-          value: 1,
-          defaultValue: 1,
+          inputType: InputType.TEXT,
+          value: "S",
+          defaultValue: "A",
         },
         weight: {
           displayName: "Weight",
@@ -108,7 +111,7 @@ function createTextObject(): Omit<
     },
   };
 }
-
+/*
 function createImageObject() {
   // TODO
   return {};
@@ -122,4 +125,4 @@ function createVideoObject() {
 function createVectorObject() {
   // TODO
   return {};
-}
+}*/

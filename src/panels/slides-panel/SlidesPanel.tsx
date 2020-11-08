@@ -1,12 +1,6 @@
-import React, { Component } from "react";
+import React from "react";
 import cx from "classnames";
-import {
-  Button,
-  NavbarGroup,
-  NavbarHeading,
-  NavbarDivider,
-  Classes,
-} from "@blueprintjs/core";
+import { Button } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -51,7 +45,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
 
-  console.log(allSlides);
   return (
     <div className={css.panel}>
       <div className={css.panelHeader}>

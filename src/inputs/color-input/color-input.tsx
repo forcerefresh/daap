@@ -1,11 +1,11 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
-import { IColorInput, IUpdateInput } from "../../types";
+import { IColorInput, IUpdateInput } from "../types";
 import { RGBColor, SketchPicker } from "react-color";
 import styles from "./color-input.module.scss";
 import { isEqual } from "lodash-es";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
-  const { displayName, value, defaultValue, onChange } = props;
+  const { value, defaultValue, onChange } = props;
 
   const _color = (value || defaultValue) as RGBColor;
 
@@ -24,7 +24,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     if (!isEqual(_color, state.color)) {
       setState({ ...state, color: _color, initialColor: _color });
     }
-  }, [value, defaultValue]);
+  }, [_color, state]);
 
   const handleClick = () => {
     setState({ ...state, displayColorPicker: !state.displayColorPicker });

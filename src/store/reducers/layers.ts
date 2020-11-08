@@ -1,12 +1,14 @@
-import { omit, without } from "lodash-es";
+import { forIn, omit, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
   ADD_OBJECT,
   DELETE_LAYERS,
+  DELETE_OBJECTS,
   DELETE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
+import { EmptyID } from "../types";
 
 export interface ILayer {
   id: string;
@@ -65,6 +67,34 @@ export function layers(
       const layerById = omit(state.layerById, layersToDeleteIds);
       const allLayers = without(state.allLayers, ...layersToDeleteIds);
       return { ...state, layerById, allLayers };
+    }
+
+    case DELETE_OBJECTS: {
+      const deleteObjectIds = action.payload;
+
+      // find layerId by first delete object id (all delete object ids belong to one layer)
+      let layerId: string = EmptyID;
+      forIn(state.layerById, function (layer, _layerId) {
+        if (layer.objectIds.indexOf(deleteObjectIds[0]) !== -1) {
+          layerId = _layerId;
+        }
+      });
+
+      if (layerId === EmptyID) return state;
+
+      return update(state, {
+        layerById: {
+          [layerId]: {
+            objectIds: {
+              $apply: (_layerIds: string[]) =>
+                without(
+                  state.layerById[layerId as string].objectIds,
+                  ...deleteObjectIds
+                ),
+            },
+          },
+        },
+      });
     }
     default:
       return state;

@@ -1,11 +1,11 @@
-import { FormGroup, HTMLSelect, InputGroup } from "@blueprintjs/core";
+import { FormGroup, HTMLSelect } from "@blueprintjs/core";
 import React, { ChangeEvent } from "react";
-import { ISelectInput, IUpdateInput } from "../../types";
+import { ISelectInput, IUpdateInput } from "../types";
 
 export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, options, value, defaultValue, onChange } = props;
+  const { displayName, options, value, onChange } = props;
   return (
     <FormGroup label={displayName} labelFor="text-input" inline>
       <HTMLSelect

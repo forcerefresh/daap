@@ -1,12 +1,12 @@
 import React from "react";
-import SlidesPanel from "../../components/slides-panel/SlidesPanel";
-import LayersPanel from "../../components/layers-panel/LayersPanel";
-import PropertiesPanel from "../../components/properties-panel/PropertiesPanel";
-import TimelinePanel from "../../components/timeline-panel/TimelinePanel";
-import MainLayout from "../../components/main-layout/MainLayout";
-import { Button, Icon } from "@blueprintjs/core";
-import ToolbarPanel from "../../components/toolbar-panel/ToolbarPanel";
-import ActionPanel from "../../components/action-panel/ActionPanel";
+import SlidesPanel from "../../panels/slides-panel/SlidesPanel";
+import LayersPanel from "../../panels/layers-panel/LayersPanel";
+import PropertiesPanel from "../../panels/properties-panel/PropertiesPanel";
+import TimelinePanel from "../../panels/timeline-panel/TimelinePanel";
+import MainLayout from "../../layouts/main-layout/MainLayout";
+import ToolbarPanel from "../../panels/toolbar-panel/ToolbarPanel";
+import ActionPanel from "../../panels/action-panel/ActionPanel";
+import StagePanel from "../../panels/stage-panel/StagePanel";
 
 function Editor() {
   return (
@@ -21,6 +21,7 @@ function Editor() {
       }
       timeline={<TimelinePanel />}
       toolbar={<ToolbarPanel />}
+      content={<StagePanel />}
     />
   );
 }

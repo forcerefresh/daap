@@ -1,6 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
-import cx from "classnames";
 import { IObject } from "../../objects/types";
 import { ILayer } from "../../store/reducers/layers";
 import { IStore } from "../../store/store";
@@ -10,7 +9,7 @@ type ITimelinePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const TimelinePanel: React.FC<ITimelinePanel> = (props) => {
-  const { objectArr, activeObjectId } = props;
+  const { objectArr } = props;
   return (
     <div className={css.wrapper}>
       <div className={css.timeline}>
@@ -44,7 +43,7 @@ export const TimelinePanel: React.FC<ITimelinePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection } = state;
+  const { layers, objects, selection } = state;
   let layer: ILayer | null = null;
   let objectArr: IObject[] | null = null;
 

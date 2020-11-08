@@ -8,27 +8,26 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { ISlides, slides } from "./reducers/slides";
 import { ILayers, layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
+import { IStage, stage } from "./reducers/stage";
 import { IObjects, objects } from "./reducers/objects";
 import initialState from "./initial-state.json";
-/*
-const reduxDevTools =
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__();*/
 
 export interface IStore {
   slides: ISlides;
   layers: ILayers;
   objects: IObjects;
   selection: ISelection;
+  stage: IStage;
 }
 const rootReducer = combineReducers({
   slides,
   layers,
   objects,
   selection,
+  stage,
 });
 export const store = createStore(
   rootReducer,
-  initialState as IStore,
+  // initialState as IStore,
   composeWithDevTools(applyMiddleware(thunk))
 );

@@ -1,0 +1,18 @@
+.stagePanel {
+  height: 100%;
+  position: relative;
+}
+
+.stage {
+  position: absolute;
+  border: 1px solid blue;
+}
+
+.text {
+  position: absolute;
+  border: 1px dotted #828282;
+}
+
+.active {
+  border: 1px solid greenyellow;
+}

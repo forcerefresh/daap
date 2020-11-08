@@ -1,5 +1,5 @@
 import { Card, Elevation } from "@blueprintjs/core";
-import React, { Component } from "react";
+import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../../store/store";
@@ -7,6 +7,8 @@ import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../../store/actions/actions";
 import { ReactComponent as DrawTextboxIcon } from "../../../assets/icons/draw-textbox.svg";
 import { ReactComponent as AddTextboxIcon } from "../../../assets/icons/add-textbox2.svg";
+import { ReactComponent as PredefinedTextIcon } from "../../../assets/icons/predefined-text2.svg";
+import { IObject, ObjectType } from "../../../objects/types";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -32,7 +34,12 @@ export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, "text");
+              _addNewObject(activeLayerId, "text", {
+                left: 250,
+                top: 250,
+                width: 300,
+                height: 300,
+              });
               onRequestClose();
             }
           }}
@@ -49,7 +56,12 @@ export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, "text");
+              _addNewObject(activeLayerId, "text", {
+                left: 150,
+                top: 150,
+                width: 300,
+                height: 300,
+              });
               onRequestClose();
             }
           }}
@@ -66,16 +78,21 @@ export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, "text");
+              _addNewObject(activeLayerId, ObjectType.TEXT, {
+                left: 0,
+                top: 0,
+                width: 300,
+                height: 50,
+              });
               onRequestClose();
             }
           }}
         >
-          <DrawTextboxIcon
+          <PredefinedTextIcon
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
           <h3>CHOSE STYLE</h3>
-          <p>Pick predefined style from</p>
+          <p>Pick predefined style</p>
         </Card>
       </div>
       <div>
@@ -173,7 +190,11 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = {
-  _addNewObject: (layerId: string, type: string) => addNewObject(layerId, type),
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>
+  ) => addNewObject(layerId, type, objectProps),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPanel);

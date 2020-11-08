@@ -106,7 +106,6 @@ export function selection(
       });
     }
     case DELETE_SLIDE: {
-      console.log(action);
       return update(state, {
         activeObjectId: {
           $apply: (activeId) => null,
@@ -122,8 +121,6 @@ export function selection(
         },
         activeSlideId: {
           $apply: (activeId) => {
-            console.log(activeId);
-            console.log(action.payload.slideId);
             return activeId === action.payload.slideId ? null : activeId;
           },
         },
@@ -164,7 +161,6 @@ export function selection(
           },
         },
       });
-      return;
     }
     default:
       return state;

@@ -56,6 +56,7 @@
     border-bottom: 1px solid #353536;
     display: flex;
     align-items: center;
+
     > *:first-child {
       flex-grow: 1;
       display: flex;
@@ -68,17 +69,20 @@
         transform: rotate(90deg);
       }
     }
+
     .objectCount {
       display: none;
       color: #858181;
       margin-left: 10px;
     }
+
     .layerName {
       //color: green;
     }
   }
 
-  .deleteLayer {
+  .deleteLayer,
+  .deleteObject {
     float: right;
 
     margin: -4px;
@@ -91,9 +95,15 @@
   }
 
   .objectHolder {
-    padding-left: 57px !important;
-    padding: 3px;
+    padding: 8px 8px 8px 57px !important;
     border-bottom: 1px solid #444;
+    display: flex;
+
+    > *:first-child {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+    }
 
     &.active {
       border-top: 1px solid #1f82c0;
