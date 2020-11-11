@@ -27,7 +27,7 @@ export const TimelinePanel: React.FC<ITimelinePanel> = (props) => {
                   <div
                     className={css.timelineContent}
                     style={{
-                      marginLeft: object.timeline.keyFrames[0].time + "px",
+                      marginLeft: object.transitions.in?.delay + "px",
                     }}
                   >
                     {object.definition.type}

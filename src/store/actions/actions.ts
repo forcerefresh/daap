@@ -219,6 +219,10 @@ export function activateObject(objectId: string): any {
       console.log("object is already active ");
       return;
     }
+
+    const layerId = getState().objects.objectById[objectId].layerId;
+
+    dispatch(_activateLayer(layerId));
     dispatch(_activateObject(objectId));
   };
 }

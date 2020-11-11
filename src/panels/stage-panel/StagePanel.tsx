@@ -64,7 +64,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               const sizeObj = pick(object, "left", "top", "width", "height");
               const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
-              return (
+              return object.isVisible ? (
                 <div
                   key={object.id}
                   className={cx(css[object.type], {
@@ -74,7 +74,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 >
                   {object.type}
                 </div>
-              );
+              ) : null;
             });
           })}
         </div>

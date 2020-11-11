@@ -40,24 +40,18 @@ function createCommonObject(): Omit<
     id: uuid(),
     type: ObjectType.TEXT,
     isVisible: true,
-    hasTimeline: true,
-    timeline: {
-      keyFrames: [
-        {
-          time: 1000,
-          properties: {
-            left: 0,
-            top: 0,
-          },
+    isLocked: false,
+    // hasTimeline: true,
+    transitions: {
+      in: {
+        relativeTo: "stage",
+        delay: 500,
+        duration: 1500,
+        effect: {
+          alias: "slideFromBottomLeft",
+          properties: {},
         },
-        {
-          time: 4000,
-          properties: {
-            left: 500,
-            top: 100,
-          },
-        },
-      ],
+      },
     },
   };
 }

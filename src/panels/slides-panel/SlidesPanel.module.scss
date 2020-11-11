@@ -1,6 +1,7 @@
 .panel {
+  display: flex;
   flex-direction: column;
-  height: 25vh;
+  height: 20vh;
 
   input,
   button,
@@ -23,21 +24,33 @@
     }
   }
 
-  .slides-holder {
+  .slidesHolder {
     flex-grow: 1;
     overflow-y: auto;
   }
 
   .slide {
+    display: flex;
+    align-items: center;
     padding: 8px;
     border: 1px solid #252526;
     border-bottom: 1px solid #353536;
-    
+
     &:hover .deleteSlide {
       :global {
         .bp3-icon-delete {
           color: gray !important;
         }
+      }
+    }
+
+    .slideDescription {
+      flex-grow: 1;
+    }
+
+    .actionButtons {
+      > * {
+        margin-right: 5px;
       }
     }
   }
@@ -70,5 +83,11 @@
 
   .selected + .selected {
     border-top: 1px solid #252526;
+  }
+
+  .settingsPanelHolder {
+    // temporary - remove this
+    min-width: 400px;
+    min-height: 300px;
   }
 }

@@ -13,6 +13,7 @@ import {
   activateObject,
   removeLayersFromSelection,
   deleteObjects,
+  updateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
@@ -40,6 +41,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _selectLayers,
     _activateObject,
     _deleteObjects,
+    _updateObject,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -147,14 +149,65 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               {openLayerById[layer.id] && (
                 <>
                   {layer.objectIds.map((objectId) => {
+                    const object = objectById[objectId];
+
                     return (
                       <div
+                        key={objectId}
                         onClick={() => _activateObject(objectId)}
                         className={cx(css.objectHolder, {
                           [css.active]: activeObjectId === objectId,
                         })}
                       >
-                        <div>{objectById[objectId].type}</div>
+                        <div className={css.actionButtons}>
+                          <Button
+                            minimal
+                            onClick={(event: any) => {
+                              event.stopPropagation();
+                              // const object = objectById[objectId];
+                              //_updateObject({
+                              //  ...object,
+                              // isLocked: !object.isLocked,
+                              // });
+                            }}
+                            small={true}
+                            icon="walk"
+                          ></Button>
+                          <Button
+                            active={object.isVisible}
+                            minimal
+                            onClick={(event: any) => {
+                              event.stopPropagation();
+                              _updateObject({
+                                ...object,
+                                isVisible: !object.isVisible,
+                              });
+                            }}
+                            small={true}
+                            icon={object.isVisible ? "eye-open" : "eye-off"}
+                          ></Button>
+                          <Button
+                            minimal
+                            active={object.isLocked}
+                            onClick={(event: any) => {
+                              event.stopPropagation();
+                              _updateObject({
+                                ...object,
+                                isLocked: !object.isLocked,
+                              });
+                            }}
+                            small={true}
+                            icon={object.isLocked ? "lock" : "unlock"}
+                          ></Button>
+                        </div>
+                        <div className={css.objectDescription}>
+                          <div>{objectById[objectId].type} </div>
+                          <div>
+                            delay: <span className={css.inlineValue}>1.2s</span>
+                            , in: <span className={css.inlineValue}>2s</span>,
+                            out: <span className={css.inlineValue}>2s</span>
+                          </div>
+                        </div>
                         <div>
                           <Button
                             minimal
@@ -217,6 +270,7 @@ const mapDispatchToProps = {
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
+  _updateObject: (object: IObject) => updateObject(object),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

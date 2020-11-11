@@ -33,25 +33,25 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   layerId: string;
   type: ObjectType;
   isVisible: boolean;
-  hasTimeline: boolean; // show in timeline
-  timeline: ITimeline;
+  isLocked: boolean;
+  // hasTimeline: boolean; // show in timeline
+  transitions: ITransitions;
   definition: IDefinition<T>;
 }
 
-export interface ITimeline {
-  keyFrames: IKeyFrame[];
+export interface ITransitions {
+  in?: ITransition;
+  out?: ITransition;
 }
 
-export interface IKeyFrame {
-  time: number;
-  properties: IKeyFrameProperties;
+export interface ITransition {
+  relativeTo: "stage";
+  delay: 500;
+  duration: 1500;
+  effect: IEffect;
 }
 
-export interface IKeyFrameProperties {
-  left?: number;
-  top?: number;
-  right?: number; // TODO: do we need this?
-  bottom?: number; // TODO: do we need this?
-  scale?: number;
-  rotate?: number;
+export interface IEffect {
+  alias: string;
+  properties?: object; // TODO to be defined
 }

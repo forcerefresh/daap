@@ -1,5 +1,5 @@
 .layerPanel {
-  height: 25vh;
+  height: 30vh;
   display: flex;
   flex-direction: column;
 
@@ -8,6 +8,14 @@
   textarea,
   :focus {
     outline: none;
+  }
+
+  .addNewLayer {
+    :global {
+      .bp3-icon {
+        color: #53e456 !important;
+      }
+    }
   }
 
   .panelHeader {
@@ -37,18 +45,6 @@
 
   .layer {
     border: 1px solid #252526;
-
-    &:hover .deleteLayer {
-      :global {
-        .bp3-icon-delete {
-          color: gray !important;
-        }
-      }
-    }
-
-    &:hover .objectCount {
-      display: block;
-    }
   }
 
   .layerInner {
@@ -79,6 +75,18 @@
     .layerName {
       //color: green;
     }
+
+    &:hover .deleteLayer {
+      :global {
+        .bp3-icon-delete {
+          color: #ff5151 !important;
+        }
+      }
+    }
+
+    &:hover .objectCount {
+      display: block;
+    }
   }
 
   .deleteLayer,
@@ -95,19 +103,37 @@
   }
 
   .objectHolder {
-    padding: 8px 8px 8px 57px !important;
+    padding: 8px !important;
     border-bottom: 1px solid #444;
     display: flex;
-
-    > *:first-child {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-    }
+    align-items: center;
 
     &.active {
       border-top: 1px solid #1f82c0;
       border-bottom: 1px solid #1f82c0;
+    }
+
+    .objectDescription {
+      flex-grow: 1;
+      display: block;
+
+      > *:nth-child(2) {
+        color: #737373;
+      }
+    }
+
+    .actionButtons {
+      > * {
+        margin-right: 5px;
+      }
+    }
+
+    &:hover .deleteObject {
+      :global {
+        .bp3-icon-delete {
+          color: #ff5151 !important;
+        }
+      }
     }
   }
 
@@ -127,5 +153,9 @@
 
   .selected + .selected {
     border-top: 1px solid #252526;
+  }
+
+  .inlineValue {
+    font-weight: bold;
   }
 }

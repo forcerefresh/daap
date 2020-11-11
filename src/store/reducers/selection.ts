@@ -54,7 +54,12 @@ export function selection(
       const activeLayerId = action.payload;
 
       // reset layerSelection (selectedLayerIds: [])
-      return { ...state, activeLayerId };
+      return {
+        ...state,
+        activeLayerId,
+        activeObjectId: null,
+        selectedObjectIds: [],
+      };
     }
     case ACTIVATE_OBJECT: {
       const activeObjectId = action.payload;

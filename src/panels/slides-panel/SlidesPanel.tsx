@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import cx from "classnames";
-import { Button } from "@blueprintjs/core";
+import { Button, Popover, Portal, Position } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -11,8 +11,11 @@ import {
   addSlidesToSelection,
   removeSlidesFromSelection,
 } from "../../store/actions/actions";
+import SlideSettingsPanel from "./slide-settings-panel/SlideSettingsPanel";
 
 import css from "./SlidesPanel.module.scss";
+import { EmptyID } from "../../store/types";
+import useOnClickOutside from "../../utils/hooks";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -31,6 +34,11 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _removeSlidesFromSelection,
   } = props;
 
+  const [
+    showSettingsPanelForSlideId,
+    setShowSettingsPanelForSlideId,
+  ] = useState<string>(EmptyID);
+
   const onSlideClick = (
     event: React.MouseEvent<HTMLDivElement>,
     slideId: string
@@ -44,6 +52,13 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
       _selectSlides([slideId]);
     }
   };
+
+  // logic for handling click outside
+  const ref = useRef(null);
+  const handleClickOutside = () => {
+    setShowSettingsPanelForSlideId(EmptyID);
+  };
+  useOnClickOutside(ref, handleClickOutside);
 
   return (
     <div className={css.panel}>
@@ -75,7 +90,27 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                 }
               )}
             >
-              {slideById[slideId].name}
+              <div className={css.actionButtons}>
+                <Button
+                  minimal
+                  onClick={() => setShowSettingsPanelForSlideId(slideId)}
+                  className={css.slideProperties}
+                  small={true}
+                  icon="cog"
+                ></Button>
+                <Portal>
+                  {showSettingsPanelForSlideId !== EmptyID && (
+                    <div ref={ref}>
+                      <SlideSettingsPanel
+                        slideId={showSettingsPanelForSlideId}
+                      />
+                    </div>
+                  )}
+                </Portal>
+              </div>
+              <div className={css.slideDescription}>
+                {slideById[slideId].name}
+              </div>
               <Button
                 minimal
                 onClick={(event: any) => {
