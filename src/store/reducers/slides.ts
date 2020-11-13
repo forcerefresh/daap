@@ -9,9 +9,15 @@ import {
 import update from "immutability-helper";
 import { EmptyID } from "../types";
 
+export interface ISlideDuration {
+  inheritFrom: "global" | "project" | "custom";
+  customValue: number;
+}
+
 export interface ISlide {
   id: string;
   name: string;
+  duration: ISlideDuration;
   layerIds: string[];
   nextLayerIdCounter: number;
 }

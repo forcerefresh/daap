@@ -41,14 +41,13 @@ function createCommonObject(): Omit<
     type: ObjectType.TEXT,
     isVisible: true,
     isLocked: false,
-    // hasTimeline: true,
     transitions: {
       in: {
         relativeTo: "stage",
-        delay: 500,
-        duration: 1500,
+        delay: 0,
+        duration: 1000,
         effect: {
-          alias: "slideFromBottomLeft",
+          id: "none",
           properties: {},
         },
       },

@@ -11,7 +11,7 @@ import {
   addSlidesToSelection,
   removeSlidesFromSelection,
 } from "../../store/actions/actions";
-import SlideSettingsPanel from "./slide-settings-panel/SlideSettingsPanel";
+import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
 import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
@@ -59,6 +59,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     setShowSettingsPanelForSlideId(EmptyID);
   };
   useOnClickOutside(ref, handleClickOutside);
+  
 
   return (
     <div className={css.panel}>

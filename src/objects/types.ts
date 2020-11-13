@@ -46,12 +46,12 @@ export interface ITransitions {
 
 export interface ITransition {
   relativeTo: "stage";
-  delay: 500;
-  duration: 1500;
+  delay: number;
+  duration: number;
   effect: IEffect;
 }
 
 export interface IEffect {
-  alias: string;
+  id: string;
   properties?: object; // TODO to be defined
 }

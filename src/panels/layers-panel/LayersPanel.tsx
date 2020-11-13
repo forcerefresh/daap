@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Button } from "@blueprintjs/core";
+import { Button, Portal } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -20,6 +20,21 @@ import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/slides";
 import { isEmpty } from "lodash-es";
 import { IObject } from "../../objects/types";
+import useOnClickOutside from "../../utils/hooks";
+import { EmptyID } from "../../store/types";
+import EffectPanel from "../effect-panel/EffectPanel";
+
+function calculateTimelineRect(
+  slideDuration: number,
+  objectDelay: number,
+  objectDuration: number,
+  holderWidth: number = 1
+) {
+  const left = (objectDelay / slideDuration) * holderWidth;
+  const width = (objectDuration / slideDuration) * holderWidth;
+
+  return { left, width };
+}
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -48,6 +63,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     [key: string]: boolean;
   }>({});
 
+  const [showEffectPanelForObjectId, setShowEffectPanelForObjectId] = useState<
+    string
+  >(EmptyID);
+
   useEffect(() => {
     if (activeLayerId && isEmpty(openLayerById)) {
       setOpenLayerById({ [activeLayerId]: true });
@@ -75,161 +94,204 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
 
+  // logic for handling click outside
+  const effectPanelRef = useRef(null);
+  const handleClickOutside = () => {
+    setShowEffectPanelForObjectId(EmptyID);
+  };
+  useOnClickOutside(effectPanelRef, handleClickOutside);
+
+  // render panels in Portal
+  const renderPanels = () => {
+    return (
+      <Portal className="bp3-dark">
+        {showEffectPanelForObjectId !== EmptyID && (
+          <div ref={effectPanelRef}>
+            <EffectPanel objectId={showEffectPanelForObjectId} />
+          </div>
+        )}
+      </Portal>
+    );
+  };
+
   return (
-    <div className={css.layerPanel}>
-      <div className={css.panelHeader}>
-        <div>
-          LAYERS PANEL
-          <span className={css.slideName}>
-            {slide && " [ " + slide.name + " ] "}
-          </span>
+    <>
+      <div className={css.layerPanel}>
+        <div className={css.panelHeader}>
+          <div>
+            LAYERS PANEL
+            <span className={css.slideName}>
+              {slide && " [ " + slide.name + " ] "}
+            </span>
+          </div>
+          <div>
+            <Button
+              minimal
+              disabled={!activeSlideId}
+              onClick={() => _addNewLayer(activeSlideId as string)}
+              className={css.addNewLayer}
+              small={true}
+              icon="add"
+            ></Button>
+          </div>
         </div>
-        <div>
-          <Button
-            minimal
-            disabled={!activeSlideId}
-            onClick={() => _addNewLayer(activeSlideId as string)}
-            className={css.addNewLayer}
-            small={true}
-            icon="add"
-          ></Button>
-        </div>
-      </div>
-      <div className={css.layersHolder}>
-        {layerArr?.map((layer) => {
-          return (
-            <div
-              key={layer.id}
-              className={cx(css.layer, {
-                [css.selected]:
-                  selectedLayerIds.length > 0 /*1*/ &&
-                  selectedLayerIds.indexOf(layer.id) !== -1,
-              })}
-            >
+        <div className={css.layersHolder}>
+          {layerArr?.map((layer) => {
+            return (
               <div
-                key={layer?.id}
-                onClick={(event) => onLayerClick(event, layer.id)}
-                className={cx(css.layerInner, {
-                  [css.active]: activeLayerId === layer.id,
+                key={layer.id}
+                className={cx(css.layer, {
+                  [css.selected]:
+                    selectedLayerIds.length > 0 /*1*/ &&
+                    selectedLayerIds.indexOf(layer.id) !== -1,
                 })}
               >
-                <div>
-                  <Button
-                    minimal
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                      toggleLayer(layer.id);
-                    }}
-                    className={cx(css.layerToggle, {
-                      [css.layerOpen]: openLayerById[layer.id],
-                    })}
-                    small={true}
-                    icon="play"
-                  ></Button>
+                <div
+                  key={layer?.id}
+                  onClick={(event) => onLayerClick(event, layer.id)}
+                  className={cx(css.layerInner, {
+                    [css.active]: activeLayerId === layer.id,
+                  })}
+                >
+                  <div>
+                    <Button
+                      minimal
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        toggleLayer(layer.id);
+                      }}
+                      className={cx(css.layerToggle, {
+                        [css.layerOpen]: openLayerById[layer.id],
+                      })}
+                      small={true}
+                      icon="play"
+                    ></Button>
 
-                  <div className={css.layerName}>{layer.name}</div>
+                    <div className={css.layerName}>{layer.name}</div>
 
-                  <div className={css.objectCount}>
-                    (objects: {layer.objectIds.length})
+                    <div className={css.objectCount}>
+                      (objects: {layer.objectIds.length})
+                    </div>
+                  </div>
+                  <div>
+                    <Button
+                      minimal
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        _deleteLayers([layer.id]);
+                      }}
+                      className={css.deleteLayer}
+                      small={true}
+                      icon="delete"
+                    ></Button>
                   </div>
                 </div>
-                <div>
-                  <Button
-                    minimal
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                      _deleteLayers([layer.id]);
-                    }}
-                    className={css.deleteLayer}
-                    small={true}
-                    icon="delete"
-                  ></Button>
-                </div>
-              </div>
-              {openLayerById[layer.id] && (
-                <>
-                  {layer.objectIds.map((objectId) => {
-                    const object = objectById[objectId];
+                {openLayerById[layer.id] && (
+                  <>
+                    {layer.objectIds.map((objectId) => {
+                      const object = objectById[objectId];
 
-                    return (
-                      <div
-                        key={objectId}
-                        onClick={() => _activateObject(objectId)}
-                        className={cx(css.objectHolder, {
-                          [css.active]: activeObjectId === objectId,
-                        })}
-                      >
-                        <div className={css.actionButtons}>
-                          <Button
-                            minimal
-                            onClick={(event: any) => {
-                              event.stopPropagation();
-                              // const object = objectById[objectId];
-                              //_updateObject({
-                              //  ...object,
-                              // isLocked: !object.isLocked,
-                              // });
-                            }}
-                            small={true}
-                            icon="walk"
-                          ></Button>
-                          <Button
-                            active={object.isVisible}
-                            minimal
-                            onClick={(event: any) => {
-                              event.stopPropagation();
-                              _updateObject({
-                                ...object,
-                                isVisible: !object.isVisible,
-                              });
-                            }}
-                            small={true}
-                            icon={object.isVisible ? "eye-open" : "eye-off"}
-                          ></Button>
-                          <Button
-                            minimal
-                            active={object.isLocked}
-                            onClick={(event: any) => {
-                              event.stopPropagation();
-                              _updateObject({
-                                ...object,
-                                isLocked: !object.isLocked,
-                              });
-                            }}
-                            small={true}
-                            icon={object.isLocked ? "lock" : "unlock"}
-                          ></Button>
-                        </div>
-                        <div className={css.objectDescription}>
-                          <div>{objectById[objectId].type} </div>
-                          <div>
-                            delay: <span className={css.inlineValue}>1.2s</span>
-                            , in: <span className={css.inlineValue}>2s</span>,
-                            out: <span className={css.inlineValue}>2s</span>
+                      const size = calculateTimelineRect(
+                        slide?.duration.customValue || 1,
+                        object?.transitions?.in?.delay || 1,
+                        object?.transitions?.in?.duration || 1,
+                        340
+                      );
+                      const timelineStyle = {
+                        left: size.left + "px",
+                        width: size.width + "px",
+                      };
+                      return (
+                        <div
+                          key={objectId}
+                          onClick={() => _activateObject(objectId)}
+                          className={cx(css.objectHolder, {
+                            [css.active]: activeObjectId === objectId,
+                          })}
+                        >
+                          <div className={css.objectHolderInner}>
+                            <div className={css.actionButtons}>
+                              <Button
+                                minimal
+                                onClick={(event: any) => {
+                                  event.stopPropagation();
+                                  setShowEffectPanelForObjectId(objectId);
+                                }}
+                                small={true}
+                                icon="walk"
+                              ></Button>
+                              <Button
+                                active={object.isVisible}
+                                minimal
+                                onClick={(event: any) => {
+                                  event.stopPropagation();
+                                  _updateObject({
+                                    ...object,
+                                    isVisible: !object.isVisible,
+                                  });
+                                }}
+                                small={true}
+                                icon={object.isVisible ? "eye-open" : "eye-off"}
+                              ></Button>
+                              <Button
+                                minimal
+                                active={object.isLocked}
+                                onClick={(event: any) => {
+                                  event.stopPropagation();
+                                  _updateObject({
+                                    ...object,
+                                    isLocked: !object.isLocked,
+                                  });
+                                }}
+                                small={true}
+                                icon={object.isLocked ? "lock" : "unlock"}
+                              ></Button>
+                            </div>
+                            <div className={css.objectDescription}>
+                              <div>{objectById[objectId].type} </div>
+                              <div>
+                                delay:{" "}
+                                <span className={css.inlineValue}>1.2s</span>,
+                                in: <span className={css.inlineValue}>2s</span>,
+                                out: <span className={css.inlineValue}>2s</span>
+                              </div>
+                            </div>
+                            <div>
+                              <Button
+                                minimal
+                                onClick={(event: any) => {
+                                  event.stopPropagation();
+                                  _deleteObjects([objectId]);
+                                }}
+                                className={css.deleteObject}
+                                small={true}
+                                icon="delete"
+                              ></Button>
+                            </div>
+                          </div>
+                          <div
+                            className={cx(css.timelineHolder, {
+                              [css.hideMe]:
+                                object.transitions.in?.effect.id === "none",
+                            })}
+                          >
+                            <div
+                              className={css.timeline}
+                              style={timelineStyle}
+                            ></div>
                           </div>
                         </div>
-                        <div>
-                          <Button
-                            minimal
-                            onClick={(event: any) => {
-                              event.stopPropagation();
-                              _deleteObjects([objectId]);
-                            }}
-                            className={css.deleteObject}
-                            small={true}
-                            icon="delete"
-                          ></Button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-            </div>
-          );
-        })}
+                      );
+                    })}
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </div>
+      {renderPanels()}
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { IStore } from "../../../store/store";
+import { IStore } from "../../store/store";
 
 import css from "./SlideSettingsPanel.module.scss";
 

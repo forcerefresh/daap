@@ -30,6 +30,10 @@ export function addNewSlide(): any {
     const slide: ISlide = {
       id: uuid(),
       name: `Slide ${getState().slides.nextSlideIdCounter}`,
+      duration: {
+        inheritFrom: "custom",
+        customValue: 10000,
+      },
       layerIds: [],
       nextLayerIdCounter: 0,
     };
