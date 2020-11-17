@@ -120,12 +120,14 @@
       flex-grow: 1;
       display: block;
 
-      > *:nth-child(2) {
+      > *:nth-child(2),
+      > *:nth-child(3) {
         color: #737373;
       }
     }
 
     .actionButtons {
+      width: 33%;
       > * {
         margin-right: 5px;
       }

@@ -2,6 +2,10 @@ import { Button, FormGroup, HTMLSelect } from "@blueprintjs/core";
 import { cloneDeep, get, noop, set } from "lodash-es";
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import {
+  getEffectDefinition,
+  getEffectsOptions,
+} from "../../../effects/effects";
 import { getInputForm } from "../../../inputs/input-factory";
 import { getNumericFiled, getSelectFiled } from "../../../inputs/input-utils";
 import { InputType } from "../../../inputs/types";
@@ -53,6 +57,43 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   const { objectId, effectType, objectById, _updateObject } = props;
 
   const object = objectById[objectId];
+
+  const renderEffectForm = (
+    effectId: string,
+    object: IObject,
+    propertiesPath: string
+  ) => {
+    const effectDefinition = getEffectDefinition(effectId);
+
+    return effectDefinition.definition.form.map((item) => {
+      function onChange(value: any) {
+        console.log(item);
+
+        console.log(value);
+
+        console.log(object);
+        const retObj = cloneDeep(object);
+        if (retObj) {
+          const properties = get(retObj, propertiesPath) || {};
+          properties[item.propertyName] = value;
+          set(retObj, propertiesPath, properties);
+          _updateObject(retObj);
+        }
+      }
+
+      console.log(effectDefinition.defaults[item.propertyName]);
+      console.log(item.propertyName);
+
+      const value = get(object, propertiesPath)[item.propertyName];
+      const defaultValue = effectDefinition.defaults[item.propertyName];
+      const inputProps = {
+        ...item,
+        value: value || defaultValue,
+      };
+      return getInputForm(item.inputType, inputProps, noop, onChange);
+    });
+  };
+
   return (
     <div className={css.effectConfigurationForm}>
       <div className={css.inlineFlex}>
@@ -83,18 +124,21 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
       {getSelectFiled(
         "Effect",
         get(object, "transitions.in.effect.id"),
-        [
-          { label: "None", value: "none" },
-          { label: "Fade", value: "fade" },
-          { label: "Zoom", value: "zoom" },
-          { label: "Slide", value: "slide" },
-        ],
+        getEffectsOptions(),
         (value: any) => {
           const obj = cloneDeep(object);
           set(obj, "transitions.in.effect.id", value);
           _updateObject(obj);
         }
       )}
+
+      <div className={css.dynamicFields}>
+        {renderEffectForm(
+          get(object, "transitions.in.effect.id"),
+          object,
+          "transitions.in.effect.properties"
+        )}
+      </div>
     </div>
   );
 };

@@ -76,7 +76,6 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  // const { object } = state;
   return {};
 };
 

@@ -19,6 +19,7 @@ export interface IStore {
   selection: ISelection;
   stage: IStage;
 }
+
 const rootReducer = combineReducers({
   slides,
   layers,
@@ -26,8 +27,9 @@ const rootReducer = combineReducers({
   selection,
   stage,
 });
+
 export const store = createStore(
   rootReducer,
-  // initialState as IStore,
+  initialState as IStore,
   composeWithDevTools(applyMiddleware(thunk))
 );

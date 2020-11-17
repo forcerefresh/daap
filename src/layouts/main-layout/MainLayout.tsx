@@ -15,7 +15,7 @@ export default function MainLayout(props: IMainLayout) {
       <div className={css.toolbar}>{toolbar}</div>
       <div className={css.center}>
         <div className={css.content}>{content}</div>
-        <div className={css.timeline}>{timeline}</div>
+        {/*<div className={css.timeline}>{timeline}</div>*/}  
       </div>
       <div className={css.properties}>{properties}</div>
     </div>

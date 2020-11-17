@@ -67,6 +67,13 @@ function createTextObject(): Omit<
       id: uuid(),
       type: ObjectType.TEXT,
       properties: {
+        text: {
+          displayName: "Text",
+          propertyName: "text",
+          inputType: InputType.TEXT,
+          value: "",
+          defaultValue: "",
+        },
         color: {
           displayName: "Color",
           propertyName: "color",

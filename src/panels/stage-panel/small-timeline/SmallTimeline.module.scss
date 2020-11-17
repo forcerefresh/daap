@@ -1,0 +1,37 @@
+.smallTimeline {
+  position: relative;
+
+  .smallTimelineInner {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .line {
+    background: #d88d12;
+    height: 4px;
+    position: absolute;
+    bottom: 17px;
+    left: 20px;
+    right: 20px;
+  }
+
+  .thumbHolder {
+    position: absolute;
+    left: 10px;
+    top: 11px;
+
+    .thumb {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background: #03ae2b;
+      left: 0px;
+      top: 0px;
+      border-radius: 100px;
+    }
+  }
+}

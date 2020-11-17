@@ -18,7 +18,7 @@ import {
 import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/slides";
-import { isEmpty } from "lodash-es";
+import { get, isEmpty } from "lodash-es";
 import { IObject } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks";
 import { EmptyID } from "../../store/types";
@@ -106,7 +106,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     return (
       <Portal className="bp3-dark">
         {showEffectPanelForObjectId !== EmptyID && (
-          <div ref={effectPanelRef}>
+          <div ref={effectPanelRef}>  
             <EffectPanel objectId={showEffectPanelForObjectId} />
           </div>
         )}
@@ -212,13 +212,16 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           <div className={css.objectHolderInner}>
                             <div className={css.actionButtons}>
                               <Button
+                                active={
+                                  object.id === showEffectPanelForObjectId
+                                }
                                 minimal
                                 onClick={(event: any) => {
                                   event.stopPropagation();
                                   setShowEffectPanelForObjectId(objectId);
                                 }}
                                 small={true}
-                                icon="walk"
+                                icon="walk" 
                               ></Button>
                               <Button
                                 active={object.isVisible}
@@ -251,10 +254,22 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               <div>{objectById[objectId].type} </div>
                               <div>
                                 delay:{" "}
-                                <span className={css.inlineValue}>1.2s</span>,
-                                in: <span className={css.inlineValue}>2s</span>,
-                                out: <span className={css.inlineValue}>2s</span>
+                                <span className={css.inlineValue}>
+                                  {get(object, "transitions.in.delay")}ms
+                                </span>
+                                , in:{" "}
+                                <span className={css.inlineValue}>
+                                  {get(object, "transitions.in.duration")}ms
+                                </span>
                               </div>
+                              {get(object, "transitions.out.duration") && (
+                                <div>
+                                  out:
+                                  <span className={css.inlineValue}>
+                                    {get(object, "transitions.out.duration")}ms
+                                  </span>
+                                </div>
+                              )}
                             </div>
                             <div>
                               <Button

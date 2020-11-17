@@ -6,13 +6,32 @@ import { INumberInput, IUpdateInput } from "../types";
 export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, propertyName, value, onInput = noop } = props;
+  const {
+    displayName,
+    propertyName,
+    helperText,
+    value,
+    onInput = noop,
+  } = props;
 
   const id = `${propertyName}_input_number`;
 
+  console.log(value);
   return (
-    <FormGroup label={displayName} labelFor={id} inline>
-      <NumericInput id={id} value={value} onValueChange={onInput} />
+    <FormGroup
+      label={displayName}
+      labelFor={id}
+      helperText={!!helperText && helperText}
+      inline
+    >
+      <NumericInput
+        id={id}
+        value={value}
+        onValueChange={(value, valueAsString) => {
+          console.log(valueAsString);
+          onInput(parseFloat(valueAsString));
+        }}
+      />
     </FormGroup>
   );
 };

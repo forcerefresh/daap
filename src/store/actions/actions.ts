@@ -459,6 +459,22 @@ export function setStageZoom(zoom: number): SetStageZoomAction {
   };
 }
 
+// ******
+
+export const SET_STAGE_PREVIEW = "Set stage preview";
+
+export interface SetStagePreviewAction {
+  type: typeof SET_STAGE_PREVIEW;
+  payload: boolean;
+}
+
+export function setStagePreview(isPreview: boolean): SetStagePreviewAction {
+  return {
+    type: SET_STAGE_PREVIEW,
+    payload: isPreview,
+  };
+}
+
 // ***
 export type ActionTypes =
   // slide
@@ -492,4 +508,5 @@ export type ActionTypes =
 
   //stage
   | SetStageSizeAction
-  | SetStageZoomAction;
+  | SetStageZoomAction
+  | SetStagePreviewAction;

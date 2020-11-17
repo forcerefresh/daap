@@ -10,18 +10,15 @@ import css from "./ToolbarPanel.module.scss";
 import AddPanel from "./add-panel/AddPanel";
 
 enum VisiblePanel {
-  Add = "add",
   None = "none",
+  Add = "add",
+  Settings= "settings"
 }
 
 const ICON_SIZE = 36;
 
 export const ToolbarPanel = () => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
-
-  const togglePanel = (panel: VisiblePanel) => {
-    setShowPanel(showPanel === panel ? VisiblePanel.None : VisiblePanel.Add);
-  };
 
   return (
     <div className={css.toolbar}>
@@ -31,7 +28,7 @@ export const ToolbarPanel = () => {
             minimal
             active={showPanel === VisiblePanel.Add}
             onClick={() => {
-              togglePanel(VisiblePanel.Add);
+              setShowPanel(VisiblePanel.Add);
             }}
           >
             <Icon icon="add" iconSize={ICON_SIZE} color={"gray"} />

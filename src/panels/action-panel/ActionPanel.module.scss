@@ -1,5 +1,13 @@
 .actionPanel {
   margin-top: auto;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
 }
 
 .previewButtons {

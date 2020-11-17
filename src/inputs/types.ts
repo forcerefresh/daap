@@ -16,6 +16,7 @@ export interface IUpdateInput {
 export interface INumberInput {
   inputType: InputType.NUMBER;
   displayName: string;
+  helperText?: string;
   propertyName: string;
   value: number;
   defaultValue: number;
@@ -25,6 +26,7 @@ export interface INumberInput {
 export interface ITextInput {
   inputType: InputType.TEXT;
   displayName: string;
+  helperText?: string;
   propertyName: string;
   value: string;
   defaultValue: string;
@@ -41,6 +43,7 @@ export interface IColorInput {
 export interface ISelectInput {
   inputType: InputType.SELECT;
   displayName: string;
+  helperText?: string;
   propertyName: string;
   value: string;
   defaultValue: string | null;
@@ -49,6 +52,7 @@ export interface ISelectInput {
 
 // Full form for text
 export interface TextProperties {
+  text: ITextInput;
   color: IColorInput;
   fontSize: ITextInput;
   weight: ISelectInput;

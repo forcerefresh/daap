@@ -12,6 +12,7 @@ export function getInputForm<T>(
   onInput?: (config: any) => void
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
+  console.log(key);
   switch (inputType) {
     case InputType.NUMBER: {
       return (
@@ -24,7 +25,7 @@ export function getInputForm<T>(
       );
     }
     case InputType.TEXT: {
-      return <TextInputForm key={key} {...inputProps} onChange={onChange} />;
+      return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
     }
     case InputType.COLOR: {
       return <ColorInputForm key={key} {...inputProps} onChange={onChange} />;

@@ -10,3 +10,11 @@
     margin-left: 16px;
   }
 }
+
+.dynamicFields {
+  :global {
+    .bp3-label {
+      width: 80px;
+    }
+  }
+}
