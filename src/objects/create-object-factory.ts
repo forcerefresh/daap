@@ -48,7 +48,7 @@ function createCommonObject(): Omit<
         duration: 1000,
         effect: {
           id: "none",
-          properties: {},
+          values: {},
         },
       },
     },

@@ -81,14 +81,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   useEffect(() => {
     if (transitionsDataArr) {
       transitionsDataArr.forEach((data) => {
-        if (data.transitions.in) {
-          tl.from(
+        const effIn = data.transitions.in;
+        if (effIn) {
+          (tl as any)[effIn.effect.id](
             "." + data.objectClass,
             {
-              duration: data.transitions.in.duration / 1000,
+              duration: effIn.duration / 1000,
               opacity: 0,
             },
-            data.transitions.in.delay / 1000
+            effIn.delay / 1000
           );
         }
       });

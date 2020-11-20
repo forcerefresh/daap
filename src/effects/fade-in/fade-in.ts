@@ -1,5 +1,8 @@
 import { InputType } from "../../inputs/types";
 import { Easings, IEffectBase } from "../types";
+import gsap from "gsap"; // TODO: remove player from here
+
+const fadeIn = "fadeIn";
 
 interface IFadeInEffect extends IEffectBase {
   fromOpacity: number;
@@ -7,7 +10,7 @@ interface IFadeInEffect extends IEffectBase {
 }
 
 export const fadeInDefaults: IFadeInEffect = {
-  id: "fadeIn",
+  id: fadeIn,
   hasDelay: true,
   hasDuration: true,
   hasEasing: true,
@@ -18,7 +21,7 @@ export const fadeInDefaults: IFadeInEffect = {
 };
 
 export const fadeInDefinition = {
-  id: "fadeIn",
+  id: fadeIn,
   name: "Fade In",
   form: [
     {
@@ -35,3 +38,17 @@ export const fadeInDefinition = {
     },
   ],
 };
+
+// Register an effect for reuse
+gsap.registerEffect({
+  name: fadeIn,
+  effect: function (targets: any, config: any) {
+    console.log(arguments);
+    return gsap.to(targets, {
+      duration: config.duration,
+      opacity: 0,
+    });
+  },
+  defaults: { duration: 8 },
+  extendTimeline: true,
+});

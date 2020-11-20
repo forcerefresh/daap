@@ -53,5 +53,6 @@ export interface ITransition {
 
 export interface IEffect {
   id: string;
-  properties?: object; // TODO to be defined
+  values?: object;
+  // properties?: object; // TODO to be defined
 }

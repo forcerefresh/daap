@@ -61,22 +61,17 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   const renderEffectForm = (
     effectId: string,
     object: IObject,
-    propertiesPath: string
+    valuesPath: string
   ) => {
     const effectDefinition = getEffectDefinition(effectId);
 
     return effectDefinition.definition.form.map((item) => {
       function onChange(value: any) {
-        console.log(item);
-
-        console.log(value);
-
-        console.log(object);
         const retObj = cloneDeep(object);
         if (retObj) {
-          const properties = get(retObj, propertiesPath) || {};
-          properties[item.propertyName] = value;
-          set(retObj, propertiesPath, properties);
+          const values = get(retObj, valuesPath) || {};
+          values[item.propertyName] = value;
+          set(retObj, valuesPath, values);
           _updateObject(retObj);
         }
       }
@@ -84,7 +79,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
       console.log(effectDefinition.defaults[item.propertyName]);
       console.log(item.propertyName);
 
-      const value = get(object, propertiesPath)[item.propertyName];
+      const value = get(object, valuesPath)[item.propertyName];
+      console.log(effectDefinition);
       const defaultValue = effectDefinition.defaults[item.propertyName];
       const inputProps = {
         ...item,
@@ -136,7 +132,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         {renderEffectForm(
           get(object, "transitions.in.effect.id"),
           object,
-          "transitions.in.effect.properties"
+          "transitions.in.effect.values"
         )}
       </div>
     </div>
