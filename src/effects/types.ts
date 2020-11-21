@@ -5,6 +5,7 @@ export interface IEffectBase {
   hasEasing: boolean;
   easing: Easings;
   customEasing: string | null;
+  duration?: number;
 }
 
 export enum Easings {

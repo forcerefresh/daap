@@ -1,6 +1,8 @@
-import { fadeInDefaults, fadeInDefinition } from "./fade-in/fade-in";
+import { fadeInDefaults, fadeInDefinition } from "./fade-in/fade-in.definition";
 import { noneDefaults, noneDefinition } from "./none/none";
 import { zoomInDefaults, zoomInDefinition } from "./zoom-in/zoom-in";
+//import all effects
+import "./fade-in/fade-in.effect";
 
 export function getEffectDefinition(effectId: string): IEffectHolder {
   return effects.find(
@@ -21,24 +23,24 @@ registerEffect(noneDefinition, noneDefaults);
 registerEffect(fadeInDefinition, fadeInDefaults);
 registerEffect(zoomInDefinition, zoomInDefaults);
 
-//
-
-interface IDefinitionWrapper {
+// interfaces for APP >>>
+interface IEffectDefinitionWrapper {
   id: string;
   name: string;
   form: { [key: string]: any }[];
 }
-interface IDefaultsWrapper {
+interface IEffectDefaultsWrapper {
   [key: string]: any;
 }
 interface IEffectHolder {
-  definition: IDefinitionWrapper;
-  defaults: IDefaultsWrapper;
+  definition: IEffectDefinitionWrapper;
+  defaults: IEffectDefaultsWrapper;
 }
+// <<
 
 function registerEffect(
-  definition: IDefinitionWrapper,
-  defaults: IDefaultsWrapper
+  definition: IEffectDefinitionWrapper,
+  defaults: IEffectDefaultsWrapper
 ) {
   effects.push({
     definition,

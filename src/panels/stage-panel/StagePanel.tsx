@@ -12,6 +12,7 @@ import gsap from "gsap"; // TODO: remove player from here
 import SmallTimeline from "./small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import { setStagePreview } from "../../store/actions/actions";
+import { ITransition } from "../../objects/types";
 
 interface ISize {
   width: number;
@@ -86,8 +87,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           (tl as any)[effIn.effect.id](
             "." + data.objectClass,
             {
+              ...effIn.effect.values,
               duration: effIn.duration / 1000,
-              opacity: 0,
             },
             effIn.delay / 1000
           );

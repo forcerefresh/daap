@@ -106,7 +106,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     return (
       <Portal className="bp3-dark">
         {showEffectPanelForObjectId !== EmptyID && (
-          <div ref={effectPanelRef}>  
+          <div ref={effectPanelRef}>
             <EffectPanel objectId={showEffectPanelForObjectId} />
           </div>
         )}
@@ -119,7 +119,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
       <div className={css.layerPanel}>
         <div className={css.panelHeader}>
           <div>
-            LAYERS PANEL
+            OBJECTS PANEL
             <span className={css.slideName}>
               {slide && " [ " + slide.name + " ] "}
             </span>
@@ -221,7 +221,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                   setShowEffectPanelForObjectId(objectId);
                                 }}
                                 small={true}
-                                icon="walk" 
+                                icon="walk"
                               ></Button>
                               <Button
                                 active={object.isVisible}
