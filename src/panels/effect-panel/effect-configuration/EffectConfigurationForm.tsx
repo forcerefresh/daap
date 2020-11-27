@@ -86,7 +86,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         ...item,
         value: value || defaultValue,
       };
-      return getInputForm(item.inputType, inputProps, noop, onChange);
+      return getInputForm(item.inputType, inputProps, onChange, onChange);
     });
   };
 

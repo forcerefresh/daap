@@ -1,5 +1,5 @@
 import { Button, Icon, Portal } from "@blueprintjs/core";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
@@ -8,17 +8,25 @@ import { ReactComponent as ImageToolIcon } from "../../assets/icons/image-tool.s
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
 import css from "./ToolbarPanel.module.scss";
 import AddPanel from "./add-panel/AddPanel";
+import useOnClickOutside from "../../utils/hooks";
 
 enum VisiblePanel {
   None = "none",
   Add = "add",
-  Settings= "settings"
+  Settings = "settings",
 }
 
 const ICON_SIZE = 36;
 
 export const ToolbarPanel = () => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
+
+  // logic for handling click outside
+  const sharedRef = useRef(null);
+  const handleClickOutside = () => {
+    setShowPanel(VisiblePanel.None);
+  };
+  useOnClickOutside(sharedRef, handleClickOutside);
 
   return (
     <div className={css.toolbar}>
@@ -35,9 +43,11 @@ export const ToolbarPanel = () => {
           </Button>
           <Portal>
             {showPanel === VisiblePanel.Add && (
-              <AddPanel
-                onRequestClose={() => setShowPanel(VisiblePanel.None)}
-              />
+              <div ref={sharedRef}>
+                <AddPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
             )}
           </Portal>
         </div>

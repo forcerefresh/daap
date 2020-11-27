@@ -1,24 +1,9 @@
 import { InputType } from "../../inputs/types";
-import { Easings, IEffectBase } from "../types";
-
-interface IZoomInEffect extends IEffectBase {
-  fromScale: number;
-  toScale: number;
-}
-
-export const zoomInDefaults: IZoomInEffect = {
-  id: "zoomIn",
-  hasDelay: true,
-  hasDuration: true,
-  hasEasing: true,
-  fromScale: 0,
-  toScale: 100,
-  easing: Easings.Power0,
-  customEasing: null,
-};
+import { Easings } from "../types";
+import { IZoomInEffect, zoomIn } from "./zoom-in.types";
 
 export const zoomInDefinition = {
-  id: "zoomIn",
+  id: zoomIn,
   name: "Zoom In",
   form: [
     {
@@ -34,4 +19,15 @@ export const zoomInDefinition = {
       inputType: InputType.NUMBER,
     },
   ],
+};
+
+export const zoomInDefaults: IZoomInEffect = {
+  id: zoomIn,
+  hasDelay: true,
+  hasDuration: true,
+  hasEasing: true,
+  fromScale: 0,
+  toScale: 100,
+  easing: Easings.Power0,
+  customEasing: null,
 };

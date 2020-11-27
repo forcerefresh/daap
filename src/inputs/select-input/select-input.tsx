@@ -6,6 +6,7 @@ export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
   props
 ) => {
   const { displayName, options, value, onChange } = props;
+  console.log(value);
   return (
     <FormGroup label={displayName} labelFor="text-input" inline>
       <HTMLSelect

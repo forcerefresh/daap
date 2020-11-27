@@ -12,7 +12,6 @@ import gsap from "gsap"; // TODO: remove player from here
 import SmallTimeline from "./small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import { setStagePreview } from "../../store/actions/actions";
-import { ITransition } from "../../objects/types";
 
 interface ISize {
   width: number;
@@ -75,12 +74,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // TODO: remove player from here
   const transitionsDataArr = exportData?.transitionsDataArr;
   let tl: gsap.core.Timeline = gsap.timeline();
-  tl.from(".fake-non-existing-selektor", {
-    duration: (slide?.duration?.customValue || 1) / 1000,
-  });
 
   useEffect(() => {
     if (transitionsDataArr) {
+      //  tl = gsap.timeline();
+      tl.clear();
+
+      tl.from(".fake-non-existing-selektor", {
+        duration: (slide?.duration?.customValue || 1) / 1000,
+      });
+
       transitionsDataArr.forEach((data) => {
         const effIn = data.transitions.in;
         if (effIn) {
@@ -94,6 +97,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           );
         }
       });
+
+      tl.restart();
 
       tl.eventCallback("onComplete", () => {
         _setStagePreview(false);
