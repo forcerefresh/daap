@@ -12,6 +12,7 @@ import gsap from "gsap"; // TODO: remove player from here
 import SmallTimeline from "./small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import { setStagePreview } from "../../store/actions/actions";
+import { IPreviewState } from "../../store/reducers/stage";
 
 interface ISize {
   width: number;
@@ -25,7 +26,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const {
     stageSize,
     stageZoom,
-    isPreview,
+    previewState,
     exportData,
     layerArr,
     objectById,
@@ -33,6 +34,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     slide,
     _setStagePreview,
   } = props;
+
+  const isPreview = previewState.isPreview;
 
   // size of visible panel area
   const [viewPortSize, setViewPortSize] = useState<ISize>({
@@ -77,6 +80,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   useEffect(() => {
     if (transitionsDataArr) {
+      console.log("RESET");
       //  tl = gsap.timeline();
       tl.clear();
 
@@ -101,8 +105,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       tl.restart();
 
       tl.eventCallback("onComplete", () => {
-        _setStagePreview(false);
+        _setStagePreview({ isPreview: false });
       });
+
+      return () => {
+        console.log("clear");
+        tl.clear();
+      };
     }
   }, [transitionsDataArr]);
 
@@ -169,9 +178,9 @@ const mapStateToProps = (state: IStore) => {
   return {
     stageSize: stage.stageSize,
     stageZoom: stage.zoom,
-    isPreview: stage.isPreview,
+    previewState: stage.previewState,
 
-    exportData: stage.isPreview
+    exportData: stage.previewState.isPreview
       ? generateExport(slides, layers, objects)
       : null,
 
@@ -186,7 +195,8 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _setStagePreview: (isPreview: boolean) => setStagePreview(isPreview),
+  _setStagePreview: (preview: Partial<IPreviewState>) =>
+    setStagePreview(preview),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

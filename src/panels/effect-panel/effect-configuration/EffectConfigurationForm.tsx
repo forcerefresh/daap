@@ -124,6 +124,14 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         (value: any) => {
           const obj = cloneDeep(object);
           set(obj, "transitions.in.effect.id", value);
+
+          const values = get(obj, "transitions.in.effect.values") || {};
+          const effDef = getEffectDefinition(value);
+          effDef.definition.form.forEach((item) => {
+            values[item.propertyName] = effDef.defaults[item.propertyName];
+          });
+          set(obj, "transitions.in.effect.values", values);
+
           _updateObject(obj);
         }
       )}

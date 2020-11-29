@@ -5,22 +5,23 @@ import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-p
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
 import { setStagePreview } from "../../store/actions/actions";
+import { IPreviewState } from "../../store/reducers/stage";
 
 type IActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const ActionPanel: React.FC<IActionPanel> = (props) => {
-  const { _setStagePreview, isPreview } = props;
+  const { _setStagePreview, previewState } = props;
 
   return (
     <div className={css.actionPanel}>
       <div className={css.previewButtons}>
         <Button
-          intent={isPreview ? "danger" : "success"}
+          intent={previewState.isPreview ? "danger" : "success"}
           large
-          icon={isPreview ? "stop" : "play"}
+          icon={previewState.isPreview ? "stop" : "play"}
           onClick={() => {
-            _setStagePreview(!isPreview);
+            _setStagePreview({ isPreview: !previewState.isPreview });
           }}
         />
         <Button minimal outlined large icon="desktop" />
@@ -39,11 +40,12 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => ({
-  isPreview: state.stage.isPreview,
+  previewState: state.stage.previewState,
 });
 
 const mapDispatchToProps = {
-  _setStagePreview: (isPreview: boolean) => setStagePreview(isPreview),
+  _setStagePreview: (previewState: Partial<IPreviewState>) =>
+    setStagePreview(previewState),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);

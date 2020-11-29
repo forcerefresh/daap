@@ -10,17 +10,27 @@ export interface IStageSize {
   height: number;
 }
 
+export interface IPreviewState {
+  isPreview: boolean;
+  previewState: "play" | "pause" | "stop";
+  previewSpeed: number;
+}
+
 export interface IStage {
   stageSize: IStageSize;
   zoom: number;
-  isPreview: boolean;
+  previewState: IPreviewState;
 }
 
 export function stage(
   state: IStage = {
     stageSize: { width: 960, height: 485 },
     zoom: 1,
-    isPreview: false,
+    previewState: {
+      previewState: "stop",
+      isPreview: false,
+      previewSpeed: 1,
+    },
   },
   action: ActionTypes
 ) {
@@ -40,7 +50,7 @@ export function stage(
     case SET_STAGE_PREVIEW: {
       return {
         ...state,
-        isPreview: action.payload,
+        previewState: { ...state.previewState, ...action.payload },
       };
     }
     default:

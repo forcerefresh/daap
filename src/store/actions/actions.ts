@@ -6,7 +6,7 @@ import { Action, AnyAction } from "@reduxjs/toolkit";
 import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { createObject } from "../../objects/create-object-factory";
-import { IStageSize } from "../reducers/stage";
+import { IPreviewState, IStageSize } from "../reducers/stage";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -465,13 +465,15 @@ export const SET_STAGE_PREVIEW = "Set stage preview";
 
 export interface SetStagePreviewAction {
   type: typeof SET_STAGE_PREVIEW;
-  payload: boolean;
+  payload: Partial<IPreviewState>;
 }
 
-export function setStagePreview(isPreview: boolean): SetStagePreviewAction {
+export function setStagePreview(
+  preview: Partial<IPreviewState>
+): SetStagePreviewAction {
   return {
     type: SET_STAGE_PREVIEW,
-    payload: isPreview,
+    payload: preview,
   };
 }
 
