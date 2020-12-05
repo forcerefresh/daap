@@ -1,5 +1,7 @@
-import { mapValues, pick } from "lodash-es";
+import { isEmpty, mapValues, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
+import useDeepCompareEffect from "use-deep-compare-effect";
+
 import { connect } from "react-redux";
 import cx from "classnames";
 import { ILayer } from "../../store/reducers/layers";
@@ -64,6 +66,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   useEffect(() => {
+    console.log("1");
     if (rootRef.current) {
       setViewPortSize({
         width: (rootRef.current as any).clientWidth,
@@ -75,18 +78,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // TODO: remove player from here
   // player
   // TODO: remove player from here
-  const transitionsDataArr = exportData?.transitionsDataArr;
-  let tl: gsap.core.Timeline = gsap.timeline();
+  const transitionsDataArr = exportData?.transitionsDataArr || [];
+  const [tl, setTl] = useState(gsap.timeline());
 
-  useEffect(() => {
-    if (transitionsDataArr) {
+  useDeepCompareEffect(() => {
+    console.log("2");
+    if (!isEmpty(transitionsDataArr)) {
       console.log("RESET");
-      //  tl = gsap.timeline();
+      // tl = gsap.timeline();
       tl.clear();
 
       tl.from(".fake-non-existing-selektor", {
         duration: (slide?.duration?.customValue || 1) / 1000,
       });
+
+      tl.repeat(-1);
+      tl.timeScale(previewState.previewSpeed);
 
       transitionsDataArr.forEach((data) => {
         const effIn = data.transitions.in;
@@ -104,9 +111,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       tl.restart();
 
-      tl.eventCallback("onComplete", () => {
+      /*tl.eventCallback("onComplete", () => {
         _setStagePreview({ isPreview: false });
-      });
+      });*/
 
       return () => {
         console.log("clear");
@@ -114,6 +121,24 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       };
     }
   }, [transitionsDataArr]);
+
+  useEffect(() => {
+    console.log("3");
+    console.log(previewState);
+    switch (previewState.previewState) {
+      case "play":
+        tl.paused(false);
+        break;
+      case "pause":
+        console.log();
+        tl.paused(true);
+        break;
+    }
+  }, [previewState.previewState]);
+
+  useEffect(() => {
+    tl.timeScale(previewState.previewSpeed);
+  }, [previewState.previewSpeed]);
 
   const renderTimeInfo = () => {
     // tl.eventCallback("onUpdate", (e) => console.log(tl.progress()));
@@ -141,6 +166,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 return object.isVisible ? (
                   <>
                     <div
+                      key={object.id + "_1"}
                       dangerouslySetInnerHTML={{
                         __html: getObjectHtml(object),
                       }}

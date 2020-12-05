@@ -1,6 +1,14 @@
 .smallTimeline {
   position: relative;
 
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
   .smallTimelineInner {
     position: absolute;
     top: 20px;
@@ -16,7 +24,7 @@
     position: absolute;
     bottom: 17px;
     left: 20px;
-    right: 20px;
+    right: 200px;
   }
 
   .thumbHolder {
@@ -32,6 +40,16 @@
       left: 0px;
       top: 0px;
       border-radius: 100px;
+    }
+  }
+
+  .actionHolder {
+    position: absolute;
+    right: 0px;
+    margin: 5px;
+
+    * + * {
+      margin-left: 5px;
     }
   }
 }

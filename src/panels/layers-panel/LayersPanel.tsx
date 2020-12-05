@@ -20,7 +20,7 @@ import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/slides";
 import { get, isEmpty } from "lodash-es";
 import { IObject } from "../../objects/types";
-import useOnClickOutside from "../../utils/hooks";
+import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import EffectPanel from "../effect-panel/EffectPanel";
 

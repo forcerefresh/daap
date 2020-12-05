@@ -1,17 +1,16 @@
 import { fadeInDefaults, fadeInDefinition } from "./fade-in/fade-in.definition";
 import { noneDefaults, noneDefinition } from "./none/none.definition";
 import { zoomInDefaults, zoomInDefinition } from "./zoom-in/zoom-in.definition";
+import {
+  slideInDefaults,
+  slideInDefinition,
+} from "./slide-in/slide-in.definition";
 
 // import all effects
 import "./none/none.effect";
 import "./fade-in/fade-in.effect";
 import "./zoom-in/zoom-in.effect";
 import "./slide-in/slide-in.effect";
-
-import {
-  slideInDefaults,
-  slideInDefinition,
-} from "./slide-in/slide-in.definition";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {

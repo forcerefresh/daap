@@ -6,7 +6,6 @@ gsap.registerEffect({
   effect: function (targets: string | object | null, config: ISlideInEffect) {
     const xy = getXY(config.from, config.distance);
 
-    console.log(config);
     return gsap.from(targets, {
       duration: config.duration!,
       y: xy.y,

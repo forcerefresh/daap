@@ -7,7 +7,7 @@
         "name": "Slide 0",
         "duration": {
           "inheritFrom": "custom",
-          "customValue": 10000
+          "customValue": 3000
         },
         "layerIds": ["fd0892eb-4738-4f4d-ba13-56da228289b6"],
         "nextLayerIdCounter": 2
@@ -31,7 +31,7 @@
   "objects": {
     "objectById": {
       "41e3fffb-0c3f-4027-bed5-47f7dfdd2e71": {
-        "left": 250,
+        "left": 300,
         "top": 250,
         "width": 300,
         "height": 300,
@@ -45,8 +45,13 @@
             "delay": 0,
             "duration": 1000,
             "effect": {
-              "id": "fadeIn",
-              "values": {}
+              "id": "slideIn",
+              "values": {
+                "fromOpacity": 1,
+                "toOpacity": 101,
+                "from": "left",
+                "distance": 500
+              }
             }
           }
         },
@@ -65,7 +70,12 @@
               "displayName": "Color",
               "propertyName": "color",
               "inputType": "color",
-              "value": null,
+              "value": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              },
               "defaultValue": {
                 "r": 0,
                 "g": 0,

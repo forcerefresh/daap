@@ -21,7 +21,11 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           large
           icon={previewState.isPreview ? "stop" : "play"}
           onClick={() => {
-            _setStagePreview({ isPreview: !previewState.isPreview });
+            const isPreview = !previewState.isPreview;
+            _setStagePreview({
+              isPreview: isPreview,
+              previewState: isPreview ? "play" : "stop",
+            });
           }}
         />
         <Button minimal outlined large icon="desktop" />

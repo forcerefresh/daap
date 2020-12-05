@@ -15,7 +15,7 @@ import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
 import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
-import useOnClickOutside from "../../utils/hooks";
+import useOnClickOutside from "../../utils/hooks/on-click-outside";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
