@@ -18,7 +18,7 @@ export type IAddPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   IAddPanelProps;
 
-export const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
+const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const { _addNewObject, activeLayerId, onRequestClose } = props;
 
   return (

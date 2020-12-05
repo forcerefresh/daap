@@ -9,6 +9,7 @@ import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool
 import css from "./ToolbarPanel.module.scss";
 import AddPanel from "./add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import AddSettingsPanel from "./add-settings-panel/AddSettingsPanel";
 
 enum VisiblePanel {
   None = "none",
@@ -80,6 +81,26 @@ export const ToolbarPanel = () => {
               style={{ padding: "16px" }}
             />
           </Button>
+        </div>
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.Settings}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Settings);
+            }}
+          >
+            <Icon icon="cog" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.Settings && (
+              <div ref={sharedRef}>
+                <AddSettingsPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
         </div>
       </div>
     </div>

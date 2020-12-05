@@ -477,6 +477,20 @@ export function setStagePreview(
   };
 }
 
+export const UPDATE_SLIDE_DURATION = "Update slide duration";
+
+export interface UpdateSlideDurationAction {
+  type: typeof UPDATE_SLIDE_DURATION;
+  payload: number;
+}
+
+export function updateSlideDuration(duration: number): UpdateSlideDurationAction {
+  return {
+    type: UPDATE_SLIDE_DURATION,
+    payload: duration,
+  };
+}
+
 // ***
 export type ActionTypes =
   // slide
@@ -507,6 +521,9 @@ export type ActionTypes =
   | ActivateSlideAction
   | ActivateLayerAction
   | ActivateObjectAction
+
+  //settings
+  | UpdateSlideDurationAction
 
   //stage
   | SetStageSizeAction

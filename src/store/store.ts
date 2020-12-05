@@ -10,6 +10,7 @@ import { ILayers, layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
 import { IStage, stage } from "./reducers/stage";
 import { IObjects, objects } from "./reducers/objects";
+import { ISettings, settings } from "./reducers/settings";
 import initialState from "./initial-state.json";
 
 export interface IStore {
@@ -18,6 +19,7 @@ export interface IStore {
   objects: IObjects;
   selection: ISelection;
   stage: IStage;
+  settings: ISettings;
 }
 
 const rootReducer = combineReducers({
@@ -26,6 +28,7 @@ const rootReducer = combineReducers({
   objects,
   selection,
   stage,
+  settings,
 });
 
 export const store = createStore(
