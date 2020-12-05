@@ -2,40 +2,43 @@
   "slides": {
     "nextSlideIdCounter": 1,
     "slideById": {
-      "5c602346-1a89-420c-ba71-90364582ac78": {
-        "id": "5c602346-1a89-420c-ba71-90364582ac78",
+      "994e6839-2559-4e76-b68f-b99f9a744cdf": {
+        "id": "994e6839-2559-4e76-b68f-b99f9a744cdf",
         "name": "Slide 0",
         "duration": {
           "inheritFrom": "custom",
           "customValue": 3000
         },
-        "layerIds": ["fd0892eb-4738-4f4d-ba13-56da228289b6"],
-        "nextLayerIdCounter": 2
+        "layerIds": ["261166a4-bbe1-4a50-86a8-b3e91b2b122c"],
+        "nextLayerIdCounter": 1
       }
     },
-    "allSlides": ["5c602346-1a89-420c-ba71-90364582ac78"]
+    "allSlides": ["994e6839-2559-4e76-b68f-b99f9a744cdf"]
   },
   "layers": {
     "layerById": {
-      "fd0892eb-4738-4f4d-ba13-56da228289b6": {
-        "id": "fd0892eb-4738-4f4d-ba13-56da228289b6",
-        "slideId": "5c602346-1a89-420c-ba71-90364582ac78",
-        "name": "Layer 1",
+      "261166a4-bbe1-4a50-86a8-b3e91b2b122c": {
+        "id": "261166a4-bbe1-4a50-86a8-b3e91b2b122c",
+        "slideId": "994e6839-2559-4e76-b68f-b99f9a744cdf",
+        "name": "Layer 0",
         "isVisible": true,
         "hasTimeline": true,
-        "objectIds": ["41e3fffb-0c3f-4027-bed5-47f7dfdd2e71"]
+        "objectIds": [
+          "4c8d86b5-30f8-438d-a384-73dce8b71f45",
+          "d52e749f-2e7c-4656-9ac1-467557a0010f"
+        ]
       }
     },
-    "allLayers": ["fd0892eb-4738-4f4d-ba13-56da228289b6"]
+    "allLayers": ["261166a4-bbe1-4a50-86a8-b3e91b2b122c"]
   },
   "objects": {
     "objectById": {
-      "41e3fffb-0c3f-4027-bed5-47f7dfdd2e71": {
-        "left": 300,
+      "4c8d86b5-30f8-438d-a384-73dce8b71f45": {
+        "left": 250,
         "top": 250,
         "width": 300,
         "height": 300,
-        "id": "41e3fffb-0c3f-4027-bed5-47f7dfdd2e71",
+        "id": "4c8d86b5-30f8-438d-a384-73dce8b71f45",
         "type": "text",
         "isVisible": true,
         "isLocked": false,
@@ -45,37 +48,30 @@
             "delay": 0,
             "duration": 1000,
             "effect": {
-              "id": "slideIn",
+              "id": "fadeIn",
               "values": {
-                "fromOpacity": 1,
-                "toOpacity": 101,
-                "from": "left",
-                "distance": 500
+                "fromOpacity": 0,
+                "toOpacity": 100
               }
             }
           }
         },
         "definition": {
-          "id": "526e09bf-8508-46f1-b6c5-38650bae580d",
+          "id": "4c38c215-95dd-4b78-83dc-f59a30ee96a2",
           "type": "text",
           "properties": {
             "text": {
               "displayName": "Text",
               "propertyName": "text",
               "inputType": "text",
-              "value": "dfgvb ",
+              "value": "asdfghj",
               "defaultValue": ""
             },
             "color": {
               "displayName": "Color",
               "propertyName": "color",
               "inputType": "color",
-              "value": {
-                "r": 0,
-                "g": 0,
-                "b": 0,
-                "a": 1
-              },
+              "value": null,
               "defaultValue": {
                 "r": 0,
                 "g": 0,
@@ -141,16 +137,125 @@
             }
           }
         },
-        "layerId": "fd0892eb-4738-4f4d-ba13-56da228289b6"
+        "layerId": "261166a4-bbe1-4a50-86a8-b3e91b2b122c"
+      },
+      "d52e749f-2e7c-4656-9ac1-467557a0010f": {
+        "left": 150,
+        "top": 150,
+        "width": 300,
+        "height": 300,
+        "id": "d52e749f-2e7c-4656-9ac1-467557a0010f",
+        "type": "text",
+        "isVisible": true,
+        "isLocked": false,
+        "transitions": {
+          "in": {
+            "relativeTo": "stage",
+            "delay": 0,
+            "duration": 1000,
+            "effect": {
+              "id": "slideIn",
+              "values": {
+                "from": "left",
+                "distance": 100
+              }
+            }
+          }
+        },
+        "definition": {
+          "id": "e8a68b67-f1f3-4775-8391-bc116ad9ab52",
+          "type": "text",
+          "properties": {
+            "text": {
+              "displayName": "Text",
+              "propertyName": "text",
+              "inputType": "text",
+              "value": "qwertyui",
+              "defaultValue": ""
+            },
+            "color": {
+              "displayName": "Color",
+              "propertyName": "color",
+              "inputType": "color",
+              "value": null,
+              "defaultValue": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              }
+            },
+            "fontSize": {
+              "displayName": "Font size",
+              "propertyName": "string",
+              "inputType": "text",
+              "value": "S",
+              "defaultValue": "A"
+            },
+            "weight": {
+              "displayName": "Weight",
+              "propertyName": "weight",
+              "inputType": "select",
+              "value": "2",
+              "defaultValue": "3",
+              "options": [
+                {
+                  "value": "100",
+                  "label": "100\tThin"
+                },
+                {
+                  "value": "200",
+                  "label": "200\tExtra Light"
+                },
+                {
+                  "value": "300",
+                  "label": "300\tLight"
+                },
+                {
+                  "value": "400",
+                  "label": "400\tNormal"
+                },
+                {
+                  "value": "500",
+                  "label": "500\tMedium"
+                },
+                {
+                  "value": "600",
+                  "label": "600\tSemi Bold"
+                },
+                {
+                  "value": "700",
+                  "label": "700\tBold"
+                },
+                {
+                  "value": "800",
+                  "label": "800\tExtra Bold"
+                },
+                {
+                  "value": "900",
+                  "label": "900\tBlack"
+                },
+                {
+                  "value": "950",
+                  "label": "950\tExtra Black"
+                }
+              ]
+            }
+          }
+        },
+        "layerId": "261166a4-bbe1-4a50-86a8-b3e91b2b122c"
       }
     },
-    "allObjects": ["41e3fffb-0c3f-4027-bed5-47f7dfdd2e71"]
+    "allObjects": [
+      "4c8d86b5-30f8-438d-a384-73dce8b71f45",
+      "d52e749f-2e7c-4656-9ac1-467557a0010f"
+    ]
   },
   "selection": {
-    "activeSlideId": "5c602346-1a89-420c-ba71-90364582ac78",
-    "activeLayerId": "fd0892eb-4738-4f4d-ba13-56da228289b6",
-    "activeObjectId": "41e3fffb-0c3f-4027-bed5-47f7dfdd2e71",
-    "selectedSlideIds": ["5c602346-1a89-420c-ba71-90364582ac78"],
+    "activeSlideId": "994e6839-2559-4e76-b68f-b99f9a744cdf",
+    "activeLayerId": "261166a4-bbe1-4a50-86a8-b3e91b2b122c",
+    "activeObjectId": "4c8d86b5-30f8-438d-a384-73dce8b71f45",
+    "selectedSlideIds": ["994e6839-2559-4e76-b68f-b99f9a744cdf"],
     "selectedLayerIds": [],
     "selectedObjectIds": []
   },
@@ -161,9 +266,12 @@
     },
     "zoom": 1,
     "previewState": {
-      "previewState": "stop",
-      "isPreview": false,
-      "previewSpeed": 1
+      "previewState": "play",
+      "isPreview": true,
+      "previewSpeed": "1"
     }
+  },
+  "settings": {
+    "slideDuration": 3
   }
 }
