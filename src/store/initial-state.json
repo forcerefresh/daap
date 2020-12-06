@@ -23,7 +23,10 @@
         "name": "Layer 0",
         "isVisible": true,
         "hasTimeline": true,
-        "objectIds": ["3738f020-c0eb-4dad-aa31-1488bd1c3022"]
+        "objectIds": [
+          "3738f020-c0eb-4dad-aa31-1488bd1c3022",
+          "a709f329-f281-4a43-98c2-f411c6045cc8"
+        ]
       }
     },
     "allLayers": ["c623ad2a-477c-41dc-a79d-404a77367b55"]
@@ -31,10 +34,10 @@
   "objects": {
     "objectById": {
       "3738f020-c0eb-4dad-aa31-1488bd1c3022": {
-        "left": 250,
-        "top": 250,
-        "width": 300,
-        "height": 300,
+        "left": 370,
+        "top": 190,
+        "width": 248,
+        "height": 60,
         "id": "3738f020-c0eb-4dad-aa31-1488bd1c3022",
         "type": "text",
         "isVisible": true,
@@ -45,10 +48,12 @@
             "delay": 0,
             "duration": 1000,
             "effect": {
-              "id": "slideIn",
+              "id": "zoomIn",
               "values": {
                 "from": "left",
-                "distance": 100
+                "distance": 100,
+                "fromScale": 0,
+                "toScale": 100
               }
             }
           }
@@ -61,7 +66,118 @@
               "displayName": "Text",
               "propertyName": "text",
               "inputType": "text",
-              "value": "dfvfdedfv",
+              "value": "Probni text",
+              "defaultValue": ""
+            },
+            "color": {
+              "displayName": "Color",
+              "propertyName": "color",
+              "inputType": "color",
+              "value": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              },
+              "defaultValue": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              }
+            },
+            "fontSize": {
+              "displayName": "Font size",
+              "propertyName": "string",
+              "inputType": "text",
+              "value": "50",
+              "defaultValue": "A"
+            },
+            "weight": {
+              "displayName": "Weight",
+              "propertyName": "weight",
+              "inputType": "select",
+              "value": "2",
+              "defaultValue": "3",
+              "options": [
+                {
+                  "value": "100",
+                  "label": "100\tThin"
+                },
+                {
+                  "value": "200",
+                  "label": "200\tExtra Light"
+                },
+                {
+                  "value": "300",
+                  "label": "300\tLight"
+                },
+                {
+                  "value": "400",
+                  "label": "400\tNormal"
+                },
+                {
+                  "value": "500",
+                  "label": "500\tMedium"
+                },
+                {
+                  "value": "600",
+                  "label": "600\tSemi Bold"
+                },
+                {
+                  "value": "700",
+                  "label": "700\tBold"
+                },
+                {
+                  "value": "800",
+                  "label": "800\tExtra Bold"
+                },
+                {
+                  "value": "900",
+                  "label": "900\tBlack"
+                },
+                {
+                  "value": "950",
+                  "label": "950\tExtra Black"
+                }
+              ]
+            }
+          }
+        },
+        "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
+      },
+      "a709f329-f281-4a43-98c2-f411c6045cc8": {
+        "left": 100,
+        "top": 40,
+        "width": 209,
+        "height": 30,
+        "id": "a709f329-f281-4a43-98c2-f411c6045cc8",
+        "type": "text",
+        "isVisible": true,
+        "isLocked": false,
+        "transitions": {
+          "in": {
+            "relativeTo": "stage",
+            "delay": 100,
+            "duration": 1000,
+            "effect": {
+              "id": "slideIn",
+              "values": {
+                "from": "left",
+                "distance": 300
+              }
+            }
+          }
+        },
+        "definition": {
+          "id": "f076fdcb-b8cc-4638-ad98-e806c1ac010f",
+          "type": "text",
+          "properties": {
+            "text": {
+              "displayName": "Text",
+              "propertyName": "text",
+              "inputType": "text",
+              "value": "Slide sa leve strane",
               "defaultValue": ""
             },
             "color": {
@@ -80,7 +196,7 @@
               "displayName": "Font size",
               "propertyName": "string",
               "inputType": "text",
-              "value": "S",
+              "value": "25",
               "defaultValue": "A"
             },
             "weight": {
@@ -137,7 +253,10 @@
         "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
       }
     },
-    "allObjects": ["3738f020-c0eb-4dad-aa31-1488bd1c3022"]
+    "allObjects": [
+      "3738f020-c0eb-4dad-aa31-1488bd1c3022",
+      "a709f329-f281-4a43-98c2-f411c6045cc8"
+    ]
   },
   "selection": {
     "activeSlideId": "f9cb7d8d-4406-41bd-be9f-5171ccc3a35b",

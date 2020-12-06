@@ -31,10 +31,24 @@ export function generateExport(
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {
-        html += "      <div class='object-" + object.id + "'>"; // object open
+        const objectClassName = "object-" + object.id;
+
+        // >> "left", "top", "width", "height"
+        const sizeObj = pick(object, "left", "top", "width", "height");
+        const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+
+        let style = "";
+        forOwn(objectStyle, function (value, key) {
+          style += key + ":" + value + ";";
+        });
+        style += "position: absolute;";
+        // << "left", "top", "width", "height"
+
+        html +=
+          "      <div class='" + objectClassName + "' style='" + style + "'>"; // object open
 
         transitionsDataArr.push({
-          objectClass: "object-" + object.id,
+          objectClass: objectClassName,
           transitions: object.transitions,
         });
         html += getObjectHtml(object);
@@ -87,13 +101,13 @@ function getTextHtml(object: IObject) {
   const textProperties = object.definition.properties as TextProperties;
 
   const sizeObj = pick(object, "left", "top", "width", "height");
-  const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+  //const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
   let style = "";
   style += "font-size: " + textProperties.fontSize.value + "px;";
-  forOwn(objectStyle, function (value, key) {
-    style += key + ":" + value + ";";
-  });
+  //forOwn(objectStyle, function (value, key) {
+  //  style += key + ":" + value + ";";
+  //});
   style += "position: absolute;";
 
   return "<p style='" + style + "'>" + textProperties.text.value + "</p>";

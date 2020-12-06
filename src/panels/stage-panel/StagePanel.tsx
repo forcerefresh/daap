@@ -82,6 +82,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const [tl, setTl] = useState(gsap.timeline());
 
   useDeepCompareEffect(() => {
+    console.log("bdd");
+
     console.log("2");
     if (!isEmpty(transitionsDataArr)) {
       console.log("RESET");
@@ -123,6 +125,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [transitionsDataArr]);
 
   useEffect(() => {
+    console.log("bdd");
+
     console.log("3");
     console.log(previewState);
     switch (previewState.previewState) {
@@ -137,8 +141,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [previewState.previewState]);
 
   useEffect(() => {
+    console.log("bdd");
     tl.timeScale(previewState.previewSpeed);
   }, [previewState.previewSpeed]);
+
+  useEffect(() => {
+    console.log("a");
+    // tl.eventCallback("onComplete", () => {});
+    // previewState.repeat ? tl.repeat(-1) : tl.repeat(0);
+    tl.eventCallback("onRepeat", () => {
+      console.log("b");
+      if (!previewState.repeat) {
+        tl.progress(0);
+        tl.pause();
+        _setStagePreview({ previewState: "stop" });
+      }
+    });
+  }, [previewState.repeat]);
 
   const renderTimeInfo = () => {
     // tl.eventCallback("onUpdate", (e) => console.log(tl.progress()));
@@ -152,6 +171,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <div style={canvasStyle} className={css.canvas}>
           {isPreview && (
             <div
+              style={{ position: "relative" }}
               dangerouslySetInnerHTML={{ __html: exportData?.html as string }}
             ></div>
           )}
@@ -162,6 +182,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
                 const sizeObj = pick(object, "left", "top", "width", "height");
                 const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+                (objectStyle as any).position = "absolute";
 
                 return object.isVisible ? (
                   <>
@@ -170,6 +191,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                       dangerouslySetInnerHTML={{
                         __html: getObjectHtml(object),
                       }}
+                      style={objectStyle}
                     />
                     <div
                       key={object.id}

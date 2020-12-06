@@ -26,7 +26,7 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
       setProgress(tl.progress());
     });
     return () => {
-      // cleanup;
+      // TODO: do we need to cleanup;
     };
   }, [tl]);
 
