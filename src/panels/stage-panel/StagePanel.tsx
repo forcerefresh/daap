@@ -11,7 +11,7 @@ import css from "./StagePanel.module.scss";
 import { generateExport, getObjectHtml } from "../../export/export-html";
 
 import gsap from "gsap"; // TODO: remove player from here
-import SmallTimeline from "./small-timeline/SmallTimeline";
+import SmallTimeline from "../small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import { setStagePreview } from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";

@@ -3,11 +3,13 @@ import gsap from "gsap";
 
 import css from "./SmallTimeline.module.scss";
 import { Button, HTMLSelect } from "@blueprintjs/core";
-import { ReactComponent as RepeatIcon } from "../../../assets/icons/repeat.svg";
-import { IStore } from "../../../store/store";
-import { IPreviewState } from "../../../store/reducers/stage";
-import { setStagePreview } from "../../../store/actions/actions";
+import { ReactComponent as RepeatIcon } from "../../assets/icons/repeat.svg";
+import { IStore } from "../../store/store";
+import { IPreviewState } from "../../store/reducers/stage";
+import { setStagePreview } from "../../store/actions/actions";
 import { connect } from "react-redux";
+import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
+import cx from "classnames";
 
 type ISmallTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & { tl: gsap.core.Timeline };
@@ -32,12 +34,35 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
     left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   };
 
+  const left = ((lineRef?.current as any)?.offsetWidth || 0) * progress;
+  const position =
+    previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
+
+  const calculateTimeFromThumb = (x: number) => {
+    const multiplier = x / (lineRef?.current as any)?.offsetWidth;
+    tl.progress(multiplier, true);
+  };
   return (
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>
         <div className={css.line} ref={lineRef}></div>
         <div className={css.thumbHolder}>
-          <div className={css.thumb} style={thumbStyle}></div>
+          <Draggable
+            axis="x"
+            handle=".handle"
+            defaultPosition={{ x: 0, y: 0 }}
+            position={position}
+            grid={[1, 1]}
+            scale={1}
+            bounds={{ left: 0, right: (lineRef?.current as any)?.offsetWidth }}
+            onStart={console.log}
+            onDrag={(evt: DraggableEvent, data: DraggableData) => {
+              calculateTimeFromThumb(data.x);
+            }}
+            onStop={console.log}
+          >
+            <div className={cx(css.thumb, "handle")}></div>
+          </Draggable>
         </div>
         <div className={css.actionHolder}>
           <HTMLSelect
@@ -72,7 +97,16 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
               },
             ]}
           ></HTMLSelect>
-          <Button active={true} minimal color={"#a7b6c2"}>
+          <Button
+            active={previewState.repeat}
+            minimal
+            color={"#a7b6c2"}
+            onClick={() => {
+              _setStagePreview({
+                repeat: !previewState.repeat,
+              });
+            }}
+          >
             <RepeatIcon
               style={{ width: "14px", height: "16px", fill: "#a7b6c2" }}
             />

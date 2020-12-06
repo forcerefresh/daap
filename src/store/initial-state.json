@@ -156,7 +156,8 @@
     "previewState": {
       "previewState": "stop",
       "isPreview": false,
-      "previewSpeed": 1
+      "previewSpeed": 1,
+      "repeat": true
     }
   },
   "settings": {

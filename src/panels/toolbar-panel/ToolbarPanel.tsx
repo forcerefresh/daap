@@ -7,9 +7,9 @@ import { ReactComponent as TextToolIcon } from "../../assets/icons/text-tool.svg
 import { ReactComponent as ImageToolIcon } from "../../assets/icons/image-tool.svg";
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
 import css from "./ToolbarPanel.module.scss";
-import AddPanel from "./add-panel/AddPanel";
+import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import AddSettingsPanel from "./add-settings-panel/AddSettingsPanel";
+import AddSettingsPanel from "../add-settings-panel/AddSettingsPanel";
 
 enum VisiblePanel {
   None = "none",

@@ -14,6 +14,7 @@ export interface IPreviewState {
   isPreview: boolean;
   previewState: "play" | "pause" | "stop";
   previewSpeed: number;
+  repeat: boolean;
 }
 
 export interface IStage {
@@ -30,6 +31,7 @@ export function stage(
       previewState: "stop",
       isPreview: false,
       previewSpeed: 1,
+      repeat: true,
     },
   },
   action: ActionTypes

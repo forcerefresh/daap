@@ -1,11 +1,11 @@
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
-import { IStore } from "../../../store/store";
+import { IStore } from "../../store/store";
 import css from "./AddSettingsPanel.module.scss";
 import { Button, Tab, Tabs } from "@blueprintjs/core";
-import { updateSlideDuration } from "../../../store/actions/actions";
-import { getNumericFiled } from "../../../inputs/input-utils";
+import { updateSlideDuration } from "../../store/actions/actions";
+import { getNumericFiled } from "../../inputs/input-utils";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
