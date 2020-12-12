@@ -66,7 +66,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   useEffect(() => {
-    console.log("1");
     if (rootRef.current) {
       setViewPortSize({
         width: (rootRef.current as any).clientWidth,
@@ -76,20 +75,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [rootRef]);
 
   // TODO: remove player from here
-  // player
-  // TODO: remove player from here
   const transitionsDataArr = exportData?.transitionsDataArr || [];
   const [tl, setTl] = useState(gsap.timeline());
 
+  // restart timeline when something is changed
   useDeepCompareEffect(() => {
-    console.log("bdd");
-
-    console.log("2");
     if (!isEmpty(transitionsDataArr)) {
-      console.log("RESET");
-      // tl = gsap.timeline();
       tl.clear();
 
+      // TODO: hack to get timeline duration to be set to slide duration
       tl.from(".fake-non-existing-selektor", {
         duration: (slide?.duration?.customValue || 1) / 1000,
       });
@@ -118,39 +112,31 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       });*/
 
       return () => {
-        console.log("clear");
         tl.clear();
       };
     }
   }, [transitionsDataArr]);
 
+  // play/pause switch
   useEffect(() => {
-    console.log("bdd");
-
-    console.log("3");
-    console.log(previewState);
     switch (previewState.previewState) {
       case "play":
         tl.paused(false);
         break;
       case "pause":
-        console.log();
         tl.paused(true);
         break;
     }
   }, [previewState.previewState]);
 
+  // change preview speed
   useEffect(() => {
-    console.log("bdd");
     tl.timeScale(previewState.previewSpeed);
   }, [previewState.previewSpeed]);
 
+  // when we turn off repeat it stops playing on end and reset position to start
   useEffect(() => {
-    console.log("a");
-    // tl.eventCallback("onComplete", () => {});
-    // previewState.repeat ? tl.repeat(-1) : tl.repeat(0);
     tl.eventCallback("onRepeat", () => {
-      console.log("b");
       if (!previewState.repeat) {
         tl.progress(0);
         tl.pause();
@@ -160,7 +146,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [previewState.repeat]);
 
   const renderTimeInfo = () => {
-    // tl.eventCallback("onUpdate", (e) => console.log(tl.progress()));
     return <SmallTimeline tl={tl} />;
   };
 
@@ -206,8 +191,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             })}
         </div>
       </div>
-      {/*  {stageSize.width}x {stageSize.height}, {stageZoom} <br />
-      {viewPortSize.width}x {viewPortSize.height}*/}
+      stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
+      viewPortSize: {viewPortSize.width}x {viewPortSize.height}
     </div>
   );
 };
@@ -228,6 +213,7 @@ const mapStateToProps = (state: IStore) => {
     stageZoom: stage.zoom,
     previewState: stage.previewState,
 
+    // generate data for player
     exportData: stage.previewState.isPreview
       ? generateExport(slides, layers, objects)
       : null,
