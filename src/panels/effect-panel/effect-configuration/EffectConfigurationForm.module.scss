@@ -14,7 +14,7 @@
 .dynamicFields {
   :global {
     .bp3-label {
-      width: 80px;
+      width: var(--effects-panel-label-width);
     }
   }
 }

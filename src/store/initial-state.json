@@ -25,7 +25,8 @@
         "hasTimeline": true,
         "objectIds": [
           "3738f020-c0eb-4dad-aa31-1488bd1c3022",
-          "a709f329-f281-4a43-98c2-f411c6045cc8"
+          "a709f329-f281-4a43-98c2-f411c6045cc8",
+          "2e3bf06b-4d74-4e72-be8a-94042328a24e"
         ]
       }
     },
@@ -46,14 +47,21 @@
           "in": {
             "relativeTo": "stage",
             "delay": 0,
-            "duration": 1000,
+            "duration": 3000,
             "effect": {
-              "id": "zoomIn",
+              "id": "fadeIn",
               "values": {
                 "from": "left",
                 "distance": 100,
                 "fromScale": 0,
-                "toScale": 100
+                "toScale": 100,
+                "scaleFactor": 0,
+                "transformOrigin": {
+                  "x": 80,
+                  "y": 80
+                },
+                "fromOpacity": 0,
+                "toOpacity": 100
               }
             }
           }
@@ -158,7 +166,7 @@
         "transitions": {
           "in": {
             "relativeTo": "stage",
-            "delay": 100,
+            "delay": 0,
             "duration": 1000,
             "effect": {
               "id": "slideIn",
@@ -251,11 +259,53 @@
           }
         },
         "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
+      },
+      "2e3bf06b-4d74-4e72-be8a-94042328a24e": {
+        "left": 0,
+        "top": 200,
+        "width": 200,
+        "height": 200,
+        "id": "2e3bf06b-4d74-4e72-be8a-94042328a24e",
+        "type": "image",
+        "isVisible": true,
+        "isLocked": false,
+        "transitions": {
+          "in": {
+            "relativeTo": "stage",
+            "delay": 0,
+            "duration": 1000,
+            "effect": {
+              "id": "kenBurns",
+              "values": {
+                "scaleFactor": 10,
+                "transformOrigin": {
+                  "x": 50,
+                  "y": 20
+                }
+              }
+            }
+          }
+        },
+        "definition": {
+          "id": "58672ef5-1b57-4b6b-837e-5b86344376f3",
+          "type": "image",
+          "properties": {
+            "url": {
+              "displayName": "Image url",
+              "propertyName": "url",
+              "inputType": "text",
+              "value": "logo192.png",
+              "defaultValue": ""
+            }
+          }
+        },
+        "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
       }
     },
     "allObjects": [
       "3738f020-c0eb-4dad-aa31-1488bd1c3022",
-      "a709f329-f281-4a43-98c2-f411c6045cc8"
+      "a709f329-f281-4a43-98c2-f411c6045cc8",
+      "2e3bf06b-4d74-4e72-be8a-94042328a24e"
     ]
   },
   "selection": {
