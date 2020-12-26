@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+
+  // Label (displayName) style
+  :global {
+    .bp3-label {
+      width: var(--effects-panel-label-width);
+      min-width: var(--effects-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}
+
+.area {
+  position: relative;
+  margin: 2px;
+  width: 108px;
+  height: 108px;
+  border: 2px solid gray;
+}
+
+.point {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #41fb2f;
+}

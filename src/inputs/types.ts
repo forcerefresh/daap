@@ -5,11 +5,16 @@ export enum InputType {
   TEXT = "text",
   SELECT = "select",
   COLOR = "color",
+  TRANSFORM_ORIGIN = "transform_origin",
 }
 
 export interface IUpdateInput {
-  onChange: (config: RGBColor | string | number) => void;
-  onInput?: (config: RGBColor | string | number) => void;
+  onChange: (
+    config: RGBColor | { x: number; y: number } | string | number
+  ) => void;
+  onInput?: (
+    config: RGBColor | { x: number; y: number } | string | number
+  ) => void;
 }
 
 //  number input
@@ -30,6 +35,15 @@ export interface ITextInput {
   propertyName: string;
   value: string;
   defaultValue: string;
+}
+
+export interface ITransformOriginInput {
+  inputType: InputType.TRANSFORM_ORIGIN;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: { x: number; y: number };
+  defaultValue: { x: number; y: number };
 }
 
 export interface IColorInput {

@@ -1,4 +1,9 @@
-import { IColorInput, INumberInput, ITextInput } from "../inputs/types";
+import {
+  IColorInput,
+  INumberInput,
+  ITextInput,
+  ITransformOriginInput,
+} from "../inputs/types";
 
 export enum ObjectType {
   TEXT = "text",
@@ -7,7 +12,9 @@ export enum ObjectType {
   //VECTOR = '"vector',
 }
 
-export interface IDefinition<T = ITextInput | INumberInput | IColorInput> {
+export interface IDefinition<
+  T = ITextInput | INumberInput | IColorInput | ITransformOriginInput
+> {
   id: string;
   type: ObjectType;
   properties: T;

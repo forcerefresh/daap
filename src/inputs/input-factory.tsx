@@ -3,6 +3,7 @@ import { ColorInputForm } from "./color-input/color-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { SelectInputForm } from "./select-input/select-input";
 import { TextInputForm } from "./text-input/text-input";
+import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import { InputType } from "./types";
 
 export function getInputForm<T>(
@@ -26,6 +27,15 @@ export function getInputForm<T>(
     }
     case InputType.TEXT: {
       return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
+    case InputType.TRANSFORM_ORIGIN: {
+      return (
+        <TransformOriginInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+        />
+      );
     }
     case InputType.COLOR: {
       return <ColorInputForm key={key} {...inputProps} onChange={onChange} />;
