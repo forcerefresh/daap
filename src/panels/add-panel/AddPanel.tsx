@@ -34,7 +34,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, "text", {
+              _addNewObject(activeLayerId, ObjectType.TEXT, {
                 left: 250,
                 top: 250,
                 width: 300,
@@ -56,7 +56,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, "text", {
+              _addNewObject(activeLayerId, ObjectType.TEXT, {
                 left: 150,
                 top: 150,
                 width: 300,
@@ -78,11 +78,11 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.TEXT, {
+              _addNewObject(activeLayerId, ObjectType.IMAGE, {
                 left: 0,
                 top: 0,
                 width: 300,
-                height: 50,
+                height: 300,
               });
               onRequestClose();
             }
@@ -91,7 +91,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <PredefinedTextIcon
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>CHOSE STYLE</h3>
+          <h3>EXTERNAL IMAGE</h3>
           <p>Pick predefined style</p>
         </Card>
       </div>
@@ -192,7 +192,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: string,
+    type: ObjectType,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
 };

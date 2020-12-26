@@ -370,11 +370,11 @@ export interface AddObjectAction {
 
 export function addNewObject(
   layerId: string,
-  type: string,
+  type: ObjectType,
   objectProps: Partial<IObject>
 ): any {
   return function (dispatch: any, getState: () => IStore) {
-    const object = createObject(ObjectType.TEXT, objectProps);
+    const object = createObject(type, objectProps);
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
   };
@@ -484,7 +484,9 @@ export interface UpdateSlideDurationAction {
   payload: number;
 }
 
-export function updateSlideDuration(duration: number): UpdateSlideDurationAction {
+export function updateSlideDuration(
+  duration: number
+): UpdateSlideDurationAction {
   return {
     type: UPDATE_SLIDE_DURATION,
     payload: duration,

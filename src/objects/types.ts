@@ -3,8 +3,8 @@ import { IColorInput, INumberInput, ITextInput } from "../inputs/types";
 export enum ObjectType {
   TEXT = "text",
   IMAGE = "image",
-  VIDEO = "video",
-  VECTOR = '"vector',
+  //VIDEO = "video",
+  //VECTOR = '"vector',
 }
 
 export interface IDefinition<T = ITextInput | INumberInput | IColorInput> {

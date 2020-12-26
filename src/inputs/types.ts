@@ -58,6 +58,6 @@ export interface TextProperties {
   weight: ISelectInput;
 }
 
-export interface TextValue {
-  value: string;
+export interface ImageProperties {
+  url: ITextInput;
 }

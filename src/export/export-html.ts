@@ -1,5 +1,5 @@
 import { forOwn, map, mapValues, pick } from "lodash-es";
-import { TextProperties } from "../inputs/types";
+import { ImageProperties, TextProperties } from "../inputs/types";
 import { IObject, ITransitions, ObjectType } from "../objects/types";
 import { ILayer, ILayers } from "../store/reducers/layers";
 import { IObjects } from "../store/reducers/objects";
@@ -92,6 +92,8 @@ export function getObjectHtml(object: IObject) {
   switch (object.type) {
     case ObjectType.TEXT:
       return getTextHtml(object);
+    case ObjectType.IMAGE:
+      return getImageHtml(object);
     default:
       return "";
   }
@@ -111,4 +113,9 @@ function getTextHtml(object: IObject) {
   style += "position: absolute;";
 
   return "<p style='" + style + "'>" + textProperties.text.value + "</p>";
+}
+
+function getImageHtml(object: IObject) {
+  const imageProperties = object.definition.properties as ImageProperties;
+  return "<img src='" + imageProperties.url.value + "'/>";
 }

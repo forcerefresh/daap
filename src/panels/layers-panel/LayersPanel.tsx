@@ -19,7 +19,7 @@ import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/slides";
 import { get, isEmpty } from "lodash-es";
-import { IObject } from "../../objects/types";
+import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import EffectPanel from "../effect-panel/EffectPanel";
@@ -63,9 +63,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     [key: string]: boolean;
   }>({});
 
-  const [showEffectPanelForObjectId, setShowEffectPanelForObjectId] = useState<
-    string
-  >(EmptyID);
+  const [
+    showEffectPanelForObjectId,
+    setShowEffectPanelForObjectId,
+  ] = useState<string>(EmptyID);
 
   useEffect(() => {
     if (activeLayerId && isEmpty(openLayerById)) {
@@ -342,7 +343,7 @@ const mapDispatchToProps = {
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (
     layerId: string,
-    type: string,
+    type: ObjectType,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),

@@ -1,5 +1,5 @@
 import { v4 as uuid } from "uuid";
-import { InputType, TextProperties } from "../inputs/types";
+import { ImageProperties, InputType, TextProperties } from "../inputs/types";
 import { ICommonObjectProperties, IObject, ObjectType } from "./types";
 
 /**
@@ -13,12 +13,15 @@ type Exclude<T, U> = T extends U ? never : T;
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 export function createObject(
-  type: ObjectType.TEXT,
+  type: ObjectType,
   objectProps: Partial<IObject>
 ): Omit<IObject, "layerId"> {
   switch (type) {
     case ObjectType.TEXT: {
       return { ...objectProps, ...createTextObject() };
+    }
+    case ObjectType.IMAGE: {
+      return { ...objectProps, ...createImageObject() };
     }
     /*case ObjectType.IMAGE: {
       return createImageObject();
@@ -32,13 +35,12 @@ export function createObject(
   }
 }
 
-function createCommonObject(): Omit<
-  IObject,
-  keyof ICommonObjectProperties | "layerId" | "definition"
-> {
+function createCommonObject(
+  type: ObjectType
+): Omit<IObject, keyof ICommonObjectProperties | "layerId" | "definition"> {
   return {
     id: uuid(),
-    type: ObjectType.TEXT,
+    type: type,
     isVisible: true,
     isLocked: false,
     transitions: {
@@ -59,7 +61,7 @@ function createTextObject(): Omit<
   IObject<TextProperties>,
   keyof ICommonObjectProperties | "layerId"
 > {
-  const object = createCommonObject();
+  const object = createCommonObject(ObjectType.TEXT);
 
   return {
     ...object,
@@ -111,12 +113,32 @@ function createTextObject(): Omit<
     },
   };
 }
-/*
-function createImageObject() {
-  // TODO
-  return {};
+
+function createImageObject(): Omit<
+  IObject<ImageProperties>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.IMAGE);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.IMAGE,
+      properties: {
+        url: {
+          displayName: "Image url",
+          propertyName: "url",
+          inputType: InputType.TEXT,
+          value: "",
+          defaultValue: "",
+        },
+      },
+    },
+  };
 }
 
+/*
 function createVideoObject() {
   // TODO
   return {};
