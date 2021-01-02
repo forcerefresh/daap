@@ -6,6 +6,7 @@ export enum InputType {
   SELECT = "select",
   COLOR = "color",
   TRANSFORM_ORIGIN = "transform_origin",
+  IMAGE = "image",
 }
 
 export interface IUpdateInput {
@@ -35,6 +36,15 @@ export interface ITextInput {
   propertyName: string;
   value: string;
   defaultValue: string;
+}
+
+export interface IImageInput {
+  inputType: InputType.IMAGE;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: { url: string };
+  defaultValue: { url: string };
 }
 
 export interface ITransformOriginInput {
@@ -73,5 +83,5 @@ export interface TextProperties {
 }
 
 export interface ImageProperties {
-  url: ITextInput;
+  url: IImageInput;
 }

@@ -117,5 +117,5 @@ function getTextHtml(object: IObject) {
 
 function getImageHtml(object: IObject) {
   const imageProperties = object.definition.properties as ImageProperties;
-  return "<img src='" + imageProperties.url.value + "'/>";
+  return "<img src='" + imageProperties.url.value.url + "'/>";
 }

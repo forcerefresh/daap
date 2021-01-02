@@ -1,0 +1,3 @@
+## Kako se kreira symlink za WP dew
+
+mklink /D webslider "c:/Users/Srdjan Arsic/Projects/slide-2/integration/wp-plugin"

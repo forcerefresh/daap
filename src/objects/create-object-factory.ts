@@ -129,9 +129,9 @@ function createImageObject(): Omit<
         url: {
           displayName: "Image url",
           propertyName: "url",
-          inputType: InputType.TEXT,
-          value: "",
-          defaultValue: "",
+          inputType: InputType.IMAGE,
+          value: { url: "" },
+          defaultValue: { url: "" },
         },
       },
     },

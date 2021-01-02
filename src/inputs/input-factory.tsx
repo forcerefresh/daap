@@ -1,5 +1,6 @@
 import React from "react";
 import { ColorInputForm } from "./color-input/color-input";
+import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { SelectInputForm } from "./select-input/select-input";
 import { TextInputForm } from "./text-input/text-input";
@@ -27,6 +28,9 @@ export function getInputForm<T>(
     }
     case InputType.TEXT: {
       return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
+    case InputType.IMAGE: {
+      return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.TRANSFORM_ORIGIN: {
       return (
