@@ -12,6 +12,9 @@ import {
   ACTIVATE_OBJECT,
   DELETE_OBJECTS,
   REMOVE_LAYERS_FROM_SELECTION,
+  SELECT_OBJECTS,
+  ADD_OBJECTS_TO_SELECTION,
+  REMOVE_OBJECTS_FROM_SELECTION,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { uniq } from "lodash-es";
@@ -97,6 +100,33 @@ export function selection(
         },
       });
     }
+    case SELECT_OBJECTS: {
+      const selectedObjectIds = action.payload;
+
+      return { ...state, selectedObjectIds };
+    }
+
+    case ADD_OBJECTS_TO_SELECTION: {
+      const addObjectIds = action.payload;
+
+      return update(state, {
+        selectedObjectIds: {
+          $apply: (selIds: string[]) => uniq(selIds.concat(addObjectIds)),
+        },
+      });
+    }
+
+    case REMOVE_OBJECTS_FROM_SELECTION: {
+      const removeObjectIds = action.payload;
+
+      return update(state, {
+        selectedObjectIds: {
+          $apply: (selIds: string[]) =>
+            selIds.filter((id) => removeObjectIds.indexOf(id) === -1),
+        },
+      });
+    }
+
     case DELETE_LAYERS: {
       const layerIds = action.payload;
       return update(state, {

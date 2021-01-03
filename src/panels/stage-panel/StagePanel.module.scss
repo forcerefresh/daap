@@ -10,6 +10,10 @@
   $dot-size: 1px;
   $dot-space: 22px;
 
+  * {
+    user-select: none;
+  }
+
   background: linear-gradient(
         90deg,
         $bg-color ($dot-space - $dot-size),
@@ -33,5 +37,23 @@
 }
 
 .active {
-  border: 1px solid greenyellow;
+  border: 1px solid #48aff0; // greenyellow;
+}
+
+.selection.selected {
+  z-index: 500;
+}
+
+.currentPosition {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  position: absolute;
+  top: -24px;
+  height: 24px;
+  width: max-content;
+
+  background: #48aff0; // greenyellow;
+  color: black;
+  padding: 3px 6px;
+  font-family: monospace;
 }

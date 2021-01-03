@@ -1,4 +1,4 @@
-import { isEmpty, mapValues, pick } from "lodash-es";
+import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 
@@ -13,8 +13,18 @@ import { generateExport, getObjectHtml } from "../../export/export-html";
 import gsap from "gsap"; // TODO: remove player from here
 import SmallTimeline from "../small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
-import { setStagePreview } from "../../store/actions/actions";
+import {
+  activateObject,
+  addObjectsToSelection,
+  deactivateObject,
+  removeObjectsFromSelection,
+  selectObjects,
+  setStagePreview,
+  updateObject,
+} from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";
+import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
+import { IObject } from "../../objects/types";
 
 interface ISize {
   width: number;
@@ -34,8 +44,30 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     objectById,
     activeObjectId,
     slide,
+    selectedObjectIds,
     _setStagePreview,
+    _updateObject,
+    _selectObjects,
+    _activateObject,
+    _addObjectsToSelection,
+    _removeObjectsFromSelection,
+    _deactivateObject,
   } = props;
+
+  // in order to recognize click on draggable element we are capturing position on start (mouseDown)
+  // and on end (mouseup) we are checking if position is the same
+  // this means we have "click" event
+  const [dragStartPosition, setDragStartPosition] = useState({ x: -1, y: -1 });
+
+  const [delta, setDelta] = useState({ x: 0, y: 0 });
+
+  // 1. keep local copy in order to apply delta from draggable object
+  const objectByIdLocal = cloneDeep(objectById);
+  // 2. apply only delta to selected objects only
+  selectedObjectIds.forEach((objectId) => {
+    objectByIdLocal[objectId].left! += delta.x;
+    objectByIdLocal[objectId].top! += delta.y;
+  });
 
   const isPreview = previewState.isPreview;
 
@@ -149,6 +181,24 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     return <SmallTimeline tl={tl} />;
   };
 
+  const onObjectClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    objectId: string
+  ) => {
+    if (event.ctrlKey) {
+      selectedObjectIds.indexOf(objectId) === -1
+        ? _addObjectsToSelection([objectId])
+        : _removeObjectsFromSelection([objectId]);
+      if (activeObjectId === objectId) {
+        _deactivateObject(objectId);
+      }
+    } else {
+      _activateObject(objectId);
+      _selectObjects([objectId]);
+    }
+  };
+
+  let objectCounter = 0;
   return (
     <div className={css.stagePanel} ref={rootRef}>
       {isPreview && renderTimeInfo()}
@@ -163,30 +213,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           {!isPreview &&
             layerArr?.map((layer) => {
               return layer.objectIds.map((objectId) => {
-                const object = objectById[objectId];
-
-                const sizeObj = pick(object, "left", "top", "width", "height");
-                const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
-                (objectStyle as any).position = "absolute";
-
-                return object.isVisible ? (
-                  <>
-                    <div
-                      key={object.id + "_1"}
-                      dangerouslySetInnerHTML={{
-                        __html: getObjectHtml(object),
-                      }}
-                      style={objectStyle}
-                    />
-                    <div
-                      key={object.id}
-                      className={cx(css[object.type], {
-                        [css.active]: activeObjectId === object.id,
-                      })}
-                      style={objectStyle}
-                    />
-                  </>
-                ) : null;
+                const object = objectByIdLocal[objectId];
+                objectCounter++;
+                return renderObject(object);
               });
             })}
         </div>
@@ -195,6 +224,107 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       viewPortSize: {viewPortSize.width}x {viewPortSize.height}
     </div>
   );
+
+  function renderObject(object: IObject) {
+    const objectId = object.id;
+    const sizeObj = pick(object, "left", "top", "width", "height");
+    const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+
+    // *** NOTE: we are rendering different for selected and non selected object
+
+    // 1. NON SELECTED  (NON-DRAGGABLE)
+
+    if (!isSelected) {
+      const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+      (objectStyle as any).position = "absolute";
+      return (
+        <div style={{ zIndex: 100, position: "absolute" }}>
+          <div
+            key={object.id + "_1"}
+            dangerouslySetInnerHTML={{
+              __html: getObjectHtml(object),
+            }}
+            style={objectStyle}
+          />
+          <div
+            onClick={(event) => {
+              onObjectClick(event, objectId);
+            }}
+            key={object.id}
+            className={cx(css[object.type])}
+            style={objectStyle}
+          />
+        </div>
+      );
+    }
+
+    // 2. SELECTED  (DRAGGABLE)
+
+    // reset position to 0 (gonna be set in Draggable)
+    sizeObj.left = sizeObj.top = 0;
+    const objectStyle2 = mapValues(sizeObj, (size) => `${size}px`);
+    (objectStyle2 as any).position = "absolute";
+
+    const currentPosition = "X:" + object.left! + " Y:" + object.top! + "";
+
+    return object.isVisible ? (
+      <Draggable
+        disabled={!isSelected}
+        key={objectId + "_drag"}
+        position={{ x: object.left!, y: object.top! }}
+        grid={[1, 1]}
+        scale={1 * stageZoom}
+        bounds={{}}
+        onStart={(evt: DraggableEvent, data: DraggableData) => {
+          setDragStartPosition({ x: data.x, y: data.y });
+        }}
+        onDrag={(evt: DraggableEvent, data: DraggableData) => {
+          setDelta((_delta) => ({
+            x: Math.round(_delta.x + data.deltaX),
+            y: Math.round(_delta.y + data.deltaY),
+          }));
+          //object.left! = object.left! + data.deltaX;
+          //object.top! = object.top! + data.deltaY;
+        }}
+        onStop={(evt: DraggableEvent, data: DraggableData) => {
+          console.log(evt);
+          // check if start end position are the same (mean object is on the same place)
+          // this means we have "mouse click" event
+          if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
+            onObjectClick(evt as any, objectId);
+          } else {
+            // reset delta
+            setDelta({ x: 0, y: 0 });
+            // update objects
+            selectedObjectIds.forEach((objectId) => {
+              _updateObject(objectByIdLocal[objectId]);
+            });
+          }
+        }}
+      >
+        <div style={{ zIndex: 500 + objectCounter, position: "absolute" }}>
+          <div
+            key={object.id + "_1"}
+            dangerouslySetInnerHTML={{
+              __html: getObjectHtml(object),
+            }}
+            style={objectStyle2}
+          />
+          <div
+            key={object.id}
+            className={cx(css.selection, css[object.type], {
+              [css.active]:
+                selectedObjectIds.length > 0 /*1*/ &&
+                selectedObjectIds.indexOf(object.id) !== -1,
+              [css.selected]: isSelected,
+            })}
+            style={objectStyle2}
+          />
+          <div className={css.currentPosition}>{currentPosition}</div>
+        </div>
+      </Draggable>
+    ) : null;
+  }
 };
 
 const mapStateToProps = (state: IStore) => {
@@ -221,16 +351,22 @@ const mapStateToProps = (state: IStore) => {
     layerArr,
     slide,
     objectById: objects.objectById,
-    // activeSlideId: selection.activeSlideId,
-    // activeLayerId: selection.activeLayerId,
     activeObjectId: selection.activeObjectId,
-    // selectedLayerIds: selection.selectedLayerIds,
+    selectedObjectIds: selection.selectedObjectIds,
   };
 };
 
 const mapDispatchToProps = {
   _setStagePreview: (preview: Partial<IPreviewState>) =>
     setStagePreview(preview),
+  _updateObject: (object: IObject) => updateObject(object),
+  _activateObject: (objectId: string) => activateObject(objectId),
+  _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
+  _addObjectsToSelection: (objectIds: string[]) =>
+    addObjectsToSelection(objectIds),
+  _removeObjectsFromSelection: (objectIds: string[]) =>
+    removeObjectsFromSelection(objectIds),
+  _deactivateObject: (objectId: string) => deactivateObject(objectId),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

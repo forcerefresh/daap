@@ -1,4 +1,4 @@
-import { Button, Icon, Portal } from "@blueprintjs/core";
+import { Button, Icon, Portal, Text } from "@blueprintjs/core";
 import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -6,10 +6,16 @@ import { IStore } from "../../store/store";
 import { ReactComponent as TextToolIcon } from "../../assets/icons/text-tool.svg";
 import { ReactComponent as ImageToolIcon } from "../../assets/icons/image-tool.svg";
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
+import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
+
 import css from "./ToolbarPanel.module.scss";
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import AddSettingsPanel from "../add-settings-panel/AddSettingsPanel";
+import SettingsPanel from "../settings-panel/SettingsPanel";
+import {
+  decreaseStageZoom,
+  increaseStageZoom,
+} from "../../store/actions/actions";
 
 enum VisiblePanel {
   None = "none",
@@ -18,8 +24,13 @@ enum VisiblePanel {
 }
 
 const ICON_SIZE = 36;
+const SMALL_ICON_SIZE = 18;
 
-export const ToolbarPanel = () => {
+type IToolbarPanel = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps>;
+
+const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
+  const { zoom, increaseStageZoom, decreaseStageZoom } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
   // logic for handling click outside
@@ -52,34 +63,28 @@ export const ToolbarPanel = () => {
             )}
           </Portal>
         </div>
+        <Button minimal>
+          <SelectToolIcon
+            style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+          />
+        </Button>
         <div>
           <Button minimal>
-            <SelectToolIcon
+            <ZoomToolIcon
               style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
             />
           </Button>
-
+          <Text>{zoom * 100} %</Text>
+          <div>
+            <Button minimal small onClick={() => increaseStageZoom()}>
+              <Icon icon="zoom-in" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+            </Button>
+            <Button minimal small onClick={() => decreaseStageZoom()}>
+              <Icon icon="zoom-out" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+            </Button>
+          </div>
           <Button minimal>
             <Icon icon="undo" iconSize={ICON_SIZE} color={"gray"} />
-          </Button>
-        </div>
-        <div>
-          <Button minimal>
-            <TextToolIcon
-              style={{ width: "42px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
-          </Button>
-          <Button minimal>
-            <ImageToolIcon
-              style={{ width: "42px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
-          </Button>
-          <Button minimal>
-            <Icon
-              icon="group-objects"
-              iconSize={ICON_SIZE}
-              style={{ padding: "16px" }}
-            />
           </Button>
         </div>
         <div>
@@ -95,7 +100,7 @@ export const ToolbarPanel = () => {
           <Portal>
             {showPanel === VisiblePanel.Settings && (
               <div ref={sharedRef}>
-                <AddSettingsPanel
+                <SettingsPanel
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>
@@ -107,8 +112,13 @@ export const ToolbarPanel = () => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({});
+const mapStateToProps = (state: IStore) => ({
+  zoom: state.stage.zoom,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  increaseStageZoom: increaseStageZoom,
+  decreaseStageZoom: decreaseStageZoom,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

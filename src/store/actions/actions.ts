@@ -207,27 +207,35 @@ export const ACTIVATE_OBJECT = "Activate object";
 
 export interface ActivateObjectAction {
   type: typeof ACTIVATE_OBJECT;
-  payload: string;
+  payload: string | null;
 }
 
-function _activateObject(objectId: string): ActivateObjectAction {
+function _activateObject(objectId: string | null): ActivateObjectAction {
   return {
     type: ACTIVATE_OBJECT,
     payload: objectId,
   };
 }
 
-export function activateObject(objectId: string): any {
+export function activateObject(objectId: string | null): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().selection.activeObjectId === objectId) {
       console.log("object is already active ");
       return;
     }
 
-    const layerId = getState().objects.objectById[objectId].layerId;
+    const layerId = getState().objects.objectById[objectId as string].layerId;
 
     dispatch(_activateLayer(layerId));
     dispatch(_activateObject(objectId));
+  };
+}
+
+export function deactivateObject(objectId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (getState().selection.activeObjectId === objectId) {
+      dispatch(_activateObject(null));
+    }
   };
 }
 
@@ -359,6 +367,56 @@ export function removeLayersFromSelection(
   };
 }
 
+// *****
+
+export const SELECT_OBJECTS = "Select objects";
+
+export interface SelectObjectAction {
+  type: typeof SELECT_OBJECTS;
+  payload: string[];
+}
+
+export function selectObjects(objectsId: string[]): SelectObjectAction {
+  return {
+    type: SELECT_OBJECTS,
+    payload: objectsId,
+  };
+}
+
+// ****
+export const ADD_OBJECTS_TO_SELECTION = "Add objects to selection";
+
+export interface AddObjectsToSelectionAction {
+  type: typeof ADD_OBJECTS_TO_SELECTION;
+  payload: string[];
+}
+
+export function addObjectsToSelection(
+  objectIds: string[]
+): AddObjectsToSelectionAction {
+  return {
+    type: ADD_OBJECTS_TO_SELECTION,
+    payload: objectIds,
+  };
+}
+
+// ***
+export const REMOVE_OBJECTS_FROM_SELECTION = "Remove objects from selection";
+
+export interface RemoveObjectsFromSelectionAction {
+  type: typeof REMOVE_OBJECTS_FROM_SELECTION;
+  payload: string[];
+}
+
+export function removeObjectsFromSelection(
+  objectIds: string[]
+): RemoveObjectsFromSelectionAction {
+  return {
+    type: REMOVE_OBJECTS_FROM_SELECTION,
+    payload: objectIds,
+  };
+}
+
 // **** OBJECTS
 
 export const ADD_OBJECT = "Add object";
@@ -445,6 +503,24 @@ export function setStageSize(stageSize: IStageSize): SetStageSizeAction {
 
 // ******
 
+export const getZoomScale = () => [
+  10,
+  20,
+  40,
+  60,
+  80,
+  100,
+  125,
+  150,
+  175,
+  200,
+  300,
+  400,
+  500,
+  600,
+  800,
+  1000,
+];
 export const SET_STAGE_ZOOM = "Set stage zoom";
 
 export interface SetStageZoomAction {
@@ -456,6 +532,28 @@ export function setStageZoom(zoom: number): SetStageZoomAction {
   return {
     type: SET_STAGE_ZOOM,
     payload: zoom,
+  };
+}
+
+export function increaseStageZoom(): any {
+  return function (dispatch: any, getState: () => IStore) {
+    const state = getState();
+    const zoomPerc = getZoomScale().find(
+      (item) => item / 100 > getState().stage.zoom
+    );
+    if (zoomPerc) {
+      dispatch(setStageZoom(zoomPerc / 100));
+    }
+  };
+}
+export function decreaseStageZoom(): any {
+  return function (dispatch: any, getState: () => IStore) {
+    const zoomPerc = getZoomScale()
+      .reverse()
+      .find((item) => item / 100 < getState().stage.zoom);
+    if (zoomPerc) {
+      dispatch(setStageZoom(zoomPerc / 100));
+    }
   };
 }
 
@@ -505,8 +603,11 @@ export type ActionTypes =
 
   // object
   | AddObjectAction
+  | SelectObjectAction
   | UpdateObjectAction
   | DeleteObjectsAction
+  | AddObjectsToSelectionAction
+  | RemoveObjectsFromSelectionAction
 
   // layer selection
   | SelectLayerAction

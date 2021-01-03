@@ -11,9 +11,7 @@ ReactDOM.render(
   <React.StrictMode>
     <IntegrationContextProvider>
       <Provider store={store}>
-        <div>
-          <App />
-        </div>
+        <App />
       </Provider>
     </IntegrationContextProvider>
   </React.StrictMode>,

@@ -10,9 +10,14 @@
       outline: none;
     }
 
-    .bp3-button {
+    .bp3-button:not(.bp3-small) {
       width: 68px;
       height: 68px;
+    }
+    .bp3-button.bp3-small {
+      width: 34px;
+      height: 34px;
+      // padding: 7px 14px;
     }
   }
 

@@ -2,7 +2,7 @@ import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import css from "./AddSettingsPanel.module.scss";
+import css from "./SettingsPanel.module.scss";
 import { Button, Tab, Tabs } from "@blueprintjs/core";
 import { updateSlideDuration } from "../../store/actions/actions";
 import { getNumericFiled } from "../../inputs/input-utils";
@@ -11,11 +11,11 @@ interface IAddPanelProps {
   onRequestClose: () => void;
 }
 
-export type IAddSettingsPanelMergedProps = typeof mapDispatchToProps &
+export type ISettingsPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   IAddPanelProps;
 
-const AddSettingsPanel: React.FC<IAddSettingsPanelMergedProps> = (props) => {
+const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
   const { slideDuration, _updateSlideDuration } = props;
 
   const ProjectPanel: React.FunctionComponent = () => (
@@ -54,4 +54,4 @@ const mapDispatchToProps = {
   _updateSlideDuration: (newValue: number) => updateSlideDuration(newValue),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddSettingsPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(SettingsPanel);

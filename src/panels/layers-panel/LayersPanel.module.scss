@@ -103,6 +103,7 @@
   }
 
   .objectHolder {
+    border: 1px solid rgba(0, 0, 0, 0);
     border-bottom: 1px solid #444;
 
     .objectHolderInner {
@@ -112,6 +113,14 @@
     }
 
     &.active {
+      //border-top: 1px solid #1f82c0;
+      //border-bottom: 1px solid #1f82c0;
+    }
+
+    &.selected {
+      //border: 1px solid #444;
+      background: #444;
+      border: 1px solid rgba(0, 0, 0, 0);
       border-top: 1px solid #1f82c0;
       border-bottom: 1px solid #1f82c0;
     }

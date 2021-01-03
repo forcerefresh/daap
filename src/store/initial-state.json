@@ -2,44 +2,44 @@
   "slides": {
     "nextSlideIdCounter": 1,
     "slideById": {
-      "f9cb7d8d-4406-41bd-be9f-5171ccc3a35b": {
-        "id": "f9cb7d8d-4406-41bd-be9f-5171ccc3a35b",
+      "6f461983-924c-4b39-a3b5-349c7293e6c1": {
+        "id": "6f461983-924c-4b39-a3b5-349c7293e6c1",
         "name": "Slide 0",
         "duration": {
           "inheritFrom": "custom",
-          "customValue": 3000
+          "customValue": 10000
         },
-        "layerIds": ["c623ad2a-477c-41dc-a79d-404a77367b55"],
+        "layerIds": ["563802ba-9dbe-4d7c-ac3b-9d474931f367"],
         "nextLayerIdCounter": 1
       }
     },
-    "allSlides": ["f9cb7d8d-4406-41bd-be9f-5171ccc3a35b"]
+    "allSlides": ["6f461983-924c-4b39-a3b5-349c7293e6c1"]
   },
   "layers": {
     "layerById": {
-      "c623ad2a-477c-41dc-a79d-404a77367b55": {
-        "id": "c623ad2a-477c-41dc-a79d-404a77367b55",
-        "slideId": "f9cb7d8d-4406-41bd-be9f-5171ccc3a35b",
+      "563802ba-9dbe-4d7c-ac3b-9d474931f367": {
+        "id": "563802ba-9dbe-4d7c-ac3b-9d474931f367",
+        "slideId": "6f461983-924c-4b39-a3b5-349c7293e6c1",
         "name": "Layer 0",
         "isVisible": true,
         "hasTimeline": true,
         "objectIds": [
-          "3738f020-c0eb-4dad-aa31-1488bd1c3022",
-          "a709f329-f281-4a43-98c2-f411c6045cc8",
-          "2e3bf06b-4d74-4e72-be8a-94042328a24e"
+          "cd62ef25-7be1-4f69-94a2-23680a6611b5",
+          "cc30fe1d-b8e4-46a0-9d6e-b98c1111e8b4",
+          "e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2"
         ]
       }
     },
-    "allLayers": ["c623ad2a-477c-41dc-a79d-404a77367b55"]
+    "allLayers": ["563802ba-9dbe-4d7c-ac3b-9d474931f367"]
   },
   "objects": {
     "objectById": {
-      "3738f020-c0eb-4dad-aa31-1488bd1c3022": {
-        "left": 370,
-        "top": 190,
-        "width": 248,
-        "height": 60,
-        "id": "3738f020-c0eb-4dad-aa31-1488bd1c3022",
+      "cd62ef25-7be1-4f69-94a2-23680a6611b5": {
+        "left": 26,
+        "top": 44,
+        "width": 300,
+        "height": 50,
+        "id": "cd62ef25-7be1-4f69-94a2-23680a6611b5",
         "type": "text",
         "isVisible": true,
         "isLocked": false,
@@ -47,19 +47,116 @@
           "in": {
             "relativeTo": "stage",
             "delay": 0,
-            "duration": 3000,
+            "duration": 1000,
+            "effect": {
+              "id": "slideIn",
+              "values": {
+                "from": "left",
+                "distance": 200
+              }
+            }
+          }
+        },
+        "definition": {
+          "id": "719a533c-9d80-4a68-8565-3b82e04c0f93",
+          "type": "text",
+          "properties": {
+            "text": {
+              "displayName": "Text",
+              "propertyName": "text",
+              "inputType": "text",
+              "value": "Slide from left",
+              "defaultValue": ""
+            },
+            "color": {
+              "displayName": "Color",
+              "propertyName": "color",
+              "inputType": "color",
+              "value": null,
+              "defaultValue": {
+                "r": 0,
+                "g": 0,
+                "b": 0,
+                "a": 1
+              }
+            },
+            "fontSize": {
+              "displayName": "Font size",
+              "propertyName": "string",
+              "inputType": "text",
+              "value": "30",
+              "defaultValue": "A"
+            },
+            "weight": {
+              "displayName": "Weight",
+              "propertyName": "weight",
+              "inputType": "select",
+              "value": "2",
+              "defaultValue": "3",
+              "options": [
+                {
+                  "value": "100",
+                  "label": "100\tThin"
+                },
+                {
+                  "value": "200",
+                  "label": "200\tExtra Light"
+                },
+                {
+                  "value": "300",
+                  "label": "300\tLight"
+                },
+                {
+                  "value": "400",
+                  "label": "400\tNormal"
+                },
+                {
+                  "value": "500",
+                  "label": "500\tMedium"
+                },
+                {
+                  "value": "600",
+                  "label": "600\tSemi Bold"
+                },
+                {
+                  "value": "700",
+                  "label": "700\tBold"
+                },
+                {
+                  "value": "800",
+                  "label": "800\tExtra Bold"
+                },
+                {
+                  "value": "900",
+                  "label": "900\tBlack"
+                },
+                {
+                  "value": "950",
+                  "label": "950\tExtra Black"
+                }
+              ]
+            }
+          }
+        },
+        "layerId": "563802ba-9dbe-4d7c-ac3b-9d474931f367"
+      },
+      "cc30fe1d-b8e4-46a0-9d6e-b98c1111e8b4": {
+        "left": 219,
+        "top": 168,
+        "width": 300,
+        "height": 120,
+        "id": "cc30fe1d-b8e4-46a0-9d6e-b98c1111e8b4",
+        "type": "text",
+        "isVisible": true,
+        "isLocked": false,
+        "transitions": {
+          "in": {
+            "relativeTo": "stage",
+            "delay": 0,
+            "duration": 1000,
             "effect": {
               "id": "fadeIn",
               "values": {
-                "from": "left",
-                "distance": 100,
-                "fromScale": 0,
-                "toScale": 100,
-                "scaleFactor": 0,
-                "transformOrigin": {
-                  "x": 80,
-                  "y": 80
-                },
                 "fromOpacity": 0,
                 "toOpacity": 100
               }
@@ -67,14 +164,14 @@
           }
         },
         "definition": {
-          "id": "4fa6fc52-2444-4445-930e-ccfa7db9fc54",
+          "id": "83cf8719-857c-4bbf-84f7-37506011415f",
           "type": "text",
           "properties": {
             "text": {
               "displayName": "Text",
               "propertyName": "text",
               "inputType": "text",
-              "value": "Probni text",
+              "value": "Fade ...",
               "defaultValue": ""
             },
             "color": {
@@ -98,7 +195,7 @@
               "displayName": "Font size",
               "propertyName": "string",
               "inputType": "text",
-              "value": "50",
+              "value": "100",
               "defaultValue": "A"
             },
             "weight": {
@@ -152,120 +249,14 @@
             }
           }
         },
-        "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
+        "layerId": "563802ba-9dbe-4d7c-ac3b-9d474931f367"
       },
-      "a709f329-f281-4a43-98c2-f411c6045cc8": {
-        "left": 100,
-        "top": 40,
-        "width": 209,
-        "height": 30,
-        "id": "a709f329-f281-4a43-98c2-f411c6045cc8",
-        "type": "text",
-        "isVisible": true,
-        "isLocked": false,
-        "transitions": {
-          "in": {
-            "relativeTo": "stage",
-            "delay": 0,
-            "duration": 1000,
-            "effect": {
-              "id": "slideIn",
-              "values": {
-                "from": "left",
-                "distance": 300
-              }
-            }
-          }
-        },
-        "definition": {
-          "id": "f076fdcb-b8cc-4638-ad98-e806c1ac010f",
-          "type": "text",
-          "properties": {
-            "text": {
-              "displayName": "Text",
-              "propertyName": "text",
-              "inputType": "text",
-              "value": "Slide sa leve strane",
-              "defaultValue": ""
-            },
-            "color": {
-              "displayName": "Color",
-              "propertyName": "color",
-              "inputType": "color",
-              "value": null,
-              "defaultValue": {
-                "r": 0,
-                "g": 0,
-                "b": 0,
-                "a": 1
-              }
-            },
-            "fontSize": {
-              "displayName": "Font size",
-              "propertyName": "string",
-              "inputType": "text",
-              "value": "25",
-              "defaultValue": "A"
-            },
-            "weight": {
-              "displayName": "Weight",
-              "propertyName": "weight",
-              "inputType": "select",
-              "value": "2",
-              "defaultValue": "3",
-              "options": [
-                {
-                  "value": "100",
-                  "label": "100\tThin"
-                },
-                {
-                  "value": "200",
-                  "label": "200\tExtra Light"
-                },
-                {
-                  "value": "300",
-                  "label": "300\tLight"
-                },
-                {
-                  "value": "400",
-                  "label": "400\tNormal"
-                },
-                {
-                  "value": "500",
-                  "label": "500\tMedium"
-                },
-                {
-                  "value": "600",
-                  "label": "600\tSemi Bold"
-                },
-                {
-                  "value": "700",
-                  "label": "700\tBold"
-                },
-                {
-                  "value": "800",
-                  "label": "800\tExtra Bold"
-                },
-                {
-                  "value": "900",
-                  "label": "900\tBlack"
-                },
-                {
-                  "value": "950",
-                  "label": "950\tExtra Black"
-                }
-              ]
-            }
-          }
-        },
-        "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
-      },
-      "2e3bf06b-4d74-4e72-be8a-94042328a24e": {
-        "left": 0,
-        "top": 200,
+      "e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2": {
+        "left": 649,
+        "top": 42,
         "width": 200,
         "height": 200,
-        "id": "2e3bf06b-4d74-4e72-be8a-94042328a24e",
+        "id": "e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2",
         "type": "image",
         "isVisible": true,
         "isLocked": false,
@@ -275,46 +266,49 @@
             "delay": 0,
             "duration": 1000,
             "effect": {
-              "id": "kenBurns",
+              "id": "zoomIn",
               "values": {
-                "scaleFactor": 10,
-                "transformOrigin": {
-                  "x": 50,
-                  "y": 20
-                }
+                "fromOpacity": 0,
+                "toOpacity": 100,
+                "fromScale": 0,
+                "toScale": 100
               }
             }
           }
         },
         "definition": {
-          "id": "58672ef5-1b57-4b6b-837e-5b86344376f3",
+          "id": "9794fbea-4a2c-451c-b2fe-3d7163958529",
           "type": "image",
           "properties": {
             "url": {
               "displayName": "Image url",
               "propertyName": "url",
-              "inputType": "text",
-              "value": "logo192.png",
-              "defaultValue": ""
+              "inputType": "image",
+              "value": {
+                "url": "logo192.png"
+              },
+              "defaultValue": {
+                "url": ""
+              }
             }
           }
         },
-        "layerId": "c623ad2a-477c-41dc-a79d-404a77367b55"
+        "layerId": "563802ba-9dbe-4d7c-ac3b-9d474931f367"
       }
     },
     "allObjects": [
-      "3738f020-c0eb-4dad-aa31-1488bd1c3022",
-      "a709f329-f281-4a43-98c2-f411c6045cc8",
-      "2e3bf06b-4d74-4e72-be8a-94042328a24e"
+      "cd62ef25-7be1-4f69-94a2-23680a6611b5",
+      "cc30fe1d-b8e4-46a0-9d6e-b98c1111e8b4",
+      "e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2"
     ]
   },
   "selection": {
-    "activeSlideId": "f9cb7d8d-4406-41bd-be9f-5171ccc3a35b",
-    "activeLayerId": "c623ad2a-477c-41dc-a79d-404a77367b55",
-    "activeObjectId": "3738f020-c0eb-4dad-aa31-1488bd1c3022",
-    "selectedSlideIds": ["f9cb7d8d-4406-41bd-be9f-5171ccc3a35b"],
-    "selectedLayerIds": ["c623ad2a-477c-41dc-a79d-404a77367b55"],
-    "selectedObjectIds": []
+    "activeSlideId": "6f461983-924c-4b39-a3b5-349c7293e6c1",
+    "activeLayerId": "563802ba-9dbe-4d7c-ac3b-9d474931f367",
+    "activeObjectId": "e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2",
+    "selectedSlideIds": ["6f461983-924c-4b39-a3b5-349c7293e6c1"],
+    "selectedLayerIds": ["563802ba-9dbe-4d7c-ac3b-9d474931f367"],
+    "selectedObjectIds": ["e8fc5c00-5581-4e2c-8ef9-faadcbe70aa2"]
   },
   "stage": {
     "stageSize": {
@@ -330,6 +324,6 @@
     }
   },
   "settings": {
-    "slideDuration": 3
+    "slideDuration": 10
   }
 }

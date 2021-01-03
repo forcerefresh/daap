@@ -14,6 +14,10 @@ import {
   removeLayersFromSelection,
   deleteObjects,
   updateObject,
+  selectObjects,
+  addObjectsToSelection,
+  removeObjectsFromSelection,
+  deactivateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/layers";
 import css from "./LayersPanel.module.scss";
@@ -48,6 +52,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     activeLayerId,
     activeObjectId,
     selectedLayerIds,
+    selectedObjectIds,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -55,8 +60,12 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _activateLayer,
     _selectLayers,
     _activateObject,
+    _selectObjects,
     _deleteObjects,
     _updateObject,
+    _addObjectsToSelection,
+    _removeObjectsFromSelection,
+    _deactivateObject,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -95,6 +104,23 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
 
+  const onObjectClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    objectId: string
+  ) => {
+    if (event.ctrlKey) {
+      console.log("SDFDWA");
+      selectedObjectIds.indexOf(objectId) === -1
+        ? _addObjectsToSelection([objectId])
+        : _removeObjectsFromSelection([objectId]);
+      if (activeObjectId === objectId) {
+        _deactivateObject(objectId);
+      }
+    } else {
+      _activateObject(objectId);
+      _selectObjects([objectId]);
+    }
+  };
   // logic for handling click outside
   const effectPanelRef = useRef(null);
   const handleClickOutside = () => {
@@ -205,9 +231,14 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       return (
                         <div
                           key={objectId}
-                          onClick={() => _activateObject(objectId)}
+                          onClick={(event) => {
+                            onObjectClick(event, objectId);
+                          }}
                           className={cx(css.objectHolder, {
                             [css.active]: activeObjectId === objectId,
+                            [css.selected]:
+                              selectedObjectIds.length > 0 /*1*/ &&
+                              selectedObjectIds.indexOf(objectId) !== -1,
                           })}
                         >
                           <div className={css.objectHolderInner}>
@@ -330,6 +361,7 @@ const mapStateToProps = (state: IStore) => {
     activeLayerId: selection.activeLayerId,
     activeObjectId: selection.activeObjectId,
     selectedLayerIds: selection.selectedLayerIds,
+    selectedObjectIds: selection.selectedObjectIds,
   };
 };
 
@@ -347,8 +379,14 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),
+  _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
+  _addObjectsToSelection: (objectIds: string[]) =>
+    addObjectsToSelection(objectIds),
+  _removeObjectsFromSelection: (objectIds: string[]) =>
+    removeObjectsFromSelection(objectIds),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
   _updateObject: (object: IObject) => updateObject(object),
+  _deactivateObject: (objectId: string) => deactivateObject(objectId),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);
