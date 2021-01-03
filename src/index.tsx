@@ -15,7 +15,7 @@ ReactDOM.render(
       </Provider>
     </IntegrationContextProvider>
   </React.StrictMode>,
-  document.getElementById(useAppRootSelector())
+  document.getElementById((useAppRootSelector as any)())
 );
 
 // If you want your app to work offline and load faster, you can change
