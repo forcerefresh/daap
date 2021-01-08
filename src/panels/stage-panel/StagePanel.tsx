@@ -1,6 +1,7 @@
 import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
+import { Icon } from "@blueprintjs/core";
 
 import { connect } from "react-redux";
 import cx from "classnames";
@@ -65,8 +66,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const objectByIdLocal = cloneDeep(objectById);
   // 2. apply only delta to selected objects only
   selectedObjectIds.forEach((objectId) => {
-    objectByIdLocal[objectId].left! += delta.x;
-    objectByIdLocal[objectId].top! += delta.y;
+    if (!objectByIdLocal[objectId].isLocked) {
+      objectByIdLocal[objectId].left! += delta.x;
+      objectByIdLocal[objectId].top! += delta.y;
+    }
   });
 
   const isPreview = previewState.isPreview;
@@ -108,7 +111,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   // TODO: remove player from here
   const transitionsDataArr = exportData?.transitionsDataArr || [];
-  const [tl, setTl] = useState(gsap.timeline());
+  const [tl /*setTl*/] = useState(gsap.timeline());
 
   // restart timeline when something is changed
   useDeepCompareEffect(() => {
@@ -245,6 +248,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               __html: getObjectHtml(object),
             }}
             style={objectStyle}
+            className={cx({
+              [css.notVisible]: !object.isVisible,
+            })}
           />
           <div
             onClick={(event) => {
@@ -267,12 +273,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     const currentPosition = "X:" + object.left! + " Y:" + object.top! + "";
 
-    return object.isVisible ? (
+    return (
       <Draggable
-        disabled={!isSelected}
+        //disabled={!isSelected}
         key={objectId + "_drag"}
         position={{ x: object.left!, y: object.top! }}
-        grid={[1, 1]}
+        // workaround to prevent move when object is locked
+        grid={object.isLocked ? [10000000, 10000000] : [1, 1]}
         scale={1 * stageZoom}
         bounds={{}}
         onStart={(evt: DraggableEvent, data: DraggableData) => {
@@ -287,7 +294,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           //object.top! = object.top! + data.deltaY;
         }}
         onStop={(evt: DraggableEvent, data: DraggableData) => {
-          console.log(evt);
           // check if start end position are the same (mean object is on the same place)
           // this means we have "mouse click" event
           if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
@@ -297,18 +303,28 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             setDelta({ x: 0, y: 0 });
             // update objects
             selectedObjectIds.forEach((objectId) => {
-              _updateObject(objectByIdLocal[objectId]);
+              if (!objectByIdLocal[objectId].isLocked) {
+                _updateObject(objectByIdLocal[objectId]);
+              }
             });
           }
         }}
       >
-        <div style={{ zIndex: 500 + objectCounter, position: "absolute" }}>
+        <div
+          style={{ zIndex: 500 + objectCounter, position: "absolute" }}
+          className={cx({
+            [css.notVisibleHolder]: !object.isVisible,
+          })}
+        >
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
               __html: getObjectHtml(object),
             }}
             style={objectStyle2}
+            className={cx({
+              [css.notVisible]: !object.isVisible,
+            })}
           />
           <div
             key={object.id}
@@ -320,10 +336,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             })}
             style={objectStyle2}
           />
-          <div className={css.currentPosition}>{currentPosition}</div>
+
+          <div className={css.selectionInfo}>
+            {object.isLocked ? (
+              <div className={css.lockIconHolder}>
+                <Icon icon="lock" />
+              </div>
+            ) : null}
+            <div className={css.currentPosition}>{currentPosition}</div>
+          </div>
         </div>
       </Draggable>
-    ) : null;
+    );
   }
 };
 

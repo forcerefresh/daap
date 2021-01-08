@@ -109,7 +109,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     objectId: string
   ) => {
     if (event.ctrlKey) {
-      console.log("SDFDWA");
       selectedObjectIds.indexOf(objectId) === -1
         ? _addObjectsToSelection([objectId])
         : _removeObjectsFromSelection([objectId]);
@@ -280,6 +279,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                 }}
                                 small={true}
                                 icon={object.isLocked ? "lock" : "unlock"}
+                                className={cx({
+                                  [css.locked]: object.isLocked,
+                                })}
                               ></Button>
                             </div>
                             <div className={css.objectDescription}>

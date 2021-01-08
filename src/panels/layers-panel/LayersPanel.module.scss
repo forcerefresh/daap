@@ -106,6 +106,12 @@
     border: 1px solid rgba(0, 0, 0, 0);
     border-bottom: 1px solid #444;
 
+    .locked svg {
+      // consider lock to be red
+      //color: #ff4646;
+      //fill: #ff4646;
+    }
+
     .objectHolderInner {
       display: flex;
       align-items: center;

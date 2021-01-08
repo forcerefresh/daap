@@ -30,7 +30,6 @@ export function objects(
     }
     case UPDATE_OBJECT: {
       const object = action.payload;
-      console.log(object);
       return Object.assign({}, state, {
         objectById: {
           ...state.objectById,

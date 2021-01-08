@@ -15,10 +15,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   return <div className={css.slideSettings}>{slideId}</div>;
 };
 
-const mapStateToProps = (state: IStore) => {
-  const { slides } = state;
-  return {};
-};
+const mapStateToProps = (state: IStore) => ({});
 
 const mapDispatchToProps = {};
 

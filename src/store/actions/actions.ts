@@ -3,6 +3,8 @@ import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
+import { undo, redo } from "../../libraries/redux-deep-diff/src/actions";
+
 import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { createObject } from "../../objects/create-object-factory";
@@ -168,7 +170,6 @@ function _activateSlide(slideId: string): ActivateSlideAction {
 export function activateSlide(slideId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().selection.activeSlideId === slideId) {
-      console.log("aaaa ");
       return;
     }
     dispatch(_activateSlide(slideId));
@@ -473,7 +474,6 @@ export interface UpdateObjectAction {
 
 export function updateObject(object: IObject): any {
   return function (dispatch: any, getState: () => IStore) {
-    console.log(object);
     dispatch(_updateObject(object));
   };
 }
@@ -537,7 +537,6 @@ export function setStageZoom(zoom: number): SetStageZoomAction {
 
 export function increaseStageZoom(): any {
   return function (dispatch: any, getState: () => IStore) {
-    const state = getState();
     const zoomPerc = getZoomScale().find(
       (item) => item / 100 > getState().stage.zoom
     );
@@ -588,6 +587,20 @@ export function updateSlideDuration(
   return {
     type: UPDATE_SLIDE_DURATION,
     payload: duration,
+  };
+}
+
+// *** UNDO - REDO
+
+export function doUndo(): any {
+  return function (dispatch: any) {
+    dispatch(undo());
+  };
+}
+
+export function doRedo(): any {
+  return function (dispatch: any) {
+    dispatch(redo());
   };
 }
 

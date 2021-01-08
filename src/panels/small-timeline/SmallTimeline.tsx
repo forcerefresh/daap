@@ -30,9 +30,9 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
     };
   }, [tl]);
 
-  const thumbStyle = {
-    left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
-  };
+  //const thumbStyle = {
+  //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
+  //};
 
   const left = ((lineRef?.current as any)?.offsetWidth || 0) * progress;
   const position =
@@ -55,11 +55,11 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
             grid={[1, 1]}
             scale={1}
             bounds={{ left: 0, right: (lineRef?.current as any)?.offsetWidth }}
-            onStart={console.log}
+            // onStart={console.log}
             onDrag={(evt: DraggableEvent, data: DraggableData) => {
               calculateTimeFromThumb(data.x);
             }}
-            onStop={console.log}
+            //onStop={console.log}
           >
             <div className={cx(css.thumb, "handle")}></div>
           </Draggable>

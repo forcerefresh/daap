@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import cx from "classnames";
-import { Button, Popover, Portal, Position } from "@blueprintjs/core";
+import { Button, Portal } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -59,7 +59,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     setShowSettingsPanelForSlideId(EmptyID);
   };
   useOnClickOutside(ref, handleClickOutside);
-  
 
   return (
     <div className={css.panel}>

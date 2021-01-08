@@ -9,12 +9,11 @@ export const Preview = () => {
   const divRef = useRef(null);
 
   useEffect(() => {
-    console.log(divRef);
     //var tl = gsap.timeline({ repeat: 100 });
     //tl.to(divRef.current, { rotation: 20, duration: 1.5, x: 750 }); //.from(divRef.current, { duration: 1, y: 1300 })
 
     return () => {
-      console.log("cleanup");
+      // console.log("cleanup");
     };
   }, [divRef]);
 

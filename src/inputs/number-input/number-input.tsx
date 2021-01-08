@@ -16,7 +16,6 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
 
   const id = `${propertyName}_input_number`;
 
-  console.log(value);
   return (
     <FormGroup
       label={displayName}
@@ -28,7 +27,6 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
         id={id}
         value={value}
         onValueChange={(value, valueAsString) => {
-          console.log(valueAsString);
           onInput(parseFloat(valueAsString));
         }}
       />

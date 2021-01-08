@@ -45,7 +45,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     };
 
     const onInput = (value: any) => {
-      console.log(value);
       const retObj = cloneDeep(object);
       if (retObj) {
         (retObj as any)[propertyName] = value;
@@ -57,13 +56,9 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   const renderProperties = (properties: any) => {
-    console.log(properties);
     return Object.keys(properties).map((key) => {
       function onChange(value: any) {
-        console.log(value);
         const retObj = cloneDeep(object);
-        console.log(retObj);
-        console.log(key);
 
         if (retObj) {
           (retObj.definition.properties as any)[key].value = value;
@@ -75,7 +70,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     });
   };
 
-  console.log(object);
   return (
     <div className={css.propertiesPanel}>
       <div className={css.panelHeader}>

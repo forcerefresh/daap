@@ -1,6 +1,5 @@
-import { Button, FormGroup, HTMLSelect } from "@blueprintjs/core";
-import { cloneDeep, get, noop, set } from "lodash-es";
-import React, { useState } from "react";
+import { cloneDeep, get, set } from "lodash-es";
+import React from "react";
 import { connect } from "react-redux";
 import {
   getEffectDefinition,
@@ -8,10 +7,8 @@ import {
 } from "../../../effects/effects";
 import { getInputForm } from "../../../inputs/input-factory";
 import { getNumericFiled, getSelectFiled } from "../../../inputs/input-utils";
-import { InputType } from "../../../inputs/types";
 import { IObject } from "../../../objects/types";
 import { updateObject } from "../../../store/actions/actions";
-import { objects } from "../../../store/reducers/objects";
 import { IStore } from "../../../store/store";
 
 import css from "./EffectConfigurationForm.module.scss";
@@ -22,39 +19,8 @@ type IEffectConfigurationForm = typeof mapDispatchToProps &
     effectType: "in" | "out";
   };
 
-const options = [
-  { label: "Fade", value: "fade" },
-  { label: "Slide", value: "slide" },
-  { label: "Bounce", value: "bounce" },
-  { label: "Flash", value: "flash" },
-  { label: "Zoom", value: "zoom" },
-];
-/*
-const getNumericFiled = (
-  object: IObject,
-  label: string,
-  path: string,
-  _updateObject: (object: IObject) => void
-) => {
-  const objectDef = {
-    displayName: label,
-    propertyName: path,
-    inputType: InputType.NUMBER,
-    value: get(object, path),
-    defaultValue: 0,
-  };
-
-  const onInput = (value: any) => {
-    const obj = cloneDeep(object);
-    set(obj, path, value);
-    _updateObject(obj);
-  };
-
-  return getInputForm(InputType.NUMBER, objectDef, noop, onInput);
-};*/
-
 const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
-  const { objectId, effectType, objectById, _updateObject } = props;
+  const { objectId, objectById, _updateObject } = props;
 
   const object = objectById[objectId];
 
@@ -76,11 +42,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         }
       }
 
-      console.log(effectDefinition.defaults[item.propertyName]);
-      console.log(item.propertyName);
-
       const value = get(object, valuesPath)[item.propertyName];
-      console.log(effectDefinition);
       const defaultValue = effectDefinition.defaults[item.propertyName];
       const inputProps = {
         ...item,

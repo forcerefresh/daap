@@ -1,4 +1,4 @@
-import { forOwn, map, mapValues, pick } from "lodash-es";
+import { forOwn, mapValues, pick } from "lodash-es";
 import { ImageProperties, TextProperties } from "../inputs/types";
 import { IObject, ITransitions, ObjectType } from "../objects/types";
 import { ILayer, ILayers } from "../store/reducers/layers";
@@ -102,7 +102,7 @@ export function getObjectHtml(object: IObject) {
 function getTextHtml(object: IObject) {
   const textProperties = object.definition.properties as TextProperties;
 
-  const sizeObj = pick(object, "left", "top", "width", "height");
+  //const sizeObj = pick(object, "left", "top", "width", "height");
   //const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
   let style = "";

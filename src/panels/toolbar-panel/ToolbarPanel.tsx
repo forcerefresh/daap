@@ -3,24 +3,27 @@ import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
-import { ReactComponent as TextToolIcon } from "../../assets/icons/text-tool.svg";
-import { ReactComponent as ImageToolIcon } from "../../assets/icons/image-tool.svg";
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
 import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
 
-import css from "./ToolbarPanel.module.scss";
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import SettingsPanel from "../settings-panel/SettingsPanel";
+
+import css from "./ToolbarPanel.module.scss";
 import {
   decreaseStageZoom,
   increaseStageZoom,
+  doUndo,
+  doRedo,
 } from "../../store/actions/actions";
+import HistoryPanel from "../history-panel/HistoryPanel";
 
 enum VisiblePanel {
   None = "none",
   Add = "add",
   Settings = "settings",
+  History = "history",
 }
 
 const ICON_SIZE = 36;
@@ -30,13 +33,13 @@ type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
-  const { zoom, increaseStageZoom, decreaseStageZoom } = props;
+  const { zoom, increaseStageZoom, decreaseStageZoom, doUndo, doRedo } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
   const handleClickOutside = () => {
-    setShowPanel(VisiblePanel.None);
+    // setShowPanel(VisiblePanel.None);
   };
   useOnClickOutside(sharedRef, handleClickOutside);
 
@@ -83,10 +86,34 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               <Icon icon="zoom-out" iconSize={SMALL_ICON_SIZE} color={"gray"} />
             </Button>
           </div>
-          <Button minimal>
+          <Button
+            minimal
+            onClick={() => {
+              setShowPanel(VisiblePanel.History);
+            }}
+          >
             <Icon icon="undo" iconSize={ICON_SIZE} color={"gray"} />
           </Button>
+          <Portal>
+            {showPanel === VisiblePanel.History && (
+              <div ref={sharedRef}>
+                <HistoryPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
         </div>
+
+        <div>
+          <Button minimal onClick={() => doUndo()}>
+            Undo
+          </Button>
+          <Button minimal onClick={() => doRedo()}>
+            Redo
+          </Button>
+        </div>
+
         <div>
           <Button
             minimal
@@ -119,6 +146,8 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   increaseStageZoom: increaseStageZoom,
   decreaseStageZoom: decreaseStageZoom,
+  doUndo: () => doUndo(),
+  doRedo: () => doRedo(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

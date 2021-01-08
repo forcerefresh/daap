@@ -2,7 +2,7 @@ import { FormGroup, InputGroup } from "@blueprintjs/core";
 import { noop } from "lodash-es";
 import React, { useContext } from "react";
 import { IntegrationContext } from "../../integration";
-import { IImageInput, ITextInput, IUpdateInput } from "../types";
+import { IImageInput, IUpdateInput } from "../types";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
@@ -13,7 +13,12 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
 
   const handleClick = () => {
     requestMedia("image").then((mediaObject: { url: string }) => {
+      //const image = new Image();
+      //image.onload = function () {
+      //  console.log(image.width);
       onChange(mediaObject);
+      //};
+      //image.src = mediaObject.url;
     });
   };
 
