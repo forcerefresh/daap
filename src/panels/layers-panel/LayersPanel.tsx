@@ -345,7 +345,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection } = state;
+  const { slides, layers, objects, selection } = state.project;
   let layerArr: ILayer[] | null = null;
   let slide: ISlide | null = null;
 

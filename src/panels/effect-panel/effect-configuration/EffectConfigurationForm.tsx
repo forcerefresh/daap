@@ -110,7 +110,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects } = state;
+  const { objects } = state.project;
   return {
     objectById: objects.objectById,
   };

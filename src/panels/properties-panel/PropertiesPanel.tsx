@@ -83,7 +83,7 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, selection } = state;
+  const { objects, selection } = state.project;
   const activeObjectId = selection.activeObjectId;
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   return {

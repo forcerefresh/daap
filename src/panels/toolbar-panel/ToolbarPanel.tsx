@@ -5,6 +5,7 @@ import { IStore } from "../../store/store";
 
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
 import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
+import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-tool.svg";
 
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -33,13 +34,24 @@ type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
-  const { zoom, increaseStageZoom, decreaseStageZoom, doUndo, doRedo } = props;
+  const {
+    zoom,
+    increaseStageZoom,
+    decreaseStageZoom,
+    doUndo,
+    doRedo,
+    hasUndoItem,
+    hasRedoItem,
+  } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
   const handleClickOutside = () => {
-    // setShowPanel(VisiblePanel.None);
+    // TODO: temporary - for dev purpose
+    if (showPanel !== VisiblePanel.History) {
+      setShowPanel(VisiblePanel.None);
+    }
   };
   useOnClickOutside(sharedRef, handleClickOutside);
 
@@ -92,7 +104,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               setShowPanel(VisiblePanel.History);
             }}
           >
-            <Icon icon="undo" iconSize={ICON_SIZE} color={"gray"} />
+            <HistoryToolIcon
+              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+            />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.History && (
@@ -104,16 +118,32 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             )}
           </Portal>
         </div>
-
         <div>
-          <Button minimal onClick={() => doUndo()}>
-            Undo
+          <Button
+            disabled={!hasUndoItem}
+            minimal
+            small
+            onClick={() => doUndo()}
+          >
+            <Icon
+              icon="undo"
+              iconSize={SMALL_ICON_SIZE}
+              color={hasUndoItem ? "gray" : "#555"}
+            />
           </Button>
-          <Button minimal onClick={() => doRedo()}>
-            Redo
+          <Button
+            disabled={!hasRedoItem}
+            minimal
+            small
+            onClick={() => doRedo()}
+          >
+            <Icon
+              icon="redo"
+              iconSize={SMALL_ICON_SIZE}
+              color={hasRedoItem ? "gray" : "#555"}
+            />
           </Button>
         </div>
-
         <div>
           <Button
             minimal
@@ -141,6 +171,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
 const mapStateToProps = (state: IStore) => ({
   zoom: state.stage.zoom,
+  hasUndoItem: state.project.diff.prev.length !== 0,
+  hasRedoItem: state.project.diff.next.length !== 0,
 });
 
 const mapDispatchToProps = {

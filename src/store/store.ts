@@ -4,7 +4,6 @@ import {
   applyMiddleware,
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
-//import undoable from "redux-undo";
 import diff from "../libraries/redux-deep-diff/src/reducer";
 
 import { composeWithDevTools } from "redux-devtools-extension";
@@ -15,31 +14,56 @@ import { IStage, stage } from "./reducers/stage";
 import { IObjects, objects } from "./reducers/objects";
 import { ISettings, settings } from "./reducers/settings";
 import initialState from "./initial-state.json";
+import { IDocument, document } from "./reducers/document";
 
 export interface IStore {
-  slides: ISlides;
-  layers: ILayers;
-  objects: IObjects;
-  selection: ISelection;
+  project: {
+    slides: ISlides;
+    layers: ILayers;
+    objects: IObjects;
+    selection: ISelection;
+    document: IDocument;
+    settings: ISettings;
+    diff: {
+      prev: any[];
+      next: any[];
+    };
+  };
   stage: IStage;
-  settings: ISettings;
 }
 
-const rootReducer = diff(
+const project = diff(
   combineReducers({
     slides,
     layers,
     objects,
     selection,
-    stage,
+    document,
     settings,
-  })
+  }),
+  {
+    skipAction: (action: { type: string; isUndoable: boolean }) => {
+      // NOTE:
+      //  1. @@INIT we get in Chrome browser
+      // 2. @@redux/@@INIT... we get in Edge browser
+      return (
+        action.type === "@@INIT" ||
+        action.type.indexOf("@@redux/@@INIT") !== -1 ||
+        !action.isUndoable
+      );
+    },
+  }
 ) as any;
 
+const rootReducer = combineReducers({
+  project,
+  stage,
+}) as any;
+
 const logger = (store: any) => (next: any) => (action: any) => {
-  console.log("dispatching", action);
+  //console.log("dispatching", action);
   let result = next(action);
-  console.log("next state", store.getState());
+  //console.log("next state", store.getState());
   return result;
 };
 

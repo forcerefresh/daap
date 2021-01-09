@@ -195,6 +195,11 @@ export function selection(
               : activeId;
           },
         },
+
+        selectedObjectIds: {
+          $apply: (selIds: string[]) =>
+            selIds.filter((id) => deletedObjectIds.indexOf(id) === -1),
+        },
       });
     }
     default:

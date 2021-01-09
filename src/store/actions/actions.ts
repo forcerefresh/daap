@@ -3,15 +3,26 @@ import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
-import { undo, redo } from "../../libraries/redux-deep-diff/src/actions";
+import { undo, redo, jump } from "../../libraries/redux-deep-diff/src/actions";
 
 import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { createObject } from "../../objects/create-object-factory";
-import { IPreviewState, IStageSize } from "../reducers/stage";
+import { IPreviewState } from "../reducers/stage";
+import { IDocumentSize } from "../reducers/document";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
+}
+
+// **** UNDOABLE interfaces
+
+export type IIsUndoable = true | false;
+export type IIsSkipHistory = true | false;
+
+export interface IUndoableAction<IsUndoable = boolean, SkipHistory = boolean> {
+  isUndoable: IsUndoable;
+  skipHistory?: SkipHistory;
 }
 
 // **** SLIDES ACTION
@@ -22,16 +33,16 @@ export interface AddSlideActionPayload {
   slide: ISlide;
 }
 
-export interface AddSlideAction {
+export interface AddSlideAction extends IUndoableAction<true> {
   type: typeof ADD_SLIDE;
   payload: ISlide;
 }
 
 export function addNewSlide(): any {
-  return function (dispatch: any, getState: () => IStore) {
+  return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: ISlide = {
       id: uuid(),
-      name: `Slide ${getState().slides.nextSlideIdCounter}`,
+      name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "custom",
         customValue: 10000,
@@ -49,6 +60,7 @@ export function addSlide(slide: ISlide): AddSlideAction {
   return {
     type: ADD_SLIDE,
     payload: slide,
+    isUndoable: true,
   };
 }
 
@@ -60,17 +72,19 @@ export interface DeleteSlideActionPayload {
   slideId: string;
 }
 
-export interface DeleteSlideAction {
+export interface DeleteSlideAction extends IUndoableAction<true> {
   type: typeof DELETE_SLIDE;
   payload: DeleteSlideActionPayload;
 }
 
 export function deleteSlideThree(slideId: string) {
-  return function (dispatch: any, getState: () => IStore) {
-    const layerIds = getState().slides.slideById[slideId].layerIds;
-    const objectIds = getState().objects.allObjects.filter(
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const layerIds = getState().project.slides.slideById[slideId].layerIds;
+    const objectIds = getState().project.objects.allObjects.filter(
       (objectId) =>
-        layerIds.indexOf(getState().objects.objectById[objectId].layerId) !== -1
+        layerIds.indexOf(
+          getState().project.objects.objectById[objectId].layerId
+        ) !== -1
     );
 
     dispatch(deleteObjects(objectIds));
@@ -79,10 +93,11 @@ export function deleteSlideThree(slideId: string) {
   };
 }
 
-export function deleteSlide(slideId: string) {
+export function deleteSlide(slideId: string): DeleteSlideAction {
   return {
     type: DELETE_SLIDE,
     payload: { slideId },
+    isUndoable: true,
   };
 }
 
@@ -90,14 +105,15 @@ export function deleteSlide(slideId: string) {
 
 export const ADD_LAYER = "Add layer";
 
-export interface AddLayerAction {
+export interface AddLayerAction extends IUndoableAction<true> {
   type: typeof ADD_LAYER;
   payload: ILayer;
 }
 
 export function addNewLayer(slideId: string): any {
-  return function (dispatch: any, getState: () => IStore) {
-    const nextId = getState().slides.slideById[slideId].nextLayerIdCounter;
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const nextId = getState().project.slides.slideById[slideId]
+      .nextLayerIdCounter;
 
     const layer: ILayer = {
       id: uuid(),
@@ -117,6 +133,7 @@ export function addLayer(layer: ILayer): AddLayerAction {
   return {
     type: ADD_LAYER,
     payload: layer,
+    isUndoable: true,
   };
 }
 
@@ -124,7 +141,7 @@ export function addLayer(layer: ILayer): AddLayerAction {
 
 export const DELETE_LAYERS = "Delete layers";
 
-export interface DeleteLayersAction {
+export interface DeleteLayersAction extends IUndoableAction<true> {
   type: typeof DELETE_LAYERS;
   payload: string[];
 }
@@ -133,6 +150,7 @@ export function deleteLayers(layerIds: string[]): DeleteLayersAction {
   return {
     type: DELETE_LAYERS,
     payload: layerIds,
+    isUndoable: true,
   };
 }
 
@@ -140,7 +158,7 @@ export function deleteLayers(layerIds: string[]): DeleteLayersAction {
 
 export const SELECT_LAYER = "Select layer";
 
-export interface SelectLayerAction {
+export interface SelectLayerAction extends IUndoableAction<true, true> {
   type: typeof SELECT_LAYER;
   payload: string;
 }
@@ -149,13 +167,15 @@ export function selectLayer(layerId: string): SelectLayerAction {
   return {
     type: SELECT_LAYER,
     payload: layerId,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 // ****
 export const ACTIVATE_SLIDE = "Activate slide";
 
-export interface ActivateSlideAction {
+export interface ActivateSlideAction extends IUndoableAction<true, true> {
   type: typeof ACTIVATE_SLIDE;
   payload: string;
 }
@@ -164,12 +184,14 @@ function _activateSlide(slideId: string): ActivateSlideAction {
   return {
     type: ACTIVATE_SLIDE,
     payload: slideId,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 export function activateSlide(slideId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (getState().selection.activeSlideId === slideId) {
+    if (getState().project.selection.activeSlideId === slideId) {
       return;
     }
     dispatch(_activateSlide(slideId));
@@ -181,7 +203,7 @@ export function activateSlide(slideId: string) {
 // ****
 export const ACTIVATE_LAYER = "Activate layer";
 
-export interface ActivateLayerAction {
+export interface ActivateLayerAction extends IUndoableAction<true, true> {
   type: typeof ACTIVATE_LAYER;
   payload: string;
 }
@@ -190,12 +212,14 @@ function _activateLayer(layerId: string): ActivateLayerAction {
   return {
     type: ACTIVATE_LAYER,
     payload: layerId,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 export function activateLayer(layerId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (getState().selection.activeLayerId === layerId) {
+    if (getState().project.selection.activeLayerId === layerId) {
       console.log("layer is already active");
       return;
     }
@@ -206,7 +230,7 @@ export function activateLayer(layerId: string): any {
 // ****
 export const ACTIVATE_OBJECT = "Activate object";
 
-export interface ActivateObjectAction {
+export interface ActivateObjectAction extends IUndoableAction<true, true> {
   type: typeof ACTIVATE_OBJECT;
   payload: string | null;
 }
@@ -215,17 +239,20 @@ function _activateObject(objectId: string | null): ActivateObjectAction {
   return {
     type: ACTIVATE_OBJECT,
     payload: objectId,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 export function activateObject(objectId: string | null): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (getState().selection.activeObjectId === objectId) {
+    if (getState().project.selection.activeObjectId === objectId) {
       console.log("object is already active ");
       return;
     }
 
-    const layerId = getState().objects.objectById[objectId as string].layerId;
+    const layerId = getState().project.objects.objectById[objectId as string]
+      .layerId;
 
     dispatch(_activateLayer(layerId));
     dispatch(_activateObject(objectId));
@@ -234,7 +261,7 @@ export function activateObject(objectId: string | null): any {
 
 export function deactivateObject(objectId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (getState().selection.activeObjectId === objectId) {
+    if (getState().project.selection.activeObjectId === objectId) {
       dispatch(_activateObject(null));
     }
   };
@@ -243,7 +270,7 @@ export function deactivateObject(objectId: string): any {
 // ****
 export const SELECT_SLIDES = "Select slides";
 
-export interface SelectSlidesAction {
+export interface SelectSlidesAction extends IUndoableAction<true, true> {
   type: typeof SELECT_SLIDES;
   payload: string[];
 }
@@ -252,16 +279,24 @@ function _selectSlides(slides: string[]): SelectSlidesAction {
   return {
     type: SELECT_SLIDES,
     payload: slides,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 export function selectSlides(slideIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (
-      differenceWith(slideIds, getState().selection.selectedSlideIds, isEqual)
-        .length === 0 &&
-      differenceWith(getState().selection.selectedSlideIds, slideIds, isEqual)
-        .length === 0
+      differenceWith(
+        slideIds,
+        getState().project.selection.selectedSlideIds,
+        isEqual
+      ).length === 0 &&
+      differenceWith(
+        getState().project.selection.selectedSlideIds,
+        slideIds,
+        isEqual
+      ).length === 0
     ) {
       return;
     }
@@ -273,7 +308,7 @@ export function selectSlides(slideIds: string[]) {
 // ****
 export const SELECT_LAYERS = "Select layers";
 
-export interface SelectLayersAction {
+export interface SelectLayersAction extends IUndoableAction<true, true> {
   type: typeof SELECT_LAYERS;
   payload: string[];
 }
@@ -282,14 +317,19 @@ function _selectLayers(layers: string[]): SelectLayersAction {
   return {
     type: SELECT_LAYERS,
     payload: layers,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 export function selectLayers(layerIds: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (
-      differenceWith(layerIds, getState().selection.selectedLayerIds, isEqual)
-        .length === 0
+      differenceWith(
+        layerIds,
+        getState().project.selection.selectedLayerIds,
+        isEqual
+      ).length === 0
     ) {
       return;
     }
@@ -302,7 +342,8 @@ export function selectLayers(layerIds: string[]): any {
 
 export const ADD_SLIDES_TO_SELECTION = "Add slides to selection";
 
-export interface AddSlidesToSelectionAction {
+export interface AddSlidesToSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof ADD_SLIDES_TO_SELECTION;
   payload: string[];
 }
@@ -313,13 +354,16 @@ export function addSlidesToSelection(
   return {
     type: ADD_SLIDES_TO_SELECTION,
     payload: slides,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 // ***
 export const REMOVE_SLIDES_FROM_SELECTION = "Remove slides from selection";
 
-export interface RemoveSlidesFromSelectionAction {
+export interface RemoveSlidesFromSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof REMOVE_SLIDES_FROM_SELECTION;
   payload: string[];
 }
@@ -330,6 +374,8 @@ export function removeSlidesFromSelection(
   return {
     type: REMOVE_SLIDES_FROM_SELECTION,
     payload: slideIds,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 // ***
@@ -337,7 +383,8 @@ export function removeSlidesFromSelection(
 // ****
 export const ADD_LAYERS_TO_SELECTION = "Add layers to selection";
 
-export interface AddLayersToSelectionAction {
+export interface AddLayersToSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof ADD_LAYERS_TO_SELECTION;
   payload: string[];
 }
@@ -348,13 +395,16 @@ export function addLayersToSelection(
   return {
     type: ADD_LAYERS_TO_SELECTION,
     payload: layerIds,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 // ***
 export const REMOVE_LAYERS_FROM_SELECTION = "Remove layers from selection";
 
-export interface RemoveLayersFromSelectionAction {
+export interface RemoveLayersFromSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof REMOVE_LAYERS_FROM_SELECTION;
   payload: string[];
 }
@@ -365,6 +415,8 @@ export function removeLayersFromSelection(
   return {
     type: REMOVE_LAYERS_FROM_SELECTION,
     payload: layerIds,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
@@ -372,7 +424,7 @@ export function removeLayersFromSelection(
 
 export const SELECT_OBJECTS = "Select objects";
 
-export interface SelectObjectAction {
+export interface SelectObjectAction extends IUndoableAction<true, true> {
   type: typeof SELECT_OBJECTS;
   payload: string[];
 }
@@ -381,13 +433,16 @@ export function selectObjects(objectsId: string[]): SelectObjectAction {
   return {
     type: SELECT_OBJECTS,
     payload: objectsId,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 // ****
 export const ADD_OBJECTS_TO_SELECTION = "Add objects to selection";
 
-export interface AddObjectsToSelectionAction {
+export interface AddObjectsToSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof ADD_OBJECTS_TO_SELECTION;
   payload: string[];
 }
@@ -398,13 +453,16 @@ export function addObjectsToSelection(
   return {
     type: ADD_OBJECTS_TO_SELECTION,
     payload: objectIds,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
 // ***
 export const REMOVE_OBJECTS_FROM_SELECTION = "Remove objects from selection";
 
-export interface RemoveObjectsFromSelectionAction {
+export interface RemoveObjectsFromSelectionAction
+  extends IUndoableAction<true, true> {
   type: typeof REMOVE_OBJECTS_FROM_SELECTION;
   payload: string[];
 }
@@ -415,6 +473,8 @@ export function removeObjectsFromSelection(
   return {
     type: REMOVE_OBJECTS_FROM_SELECTION,
     payload: objectIds,
+    isUndoable: true,
+    skipHistory: true,
   };
 }
 
@@ -422,7 +482,7 @@ export function removeObjectsFromSelection(
 
 export const ADD_OBJECT = "Add object";
 
-export interface AddObjectAction {
+export interface AddObjectAction extends IUndoableAction<true> {
   type: typeof ADD_OBJECT;
   payload: IObject;
 }
@@ -432,7 +492,7 @@ export function addNewObject(
   type: ObjectType,
   objectProps: Partial<IObject>
 ): any {
-  return function (dispatch: any, getState: () => IStore) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
     const object = createObject(type, objectProps);
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
@@ -443,6 +503,7 @@ export function addObject(object: IObject): AddObjectAction {
   return {
     type: ADD_OBJECT,
     payload: object,
+    isUndoable: true,
   };
 }
 
@@ -451,7 +512,7 @@ export function addObject(object: IObject): AddObjectAction {
 
 export const DELETE_OBJECTS = "Delete objects";
 
-export interface DeleteObjectsAction {
+export interface DeleteObjectsAction extends IUndoableAction<true> {
   type: typeof DELETE_OBJECTS;
   payload: string[];
 }
@@ -460,6 +521,7 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
   return {
     type: DELETE_OBJECTS,
     payload: objectIds,
+    isUndoable: true,
   };
 }
 
@@ -467,13 +529,13 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
 // ***
 export const UPDATE_OBJECT = "Update object";
 
-export interface UpdateObjectAction {
+export interface UpdateObjectAction extends IUndoableAction<true> {
   type: typeof UPDATE_OBJECT;
   payload: IObject;
 }
 
 export function updateObject(object: IObject): any {
-  return function (dispatch: any, getState: () => IStore) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
     dispatch(_updateObject(object));
   };
 }
@@ -482,22 +544,26 @@ export function _updateObject(object: IObject): UpdateObjectAction {
   return {
     type: UPDATE_OBJECT,
     payload: object,
+    isUndoable: true,
   };
 }
 
 // ******
 
-export const SET_STAGE_SIZE = "Set stage size";
+export const SET_DOCUMENT_SIZE = "Set stage size";
 
-export interface SetStageSizeAction {
-  type: typeof SET_STAGE_SIZE;
-  payload: IStageSize;
+export interface SetDocumentSizeAction extends IUndoableAction<false> {
+  type: typeof SET_DOCUMENT_SIZE;
+  payload: IDocumentSize;
 }
 
-export function setStageSize(stageSize: IStageSize): SetStageSizeAction {
+export function setDocumentSize(
+  stageSize: IDocumentSize
+): SetDocumentSizeAction {
   return {
-    type: SET_STAGE_SIZE,
+    type: SET_DOCUMENT_SIZE,
     payload: stageSize,
+    isUndoable: false,
   };
 }
 
@@ -523,7 +589,7 @@ export const getZoomScale = () => [
 ];
 export const SET_STAGE_ZOOM = "Set stage zoom";
 
-export interface SetStageZoomAction {
+export interface SetStageZoomAction extends IUndoableAction<false> {
   type: typeof SET_STAGE_ZOOM;
   payload: number;
 }
@@ -532,11 +598,12 @@ export function setStageZoom(zoom: number): SetStageZoomAction {
   return {
     type: SET_STAGE_ZOOM,
     payload: zoom,
+    isUndoable: false,
   };
 }
 
 export function increaseStageZoom(): any {
-  return function (dispatch: any, getState: () => IStore) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
     const zoomPerc = getZoomScale().find(
       (item) => item / 100 > getState().stage.zoom
     );
@@ -546,7 +613,7 @@ export function increaseStageZoom(): any {
   };
 }
 export function decreaseStageZoom(): any {
-  return function (dispatch: any, getState: () => IStore) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
     const zoomPerc = getZoomScale()
       .reverse()
       .find((item) => item / 100 < getState().stage.zoom);
@@ -560,7 +627,7 @@ export function decreaseStageZoom(): any {
 
 export const SET_STAGE_PREVIEW = "Set stage preview";
 
-export interface SetStagePreviewAction {
+export interface SetStagePreviewAction extends IUndoableAction<false> {
   type: typeof SET_STAGE_PREVIEW;
   payload: Partial<IPreviewState>;
 }
@@ -571,12 +638,13 @@ export function setStagePreview(
   return {
     type: SET_STAGE_PREVIEW,
     payload: preview,
+    isUndoable: false,
   };
 }
 
 export const UPDATE_SLIDE_DURATION = "Update slide duration";
 
-export interface UpdateSlideDurationAction {
+export interface UpdateSlideDurationAction extends IUndoableAction<true> {
   type: typeof UPDATE_SLIDE_DURATION;
   payload: number;
 }
@@ -587,20 +655,87 @@ export function updateSlideDuration(
   return {
     type: UPDATE_SLIDE_DURATION,
     payload: duration,
+    isUndoable: true,
   };
 }
 
 // *** UNDO - REDO
+/*
+const ignoreActions = [
+  SELECT_SLIDES,
+  SELECT_LAYER,
+  SELECT_LAYERS,
+  SELECT_OBJECTS,
+  ACTIVATE_OBJECT,
+  ACTIVATE_LAYER,
+  ACTIVATE_SLIDE,
+];*/
 
 export function doUndo(): any {
-  return function (dispatch: any) {
-    dispatch(undo());
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    let counter = 0;
+    let jumpIdx: number = 0;
+
+    const prevArr = [...getState().project.diff.prev];
+    let diffItem: any;
+
+    do {
+      counter++;
+      diffItem = prevArr.shift();
+      if ((diffItem as IUndoableAction).skipHistory !== true) {
+        jumpIdx = counter;
+      }
+    } while (jumpIdx === 0 && prevArr.length !== 0);
+
+    dispatch(jump(-jumpIdx));
   };
 }
 
 export function doRedo(): any {
-  return function (dispatch: any) {
-    dispatch(redo());
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    let counter = 0;
+    let jumpIdx: number = 0;
+
+    const nextArr = [...getState().project.diff.next];
+    let diffItem: any;
+
+    // expected that fist action is regular (not ignorable one)
+    nextArr.shift();
+
+    // if there is only one action
+    if (nextArr.length === 0) {
+      dispatch(jump(1));
+      return;
+    }
+
+    // if second action is regular (not ignorable one)
+    if (
+      nextArr.length > 0 &&
+      (nextArr[0] as IUndoableAction).skipHistory !== true
+    ) {
+      dispatch(jump(1));
+      return;
+    }
+
+    do {
+      counter++;
+      diffItem = nextArr.shift();
+      if ((diffItem as IUndoableAction).skipHistory !== true) {
+        jumpIdx = counter;
+      }
+    } while (jumpIdx === 0 && nextArr.length !== 0);
+
+    if (nextArr.length === 0) {
+      jumpIdx = getState().project.diff.next.length;
+    }
+
+    dispatch(jump(jumpIdx));
+  };
+}
+
+export function doJump(jumpIdx: number): any {
+  return function (dispatch: Dispatch) {
+    dispatch(jump(jumpIdx));
   };
 }
 
@@ -642,6 +777,6 @@ export type ActionTypes =
   | UpdateSlideDurationAction
 
   //stage
-  | SetStageSizeAction
+  | SetDocumentSizeAction
   | SetStageZoomAction
   | SetStagePreviewAction;

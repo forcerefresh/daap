@@ -130,7 +130,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection } = state;
+  const { slides, selection } = state.project;
   return {
     allSlides: slides.allSlides,
     slideById: slides.slideById,

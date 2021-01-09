@@ -352,7 +352,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, stage } = state;
+  const { slides, layers, objects, selection, document } = state.project;
+  const { stage } = state;
+
   let layerArr: ILayer[] | null = null;
   let slide: ISlide | null = null;
 
@@ -363,7 +365,7 @@ const mapStateToProps = (state: IStore) => {
   }
 
   return {
-    stageSize: stage.stageSize,
+    stageSize: document.documentSize,
     stageZoom: stage.zoom,
     previewState: stage.previewState,
 

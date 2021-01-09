@@ -186,7 +186,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.selection.activeLayerId,
+  activeLayerId: state.project.selection.activeLayerId,
 });
 
 const mapDispatchToProps = {

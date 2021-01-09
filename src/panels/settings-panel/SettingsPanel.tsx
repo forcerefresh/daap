@@ -47,7 +47,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => ({
-  slideDuration: state.settings.slideDuration,
+  slideDuration: state.project.settings.slideDuration,
 });
 
 const mapDispatchToProps = {

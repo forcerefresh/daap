@@ -6,7 +6,11 @@ export const useMediaHook = () => {
       throw new Error("Media type is not valid");
     }
 
-    return Promise.resolve({ url: "logo192.png" });
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({ url: "logo192.png" });
+      }, 5000);
+    });
   };
   return { requestMedia };
 };
