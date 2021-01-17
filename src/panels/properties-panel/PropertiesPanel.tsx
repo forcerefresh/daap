@@ -76,7 +76,11 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         <Text>PROPERTIES PANEL</Text>
       </div>
       <div className={css.propertiesHolder}>
-        {object && renderObjectProperties(object)}
+        {object ? (
+          renderObjectProperties(object)
+        ) : (
+          <div>No object selected</div>
+        )}
       </div>
     </div>
   );

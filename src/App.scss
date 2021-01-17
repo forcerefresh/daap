@@ -1,9 +1,14 @@
 body,
 html {
   --effects-panel-label-width: 80px;
+  --font-color: gray;
 
   overflow: hidden;
-  color: #ccc;
+  color: var(--font-color);
+
+  .bp3-dark label.bp3-control {
+    color: #c3c3c3;
+  }
 
   .input60 input {
     width: 60px !important;

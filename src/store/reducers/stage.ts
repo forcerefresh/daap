@@ -1,6 +1,7 @@
 import {
   ActionTypes,
   SET_STAGE_PREVIEW,
+  SET_STAGE_TOOL,
   SET_STAGE_ZOOM,
 } from "../actions/actions";
 
@@ -11,9 +12,16 @@ export interface IPreviewState {
   repeat: boolean;
 }
 
+export enum StageTools {
+  SELECT = "SELECT",
+  PAN = "PAN",
+  DRAW = "DRAW",
+}
+
 export interface IStage {
   zoom: number;
   previewState: IPreviewState;
+  stageTool: StageTools;
 }
 
 export function stage(
@@ -25,6 +33,7 @@ export function stage(
       previewSpeed: 1,
       repeat: true,
     },
+    stageTool: StageTools.SELECT,
   },
   action: ActionTypes
 ) {
@@ -39,6 +48,12 @@ export function stage(
       return {
         ...state,
         previewState: { ...state.previewState, ...action.payload },
+      };
+    }
+    case SET_STAGE_TOOL: {
+      return {
+        ...state,
+        stageTool: action.payload,
       };
     }
     default:

@@ -1,5 +1,5 @@
 import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { Icon } from "@blueprintjs/core";
 
@@ -20,12 +20,22 @@ import {
   deactivateObject,
   removeObjectsFromSelection,
   selectObjects,
+  selectObjectsByRect,
   setStagePreview,
   updateObject,
 } from "../../store/actions/actions";
-import { IPreviewState } from "../../store/reducers/stage";
+import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { IObject } from "../../objects/types";
+import {
+  applyRectValuesToElement,
+  getMousePosition,
+  getPointsDiff,
+  getRectFromPoints,
+  IRect,
+  multiplyRect,
+} from "../../utils/doom-utils/common";
+import { useControlPress } from "../../utils/hooks/key-press";
 
 interface ISize {
   width: number;
@@ -53,14 +63,44 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _addObjectsToSelection,
     _removeObjectsFromSelection,
     _deactivateObject,
+    _selectObjectsByRect,
+    stageTool,
   } = props;
+
+  const ctrlDown = useControlPress();
+  console.log(ctrlDown);
+
+  const stageToolInternal = useMemo(() => {
+    setTimeout(() => {
+      document.dispatchEvent(new MouseEvent("mousemove"));
+    });
+    if (ctrlDown) return StageTools.PAN;
+    else return stageTool;
+  }, [stageTool, ctrlDown]);
+
+  // ref for updating selection box
+  const selectionBoxRef = useRef<HTMLDivElement | null>(null);
 
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
   const [dragStartPosition, setDragStartPosition] = useState({ x: -1, y: -1 });
+  const [selectionStartPosition, setSelectionStartPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
   const [delta, setDelta] = useState({ x: 0, y: 0 });
+
+  // use form PAN tool
+  const [panMove, setPanMove] = useState({
+    x: 0,
+    y: 0,
+  });
+  const [panMoveStart, setPanMoveStart] = useState({
+    x: 0,
+    y: 0,
+  });
 
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = cloneDeep(objectById);
@@ -82,11 +122,17 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const rootRef = useRef(null);
 
-  const xOffset = (viewPortSize.width - stageSize.width * stageZoom) / 2;
-  const yOffset = (viewPortSize.height - stageSize.height * stageZoom) / 2;
+  const stageXOffset =
+    (viewPortSize.width - stageSize.width * stageZoom) / 2 +
+    panMove.x +
+    panMoveStart.x;
+  const stageYOffset =
+    (viewPortSize.height - stageSize.height * stageZoom) / 2 +
+    panMove.y +
+    panMoveStart.y;
   const stageStyle = {
-    top: 0 + yOffset + "px",
-    left: 0 + xOffset + "px",
+    top: 0 + stageYOffset + "px",
+    left: 0 + stageXOffset + "px",
     width: stageSize.width * stageZoom + "px",
     height: stageSize.height * stageZoom + "px",
   };
@@ -195,38 +241,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       if (activeObjectId === objectId) {
         _deactivateObject(objectId);
       }
+
+      setSelectionStartPosition(null);
     } else {
       _activateObject(objectId);
       _selectObjects([objectId]);
     }
   };
-
-  let objectCounter = 0;
-  return (
-    <div className={css.stagePanel} ref={rootRef}>
-      {isPreview && renderTimeInfo()}
-      <div style={stageStyle} className={css.stage}>
-        <div style={canvasStyle} className={css.canvas}>
-          {isPreview && (
-            <div
-              style={{ position: "relative" }}
-              dangerouslySetInnerHTML={{ __html: exportData?.html as string }}
-            ></div>
-          )}
-          {!isPreview &&
-            layerArr?.map((layer) => {
-              return layer.objectIds.map((objectId) => {
-                const object = objectByIdLocal[objectId];
-                objectCounter++;
-                return renderObject(object);
-              });
-            })}
-        </div>
-      </div>
-      stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
-      viewPortSize: {viewPortSize.width}x {viewPortSize.height}
-    </div>
-  );
 
   function renderObject(object: IObject) {
     const objectId = object.id;
@@ -270,12 +291,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     sizeObj.left = sizeObj.top = 0;
     const objectStyle2 = mapValues(sizeObj, (size) => `${size}px`);
     (objectStyle2 as any).position = "absolute";
+    (objectStyle2 as any).borderWidth = 1 / stageZoom + "px";
 
     const currentPosition = "X:" + object.left! + " Y:" + object.top! + "";
 
     return (
       <Draggable
-        //disabled={!isSelected}
+        disabled={stageToolInternal !== StageTools.SELECT}
         key={objectId + "_drag"}
         position={{ x: object.left!, y: object.top! }}
         // workaround to prevent move when object is locked
@@ -283,9 +305,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         scale={1 * stageZoom}
         bounds={{}}
         onStart={(evt: DraggableEvent, data: DraggableData) => {
+          if (stageToolInternal !== StageTools.SELECT) {
+            evt.stopPropagation();
+            return;
+          }
+
           setDragStartPosition({ x: data.x, y: data.y });
+          setSelectionStartPosition(null);
         }}
         onDrag={(evt: DraggableEvent, data: DraggableData) => {
+          if (stageToolInternal !== StageTools.SELECT) {
+            evt.stopPropagation();
+            return;
+          }
+
+          setSelectionStartPosition(null);
           setDelta((_delta) => ({
             x: Math.round(_delta.x + data.deltaX),
             y: Math.round(_delta.y + data.deltaY),
@@ -294,6 +328,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           //object.top! = object.top! + data.deltaY;
         }}
         onStop={(evt: DraggableEvent, data: DraggableData) => {
+          if (stageToolInternal !== StageTools.SELECT) {
+            evt.stopPropagation();
+            return;
+          }
+
           // check if start end position are the same (mean object is on the same place)
           // this means we have "mouse click" event
           if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
@@ -311,6 +350,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         }}
       >
         <div
+          //onMouseUp={(e) => e.stopPropagation()}
           style={{ zIndex: 500 + objectCounter, position: "absolute" }}
           className={cx({
             [css.notVisibleHolder]: !object.isVisible,
@@ -349,6 +389,112 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       </Draggable>
     );
   }
+
+  let objectCounter = 0;
+  return (
+    <div
+      ref={rootRef}
+      className={cx(css.stagePanel, {
+        [css.panCursor]: stageToolInternal === StageTools.PAN,
+      })}
+      onMouseDown={(e: React.MouseEvent) => {
+        if (stageToolInternal === StageTools.PAN) {
+          setPanMoveStart({
+            x: panMoveStart.x + panMove.x,
+            y: panMoveStart.y + panMove.y,
+          });
+          setPanMove({ x: 0, y: 0 });
+        }
+
+        //e.persist();
+        //_activateObject(null);
+        //_selectObjects([]);
+        setSelectionStartPosition(getMousePosition(e));
+      }}
+      onMouseMove={(e) => {
+        e.persist();
+        if (selectionStartPosition != null) {
+          const point = getMousePosition(e);
+          if (stageToolInternal === StageTools.SELECT) {
+            const rect = getRectFromPoints(selectionStartPosition, point);
+            //rect.x -= stageXOffset;
+            //rect.y -= stageYOffset;
+            applyRectValuesToElement(selectionBoxRef?.current, rect);
+            if (selectionBoxRef?.current?.style) {
+              selectionBoxRef.current.style.display = "block";
+            }
+          } else if (stageToolInternal === StageTools.PAN) {
+            const panMoveNew = getPointsDiff(selectionStartPosition, point);
+            setPanMove({ ...panMove, ...panMoveNew });
+          }
+        }
+      }}
+      onMouseUp={(e) => {
+        if (stageToolInternal === StageTools.PAN) {
+          //console.log({ ...panMoveStart });
+
+          //setPanMoveStart(() => ({ ...panMove }));
+          //setPanMove(() => ({ x: 0, y: 0 }));
+          setSelectionStartPosition(null);
+          return;
+        }
+
+        if (selectionStartPosition != null) {
+          const point = getMousePosition(e);
+          let rect = getRectFromPoints(selectionStartPosition, point);
+          rect.x -= stageXOffset;
+          rect.y -= stageYOffset;
+
+          if (rect.w > 1 && rect.h > 1)
+            _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
+          else {
+            const t1 = e.target as any;
+            const t2 = t1.parentElement! as any;
+            const t3 = t2.parentElement! as any;
+            if (
+              t1.className.indexOf("StagePanel_stagePanel_") !== -1 ||
+              t2.className.indexOf("StagePanel_stagePanel_") !== -1 ||
+              t3.className.indexOf("StagePanel_stagePanel_") !== -1
+            ) {
+              // deselect objects
+              _selectObjects([]);
+            }
+          }
+        }
+
+        setSelectionStartPosition(null);
+
+        if (selectionBoxRef?.current?.style) {
+          selectionBoxRef.current.style.display = "none";
+        }
+      }}
+    >
+      {!isPreview && (
+        <div ref={selectionBoxRef} className={css.selectionBox}></div>
+      )}
+      {isPreview && renderTimeInfo()}
+      <div style={stageStyle} className={css.stage}>
+        <div style={canvasStyle} className={css.canvas}>
+          {isPreview && (
+            <div
+              style={{ position: "relative" }}
+              dangerouslySetInnerHTML={{ __html: exportData?.html as string }}
+            ></div>
+          )}
+          {!isPreview &&
+            layerArr?.map((layer) => {
+              return layer.objectIds.map((objectId) => {
+                const object = objectByIdLocal[objectId];
+                objectCounter++;
+                return renderObject(object);
+              });
+            })}
+        </div>
+      </div>
+      stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
+      viewPortSize: {viewPortSize.width}x {viewPortSize.height}
+    </div>
+  );
 };
 
 const mapStateToProps = (state: IStore) => {
@@ -379,6 +525,7 @@ const mapStateToProps = (state: IStore) => {
     objectById: objects.objectById,
     activeObjectId: selection.activeObjectId,
     selectedObjectIds: selection.selectedObjectIds,
+    stageTool: state.stage.stageTool,
   };
 };
 
@@ -386,13 +533,14 @@ const mapDispatchToProps = {
   _setStagePreview: (preview: Partial<IPreviewState>) =>
     setStagePreview(preview),
   _updateObject: (object: IObject) => updateObject(object),
-  _activateObject: (objectId: string) => activateObject(objectId),
+  _activateObject: (objectId: string | null) => activateObject(objectId),
   _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
   _addObjectsToSelection: (objectIds: string[]) =>
     addObjectsToSelection(objectIds),
   _removeObjectsFromSelection: (objectIds: string[]) =>
     removeObjectsFromSelection(objectIds),
   _deactivateObject: (objectId: string) => deactivateObject(objectId),
+  _selectObjectsByRect: (rect: IRect) => selectObjectsByRect(rect),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

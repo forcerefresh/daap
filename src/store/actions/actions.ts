@@ -3,13 +3,19 @@ import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
-import { undo, redo, jump } from "../../libraries/redux-deep-diff/src/actions";
+import { jump } from "../../libraries/redux-deep-diff/src/actions";
 
 import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { createObject } from "../../objects/create-object-factory";
-import { IPreviewState } from "../reducers/stage";
+import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocumentSize } from "../reducers/document";
+import { IGlobals } from "../reducers/globals";
+import {
+  IRect,
+  isIntersectingRect,
+  testIfRectsAreOverlapping,
+} from "../../utils/doom-utils/common";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -36,6 +42,25 @@ export interface AddSlideActionPayload {
 export interface AddSlideAction extends IUndoableAction<true> {
   type: typeof ADD_SLIDE;
   payload: ISlide;
+}
+
+export function initializeSlideAndLayer(): any {
+  return function (dispatch: Dispatch | any, getState: () => IStore) {
+    const slide: ISlide = {
+      id: uuid(),
+      name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
+      duration: {
+        inheritFrom: "custom",
+        customValue: 10000,
+      },
+      layerIds: [],
+      nextLayerIdCounter: 0,
+    };
+    dispatch(addSlide(slide));
+    dispatch(activateSlide(slide.id));
+    dispatch(selectSlides([slide.id]));
+    dispatch(addNewLayer(slide.id));
+  };
 }
 
 export function addNewSlide(): any {
@@ -246,6 +271,11 @@ function _activateObject(objectId: string | null): ActivateObjectAction {
 
 export function activateObject(objectId: string | null): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    // if we pass null we wants to deactivate current active object
+    if (objectId === null) {
+      dispatch(_activateObject(objectId));
+      return;
+    }
     if (getState().project.selection.activeObjectId === objectId) {
       console.log("object is already active ");
       return;
@@ -421,6 +451,24 @@ export function removeLayersFromSelection(
 }
 
 // *****
+/*
+export const SELECT_OBJECTS_BY_RECT = "Select objects by rect";
+
+export interface SelectObjectsByRectAction extends IUndoableAction<true, true> {
+  type: typeof SELECT_OBJECTS_BY_RECT;
+  payload: IRect;
+}
+
+export function selectObjectsByRect(rect: IRect): SelectObjectsByRectAction {
+  return {
+    type: SELECT_OBJECTS_BY_RECT,
+    payload: rect,
+    isUndoable: true,
+    skipHistory: true,
+  };
+}*/
+
+// *****
 
 export const SELECT_OBJECTS = "Select objects";
 
@@ -435,6 +483,27 @@ export function selectObjects(objectsId: string[]): SelectObjectAction {
     payload: objectsId,
     isUndoable: true,
     skipHistory: true,
+  };
+}
+
+export function selectObjectsByRect(rect: IRect): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectToSelectIds: string[] = [];
+    getState().project.objects.allObjects.map((objectId) => {
+      const object = getState().project.objects.objectById[objectId];
+
+      if (
+        isIntersectingRect(rect, {
+          x: object.left!,
+          y: object.top!,
+          w: object.width!,
+          h: object.height!,
+        })
+      ) {
+        objectToSelectIds.push(object.id);
+      }
+    });
+    dispatch(selectObjects(objectToSelectIds));
   };
 }
 
@@ -493,7 +562,7 @@ export function addNewObject(
   objectProps: Partial<IObject>
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const object = createObject(type, objectProps);
+    const object = createObject(type, objectProps, { text: "Sample test" });
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
   };
@@ -659,6 +728,27 @@ export function updateSlideDuration(
   };
 }
 
+// ***
+
+export const SET_GLOBALS = "Set globals configuration";
+
+export interface SetGlobalConfigurationAction extends IUndoableAction<false> {
+  type: typeof SET_GLOBALS;
+  payload: Partial<IGlobals>;
+}
+
+export function updateGlobalConfiguration(
+  globals: Partial<IGlobals>
+): SetGlobalConfigurationAction {
+  return {
+    type: SET_GLOBALS,
+    payload: globals,
+    isUndoable: false,
+  };
+}
+
+// ***
+
 // *** UNDO - REDO
 /*
 const ignoreActions = [
@@ -740,6 +830,22 @@ export function doJump(jumpIdx: number): any {
 }
 
 // ***
+export const SET_STAGE_TOOL = "Set stage tool";
+
+export interface SetStageToolAction extends IUndoableAction<false> {
+  type: typeof SET_STAGE_TOOL;
+  payload: StageTools;
+}
+
+export function setStageTool(stageTool: StageTools): SetStageToolAction {
+  return {
+    type: SET_STAGE_TOOL,
+    payload: stageTool,
+    isUndoable: false,
+  };
+}
+
+// ***
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -779,4 +885,10 @@ export type ActionTypes =
   //stage
   | SetDocumentSizeAction
   | SetStageZoomAction
-  | SetStagePreviewAction;
+  | SetStagePreviewAction
+
+  //global
+  | SetGlobalConfigurationAction
+
+  //tools
+  | SetStageToolAction;

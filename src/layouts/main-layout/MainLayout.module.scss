@@ -1,3 +1,4 @@
+// COMMON STYLE
 .mainLayout {
   display: flex;
   flex-direction: row;
@@ -5,23 +6,12 @@
   height: 100%;
   background: rgb(30, 30, 30);
 
-  .toolbar {
+  .left {
     z-index: 40;
     width: 68px;
     background: rgb(51, 51, 51);
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
     flex: 0 0 68px;
-  }
-
-  .properties {
-    z-index: 50;
-    width: 340px;
-    min-width: 340px;
-    background: rgb(37, 37, 38);
-    box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
-    flex: 0 0 340px;
-    display: flex;
-    flex-direction: column;
   }
 
   .center {
@@ -32,8 +22,78 @@
     .content {
       flex-grow: 1;
     }
-    .timeline {
-      height: 200px;
+  }
+}
+
+.defaultStyle {
+  .right {
+    z-index: 50;
+    width: 340px;
+    min-width: 340px;
+    background: rgb(37, 37, 38);
+    box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+    flex: 0 0 340px;
+    display: flex;
+    flex-direction: column;
+
+    .slides {
+      height: 20vh;
+    }
+    .layers {
+      height: 30vh;
+    }
+    .properties {
+      height: 30vh;
+    }
+    .action {
+      height: 20vh;
+    }
+  }
+}
+
+.defaultLayersStyle {
+  .right {
+    width: 681px !important;
+    min-width: 681px !important;
+    display: flex;
+    flex-direction: row;
+    box-shadow: none;
+    background: rgb(37, 37, 38);
+    > div {
+      display: flex;
+      flex-direction: column;
+      box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+      width: 340px;
+
+      &:last-child {
+        z-index: 100;
+
+        .slides {
+          height: 20vh;
+        }
+
+        .properties {
+          //height: 35vh;
+          flex: 1;
+        }
+        .action {
+          //height: 20vh;
+        }
+        .effects {
+          height: 35vh !important;
+          flex: 1;
+        }
+      }
+
+      &:first-child {
+        .layers {
+          width: 340px;
+          height: 100vh !important;
+          background: rgb(37, 37, 38);
+          box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+          z-index: 100;
+        }
+      }
     }
   }
 }

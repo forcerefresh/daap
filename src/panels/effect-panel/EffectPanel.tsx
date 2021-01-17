@@ -13,7 +13,7 @@ const EffectPanelSections = {
 
 type IEffectPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    objectId: string;
+    objectId: string | null | undefined;
   };
 
 const EffectPanel: React.FC<IEffectPanel> = (props) => {
@@ -33,43 +33,52 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
   return (
     <div className={css.effect}>
       <div className={css.panelHeader}>EFFECT PANEL</div>
-      <div className={css.contentHolder}>
-        <section>
-          <div className={css.sectionHeader}>
-            <Button
-              minimal
-              onClick={() => toggleSection(EffectPanelSections.EFFECT_IN)}
-              small={true}
-              icon={
-                visibleSectionIds[EffectPanelSections.EFFECT_IN]
-                  ? "caret-down"
-                  : "caret-right"
-              }
-            ></Button>
-            effect in
-          </div>
-          {visibleSectionIds[EffectPanelSections.EFFECT_IN] && (
-            <EffectConfigurationForm effectType={"in"} objectId={objectId} />
-          )}
-        </section>
-        <section>
-          <div className={css.sectionHeader}>
-            <Button
-              minimal
-              onClick={() => toggleSection(EffectPanelSections.EFFECT_OUT)}
-              small={true}
-              icon={
-                visibleSectionIds[EffectPanelSections.EFFECT_OUT]
-                  ? "caret-down"
-                  : "caret-right"
-              }
-            ></Button>
-            effect out
-          </div>
-          {visibleSectionIds[EffectPanelSections.EFFECT_OUT] && (
-            <div> section content</div>
-          )}
-        </section>
+      <div className={css.effectsHolder}>
+        {objectId ? (
+          <>
+            <section>
+              <div className={css.sectionHeader}>
+                <Button
+                  minimal
+                  onClick={() => toggleSection(EffectPanelSections.EFFECT_IN)}
+                  small={true}
+                  icon={
+                    visibleSectionIds[EffectPanelSections.EFFECT_IN]
+                      ? "caret-down"
+                      : "caret-right"
+                  }
+                ></Button>
+                effect in
+              </div>
+              {visibleSectionIds[EffectPanelSections.EFFECT_IN] && (
+                <EffectConfigurationForm
+                  effectType={"in"}
+                  objectId={objectId}
+                />
+              )}
+            </section>
+            <section>
+              <div className={css.sectionHeader}>
+                <Button
+                  minimal
+                  onClick={() => toggleSection(EffectPanelSections.EFFECT_OUT)}
+                  small={true}
+                  icon={
+                    visibleSectionIds[EffectPanelSections.EFFECT_OUT]
+                      ? "caret-down"
+                      : "caret-right"
+                  }
+                ></Button>
+                effect out
+              </div>
+              {visibleSectionIds[EffectPanelSections.EFFECT_OUT] && (
+                <div> section content</div>
+              )}
+            </section>
+          </>
+        ) : (
+          <div>No object selected</div>
+        )}
       </div>
     </div>
   );

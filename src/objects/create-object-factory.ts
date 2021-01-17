@@ -1,3 +1,4 @@
+import { forEach, forIn } from "lodash-es";
 import { v4 as uuid } from "uuid";
 import { ImageProperties, InputType, TextProperties } from "../inputs/types";
 import { ICommonObjectProperties, IObject, ObjectType } from "./types";
@@ -14,11 +15,14 @@ type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 export function createObject(
   type: ObjectType,
-  objectProps: Partial<IObject>
+  objectProps: Partial<IObject>,
+  initialValue?: {
+    [key: string]: string;
+  }
 ): Omit<IObject, "layerId"> {
   switch (type) {
     case ObjectType.TEXT: {
-      return { ...objectProps, ...createTextObject() };
+      return { ...objectProps, ...createTextObject(initialValue) };
     }
     case ObjectType.IMAGE: {
       return { ...objectProps, ...createImageObject() };
@@ -57,10 +61,9 @@ function createCommonObject(
   };
 }
 
-function createTextObject(): Omit<
-  IObject<TextProperties>,
-  keyof ICommonObjectProperties | "layerId"
-> {
+function createTextObject(initialValue?: {
+  [key: string]: string;
+}): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.TEXT);
 
   return {
@@ -73,7 +76,7 @@ function createTextObject(): Omit<
           displayName: "Text",
           propertyName: "text",
           inputType: InputType.TEXT,
-          value: "",
+          value: (initialValue?.text as string) || "",
           defaultValue: "",
         },
         color: {
@@ -87,8 +90,8 @@ function createTextObject(): Omit<
           displayName: "Font size",
           propertyName: "string",
           inputType: InputType.TEXT,
-          value: "S",
-          defaultValue: "A",
+          value: "14",
+          defaultValue: "14",
         },
         weight: {
           displayName: "Weight",

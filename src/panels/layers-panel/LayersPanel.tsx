@@ -53,6 +53,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     activeObjectId,
     selectedLayerIds,
     selectedObjectIds,
+    layoutStaticEffectsPanel,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -132,7 +133,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     return (
       <Portal className="bp3-dark">
         {showEffectPanelForObjectId !== EmptyID && (
-          <div ref={effectPanelRef}>
+          <div ref={effectPanelRef} className={css.floatingEffectPanel}>
             <EffectPanel objectId={showEffectPanelForObjectId} />
           </div>
         )}
@@ -242,18 +243,20 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         >
                           <div className={css.objectHolderInner}>
                             <div className={css.actionButtons}>
-                              <Button
-                                active={
-                                  object.id === showEffectPanelForObjectId
-                                }
-                                minimal
-                                onClick={(event: any) => {
-                                  event.stopPropagation();
-                                  setShowEffectPanelForObjectId(objectId);
-                                }}
-                                small={true}
-                                icon="walk"
-                              ></Button>
+                              {!layoutStaticEffectsPanel && (
+                                <Button
+                                  active={
+                                    object.id === showEffectPanelForObjectId
+                                  }
+                                  minimal
+                                  onClick={(event: any) => {
+                                    event.stopPropagation();
+                                    setShowEffectPanelForObjectId(objectId);
+                                  }}
+                                  small={true}
+                                  icon="walk"
+                                ></Button>
+                              )}
                               <Button
                                 active={object.isVisible}
                                 minimal
@@ -346,6 +349,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
 const mapStateToProps = (state: IStore) => {
   const { slides, layers, objects, selection } = state.project;
+  const { layoutType } = state.globals;
   let layerArr: ILayer[] | null = null;
   let slide: ISlide | null = null;
 
@@ -364,6 +368,7 @@ const mapStateToProps = (state: IStore) => {
     activeObjectId: selection.activeObjectId,
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
+    layoutStaticEffectsPanel: layoutType === "default-layers",
   };
 };
 

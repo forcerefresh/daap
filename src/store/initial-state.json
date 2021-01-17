@@ -3,40 +3,40 @@
     "slides": {
       "nextSlideIdCounter": 1,
       "slideById": {
-        "73078cb0-4362-4799-b82e-d3e9cc597168": {
-          "id": "73078cb0-4362-4799-b82e-d3e9cc597168",
+        "0f4cf71b-3b6c-41ce-965d-9e73312be3b1": {
+          "id": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
           "name": "Slide 0",
           "duration": {
             "inheritFrom": "custom",
             "customValue": 10000
           },
-          "layerIds": ["b4f20cee-f791-462a-bd8e-ce5f527cc221"],
+          "layerIds": ["7350bf49-bced-491f-96d6-5c907ecdd1f0"],
           "nextLayerIdCounter": 1
         }
       },
-      "allSlides": ["73078cb0-4362-4799-b82e-d3e9cc597168"]
+      "allSlides": ["0f4cf71b-3b6c-41ce-965d-9e73312be3b1"]
     },
     "layers": {
       "layerById": {
-        "b4f20cee-f791-462a-bd8e-ce5f527cc221": {
-          "id": "b4f20cee-f791-462a-bd8e-ce5f527cc221",
-          "slideId": "73078cb0-4362-4799-b82e-d3e9cc597168",
+        "7350bf49-bced-491f-96d6-5c907ecdd1f0": {
+          "id": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
+          "slideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
           "name": "Layer 0",
           "isVisible": true,
           "hasTimeline": true,
-          "objectIds": ["038dab38-6e6d-466a-8981-15cc639d7f3a"]
+          "objectIds": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
         }
       },
-      "allLayers": ["b4f20cee-f791-462a-bd8e-ce5f527cc221"]
+      "allLayers": ["7350bf49-bced-491f-96d6-5c907ecdd1f0"]
     },
     "objects": {
       "objectById": {
-        "038dab38-6e6d-466a-8981-15cc639d7f3a": {
+        "2a69e983-2b03-4ede-928e-39c68498aae9": {
           "left": 0,
           "top": 0,
           "width": 300,
           "height": 300,
-          "id": "038dab38-6e6d-466a-8981-15cc639d7f3a",
+          "id": "2a69e983-2b03-4ede-928e-39c68498aae9",
           "type": "image",
           "isVisible": true,
           "isLocked": false,
@@ -52,7 +52,7 @@
             }
           },
           "definition": {
-            "id": "64c7c68e-bde4-4175-9068-b7db261e1452",
+            "id": "78c706d9-331e-4388-a4d5-4fe057b2dce7",
             "type": "image",
             "properties": {
               "url": {
@@ -68,18 +68,18 @@
               }
             }
           },
-          "layerId": "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+          "layerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
         }
       },
-      "allObjects": ["038dab38-6e6d-466a-8981-15cc639d7f3a"]
+      "allObjects": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
     },
     "selection": {
-      "activeSlideId": "73078cb0-4362-4799-b82e-d3e9cc597168",
-      "activeLayerId": "b4f20cee-f791-462a-bd8e-ce5f527cc221",
-      "activeObjectId": "038dab38-6e6d-466a-8981-15cc639d7f3a",
-      "selectedSlideIds": ["73078cb0-4362-4799-b82e-d3e9cc597168"],
+      "activeSlideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
+      "activeLayerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
+      "activeObjectId": "2a69e983-2b03-4ede-928e-39c68498aae9",
+      "selectedSlideIds": ["0f4cf71b-3b6c-41ce-965d-9e73312be3b1"],
       "selectedLayerIds": [],
-      "selectedObjectIds": ["038dab38-6e6d-466a-8981-15cc639d7f3a"]
+      "selectedObjectIds": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
     },
     "document": {
       "documentSize": {
@@ -93,13 +93,30 @@
     "diff": {
       "prev": [
         {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
           "changes": [
             {
               "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "038dab38-6e6d-466a-8981-15cc639d7f3a",
+                "2a69e983-2b03-4ede-928e-39c68498aae9",
                 "definition",
                 "properties",
                 "url",
@@ -120,7 +137,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "038dab38-6e6d-466a-8981-15cc639d7f3a"
+                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
               }
             }
           ],
@@ -133,7 +150,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "038dab38-6e6d-466a-8981-15cc639d7f3a"
+              "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
             }
           ],
           "type": "Activate object",
@@ -151,13 +168,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "b4f20cee-f791-462a-bd8e-ce5f527cc221",
+                "7350bf49-bced-491f-96d6-5c907ecdd1f0",
                 "objectIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "038dab38-6e6d-466a-8981-15cc639d7f3a"
+                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
               }
             },
             {
@@ -165,14 +182,14 @@
               "path": [
                 "objects",
                 "objectById",
-                "038dab38-6e6d-466a-8981-15cc639d7f3a"
+                "2a69e983-2b03-4ede-928e-39c68498aae9"
               ],
               "rhs": {
                 "left": 0,
                 "top": 0,
                 "width": 300,
                 "height": 300,
-                "id": "038dab38-6e6d-466a-8981-15cc639d7f3a",
+                "id": "2a69e983-2b03-4ede-928e-39c68498aae9",
                 "type": "image",
                 "isVisible": true,
                 "isLocked": false,
@@ -188,7 +205,7 @@
                   }
                 },
                 "definition": {
-                  "id": "64c7c68e-bde4-4175-9068-b7db261e1452",
+                  "id": "78c706d9-331e-4388-a4d5-4fe057b2dce7",
                   "type": "image",
                   "properties": {
                     "url": {
@@ -204,7 +221,7 @@
                     }
                   }
                 },
-                "layerId": "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+                "layerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
               }
             },
             {
@@ -213,7 +230,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "038dab38-6e6d-466a-8981-15cc639d7f3a"
+                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
               }
             }
           ],
@@ -225,7 +242,7 @@
               "kind": "E",
               "path": ["selection", "activeLayerId"],
               "lhs": null,
-              "rhs": "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+              "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
             }
           ],
           "type": "Activate layer",
@@ -238,13 +255,13 @@
               "path": [
                 "slides",
                 "slideById",
-                "73078cb0-4362-4799-b82e-d3e9cc597168",
+                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
                 "layerIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+                "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
               }
             },
             {
@@ -252,7 +269,7 @@
               "path": [
                 "slides",
                 "slideById",
-                "73078cb0-4362-4799-b82e-d3e9cc597168",
+                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
                 "nextLayerIdCounter"
               ],
               "lhs": 0,
@@ -263,11 +280,11 @@
               "path": [
                 "layers",
                 "layerById",
-                "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+                "7350bf49-bced-491f-96d6-5c907ecdd1f0"
               ],
               "rhs": {
-                "id": "b4f20cee-f791-462a-bd8e-ce5f527cc221",
-                "slideId": "73078cb0-4362-4799-b82e-d3e9cc597168",
+                "id": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
+                "slideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
                 "name": "Layer 0",
                 "isVisible": true,
                 "hasTimeline": true,
@@ -280,7 +297,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "b4f20cee-f791-462a-bd8e-ce5f527cc221"
+                "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
               }
             }
           ],
@@ -294,7 +311,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "73078cb0-4362-4799-b82e-d3e9cc597168"
+                "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
               }
             }
           ],
@@ -307,7 +324,7 @@
               "kind": "E",
               "path": ["selection", "activeSlideId"],
               "lhs": null,
-              "rhs": "73078cb0-4362-4799-b82e-d3e9cc597168"
+              "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
             }
           ],
           "type": "Activate slide",
@@ -326,10 +343,10 @@
               "path": [
                 "slides",
                 "slideById",
-                "73078cb0-4362-4799-b82e-d3e9cc597168"
+                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
               ],
               "rhs": {
-                "id": "73078cb0-4362-4799-b82e-d3e9cc597168",
+                "id": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
                 "name": "Slide 0",
                 "duration": {
                   "inheritFrom": "custom",
@@ -345,7 +362,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "73078cb0-4362-4799-b82e-d3e9cc597168"
+                "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
               }
             }
           ],
@@ -364,5 +381,9 @@
       "previewSpeed": 1,
       "repeat": true
     }
+  },
+  "globals": {
+    "layoutType": "default-layers",
+    "layoutSlidesSelectionBox": false
   }
 }

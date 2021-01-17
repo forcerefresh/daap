@@ -1,7 +1,7 @@
 .propertiesPanel {
-  height: 30vh;
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   :global {
     .bp3-label {
@@ -10,7 +10,6 @@
     .bp3-form-group {
       margin-bottom: 5px;
     }
-    
   }
 }
 
@@ -25,4 +24,5 @@
 
 .propertiesHolder {
   padding: 10px;
+  overflow-y: auto;
 }

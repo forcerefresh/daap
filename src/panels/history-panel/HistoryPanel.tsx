@@ -34,7 +34,6 @@ const getHistory = (
         ignoreActionTitle: "",
       };
     }
-    console.log(item.skipHistory);
     if (item.skipHistory !== true) {
       historyItem.jumpIndex = idx;
       historyItem.title = item.type;
@@ -58,9 +57,6 @@ const HistoryPanel: React.FC<IHistoryPanelMergedProps> = (props) => {
       makeVisible.call(activeRef?.current);
     }
   }, [activeRef, prev]);
-
-  const nextItems = [...next].reverse();
-  const prevItems = prev;
 
   const nextHistory = getHistory([...next].reverse());
   const prevHistory = getHistory(prev);

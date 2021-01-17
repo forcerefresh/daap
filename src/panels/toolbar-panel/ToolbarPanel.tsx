@@ -17,8 +17,10 @@ import {
   increaseStageZoom,
   doUndo,
   doRedo,
+  setStageTool,
 } from "../../store/actions/actions";
 import HistoryPanel from "../history-panel/HistoryPanel";
+import { StageTools } from "../../store/reducers/stage";
 
 enum VisiblePanel {
   None = "none",
@@ -42,16 +44,15 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     doRedo,
     hasUndoItem,
     hasRedoItem,
+    stageTool,
+    _setStageTool,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
   const handleClickOutside = () => {
-    // TODO: temporary - for dev purpose
-    if (showPanel !== VisiblePanel.History) {
-      setShowPanel(VisiblePanel.None);
-    }
+    setShowPanel(VisiblePanel.None);
   };
   useOnClickOutside(sharedRef, handleClickOutside);
 
@@ -78,17 +79,31 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             )}
           </Portal>
         </div>
-        <Button minimal>
-          <SelectToolIcon
-            style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-          />
-        </Button>
         <div>
-          <Button minimal>
-            <ZoomToolIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+          <Button
+            small
+            minimal
+            onClick={() => _setStageTool(StageTools.SELECT)}
+            active={stageTool === StageTools.SELECT}
+          >
+            <SelectToolIcon
+              style={{
+                width: SMALL_ICON_SIZE + "36px",
+                height: SMALL_ICON_SIZE + "px",
+                fill: "gray",
+              }}
             />
           </Button>
+          <Button
+            minimal
+            small
+            onClick={() => _setStageTool(StageTools.PAN)}
+            active={stageTool === StageTools.PAN}
+          >
+            <Icon icon="hand" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+          </Button>
+        </div>
+        <div>
           <Text>{zoom * 100} %</Text>
           <div>
             <Button minimal small onClick={() => increaseStageZoom()}>
@@ -100,6 +115,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </div>
           <Button
             minimal
+            active={showPanel === VisiblePanel.History}
             onClick={() => {
               setShowPanel(VisiblePanel.History);
             }}
@@ -173,6 +189,7 @@ const mapStateToProps = (state: IStore) => ({
   zoom: state.stage.zoom,
   hasUndoItem: state.project.diff.prev.length !== 0,
   hasRedoItem: state.project.diff.next.length !== 0,
+  stageTool: state.stage.stageTool,
 });
 
 const mapDispatchToProps = {
@@ -180,6 +197,7 @@ const mapDispatchToProps = {
   decreaseStageZoom: decreaseStageZoom,
   doUndo: () => doUndo(),
   doRedo: () => doRedo(),
+  _setStageTool: (tool: StageTools) => setStageTool(tool),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

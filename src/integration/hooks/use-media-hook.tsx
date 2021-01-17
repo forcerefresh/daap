@@ -9,7 +9,7 @@ export const useMediaHook = () => {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve({ url: "logo192.png" });
-      }, 5000);
+      }, 1);
     });
   };
   return { requestMedia };

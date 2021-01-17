@@ -1,7 +1,7 @@
 .layerPanel {
-  height: 30vh;
   display: flex;
   flex-direction: column;
+  height: 100%;
 
   input,
   button,
@@ -195,4 +195,14 @@
   .hideMe {
     display: none;
   }
+}
+
+.floatingEffectPanel {
+  z-index: 200;
+  position: absolute;
+  right: 350px;
+  top: 20vh;
+  background: #252526;
+  width: 340px;
+  height: 50vh;
 }

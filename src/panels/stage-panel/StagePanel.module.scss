@@ -82,3 +82,15 @@
   color: white;
   fll: white;
 }
+
+.selectionBox {
+  display: none;
+  position: absolute;
+  z-index: 300;
+  border: 1px dotted #48aff0;
+}
+
+.panCursor {
+  cursor: url("../../assets/cursors/hand.png"), auto;
+  // cursor: pointer;
+}

@@ -6,20 +6,18 @@ import MainLayout from "../../layouts/main-layout/MainLayout";
 import ToolbarPanel from "../../panels/toolbar-panel/ToolbarPanel";
 import ActionPanel from "../../panels/action-panel/ActionPanel";
 import StagePanel from "../../panels/stage-panel/StagePanel";
+import StaticEffectPanel from "../../panels/effect-panel/StaticEffectPanel";
 
 function Editor() {
   return (
     <MainLayout
-      properties={
-        <>
-          <SlidesPanel />
-          <LayersPanel />
-          <PropertiesPanel />
-          <ActionPanel />
-        </>
-      }
+      slides={<SlidesPanel />}
+      layers={<LayersPanel />}
+      properties={<PropertiesPanel />}
+      action={<ActionPanel />}
       toolbar={<ToolbarPanel />}
       content={<StagePanel />}
+      effects={<StaticEffectPanel />}
     />
   );
 }
