@@ -4,7 +4,7 @@ import {
   applyMiddleware,
 } from "@reduxjs/toolkit";
 import thunk from "redux-thunk";
-import diff from "../libraries/redux-deep-diff/src/reducer";
+import diff from "../3rd-party-libs/undo-redo/reducer";
 
 import { composeWithDevTools } from "redux-devtools-extension";
 import { ISlides, slides } from "./reducers/slides";

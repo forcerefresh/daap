@@ -3,7 +3,7 @@ import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
-import { jump } from "../../libraries/redux-deep-diff/src/actions";
+import { jump } from "../../3rd-party-libs/undo-redo/actions";
 
 import { differenceWith, isEqual } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
