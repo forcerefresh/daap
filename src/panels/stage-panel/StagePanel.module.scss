@@ -92,5 +92,8 @@
 
 .panCursor {
   cursor: url("../../assets/cursors/hand.png"), auto;
-  // cursor: pointer;
+}
+
+.drawCursor {
+  cursor: crosshair;
 }

@@ -1,3 +1,4 @@
+import { ObjectType } from "../../objects/types";
 import {
   ActionTypes,
   SET_STAGE_PREVIEW,
@@ -21,7 +22,7 @@ export enum StageTools {
 export interface IStage {
   zoom: number;
   previewState: IPreviewState;
-  stageTool: StageTools;
+  stageTool: { tool: StageTools; objectType?: ObjectType };
 }
 
 export function stage(
@@ -33,7 +34,7 @@ export function stage(
       previewSpeed: 1,
       repeat: true,
     },
-    stageTool: StageTools.SELECT,
+    stageTool: { tool: StageTools.SELECT },
   },
   action: ActionTypes
 ) {

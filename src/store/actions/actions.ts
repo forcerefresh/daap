@@ -834,13 +834,16 @@ export const SET_STAGE_TOOL = "Set stage tool";
 
 export interface SetStageToolAction extends IUndoableAction<false> {
   type: typeof SET_STAGE_TOOL;
-  payload: StageTools;
+  payload: { tool: StageTools; objectType?: ObjectType };
 }
 
-export function setStageTool(stageTool: StageTools): SetStageToolAction {
+export function setStageTool(
+  tool: StageTools,
+  objectType?: ObjectType
+): SetStageToolAction {
   return {
     type: SET_STAGE_TOOL,
-    payload: stageTool,
+    payload: { tool, objectType },
     isUndoable: false,
   };
 }

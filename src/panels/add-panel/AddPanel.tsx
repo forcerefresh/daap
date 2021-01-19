@@ -4,11 +4,12 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
-import { addNewObject } from "../../store/actions/actions";
+import { addNewObject, setStageTool } from "../../store/actions/actions";
 import { ReactComponent as DrawTextboxIcon } from "../../assets/icons/draw-textbox.svg";
 import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
 import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefined-text2.svg";
 import { IObject, ObjectType } from "../../objects/types";
+import { StageTools } from "../../store/reducers/stage";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -19,7 +20,7 @@ export type IAddPanelMergedProps = typeof mapDispatchToProps &
   IAddPanelProps;
 
 const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
-  const { _addNewObject, activeLayerId, onRequestClose } = props;
+  const { _addNewObject, _setStageTool, activeLayerId, onRequestClose } = props;
 
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
@@ -34,12 +35,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.TEXT, {
-                left: 250,
-                top: 250,
-                width: 300,
-                height: 300,
-              });
+              _setStageTool(StageTools.DRAW, ObjectType.TEXT);
               onRequestClose();
             }
           }}
@@ -56,12 +52,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.TEXT, {
-                left: 150,
-                top: 150,
-                width: 300,
-                height: 300,
-              });
+              _setStageTool(StageTools.DRAW, ObjectType.TEXT);
               onRequestClose();
             }
           }}
@@ -195,6 +186,8 @@ const mapDispatchToProps = {
     type: ObjectType,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
+  _setStageTool: (tool: StageTools, objectType: ObjectType) =>
+    setStageTool(tool, objectType),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPanel);

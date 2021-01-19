@@ -16,17 +16,19 @@ import SmallTimeline from "../small-timeline/SmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import {
   activateObject,
+  addNewObject,
   addObjectsToSelection,
   deactivateObject,
   removeObjectsFromSelection,
   selectObjects,
   selectObjectsByRect,
   setStagePreview,
+  setStageTool,
   updateObject,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { IObject } from "../../objects/types";
+import { IObject, ObjectType } from "../../objects/types";
 import {
   applyRectValuesToElement,
   getMousePosition,
@@ -56,6 +58,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     activeObjectId,
     slide,
     selectedObjectIds,
+    activeLayerId,
     _setStagePreview,
     _updateObject,
     _selectObjects,
@@ -64,7 +67,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _removeObjectsFromSelection,
     _deactivateObject,
     _selectObjectsByRect,
+    _addNewObject,
     stageTool,
+    stageToolObjectType,
+    _resetStageTool,
   } = props;
 
   const ctrlDown = useControlPress();
@@ -396,6 +402,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       ref={rootRef}
       className={cx(css.stagePanel, {
         [css.panCursor]: stageToolInternal === StageTools.PAN,
+        [css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
       onMouseDown={(e: React.MouseEvent) => {
         if (stageToolInternal === StageTools.PAN) {
@@ -415,7 +422,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         e.persist();
         if (selectionStartPosition != null) {
           const point = getMousePosition(e);
-          if (stageToolInternal === StageTools.SELECT) {
+          if (
+            stageToolInternal === StageTools.SELECT ||
+            stageToolInternal === StageTools.DRAW
+          ) {
             const rect = getRectFromPoints(selectionStartPosition, point);
             //rect.x -= stageXOffset;
             //rect.y -= stageYOffset;
@@ -445,9 +455,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           rect.x -= stageXOffset;
           rect.y -= stageYOffset;
 
-          if (rect.w > 1 && rect.h > 1)
-            _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
-          else {
+          if (rect.w > 1 && rect.h > 1) {
+            if (stageToolInternal === StageTools.DRAW && stageToolObjectType) {
+              if (activeLayerId) {
+                const rect2 = multiplyRect(rect, 1 / stageZoom);
+                _addNewObject(activeLayerId, stageToolObjectType, {
+                  left: rect2.x,
+                  top: rect2.y,
+                  width: rect2.w,
+                  height: rect2.h,
+                });
+                _resetStageTool();
+              }
+            } else {
+              _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
+            }
+          } else {
             const t1 = e.target as any;
             const t2 = t1.parentElement! as any;
             const t3 = t2.parentElement! as any;
@@ -524,8 +547,10 @@ const mapStateToProps = (state: IStore) => {
     slide,
     objectById: objects.objectById,
     activeObjectId: selection.activeObjectId,
+    activeLayerId: selection.activeLayerId,
     selectedObjectIds: selection.selectedObjectIds,
-    stageTool: state.stage.stageTool,
+    stageTool: state.stage.stageTool.tool,
+    stageToolObjectType: state.stage.stageTool.objectType,
   };
 };
 
@@ -541,6 +566,12 @@ const mapDispatchToProps = {
     removeObjectsFromSelection(objectIds),
   _deactivateObject: (objectId: string) => deactivateObject(objectId),
   _selectObjectsByRect: (rect: IRect) => selectObjectsByRect(rect),
+  _addNewObject: (
+    layerId: string,
+    type: ObjectType,
+    objectProps: Partial<IObject>
+  ) => addNewObject(layerId, type, objectProps),
+  _resetStageTool: () => setStageTool(StageTools.SELECT),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

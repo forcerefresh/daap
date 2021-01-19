@@ -189,7 +189,7 @@ const mapStateToProps = (state: IStore) => ({
   zoom: state.stage.zoom,
   hasUndoItem: state.project.diff.prev.length !== 0,
   hasRedoItem: state.project.diff.next.length !== 0,
-  stageTool: state.stage.stageTool,
+  stageTool: state.stage.stageTool.tool,
 });
 
 const mapDispatchToProps = {
