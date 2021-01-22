@@ -75,16 +75,23 @@ function createTextObject(initialValue?: {
         text: {
           displayName: "Text",
           propertyName: "text",
-          inputType: InputType.TEXT,
+          inputType: InputType.TEXTAREA,
           value: (initialValue?.text as string) || "",
           defaultValue: "",
+        },
+        autoHeight: {
+          displayName: "Auto height",
+          propertyName: "autoHeight",
+          inputType: InputType.CHECKBOX,
+          value: false,
+          defaultValue: false,
         },
         color: {
           displayName: "Color",
           propertyName: "color",
           inputType: InputType.COLOR,
-          value: null,
-          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
         },
         fontSize: {
           displayName: "Font size",
@@ -97,8 +104,8 @@ function createTextObject(initialValue?: {
           displayName: "Weight",
           propertyName: "weight",
           inputType: InputType.SELECT,
-          value: "2",
-          defaultValue: "3",
+          value: "400",
+          defaultValue: "400",
           options: [
             { value: "100", label: "100	Thin" },
             { value: "200", label: "200	Extra Light" },

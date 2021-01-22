@@ -23,6 +23,10 @@
       flex-grow: 1;
     }
   }
+
+  .right {
+    z-index: 95;
+  }
 }
 
 .defaultStyle {
@@ -32,7 +36,6 @@
     min-width: 340px;
     background: rgb(37, 37, 38);
     box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
-    flex: 0 0 340px;
     display: flex;
     flex-direction: column;
 
@@ -43,10 +46,10 @@
       height: 30vh;
     }
     .properties {
-      height: 30vh;
+      height: 40vh;
     }
     .action {
-      height: 20vh;
+      height: 10vh;
     }
   }
 }
@@ -71,17 +74,14 @@
         .slides {
           height: 20vh;
         }
-
         .properties {
-          //height: 35vh;
-          flex: 1;
+          height: 35vh;
         }
         .action {
-          //height: 20vh;
+          height: 10vh;
         }
         .effects {
           height: 35vh !important;
-          flex: 1;
         }
       }
 

@@ -83,3 +83,14 @@ export function multiplyRect(r: IRect, multiplier: number) {
     h: r.h * multiplier,
   };
 }
+
+export function nl2br(str: string | undefined): string {
+  if (typeof str === "undefined" || str === null) {
+    return "";
+  }
+  var breakTag = "<br />";
+  return (str + "").replace(
+    /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,
+    "$1" + breakTag + "$2"
+  );
+}

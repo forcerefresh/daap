@@ -1,13 +1,14 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
+import { isEqual } from "lodash-es";
+import { FormGroup } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "../types";
 import { RGBColor, SketchPicker } from "react-color";
-import styles from "./color-input.module.scss";
-import { isEqual } from "lodash-es";
+import css from "./color-input.module.scss";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
-  const { value, defaultValue, onChange } = props;
+  const { value, defaultValue, displayName, onChange } = props;
 
-  const _color = (value || defaultValue) as RGBColor;
+  const colorFromProp = (value || defaultValue) as RGBColor;
 
   const [state, setState] = useState<{
     displayColorPicker: boolean;
@@ -15,16 +16,16 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     color: RGBColor;
   }>({
     displayColorPicker: false,
-    color: _color,
-    initialColor: _color,
+    color: colorFromProp,
+    initialColor: colorFromProp,
   });
 
   // update state when props.value is changed
   useEffect(() => {
-    if (!isEqual(_color, state.color)) {
-      setState({ ...state, color: _color, initialColor: _color });
+    if (!isEqual(colorFromProp, state.color)) {
+      setState({ ...state, color: colorFromProp, initialColor: colorFromProp });
     }
-  }, [_color, state]);
+  }, [colorFromProp, state]);
 
   const handleClick = () => {
     setState({ ...state, displayColorPicker: !state.displayColorPicker });
@@ -36,6 +37,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const handleChange = (color: any) => {
     setState({ ...state, color: color.rgb });
+    onChange(color.rgb);
   };
 
   const { color } = state;
@@ -60,28 +62,24 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   });
 
   return (
-    <div>
-      <div className={styles.swatch} onClick={handleClick} tabIndex={1}>
-        <div className={styles.color} style={style} />
+    <FormGroup label={displayName} labelFor="color-input" inline>
+      <div
+        id="color-input"
+        className={css.swatch}
+        onClick={handleClick}
+        tabIndex={1}
+      >
+        <div className={css.color} style={style} />
       </div>
       {state.displayColorPicker ? (
-        <div className={styles.popover}>
-          <div className={styles.cover} onClick={handleClose} />
-          <div
-            onMouseUp={(event: any) => {
-              // event.stopPropagation();
-              //event.cancelBubble = true;
-            }}
-            onMouseDown={(event: any) => {
-              // event.stopPropagation();
-              //event.cancelBubble = true;
-            }}
-          >
+        <div className={css.popover}>
+          <div className={css.cover} onClick={handleClose} />
+          <div>
             <SketchPicker color={state.color} onChange={handleChange} />
           </div>
         </div>
       ) : null}
-    </div>
+    </FormGroup>
   );
 };
 

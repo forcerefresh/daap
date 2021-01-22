@@ -1,5 +1,5 @@
 import { Text } from "@blueprintjs/core";
-import { cloneDeep, noop } from "lodash-es";
+import { cloneDeep, pick } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getInputForm } from "../../inputs/input-factory";
@@ -25,34 +25,19 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   const renderPositionAndSize = (object: IObject) => {
-    return (
-      <>
-        {getPositionFiled("X", "left")}
-        {getPositionFiled("Y", "top")}
-        {getPositionFiled("W", "width")}
-        {getPositionFiled("H", "height")}
-      </>
-    );
-  };
-
-  const getPositionFiled = (label: string, propertyName: keyof IObject) => {
     const objectDef = {
-      displayName: label,
-      propertyName: propertyName,
-      inputType: InputType.NUMBER,
-      value: object?.[propertyName],
-      defaultValue: 0,
+      inputType: InputType.TRANSFORM,
+      value: pick(object, "left", "top", "width", "height"),
     };
 
-    const onInput = (value: any) => {
+    const onChange = (value: any) => {
       const retObj = cloneDeep(object);
       if (retObj) {
-        (retObj as any)[propertyName] = value;
-        _updateObject(retObj);
+        _updateObject({ ...retObj, ...value });
       }
     };
 
-    return getInputForm(InputType.NUMBER, objectDef, noop, onInput);
+    return getInputForm(InputType.TRANSFORM, objectDef, onChange);
   };
 
   const renderProperties = (properties: any) => {
@@ -71,7 +56,7 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   return (
-    <div className={css.propertiesPanel}>
+    <div className={css.propertiesPanel} key={object?.id}>
       <div className={css.panelHeader}>
         <Text>PROPERTIES PANEL</Text>
       </div>

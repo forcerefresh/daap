@@ -4,6 +4,7 @@ import { IObject, ITransitions, ObjectType } from "../objects/types";
 import { ILayer, ILayers } from "../store/reducers/layers";
 import { IObjects } from "../store/reducers/objects";
 import { ISlide, ISlides } from "../store/reducers/slides";
+import { nl2br } from "../utils/doom-utils/common";
 
 export interface IExportData {
   html: string;
@@ -99,7 +100,7 @@ export function getObjectHtml(object: IObject) {
   }
 }
 
-function getTextHtml(object: IObject) {
+export function getTextHtml(object: IObject) {
   const textProperties = object.definition.properties as TextProperties;
 
   //const sizeObj = pick(object, "left", "top", "width", "height");
@@ -107,12 +108,17 @@ function getTextHtml(object: IObject) {
 
   let style = "";
   style += "font-size: " + textProperties.fontSize.value + "px;";
+  const c = textProperties.color.value;
+  style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
+  style += "font-weight: " + textProperties.weight.value + ";";
   //forOwn(objectStyle, function (value, key) {
   //  style += key + ":" + value + ";";
   //});
   style += "position: absolute;";
 
-  return "<p style='" + style + "'>" + textProperties.text.value + "</p>";
+  return (
+    "<p style='" + style + "'>" + nl2br(textProperties.text.value) + "</p>"
+  );
 }
 
 function getImageHtml(object: IObject) {

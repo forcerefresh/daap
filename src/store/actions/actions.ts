@@ -16,6 +16,8 @@ import {
   isIntersectingRect,
   testIfRectsAreOverlapping,
 } from "../../utils/doom-utils/common";
+import { TextProperties } from "../../inputs/types";
+import { getTextHtml } from "../../export/export-html";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -595,7 +597,28 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
 }
 
 // ****
-// ***
+// TODO: this is object update middleware!!! move somewhere!!!
+function handleObjectUpdate(object: IObject) {
+  switch (object.type) {
+    case ObjectType.TEXT: {
+      handleTextUpdate(object);
+    }
+  }
+}
+
+function handleTextUpdate(object: IObject) {
+  const properties = object.definition.properties as TextProperties;
+  if (properties.autoHeight.value === true) {
+    const html = getTextHtml(object);
+    const holder = document.createElement("div");
+    holder.innerHTML = html;
+    holder.querySelector("p")!.style.position = "relative";
+    holder.querySelector("p")!.style.width = object.width + "px";
+    document.body.appendChild(holder);
+    object.height = holder.querySelector("p")?.offsetHeight;
+  }
+  return { ...object };
+}
 export const UPDATE_OBJECT = "Update object";
 
 export interface UpdateObjectAction extends IUndoableAction<true> {
@@ -605,6 +628,7 @@ export interface UpdateObjectAction extends IUndoableAction<true> {
 
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    handleObjectUpdate(object);
     dispatch(_updateObject(object));
   };
 }

@@ -1,9 +1,12 @@
 import React from "react";
+import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { SelectInputForm } from "./select-input/select-input";
 import { TextInputForm } from "./text-input/text-input";
+import { TextAreaInputForm } from "./textarea-input/textarea-input";
+import { TransformInputForm } from "./transform-input/transform-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import { InputType } from "./types";
 
@@ -29,6 +32,9 @@ export function getInputForm<T>(
     case InputType.TEXT: {
       return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
     }
+    case InputType.TEXTAREA: {
+      return <TextAreaInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
     }
@@ -46,6 +52,16 @@ export function getInputForm<T>(
     }
     case InputType.SELECT: {
       return <SelectInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.TRANSFORM: {
+      return (
+        <TransformInputForm key={key} {...inputProps} onChange={onChange} />
+      );
+    }
+    case InputType.CHECKBOX: {
+      return (
+        <CheckboxInputForm key={key} {...inputProps} onChange={onChange} />
+      );
     }
   }
 }

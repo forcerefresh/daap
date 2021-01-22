@@ -20,7 +20,13 @@ export type IAddPanelMergedProps = typeof mapDispatchToProps &
   IAddPanelProps;
 
 const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
-  const { _addNewObject, _setStageTool, activeLayerId, onRequestClose } = props;
+  const {
+    _addNewObject,
+    _setStageTool,
+    documentSize,
+    activeLayerId,
+    onRequestClose,
+  } = props;
 
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
@@ -35,7 +41,12 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _setStageTool(StageTools.DRAW, ObjectType.TEXT);
+              _addNewObject(activeLayerId, ObjectType.TEXT, {
+                left: documentSize.width / 4,
+                top: documentSize.height / 4,
+                width: documentSize.width / 2,
+                height: documentSize.height / 2,
+              });
               onRequestClose();
             }
           }}
@@ -63,6 +74,14 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>DRAW TEXT BOX</h3>
           <p>Draw text box using text tool</p>
         </Card>
+      </div>
+
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Image</h1>
+          <p>Place image content</p>
+        </Card>
+
         <Card
           interactive={!!activeLayerId}
           elevation={Elevation.TWO}
@@ -86,6 +105,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <p>Pick predefined style</p>
         </Card>
       </div>
+
       <div>
         <Card
           interactive={true}
@@ -178,6 +198,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
 const mapStateToProps = (state: IStore) => ({
   activeLayerId: state.project.selection.activeLayerId,
+  documentSize: state.project.document.documentSize,
 });
 
 const mapDispatchToProps = {

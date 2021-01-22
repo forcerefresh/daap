@@ -4,9 +4,22 @@
   height: 100%;
 
   :global {
+    .bp3-control input:focus ~ .bp3-control-indicator,
+    #color-input:focus {
+      box-shadow: 0 0 0 1px #137cbd, 0 0 0 1px #137cbd,
+        0 0 0 3px rgba(19, 124, 189, 0.3), inset 0 0 0 1px rgba(16, 22, 26, 0.3),
+        inset 0 1px 1px rgba(16, 22, 26, 0.4) !important;
+      outline: none !important;
+    }
+
+    .bp3-form-group.bp3-inline label.bp3-label {
+      line-height: 16px;
+    }
+
     .bp3-label {
       width: 70px;
     }
+
     .bp3-form-group {
       margin-bottom: 5px;
     }
