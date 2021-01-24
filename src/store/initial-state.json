@@ -1,43 +1,62 @@
 {
   "project": {
     "slides": {
-      "nextSlideIdCounter": 1,
+      "nextSlideIdCounter": 5,
       "slideById": {
-        "0f4cf71b-3b6c-41ce-965d-9e73312be3b1": {
-          "id": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
+        "4ff84384-9f56-4acb-bfde-490f646f1601": {
+          "id": "4ff84384-9f56-4acb-bfde-490f646f1601",
           "name": "Slide 0",
           "duration": {
             "inheritFrom": "custom",
-            "customValue": 10000
+            "customValue": 2000
           },
-          "layerIds": ["7350bf49-bced-491f-96d6-5c907ecdd1f0"],
+          "layerIds": ["be527317-6de2-47d4-9ddb-b33d4e4d18ea"],
           "nextLayerIdCounter": 1
         }
       },
-      "allSlides": ["0f4cf71b-3b6c-41ce-965d-9e73312be3b1"]
+      "allSlides": ["4ff84384-9f56-4acb-bfde-490f646f1601"]
     },
     "layers": {
       "layerById": {
-        "7350bf49-bced-491f-96d6-5c907ecdd1f0": {
-          "id": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
-          "slideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
-          "name": "Layer 0",
+        "be527317-6de2-47d4-9ddb-b33d4e4d18ea": {
+          "id": "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+          "slideId": "4ff84384-9f56-4acb-bfde-490f646f1601",
+          "isBackground": true,
+          "name": "Background layer",
           "isVisible": true,
           "hasTimeline": true,
-          "objectIds": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
+          "objectIds": [
+            "57c99646-c665-47f8-84fc-3eb8448de141",
+            "539e0f75-f91f-478f-a476-16901d9f1fcd",
+            "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+          ],
+          "transitions": {
+            "in": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "effect": {
+                "id": "zoomIn",
+                "values": {
+                  "fromScale": 0,
+                  "toScale": 100
+                }
+              }
+            }
+          }
         }
       },
-      "allLayers": ["7350bf49-bced-491f-96d6-5c907ecdd1f0"]
+      "allLayers": ["be527317-6de2-47d4-9ddb-b33d4e4d18ea"]
     },
     "objects": {
       "objectById": {
-        "2a69e983-2b03-4ede-928e-39c68498aae9": {
-          "left": 0,
-          "top": 0,
-          "width": 300,
-          "height": 300,
-          "id": "2a69e983-2b03-4ede-928e-39c68498aae9",
-          "type": "image",
+        "57c99646-c665-47f8-84fc-3eb8448de141": {
+          "left": 20,
+          "top": 294.25,
+          "width": 480,
+          "height": 242.5,
+          "id": "57c99646-c665-47f8-84fc-3eb8448de141",
+          "type": "text",
           "isVisible": true,
           "isLocked": false,
           "transitions": {
@@ -52,7 +71,240 @@
             }
           },
           "definition": {
-            "id": "78c706d9-331e-4388-a4d5-4fe057b2dce7",
+            "id": "41b7689b-dedd-47f7-ab2a-46b9bf81f12f",
+            "type": "text",
+            "properties": {
+              "text": {
+                "displayName": "Text",
+                "propertyName": "text",
+                "inputType": "textarea",
+                "value": "Nemanja glej ovu foru",
+                "defaultValue": ""
+              },
+              "autoHeight": {
+                "displayName": "Auto height",
+                "propertyName": "autoHeight",
+                "inputType": "checkbox",
+                "value": false,
+                "defaultValue": false
+              },
+              "color": {
+                "displayName": "Color",
+                "propertyName": "color",
+                "inputType": "color",
+                "value": {
+                  "r": 249,
+                  "g": 158,
+                  "b": 158,
+                  "a": 1
+                },
+                "defaultValue": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                }
+              },
+              "fontSize": {
+                "displayName": "Font size",
+                "propertyName": "string",
+                "inputType": "text",
+                "value": "30",
+                "defaultValue": "14"
+              },
+              "weight": {
+                "displayName": "Weight",
+                "propertyName": "weight",
+                "inputType": "select",
+                "value": "400",
+                "defaultValue": "400",
+                "options": [
+                  {
+                    "value": "100",
+                    "label": "100\tThin"
+                  },
+                  {
+                    "value": "200",
+                    "label": "200\tExtra Light"
+                  },
+                  {
+                    "value": "300",
+                    "label": "300\tLight"
+                  },
+                  {
+                    "value": "400",
+                    "label": "400\tNormal"
+                  },
+                  {
+                    "value": "500",
+                    "label": "500\tMedium"
+                  },
+                  {
+                    "value": "600",
+                    "label": "600\tSemi Bold"
+                  },
+                  {
+                    "value": "700",
+                    "label": "700\tBold"
+                  },
+                  {
+                    "value": "800",
+                    "label": "800\tExtra Bold"
+                  },
+                  {
+                    "value": "900",
+                    "label": "900\tBlack"
+                  },
+                  {
+                    "value": "950",
+                    "label": "950\tExtra Black"
+                  }
+                ]
+              }
+            }
+          },
+          "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
+        },
+        "539e0f75-f91f-478f-a476-16901d9f1fcd": {
+          "left": 504,
+          "top": 242.25,
+          "width": 480,
+          "height": 242.5,
+          "id": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+          "type": "text",
+          "isVisible": true,
+          "isLocked": false,
+          "transitions": {
+            "in": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "effect": {
+                "id": "none",
+                "values": {}
+              }
+            }
+          },
+          "definition": {
+            "id": "e4697c46-88fe-4adb-96e3-1f82fa466275",
+            "type": "text",
+            "properties": {
+              "text": {
+                "displayName": "Text",
+                "propertyName": "text",
+                "inputType": "textarea",
+                "value": "Sample test",
+                "defaultValue": ""
+              },
+              "autoHeight": {
+                "displayName": "Auto height",
+                "propertyName": "autoHeight",
+                "inputType": "checkbox",
+                "value": false,
+                "defaultValue": false
+              },
+              "color": {
+                "displayName": "Color",
+                "propertyName": "color",
+                "inputType": "color",
+                "value": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                },
+                "defaultValue": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                }
+              },
+              "fontSize": {
+                "displayName": "Font size",
+                "propertyName": "string",
+                "inputType": "text",
+                "value": "30",
+                "defaultValue": "14"
+              },
+              "weight": {
+                "displayName": "Weight",
+                "propertyName": "weight",
+                "inputType": "select",
+                "value": "400",
+                "defaultValue": "400",
+                "options": [
+                  {
+                    "value": "100",
+                    "label": "100\tThin"
+                  },
+                  {
+                    "value": "200",
+                    "label": "200\tExtra Light"
+                  },
+                  {
+                    "value": "300",
+                    "label": "300\tLight"
+                  },
+                  {
+                    "value": "400",
+                    "label": "400\tNormal"
+                  },
+                  {
+                    "value": "500",
+                    "label": "500\tMedium"
+                  },
+                  {
+                    "value": "600",
+                    "label": "600\tSemi Bold"
+                  },
+                  {
+                    "value": "700",
+                    "label": "700\tBold"
+                  },
+                  {
+                    "value": "800",
+                    "label": "800\tExtra Bold"
+                  },
+                  {
+                    "value": "900",
+                    "label": "900\tBlack"
+                  },
+                  {
+                    "value": "950",
+                    "label": "950\tExtra Black"
+                  }
+                ]
+              }
+            }
+          },
+          "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
+        },
+        "8a54e955-0f8e-4a29-b026-a5828e52d0d7": {
+          "left": -105,
+          "top": -107,
+          "width": 300,
+          "height": 300,
+          "id": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+          "type": "image",
+          "isVisible": true,
+          "isLocked": false,
+          "transitions": {
+            "in": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "effect": {
+                "id": "slideIn",
+                "values": {
+                  "from": "left",
+                  "distance": 1000
+                }
+              }
+            }
+          },
+          "definition": {
+            "id": "409cf00a-c07c-4501-b12a-75eb4938ed6f",
             "type": "image",
             "properties": {
               "url": {
@@ -68,18 +320,22 @@
               }
             }
           },
-          "layerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+          "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
         }
       },
-      "allObjects": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
+      "allObjects": [
+        "57c99646-c665-47f8-84fc-3eb8448de141",
+        "539e0f75-f91f-478f-a476-16901d9f1fcd",
+        "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+      ]
     },
     "selection": {
-      "activeSlideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
-      "activeLayerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
-      "activeObjectId": "2a69e983-2b03-4ede-928e-39c68498aae9",
-      "selectedSlideIds": ["0f4cf71b-3b6c-41ce-965d-9e73312be3b1"],
+      "activeSlideId": "4ff84384-9f56-4acb-bfde-490f646f1601",
+      "activeLayerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+      "activeObjectId": "57c99646-c665-47f8-84fc-3eb8448de141",
+      "selectedSlideIds": ["4ff84384-9f56-4acb-bfde-490f646f1601"],
       "selectedLayerIds": [],
-      "selectedObjectIds": ["2a69e983-2b03-4ede-928e-39c68498aae9"]
+      "selectedObjectIds": ["57c99646-c665-47f8-84fc-3eb8448de141"]
     },
     "document": {
       "documentSize": {
@@ -88,25 +344,27 @@
       }
     },
     "settings": {
-      "slideDuration": 10
+      "slideDuration": 4
     },
     "diff": {
       "prev": [
         {
-          "changes": [],
-          "type": "Select objects",
-          "skipHistory": true
-        },
-        {
-          "changes": [],
-          "type": "Update object"
-        },
-        {
-          "changes": [],
-          "type": "Update object"
-        },
-        {
-          "changes": [],
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ovu for",
+              "rhs": "Nemanja glej ovu foru"
+            }
+          ],
           "type": "Update object"
         },
         {
@@ -116,7 +374,2814 @@
               "path": [
                 "objects",
                 "objectById",
-                "2a69e983-2b03-4ede-928e-39c68498aae9",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ovu fo",
+              "rhs": "Nemanja glej ovu for"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ovu f",
+              "rhs": "Nemanja glej ovu fo"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ovu ",
+              "rhs": "Nemanja glej ovu f"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ovu",
+              "rhs": "Nemanja glej ovu "
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ov",
+              "rhs": "Nemanja glej ovu"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej o",
+              "rhs": "Nemanja glej ov"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej ",
+              "rhs": "Nemanja glej o"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja glej",
+              "rhs": "Nemanja glej "
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja gle",
+              "rhs": "Nemanja glej"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja gl",
+              "rhs": "Nemanja gle"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja g",
+              "rhs": "Nemanja gl"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja ",
+              "rhs": "Nemanja g"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanja",
+              "rhs": "Nemanja "
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nemanj",
+              "rhs": "Nemanja"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Neman",
+              "rhs": "Nemanj"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nema",
+              "rhs": "Neman"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Nem",
+              "rhs": "Nema"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Ne",
+              "rhs": "Nem"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "N",
+              "rhs": "Ne"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "text",
+                "value"
+              ],
+              "lhs": "Sample test",
+              "rhs": "N"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "left"
+              ],
+              "lhs": 146,
+              "rhs": 20
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "top"
+              ],
+              "lhs": 128.25,
+              "rhs": 294.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "left"
+              ],
+              "lhs": 130,
+              "rhs": -105
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "top"
+              ],
+              "lhs": 149,
+              "rhs": -107
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "left"
+              ],
+              "lhs": 533,
+              "rhs": 504
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "top"
+              ],
+              "lhs": 11.25,
+              "rhs": 242.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "left"
+              ],
+              "lhs": 279,
+              "rhs": 533
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "top"
+              ],
+              "lhs": 2.25,
+              "rhs": 11.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "D",
+              "path": [
+                "slides",
+                "slideById",
+                "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+              ],
+              "lhs": {
+                "id": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "name": "Slide 4",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 1
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+              }
+            }
+          ],
+          "type": "Delete slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "layers",
+                "layerById",
+                "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              ],
+              "lhs": {
+                "id": "56bb5729-c005-4f47-aa38-fafc552d97ea",
+                "slideId": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              }
+            }
+          ],
+          "type": "Delete layers"
+        },
+        {
+          "changes": [],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "56bb5729-c005-4f47-aa38-fafc552d97ea",
+              "rhs": null
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "56bb5729-c005-4f47-aa38-fafc552d97ea"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "nextLayerIdCounter"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              ],
+              "rhs": {
+                "id": "56bb5729-c005-4f47-aa38-fafc552d97ea",
+                "slideId": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "56bb5729-c005-4f47-aa38-fafc552d97ea"
+              }
+            }
+          ],
+          "type": "Add layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+              }
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": null,
+              "rhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["slides", "nextSlideIdCounter"],
+              "lhs": 4,
+              "rhs": 5
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+              ],
+              "rhs": {
+                "id": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f",
+                "name": "Slide 4",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 0
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "f3c9740c-1606-4a39-a47a-9a722a1f8d4f"
+              }
+            }
+          ],
+          "type": "Add slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "D",
+              "path": [
+                "slides",
+                "slideById",
+                "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+              ],
+              "lhs": {
+                "id": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "name": "Slide 3",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 1
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+              }
+            }
+          ],
+          "type": "Delete slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "c478b824-4a28-437a-9b5e-25b17042ef40"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "layers",
+                "layerById",
+                "c478b824-4a28-437a-9b5e-25b17042ef40"
+              ],
+              "lhs": {
+                "id": "c478b824-4a28-437a-9b5e-25b17042ef40",
+                "slideId": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "c478b824-4a28-437a-9b5e-25b17042ef40"
+              }
+            }
+          ],
+          "type": "Delete layers"
+        },
+        {
+          "changes": [],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "c478b824-4a28-437a-9b5e-25b17042ef40",
+              "rhs": null
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "c478b824-4a28-437a-9b5e-25b17042ef40"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "c478b824-4a28-437a-9b5e-25b17042ef40"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "nextLayerIdCounter"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "c478b824-4a28-437a-9b5e-25b17042ef40"
+              ],
+              "rhs": {
+                "id": "c478b824-4a28-437a-9b5e-25b17042ef40",
+                "slideId": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "c478b824-4a28-437a-9b5e-25b17042ef40"
+              }
+            }
+          ],
+          "type": "Add layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["slides", "nextSlideIdCounter"],
+              "lhs": 3,
+              "rhs": 4
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+              ],
+              "rhs": {
+                "id": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e",
+                "name": "Slide 3",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 0
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "eb102e6a-0651-4b6b-b02d-cabb25f2f02e"
+              }
+            }
+          ],
+          "type": "Add slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+              }
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": null,
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "D",
+              "path": [
+                "slides",
+                "slideById",
+                "f383a65b-af32-411b-9b7a-bac10439b093"
+              ],
+              "lhs": {
+                "id": "f383a65b-af32-411b-9b7a-bac10439b093",
+                "name": "Slide 2",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 1
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "f383a65b-af32-411b-9b7a-bac10439b093",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+              }
+            }
+          ],
+          "type": "Delete slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "f383a65b-af32-411b-9b7a-bac10439b093",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "layers",
+                "layerById",
+                "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              ],
+              "lhs": {
+                "id": "7305fad1-2298-4d55-ad34-be8139a0ee16",
+                "slideId": "f383a65b-af32-411b-9b7a-bac10439b093",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              }
+            }
+          ],
+          "type": "Delete layers"
+        },
+        {
+          "changes": [],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+              }
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": null,
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "D",
+              "path": [
+                "slides",
+                "slideById",
+                "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+              ],
+              "lhs": {
+                "id": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "name": "Slide 1",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 4000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 1
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["slides", "allSlides", 1],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedSlideIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+              }
+            }
+          ],
+          "type": "Delete slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "layers",
+                "layerById",
+                "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+              ],
+              "lhs": {
+                "id": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3",
+                "slideId": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["layers", "allLayers", 1],
+              "lhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3",
+              "rhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+            }
+          ],
+          "type": "Delete layers"
+        },
+        {
+          "changes": [],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "f383a65b-af32-411b-9b7a-bac10439b093",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "f383a65b-af32-411b-9b7a-bac10439b093",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "f383a65b-af32-411b-9b7a-bac10439b093",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "f383a65b-af32-411b-9b7a-bac10439b093",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "7305fad1-2298-4d55-ad34-be8139a0ee16",
+              "rhs": null
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "f383a65b-af32-411b-9b7a-bac10439b093",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "f383a65b-af32-411b-9b7a-bac10439b093",
+                "nextLayerIdCounter"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              ],
+              "rhs": {
+                "id": "7305fad1-2298-4d55-ad34-be8139a0ee16",
+                "slideId": "f383a65b-af32-411b-9b7a-bac10439b093",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "7305fad1-2298-4d55-ad34-be8139a0ee16"
+              }
+            }
+          ],
+          "type": "Add layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["slides", "nextSlideIdCounter"],
+              "lhs": 2,
+              "rhs": 3
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "f383a65b-af32-411b-9b7a-bac10439b093"
+              ],
+              "rhs": {
+                "id": "f383a65b-af32-411b-9b7a-bac10439b093",
+                "name": "Slide 2",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 0
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "f383a65b-af32-411b-9b7a-bac10439b093"
+              }
+            }
+          ],
+          "type": "Add slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3",
+              "rhs": null
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "nextLayerIdCounter"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+              ],
+              "rhs": {
+                "id": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3",
+                "slideId": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "isBackground": true,
+                "name": "Background layer",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "c7e46d02-1e34-4e0a-abcc-c02df5e9d7a3"
+              }
+            }
+          ],
+          "type": "Add layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "4ff84384-9f56-4acb-bfde-490f646f1601",
+              "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+              "rhs": null
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+              "rhs": null
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["slides", "nextSlideIdCounter"],
+              "lhs": 1,
+              "rhs": 2
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+              ],
+              "rhs": {
+                "id": "50af3ee7-0b97-43b6-8a90-f7f17128b89d",
+                "name": "Slide 1",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 10000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 0
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "50af3ee7-0b97-43b6-8a90-f7f17128b89d"
+              }
+            }
+          ],
+          "type": "Add slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "from"
+              ],
+              "lhs": "right",
+              "rhs": "left"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "lhs": 100,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "slideIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "from"
+              ],
+              "rhs": "right"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "zoomIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "fromScale"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "toScale"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "left"
+              ],
+              "lhs": 196,
+              "rhs": 146
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "top"
+              ],
+              "lhs": 66.25,
+              "rhs": 128.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "left"
+              ],
+              "lhs": 582,
+              "rhs": 279
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "top"
+              ],
+              "lhs": 13.25,
+              "rhs": 2.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "left"
+              ],
+              "lhs": 360,
+              "rhs": 196
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "top"
+              ],
+              "lhs": 304.25,
+              "rhs": 66.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "left"
+              ],
+              "lhs": 0,
+              "rhs": 130
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "top"
+              ],
+              "lhs": 0,
+              "rhs": 149
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
                 "definition",
                 "properties",
                 "url",
@@ -137,7 +3202,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
               }
             }
           ],
@@ -150,7 +3215,903 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
+              "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 235,
+              "rhs": 249
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 114,
+              "rhs": 158
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 114,
+              "rhs": 158
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 220,
+              "rhs": 235
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 72,
+              "rhs": 114
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 72,
+              "rhs": 114
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 220
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 136,
+              "rhs": 72
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 136,
+              "rhs": 72
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 178,
+              "rhs": 255
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 21,
+              "rhs": 136
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 21,
+              "rhs": 136
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 178
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 21
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 21
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "3",
+              "rhs": "30"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "14",
+              "rhs": "3"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "left"
+              ],
+              "lhs": 360,
+              "rhs": 582
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "top"
+              ],
+              "lhs": 304.25,
+              "rhs": 13.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "3",
+              "rhs": "30"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "14",
+              "rhs": "3"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "left"
+              ],
+              "lhs": 240,
+              "rhs": 360
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "top"
+              ],
+              "lhs": 121.25,
+              "rhs": 304.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "left"
+              ],
+              "lhs": 240,
+              "rhs": 360
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "57c99646-c665-47f8-84fc-3eb8448de141",
+                "top"
+              ],
+              "lhs": 121.25,
+              "rhs": 304.25
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "objectIds"
+              ],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              ],
+              "rhs": {
+                "left": 0,
+                "top": 0,
+                "width": 300,
+                "height": 300,
+                "id": "8a54e955-0f8e-4a29-b026-a5828e52d0d7",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "409cf00a-c07c-4501-b12a-75eb4938ed6f",
+                  "type": "image",
+                  "properties": {
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": ""
+                      },
+                      "defaultValue": {
+                        "url": ""
+                      }
+                    }
+                  }
+                },
+                "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "8a54e955-0f8e-4a29-b026-a5828e52d0d7"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "57c99646-c665-47f8-84fc-3eb8448de141",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "objectIds"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              ],
+              "rhs": {
+                "left": 240,
+                "top": 121.25,
+                "width": 480,
+                "height": 242.5,
+                "id": "539e0f75-f91f-478f-a476-16901d9f1fcd",
+                "type": "text",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "e4697c46-88fe-4adb-96e3-1f82fa466275",
+                  "type": "text",
+                  "properties": {
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
+                      "value": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      },
+                      "defaultValue": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "14",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "539e0f75-f91f-478f-a476-16901d9f1fcd"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
             }
           ],
           "type": "Activate object",
@@ -168,13 +4129,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "7350bf49-bced-491f-96d6-5c907ecdd1f0",
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
                 "objectIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
               }
             },
             {
@@ -182,15 +4143,15 @@
               "path": [
                 "objects",
                 "objectById",
-                "2a69e983-2b03-4ede-928e-39c68498aae9"
+                "57c99646-c665-47f8-84fc-3eb8448de141"
               ],
               "rhs": {
-                "left": 0,
-                "top": 0,
-                "width": 300,
-                "height": 300,
-                "id": "2a69e983-2b03-4ede-928e-39c68498aae9",
-                "type": "image",
+                "left": 240,
+                "top": 121.25,
+                "width": 480,
+                "height": 242.5,
+                "id": "57c99646-c665-47f8-84fc-3eb8448de141",
+                "type": "text",
                 "isVisible": true,
                 "isLocked": false,
                 "transitions": {
@@ -205,23 +4166,99 @@
                   }
                 },
                 "definition": {
-                  "id": "78c706d9-331e-4388-a4d5-4fe057b2dce7",
-                  "type": "image",
+                  "id": "41b7689b-dedd-47f7-ab2a-46b9bf81f12f",
+                  "type": "text",
                   "properties": {
-                    "url": {
-                      "displayName": "Image url",
-                      "propertyName": "url",
-                      "inputType": "image",
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
                       "value": {
-                        "url": ""
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
                       },
                       "defaultValue": {
-                        "url": ""
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
                       }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "14",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
                     }
                   }
                 },
-                "layerId": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+                "layerId": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
               }
             },
             {
@@ -230,7 +4267,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "2a69e983-2b03-4ede-928e-39c68498aae9"
+                "rhs": "57c99646-c665-47f8-84fc-3eb8448de141"
               }
             }
           ],
@@ -242,7 +4279,7 @@
               "kind": "E",
               "path": ["selection", "activeLayerId"],
               "lhs": null,
-              "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+              "rhs": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
             }
           ],
           "type": "Activate layer",
@@ -255,13 +4292,13 @@
               "path": [
                 "slides",
                 "slideById",
-                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
+                "4ff84384-9f56-4acb-bfde-490f646f1601",
                 "layerIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+                "rhs": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
               }
             },
             {
@@ -269,7 +4306,7 @@
               "path": [
                 "slides",
                 "slideById",
-                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
+                "4ff84384-9f56-4acb-bfde-490f646f1601",
                 "nextLayerIdCounter"
               ],
               "lhs": 0,
@@ -280,15 +4317,27 @@
               "path": [
                 "layers",
                 "layerById",
-                "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+                "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
               ],
               "rhs": {
-                "id": "7350bf49-bced-491f-96d6-5c907ecdd1f0",
-                "slideId": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
-                "name": "Layer 0",
+                "id": "be527317-6de2-47d4-9ddb-b33d4e4d18ea",
+                "slideId": "4ff84384-9f56-4acb-bfde-490f646f1601",
+                "isBackground": true,
+                "name": "Background layer",
                 "isVisible": true,
                 "hasTimeline": true,
-                "objectIds": []
+                "objectIds": [],
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
               }
             },
             {
@@ -297,7 +4346,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "7350bf49-bced-491f-96d6-5c907ecdd1f0"
+                "rhs": "be527317-6de2-47d4-9ddb-b33d4e4d18ea"
               }
             }
           ],
@@ -311,7 +4360,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
+                "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
               }
             }
           ],
@@ -324,7 +4373,7 @@
               "kind": "E",
               "path": ["selection", "activeSlideId"],
               "lhs": null,
-              "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
+              "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
             }
           ],
           "type": "Activate slide",
@@ -343,10 +4392,10 @@
               "path": [
                 "slides",
                 "slideById",
-                "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
+                "4ff84384-9f56-4acb-bfde-490f646f1601"
               ],
               "rhs": {
-                "id": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1",
+                "id": "4ff84384-9f56-4acb-bfde-490f646f1601",
                 "name": "Slide 0",
                 "duration": {
                   "inheritFrom": "custom",
@@ -362,7 +4411,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "0f4cf71b-3b6c-41ce-965d-9e73312be3b1"
+                "rhs": "4ff84384-9f56-4acb-bfde-490f646f1601"
               }
             }
           ],
@@ -380,10 +4429,12 @@
       "isPreview": false,
       "previewSpeed": 1,
       "repeat": true
+    },
+    "stageTool": {
+      "tool": "SELECT"
     }
   },
   "globals": {
-    "layoutType": "default-layers",
-    "layoutSlidesSelectionBox": false
+    "layoutType": "default"
   }
 }

@@ -1,13 +1,21 @@
 import React, { useEffect, useState } from "react";
 
-export function useControlPress() {
+export function useKeyDown() {
   // State for keeping track of whether key is pressed
   const [ctrlDown, setCtrlDown] = useState(false);
+  const [spaceDown, setSpaceDown] = useState(false);
 
   // If pressed key is our target key then set to true
-  function downHandler({ code }: KeyboardEvent) {
+  function downHandler(evt: KeyboardEvent) {
+    const code = evt.code;
+    console.log(code);
     if (code === "ControlLeft") {
       setCtrlDown(true);
+    }
+    if (code === "Space") {
+      if (spaceDown !== true) {
+        setSpaceDown(true);
+      }
     }
   }
 
@@ -15,6 +23,9 @@ export function useControlPress() {
   const upHandler = ({ code }: KeyboardEvent) => {
     if (code === "ControlLeft") {
       setCtrlDown(false);
+    }
+    if (code === "Space") {
+      setSpaceDown(false);
     }
   };
 
@@ -29,5 +40,5 @@ export function useControlPress() {
     };
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
-  return ctrlDown;
+  return { ctrlDown, spaceDown };
 }

@@ -28,7 +28,15 @@ export function generateExport(
 
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
-      html += "    <div class='layer-" + layer.id + "'>"; // layer open
+      const layerClassName = "layer-" + layer.id;
+      if (layer.isBackground) {
+        transitionsDataArr.push({
+          objectClass: layerClassName,
+          transitions: layer.transitions,
+        });
+      }
+
+      html += "    <div class='" + layerClassName + "'>"; // layer open
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {

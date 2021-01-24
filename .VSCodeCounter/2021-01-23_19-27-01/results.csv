@@ -1,0 +1,117 @@
+"filename", "language", "TypeScript", "TypeScript React", "JSON", "SCSS", "XML", "CSS", "JavaScript", "comment", "blank", "total"
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\accumulator.js", "JavaScript", 0, 0, 0, 0, 0, 0, 116, 83, 23, 222
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\actions.js", "JavaScript", 0, 0, 0, 0, 0, 0, 8, 0, 2, 10
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\deducer.js", "JavaScript", 0, 0, 0, 0, 0, 0, 61, 29, 19, 109
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\index.js", "JavaScript", 0, 0, 0, 0, 0, 0, 3, 0, 1, 4
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\reducer.js", "JavaScript", 0, 0, 0, 0, 0, 0, 110, 36, 20, 166
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\3rd-party-libs\undo-redo\util.js", "JavaScript", 0, 0, 0, 0, 0, 0, 18, 19, 6, 43
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\App.scss", "SCSS", 0, 0, 0, 68, 0, 0, 0, 4, 10, 82
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\App.test.tsx", "TypeScript React", 0, 13, 0, 0, 0, 0, 0, 0, 3, 16
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\App.tsx", "TypeScript React", 0, 30, 0, 0, 0, 0, 0, 0, 7, 37
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\add-textbox.svg", "XML", 0, 0, 0, 0, 2, 0, 0, 0, 1, 3
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\add-textbox2.svg", "XML", 0, 0, 0, 0, 53, 0, 0, 1, 1, 55
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\desktop-preview.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\draw-textbox.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\font.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\history-tool.svg", "XML", 0, 0, 0, 0, 4, 0, 0, 0, 0, 4
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\image-tool.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\predefined-text.svg", "XML", 0, 0, 0, 0, 70, 0, 0, 1, 1, 72
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\predefined-text2.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\repeat.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\select-tool.svg", "XML", 0, 0, 0, 0, 11, 0, 0, 1, 1, 13
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\tablet-preview.svg", "XML", 0, 0, 0, 0, 43, 0, 0, 1, 1, 45
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\text-tool.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 0, 1
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\assets\icons\zoom-tool.svg", "XML", 0, 0, 0, 0, 10, 0, 0, 0, 1, 11
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\effects.tsx", "TypeScript React", 0, 54, 0, 0, 0, 0, 0, 3, 8, 65
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\fade-in\fade-in.definition.ts", "TypeScript", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\fade-in\fade-in.effect.ts", "TypeScript", 14, 0, 0, 0, 0, 0, 0, 0, 3, 17
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\fade-in\fade-in.types.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 3, 9
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\ken-burns\ken-burns.definition.ts", "TypeScript", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\ken-burns\ken-burns.effect.ts", "TypeScript", 10, 0, 0, 0, 0, 0, 0, 1, 2, 13
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\ken-burns\ken-burns.types.ts", "TypeScript", 9, 0, 0, 0, 0, 0, 0, 0, 3, 12
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\none\none.definition.ts", "TypeScript", 15, 0, 0, 0, 0, 0, 0, 0, 3, 18
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\none\none.effect.ts", "TypeScript", 8, 0, 0, 0, 0, 0, 0, 0, 2, 10
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\none\none.types.ts", "TypeScript", 3, 0, 0, 0, 0, 0, 0, 0, 3, 6
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\slide-in\slide-in.definition.ts", "TypeScript", 37, 0, 0, 0, 0, 0, 0, 0, 3, 40
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\slide-in\slide-in.effect.ts", "TypeScript", 33, 0, 0, 0, 0, 0, 0, 0, 4, 37
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\slide-in\slide-in.types.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 3, 9
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\types.ts", "TypeScript", 30, 0, 0, 0, 0, 0, 0, 0, 3, 33
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\zoom-in\zoom-in.definition.ts", "TypeScript", 31, 0, 0, 0, 0, 0, 0, 0, 3, 34
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\zoom-in\zoom-in.effect.ts", "TypeScript", 17, 0, 0, 0, 0, 0, 0, 1, 3, 21
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\effects\zoom-in\zoom-in.types.ts", "TypeScript", 6, 0, 0, 0, 0, 0, 0, 0, 3, 9
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\export\export-html.ts", "TypeScript", 88, 0, 0, 0, 0, 0, 0, 16, 24, 128
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\index.css", "CSS", 0, 0, 0, 0, 0, 10, 0, 0, 2, 12
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\index.tsx", "TypeScript React", 0, 19, 0, 0, 0, 0, 0, 3, 3, 25
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\checkbox-input\checkbox-input.tsx", "TypeScript React", 0, 21, 0, 0, 0, 0, 0, 0, 2, 23
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\color-input\color-input.module.scss", "SCSS", 0, 0, 0, 29, 0, 0, 0, 0, 5, 34
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\color-input\color-input.tsx", "TypeScript React", 0, 98, 0, 0, 0, 0, 0, 8, 12, 118
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\image-input\image-input.tsx", "TypeScript React", 0, 25, 0, 0, 0, 0, 0, 5, 6, 36
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\input-factory.tsx", "TypeScript React", 0, 65, 0, 0, 0, 0, 0, 0, 3, 68
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\input-utils.tsx", "TypeScript React", 0, 33, 0, 0, 0, 0, 0, 1, 6, 40
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\number-input\number-input.tsx", "TypeScript React", 0, 32, 0, 0, 0, 0, 0, 13, 5, 50
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\select-input\select-input.tsx", "TypeScript React", 0, 20, 0, 0, 0, 0, 0, 0, 3, 23
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\text-input\text-input.tsx", "TypeScript React", 0, 18, 0, 0, 0, 0, 0, 0, 2, 20
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\textarea-input\textarea-input.tsx", "TypeScript React", 0, 22, 0, 0, 0, 0, 0, 0, 2, 24
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\transform-input\transform-input.module.scss", "SCSS", 0, 0, 0, 37, 0, 0, 0, 0, 7, 44
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\transform-input\transform-input.tsx", "TypeScript React", 0, 170, 0, 0, 0, 0, 0, 2, 17, 189
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\transform-origin\transform-origin.module.scss", "SCSS", 0, 0, 0, 25, 0, 0, 0, 1, 4, 30
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\transform-origin\transform-origin.tsx", "TypeScript React", 0, 34, 0, 0, 0, 0, 0, 0, 5, 39
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\inputs\types.ts", "TypeScript", 102, 0, 0, 0, 0, 0, 0, 3, 11, 116
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\integration.tsx", "TypeScript React", 0, 32, 0, 0, 0, 0, 0, 4, 7, 43
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\integration\hooks\use-media-hook.tsx", "TypeScript React", 0, 13, 0, 0, 0, 0, 0, 1, 3, 17
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\integration\hooks\wp-use-media-hook.tsx", "TypeScript React", 0, 20, 0, 0, 0, 0, 0, 1, 5, 26
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\layouts\main-layout\MainLayout.module.scss", "SCSS", 0, 0, 0, 89, 0, 0, 0, 1, 10, 100
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\layouts\main-layout\MainLayout.tsx", "TypeScript React", 0, 78, 0, 0, 0, 0, 0, 1, 10, 89
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\logo.svg", "XML", 0, 0, 0, 0, 1, 0, 0, 0, 1, 2
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\objects\create-object-factory.ts", "TypeScript", 126, 0, 0, 0, 0, 0, 0, 25, 10, 161
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\objects\types.ts", "TypeScript", 54, 0, 0, 0, 0, 0, 0, 4, 8, 66
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\pages\editor\Editor.tsx", "TypeScript React", 0, 23, 0, 0, 0, 0, 0, 0, 3, 26
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\action-panel\ActionPanel.module.scss", "SCSS", 0, 0, 0, 17, 0, 0, 0, 0, 3, 20
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\action-panel\ActionPanel.tsx", "TypeScript React", 0, 49, 0, 0, 0, 0, 0, 0, 7, 56
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\add-panel\AddPanel.module.scss", "SCSS", 0, 0, 0, 35, 0, 0, 0, 2, 5, 42
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\add-panel\AddPanel.tsx", "TypeScript React", 0, 204, 0, 0, 0, 0, 0, 0, 11, 215
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\effect-panel\EffectPanel.module.scss", "SCSS", 0, 0, 0, 43, 0, 0, 0, 6, 8, 57
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\effect-panel\EffectPanel.tsx", "TypeScript React", 0, 83, 0, 0, 0, 0, 0, 0, 11, 94
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\effect-panel\StaticEffectPanel.tsx", "TypeScript React", 0, 16, 0, 0, 0, 0, 0, 0, 7, 23
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\effect-panel\effect-configuration\EffectConfigurationForm.module.scss", "SCSS", 0, 0, 0, 16, 0, 0, 0, 1, 4, 21
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\effect-panel\effect-configuration\EffectConfigurationForm.tsx", "TypeScript React", 0, 111, 0, 0, 0, 0, 0, 0, 16, 127
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\history-panel\HistoryPanel.module.scss", "SCSS", 0, 0, 0, 57, 0, 0, 0, 3, 13, 73
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\history-panel\HistoryPanel.tsx", "TypeScript React", 0, 131, 0, 0, 0, 0, 0, 21, 19, 171
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\layers-panel\LayersPanel.module.scss", "SCSS", 0, 0, 0, 168, 0, 0, 0, 7, 34, 209
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\layers-panel\LayersPanel.tsx", "TypeScript React", 0, 377, 0, 0, 0, 0, 0, 2, 21, 400
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\properties-panel\PropertiesPanel.module.scss", "SCSS", 0, 0, 0, 35, 0, 0, 0, 0, 7, 42
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\properties-panel\PropertiesPanel.tsx", "TypeScript React", 0, 74, 0, 0, 0, 0, 0, 1, 14, 89
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\settings-panel\SettingsPanel.module.scss", "SCSS", 0, 0, 0, 65, 0, 0, 0, 0, 11, 76
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\settings-panel\SettingsPanel.tsx", "TypeScript React", 0, 146, 0, 0, 0, 0, 0, 9, 12, 167
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\slide-settings-panel\SlideSettingsPanel.module.scss", "SCSS", 0, 0, 0, 7, 0, 0, 0, 0, 1, 8
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\slide-settings-panel\SlideSettingsPanel.tsx", "TypeScript React", 0, 15, 0, 0, 0, 0, 0, 0, 8, 23
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\slides-panel\SlidesPanel.module.scss", "SCSS", 0, 0, 0, 78, 0, 0, 0, 1, 15, 94
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\slides-panel\SlidesPanel.tsx", "TypeScript React", 0, 140, 0, 0, 0, 0, 0, 1, 11, 152
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\small-timeline\SmallTimeline.module.scss", "SCSS", 0, 0, 0, 48, 0, 0, 0, 0, 8, 56
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\small-timeline\SmallTimeline.tsx", "TypeScript React", 0, 125, 0, 0, 0, 0, 0, 6, 14, 145
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\stage-panel\StagePanel.module.scss", "SCSS", 0, 0, 0, 79, 0, 0, 0, 2, 19, 100
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\stage-panel\StagePanel.tsx", "TypeScript React", 0, 477, 0, 0, 0, 0, 0, 41, 61, 579
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\toolbar-panel\ToolbarPanel.module.scss", "SCSS", 0, 0, 0, 23, 0, 0, 0, 1, 4, 28
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\panels\toolbar-panel\ToolbarPanel.tsx", "TypeScript React", 0, 190, 0, 0, 0, 0, 0, 1, 13, 204
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\preview\Preview.module.scss", "SCSS", 0, 0, 0, 10, 0, 0, 0, 0, 1, 11
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\preview\Preview.tsx", "TypeScript React", 0, 24, 0, 0, 0, 0, 0, 3, 8, 35
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\react-app-env.d.ts", "TypeScript", 0, 0, 0, 0, 0, 0, 0, 1, 1, 2
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\redux-deep-diff.d.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\serviceWorker.ts", "TypeScript", 102, 0, 0, 0, 0, 0, 0, 31, 14, 147
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\setupTests.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 4, 1, 6
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\actions\actions.ts", "TypeScript", 699, 0, 0, 0, 0, 0, 0, 74, 149, 922
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\initial-state.json", "JSON", 0, 0, 389, 0, 0, 0, 0, 0, 1, 390
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\document.ts", "TypeScript", 25, 0, 0, 0, 0, 0, 0, 0, 4, 29
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\globals.ts", "TypeScript", 21, 0, 0, 0, 0, 0, 0, 2, 4, 27
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\layers.ts", "TypeScript", 90, 0, 0, 0, 0, 0, 0, 2, 11, 103
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\objects.ts", "TypeScript", 45, 0, 0, 0, 0, 0, 0, 0, 4, 49
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\selection.ts", "TypeScript", 185, 0, 0, 0, 0, 0, 0, 3, 21, 209
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\settings.ts", "TypeScript", 19, 0, 0, 0, 0, 0, 0, 0, 3, 22
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\slides.ts", "TypeScript", 86, 0, 0, 0, 0, 0, 0, 1, 10, 97
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\reducers\stage.ts", "TypeScript", 59, 0, 0, 0, 0, 0, 0, 0, 5, 64
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\store.ts", "TypeScript", 65, 0, 0, 0, 0, 0, 0, 6, 7, 78
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\store\types.ts", "TypeScript", 1, 0, 0, 0, 0, 0, 0, 0, 1, 2
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\utils\doom-utils\common.ts", "TypeScript", 76, 0, 0, 0, 0, 0, 0, 10, 11, 97
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\utils\hooks\key-down.tsx", "TypeScript React", 0, 34, 0, 0, 0, 0, 0, 5, 6, 45
+"c:\Users\Srdjan Arsic\Projects\slide-2\src\utils\hooks\on-click-outside.tsx", "TypeScript React", 0, 23, 0, 0, 0, 0, 0, 3, 2, 28
+"Total", "-", 2132, 3039, 389, 929, 201, 10, 316, 519, 950, 8485

@@ -48,20 +48,23 @@ export interface AddSlideAction extends IUndoableAction<true> {
 
 export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
-    const slide: ISlide = {
-      id: uuid(),
-      name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
-      duration: {
-        inheritFrom: "custom",
-        customValue: 10000,
-      },
-      layerIds: [],
-      nextLayerIdCounter: 0,
-    };
-    dispatch(addSlide(slide));
-    dispatch(activateSlide(slide.id));
-    dispatch(selectSlides([slide.id]));
-    dispatch(addNewLayer(slide.id));
+    if (getState().project.slides.allSlides.length === 0) {
+      const slide: ISlide = {
+        id: uuid(),
+        name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
+        duration: {
+          inheritFrom: "custom",
+          customValue: 10000,
+        },
+        layerIds: [],
+        nextLayerIdCounter: 0,
+      };
+      dispatch(addSlide(slide));
+      dispatch(activateSlide(slide.id));
+      dispatch(selectSlides([slide.id]));
+      dispatch(addNewLayer(slide.id, true));
+      //dispatch(addNewLayer(slide.id));
+    }
   };
 }
 
@@ -137,7 +140,7 @@ export interface AddLayerAction extends IUndoableAction<true> {
   payload: ILayer;
 }
 
-export function addNewLayer(slideId: string): any {
+export function addNewLayer(slideId: string, isBackground = false): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const nextId = getState().project.slides.slideById[slideId]
       .nextLayerIdCounter;
@@ -145,10 +148,22 @@ export function addNewLayer(slideId: string): any {
     const layer: ILayer = {
       id: uuid(),
       slideId,
-      name: `Layer ${nextId}`,
+      isBackground: isBackground,
+      name: isBackground ? `Background layer` : `Layer ${nextId}`,
       isVisible: true,
       hasTimeline: true,
       objectIds: [],
+      transitions: {
+        in: {
+          relativeTo: "stage",
+          delay: 0,
+          duration: 1000,
+          effect: {
+            id: "none",
+            values: {},
+          },
+        },
+      },
     };
 
     dispatch(addLayer(layer));
@@ -181,6 +196,22 @@ export function deleteLayers(layerIds: string[]): DeleteLayersAction {
   };
 }
 
+// ******
+
+export const UPDATE_LAYER = "Update layer";
+
+export interface UpdateLayerAction extends IUndoableAction<true> {
+  type: typeof UPDATE_LAYER;
+  payload: ILayer;
+}
+
+export function updateLayer(layer: ILayer): UpdateLayerAction {
+  return {
+    type: UPDATE_LAYER,
+    payload: layer,
+    isUndoable: true,
+  };
+}
 // ****
 
 export const SELECT_LAYER = "Select layer";
@@ -881,6 +912,7 @@ export type ActionTypes =
   // layer
   | AddLayerAction
   | DeleteLayersAction
+  | UpdateLayerAction
 
   // object
   | AddObjectAction

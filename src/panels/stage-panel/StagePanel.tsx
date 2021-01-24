@@ -37,7 +37,7 @@ import {
   IRect,
   multiplyRect,
 } from "../../utils/doom-utils/common";
-import { useControlPress } from "../../utils/hooks/key-press";
+import { useKeyDown } from "../../utils/hooks/key-down";
 
 interface ISize {
   width: number;
@@ -73,14 +73,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _resetStageTool,
   } = props;
 
-  const ctrlDown = useControlPress();
-  console.log(ctrlDown);
+  const { ctrlDown, spaceDown } = useKeyDown();
 
+  // TODO: fix this
   const stageToolInternal = useMemo(() => {
     setTimeout(() => {
       document.dispatchEvent(new MouseEvent("mousemove"));
     });
-    if (ctrlDown) return StageTools.PAN;
+    // TODO: fix this
+    if (false && ctrlDown) return StageTools.PAN;
     else return stageTool;
   }, [stageTool, ctrlDown]);
 
@@ -170,6 +171,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (!isEmpty(transitionsDataArr)) {
       tl.clear();
 
+      console.log(slide?.duration?.customValue);
       // TODO: hack to get timeline duration to be set to slide duration
       tl.from(".fake-non-existing-selektor", {
         duration: (slide?.duration?.customValue || 1) / 1000,

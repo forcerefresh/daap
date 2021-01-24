@@ -13,11 +13,12 @@ const EffectPanelSections = {
 
 type IEffectPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    objectId: string | null | undefined;
+    id: string | null | undefined;
+    objectType?: "object" | "layer";
   };
 
 const EffectPanel: React.FC<IEffectPanel> = (props) => {
-  const { objectId } = props;
+  const { id: objectOrLayerId, objectType } = props;
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
@@ -34,7 +35,7 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
     <div className={css.effect}>
       <div className={css.panelHeader}>EFFECT PANEL</div>
       <div className={css.effectsHolder}>
-        {objectId ? (
+        {objectOrLayerId ? (
           <>
             <section>
               <div className={css.sectionHeader}>
@@ -53,7 +54,8 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
               {visibleSectionIds[EffectPanelSections.EFFECT_IN] && (
                 <EffectConfigurationForm
                   effectType={"in"}
-                  objectId={objectId}
+                  objectOrLayerId={objectOrLayerId}
+                  objectType={objectType}
                 />
               )}
             </section>

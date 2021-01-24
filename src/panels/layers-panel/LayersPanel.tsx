@@ -73,10 +73,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     [key: string]: boolean;
   }>({});
 
-  const [
-    showEffectPanelForObjectId,
-    setShowEffectPanelForObjectId,
-  ] = useState<string>(EmptyID);
+  const [showEffectPanelForId, setShowEffectPanelForId] = useState<{
+    id: string;
+    type?: "object" | "layer";
+  }>({ id: EmptyID });
 
   useEffect(() => {
     if (activeLayerId && isEmpty(openLayerById)) {
@@ -124,7 +124,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   // logic for handling click outside
   const effectPanelRef = useRef(null);
   const handleClickOutside = () => {
-    setShowEffectPanelForObjectId(EmptyID);
+    setShowEffectPanelForId({ id: EmptyID });
   };
   useOnClickOutside(effectPanelRef, handleClickOutside);
 
@@ -132,9 +132,12 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   const renderPanels = () => {
     return (
       <Portal className="bp3-dark">
-        {showEffectPanelForObjectId !== EmptyID && (
+        {showEffectPanelForId.id !== EmptyID && (
           <div ref={effectPanelRef} className={css.floatingEffectPanel}>
-            <EffectPanel objectId={showEffectPanelForObjectId} />
+            <EffectPanel
+              id={showEffectPanelForId.id}
+              objectType={showEffectPanelForId.type}
+            />
           </div>
         )}
       </Portal>
@@ -181,6 +184,19 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   })}
                 >
                   <div>
+                    <Button
+                      active={layer.id === showEffectPanelForId.id}
+                      minimal
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        setShowEffectPanelForId({
+                          id: layer.id,
+                          type: "layer",
+                        });
+                      }}
+                      small={true}
+                      icon="walk"
+                    ></Button>
                     <Button
                       minimal
                       onClick={(event: any) => {
@@ -245,13 +261,14 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             <div className={css.actionButtons}>
                               {!layoutStaticEffectsPanel && (
                                 <Button
-                                  active={
-                                    object.id === showEffectPanelForObjectId
-                                  }
+                                  active={object.id === showEffectPanelForId.id}
                                   minimal
                                   onClick={(event: any) => {
                                     event.stopPropagation();
-                                    setShowEffectPanelForObjectId(objectId);
+                                    setShowEffectPanelForId({
+                                      id: objectId,
+                                      type: "object",
+                                    });
                                   }}
                                   small={true}
                                   icon="walk"

@@ -8,26 +8,37 @@ import {
 import { getInputForm } from "../../../inputs/input-factory";
 import { getNumericFiled, getSelectFiled } from "../../../inputs/input-utils";
 import { IObject } from "../../../objects/types";
-import { updateObject } from "../../../store/actions/actions";
+import { updateLayer, updateObject } from "../../../store/actions/actions";
+import { ILayer } from "../../../store/reducers/layers";
 import { IStore } from "../../../store/store";
 
 import css from "./EffectConfigurationForm.module.scss";
 
 type IEffectConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    objectId: string;
+    objectOrLayerId: string;
+    objectType?: "object" | "layer";
     effectType: "in" | "out";
   };
 
 const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
-  const { objectId, objectById, _updateObject } = props;
+  const {
+    objectOrLayerId: objectId,
+    objectType,
+    objectById,
+    layerById,
+    _updateObject,
+    _updateLayer,
+  } = props;
 
-  const object = objectById[objectId];
+  const objectOrLayer =
+    objectType === "object" ? objectById[objectId] : layerById[objectId];
 
   const renderEffectForm = (
     effectId: string,
-    object: IObject,
-    valuesPath: string
+    object: IObject | ILayer,
+    valuesPath: string,
+    objectType?: "object" | "layer"
   ) => {
     const effectDefinition = getEffectDefinition(effectId);
 
@@ -38,7 +49,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           const values = get(retObj, valuesPath) || {};
           values[item.propertyName] = value;
           set(retObj, valuesPath, values);
-          _updateObject(retObj);
+          if (objectType === "object") _updateObject(retObj as IObject);
+          else if (objectType === "layer") _updateLayer(retObj as ILayer);
         }
       }
 
@@ -58,22 +70,24 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         <div className="input60">
           {getNumericFiled(
             "Delay",
-            get(object, "transitions.in.delay"),
+            get(objectOrLayer, "transitions.in.delay"),
             (value: any) => {
-              const obj = cloneDeep(object);
+              const obj = cloneDeep(objectOrLayer);
               set(obj, "transitions.in.delay", value);
-              _updateObject(obj);
+              if (objectType === "object") _updateObject(obj as IObject);
+              else if (objectType === "layer") _updateLayer(obj as ILayer);
             }
           )}
         </div>
         <div className="input60">
           {getNumericFiled(
             "Duration",
-            get(object, "transitions.in.duration"),
+            get(objectOrLayer, "transitions.in.duration"),
             (value: any) => {
-              const obj = cloneDeep(object);
+              const obj = cloneDeep(objectOrLayer);
               set(obj, "transitions.in.duration", value);
-              _updateObject(obj);
+              if (objectType === "object") _updateObject(obj as IObject);
+              else if (objectType === "layer") _updateLayer(obj as ILayer);
             }
           )}
         </div>
@@ -81,10 +95,10 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 
       {getSelectFiled(
         "Effect",
-        get(object, "transitions.in.effect.id"),
+        get(objectOrLayer, "transitions.in.effect.id"),
         getEffectsOptions(),
         (value: any) => {
-          const obj = cloneDeep(object);
+          const obj = cloneDeep(objectOrLayer);
           set(obj, "transitions.in.effect.id", value);
 
           const values = get(obj, "transitions.in.effect.values") || {};
@@ -94,15 +108,17 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           });
           set(obj, "transitions.in.effect.values", values);
 
-          _updateObject(obj);
+          if (objectType === "object") _updateObject(obj as IObject);
+          else if (objectType === "layer") _updateLayer(obj as ILayer);
         }
       )}
 
       <div className={css.dynamicFields}>
         {renderEffectForm(
-          get(object, "transitions.in.effect.id"),
-          object,
-          "transitions.in.effect.values"
+          get(objectOrLayer, "transitions.in.effect.id"),
+          objectOrLayer,
+          "transitions.in.effect.values",
+          objectType
         )}
       </div>
     </div>
@@ -110,14 +126,16 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects } = state.project;
+  const { objects, layers } = state.project;
   return {
     objectById: objects.objectById,
+    layerById: layers.layerById,
   };
 };
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
+  _updateLayer: (layer: ILayer) => updateLayer(layer),
 };
 
 export default connect(

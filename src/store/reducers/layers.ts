@@ -6,17 +6,21 @@ import {
   DELETE_LAYERS,
   DELETE_OBJECTS,
   DELETE_SLIDE,
+  UPDATE_LAYER,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
+import { ITransitions } from "../../objects/types";
 
 export interface ILayer {
   id: string;
   slideId: string;
+  isBackground: boolean;
   name: string;
   isVisible: boolean;
   hasTimeline: boolean;
   objectIds: string[];
+  transitions: ITransitions;
 }
 
 export interface ILayers {
@@ -38,6 +42,15 @@ export function layers(
           ...{ [layer.id]: layer },
         },
         allLayers: [...state.allLayers, layer.id],
+      });
+    }
+    case UPDATE_LAYER: {
+      const layer = action.payload;
+      return Object.assign({}, state, {
+        layerById: {
+          ...state.layerById,
+          ...{ [layer.id]: { ...layer } },
+        },
       });
     }
     case ADD_OBJECT: {
