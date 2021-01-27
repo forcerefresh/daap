@@ -23,6 +23,7 @@ enum GlobalPanelSections {
   UiLayout = "uiLayout",
   OtherSettings = "otherSettings",
 }
+
 interface ISettingsPanelProps {
   onRequestClose: () => void;
 }

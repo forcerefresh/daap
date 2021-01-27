@@ -1,0 +1,107 @@
+.fontPreviewPanel {
+  z-index: 100;
+  position: absolute;
+  top: 0px;
+  left: 68px;
+  width: 950px;
+  height: 100vh;
+
+  background: rgb(40, 40, 40);
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+
+  section {
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    max-height: 80%;
+
+    overflow: auto;
+
+    &.open {
+      min-height: 25%;
+    }
+
+    .sectionHeader {
+      cursor: pointer;
+      font-weight: bold;
+      color: #808080;
+      padding: 15px 10px 15px 10px;
+    }
+  }
+
+  .panel {
+    padding: 20px;
+    padding-top: 5px;
+    overflow: auto;
+
+    :global {
+      .bp3-form-group .bp3-control {
+        margin-bottom: 5px;
+      }
+      .bp3-label {
+        margin-bottom: 0px;
+        color: #b5b5b5;
+        font-weight: bold;
+      }
+    }
+
+    > div {
+      padding: 5px;
+    }
+  }
+
+  .fontList {
+    display: flex;
+    flex-direction: column;
+    width: 280px;
+
+    .fontListItem {
+      cursor: pointer;
+
+      &.active {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      > span {
+        float: right;
+      }
+    }
+  }
+
+  .fontPreview {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    padding-left: 20px;
+    overflow-y: auto;
+  }
+}
+
+.card {
+  display: inline-block;
+  background: rgb(51, 51, 51) !important;
+  //text-align: center;
+  margin: 10px;
+
+  cursor: pointer;
+  //width: 100%;
+  &.disabled {
+    opacity: 0.3;
+  }
+
+  &:first-child {
+    margin-top: 0px;
+  }
+
+  p {
+    margin: 0;
+  }
+}

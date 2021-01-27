@@ -18,6 +18,7 @@ import {
 } from "../../utils/doom-utils/common";
 import { TextProperties } from "../../inputs/types";
 import { getTextHtml } from "../../export/export-html";
+import { load } from "webfontloader";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -592,10 +593,15 @@ export interface AddObjectAction extends IUndoableAction<true> {
 export function addNewObject(
   layerId: string,
   type: ObjectType,
-  objectProps: Partial<IObject>
+  objectProps: Partial<IObject>,
+  values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const object = createObject(type, objectProps, { text: "Sample test" });
+    console.log(values);
+    const object = createObject(type, objectProps, {
+      ...values,
+      text: "Sample test",
+    });
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
   };
@@ -629,15 +635,30 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
 
 // ****
 // TODO: this is object update middleware!!! move somewhere!!!
-function handleObjectUpdate(object: IObject) {
+function handleObjectUpdate(
+  object: IObject,
+  objectPrevState: IObject,
+  loadedFontFamilies: string[],
+  dispatch: Dispatch
+) {
   switch (object.type) {
     case ObjectType.TEXT: {
-      handleTextUpdate(object);
+      return handleTextUpdate(
+        object,
+        objectPrevState,
+        loadedFontFamilies,
+        dispatch
+      );
     }
   }
 }
 
-function handleTextUpdate(object: IObject) {
+function handleTextUpdate(
+  object: IObject,
+  objectPrevState: IObject,
+  loadedFontFamilies: string[],
+  dispatch: Dispatch
+): boolean {
   const properties = object.definition.properties as TextProperties;
   if (properties.autoHeight.value === true) {
     const html = getTextHtml(object);
@@ -648,8 +669,38 @@ function handleTextUpdate(object: IObject) {
     document.body.appendChild(holder);
     object.height = holder.querySelector("p")?.offsetHeight;
   }
-  return { ...object };
+
+  const newProperties = object.definition.properties as TextProperties;
+  const oldProperties = objectPrevState.definition.properties as TextProperties;
+  const newFont = newProperties.fontFamily.value;
+  const oldFont = oldProperties.fontFamily.value;
+
+  if (newFont !== oldFont) {
+    if (loadedFontFamilies.indexOf(newFont) === -1) {
+      // load font
+      load({
+        google: {
+          families: [newFont],
+        },
+        classes: false,
+        fontloading: (familyName: string, fvd: string) => {},
+        fontinactive: (familyName: string, fvd: string) => {
+          // TODO: loading font error
+          dispatch(_updateObject(object));
+        },
+        fontactive: (familyName: string, fvd: string) => {
+          dispatch(setExternalFontLoaded(familyName));
+          dispatch(_updateObject(object));
+        },
+      });
+
+      return true;
+    }
+  }
+
+  return false;
 }
+
 export const UPDATE_OBJECT = "Update object";
 
 export interface UpdateObjectAction extends IUndoableAction<true> {
@@ -659,8 +710,14 @@ export interface UpdateObjectAction extends IUndoableAction<true> {
 
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    handleObjectUpdate(object);
-    dispatch(_updateObject(object));
+    const skipUpdateObject = handleObjectUpdate(
+      object,
+      getState().project.objects.objectById[object.id],
+      getState().fonts.loadedFontFamilies,
+      dispatch
+    );
+
+    if (!skipUpdateObject) dispatch(_updateObject(object));
   };
 }
 
@@ -904,6 +961,25 @@ export function setStageTool(
 }
 
 // ***
+
+export const EXTERNAL_FONT_LOADED = "External font loaded";
+
+export interface ExternalFontLoadedAction extends IUndoableAction<false> {
+  type: typeof EXTERNAL_FONT_LOADED;
+  payload: string;
+}
+
+export function setExternalFontLoaded(
+  fontFamilyName: string
+): ExternalFontLoadedAction {
+  return {
+    type: EXTERNAL_FONT_LOADED,
+    payload: fontFamilyName,
+    isUndoable: false,
+  };
+}
+
+// ***
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -950,4 +1026,7 @@ export type ActionTypes =
   | SetGlobalConfigurationAction
 
   //tools
-  | SetStageToolAction;
+  | SetStageToolAction
+
+  //external fonts
+  | ExternalFontLoadedAction;

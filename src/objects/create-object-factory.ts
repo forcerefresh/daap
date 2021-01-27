@@ -86,6 +86,14 @@ function createTextObject(initialValue?: {
           value: false,
           defaultValue: false,
         },
+        fontFamily: {
+          displayName: "Font",
+          propertyName: "fontFamily",
+          inputType: InputType.SELECT,
+          value: (initialValue?.fontFamily as string) || "",
+          defaultValue: "",
+          options: "getExternalFonts",
+        },
         color: {
           displayName: "Color",
           propertyName: "color",
@@ -97,7 +105,7 @@ function createTextObject(initialValue?: {
           displayName: "Font size",
           propertyName: "string",
           inputType: InputType.TEXT,
-          value: "14",
+          value: (initialValue?.fontSize as string) || "14",
           defaultValue: "14",
         },
         weight: {

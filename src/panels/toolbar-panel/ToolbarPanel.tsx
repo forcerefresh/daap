@@ -21,12 +21,14 @@ import {
 } from "../../store/actions/actions";
 import HistoryPanel from "../history-panel/HistoryPanel";
 import { StageTools } from "../../store/reducers/stage";
+import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
 
 enum VisiblePanel {
   None = "none",
   Add = "add",
   Settings = "settings",
   History = "history",
+  FontPreview = "font-preview",
 }
 
 const ICON_SIZE = 36;
@@ -73,6 +75,16 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Add && (
               <div ref={sharedRef}>
                 <AddPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestFontPreview={() =>
+                    setShowPanel(VisiblePanel.FontPreview)
+                  }
+                />
+              </div>
+            )}
+            {showPanel === VisiblePanel.FontPreview && (
+              <div ref={sharedRef}>
+                <FontPreviewPanel
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>

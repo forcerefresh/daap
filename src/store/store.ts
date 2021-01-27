@@ -16,6 +16,7 @@ import { ISettings, settings } from "./reducers/settings";
 import initialState from "./initial-state.json";
 import { IDocument, document } from "./reducers/document";
 import { IGlobals, globals } from "./reducers/globals";
+import { IFonts, fonts } from "./reducers/fonts";
 
 export interface IStore {
   project: {
@@ -32,6 +33,7 @@ export interface IStore {
   };
   stage: IStage;
   globals: IGlobals;
+  fonts: IFonts;
 }
 
 const project = diff(
@@ -61,6 +63,7 @@ const rootReducer = combineReducers({
   project,
   stage,
   globals,
+  fonts,
 }) as any;
 
 const logger = (store: any) => (next: any) => (action: any) => {
@@ -72,6 +75,6 @@ const logger = (store: any) => (next: any) => (action: any) => {
 
 export const store = createStore(
   rootReducer,
-  (initialState as unknown) as IStore,
+  // (initialState as unknown) as IStore,
   composeWithDevTools(applyMiddleware(logger, thunk))
 );

@@ -1,4 +1,4 @@
-import { Card, Elevation } from "@blueprintjs/core";
+import { Card, Colors, Elevation, Icon } from "@blueprintjs/core";
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -10,9 +10,11 @@ import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox
 import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefined-text2.svg";
 import { IObject, ObjectType } from "../../objects/types";
 import { StageTools } from "../../store/reducers/stage";
+import { ColorInputForm } from "../../inputs/color-input/color-input";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
+  onRequestFontPreview: () => void;
 }
 
 export type IAddPanelMergedProps = typeof mapDispatchToProps &
@@ -26,6 +28,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     documentSize,
     activeLayerId,
     onRequestClose,
+    onRequestFontPreview,
   } = props;
 
   return (
@@ -73,6 +76,25 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           />
           <h3>DRAW TEXT BOX</h3>
           <p>Draw text box using text tool</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              onRequestFontPreview();
+            }
+          }}
+        >
+          <Icon
+            icon="font"
+            iconSize={36}
+            color="gray"
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>PREVIEW FONT</h3>
+          <p>Add text by choosing font</p>
         </Card>
       </div>
 

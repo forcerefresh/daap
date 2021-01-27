@@ -98,13 +98,14 @@ export interface ISelectInput {
   propertyName: string;
   value: string;
   defaultValue: string | null;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string }[] | string;
 }
 
 // Full form for text
 export interface TextProperties {
   text: ITextAreaInput;
   autoHeight: ICheckboxInput;
+  fontFamily: ISelectInput;
   color: IColorInput;
   fontSize: ITextInput;
   weight: ISelectInput;
