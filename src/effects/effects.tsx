@@ -9,6 +9,10 @@ import {
   kenBurnsDefaults,
   kenBurnsDefinition,
 } from "./ken-burns/ken-burns.definition";
+import {
+  tilesZoomDefaults,
+  tilesZoomDefinition,
+} from "./tiles-zoom/tiles-zoom.definition";
 
 // import all effects
 import "./none/none.effect";
@@ -16,7 +20,7 @@ import "./fade-in/fade-in.effect";
 import "./zoom-in/zoom-in.effect";
 import "./slide-in/slide-in.effect";
 import "./ken-burns/ken-burns.effect";
-
+import "./tiles-zoom/tiles-zoom.effect";
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
   id: string;
@@ -39,6 +43,7 @@ registerEffect(fadeInDefinition, fadeInDefaults);
 registerEffect(zoomInDefinition, zoomInDefaults);
 registerEffect(slideInDefinition, slideInDefaults);
 registerEffect(kenBurnsDefinition, kenBurnsDefaults);
+registerEffect(tilesZoomDefinition, tilesZoomDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
