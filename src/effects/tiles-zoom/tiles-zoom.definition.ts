@@ -7,20 +7,20 @@ export const tilesZoomDefinition = {
   name: "Tiles Zoom",
   form: [
     {
-      displayName: "Tile column",
-      helperText: "Default column value (default 10)",
-      propertyName: "column",
+      displayName: "Columns",
+      helperText: "Number of columns (default 10)",
+      propertyName: "columns",
       inputType: InputType.NUMBER,
     },
     {
-      displayName: "Tile row",
-      helperText: "Default row value (default 10)",
-      propertyName: "row",
+      displayName: "Rows",
+      helperText: "Number of rows (default 10)",
+      propertyName: "rows",
       inputType: InputType.NUMBER,
     },
     {
-      displayName: "From point",
-      propertyName: "pointOfView",
+      displayName: "Start from",
+      propertyName: "startFrom",
       inputType: InputType.SELECT,
       options: [
         { label: "Random", value: "random" },
@@ -50,10 +50,10 @@ export const tilesZoomDefaults: ITilesZoomEffect = {
   hasDelay: true,
   hasDuration: true,
   hasEasing: true,
-  row: 10,
-  column: 10,
+  rows: 10,
+  columns: 10,
   transformOrigin: { x: 50, y: 50 },
-  pointOfView: "random",
+  startFrom: "random",
   easing: Easings.Power0,
   customEasing: null,
 };

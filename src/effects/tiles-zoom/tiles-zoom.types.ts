@@ -3,13 +3,13 @@ import { IEffectBase } from "../types";
 export const tilesZoom = "tilesZoom";
 
 export interface ITilesZoomEffect extends IEffectBase {
-  row: number;
-  column: number;
+  rows: number;
+  columns: number;
   transformOrigin: {
     x: number;
     y: number;
   };
-  pointOfView:
+  startFrom:
     | "random"
     | "center"
     | "horizontal-center"

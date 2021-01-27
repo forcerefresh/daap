@@ -1,111 +1,119 @@
 import gsap from "gsap";
 import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
-import * as _ from "lodash";
+import { merge } from "lodash";
 
 gsap.registerEffect({
   name: tilesZoom,
   effect: function (targets: any, config: ITilesZoomEffect) {
-    gsap.set(targets, {
-      column: config.column,
-      row: config.row,
-      transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
-    });
+    // cemu sluzi funkcija set?
+    //gsap.set(targets, {
+    //column: config.columns, /// << cemu sluzi ovo ?
+    //row: config.rows, /// << cemu sluzi ovo ?
+    // transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`, /// << cemu sluzi ovo?
+    //});
 
+    // TODO: remove hardcoded
     const url = "http://macloo.com/images/inidisini/domba/IMG_4507.jpg";
     const size = { w: 600, h: 366 };
-    const photoGrid = { r: config.row, c: config.column };
+    const photoGrid = { r: config.rows, c: config.columns };
 
     const elements = createTiles(url, size, photoGrid);
-
     elements.forEach((element) => {
       targets[0].appendChild(element);
     });
 
-    const conf = getParameters(config.row, config.column, config.pointOfView);
-
-    var effectConfiguration = {
+    // 1. common config
+    var baseConfig = {
       duration: config.duration! / 2,
       scale: 0,
       ease: "power1.inOut",
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
-      ...conf.root,
       stagger: {
         amount: config.duration! / 2,
-        grid: [config.row, config.column],
+        grid: [config.rows, config.columns],
         ease: "none",
-        ...conf.root.stagger,
       },
     };
 
-    return gsap.from(elements, { ...(effectConfiguration as any) });
+    // 2. specific config for effect variation
+    const partialConfig = getParameters(
+      config.rows,
+      config.columns,
+      config.startFrom
+    );
+
+    // 3. merge common and specific config
+    return gsap.from(elements, merge(baseConfig, partialConfig) as any);
   },
   defaults: {},
   extendTimeline: true,
 });
 
-function getParameters(row: number, column: number, pointOfView: string) {
-  var conf = {
-    root: {
-      stagger: {
-        from: "",
-        axis: "",
-      },
-    },
-  };
-
-  switch (pointOfView) {
+function getParameters(rows: number, columns: number, startFrom: string) {
+  switch (startFrom) {
     case "random":
-      conf.root.stagger = _.merge(conf.root.stagger, { from: "random" });
-      break;
+      return { stagger: { from: "random" } };
+    case "center":
+      return {
+        stagger: {
+          from: "center",
+        },
+      };
     case "horizontal-center":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: "center",
-        axis: "y",
-      });
-      break;
+      return {
+        stagger: {
+          from: "center",
+          axis: "y",
+        },
+      };
     case "vertical-center":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: "center",
-        axis: "x",
-      });
-      break;
+      return {
+        stagger: {
+          from: "center",
+          axis: "x",
+        },
+      };
     case "edges":
-      conf.root.stagger = _.merge(conf.root.stagger, { from: "edges" });
-      break;
+      return { stagger: { from: "edges" } };
     case "horizontal-edges":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: "edges",
-        axis: "y",
-      });
-      break;
+      return {
+        stagger: {
+          from: "edges",
+          axis: "y",
+        },
+      };
     case "vertical-edges":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: "edges",
-        axis: "x",
-      });
-      break;
+      return {
+        stagger: {
+          from: "edges",
+          axis: "x",
+        },
+      };
     case "top-left":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: "0",
-      });
-      break;
+      return {
+        stagger: {
+          from: "0",
+        },
+      };
     case "top-right":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: `${column - 1}`,
-      });
-      break;
+      return {
+        stagger: {
+          from: `${columns - 1}`,
+        },
+      };
     case "bottom-left":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: `${column * (row - 1)}`,
-      });
-      break;
+      return {
+        stagger: {
+          from: `${columns * (rows - 1)}`,
+        },
+      };
     case "bottom-right":
-      conf.root.stagger = _.merge(conf.root.stagger, {
-        from: `${column * row - 1}`,
-      });
-      break;
+      return {
+        stagger: {
+          from: `${columns * rows - 1}`,
+        },
+      };
   }
-  return conf;
 }
 
 function createTiles(
