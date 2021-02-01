@@ -115,7 +115,7 @@ export function getTextHtml(object: IObject) {
   //const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
   let style = "";
-  style += "font-family: " + textProperties.fontFamily.value + ";";
+  style += "font-family: " + textProperties.font.value.fontFamily + ";";
   style += "font-size: " + textProperties.fontSize.value + "px;";
   const c = textProperties.color.value;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;

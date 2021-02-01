@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { jump } from "../../3rd-party-libs/undo-redo/actions";
 
-import { differenceWith, isEqual } from "lodash-es";
+import { delay, differenceWith, isEqual, once } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import { createObject } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
@@ -637,28 +637,26 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
 // TODO: this is object update middleware!!! move somewhere!!!
 function handleObjectUpdate(
   object: IObject,
-  objectPrevState: IObject,
-  loadedFontFamilies: string[],
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  getState: () => IStore
 ) {
   switch (object.type) {
     case ObjectType.TEXT: {
-      return handleTextUpdate(
-        object,
-        objectPrevState,
-        loadedFontFamilies,
-        dispatch
-      );
+      handleTextUpdate(object, dispatch, getState);
+      break;
+    }
+    default: {
+      dispatch(_updateObject(object));
     }
   }
 }
 
 function handleTextUpdate(
   object: IObject,
-  objectPrevState: IObject,
-  loadedFontFamilies: string[],
-  dispatch: Dispatch
-): boolean {
+  dispatch: Dispatch,
+  getState: () => IStore
+): void {
+  // * handle auto height
   const properties = object.definition.properties as TextProperties;
   if (properties.autoHeight.value === true) {
     const html = getTextHtml(object);
@@ -670,35 +668,48 @@ function handleTextUpdate(
     object.height = holder.querySelector("p")?.offsetHeight;
   }
 
+  // * handle font loading
+  const objectPrevState = getState().project.objects.objectById[object.id];
+  const { loadedFontFamilies } = getState().fonts;
+
   const newProperties = object.definition.properties as TextProperties;
   const oldProperties = objectPrevState.definition.properties as TextProperties;
-  const newFont = newProperties.fontFamily.value;
-  const oldFont = oldProperties.fontFamily.value;
+  const newFont = newProperties.font.value.fontFamily;
+  const oldFont = oldProperties.font.value.fontFamily;
 
-  if (newFont !== oldFont) {
-    if (loadedFontFamilies.indexOf(newFont) === -1) {
-      // load font
-      load({
-        google: {
-          families: [newFont],
-        },
-        classes: false,
-        fontloading: (familyName: string, fvd: string) => {},
-        fontinactive: (familyName: string, fvd: string) => {
-          // TODO: loading font error
-          dispatch(_updateObject(object));
-        },
-        fontactive: (familyName: string, fvd: string) => {
-          dispatch(setExternalFontLoaded(familyName));
-          dispatch(_updateObject(object));
-        },
-      });
+  // NOTE: update object once. update either after font is loaded or after 500ms
+  const updateObjectOnce = once(() => {
+    console.log("UPDATE!!!! ONCE");
+    dispatch(_updateObject(object));
+  });
 
-      return true;
-    }
+  // NOTE: check if we need to load fonts
+  if (
+    newProperties.font.value.source !== "system" &&
+    newFont !== oldFont &&
+    loadedFontFamilies.indexOf(newFont) === -1
+  ) {
+    delay(updateObjectOnce, 500);
+    // load font
+    load({
+      google: {
+        families: [newFont],
+      },
+      classes: false,
+      fontloading: (familyName: string, fvd: string) => {},
+      fontinactive: (familyName: string, fvd: string) => {
+        // TODO: loading font error
+        updateObjectOnce();
+      },
+      fontactive: (familyName: string, fvd: string) => {
+        console.log("ACTIVATE FONT");
+        dispatch(setExternalFontLoaded(familyName));
+        updateObjectOnce();
+      },
+    });
+  } else {
+    updateObjectOnce();
   }
-
-  return false;
 }
 
 export const UPDATE_OBJECT = "Update object";
@@ -710,6 +721,8 @@ export interface UpdateObjectAction extends IUndoableAction<true> {
 
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    handleObjectUpdate(object, dispatch, getState);
+    /*
     const skipUpdateObject = handleObjectUpdate(
       object,
       getState().project.objects.objectById[object.id],
@@ -717,7 +730,7 @@ export function updateObject(object: IObject): any {
       dispatch
     );
 
-    if (!skipUpdateObject) dispatch(_updateObject(object));
+    if (!skipUpdateObject) dispatch(_updateObject(object));*/
   };
 }
 

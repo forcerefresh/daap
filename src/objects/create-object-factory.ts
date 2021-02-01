@@ -1,6 +1,11 @@
 import { forEach, forIn } from "lodash-es";
 import { v4 as uuid } from "uuid";
-import { ImageProperties, InputType, TextProperties } from "../inputs/types";
+import {
+  IFontSelectInputValue,
+  ImageProperties,
+  InputType,
+  TextProperties,
+} from "../inputs/types";
 import { ICommonObjectProperties, IObject, ObjectType } from "./types";
 
 /**
@@ -62,7 +67,7 @@ function createCommonObject(
 }
 
 function createTextObject(initialValue?: {
-  [key: string]: string;
+  [key: string]: any;
 }): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.TEXT);
 
@@ -86,13 +91,18 @@ function createTextObject(initialValue?: {
           value: false,
           defaultValue: false,
         },
-        fontFamily: {
+        font: {
           displayName: "Font",
           propertyName: "fontFamily",
-          inputType: InputType.SELECT,
-          value: (initialValue?.fontFamily as string) || "",
-          defaultValue: "",
-          options: "getExternalFonts",
+          inputType: InputType.FONT_SELECT,
+          value: (initialValue?.font as IFontSelectInputValue) || {
+            fontFamily: "Arial",
+            source: "system-fonts",
+          },
+          defaultValue: {
+            fontFamily: "Arial",
+            source: "system-fonts",
+          },
         },
         color: {
           displayName: "Color",

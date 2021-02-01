@@ -10,11 +10,17 @@ export enum InputType {
   TRANSFORM = "transform",
   IMAGE = "image",
   CHECKBOX = "checkbox",
+  FONT_SELECT = "font_select",
 }
 
 export interface IUpdateInput {
   onChange: (
-    config: RGBColor | { x: number; y: number } | string | number
+    config:
+      | RGBColor
+      | { x: number; y: number }
+      | IFontSelectInputValue
+      | string
+      | number
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -98,14 +104,31 @@ export interface ISelectInput {
   propertyName: string;
   value: string;
   defaultValue: string | null;
-  options: { value: string; label: string }[] | string;
+  options: { value: string; label: string }[];
+}
+
+export interface IFontSelectInputValue {
+  fontFamily: string;
+  source: "system-fonts" | "google-fonts" | string;
+}
+export interface IFontSelectInputOption {
+  value: IFontSelectInputValue;
+  label: string;
+}
+export interface IFontSelectInput {
+  inputType: InputType.FONT_SELECT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: IFontSelectInputValue;
+  defaultValue: IFontSelectInputValue;
 }
 
 // Full form for text
 export interface TextProperties {
   text: ITextAreaInput;
   autoHeight: ICheckboxInput;
-  fontFamily: ISelectInput;
+  font: IFontSelectInput;
   color: IColorInput;
   fontSize: ITextInput;
   weight: ISelectInput;

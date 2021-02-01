@@ -1,6 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash-es";
-import { FormGroup } from "@blueprintjs/core";
+import { FormGroup, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "../types";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
@@ -63,22 +63,23 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   return (
     <FormGroup label={displayName} labelFor="color-input" inline>
-      <div
-        id="color-input"
-        className={css.swatch}
-        onClick={handleClick}
-        tabIndex={1}
-      >
-        <div className={css.color} style={style} />
-      </div>
-      {state.displayColorPicker ? (
+      <Popover position="top" isOpen={state.displayColorPicker}>
+        <div
+          id="color-input"
+          className={css.swatch}
+          onClick={handleClick}
+          tabIndex={1}
+        >
+          <div className={css.color} style={style} />
+        </div>
+
         <div className={css.popover}>
           <div className={css.cover} onClick={handleClose} />
           <div>
             <SketchPicker color={state.color} onChange={handleChange} />
           </div>
         </div>
-      ) : null}
+      </Popover>
     </FormGroup>
   );
 };

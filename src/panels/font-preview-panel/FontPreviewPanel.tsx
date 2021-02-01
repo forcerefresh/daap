@@ -16,12 +16,13 @@ import { indexOf } from "lodash-es";
 import { getGlobals } from "../../globals";
 
 enum FontSections {
-  SystemFonts = "system",
-  GoogleFonts = "google",
+  SystemFonts = "system-fonts",
+  GoogleFonts = "google-fonts",
 }
 
 interface IFontPreview {
   fontFamily: string;
+  source: "system-fonts" | "google-fonts" | string;
 }
 
 interface IFontPreviewPanelProps {
@@ -64,43 +65,45 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
   useEffect(() => {
     if (!selectedFont) return;
 
-    // if font is already loaded, do not load again
-    if (loadedFontFamilies.indexOf(selectedFont?.fontFamily) !== -1) {
+    // NOTE: if font is system or already loaded do not load
+    if (
+      selectedFont.source === "system-fonts" ||
+      loadedFontFamilies.indexOf(selectedFont?.fontFamily) !== -1
+    ) {
       setPreviewFont(selectedFont);
       return;
     }
 
-    // load font
-    load({
-      google: {
-        families: [selectedFont?.fontFamily],
-      },
-      classes: false,
-      fontloading: (familyName: string, fvd: string) => {
-        console.log(familyName);
-        console.log(fvd);
-      },
-      fontactive: (familyName: string, fvd: string) => {
-        setPreviewFont({ fontFamily: familyName });
-        _setExternalFontLoaded(familyName);
-      },
-    });
+    // load font closure
+    function loadFont(_selectedFont: IFontPreview) {
+      load({
+        google: {
+          families: [_selectedFont?.fontFamily],
+        },
+        classes: false,
+        fontloading: (familyName: string, fvd: string) => {
+          console.log(familyName);
+          console.log(fvd);
+        },
+        fontactive: (familyName: string, fvd: string) => {
+          setPreviewFont(_selectedFont);
+          _setExternalFontLoaded(_selectedFont.fontFamily);
+        },
+      });
+    }
+
+    loadFont({ ...selectedFont });
   }, [selectedFont]);
 
   const googleFonts: IFontPreview[] = getGlobals()
-    .getExternalFonts()
-    .map((fontName) => ({ fontFamily: fontName }));
+    .getFonts()
+    .filter((font) => font.source === "google-fonts")
+    .sort();
 
-  const systemFonts: IFontPreview[] = [
-    "Times New Roman",
-    "Courier New",
-    "Courier",
-    "Verdana",
-    "Georgia",
-    "Tahoma",
-  ]
-    .sort()
-    .map((fontName) => ({ fontFamily: fontName }));
+  const systemFonts: IFontPreview[] = getGlobals()
+    .getFonts()
+    .filter((font) => font.source === "system-fonts")
+    .sort();
 
   const previewSizes = [
     { size: 45 },
@@ -216,7 +219,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                     height: documentSize.height / 2,
                   },
                   {
-                    fontFamily: previewFont?.fontFamily!,
+                    font: previewFont!,
                     fontSize: previewSize.size.toString(),
                   }
                 );
@@ -252,7 +255,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: ObjectType,
     objectProps: Partial<IObject>,
-    values: { [key: string]: string }
+    values: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
   _setExternalFontLoaded: (fontFamilyName: string) =>
     setExternalFontLoaded(fontFamilyName),

@@ -1,6 +1,7 @@
 import React from "react";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
+import { FontSelectInputForm } from "./font-input/font-input";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { SelectInputForm } from "./select-input/select-input";
@@ -52,6 +53,11 @@ export function getInputForm<T>(
     }
     case InputType.SELECT: {
       return <SelectInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.FONT_SELECT: {
+      return (
+        <FontSelectInputForm key={key} {...inputProps} onChange={onChange} />
+      );
     }
     case InputType.TRANSFORM: {
       return (

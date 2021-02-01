@@ -1,8 +1,10 @@
+import { getFonts } from "./utils/fonts/fonts";
 import { getGoogleFontList } from "./utils/fonts/google-fonts";
 
 export interface IGlobals {
   WebSlider_GlogalScope: {
     getExternalFonts: () => string[];
+    getFonts: () => { fontFamily: string; source: string }[];
   };
 }
 
@@ -12,6 +14,7 @@ export function getGlobals() {
 
 const WebSlider_GlogalScope = {
   getExternalFonts: getGoogleFontList,
+  getFonts: getFonts,
 };
 
 const globals = (window as any) as IGlobals;
