@@ -3,17 +3,18 @@ import { IEffectBase } from "../types";
 export const tilesFade = "tilesFade";
 
 export interface ITilesFadeEffect extends IEffectBase {
-  row: number;
-  column: number;
-  transformOrigin: {
-    x: number;
-    y: number;
-  };
-  pointOfView:
+  rows: number;
+  columns: number;
+  startFrom:
     | "random"
     | "center"
     | "horizontal-center"
     | "vertical-center"
     | "edges"
-    | "end";
+    | "horizontal-edges"
+    | "vertical-edges"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
 }
