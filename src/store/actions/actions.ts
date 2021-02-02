@@ -604,6 +604,7 @@ export function addNewObject(
     });
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
+    dispatch(selectObjects([object.id]));
   };
 }
 

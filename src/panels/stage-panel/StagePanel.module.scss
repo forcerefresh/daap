@@ -97,3 +97,12 @@
 .drawCursor {
   cursor: crosshair;
 }
+
+.resizeHandle {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #48aff0;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+}

@@ -88,6 +88,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // ref for updating selection box
   const selectionBoxRef = useRef<HTMLDivElement | null>(null);
 
+  // ref for resizing object
+  const resizingObjectRef = useRef<HTMLDivElement | null>(null);
+
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
@@ -96,8 +99,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     x: number;
     y: number;
   } | null>(null);
-
-  const [delta, setDelta] = useState({ x: 0, y: 0 });
+  const [selRectDelta, setSelRectDelta] = useState({ x: 0, y: 0 });
 
   // use form PAN tool
   const [panMove, setPanMove] = useState({
@@ -109,13 +111,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     y: 0,
   });
 
+  // Resize state
+  const [resizeStartPosition, setResizeStartPosition] = useState<{
+    x: number;
+    y: number;
+    corner: string;
+  } | null>(null);
+  const [resizeRectDelta, resizeSelRectDelta] = useState({ x: 0, y: 0 });
+
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = cloneDeep(objectById);
   // 2. apply only delta to selected objects only
   selectedObjectIds.forEach((objectId) => {
     if (!objectByIdLocal[objectId].isLocked) {
-      objectByIdLocal[objectId].left! += delta.x;
-      objectByIdLocal[objectId].top! += delta.y;
+      objectByIdLocal[objectId].left! += selRectDelta.x;
+      objectByIdLocal[objectId].top! += selRectDelta.y;
     }
   });
 
@@ -257,6 +267,71 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   };
 
+  function renderObjectHandles(object: IObject) {
+    const objectId = object.id;
+    const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+    if (!isSelected) return null;
+
+    const sizeObj = pick(object, "left", "top", "width", "height");
+    const topLeftStyle: any = {
+      left: sizeObj.left! - 4 + "px",
+      top: sizeObj.top! - 4 + "px",
+      cursor: "nwse-resize",
+    };
+    const topRightStyle: any = {
+      left: sizeObj.left! - 4 + sizeObj.width! + "px",
+      top: sizeObj.top! - 4 + "px",
+      cursor: "nesw-resize",
+    };
+    const bottomLeftStyle: any = {
+      left: sizeObj.left! - 4 + "px",
+      top: sizeObj.top! - 4 + sizeObj.height! + "px",
+      cursor: "nesw-resize",
+    };
+    const bottomRightStyle: any = {
+      left: sizeObj.left! - 4 + sizeObj.width! + "px",
+      top: sizeObj.top! - 4 + sizeObj.height! + "px",
+      cursor: "nwse-resize",
+    };
+    return (
+      <>
+        <div
+          style={topLeftStyle}
+          className={cx(css.resizeHandle, "resizeHandle")}
+          onMouseDown={(e: React.MouseEvent) => {
+            //e.stopPropagation();
+            //setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
+          }}
+          onMouseMove={(e) => {
+            /*e.persist();
+            e.stopPropagation();
+            if (resizeStartPosition != null) {
+              const point = getMousePosition(e);
+
+              const rect = getRectFromPoints(resizeStartPosition, point);
+              console.log(rect);
+              //rect.x -= stageXOffset;
+              //rect.y -= stageYOffset;
+              //applyRectValuesToElement(selectionBoxRef?.current, rect);
+            }*/
+          }}
+          onMouseUp={() => {}}
+        ></div>
+        <div
+          style={topRightStyle}
+          className={cx(css.resizeHandle, "resizeHandle")}
+        ></div>
+        <div
+          style={bottomLeftStyle}
+          className={cx(css.resizeHandle, "resizeHandle")}
+        ></div>
+        <div
+          style={bottomRightStyle}
+          className={cx(css.resizeHandle, "resizeHandle")}
+        ></div>
+      </>
+    );
+  }
   function renderObject(object: IObject) {
     const objectId = object.id;
     const sizeObj = pick(object, "left", "top", "width", "height");
@@ -328,7 +403,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           }
 
           setSelectionStartPosition(null);
-          setDelta((_delta) => ({
+          setSelRectDelta((_delta) => ({
             x: Math.round(_delta.x + data.deltaX),
             y: Math.round(_delta.y + data.deltaY),
           }));
@@ -347,7 +422,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             onObjectClick(evt as any, objectId);
           } else {
             // reset delta
-            setDelta({ x: 0, y: 0 });
+            setSelRectDelta({ x: 0, y: 0 });
             // update objects
             selectedObjectIds.forEach((objectId) => {
               if (!objectByIdLocal[objectId].isLocked) {
@@ -407,6 +482,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         [css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
       onMouseDown={(e: React.MouseEvent) => {
+        const target = e.target as HTMLElement;
+        if (target.className.indexOf("resizeHandle") !== -1) {
+          e.stopPropagation();
+          setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
+          return;
+        }
+
         if (stageToolInternal === StageTools.PAN) {
           setPanMoveStart({
             x: panMoveStart.x + panMove.x,
@@ -439,9 +521,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             const panMoveNew = getPointsDiff(selectionStartPosition, point);
             setPanMove({ ...panMove, ...panMoveNew });
           }
+        } else if (resizeStartPosition != null) {
+          const point = getMousePosition(e);
+          const movePoint = getPointsDiff(resizeStartPosition, point);
+          console.log(movePoint);
+          //applyRectValuesToElement(selectionBoxRef?.current, rect);
+
+          //rect.x -= stageXOffset;
+          //rect.y -= stageYOffset;
+          //applyRectValuesToElement(selectionBoxRef?.current, rect);
         }
       }}
       onMouseUp={(e) => {
+        if (resizeStartPosition != null) {
+          setResizeStartPosition(null);
+          return;
+        }
+
         if (stageToolInternal === StageTools.PAN) {
           //console.log({ ...panMoveStart });
 
@@ -515,9 +611,19 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               });
             })}
         </div>
+        <div className="resizeHolder">
+          {!isPreview &&
+            layerArr?.map((layer) => {
+              return layer.objectIds.map((objectId) => {
+                const object = objectByIdLocal[objectId];
+                return renderObjectHandles(object);
+              });
+            })}
+        </div>
       </div>
-      stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
-      viewPortSize: {viewPortSize.width}x {viewPortSize.height}
+
+      {/*stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
+      viewPortSize: {viewPortSize.width}x {viewPortSize.height}*/}
     </div>
   );
 };
