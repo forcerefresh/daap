@@ -32,8 +32,6 @@ function MainLayout(props: IMainLayoutMergedProps) {
     layoutStaticEffectsPanel,
   } = props;
 
-  console.log(layoutType);
-
   switch (layoutType) {
     case "default-layers": {
       return (

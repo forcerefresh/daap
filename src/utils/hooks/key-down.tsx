@@ -8,7 +8,6 @@ export function useKeyDown() {
   // If pressed key is our target key then set to true
   function downHandler(evt: KeyboardEvent) {
     const code = evt.code;
-    console.log(code);
     if (code === "ControlLeft") {
       setCtrlDown(true);
     }

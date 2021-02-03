@@ -90,6 +90,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   // ref for resizing object
   const resizingObjectRef = useRef<HTMLDivElement | null>(null);
+  const resizingSelectionRef = useRef<HTMLDivElement | null>(null);
 
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
@@ -117,7 +118,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     y: number;
     corner: string;
   } | null>(null);
-  const [resizeRectDelta, resizeSelRectDelta] = useState({ x: 0, y: 0 });
+  const [resizeRect, setResizeRect] = useState<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  } | null>(null);
 
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = cloneDeep(objectById);
@@ -181,7 +187,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (!isEmpty(transitionsDataArr)) {
       tl.clear();
 
-      console.log(slide?.duration?.customValue);
       // TODO: hack to get timeline duration to be set to slide duration
       tl.from(".fake-non-existing-selektor", {
         duration: (slide?.duration?.customValue || 1) / 1000,
@@ -267,6 +272,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   };
 
+  const [resizeData, setResizeData] = useState<{
+    objectId: string;
+    handle: string;
+  } | null>(null);
+
   function renderObjectHandles(object: IObject) {
     const objectId = object.id;
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
@@ -293,41 +303,41 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       top: sizeObj.top! - 4 + sizeObj.height! + "px",
       cursor: "nwse-resize",
     };
+
     return (
       <>
         <div
           style={topLeftStyle}
+          data-resize-handle-tl={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
           onMouseDown={(e: React.MouseEvent) => {
-            //e.stopPropagation();
-            //setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
+            setResizeData({ objectId: object.id, handle: "tl" });
           }}
-          onMouseMove={(e) => {
-            /*e.persist();
-            e.stopPropagation();
-            if (resizeStartPosition != null) {
-              const point = getMousePosition(e);
-
-              const rect = getRectFromPoints(resizeStartPosition, point);
-              console.log(rect);
-              //rect.x -= stageXOffset;
-              //rect.y -= stageYOffset;
-              //applyRectValuesToElement(selectionBoxRef?.current, rect);
-            }*/
-          }}
-          onMouseUp={() => {}}
         ></div>
         <div
           style={topRightStyle}
+          data-resize-handle-tr={object.id}
+          data-resize-handle="tr"
           className={cx(css.resizeHandle, "resizeHandle")}
+          onMouseDown={(e: React.MouseEvent) => {
+            setResizeData({ objectId: object.id, handle: "tr" });
+          }}
         ></div>
         <div
           style={bottomLeftStyle}
+          data-resize-handle-bl={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
+          onMouseDown={(e: React.MouseEvent) => {
+            setResizeData({ objectId: object.id, handle: "bl" });
+          }}
         ></div>
         <div
           style={bottomRightStyle}
+          data-resize-handle-br={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
+          onMouseDown={(e: React.MouseEvent) => {
+            setResizeData({ objectId: object.id, handle: "br" });
+          }}
         ></div>
       </>
     );
@@ -382,7 +392,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       <Draggable
         disabled={stageToolInternal !== StageTools.SELECT}
         key={objectId + "_drag"}
-        position={{ x: object.left!, y: object.top! }}
+        position={
+          resizeRect && resizeData?.objectId === object.id
+            ? resizeRect
+            : { x: object.left!, y: object.top! }
+        }
         // workaround to prevent move when object is locked
         grid={object.isLocked ? [10000000, 10000000] : [1, 1]}
         scale={1 * stageZoom}
@@ -433,6 +447,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         }}
       >
         <div
+          data-draggable-object-id={object.id}
           //onMouseUp={(e) => e.stopPropagation()}
           style={{ zIndex: 500 + objectCounter, position: "absolute" }}
           className={cx({
@@ -440,6 +455,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           })}
         >
           <div
+            ref={resizingObjectRef}
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
               __html: getObjectHtml(object),
@@ -450,6 +466,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             })}
           />
           <div
+            ref={resizingSelectionRef}
             key={object.id}
             className={cx(css.selection, css[object.type], {
               [css.active]:
@@ -511,6 +528,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             stageToolInternal === StageTools.DRAW
           ) {
             const rect = getRectFromPoints(selectionStartPosition, point);
+            // console.log(rect);
             //rect.x -= stageXOffset;
             //rect.y -= stageYOffset;
             applyRectValuesToElement(selectionBoxRef?.current, rect);
@@ -521,20 +539,124 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             const panMoveNew = getPointsDiff(selectionStartPosition, point);
             setPanMove({ ...panMove, ...panMoveNew });
           }
-        } else if (resizeStartPosition != null) {
+        } else if (resizeStartPosition != null && resizeData) {
           const point = getMousePosition(e);
           const movePoint = getPointsDiff(resizeStartPosition, point);
-          console.log(movePoint);
-          //applyRectValuesToElement(selectionBoxRef?.current, rect);
 
-          //rect.x -= stageXOffset;
-          //rect.y -= stageYOffset;
-          //applyRectValuesToElement(selectionBoxRef?.current, rect);
+          const obj = objectById[resizeData.objectId];
+          const objectRect = {
+            x: obj.left!,
+            y: obj.top!,
+            w: obj.width!,
+            h: obj.height!,
+          };
+          switch (resizeData.handle) {
+            case "tl": {
+              movePoint.x = Math.min(movePoint.x, objectRect.w);
+              movePoint.y = Math.min(movePoint.y, objectRect.h);
+
+              objectRect.x += movePoint.x!;
+              objectRect.y += movePoint.y!;
+              objectRect.w -= movePoint.x!;
+              objectRect.h -= movePoint.y!;
+              break;
+            }
+            case "bl": {
+              movePoint.x = Math.min(movePoint.x, objectRect.w);
+              movePoint.y = Math.max(movePoint.y, -objectRect.h);
+
+              objectRect.x += movePoint.x!;
+              //objectRect.y += movePoint.y!;
+              objectRect.w -= movePoint.x!;
+              objectRect.h += movePoint.y!;
+              break;
+            }
+            case "br": {
+              movePoint.x = Math.max(movePoint.x, -objectRect.w);
+              movePoint.y = Math.max(movePoint.y, -objectRect.h);
+              //objectRect.x += movePoint.x!;
+              //objectRect.y += movePoint.y!;
+              objectRect.w += movePoint.x!;
+              objectRect.h += movePoint.y!;
+              break;
+            }
+            case "tr": {
+              movePoint.x = Math.max(movePoint.x, -objectRect.w);
+              movePoint.y = Math.min(movePoint.y, objectRect.h);
+              //objectRect.x += movePoint.x!;
+              objectRect.y += movePoint.y!;
+              objectRect.w += movePoint.x!;
+              objectRect.h -= movePoint.y!;
+              break;
+            }
+          }
+
+          // br handle
+          const brHandle = document.querySelector(
+            "[data-resize-handle-br='" + obj.id + "']"
+          ) as HTMLDivElement;
+          brHandle.style.left = objectRect.x! - 4 + objectRect.w! + "px";
+          brHandle.style.top = objectRect.y! - 4 + objectRect.h! + "px";
+
+          // bl handle
+          const blHandle = document.querySelector(
+            "[data-resize-handle-bl='" + obj.id + "']"
+          ) as HTMLDivElement;
+          blHandle.style.left = objectRect.x! - 4 + "px";
+          blHandle.style.top = objectRect.y! - 4 + objectRect.h! + "px";
+
+          // tl handle
+          const tlHandle = document.querySelector(
+            "[data-resize-handle-tl='" + obj.id + "']"
+          ) as HTMLDivElement;
+          tlHandle.style.left = objectRect.x! - 4 + "px";
+          tlHandle.style.top = objectRect.y! - 4 + "px";
+
+          // tr handle
+          const trHandle = document.querySelector(
+            "[data-resize-handle-tr='" + obj.id + "']"
+          ) as HTMLDivElement;
+          trHandle.style.left = objectRect.x! - 4 + objectRect.w! + "px";
+          trHandle.style.top = objectRect.y! - 4 + "px";
+
+          // position
+          setResizeRect(objectRect);
+
+          // w and h
+          const el = document.querySelector(
+            "[data-draggable-object-id='" + obj.id + "']"
+          ) as HTMLDivElement;
+          applyRectValuesToElement(
+            el.childNodes[0] as any /*resizingObjectRef?.current*/,
+            {
+              ...pick(objectRect, "w", "h"),
+              x: 0,
+              y: 0,
+            }
+          );
+          applyRectValuesToElement(
+            el.childNodes[1] as any /*resizingSelectionRef?.current*/,
+            {
+              ...pick(objectRect, "w", "h"),
+              x: 0,
+              y: 0,
+            }
+          );
         }
       }}
       onMouseUp={(e) => {
-        if (resizeStartPosition != null) {
+        if (resizeStartPosition !== null && resizeData !== null) {
+          const obj = { ...objectById[resizeData?.objectId!] };
+          obj.left! = resizeRect?.x!;
+          obj.top! = resizeRect?.y!;
+          obj.width! = resizeRect?.w!;
+          obj.height! = resizeRect?.h!;
+
+          _updateObject(obj);
+
           setResizeStartPosition(null);
+          setResizeRect(null);
+
           return;
         }
 

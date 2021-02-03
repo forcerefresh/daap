@@ -597,7 +597,6 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    console.log(values);
     const object = createObject(type, objectProps, {
       ...values,
       text: "Sample test",
@@ -680,7 +679,6 @@ function handleTextUpdate(
 
   // NOTE: update object once. update either after font is loaded or after 500ms
   const updateObjectOnce = once(() => {
-    console.log("UPDATE!!!! ONCE");
     dispatch(_updateObject(object));
   });
 
@@ -703,7 +701,6 @@ function handleTextUpdate(
         updateObjectOnce();
       },
       fontactive: (familyName: string, fvd: string) => {
-        console.log("ACTIVATE FONT");
         dispatch(setExternalFontLoaded(familyName));
         updateObjectOnce();
       },

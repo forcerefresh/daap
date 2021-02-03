@@ -1,12 +1,26 @@
 import { FormGroup, InputGroup, Intent, TextArea } from "@blueprintjs/core";
-import { noop } from "lodash-es";
-import React from "react";
+import { debounce, noop, throttle } from "lodash-es";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ITextAreaInput, IUpdateInput } from "../types";
 
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onChange = noop, onInput = noop } = props;
+  const { displayName, value, onInput = noop } = props;
+
+  const throttledOnChange = useCallback(
+    debounce((value: any) => onInput(value), 500),
+    [onInput]
+  );
+
+  const [localValue, setLocalValue] = useState(value);
+
+  useEffect(() => {
+    if (localValue !== value) {
+      setLocalValue(value);
+    }
+  }, [value]);
+
   return (
     <FormGroup label={displayName} labelFor="textarea-input">
       <TextArea
@@ -14,9 +28,15 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
         growVertically={true}
         rows={5}
         fill
-        value={value}
-        onChange={(event: any) => onChange(event.target.value)}
-        onInput={(event: any) => onInput(event.target.value)}
+        value={localValue}
+        onChange={(event: any) => {
+          setLocalValue(event.target.value);
+          throttledOnChange(event.target.value);
+        }}
+        onInput={(event: any) => {
+          setLocalValue(event.target.value);
+          throttledOnChange(event.target.value);
+        }}
       />
     </FormGroup>
   );

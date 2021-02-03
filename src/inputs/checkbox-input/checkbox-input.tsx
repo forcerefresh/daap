@@ -13,7 +13,6 @@ export const CheckboxInputForm: React.FC<ICheckboxInput & IUpdateInput> = (
         id="checkbox-input"
         checked={value}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          console.log(event.target.checked);
           onChange(event.target.checked);
         }}
       />
