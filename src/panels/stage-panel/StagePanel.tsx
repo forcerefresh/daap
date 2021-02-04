@@ -318,23 +318,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     const sizeObj = pick(object, "left", "top", "width", "height");
     const topLeftStyle: any = {
-      left: sizeObj.left! - 4 + "px",
-      top: sizeObj.top! - 4 + "px",
+      left: sizeObj.left! * stageZoom - 4 + "px",
+      top: sizeObj.top! * stageZoom - 4 + "px",
       cursor: "nwse-resize",
     };
     const topRightStyle: any = {
-      left: sizeObj.left! - 4 + sizeObj.width! + "px",
-      top: sizeObj.top! - 4 + "px",
+      left: sizeObj.left! * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
+      top: sizeObj.top! * stageZoom - 4 + "px",
       cursor: "nesw-resize",
     };
     const bottomLeftStyle: any = {
-      left: sizeObj.left! - 4 + "px",
-      top: sizeObj.top! - 4 + sizeObj.height! + "px",
+      left: sizeObj.left! * stageZoom - 4 + "px",
+      top: sizeObj.top! * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nesw-resize",
     };
     const bottomRightStyle: any = {
-      left: sizeObj.left! - 4 + sizeObj.width! + "px",
-      top: sizeObj.top! - 4 + sizeObj.height! + "px",
+      left: sizeObj.left! * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
+      top: sizeObj.top! * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nwse-resize",
     };
 
@@ -557,8 +557,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       };
       switch (resizeData.handle) {
         case "tl": {
-          movePoint.x = Math.min(movePoint.x, objectRect.w);
-          movePoint.y = Math.min(movePoint.y, objectRect.h);
+          movePoint.x =
+            Math.min(movePoint.x, objectRect.w * stageZoom) / stageZoom;
+          movePoint.y =
+            Math.min(movePoint.y, objectRect.h * stageZoom) / stageZoom;
 
           objectRect.x += movePoint.x!;
           objectRect.y += movePoint.y!;
@@ -567,8 +569,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           break;
         }
         case "bl": {
-          movePoint.x = Math.min(movePoint.x, objectRect.w);
-          movePoint.y = Math.max(movePoint.y, -objectRect.h);
+          movePoint.x =
+            Math.min(movePoint.x, objectRect.w * stageZoom) / stageZoom;
+          movePoint.y =
+            Math.max(movePoint.y, -objectRect.h * stageZoom) / stageZoom;
 
           objectRect.x += movePoint.x!;
           //objectRect.y += movePoint.y!;
@@ -577,8 +581,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           break;
         }
         case "br": {
-          movePoint.x = Math.max(movePoint.x, -objectRect.w);
-          movePoint.y = Math.max(movePoint.y, -objectRect.h);
+          movePoint.x =
+            Math.max(movePoint.x, -objectRect.w * stageZoom) / stageZoom;
+          movePoint.y =
+            Math.max(movePoint.y, -objectRect.h * stageZoom) / stageZoom;
           //objectRect.x += movePoint.x!;
           //objectRect.y += movePoint.y!;
           objectRect.w += movePoint.x!;
@@ -586,8 +592,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           break;
         }
         case "tr": {
-          movePoint.x = Math.max(movePoint.x, -objectRect.w);
-          movePoint.y = Math.min(movePoint.y, objectRect.h);
+          movePoint.x =
+            Math.max(movePoint.x, -objectRect.w * stageZoom) / stageZoom;
+          movePoint.y =
+            Math.min(movePoint.y, objectRect.h * stageZoom) / stageZoom;
           //objectRect.x += movePoint.x!;
           objectRect.y += movePoint.y!;
           objectRect.w += movePoint.x!;
