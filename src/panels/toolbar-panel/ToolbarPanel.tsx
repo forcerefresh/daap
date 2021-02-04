@@ -100,7 +100,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           >
             <SelectToolIcon
               style={{
-                width: SMALL_ICON_SIZE + "36px",
+                width: SMALL_ICON_SIZE + "px",
                 height: SMALL_ICON_SIZE + "px",
                 fill: "gray",
               }}
