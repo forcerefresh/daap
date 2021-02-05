@@ -53,7 +53,7 @@ function getParameters(rows: number, columns: number, startFrom: string) {
     case "center":
       return { stagger: { from: "center" } };
     case "start":
-      return { stagger: { from: "0" } };
+      return { stagger: { from: "start" } };
     case "end":
       return { stagger: { from: "end" } };
   }
