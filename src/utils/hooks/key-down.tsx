@@ -4,6 +4,7 @@ export function useKeyDown() {
   // State for keeping track of whether key is pressed
   const [ctrlDown, setCtrlDown] = useState(false);
   const [spaceDown, setSpaceDown] = useState(false);
+  const [escapeDown, setEscapeDown] = useState(false);
 
   // If pressed key is our target key then set to true
   function downHandler(evt: KeyboardEvent) {
@@ -16,6 +17,11 @@ export function useKeyDown() {
         setSpaceDown(true);
       }
     }
+    if (code === "Escape") {
+      if (escapeDown !== true) {
+        setEscapeDown(true);
+      }
+    }
   }
 
   // If released key is our target key then set to false
@@ -25,6 +31,9 @@ export function useKeyDown() {
     }
     if (code === "Space") {
       setSpaceDown(false);
+    }
+    if (code === "Escape") {
+      setEscapeDown(false);
     }
   };
 
@@ -39,5 +48,5 @@ export function useKeyDown() {
     };
   }, []); // Empty array ensures that effect is only run on mount and unmount
 
-  return { ctrlDown, spaceDown };
+  return { ctrlDown, spaceDown, escapeDown };
 }

@@ -14,7 +14,7 @@ import { IGlobals } from "../reducers/globals";
 import {
   IRect,
   isIntersectingRect,
-  testIfRectsAreOverlapping,
+  roundNumber,
 } from "../../utils/doom-utils/common";
 import { TextProperties } from "../../inputs/types";
 import { getTextHtml } from "../../export/export-html";
@@ -640,6 +640,12 @@ function handleObjectUpdate(
   dispatch: Dispatch,
   getState: () => IStore
 ) {
+  // round to max two decimals
+  object.left = roundNumber(object.left!, 2);
+  object.width = roundNumber(object.width!, 2);
+  object.top = roundNumber(object.top!, 2);
+  object.height = roundNumber(object.height!, 2);
+
   switch (object.type) {
     case ObjectType.TEXT: {
       handleTextUpdate(object, dispatch, getState);
