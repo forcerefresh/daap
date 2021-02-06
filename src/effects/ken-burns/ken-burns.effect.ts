@@ -7,11 +7,12 @@ gsap.registerEffect({
     gsap.set(targets, {
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
     });
-    
+
     // scale factor are increasing through the time
     const totalScaleFactor = (config.scaleFactor * config.duration!) / 100 + 1;
 
     return gsap.to(targets, {
+      ease: config.ease,
       duration: config.duration!,
       scale: totalScaleFactor,
     });

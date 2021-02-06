@@ -13,8 +13,8 @@ gsap.registerEffect({
     //});
 
     // TODO: remove hardcoded
-    const url = "http://macloo.com/images/inidisini/domba/IMG_4507.jpg";
-    const size = { w: 600, h: 366 };
+    const url = "/images/Machu_Picchu.jpg";
+    const size = { w: 1024, h: 768 };
     const photoGrid = { r: config.rows, c: config.columns };
 
     const elements = createTiles(url, size, photoGrid);
@@ -24,9 +24,10 @@ gsap.registerEffect({
 
     // 1. common config
     var baseConfig = {
+      ease: config.ease,
       duration: config.duration! / 2,
       scale: 0,
-      ease: "power1.inOut",
+      transformZ: 0,
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
       stagger: {
         amount: config.duration! / 2,
@@ -128,6 +129,8 @@ function createTiles(
   for (let i = 0; i < grid.r; i++) {
     for (let j = 0; j < grid.c; j++) {
       html += `<div style="
+                outline: 1px solid transparent;
+                transform: translateZ(0);
 								background:url('${url}'); 
 								width: ${tilesWidth}px; 
 								height: ${tilesHeight}px;

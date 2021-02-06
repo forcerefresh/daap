@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { IKenBurnsEffect, kenBurns } from "./ken-burns.types";
 
 export const kenBurnsDefinition = {
@@ -25,9 +24,10 @@ export const kenBurnsDefaults: IKenBurnsEffect = {
   id: kenBurns,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   scaleFactor: 10,
   transformOrigin: { x: 50, y: 50 },
-  easing: Easings.Power0,
-  customEasing: null,
 };

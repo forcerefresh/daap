@@ -279,7 +279,7 @@ function _activateLayer(layerId: string): ActivateLayerAction {
 export function activateLayer(layerId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().project.selection.activeLayerId === layerId) {
-      console.log("layer is already active");
+      // console.log("layer is already active");
       return;
     }
     dispatch(_activateLayer(layerId));
@@ -311,7 +311,7 @@ export function activateObject(objectId: string | null): any {
       return;
     }
     if (getState().project.selection.activeObjectId === objectId) {
-      console.log("object is already active ");
+      //console.log("object is already active ");
       return;
     }
 

@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { fadeIn, IFadeInEffect } from "./fade-in.types";
 
 export const fadeInDefinition = {
@@ -25,9 +24,10 @@ export const fadeInDefaults: IFadeInEffect = {
   id: fadeIn,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   fromOpacity: 0,
   toOpacity: 100,
-  easing: Easings.Power0,
-  customEasing: null,
 };

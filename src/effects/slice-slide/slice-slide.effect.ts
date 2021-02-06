@@ -5,8 +5,8 @@ import { merge } from "lodash";
 gsap.registerEffect({
   name: sliceSlide,
   effect: function (targets: any, config: ISliceSlideEffect) {
-    const url = "http://macloo.com/images/inidisini/domba/IMG_4507.jpg";
-    const size = { w: 600, h: 366 };
+    const url = "/images/Machu_Picchu.jpg";
+    const size = { w: 1024, h: 768 };
     var photoGrid = { r: 1, c: 1 };
 
     if (config.orientation == "horizontal") {
@@ -23,8 +23,8 @@ gsap.registerEffect({
     });
 
     var baseConfig = {
+      ease: config.ease,
       duration: config.duration! / 2,
-      ease: "power1.in",
       opacity: 0,
       x: xy.x,
       y: xy.y,
@@ -90,6 +90,8 @@ function createTiles(
   for (let i = 0; i < grid.r; i++) {
     for (let j = 0; j < grid.c; j++) {
       html += `<div style="
+              outline: 1px solid transparent;
+              transform: translateZ(0);
 							background:url('${url}'); 
 							width: ${tilesWidth}px; 
 							height: ${tilesHeight}px;

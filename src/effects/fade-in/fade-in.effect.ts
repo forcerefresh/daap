@@ -7,6 +7,7 @@ gsap.registerEffect({
     gsap.set(targets, { opacity: config.fromOpacity / 100 });
 
     return gsap.to(targets, {
+      ease: config.ease,
       duration: config.duration!,
       opacity: config.toOpacity / 100,
     });

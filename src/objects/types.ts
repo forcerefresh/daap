@@ -55,6 +55,8 @@ export interface ITransition {
   relativeTo: "stage";
   delay: number;
   duration: number;
+  ease?: string;
+  childEase?: string;
   effect: IEffect;
 }
 

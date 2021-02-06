@@ -22,7 +22,7 @@ export function getNumericFiled<T>(
   return getInputForm(InputType.NUMBER, objectDef, noop, onInput);
 }
 
-export function getSelectFiled<T>(
+export function getSelectField<T>(
   label: string,
   value: T,
   options: { value: string | number; label: string }[],

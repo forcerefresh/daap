@@ -8,7 +8,7 @@ export const useMediaHook = () => {
 
     return new Promise((resolve) => {
       setTimeout(() => {
-        resolve({ url: "logo192.png" });
+        resolve({ url: "/images/wall1.webp" });
       }, 1);
     });
   };

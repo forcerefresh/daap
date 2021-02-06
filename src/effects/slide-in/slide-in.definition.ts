@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { ISlideInEffect, slideIn } from "./slide-in.types";
 
 export const slideInDefinition = {
@@ -31,9 +30,10 @@ export const slideInDefaults: ISlideInEffect = {
   id: slideIn,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific this effect
   distance: 100,
   from: "right",
-  easing: Easings.Power0,
-  customEasing: null,
 };

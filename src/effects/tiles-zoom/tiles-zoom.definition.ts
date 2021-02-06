@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
 
 export const tilesZoomDefinition = {
@@ -49,11 +48,12 @@ export const tilesZoomDefaults: ITilesZoomEffect = {
   id: tilesZoom,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   rows: 10,
   columns: 10,
   transformOrigin: { x: 50, y: 50 },
   startFrom: "random",
-  easing: Easings.Power0,
-  customEasing: null,
 };

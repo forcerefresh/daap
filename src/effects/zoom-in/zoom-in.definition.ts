@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { IZoomInEffect, zoomIn } from "./zoom-in.types";
 
 export const zoomInDefinition = {
@@ -25,9 +24,10 @@ export const zoomInDefaults: IZoomInEffect = {
   id: zoomIn,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   fromScale: 0,
   toScale: 100,
-  easing: Easings.Power0,
-  customEasing: null,
 };

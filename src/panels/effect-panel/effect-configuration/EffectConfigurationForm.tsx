@@ -5,8 +5,9 @@ import {
   getEffectDefinition,
   getEffectsOptions,
 } from "../../../effects/effects";
+import { EasingOptions } from "../../../effects/types";
 import { getInputForm } from "../../../inputs/input-factory";
-import { getNumericFiled, getSelectFiled } from "../../../inputs/input-utils";
+import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
 import { IObject } from "../../../objects/types";
 import { updateLayer, updateObject } from "../../../store/actions/actions";
 import { ILayer } from "../../../store/reducers/layers";
@@ -64,6 +65,10 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
     });
   };
 
+  const effectDefinition = getEffectDefinition(
+    get(objectOrLayer, "transitions.in.effect.id")
+  );
+
   return (
     <div className={css.effectConfigurationForm}>
       <div className={css.inlineFlex}>
@@ -92,8 +97,22 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           )}
         </div>
       </div>
+      <div>
+        {effectDefinition.defaults.hasEase &&
+          getSelectField(
+            "Easing",
+            get(objectOrLayer, "transitions.in.ease"),
+            EasingOptions,
+            (value: any) => {
+              const obj = cloneDeep(objectOrLayer);
+              set(obj, "transitions.in.ease", value);
+              if (objectType === "object") _updateObject(obj as IObject);
+              else if (objectType === "layer") _updateLayer(obj as ILayer);
+            }
+          )}
+      </div>
 
-      {getSelectFiled(
+      {getSelectField(
         "Effect",
         get(objectOrLayer, "transitions.in.effect.id"),
         getEffectsOptions(),

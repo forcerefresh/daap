@@ -169,14 +169,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const rootRef = useRef(null);
 
-  const stageXOffset =
+  const stageXOffset = Math.round(
     (viewPortSize.width - stageSize.width * stageZoom) / 2 +
-    panMove.x +
-    panMoveStart.x;
-  const stageYOffset =
+      panMove.x +
+      panMoveStart.x
+  );
+  const stageYOffset = Math.round(
     (viewPortSize.height - stageSize.height * stageZoom) / 2 +
-    panMove.y +
-    panMoveStart.y;
+      panMove.y +
+      panMoveStart.y
+  );
   const stageStyle = {
     top: 0 + stageYOffset + "px",
     left: 0 + stageXOffset + "px",
@@ -195,10 +197,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   useEffect(() => {
     function resetAll(force = false) {
-      console.log("r 1");
       if (force || resizeData || selectionStartPosition) {
-        console.log("r 2");
-
         setSelectionStartPosition(null);
         setResizeData(null);
         setResizeStartPosition(null);
@@ -212,13 +211,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
 
     function documentMouseUpHandler() {
-      resetAll(true);
+      resetAll();
     }
 
     // NOTE: if mouse pointer go outside of window
     function documentMouseOutHandler(e: any) {
       if (e.toElement == null) {
-        resetAll(true);
+        resetAll();
       }
     }
 
@@ -240,7 +239,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       //  documentMouseMoveHandler
       //);
     };
-  }, []);
+  }, [resizeData, selectionStartPosition]);
 
   useEffect(() => {
     if (rootRef.current) {
@@ -276,6 +275,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             {
               ...effIn.effect.values,
               duration: effIn.duration / 1000,
+              ease: effIn.ease,
+              childEase: effIn.childEase,
             },
             effIn.delay / 1000
           );
@@ -713,8 +714,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         [css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
       onMouseDown={(e: React.MouseEvent) => {
+        e.persist();
         const target = e.target as HTMLElement;
-        if (target.className.indexOf("resizeHandle") !== -1) {
+        if (
+          target?.className?.indexOf &&
+          target?.className?.indexOf("resizeHandle") !== -1
+        ) {
           e.stopPropagation();
           setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
           return;
@@ -750,6 +755,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           setResizeStartPosition(null);
           setResizeRect(null);
           setResizeData(null);
+          // setRerender((rerender) => rerender + 1);
           return;
         }
 
@@ -784,17 +790,19 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
             }
           } else {
-            const t1 = e.target as any;
-            const t2 = t1.parentElement! as any;
-            const t3 = t2.parentElement! as any;
-            if (
-              t1.className.indexOf("StagePanel_stagePanel_") !== -1 ||
-              t2.className.indexOf("StagePanel_stagePanel_") !== -1 ||
-              t3.className.indexOf("StagePanel_stagePanel_") !== -1
-            ) {
-              // deselect objects
-              _selectObjects([]);
-            }
+            try {
+              const t1 = e.target as any;
+              const t2 = t1.parentElement! as any;
+              const t3 = t2.parentElement! as any;
+              if (
+                t1.className.indexOf("StagePanel_stagePanel_") !== -1 ||
+                t2.className.indexOf("StagePanel_stagePanel_") !== -1 ||
+                t3.className.indexOf("StagePanel_stagePanel_") !== -1
+              ) {
+                // deselect objects
+                _selectObjects([]);
+              }
+            } catch (ex) {}
           }
         }
 

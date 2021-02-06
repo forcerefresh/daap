@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
 
 export const sliceSlideDefinition = {
@@ -59,12 +58,13 @@ export const sliceSlideDefaults: ISliceSlideEffect = {
   id: sliceSlide,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   slices: 5,
   orientation: "horizontal",
   startingPoint: "random",
   distance: 100,
   from: "right",
-  easing: Easings.Power0,
-  customEasing: null,
 };

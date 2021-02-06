@@ -1,5 +1,4 @@
 import { InputType } from "../../inputs/types";
-import { Easings } from "../types";
 import { tilesFade, ITilesFadeEffect } from "./tiles-fade.types";
 
 export const tilesFadeDefinition = {
@@ -43,10 +42,11 @@ export const tilesFadeDefaults: ITilesFadeEffect = {
   id: tilesFade,
   hasDelay: true,
   hasDuration: true,
-  hasEasing: true,
+  hasEase: true,
+  ease: "none",
+  customEase: null,
+  // specific to this effect
   rows: 10,
   columns: 10,
   startFrom: "random",
-  easing: Easings.Power0,
-  customEasing: null,
 };

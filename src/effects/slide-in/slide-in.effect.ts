@@ -7,6 +7,7 @@ gsap.registerEffect({
     const xy = getXY(config.from, config.distance);
 
     return gsap.from(targets, {
+      ease: config.ease,
       duration: config.duration!,
       y: xy.y,
       x: xy.x,
