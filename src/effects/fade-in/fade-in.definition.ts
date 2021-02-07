@@ -25,8 +25,8 @@ export const fadeInDefaults: IFadeInEffect = {
   hasDelay: true,
   hasDuration: true,
   hasEase: true,
+  hasChildEase: false,
   ease: "none",
-  customEase: null,
   // specific to this effect
   fromOpacity: 0,
   toOpacity: 100,

@@ -31,8 +31,8 @@ export const slideInDefaults: ISlideInEffect = {
   hasDelay: true,
   hasDuration: true,
   hasEase: true,
+  hasChildEase: false,
   ease: "none",
-  customEase: null,
   // specific this effect
   distance: 100,
   from: "right",

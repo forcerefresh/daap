@@ -5,11 +5,12 @@ import { InputType } from "./types";
 export function getNumericFiled<T>(
   label: string,
   value: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  helperText?: string
 ) {
   const objectDef = {
     displayName: label,
-    // propertyName: label,
+    helperText: helperText,
     inputType: InputType.NUMBER,
     value: value,
     defaultValue: 0,

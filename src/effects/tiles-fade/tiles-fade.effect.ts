@@ -5,6 +5,8 @@ import { merge } from "lodash";
 gsap.registerEffect({
   name: tilesFade,
   effect: function (targets: any, config: ITilesFadeEffect) {
+    console.log(config);
+
     const url = "/images/Machu_Picchu.jpg";
     const size = { w: 1024, h: 768 };
     const photoGrid = { r: config.rows, c: config.columns };
@@ -17,12 +19,12 @@ gsap.registerEffect({
 
     var baseConfig = {
       ease: config.ease,
-      duration: config.duration! / 2,
+      duration: config.duration! * (config.timeDistribution! / 100),
       opacity: 0,
       stagger: {
-        amount: config.duration! / 2,
+        amount: config.duration! * (1 - config.timeDistribution! / 100),
         grid: [config.rows, config.columns],
-        ease: "none",
+        ease: config.childEase,
       },
     };
 

@@ -22,17 +22,18 @@ gsap.registerEffect({
       targets[0].appendChild(element);
     });
 
+    console.log(config);
     // 1. common config
     var baseConfig = {
       ease: config.ease,
-      duration: config.duration! / 2,
+      duration: config.duration! * (config.timeDistribution! / 100),
       scale: 0,
       transformZ: 0,
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
       stagger: {
-        amount: config.duration! / 2,
+        amount: config.duration! * (1 - config.timeDistribution! / 100),
         grid: [config.rows, config.columns],
-        ease: "none",
+        ease: config.childEase,
       },
     };
 

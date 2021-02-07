@@ -59,8 +59,10 @@ export const sliceSlideDefaults: ISliceSlideEffect = {
   hasDelay: true,
   hasDuration: true,
   hasEase: true,
+  hasChildEase: true,
+  hasTimeDistribution: true,
   ease: "none",
-  customEase: null,
+  childEase: "none",
   // specific to this effect
   slices: 5,
   orientation: "horizontal",

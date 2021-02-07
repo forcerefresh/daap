@@ -24,13 +24,13 @@ gsap.registerEffect({
 
     var baseConfig = {
       ease: config.ease,
-      duration: config.duration! / 2,
+      duration: config.duration! * (config.timeDistribution! / 100),
       opacity: 0,
       x: xy.x,
       y: xy.y,
       stagger: {
-        amount: config.duration! / 2,
-        ease: "none",
+        amount: config.duration! * (1 - config.timeDistribution! / 100),
+        ease: config.childEase,
       },
     };
 

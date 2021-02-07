@@ -277,6 +277,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               duration: effIn.duration / 1000,
               ease: effIn.ease,
               childEase: effIn.childEase,
+              timeDistribution: effIn.timeDistribution,
             },
             effIn.delay / 1000
           );

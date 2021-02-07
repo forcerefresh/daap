@@ -97,20 +97,6 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           )}
         </div>
       </div>
-      <div>
-        {effectDefinition.defaults.hasEase &&
-          getSelectField(
-            "Easing",
-            get(objectOrLayer, "transitions.in.ease"),
-            EasingOptions,
-            (value: any) => {
-              const obj = cloneDeep(objectOrLayer);
-              set(obj, "transitions.in.ease", value);
-              if (objectType === "object") _updateObject(obj as IObject);
-              else if (objectType === "layer") _updateLayer(obj as ILayer);
-            }
-          )}
-      </div>
 
       {getSelectField(
         "Effect",
@@ -139,6 +125,47 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           "transitions.in.effect.values",
           objectType
         )}
+      </div>
+
+      <div>
+        {effectDefinition.defaults.hasEase &&
+          getSelectField(
+            "Easing",
+            get(objectOrLayer, "transitions.in.ease"),
+            EasingOptions,
+            (value: any) => {
+              const obj = cloneDeep(objectOrLayer);
+              set(obj, "transitions.in.ease", value);
+              if (objectType === "object") _updateObject(obj as IObject);
+              else if (objectType === "layer") _updateLayer(obj as ILayer);
+            }
+          )}
+        {effectDefinition.defaults.hasChildEase &&
+          getSelectField(
+            "Child easing",
+            get(objectOrLayer, "transitions.in.childEase"),
+            EasingOptions,
+            (value: any) => {
+              const obj = cloneDeep(objectOrLayer);
+              set(obj, "transitions.in.childEase", value);
+              if (objectType === "object") _updateObject(obj as IObject);
+              else if (objectType === "layer") _updateLayer(obj as ILayer);
+            }
+          )}
+        <div className="input60">
+          {effectDefinition.defaults.hasTimeDistribution &&
+            getNumericFiled(
+              "Time distribution",
+              get(objectOrLayer, "transitions.in.timeDistribution"),
+              (value: any) => {
+                const obj = cloneDeep(objectOrLayer);
+                set(obj, "transitions.in.timeDistribution", value);
+                if (objectType === "object") _updateObject(obj as IObject);
+                else if (objectType === "layer") _updateLayer(obj as ILayer);
+              },
+              "Percentage that every item will take related to effect time (default 50%)"
+            )}
+        </div>
       </div>
     </div>
   );

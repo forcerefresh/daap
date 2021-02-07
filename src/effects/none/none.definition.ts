@@ -11,6 +11,6 @@ export const noneDefaults: INoneEffect = {
   hasDelay: false,
   hasDuration: false,
   hasEase: false,
+  hasChildEase: false,
   ease: "none",
-  customEase: null,
 };

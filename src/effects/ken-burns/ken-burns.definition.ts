@@ -25,8 +25,8 @@ export const kenBurnsDefaults: IKenBurnsEffect = {
   hasDelay: true,
   hasDuration: true,
   hasEase: true,
+  hasChildEase: false,
   ease: "none",
-  customEase: null,
   // specific to this effect
   scaleFactor: 10,
   transformOrigin: { x: 50, y: 50 },

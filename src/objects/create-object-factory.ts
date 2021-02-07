@@ -57,6 +57,8 @@ function createCommonObject(
         relativeTo: "stage",
         delay: 0,
         duration: 1000,
+        ease: "none",
+        timeDistribution: 50,
         effect: {
           id: "none",
           values: {},

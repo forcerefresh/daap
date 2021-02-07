@@ -56,6 +56,7 @@ export function generateExport(
         html +=
           "      <div class='" + objectClassName + "' style='" + style + "'>"; // object open
 
+        console.log(object.transitions);
         transitionsDataArr.push({
           objectClass: objectClassName,
           transitions: object.transitions,

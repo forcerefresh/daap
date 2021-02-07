@@ -1,11 +1,17 @@
 export interface IEffectBase {
   id: string;
+  // >> flags beginning (TODO: make flags optional as by default they are false)
   hasDelay: boolean;
   hasDuration: boolean;
   hasEase: boolean;
-  // hasChildEase: boolean;
-  ease: string;
-  customEase: string | null;
+  hasChildEase: boolean;
+  hasTimeDistribution?: boolean;
+  // << flags end
+  timeDistribution?: number;
+  ease?: string;
+  customEase?: string;
+  childEase?: string;
+  childCustomEase?: string;
   duration?: number;
 }
 
