@@ -714,6 +714,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         [css.panCursor]: stageToolInternal === StageTools.PAN,
         [css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
+      onWheel={console.log}
       onMouseDown={(e: React.MouseEvent) => {
         e.persist();
         const target = e.target as HTMLElement;

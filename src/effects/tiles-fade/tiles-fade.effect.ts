@@ -13,6 +13,9 @@ gsap.registerEffect({
 
     const elements = createTiles(url, size, photoGrid);
 
+    // clean
+    targets[0].innerHTML = "";
+
     elements.forEach((element) => {
       targets[0].appendChild(element);
     });
