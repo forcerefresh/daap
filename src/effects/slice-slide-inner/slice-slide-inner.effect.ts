@@ -24,7 +24,8 @@ gsap.registerEffect({
       duration: config.duration! * (config.timeDistribution! / 100),
       opacity: 0,
       filter: `blur(${config.filter}px)`,
-      backgroundPosition: `${config.axisX}px ${config.axisY}px`,
+      backgroundPositionX: `+=${config.axisX}px`,
+      backgroundPositionY: `+=${config.axisY}px`,
       stagger: {
         amount: config.duration! * (1 - config.timeDistribution! / 100),
         ease: config.childEase,
@@ -74,7 +75,9 @@ function createTiles(
 							position:absolute; 
 							left: ${j * tilesWidth}px;
 							top: ${i * tilesHeight}px;
-							background-position: ${-j * tilesWidth}px ${-i * tilesHeight}px;">
+							background-position: ${-j * tilesWidth}px ${-i * tilesHeight}px;
+              background-repeat: no-repeat;
+              ">
 							</div>`;
     }
   }
