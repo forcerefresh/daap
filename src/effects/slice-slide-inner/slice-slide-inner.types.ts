@@ -6,7 +6,19 @@ export interface ISliceSlideInnerEffect extends IEffectBase {
   rows: number;
   columns: number;
   filter: number;
-  startFrom: "random" | "center" | "start" | "end";
+  opacity: number;
   axisX: number;
   axisY: number;
+  startFrom:
+    | "random"
+    | "center"
+    | "horizontal-center"
+    | "vertical-center"
+    | "edges"
+    | "horizontal-edges"
+    | "vertical-edges"
+    | "top-left"
+    | "top-right"
+    | "bottom-left"
+    | "bottom-right";
 }
