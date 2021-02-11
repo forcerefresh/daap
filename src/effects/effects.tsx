@@ -21,6 +21,10 @@ import {
   sliceSlideDefaults,
   sliceSlideDefinition,
 } from "./slice-slide/slice-slide.definition";
+import { 
+  sliceSlideInnerDefaults, 
+  sliceSlideInnerDefinition 
+} from "./slice-slide-inner/slice-slide-inner.definition";
 
 // import all effects
 import "./none/none.effect";
@@ -31,6 +35,7 @@ import "./ken-burns/ken-burns.effect";
 import "./tiles-zoom/tiles-zoom.effect";
 import "./tiles-fade/tiles-fade.effect";
 import "./slice-slide/slice-slide.effect";
+import "./slice-slide-inner/slice-slide-inner.effect";
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
   id: string;
@@ -56,6 +61,7 @@ registerEffect(kenBurnsDefinition, kenBurnsDefaults);
 registerEffect(tilesZoomDefinition, tilesZoomDefaults);
 registerEffect(tilesFadeDefinition, tilesFadeDefaults);
 registerEffect(sliceSlideDefinition, sliceSlideDefaults);
+registerEffect(sliceSlideInnerDefinition, sliceSlideInnerDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
