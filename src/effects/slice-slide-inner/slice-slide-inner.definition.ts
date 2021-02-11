@@ -40,8 +40,8 @@ export const sliceSlideInnerDefinition = {
     },
     {
       displayName: "Blur",
-      helperText: "Increase to blur item (default 0)",
-      propertyName: "filter",
+      helperText: "Initial blur (default 0)",
+      propertyName: "blur",
       inputType: InputType.NUMBER,
     },
     {
@@ -52,13 +52,13 @@ export const sliceSlideInnerDefinition = {
     },
     {
       displayName: "Right/Left",
-      helperText: "Move item background right or left",
+      helperText: "Slide item right or left (accept negative values)",
       propertyName: "axisX",
       inputType: InputType.NUMBER,
     },
     {
       displayName: "Top/Bottom",
-      helperText: "Move item background top or bottom",
+      helperText: "Slide item top or bottom (accept negative values)",
       propertyName: "axisY",
       inputType: InputType.NUMBER,
     },
@@ -76,7 +76,7 @@ export const sliceSlideInnerDefaults: ISliceSlideInnerEffect = {
   childEase: "none",
   // specific to this effect
   startFrom: "random",
-  filter: 0,
+  blur: 0,
   opacity: 0,
   axisX: 0,
   axisY: 0,

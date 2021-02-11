@@ -23,7 +23,7 @@ gsap.registerEffect({
       ease: config.ease,
       duration: config.duration! * (config.timeDistribution! / 100),
       opacity: config.opacity / 100,
-      filter: `blur(${config.filter}px)`,
+      filter: `blur(${config.blur}px)`,
       backgroundPositionX: `+=${config.axisX}px`,
       backgroundPositionY: `+=${config.axisY}px`,
       stagger: {

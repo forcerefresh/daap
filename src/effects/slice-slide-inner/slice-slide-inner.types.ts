@@ -5,7 +5,7 @@ export const sliceSlideInner = "sliceSlideInner";
 export interface ISliceSlideInnerEffect extends IEffectBase {
   rows: number;
   columns: number;
-  filter: number;
+  blur: number;
   opacity: number;
   axisX: number;
   axisY: number;
