@@ -64,6 +64,17 @@ function createCommonObject(
           values: {},
         },
       },
+      out: {
+        relativeTo: "stage",
+        delay: 0,
+        duration: 1000,
+        ease: "none",
+        timeDistribution: 50,
+        effect: {
+          id: "none",
+          values: {},
+        },
+      },
     },
   };
 }
@@ -160,8 +171,13 @@ function createImageObject(): Omit<
           displayName: "Image url",
           propertyName: "url",
           inputType: InputType.IMAGE,
-          value: { url: "" },
-          defaultValue: { url: "" },
+          value: { url: "", width: 300, height: 300, isPlaceholder: true },
+          defaultValue: {
+            url: "",
+            width: 300,
+            height: 300,
+            isPlaceholder: true,
+          },
         },
       },
     },

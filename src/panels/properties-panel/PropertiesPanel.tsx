@@ -46,7 +46,23 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         const retObj = cloneDeep(object);
 
         if (retObj) {
-          (retObj.definition.properties as any)[key].value = value;
+          const properties = retObj.definition.properties as any;
+          properties[key].value = value;
+
+          // >>> exception for image
+          // use image w and h for the object
+          if (properties[key].inputType === InputType.IMAGE) {
+            // set placeholder to false
+            properties[key].value.isPlaceholder = false;
+            if (retObj.width === 0) {
+              retObj.width = value.width;
+            }
+            if (retObj.height === 0) {
+              retObj.height = value.height;
+            }
+          }
+          // >>> exception for image
+
           _updateObject(retObj);
         }
       }

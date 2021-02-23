@@ -1,20 +1,41 @@
 import gsap from "gsap";
 import { merge } from "lodash";
 import {
-  ISliceSlideInnerEffect,
-  sliceSlideInner,
-} from "./slice-slide-inner.types";
+  createTilesFromHtml,
+  getMethodByType,
+  getObjectContentElementAndHtml,
+  tilesCompleteHandler,
+  tilesStartHandler,
+} from "../common";
+import {
+  ITilesSlideInnerEffect,
+  tilesSlideInner,
+} from "./tiles-slide-inner.types";
 
 gsap.registerEffect({
-  name: sliceSlideInner,
-  effect: function (targets: any, config: ISliceSlideInnerEffect) {
-    const url = "/images/Machu_Picchu.jpg";
-    const size = { w: 1024, h: 768 };
-    var photoGrid = { r: config.rows, c: config.columns };
+  name: tilesSlideInner,
+  effect: function (targets: any, config: ITilesSlideInnerEffect) {
+    // get element and html
+    const {
+      objectContentElement,
+      objectContentHtml,
+    } = getObjectContentElementAndHtml(targets[0]);
 
-    const elements = createTiles(url, size, photoGrid);
+    // create title elements
+    const elements = createTilesFromHtml(
+      objectContentHtml,
+      {
+        w: config.objectProperties?.width!,
+        h: config.objectProperties?.height!,
+      },
+      { r: config.rows, c: config.columns }
+    );
 
+    const innerElements: HTMLDivElement[] = [];
+    // append title elements
     elements.forEach((element) => {
+      console.log(element.innerHTML);
+      innerElements.push(element.firstElementChild as HTMLDivElement);
       targets[0].appendChild(element);
     });
 
@@ -24,12 +45,21 @@ gsap.registerEffect({
       duration: config.duration! * (config.timeDistribution! / 100),
       opacity: config.opacity / 100,
       filter: `blur(${config.blur}px)`,
-      backgroundPositionX: `+=${config.axisX}px`,
-      backgroundPositionY: `+=${config.axisY}px`,
+      //scale: 1.1,
+      //backgroundPositionX: `+=${config.axisX}px`,
+      //backgroundPositionY: `+=${config.axisY}px`,
+      x: `+=${config.axisX}`,
+      y: `+=${config.axisY}`,
       stagger: {
         amount: config.duration! * (1 - config.timeDistribution! / 100),
         ease: config.childEase,
         grid: [config.rows, config.columns],
+      },
+      onComplete: () => {
+        tilesCompleteHandler(config.type, objectContentElement, elements);
+      },
+      onStart: () => {
+        tilesStartHandler(config.type, objectContentElement, elements);
       },
     };
 
@@ -40,7 +70,10 @@ gsap.registerEffect({
       config.startFrom
     );
 
-    return gsap.from(elements, merge(baseConfig, partialConfig) as any);
+    return gsap[getMethodByType(config.type)](
+      innerElements,
+      merge(baseConfig, partialConfig) as any
+    );
   },
   defaults: {},
   extendTimeline: true,
@@ -112,7 +145,7 @@ function getParameters(rows: number, columns: number, startFrom: string) {
       };
   }
 }
-
+/*
 function createTiles(
   url: string,
   size: { w: number; h: number },
@@ -142,4 +175,4 @@ function createTiles(
 
   holder.innerHTML = html;
   return Array.from(holder.children);
-}
+}*/

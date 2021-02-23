@@ -1,9 +1,9 @@
 import { InputType } from "../../inputs/types";
-import { ISlideInEffect, slideIn } from "./slide-in.types";
+import { ISlideEffect, slide } from "./slide.types";
 
-export const slideInDefinition = {
-  id: slideIn,
-  name: "Slide In",
+export const slideDefinition = {
+  id: slide,
+  name: "Slide",
   form: [
     {
       displayName: "Slide from",
@@ -26,8 +26,8 @@ export const slideInDefinition = {
   ],
 };
 
-export const slideInDefaults: ISlideInEffect = {
-  id: slideIn,
+export const slideDefaults: ISlideEffect = {
+  id: slide,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

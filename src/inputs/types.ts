@@ -76,8 +76,18 @@ export interface IImageInput {
   displayName: string;
   helperText?: string;
   propertyName: string;
-  value: { url: string };
-  defaultValue: { url: string };
+  value: {
+    url: string;
+    width: number;
+    height: number;
+    isPlaceholder?: boolean;
+  };
+  defaultValue: {
+    url: string;
+    width: number;
+    height: number;
+    isPlaceholder?: boolean;
+  };
 }
 
 export interface ITransformOriginInput {

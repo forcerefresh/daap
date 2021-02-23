@@ -3,44 +3,75 @@ import { ImageProperties, TextProperties } from "../inputs/types";
 import { IObject, ITransitions, ObjectType } from "../objects/types";
 import { ILayer, ILayers } from "../store/reducers/layers";
 import { IObjects } from "../store/reducers/objects";
-import { ISlide, ISlides } from "../store/reducers/slides";
+import { ISlide, ISlideDuration, ISlides } from "../store/reducers/slides";
+import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
 
-export interface IExportData {
-  html: string;
-  transitionsDataArr: { objectClass: string; transitions: ITransitions }[];
+export interface ITransitionsData {
+  objectClass: string;
+  transitions: ITransitions;
+  data: {
+    slideDuration: ISlideDuration;
+    objectWidth?: number;
+    objectHeight?: number;
+    objectHtml?: string;
+  };
 }
-export function generateExport(
-  slides: ISlides,
-  layers: ILayers,
-  objects: IObjects
-): IExportData {
-  const slideArr = getSlideArr(slides);
+export interface IPlayerData {
+  html: string;
+  transitionsDataArr: ITransitionsData[];
+}
 
-  const transitionsDataArr: {
-    objectClass: string;
-    transitions: ITransitions;
-  }[] = [];
+export interface ISources {
+  slides: ISlides;
+  layers: ILayers;
+  objects: IObjects;
+}
+
+export function generatePlayerData(
+  sources: ISources,
+  scope: IPreviewScope | null
+): IPlayerData {
+  const { slides, layers, objects } = sources;
+
+  let previewSlidesArr: ISlide[] = [];
+  switch (scope?.entityType) {
+    case "slide": {
+      previewSlidesArr = getSlideArr(slides).filter(
+        (slide) => slide.id === scope?.entityId
+      );
+      break;
+    }
+    default: {
+      previewSlidesArr = getSlideArr(slides);
+      break;
+    }
+  }
+
+  const transitionsDataArr: ITransitionsData[] = [];
   let html = "<div>"; // slides holder open
 
-  slideArr.forEach((slide) => {
+  previewSlidesArr.forEach((slide) => {
     html += "  <div class='slide-" + slide.id + "'>"; // slide open
 
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
       const layerClassName = "layer-" + layer.id;
       if (layer.isBackground) {
-        transitionsDataArr.push({
+        /* transitionsDataArr.push({
           objectClass: layerClassName,
           transitions: layer.transitions,
-        });
+          data: {
+            slideDuration: slide.duration,
+          },
+        });*/
       }
 
-      html += "    <div class='" + layerClassName + "'>"; // layer open
+      html += `    <div class="${layerClassName}">`; // layer open
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {
-        const objectClassName = "object-" + object.id;
+        const objectClass = "object-" + object.id;
 
         // >> "left", "top", "width", "height"
         const sizeObj = pick(object, "left", "top", "width", "height");
@@ -53,15 +84,20 @@ export function generateExport(
         style += "position: absolute;";
         // << "left", "top", "width", "height"
 
-        html +=
-          "      <div class='" + objectClassName + "' style='" + style + "'>"; // object open
+        html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
-        console.log(object.transitions);
+        const objectHtml = getObjectHtml(object);
         transitionsDataArr.push({
-          objectClass: objectClassName,
+          objectClass: objectClass,
           transitions: object.transitions,
+          data: {
+            slideDuration: slide.duration,
+            objectWidth: object.width,
+            objectHeight: object.height,
+            objectHtml,
+          },
         });
-        html += getObjectHtml(object);
+        html += objectHtml;
 
         html += "      </div>"; // object close
       });
@@ -126,12 +162,15 @@ export function getTextHtml(object: IObject) {
   //});
   style += "position: absolute;";
 
-  return (
-    "<p style='" + style + "'>" + nl2br(textProperties.text.value) + "</p>"
-  );
+  return `<p class="object-content" style="${style}">${nl2br(
+    textProperties.text.value
+  )}</p>`;
 }
 
 function getImageHtml(object: IObject) {
   const imageProperties = object.definition.properties as ImageProperties;
-  return "<img src='" + imageProperties.url.value.url + "'/>";
+  if (imageProperties.url.value.isPlaceholder) {
+    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+  }
+  return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }

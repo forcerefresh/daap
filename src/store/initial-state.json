@@ -3,31 +3,40 @@
     "slides": {
       "nextSlideIdCounter": 1,
       "slideById": {
-        "5e384c85-ea6b-45b8-9334-ed440ed32175": {
-          "id": "5e384c85-ea6b-45b8-9334-ed440ed32175",
+        "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7": {
+          "id": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
           "name": "Slide 0",
           "duration": {
             "inheritFrom": "custom",
-            "customValue": 10000
+            "customValue": 5000
           },
-          "layerIds": ["b27e182b-d4ce-4544-b307-909a42822db3"],
+          "layerIds": ["5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"],
           "nextLayerIdCounter": 1
         }
       },
-      "allSlides": ["5e384c85-ea6b-45b8-9334-ed440ed32175"]
+      "allSlides": ["6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"]
     },
     "layers": {
       "layerById": {
-        "b27e182b-d4ce-4544-b307-909a42822db3": {
-          "id": "b27e182b-d4ce-4544-b307-909a42822db3",
-          "slideId": "5e384c85-ea6b-45b8-9334-ed440ed32175",
+        "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7": {
+          "id": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+          "slideId": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
           "isBackground": true,
           "name": "Background layer",
           "isVisible": true,
           "hasTimeline": true,
-          "objectIds": ["4b8df132-0d6d-4321-8412-42b554aad6e6"],
+          "objectIds": ["69eeb88b-8212-4603-bd6d-f9440d3a670d"],
           "transitions": {
             "in": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "effect": {
+                "id": "none",
+                "values": {}
+              }
+            },
+            "out": {
               "relativeTo": "stage",
               "delay": 0,
               "duration": 1000,
@@ -39,17 +48,17 @@
           }
         }
       },
-      "allLayers": ["b27e182b-d4ce-4544-b307-909a42822db3"]
+      "allLayers": ["5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"]
     },
     "objects": {
       "objectById": {
-        "4b8df132-0d6d-4321-8412-42b554aad6e6": {
-          "left": -177,
-          "top": -115,
-          "width": 339,
-          "height": 145,
-          "id": "4b8df132-0d6d-4321-8412-42b554aad6e6",
-          "type": "text",
+        "69eeb88b-8212-4603-bd6d-f9440d3a670d": {
+          "left": 128,
+          "top": -21.5,
+          "width": 712,
+          "height": 611,
+          "id": "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+          "type": "image",
           "isVisible": true,
           "isLocked": false,
           "transitions": {
@@ -60,136 +69,57 @@
               "ease": "none",
               "timeDistribution": 50,
               "effect": {
-                "id": "sliceSlideInner",
-                "values": {
-                  "columns": 8,
-                  "rows": 1,
-                  "startFrom": "end",
-                  "filter": 2,
-                  "axisX": -200,
-                  "axisY": 0
-                }
+                "id": "none",
+                "values": {}
+              }
+            },
+            "out": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "ease": "none",
+              "timeDistribution": 50,
+              "effect": {
+                "id": "none",
+                "values": {}
               }
             }
           },
           "definition": {
-            "id": "89028eec-f065-45d2-b7f4-195c7ddd3675",
-            "type": "text",
+            "id": "3bc4167a-68a4-4592-8160-c223f0e229d4",
+            "type": "image",
             "properties": {
-              "text": {
-                "displayName": "Text",
-                "propertyName": "text",
-                "inputType": "textarea",
-                "value": "Sample test",
-                "defaultValue": ""
-              },
-              "autoHeight": {
-                "displayName": "Auto height",
-                "propertyName": "autoHeight",
-                "inputType": "checkbox",
-                "value": false,
-                "defaultValue": false
-              },
-              "font": {
-                "displayName": "Font",
-                "propertyName": "fontFamily",
-                "inputType": "font_select",
+              "url": {
+                "displayName": "Image url",
+                "propertyName": "url",
+                "inputType": "image",
                 "value": {
-                  "fontFamily": "Arial",
-                  "source": "system-fonts"
+                  "url": "/images/wall1.webp",
+                  "width": 1024,
+                  "height": 768,
+                  "isPlaceholder": false
                 },
                 "defaultValue": {
-                  "fontFamily": "Arial",
-                  "source": "system-fonts"
+                  "url": "",
+                  "width": 300,
+                  "height": 300,
+                  "isPlaceholder": true
                 }
-              },
-              "color": {
-                "displayName": "Color",
-                "propertyName": "color",
-                "inputType": "color",
-                "value": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 1
-                },
-                "defaultValue": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 1
-                }
-              },
-              "fontSize": {
-                "displayName": "Font size",
-                "propertyName": "string",
-                "inputType": "text",
-                "value": "14",
-                "defaultValue": "14"
-              },
-              "weight": {
-                "displayName": "Weight",
-                "propertyName": "weight",
-                "inputType": "select",
-                "value": "400",
-                "defaultValue": "400",
-                "options": [
-                  {
-                    "value": "100",
-                    "label": "100\tThin"
-                  },
-                  {
-                    "value": "200",
-                    "label": "200\tExtra Light"
-                  },
-                  {
-                    "value": "300",
-                    "label": "300\tLight"
-                  },
-                  {
-                    "value": "400",
-                    "label": "400\tNormal"
-                  },
-                  {
-                    "value": "500",
-                    "label": "500\tMedium"
-                  },
-                  {
-                    "value": "600",
-                    "label": "600\tSemi Bold"
-                  },
-                  {
-                    "value": "700",
-                    "label": "700\tBold"
-                  },
-                  {
-                    "value": "800",
-                    "label": "800\tExtra Bold"
-                  },
-                  {
-                    "value": "900",
-                    "label": "900\tBlack"
-                  },
-                  {
-                    "value": "950",
-                    "label": "950\tExtra Black"
-                  }
-                ]
               }
             }
           },
-          "layerId": "b27e182b-d4ce-4544-b307-909a42822db3"
+          "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
         }
       },
-      "allObjects": ["4b8df132-0d6d-4321-8412-42b554aad6e6"]
+      "allObjects": ["69eeb88b-8212-4603-bd6d-f9440d3a670d"]
     },
     "selection": {
-      "activeSlideId": "5e384c85-ea6b-45b8-9334-ed440ed32175",
-      "activeLayerId": "b27e182b-d4ce-4544-b307-909a42822db3",
-      "activeObjectId": "4b8df132-0d6d-4321-8412-42b554aad6e6",
-      "selectedSlideIds": ["5e384c85-ea6b-45b8-9334-ed440ed32175"],
+      "activeSlideId": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
+      "activeLayerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+      "activeObjectId": "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+      "selectedSlideIds": ["6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"],
       "selectedLayerIds": [],
-      "selectedObjectIds": ["4b8df132-0d6d-4321-8412-42b554aad6e6"]
+      "selectedObjectIds": ["69eeb88b-8212-4603-bd6d-f9440d3a670d"]
     },
     "document": {
       "documentSize": {
@@ -209,22 +139,22 @@
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "left"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "width"
               ],
-              "lhs": 36,
-              "rhs": -177
+              "lhs": 586,
+              "rhs": 712
             },
             {
               "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "top"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "height"
               ],
-              "lhs": -24,
-              "rhs": -115
+              "lhs": 505,
+              "rhs": 611
             }
           ],
           "type": "Update object"
@@ -237,10 +167,15 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "rhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
               }
             }
           ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
           "type": "Select objects",
           "skipHistory": true
         },
@@ -252,7 +187,7 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "lhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
               }
             }
           ],
@@ -266,278 +201,141 @@
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisX"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "left"
               ],
-              "lhs": 200,
-              "rhs": -200
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "startFrom"
-              ],
-              "lhs": "random",
-              "rhs": "end"
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "rows"
-              ],
-              "lhs": 10,
-              "rhs": 1
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "columns"
-              ],
-              "lhs": 10,
-              "rhs": 8
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "filter"
-              ],
-              "lhs": 1,
-              "rhs": 2
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "filter"
-              ],
-              "lhs": 0,
-              "rhs": 1
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisX"
-              ],
-              "lhs": 20,
-              "rhs": 200
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisX"
-              ],
-              "lhs": 2,
-              "rhs": 20
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisX"
-              ],
-              "lhs": 0,
-              "rhs": 2
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "id"
-              ],
-              "lhs": "none",
-              "rhs": "sliceSlideInner"
+              "lhs": 241,
+              "rhs": 128
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "columns"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "top"
               ],
-              "rhs": 10
+              "lhs": 39.5,
+              "rhs": -21.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 586
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "rows"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "height"
               ],
-              "rhs": 10
+              "lhs": 300,
+              "rhs": 505
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": 241
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "startFrom"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "top"
               ],
-              "rhs": "random"
+              "lhs": 92.5,
+              "rhs": 39.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "url"
+              ],
+              "lhs": "",
+              "rhs": "/images/wall1.webp"
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "filter"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "width"
               ],
-              "rhs": 0
+              "lhs": 300,
+              "rhs": 1024
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisX"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "height"
               ],
-              "rhs": 0
+              "lhs": 300,
+              "rhs": 768
             },
             {
-              "kind": "N",
+              "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6",
-                "transitions",
-                "in",
-                "effect",
-                "values",
-                "axisY"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "isPlaceholder"
               ],
-              "rhs": 0
+              "lhs": true,
+              "rhs": false
             }
           ],
           "type": "Update object"
@@ -550,7 +348,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "rhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
               }
             }
           ],
@@ -563,7 +361,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+              "rhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
             }
           ],
           "type": "Activate object",
@@ -581,13 +379,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "b27e182b-d4ce-4544-b307-909a42822db3",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
                 "objectIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "rhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
               }
             },
             {
@@ -595,14 +393,2769 @@
               "path": [
                 "objects",
                 "objectById",
-                "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "69eeb88b-8212-4603-bd6d-f9440d3a670d"
               ],
               "rhs": {
-                "left": 36,
-                "top": -24,
-                "width": 339,
-                "height": 145,
-                "id": "4b8df132-0d6d-4321-8412-42b554aad6e6",
+                "left": 330,
+                "top": 92.5,
+                "width": 300,
+                "height": 300,
+                "id": "69eeb88b-8212-4603-bd6d-f9440d3a670d",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "3bc4167a-68a4-4592-8160-c223f0e229d4",
+                  "type": "image",
+                  "properties": {
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "69eeb88b-8212-4603-bd6d-f9440d3a670d"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              ],
+              "lhs": {
+                "left": -47,
+                "top": -118,
+                "width": 1000,
+                "height": 1000,
+                "id": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 500,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "fadeIn",
+                      "values": {
+                        "columns": 10,
+                        "rows": 10,
+                        "startFrom": "random",
+                        "blur": 0,
+                        "opacity": 0,
+                        "axisX": 100,
+                        "axisY": 0,
+                        "fromOpacity": 0,
+                        "toOpacity": 100,
+                        "fromScale": 0,
+                        "toScale": 100,
+                        "transformOrigin": {
+                          "x": 50,
+                          "y": 50
+                        }
+                      }
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 500,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 10,
+                    "effect": {
+                      "id": "fadeIn",
+                      "values": {
+                        "columns": 10,
+                        "rows": 10,
+                        "startFrom": "random",
+                        "fromOpacity": 0,
+                        "toOpacity": 100
+                      }
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "437cf6d6-a62f-4e66-a948-541ecc7dfa0b",
+                  "type": "image",
+                  "properties": {
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "/images/wall1.webp",
+                        "width": 1024,
+                        "height": 768,
+                        "isPlaceholder": false
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+              "rhs": null
+            }
+          ],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "delay"
+              ],
+              "lhs": 50,
+              "rhs": 500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "delay"
+              ],
+              "lhs": 5,
+              "rhs": 50
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "delay"
+              ],
+              "lhs": 0,
+              "rhs": 5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "duration"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "duration"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "duration"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "duration"
+              ],
+              "lhs": 1500,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "id"
+              ],
+              "lhs": "tilesFade",
+              "rhs": "fadeIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "fromOpacity"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "toOpacity"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 2000,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 50,
+              "rhs": 500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 5,
+              "rhs": 50
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 1000,
+              "rhs": 5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "tilesZoom",
+              "rhs": "fadeIn"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "zoomIn",
+              "rhs": "tilesZoom"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 30,
+              "rhs": 10
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "top-left",
+              "rhs": "random"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "transformOrigin"
+              ],
+              "rhs": {
+                "x": 50,
+                "y": 50
+              }
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "fadeIn",
+              "rhs": "zoomIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "fromScale"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "toScale"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "sliceSlideInner",
+              "rhs": "fadeIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "fromOpacity"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "toOpacity"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 2000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 778,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 996,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "blur"
+              ],
+              "lhs": 3,
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 5,
+              "rhs": 50
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 20,
+              "rhs": 5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "axisX"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "axisX"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "axisX"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "center",
+              "rhs": "top-left"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "blur"
+              ],
+              "lhs": 2,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "blur"
+              ],
+              "lhs": 1,
+              "rhs": 2
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "blur"
+              ],
+              "lhs": 0,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 1,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 10,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "random",
+              "rhs": "center"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 10,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "tilesFade",
+              "rhs": "sliceSlideInner"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "top-right",
+              "rhs": "random"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "blur"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "opacity"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "axisX"
+              ],
+              "rhs": 0
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "axisY"
+              ],
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 456,
+              "rhs": 996
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 283,
+              "rhs": 778
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c"
+              ],
+              "lhs": {
+                "left": 225,
+                "top": 251,
+                "width": 448,
+                "height": 199,
+                "id": "15203b90-07f5-4801-9cb1-440ad991876c",
+                "type": "text",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "tilesFade",
+                      "values": {
+                        "columns": 10,
+                        "rows": 10,
+                        "startFrom": "random"
+                      }
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "9de4a8d1-7d2f-462e-9762-bff7fb96ee1d",
+                  "type": "text",
+                  "properties": {
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "font": {
+                      "displayName": "Font",
+                      "propertyName": "fontFamily",
+                      "inputType": "font_select",
+                      "value": {
+                        "fontFamily": "Courgette",
+                        "source": "google-fonts"
+                      },
+                      "defaultValue": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      }
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
+                      "value": {
+                        "r": 167,
+                        "g": 172,
+                        "b": 255,
+                        "a": 1
+                      },
+                      "defaultValue": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "70",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "15203b90-07f5-4801-9cb1-440ad991876c",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            }
+          ],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds",
+                1
+              ],
+              "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+              "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              ],
+              "lhs": {
+                "left": 478,
+                "top": -103,
+                "width": 257,
+                "height": 56,
+                "id": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "type": "text",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "power3.in",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "slideIn",
+                      "values": {
+                        "from": "right",
+                        "distance": 1000
+                      }
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "722f6d43-56d9-45e2-9964-2b40d30474f4",
+                  "type": "text",
+                  "properties": {
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "font": {
+                      "displayName": "Font",
+                      "propertyName": "fontFamily",
+                      "inputType": "font_select",
+                      "value": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      },
+                      "defaultValue": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      }
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
+                      "value": {
+                        "r": 204,
+                        "g": 255,
+                        "b": 0,
+                        "a": 1
+                      },
+                      "defaultValue": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "40",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["objects", "allObjects", 1],
+              "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+              "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+            }
+          ],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "tilesFade"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "rhs": "random"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 170,
+              "rhs": 167
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 175,
+              "rhs": 172
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 171,
+              "rhs": 170
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 176,
+              "rhs": 175
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 173,
+              "rhs": 171
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 178,
+              "rhs": 176
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 177,
+              "rhs": 173
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 181,
+              "rhs": 178
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 176,
+              "rhs": 177
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 180,
+              "rhs": 181
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 252,
+              "rhs": 255
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 164,
+              "rhs": 176
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 168,
+              "rhs": 180
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 240,
+              "rhs": 252
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 147,
+              "rhs": 164
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 151,
+              "rhs": 168
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 228,
+              "rhs": 240
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 150,
+              "rhs": 147
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 155,
+              "rhs": 151
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 243,
+              "rhs": 228
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 148,
+              "rhs": 150
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 153,
+              "rhs": 155
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 241,
+              "rhs": 243
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 145,
+              "rhs": 148
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 150,
+              "rhs": 153
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 144,
+              "rhs": 145
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 149,
+              "rhs": 150
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 128,
+              "rhs": 144
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 134,
+              "rhs": 149
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 243,
+              "rhs": 241
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 77,
+              "rhs": 128
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 85,
+              "rhs": 134
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 218,
+              "rhs": 243
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 50,
+              "rhs": 77
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 56,
+              "rhs": 85
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 160,
+              "rhs": 218
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 158,
+              "rhs": 160
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 50
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 56
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 158
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "font",
+                "value",
+                "fontFamily"
+              ],
+              "lhs": "Cantora One",
+              "rhs": "Courgette"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "font",
+                "value",
+                "fontFamily"
+              ],
+              "lhs": "Carrois Gothic",
+              "rhs": "Cantora One"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "font",
+                "value",
+                "fontFamily"
+              ],
+              "lhs": "Baloo Chettan 2",
+              "rhs": "Carrois Gothic"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "font",
+                "value",
+                "fontFamily"
+              ],
+              "lhs": "Arial",
+              "rhs": "Baloo Chettan 2"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "font",
+                "value",
+                "source"
+              ],
+              "lhs": "system-fonts",
+              "rhs": "google-fonts"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "7",
+              "rhs": "70"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "14",
+              "rhs": "7"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "15203b90-07f5-4801-9cb1-440ad991876c"
+              ],
+              "rhs": {
+                "left": 225,
+                "top": 251,
+                "width": 448,
+                "height": 199,
+                "id": "15203b90-07f5-4801-9cb1-440ad991876c",
                 "type": "text",
                 "isVisible": true,
                 "isLocked": false,
@@ -617,10 +3170,21 @@
                       "id": "none",
                       "values": {}
                     }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
                   }
                 },
                 "definition": {
-                  "id": "89028eec-f065-45d2-b7f4-195c7ddd3675",
+                  "id": "9de4a8d1-7d2f-462e-9762-bff7fb96ee1d",
                   "type": "text",
                   "properties": {
                     "text": {
@@ -725,7 +3289,3133 @@
                     }
                   }
                 },
-                "layerId": "b27e182b-d4ce-4544-b307-909a42822db3"
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": "15203b90-07f5-4801-9cb1-440ad991876c"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "left"
+              ],
+              "lhs": 108,
+              "rhs": 478
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "top"
+              ],
+              "lhs": -94,
+              "rhs": -103
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "width"
+              ],
+              "lhs": 915,
+              "rhs": 257
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "height"
+              ],
+              "lhs": 168,
+              "rhs": 56
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "4",
+              "rhs": "40"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "140",
+              "rhs": "4"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 1024,
+              "rhs": 456
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 768,
+              "rhs": 283
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 2500,
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "ease"
+              ],
+              "lhs": "none",
+              "rhs": "power3.in"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "center",
+              "rhs": "top-right"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "delay"
+              ],
+              "lhs": 500,
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 500,
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 30,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 30,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 2000,
+              "rhs": 2500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 3000,
+              "rhs": 2000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 300,
+              "rhs": 3000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 30,
+              "rhs": 300
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 0,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 5000,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 20,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 20,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 2,
+              "rhs": 20
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 30,
+              "rhs": 2
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 2,
+              "rhs": 20
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 30,
+              "rhs": 2
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 2,
+              "rhs": 20
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 30,
+              "rhs": 2
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "slideIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "from"
+              ],
+              "rhs": "right"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 500,
+              "rhs": 5000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "left"
+              ],
+              "lhs": 158,
+              "rhs": 108
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "top"
+              ],
+              "lhs": 57,
+              "rhs": -94
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "width"
+              ],
+              "lhs": 688,
+              "rhs": 915
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "height"
+              ],
+              "lhs": 374,
+              "rhs": 168
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 205,
+              "rhs": 204
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 3,
+              "rhs": 0
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 4,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 201,
+              "rhs": 205
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 245,
+              "rhs": 255
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 22,
+              "rhs": 4
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 198,
+              "rhs": 201
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 236,
+              "rhs": 245
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 41,
+              "rhs": 22
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 44,
+              "rhs": 41
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 211,
+              "rhs": 198
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 240,
+              "rhs": 236
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 96,
+              "rhs": 44
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 210,
+              "rhs": 211
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 238,
+              "rhs": 240
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 98,
+              "rhs": 96
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 208,
+              "rhs": 210
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 235,
+              "rhs": 238
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 101,
+              "rhs": 98
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 203,
+              "rhs": 208
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 226,
+              "rhs": 235
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 110,
+              "rhs": 101
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 197,
+              "rhs": 203
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 219,
+              "rhs": 226
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 106,
+              "rhs": 110
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 194,
+              "rhs": 197
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 216,
+              "rhs": 219
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 105,
+              "rhs": 106
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 157,
+              "rhs": 194
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 173,
+              "rhs": 216
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 90,
+              "rhs": 105
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 126,
+              "rhs": 157
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 138,
+              "rhs": 173
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 76,
+              "rhs": 90
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 184,
+              "rhs": 126
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 219,
+              "rhs": 138
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 32,
+              "rhs": 76
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 165,
+              "rhs": 184
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 152,
+              "rhs": 165
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 145,
+              "rhs": 152
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 165,
+              "rhs": 145
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 47,
+              "rhs": 165
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 32,
+              "rhs": 47
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 36,
+              "rhs": 32
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 219,
+              "rhs": 32
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 32,
+              "rhs": 219
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 32,
+              "rhs": 36
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 219
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 32
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "color",
+                "value",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 32
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "14",
+              "rhs": "140"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              ],
+              "rhs": {
+                "left": 158,
+                "top": 57,
+                "width": 688,
+                "height": 374,
+                "id": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3",
+                "type": "text",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "722f6d43-56d9-45e2-9964-2b40d30474f4",
+                  "type": "text",
+                  "properties": {
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "font": {
+                      "displayName": "Font",
+                      "propertyName": "fontFamily",
+                      "inputType": "font_select",
+                      "value": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      },
+                      "defaultValue": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      }
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
+                      "value": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      },
+                      "defaultValue": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "14",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "0a00dc25-c40f-4268-b31d-c5fb27ddb3f3"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 10,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 10,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "lhs": 10,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "lhs": 10,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "delay"
+              ],
+              "lhs": 0,
+              "rhs": 500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 50,
+              "rhs": 500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 5,
+              "rhs": 50
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "delay"
+              ],
+              "lhs": 0,
+              "rhs": 5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 10000,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 10000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 100,
+              "rhs": 1000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 10,
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 150,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1500,
+              "rhs": 150
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 1500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 1500
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "tilesFade"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "rhs": "random"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 10,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "timeDistribution"
+              ],
+              "lhs": 50,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "timeDistribution"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "timeDistribution"
+              ],
+              "lhs": 30,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "timeDistribution"
+              ],
+              "lhs": 3,
+              "rhs": 30
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "out",
+                "timeDistribution"
+              ],
+              "lhs": 50,
+              "rhs": 3
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "lhs": "random",
+              "rhs": "center"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "top"
+              ],
+              "lhs": -118.5,
+              "rhs": -118
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "left"
+              ],
+              "lhs": 206,
+              "rhs": -47
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "top"
+              ],
+              "lhs": 54.5,
+              "rhs": -118.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 76,
+              "rhs": 768
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 7,
+              "rhs": 76
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 315,
+              "rhs": 7
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 102,
+              "rhs": 1024
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 10,
+              "rhs": 102
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 1,
+              "rhs": 10
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 513,
+              "rhs": 1
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "tilesFade"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "columns"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "rows"
+              ],
+              "rhs": 10
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "startFrom"
+              ],
+              "rhs": "random"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": 206
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "top"
+              ],
+              "lhs": 92.5,
+              "rhs": 54.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 513
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 315
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "url"
+              ],
+              "lhs": "",
+              "rhs": "/images/wall1.webp"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 1024
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 768
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "isPlaceholder"
+              ],
+              "lhs": true,
+              "rhs": false
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "objectIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
+              ],
+              "rhs": {
+                "left": 330,
+                "top": 92.5,
+                "width": 300,
+                "height": 300,
+                "id": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "definition": {
+                  "id": "437cf6d6-a62f-4e66-a948-541ecc7dfa0b",
+                  "type": "image",
+                  "properties": {
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
               }
             },
             {
@@ -734,7 +6424,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "4b8df132-0d6d-4321-8412-42b554aad6e6"
+                "rhs": "bfb15bdd-586d-4a90-bf42-3fb9a5e83cfe"
               }
             }
           ],
@@ -746,7 +6436,7 @@
               "kind": "E",
               "path": ["selection", "activeLayerId"],
               "lhs": null,
-              "rhs": "b27e182b-d4ce-4544-b307-909a42822db3"
+              "rhs": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
             }
           ],
           "type": "Activate layer",
@@ -759,13 +6449,13 @@
               "path": [
                 "slides",
                 "slideById",
-                "5e384c85-ea6b-45b8-9334-ed440ed32175",
+                "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
                 "layerIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "b27e182b-d4ce-4544-b307-909a42822db3"
+                "rhs": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
               }
             },
             {
@@ -773,7 +6463,7 @@
               "path": [
                 "slides",
                 "slideById",
-                "5e384c85-ea6b-45b8-9334-ed440ed32175",
+                "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
                 "nextLayerIdCounter"
               ],
               "lhs": 0,
@@ -784,11 +6474,11 @@
               "path": [
                 "layers",
                 "layerById",
-                "b27e182b-d4ce-4544-b307-909a42822db3"
+                "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
               ],
               "rhs": {
-                "id": "b27e182b-d4ce-4544-b307-909a42822db3",
-                "slideId": "5e384c85-ea6b-45b8-9334-ed440ed32175",
+                "id": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7",
+                "slideId": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
                 "isBackground": true,
                 "name": "Background layer",
                 "isVisible": true,
@@ -796,6 +6486,15 @@
                 "objectIds": [],
                 "transitions": {
                   "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
                     "relativeTo": "stage",
                     "delay": 0,
                     "duration": 1000,
@@ -813,7 +6512,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "b27e182b-d4ce-4544-b307-909a42822db3"
+                "rhs": "5d14425c-3ca5-4fd3-a023-ac5e1cf186b7"
               }
             }
           ],
@@ -827,7 +6526,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "5e384c85-ea6b-45b8-9334-ed440ed32175"
+                "rhs": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"
               }
             }
           ],
@@ -840,7 +6539,7 @@
               "kind": "E",
               "path": ["selection", "activeSlideId"],
               "lhs": null,
-              "rhs": "5e384c85-ea6b-45b8-9334-ed440ed32175"
+              "rhs": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"
             }
           ],
           "type": "Activate slide",
@@ -859,14 +6558,14 @@
               "path": [
                 "slides",
                 "slideById",
-                "5e384c85-ea6b-45b8-9334-ed440ed32175"
+                "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"
               ],
               "rhs": {
-                "id": "5e384c85-ea6b-45b8-9334-ed440ed32175",
+                "id": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7",
                 "name": "Slide 0",
                 "duration": {
                   "inheritFrom": "custom",
-                  "customValue": 10000
+                  "customValue": 5000
                 },
                 "layerIds": [],
                 "nextLayerIdCounter": 0
@@ -878,7 +6577,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "5e384c85-ea6b-45b8-9334-ed440ed32175"
+                "rhs": "6a7b764b-19d2-46f5-bf51-dfbec0d0dcf7"
               }
             }
           ],
@@ -894,6 +6593,10 @@
     "previewState": {
       "previewState": "stop",
       "isPreview": false,
+      "scope": {
+        "entityType": "project",
+        "entityId": "current-project"
+      },
       "previewSpeed": 1,
       "repeat": true
     },
@@ -905,6 +6608,11 @@
     "layoutType": "default"
   },
   "fonts": {
-    "loadedFontFamilies": []
+    "loadedFontFamilies": [
+      "Baloo Chettan 2",
+      "Carrois Gothic",
+      "Cantora One",
+      "Courgette"
+    ]
   }
 }

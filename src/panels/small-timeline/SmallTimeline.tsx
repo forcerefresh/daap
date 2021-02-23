@@ -12,23 +12,23 @@ import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
 
 type ISmallTimelineProps = typeof mapDispatchToProps &
-  ReturnType<typeof mapStateToProps> & { tl: gsap.core.Timeline };
+  ReturnType<typeof mapStateToProps> & { progress: number };
 
 const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
-  const { tl, previewState, _setStagePreview } = props;
+  const { progress, previewState, _setStagePreview } = props;
 
-  const [progress, setProgress] = useState<number>(0);
+  //const [progress, setProgress] = useState<number>(0);
 
   const lineRef = React.useRef(null);
 
-  useEffect(() => {
+  /* useEffect(() => {
     tl.eventCallback("onUpdate", () => {
       setProgress(tl.progress());
     });
     return () => {
       // TODO: do we need to cleanup;
     };
-  }, [tl]);
+  }, [tl]);*/
 
   //const thumbStyle = {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
@@ -40,7 +40,7 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
 
   const calculateTimeFromThumb = (x: number) => {
     const multiplier = x / (lineRef?.current as any)?.offsetWidth;
-    tl.progress(multiplier, true);
+    //tl.progress(multiplier, true);
   };
   return (
     <div className={css.smallTimeline}>

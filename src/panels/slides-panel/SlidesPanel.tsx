@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import cx from "classnames";
-import { Button, Portal } from "@blueprintjs/core";
+import { Button, Colors, Portal } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -10,12 +10,14 @@ import {
   activateSlide,
   addSlidesToSelection,
   removeSlidesFromSelection,
+  setStagePreview,
 } from "../../store/actions/actions";
 import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
 import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { IPreviewState } from "../../store/reducers/stage";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -26,12 +28,14 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     slideById,
     selectedSlideIds,
     activeSlideId,
+    previewState,
     _addNewSlide,
     _deleteSlideThree,
     _activateSlide,
     _selectSlides,
     _addSlidesToSelection,
     _removeSlidesFromSelection,
+    _setStagePreview,
   } = props;
 
   const [
@@ -93,6 +97,39 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               <div className={css.actionButtons}>
                 <Button
                   minimal
+                  active={
+                    previewState.previewState === "play" &&
+                    previewState.scope?.entityType === "slide" &&
+                    previewState.scope?.entityId === slideId
+                  }
+                  onClick={() => {
+                    if (
+                      previewState.previewState === "play" &&
+                      previewState.scope?.entityType === "slide" &&
+                      previewState.scope?.entityId === slideId
+                    ) {
+                      _setStagePreview({
+                        previewState: "stop",
+                        isPreview: false,
+                        scope: null,
+                      });
+                    } else {
+                      _setStagePreview({
+                        previewState: "play",
+                        isPreview: true,
+                        scope: {
+                          entityType: "slide",
+                          entityId: slideId,
+                        },
+                      });
+                    }
+                  }}
+                  className={css.playButton}
+                  small={true}
+                  icon="play"
+                ></Button>
+                <Button
+                  minimal
                   onClick={() => setShowSettingsPanelForSlideId(slideId)}
                   className={css.slideProperties}
                   small={true}
@@ -131,11 +168,13 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 
 const mapStateToProps = (state: IStore) => {
   const { slides, selection } = state.project;
+  const { previewState } = state.stage;
   return {
     allSlides: slides.allSlides,
     slideById: slides.slideById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
+    previewState,
   };
 };
 
@@ -146,6 +185,8 @@ const mapDispatchToProps = {
   _selectSlides: (ids: string[]): any => selectSlides(ids),
   _addSlidesToSelection: addSlidesToSelection,
   _removeSlidesFromSelection: removeSlidesFromSelection,
+  _setStagePreview: (preview: Partial<IPreviewState>) =>
+    setStagePreview(preview),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

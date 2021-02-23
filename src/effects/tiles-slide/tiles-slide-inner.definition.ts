@@ -1,12 +1,12 @@
 import { InputType } from "../../inputs/types";
 import {
-  ISliceSlideInnerEffect,
-  sliceSlideInner,
-} from "./slice-slide-inner.types";
+  ITilesSlideInnerEffect,
+  tilesSlideInner,
+} from "./tiles-slide-inner.types";
 
-export const sliceSlideInnerDefinition = {
-  id: sliceSlideInner,
-  name: "Slice Slide Inner",
+export const tilesSlideInnerDefinition = {
+  id: tilesSlideInner,
+  name: "Tiles Slide Inner",
   form: [
     {
       displayName: "Columns",
@@ -65,8 +65,8 @@ export const sliceSlideInnerDefinition = {
   ],
 };
 
-export const sliceSlideInnerDefaults: ISliceSlideInnerEffect = {
-  id: sliceSlideInner,
+export const sliceSlideInnerDefaults: ITilesSlideInnerEffect = {
+  id: tilesSlideInner,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

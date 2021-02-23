@@ -1,6 +1,5 @@
 import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import useDeepCompareEffect from "use-deep-compare-effect";
 import { Icon } from "@blueprintjs/core";
 
 import { connect } from "react-redux";
@@ -9,7 +8,11 @@ import { ILayer } from "../../store/reducers/layers";
 import { IStore } from "../../store/store";
 
 import css from "./StagePanel.module.scss";
-import { generateExport, getObjectHtml } from "../../export/export-html";
+import {
+  generatePlayerData,
+  getObjectHtml,
+  IPlayerData,
+} from "../../export/export-html";
 
 import gsap from "gsap"; // TODO: remove player from here
 import SmallTimeline from "../small-timeline/SmallTimeline";
@@ -39,6 +42,7 @@ import {
   roundNumber,
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
+import { AppPlayer } from "../../player/AppPlayer";
 
 interface ISize {
   width: number;
@@ -75,6 +79,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } = props;
 
   const { ctrlDown, spaceDown, escapeDown } = useKeyDown();
+
+  // preview progress
+  const [progress, setProgress] = useState(0);
 
   const [resizeData, setResizeData] = useState<{
     objectId: string;
@@ -250,82 +257,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [rootRef]);
 
-  // TODO: remove player from here
-  const transitionsDataArr = exportData?.transitionsDataArr || [];
-  const [tl /*setTl*/] = useState(gsap.timeline());
-
-  // restart timeline when something is changed
-  useDeepCompareEffect(() => {
-    if (!isEmpty(transitionsDataArr)) {
-      tl.clear();
-
-      // TODO: hack to get timeline duration to be set to slide duration
-      tl.from(".fake-non-existing-selektor", {
-        duration: (slide?.duration?.customValue || 1) / 1000,
-      });
-
-      tl.repeat(-1);
-      tl.timeScale(previewState.previewSpeed);
-
-      transitionsDataArr.forEach((data) => {
-        const effIn = data.transitions.in;
-        if (effIn) {
-          (tl as any)[effIn.effect.id](
-            "." + data.objectClass,
-            {
-              ...effIn.effect.values,
-              duration: effIn.duration / 1000,
-              ease: effIn.ease,
-              childEase: effIn.childEase,
-              timeDistribution: effIn.timeDistribution,
-            },
-            effIn.delay / 1000
-          );
-        }
-      });
-
-      tl.restart();
-
-      /*tl.eventCallback("onComplete", () => {
-        _setStagePreview({ isPreview: false });
-      });*/
-
-      return () => {
-        tl.clear();
-      };
-    }
-  }, [transitionsDataArr]);
-
-  // play/pause switch
-  useEffect(() => {
-    switch (previewState.previewState) {
-      case "play":
-        tl.paused(false);
-        break;
-      case "pause":
-        tl.paused(true);
-        break;
-    }
-  }, [previewState.previewState]);
-
-  // change preview speed
-  useEffect(() => {
-    tl.timeScale(previewState.previewSpeed);
-  }, [previewState.previewSpeed]);
-
-  // when we turn off repeat it stops playing on end and reset position to start
-  useEffect(() => {
-    tl.eventCallback("onRepeat", () => {
-      if (!previewState.repeat) {
-        tl.progress(0);
-        tl.pause();
-        _setStagePreview({ previewState: "stop" });
-      }
-    });
-  }, [previewState.repeat]);
-
   const renderTimeInfo = () => {
-    return <SmallTimeline tl={tl} />;
+    return <SmallTimeline progress={progress} />;
   };
 
   const onObjectClick = (
@@ -822,10 +755,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       <div style={stageStyle} className={css.stage}>
         <div style={canvasStyle} className={css.canvas}>
           {isPreview && (
-            <div
-              style={{ position: "relative" }}
-              dangerouslySetInnerHTML={{ __html: exportData?.html as string }}
-            ></div>
+            <AppPlayer
+              playerData={exportData}
+              previewState={previewState}
+              onProgress={(progress: number) => {
+                setProgress(progress);
+              }}
+              requestStop={() => {
+                _setStagePreview({ previewState: "stop", scope: null });
+              }}
+            />
           )}
           {!isPreview &&
             layerArr?.map((layer) => {
@@ -866,16 +805,20 @@ const mapStateToProps = (state: IStore) => {
     slide = slides.slideById[selection.activeSlideId];
   }
 
+  // generate data for player
+  let exportData: IPlayerData | null = null;
+  if (stage.previewState.isPreview) {
+    exportData = generatePlayerData(
+      { slides, layers, objects },
+      stage.previewState.scope
+    );
+  }
+
   return {
     stageSize: document.documentSize,
     stageZoom: stage.zoom,
     previewState: stage.previewState,
-
-    // generate data for player
-    exportData: stage.previewState.isPreview
-      ? generateExport(slides, layers, objects)
-      : null,
-
+    exportData,
     layerArr,
     slide,
     objectById: objects.objectById,

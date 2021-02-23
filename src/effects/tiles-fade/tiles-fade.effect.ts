@@ -1,21 +1,34 @@
 import gsap from "gsap";
 import { tilesFade, ITilesFadeEffect } from "./tiles-fade.types";
 import { merge } from "lodash";
+import {
+  createTilesFromHtml,
+  getMethodByType,
+  getObjectContentElementAndHtml,
+  tilesCompleteHandler,
+  tilesStartHandler,
+} from "../common";
 
 gsap.registerEffect({
   name: tilesFade,
   effect: function (targets: any, config: ITilesFadeEffect) {
-    console.log(config);
+    // get element and html
+    const {
+      objectContentElement,
+      objectContentHtml,
+    } = getObjectContentElementAndHtml(targets[0]);
 
-    const url = "/images/Machu_Picchu.jpg";
-    const size = { w: 1024, h: 768 };
-    const photoGrid = { r: config.rows, c: config.columns };
+    // create title elements
+    const elements = createTilesFromHtml(
+      objectContentHtml,
+      {
+        w: config.objectProperties?.width!,
+        h: config.objectProperties?.height!,
+      },
+      { r: config.rows, c: config.columns }
+    );
 
-    const elements = createTiles(url, size, photoGrid);
-
-    // clean
-    targets[0].innerHTML = "";
-
+    // append title elements
     elements.forEach((element) => {
       targets[0].appendChild(element);
     });
@@ -29,6 +42,12 @@ gsap.registerEffect({
         grid: [config.rows, config.columns],
         ease: config.childEase,
       },
+      onComplete: () => {
+        tilesCompleteHandler(config.type, objectContentElement, elements);
+      },
+      onStart: () => {
+        tilesStartHandler(config.type, objectContentElement, elements);
+      },
     };
 
     const partialConfig = getParameters(
@@ -37,7 +56,10 @@ gsap.registerEffect({
       config.startFrom
     );
 
-    return gsap.from(elements, merge(baseConfig, partialConfig) as any);
+    return gsap[getMethodByType(config.type)](
+      elements,
+      merge(baseConfig, partialConfig) as any
+    );
   },
   defaults: {},
   extendTimeline: true,
@@ -108,33 +130,4 @@ function getParameters(rows: number, columns: number, startFrom: string) {
         },
       };
   }
-}
-
-function createTiles(
-  url: string,
-  size: { w: number; h: number },
-  grid: { r: number; c: number }
-): Element[] {
-  const holder = document.createElement("div");
-  let html = "";
-  const tilesWidth = size.w / grid.c;
-  const tilesHeight = size.h / grid.r;
-  for (let i = 0; i < grid.r; i++) {
-    for (let j = 0; j < grid.c; j++) {
-      html += `<div style="
-              outline: 1px solid transparent;
-              transform: translateZ(0);
-							background:url('${url}'); 
-							width: ${tilesWidth}px; 
-							height: ${tilesHeight}px;
-							position:absolute; 
-							left: ${j * tilesWidth}px;
-							top: ${i * tilesHeight}px;
-							background-position: ${-j * tilesWidth}px ${-i * tilesHeight}px;">
-							</div>`;
-    }
-  }
-
-  holder.innerHTML = html;
-  return Array.from(holder.children);
 }

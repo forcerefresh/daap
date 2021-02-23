@@ -16,6 +16,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
       //const image = new Image();
       //image.onload = function () {
       //  console.log(image.width);
+      console.log(mediaObject);
       onChange(mediaObject);
       //};
       //image.src = mediaObject.url;

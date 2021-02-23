@@ -1,8 +1,8 @@
 import { IEffectBase } from "../types";
 
-export const sliceSlideInner = "sliceSlideInner";
+export const tilesSlideInner = "tilesSlideInner";
 
-export interface ISliceSlideInnerEffect extends IEffectBase {
+export interface ITilesSlideInnerEffect extends IEffectBase {
   rows: number;
   columns: number;
   blur: number;

@@ -1,8 +1,8 @@
 import { IEffectBase } from "../types";
 
-export const slideIn = "slideIn";
+export const slide = "slide";
 
-export interface ISlideInEffect extends IEffectBase {
+export interface ISlideEffect extends IEffectBase {
   distance: number;
   from: "top" | "bottom" | "left" | "right";
 }

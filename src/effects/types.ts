@@ -1,5 +1,11 @@
 export interface IEffectBase {
   id: string;
+  type?: "in" | "out";
+  objectProperties?: {
+    width: number;
+    height: number;
+    objectHtml: string;
+  };
   // >> flags beginning (TODO: make flags optional as by default they are false)
   hasDelay: boolean;
   hasDuration: boolean;
@@ -13,6 +19,7 @@ export interface IEffectBase {
   childEase?: string;
   childCustomEase?: string;
   duration?: number;
+  delay?: number;
 }
 
 export interface IEasing {

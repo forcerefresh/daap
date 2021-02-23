@@ -32,9 +32,18 @@ function calculateTimelineRect(
   slideDuration: number,
   objectDelay: number,
   objectDuration: number,
-  holderWidth: number = 1
+  holderWidth: number = 1,
+  isOut = false
 ) {
-  const left = (objectDelay / slideDuration) * holderWidth;
+  let left: number;
+  if (isOut) {
+    left =
+      ((slideDuration - objectDelay - objectDuration) / slideDuration) *
+      holderWidth;
+  } else {
+    left = (objectDelay / slideDuration) * holderWidth;
+  }
+
   const width = (objectDuration / slideDuration) * holderWidth;
 
   return { left, width };
@@ -184,7 +193,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   })}
                 >
                   <div>
-                    <Button
+                    {/* TODO */
+                    /*<Button
                       active={layer.id === showEffectPanelForId.id}
                       minimal
                       onClick={(event: any) => {
@@ -196,7 +206,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       }}
                       small={true}
                       icon="walk"
-                    ></Button>
+                    ></Button>*/}
                     <Button
                       minimal
                       onClick={(event: any) => {
@@ -207,9 +217,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         [css.layerOpen]: openLayerById[layer.id],
                       })}
                       small={true}
-                      icon="play"
+                      icon="chevron-right"
                     ></Button>
-
                     <div className={css.layerName}>{layer.name}</div>
 
                     <div className={css.objectCount}>
@@ -234,16 +243,30 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                     {layer.objectIds.map((objectId) => {
                       const object = objectById[objectId];
 
-                      const size = calculateTimelineRect(
+                      const sizeIn = calculateTimelineRect(
                         slide?.duration.customValue || 1,
                         object?.transitions?.in?.delay || 1,
                         object?.transitions?.in?.duration || 1,
                         340
                       );
-                      const timelineStyle = {
-                        left: size.left + "px",
-                        width: size.width + "px",
+                      const timelineInStyle = {
+                        left: sizeIn.left + "px",
+                        width: sizeIn.width + "px",
                       };
+
+                      const sizeOut = calculateTimelineRect(
+                        slide?.duration.customValue || 1,
+                        object?.transitions?.out?.delay || 1,
+                        object?.transitions?.out?.duration || 1,
+                        340,
+                        true
+                      );
+                      const timelineOutStyle = {
+                        left: sizeOut.left + "px",
+                        width: sizeOut.width + "px",
+                      };
+
+                      // TODO: OUTEFFECT
                       return (
                         <div
                           key={objectId}
@@ -322,6 +345,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                   <span className={css.inlineValue}>
                                     {get(object, "transitions.out.duration")}ms
                                   </span>
+                                  , gap:{" "}
+                                  <span className={css.inlineValue}>
+                                    {get(object, "transitions.in.delay")}ms
+                                  </span>
                                 </div>
                               )}
                             </div>
@@ -341,13 +368,22 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           <div
                             className={cx(css.timelineHolder, {
                               [css.hideMe]:
-                                object.transitions.in?.effect.id === "none",
+                                object.transitions.in?.effect.id === "none" &&
+                                object.transitions.out?.effect.id === "none",
                             })}
                           >
-                            <div
-                              className={css.timeline}
-                              style={timelineStyle}
-                            ></div>
+                            {object.transitions.in?.effect.id !== "none" && (
+                              <div
+                                className={css.timeline}
+                                style={timelineInStyle}
+                              />
+                            )}
+                            {object.transitions.out?.effect.id !== "none" && (
+                              <div
+                                className={css.timeline}
+                                style={timelineOutStyle}
+                              />
+                            )}
                           </div>
                         </div>
                       );

@@ -25,6 +25,10 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             _setStagePreview({
               isPreview: isPreview,
               previewState: isPreview ? "play" : "stop",
+              scope: {
+                entityType: "project",
+                entityId: "current-project",
+              },
             });
           }}
         />

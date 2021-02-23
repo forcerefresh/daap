@@ -55,7 +55,7 @@ export function initializeSlideAndLayer(): any {
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
         duration: {
           inheritFrom: "custom",
-          customValue: 10000,
+          customValue: 5000,
         },
         layerIds: [],
         nextLayerIdCounter: 0,
@@ -156,6 +156,15 @@ export function addNewLayer(slideId: string, isBackground = false): any {
       objectIds: [],
       transitions: {
         in: {
+          relativeTo: "stage",
+          delay: 0,
+          duration: 1000,
+          effect: {
+            id: "none",
+            values: {},
+          },
+        },
+        out: {
           relativeTo: "stage",
           delay: 0,
           duration: 1000,

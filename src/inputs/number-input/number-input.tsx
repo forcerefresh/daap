@@ -23,7 +23,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
   );
 
   useEffect(() => {
-    if (!isEqual(value, latestValidValue)) {
+    if (!isEqual(value.toString(), latestValidValue)) {
       setLatestValidValue(value.toString());
       setInternalValue(value.toString());
     }

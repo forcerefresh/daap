@@ -28,6 +28,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
     objectType,
     objectById,
     layerById,
+    effectType,
     _updateObject,
     _updateLayer,
   } = props;
@@ -46,8 +47,13 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
     return effectDefinition.definition.form.map((item) => {
       function onChange(value: any) {
         const retObj = cloneDeep(object);
+        console.log(retObj);
         if (retObj) {
           const values = get(retObj, valuesPath) || {};
+          console.log(item.propertyName);
+          console.log(value);
+          console.log(valuesPath);
+          console.log(values);
           values[item.propertyName] = value;
           set(retObj, valuesPath, values);
           if (objectType === "object") _updateObject(retObj as IObject);
@@ -59,59 +65,84 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
       const defaultValue = effectDefinition.defaults[item.propertyName];
       const inputProps = {
         ...item,
-        value: value || defaultValue,
+        value: typeof value !== "undefined" ? value : defaultValue,
       };
       return getInputForm(item.inputType, inputProps, onChange, onChange);
     });
   };
 
-  const effectDefinition = getEffectDefinition(
+  const effDef = (type: string) => {
+    return getEffectDefinition(
+      get(objectOrLayer, "transitions." + type + ".effect.id")
+    );
+  };
+
+  /*const effectDefinition = getEffectDefinition(
     get(objectOrLayer, "transitions.in.effect.id")
+  );*/
+
+  const delayInput = () => (
+    <div className="input60">
+      {getNumericFiled(
+        effectType === "in" ? "Delay" : "Gap",
+        get(objectOrLayer, `transitions.${effectType}.delay`),
+        (value: any) => {
+          const obj = cloneDeep(objectOrLayer);
+          set(obj, `transitions.${effectType}.delay`, value);
+          if (objectType === "object") _updateObject(obj as IObject);
+          else if (objectType === "layer") _updateLayer(obj as ILayer);
+        }
+      )}
+    </div>
+  );
+
+  const durationInput = () => (
+    <div className="input60">
+      {getNumericFiled(
+        "Duration",
+        get(objectOrLayer, `transitions.${effectType}.duration`),
+        (value: any) => {
+          const obj = cloneDeep(objectOrLayer);
+          set(obj, `transitions.${effectType}.duration`, value);
+          if (objectType === "object") _updateObject(obj as IObject);
+          else if (objectType === "layer") _updateLayer(obj as ILayer);
+        }
+      )}
+    </div>
   );
 
   return (
     <div className={css.effectConfigurationForm}>
       <div className={css.inlineFlex}>
-        <div className="input60">
-          {getNumericFiled(
-            "Delay",
-            get(objectOrLayer, "transitions.in.delay"),
-            (value: any) => {
-              const obj = cloneDeep(objectOrLayer);
-              set(obj, "transitions.in.delay", value);
-              if (objectType === "object") _updateObject(obj as IObject);
-              else if (objectType === "layer") _updateLayer(obj as ILayer);
-            }
-          )}
-        </div>
-        <div className="input60">
-          {getNumericFiled(
-            "Duration",
-            get(objectOrLayer, "transitions.in.duration"),
-            (value: any) => {
-              const obj = cloneDeep(objectOrLayer);
-              set(obj, "transitions.in.duration", value);
-              if (objectType === "object") _updateObject(obj as IObject);
-              else if (objectType === "layer") _updateLayer(obj as ILayer);
-            }
-          )}
-        </div>
+        {effectType === "in" && (
+          <>
+            {delayInput()}
+            {durationInput()}
+          </>
+        )}
+        {effectType === "out" && (
+          <>
+            {durationInput()}
+            {delayInput()}
+          </>
+        )}
       </div>
 
       {getSelectField(
         "Effect",
-        get(objectOrLayer, "transitions.in.effect.id"),
+        get(objectOrLayer, `transitions.${effectType}.effect.id`),
         getEffectsOptions(),
         (value: any) => {
           const obj = cloneDeep(objectOrLayer);
-          set(obj, "transitions.in.effect.id", value);
+          set(obj, `transitions.${effectType}.effect.id`, value);
 
-          const values = get(obj, "transitions.in.effect.values") || {};
+          const values =
+            get(obj, `transitions.${effectType}.effect.values`) || {};
           const effDef = getEffectDefinition(value);
           effDef.definition.form.forEach((item) => {
             values[item.propertyName] = effDef.defaults[item.propertyName];
           });
-          set(obj, "transitions.in.effect.values", values);
+          set(obj, `transitions.${effectType}.effect.values`, values);
 
           if (objectType === "object") _updateObject(obj as IObject);
           else if (objectType === "layer") _updateLayer(obj as ILayer);
@@ -120,46 +151,46 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 
       <div className={css.dynamicFields}>
         {renderEffectForm(
-          get(objectOrLayer, "transitions.in.effect.id"),
+          get(objectOrLayer, `transitions.${effectType}.effect.id`),
           objectOrLayer,
-          "transitions.in.effect.values",
+          `transitions.${effectType}.effect.values`,
           objectType
         )}
       </div>
 
       <div>
-        {effectDefinition.defaults.hasEase &&
+        {effDef(effectType).defaults.hasEase &&
           getSelectField(
             "Easing",
-            get(objectOrLayer, "transitions.in.ease"),
+            get(objectOrLayer, `transitions.${effectType}.ease`),
             EasingOptions,
             (value: any) => {
               const obj = cloneDeep(objectOrLayer);
-              set(obj, "transitions.in.ease", value);
+              set(obj, `transitions.${effectType}.ease`, value);
               if (objectType === "object") _updateObject(obj as IObject);
               else if (objectType === "layer") _updateLayer(obj as ILayer);
             }
           )}
-        {effectDefinition.defaults.hasChildEase &&
+        {effDef(effectType).defaults.hasChildEase &&
           getSelectField(
             "Child easing",
-            get(objectOrLayer, "transitions.in.childEase"),
+            get(objectOrLayer, `transitions.${effectType}.childEase`),
             EasingOptions,
             (value: any) => {
               const obj = cloneDeep(objectOrLayer);
-              set(obj, "transitions.in.childEase", value);
+              set(obj, `transitions.${effectType}.childEase`, value);
               if (objectType === "object") _updateObject(obj as IObject);
               else if (objectType === "layer") _updateLayer(obj as ILayer);
             }
           )}
         <div className="input60">
-          {effectDefinition.defaults.hasTimeDistribution &&
+          {effDef(effectType).defaults.hasTimeDistribution &&
             getNumericFiled(
               "Time distribution",
-              get(objectOrLayer, "transitions.in.timeDistribution"),
+              get(objectOrLayer, `transitions.${effectType}.timeDistribution`),
               (value: any) => {
                 const obj = cloneDeep(objectOrLayer);
-                set(obj, "transitions.in.timeDistribution", value);
+                set(obj, `transitions.${effectType}.timeDistribution`, value);
                 if (objectType === "object") _updateObject(obj as IObject);
                 else if (objectType === "layer") _updateLayer(obj as ILayer);
               },

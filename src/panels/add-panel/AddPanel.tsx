@@ -111,8 +111,8 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           onClick={() => {
             if (activeLayerId) {
               _addNewObject(activeLayerId, ObjectType.IMAGE, {
-                left: 0,
-                top: 0,
+                left: (documentSize.width - 300) / 2,
+                top: (documentSize.height - 300) / 2,
                 width: 300,
                 height: 300,
               });

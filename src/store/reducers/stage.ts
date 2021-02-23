@@ -6,11 +6,17 @@ import {
   SET_STAGE_ZOOM,
 } from "../actions/actions";
 
+export interface IPreviewScope {
+  entityType: "project" | "slide" | "layer" | "object";
+  entityId: string;
+}
+
 export interface IPreviewState {
   isPreview: boolean;
   previewState: "play" | "pause" | "stop";
   previewSpeed: number;
   repeat: boolean;
+  scope: IPreviewScope | null;
 }
 
 export enum StageTools {
@@ -31,6 +37,7 @@ export function stage(
     previewState: {
       previewState: "stop",
       isPreview: false,
+      scope: null,
       previewSpeed: 1,
       repeat: true,
     },

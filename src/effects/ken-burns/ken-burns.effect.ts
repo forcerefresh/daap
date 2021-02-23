@@ -1,20 +1,33 @@
 import gsap from "gsap";
+import { getMethodByType, getObjectContentElementAndHtml } from "../common";
 import { IKenBurnsEffect, kenBurns } from "./ken-burns.types";
 
 gsap.registerEffect({
   name: kenBurns,
-  effect: function (targets: string | object | null, config: IKenBurnsEffect) {
-    gsap.set(targets, {
-      transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
-    });
+  effect: function (targets: any, config: IKenBurnsEffect) {
+    // get element
+    const { objectContentElement } = getObjectContentElementAndHtml(targets[0]);
 
     // scale factor are increasing through the time
     const totalScaleFactor = (config.scaleFactor * config.duration!) / 100 + 1;
 
-    return gsap.to(targets, {
+    if (config.type === "in") {
+      gsap.set(targets, {
+        scale: totalScaleFactor,
+      });
+    }
+
+    return gsap[getMethodByType(config.type)](targets, {
       ease: config.ease,
       duration: config.duration!,
-      scale: totalScaleFactor,
+      scale: 1,
+      onStart: () => {
+        gsap.set(targets, {
+          transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
+        });
+        objectContentElement.style.visibility = "visible";
+      },
+      onInit: () => {},
     });
   },
   defaults: {},

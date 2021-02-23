@@ -1,16 +1,29 @@
 import gsap from "gsap";
-import { ISlideInEffect, slideIn } from "./slide-in.types";
+import { getObjectContentElementAndHtml } from "../common";
+import { ISlideEffect, slide } from "./slide.types";
 
 gsap.registerEffect({
-  name: slideIn,
-  effect: function (targets: string | object | null, config: ISlideInEffect) {
+  name: slide,
+  effect: function (targets: any, config: ISlideEffect) {
+    // get element
+    const { objectContentElement } = getObjectContentElementAndHtml(targets[0]);
+
     const xy = getXY(config.from, config.distance);
 
-    return gsap.from(targets, {
+    const effectMethod = config.type === "in" ? "from" : "to";
+    return gsap[effectMethod](targets, {
       ease: config.ease,
       duration: config.duration!,
       y: xy.y,
       x: xy.x,
+      onComplete: () => {
+        if (config.type === "in") {
+          objectContentElement.style.visibility = "visible";
+        }
+      },
+      onStart: () => {
+        objectContentElement.style.visibility = "visible";
+      },
     });
   },
   defaults: {},

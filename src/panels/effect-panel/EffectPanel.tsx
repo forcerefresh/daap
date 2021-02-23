@@ -74,7 +74,11 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
                 effect out
               </div>
               {visibleSectionIds[EffectPanelSections.EFFECT_OUT] && (
-                <div> section content</div>
+                <EffectConfigurationForm
+                  effectType={"out"}
+                  objectOrLayerId={objectOrLayerId}
+                  objectType={objectType}
+                />
               )}
             </section>
           </>

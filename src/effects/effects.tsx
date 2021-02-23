@@ -1,10 +1,7 @@
-import { fadeInDefaults, fadeInDefinition } from "./fade-in/fade-in.definition";
+import { fadeDefaults, fadeDefinition } from "./fade/fade.definition";
 import { noneDefaults, noneDefinition } from "./none/none.definition";
-import { zoomInDefaults, zoomInDefinition } from "./zoom-in/zoom-in.definition";
-import {
-  slideInDefaults,
-  slideInDefinition,
-} from "./slide-in/slide-in.definition";
+import { zoomInDefaults, zoomInDefinition } from "./zoom/zoom.definition";
+import { slideDefaults, slideDefinition } from "./slide/slide.definition";
 import {
   kenBurnsDefaults,
   kenBurnsDefinition,
@@ -21,21 +18,22 @@ import {
   sliceSlideDefaults,
   sliceSlideDefinition,
 } from "./slice-slide/slice-slide.definition";
-import { 
-  sliceSlideInnerDefaults, 
-  sliceSlideInnerDefinition 
-} from "./slice-slide-inner/slice-slide-inner.definition";
+import {
+  sliceSlideInnerDefaults,
+  tilesSlideInnerDefinition,
+} from "./tiles-slide/tiles-slide-inner.definition";
 
 // import all effects
 import "./none/none.effect";
-import "./fade-in/fade-in.effect";
-import "./zoom-in/zoom-in.effect";
-import "./slide-in/slide-in.effect";
+import "./fade/fade.effect";
+import "./zoom/zoom.effect";
+import "./slide/slide.effect";
 import "./ken-burns/ken-burns.effect";
 import "./tiles-zoom/tiles-zoom.effect";
 import "./tiles-fade/tiles-fade.effect";
 import "./slice-slide/slice-slide.effect";
-import "./slice-slide-inner/slice-slide-inner.effect";
+import "./tiles-slide/tiles-slide-inner.effect";
+
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
   id: string;
@@ -49,19 +47,19 @@ interface IEffectHolder {
   definition: IEffectDefinitionWrapper;
   defaults: IEffectDefaultsWrapper;
 }
-// <<
+// <<<
 
 const effects: IEffectHolder[] = [];
 
 registerEffect(noneDefinition, noneDefaults);
-registerEffect(fadeInDefinition, fadeInDefaults);
+registerEffect(fadeDefinition, fadeDefaults);
 registerEffect(zoomInDefinition, zoomInDefaults);
-registerEffect(slideInDefinition, slideInDefaults);
+registerEffect(slideDefinition, slideDefaults);
 registerEffect(kenBurnsDefinition, kenBurnsDefaults);
 registerEffect(tilesZoomDefinition, tilesZoomDefaults);
 registerEffect(tilesFadeDefinition, tilesFadeDefaults);
+registerEffect(tilesSlideInnerDefinition, sliceSlideInnerDefaults);
 registerEffect(sliceSlideDefinition, sliceSlideDefaults);
-registerEffect(sliceSlideInnerDefinition, sliceSlideInnerDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

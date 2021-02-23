@@ -1,0 +1,17 @@
+import { InputType } from "../../inputs/types";
+import { fade, IFadeEffect } from "./fade.types";
+
+export const fadeDefinition = {
+  id: fade,
+  name: "Fade",
+  form: [],
+};
+
+export const fadeDefaults: IFadeEffect = {
+  id: fade,
+  hasDelay: true,
+  hasDuration: true,
+  hasEase: true,
+  hasChildEase: false,
+  ease: "none",
+};

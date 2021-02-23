@@ -1,20 +1,20 @@
 import { InputType } from "../../inputs/types";
-import { IZoomInEffect, zoomIn } from "./zoom-in.types";
+import { IZoomInEffect, zoomIn } from "./zoom.types";
 
 export const zoomInDefinition = {
   id: zoomIn,
-  name: "Zoom In",
+  name: "Zoom",
   form: [
     {
-      displayName: "Start scale",
+      displayName: "Scale X",
       helperText: "Percentage value (default 0)",
-      propertyName: "fromScale",
+      propertyName: "scaleX",
       inputType: InputType.NUMBER,
     },
     {
-      displayName: "End scale",
+      displayName: "Scale Y",
       helperText: "Percentage value (default 100)",
-      propertyName: "toScale",
+      propertyName: "scaleY",
       inputType: InputType.NUMBER,
     },
   ],
@@ -28,6 +28,6 @@ export const zoomInDefaults: IZoomInEffect = {
   hasChildEase: false,
   ease: "none",
   // specific to this effect
-  fromScale: 0,
-  toScale: 100,
+  scaleX: 100,
+  scaleY: 100,
 };
