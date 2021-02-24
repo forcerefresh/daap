@@ -4,106 +4,97 @@ import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
 gsap.registerEffect({
   name: fallingLeaves,
   effect: function (targets: any, config: IFallingLeaves) {
-    gsap.set(targets[0], {
-      perspective: 600,
-    });
+    gsap.set(targets[0], { perspective: 600 });
+    //targets[0].style.overflow = "hidden";
+
+    targets[0].style.border = "1px solid red";
+
+    var total = 30;
+    var container = document.getElementById("container");
+    var w = 300;
+    var h = 200;
+
     const url = "/images/leaf.png";
 
-    const size = { w: 50, h: 50 };
-    const amount = 30;
-    const h = 900;
+    const size = { w: 35, h: 35 };
 
-    const rootTimeline = gsap.timeline();
-    function animate(elm: Element) {
-      let tl = gsap.timeline();
+    const rootTimeline = gsap.timeline({});
 
-      tl.to(
-        elm,
-        {
-          duration: R(6, 15),
-          y: h + 100,
-          //ease: Linear.easeNone,
-          repeat: -1,
-          delay: -15,
-        },
-        0
-      );
-      tl.to(
-        elm,
-        {
-          duration: R(4, 8),
+    for (let i = 0; i < total; i++) {
+      var Div = document.createElement("div");
+      Div.style.position = "absolute";
+      Div.innerHTML = `<img src="${url}" width="${size.w}" height="${size.h}" />`;
+
+      gsap.set(Div, {
+        attr: { class: "dot" },
+        x: R(0, w),
+        y: R(-200, -150),
+        z: R(-200, 200),
+      });
+      targets[0].appendChild(Div);
+      rootTimeline.add(animm(Div), 0);
+    }
+
+    const tweenns = [];
+    function animm(elm: Element) {
+      const tl = gsap.timeline();
+
+      const tween = gsap.to(elm, {
+        duration: R(6, 15),
+        y: h + 100,
+        ease: "none",
+        repeat: -1,
+      });
+
+      tween.startTime(16);
+      tl.smoothChildTiming = true;
+      tl.add(tween, 0);
+      tl.startTime(4);
+      /* tl.add(
+        gsap.to(elm, R(4, 8), {
           x: "+=100",
           rotationZ: R(0, 180),
           repeat: -1,
           yoyo: true,
-          //ease: Sine.easeInOut,
-        },
-        0
+          ease: "Sine.easeInOut",
+        })
       );
-      tl.to(
-        elm,
-        {
-          duration: R(2, 8),
+      tl.add(
+        gsap.to(elm, R(2, 8), {
           rotationX: R(0, 360),
           rotationY: R(0, 360),
           repeat: -1,
           yoyo: true,
-          //ease: Sine.easeInOut,
+          ease: "Sine.easeInOut",
           delay: -5,
-        },
-        0
-      );
-
-      /*
-      tl.to(
-        element,
-        {
-          duration: R(config.duration! + 4, config.duration! + 11),
-          y: h + 100,
-          //ease: "easeNone",
-        },
-        0
-      );
-      tl.to(
-        element,
-        {
-          duration: R(config.duration! + 2, config.duration! + 4),
-          x: "+=200",
-          rotationZ: R(0, 180),
-          //ease: "easeInOut",
-        },
-        0
-      );
-      tl.to(
-        element,
-        {
-          duration: R(config.duration!, config.duration! + 6),
-          rotationX: R(0, 360),
-          rotationY: R(0, 360),
-          //ease: "easeInOut",
-        },
-        0
+        })
       );*/
       return tl;
     }
-
-    for (let i = 0; i < amount; i++) {
-      let leaf = createLeaf(size, url);
-      targets[0].appendChild(leaf);
-      rootTimeline.add(animate(leaf), 0);
-    }
+    //rootTimeline.startTime(15);
     return rootTimeline;
   },
   defaults: {},
   extendTimeline: true,
 });
 
-function R(min: number, max: number) {
-  return min + Math.random() * (max - min);
-}
-
 function createLeaf(size: { w: number; h: number }, url: string): Element {
-  const holder = document.createElement("div");
+  const leaf = document.createElement("div");
+  leaf.style.position = "absolute";
+  leaf.innerHTML = `<img src="${url}" width="${size.w}" height="${size.h}" />`;
+  const w = 1500;
+
+  gsap.set(leaf, {
+    attr: { class: "dot" },
+    x: R(0, w),
+    y: R(-0, -10),
+    z: R(-200, 200),
+  });
+  return leaf;
+  /*
+  container.appendChild(Div);
+
+
 
   let html = "";
   html = `<div style="transform:translate3d(${R(0, 600)}px, ${R(
@@ -114,5 +105,9 @@ function createLeaf(size: { w: number; h: number }, url: string): Element {
 					</div>`;
 
   holder.innerHTML = html;
-  return holder.firstElementChild as Element;
+  return holder.firstElementChild as Element;*/
+}
+
+function R(min: number, max: number) {
+  return min + Math.random() * (max - min);
 }
