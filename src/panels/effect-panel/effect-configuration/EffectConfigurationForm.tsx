@@ -9,8 +9,13 @@ import { EasingOptions } from "../../../effects/types";
 import { getInputForm } from "../../../inputs/input-factory";
 import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
 import { IObject } from "../../../objects/types";
-import { updateLayer, updateObject } from "../../../store/actions/actions";
+import {
+  updateLayer,
+  updateObject,
+  updateSlide,
+} from "../../../store/actions/actions";
 import { ILayer } from "../../../store/reducers/layers";
+import { ISlide, slides } from "../../../store/reducers/slides";
 import { IStore } from "../../../store/store";
 
 import css from "./EffectConfigurationForm.module.scss";
@@ -18,8 +23,8 @@ import css from "./EffectConfigurationForm.module.scss";
 type IEffectConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     objectOrLayerId: string;
-    objectType?: "object" | "layer";
-    effectType: "in" | "out";
+    objectType?: "object" | "layer" | "slide";
+    effectType: "in" | "out" | "effect";
   };
 
 const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
@@ -28,36 +33,41 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
     objectType,
     objectById,
     layerById,
+    slideById,
     effectType,
     _updateObject,
     _updateLayer,
+    _updateSlide,
   } = props;
 
   const objectOrLayer =
-    objectType === "object" ? objectById[objectId] : layerById[objectId];
+    objectType === "object"
+      ? objectById[objectId]
+      : objectType === "layer"
+      ? layerById[objectId]
+      : slideById[objectId];
 
   const renderEffectForm = (
     effectId: string,
-    object: IObject | ILayer,
+    object: IObject | ILayer | ISlide,
     valuesPath: string,
-    objectType?: "object" | "layer"
+    objectType?: "object" | "layer" | "slide"
   ) => {
     const effectDefinition = getEffectDefinition(effectId);
 
     return effectDefinition.definition.form.map((item) => {
       function onChange(value: any) {
         const retObj = cloneDeep(object);
-        console.log(retObj);
         if (retObj) {
           const values = get(retObj, valuesPath) || {};
-          console.log(item.propertyName);
-          console.log(value);
-          console.log(valuesPath);
-          console.log(values);
           values[item.propertyName] = value;
           set(retObj, valuesPath, values);
-          if (objectType === "object") _updateObject(retObj as IObject);
-          else if (objectType === "layer") _updateLayer(retObj as ILayer);
+          if (objectType === "object")
+            _updateObject((retObj as any) as IObject);
+          else if (objectType === "layer")
+            _updateLayer((retObj as any) as ILayer);
+          else if (objectType === "slide")
+            _updateSlide((retObj as any) as ISlide);
         }
       }
 
@@ -84,13 +94,14 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   const delayInput = () => (
     <div className="input60">
       {getNumericFiled(
-        effectType === "in" ? "Delay" : "Gap",
+        effectType === "out" ? "Gap" : "Delay",
         get(objectOrLayer, `transitions.${effectType}.delay`),
         (value: any) => {
           const obj = cloneDeep(objectOrLayer);
           set(obj, `transitions.${effectType}.delay`, value);
           if (objectType === "object") _updateObject(obj as IObject);
           else if (objectType === "layer") _updateLayer(obj as ILayer);
+          else if (objectType === "slide") _updateSlide((obj as any) as ISlide);
         }
       )}
     </div>
@@ -106,15 +117,18 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           set(obj, `transitions.${effectType}.duration`, value);
           if (objectType === "object") _updateObject(obj as IObject);
           else if (objectType === "layer") _updateLayer(obj as ILayer);
+          else if (objectType === "slide") _updateSlide((obj as any) as ISlide);
         }
       )}
     </div>
   );
 
+  const a = get(objectOrLayer, `transitions.${effectType}.effect.id`);
+
   return (
     <div className={css.effectConfigurationForm}>
       <div className={css.inlineFlex}>
-        {effectType === "in" && (
+        {(effectType === "in" || effectType === "effect") && (
           <>
             {delayInput()}
             {durationInput()}
@@ -127,6 +141,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           </>
         )}
       </div>
+
+      {effectType === "effect" && <div className="bp3-form-helper-text"></div>}
 
       {getSelectField(
         "Effect",
@@ -146,6 +162,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 
           if (objectType === "object") _updateObject(obj as IObject);
           else if (objectType === "layer") _updateLayer(obj as ILayer);
+          else if (objectType === "slide") _updateSlide((obj as any) as ISlide);
         }
       )}
 
@@ -169,6 +186,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
               set(obj, `transitions.${effectType}.ease`, value);
               if (objectType === "object") _updateObject(obj as IObject);
               else if (objectType === "layer") _updateLayer(obj as ILayer);
+              else if (objectType === "slide")
+                _updateSlide((obj as any) as ISlide);
             }
           )}
         {effDef(effectType).defaults.hasChildEase &&
@@ -181,6 +200,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
               set(obj, `transitions.${effectType}.childEase`, value);
               if (objectType === "object") _updateObject(obj as IObject);
               else if (objectType === "layer") _updateLayer(obj as ILayer);
+              else if (objectType === "slide")
+                _updateSlide((obj as any) as ISlide);
             }
           )}
         <div className="input60">
@@ -193,6 +214,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
                 set(obj, `transitions.${effectType}.timeDistribution`, value);
                 if (objectType === "object") _updateObject(obj as IObject);
                 else if (objectType === "layer") _updateLayer(obj as ILayer);
+                else if (objectType === "slide")
+                  _updateSlide((obj as any) as ISlide);
               },
               "Percentage that every item will take related to effect time (default 50%)"
             )}
@@ -203,16 +226,18 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers } = state.project;
+  const { objects, layers, slides } = state.project;
   return {
     objectById: objects.objectById,
     layerById: layers.layerById,
+    slideById: slides.slideById,
   };
 };
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
+  _updateSlide: (slide: ISlide) => updateSlide(slide),
 };
 
 export default connect(

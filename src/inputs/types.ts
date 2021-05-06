@@ -1,4 +1,5 @@
 import { RGBColor } from "react-color";
+import { IObjectEvent } from "../objects/types";
 
 export enum InputType {
   NUMBER = "number",
@@ -11,6 +12,7 @@ export enum InputType {
   IMAGE = "image",
   CHECKBOX = "checkbox",
   FONT_SELECT = "font_select",
+  EVENTS = "events",
 }
 
 export interface IUpdateInput {
@@ -21,6 +23,7 @@ export interface IUpdateInput {
       | IFontSelectInputValue
       | string
       | number
+      | { events: IObjectEvent[] }
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -115,6 +118,15 @@ export interface ISelectInput {
   value: string;
   defaultValue: string | null;
   options: { value: string; label: string }[];
+}
+
+export interface IEventsInput {
+  inputType: InputType.EVENTS;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: { events: IObjectEvent[] };
+  defaultValue: { events: IObjectEvent[] };
 }
 
 export interface IFontSelectInputValue {

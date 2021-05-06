@@ -1,25 +1,43 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import { ImageProperties, TextProperties } from "../inputs/types";
-import { IObject, ITransitions, ObjectType } from "../objects/types";
+import {
+  IObject,
+  IObjectEvent,
+  ISlideTransition,
+  ITransitions,
+  ObjectType,
+} from "../objects/types";
 import { ILayer, ILayers } from "../store/reducers/layers";
 import { IObjects } from "../store/reducers/objects";
-import { ISlide, ISlideDuration, ISlides } from "../store/reducers/slides";
+import {
+  ISlide,
+  ISlideDuration,
+  ISlides,
+  SlideType,
+} from "../store/reducers/slides";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
 
 export interface ITransitionsData {
   objectClass: string;
   transitions: ITransitions;
+  events: IObjectEvent[];
   data: {
     slideDuration: ISlideDuration;
     objectWidth?: number;
     objectHeight?: number;
     objectHtml?: string;
+    overflow: string;
   };
 }
+
+export interface ISlideTransitionData {
+  transitions: ITransitions;
+}
+
 export interface IPlayerData {
   html: string;
-  transitionsDataArr: ITransitionsData[];
+  slideDataArr: ISlideData[];
 }
 
 export interface ISources {
@@ -28,11 +46,23 @@ export interface ISources {
   objects: IObjects;
 }
 
+export interface ISlideData {
+  slide: {
+    id: string;
+    slideType: SlideType;
+    slideTransition: ISlideTransition;
+    duration: ISlideDuration;
+  };
+  transitionsData: ITransitionsData[];
+}
+
 export function generatePlayerData(
   sources: ISources,
   scope: IPreviewScope | null
 ): IPlayerData {
   const { slides, layers, objects } = sources;
+
+  const slideIds: string[] = [];
 
   let previewSlidesArr: ISlide[] = [];
   switch (scope?.entityType) {
@@ -48,11 +78,22 @@ export function generatePlayerData(
     }
   }
 
-  const transitionsDataArr: ITransitionsData[] = [];
-  let html = "<div>"; // slides holder open
+  const slideDataArr: ISlideData[] = [];
+
+  let html = "<div class='slidesHolder'>"; // slides holder open
 
   previewSlidesArr.forEach((slide) => {
-    html += "  <div class='slide-" + slide.id + "'>"; // slide open
+    const transitionsData: ITransitionsData[] = [];
+    const slideData: ISlideData = {
+      slide: pick(slide, ["id", "slideType", "slideTransition", "duration"]),
+      transitionsData,
+    };
+
+    let slideStyle = "";
+    slideStyle += "position: absolute;";
+
+    html += "  <div style='" + slideStyle + "' class='slide-" + slide.id + "'>"; // slide open
+    slideIds.push(slide.id);
 
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
@@ -82,35 +123,49 @@ export function generatePlayerData(
           style += key + ":" + value + ";";
         });
         style += "position: absolute;";
+        const overflow = (object.definition.properties as any).overflow.value;
+        style += `overflow: ${overflow};`;
         // << "left", "top", "width", "height"
 
+        const wrapperStyle = style;
+        style +=
+          "position: relative; left:initial; top: initial; overflow: visible";
+
+        html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
         html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
+        console.log(object);
         const objectHtml = getObjectHtml(object);
-        transitionsDataArr.push({
+
+        transitionsData.push({
           objectClass: objectClass,
           transitions: object.transitions,
+          events: object.events,
           data: {
             slideDuration: slide.duration,
             objectWidth: object.width,
             objectHeight: object.height,
+            overflow,
             objectHtml,
           },
         });
         html += objectHtml;
 
         html += "      </div>"; // object close
+        html += "      </div>"; // object close wrapper
       });
 
       html += "    </div>"; // layer close
     });
 
     html += "  </div>"; // slide close
+
+    slideDataArr.push(slideData);
   });
 
   html += "</div>"; //slides holder close
 
-  return { html, transitionsDataArr };
+  return { html, slideDataArr };
 }
 
 /**

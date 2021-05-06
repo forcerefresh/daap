@@ -82,6 +82,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   // preview progress
   const [progress, setProgress] = useState(0);
+  const [manualProgress, setManualProgress] = useState(0);
 
   const [resizeData, setResizeData] = useState<{
     objectId: string;
@@ -258,7 +259,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [rootRef]);
 
   const renderTimeInfo = () => {
-    return <SmallTimeline progress={progress} />;
+    return (
+      <SmallTimeline
+        progress={progress}
+        onManualProgress={(progress) => setManualProgress(progress)}
+      />
+    );
   };
 
   const onObjectClick = (
@@ -758,6 +764,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             <AppPlayer
               playerData={exportData}
               previewState={previewState}
+              manualProgress={manualProgress}
               onProgress={(progress: number) => {
                 setProgress(progress);
               }}

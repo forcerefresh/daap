@@ -1,0 +1,69 @@
+import {
+  FormGroup,
+  HTMLSelect,
+  Intent,
+  IOptionProps,
+  NumericInput,
+} from "@blueprintjs/core";
+import React, { ChangeEvent } from "react";
+import { IGoToSlideAction, IObjectEvent } from "../../objects/types";
+import { IEventsInput, IUpdateInput } from "../types";
+
+export const EventsInputForm: React.FC<IEventsInput & IUpdateInput> = (
+  props
+) => {
+  const { displayName, value, onChange } = props;
+
+  const action: IGoToSlideAction = { action: "goToSlideAction", slideId: 1 };
+  const oneValue: IObjectEvent = value?.events?.[0] || {
+    type: "click",
+    action: action,
+  };
+
+  const options: IOptionProps[] = [
+    { label: "click", value: "click" },
+    { label: "mousedown", value: "mousedown" },
+    { label: "mouseenter", value: "mouseenter" },
+    { label: "mouseleave", value: "mouseleave" },
+  ];
+
+  const slideIdxValid = true;
+  return (
+    <>
+      <FormGroup label={displayName} labelFor="event-input-type" inline>
+        <HTMLSelect
+          id="text-input"
+          options={options}
+          value={oneValue.type}
+          onChange={(event: ChangeEvent) => {
+            const newType = (event.currentTarget as HTMLSelectElement).value;
+            onChange({ events: [{ ...oneValue, type: newType as any }] });
+          }}
+        />
+      </FormGroup>
+      <FormGroup label={"Slide index"} labelFor="event-input-slide-idx" inline>
+        <NumericInput
+          intent={!slideIdxValid ? Intent.WARNING : Intent.NONE}
+          id="event-input-slide-idx"
+          value={(oneValue.action as IGoToSlideAction).slideId}
+          onValueChange={(value, valueAsString) => {
+            //updateValue(valueAsString);
+
+            console.log(valueAsString);
+            onChange({
+              events: [
+                {
+                  ...oneValue,
+                  action: {
+                    ...action,
+                    slideId: parseInt(valueAsString),
+                  },
+                },
+              ],
+            });
+          }}
+        />
+      </FormGroup>
+    </>
+  );
+};

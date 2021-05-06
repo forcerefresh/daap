@@ -39,6 +39,8 @@ gsap.registerEffect({
       targets[0].appendChild(element);
     });
 
+    let isStarted = false;
+
     const xy = getXY(config.from, config.distance);
     const baseConfig = {
       ease: config.ease,
@@ -52,9 +54,19 @@ gsap.registerEffect({
       },
       onComplete: () => {
         tilesCompleteHandler(config.type, objectContentElement, elements);
+        isStarted = false;
       },
       onStart: () => {
-        tilesStartHandler(config.type, objectContentElement, elements);
+        if (!isStarted) {
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
+      },
+      onUpdate: () => {
+        if (!isStarted) {
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
       },
     };
 

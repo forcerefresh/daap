@@ -97,4 +97,23 @@
     min-width: 400px;
     min-height: 300px;
   }
+
+  .staticLabel {
+    color: #dd00dd;
+    font-size: 10px;
+    float: right;
+    font-weight: bold;
+    margin: 5px;
+    margin-right: 15px;
+  }
+}
+
+.floatingEffectPanel {
+  z-index: 200;
+  position: absolute;
+  right: 350px;
+  top: 10vh;
+  background: #252526;
+  width: 340px;
+  height: 80vh;
 }

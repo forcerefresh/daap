@@ -9,14 +9,17 @@ import {
   tilesStartHandler,
 } from "../common";
 
+//console.log("REGISTER EFFECT");
 gsap.registerEffect({
   name: tilesZoom,
   effect: function (targets: any, config: ITilesZoomEffect) {
+    const target = targets[0];
+
     // get element and html
     const {
       objectContentElement,
       objectContentHtml,
-    } = getObjectContentElementAndHtml(targets[0]);
+    } = getObjectContentElementAndHtml(target);
 
     // create title elements
     const elements = createTilesFromHtml(
@@ -30,25 +33,43 @@ gsap.registerEffect({
 
     // append title elements
     elements.forEach((element) => {
-      targets[0].appendChild(element);
+      target.appendChild(element);
     });
+
+    let isStarted = false;
 
     var baseConfig = {
       ease: config.ease,
       duration: config.duration! * (config.timeDistribution! / 100),
       scale: 0,
-      transformZ: 0,
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
       stagger: {
         amount: config.duration! * (1 - config.timeDistribution! / 100),
         grid: [config.rows, config.columns],
         ease: config.childEase,
       },
-      onComplete: () => {
+      onComplete: function () {
+        isStarted = false;
         tilesCompleteHandler(config.type, objectContentElement, elements);
       },
-      onStart: () => {
-        tilesStartHandler(config.type, objectContentElement, elements);
+      onStart: function () {
+        //console.log("---------------- onStart");
+        if (!isStarted) {
+          isStarted = true;
+          //console.log("START onStart ************************************");
+          //console.log(objectContentElement);
+          tilesStartHandler(config.type, objectContentElement, elements);
+          //target.style.display = "block";
+        }
+      },
+      onUpdate: function () {
+        if (!isStarted) {
+          isStarted = true;
+          //console.log("START  ********** onUpdate **************************");
+          //console.log(objectContentElement);
+          tilesStartHandler(config.type, objectContentElement, elements);
+          // target.style.display = "block";
+        }
       },
     };
 

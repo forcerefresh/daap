@@ -12,10 +12,13 @@ import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
 
 type ISmallTimelineProps = typeof mapDispatchToProps &
-  ReturnType<typeof mapStateToProps> & { progress: number };
+  ReturnType<typeof mapStateToProps> & {
+    progress: number;
+    onManualProgress: (progress: number) => void;
+  };
 
 const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
-  const { progress, previewState, _setStagePreview } = props;
+  const { progress, onManualProgress, previewState, _setStagePreview } = props;
 
   //const [progress, setProgress] = useState<number>(0);
 
@@ -40,6 +43,7 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
 
   const calculateTimeFromThumb = (x: number) => {
     const multiplier = x / (lineRef?.current as any)?.offsetWidth;
+    onManualProgress(multiplier);
     //tl.progress(multiplier, true);
   };
   return (

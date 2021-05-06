@@ -5,13 +5,20 @@ import {
   ADD_SLIDE,
   DELETE_LAYERS,
   DELETE_SLIDE,
+  UPDATE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
+import { ISlideTransition, ITransitions } from "../../objects/types";
 
 export interface ISlideDuration {
   inheritFrom: "global" | "project" | "custom";
   customValue: number;
+}
+
+export enum SlideType {
+  Normal = "Normal",
+  Static = "Static",
 }
 
 export interface ISlide {
@@ -20,6 +27,8 @@ export interface ISlide {
   duration: ISlideDuration;
   layerIds: string[];
   nextLayerIdCounter: number;
+  slideType: SlideType;
+  slideTransition: ISlideTransition;
 }
 
 export interface ISlides {
@@ -60,6 +69,16 @@ export function slides(
             layerIds: { $push: [layer.id] },
             nextLayerIdCounter: (idx) => idx + 1,
           },
+        },
+      });
+    }
+    case UPDATE_SLIDE: {
+      const slide = action.payload;
+
+      return Object.assign({}, state, {
+        slideById: {
+          ...state.slideById,
+          ...{ [slide.id]: { ...slide } },
         },
       });
     }

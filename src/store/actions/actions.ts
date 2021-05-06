@@ -1,4 +1,4 @@
-import { ISlide } from "../reducers/slides";
+import { ISlide, SlideType } from "../reducers/slides";
 import { ILayer } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
@@ -7,7 +7,11 @@ import { jump } from "../../3rd-party-libs/undo-redo/actions";
 
 import { delay, differenceWith, isEqual, once } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
-import { createObject } from "../../objects/create-object-factory";
+import {
+  createObject,
+  getDefaultSlideTransition,
+  getDefaultTransitions,
+} from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocumentSize } from "../reducers/document";
 import { IGlobals } from "../reducers/globals";
@@ -50,7 +54,8 @@ export interface AddSlideAction extends IUndoableAction<true> {
 export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     if (getState().project.slides.allSlides.length === 0) {
-      const slide: ISlide = {
+      let slide: ISlide;
+      slide = {
         id: uuid(),
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
         duration: {
@@ -59,27 +64,46 @@ export function initializeSlideAndLayer(): any {
         },
         layerIds: [],
         nextLayerIdCounter: 0,
+        slideType: SlideType.Static,
+        slideTransition: getDefaultSlideTransition(),
       };
       dispatch(addSlide(slide));
       dispatch(activateSlide(slide.id));
       dispatch(selectSlides([slide.id]));
       dispatch(addNewLayer(slide.id, true));
-      //dispatch(addNewLayer(slide.id));
+
+      /*slide = {
+        id: uuid(),
+        name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
+        duration: {
+          inheritFrom: "custom",
+          customValue: 5000,
+        },
+        layerIds: [],
+        nextLayerIdCounter: 0,
+        slideType: SlideType.Normal,
+      };
+      dispatch(addSlide(slide));
+      dispatch(activateSlide(slide.id));
+      dispatch(selectSlides([slide.id]));
+      dispatch(addNewLayer(slide.id, true));*/
     }
   };
 }
 
-export function addNewSlide(): any {
+export function addNewSlide(slideType = SlideType.Normal): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: ISlide = {
       id: uuid(),
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "custom",
-        customValue: 10000,
+        customValue: 5000,
       },
       layerIds: [],
       nextLayerIdCounter: 0,
+      slideType,
+      slideTransition: getDefaultSlideTransition(),
     };
     dispatch(addSlide(slide));
     dispatch(activateSlide(slide.id));
@@ -132,6 +156,24 @@ export function deleteSlide(slideId: string): DeleteSlideAction {
   };
 }
 
+// update slide
+
+export const UPDATE_SLIDE = "Update slide";
+
+export interface UpdateSlideAction extends IUndoableAction<true> {
+  type: typeof UPDATE_SLIDE;
+  payload: ISlide;
+}
+
+export function updateSlide(slide: ISlide): UpdateSlideAction {
+  return {
+    type: UPDATE_SLIDE,
+    payload: slide,
+    isUndoable: true,
+  };
+}
+// ****
+
 // **** LAYERS ACTIONS
 
 export const ADD_LAYER = "Add layer";
@@ -154,26 +196,7 @@ export function addNewLayer(slideId: string, isBackground = false): any {
       isVisible: true,
       hasTimeline: true,
       objectIds: [],
-      transitions: {
-        in: {
-          relativeTo: "stage",
-          delay: 0,
-          duration: 1000,
-          effect: {
-            id: "none",
-            values: {},
-          },
-        },
-        out: {
-          relativeTo: "stage",
-          delay: 0,
-          duration: 1000,
-          effect: {
-            id: "none",
-            values: {},
-          },
-        },
-      },
+      transitions: getDefaultTransitions(),
     };
 
     dispatch(addLayer(layer));
@@ -1010,6 +1033,7 @@ export type ActionTypes =
   // slide
   | AddSlideAction
   | DeleteSlideAction
+  | UpdateSlideAction
 
   // layer
   | AddLayerAction

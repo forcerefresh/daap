@@ -19,9 +19,27 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     return (
       <>
         {renderPositionAndSize(object)}
+        {renderEvents(object)}
         {renderProperties(object.definition.properties)}
       </>
     );
+  };
+
+  const renderEvents = (object: IObject) => {
+    const objectDef = {
+      inputType: InputType.EVENTS,
+      value: pick(object, "events"),
+    };
+
+    const onChange = (value: any) => {
+      const retObj = cloneDeep(object);
+      if (retObj) {
+        _updateObject({ ...retObj, ...value });
+      }
+    };
+
+    console.log(objectDef);
+    return getInputForm(InputType.EVENTS, objectDef, onChange);
   };
 
   const renderPositionAndSize = (object: IObject) => {

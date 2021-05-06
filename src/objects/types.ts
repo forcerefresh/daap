@@ -44,11 +44,29 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   // hasTimeline: boolean; // show in timeline
   transitions: ITransitions;
   definition: IDefinition<T>;
+  events: IObjectEvent[];
+}
+
+export interface IObjectEvent {
+  type?: "click" | "mouseenter" | "mouseleave"; //TODO add other
+  action?: IGoToSlideAction | INavigateToUrlAction;
+}
+export interface IGoToSlideAction {
+  action: "goToSlideAction";
+  slideId?: number;
+  slideLabel?: string;
+}
+
+export interface INavigateToUrlAction {
+  action: "navigateToUrlAction";
+  url?: number;
+  target?: string;
 }
 
 export interface ITransitions {
   in?: ITransition;
   out?: ITransition;
+  effect?: ITransition;
 }
 
 export interface ITransition {
@@ -58,6 +76,13 @@ export interface ITransition {
   timeDistribution?: number;
   ease?: string;
   childEase?: string;
+  effect: IEffect;
+  overlap?: number;
+}
+
+export interface ISlideTransition {
+  overlap: number;
+  duration: number;
   effect: IEffect;
 }
 

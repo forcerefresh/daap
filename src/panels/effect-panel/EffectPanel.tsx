@@ -7,14 +7,15 @@ import EffectConfigurationForm from "./effect-configuration/EffectConfigurationF
 import css from "./EffectPanel.module.scss";
 
 const EffectPanelSections = {
-  EFFECT_IN: "EFFECT_IN",
-  EFFECT_OUT: "EFFECT_OUT",
+  IN: "IN",
+  OUT: "OUT",
+  EFFECT: "EFFECT",
 };
 
 type IEffectPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     id: string | null | undefined;
-    objectType?: "object" | "layer";
+    objectType?: "object" | "layer" | "slide";
   };
 
 const EffectPanel: React.FC<IEffectPanel> = (props) => {
@@ -22,7 +23,7 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
-  }>({ EFFECT_IN: true, EFFECT_OUT: true });
+  }>({ IN: true, OUT: true, EFFECT: true });
 
   const toggleSection = (section: string) => {
     setVisibleSectionIds({
@@ -41,17 +42,17 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
               <div className={css.sectionHeader}>
                 <Button
                   minimal
-                  onClick={() => toggleSection(EffectPanelSections.EFFECT_IN)}
+                  onClick={() => toggleSection(EffectPanelSections.IN)}
                   small={true}
                   icon={
-                    visibleSectionIds[EffectPanelSections.EFFECT_IN]
+                    visibleSectionIds[EffectPanelSections.IN]
                       ? "caret-down"
                       : "caret-right"
                   }
                 ></Button>
                 effect in
               </div>
-              {visibleSectionIds[EffectPanelSections.EFFECT_IN] && (
+              {visibleSectionIds[EffectPanelSections.IN] && (
                 <EffectConfigurationForm
                   effectType={"in"}
                   objectOrLayerId={objectOrLayerId}
@@ -63,19 +64,42 @@ const EffectPanel: React.FC<IEffectPanel> = (props) => {
               <div className={css.sectionHeader}>
                 <Button
                   minimal
-                  onClick={() => toggleSection(EffectPanelSections.EFFECT_OUT)}
+                  onClick={() => toggleSection(EffectPanelSections.OUT)}
                   small={true}
                   icon={
-                    visibleSectionIds[EffectPanelSections.EFFECT_OUT]
+                    visibleSectionIds[EffectPanelSections.OUT]
                       ? "caret-down"
                       : "caret-right"
                   }
                 ></Button>
                 effect out
               </div>
-              {visibleSectionIds[EffectPanelSections.EFFECT_OUT] && (
+              {visibleSectionIds[EffectPanelSections.OUT] && (
                 <EffectConfigurationForm
                   effectType={"out"}
+                  objectOrLayerId={objectOrLayerId}
+                  objectType={objectType}
+                />
+              )}
+            </section>
+
+            <section>
+              <div className={css.sectionHeader}>
+                <Button
+                  minimal
+                  onClick={() => toggleSection(EffectPanelSections.EFFECT)}
+                  small={true}
+                  icon={
+                    visibleSectionIds[EffectPanelSections.EFFECT]
+                      ? "caret-down"
+                      : "caret-right"
+                  }
+                ></Button>
+                effect
+              </div>
+              {visibleSectionIds[EffectPanelSections.EFFECT] && (
+                <EffectConfigurationForm
+                  effectType={"effect"}
                   objectOrLayerId={objectOrLayerId}
                   objectType={objectType}
                 />

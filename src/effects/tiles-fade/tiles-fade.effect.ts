@@ -33,6 +33,8 @@ gsap.registerEffect({
       targets[0].appendChild(element);
     });
 
+    let isStarted = false;
+
     var baseConfig = {
       ease: config.ease,
       duration: config.duration! * (config.timeDistribution! / 100),
@@ -44,9 +46,19 @@ gsap.registerEffect({
       },
       onComplete: () => {
         tilesCompleteHandler(config.type, objectContentElement, elements);
+        isStarted = false;
       },
       onStart: () => {
-        tilesStartHandler(config.type, objectContentElement, elements);
+        if (!isStarted) {
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
+      },
+      onUpdate: () => {
+        if (!isStarted) {
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
       },
     };
 

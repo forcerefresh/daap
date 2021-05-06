@@ -193,20 +193,22 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   })}
                 >
                   <div>
-                    {/* TODO */
-                    /*<Button
-                      active={layer.id === showEffectPanelForId.id}
-                      minimal
-                      onClick={(event: any) => {
-                        event.stopPropagation();
-                        setShowEffectPanelForId({
-                          id: layer.id,
-                          type: "layer",
-                        });
-                      }}
-                      small={true}
-                      icon="walk"
-                    ></Button>*/}
+                    {
+                      /* TODO */
+                      <Button
+                        active={layer.id === showEffectPanelForId.id}
+                        minimal
+                        onClick={(event: any) => {
+                          event.stopPropagation();
+                          setShowEffectPanelForId({
+                            id: layer.id,
+                            type: "layer",
+                          });
+                        }}
+                        small={true}
+                        icon="walk"
+                      ></Button>
+                    }
                     <Button
                       minimal
                       onClick={(event: any) => {

@@ -5,7 +5,7 @@ import { IntegrationContext } from "../../integration";
 import { IImageInput, IUpdateInput } from "../types";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
-  const { displayName, value, onChange = noop } = props;
+  const { displayName, value, onChange = noop, onInput = noop } = props;
 
   const globalContext = useContext(IntegrationContext);
 
@@ -30,6 +30,8 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
         placeholder="Placeholder text"
         value={value.url}
         onClick={handleClick}
+        //onChange={(event: any) => onChange(event.target.value)}
+        //onInput={(event: any) => onInput(event.target.value)}
       />
     </FormGroup>
   );

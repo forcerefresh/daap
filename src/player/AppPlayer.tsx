@@ -1,28 +1,47 @@
 import React, { useEffect, useRef, useState } from "react";
 import { isEmpty } from "lodash-es";
-import gsap from "gsap";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPlayerData } from "../export/export-html";
 import { IPreviewState } from "../store/reducers/stage";
 import { createTimelineForObject } from "./AppPlayerUtils";
+import { IPlayerConfig, Player } from "./player/Player";
 
 export interface AppPlayerProps {
   playerData: IPlayerData | null;
   previewState: IPreviewState;
+  manualProgress: number;
   onProgress: (progress: number) => void;
   requestStop: () => void;
 }
 
 export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
-  const { playerData, previewState, onProgress, requestStop } = props;
+  const {
+    playerData,
+    manualProgress,
+    previewState,
+    onProgress,
+    requestStop,
+  } = props;
 
   const divRef = useRef(null);
 
-  const transitionsDataArr = playerData?.transitionsDataArr || [];
-  const [tl, _setTl] = useState(gsap.timeline());
+  //const slideDataArr = playerData?.slideDataArr
+  //const [player, setPlayer] = useState<Player>();
+
+  const player = useRef<Player>();
+
+  const playerHolderRef = useRef<HTMLDivElement>(null);
+
+  // manual rogress
+  /*useEffect(() => {
+    if (tl.paused()) {
+      console.log(manualProgress);
+      tl.progress(manualProgress, true);
+    }
+  }, [manualProgress]);*/
 
   // play/pause switch
-  useEffect(() => {
+  /*useEffect(() => {
     switch (previewState.previewState) {
       case "play":
         tl.paused(false);
@@ -31,15 +50,15 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         tl.paused(true);
         break;
     }
-  }, [previewState.previewState]);
+  }, [previewState.previewState]);*/
 
   // change preview speed
-  useEffect(() => {
+  /*useEffect(() => {
     tl.timeScale(previewState.previewSpeed);
-  }, [previewState.previewSpeed]);
+  }, [previewState.previewSpeed]);*/
 
   // when we turn off repeat it stops playing on end and reset position to start
-  useEffect(() => {
+  /*useEffect(() => {
     tl.eventCallback("onRepeat", () => {
       if (!previewState.repeat) {
         tl.progress(0);
@@ -51,47 +70,36 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         });
       }
     });
-  }, [previewState.repeat]);
+  }, [previewState.repeat]);*/
 
-  useEffect(() => {
+  /*useEffect(() => {
     tl.eventCallback("onUpdate", () => {
       onProgress(tl.progress());
     });
     return () => {
       // TODO: do we need to cleanup;
     };
-  }, [tl]);
+  }, [tl]);*/
 
   useDeepCompareEffect(() => {
-    if (!isEmpty(transitionsDataArr)) {
-      tl.clear();
+    if (!isEmpty(playerData?.slideDataArr)) {
+      const playerConfig: IPlayerConfig = {
+        oneSlide: previewState?.scope?.entityType === "slide",
+      };
+      const pl = new Player(playerData, playerHolderRef.current!, playerConfig);
+      player.current = pl;
 
-      tl.repeat(-1);
-      tl.timeScale(previewState.previewSpeed);
-
-      transitionsDataArr.forEach((data) => {
-        console.log(data);
-        tl.add(createTimelineForObject(data), 0);
-      });
-
-      tl.restart();
-
-      /*tl.eventCallback("onComplete", () => {
-        _setStagePreview({ isPreview: false });
-      });*/
+      pl.playSlide(0);
 
       return () => {
-        tl.clear();
+        pl.clear();
       };
     }
-  }, [transitionsDataArr]);
+  }, [playerData]);
 
   return (
     <div>
-      <div
-        style={{ position: "relative" }}
-        dangerouslySetInnerHTML={{ __html: playerData?.html as string }}
-      />
+      <div style={{ position: "relative" }} ref={playerHolderRef} />
     </div>
   );
 };

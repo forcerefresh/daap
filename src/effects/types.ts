@@ -1,6 +1,6 @@
 export interface IEffectBase {
   id: string;
-  type?: "in" | "out";
+  type?: "in" | "out" | "effect";
   objectProperties?: {
     width: number;
     height: number;

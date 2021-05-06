@@ -1,12 +1,12 @@
 export function getMethodByType(
-  type: "in" | "out" | undefined,
+  type: "in" | "out" | "effect" | undefined,
   inverse = false
 ) {
   return !inverse
-    ? type === "in"
+    ? type === "in" || type === "effect"
       ? "from"
       : "to"
-    : type === "in"
+    : type === "in" || type === "effect"
     ? "to"
     : "from";
 }
@@ -27,7 +27,7 @@ export function getObjectContentElementAndHtml(root: HTMLDivElement) {
 }
 
 export function tilesCompleteHandler(
-  type: "in" | "out" | undefined,
+  type: "in" | "out" | "effect" | undefined,
   objectContentElement: HTMLDivElement,
   tilesElements: HTMLDivElement[]
 ) {
@@ -40,14 +40,15 @@ export function tilesCompleteHandler(
 }
 
 export function tilesStartHandler(
-  type: "in" | "out" | undefined,
+  type: "in" | "out" | "effect" | undefined,
   objectContentElement: HTMLDivElement,
   tilesElements: HTMLDivElement[]
 ) {
+  objectContentElement.style.visibility = "hidden";
+  //console.log(objectContentElement);
   tilesElements.forEach((element) => {
     element.style.visibility = "visible";
   });
-  objectContentElement.style.visibility = "hidden";
 }
 
 export function createTilesFromHtml(

@@ -22,7 +22,12 @@ import {
   sliceSlideInnerDefaults,
   tilesSlideInnerDefinition,
 } from "./tiles-slide/tiles-slide-inner.definition";
+import {
+  fallingLeavesDefaults,
+  fallingLeavesDefinition,
+} from "./falling-leaves/falling-leaves.definition";
 
+import { cubeDefaults, cubeDefinition } from "./cube/cube.definition";
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -33,7 +38,9 @@ import "./tiles-zoom/tiles-zoom.effect";
 import "./tiles-fade/tiles-fade.effect";
 import "./slice-slide/slice-slide.effect";
 import "./tiles-slide/tiles-slide-inner.effect";
-
+import "./tiles-slide/tiles-slide-inner.effect";
+import "./falling-leaves/falling-leaves.effect";
+import "./cube/cube.effect";
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
   id: string;
@@ -60,6 +67,8 @@ registerEffect(tilesZoomDefinition, tilesZoomDefaults);
 registerEffect(tilesFadeDefinition, tilesFadeDefaults);
 registerEffect(tilesSlideInnerDefinition, sliceSlideInnerDefaults);
 registerEffect(sliceSlideDefinition, sliceSlideDefaults);
+registerEffect(fallingLeavesDefinition, fallingLeavesDefaults);
+registerEffect(cubeDefinition, cubeDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

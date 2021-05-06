@@ -6,7 +6,13 @@ import {
   InputType,
   TextProperties,
 } from "../inputs/types";
-import { ICommonObjectProperties, IObject, ObjectType } from "./types";
+import {
+  ICommonObjectProperties,
+  IObject,
+  ISlideTransition,
+  ITransitions,
+  ObjectType,
+} from "./types";
 
 /**
  * Exclude from T those types that are assignable to U
@@ -27,10 +33,20 @@ export function createObject(
 ): Omit<IObject, "layerId"> {
   switch (type) {
     case ObjectType.TEXT: {
-      return { ...objectProps, ...createTextObject(initialValue) };
+      return {
+        ...objectProps,
+        ...createTextObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
     }
     case ObjectType.IMAGE: {
-      return { ...objectProps, ...createImageObject() };
+      return {
+        ...objectProps,
+        ...createImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
     }
     /*case ObjectType.IMAGE: {
       return createImageObject();
@@ -44,6 +60,55 @@ export function createObject(
   }
 }
 
+export function getDefaultSlideTransition(): ISlideTransition {
+  return {
+    duration: 2000,
+    overlap: 1000,
+    effect: {
+      id: "none",
+      values: {},
+    },
+  };
+}
+
+export function getDefaultTransitions(): ITransitions {
+  return {
+    in: {
+      relativeTo: "stage",
+      delay: 0,
+      duration: 1000,
+      ease: "none",
+      timeDistribution: 50,
+      effect: {
+        id: "none",
+        values: {},
+      },
+    },
+    out: {
+      relativeTo: "stage",
+      delay: 0,
+      duration: 1000,
+      ease: "none",
+      timeDistribution: 50,
+      effect: {
+        id: "none",
+        values: {},
+      },
+    },
+    effect: {
+      relativeTo: "stage",
+      delay: 0,
+      duration: -1,
+      ease: "none",
+      timeDistribution: 50,
+      effect: {
+        id: "none",
+        values: {},
+      },
+    },
+  };
+}
+
 function createCommonObject(
   type: ObjectType
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId" | "definition"> {
@@ -52,36 +117,19 @@ function createCommonObject(
     type: type,
     isVisible: true,
     isLocked: false,
-    transitions: {
-      in: {
-        relativeTo: "stage",
-        delay: 0,
-        duration: 1000,
-        ease: "none",
-        timeDistribution: 50,
-        effect: {
-          id: "none",
-          values: {},
-        },
-      },
-      out: {
-        relativeTo: "stage",
-        delay: 0,
-        duration: 1000,
-        ease: "none",
-        timeDistribution: 50,
-        effect: {
-          id: "none",
-          values: {},
-        },
-      },
-    },
+    transitions: getDefaultTransitions(),
+    events: [],
   };
 }
 
-function createTextObject(initialValue?: {
-  [key: string]: any;
-}): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
+function createTextObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.TEXT);
 
   return {
@@ -90,6 +138,21 @@ function createTextObject(initialValue?: {
       id: uuid(),
       type: ObjectType.TEXT,
       properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
         text: {
           displayName: "Text",
           propertyName: "text",
@@ -155,10 +218,14 @@ function createTextObject(initialValue?: {
   };
 }
 
-function createImageObject(): Omit<
-  IObject<ImageProperties>,
-  keyof ICommonObjectProperties | "layerId"
-> {
+function createImageObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<ImageProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.IMAGE);
 
   return {
@@ -167,6 +234,21 @@ function createImageObject(): Omit<
       id: uuid(),
       type: ObjectType.IMAGE,
       properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
         url: {
           displayName: "Image url",
           propertyName: "url",

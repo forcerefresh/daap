@@ -18,6 +18,8 @@ import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
+import { SlideType } from "../../store/reducers/slides";
+import EffectPanel from "../effect-panel/EffectPanel";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -64,6 +66,34 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   };
   useOnClickOutside(ref, handleClickOutside);
 
+  const [showEffectPanelForId, setShowEffectPanelForId] = useState<{
+    id: string;
+    type?: "object" | "layer" | "slide";
+  }>({ id: EmptyID });
+
+  // logic for handling click outside
+  const effectPanelRef = useRef(null);
+  const handleClickOutside2 = () => {
+    setShowEffectPanelForId({ id: EmptyID });
+  };
+  useOnClickOutside(effectPanelRef, handleClickOutside2);
+
+  // render panels in Portal
+  const renderPanels = () => {
+    return (
+      <Portal className="bp3-dark">
+        {showEffectPanelForId.id !== EmptyID && (
+          <div ref={effectPanelRef} className={css.floatingEffectPanel}>
+            <EffectPanel
+              id={showEffectPanelForId.id}
+              objectType={showEffectPanelForId.type}
+            />
+          </div>
+        )}
+      </Portal>
+    );
+  };
+
   return (
     <div className={css.panel}>
       <div className={css.panelHeader}>
@@ -95,6 +125,22 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               )}
             >
               <div className={css.actionButtons}>
+                {
+                  /* TODO */
+                  <Button
+                    active={slideId === showEffectPanelForId.id}
+                    minimal
+                    onClick={(event: any) => {
+                      event.stopPropagation();
+                      setShowEffectPanelForId({
+                        id: slideId,
+                        type: "slide",
+                      });
+                    }}
+                    small={true}
+                    icon="walk"
+                  ></Button>
+                }
                 <Button
                   minimal
                   active={
@@ -146,7 +192,10 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                 </Portal>
               </div>
               <div className={css.slideDescription}>
-                {slideById[slideId].name}
+                {slideById[slideId].name}{" "}
+                {slideById[slideId].slideType === SlideType.Static ? (
+                  <span className={css.staticLabel}>STATIC</span>
+                ) : null}
               </div>
               <Button
                 minimal
@@ -162,6 +211,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
           );
         })}
       </div>
+      {renderPanels()}
     </div>
   );
 };

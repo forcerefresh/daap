@@ -1,6 +1,7 @@
 import React from "react";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
+import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
@@ -68,6 +69,9 @@ export function getInputForm<T>(
       return (
         <CheckboxInputForm key={key} {...inputProps} onChange={onChange} />
       );
+    }
+    case InputType.EVENTS: {
+      return <EventsInputForm key={key} {...inputProps} onChange={onChange} />;
     }
   }
 }
