@@ -47,8 +47,28 @@
               "ease": "none",
               "timeDistribution": 50,
               "effect": {
-                "id": "none",
-                "values": {}
+                "id": "parallax",
+                "values": {
+                  "parallax": {
+                    "objects": [
+                      {
+                        "id": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                        "depth": 0
+                      },
+                      {
+                        "id": "5df9a8af-7d01-4882-9938-34771c6506ed",
+                        "depth": 5
+                      },
+                      {
+                        "id": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                        "depth": 10
+                      }
+                    ],
+                    "autoDepthInc": 5,
+                    "autoDepth": true,
+                    "smooth": true
+                  }
+                }
               }
             }
           }
@@ -348,6 +368,120 @@
     },
     "diff": {
       "prev": [
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "transitions",
+                "layer",
+                "effect",
+                "values",
+                "parallax",
+                "objects"
+              ],
+              "index": 2,
+              "item": {
+                "kind": "N",
+                "rhs": {
+                  "id": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                  "depth": 10
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "transitions",
+                "layer",
+                "effect",
+                "values",
+                "parallax",
+                "objects"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": {
+                  "id": "5df9a8af-7d01-4882-9938-34771c6506ed",
+                  "depth": 5
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "transitions",
+                "layer",
+                "effect",
+                "values",
+                "parallax",
+                "objects"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": {
+                  "id": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                  "depth": 0
+                }
+              }
+            }
+          ],
+          "type": "Update layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "transitions",
+                "layer",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "parallax"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "transitions",
+                "layer",
+                "effect",
+                "values",
+                "parallax"
+              ],
+              "rhs": {
+                "objects": [],
+                "autoDepthInc": 5,
+                "autoDepth": true,
+                "smooth": true
+              }
+            }
+          ],
+          "type": "Update layer"
+        },
         {
           "changes": [
             {
@@ -4047,7 +4181,10 @@
     "previewState": {
       "previewState": "stop",
       "isPreview": false,
-      "scope": null,
+      "scope": {
+        "entityType": "project",
+        "entityId": "current-project"
+      },
       "previewSpeed": 1,
       "repeat": true
     },
