@@ -1,3 +1,4 @@
+import { EffectType } from "./types";
 import { fadeDefaults, fadeDefinition } from "./fade/fade.definition";
 import { noneDefaults, noneDefinition } from "./none/none.definition";
 import { zoomInDefaults, zoomInDefinition } from "./zoom/zoom.definition";
@@ -28,6 +29,13 @@ import {
 } from "./falling-leaves/falling-leaves.definition";
 
 import { cubeDefaults, cubeDefinition } from "./cube/cube.definition";
+import { splitDefaults, splitDefinition } from "./split/split.definition";
+
+import {
+  parallaxDefaults,
+  parallaxDefinition,
+} from "./parallax/parallax.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -41,6 +49,9 @@ import "./tiles-slide/tiles-slide-inner.effect";
 import "./tiles-slide/tiles-slide-inner.effect";
 import "./falling-leaves/falling-leaves.effect";
 import "./cube/cube.effect";
+import "./split/split.effect";
+import "./parallax/parallax.effect";
+
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
   id: string;
@@ -69,6 +80,8 @@ registerEffect(tilesSlideInnerDefinition, sliceSlideInnerDefaults);
 registerEffect(sliceSlideDefinition, sliceSlideDefaults);
 registerEffect(fallingLeavesDefinition, fallingLeavesDefaults);
 registerEffect(cubeDefinition, cubeDefaults);
+registerEffect(splitDefinition, splitDefaults);
+registerEffect(parallaxDefinition, parallaxDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
@@ -86,9 +99,18 @@ export function getEffectDefinition(effectId: string): IEffectHolder {
   ) as IEffectHolder;
 }
 
-export function getEffectsOptions(): { label: string; value: string }[] {
-  return effects.map((item) => ({
-    value: item.definition.id,
-    label: item.definition.name,
-  }));
+export function getEffectsOptions(
+  effectType: EffectType
+): { label: string; value: string }[] {
+  return effects
+    .filter(
+      (eff) =>
+        (eff.defaults.supportedEffectTypes as EffectType[]).indexOf(
+          effectType
+        ) !== -1
+    )
+    .map((item) => ({
+      value: item.definition.id,
+      label: item.definition.name,
+    }));
 }

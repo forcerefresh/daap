@@ -1,5 +1,6 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash-es";
+import cx from "classnames";
 import { FormGroup, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "../types";
 import { RGBColor, SketchPicker } from "react-color";
@@ -46,6 +47,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   };
 
   useEventListener("keydown", (event: any) => {
+    console.log(event.keyCode);
     if (event.keyCode === 27) {
       setState({
         ...state,
@@ -53,7 +55,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         displayColorPicker: false,
       });
     } else if (event.keyCode === 13) {
-      onChange(state.color);
+      //onChange(state.color);
       setState({
         ...state,
         displayColorPicker: false,
@@ -73,8 +75,10 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
           <div className={css.color} style={style} />
         </div>
 
-        <div className={css.popover}>
-          <div className={css.cover} onClick={handleClose} />
+        <div className={cx("color-picker-holder", css.popover)}>
+          <div className={css.cover} onClick={handleClose}>
+            Close
+          </div>
           <div>
             <SketchPicker color={state.color} onChange={handleChange} />
           </div>

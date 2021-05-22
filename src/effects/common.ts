@@ -1,7 +1,6 @@
-export function getMethodByType(
-  type: "in" | "out" | "effect" | undefined,
-  inverse = false
-) {
+import { EffectType } from "./types";
+
+export function getMethodByType(type: EffectType | undefined, inverse = false) {
   return !inverse
     ? type === "in" || type === "effect"
       ? "from"
@@ -27,7 +26,7 @@ export function getObjectContentElementAndHtml(root: HTMLDivElement) {
 }
 
 export function tilesCompleteHandler(
-  type: "in" | "out" | "effect" | undefined,
+  type: EffectType | undefined,
   objectContentElement: HTMLDivElement,
   tilesElements: HTMLDivElement[]
 ) {
@@ -40,7 +39,7 @@ export function tilesCompleteHandler(
 }
 
 export function tilesStartHandler(
-  type: "in" | "out" | "effect" | undefined,
+  type: EffectType | undefined,
   objectContentElement: HTMLDivElement,
   tilesElements: HTMLDivElement[]
 ) {

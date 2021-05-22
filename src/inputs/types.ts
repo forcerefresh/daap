@@ -8,11 +8,14 @@ export enum InputType {
   SELECT = "select",
   COLOR = "color",
   TRANSFORM_ORIGIN = "transform_origin",
+  SPLIT = "split",
   TRANSFORM = "transform",
   IMAGE = "image",
+  VIDEO = "video",
   CHECKBOX = "checkbox",
   FONT_SELECT = "font_select",
   EVENTS = "events",
+  PARALLAX = "parallax",
 }
 
 export interface IUpdateInput {
@@ -24,6 +27,16 @@ export interface IUpdateInput {
       | string
       | number
       | { events: IObjectEvent[] }
+      | {
+          center: { x: number; y: number };
+          points: { x: number; y: number }[];
+        }
+      | {
+          objects: { id: string; depth: number }[];
+          smooth: boolean;
+          autoDepth: boolean;
+          autoDepthInc: number;
+        }
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -38,6 +51,7 @@ export interface INumberInput {
   propertyName: string;
   value: number;
   defaultValue: number;
+  inputProps?: { disabled: boolean };
 }
 
 //  text input
@@ -93,6 +107,25 @@ export interface IImageInput {
   };
 }
 
+export interface IVideoInput {
+  inputType: InputType.VIDEO;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: {
+    url: string;
+    width: number;
+    height: number;
+    isPlaceholder?: boolean;
+  };
+  defaultValue: {
+    url: string;
+    width: number;
+    height: number;
+    isPlaceholder?: boolean;
+  };
+}
+
 export interface ITransformOriginInput {
   inputType: InputType.TRANSFORM_ORIGIN;
   displayName: string;
@@ -100,6 +133,40 @@ export interface ITransformOriginInput {
   propertyName: string;
   value: { x: number; y: number };
   defaultValue: { x: number; y: number };
+}
+
+export interface ISplitInput {
+  inputType: InputType.SPLIT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: {
+    center: { x: number; y: number };
+    points: { x: number; y: number }[];
+  };
+  defaultValue: {
+    center: { x: number; y: number };
+    points: { x: number; y: number }[];
+  };
+}
+
+export interface IParallaxInput {
+  inputType: InputType.PARALLAX;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: {
+    objects: { id: string; depth: number }[];
+    smooth: boolean;
+    autoDepth: boolean;
+    autoDepthInc: number;
+  };
+  defaultValue: {
+    objects: { id: string; depth: number }[];
+    smooth: boolean;
+    autoDepth: boolean;
+    autoDepthInc: number;
+  };
 }
 
 export interface IColorInput {
@@ -158,4 +225,8 @@ export interface TextProperties {
 
 export interface ImageProperties {
   url: IImageInput;
+}
+
+export interface VideoProperties {
+  url: IVideoInput;
 }

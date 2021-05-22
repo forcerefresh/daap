@@ -16,7 +16,7 @@ export function createTimelineForObject(
 
   const effIn = data.transitions.in;
   const effOut = data.transitions.out;
-  const effEffect = data.transitions.effect;
+  const effEffect = data.transitions.effect || data.transitions.layer; // TODO: layer is added adhock
 
   if (effIn || effOut) {
     tl = gsap.timeline();
@@ -32,7 +32,7 @@ export function createTimelineForObject(
       );
       totalDuration += getDuration(effIn);
 
-      console.log(getDuration(effIn));
+      //console.log(getDuration(effIn));
       // TWO: duration for IN effect
 
       const ineff = gsap.effects[effIn.effect.id]("." + data.objectClass, {
@@ -40,6 +40,8 @@ export function createTimelineForObject(
         objectProperties: {
           width: data.data.objectWidth,
           height: data.data.objectHeight,
+          left: data.data.objectLeft,
+          top: data.data.objectTop,
           objectHtml: data.data.objectHtml,
         },
         type: "in",
@@ -56,23 +58,23 @@ export function createTimelineForObject(
         data.data.slideDuration.customValue -
         (getDuration(effOut) + effOut.delay);
 
-      console.log(betweenGap);
+      //console.log(betweenGap);
       if (effIn) {
         betweenGap -= getDuration(effIn) + effIn?.delay;
-        console.log(betweenGap);
+        //console.log(betweenGap);
       }
-      console.log(betweenGap);
+      //console.log(betweenGap);
 
       if (betweenGap > 0) {
         totalDuration += betweenGap;
 
-        console.log(betweenGap, "betweenGap");
+        //console.log(betweenGap, "betweenGap");
         (tl as any).add(
           gsap.to("." + data.objectClass, { duration: betweenGap / 1000 })
         );
       }
 
-      console.log(totalDuration);
+      //console.log(totalDuration);
 
       totalDuration += getDuration(effOut);
       (tl as any).add(
@@ -83,6 +85,8 @@ export function createTimelineForObject(
             objectProperties: {
               width: data.data.objectWidth,
               height: data.data.objectHeight,
+              left: data.data.objectLeft,
+              top: data.data.objectTop,
               objectHtml: data.data.objectHtml,
             },
             type: "out",
@@ -101,14 +105,14 @@ export function createTimelineForObject(
 
       totalDuration += effOut.delay;
 
-      console.log(totalDuration);
+      //console.log(totalDuration);
       (tl as any).add(
         gsap.to("." + data.objectClass, { duration: effOut.delay / 1000 })
       );
     }
 
-    console.log("total", totalDuration);
-    console.log("slide dur", data.data.slideDuration.customValue);
+    //console.log("total", totalDuration);
+    //console.log("slide dur", data.data.slideDuration.customValue);
   }
 
   if (effEffect) {
@@ -130,6 +134,8 @@ export function createTimelineForObject(
       objectProperties: {
         width: data.data.objectWidth,
         height: data.data.objectHeight,
+        left: data.data.objectLeft,
+        top: data.data.objectTop,
         objectHtml: data.data.objectHtml,
       },
       type: "in",

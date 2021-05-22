@@ -1,15 +1,18 @@
 import { cloneDeep, get, set } from "lodash-es";
 import cx from "classnames";
 import React from "react";
+import { Text } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { getNumericFiled, getSelectField } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
-import { ISlide } from "../../store/reducers/slides";
+import { ISlide, SlideType } from "../../store/reducers/slides";
 import { IStore } from "../../store/store";
 
 import css from "./SlideSettingsPanel.module.scss";
 import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { getInputForm } from "../../inputs/input-factory";
+import { SlideDurationOptions, SlideTypeOptions } from "../../store/types";
+import { getRealSlideDuration } from "../../utils/utils";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -17,7 +20,7 @@ type ISlideSettingsPanel = typeof mapDispatchToProps &
   };
 
 const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
-  const { slide, _updateSlide } = props;
+  const { slide, settings, _updateSlide } = props;
 
   const overlapInput = () => (
     <div className="input60">
@@ -27,7 +30,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
         (value: any) => {
           const obj = cloneDeep(slide);
           set(obj!, "slideTransition.overlap", value);
-          _updateSlide((obj as any) as ISlide);
+          _updateSlide(obj as any as ISlide);
         }
       )}
     </div>
@@ -41,7 +44,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
         (value: any) => {
           const obj = cloneDeep(slide);
           set(obj!, "slideTransition.duration", value);
-          _updateSlide((obj as any) as ISlide);
+          _updateSlide(obj as any as ISlide);
         }
       )}
     </div>
@@ -62,7 +65,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           values[item.propertyName] = value;
           set(retObj, valuesPath, values);
 
-          _updateSlide((retObj as any) as ISlide);
+          _updateSlide(retObj as any as ISlide);
         }
       }
 
@@ -79,46 +82,90 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   if (!slide) return null;
 
   return (
-    <>
-      <div className={cx("bp3-dark", css.slideSettings)}>
-        {getSelectField(
-          "Slide transition",
-          get(slide, `slideTransition.effect.id`),
-          getEffectsOptions(),
-          (value: any) => {
-            const obj = cloneDeep(slide);
-            set(obj, `slideTransition.effect.id`, value);
-
-            const values = get(obj, `slideTransition.effect.values`) || {};
-            const effDef = getEffectDefinition(value);
-            effDef.definition.form.forEach((item) => {
-              values[item.propertyName] = effDef.defaults[item.propertyName];
-            });
-            set(obj, `slideTransition.effect.values`, values);
-
-            _updateSlide((obj as any) as ISlide);
-          }
-        )}
-
-        <div className={css.inlineFlex}>
-          {overlapInput()}
-          {durationInput()}
+    <div className={cx("bp3-dark", css.slideSettings)}>
+      <div className={css.slidePanel} key={slide?.id}>
+        <div className={css.slideHeader}>
+          <div>
+            SLIDE PROPERTIES
+            <span className={css.slideName}>
+              {slide && " [ " + slide.name + " ] "}
+            </span>
+          </div>
         </div>
-
-        <div className={css.dynamicFields}>
-          {renderEffectForm(
-            get(slide, `slideTransition.effect.id`),
-            slide,
-            `slideTransition.effect.values`
+        <div className={css.slidePropertiesHolder}>
+          {getSelectField(
+            "Type",
+            slide.slideType,
+            SlideTypeOptions,
+            (value: string) => {
+              const obj = cloneDeep(slide);
+              obj.slideType = value as SlideType;
+              _updateSlide(obj);
+            }
           )}
+
+          {getSelectField(
+            "Duration",
+            slide.duration.inheritFrom,
+            SlideDurationOptions,
+            (value: "inherit" | "custom") => {
+              const obj = cloneDeep(slide);
+              obj.duration.inheritFrom = value;
+              _updateSlide(obj);
+            }
+          )}
+
+          {getNumericFiled(
+            " ",
+            getRealSlideDuration(slide, settings),
+            (value: number) => {
+              const obj = cloneDeep(slide);
+              obj.duration.customValue = value;
+              _updateSlide(obj as any as ISlide);
+            },
+            undefined,
+            { disabled: slide.duration.inheritFrom === "inherit" }
+          )}
+
+          {getSelectField(
+            "Transition",
+            get(slide, `slideTransition.effect.id`),
+            getEffectsOptions("slide"),
+            (value: any) => {
+              const obj = cloneDeep(slide);
+              set(obj, `slideTransition.effect.id`, value);
+
+              const values = get(obj, `slideTransition.effect.values`) || {};
+              const effDef = getEffectDefinition(value);
+              effDef.definition.form.forEach((item) => {
+                values[item.propertyName] = effDef.defaults[item.propertyName];
+              });
+              set(obj, `slideTransition.effect.values`, values);
+
+              _updateSlide(obj as any as ISlide);
+            }
+          )}
+
+          <div>
+            {overlapInput()}
+            {durationInput()}
+          </div>
+
+          <div className={css.dynamicFields}>
+            {renderEffectForm(
+              get(slide, `slideTransition.effect.id`),
+              slide,
+              `slideTransition.effect.values`
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection } = state.project;
+  const { slides, selection, settings } = state.project;
   let slide: ISlide | null = null;
 
   if (selection.activeSlideId) {
@@ -127,6 +174,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     slide,
+    settings,
   };
 };
 

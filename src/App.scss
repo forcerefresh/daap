@@ -47,7 +47,9 @@ html {
       font-size: 12px !important;
       margin-top: 5px !important;
     }
-
+    .error {
+      color: red !important;
+    }
     // SELECT
     .bp3-html-select select {
       background: rgba(16, 22, 26, 0.3);

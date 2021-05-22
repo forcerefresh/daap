@@ -12,13 +12,13 @@ import { EmptyID } from "../types";
 import { ISlideTransition, ITransitions } from "../../objects/types";
 
 export interface ISlideDuration {
-  inheritFrom: "global" | "project" | "custom";
+  inheritFrom: "inherit" | "custom";
   customValue: number;
 }
 
 export enum SlideType {
-  Normal = "Normal",
-  Static = "Static",
+  Normal = "normal",
+  Static = "static",
 }
 
 export interface ISlide {

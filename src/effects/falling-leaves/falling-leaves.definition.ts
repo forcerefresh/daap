@@ -36,6 +36,7 @@ export const fallingLeavesDefaults: IFallingLeaves = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
+  supportedEffectTypes: ["effect"],
   // specific to this effect
   number: 30,
   image: {

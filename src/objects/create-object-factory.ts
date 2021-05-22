@@ -5,6 +5,7 @@ import {
   ImageProperties,
   InputType,
   TextProperties,
+  VideoProperties,
 } from "../inputs/types";
 import {
   ICommonObjectProperties,
@@ -48,6 +49,14 @@ export function createObject(
         }),
       };
     }
+    case ObjectType.VIDEO: {
+      return {
+        ...objectProps,
+        ...createVideoObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
     /*case ObjectType.IMAGE: {
       return createImageObject();
     }
@@ -71,7 +80,7 @@ export function getDefaultSlideTransition(): ISlideTransition {
   };
 }
 
-export function getDefaultTransitions(): ITransitions {
+export function getDefaultTransitionsForObject(): ITransitions {
   return {
     in: {
       relativeTo: "stage",
@@ -109,15 +118,32 @@ export function getDefaultTransitions(): ITransitions {
   };
 }
 
+export function getDefaultTransitionsForLayer(): ITransitions {
+  return {
+    layer: {
+      relativeTo: "stage",
+      delay: 0,
+      duration: 1000,
+      ease: "none",
+      timeDistribution: 50,
+      effect: {
+        id: "none",
+        values: {},
+      },
+    },
+  };
+}
+
 function createCommonObject(
   type: ObjectType
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId" | "definition"> {
   return {
     id: uuid(),
+    name: "", // will be over written
     type: type,
     isVisible: true,
     isLocked: false,
-    transitions: getDefaultTransitions(),
+    transitions: getDefaultTransitionsForObject(),
     events: [],
   };
 }
@@ -266,11 +292,55 @@ function createImageObject(
   };
 }
 
-/*
-function createVideoObject() {
-  // TODO
-  return {};
+function createVideoObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<VideoProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.VIDEO);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.VIDEO,
+      properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+        url: {
+          displayName: "Video url",
+          propertyName: "url",
+          inputType: InputType.VIDEO,
+          value: { url: "", width: 960, height: 540, isPlaceholder: true },
+          defaultValue: {
+            url: "",
+            width: 960,
+            height: 540,
+            isPlaceholder: true,
+          },
+        },
+      },
+    },
+  };
 }
+
+/*
 
 function createVectorObject() {
   // TODO

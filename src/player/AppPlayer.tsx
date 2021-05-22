@@ -3,8 +3,7 @@ import { isEmpty } from "lodash-es";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPlayerData } from "../export/export-html";
 import { IPreviewState } from "../store/reducers/stage";
-import { createTimelineForObject } from "./AppPlayerUtils";
-import { IPlayerConfig, Player } from "./player/Player";
+import { Player } from "./player/Player";
 
 export interface AppPlayerProps {
   playerData: IPlayerData | null;
@@ -83,10 +82,10 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
   useDeepCompareEffect(() => {
     if (!isEmpty(playerData?.slideDataArr)) {
-      const playerConfig: IPlayerConfig = {
+      /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
-      };
-      const pl = new Player(playerData, playerHolderRef.current!, playerConfig);
+      };*/
+      const pl = new Player(playerData, playerHolderRef.current!);
       player.current = pl;
 
       pl.playSlide(0);

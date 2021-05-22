@@ -74,6 +74,7 @@ export const sliceSlideInnerDefaults: ITilesSlideInnerEffect = {
   hasTimeDistribution: true,
   ease: "none",
   childEase: "none",
+  supportedEffectTypes: ["in", "out"],
   // specific to this effect
   startFrom: "random",
   blur: 0,

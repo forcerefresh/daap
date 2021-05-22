@@ -9,7 +9,13 @@ type IStaticEffectPanel = typeof mapDispatchToProps &
 const StaticEffectPanel: React.FC<IStaticEffectPanel> = (props) => {
   const { objectId } = props;
 
-  return <EffectPanel id={objectId} objectType="object" />;
+  return (
+    <EffectPanel
+      sections={["IN", "OUT", "EFFECT"]}
+      id={objectId}
+      objectType="object"
+    />
+  );
 };
 
 const mapStateToProps = (state: IStore) => {

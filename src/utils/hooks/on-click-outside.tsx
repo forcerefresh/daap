@@ -4,7 +4,8 @@ import { RefObject, useEffect } from "react";
 type Event = MouseEvent | TouchEvent;
 function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
-  handler: (event: Event) => void
+  handler: (event: Event) => void,
+  skipClassName?: string
 ) {
   useEffect(() => {
     const listener = (event: Event) => {
@@ -13,6 +14,14 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
       if (!el || el.contains((event?.target as Node) || null)) {
         return;
       }
+
+      if (
+        skipClassName &&
+        (event?.target as HTMLElement)?.closest("." + skipClassName)
+      ) {
+        return;
+      }
+
       handler(event);
     };
     document.addEventListener(`mousedown`, listener);

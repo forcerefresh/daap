@@ -1,9 +1,9 @@
 import { RGBColor } from "react-color";
-import { IEffectBase } from "../types";
+import { IEffectBase, INextZIndex } from "../types";
 
 export const cube = "cube";
 
-export interface ICubeEffect extends IEffectBase {
+export interface ICubeEffect extends IEffectBase, INextZIndex {
   nextSlideEl?: HTMLDivElement;
   prevSlideEl?: HTMLDivElement;
   cubeBackgroundColor: RGBColor;

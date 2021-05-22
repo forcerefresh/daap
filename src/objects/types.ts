@@ -8,7 +8,7 @@ import {
 export enum ObjectType {
   TEXT = "text",
   IMAGE = "image",
-  //VIDEO = "video",
+  VIDEO = "video",
   //VECTOR = '"vector',
 }
 
@@ -37,6 +37,7 @@ export interface ICommonObjectProperties {
 
 export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   id: string;
+  name: string;
   layerId: string;
   type: ObjectType;
   isVisible: boolean;
@@ -67,6 +68,7 @@ export interface ITransitions {
   in?: ITransition;
   out?: ITransition;
   effect?: ITransition;
+  layer?: ITransition;
 }
 
 export interface ITransition {

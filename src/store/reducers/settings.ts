@@ -5,7 +5,7 @@ export interface ISettings {
 }
 
 export function settings(
-  state: ISettings = { slideDuration: 10 },
+  state: ISettings = { slideDuration: 10000 },
   action: ActionTypes
 ) {
   switch (action.type) {

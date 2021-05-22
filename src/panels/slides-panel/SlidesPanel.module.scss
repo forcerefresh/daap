@@ -98,12 +98,19 @@
     min-height: 300px;
   }
 
-  .staticLabel {
-    color: #dd00dd;
+  .staticLabel,
+  .durationLabel {
     font-size: 10px;
     float: right;
     font-weight: bold;
     margin: 5px;
+  }
+  .staticLabel {
+    color: #888;
+    margin-right: 7px;
+  }
+  .durationLabel {
+    color: #dd00dd;
     margin-right: 15px;
   }
 }

@@ -38,7 +38,7 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       }
     };
 
-    console.log(objectDef);
+    //console.log(objectDef);
     return getInputForm(InputType.EVENTS, objectDef, onChange);
   };
 

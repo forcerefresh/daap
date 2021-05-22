@@ -19,7 +19,7 @@ import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
 import { SlideType } from "../../store/reducers/slides";
-import EffectPanel from "../effect-panel/EffectPanel";
+import { getRealSlideDurationVisual } from "../../utils/utils";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -31,6 +31,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     selectedSlideIds,
     activeSlideId,
     previewState,
+    settings,
     _addNewSlide,
     _deleteSlideThree,
     _activateSlide,
@@ -40,10 +41,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _setStagePreview,
   } = props;
 
-  const [
-    showSettingsPanelForSlideId,
-    setShowSettingsPanelForSlideId,
-  ] = useState<string>(EmptyID);
+  const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
+    useState<string>(EmptyID);
 
   const onSlideClick = (
     event: React.MouseEvent<HTMLDivElement>,
@@ -64,40 +63,27 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   const handleClickOutside = () => {
     setShowSettingsPanelForSlideId(EmptyID);
   };
-  useOnClickOutside(ref, handleClickOutside);
-
-  const [showEffectPanelForId, setShowEffectPanelForId] = useState<{
-    id: string;
-    type?: "object" | "layer" | "slide";
-  }>({ id: EmptyID });
-
-  // logic for handling click outside
-  const effectPanelRef = useRef(null);
-  const handleClickOutside2 = () => {
-    setShowEffectPanelForId({ id: EmptyID });
-  };
-  useOnClickOutside(effectPanelRef, handleClickOutside2);
+  useOnClickOutside(ref, handleClickOutside, "color-picker-holder");
 
   // render panels in Portal
   const renderPanels = () => {
     return (
-      <Portal className="bp3-dark">
-        {showEffectPanelForId.id !== EmptyID && (
-          <div ref={effectPanelRef} className={css.floatingEffectPanel}>
-            <EffectPanel
-              id={showEffectPanelForId.id}
-              objectType={showEffectPanelForId.type}
-            />
-          </div>
-        )}
-      </Portal>
+      <>
+        <Portal className="bp3-dark">
+          {showSettingsPanelForSlideId !== EmptyID && (
+            <div ref={ref}>
+              <SlideSettingsPanel slideId={showSettingsPanelForSlideId} />
+            </div>
+          )}
+        </Portal>
+      </>
     );
   };
 
   return (
     <div className={css.panel}>
       <div className={css.panelHeader}>
-        SLIDES PANEL
+        SLIDES
         <Button
           minimal
           onClick={() => _addNewSlide()}
@@ -125,22 +111,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               )}
             >
               <div className={css.actionButtons}>
-                {
-                  /* TODO */
-                  <Button
-                    active={slideId === showEffectPanelForId.id}
-                    minimal
-                    onClick={(event: any) => {
-                      event.stopPropagation();
-                      setShowEffectPanelForId({
-                        id: slideId,
-                        type: "slide",
-                      });
-                    }}
-                    small={true}
-                    icon="walk"
-                  ></Button>
-                }
                 <Button
                   minimal
                   active={
@@ -181,18 +151,12 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   small={true}
                   icon="cog"
                 ></Button>
-                <Portal>
-                  {showSettingsPanelForSlideId !== EmptyID && (
-                    <div ref={ref}>
-                      <SlideSettingsPanel
-                        slideId={showSettingsPanelForSlideId}
-                      />
-                    </div>
-                  )}
-                </Portal>
               </div>
               <div className={css.slideDescription}>
                 {slideById[slideId].name}{" "}
+                <span className={css.durationLabel}>
+                  {getRealSlideDurationVisual(slideById[slideId], settings)}
+                </span>
                 {slideById[slideId].slideType === SlideType.Static ? (
                   <span className={css.staticLabel}>STATIC</span>
                 ) : null}
@@ -217,7 +181,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection } = state.project;
+  const { slides, selection, settings } = state.project;
   const { previewState } = state.stage;
   return {
     allSlides: slides.allSlides,
@@ -225,6 +189,7 @@ const mapStateToProps = (state: IStore) => {
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
     previewState,
+    settings,
   };
 };
 

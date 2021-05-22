@@ -10,7 +10,8 @@ import { IObject, ObjectType } from "../../objects/types";
 import {
   createObject,
   getDefaultSlideTransition,
-  getDefaultTransitions,
+  getDefaultTransitionsForLayer,
+  getDefaultTransitionsForObject,
 } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocumentSize } from "../reducers/document";
@@ -64,7 +65,7 @@ export function initializeSlideAndLayer(): any {
         },
         layerIds: [],
         nextLayerIdCounter: 0,
-        slideType: SlideType.Static,
+        slideType: SlideType.Normal,
         slideTransition: getDefaultSlideTransition(),
       };
       dispatch(addSlide(slide));
@@ -185,8 +186,8 @@ export interface AddLayerAction extends IUndoableAction<true> {
 
 export function addNewLayer(slideId: string, isBackground = false): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const nextId = getState().project.slides.slideById[slideId]
-      .nextLayerIdCounter;
+    const nextId =
+      getState().project.slides.slideById[slideId].nextLayerIdCounter;
 
     const layer: ILayer = {
       id: uuid(),
@@ -196,7 +197,7 @@ export function addNewLayer(slideId: string, isBackground = false): any {
       isVisible: true,
       hasTimeline: true,
       objectIds: [],
-      transitions: getDefaultTransitions(),
+      transitions: getDefaultTransitionsForLayer(),
     };
 
     dispatch(addLayer(layer));
@@ -347,8 +348,8 @@ export function activateObject(objectId: string | null): any {
       return;
     }
 
-    const layerId = getState().project.objects.objectById[objectId as string]
-      .layerId;
+    const layerId =
+      getState().project.objects.objectById[objectId as string].layerId;
 
     dispatch(_activateLayer(layerId));
     dispatch(_activateObject(objectId));
@@ -633,6 +634,7 @@ export function addNewObject(
       ...values,
       text: "Sample test",
     });
+    object.name = type + " " + Math.round(Math.random() * 100);
     dispatch(addObject({ ...object, layerId }));
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
@@ -800,22 +802,7 @@ export function setDocumentSize(
 // ******
 
 export const getZoomScale = () => [
-  10,
-  20,
-  40,
-  60,
-  80,
-  100,
-  125,
-  150,
-  175,
-  200,
-  300,
-  400,
-  500,
-  600,
-  800,
-  1000,
+  10, 20, 40, 60, 80, 100, 125, 150, 175, 200, 300, 400, 500, 600, 800, 1000,
 ];
 export const SET_STAGE_ZOOM = "Set stage zoom";
 

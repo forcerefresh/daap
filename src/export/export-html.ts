@@ -26,6 +26,8 @@ export interface ITransitionsData {
     slideDuration: ISlideDuration;
     objectWidth?: number;
     objectHeight?: number;
+    objectLeft?: number;
+    objectTop?: number;
     objectHtml?: string;
     overflow: string;
   };
@@ -98,6 +100,21 @@ export function generatePlayerData(
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
       const layerClassName = "layer-" + layer.id;
+      transitionsData.push({
+        objectClass: layerClassName,
+        transitions: layer.transitions,
+        events: [],
+        data: {
+          slideDuration: slide.duration,
+          objectWidth: 1000,
+          objectHeight: 500,
+          objectLeft: 0,
+          objectTop: 0,
+          overflow: "",
+          objectHtml: " ",
+        },
+      });
+
       if (layer.isBackground) {
         /* transitionsDataArr.push({
           objectClass: layerClassName,
@@ -134,7 +151,7 @@ export function generatePlayerData(
         html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
         html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
-        console.log(object);
+        //console.log(object);
         const objectHtml = getObjectHtml(object);
 
         transitionsData.push({
@@ -145,6 +162,8 @@ export function generatePlayerData(
             slideDuration: slide.duration,
             objectWidth: object.width,
             objectHeight: object.height,
+            objectLeft: object.left,
+            objectTop: object.top,
             overflow,
             objectHtml,
           },
@@ -195,6 +214,8 @@ export function getObjectHtml(object: IObject) {
       return getTextHtml(object);
     case ObjectType.IMAGE:
       return getImageHtml(object);
+    case ObjectType.VIDEO:
+      return getVideoHtml(object);
     default:
       return "";
   }
@@ -228,4 +249,21 @@ function getImageHtml(object: IObject) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
   return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+}
+
+function getVideoHtml(object: IObject) {
+  const imageProperties = object.definition.properties as ImageProperties;
+  if (imageProperties.url.value.isPlaceholder) {
+    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
+  }
+
+  const videoHtml = `<video style="object-fit: fill;" no-controls autoplay width="${object.width}" height="${object.height}">
+    <source src="${imageProperties.url.value.url}" type="video/mp4">
+  </video>`;
+
+  return videoHtml;
+
+  //Sorry, your browser doesn't support embedded videos.
+
+  //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }

@@ -6,9 +6,14 @@ import { ICheckboxInput, IUpdateInput } from "../types";
 export const CheckboxInputForm: React.FC<ICheckboxInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onChange = noop } = props;
+  const { displayName, value, onChange = noop, helperText } = props;
   return (
-    <FormGroup label={displayName} labelFor="checkbox-input" inline>
+    <FormGroup
+      label={displayName}
+      labelFor="checkbox-input"
+      inline
+      helperText={!!helperText && helperText}
+    >
       <Checkbox
         id="checkbox-input"
         checked={value}

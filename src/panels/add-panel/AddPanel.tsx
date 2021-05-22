@@ -129,6 +129,36 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       </div>
 
       <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Video</h1>
+          <p>Place video content</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.VIDEO, {
+                left: (documentSize.width - 960) / 2,
+                top: (documentSize.height - 540) / 2,
+                width: 960,
+                height: 540,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <PredefinedTextIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>EXTERNAL VIDEO</h3>
+          <p>Pick predefined style</p>
+        </Card>
+      </div>
+
+      <div>
         <Card
           interactive={true}
           elevation={Elevation.TWO}

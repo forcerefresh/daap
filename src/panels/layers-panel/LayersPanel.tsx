@@ -144,6 +144,11 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         {showEffectPanelForId.id !== EmptyID && (
           <div ref={effectPanelRef} className={css.floatingEffectPanel}>
             <EffectPanel
+              sections={
+                showEffectPanelForId.type === "object"
+                  ? ["IN", "OUT", "EFFECT"]
+                  : ["LAYER"]
+              }
               id={showEffectPanelForId.id}
               objectType={showEffectPanelForId.type}
             />
@@ -158,7 +163,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
       <div className={css.layerPanel}>
         <div className={css.panelHeader}>
           <div>
-            OBJECTS PANEL
+            LAYERS AND OBJECTS
             <span className={css.slideName}>
               {slide && " [ " + slide.name + " ] "}
             </span>
@@ -330,7 +335,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               ></Button>
                             </div>
                             <div className={css.objectDescription}>
-                              <div>{objectById[objectId].type} </div>
+                              <div>{objectById[objectId].name} </div>
                               <div>
                                 delay:{" "}
                                 <span className={css.inlineValue}>

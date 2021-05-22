@@ -1,213 +1,49 @@
 {
   "project": {
     "slides": {
-      "nextSlideIdCounter": 3,
+      "nextSlideIdCounter": 1,
       "slideById": {
-        "19325433-2f0e-4ebe-85f5-dfcdc66b0b59": {
-          "id": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
+        "a56c4939-69ca-48d5-a814-63158f17971f": {
+          "id": "a56c4939-69ca-48d5-a814-63158f17971f",
           "name": "Slide 0",
           "duration": {
             "inheritFrom": "custom",
             "customValue": 5000
           },
-          "layerIds": ["f36b7d4d-24d2-4478-9f92-5ce2c0426a9c"],
+          "layerIds": ["113cbf98-8672-4c08-95ad-14f9904f6db3"],
           "nextLayerIdCounter": 1,
-          "slideType": "Static",
+          "slideType": "normal",
           "slideTransition": {
             "duration": 2000,
             "overlap": 1000,
             "effect": {
               "id": "none",
               "values": {}
-            }
-          }
-        },
-        "6cdbcd43-9f70-4c33-81d4-3feb76190157": {
-          "id": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-          "name": "Slide 1",
-          "duration": {
-            "inheritFrom": "custom",
-            "customValue": 5000
-          },
-          "layerIds": ["c68980fe-051b-42c1-bbbe-6c9414aa2d12"],
-          "nextLayerIdCounter": 1,
-          "slideType": "Normal",
-          "slideTransition": {
-            "duration": 2000,
-            "overlap": 1000,
-            "effect": {
-              "id": "none",
-              "values": {}
-            }
-          }
-        },
-        "91b3e022-4397-49ac-886a-a9d72128813f": {
-          "id": "91b3e022-4397-49ac-886a-a9d72128813f",
-          "name": "Slide 2",
-          "duration": {
-            "inheritFrom": "custom",
-            "customValue": 5000
-          },
-          "layerIds": ["2c0fb662-0f93-4477-9af0-9ff77d61c167"],
-          "nextLayerIdCounter": 1,
-          "slideType": "Normal",
-          "slideTransition": {
-            "duration": 3000,
-            "overlap": 3000,
-            "effect": {
-              "id": "cube",
-              "values": {
-                "cubeBackgroundColor": {
-                  "r": 255,
-                  "g": 255,
-                  "b": 255,
-                  "a": 0.16
-                },
-                "cubeEdgeColor": {
-                  "r": 243,
-                  "g": 236,
-                  "b": 236,
-                  "a": 1
-                }
-              }
             }
           }
         }
       },
-      "allSlides": [
-        "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-        "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-        "91b3e022-4397-49ac-886a-a9d72128813f"
-      ]
+      "allSlides": ["a56c4939-69ca-48d5-a814-63158f17971f"]
     },
     "layers": {
       "layerById": {
-        "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c": {
-          "id": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c",
-          "slideId": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
+        "113cbf98-8672-4c08-95ad-14f9904f6db3": {
+          "id": "113cbf98-8672-4c08-95ad-14f9904f6db3",
+          "slideId": "a56c4939-69ca-48d5-a814-63158f17971f",
           "isBackground": true,
           "name": "Background layer",
           "isVisible": true,
           "hasTimeline": true,
-          "objectIds": [],
-          "transitions": {
-            "in": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "out": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "effect": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": -1,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            }
-          }
-        },
-        "c68980fe-051b-42c1-bbbe-6c9414aa2d12": {
-          "id": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-          "slideId": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-          "isBackground": false,
-          "name": "Layer 0",
-          "isVisible": true,
-          "hasTimeline": true,
           "objectIds": [
-            "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-            "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+            "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+            "5df9a8af-7d01-4882-9938-34771c6506ed",
+            "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
           ],
           "transitions": {
-            "in": {
+            "layer": {
               "relativeTo": "stage",
               "delay": 0,
               "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "out": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "effect": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": -1,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            }
-          }
-        },
-        "2c0fb662-0f93-4477-9af0-9ff77d61c167": {
-          "id": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-          "slideId": "91b3e022-4397-49ac-886a-a9d72128813f",
-          "isBackground": false,
-          "name": "Layer 0",
-          "isVisible": true,
-          "hasTimeline": true,
-          "objectIds": ["9e24bee5-90b8-44bf-b698-ba646716c469"],
-          "transitions": {
-            "in": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "out": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "effect": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": -1,
               "ease": "none",
               "timeDistribution": 50,
               "effect": {
@@ -218,20 +54,17 @@
           }
         }
       },
-      "allLayers": [
-        "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c",
-        "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-        "2c0fb662-0f93-4477-9af0-9ff77d61c167"
-      ]
+      "allLayers": ["113cbf98-8672-4c08-95ad-14f9904f6db3"]
     },
     "objects": {
       "objectById": {
-        "16ab0c15-9b00-44ab-b8f9-2fec30dbe399": {
-          "left": 21,
-          "top": 17.5,
-          "width": 365,
-          "height": 271,
-          "id": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+        "aaa8d773-9b1b-426c-bb95-171e24ef6347": {
+          "left": 106,
+          "top": -35.5,
+          "width": 300,
+          "height": 300,
+          "id": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+          "name": "image 14",
           "type": "image",
           "isVisible": true,
           "isLocked": false,
@@ -272,7 +105,7 @@
           },
           "events": [],
           "definition": {
-            "id": "df33450d-00dc-4716-863d-05c60b633f72",
+            "id": "ee80222b-43a6-4d7f-ade0-1ca043260d08",
             "type": "image",
             "properties": {
               "overflow": {
@@ -311,14 +144,15 @@
               }
             }
           },
-          "layerId": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+          "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
         },
-        "9e24bee5-90b8-44bf-b698-ba646716c469": {
-          "left": 145,
-          "top": 150.5,
-          "width": 710,
-          "height": 304,
-          "id": "9e24bee5-90b8-44bf-b698-ba646716c469",
+        "5df9a8af-7d01-4882-9938-34771c6506ed": {
+          "left": 550,
+          "top": 49.5,
+          "width": 300,
+          "height": 300,
+          "id": "5df9a8af-7d01-4882-9938-34771c6506ed",
+          "name": "image 80",
           "type": "image",
           "isVisible": true,
           "isLocked": false,
@@ -359,7 +193,7 @@
           },
           "events": [],
           "definition": {
-            "id": "5c975c9c-200a-4968-8477-40661d8ce6e1",
+            "id": "e4792a7c-f893-4c54-b398-159078aa1cc7",
             "type": "image",
             "properties": {
               "overflow": {
@@ -398,14 +232,15 @@
               }
             }
           },
-          "layerId": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+          "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
         },
-        "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4": {
-          "left": 552,
-          "top": 53.5,
-          "width": 240,
-          "height": 186,
-          "id": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+        "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5": {
+          "left": 213,
+          "top": 294.5,
+          "width": 300,
+          "height": 300,
+          "id": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+          "name": "image 37",
           "type": "image",
           "isVisible": true,
           "isLocked": false,
@@ -446,7 +281,7 @@
           },
           "events": [],
           "definition": {
-            "id": "2a855fcb-92f8-4795-871f-47663c90ca21",
+            "id": "845085fa-b97f-4bde-9e40-03bf21a89e3e",
             "type": "image",
             "properties": {
               "overflow": {
@@ -485,20 +320,20 @@
               }
             }
           },
-          "layerId": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+          "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
         }
       },
       "allObjects": [
-        "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-        "9e24bee5-90b8-44bf-b698-ba646716c469",
-        "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+        "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+        "5df9a8af-7d01-4882-9938-34771c6506ed",
+        "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
       ]
     },
     "selection": {
-      "activeSlideId": "91b3e022-4397-49ac-886a-a9d72128813f",
-      "activeLayerId": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-      "activeObjectId": "9e24bee5-90b8-44bf-b698-ba646716c469",
-      "selectedSlideIds": ["91b3e022-4397-49ac-886a-a9d72128813f"],
+      "activeSlideId": "a56c4939-69ca-48d5-a814-63158f17971f",
+      "activeLayerId": "113cbf98-8672-4c08-95ad-14f9904f6db3",
+      "activeObjectId": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+      "selectedSlideIds": ["a56c4939-69ca-48d5-a814-63158f17971f"],
       "selectedLayerIds": [],
       "selectedObjectIds": []
     },
@@ -509,7 +344,7 @@
       }
     },
     "settings": {
-      "slideDuration": 10
+      "slideDuration": 10000
     },
     "diff": {
       "prev": [
@@ -521,8 +356,191 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 546,
+              "rhs": 550
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 56.5,
+              "rhs": 49.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedObjectIds", 0],
+              "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
             }
           ],
           "type": "Select objects",
@@ -535,125 +553,22 @@
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "left"
               ],
-              "lhs": -3,
-              "rhs": 145
+              "lhs": 235,
+              "rhs": 213
             },
             {
               "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "top"
               ],
-              "lhs": 193.5,
-              "rhs": 150.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "width"
-              ],
-              "lhs": 970,
-              "rhs": 710
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "height"
-              ],
-              "lhs": 276,
-              "rhs": 304
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "left"
-              ],
-              "lhs": 41,
-              "rhs": -3
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "top"
-              ],
-              "lhs": 240.5,
-              "rhs": 193.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "left"
-              ],
-              "lhs": 479,
-              "rhs": 41
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "top"
-              ],
-              "lhs": 130.5,
-              "rhs": 240.5
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "width"
-              ],
-              "lhs": 532,
-              "rhs": 970
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "height"
-              ],
-              "lhs": 386,
-              "rhs": 276
+              "lhs": 255.5,
+              "rhs": 294.5
             }
           ],
           "type": "Update object"
@@ -666,7 +581,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
               }
             }
           ],
@@ -679,7 +594,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+              "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
             }
           ],
           "type": "Activate object",
@@ -689,9 +604,18 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
             }
           ],
           "type": "Activate layer",
@@ -701,32 +625,62 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 534,
+              "rhs": 546
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 138.5,
+              "rhs": 56.5
             }
           ],
-          "type": "Select slides",
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
           "skipHistory": true
         },
         {
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-              "rhs": null
-            },
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
             {
               "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
               "rhs": null
             },
             {
@@ -735,11 +689,11 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
-          "type": "Activate slide",
+          "type": "Activate layer",
           "skipHistory": true
         },
         {
@@ -749,7 +703,109 @@
               "path": [
                 "objects",
                 "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "left"
+              ],
+              "lhs": 116,
+              "rhs": 106
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "top"
+              ],
+              "lhs": 52.5,
+              "rhs": -35.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": 235
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "top"
+              ],
+              "lhs": 92.5,
+              "rhs": 255.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "definition",
                 "properties",
                 "url",
@@ -764,7 +820,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "definition",
                 "properties",
                 "url",
@@ -779,7 +835,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "definition",
                 "properties",
                 "url",
@@ -794,7 +850,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
                 "definition",
                 "properties",
                 "url",
@@ -810,93 +866,12 @@
         {
           "changes": [
             {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "left"
-              ],
-              "lhs": 416,
-              "rhs": 552
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "top"
-              ],
-              "lhs": 50.5,
-              "rhs": 53.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "width"
-              ],
-              "lhs": 300,
-              "rhs": 240
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "height"
-              ],
-              "lhs": 300,
-              "rhs": 186
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "left"
-              ],
-              "lhs": 330,
-              "rhs": 416
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
-                "top"
-              ],
-              "lhs": 92.5,
-              "rhs": 50.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
               "kind": "A",
               "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+                "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
               }
             }
           ],
@@ -909,7 +884,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+              "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
             }
           ],
           "type": "Activate object",
@@ -920,7 +895,7 @@
             {
               "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
               "rhs": null
             },
             {
@@ -929,7 +904,7 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
@@ -943,13 +918,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
                 "objectIds"
               ],
-              "index": 1,
+              "index": 2,
               "item": {
                 "kind": "N",
-                "rhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+                "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
               }
             },
             {
@@ -957,14 +932,15 @@
               "path": [
                 "objects",
                 "objectById",
-                "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
               ],
               "rhs": {
                 "left": 330,
                 "top": 92.5,
                 "width": 300,
                 "height": 300,
-                "id": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4",
+                "id": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "name": "image 37",
                 "type": "image",
                 "isVisible": true,
                 "isLocked": false,
@@ -1005,7 +981,7 @@
                 },
                 "events": [],
                 "definition": {
-                  "id": "2a855fcb-92f8-4795-871f-47663c90ca21",
+                  "id": "845085fa-b97f-4bde-9e40-03bf21a89e3e",
                   "type": "image",
                   "properties": {
                     "overflow": {
@@ -1044,7 +1020,7 @@
                     }
                   }
                 },
-                "layerId": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+                "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             },
             {
@@ -1053,7 +1029,7 @@
               "index": 2,
               "item": {
                 "kind": "N",
-                "rhs": "ff6d30b4-f9a7-4bb2-a6da-f524b479acd4"
+                "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
               }
             }
           ],
@@ -1062,93 +1038,12 @@
         {
           "changes": [
             {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": 27,
-              "rhs": 21
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": 6.5,
-              "rhs": 17.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "width"
-              ],
-              "lhs": 702,
-              "rhs": 365
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "height"
-              ],
-              "lhs": 447,
-              "rhs": 271
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": -58,
-              "rhs": 27
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": -104.5,
-              "rhs": 6.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
               "kind": "A",
               "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
@@ -1161,7 +1056,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
             }
           ],
           "type": "Activate object",
@@ -1171,1638 +1066,8 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.15,
-              "rhs": 0.16
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.14,
-              "rhs": 0.15
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.16,
-              "rhs": 0.14
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.18,
-              "rhs": 0.16
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.19,
-              "rhs": 0.18
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.21,
-              "rhs": 0.19
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.27,
-              "rhs": 0.21
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.34,
-              "rhs": 0.27
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.35,
-              "rhs": 0.34
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 241,
-              "rhs": 243
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 233,
-              "rhs": 236
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 233,
-              "rhs": 236
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 226,
-              "rhs": 241
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 200,
-              "rhs": 233
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 200,
-              "rhs": 233
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 199,
-              "rhs": 226
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 177,
-              "rhs": 200
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 177,
-              "rhs": 200
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 194,
-              "rhs": 199
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 145,
-              "rhs": 177
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 145,
-              "rhs": 177
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 179,
-              "rhs": 194
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 91,
-              "rhs": 145
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 91,
-              "rhs": 145
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 119,
-              "rhs": 179
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 0,
-              "rhs": 91
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 0,
-              "rhs": 91
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 110,
-              "rhs": 119
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 107,
-              "rhs": 110
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 102,
-              "rhs": 107
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 119,
-              "rhs": 102
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 128,
-              "rhs": 119
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 18,
-              "rhs": 0
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 18,
-              "rhs": 0
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 87,
-              "rhs": 128
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 8,
-              "rhs": 18
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 8,
-              "rhs": 18
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 233,
-              "rhs": 87
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 206,
-              "rhs": 8
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 206,
-              "rhs": 8
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 255,
-              "rhs": 233
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 255,
-              "rhs": 206
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 255,
-              "rhs": 206
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 251,
-              "rhs": 255
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 251,
-              "rhs": 255
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 228,
-              "rhs": 251
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 228,
-              "rhs": 251
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 167,
-              "rhs": 255
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 136,
-              "rhs": 228
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 136,
-              "rhs": 228
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 156,
-              "rhs": 167
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 127,
-              "rhs": 136
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 127,
-              "rhs": 136
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 228,
-              "rhs": 156
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 194,
-              "rhs": 127
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 194,
-              "rhs": 127
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.38,
-              "rhs": 0.35
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.39,
-              "rhs": 0.38
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.38,
-              "rhs": 0.39
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.28,
-              "rhs": 0.38
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.25,
-              "rhs": 0.28
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "r"
-              ],
-              "lhs": 219,
-              "rhs": 255
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "g"
-              ],
-              "lhs": 193,
-              "rhs": 255
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "b"
-              ],
-              "lhs": 193,
-              "rhs": 255
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "r"
-              ],
-              "lhs": 211,
-              "rhs": 219
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "g"
-              ],
-              "lhs": 180,
-              "rhs": 193
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "b"
-              ],
-              "lhs": 180,
-              "rhs": 193
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "r"
-              ],
-              "lhs": 238,
-              "rhs": 211
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "g"
-              ],
-              "lhs": 27,
-              "rhs": 180
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "b"
-              ],
-              "lhs": 27,
-              "rhs": 180
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.26,
-              "rhs": 0.25
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.28,
-              "rhs": 0.26
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.29,
-              "rhs": 0.28
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.31,
-              "rhs": 0.29
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.32,
-              "rhs": 0.31
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.42,
-              "rhs": 0.32
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.48,
-              "rhs": 0.42
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.6,
-              "rhs": 0.48
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.63,
-              "rhs": 0.6
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.74,
-              "rhs": 0.63
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 0.95,
-              "rhs": 0.74
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "a"
-              ],
-              "lhs": 1,
-              "rhs": 0.95
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-              "rhs": null
-            },
-            {
-              "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469",
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
               "rhs": null
             },
             {
@@ -2811,39 +1076,12 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
-          "type": "Activate slide",
+          "type": "Activate layer",
           "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "left"
-              ],
-              "lhs": 450,
-              "rhs": 479
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "top"
-              ],
-              "lhs": 108.5,
-              "rhs": 130.5
-            }
-          ],
-          "type": "Update object"
         },
         {
           "changes": [
@@ -2853,7 +1091,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
@@ -2866,7 +1104,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
           "type": "Activate object",
@@ -2876,44 +1114,8 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-              "rhs": null
-            },
-            {
-              "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
               "rhs": null
             },
             {
@@ -2922,39 +1124,12 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
-          "type": "Activate slide",
+          "type": "Activate layer",
           "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": -142,
-              "rhs": -58
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": -90.5,
-              "rhs": -104.5
-            }
-          ],
-          "type": "Update object"
         },
         {
           "changes": [
@@ -2964,7 +1139,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
@@ -2977,7 +1152,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
             }
           ],
           "type": "Activate object",
@@ -2987,44 +1162,8 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-              "rhs": null
-            },
-            {
-              "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469",
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
               "rhs": null
             },
             {
@@ -3033,66 +1172,12 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
-          "type": "Activate slide",
+          "type": "Activate layer",
           "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "left"
-              ],
-              "lhs": 536,
-              "rhs": 450
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "top"
-              ],
-              "lhs": 148.5,
-              "rhs": 108.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "width"
-              ],
-              "lhs": 471,
-              "rhs": 532
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "height"
-              ],
-              "lhs": 332,
-              "rhs": 386
-            }
-          ],
-          "type": "Update object"
         },
         {
           "changes": [
@@ -3102,7 +1187,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
@@ -3115,7 +1200,7 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
           "type": "Activate object",
@@ -3125,54 +1210,9 @@
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-              "rhs": null
-            },
-            {
-              "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
               "rhs": null
-            },
-            {
-              "kind": "A",
-              "path": ["selection", "selectedLayerIds"],
-              "index": 0,
-              "item": {
-                "kind": "D",
-                "lhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-              }
             },
             {
               "kind": "A",
@@ -3180,70 +1220,11 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "width"
-              ],
-              "lhs": 300,
-              "rhs": 702
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "height"
-              ],
-              "lhs": 300,
-              "rhs": 447
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": 436,
-              "rhs": -142
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": 153.5,
-              "rhs": -90.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [],
-          "type": "Select objects",
+          "type": "Activate layer",
           "skipHistory": true
         },
         {
@@ -3254,7 +1235,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
@@ -3267,553 +1248,42 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
             }
           ],
           "type": "Activate object",
           "skipHistory": true
         },
         {
-          "changes": [],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
           "changes": [
-            {
-              "kind": "A",
-              "path": ["selection", "selectedLayerIds"],
-              "index": 0,
-              "item": {
-                "kind": "N",
-                "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-              }
-            }
-          ],
-          "type": "Select layers",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [],
-          "type": "Select objects",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "duration"
-              ],
-              "lhs": 2000,
-              "rhs": 3000
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "overlap"
-              ],
-              "lhs": 1000,
-              "rhs": 3000
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-              "rhs": null
-            },
             {
               "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469",
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
               "rhs": null
             },
             {
               "kind": "A",
-              "path": ["selection", "selectedLayerIds"],
+              "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
-          "type": "Activate slide",
+          "type": "Activate layer",
           "skipHistory": true
         },
         {
           "changes": [
             {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 192,
-              "rhs": 194
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 192,
-              "rhs": 194
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 230,
-              "rhs": 228
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 148,
-              "rhs": 192
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 148,
-              "rhs": 192
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 226,
-              "rhs": 230
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 144,
-              "rhs": 148
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 144,
-              "rhs": 148
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 142,
-              "rhs": 144
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 142,
-              "rhs": 144
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 179,
-              "rhs": 142
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 179,
-              "rhs": 142
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "r"
-              ],
-              "lhs": 255,
-              "rhs": 226
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "g"
-              ],
-              "lhs": 255,
-              "rhs": 179
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor",
-                "b"
-              ],
-              "lhs": 255,
-              "rhs": 179
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "r"
-              ],
-              "lhs": 255,
-              "rhs": 238
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "g"
-              ],
-              "lhs": 255,
-              "rhs": 27
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor",
-                "b"
-              ],
-              "lhs": 255,
-              "rhs": 27
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "id"
-              ],
-              "lhs": "none",
-              "rhs": "cube"
-            },
-            {
-              "kind": "N",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeBackgroundColor"
-              ],
-              "rhs": {
-                "r": 255,
-                "g": 255,
-                "b": 255,
-                "a": 1
-              }
-            },
-            {
-              "kind": "N",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "slideTransition",
-                "effect",
-                "values",
-                "cubeEdgeColor"
-              ],
-              "rhs": {
-                "r": 255,
-                "g": 255,
-                "b": 255,
-                "a": 1
-              }
-            }
-          ],
-          "type": "Update slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "A",
-              "path": ["selection", "selectedObjectIds"],
-              "index": 1,
-              "item": {
-                "kind": "D",
-                "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
-              }
-            },
-            {
               "kind": "A",
               "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
-                "kind": "D",
-                "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
@@ -3824,105 +1294,33 @@
           "changes": [
             {
               "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "width"
-              ],
-              "lhs": 300,
-              "rhs": 471
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "height"
-              ],
-              "lhs": 300,
-              "rhs": 332
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
-          "type": "Update object"
+          "type": "Activate object",
+          "skipHistory": true
         },
         {
           "changes": [
             {
               "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "left"
-              ],
-              "lhs": 330,
-              "rhs": 536
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
-                "top"
-              ],
-              "lhs": 92.5,
-              "rhs": 148.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": 230,
-              "rhs": 436
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": 97.5,
-              "rhs": 153.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "A",
-              "path": ["selection", "selectedObjectIds"],
-              "index": 1,
-              "item": {
-                "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
-              }
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
             },
             {
               "kind": "A",
               "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
-                "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
-          "type": "Select objects",
+          "type": "Activate layer",
           "skipHistory": true
         },
         {
@@ -3932,11 +1330,721 @@
               "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
-                "kind": "D",
-                "lhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
           "type": "Select objects",
           "skipHistory": true
         },
@@ -3948,11 +2056,889 @@
         {
           "changes": [
             {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
               "kind": "E",
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
                 "definition",
                 "properties",
                 "url",
@@ -3967,7 +2953,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
                 "definition",
                 "properties",
                 "url",
@@ -3982,7 +2968,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
                 "definition",
                 "properties",
                 "url",
@@ -3997,7 +2983,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
                 "definition",
                 "properties",
                 "url",
@@ -4011,11 +2997,6 @@
           "type": "Update object"
         },
         {
-          "changes": [],
-          "type": "Select objects",
-          "skipHistory": true
-        },
-        {
           "changes": [
             {
               "kind": "A",
@@ -4023,7 +3004,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
@@ -4036,14 +3017,185 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
           "type": "Activate object",
           "skipHistory": true
         },
         {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
           "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "url"
+              ],
+              "lhs": "",
+              "rhs": "/images/wall1.webp"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 1024
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 768
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "isPlaceholder"
+              ],
+              "lhs": true,
+              "rhs": false
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": 534
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 92.5,
+              "rhs": 138.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
           "type": "Activate layer",
           "skipHistory": true
         },
@@ -4054,13 +3206,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "2c0fb662-0f93-4477-9af0-9ff77d61c167",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
                 "objectIds"
               ],
-              "index": 0,
+              "index": 1,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             },
             {
@@ -4068,14 +3220,15 @@
               "path": [
                 "objects",
                 "objectById",
-                "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "5df9a8af-7d01-4882-9938-34771c6506ed"
               ],
               "rhs": {
                 "left": 330,
                 "top": 92.5,
                 "width": 300,
                 "height": 300,
-                "id": "9e24bee5-90b8-44bf-b698-ba646716c469",
+                "id": "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "name": "image 80",
                 "type": "image",
                 "isVisible": true,
                 "isLocked": false,
@@ -4116,7 +3269,7 @@
                 },
                 "events": [],
                 "definition": {
-                  "id": "5c975c9c-200a-4968-8477-40661d8ce6e1",
+                  "id": "e4792a7c-f893-4c54-b398-159078aa1cc7",
                   "type": "image",
                   "properties": {
                     "overflow": {
@@ -4155,7 +3308,7 @@
                     }
                   }
                 },
-                "layerId": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+                "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             },
             {
@@ -4164,7 +3317,7 @@
               "index": 1,
               "item": {
                 "kind": "N",
-                "rhs": "9e24bee5-90b8-44bf-b698-ba646716c469"
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
               }
             }
           ],
@@ -4173,27 +3326,59 @@
         {
           "changes": [
             {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": 116
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "top"
+              ],
+              "lhs": 92.5,
+              "rhs": 52.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
               "kind": "A",
-              "path": ["selection", "selectedLayerIds"],
+              "path": ["selection", "selectedObjectIds"],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
-          "type": "Select layers",
+          "type": "Select objects",
           "skipHistory": true
         },
         {
           "changes": [
             {
               "kind": "E",
-              "path": ["selection", "activeLayerId"],
+              "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
           "type": "Activate layer",
           "skipHistory": true
         },
@@ -4202,43 +3387,34 @@
             {
               "kind": "A",
               "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "layerIds"
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "objectIds"
               ],
-              "index": 0,
+              "index": 1,
               "item": {
-                "kind": "N",
-                "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+                "kind": "D",
+                "lhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
               }
             },
             {
-              "kind": "E",
+              "kind": "D",
               "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f",
-                "nextLayerIdCounter"
+                "objects",
+                "objectById",
+                "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
               ],
-              "lhs": 0,
-              "rhs": 1
-            },
-            {
-              "kind": "N",
-              "path": [
-                "layers",
-                "layerById",
-                "2c0fb662-0f93-4477-9af0-9ff77d61c167"
-              ],
-              "rhs": {
-                "id": "2c0fb662-0f93-4477-9af0-9ff77d61c167",
-                "slideId": "91b3e022-4397-49ac-886a-a9d72128813f",
-                "isBackground": false,
-                "name": "Layer 0",
+              "lhs": {
+                "left": 0,
+                "top": -27.5,
+                "width": 960,
+                "height": 540,
+                "id": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12",
+                "name": "video 92",
+                "type": "video",
                 "isVisible": true,
-                "hasTimeline": true,
-                "objectIds": [],
+                "isLocked": false,
                 "transitions": {
                   "in": {
                     "relativeTo": "stage",
@@ -4273,51 +3449,63 @@
                       "values": {}
                     }
                   }
-                }
+                },
+                "events": [],
+                "definition": {
+                  "id": "b11a4325-fa60-4791-8284-00aa76baaa07",
+                  "type": "video",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Video url",
+                      "propertyName": "url",
+                      "inputType": "video",
+                      "value": {
+                        "url": "/images/video1.mp4",
+                        "width": 960,
+                        "height": 540
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 960,
+                        "height": 540,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             },
             {
               "kind": "A",
-              "path": ["layers", "allLayers"],
-              "index": 2,
+              "path": ["objects", "allObjects"],
+              "index": 1,
               "item": {
-                "kind": "N",
-                "rhs": "2c0fb662-0f93-4477-9af0-9ff77d61c167"
+                "kind": "D",
+                "lhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
               }
-            }
-          ],
-          "type": "Add layer"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-              "rhs": null
             },
             {
               "kind": "E",
               "path": ["selection", "activeObjectId"],
-              "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+              "lhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12",
               "rhs": null
             },
             {
@@ -4326,12 +3514,11 @@
               "index": 0,
               "item": {
                 "kind": "D",
-                "lhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "lhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
               }
             }
           ],
-          "type": "Activate slide",
-          "skipHistory": true
+          "type": "Delete objects"
         },
         {
           "changes": [
@@ -4340,34 +3527,7 @@
               "path": [
                 "objects",
                 "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": 442,
-              "rhs": 230
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": 119.5,
-              "rhs": 97.5
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+                "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12",
                 "definition",
                 "properties",
                 "url",
@@ -4375,79 +3535,21 @@
                 "url"
               ],
               "lhs": "",
-              "rhs": "/images/wall1.webp"
+              "rhs": "/images/video1.mp4"
             },
             {
-              "kind": "E",
+              "kind": "D",
               "path": [
                 "objects",
                 "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "definition",
-                "properties",
-                "url",
-                "value",
-                "width"
-              ],
-              "lhs": 300,
-              "rhs": 1024
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "definition",
-                "properties",
-                "url",
-                "value",
-                "height"
-              ],
-              "lhs": 300,
-              "rhs": 768
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+                "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12",
                 "definition",
                 "properties",
                 "url",
                 "value",
                 "isPlaceholder"
               ],
-              "lhs": true,
-              "rhs": false
-            }
-          ],
-          "type": "Update object"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "left"
-              ],
-              "lhs": 330,
-              "rhs": 442
-            },
-            {
-              "kind": "E",
-              "path": [
-                "objects",
-                "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
-                "top"
-              ],
-              "lhs": 92.5,
-              "rhs": 119.5
+              "lhs": true
             }
           ],
           "type": "Update object"
@@ -4460,7 +3562,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
               }
             }
           ],
@@ -4473,7 +3575,179 @@
               "kind": "E",
               "path": ["selection", "activeObjectId"],
               "lhs": null,
-              "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+              "rhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "objectIds"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
+              ],
+              "rhs": {
+                "left": 0,
+                "top": -27.5,
+                "width": 960,
+                "height": 540,
+                "id": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12",
+                "name": "video 92",
+                "type": "video",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "b11a4325-fa60-4791-8284-00aa76baaa07",
+                  "type": "video",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Video url",
+                      "propertyName": "url",
+                      "inputType": "video",
+                      "value": {
+                        "url": "",
+                        "width": 960,
+                        "height": 540,
+                        "isPlaceholder": true
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 960,
+                        "height": 540,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "8d2a10e4-5dcf-4211-ab47-0792ebf9fb12"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
             }
           ],
           "type": "Activate object",
@@ -4491,13 +3765,13 @@
               "path": [
                 "layers",
                 "layerById",
-                "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
+                "113cbf98-8672-4c08-95ad-14f9904f6db3",
                 "objectIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             },
             {
@@ -4505,14 +3779,15 @@
               "path": [
                 "objects",
                 "objectById",
-                "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               ],
               "rhs": {
                 "left": 330,
                 "top": 92.5,
                 "width": 300,
                 "height": 300,
-                "id": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399",
+                "id": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "name": "image 14",
                 "type": "image",
                 "isVisible": true,
                 "isLocked": false,
@@ -4553,7 +3828,7 @@
                 },
                 "events": [],
                 "definition": {
-                  "id": "df33450d-00dc-4716-863d-05c60b633f72",
+                  "id": "ee80222b-43a6-4d7f-ade0-1ca043260d08",
                   "type": "image",
                   "properties": {
                     "overflow": {
@@ -4592,7 +3867,7 @@
                     }
                   }
                 },
-                "layerId": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+                "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             },
             {
@@ -4601,7 +3876,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "16ab0c15-9b00-44ab-b8f9-2fec30dbe399"
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
               }
             }
           ],
@@ -4613,7 +3888,7 @@
               "kind": "E",
               "path": ["selection", "activeLayerId"],
               "lhs": null,
-              "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+              "rhs": "113cbf98-8672-4c08-95ad-14f9904f6db3"
             }
           ],
           "type": "Activate layer",
@@ -4626,13 +3901,13 @@
               "path": [
                 "slides",
                 "slideById",
-                "6cdbcd43-9f70-4c33-81d4-3feb76190157",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
                 "layerIds"
               ],
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+                "rhs": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             },
             {
@@ -4640,7 +3915,7 @@
               "path": [
                 "slides",
                 "slideById",
-                "6cdbcd43-9f70-4c33-81d4-3feb76190157",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
                 "nextLayerIdCounter"
               ],
               "lhs": 0,
@@ -4651,318 +3926,21 @@
               "path": [
                 "layers",
                 "layerById",
-                "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
+                "113cbf98-8672-4c08-95ad-14f9904f6db3"
               ],
               "rhs": {
-                "id": "c68980fe-051b-42c1-bbbe-6c9414aa2d12",
-                "slideId": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-                "isBackground": false,
-                "name": "Layer 0",
-                "isVisible": true,
-                "hasTimeline": true,
-                "objectIds": [],
-                "transitions": {
-                  "in": {
-                    "relativeTo": "stage",
-                    "delay": 0,
-                    "duration": 1000,
-                    "ease": "none",
-                    "timeDistribution": 50,
-                    "effect": {
-                      "id": "none",
-                      "values": {}
-                    }
-                  },
-                  "out": {
-                    "relativeTo": "stage",
-                    "delay": 0,
-                    "duration": 1000,
-                    "ease": "none",
-                    "timeDistribution": 50,
-                    "effect": {
-                      "id": "none",
-                      "values": {}
-                    }
-                  },
-                  "effect": {
-                    "relativeTo": "stage",
-                    "delay": 0,
-                    "duration": -1,
-                    "ease": "none",
-                    "timeDistribution": 50,
-                    "effect": {
-                      "id": "none",
-                      "values": {}
-                    }
-                  }
-                }
-              }
-            },
-            {
-              "kind": "A",
-              "path": ["layers", "allLayers"],
-              "index": 1,
-              "item": {
-                "kind": "N",
-                "rhs": "c68980fe-051b-42c1-bbbe-6c9414aa2d12"
-              }
-            }
-          ],
-          "type": "Add layer"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "91b3e022-4397-49ac-886a-a9d72128813f",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-              "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["slides", "nextSlideIdCounter"],
-              "lhs": 2,
-              "rhs": 3
-            },
-            {
-              "kind": "N",
-              "path": [
-                "slides",
-                "slideById",
-                "91b3e022-4397-49ac-886a-a9d72128813f"
-              ],
-              "rhs": {
-                "id": "91b3e022-4397-49ac-886a-a9d72128813f",
-                "name": "Slide 2",
-                "duration": {
-                  "inheritFrom": "custom",
-                  "customValue": 5000
-                },
-                "layerIds": [],
-                "nextLayerIdCounter": 0,
-                "slideType": "Normal",
-                "slideTransition": {
-                  "duration": 2000,
-                  "overlap": 1000,
-                  "effect": {
-                    "id": "none",
-                    "values": {}
-                  }
-                }
-              }
-            },
-            {
-              "kind": "A",
-              "path": ["slides", "allSlides"],
-              "index": 2,
-              "item": {
-                "kind": "N",
-                "rhs": "91b3e022-4397-49ac-886a-a9d72128813f"
-              }
-            }
-          ],
-          "type": "Add slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "selectedSlideIds", 0],
-              "lhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            }
-          ],
-          "type": "Select slides",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeSlideId"],
-              "lhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-              "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-            },
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c",
-              "rhs": null
-            }
-          ],
-          "type": "Activate slide",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["slides", "nextSlideIdCounter"],
-              "lhs": 1,
-              "rhs": 2
-            },
-            {
-              "kind": "N",
-              "path": [
-                "slides",
-                "slideById",
-                "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-              ],
-              "rhs": {
-                "id": "6cdbcd43-9f70-4c33-81d4-3feb76190157",
-                "name": "Slide 1",
-                "duration": {
-                  "inheritFrom": "custom",
-                  "customValue": 5000
-                },
-                "layerIds": [],
-                "nextLayerIdCounter": 0,
-                "slideType": "Normal",
-                "slideTransition": {
-                  "duration": 2000,
-                  "overlap": 1000,
-                  "effect": {
-                    "id": "none",
-                    "values": {}
-                  }
-                }
-              }
-            },
-            {
-              "kind": "A",
-              "path": ["slides", "allSlides"],
-              "index": 1,
-              "item": {
-                "kind": "N",
-                "rhs": "6cdbcd43-9f70-4c33-81d4-3feb76190157"
-              }
-            }
-          ],
-          "type": "Add slide"
-        },
-        {
-          "changes": [
-            {
-              "kind": "E",
-              "path": ["selection", "activeLayerId"],
-              "lhs": null,
-              "rhs": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c"
-            }
-          ],
-          "type": "Activate layer",
-          "skipHistory": true
-        },
-        {
-          "changes": [
-            {
-              "kind": "A",
-              "path": [
-                "slides",
-                "slideById",
-                "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-                "layerIds"
-              ],
-              "index": 0,
-              "item": {
-                "kind": "N",
-                "rhs": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c"
-              }
-            },
-            {
-              "kind": "E",
-              "path": [
-                "slides",
-                "slideById",
-                "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
-                "nextLayerIdCounter"
-              ],
-              "lhs": 0,
-              "rhs": 1
-            },
-            {
-              "kind": "N",
-              "path": [
-                "layers",
-                "layerById",
-                "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c"
-              ],
-              "rhs": {
-                "id": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c",
-                "slideId": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
+                "id": "113cbf98-8672-4c08-95ad-14f9904f6db3",
+                "slideId": "a56c4939-69ca-48d5-a814-63158f17971f",
                 "isBackground": true,
                 "name": "Background layer",
                 "isVisible": true,
                 "hasTimeline": true,
                 "objectIds": [],
                 "transitions": {
-                  "in": {
+                  "layer": {
                     "relativeTo": "stage",
                     "delay": 0,
                     "duration": 1000,
-                    "ease": "none",
-                    "timeDistribution": 50,
-                    "effect": {
-                      "id": "none",
-                      "values": {}
-                    }
-                  },
-                  "out": {
-                    "relativeTo": "stage",
-                    "delay": 0,
-                    "duration": 1000,
-                    "ease": "none",
-                    "timeDistribution": 50,
-                    "effect": {
-                      "id": "none",
-                      "values": {}
-                    }
-                  },
-                  "effect": {
-                    "relativeTo": "stage",
-                    "delay": 0,
-                    "duration": -1,
                     "ease": "none",
                     "timeDistribution": 50,
                     "effect": {
@@ -4979,7 +3957,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "f36b7d4d-24d2-4478-9f92-5ce2c0426a9c"
+                "rhs": "113cbf98-8672-4c08-95ad-14f9904f6db3"
               }
             }
           ],
@@ -4993,7 +3971,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
+                "rhs": "a56c4939-69ca-48d5-a814-63158f17971f"
               }
             }
           ],
@@ -5006,7 +3984,7 @@
               "kind": "E",
               "path": ["selection", "activeSlideId"],
               "lhs": null,
-              "rhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
+              "rhs": "a56c4939-69ca-48d5-a814-63158f17971f"
             }
           ],
           "type": "Activate slide",
@@ -5025,10 +4003,10 @@
               "path": [
                 "slides",
                 "slideById",
-                "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
+                "a56c4939-69ca-48d5-a814-63158f17971f"
               ],
               "rhs": {
-                "id": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59",
+                "id": "a56c4939-69ca-48d5-a814-63158f17971f",
                 "name": "Slide 0",
                 "duration": {
                   "inheritFrom": "custom",
@@ -5036,7 +4014,7 @@
                 },
                 "layerIds": [],
                 "nextLayerIdCounter": 0,
-                "slideType": "Static",
+                "slideType": "normal",
                 "slideTransition": {
                   "duration": 2000,
                   "overlap": 1000,
@@ -5053,7 +4031,7 @@
               "index": 0,
               "item": {
                 "kind": "N",
-                "rhs": "19325433-2f0e-4ebe-85f5-dfcdc66b0b59"
+                "rhs": "a56c4939-69ca-48d5-a814-63158f17971f"
               }
             }
           ],
@@ -5069,10 +4047,7 @@
     "previewState": {
       "previewState": "stop",
       "isPreview": false,
-      "scope": {
-        "entityType": "project",
-        "entityId": "current-project"
-      },
+      "scope": null,
       "previewSpeed": 1,
       "repeat": true
     },

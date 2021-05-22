@@ -1,6 +1,8 @@
+export type EffectType = "in" | "out" | "effect" | "slide" | "layer";
+
 export interface IEffectBase {
   id: string;
-  type?: "in" | "out" | "effect";
+  type?: EffectType;
   objectProperties?: {
     width: number;
     height: number;
@@ -13,6 +15,7 @@ export interface IEffectBase {
   hasChildEase: boolean;
   hasTimeDistribution?: boolean;
   // << flags end
+  supportedEffectTypes: EffectType[];
   timeDistribution?: number;
   ease?: string;
   customEase?: string;
@@ -25,6 +28,10 @@ export interface IEffectBase {
 export interface IEasing {
   label: string;
   value: string;
+}
+
+export interface INextZIndex {
+  nextZIndex?: number;
 }
 
 export const EasingOptions: IEasing[] = [

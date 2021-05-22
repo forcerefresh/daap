@@ -27,6 +27,7 @@ export const zoomInDefaults: IZoomInEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
+  supportedEffectTypes: ["in", "out"],
   // specific to this effect
   scaleX: 100,
   scaleY: 100,

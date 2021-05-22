@@ -12,6 +12,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
     helperText,
     value,
     onInput = noop,
+    inputProps = {},
   } = props;
 
   const id = `${propertyName}_input_number`;
@@ -76,6 +77,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
         onValueChange={(value, valueAsString) => {
           updateValue(valueAsString);
         }}
+        {...inputProps}
       />
     </FormGroup>
   );

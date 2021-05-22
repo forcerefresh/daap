@@ -8,17 +8,27 @@ export const useMediaHook = () => {
       throw new Error("Media type is not valid");
     }
 
-    return new Promise((resolve) => {
-      const image = document.createElement("img");
-      image.onload = () => {
+    if (type === "image") {
+      return new Promise((resolve) => {
+        const image = document.createElement("img");
+        image.onload = () => {
+          resolve({
+            url: "/images/wall1.webp",
+            width: image.naturalWidth,
+            height: image.naturalHeight,
+          });
+        };
+        image.src = "/images/wall1.webp";
+      });
+    } else {
+      return new Promise((resolve) => {
         resolve({
-          url: "/images/wall1.webp",
-          width: image.naturalWidth,
-          height: image.naturalHeight,
+          url: "/images/video1.mp4",
+          width: 960,
+          height: 540,
         });
-      };
-      image.src = "/images/wall1.webp";
-    });
+      });
+    }
   };
   return { requestMedia };
 };
