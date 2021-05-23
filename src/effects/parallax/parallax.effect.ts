@@ -1,5 +1,5 @@
 import { Console } from "console";
-import gsap from "gsap";
+import gsap, { Circ } from "gsap";
 import { layers } from "../../store/reducers/layers";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
 import { parallax, IParallaxEffect } from "./parallax.types";
@@ -22,12 +22,13 @@ gsap.registerEffect({
     //const autoDepthInc = config.parallax.autoDepthInc;
 
     //const autoDepth = config.parallax.autoDepth;
-    return gsap.to(targets, {
-      ease: config.ease,
-      duration: 5,
-      x: "-=100",
-      opacity: 0.3,
-      repeat: 1000,
+    const tl = gsap.timeline({ repeat: -1 });
+    return tl.to(targets[0], {
+      duration: 1.5,
+      y: -200,
+      ease: Circ.easeOut,
+      yoyo: true,
+      repeat: 1,
     });
   },
 

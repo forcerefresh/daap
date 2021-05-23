@@ -8,7 +8,7 @@
           "name": "Slide 0",
           "duration": {
             "inheritFrom": "custom",
-            "customValue": 5000
+            "customValue": 500000
           },
           "layerIds": ["113cbf98-8672-4c08-95ad-14f9904f6db3"],
           "nextLayerIdCounter": 1,
@@ -17,8 +17,21 @@
             "duration": 2000,
             "overlap": 1000,
             "effect": {
-              "id": "none",
-              "values": {}
+              "id": "cube",
+              "values": {
+                "cubeBackgroundColor": {
+                  "r": 46,
+                  "g": 48,
+                  "b": 85,
+                  "a": 0
+                },
+                "cubeEdgeColor": {
+                  "r": 147,
+                  "g": 144,
+                  "b": 144,
+                  "a": 1
+                }
+              }
             }
           }
         }
@@ -79,10 +92,10 @@
     "objects": {
       "objectById": {
         "aaa8d773-9b1b-426c-bb95-171e24ef6347": {
-          "left": 106,
-          "top": -35.5,
-          "width": 300,
-          "height": 300,
+          "left": 150,
+          "top": 242.5,
+          "width": 187,
+          "height": 132,
           "id": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
           "name": "image 14",
           "type": "image",
@@ -167,10 +180,10 @@
           "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
         },
         "5df9a8af-7d01-4882-9938-34771c6506ed": {
-          "left": 550,
-          "top": 49.5,
-          "width": 300,
-          "height": 300,
+          "left": 644,
+          "top": 168.5,
+          "width": 166,
+          "height": 125,
           "id": "5df9a8af-7d01-4882-9938-34771c6506ed",
           "name": "image 80",
           "type": "image",
@@ -255,10 +268,10 @@
           "layerId": "113cbf98-8672-4c08-95ad-14f9904f6db3"
         },
         "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5": {
-          "left": 213,
-          "top": 294.5,
-          "width": 300,
-          "height": 300,
+          "left": 528,
+          "top": 331.5,
+          "width": 173,
+          "height": 128,
           "id": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
           "name": "image 37",
           "type": "image",
@@ -368,6 +381,3519 @@
     },
     "diff": {
       "prev": [
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "a"
+              ],
+              "lhs": 1,
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "duration",
+                "customValue"
+              ],
+              "lhs": 50000,
+              "rhs": 500000
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "duration",
+                "customValue"
+              ],
+              "lhs": 5000,
+              "rhs": 50000
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 148,
+              "rhs": 147
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 145,
+              "rhs": 144
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 145,
+              "rhs": 144
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 152,
+              "rhs": 148
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 149,
+              "rhs": 145
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 149,
+              "rhs": 145
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 159,
+              "rhs": 152
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 155,
+              "rhs": 149
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 155,
+              "rhs": 149
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 167,
+              "rhs": 159
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 164,
+              "rhs": 155
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 164,
+              "rhs": 155
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 159,
+              "rhs": 164
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 159,
+              "rhs": 164
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 152,
+              "rhs": 159
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 152,
+              "rhs": 159
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 169,
+              "rhs": 167
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 151,
+              "rhs": 152
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 151,
+              "rhs": 152
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 215,
+              "rhs": 169
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 192,
+              "rhs": 151
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 192,
+              "rhs": 151
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 215
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 192
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 192
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 196,
+              "rhs": 255
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 196,
+              "rhs": 255
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 196,
+              "rhs": 255
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 0,
+              "rhs": 196
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 0,
+              "rhs": 196
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 0,
+              "rhs": 196
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 50,
+              "rhs": 0
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 21,
+              "rhs": 0
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 21,
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 108,
+              "rhs": 50
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 94,
+              "rhs": 21
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 94,
+              "rhs": 21
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 136,
+              "rhs": 108
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 136,
+              "rhs": 94
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 136,
+              "rhs": 94
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 131,
+              "rhs": 136
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 131,
+              "rhs": 136
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 131,
+              "rhs": 136
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 125,
+              "rhs": 131
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 116,
+              "rhs": 131
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 116,
+              "rhs": 131
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 126,
+              "rhs": 125
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 126,
+              "rhs": 116
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 126,
+              "rhs": 116
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 128,
+              "rhs": 126
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 128,
+              "rhs": 126
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 128,
+              "rhs": 126
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 150,
+              "rhs": 128
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 147,
+              "rhs": 128
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 147,
+              "rhs": 128
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 152,
+              "rhs": 150
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 149,
+              "rhs": 147
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 149,
+              "rhs": 147
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 169,
+              "rhs": 152
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 164,
+              "rhs": 149
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 164,
+              "rhs": 149
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 170,
+              "rhs": 169
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 165,
+              "rhs": 164
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 165,
+              "rhs": 164
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 172,
+              "rhs": 170
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 166,
+              "rhs": 165
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 166,
+              "rhs": 165
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 196,
+              "rhs": 172
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 186,
+              "rhs": 166
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 186,
+              "rhs": 166
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 232,
+              "rhs": 196
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 222,
+              "rhs": 186
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 222,
+              "rhs": 186
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "a"
+              ],
+              "lhs": 0.1,
+              "rhs": 1
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "a"
+              ],
+              "lhs": 0.01,
+              "rhs": 0.1
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "a"
+              ],
+              "lhs": 0,
+              "rhs": 0.01
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 221,
+              "rhs": 222
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 221,
+              "rhs": 222
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 221,
+              "rhs": 232
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 208,
+              "rhs": 221
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 208,
+              "rhs": 221
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 220,
+              "rhs": 221
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 207,
+              "rhs": 208
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 207,
+              "rhs": 208
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 208,
+              "rhs": 220
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 194,
+              "rhs": 207
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 194,
+              "rhs": 207
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 148,
+              "rhs": 208
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 146,
+              "rhs": 194
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 146,
+              "rhs": 194
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 142,
+              "rhs": 148
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 137,
+              "rhs": 146
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 137,
+              "rhs": 146
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 136,
+              "rhs": 142
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 131,
+              "rhs": 137
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 131,
+              "rhs": 137
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 126,
+              "rhs": 136
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 119,
+              "rhs": 131
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 119,
+              "rhs": 131
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 123,
+              "rhs": 126
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 116,
+              "rhs": 119
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 116,
+              "rhs": 119
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 117,
+              "rhs": 116
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 117,
+              "rhs": 116
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 121,
+              "rhs": 123
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 116,
+              "rhs": 117
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 116,
+              "rhs": 117
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 119,
+              "rhs": 121
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 115,
+              "rhs": 116
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 115,
+              "rhs": 116
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 58,
+              "rhs": 119
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 58,
+              "rhs": 115
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 58,
+              "rhs": 115
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 60,
+              "rhs": 58
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 60,
+              "rhs": 58
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 60,
+              "rhs": 58
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 82,
+              "rhs": 60
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 82,
+              "rhs": 60
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 82,
+              "rhs": 60
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 150,
+              "rhs": 82
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 101,
+              "rhs": 82
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 101,
+              "rhs": 82
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 150
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 101
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 101
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 50,
+              "rhs": 48
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 52,
+              "rhs": 50
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 51,
+              "rhs": 52
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 85,
+              "rhs": 51
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 50,
+              "rhs": 85
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 66,
+              "rhs": 50
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 69,
+              "rhs": 66
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 85,
+              "rhs": 46
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 46,
+              "rhs": 85
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 46,
+              "rhs": 69
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 67,
+              "rhs": 85
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 50,
+              "rhs": 46
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 50,
+              "rhs": 46
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 111,
+              "rhs": 67
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 48,
+              "rhs": 50
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 48,
+              "rhs": 50
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 0,
+              "rhs": 111
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 0,
+              "rhs": 48
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 0,
+              "rhs": 48
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 7,
+              "rhs": 0
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 7,
+              "rhs": 0
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 7,
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 48,
+              "rhs": 7
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 46,
+              "rhs": 7
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 46,
+              "rhs": 7
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 38,
+              "rhs": 48
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 37,
+              "rhs": 46
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 37,
+              "rhs": 46
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "left"
+              ],
+              "lhs": 234,
+              "rhs": 150
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "top"
+              ],
+              "lhs": 135.5,
+              "rhs": 242.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 559,
+              "rhs": 644
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 56.5,
+              "rhs": 168.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "left"
+              ],
+              "lhs": 495,
+              "rhs": 528
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "top"
+              ],
+              "lhs": 268.5,
+              "rhs": 331.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "left"
+              ],
+              "lhs": 605,
+              "rhs": 495
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "top"
+              ],
+              "lhs": 294.5,
+              "rhs": 268.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "left"
+              ],
+              "lhs": 478,
+              "rhs": 605
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "top"
+              ],
+              "lhs": 122.5,
+              "rhs": 294.5
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 173
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 128
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "left"
+              ],
+              "lhs": 213,
+              "rhs": 478
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5",
+                "top"
+              ],
+              "lhs": 294.5,
+              "rhs": 122.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "fdb935e2-4b90-4df7-b95a-ab7f0a1f89b5"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "width"
+              ],
+              "lhs": 141,
+              "rhs": 166
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "height"
+              ],
+              "lhs": 92,
+              "rhs": 125
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 624,
+              "rhs": 559
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 110.5,
+              "rhs": 56.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "left"
+              ],
+              "lhs": 550,
+              "rhs": 624
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "top"
+              ],
+              "lhs": 49.5,
+              "rhs": 110.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 141
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "5df9a8af-7d01-4882-9938-34771c6506ed",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 92
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "5df9a8af-7d01-4882-9938-34771c6506ed"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "left"
+              ],
+              "lhs": 106,
+              "rhs": 234
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "top"
+              ],
+              "lhs": -35.5,
+              "rhs": 135.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 187
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "aaa8d773-9b1b-426c-bb95-171e24ef6347",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 132
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "aaa8d773-9b1b-426c-bb95-171e24ef6347"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor",
+                "a"
+              ],
+              "lhs": 1,
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 29,
+              "rhs": 38
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 29,
+              "rhs": 37
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 29,
+              "rhs": 37
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "r"
+              ],
+              "lhs": 255,
+              "rhs": 29
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "g"
+              ],
+              "lhs": 255,
+              "rhs": 29
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "b"
+              ],
+              "lhs": 255,
+              "rhs": 29
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "cube"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor"
+              ],
+              "rhs": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 1
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "a56c4939-69ca-48d5-a814-63158f17971f",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor"
+              ],
+              "rhs": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 1
+              }
+            }
+          ],
+          "type": "Update slide"
+        },
         {
           "changes": [],
           "type": "Select objects",

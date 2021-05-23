@@ -1,3 +1,8 @@
 ## Kako se kreira symlink za WP dew
 
 mklink /D webslider "c:/Users/Srdjan Arsic/Projects/slide-2/integration/wp-plugin"
+
+
+## efekti
+
+https://greensock.com/forums/topic/26717-from-css-topleft-to-gsap-bouncing-shape-around/
