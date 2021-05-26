@@ -64,7 +64,7 @@ export function initializeSlideAndLayer(): any {
           customValue: 5000,
         },
         layerIds: [],
-        nextLayerIdCounter: 0,
+        nextLayerIdCounter: 1,
         slideType: SlideType.Normal,
         slideTransition: getDefaultSlideTransition(),
       };
@@ -102,7 +102,7 @@ export function addNewSlide(slideType = SlideType.Normal): any {
         customValue: 5000,
       },
       layerIds: [],
-      nextLayerIdCounter: 0,
+      nextLayerIdCounter: 1,
       slideType,
       slideTransition: getDefaultSlideTransition(),
     };
@@ -184,7 +184,7 @@ export interface AddLayerAction extends IUndoableAction<true> {
   payload: ILayer;
 }
 
-export function addNewLayer(slideId: string, isBackground = false): any {
+export function addNewLayer(slideId: string, _isBackground = false): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const nextId =
       getState().project.slides.slideById[slideId].nextLayerIdCounter;
@@ -192,8 +192,9 @@ export function addNewLayer(slideId: string, isBackground = false): any {
     const layer: ILayer = {
       id: uuid(),
       slideId,
-      isBackground: isBackground,
-      name: isBackground ? `Background layer` : `Layer ${nextId}`,
+      // isBackground: isBackground,
+      // name: isBackground ? `Background layer` : `Layer ${nextId}`,
+      name: `Layer ${nextId}`,
       isVisible: true,
       hasTimeline: true,
       objectIds: [],

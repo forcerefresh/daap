@@ -38,7 +38,7 @@ export interface ISlides {
 }
 
 export function slides(
-  state: ISlides = { nextSlideIdCounter: 0, slideById: {}, allSlides: [] },
+  state: ISlides = { nextSlideIdCounter: 1, slideById: {}, allSlides: [] },
   action: ActionTypes
 ) {
   switch (action.type) {

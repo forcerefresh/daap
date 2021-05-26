@@ -15,7 +15,7 @@ import { ITransitions } from "../../objects/types";
 export interface ILayer {
   id: string;
   slideId: string;
-  isBackground: boolean;
+  //isBackground: boolean;
   name: string;
   isVisible: boolean;
   hasTimeline: boolean;

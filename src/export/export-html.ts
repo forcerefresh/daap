@@ -115,15 +115,15 @@ export function generatePlayerData(
         },
       });
 
-      if (layer.isBackground) {
-        /* transitionsDataArr.push({
+      //if (layer.isBackground) {
+      /* transitionsDataArr.push({
           objectClass: layerClassName,
           transitions: layer.transitions,
           data: {
             slideDuration: slide.duration,
           },
         });*/
-      }
+      //}
 
       html += `    <div class="${layerClassName}">`; // layer open
 

@@ -198,22 +198,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   })}
                 >
                   <div>
-                    {
-                      /* TODO */
-                      <Button
-                        active={layer.id === showEffectPanelForId.id}
-                        minimal
-                        onClick={(event: any) => {
-                          event.stopPropagation();
-                          setShowEffectPanelForId({
-                            id: layer.id,
-                            type: "layer",
-                          });
-                        }}
-                        small={true}
-                        icon="walk"
-                      ></Button>
-                    }
                     <Button
                       minimal
                       onClick={(event: any) => {
@@ -221,11 +205,28 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         toggleLayer(layer.id);
                       }}
                       className={cx(css.layerToggle, {
-                        [css.layerOpen]: openLayerById[layer.id],
+                        /*[css.layerOpen]: openLayerById[layer.id],*/
                       })}
                       small={true}
-                      icon="chevron-right"
+                      icon={
+                        openLayerById[layer.id] ? "folder-open" : "folder-close"
+                      }
                     ></Button>
+
+                    <Button
+                      minimal
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        setShowEffectPanelForId({
+                          id: layer.id,
+                          type: "layer",
+                        });
+                      }}
+                      className={css.slideProperties}
+                      small={true}
+                      icon="cog"
+                    ></Button>
+
                     <div className={css.layerName}>{layer.name}</div>
 
                     <div className={css.objectCount}>

@@ -61,9 +61,13 @@
 
     .layerToggle {
       margin-right: 5px;
-      &.layerOpen {
+      /*&.layerOpen {
         transform: rotate(90deg);
-      }
+      }*/
+    }
+
+    .slideProperties {
+      margin-right: 5px;
     }
 
     .objectCount {
