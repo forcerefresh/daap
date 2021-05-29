@@ -15,11 +15,20 @@ export const parallaxDefinition = {
 
 export const parallaxDefaults: IParallaxEffect = {
   id: parallax,
-  hasDelay: false,
-  hasDuration: false,
-  hasEase: false,
+  hasDelay: true,
+  hasDuration: true,
+  hasEase: true,
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["layer"],
-  parallax: { objects: [], autoDepthInc: 5, autoDepth: true, smooth: true },
+  parallax: {
+    objects: [],
+    autoDepthInc: 5,
+    autoDepth: true,
+    smooth: true,
+    strengthX: 50,
+    strengthY: 50,
+    setToInitialPositionOnComplete: false,
+    followTime: 500,
+  },
 };

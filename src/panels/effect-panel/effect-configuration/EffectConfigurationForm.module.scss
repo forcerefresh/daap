@@ -16,5 +16,11 @@
     .bp3-label {
       width: var(--effects-panel-label-width);
     }
+
+    .bp3-form-group.bp3-inline label.bp3-label {
+      //line-height: 30px;
+      line-height: 20px;
+      padding-top: 5px;
+    }
   }
 }

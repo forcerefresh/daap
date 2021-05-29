@@ -136,7 +136,9 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   return (
     <div className={css.effectConfigurationForm}>
       <div className={css.inlineFlex}>
-        {(effectType === "in" || effectType === "effect") && (
+        {(effectType === "in" ||
+          effectType === "effect" ||
+          effectType === "layer") && (
           <>
             {delayInput()}
             {durationInput()}

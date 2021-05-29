@@ -1,5 +1,9 @@
 import { forOwn, mapValues, pick } from "lodash-es";
-import { ImageProperties, TextProperties } from "../inputs/types";
+import {
+  ImageProperties,
+  SvgProperties,
+  TextProperties,
+} from "../inputs/types";
 import {
   IObject,
   IObjectEvent,
@@ -115,17 +119,9 @@ export function generatePlayerData(
         },
       });
 
-      //if (layer.isBackground) {
-      /* transitionsDataArr.push({
-          objectClass: layerClassName,
-          transitions: layer.transitions,
-          data: {
-            slideDuration: slide.duration,
-          },
-        });*/
-      //}
-
-      html += `    <div class="${layerClassName}">`; // layer open
+      // TODO: IMPORTANT
+      // IMPORTANT: !!!!!! SIZE HARDCODED
+      html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {
@@ -152,7 +148,7 @@ export function generatePlayerData(
         html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
         //console.log(object);
-        const objectHtml = getObjectHtml(object);
+        const objectHtml = getObjectHtml(object, true);
 
         transitionsData.push({
           objectClass: objectClass,
@@ -208,14 +204,16 @@ function getObjectArr(objects: IObjects, objectIds: string[]): IObject[] {
   return objectIds.map((objectId) => objects.objectById[objectId]);
 }
 
-export function getObjectHtml(object: IObject) {
+export function getObjectHtml(object: IObject, isPlayer: boolean) {
   switch (object.type) {
     case ObjectType.TEXT:
       return getTextHtml(object);
     case ObjectType.IMAGE:
       return getImageHtml(object);
     case ObjectType.VIDEO:
-      return getVideoHtml(object);
+      return getVideoHtml(object, isPlayer);
+    case ObjectType.SVG:
+      return getSvgHtml(object);
     default:
       return "";
   }
@@ -251,13 +249,15 @@ function getImageHtml(object: IObject) {
   return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }
 
-function getVideoHtml(object: IObject) {
+function getVideoHtml(object: IObject, isPlayer: boolean) {
   const imageProperties = object.definition.properties as ImageProperties;
   if (imageProperties.url.value.isPlaceholder) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
   }
 
-  const videoHtml = `<video style="object-fit: fill;" no-controls autoplay width="${object.width}" height="${object.height}">
+  const videoHtml = `<video style="object-fit: fill;" ${
+    isPlayer ? "autoplay" : ""
+  } controls  width="100%" height="100%">
     <source src="${imageProperties.url.value.url}" type="video/mp4">
   </video>`;
 
@@ -266,4 +266,12 @@ function getVideoHtml(object: IObject) {
   //Sorry, your browser doesn't support embedded videos.
 
   //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+}
+
+function getSvgHtml(object: IObject) {
+  const imageProperties = object.definition.properties as SvgProperties;
+  if (imageProperties.svg.value) {
+    return imageProperties.svg.value;
+  }
+  return ``;
 }

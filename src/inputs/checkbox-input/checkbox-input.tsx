@@ -7,15 +7,16 @@ export const CheckboxInputForm: React.FC<ICheckboxInput & IUpdateInput> = (
   props
 ) => {
   const { displayName, value, onChange = noop, helperText } = props;
+  const labelFor = Math.random() + displayName;
   return (
     <FormGroup
       label={displayName}
-      labelFor="checkbox-input"
+      labelFor={labelFor}
       inline
       helperText={!!helperText && helperText}
     >
       <Checkbox
-        id="checkbox-input"
+        id={labelFor}
         checked={value}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           onChange(event.target.checked);

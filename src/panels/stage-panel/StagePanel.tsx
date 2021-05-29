@@ -84,19 +84,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const [progress, setProgress] = useState(0);
   const [manualProgress, setManualProgress] = useState(0);
 
-  const [resizeData, setResizeData] = useState<{
-    objectId: string;
-    handle: string;
-  } | null>(null);
+  const [resizeData, setResizeData] =
+    useState<{
+      objectId: string;
+      handle: string;
+    } | null>(null);
 
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
   const [dragStartPosition, setDragStartPosition] = useState({ x: -1, y: -1 });
-  const [selectionStartPosition, setSelectionStartPosition] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+  const [selectionStartPosition, setSelectionStartPosition] =
+    useState<{
+      x: number;
+      y: number;
+    } | null>(null);
   const [selRectDelta, setSelRectDelta] = useState({ x: 0, y: 0 });
 
   // clear all on escape
@@ -145,17 +147,19 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const [rerender, setRerender] = useState(1);
 
   // Resize state
-  const [resizeStartPosition, setResizeStartPosition] = useState<{
-    x: number;
-    y: number;
-    corner: string;
-  } | null>(null);
-  const [resizeRect, setResizeRect] = useState<{
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  } | null>(null);
+  const [resizeStartPosition, setResizeStartPosition] =
+    useState<{
+      x: number;
+      y: number;
+      corner: string;
+    } | null>(null);
+  const [resizeRect, setResizeRect] =
+    useState<{
+      x: number;
+      y: number;
+      w: number;
+      h: number;
+    } | null>(null);
 
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = cloneDeep(objectById);
@@ -368,7 +372,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
-              __html: getObjectHtml(object),
+              __html: getObjectHtml(object, false),
             }}
             style={objectStyle}
             className={cx({
@@ -403,6 +407,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
       </>
     );
+
+    const widthAndHeightStyle = {
+      width: object.width + "px",
+      height: object.height + "px",
+    };
+
+    const widthAndHeightObject = {
+      width: object.width,
+      height: object.height,
+    };
+
+    if (resizeRect && resizeData?.objectId === object.id) {
+      widthAndHeightStyle.width = resizeRect.w + "px";
+      widthAndHeightStyle.height = resizeRect.h + "px";
+      widthAndHeightObject.width = resizeRect.w;
+      widthAndHeightObject.height = resizeRect.h;
+    }
 
     return (
       <Draggable
@@ -465,7 +486,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <div
           data-draggable-object-id={object.id}
           //onMouseUp={(e) => e.stopPropagation()}
-          style={{ zIndex: 500 + objectCounter, position: "absolute" }}
+          style={{ zIndex: 100, position: "absolute" }}
           className={cx({
             [css.notVisibleHolder]: !object.isVisible,
           })}
@@ -474,9 +495,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             ref={resizingObjectRef}
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
-              __html: getObjectHtml(object),
+              __html: getObjectHtml(
+                { ...object, ...widthAndHeightObject },
+                false
+              ),
             }}
-            style={objectStyle2}
+            style={{ ...objectStyle2, ...widthAndHeightStyle }}
             className={cx({
               [css.notVisible]: !object.isVisible,
             })}
@@ -484,12 +508,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           <div
             ref={resizingSelectionRef}
             key={object.id}
-            className={cx(css.selection, css[object.type], {
-              [css.active]:
-                selectedObjectIds.length > 0 /*1*/ &&
-                selectedObjectIds.indexOf(object.id) !== -1,
-              [css.selected]: isSelected,
-            })}
+            className={cx(css.selection, css[object.type])}
             style={objectStyle2}
           />
 
@@ -787,7 +806,40 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             layerArr?.map((layer) => {
               return layer.objectIds.map((objectId) => {
                 const object = objectByIdLocal[objectId];
-                return renderObjectHandles(object);
+                const sizeObj = pick(object, "left", "top", "width", "height");
+                const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+
+                //   sizeObj.left = sizeObj.top = 0;
+                const objectStyle2 = mapValues(
+                  sizeObj,
+                  (size) => `${size! * stageZoom}px`
+                );
+                (objectStyle2 as any).position = "absolute";
+                (objectStyle2 as any).borderWidth = 1 / stageZoom + "px";
+
+                if (resizeRect && resizeData?.objectId === object.id) {
+                  objectStyle2.left = resizeRect.x * stageZoom + "px";
+                  objectStyle2.top = resizeRect.y * stageZoom + "px";
+                  objectStyle2.width = resizeRect.w * stageZoom + "px";
+                  objectStyle2.height = resizeRect.h * stageZoom + "px";
+                }
+
+                return (
+                  <>
+                    <div
+                      ref={resizingSelectionRef}
+                      key={`selbox_${object.id}`}
+                      className={cx(css.selection, css[object.type], {
+                        [css.active]:
+                          selectedObjectIds.length > 0 /*1*/ &&
+                          selectedObjectIds.indexOf(object.id) !== -1,
+                        [css.selected]: isSelected,
+                      })}
+                      style={{ ...objectStyle2, pointerEvents: "none" }}
+                    />
+                    {renderObjectHandles(object)}
+                  </>
+                );
               });
             })}
         </div>

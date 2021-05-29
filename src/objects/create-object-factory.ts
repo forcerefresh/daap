@@ -4,6 +4,7 @@ import {
   IFontSelectInputValue,
   ImageProperties,
   InputType,
+  SvgProperties,
   TextProperties,
   VideoProperties,
 } from "../inputs/types";
@@ -53,6 +54,22 @@ export function createObject(
       return {
         ...objectProps,
         ...createVideoObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.SVG: {
+      return {
+        ...objectProps,
+        ...createSvgObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.HTML: {
+      return {
+        ...objectProps,
+        ...createSvgObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -334,6 +351,53 @@ function createVideoObject(
             height: 540,
             isPlaceholder: true,
           },
+        },
+      },
+    },
+  };
+}
+
+function createSvgObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<SvgProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.SVG);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.SVG,
+      properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+        svg: {
+          displayName: "SVG code",
+          propertyName: "svg",
+          inputType: InputType.TEXTAREA,
+          value: `<svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>`,
+          defaultValue: `<svg height="100" width="100">
+  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>`,
         },
       },
     },

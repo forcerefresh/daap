@@ -1,8 +1,6 @@
-import { Label, Text } from "@blueprintjs/core";
-import cx from "classnames";
-import { cloneDeep, isEqual, uniqWith } from "lodash-es";
+import { Label } from "@blueprintjs/core";
+import { cloneDeep } from "lodash-es";
 import React, { useEffect } from "react";
-import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { IObject } from "../../objects/types";
 import { ILayer } from "../../store/reducers/layers";
 import { getCheckboxField, getNumericFiled } from "../input-utils";
@@ -40,20 +38,44 @@ export const ParallaxInputForm: React.FC<
     }
   }, [value]);
 
-  const autoDepthInput = () => (
+  const numericInput = (
+    propertyName: "strengthX" | "strengthY" | "followTime",
+    label: string,
+    helperText: string
+  ) => (
     <div className="input60">
-      {getCheckboxField(
-        "Auto depth",
-        value.autoDepth,
-        (autoDepth: any) => {
+      {getNumericFiled(
+        label,
+        value[propertyName],
+        (val: any) => {
           const valueClone = cloneDeep(value);
-          valueClone.autoDepth = autoDepth;
+          valueClone[propertyName] = val;
           onChange(valueClone);
         },
-        "If set to true, dept will be applied by default by using  'Increment' value."
+        helperText
       )}
     </div>
   );
+
+  const booleanInput = (
+    propertyName: "autoDepth" | "setToInitialPositionOnComplete",
+    label: string,
+    helperText: string
+  ) => (
+    <div className="input60">
+      {getCheckboxField(
+        label,
+        value[propertyName],
+        (val: any) => {
+          const valueClone = cloneDeep(value);
+          valueClone[propertyName] = val;
+          onChange(valueClone);
+        },
+        helperText
+      )}
+    </div>
+  );
+
   const autoDepthIncInput = () => (
     <div className="input60">
       {getNumericFiled(
@@ -86,33 +108,50 @@ export const ParallaxInputForm: React.FC<
     );
   };
 
-  //<div className="bp3-form-helper-text">{helperText}</div>
-  //<div className="bp3-form-helper-text">{layerData?.layer?.id}</div>
-  //<div className="bp3-form-helper-text">{layerData?.layer?.name}</div>
-  //<div className="bp3-form-helper-text">
-  //  {layerData?.layer?.objectIds}
-  //</div>
-
   const getValueForId = (objectId: string) => {
     const ret = value.objects.find((item) => item.id === objectId);
     return ret ? ret.depth : DEFAULT_DEPTH;
   };
+
   return (
     <div className={css.container}>
       <div>
         <Label>{displayName}</Label>
-        {autoDepthInput()}
+
+        {booleanInput(
+          "autoDepth",
+          "Auto depth",
+          "If set to true, dept will be applied by default by using  'Increment' value."
+        )}
         {value.autoDepth && autoDepthIncInput()}
+
+        {numericInput(
+          "strengthX",
+          "Strength X",
+          "Set strength for vertical movement"
+        )}
+
+        {numericInput(
+          "strengthY",
+          "Strength Y",
+          "Set strength for horizontal movement"
+        )}
+
+        {numericInput(
+          "followTime",
+          "Follow time",
+          "Time after objects stops move"
+        )}
+
+        {booleanInput(
+          "setToInitialPositionOnComplete",
+          "Reset on complete",
+          "Position object to initial position on complete"
+        )}
+
         <Label style={{ width: "100%" }}>Object depths</Label>
         {objects.map((object: IObject) =>
           renderObject(object, getValueForId(object.id))
-        )}
-
-        {false && (
-          <div className={cx("bp3-form-helper-text", "error", css.error)}>
-            Each side or rectangle should have at least 1 point, otherwise some
-            part of image will be cut out.
-          </div>
         )}
       </div>
     </div>

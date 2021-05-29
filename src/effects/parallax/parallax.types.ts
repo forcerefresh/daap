@@ -8,5 +8,9 @@ export interface IParallaxEffect extends IEffectBase {
     smooth: boolean;
     autoDepth: boolean;
     autoDepthInc: number;
+    strengthX: number;
+    strengthY: number;
+    setToInitialPositionOnComplete: boolean;
+    followTime: number;
   };
 }

@@ -21,7 +21,7 @@
     "clone-deep": "^4.0.1",
     "deep-diff": "^1.0.2",
     "env-cmd": "^10.1.0",
-    "gsap": "^3.5.1",
+    "gsap": "file:gsap-bonus.tgz",
     "immutability-helper": "^3.1.1",
     "lodash-es": "^4.17.15",
     "node-sass": "^4.14.1",

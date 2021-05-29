@@ -159,6 +159,36 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       </div>
 
       <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>HTML</h1>
+          <p>Place html content</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.SVG, {
+                left: (documentSize.width - 100) / 2,
+                top: (documentSize.height - 100) / 2,
+                width: 100,
+                height: 100,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <PredefinedTextIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>SVG</h3>
+          <p>Add Inline SVG</p>
+        </Card>
+      </div>
+
+      <div>
         <Card
           interactive={true}
           elevation={Elevation.TWO}

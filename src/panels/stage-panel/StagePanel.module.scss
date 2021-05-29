@@ -100,6 +100,7 @@
 
 .resizeHandle {
   position: absolute;
+  z-index: 550;
   background-color: white;
   border: 1px solid #48aff0;
   width: 8px;

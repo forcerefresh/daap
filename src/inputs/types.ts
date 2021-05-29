@@ -36,6 +36,10 @@ export interface IUpdateInput {
           smooth: boolean;
           autoDepth: boolean;
           autoDepthInc: number;
+          strengthX: number;
+          strengthY: number;
+          setToInitialPositionOnComplete: boolean;
+          followTime: number;
         }
   ) => void;
   onInput?: (
@@ -160,12 +164,20 @@ export interface IParallaxInput {
     smooth: boolean;
     autoDepth: boolean;
     autoDepthInc: number;
+    strengthX: number;
+    strengthY: number;
+    setToInitialPositionOnComplete: boolean;
+    followTime: number;
   };
   defaultValue: {
     objects: { id: string; depth: number }[];
     smooth: boolean;
     autoDepth: boolean;
     autoDepthInc: number;
+    strengthX: number;
+    strengthY: number;
+    setToInitialPositionOnComplete: boolean;
+    followTime: number;
   };
 }
 
@@ -229,4 +241,12 @@ export interface ImageProperties {
 
 export interface VideoProperties {
   url: IVideoInput;
+}
+
+export interface SvgProperties {
+  svg: ITextAreaInput;
+}
+
+export interface HtmlProperties {
+  html: ITextAreaInput;
 }

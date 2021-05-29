@@ -9,6 +9,8 @@ export enum ObjectType {
   TEXT = "text",
   IMAGE = "image",
   VIDEO = "video",
+  HTML = "html",
+  SVG = "svg",
   //VECTOR = '"vector',
 }
 

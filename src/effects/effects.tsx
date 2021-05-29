@@ -36,6 +36,8 @@ import {
   parallaxDefinition,
 } from "./parallax/parallax.definition";
 
+import { morphDefaults, morphDefinition } from "./morph/morph.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -51,6 +53,7 @@ import "./falling-leaves/falling-leaves.effect";
 import "./cube/cube.effect";
 import "./split/split.effect";
 import "./parallax/parallax.effect";
+import "./morph/morph.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -82,6 +85,7 @@ registerEffect(fallingLeavesDefinition, fallingLeavesDefaults);
 registerEffect(cubeDefinition, cubeDefaults);
 registerEffect(splitDefinition, splitDefaults);
 registerEffect(parallaxDefinition, parallaxDefaults);
+registerEffect(morphDefinition, morphDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
