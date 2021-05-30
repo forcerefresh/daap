@@ -128,13 +128,13 @@ export const ParallaxInputForm: React.FC<
         {numericInput(
           "strengthX",
           "Strength X",
-          "Set strength for vertical movement"
+          "Set strength for horizontal movement"
         )}
 
         {numericInput(
           "strengthY",
           "Strength Y",
-          "Set strength for horizontal movement"
+          "Set strength for vertical movement"
         )}
 
         {numericInput(

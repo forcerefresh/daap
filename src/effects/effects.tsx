@@ -37,6 +37,10 @@ import {
 } from "./parallax/parallax.definition";
 
 import { morphDefaults, morphDefinition } from "./morph/morph.definition";
+import {
+  magneticDefaults,
+  magneticDefinition,
+} from "./magnetic/magnetic.definition";
 
 // import all effects
 import "./none/none.effect";
@@ -54,6 +58,7 @@ import "./cube/cube.effect";
 import "./split/split.effect";
 import "./parallax/parallax.effect";
 import "./morph/morph.effect";
+import "./magnetic/magnetic.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -86,6 +91,7 @@ registerEffect(cubeDefinition, cubeDefaults);
 registerEffect(splitDefinition, splitDefaults);
 registerEffect(parallaxDefinition, parallaxDefaults);
 registerEffect(morphDefinition, morphDefaults);
+registerEffect(magneticDefinition, magneticDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
