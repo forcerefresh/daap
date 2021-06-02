@@ -14,13 +14,8 @@ export interface AppPlayerProps {
 }
 
 export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
-  const {
-    playerData,
-    manualProgress,
-    previewState,
-    onProgress,
-    requestStop,
-  } = props;
+  const { playerData, manualProgress, previewState, onProgress, requestStop } =
+    props;
 
   const divRef = useRef(null);
 
@@ -80,6 +75,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
     };
   }, [tl]);*/
 
+  let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
     if (!isEmpty(playerData?.slideDataArr)) {
       /*const playerConfig: IPlayerConfig = {
@@ -90,11 +86,17 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
       pl.playSlide(0);
 
+      currentPlayer.current = pl;
+
       return () => {
         pl.clear();
       };
     }
   }, [playerData]);
+
+  useEffect(() => {
+    currentPlayer.current?.setPaused(!!previewState.paused);
+  }, [previewState.paused]);
 
   return (
     <div>

@@ -33,7 +33,7 @@ gsap.registerEffect({
       target.style.width = `${areaW}px`;
       target.style.height = `${areaH}px`;
       target.className = "slideTransitionHolder";
-      target.style.zIndex = `${(config.nextZIndex || 0) - 2}`;
+      //s target.style.zIndex = `${(config.nextZIndex || 0) - 2}`;
 
       document.getElementsByClassName("slidesHolder")[0].append(target);
 

@@ -196,13 +196,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     left: 0 + stageXOffset + "px",
     width: stageSize.width * stageZoom + "px",
     height: stageSize.height * stageZoom + "px",
+    overflow: previewState.scrollbar ? "scroll" : "visible",
   };
 
   const canvasStyle: React.CSSProperties = {
     top: 0 + "px",
     left: 0 + "px",
     width: stageSize.width + "px",
-    height: stageSize.height + "px",
+    height: stageSize.height * (previewState.scrollbar ? 3 : 1) + "px",
     transform: "scale(" + stageZoom + ")",
     transformOrigin: "left top",
   };
@@ -777,7 +778,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <div ref={selectionBoxRef} className={css.selectionBox}></div>
       )}
       {isPreview && renderTimeInfo()}
-      <div style={stageStyle} className={css.stage}>
+      <div style={stageStyle} className={cx("tmp-stage-selector", css.stage)}>
         <div style={canvasStyle} className={css.canvas}>
           {isPreview && (
             <AppPlayer

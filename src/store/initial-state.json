@@ -1,7 +1,7 @@
 {
   "project": {
     "slides": {
-      "nextSlideIdCounter": 2,
+      "nextSlideIdCounter": 3,
       "slideById": {
         "3b34f4b3-763a-4fcc-acfb-220df714d82e": {
           "id": "3b34f4b3-763a-4fcc-acfb-220df714d82e",
@@ -17,13 +17,75 @@
             "duration": 2000,
             "overlap": 1000,
             "effect": {
-              "id": "none",
-              "values": {}
+              "id": "split",
+              "values": {
+                "split": {
+                  "center": {
+                    "x": 50,
+                    "y": 50
+                  },
+                  "points": [
+                    {
+                      "x": 0,
+                      "y": 30.5
+                    },
+                    {
+                      "x": 36,
+                      "y": 100
+                    },
+                    {
+                      "x": 100,
+                      "y": 77.5
+                    },
+                    {
+                      "x": 83,
+                      "y": 0
+                    }
+                  ]
+                },
+                "rotation": 20,
+                "randomStrength": 0
+              }
+            }
+          }
+        },
+        "6de45704-8514-4986-acee-39861159d4be": {
+          "id": "6de45704-8514-4986-acee-39861159d4be",
+          "name": "Slide 2",
+          "duration": {
+            "inheritFrom": "custom",
+            "customValue": 5000
+          },
+          "layerIds": ["047afb64-15e4-452e-ad47-3545df045533"],
+          "nextLayerIdCounter": 2,
+          "slideType": "normal",
+          "slideTransition": {
+            "duration": 2000,
+            "overlap": 1000,
+            "effect": {
+              "id": "cube",
+              "values": {
+                "cubeBackgroundColor": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 0
+                },
+                "cubeEdgeColor": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                }
+              }
             }
           }
         }
       },
-      "allSlides": ["3b34f4b3-763a-4fcc-acfb-220df714d82e"]
+      "allSlides": [
+        "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+        "6de45704-8514-4986-acee-39861159d4be"
+      ]
     },
     "layers": {
       "layerById": {
@@ -33,11 +95,7 @@
           "name": "Layer 1",
           "isVisible": true,
           "hasTimeline": true,
-          "objectIds": [
-            "55f921ee-5b4e-46e6-b604-57b48347b478",
-            "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
-            "23a95b1c-3849-411a-a354-e8d131b3c768"
-          ],
+          "objectIds": ["886ac2de-1409-4b8f-996d-6b76e30472fb"],
           "transitions": {
             "layer": {
               "relativeTo": "stage",
@@ -46,7 +104,7 @@
               "ease": "none",
               "timeDistribution": 50,
               "effect": {
-                "id": "parallax",
+                "id": "none",
                 "values": {
                   "parallax": {
                     "objects": [
@@ -75,19 +133,43 @@
               }
             }
           }
+        },
+        "047afb64-15e4-452e-ad47-3545df045533": {
+          "id": "047afb64-15e4-452e-ad47-3545df045533",
+          "slideId": "6de45704-8514-4986-acee-39861159d4be",
+          "name": "Layer 1",
+          "isVisible": true,
+          "hasTimeline": true,
+          "objectIds": ["38d62df7-17c5-45b7-be63-ca1f90ec9e9c"],
+          "transitions": {
+            "layer": {
+              "relativeTo": "stage",
+              "delay": 0,
+              "duration": 1000,
+              "ease": "none",
+              "timeDistribution": 50,
+              "effect": {
+                "id": "none",
+                "values": {}
+              }
+            }
+          }
         }
       },
-      "allLayers": ["a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"]
+      "allLayers": [
+        "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+        "047afb64-15e4-452e-ad47-3545df045533"
+      ]
     },
     "objects": {
       "objectById": {
-        "55f921ee-5b4e-46e6-b604-57b48347b478": {
-          "left": -4,
-          "top": -1.5,
-          "width": 966,
-          "height": 480,
-          "id": "55f921ee-5b4e-46e6-b604-57b48347b478",
-          "name": "image 38",
+        "886ac2de-1409-4b8f-996d-6b76e30472fb": {
+          "left": -72,
+          "top": 65.5,
+          "width": 300,
+          "height": 300,
+          "id": "886ac2de-1409-4b8f-996d-6b76e30472fb",
+          "name": "image 7",
           "type": "image",
           "isVisible": true,
           "isLocked": false,
@@ -95,12 +177,17 @@
             "in": {
               "relativeTo": "stage",
               "delay": 0,
-              "duration": 1000,
+              "duration": 5000,
               "ease": "none",
               "timeDistribution": 50,
               "effect": {
-                "id": "none",
-                "values": {}
+                "id": "slide",
+                "values": {
+                  "scaleX": 100,
+                  "scaleY": 100,
+                  "from": "right",
+                  "distance": 100
+                }
               }
             },
             "out": {
@@ -128,7 +215,7 @@
           },
           "events": [],
           "definition": {
-            "id": "180c619f-5fe9-42ad-83b3-ebffc61cb492",
+            "id": "b1c1b7c7-e8a5-4b78-bab3-ce4b4dccc6e9",
             "type": "image",
             "properties": {
               "overflow": {
@@ -169,14 +256,14 @@
           },
           "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
         },
-        "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63": {
-          "left": 226,
-          "top": 102.5,
-          "width": 484,
-          "height": 286,
-          "id": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
-          "name": "image 97",
-          "type": "image",
+        "38d62df7-17c5-45b7-be63-ca1f90ec9e9c": {
+          "left": 240,
+          "top": 121.25,
+          "width": 480,
+          "height": 242.5,
+          "id": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c",
+          "name": "text 98",
+          "type": "text",
           "isVisible": true,
           "isLocked": false,
           "transitions": {
@@ -216,8 +303,8 @@
           },
           "events": [],
           "definition": {
-            "id": "246e36fe-3316-4510-92f9-3367ca3dfbb9",
-            "type": "image",
+            "id": "39d8f016-cd12-4459-8392-c8b89e855ab0",
+            "type": "text",
             "properties": {
               "overflow": {
                 "displayName": "Overflow",
@@ -236,128 +323,122 @@
                   }
                 ]
               },
-              "url": {
-                "displayName": "Image url",
-                "propertyName": "url",
-                "inputType": "image",
+              "text": {
+                "displayName": "Text",
+                "propertyName": "text",
+                "inputType": "textarea",
+                "value": "Sample test",
+                "defaultValue": ""
+              },
+              "autoHeight": {
+                "displayName": "Auto height",
+                "propertyName": "autoHeight",
+                "inputType": "checkbox",
+                "value": false,
+                "defaultValue": false
+              },
+              "font": {
+                "displayName": "Font",
+                "propertyName": "fontFamily",
+                "inputType": "font_select",
                 "value": {
-                  "url": "/images/wall1.webp",
-                  "width": 1024,
-                  "height": 768,
-                  "isPlaceholder": false
+                  "fontFamily": "Arial",
+                  "source": "system-fonts"
                 },
                 "defaultValue": {
-                  "url": "",
-                  "width": 300,
-                  "height": 300,
-                  "isPlaceholder": true
+                  "fontFamily": "Arial",
+                  "source": "system-fonts"
                 }
-              }
-            }
-          },
-          "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
-        },
-        "23a95b1c-3849-411a-a354-e8d131b3c768": {
-          "left": 402,
-          "top": 155.5,
-          "width": 148,
-          "height": 175,
-          "id": "23a95b1c-3849-411a-a354-e8d131b3c768",
-          "name": "image 86",
-          "type": "image",
-          "isVisible": true,
-          "isLocked": false,
-          "transitions": {
-            "in": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "out": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": 1000,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            },
-            "effect": {
-              "relativeTo": "stage",
-              "delay": 0,
-              "duration": -1,
-              "ease": "none",
-              "timeDistribution": 50,
-              "effect": {
-                "id": "none",
-                "values": {}
-              }
-            }
-          },
-          "events": [],
-          "definition": {
-            "id": "99d9dc40-6406-4459-a4d4-e052ad58aed0",
-            "type": "image",
-            "properties": {
-              "overflow": {
-                "displayName": "Overflow",
-                "propertyName": "overflow",
+              },
+              "color": {
+                "displayName": "Color",
+                "propertyName": "color",
+                "inputType": "color",
+                "value": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                },
+                "defaultValue": {
+                  "r": 255,
+                  "g": 255,
+                  "b": 255,
+                  "a": 1
+                }
+              },
+              "fontSize": {
+                "displayName": "Font size",
+                "propertyName": "string",
+                "inputType": "text",
+                "value": "140",
+                "defaultValue": "14"
+              },
+              "weight": {
+                "displayName": "Weight",
+                "propertyName": "weight",
                 "inputType": "select",
-                "value": "visible",
-                "defaultValue": "visible",
+                "value": "400",
+                "defaultValue": "400",
                 "options": [
                   {
-                    "value": "visible",
-                    "label": "visible"
+                    "value": "100",
+                    "label": "100\tThin"
                   },
                   {
-                    "value": "hidden",
-                    "label": "hidden"
+                    "value": "200",
+                    "label": "200\tExtra Light"
+                  },
+                  {
+                    "value": "300",
+                    "label": "300\tLight"
+                  },
+                  {
+                    "value": "400",
+                    "label": "400\tNormal"
+                  },
+                  {
+                    "value": "500",
+                    "label": "500\tMedium"
+                  },
+                  {
+                    "value": "600",
+                    "label": "600\tSemi Bold"
+                  },
+                  {
+                    "value": "700",
+                    "label": "700\tBold"
+                  },
+                  {
+                    "value": "800",
+                    "label": "800\tExtra Bold"
+                  },
+                  {
+                    "value": "900",
+                    "label": "900\tBlack"
+                  },
+                  {
+                    "value": "950",
+                    "label": "950\tExtra Black"
                   }
                 ]
-              },
-              "url": {
-                "displayName": "Image url",
-                "propertyName": "url",
-                "inputType": "image",
-                "value": {
-                  "url": "/images/wall1.webp",
-                  "width": 1024,
-                  "height": 768,
-                  "isPlaceholder": false
-                },
-                "defaultValue": {
-                  "url": "",
-                  "width": 300,
-                  "height": 300,
-                  "isPlaceholder": true
-                }
               }
             }
           },
-          "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+          "layerId": "047afb64-15e4-452e-ad47-3545df045533"
         }
       },
       "allObjects": [
-        "55f921ee-5b4e-46e6-b604-57b48347b478",
-        "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
-        "23a95b1c-3849-411a-a354-e8d131b3c768"
+        "886ac2de-1409-4b8f-996d-6b76e30472fb",
+        "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
       ]
     },
     "selection": {
       "activeSlideId": "3b34f4b3-763a-4fcc-acfb-220df714d82e",
-      "activeLayerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
-      "activeObjectId": "23a95b1c-3849-411a-a354-e8d131b3c768",
+      "activeLayerId": null,
+      "activeObjectId": null,
       "selectedSlideIds": ["3b34f4b3-763a-4fcc-acfb-220df714d82e"],
-      "selectedLayerIds": ["a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"],
+      "selectedLayerIds": [],
       "selectedObjectIds": []
     },
     "document": {
@@ -371,6 +452,1544 @@
     },
     "diff": {
       "prev": [
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+                "slideTransition",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "split"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+                "slideTransition",
+                "effect",
+                "values",
+                "split"
+              ],
+              "rhs": {
+                "center": {
+                  "x": 50,
+                  "y": 50
+                },
+                "points": [
+                  {
+                    "x": 0,
+                    "y": 30.5
+                  },
+                  {
+                    "x": 36,
+                    "y": 100
+                  },
+                  {
+                    "x": 100,
+                    "y": 77.5
+                  },
+                  {
+                    "x": 83,
+                    "y": 0
+                  }
+                ]
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+                "slideTransition",
+                "effect",
+                "values",
+                "rotation"
+              ],
+              "rhs": 20
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+                "slideTransition",
+                "effect",
+                "values",
+                "randomStrength"
+              ],
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "6de45704-8514-4986-acee-39861159d4be",
+              "rhs": "3b34f4b3-763a-4fcc-acfb-220df714d82e"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "6de45704-8514-4986-acee-39861159d4be",
+              "rhs": "3b34f4b3-763a-4fcc-acfb-220df714d82e"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "047afb64-15e4-452e-ad47-3545df045533",
+              "rhs": null
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+              }
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor",
+                "a"
+              ],
+              "lhs": 1,
+              "rhs": 0
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "slideTransition",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "cube"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeBackgroundColor"
+              ],
+              "rhs": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 1
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "slideTransition",
+                "effect",
+                "values",
+                "cubeEdgeColor"
+              ],
+              "rhs": {
+                "r": 255,
+                "g": 255,
+                "b": 255,
+                "a": 1
+              }
+            }
+          ],
+          "type": "Update slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "38d62df7-17c5-45b7-be63-ca1f90ec9e9c",
+                "definition",
+                "properties",
+                "fontSize",
+                "value"
+              ],
+              "lhs": "14",
+              "rhs": "140"
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "047afb64-15e4-452e-ad47-3545df045533",
+                "objectIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+              ],
+              "rhs": {
+                "left": 240,
+                "top": 121.25,
+                "width": 480,
+                "height": 242.5,
+                "id": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c",
+                "name": "text 98",
+                "type": "text",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "39d8f016-cd12-4459-8392-c8b89e855ab0",
+                  "type": "text",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "text": {
+                      "displayName": "Text",
+                      "propertyName": "text",
+                      "inputType": "textarea",
+                      "value": "Sample test",
+                      "defaultValue": ""
+                    },
+                    "autoHeight": {
+                      "displayName": "Auto height",
+                      "propertyName": "autoHeight",
+                      "inputType": "checkbox",
+                      "value": false,
+                      "defaultValue": false
+                    },
+                    "font": {
+                      "displayName": "Font",
+                      "propertyName": "fontFamily",
+                      "inputType": "font_select",
+                      "value": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      },
+                      "defaultValue": {
+                        "fontFamily": "Arial",
+                        "source": "system-fonts"
+                      }
+                    },
+                    "color": {
+                      "displayName": "Color",
+                      "propertyName": "color",
+                      "inputType": "color",
+                      "value": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      },
+                      "defaultValue": {
+                        "r": 255,
+                        "g": 255,
+                        "b": 255,
+                        "a": 1
+                      }
+                    },
+                    "fontSize": {
+                      "displayName": "Font size",
+                      "propertyName": "string",
+                      "inputType": "text",
+                      "value": "14",
+                      "defaultValue": "14"
+                    },
+                    "weight": {
+                      "displayName": "Weight",
+                      "propertyName": "weight",
+                      "inputType": "select",
+                      "value": "400",
+                      "defaultValue": "400",
+                      "options": [
+                        {
+                          "value": "100",
+                          "label": "100\tThin"
+                        },
+                        {
+                          "value": "200",
+                          "label": "200\tExtra Light"
+                        },
+                        {
+                          "value": "300",
+                          "label": "300\tLight"
+                        },
+                        {
+                          "value": "400",
+                          "label": "400\tNormal"
+                        },
+                        {
+                          "value": "500",
+                          "label": "500\tMedium"
+                        },
+                        {
+                          "value": "600",
+                          "label": "600\tSemi Bold"
+                        },
+                        {
+                          "value": "700",
+                          "label": "700\tBold"
+                        },
+                        {
+                          "value": "800",
+                          "label": "800\tExtra Bold"
+                        },
+                        {
+                          "value": "900",
+                          "label": "900\tBlack"
+                        },
+                        {
+                          "value": "950",
+                          "label": "950\tExtra Black"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "layerId": "047afb64-15e4-452e-ad47-3545df045533"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "38d62df7-17c5-45b7-be63-ca1f90ec9e9c"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": null,
+              "rhs": "047afb64-15e4-452e-ad47-3545df045533"
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "layerIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "047afb64-15e4-452e-ad47-3545df045533"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be",
+                "nextLayerIdCounter"
+              ],
+              "lhs": 1,
+              "rhs": 2
+            },
+            {
+              "kind": "N",
+              "path": [
+                "layers",
+                "layerById",
+                "047afb64-15e4-452e-ad47-3545df045533"
+              ],
+              "rhs": {
+                "id": "047afb64-15e4-452e-ad47-3545df045533",
+                "slideId": "6de45704-8514-4986-acee-39861159d4be",
+                "name": "Layer 1",
+                "isVisible": true,
+                "hasTimeline": true,
+                "objectIds": [],
+                "transitions": {
+                  "layer": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["layers", "allLayers"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "047afb64-15e4-452e-ad47-3545df045533"
+              }
+            }
+          ],
+          "type": "Add layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "selectedSlideIds", 0],
+              "lhs": "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+              "rhs": "6de45704-8514-4986-acee-39861159d4be"
+            }
+          ],
+          "type": "Select slides",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeSlideId"],
+              "lhs": "3b34f4b3-763a-4fcc-acfb-220df714d82e",
+              "rhs": "6de45704-8514-4986-acee-39861159d4be"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeLayerId"],
+              "lhs": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+              "rhs": null
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "886ac2de-1409-4b8f-996d-6b76e30472fb",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedLayerIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "886ac2de-1409-4b8f-996d-6b76e30472fb"
+              }
+            }
+          ],
+          "type": "Activate slide",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["slides", "nextSlideIdCounter"],
+              "lhs": 2,
+              "rhs": 3
+            },
+            {
+              "kind": "N",
+              "path": [
+                "slides",
+                "slideById",
+                "6de45704-8514-4986-acee-39861159d4be"
+              ],
+              "rhs": {
+                "id": "6de45704-8514-4986-acee-39861159d4be",
+                "name": "Slide 2",
+                "duration": {
+                  "inheritFrom": "custom",
+                  "customValue": 5000
+                },
+                "layerIds": [],
+                "nextLayerIdCounter": 1,
+                "slideType": "normal",
+                "slideTransition": {
+                  "duration": 2000,
+                  "overlap": 1000,
+                  "effect": {
+                    "id": "none",
+                    "values": {}
+                  }
+                }
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["slides", "allSlides"],
+              "index": 1,
+              "item": {
+                "kind": "N",
+                "rhs": "6de45704-8514-4986-acee-39861159d4be"
+              }
+            }
+          ],
+          "type": "Add slide"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 4000,
+              "rhs": 5000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 400,
+              "rhs": 4000
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "duration"
+              ],
+              "lhs": 1000,
+              "rhs": 400
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "zoomIn",
+              "rhs": "slide"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "from"
+              ],
+              "rhs": "right"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "distance"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "id"
+              ],
+              "lhs": "none",
+              "rhs": "zoomIn"
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "scaleX"
+              ],
+              "rhs": 100
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "transitions",
+                "in",
+                "effect",
+                "values",
+                "scaleY"
+              ],
+              "rhs": 100
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "url"
+              ],
+              "lhs": "",
+              "rhs": "/images/wall1.webp"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "width"
+              ],
+              "lhs": 300,
+              "rhs": 1024
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "height"
+              ],
+              "lhs": 300,
+              "rhs": 768
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "definition",
+                "properties",
+                "url",
+                "value",
+                "isPlaceholder"
+              ],
+              "lhs": true,
+              "rhs": false
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "left"
+              ],
+              "lhs": 330,
+              "rhs": -72
+            },
+            {
+              "kind": "E",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "top"
+              ],
+              "lhs": 92.5,
+              "rhs": 65.5
+            }
+          ],
+          "type": "Update object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "886ac2de-1409-4b8f-996d-6b76e30472fb"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "886ac2de-1409-4b8f-996d-6b76e30472fb"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "886ac2de-1409-4b8f-996d-6b76e30472fb"
+              }
+            },
+            {
+              "kind": "N",
+              "path": [
+                "objects",
+                "objectById",
+                "886ac2de-1409-4b8f-996d-6b76e30472fb"
+              ],
+              "rhs": {
+                "left": 330,
+                "top": 92.5,
+                "width": 300,
+                "height": 300,
+                "id": "886ac2de-1409-4b8f-996d-6b76e30472fb",
+                "name": "image 7",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "b1c1b7c7-e8a5-4b78-bab3-ce4b4dccc6e9",
+                  "type": "image",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "886ac2de-1409-4b8f-996d-6b76e30472fb"
+              }
+            }
+          ],
+          "type": "Add object"
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "transitions",
+                "layer",
+                "effect",
+                "id"
+              ],
+              "lhs": "parallax",
+              "rhs": "none"
+            }
+          ],
+          "type": "Update layer"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds"
+              ],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "23a95b1c-3849-411a-a354-e8d131b3c768"
+              ],
+              "lhs": {
+                "left": 402,
+                "top": 155.5,
+                "width": 148,
+                "height": 175,
+                "id": "23a95b1c-3849-411a-a354-e8d131b3c768",
+                "name": "image 86",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "99d9dc40-6406-4459-a4d4-e052ad58aed0",
+                  "type": "image",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "/images/wall1.webp",
+                        "width": 1024,
+                        "height": 768,
+                        "isPlaceholder": false
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            }
+          ],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds"
+              ],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds",
+                0
+              ],
+              "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+              "rhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+              ],
+              "lhs": {
+                "left": 226,
+                "top": 102.5,
+                "width": 484,
+                "height": 286,
+                "id": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+                "name": "image 97",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "246e36fe-3316-4510-92f9-3367ca3dfbb9",
+                  "type": "image",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "/images/wall1.webp",
+                        "width": 1024,
+                        "height": 768,
+                        "isPlaceholder": false
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 1,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["objects", "allObjects", 0],
+              "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+              "rhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+            },
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+              "rhs": null
+            },
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "D",
+                "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+              }
+            }
+          ],
+          "type": "Delete objects"
+        },
+        {
+          "changes": [],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": ["selection", "selectedObjectIds"],
+              "index": 0,
+              "item": {
+                "kind": "N",
+                "rhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+              }
+            }
+          ],
+          "type": "Select objects",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": null,
+              "rhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+            }
+          ],
+          "type": "Activate object",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "E",
+              "path": ["selection", "activeObjectId"],
+              "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768",
+              "rhs": null
+            }
+          ],
+          "type": "Activate layer",
+          "skipHistory": true
+        },
+        {
+          "changes": [
+            {
+              "kind": "A",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds"
+              ],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            },
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds",
+                1
+              ],
+              "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+              "rhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+            },
+            {
+              "kind": "E",
+              "path": [
+                "layers",
+                "layerById",
+                "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e",
+                "objectIds",
+                0
+              ],
+              "lhs": "55f921ee-5b4e-46e6-b604-57b48347b478",
+              "rhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+            },
+            {
+              "kind": "D",
+              "path": [
+                "objects",
+                "objectById",
+                "55f921ee-5b4e-46e6-b604-57b48347b478"
+              ],
+              "lhs": {
+                "left": -4,
+                "top": -1.5,
+                "width": 966,
+                "height": 480,
+                "id": "55f921ee-5b4e-46e6-b604-57b48347b478",
+                "name": "image 38",
+                "type": "image",
+                "isVisible": true,
+                "isLocked": false,
+                "transitions": {
+                  "in": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "out": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": 1000,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  },
+                  "effect": {
+                    "relativeTo": "stage",
+                    "delay": 0,
+                    "duration": -1,
+                    "ease": "none",
+                    "timeDistribution": 50,
+                    "effect": {
+                      "id": "none",
+                      "values": {}
+                    }
+                  }
+                },
+                "events": [],
+                "definition": {
+                  "id": "180c619f-5fe9-42ad-83b3-ebffc61cb492",
+                  "type": "image",
+                  "properties": {
+                    "overflow": {
+                      "displayName": "Overflow",
+                      "propertyName": "overflow",
+                      "inputType": "select",
+                      "value": "visible",
+                      "defaultValue": "visible",
+                      "options": [
+                        {
+                          "value": "visible",
+                          "label": "visible"
+                        },
+                        {
+                          "value": "hidden",
+                          "label": "hidden"
+                        }
+                      ]
+                    },
+                    "url": {
+                      "displayName": "Image url",
+                      "propertyName": "url",
+                      "inputType": "image",
+                      "value": {
+                        "url": "/images/wall1.webp",
+                        "width": 1024,
+                        "height": 768,
+                        "isPlaceholder": false
+                      },
+                      "defaultValue": {
+                        "url": "",
+                        "width": 300,
+                        "height": 300,
+                        "isPlaceholder": true
+                      }
+                    }
+                  }
+                },
+                "layerId": "a6a5eee9-8ef9-491e-bbc1-12dc95d1bb7e"
+              }
+            },
+            {
+              "kind": "A",
+              "path": ["objects", "allObjects"],
+              "index": 2,
+              "item": {
+                "kind": "D",
+                "lhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+              }
+            },
+            {
+              "kind": "E",
+              "path": ["objects", "allObjects", 1],
+              "lhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63",
+              "rhs": "23a95b1c-3849-411a-a354-e8d131b3c768"
+            },
+            {
+              "kind": "E",
+              "path": ["objects", "allObjects", 0],
+              "lhs": "55f921ee-5b4e-46e6-b604-57b48347b478",
+              "rhs": "24e0bc07-3b7e-4fbc-9869-157a7bbbdd63"
+            }
+          ],
+          "type": "Delete objects"
+        },
         {
           "changes": [
             {

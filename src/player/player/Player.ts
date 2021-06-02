@@ -72,6 +72,20 @@ export class Player {
     });
   }
 
+  public setPaused(p: boolean) {
+    if (p) {
+      this.timelines.forEach((tl) => {
+        tl.pause();
+      });
+
+      this.staticTimelines.forEach((tl) => {
+        tl.pause();
+      });
+
+      this.slideTransitionTimeline?.pause();
+    }
+  }
+
   public clear() {
     this.timelines.forEach((tl) => {
       tl.clear();

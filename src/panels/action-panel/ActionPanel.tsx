@@ -32,6 +32,32 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             });
           }}
         />
+        <Button
+          minimal
+          outlined
+          large
+          active={previewState.paused}
+          icon={"pause"}
+          onClick={() => {
+            const isPreview = !previewState.isPreview;
+            _setStagePreview({ ...previewState, paused: !previewState.paused });
+          }}
+        />
+
+        <Button
+          minimal
+          outlined
+          large
+          active={previewState.scrollbar}
+          onClick={() => {
+            _setStagePreview({
+              ...previewState,
+              scrollbar: !previewState.scrollbar,
+            });
+          }}
+        >
+          SCROLL
+        </Button>
         <Button minimal outlined large icon="desktop" />
         <Button minimal outlined large>
           <TabletPreviewIcon

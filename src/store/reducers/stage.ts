@@ -14,6 +14,8 @@ export interface IPreviewScope {
 export interface IPreviewState {
   isPreview: boolean;
   previewState: "play" | "pause" | "stop";
+  paused?: boolean;
+  scrollbar?: boolean;
   previewSpeed: number;
   repeat: boolean;
   scope: IPreviewScope | null;
