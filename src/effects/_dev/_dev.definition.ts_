@@ -1,0 +1,32 @@
+import { InputType } from "../../inputs/types";
+import { _dev, IDevEffect } from "./_dev.types";
+
+export const fadeDefinition = {
+  id: _dev,
+  name: "Fade",
+  form: [
+    {
+      displayName: "Property1",
+      helperText: "",
+      propertyName: "property1",
+      inputType: InputType.TEXT,
+    },
+    {
+      displayName: "Property2",
+      helperText: "",
+      propertyName: "property2",
+      inputType: InputType.TEXT,
+    },
+  ],
+};
+
+export const devDefaults: IDevEffect = {
+  id: _dev,
+  hasDelay: true,
+  hasDuration: true,
+  hasEase: true,
+  hasChildEase: false,
+  ease: "none",
+  supportedEffectTypes: ["in", "out", "effect", "layer", "slide"],
+  propert1:
+};
