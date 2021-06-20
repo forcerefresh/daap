@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@blueprintjs/core": "^3.36.0",
+    "@blueprintjs/popover2": "^0.10.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -29,6 +30,7 @@
     "react-color": "^2.18.1",
     "react-dom": "^16.14.0",
     "react-draggable": "^4.4.3",
+    "react-infinite-scroll-component": "^6.1.0",
     "react-redux": "^7.2.1",
     "react-scripts": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",

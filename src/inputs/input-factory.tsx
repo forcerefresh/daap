@@ -16,6 +16,7 @@ import { TextAreaInputForm } from "./textarea-input/textarea-input";
 import { TransformInputForm } from "./transform-input/transform-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import { InputType } from "./types";
+import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 
 export function getInputForm<T>(
@@ -36,6 +37,16 @@ export function getInputForm<T>(
     case InputType.NUMBER: {
       return (
         <NumberInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.UNITS_NUMBER: {
+      return (
+        <UnitsNumberInputForm
           key={key}
           {...inputProps}
           onChange={onChange}

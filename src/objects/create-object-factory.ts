@@ -196,6 +196,15 @@ function createTextObject(
               },
             }
           : {}),
+        fontSize: {
+          displayName: "Font size",
+          placeholderText: "Enter font size",
+          allowedUnits: ["px", "em", "%"],
+          propertyName: "string",
+          inputType: InputType.UNITS_NUMBER,
+          value: initialValue?.fontSize || "1em",
+          defaultValue: "1em",
+        },
         text: {
           displayName: "Text",
           propertyName: "text",
@@ -229,13 +238,6 @@ function createTextObject(
           inputType: InputType.COLOR,
           value: { r: 255, g: 255, b: 255, a: 1 },
           defaultValue: { r: 255, g: 255, b: 255, a: 1 },
-        },
-        fontSize: {
-          displayName: "Font size",
-          propertyName: "string",
-          inputType: InputType.TEXT,
-          value: (initialValue?.fontSize as string) || "14",
-          defaultValue: "14",
         },
         weight: {
           displayName: "Weight",
@@ -296,7 +298,12 @@ function createImageObject(
           displayName: "Image url",
           propertyName: "url",
           inputType: InputType.IMAGE,
-          value: { url: "", width: 300, height: 300, isPlaceholder: true },
+          value: {
+            url: initialValue?.url || "",
+            width: 300,
+            height: 300,
+            isPlaceholder: !initialValue?.url,
+          },
           defaultValue: {
             url: "",
             width: 300,

@@ -3,6 +3,7 @@ import { IObjectEvent } from "../objects/types";
 
 export enum InputType {
   NUMBER = "number",
+  UNITS_NUMBER = "units_number",
   TEXT = "text",
   TEXTAREA = "textarea",
   SELECT = "select",
@@ -55,6 +56,21 @@ export interface INumberInput {
   propertyName: string;
   value: number;
   defaultValue: number;
+  inputProps?: { disabled: boolean };
+}
+
+type Units = "px" | "em" | "%";
+
+//  advanced number input
+export interface IUnitsNumberInput {
+  inputType: InputType.UNITS_NUMBER;
+  placeholderText: string;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  allowedUnits: Units[];
+  value: string;
+  defaultValue: string;
   inputProps?: { disabled: boolean };
 }
 
@@ -231,7 +247,7 @@ export interface TextProperties {
   autoHeight: ICheckboxInput;
   font: IFontSelectInput;
   color: IColorInput;
-  fontSize: ITextInput;
+  fontSize: IUnitsNumberInput;
   weight: ISelectInput;
 }
 

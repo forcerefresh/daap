@@ -8,9 +8,13 @@
 
   background: rgb(40, 40, 40);
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  padding: 30px;
+  padding-top: 30px;
   display: flex;
   flex-direction: column;
+
+  > div {
+    display: flex;
+  }
 
   :global {
     *,
@@ -29,6 +33,10 @@
         order: 21;
       }
     }
+
+    .bp3-tab-panel {
+      overflow: auto;
+    }
   }
 
   > * {
@@ -37,6 +45,7 @@
 
   .tabs {
     width: 100%;
+    padding-left: 30px;
   }
 
   section {
@@ -69,7 +78,7 @@
     }
 
     > div {
-      margin-bottom: 30px;
+      //margin-bottom: 30px;
     }
   }
 }

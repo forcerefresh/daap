@@ -227,15 +227,18 @@ export function getTextHtml(object: IObject) {
 
   let style = "";
   style += "font-family: " + textProperties.font.value.fontFamily + ";";
-  style += "font-size: " + textProperties.fontSize.value + "px;";
+  style += "font-size: " + textProperties.fontSize.value + ";";
   const c = textProperties.color.value;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
   style += "font-weight: " + textProperties.weight.value + ";";
+  style += "width: " + object.width + "px;";
+  style += "height:" + object.height + "px;";
   //forOwn(objectStyle, function (value, key) {
   //  style += key + ":" + value + ";";
   //});
   style += "position: absolute;";
 
+  //console.log(style);
   return `<p class="object-content" style="${style}">${nl2br(
     textProperties.text.value
   )}</p>`;

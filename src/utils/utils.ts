@@ -11,3 +11,13 @@ export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {
   const dur = getRealSlideDuration(slide, settings);
   return (dur / 1000).toString() + " sec";
 }
+
+export function removeFalsy(obj: { [key: string]: any }) {
+  let newObj: { [key: string]: any } = {};
+  Object.keys(obj).forEach((prop) => {
+    if (obj[prop]) {
+      newObj[prop] = obj[prop];
+    }
+  });
+  return newObj;
+}

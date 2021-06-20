@@ -84,6 +84,14 @@ export function multiplyRect(r: IRect, multiplier: number) {
   };
 }
 
+export function stace2nbsp(str: string | undefined): string {
+  if (typeof str === "undefined" || str === null) {
+    return "";
+  }
+
+  return str.replace(/ /g, "&nbsp;");
+}
+
 export function nl2br(str: string | undefined): string {
   if (typeof str === "undefined" || str === null) {
     return "";

@@ -18,6 +18,7 @@ import {
 } from "../../store/actions/actions";
 import { getNumericFiled } from "../../inputs/input-utils";
 import { IGlobals } from "../../store/reducers/globals";
+import ProjectPanel from "../project-panel/ProjectPanel";
 
 enum GlobalPanelSections {
   UiLayout = "uiLayout",
@@ -53,14 +54,6 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
       [section]: !visibleSectionIds[section],
     });
   };
-
-  const ProjectPanel: React.FunctionComponent = () => (
-    <div className="input60">
-      {getNumericFiled("Slide duration", slideDuration, (value: number) => {
-        _updateSlideDuration(value);
-      })}
-    </div>
-  );
 
   const GlobalPanel: React.FunctionComponent = () => (
     <div>
@@ -143,8 +136,9 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
     <div className={cx("bp3-dark", css.settingsPanel)}>
       <div>
         <Tabs className={css.tabs}>
-          <Tab id="global" title="App Settings" panel={<GlobalPanel />} />
           <Tab id="project" title="Project Settings" panel={<ProjectPanel />} />
+          <Tab id="global" title="App Settings" panel={<GlobalPanel />} />
+
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}
         </Tabs>

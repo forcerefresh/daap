@@ -110,6 +110,13 @@ export class Player {
     // TODO: check if all assets are loaded
     // 2 ...
 
+    // NOTE: temporary
+    const prevSlideTimeline = this.currentSlideTimeline;
+    if (prevSlideTimeline) {
+      // TODO: NOTE: temporary to try to stop typewriter
+      //prevSlideTimeline.kill();
+    }
+
     const bettwenSlideEff: ISlideTransition | undefined =
       this.normalSlideDataArr?.[slideIdx]?.slide?.slideTransition;
 
@@ -163,6 +170,7 @@ export class Player {
 
     // PLAY SLIDE :)
     this.currentSlideTimeline.play(prevTlTime);
+    //slideEl.style.display = "block";
 
     let isUpdated = false;
     this.currentSlideTimeline.eventCallback("onUpdate", function () {

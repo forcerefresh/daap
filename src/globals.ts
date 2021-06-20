@@ -9,7 +9,7 @@ export interface IGlobals {
 }
 
 export function getGlobals() {
-  return ((window as any) as IGlobals).WebSlider_GlogalScope;
+  return (window as any as IGlobals).WebSlider_GlogalScope;
 }
 
 const WebSlider_GlogalScope = {
@@ -17,5 +17,5 @@ const WebSlider_GlogalScope = {
   getFonts: getFonts,
 };
 
-const globals = (window as any) as IGlobals;
+const globals = window as any as IGlobals;
 globals.WebSlider_GlogalScope = WebSlider_GlogalScope;

@@ -24,6 +24,10 @@ import {
 import { TextProperties } from "../../inputs/types";
 import { getTextHtml } from "../../export/export-html";
 import { load } from "webfontloader";
+import {
+  BreakpointConfiguration,
+  BreakpointsConfiguration,
+} from "../reducers/settings";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -879,6 +883,25 @@ export function updateSlideDuration(
 
 // ***
 
+export const UPDATE_SLIDE_BREAKPOINTS = "Update slide breakpoints";
+
+export interface UpdateSlideBreakpointsAction extends IUndoableAction<true> {
+  type: typeof UPDATE_SLIDE_BREAKPOINTS;
+  payload: BreakpointsConfiguration;
+}
+
+export function updateSlideBreakpoints(
+  slideBreakpoints: BreakpointsConfiguration
+): UpdateSlideBreakpointsAction {
+  return {
+    type: UPDATE_SLIDE_BREAKPOINTS,
+    payload: slideBreakpoints,
+    isUndoable: true,
+  };
+}
+
+// ***
+
 export const SET_GLOBALS = "Set globals configuration";
 
 export interface SetGlobalConfigurationAction extends IUndoableAction<false> {
@@ -1054,6 +1077,7 @@ export type ActionTypes =
 
   //settings
   | UpdateSlideDurationAction
+  | UpdateSlideBreakpointsAction
 
   //stage
   | SetDocumentSizeAction

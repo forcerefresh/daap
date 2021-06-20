@@ -63,6 +63,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
     onInput(isValidValue ? parseFloat(newValue) : value);
   };
 
+  const helperText2 = !valid ? "Error max value bla bla" : helperText;
   return (
     <FormGroup
       label={displayName}
@@ -79,6 +80,9 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
         }}
         {...inputProps}
       />
+      {helperText2 && (
+        <div className="bp3-form-helper-text">Please enter a value</div>
+      )}
     </FormGroup>
   );
 };

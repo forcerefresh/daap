@@ -220,7 +220,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                   },
                   {
                     font: previewFont!,
-                    fontSize: previewSize.size.toString(),
+                    fontSize: previewSize.size.toString() + "px",
                   }
                 );
                 onRequestClose();

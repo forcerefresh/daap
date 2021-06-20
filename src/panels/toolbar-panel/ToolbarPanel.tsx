@@ -22,6 +22,7 @@ import {
 import HistoryPanel from "../history-panel/HistoryPanel";
 import { StageTools } from "../../store/reducers/stage";
 import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
+import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
 
 enum VisiblePanel {
   None = "none",
@@ -29,6 +30,7 @@ enum VisiblePanel {
   Settings = "settings",
   History = "history",
   FontPreview = "font-preview",
+  MediaLibrary = "media-library",
 }
 
 const ICON_SIZE = 36;
@@ -56,7 +58,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const handleClickOutside = () => {
     setShowPanel(VisiblePanel.None);
   };
-  useOnClickOutside(sharedRef, handleClickOutside);
+  useOnClickOutside(sharedRef, handleClickOutside, "image-preview-popover");
 
   return (
     <div className={css.toolbar}>
@@ -171,6 +173,26 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               color={hasRedoItem ? "gray" : "#555"}
             />
           </Button>
+        </div>
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.MediaLibrary}
+            onClick={() => {
+              setShowPanel(VisiblePanel.MediaLibrary);
+            }}
+          >
+            <Icon icon="media" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.MediaLibrary && (
+              <div ref={sharedRef}>
+                <MediaLibraryPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
         </div>
         <div>
           <Button

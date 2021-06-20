@@ -1,0 +1,55 @@
+.imageLibraryPanel {
+  height: calc(100vh - 110px);
+  padding: 3px;
+  padding-right: 30px;
+  position: relative;
+}
+
+.headerSection {
+  margin-bottom: 10px;
+}
+
+.mainSection {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 310px);
+
+  img {
+    margin: 8px;
+  }
+  :global {
+    .infinite-scroll-component {
+      padding-bottom: 100px;
+    }
+  }
+}
+
+.mediaHolder {
+  //height: 2000px;
+  //background-color: darkcyan;
+}
+
+.tag {
+  margin: 5px;
+  cursor: pointer;
+}
+
+.popoverHolder {
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  background: #333333;
+
+  > div:nth-child(2) {
+    padding-left: 20px;
+  }
+}
+
+.previewTitle {
+  padding: 0 10px 10px 10px;
+  font-weight: bold;
+}
+
+.selectedImage {
+  box-shadow: 0 0 0 1px #137cbd;
+}
