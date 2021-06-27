@@ -4,6 +4,7 @@ import { ILayer } from "../store/reducers/layers";
 import { ISlide } from "../store/reducers/slides";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
+import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { ImageInputForm } from "./image-input/image-input";
@@ -62,6 +63,15 @@ export function getInputForm<T>(
     }
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.COVER_PLACEMENT: {
+      return (
+        <CoverPlacementInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+        />
+      );
     }
     case InputType.VIDEO: {
       return <VideoInputForm key={key} {...inputProps} onChange={onChange} />;

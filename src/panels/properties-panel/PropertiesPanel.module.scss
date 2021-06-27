@@ -21,8 +21,19 @@
       width: 70px;
     }
 
+    .labelAuto .bp3-label {
+      width: auto;
+    }
+
     .bp3-form-group {
       margin-bottom: 5px;
+    }
+  }
+
+  :global {
+    hr {
+      border: 1px solid #3f3f3f;
+      margin: 14px 0;
     }
   }
 }

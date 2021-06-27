@@ -120,11 +120,35 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             }
           }}
         >
-          <PredefinedTextIcon
+          <Icon
+            icon="media"
+            iconSize={36}
+            color="gray"
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>EXTERNAL IMAGE</h3>
-          <p>Pick predefined style</p>
+          <h3>IMAGE</h3>
+          <p>Position image relative or absolute</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.COVER_IMAGE, {});
+              onRequestClose();
+            }
+          }}
+        >
+          <Icon
+            icon="media"
+            iconSize={36}
+            color="gray"
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>COVER IMAGE</h3>
+          <p>Cover, fit image to page, stage, guidelines...</p>
         </Card>
       </div>
 

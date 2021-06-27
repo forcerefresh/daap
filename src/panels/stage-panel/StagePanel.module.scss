@@ -27,7 +27,7 @@
 
 .stage {
   position: absolute;
-  border: 1px dotted #828282;
+  //border: 1px dotted #51c35a;
   background: rgb(30, 30, 30);
 }
 
@@ -106,4 +106,38 @@
   width: 8px;
   height: 8px;
   cursor: pointer;
+}
+
+.guidelinesHolder {
+  position: absolute;
+  border: 1px dotted #1f82c0;
+  top: 10px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.guidelinesBorder {
+  position: absolute;
+  border: 1px dotted #00d6ff;
+  pointer-events: none;
+}
+
+.pageBorder {
+  position: absolute;
+  border: 1px dotted #ff2121;
+  pointer-events: none;
+}
+
+.stageBorder {
+  position: absolute;
+  border: 1px solid #45c750;
+  pointer-events: none;
+}
+
+.layoutBox {
+  position: relative;
+  background: #565656;
+  border-radius: 5px;
 }

@@ -39,10 +39,15 @@ import {
   getRectFromPoints,
   IRect,
   multiplyRect,
-  roundNumber,
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
+import { BreakpointConfiguration } from "../../store/reducers/settings";
+import {
+  calculateObjectSize,
+  getPositionInfo,
+  getPreviewLayout,
+} from "./StagePanelUtils";
 
 interface ISize {
   width: number;
@@ -54,14 +59,15 @@ type IStagePanel = typeof mapDispatchToProps &
 
 const StagePanel: React.FC<IStagePanel> = (props) => {
   const {
-    stageSize,
+    slides,
+    layers,
+    objects,
     stageZoom,
     previewState,
-    exportData,
+    //exportData,
     layerArr,
     objectById,
     activeObjectId,
-    slide,
     selectedObjectIds,
     activeLayerId,
     _setStagePreview,
@@ -76,7 +82,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     stageTool,
     stageToolObjectType,
     _resetStageTool,
+    breakpointConfig,
   } = props;
+
+  const stageSize = breakpointConfig?.normal.slide!;
+
+  // generate data for player
+  let exportData: IPlayerData | null = null;
+  if (previewState.isPreview) {
+    exportData = generatePlayerData(
+      { slides, layers, objects },
+      previewState.scope,
+      //stageSize,
+      breakpointConfig!
+    );
+  }
 
   const { ctrlDown, spaceDown, escapeDown } = useKeyDown();
 
@@ -84,21 +104,19 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const [progress, setProgress] = useState(0);
   const [manualProgress, setManualProgress] = useState(0);
 
-  const [resizeData, setResizeData] =
-    useState<{
-      objectId: string;
-      handle: string;
-    } | null>(null);
+  const [resizeData, setResizeData] = useState<{
+    objectId: string;
+    handle: string;
+  } | null>(null);
 
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
   const [dragStartPosition, setDragStartPosition] = useState({ x: -1, y: -1 });
-  const [selectionStartPosition, setSelectionStartPosition] =
-    useState<{
-      x: number;
-      y: number;
-    } | null>(null);
+  const [selectionStartPosition, setSelectionStartPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
   const [selRectDelta, setSelRectDelta] = useState({ x: 0, y: 0 });
 
   // clear all on escape
@@ -147,19 +165,17 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const [rerender, setRerender] = useState(1);
 
   // Resize state
-  const [resizeStartPosition, setResizeStartPosition] =
-    useState<{
-      x: number;
-      y: number;
-      corner: string;
-    } | null>(null);
-  const [resizeRect, setResizeRect] =
-    useState<{
-      x: number;
-      y: number;
-      w: number;
-      h: number;
-    } | null>(null);
+  const [resizeStartPosition, setResizeStartPosition] = useState<{
+    x: number;
+    y: number;
+    corner: string;
+  } | null>(null);
+  const [resizeRect, setResizeRect] = useState<{
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  } | null>(null);
 
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = cloneDeep(objectById);
@@ -172,6 +188,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   });
 
   const isPreview = previewState.isPreview;
+
+  useEffect(() => {
+    if (isPreview === true) {
+      const el = document.querySelector(".preview-scrollable-holder");
+      if (el) {
+        el.scrollTop = 0;
+      }
+    }
+  }, [isPreview]);
 
   // size of visible panel area
   const [viewPortSize, setViewPortSize] = useState<ISize>({
@@ -191,21 +216,59 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       panMove.y +
       panMoveStart.y
   );
-  const stageStyle = {
+  const stageStyle: React.CSSProperties = {
     top: 0 + stageYOffset + "px",
     left: 0 + stageXOffset + "px",
     width: stageSize.width * stageZoom + "px",
     height: stageSize.height * stageZoom + "px",
-    overflow: previewState.scrollbar ? "scroll" : "visible",
+    overflowX: "visible", //isPreview ? "hidden" :
+    overflowY: "visible", // isPreview ? "scroll" :
   };
 
   const canvasStyle: React.CSSProperties = {
     top: 0 + "px",
     left: 0 + "px",
     width: stageSize.width + "px",
-    height: stageSize.height * (previewState.scrollbar ? 3 : 1) + "px",
+    height: stageSize.height + "px",
     transform: "scale(" + stageZoom + ")",
     transformOrigin: "left top",
+  };
+
+  const guidelinesBorderStyle: React.CSSProperties = {
+    top:
+      (breakpointConfig?.normal?.guidelinesPadding?.top || 0) * stageZoom +
+      "px",
+    left:
+      (breakpointConfig?.normal?.guidelinesPadding?.left || 0) * stageZoom +
+      "px",
+    width:
+      (stageSize.width -
+        (breakpointConfig?.normal?.guidelinesPadding?.right || 0) -
+        (breakpointConfig?.normal?.guidelinesPadding?.left || 0)) *
+        stageZoom +
+      "px",
+    height:
+      (stageSize.height -
+        (breakpointConfig?.normal?.guidelinesPadding?.bottom || 0) -
+        (breakpointConfig?.normal?.guidelinesPadding?.top || 0)) *
+        stageZoom +
+      "px",
+  };
+  const stageBorderStyle = {
+    top: 0 + "px",
+    left: 0 + "px",
+    width: stageSize.width * stageZoom + "px",
+    height: stageSize.height * stageZoom + "px",
+  };
+  const pageColumnWidth =
+    ((breakpointConfig?.normal?.page.width || stageSize.width) -
+      stageSize.width) /
+    2;
+  const pageBorderStyle = {
+    top: 0 + "px",
+    left: -pageColumnWidth * stageZoom + "px",
+    width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
+    height: stageSize.height * stageZoom + "px",
   };
 
   useEffect(() => {
@@ -358,7 +421,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }
   function renderObject(object: IObject) {
     const objectId = object.id;
-    const sizeObj = pick(object, "left", "top", "width", "height");
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
 
     // *** NOTE: we are rendering different for selected and non selected object
@@ -366,7 +428,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     // 1. NON SELECTED  (NON-DRAGGABLE)
 
     if (!isSelected) {
-      const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+      //
+      const objectStyle = calculateObjectSize(object, breakpointConfig!, {
+        resetPosition: false,
+      });
+
+      console.log(objectStyle);
+
       (objectStyle as any).position = "absolute";
       return (
         <div style={{ zIndex: 100, position: "absolute" }}>
@@ -394,30 +462,36 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     // 2. SELECTED  (DRAGGABLE)
 
-    // reset position to 0 (gonna be set in Draggable)
-    sizeObj.left = sizeObj.top = 0;
-    const objectStyle2 = mapValues(sizeObj, (size) => `${size}px`);
-    (objectStyle2 as any).position = "absolute";
-    (objectStyle2 as any).borderWidth = 1 / stageZoom + "px";
+    // reset position to 0 (position gonna be set in Draggable)
+    const objectStyle2 = calculateObjectSize(object, breakpointConfig!, {
+      resetPosition: true,
+    });
 
-    const currentPosition = (
-      <>
-        <span> {"X:" + roundNumber(object.left!, 2)}</span>
-        <span> {"Y:" + roundNumber(object.top!, 2)}</span>
-        {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
-        <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
-      </>
-    );
+    objectStyle2.position = "absolute";
+    objectStyle2.borderWidth = 1 + "px";
 
-    const widthAndHeightStyle = {
+    let widthAndHeightStyle = {
       width: object.width + "px",
       height: object.height + "px",
     };
 
-    const widthAndHeightObject = {
+    if (object.hasNoPosition) {
+      widthAndHeightStyle = {
+        width: objectStyle2.width as string, //page:
+        height: objectStyle2.height as string, //+ "px",
+      };
+    }
+
+    let widthAndHeightObject = {
       width: object.width,
       height: object.height,
     };
+    if (object.hasNoPosition) {
+      widthAndHeightObject = {
+        width: parseInt(objectStyle2.width! as any),
+        height: parseInt(objectStyle2.height! as any),
+      };
+    }
 
     if (resizeRect && resizeData?.objectId === object.id) {
       widthAndHeightStyle.width = resizeRect.w + "px";
@@ -428,7 +502,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     return (
       <Draggable
-        disabled={stageToolInternal !== StageTools.SELECT}
+        disabled={
+          stageToolInternal !== StageTools.SELECT || object.hasNoPosition
+        }
         key={objectId + "_drag"}
         position={
           resizeRect && resizeData?.objectId === object.id
@@ -519,7 +595,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 <Icon icon="lock" />
               </div>
             ) : null}
-            <div className={css.currentPosition}>{currentPosition}</div>
+            <div className={css.currentPosition}>{getPositionInfo(object)}</div>
           </div>
         </div>
       </Draggable>
@@ -664,7 +740,28 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   };
 
-  let objectCounter = 0;
+  const previewLayout = getPreviewLayout(stageZoom);
+
+  const scrollableDivStyle: React.CSSProperties = {
+    position: "relative",
+    left: -pageColumnWidth + "px",
+    top: isPreview ? -previewLayout.header.height : 0 + "px",
+    width: parseInt(pageBorderStyle.width, 10) + 14 + "px",
+    height:
+      parseInt(pageBorderStyle.height, 10) +
+      (isPreview ? previewLayout.header.height : 0) +
+      "px",
+    overflowX: isPreview ? "hidden" : "visible",
+    overflowY: isPreview ? "scroll" : "visible",
+    border: isPreview ? "1px solid #545454" : "1px solid transparent",
+  };
+
+  const scrollableDivInnerStyle: React.CSSProperties = {
+    position: "relative",
+    left: pageColumnWidth * stageZoom + "px",
+    height: stageSize.height * stageZoom + "px",
+  };
+
   return (
     <div
       key={rerender}
@@ -779,81 +876,112 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       )}
       {isPreview && renderTimeInfo()}
       <div style={stageStyle} className={cx("tmp-stage-selector", css.stage)}>
-        <div style={canvasStyle} className={css.canvas}>
-          {isPreview && (
-            <AppPlayer
-              playerData={exportData}
-              previewState={previewState}
-              manualProgress={manualProgress}
-              onProgress={(progress: number) => {
-                setProgress(progress);
-              }}
-              requestStop={() => {
-                _setStagePreview({ previewState: "stop", scope: null });
-              }}
-            />
-          )}
-          {!isPreview &&
-            layerArr?.map((layer) => {
-              return layer.objectIds.map((objectId) => {
-                const object = objectByIdLocal[objectId];
-                objectCounter++;
-                return renderObject(object);
-              });
-            })}
-        </div>
-        <div className="resizeHolder">
-          {!isPreview &&
-            layerArr?.map((layer) => {
-              return layer.objectIds.map((objectId) => {
-                const object = objectByIdLocal[objectId];
-                const sizeObj = pick(object, "left", "top", "width", "height");
-                const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+        <div className="preview-scrollable-holder" style={scrollableDivStyle}>
+          {isPreview && previewLayout.header.component}
+          <div style={scrollableDivInnerStyle}>
+            <div style={canvasStyle} className={css.canvas}>
+              {isPreview && (
+                <AppPlayer
+                  playerData={exportData}
+                  previewState={previewState}
+                  manualProgress={manualProgress}
+                  onProgress={(progress: number) => {
+                    setProgress(progress);
+                  }}
+                  requestStop={() => {
+                    _setStagePreview({ previewState: "stop", scope: null });
+                  }}
+                />
+              )}
+              {!isPreview &&
+                layerArr?.map((layer) => {
+                  return layer.objectIds.map((objectId) => {
+                    const object = objectByIdLocal[objectId];
+                    return renderObject(object);
+                  });
+                })}
+            </div>
+            <div className="resizeHolder">
+              {!isPreview &&
+                layerArr?.map((layer) => {
+                  return layer.objectIds.map((objectId) => {
+                    const object = objectByIdLocal[objectId];
+                    if (object.hasNoPosition) {
+                      return null;
+                    }
 
-                //   sizeObj.left = sizeObj.top = 0;
-                const objectStyle2 = mapValues(
-                  sizeObj,
-                  (size) => `${size! * stageZoom}px`
-                );
-                (objectStyle2 as any).position = "absolute";
-                (objectStyle2 as any).borderWidth = 1 / stageZoom + "px";
+                    const sizeObj = pick(
+                      object,
+                      "left",
+                      "top",
+                      "width",
+                      "height"
+                    );
+                    const isSelected =
+                      selectedObjectIds.indexOf(objectId) !== -1;
 
-                if (resizeRect && resizeData?.objectId === object.id) {
-                  objectStyle2.left = resizeRect.x * stageZoom + "px";
-                  objectStyle2.top = resizeRect.y * stageZoom + "px";
-                  objectStyle2.width = resizeRect.w * stageZoom + "px";
-                  objectStyle2.height = resizeRect.h * stageZoom + "px";
-                }
+                    //   sizeObj.left = sizeObj.top = 0;
+                    const objectStyle2 = mapValues(
+                      sizeObj,
+                      (size) => `${size! * stageZoom}px`
+                    );
+                    (objectStyle2 as any).position = "absolute";
+                    (objectStyle2 as any).borderWidth = 1 + "px";
 
-                return (
-                  <>
-                    <div
-                      ref={resizingSelectionRef}
-                      key={`selbox_${object.id}`}
-                      className={cx(css.selection, css[object.type], {
-                        [css.active]:
-                          selectedObjectIds.length > 0 /*1*/ &&
-                          selectedObjectIds.indexOf(object.id) !== -1,
-                        [css.selected]: isSelected,
-                      })}
-                      style={{ ...objectStyle2, pointerEvents: "none" }}
-                    />
-                    {renderObjectHandles(object)}
-                  </>
-                );
-              });
-            })}
+                    if (resizeRect && resizeData?.objectId === object.id) {
+                      objectStyle2.left = resizeRect.x * stageZoom + "px";
+                      objectStyle2.top = resizeRect.y * stageZoom + "px";
+                      objectStyle2.width = resizeRect.w * stageZoom + "px";
+                      objectStyle2.height = resizeRect.h * stageZoom + "px";
+                    }
+
+                    return (
+                      <>
+                        <div
+                          ref={resizingSelectionRef}
+                          key={`selbox_${object.id}`}
+                          className={cx(css.selection, css[object.type], {
+                            [css.active]:
+                              selectedObjectIds.length > 0 /*1*/ &&
+                              selectedObjectIds.indexOf(object.id) !== -1,
+                            [css.selected]: isSelected,
+                          })}
+                          style={{ ...objectStyle2, pointerEvents: "none" }}
+                        />
+                        {renderObjectHandles(object)}
+                      </>
+                    );
+                  });
+                })}
+            </div>
+            {!isPreview && (
+              <>
+                <div
+                  style={pageBorderStyle}
+                  className={cx(css.borderBase, css.pageBorder)}
+                ></div>
+                <div
+                  style={stageBorderStyle}
+                  className={cx(css.borderBase, css.stageBorder)}
+                ></div>
+
+                <div
+                  style={guidelinesBorderStyle}
+                  className={cx(css.borderBase, css.guidelinesBorder)}
+                ></div>
+              </>
+            )}
+          </div>
+          {isPreview && previewLayout.body.component}
         </div>
       </div>
-
-      {/*stageSize: {stageSize.width} x {stageSize.height}, {stageZoom} <br />
-      viewPortSize: {viewPortSize.width}x {viewPortSize.height}*/}
     </div>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document } = state.project;
+  const { slides, layers, objects, selection, document, settings } =
+    state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
@@ -865,20 +993,18 @@ const mapStateToProps = (state: IStore) => {
     slide = slides.slideById[selection.activeSlideId];
   }
 
-  // generate data for player
-  let exportData: IPlayerData | null = null;
-  if (stage.previewState.isPreview) {
-    exportData = generatePlayerData(
-      { slides, layers, objects },
-      stage.previewState.scope
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    settings.breakpointsConfiguration.breakpointsConfiguration.find(
+      (breakpointConfig) => breakpointConfig.icon === "laptop"
     );
-  }
 
   return {
+    slides,
+    layers,
+    objects,
     stageSize: document.documentSize,
     stageZoom: stage.zoom,
     previewState: stage.previewState,
-    exportData,
     layerArr,
     slide,
     objectById: objects.objectById,
@@ -887,6 +1013,7 @@ const mapStateToProps = (state: IStore) => {
     selectedObjectIds: selection.selectedObjectIds,
     stageTool: state.stage.stageTool.tool,
     stageToolObjectType: state.stage.stageTool.objectType,
+    breakpointConfig,
   };
 };
 

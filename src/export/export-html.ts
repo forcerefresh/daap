@@ -1,5 +1,7 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import {
+  CoverImageProperties,
+  ICoverPlacementValue,
   ImageProperties,
   SvgProperties,
   TextProperties,
@@ -11,8 +13,10 @@ import {
   ITransitions,
   ObjectType,
 } from "../objects/types";
+import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers } from "../store/reducers/layers";
 import { IObjects } from "../store/reducers/objects";
+import { BreakpointConfiguration } from "../store/reducers/settings";
 import {
   ISlide,
   ISlideDuration,
@@ -64,7 +68,8 @@ export interface ISlideData {
 
 export function generatePlayerData(
   sources: ISources,
-  scope: IPreviewScope | null
+  scope: IPreviewScope | null,
+  breakpointConfig: BreakpointConfiguration
 ): IPlayerData {
   const { slides, layers, objects } = sources;
 
@@ -131,8 +136,15 @@ export function generatePlayerData(
         const sizeObj = pick(object, "left", "top", "width", "height");
         const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
+        // TODO: IMPORTANT (size issue)
+        const calculatedObjectSize = calculateObjectSize(
+          object,
+          breakpointConfig,
+          { resetPosition: false }
+        );
+
         let style = "";
-        forOwn(objectStyle, function (value, key) {
+        forOwn(calculatedObjectSize, function (value, key) {
           style += key + ":" + value + ";";
         });
         style += "position: absolute;";
@@ -156,10 +168,11 @@ export function generatePlayerData(
           events: object.events,
           data: {
             slideDuration: slide.duration,
-            objectWidth: object.width,
-            objectHeight: object.height,
-            objectLeft: object.left,
-            objectTop: object.top,
+            // TODO: IMPORTANT (size issue)
+            objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
+            objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
+            objectLeft: parseInt(calculatedObjectSize!.left + "", 10),
+            objectTop: parseInt(calculatedObjectSize!.top + "", 10),
             overflow,
             objectHtml,
           },
@@ -210,6 +223,8 @@ export function getObjectHtml(object: IObject, isPlayer: boolean) {
       return getTextHtml(object);
     case ObjectType.IMAGE:
       return getImageHtml(object);
+    case ObjectType.COVER_IMAGE:
+      return getCoverImageHtml(object);
     case ObjectType.VIDEO:
       return getVideoHtml(object, isPlayer);
     case ObjectType.SVG:
@@ -250,6 +265,26 @@ function getImageHtml(object: IObject) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
   return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+}
+
+function getCoverImageHtml(object: IObject) {
+  const imageProperties = object.definition.properties as CoverImageProperties;
+  if (imageProperties.url.value.isPlaceholder) {
+    return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+  }
+
+  let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
+    .size as any;
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+
+  const aH = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionHorizontal;
+  const aV = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionVertical;
+
+  return `<div class="object-content" style="width: 100%; height: 100%; background-image:url('${imageProperties.url.value.url}'); background-repeat:no-repeat;background-size: ${backgroundSize};  background-position: ${aH} ${aV};"></div>`;
 }
 
 function getVideoHtml(object: IObject, isPlayer: boolean) {

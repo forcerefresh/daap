@@ -12,6 +12,11 @@ export interface IRect {
   h: number;
 }
 
+export interface ISize {
+  width: number;
+  height: number;
+}
+
 export function getMousePosition(e: React.MouseEvent) {
   var rect = e.currentTarget.getBoundingClientRect();
   var x = e.clientX - rect.left;

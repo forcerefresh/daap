@@ -2,6 +2,29 @@ import { noop } from "lodash-es";
 import { getInputForm } from "./input-factory";
 import { InputType } from "./types";
 
+export function getUnitNumericFiled<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.UNITS_NUMBER,
+    value: value,
+    defaultValue: 0,
+    inputProps,
+  };
+
+  const onInput = (value: any) => {
+    onChange(value);
+  };
+
+  return getInputForm(InputType.UNITS_NUMBER, objectDef, noop, onInput);
+}
+
 export function getNumericFiled<T>(
   label: string,
   value: T,

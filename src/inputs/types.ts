@@ -17,8 +17,10 @@ export enum InputType {
   FONT_SELECT = "font_select",
   EVENTS = "events",
   PARALLAX = "parallax",
+  COVER_PLACEMENT = "cover_placement",
 }
 
+// TODO: create interfaces for all input values
 export interface IUpdateInput {
   onChange: (
     config:
@@ -33,6 +35,7 @@ export interface IUpdateInput {
           points: { x: number; y: number }[];
         }
       | {
+          // parallax
           objects: { id: string; depth: number }[];
           smooth: boolean;
           autoDepth: boolean;
@@ -42,6 +45,7 @@ export interface IUpdateInput {
           setToInitialPositionOnComplete: boolean;
           followTime: number;
         }
+      | ICoverPlacementValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -144,6 +148,22 @@ export interface IVideoInput {
     height: number;
     isPlaceholder?: boolean;
   };
+}
+
+export interface ICoverPlacementValue {
+  relativeTo: "page" | "stage" | "guidelines";
+  size: "cover" | "fit";
+  positionHorizontal?: "left" | "center" | "right";
+  positionVertical?: "top" | "center" | "bottom";
+}
+
+export interface ICoverPlacementInput {
+  inputType: InputType.COVER_PLACEMENT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: ICoverPlacementValue;
+  defaultValue: ICoverPlacementValue;
 }
 
 export interface ITransformOriginInput {
@@ -252,6 +272,11 @@ export interface TextProperties {
 }
 
 export interface ImageProperties {
+  url: IImageInput;
+}
+
+export interface CoverImageProperties {
+  placement: ICoverPlacementInput;
   url: IImageInput;
 }
 

@@ -1,6 +1,8 @@
 import { forEach, forIn } from "lodash-es";
 import { v4 as uuid } from "uuid";
 import {
+  CoverImageProperties,
+  ICoverPlacementValue,
   IFontSelectInputValue,
   ImageProperties,
   InputType,
@@ -46,6 +48,14 @@ export function createObject(
       return {
         ...objectProps,
         ...createImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.COVER_IMAGE: {
+      return {
+        ...objectProps,
+        ...createCoverImageObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -316,6 +326,71 @@ function createImageObject(
   };
 }
 
+function createCoverImageObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<CoverImageProperties>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.COVER_IMAGE);
+
+  return {
+    ...object,
+    hasNoPosition: true,
+    definition: {
+      id: uuid(),
+      type: ObjectType.COVER_IMAGE,
+      properties: {
+        placement: {
+          displayName: "Placement",
+          propertyName: "placement",
+          inputType: InputType.COVER_PLACEMENT,
+          value: initialValue?.placement || getDefaultCoveragePlacement(),
+          defaultValue: getDefaultCoveragePlacement(),
+        },
+        url: {
+          displayName: "Image url",
+          propertyName: "url",
+          inputType: InputType.IMAGE,
+          value: {
+            url: initialValue?.url || "",
+            width: 300,
+            height: 300,
+            isPlaceholder: !initialValue?.url,
+          },
+          defaultValue: {
+            url: "",
+            width: 300,
+            height: 300,
+            isPlaceholder: true,
+          },
+        },
+
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+      },
+    },
+  };
+}
+
 function createVideoObject(
   initialValue?: {
     [key: string]: any;
@@ -411,9 +486,13 @@ function createSvgObject(
   };
 }
 
-/*
+/* NOTE: consider moving to sibling file (...utils file) */
 
-function createVectorObject() {
-  // TODO
-  return {};
-}*/
+function getDefaultCoveragePlacement(): ICoverPlacementValue {
+  return {
+    relativeTo: "stage",
+    size: "cover",
+    positionHorizontal: "center",
+    positionVertical: "center",
+  };
+}

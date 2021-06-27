@@ -5,7 +5,7 @@ import { IStore } from "../../store/store";
 import css from "./ImagesLibraryPanel.module.scss";
 import {
   Button,
-  Icon,
+  Checkbox,
   InputGroup,
   Popover,
   PopoverInteractionKind,
@@ -59,12 +59,16 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
+  const [selectedResolution, setSelectedResolution] =
+    useState<string>("medium");
 
   const badImages = React.useRef<number[]>([]);
 
   const fetchData = (from = -1) => {
     setLoading(true);
 
+    console.log("LOAD DATA");
+    console.log({ ...selectedTags });
     from = from === -1 ? images?.length || 0 : from;
 
     let url = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1?from=${from}`;
@@ -81,7 +85,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       .then(
         (result) => {
           console.log(result);
-          setImages((imgs) => [...imgs, ...result.photos]);
+          setImages([...images, ...result.photos]);
           setLoading(false);
           setHasMore(result.photos.length > 0);
         },
@@ -143,6 +147,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
+    console.log({ ...selectedTags });
     debounceFetchData(0);
   }, [selectedTags]);
 
@@ -259,7 +264,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       setSelectedImage(idx);
                     }}
                   />
-                  <div className={css.popoverHolder}>
+                  <div
+                    className={css.popoverHolder}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                    }}
+                  >
                     <div>
                       <img
                         style={{ maxHeight: "400px", maxWidth: "400px" }}
@@ -270,33 +280,74 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     </div>
                     <div>
                       <Text className={css.previewTitle}>Chose resolution</Text>
-                      {Object.values(image.images).map((oneimg) => (
-                        <p>
-                          <Button
-                            minimal
-                            onClick={() => {
-                              if (activeLayerId) {
-                                _addNewObject(
-                                  activeLayerId,
-                                  ObjectType.IMAGE,
-                                  {
-                                    left: 0,
-                                    top: 0,
-                                    width: oneimg.size.width,
-                                    height: oneimg.size.height,
-                                  },
-                                  {
-                                    url: `${process.env.REACT_APP_ASSETS_BASE_URL}/${oneimg.url}`,
-                                  }
-                                );
-                                onRequestClose();
+                      {Object.entries(image.images).map(
+                        ([sizeAlias, oneimg]) => (
+                          <p>
+                            <Checkbox
+                              checked={selectedResolution === sizeAlias}
+                              onChange={() => {
+                                setSelectedResolution(sizeAlias);
+                              }}
+                            >
+                              {oneimg.size.width}px x {oneimg.size.height}px
+                            </Checkbox>
+                          </p>
+                        )
+                      )}
+                      <Button
+                        onClick={() => {
+                          if (activeLayerId) {
+                            _addNewObject(
+                              activeLayerId,
+                              ObjectType.COVER_IMAGE,
+                              {},
+                              {
+                                url: `${
+                                  process.env.REACT_APP_ASSETS_BASE_URL
+                                }/${
+                                  (image?.images as any)[selectedResolution]
+                                    ?.url
+                                }`,
+                                //placement: getDefaultCoveragePlacement,
                               }
-                            }}
-                          >
-                            {oneimg.size.width}px x {oneimg.size.height}px
-                          </Button>
-                        </p>
-                      ))}
+                            );
+                            onRequestClose();
+                          }
+                        }}
+                      >
+                        Cover image
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          if (activeLayerId) {
+                            _addNewObject(
+                              activeLayerId,
+                              ObjectType.IMAGE,
+                              {
+                                left: 0,
+                                top: 0,
+                                width: (image?.images as any)[
+                                  selectedResolution
+                                ]?.size.width,
+                                height: (image?.images as any)[
+                                  selectedResolution
+                                ]?.size.height,
+                              },
+                              {
+                                url: `${
+                                  process.env.REACT_APP_ASSETS_BASE_URL
+                                }/${
+                                  (image?.images as any)[selectedResolution]
+                                    ?.url
+                                }`,
+                              }
+                            );
+                            onRequestClose();
+                          }
+                        }}
+                      >
+                        Block image
+                      </Button>
                     </div>
                   </div>
                 </Popover>

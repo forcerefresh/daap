@@ -7,11 +7,11 @@ import {
 
 export enum ObjectType {
   TEXT = "text",
+  COVER_IMAGE = "cover_image",
   IMAGE = "image",
   VIDEO = "video",
   HTML = "html",
   SVG = "svg",
-  //VECTOR = '"vector',
 }
 
 export interface IDefinition<
@@ -44,6 +44,7 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   type: ObjectType;
   isVisible: boolean;
   isLocked: boolean;
+  hasNoPosition?: boolean;
   // hasTimeline: boolean; // show in timeline
   transitions: ITransitions;
   definition: IDefinition<T>;

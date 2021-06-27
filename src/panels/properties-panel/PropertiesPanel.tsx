@@ -18,9 +18,10 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   const renderObjectProperties = (object: IObject) => {
     return (
       <>
-        {renderPositionAndSize(object)}
-        {renderEvents(object)}
+        {!object.hasNoPosition && renderPositionAndSize(object)}
         {renderProperties(object.definition.properties)}
+        <hr />
+        {renderEvents(object)}
       </>
     );
   };

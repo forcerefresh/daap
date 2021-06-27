@@ -100,7 +100,6 @@ export class Player {
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
     this.rootDiv.style.display = "block";
-
     if (!this.normalSlideDataArr?.[slideIdx]) {
       //slide does not exist
       return;
@@ -186,7 +185,6 @@ export class Player {
     });
 
     this.currentSlideTimeline.eventCallback("onComplete", function () {
-      //console.log("AAAAAAAAAAAAAAAAAAAA");
       slideEl.style.display = "none";
     });
 
