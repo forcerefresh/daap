@@ -45,6 +45,10 @@ import {
   typewriterDefaults,
   typewriterDefinition,
 } from "./typewriter/typewriter.definition";
+import {
+  splitTextDefaults,
+  splitTextDefinition,
+} from "./split-text/split-text.definition";
 
 // import all effects
 import "./none/none.effect";
@@ -64,6 +68,7 @@ import "./parallax/parallax.effect";
 import "./morph/morph.effect";
 import "./magnetic/magnetic.effect";
 import "./typewriter/typewriter.effect";
+import "./split-text/split-text.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -98,6 +103,7 @@ registerEffect(parallaxDefinition, parallaxDefaults);
 registerEffect(morphDefinition, morphDefaults);
 registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(typewriterDefinition, typewriterDefaults);
+registerEffect(splitTextDefinition, splitTextDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
