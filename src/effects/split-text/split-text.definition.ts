@@ -18,48 +18,59 @@ export const splitTextDefinition = {
       inputType: InputType.NUMBER,
     },
     {
+      displayName: "Opacity",
+      helperText: "Percentage value (default 0)",
+      propertyName: "opacity",
+      inputType: InputType.NUMERIC_TIMELINE,
+    },
+    {
+      displayName: "Blur",
+      //helperText: "Percentage value (default 0)",
+      propertyName: "blur",
+      inputType: InputType.NUMERIC_TIMELINE,
+    },
+    {
       displayName: "Scale X",
       helperText: "Percentage value (default 0)",
       propertyName: "scaleX",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
       displayName: "Scale Y",
       helperText: "Percentage value (default 0)",
       propertyName: "scaleY",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
       displayName: "Rotation",
       helperText: "Rotate char ( default 0)",
       propertyName: "rotationPerChar",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
       displayName: "Position X",
       helperText: "Move along X axis (default 0)",
       propertyName: "positionX",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
       displayName: "Position Y",
       helperText: "Move along Y axis (default 0)",
       propertyName: "positionY",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
       displayName: "Start from",
       propertyName: "startFrom",
-      inputType: InputType.SELECT,
-      options: [
-        { label: "Random", value: "random" },
-        { label: "Center", value: "center" },
-        { label: "Edges", value: "edges" },
-        { label: "End", value: "end" },
-        { label: "Start", value: "0" },
-      ],
+      inputType: InputType.TEXT_START_POSITION,
     },
   ],
+};
+
+const delayAndDuration = {
+  hasTimelineProperties: false,
+  delay: 0,
+  duration: 1000,
 };
 
 export const splitTextDefaults: ISplitTextEffect = {
@@ -70,12 +81,21 @@ export const splitTextDefaults: ISplitTextEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
-  durationPerChar: 200,
+  durationPerChar: 1000,
   delayBetweenChar: 50,
-  scaleX: 1,
-  scaleY: 1,
-  rotationPerChar: 0,
-  positionX: 0,
-  positionY: 0,
-  startFrom: 0,
+  opacity: { value: 0, ...delayAndDuration },
+  blur: { value: 0, ...delayAndDuration },
+  scaleX: { value: 1, ...delayAndDuration },
+  scaleY: { value: 1, ...delayAndDuration },
+  rotationPerChar: {
+    value: 0,
+    ...delayAndDuration,
+  },
+  positionX: { value: 0, ...delayAndDuration },
+  positionY: { value: 0, ...delayAndDuration },
+  startFrom: {
+    startFrom: "start",
+    customOrder: "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+    fromCharacter: 1,
+  },
 };

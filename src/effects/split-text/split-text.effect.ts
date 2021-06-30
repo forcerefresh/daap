@@ -1,122 +1,119 @@
 import gsap from "gsap";
 import { ISplitTextEffect, splitText } from "./split-text.types";
 import { SplitText } from "gsap/SplitText";
-import { stace2nbsp } from "../../utils/doom-utils/common";
+import { space2nbsp } from "../../utils/doom-utils/common";
 import { getMethodByType } from "../common";
+import {
+  addTextEffectPartToTimeline,
+  arrangeChars,
+  createRootTimelineForTextEffect,
+} from "../text.utils";
+import { pick } from "lodash-es";
 
 gsap.registerEffect({
   name: splitText,
   effect: function (targets: any, config: ISplitTextEffect) {
     const objectEL = targets[0]! as HTMLElement;
-    const pEl = objectEL.firstChild as HTMLParagraphElement;
-    pEl.style.opacity = config.type === "in" ? "0" : "1";
-    const originalInnerHTML = pEl.innerHTML;
-    const numberOfChars = pEl.innerHTML.length;
+    const pElOriginal = objectEL.firstChild as HTMLParagraphElement;
+    const pElClone = pElOriginal.cloneNode(true) as HTMLElement;
+    objectEL.appendChild(pElClone);
+    pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
+    pElClone.style.opacity = config.type === "in" ? "0" : "1";
+
+    const numberOfChars = pElClone.innerHTML.length;
 
     let textChars: SplitText;
+    console.log(config);
+
+    const initializeEffect = () => {
+      pElClone.innerHTML = space2nbsp(pElClone.innerHTML);
+      pElClone.style.opacity = "1"; // config.type === "in" ? "0" : "1";
+      pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
+
+      textChars = new SplitText(pElClone, {
+        type: "chars",
+        position: "absolute",
+      });
+      const chars = arrangeChars(config.startFrom, textChars.chars);
+      gsap.set(chars, { opacity: 1, visibility: "visible" });
+
+      console.log(config.positionX);
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.positionX,
+        propertyName: "x",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.positionY,
+        propertyName: "y",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.rotationPerChar,
+        propertyName: "rotation",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.scaleX,
+        propertyName: "scaleX",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.scaleY,
+        propertyName: "scaleY",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: config.opacity,
+        propertyName: "opacity",
+      });
+
+      addTextEffectPartToTimeline({
+        timeline: rootTimeline,
+        chars,
+        config: config,
+        value: { ...config.blur, ...{ value: `blur(${config.blur.value}px)` } }, //{ ...config.blur, ...{ value: `blur(${config.blur}px)` } },
+        propertyName: "filter",
+      });
+    };
+
+    const teardownEffect = () => {
+      textChars.revert(); //// OBSOLETE:  cleanup SplitText outcome  - no need as we clean all (removeChild)
+      //pElClone.parentElement?.removeChild(pElClone);
+      pElClone.style.opacity = "0";
+      pElOriginal.style.opacity = config.type === "in" ? "1" : "0";
+    };
 
     const totalDuration =
       config.delayBetweenChar * numberOfChars +
       (config.durationPerChar - config.delayBetweenChar);
 
-    const rootTimeline = gsap.timeline({
-      duration: totalDuration / 1000,
-    });
-
-    const initializeEffect = () => {
-      console.log(config.type);
-      // - create characters
-
-      pEl.innerHTML = stace2nbsp(pEl.innerHTML);
-      pEl.style.opacity = "1";
-      textChars = new SplitText(pEl, {
-        type: "chars",
-        position: "absolute",
-      });
-      const chars = textChars.chars;
-      gsap.set(chars, { opacity: 1, visibility: "visible" });
-
-      rootTimeline[getMethodByType(config.type)](
-        chars,
-        {
-          ease: config.ease,
-          duration: config.durationPerChar / 1000,
-          x: config.positionX,
-          y: config.positionY,
-          rotate: config.rotationPerChar,
-          stagger: {
-            amount: (config.delayBetweenChar / 1000) * numberOfChars,
-            from: config.startFrom,
-          },
-        },
-        0
-      );
-
-      rootTimeline[getMethodByType(config.type)](
-        chars,
-        {
-          ease: config.ease,
-          duration: config.durationPerChar / 1000,
-          scaleX: config.scaleX,
-          scaleY: config.scaleY,
-          stagger: {
-            amount: (config.delayBetweenChar / 1000) * numberOfChars,
-            from: config.startFrom,
-          },
-        },
-        0
-      );
-
-      rootTimeline[getMethodByType(config.type)](
-        chars,
-        {
-          opacity: 0,
-          ease: config.ease,
-          duration: config.durationPerChar / 1000,
-          stagger: {
-            amount: (config.delayBetweenChar / 1000) * numberOfChars,
-            from: config.startFrom,
-          },
-        },
-        0
-      );
-    };
-
-    let isStarted = false;
-    rootTimeline.eventCallback("onStart", () => {
-      if (!isStarted) {
-        // NOTE: wait for element to be visible on dom
-        if ((targets[0] as HTMLElement).offsetWidth === 0) {
-          return;
-        }
-
-        initializeEffect();
-
-        isStarted = true;
-      }
-    });
-
-    rootTimeline.eventCallback("onUpdate", () => {
-      if (!isStarted) {
-        // NOTE: wait for element to be visible on dom
-        if ((targets[0] as HTMLElement).offsetWidth === 0) {
-          return;
-        }
-
-        initializeEffect();
-
-        isStarted = true;
-      }
-    });
-
-    rootTimeline.eventCallback("onComplete", () => {
-      if (isStarted) {
-        // celanup
-        textChars.revert(); // cleanup SplitText outcome
-        pEl.innerHTML = originalInnerHTML; // revert text
-
-        isStarted = false;
-      }
+    const rootTimeline = createRootTimelineForTextEffect({
+      timelineConfig: {
+        duration: totalDuration / 1000,
+      },
+      target: targets[0] as HTMLElement,
+      initializeEffect,
+      teardownEffect,
     });
 
     return rootTimeline;

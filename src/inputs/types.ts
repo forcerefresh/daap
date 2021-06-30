@@ -4,6 +4,7 @@ import { IObjectEvent } from "../objects/types";
 export enum InputType {
   NUMBER = "number",
   UNITS_NUMBER = "units_number",
+  NUMERIC_TIMELINE = "numeric_timeline",
   TEXT = "text",
   TEXTAREA = "textarea",
   SELECT = "select",
@@ -18,6 +19,7 @@ export enum InputType {
   EVENTS = "events",
   PARALLAX = "parallax",
   COVER_PLACEMENT = "cover_placement",
+  TEXT_START_POSITION = "text_start_position",
 }
 
 // TODO: create interfaces for all input values
@@ -46,6 +48,8 @@ export interface IUpdateInput {
           followTime: number;
         }
       | ICoverPlacementValue
+      | INumericTimelineValue
+      | ITextStartPositionValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -76,6 +80,39 @@ export interface IUnitsNumberInput {
   value: string;
   defaultValue: string;
   inputProps?: { disabled: boolean };
+}
+
+// timeline numeric value (delay and duration)
+export interface INumericTimelineValue {
+  value: number | string;
+  hasTimelineProperties: boolean;
+  delay: number;
+  duration: number;
+}
+
+export interface INumericTimelineInput {
+  inputType: InputType.NUMERIC_TIMELINE;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: INumericTimelineValue;
+  defaultValue: INumericTimelineValue;
+}
+
+// timeline numeric value (delay and duration)
+export interface ITextStartPositionValue {
+  startFrom: string;
+  fromCharacter?: number;
+  customOrder?: string;
+}
+
+export interface ITextStartPositionInput {
+  inputType: InputType.TEXT_START_POSITION;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: ITextStartPositionValue;
+  defaultValue: ITextStartPositionValue;
 }
 
 //  text input

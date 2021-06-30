@@ -72,6 +72,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
       inline
     >
       <NumericInput
+        buttonPosition={"none"}
         intent={!valid ? Intent.WARNING : Intent.NONE}
         id={id}
         value={internalValue}

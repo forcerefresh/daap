@@ -1,6 +1,13 @@
 .effectConfigurationForm {
   // background: rgba(222, 222, 222, 0.4);
   padding: 8px;
+
+  :global {
+    .labelAuto .bp3-label {
+      width: auto;
+      min-width: auto;
+    }
+  }
 }
 
 .inlineFlex {
@@ -15,6 +22,7 @@
   :global {
     .bp3-label {
       width: var(--effects-panel-label-width);
+      min-width: var(--effects-panel-label-width);
     }
 
     .bp3-form-group.bp3-inline label.bp3-label {

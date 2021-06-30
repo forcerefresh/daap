@@ -1,6 +1,9 @@
 import { EffectType } from "./types";
 
-export function getMethodByType(type: EffectType | undefined, inverse = false) {
+export function getMethodByType(
+  type: EffectType | undefined,
+  inverse = false
+): "to" | "from" {
   return !inverse
     ? type === "in" || type === "effect"
       ? "from"

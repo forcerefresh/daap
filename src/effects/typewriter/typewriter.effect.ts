@@ -1,7 +1,7 @@
 import gsap, { SteppedEase } from "gsap";
 import { typewriter, ITypeWriterEffect } from "./typewriter.types";
 import { SplitText } from "gsap/SplitText";
-import { nl2br, stace2nbsp } from "../../utils/doom-utils/common";
+import { nl2br, space2nbsp } from "../../utils/doom-utils/common";
 
 //gsap.registerPlugin(SplitText);
 
@@ -31,7 +31,7 @@ gsap.registerEffect({
       // - create characters
       pEl.innerText = text;
 
-      pEl.innerHTML = stace2nbsp(pEl.innerHTML);
+      pEl.innerHTML = space2nbsp(pEl.innerHTML);
       pEl.style.opacity = "1";
       textChars = new SplitText(pEl, {
         type: "chars",

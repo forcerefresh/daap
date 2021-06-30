@@ -9,10 +9,12 @@ import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
+import { NumbericTimelineInputForm as NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
 import { ParallaxInputForm } from "./parallax-input/parallax-input";
 import { SelectInputForm } from "./select-input/select-input";
 import { SplitInputForm } from "./split-input/split-input";
 import { TextInputForm } from "./text-input/text-input";
+import { TextStartPositionInputForm } from "./text-start-position-input/text-start-position-input";
 import { TextAreaInputForm } from "./textarea-input/textarea-input";
 import { TransformInputForm } from "./transform-input/transform-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
@@ -48,6 +50,16 @@ export function getInputForm<T>(
     case InputType.UNITS_NUMBER: {
       return (
         <UnitsNumberInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.NUMERIC_TIMELINE: {
+      return (
+        <NumericTimelineInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
@@ -119,6 +131,15 @@ export function getInputForm<T>(
           {...inputProps}
           onChange={onChange}
           layerData={data?.layerData}
+        />
+      );
+    }
+    case InputType.TEXT_START_POSITION: {
+      return (
+        <TextStartPositionInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
         />
       );
     }

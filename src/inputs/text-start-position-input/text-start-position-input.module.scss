@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  place-items: unset;
+  // Label (displayName) style
+  :global {
+    .bp3-label {
+      width: var(--effects-panel-label-width);
+      min-width: var(--effects-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}
+.alignHolder {
+  display: flex;
+  .alignHolderInner {
+    display: flex;
+
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+}

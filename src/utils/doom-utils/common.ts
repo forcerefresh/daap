@@ -1,5 +1,3 @@
-import { isReactElement } from "@blueprintjs/core/lib/esm/common/utils";
-
 export interface IPoint {
   x: number;
   y: number;
@@ -89,7 +87,7 @@ export function multiplyRect(r: IRect, multiplier: number) {
   };
 }
 
-export function stace2nbsp(str: string | undefined): string {
+export function space2nbsp(str: string | undefined): string {
   if (typeof str === "undefined" || str === null) {
     return "";
   }

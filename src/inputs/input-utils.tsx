@@ -71,7 +71,7 @@ export function getCheckboxField<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabled?: boolean } & { [key: string]: any } = {}
 ) {
   const objectDef = {
     displayName: label,
@@ -82,4 +82,23 @@ export function getCheckboxField<T>(
   };
 
   return getInputForm(InputType.CHECKBOX, objectDef, onChange);
+}
+
+export function getTextArea<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.TEXTAREA,
+    value: value,
+    defaultValue: "",
+    inputProps,
+  };
+
+  return getInputForm(InputType.TEXTAREA, objectDef, onChange);
 }

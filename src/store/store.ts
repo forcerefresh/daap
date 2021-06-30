@@ -75,6 +75,6 @@ const logger = (store: any) => (next: any) => (action: any) => {
 
 export const store = createStore(
   rootReducer,
-  // initialState as unknown as IStore,
+  initialState as unknown as IStore,
   composeWithDevTools(applyMiddleware(logger, thunk))
 );
