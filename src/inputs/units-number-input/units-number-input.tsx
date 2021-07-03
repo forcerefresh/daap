@@ -37,12 +37,14 @@ export const UnitsNumberInputForm: React.FC<IUnitsNumberInput & IUpdateInput> =
       placeholderText,
       allowedUnits,
       helperText,
+      inputProps,
       value,
       onChange,
     } = props;
 
     const id = `${propertyName}_units_input_number`;
 
+    console.log(inputProps);
     const latestUnit = React.useRef<"px" | "em" | "%" | null>("px");
     if (value2UnitValue(value).unit !== null) {
       latestUnit.current = value2UnitValue(value).unit;
@@ -110,6 +112,7 @@ export const UnitsNumberInputForm: React.FC<IUnitsNumberInput & IUpdateInput> =
           value={internalValue.value}
           onChange={(event: any) => updateValue(event.target.value)}
           onInput={(event: any) => updateValue(event.target.value)}
+          {...inputProps}
         />
       </FormGroup>
     );

@@ -1,5 +1,5 @@
 import { Text } from "@blueprintjs/core";
-import { cloneDeep, pick } from "lodash-es";
+import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getInputForm } from "../../inputs/input-factory";
@@ -22,6 +22,8 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         {renderProperties(object.definition.properties)}
         <hr />
         {renderEvents(object)}
+        <hr />
+        {renderCommonObjectProperties(object)}
       </>
     );
   };
@@ -41,6 +43,25 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
 
     //console.log(objectDef);
     return getInputForm(InputType.EVENTS, objectDef, onChange);
+  };
+
+  const renderCommonObjectProperties = (object: IObject) => {
+    const objectDef = {
+      displayName: "Corner radius",
+      inputType: InputType.CORNER_RADIUS,
+      value: object?.commonProperties?.borderRadius || { common: "0px" },
+    };
+
+    const onChange = (value: any) => {
+      const retObj = cloneDeep(object);
+      set(retObj, "commonProperties.borderRadius", value);
+      if (retObj) {
+        _updateObject(retObj);
+      }
+    };
+
+    //console.log(objectDef);
+    return getInputForm(InputType.CORNER_RADIUS, objectDef, onChange);
   };
 
   const renderPositionAndSize = (object: IObject) => {

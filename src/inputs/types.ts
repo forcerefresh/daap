@@ -20,6 +20,7 @@ export enum InputType {
   PARALLAX = "parallax",
   COVER_PLACEMENT = "cover_placement",
   TEXT_START_POSITION = "text_start_position",
+  CORNER_RADIUS = "corner-radius",
 }
 
 // TODO: create interfaces for all input values
@@ -50,6 +51,7 @@ export interface IUpdateInput {
       | ICoverPlacementValue
       | INumericTimelineValue
       | ITextStartPositionValue
+      | ICornerRadiusValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -203,6 +205,23 @@ export interface ICoverPlacementInput {
   defaultValue: ICoverPlacementValue;
 }
 
+export interface ICornerRadiusValue {
+  common?: string;
+  tl?: string;
+  tr?: string;
+  bl?: string;
+  br?: string;
+}
+
+export interface ICornerRadiusInput {
+  inputType: InputType.CORNER_RADIUS;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: ICornerRadiusValue;
+  defaultValue: ICornerRadiusValue;
+}
+
 export interface ITransformOriginInput {
   inputType: InputType.TRANSFORM_ORIGIN;
   displayName: string;
@@ -317,6 +336,13 @@ export interface CoverImageProperties {
   url: IImageInput;
 }
 
+export interface SourceImageProperties {
+  id: ITextInput;
+  visible: ICheckboxInput;
+  placement: ICoverPlacementInput;
+  url: IImageInput;
+}
+
 export interface VideoProperties {
   url: IVideoInput;
 }
@@ -327,4 +353,8 @@ export interface SvgProperties {
 
 export interface HtmlProperties {
   html: ITextAreaInput;
+}
+
+export interface CanvasProperties {
+  source: ITextInput;
 }

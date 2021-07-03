@@ -37,7 +37,35 @@ gsap.registerEffect({
       const chars = arrangeChars(config.startFrom, textChars.chars);
       gsap.set(chars, { opacity: 1, visibility: "visible" });
 
-      console.log(config.positionX);
+      /* console.log(config.positionX);
+
+      const newChars1 = [...chars].slice(0, 4).reverse();
+      const newChars2 = [...chars].slice(5, 10);
+      const newChars = [...newChars1, ...newChars2];
+      rootTimeline.from(
+        chars,
+        {
+          x: gsap.utils.wrap([
+            "-=100",
+            "-=100",
+            "-=100",
+            "-=100",
+            "-=100",
+            "+=100",
+            "+=100",
+            "+=100",
+            "+=100",
+            "+=100",
+          ]),
+          delay: 0.1,
+          stagger: {
+            amount: (config.delayBetweenChar / 1000) * chars.length,
+            from: "center",
+          },
+        },
+        0
+      );
+*/
 
       addTextEffectPartToTimeline({
         timeline: rootTimeline,
@@ -97,8 +125,8 @@ gsap.registerEffect({
     };
 
     const teardownEffect = () => {
-      textChars.revert(); //// OBSOLETE:  cleanup SplitText outcome  - no need as we clean all (removeChild)
-      //pElClone.parentElement?.removeChild(pElClone);
+      //textChars.revert(); //// OBSOLETE:  cleanup SplitText outcome  - no need as we clean all (removeChild)
+      pElClone.parentElement?.removeChild(pElClone);
       pElClone.style.opacity = "0";
       pElOriginal.style.opacity = config.type === "in" ? "1" : "0";
     };

@@ -1,8 +1,10 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import {
+  CanvasProperties,
   CoverImageProperties,
   ICoverPlacementValue,
   ImageProperties,
+  SourceImageProperties,
   SvgProperties,
   TextProperties,
 } from "../inputs/types";
@@ -229,16 +231,19 @@ export function getObjectHtml(object: IObject, isPlayer: boolean) {
       return getVideoHtml(object, isPlayer);
     case ObjectType.SVG:
       return getSvgHtml(object);
+    case ObjectType.CANVAS:
+      return getCanvasHtml(object, isPlayer);
+    case ObjectType.SOURCE_IMAGE:
+      return getSourceImageHtml(object, isPlayer);
     default:
       return "";
   }
 }
 
+// OBJECT HTML CREATOR FUNCTIONS **********************
+
 export function getTextHtml(object: IObject) {
   const textProperties = object.definition.properties as TextProperties;
-
-  //const sizeObj = pick(object, "left", "top", "width", "height");
-  //const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
 
   let style = "";
   style += "font-family: " + textProperties.font.value.fontFamily + ";";
@@ -248,12 +253,8 @@ export function getTextHtml(object: IObject) {
   style += "font-weight: " + textProperties.weight.value + ";";
   style += "width: " + object.width + "px;";
   style += "height:" + object.height + "px;";
-  //forOwn(objectStyle, function (value, key) {
-  //  style += key + ":" + value + ";";
-  //});
   style += "position: absolute;";
 
-  //console.log(style);
   return `<p class="object-content" style="${style}">${nl2br(
     textProperties.text.value
   )}</p>`;
@@ -261,47 +262,96 @@ export function getTextHtml(object: IObject) {
 
 function getImageHtml(object: IObject) {
   const imageProperties = object.definition.properties as ImageProperties;
+
   if (imageProperties.url.value.isPlaceholder) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
-  return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+
+  return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }
 
 function getCoverImageHtml(object: IObject) {
   const imageProperties = object.definition.properties as CoverImageProperties;
+
+  // if placeholder
   if (imageProperties.url.value.isPlaceholder) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
 
   let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
-    .size as any;
+    .size as "cover" | "fit" | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
   if (backgroundSize === "fit") backgroundSize = "100% 100%";
-
   const aH = (imageProperties.placement.value as ICoverPlacementValue)
     .positionHorizontal;
   const aV = (imageProperties.placement.value as ICoverPlacementValue)
     .positionVertical;
 
-  return `<div class="object-content" style="width: 100%; height: 100%; background-image:url('${imageProperties.url.value.url}'); background-repeat:no-repeat;background-size: ${backgroundSize};  background-position: ${aH} ${aV};"></div>`;
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-repeat:no-repeat;`;
+  style += `background-size: ${backgroundSize};`;
+  style += `background-position: ${aH} ${aV};`;
+
+  return `<div class="object-content" style="${style}"></div>`;
+}
+
+function getSourceImageHtml(object: IObject, isPlayer: boolean) {
+  const imageProperties = object.definition.properties as SourceImageProperties;
+  if (imageProperties.url.value.isPlaceholder) {
+    return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+  }
+
+  let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
+    .size as "cover" | "fit" | "100% 100%";
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  const aH = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionHorizontal;
+  const aV = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionVertical;
+
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-repeat:no-repeat;`;
+  style += `background-size: ${backgroundSize};`;
+  style += `background-position: ${aH} ${aV};`;
+  style += `opacity: ${imageProperties.visible.value ? 1 : 0};`;
+
+  return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageProperties.id.value}" src="${imageProperties.url.value.url}"></div>`;
 }
 
 function getVideoHtml(object: IObject, isPlayer: boolean) {
   const imageProperties = object.definition.properties as ImageProperties;
+
   if (imageProperties.url.value.isPlaceholder) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
   }
 
-  const videoHtml = `<video style="object-fit: fill;" ${
-    isPlayer ? "autoplay" : ""
-  } controls  width="100%" height="100%">
-    <source src="${imageProperties.url.value.url}" type="video/mp4">
-  </video>`;
+  let style = "";
+  style += "object-fit: fill;";
+
+  let attrs = "";
+  if (isPlayer) attrs += " autoplay controls";
+  attrs += ` width="100%"`;
+  attrs += ` height="100%"`;
+
+  const url = imageProperties.url.value.url;
+
+  const videoHtml = `<video style="${style}" ${attrs}><source src="${url}" type="video/mp4"></video>`;
 
   return videoHtml;
-
-  //Sorry, your browser doesn't support embedded videos.
 
   //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }
@@ -312,4 +362,43 @@ function getSvgHtml(object: IObject) {
     return imageProperties.svg.value;
   }
   return ``;
+}
+
+function getCanvasHtml(object: IObject, isPlayer: boolean) {
+  const canvasProperties = object.definition.properties as CanvasProperties;
+
+  let style = "";
+  console.log(object);
+  style += addCommonPropertiesToStyle(style, object);
+  style += "position: absolute;";
+  if (!isPlayer) {
+    style += "background-color: rgba(255,255,255,0.2);";
+  }
+  return `<canvas width="${object.width}" height="${object.height}" class="object-content" style="${style}"/>`;
+}
+
+// UTILS FUNCTIONS **************
+
+function addCommonPropertiesToStyle(style: string, object: IObject) {
+  console.log(object.commonProperties);
+  if (object.commonProperties?.borderRadius) {
+    if (object.commonProperties?.borderRadius.common) {
+      style +=
+        "border-radius: " + object.commonProperties?.borderRadius.common + ";";
+    } else if (object.commonProperties?.borderRadius.tl) {
+      style +=
+        "border-radius: " +
+        object.commonProperties?.borderRadius.tl +
+        " " +
+        object.commonProperties?.borderRadius.tr +
+        " " +
+        object.commonProperties?.borderRadius.br +
+        " " +
+        object.commonProperties?.borderRadius.bl +
+        ";";
+    }
+  }
+
+  console.log(style);
+  return style;
 }

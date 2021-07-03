@@ -7,7 +7,7 @@ export function getUnitNumericFiled<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {}
 ) {
   const objectDef = {
     displayName: label,
@@ -18,11 +18,11 @@ export function getUnitNumericFiled<T>(
     inputProps,
   };
 
-  const onInput = (value: any) => {
+  /*const onChange = (value: any) => {
     onChange(value);
-  };
+  };*/
 
-  return getInputForm(InputType.UNITS_NUMBER, objectDef, noop, onInput);
+  return getInputForm(InputType.UNITS_NUMBER, objectDef, onChange);
 }
 
 export function getNumericFiled<T>(

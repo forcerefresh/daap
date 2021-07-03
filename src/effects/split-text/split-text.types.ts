@@ -6,7 +6,7 @@ import { IEffectBase } from "../types";
 
 export const splitText = "splitText";
 
-export interface ISplitTextEffect extends IEffectBase {
+export interface SplitTextEffectValues {
   durationPerChar: number;
   delayBetweenChar: number;
   opacity: INumericTimelineValue;
@@ -18,3 +18,5 @@ export interface ISplitTextEffect extends IEffectBase {
   positionY: INumericTimelineValue;
   startFrom: ITextStartPositionValue;
 }
+
+export interface ISplitTextEffect extends IEffectBase, SplitTextEffectValues {}

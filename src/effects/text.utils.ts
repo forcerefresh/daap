@@ -64,6 +64,7 @@ export function addTextEffectPartToTimeline({
   config,
   propertyName,
   value,
+  from,
 }: {
   chars: Element[];
   timeline: gsap.core.Timeline;
@@ -74,6 +75,7 @@ export function addTextEffectPartToTimeline({
   };
   propertyName: string;
   value: INumericTimelineValue;
+  from?: string | number;
 }) {
   timeline[getMethodByType(config.type)](
     chars,
@@ -86,11 +88,14 @@ export function addTextEffectPartToTimeline({
       [propertyName]: value.value,
       stagger: {
         amount: (config.delayBetweenChar / 1000) * chars.length,
-        from: getStartFromCharacter(config.startFrom),
+        from: from ? from : getStartFromCharacter(config.startFrom),
       },
     },
     value.hasTimelineProperties ? value.delay / 1000 : 0
   );
+}
+function getNodeIndex(element: any) {
+  return [...element.parentNode.childNodes].indexOf(element);
 }
 
 export function getStartFromCharacter(value: ITextStartPositionValue): any {

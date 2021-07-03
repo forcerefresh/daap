@@ -4,6 +4,7 @@ import { ILayer } from "../store/reducers/layers";
 import { ISlide } from "../store/reducers/slides";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
+import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
@@ -141,6 +142,11 @@ export function getInputForm<T>(
           {...inputProps}
           onChange={onChange}
         />
+      );
+    }
+    case InputType.CORNER_RADIUS: {
+      return (
+        <CornerRadiusInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
   }

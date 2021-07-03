@@ -500,17 +500,27 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       widthAndHeightObject.height = resizeRect.h;
     }
 
+    console.log(resizeRect);
+    console.log(resizeData?.objectId === object.id);
+    console.log({ x: object.left!, y: object.top! });
+
+    const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
+    if (!object.hasNoPosition) {
+      if (resizeRect && resizeData?.objectId === object.id) {
+        objDraggablePos.x = resizeRect.x;
+        objDraggablePos.y = resizeRect.y;
+      } else {
+        objDraggablePos.x = object.left!;
+        objDraggablePos.y = object.top!;
+      }
+    }
     return (
       <Draggable
         disabled={
           stageToolInternal !== StageTools.SELECT || object.hasNoPosition
         }
         key={objectId + "_drag"}
-        position={
-          resizeRect && resizeData?.objectId === object.id
-            ? resizeRect
-            : { x: object.left!, y: object.top! }
-        }
+        position={objDraggablePos}
         // workaround to prevent move when object is locked
         grid={object.isLocked ? [10000000, 10000000] : [1, 1]}
         scale={1 * stageZoom}
@@ -744,7 +754,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const scrollableDivStyle: React.CSSProperties = {
     position: "relative",
-    left: -pageColumnWidth + "px",
+    left: -pageColumnWidth * stageZoom + "px",
     top: isPreview ? -previewLayout.header.height : 0 + "px",
     width: parseInt(pageBorderStyle.width, 10) + 14 + "px",
     height:

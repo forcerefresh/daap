@@ -12,6 +12,8 @@
   display: flex;
   flex-direction: column;
 
+  overflow: auto;
+
   > * {
     display: flex;
   }

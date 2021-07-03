@@ -32,7 +32,7 @@ gsap.registerEffect({
     ) {
       gsap.to(el.parentElement!, {
         ease: config.ease,
-        scale: moveX == 0 && moveY === 0 ? 1 : 1.1,
+        scale: moveX == 0 && moveY === 0 ? 1 : 1.1, // TODO: uncoment this
         duration: config.followTime / 1000,
         x: (moveX * config.strengthX) / STRENGTH_MULTIPLIER,
         y: (moveY * config.strengthY) / STRENGTH_MULTIPLIER,

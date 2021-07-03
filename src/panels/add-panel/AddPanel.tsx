@@ -213,6 +213,54 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       </div>
 
       <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Canvas</h1>
+          <p>Add canvas</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.SOURCE_IMAGE, {
+                left: (documentSize.width - 100) / 2,
+                top: (documentSize.height - 100) / 2,
+                width: 100,
+                height: 100,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <PredefinedTextIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>SOURCE IMAGE</h3>
+          <p>Add source image</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.CANVAS, {});
+              onRequestClose();
+            }
+          }}
+        >
+          <PredefinedTextIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>CANVAS</h3>
+          <p>Add canvas</p>
+        </Card>
+      </div>
+
+      <div>
         <Card
           interactive={true}
           elevation={Elevation.TWO}

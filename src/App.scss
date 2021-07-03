@@ -18,6 +18,12 @@ html {
     width: 10px;
   }
 
+  .input40 input {
+    width: 40px !important;
+  }
+  .input50 input {
+    width: 50px !important;
+  }
   .input60 input {
     width: 60px !important;
   }
@@ -35,6 +41,14 @@ html {
   }
   .input160 input {
     width: 160px !important;
+  }
+
+  // this will override above
+  .input50-force input {
+    width: 50px !important;
+  }
+  .input70-force input {
+    width: 70px !important;
   }
 
   .bp3-dark {

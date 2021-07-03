@@ -12,6 +12,8 @@ export enum ObjectType {
   VIDEO = "video",
   HTML = "html",
   SVG = "svg",
+  CANVAS = "canvas",
+  SOURCE_IMAGE = "source_image",
 }
 
 export interface IDefinition<
@@ -49,6 +51,15 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   transitions: ITransitions;
   definition: IDefinition<T>;
   events: IObjectEvent[];
+  commonProperties?: {
+    borderRadius?: {
+      common?: string;
+      tl?: string;
+      tr?: string;
+      bl?: string;
+      br?: string;
+    };
+  };
 }
 
 export interface IObjectEvent {

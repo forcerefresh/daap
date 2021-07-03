@@ -50,6 +50,11 @@ import {
   splitTextDefinition,
 } from "./split-text/split-text.definition";
 
+import {
+  canvasCopyDefaults,
+  canvasCopyDefinition,
+} from "./canvas-copy/canvas-copy.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -69,6 +74,7 @@ import "./morph/morph.effect";
 import "./magnetic/magnetic.effect";
 import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
+import "./canvas-copy/canvas-copy.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -104,6 +110,7 @@ registerEffect(morphDefinition, morphDefaults);
 registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(typewriterDefinition, typewriterDefaults);
 registerEffect(splitTextDefinition, splitTextDefaults);
+registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

@@ -1,11 +1,13 @@
 import { forEach, forIn } from "lodash-es";
 import { v4 as uuid } from "uuid";
 import {
+  CanvasProperties,
   CoverImageProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
   ImageProperties,
   InputType,
+  SourceImageProperties,
   SvgProperties,
   TextProperties,
   VideoProperties,
@@ -84,15 +86,22 @@ export function createObject(
         }),
       };
     }
-    /*case ObjectType.IMAGE: {
-      return createImageObject();
+    case ObjectType.CANVAS: {
+      return {
+        ...objectProps,
+        ...createCanvasObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
     }
-    case ObjectType.VIDEO: {
-      return createVideoObject();
+    case ObjectType.SOURCE_IMAGE: {
+      return {
+        ...objectProps,
+        ...createSourceImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
     }
-    case ObjectType.VECTOR: {
-      return createVectorObject();
-    }*/
   }
 }
 
@@ -391,6 +400,85 @@ function createCoverImageObject(
   };
 }
 
+function createSourceImageObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<SourceImageProperties>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.SOURCE_IMAGE);
+
+  return {
+    ...object,
+    hasNoPosition: true,
+    definition: {
+      id: uuid(),
+      type: ObjectType.SOURCE_IMAGE,
+      properties: {
+        id: {
+          displayName: "Identifier",
+          propertyName: "id",
+          inputType: InputType.TEXT,
+          value: "",
+          defaultValue: "",
+        },
+        visible: {
+          displayName: "Visible",
+          propertyName: "visible",
+          inputType: InputType.CHECKBOX,
+          value: true,
+          defaultValue: true,
+        },
+        placement: {
+          displayName: "Placement",
+          propertyName: "placement",
+          inputType: InputType.COVER_PLACEMENT,
+          value: initialValue?.placement || getDefaultCoveragePlacement(),
+          defaultValue: getDefaultCoveragePlacement(),
+        },
+        url: {
+          displayName: "Image url",
+          propertyName: "url",
+          inputType: InputType.IMAGE,
+          value: {
+            url: initialValue?.url || "",
+            width: 300,
+            height: 300,
+            isPlaceholder: !initialValue?.url,
+          },
+          defaultValue: {
+            url: "",
+            width: 300,
+            height: 300,
+            isPlaceholder: true,
+          },
+        },
+
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+      },
+    },
+  };
+}
+
 function createVideoObject(
   initialValue?: {
     [key: string]: any;
@@ -480,6 +568,49 @@ function createSvgObject(
           defaultValue: `<svg height="100" width="100">
   <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 </svg>`,
+        },
+      },
+    },
+  };
+}
+
+function createCanvasObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<CanvasProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.CANVAS);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.SVG,
+      properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+        source: {
+          displayName: "SVG code",
+          propertyName: "svg",
+          inputType: InputType.TEXT,
+          value: "",
+          defaultValue: "",
         },
       },
     },

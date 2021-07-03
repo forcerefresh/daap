@@ -10,6 +10,13 @@ export interface IRect {
   h: number;
 }
 
+export interface ICSSRectangle {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
 export interface ISize {
   width: number;
   height: number;
