@@ -128,6 +128,10 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
 
     if (objects.length <= 2) return;
 
+    objects.sort((a, b) => {
+      return a.top! + a.height! >= b.top! + b.height! ? 1 : -1;
+    });
+
     let minCenter = 1000000;
     let maxCenter = -1000000;
     objects.forEach((object) => {
@@ -152,6 +156,10 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
 
     if (objects.length <= 2) return;
 
+    objects.sort((a, b) => {
+      return a.left! + a.width! >= b.left! + b.width! ? 1 : -1;
+    });
+
     let minCenter = 1000000;
     let maxCenter = -1000000;
     objects.forEach((object) => {
@@ -162,6 +170,11 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
     const delta = (maxCenter - minCenter) / (objects.length - 1);
     const centerObjects = objects.slice(1, objects.length - 1);
 
+    console.log(minCenter);
+
+    console.log(maxCenter);
+
+    console.log(delta);
     centerObjects.forEach((object, idx) => {
       const objectClone = cloneDeep(object);
       objectClone.left = minCenter + delta * (idx + 1) - object.width! / 2;
