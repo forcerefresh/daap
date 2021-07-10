@@ -18,29 +18,45 @@ html {
     width: 10px;
   }
 
-  .input40 input {
+  .input40 input,
+  .input40 textarea {
     width: 40px !important;
   }
-  .input50 input {
+  .input50 input,
+  .input50 textarea {
     width: 50px !important;
   }
-  .input60 input {
+  .input60 input,
+  .input60 textarea {
     width: 60px !important;
   }
-  .input80 input {
+  .input80 input,
+  .input80 textarea {
     width: 80px !important;
   }
-  .input100 input {
+  .input100 input,
+  .input100 textarea {
     width: 100px !important;
   }
-  .input120 input {
+  .input120 input,
+  .input120 textarea {
     width: 120px !important;
   }
-  .input140 input {
+  .input140 input,
+  .input140 textarea {
     width: 140px !important;
   }
-  .input160 input {
+  .input160 input,
+  .input160 textarea {
     width: 160px !important;
+  }
+  .input200 input,
+  .input200 textarea {
+    width: 200px !important;
+  }
+  .input260 input,
+  .input260 textarea {
+    width: 260px !important;
   }
 
   // this will override above

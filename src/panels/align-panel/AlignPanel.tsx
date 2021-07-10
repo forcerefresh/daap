@@ -1,12 +1,12 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import cx from "classnames";
+import { cloneDeep } from "lodash-es";
 import { connect } from "react-redux";
-import { IStore } from "../../store/store";
 import { Button, Label } from "@blueprintjs/core";
+import { IStore } from "../../store/store";
 import css from "./AlignPanel.module.scss";
 import { IObject } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
-import { cloneDeep } from "lodash-es";
 
 interface IAlignPanelProps {
   onRequestClose: () => void;
@@ -170,11 +170,6 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
     const delta = (maxCenter - minCenter) / (objects.length - 1);
     const centerObjects = objects.slice(1, objects.length - 1);
 
-    console.log(minCenter);
-
-    console.log(maxCenter);
-
-    console.log(delta);
     centerObjects.forEach((object, idx) => {
       const objectClone = cloneDeep(object);
       objectClone.left = minCenter + delta * (idx + 1) - object.width! / 2;
@@ -230,10 +225,6 @@ const mapStateToProps = (state: IStore) => ({
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
-
-  // doJump: (jumpIdx: number) => doJump(jumpIdx),
-  // doUndo: () => doUndo(),
-  // doRedo: () => doRedo(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AlignPanel);

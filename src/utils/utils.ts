@@ -1,3 +1,5 @@
+import React from "react";
+import { RGBColor } from "react-color";
 import { ISettings } from "../store/reducers/settings";
 import { ISlide } from "../store/reducers/slides";
 
@@ -20,4 +22,14 @@ export function removeFalsy(obj: { [key: string]: any }) {
     }
   });
   return newObj;
+}
+
+export function getBgColor(c?: RGBColor): React.CSSProperties {
+  if (!c) {
+    return {};
+  }
+
+  return {
+    backgroundColor: `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a})`,
+  };
 }

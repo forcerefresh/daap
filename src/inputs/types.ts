@@ -141,6 +141,7 @@ export interface ITextAreaInput {
   propertyName: string;
   value: string;
   defaultValue: string;
+  inputProps?: { disableDebounce?: boolean };
 }
 export interface ITransformInput {
   inputType: InputType.TEXT;
@@ -276,6 +277,7 @@ export interface IParallaxInput {
 export interface IColorInput {
   inputType: InputType.COLOR;
   displayName: string;
+  helperText?: string;
   propertyName: string;
   value: RGBColor | null;
   defaultValue: RGBColor | null;

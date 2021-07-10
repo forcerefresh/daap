@@ -24,6 +24,8 @@ import { StageTools } from "../../store/reducers/stage";
 import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
 import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
 import AlignPanel from "../align-panel/AlignPanel";
+import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel";
+import SavePanel from "../save-panel/SavePanel";
 
 enum VisiblePanel {
   None = "none",
@@ -33,6 +35,8 @@ enum VisiblePanel {
   FontPreview = "font-preview",
   MediaLibrary = "media-library",
   AlignAndDistribute = "align-and-distribute",
+  ProjectsLibrary = "projects-library",
+  Save = "save",
 }
 
 const ICON_SIZE = 36;
@@ -60,7 +64,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const handleClickOutside = () => {
     setShowPanel(VisiblePanel.None);
   };
-  useOnClickOutside(sharedRef, handleClickOutside, "image-preview-popover");
+  useOnClickOutside(sharedRef, handleClickOutside, [
+    "image-preview-popover",
+    "color-picker-holder",
+  ]);
 
   return (
     <div className={css.toolbar}>
@@ -149,25 +156,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               </div>
             )}
           </Portal>
-
-          <Button
-            minimal
-            active={showPanel === VisiblePanel.AlignAndDistribute}
-            onClick={() => {
-              setShowPanel(VisiblePanel.AlignAndDistribute);
-            }}
-          >
-            <Icon icon="alignment-left" iconSize={ICON_SIZE} color={"gray"} />
-          </Button>
-          <Portal>
-            {showPanel === VisiblePanel.AlignAndDistribute && (
-              <div ref={sharedRef}>
-                <AlignPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
-                />
-              </div>
-            )}
-          </Portal>
         </div>
         <div>
           <Button
@@ -194,6 +182,26 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               color={hasRedoItem ? "gray" : "#555"}
             />
           </Button>
+        </div>
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.AlignAndDistribute}
+            onClick={() => {
+              setShowPanel(VisiblePanel.AlignAndDistribute);
+            }}
+          >
+            <Icon icon="alignment-left" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.AlignAndDistribute && (
+              <div ref={sharedRef}>
+                <AlignPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
         </div>
         <div>
           <Button
@@ -229,6 +237,49 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Settings && (
               <div ref={sharedRef}>
                 <SettingsPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.Save}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Save);
+            }}
+          >
+            <Icon icon="floppy-disk" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.Save && (
+              <div ref={sharedRef}>
+                <SavePanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.ProjectsLibrary}
+            onClick={() => {
+              setShowPanel(VisiblePanel.ProjectsLibrary);
+            }}
+          >
+            <Icon icon="projects" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+
+          <Portal>
+            {showPanel === VisiblePanel.ProjectsLibrary && (
+              <div ref={sharedRef}>
+                <ProjectsLibraryPanel
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>

@@ -1,13 +1,13 @@
 import React, { RefObject, useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash-es";
 import cx from "classnames";
-import { FormGroup, Popover } from "@blueprintjs/core";
+import { Button, FormGroup, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "../types";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
-  const { value, defaultValue, displayName, onChange } = props;
+  const { value, defaultValue, displayName, helperText, onChange } = props;
 
   const colorFromProp = (value || defaultValue) as RGBColor;
 
@@ -64,8 +64,18 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   });
 
   return (
-    <FormGroup label={displayName} labelFor="color-input" inline>
-      <Popover position="top" isOpen={state.displayColorPicker}>
+    <FormGroup
+      label={displayName}
+      labelFor="color-input"
+      inline
+      helperText={!!helperText && helperText}
+    >
+      <Popover
+        position="top"
+        isOpen={state.displayColorPicker}
+        portalClassName="color-picker-popover"
+        minimal
+      >
         <div
           id="color-input"
           className={css.swatch}
@@ -76,8 +86,13 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         </div>
 
         <div className={cx("color-picker-holder", css.popover)}>
-          <div className={css.cover} onClick={handleClose}>
-            Close
+          <div className={css.buttonHolder}>
+            <Button minimal icon="tick" small onClick={handleClose}>
+              Apply
+            </Button>
+            <Button minimal icon="cross" small onClick={handleClose}>
+              Cancel
+            </Button>
           </div>
           <div>
             <SketchPicker color={state.color} onChange={handleChange} />

@@ -7,6 +7,9 @@ import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
 
 import css from "./StagePanel.module.scss";
+import { Header1 } from "./preview/Header1/Header1";
+import { RGBColor } from "react-color";
+import { Body1 } from "./preview/Body1/Body1";
 
 export function calculateObjectSize(
   object: IObject,
@@ -142,23 +145,42 @@ export function getStageSize(breakpointConfig: BreakpointConfiguration): ISize {
   };
 }
 
-export function getPreviewLayout(stageZoom: number) {
+export function getPreviewLayout(
+  stageZoom: number,
+  left: number,
+  width: number,
+  {
+    itemsColor,
+    transparentHeader,
+  }: { itemsColor: RGBColor; transparentHeader: boolean }
+) {
   const header = {
-    height: 40 * stageZoom,
-    component: getPreviewHeaderMock({
-      margin: 5 * stageZoom + "px",
-      borderRadius: 5 * stageZoom + "px",
-      height: 30 * stageZoom + "px",
-    }),
+    height: transparentHeader ? 0 : 40 * stageZoom,
+    component: getPreviewHeaderMock(
+      {
+        left: left * stageZoom + "px",
+        width: width * stageZoom + "px",
+        margin: 5 * stageZoom + "px",
+        borderRadius: 5 * stageZoom + "px",
+        height: 30 * stageZoom + "px",
+      },
+      itemsColor,
+      transparentHeader
+    ),
   };
 
   const body = {
     height: 710 * stageZoom,
-    component: getPreviewBodyMock({
-      margin: 5 * stageZoom + "px",
-      borderRadius: 5 * stageZoom + "px",
-      height: 700 * stageZoom + "px",
-    }),
+    component: getPreviewBodyMock(
+      {
+        left: left * stageZoom + "px",
+        width: width * stageZoom + "px",
+        margin: 5 * stageZoom + "px",
+        borderRadius: 5 * stageZoom + "px",
+        height: 800 * stageZoom + "px",
+      },
+      itemsColor
+    ),
   };
 
   return {
@@ -167,10 +189,28 @@ export function getPreviewLayout(stageZoom: number) {
   };
 }
 
-export function getPreviewHeaderMock(style: React.CSSProperties) {
-  return <div className={cx(css.layoutBox)} style={style}></div>;
+export function getPreviewHeaderMock(
+  style: React.CSSProperties,
+  itemsColor: RGBColor,
+  transparentHeader: boolean
+) {
+  return (
+    <div
+      className={cx(transparentHeader ? css.headerLayoutBox : css.layoutBox)}
+      style={style}
+    >
+      <Header1 itemsColor={itemsColor} />
+    </div>
+  );
 }
 
-export function getPreviewBodyMock(style: React.CSSProperties) {
-  return <div className={cx(css.layoutBox)} style={style}></div>;
+export function getPreviewBodyMock(
+  style: React.CSSProperties,
+  itemsColor: RGBColor
+) {
+  return (
+    <div className={cx(css.layoutBox)} style={style}>
+      <Body1 itemsColor={itemsColor} />
+    </div>
+  );
 }

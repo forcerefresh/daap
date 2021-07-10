@@ -11,7 +11,6 @@ import {
   createObject,
   getDefaultSlideTransition,
   getDefaultTransitionsForLayer,
-  getDefaultTransitionsForObject,
 } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocumentSize } from "../reducers/document";
@@ -24,10 +23,8 @@ import {
 import { TextProperties } from "../../inputs/types";
 import { getTextHtml } from "../../export/export-html";
 import { load } from "webfontloader";
-import {
-  BreakpointConfiguration,
-  BreakpointsConfiguration,
-} from "../reducers/settings";
+import { BreakpointsConfiguration, ISettings } from "../reducers/settings";
+import { IMeta } from "../reducers/meta";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -864,6 +861,25 @@ export function setStagePreview(
   };
 }
 
+// **
+export const UPDATE_PROJECT_SETTINGS = "Update project settings";
+
+export interface UpdateProjectSettingsAction extends IUndoableAction<true> {
+  type: typeof UPDATE_PROJECT_SETTINGS;
+  payload: Partial<ISettings>;
+}
+
+export function updateProjectSettings(
+  settings: Partial<ISettings>
+): UpdateProjectSettingsAction {
+  return {
+    type: UPDATE_PROJECT_SETTINGS,
+    payload: settings,
+    isUndoable: true,
+  };
+}
+
+//** */
 export const UPDATE_SLIDE_DURATION = "Update slide duration";
 
 export interface UpdateSlideDurationAction extends IUndoableAction<true> {
@@ -1040,6 +1056,23 @@ export function setExternalFontLoaded(
 }
 
 // ***
+
+export const UPDATE_PROJECT_META = "Update project meta";
+
+export interface UpdateProjectMetaAction extends IUndoableAction<false> {
+  type: typeof UPDATE_PROJECT_META;
+  payload: IMeta;
+}
+
+export function updateProjectMeta(meta: IMeta): UpdateProjectMetaAction {
+  return {
+    type: UPDATE_PROJECT_META,
+    payload: meta,
+    isUndoable: false,
+  };
+}
+
+// ***
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -1076,6 +1109,7 @@ export type ActionTypes =
   | ActivateObjectAction
 
   //settings
+  | UpdateProjectSettingsAction
   | UpdateSlideDurationAction
   | UpdateSlideBreakpointsAction
 
@@ -1091,4 +1125,7 @@ export type ActionTypes =
   | SetStageToolAction
 
   //external fonts
-  | ExternalFontLoadedAction;
+  | ExternalFontLoadedAction
+
+  // project metadata
+  | UpdateProjectMetaAction;

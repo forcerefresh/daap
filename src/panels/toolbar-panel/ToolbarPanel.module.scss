@@ -2,6 +2,7 @@
   text-align: center;
   padding: 8px 0px;
   color: gray;
+  height: 100vh;
 
   :global {
     *,
@@ -21,6 +22,14 @@
     }
   }
 
+  .buttonGroupsHolder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .buttonGroupsHolder > div:last-of-type {
+    margin-top: auto;
+  }
   .buttonGroupsHolder > * + * {
     margin-top: 0px;
   }

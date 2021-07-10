@@ -6,7 +6,7 @@ import { ITextAreaInput, IUpdateInput } from "../types";
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onInput = noop } = props;
+  const { displayName, value, onInput = noop, inputProps = {} } = props;
 
   const throttledOnChange = useCallback(
     debounce((value: any) => onInput(value), 500),
@@ -21,6 +21,14 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
     }
   }, [value]);
 
+  const handleChange = (value: any) => {
+    if (inputProps.disableDebounce) {
+      onInput(value);
+    } else {
+      throttledOnChange(value);
+    }
+  };
+
   return (
     <FormGroup label={displayName} labelFor="textarea-input">
       <TextArea
@@ -31,11 +39,11 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
         value={localValue}
         onChange={(event: any) => {
           setLocalValue(event.target.value);
-          throttledOnChange(event.target.value);
+          handleChange(event.target.value);
         }}
         onInput={(event: any) => {
           setLocalValue(event.target.value);
-          throttledOnChange(event.target.value);
+          handleChange(event.target.value);
         }}
       />
     </FormGroup>

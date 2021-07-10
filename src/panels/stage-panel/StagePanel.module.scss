@@ -28,7 +28,7 @@
 .stage {
   position: absolute;
   //border: 1px dotted #51c35a;
-  background: rgb(30, 30, 30);
+  //background: rgb(30, 30, 30);
 }
 
 .text {
@@ -138,6 +138,12 @@
 
 .layoutBox {
   position: relative;
-  background: #565656;
-  border-radius: 5px;
+  //background: #565656;
+  //border-radius: 5px;
+}
+
+.headerLayoutBox {
+  position: absolute;
+  top: 0px;
+  z-index: 100;
 }

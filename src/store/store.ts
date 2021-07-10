@@ -17,6 +17,7 @@ import initialState from "./initial-state.json";
 import { IDocument, document } from "./reducers/document";
 import { IGlobals, globals } from "./reducers/globals";
 import { IFonts, fonts } from "./reducers/fonts";
+import { IMeta, meta } from "./reducers/meta";
 
 export interface IStore {
   project: {
@@ -31,6 +32,7 @@ export interface IStore {
       next: any[];
     };
   };
+  meta: IMeta;
   stage: IStage;
   globals: IGlobals;
   fonts: IFonts;
@@ -60,6 +62,7 @@ const project = diff(
 ) as any;
 
 const rootReducer = combineReducers({
+  meta,
   project,
   stage,
   globals,
@@ -75,6 +78,6 @@ const logger = (store: any) => (next: any) => (action: any) => {
 
 export const store = createStore(
   rootReducer,
-  initialState as unknown as IStore,
+  //initialState as unknown as IStore,
   composeWithDevTools(applyMiddleware(logger, thunk))
 );

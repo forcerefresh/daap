@@ -18,7 +18,6 @@ import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, uniq } from "lodash-es";
-import { removeFalsy } from "../../utils/utils";
 
 interface ImageItem {
   url: string;
@@ -141,7 +140,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     setSelectedImage(-1);
     setSearchValue("");
     setSelectedTags(
-      removeFalsy({ ...selectedTags, [tag]: !selectedTags[tag] })
+      { [tag]: !selectedTags[tag] }
+      //removeFalsy({ ...selectedTags, [tag]: !selectedTags[tag] })
     );
     setImages([]);
   };

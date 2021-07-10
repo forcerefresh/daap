@@ -16,3 +16,14 @@
 .popover {
   height: 300px;
 }
+
+:global {
+  .color-picker-popover .bp3-popover-content {
+    background: rgba(0, 0, 0, 0) !important;
+  }
+}
+
+.buttonHolder {
+  display: flex;
+  flex-direction: row-reverse;
+}

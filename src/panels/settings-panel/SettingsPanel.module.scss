@@ -27,10 +27,10 @@
       display: flex;
       flex-direction: column;
       > div:last-child {
-        order: 1;
+        //order: 1;
       }
       > div:first-child {
-        order: 21;
+        //order: 21;
       }
     }
 

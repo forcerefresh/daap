@@ -14,7 +14,7 @@ import {
 } from "@blueprintjs/core";
 import css from "./Breakpoint.module.scss";
 
-import { getNumericFiled } from "../../../inputs/input-utils";
+import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
 import { getResponsiveIcon } from "../../../utils/icons/responsive-icons-factory";
 import { BreakpointConfiguration } from "../../../store/reducers/settings";
 import { BreakpointPreview } from "../breakpoint-preview/BreakpointPreview";
@@ -39,6 +39,46 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
           <h3>{breakpointConfiguration.name}</h3>
         </div>
         <div>
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Horizontal fit</Text>
+            <div>
+              {getSelectField(
+                "",
+                breakpointConfiguration.normal.horizontalFitTo as any,
+                [
+                  { label: "Viewport", value: "viewport" },
+                  { label: "Slider", value: "slider" },
+                  { label: "Fit to parent", value: "fitToParent" },
+                  { label: "Custom", value: "custom" },
+                ],
+                (value: number) => {
+                  set(breakpointConfiguration, "normal.horizontalFitTo", value);
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+          </div>
+
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Vertical fit</Text>
+            <div>
+              {getSelectField(
+                "",
+                breakpointConfiguration.normal.verticalFitTo as any,
+                [
+                  { label: "Viewport", value: "viewport" },
+                  { label: "Keep aspect ratio", value: "keepAspectRation" },
+                  { label: "Fit to parent", value: "fitToParent" },
+                  { label: "Custom", value: "custom" },
+                ],
+                (value: number) => {
+                  set(breakpointConfiguration, "normal.horizontalFitTo", value);
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+          </div>
+
           <div className={css.inlineRow}>
             <Text className={css.inlineRowLabel}>Page</Text>
             <div className="input60 labelOneLetter">

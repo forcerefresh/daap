@@ -18,10 +18,6 @@ export function getUnitNumericFiled<T>(
     inputProps,
   };
 
-  /*const onChange = (value: any) => {
-    onChange(value);
-  };*/
-
   return getInputForm(InputType.UNITS_NUMBER, objectDef, onChange);
 }
 
@@ -46,6 +42,25 @@ export function getNumericFiled<T>(
   };
 
   return getInputForm(InputType.NUMBER, objectDef, noop, onInput);
+}
+
+export function getColorField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.COLOR,
+    value: value,
+    defaultValue: 0,
+    inputProps,
+  };
+
+  return getInputForm(InputType.COLOR, objectDef, onChange);
 }
 
 export function getSelectField<T>(
@@ -89,7 +104,7 @@ export function getTextArea<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabledDebounce?: boolean } = {}
 ) {
   const objectDef = {
     displayName: label,
@@ -101,4 +116,23 @@ export function getTextArea<T>(
   };
 
   return getInputForm(InputType.TEXTAREA, objectDef, onChange);
+}
+
+export function getTextField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.TEXT,
+    value: value,
+    defaultValue: "",
+    inputProps,
+  };
+
+  return getInputForm(InputType.TEXT, objectDef, onChange);
 }

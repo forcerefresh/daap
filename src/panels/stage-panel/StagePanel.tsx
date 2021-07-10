@@ -48,6 +48,7 @@ import {
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
+import { getBgColor } from "../../utils/utils";
 
 interface ISize {
   width: number;
@@ -83,6 +84,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     stageToolObjectType,
     _resetStageTool,
     breakpointConfig,
+    settings,
   } = props;
 
   const stageSize = breakpointConfig?.normal.slide!;
@@ -750,13 +752,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   };
 
-  const previewLayout = getPreviewLayout(stageZoom);
+  const previewLayout = getPreviewLayout(
+    stageZoom,
+    pageColumnWidth,
+    stageSize.width,
+    {
+      itemsColor: settings.layoutBoxBackgroundColor,
+      transparentHeader: settings.transparentHeader,
+    }
+  );
 
   const scrollableDivStyle: React.CSSProperties = {
     position: "relative",
     left: -pageColumnWidth * stageZoom + "px",
     top: isPreview ? -previewLayout.header.height : 0 + "px",
-    width: parseInt(pageBorderStyle.width, 10) + 14 + "px",
+    width: parseInt(pageBorderStyle.width, 10) + (isPreview ? 14 : 0) + "px",
     height:
       parseInt(pageBorderStyle.height, 10) +
       (isPreview ? previewLayout.header.height : 0) +
@@ -764,12 +774,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     overflowX: isPreview ? "hidden" : "visible",
     overflowY: isPreview ? "scroll" : "visible",
     border: isPreview ? "1px solid #545454" : "1px solid transparent",
+    ...getBgColor(settings.pageBackgroundColor),
   };
 
   const scrollableDivInnerStyle: React.CSSProperties = {
     position: "relative",
     left: pageColumnWidth * stageZoom + "px",
     height: stageSize.height * stageZoom + "px",
+  };
+
+  const scrollableDivInnerSlideBackgroundStyle: React.CSSProperties = {
+    position: "absolute",
+    left: -pageColumnWidth * stageZoom + "px",
+    height: stageSize.height * stageZoom + "px",
+    width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
+    ...getBgColor(settings.sliderBackgroundColor),
   };
 
   return (
@@ -889,6 +908,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <div className="preview-scrollable-holder" style={scrollableDivStyle}>
           {isPreview && previewLayout.header.component}
           <div style={scrollableDivInnerStyle}>
+            <div style={scrollableDivInnerSlideBackgroundStyle}></div>
+
             <div style={canvasStyle} className={css.canvas}>
               {isPreview && (
                 <AppPlayer
@@ -1003,6 +1024,7 @@ const mapStateToProps = (state: IStore) => {
     slide = slides.slideById[selection.activeSlideId];
   }
 
+  // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpointsConfiguration.breakpointsConfiguration.find(
       (breakpointConfig) => breakpointConfig.icon === "laptop"
@@ -1024,6 +1046,7 @@ const mapStateToProps = (state: IStore) => {
     stageTool: state.stage.stageTool.tool,
     stageToolObjectType: state.stage.stageTool.objectType,
     breakpointConfig,
+    settings,
   };
 };
 

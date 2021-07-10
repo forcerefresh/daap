@@ -16,10 +16,15 @@ import {
   Text,
 } from "@blueprintjs/core";
 import {
+  updateProjectSettings,
   updateSlideBreakpoints,
   updateSlideDuration,
 } from "../../store/actions/actions";
-import { getNumericFiled } from "../../inputs/input-utils";
+import {
+  getCheckboxField,
+  getColorField,
+  getNumericFiled,
+} from "../../inputs/input-utils";
 
 import settingsCss from "../settings-panel/SettingsPanel.module.scss";
 import { Breakpoint } from "./breakpoint-component/Breakpoint";
@@ -27,10 +32,12 @@ import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
 import {
   BreakpointConfiguration,
   BreakpointsConfiguration,
+  ISettings,
 } from "../../store/reducers/settings";
 
 enum ProjectPanelSections {
-  Main = "Main",
+  Slider = "Slider",
+  Preview = "Preview",
   Breakpoints = "Breakpoints",
 }
 
@@ -44,16 +51,18 @@ export type IProjectPanelMergedProps = typeof mapDispatchToProps &
 
 const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
   const {
-    slideDuration,
+    settings,
     breakpointConfiguration,
     _updateSlideDuration,
     _updateSlideBreakpoints,
+    _updateProjectSettings,
   } = props;
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
   }>({
-    [ProjectPanelSections.Main]: true,
+    [ProjectPanelSections.Slider]: true,
+    [ProjectPanelSections.Preview]: true,
     [ProjectPanelSections.Breakpoints]: true,
   });
 
@@ -87,35 +96,104 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
       <section>
         <div
           className={settingsCss.sectionHeader}
-          onClick={() => toggleSection(ProjectPanelSections.Main)}
+          onClick={() => toggleSection(ProjectPanelSections.Slider)}
         >
           <Button
             minimal
             small={true}
             icon={
-              visibleSectionIds[ProjectPanelSections.Main]
+              visibleSectionIds[ProjectPanelSections.Slider]
                 ? "caret-down"
                 : "caret-right"
             }
           ></Button>
-          Main
+          Slider
         </div>
-        {visibleSectionIds[ProjectPanelSections.Main] && (
+        {visibleSectionIds[ProjectPanelSections.Slider] && (
+          <div className={settingsCss.panel}>
+            <FormGroup>
+              <div className="input60">
+                {getNumericFiled(
+                  "Slide duration",
+                  settings.slideDuration,
+                  (value: number) => {
+                    _updateSlideDuration(value);
+                  }
+                )}
+              </div>
+              <div className="input60">
+                {getColorField(
+                  "Slider background color",
+                  settings.sliderBackgroundColor,
+                  (sliderBackgroundColor: any) => {
+                    _updateProjectSettings({ sliderBackgroundColor });
+                  },
+                  ""
+                )}
+              </div>
+            </FormGroup>
+          </div>
+        )}
+      </section>
+
+      <section>
+        <div
+          className={settingsCss.sectionHeader}
+          onClick={() => toggleSection(ProjectPanelSections.Preview)}
+        >
+          <Button
+            minimal
+            small={true}
+            icon={
+              visibleSectionIds[ProjectPanelSections.Preview]
+                ? "caret-down"
+                : "caret-right"
+            }
+          ></Button>
+          Preview
+        </div>
+        {visibleSectionIds[ProjectPanelSections.Preview] && (
           <div className={settingsCss.panel}>
             {/* helperText="Choose app layout which make app easier for use, improves
               performance, specificity specificity of the projects."
               label="Layout type"
               labelFor="layoutType" */}
             <FormGroup
+
             //requiredLabel={true}
             >
               <div className="input60">
-                {getNumericFiled(
-                  "Slide duration",
-                  slideDuration,
-                  (value: number) => {
-                    _updateSlideDuration(value);
-                  }
+                {getColorField(
+                  "Page background color",
+                  settings.pageBackgroundColor,
+                  (pageBackgroundColor: any) => {
+                    _updateProjectSettings({ pageBackgroundColor });
+                  },
+
+                  "" //"NOTE: Page color is use used only for preview in the app"
+                )}
+              </div>
+
+              <div className="input60">
+                {getColorField(
+                  "Layout box color",
+                  settings.layoutBoxBackgroundColor,
+                  (layoutBoxBackgroundColor: any) => {
+                    _updateProjectSettings({ layoutBoxBackgroundColor });
+                  },
+
+                  ""
+                )}
+              </div>
+
+              <div className="input60">
+                {getCheckboxField(
+                  "Transparent header",
+                  settings.transparentHeader,
+                  (transparentHeader: any) => {
+                    _updateProjectSettings({ transparentHeader });
+                  },
+                  ""
                 )}
               </div>
             </FormGroup>
@@ -132,6 +210,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
           </div>
         )}
       </section>
+
       <section>
         <div
           className={settingsCss.sectionHeader}
@@ -180,12 +259,14 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => ({
-  slideDuration: state.project.settings.slideDuration,
+  settings: state.project.settings,
   breakpointConfiguration: state.project.settings.breakpointsConfiguration,
 });
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: number) => updateSlideDuration(newValue),
+  _updateProjectSettings: (newValue: Partial<ISettings>) =>
+    updateProjectSettings(newValue),
   _updateSlideBreakpoints: (slideBreakpoints: BreakpointsConfiguration) =>
     updateSlideBreakpoints(slideBreakpoints),
 };

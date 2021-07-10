@@ -6,6 +6,23 @@ export const IntegrationContext = React.createContext({
     requestMedia: (type: "image" | "video"): Promise<{ url: string }> =>
       Promise.resolve({ url: "" }),
   }),
+
+  useAPIHook: () => ({
+    getProjects: (from: number, search: string): Promise<any> =>
+      Promise.resolve({}), // todo: add interface for api response
+    saveProject: ({
+      id,
+      name,
+      description,
+      project,
+    }: {
+      id?: number;
+      name: string;
+      description?: string;
+      project: any;
+    }): Promise<{ id: number; name: string; description: string }> =>
+      Promise.resolve({ id: 1, name: "", description: "" }), // todo: add interface for api response
+  }),
 });
 
 // *** PUBLIC INTEGRATION FACTORY FUNCTIONS ***
@@ -29,12 +46,23 @@ function useMediaHookFactory() {
   }
 }
 
+function useAPIHookFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/wp-use-api-hook").useAPIHook;
+  } else {
+    return require("./integration/hooks/use-api-hook").useAPIHook;
+  }
+}
+
 export const IntegrationContextProvider = (
   props: React.PropsWithChildren<React.ReactNode>
 ) => {
   return (
     <IntegrationContext.Provider
-      value={{ useMediaHook: useMediaHookFactory() }}
+      value={{
+        useMediaHook: useMediaHookFactory(),
+        useAPIHook: useAPIHookFactory(),
+      }}
     >
       {props.children}
     </IntegrationContext.Provider>

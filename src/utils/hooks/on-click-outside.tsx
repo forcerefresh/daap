@@ -1,3 +1,4 @@
+import { isArray } from "lodash-es";
 import { RefObject, useEffect } from "react";
 
 // Hook
@@ -5,8 +6,14 @@ type Event = MouseEvent | TouchEvent;
 function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   handler: (event: Event) => void,
-  skipClassName?: string
+  skipClassName?: string | string[]
 ) {
+  const skipClassNames = isArray(skipClassName)
+    ? skipClassName
+    : skipClassName
+    ? [skipClassName]
+    : undefined;
+
   useEffect(() => {
     const listener = (event: Event) => {
       const el = ref?.current;
@@ -15,15 +22,17 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      if (
-        skipClassName &&
-        (event?.target as HTMLElement)?.closest("." + skipClassName)
-      ) {
-        return;
+      if (skipClassNames) {
+        const foundSkip = skipClassNames.find((skipClassName) => {
+          return !!(event?.target as HTMLElement)?.closest("." + skipClassName);
+        });
+
+        if (foundSkip) return;
       }
 
       handler(event);
     };
+
     document.addEventListener(`mousedown`, listener);
     document.addEventListener(`touchstart`, listener);
     return () => {
