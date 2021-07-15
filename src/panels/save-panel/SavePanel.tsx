@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
-import { cloneDeep, noop, round } from "lodash-es";
+import { cloneDeep, noop, omit, round } from "lodash-es";
 import { connect } from "react-redux";
 import { Button, Label, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
@@ -16,6 +16,7 @@ import {
 import { IMeta } from "../../store/reducers/meta";
 import { generatePlayerData } from "../../export/export-html";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 const THUMB_WIDTH = 200;
 
@@ -36,10 +37,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     objects,
     breakpointConfig,
     _updateProjectMeta,
+    onRequestClose,
   } = props;
 
   // spinner
-  const [showSpinner, setShowSpinner] = useState(false);
+  //const [showSpinner, setShowSpinner] = useState(false);
 
   const [html, setHtml] = useState("");
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
@@ -73,17 +75,45 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { saveProject } = globalContext.useAPIHook();
   const onClickSave = (duplicate = false) => {
-    setShowSpinner(true);
+    _updateProjectMeta({ inSaving: true });
 
     saveProject({
       id: duplicate ? undefined : localMeta.id,
       name: localMeta.name!,
       description: localMeta.description!,
       project,
-    }).then(({ id, name, description }) => {
-      _updateProjectMeta({ id, name, description });
-      setShowSpinner(false);
-    });
+      preview: {
+        width: thumbSize.width,
+        height: thumbSize.height,
+        scale: thumbSize.scale,
+        html: html,
+      },
+    })
+      .then(({ id, name, description, slides, created, modified }) => {
+        console.log({ id, name, description });
+        _updateProjectMeta({
+          id,
+          name,
+          description,
+          slides,
+          created,
+          modified,
+          inSaving: false,
+        });
+        onRequestClose();
+        AppToaster.show({
+          intent: "success",
+          message: "Slider is successfully saved.",
+        });
+      })
+      .catch(() => {
+        _updateProjectMeta({ inSaving: false });
+        onRequestClose();
+        AppToaster.show({
+          intent: "danger",
+          message: "Something went wrong. Slider is not saved.",
+        });
+      });
   };
 
   return (
@@ -108,7 +138,13 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       </div>
       <div className={css.panelHeader}>
         <div>SAVE PANEL</div>
-        <div>{showSpinner && <Spinner size={16} />}</div>
+        <div className={css.saving}>
+          {meta.inSaving && (
+            <>
+              <Spinner size={16} /> Saving...
+            </>
+          )}
+        </div>
       </div>
       <div className={css.saveHolder}>
         {/*<Label>Align</Label>*/}
@@ -136,7 +172,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         </div>
         <div className={css.actionRow}>
           <Button
-            disabled={showSpinner}
+            disabled={meta.inSaving}
             intent="primary"
             icon="floppy-disk"
             onClick={() => onClickSave()}
@@ -144,10 +180,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             Save
           </Button>
           <Button
-            disabled={showSpinner}
+            disabled={meta.inSaving}
             intent="primary"
             icon="floppy-disk"
+            minimal
             onClick={() => onClickSave(true)}
+            style={{ marginLeft: "40px" }}
           >
             Save as new slider
           </Button>
@@ -165,7 +203,7 @@ const mapStateToProps = (state: IStore) => {
     );
 
   return {
-    project: state.project,
+    project: omit({ ...state.project }, "diff"),
     meta: state.meta,
     slides: state.project.slides,
     layers: state.project.layers,

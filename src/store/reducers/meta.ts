@@ -4,8 +4,10 @@ export interface IMeta {
   id?: number;
   name?: string;
   description?: string;
+  slides?: number;
   created?: string;
-  updated?: string;
+  modified?: string;
+  inSaving?: boolean;
 }
 
 export function meta(state: IMeta = {}, action: ActionTypes) {

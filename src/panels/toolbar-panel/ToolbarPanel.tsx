@@ -67,6 +67,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
+    "bp3-overlay-scroll-container", // alert
   ]);
 
   return (

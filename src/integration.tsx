@@ -8,20 +8,53 @@ export const IntegrationContext = React.createContext({
   }),
 
   useAPIHook: () => ({
+    /* returns project */
+    getProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    /* returns projects */
     getProjects: (from: number, search: string): Promise<any> =>
       Promise.resolve({}), // todo: add interface for api response
+
+    /* delete project */
+    deleteProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    /* save project */
     saveProject: ({
       id,
       name,
       description,
       project,
+      preview,
     }: {
       id?: number;
       name: string;
       description?: string;
+      slides?: number;
+      created?: string;
+      modified?: string;
       project: any;
-    }): Promise<{ id: number; name: string; description: string }> =>
-      Promise.resolve({ id: 1, name: "", description: "" }), // todo: add interface for api response
+      preview: {
+        width: number;
+        height: number;
+        scale: number;
+        html: string;
+      };
+    }): Promise<{
+      id: number;
+      name: string;
+      description: string;
+      slides: number;
+      created: string;
+      modified: string;
+    }> =>
+      Promise.resolve({
+        id: 1,
+        name: "",
+        description: "",
+        slides: 0,
+        created: "",
+        modified: "",
+      }), // todo: add interface for api response
   }),
 });
 

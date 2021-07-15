@@ -2,6 +2,7 @@ import { cloneDeep } from "lodash-es";
 import { RGBColor } from "react-color";
 import {
   ActionTypes,
+  OPEN_PROJECT,
   UPDATE_PROJECT_SETTINGS,
   UPDATE_SLIDE_BREAKPOINTS,
   UPDATE_SLIDE_DURATION,
@@ -147,7 +148,11 @@ export function settings(
         breakpointsConfiguration: cloneDeep(action.payload),
       };
     }
-
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.settings,
+      };
+    }
     default:
       return state;
   }

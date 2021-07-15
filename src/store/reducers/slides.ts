@@ -5,6 +5,7 @@ import {
   ADD_SLIDE,
   DELETE_LAYERS,
   DELETE_SLIDE,
+  OPEN_PROJECT,
   UPDATE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
@@ -108,6 +109,11 @@ export function slides(
           },
         },
       });
+    }
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.slides,
+      };
     }
     default:
       return state;

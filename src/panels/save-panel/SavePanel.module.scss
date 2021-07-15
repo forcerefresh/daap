@@ -1,10 +1,10 @@
 .savePanel {
   z-index: 120;
   position: absolute;
-  top: 350px;
+  top: 0px;
   left: 68px;
   width: 600px;
-  height: 340px;
+  height: 100vh;
 
   background: #252526;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
@@ -33,6 +33,18 @@
 
     > *:first-child {
       flex-grow: 1;
+    }
+
+    .saving {
+      width: auto;
+      display: flex;
+      column-gap: 5px;
+
+      :global {
+        .bp3-spinner {
+          display: inline-flex;
+        }
+      }
     }
   }
 

@@ -15,6 +15,7 @@ import {
   SELECT_OBJECTS,
   ADD_OBJECTS_TO_SELECTION,
   REMOVE_OBJECTS_FROM_SELECTION,
+  OPEN_PROJECT,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { uniq } from "lodash-es";
@@ -201,6 +202,11 @@ export function selection(
             selIds.filter((id) => deletedObjectIds.indexOf(id) === -1),
         },
       });
+    }
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.selection,
+      };
     }
     default:
       return state;

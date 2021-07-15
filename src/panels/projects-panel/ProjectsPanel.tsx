@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, uniq } from "lodash-es";
+import { debounce, remove, round, uniq } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
+  Alert,
   Button,
   Checkbox,
   InputGroup,
+  Intent,
   Popover,
   PopoverInteractionKind,
   Position,
@@ -15,11 +17,18 @@ import {
   Tag,
   Text,
 } from "@blueprintjs/core";
-import { addNewObject } from "../../store/actions/actions";
+import {
+  addNewObject,
+  doClearHistory,
+  openProject,
+  updateProjectMeta,
+} from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 
 import css from "./ProjectsPanel.module.scss";
 import { IntegrationContext } from "../../integration";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { IMeta } from "../../store/reducers/meta";
 
 interface ImageItem {
   url: string;
@@ -45,38 +54,27 @@ export type IProjectsMergedProps = typeof mapDispatchToProps &
   IProjectsPanelProps;
 
 const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
-  const { activeLayerId, _addNewObject, onRequestClose } = props;
+  const { onRequestClose, _updateProjectMeta, _openProject, _doClearHistory } =
+    props;
 
-  const [projects, setProjects] = useState<ImageData[]>([]);
+  const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [selectedResolution, setSelectedResolution] =
-    useState<string>("medium");
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteLoading, setDeleteLoading] = useState(false);
 
   const badImages = React.useRef<number[]>([]);
 
   const globalContext = useContext(IntegrationContext);
-  const { getProjects } = globalContext.useAPIHook();
-
-  /*const onClickSave = (duplicate = false) => {
-    setShowSpinner(true);
-    saveProject({
-      id: duplicate ? undefined : localMeta.id,
-      name: localMeta.name!,
-      description: localMeta.description!,
-      project,
-    }).then(({ id, name, description }) => {
-      _updateProjectMeta({ id, name, description });
-      setShowSpinner(false);
-    });
-  };*/
+  const { getProject, getProjects, deleteProject } = globalContext.useAPIHook();
 
   const fetchData = (from = -1) => {
     setLoading(true);
 
     from = from === -1 ? projects?.length || 0 : from;
 
+    console.log(from);
     getProjects(from, searchValue).then(
       (result) => {
         console.log(result);
@@ -105,67 +103,64 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const tags = [
-    "Abstract",
-    "Architecture",
-    "Background",
-    "Baking",
-    "Texture",
-    "Business",
-    "Duotone",
-    "Fashion",
-    "Food",
-    "Drink",
-    "Holidays",
-    "Letters",
-    "Love",
-    "Nature",
-    "Animals",
-    "People",
-    "Roads",
-    "Sports",
-    "Technology",
-    "Transportation",
-  ];
-
-  const [selectedTags, setSelectedTags] = useState<{ [key: string]: boolean }>(
-    {}
-  );
-
-  const toggleTag = (tag: string) => {
-    setSelectedImage(-1);
-    setSearchValue("");
-    setSelectedTags(
-      { [tag]: !selectedTags[tag] }
-      //removeFalsy({ ...selectedTags, [tag]: !selectedTags[tag] })
-    );
-    setProjects([]);
+  const deleteIdRef = useRef(-1);
+  const onDeleteProject = (id: number) => {
+    setIsOpen(true);
+    deleteIdRef.current = id;
   };
 
-  useEffect(() => {
-    console.log({ ...selectedTags });
-    debounceFetchData(0);
-  }, [selectedTags]);
+  const deleteConfirm = () => {
+    setDeleteLoading(true);
 
-  const [selectedImage, setSelectedImage] = useState<number>(-1);
+    console.log(deleteIdRef.current);
+    deleteProject(deleteIdRef.current).then(({ id }: { id: number }) => {
+      const newProjects = projects.concat();
+      remove(newProjects, (p: any) => {
+        return p.id === id;
+      });
+      setProjects(newProjects);
 
-  const qwe = (image: any, idx: number) => {
-    if (!image.images.small) {
-      badImages.current.push(idx);
-      //console.log(image.title);
-    }
+      if (newProjects.length === 0) {
+        setHasMore(false);
+      }
 
-    return null;
+      setIsOpen(false);
+      setDeleteLoading(false);
+      AppToaster.show({
+        intent: "success",
+        message: "Slider is successfully deleted.",
+      });
+    });
   };
 
-  console.log(process.env);
+  const deleteCancel = () => {
+    setIsOpen(false);
+    setDeleteLoading(false);
+  };
+
+  const onOpenProject = (id: number) => {
+    getProject(id).then((response: any) => {
+      const meta: IMeta = {
+        id: response.project.id,
+        name: response.project.name,
+        description: response.project.description,
+        modified: response.project.modified,
+        created: response.project.created,
+      };
+      _updateProjectMeta(meta);
+
+      const project = response.project.project;
+      delete project.diff;
+
+      _openProject(project);
+
+      _doClearHistory();
+
+      onRequestClose();
+    });
+  };
   return (
-    <div
-      className={css.projectsPanel}
-      onClick={() => {
-        setSelectedImage(-1);
-      }}
-    >
+    <div className={css.projectsPanel}>
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -195,6 +190,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       </div>
 
       <div className={cx(css.headerSection, css.tableHeader)}>
+        <div className={css.id}>ID</div>
         <div className={css.thumb}>Thumbnail</div>
         <div className={css.name}>Name &amp; Description</div>
         <div className={css.slides}>Slides</div>
@@ -203,13 +199,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         <div className={css.action}>Action</div>
       </div>
 
-      <div
-        className={css.mainSection}
-        id="mediaHolder"
-        onScroll={() => {
-          setSelectedImage(-1);
-        }}
-      >
+      <div className={css.mainSection} id="mediaHolder">
         <InfiniteScroll
           dataLength={projects?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
@@ -228,41 +218,67 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              <b>All projects are loaded for the selected criteria.</b>
+              {projects.length === 0 ? (
+                <b>There are no project for the selected criteria.</b>
+              ) : (
+                <b>All projects are loaded for the selected criteria.</b>
+              )}
             </p>
           }
         >
           {projects?.map((project, idx) => (
             <>
               <div className={cx(css.headerSection, css.tableRow)}>
+                <div className={css.id}>{project.id}</div>
                 <div className={css.thumb}>
-                  <img
-                    className={selectedImage === idx ? css.selectedImage : ""}
-                    width="90px"
-                    key={idx}
-                    src={``}
-                    alt=""
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedImage(idx);
+                  <div
+                    className={css.thumbHolder}
+                    style={{
+                      width: project.preview.width + "px",
+                      height: project.preview.height + "px",
                     }}
-                  />
+                  >
+                    <div
+                      className={css.thumbHolderInner}
+                      dangerouslySetInnerHTML={{
+                        __html: project.preview.html,
+                      }}
+                      style={{
+                        transform: `scale(${round(project.preview.scale, 2)})`,
+                      }}
+                    ></div>
+                  </div>
                 </div>
                 <div className={css.name}>
-                  {project.id} <br /> {project.name} <br />{" "}
-                  {project.description}
+                  {project.name}
+                  <br />
+                  <span className={css.description}>{project.description}</span>
                 </div>
-                <div className={css.slides}>5</div>
-                <div className={css.created}>11/12/21</div>
-                <div className={css.modified}>11/12/21</div>
+                <div className={css.slides}>{project.slides}</div>
+                <div className={css.created}>
+                  {new Date(project.created).toLocaleDateString()}
+                  <br />
+                  {new Date(project.created).toLocaleTimeString()}
+                </div>
+                <div className={css.modified}>
+                  {new Date(project.modified).toLocaleDateString()}
+                  <br />
+                  {new Date(project.modified).toLocaleTimeString()}
+                </div>
                 <div className={css.action}>
-                  <Button intent="primary">Open</Button>
-                  <Button intent="primary">Integration</Button>
+                  <Button
+                    intent="primary"
+                    onClick={() => onOpenProject(project.id)}
+                  >
+                    Open
+                  </Button>
+                  {/*<Button intent="primary">Integration</Button>*/}
                   <Button
                     intent="danger"
                     icon="trash"
                     className={css.delete}
                     minimal
+                    onClick={() => onDeleteProject(project.id)}
                   ></Button>
                 </div>
               </div>
@@ -270,6 +286,22 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           ))}
         </InfiniteScroll>
       </div>
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Delete"
+        canOutsideClickCancel={false}
+        icon="trash"
+        loading={isDeleteLoading}
+        intent={Intent.DANGER}
+        isOpen={isOpen}
+        onCancel={deleteCancel}
+        onConfirm={deleteConfirm}
+        className="bp3-dark"
+      >
+        <p>
+          Are you sure you want to delete <b>filename</b> slider?
+        </p>
+      </Alert>
     </div>
   );
 };
@@ -285,6 +317,9 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
+  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _openProject: (project: any) => openProject(project),
+  _doClearHistory: () => doClearHistory(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

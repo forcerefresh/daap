@@ -1,4 +1,8 @@
-import { ActionTypes, SET_DOCUMENT_SIZE } from "../actions/actions";
+import {
+  ActionTypes,
+  OPEN_PROJECT,
+  SET_DOCUMENT_SIZE,
+} from "../actions/actions";
 
 export interface IDocumentSize {
   width: number;
@@ -20,6 +24,11 @@ export function document(
       return {
         ...state,
         stageSize: action.payload,
+      };
+    }
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.document,
       };
     }
     default:

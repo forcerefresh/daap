@@ -1,9 +1,9 @@
-import { ISlide, SlideType } from "../reducers/slides";
-import { ILayer } from "../reducers/layers";
+import { ISlide, ISlides, SlideType } from "../reducers/slides";
+import { ILayer, ILayers } from "../reducers/layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
-import { jump } from "../../3rd-party-libs/undo-redo/actions";
+import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
 import { delay, differenceWith, isEqual, once } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
@@ -13,7 +13,7 @@ import {
   getDefaultTransitionsForLayer,
 } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
-import { IDocumentSize } from "../reducers/document";
+import { IDocument, IDocumentSize } from "../reducers/document";
 import { IGlobals } from "../reducers/globals";
 import {
   IRect,
@@ -25,6 +25,8 @@ import { getTextHtml } from "../../export/export-html";
 import { load } from "webfontloader";
 import { BreakpointsConfiguration, ISettings } from "../reducers/settings";
 import { IMeta } from "../reducers/meta";
+import { IObjects } from "../reducers/objects";
+import { ISelection } from "../reducers/selection";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -937,6 +939,35 @@ export function updateGlobalConfiguration(
 
 // ***
 
+export const OPEN_PROJECT = "Open project";
+
+export interface OpenProjectAction extends IUndoableAction<false> {
+  type: typeof OPEN_PROJECT;
+  payload: {
+    slides: ISlides;
+    layers: ILayers;
+    objects: IObjects;
+    selection: ISelection;
+    document: IDocument;
+    settings: ISettings;
+  };
+}
+
+export function openProject(project: {
+  slides: ISlides;
+  layers: ILayers;
+  objects: IObjects;
+  selection: ISelection;
+  document: IDocument;
+  settings: ISettings;
+}): OpenProjectAction {
+  return {
+    type: OPEN_PROJECT,
+    payload: project,
+    isUndoable: false,
+  };
+}
+
 // *** UNDO - REDO
 /*
 const ignoreActions = [
@@ -948,6 +979,12 @@ const ignoreActions = [
   ACTIVATE_LAYER,
   ACTIVATE_SLIDE,
 ];*/
+
+export function doClearHistory(): any {
+  return function (dispatch: Dispatch) {
+    dispatch(clear());
+  };
+}
 
 export function doUndo(): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
@@ -1128,4 +1165,7 @@ export type ActionTypes =
   | ExternalFontLoadedAction
 
   // project metadata
-  | UpdateProjectMetaAction;
+  | UpdateProjectMetaAction
+
+  // open project
+  | OpenProjectAction;

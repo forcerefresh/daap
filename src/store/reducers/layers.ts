@@ -6,6 +6,7 @@ import {
   DELETE_LAYERS,
   DELETE_OBJECTS,
   DELETE_SLIDE,
+  OPEN_PROJECT,
   UPDATE_LAYER,
 } from "../actions/actions";
 import update from "immutability-helper";
@@ -108,6 +109,11 @@ export function layers(
           },
         },
       });
+    }
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.layers,
+      };
     }
     default:
       return state;

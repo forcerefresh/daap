@@ -4,6 +4,7 @@ import {
   ActionTypes,
   ADD_OBJECT,
   DELETE_OBJECTS,
+  OPEN_PROJECT,
   UPDATE_OBJECT,
 } from "../actions/actions";
 
@@ -42,6 +43,11 @@ export function objects(
       const objectById = omit(state.objectById, objectIds);
       const allObjects = without(state.allObjects, ...objectIds);
       return { ...state, objectById, allObjects };
+    case OPEN_PROJECT: {
+      return {
+        ...action.payload.objects,
+      };
+    }
     default:
       return state;
   }
