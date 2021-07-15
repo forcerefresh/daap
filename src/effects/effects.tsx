@@ -55,6 +55,11 @@ import {
   canvasCopyDefinition,
 } from "./canvas-copy/canvas-copy.definition";
 
+import {
+  squareMaskDefaults,
+  squareMaskDefinition,
+} from "./square-mask/square-mask.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -75,6 +80,7 @@ import "./magnetic/magnetic.effect";
 import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
+import "./square-mask/square-mask.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -111,6 +117,7 @@ registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(typewriterDefinition, typewriterDefaults);
 registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
+registerEffect(squareMaskDefinition, squareMaskDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
