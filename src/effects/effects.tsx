@@ -22,7 +22,7 @@ import {
 import {
   sliceSlideInnerDefaults,
   tilesSlideInnerDefinition,
-} from "./tiles-slide/tiles-slide-inner.definition";
+} from "./tiles-slide/tiles-slide.definition";
 import {
   fallingLeavesDefaults,
   fallingLeavesDefinition,
@@ -69,8 +69,8 @@ import "./ken-burns/ken-burns.effect";
 import "./tiles-zoom/tiles-zoom.effect";
 import "./tiles-fade/tiles-fade.effect";
 import "./slice-slide/slice-slide.effect";
-import "./tiles-slide/tiles-slide-inner.effect";
-import "./tiles-slide/tiles-slide-inner.effect";
+import "./tiles-slide/tiles-slide.effect";
+import "./tiles-slide/tiles-slide.effect";
 import "./falling-leaves/falling-leaves.effect";
 import "./cube/cube.effect";
 import "./split/split.effect";
@@ -81,6 +81,7 @@ import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
 import "./square-mask/square-mask.effect";
+import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -94,6 +95,7 @@ interface IEffectDefaultsWrapper {
 interface IEffectHolder {
   definition: IEffectDefinitionWrapper;
   defaults: IEffectDefaultsWrapper;
+  getDuration?: (object?: any, config?: any) => number;
 }
 // <<<
 
@@ -114,18 +116,24 @@ registerEffect(splitDefinition, splitDefaults);
 registerEffect(parallaxDefinition, parallaxDefaults);
 registerEffect(morphDefinition, morphDefaults);
 registerEffect(magneticDefinition, magneticDefaults);
-registerEffect(typewriterDefinition, typewriterDefaults);
+registerEffect(
+  typewriterDefinition,
+  typewriterDefaults,
+  getTypewriterEffectDuration
+);
 registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
-  defaults: IEffectDefaultsWrapper
+  defaults: IEffectDefaultsWrapper,
+  getDuration?: (object?: any, config?: any) => number
 ) {
   effects.push({
     definition,
     defaults,
+    getDuration,
   });
 }
 

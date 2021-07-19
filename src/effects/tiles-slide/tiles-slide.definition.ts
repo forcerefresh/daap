@@ -1,12 +1,9 @@
 import { InputType } from "../../inputs/types";
-import {
-  ITilesSlideInnerEffect,
-  tilesSlideInner,
-} from "./tiles-slide-inner.types";
+import { ITilesSlideInnerEffect, tilesSlideInner } from "./tiles-slide.types";
 
 export const tilesSlideInnerDefinition = {
   id: tilesSlideInner,
-  name: "Tiles Slide Inner",
+  name: "Tiles Slide",
   form: [
     {
       displayName: "Columns",

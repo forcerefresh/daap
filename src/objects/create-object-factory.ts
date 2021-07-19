@@ -3,6 +3,7 @@ import { v4 as uuid } from "uuid";
 import {
   CanvasProperties,
   CoverImageProperties,
+  FrameProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
   ImageProperties,
@@ -98,6 +99,14 @@ export function createObject(
       return {
         ...objectProps,
         ...createSourceImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.FRAME: {
+      return {
+        ...objectProps,
+        ...createFrameObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -588,7 +597,7 @@ function createCanvasObject(
     ...object,
     definition: {
       id: uuid(),
-      type: ObjectType.SVG,
+      type: ObjectType.CANVAS,
       properties: {
         ...(commonProperties?.hasOverflowProperty
           ? {
@@ -612,6 +621,42 @@ function createCanvasObject(
           value: "",
           defaultValue: "",
         },
+      },
+    },
+  };
+}
+
+function createFrameObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<FrameProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.FRAME);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.FRAME,
+      properties: {
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
       },
     },
   };

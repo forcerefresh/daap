@@ -141,12 +141,12 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           effectType === "layer") && (
           <>
             {delayInput()}
-            {durationInput()}
+            {effDef(effectType).defaults.hasDuration && durationInput()}
           </>
         )}
         {effectType === "out" && (
           <>
-            {durationInput()}
+            {effDef(effectType).defaults.hasDuration && durationInput()}
             {delayInput()}
           </>
         )}

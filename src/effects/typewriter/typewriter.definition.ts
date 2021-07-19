@@ -39,6 +39,13 @@ export const typewriterDefinition = {
       inputType: InputType.NUMBER,
     },
     {
+      displayName: "Time after write",
+      helperText: "Cursor blinking after text is written",
+      propertyName: "timeAfterWrite",
+      inputType: InputType.NUMBER,
+    },
+
+    {
       displayName: "Cursor blinking",
       helperText: "Time for cursor blinking (default 0.5)",
       propertyName: "cursorBlinking",
@@ -77,7 +84,8 @@ export const typewriterDefinition = {
 export const typewriterDefaults: ITypeWriterEffect = {
   id: typewriter,
   hasDelay: true,
-  hasDuration: true,
+  hasDuration: false,
+  hasOwnDuration: true,
   hasEase: true,
   hasChildEase: false,
   ease: "none",
@@ -88,6 +96,7 @@ export const typewriterDefaults: ITypeWriterEffect = {
   emptySpaceDeleteTime: 200,
   cursorBlinking: 500,
   initialDelay: 2000,
+  timeAfterWrite: 2000,
   cursorPadding: 5,
   text1: "UNLIMITED POSSIBILITIES!",
   text2: "Awesome features :D !",

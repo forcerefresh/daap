@@ -148,7 +148,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
           <h3>COVER IMAGE</h3>
-          <p>Cover, fit image to page, stage, guidelines...</p>
+          <p>Fit image to page, stage or guidelines</p>
         </Card>
       </div>
 
@@ -257,6 +257,39 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           />
           <h3>CANVAS</h3>
           <p>Add canvas</p>
+        </Card>
+      </div>
+
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Empty</h1>
+          <p>Add empty element</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.FRAME, {
+                left: (documentSize.width - 100) / 2,
+                top: (documentSize.height - 100) / 2,
+                width: 100,
+                height: 100,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <Icon
+            icon="square"
+            iconSize={36}
+            color="gray"
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>FRAME</h3>
+          <p>Add empty frame</p>
         </Card>
       </div>
 

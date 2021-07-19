@@ -23,12 +23,16 @@ export function createRootTimelineForTextEffect({
   const rootTimeline = gsap.timeline(timelineConfig);
 
   const initializeIfNotInitialized = () => {
+    console.log("000");
     if (!isInitialized) {
+      console.log("111");
       // NOTE: wait for element to be visible on dom
       if (target.offsetWidth === 0) {
+        console.log("2222");
         return;
       }
 
+      console.log("333");
       initializeEffect();
 
       isInitialized = true;
@@ -44,14 +48,17 @@ export function createRootTimelineForTextEffect({
   };
 
   rootTimeline.eventCallback("onStart", () => {
+    console.log("onStart");
     initializeIfNotInitialized();
   });
 
   rootTimeline.eventCallback("onUpdate", () => {
+    console.log("onUpdate");
     initializeIfNotInitialized();
   });
 
   rootTimeline.eventCallback("onComplete", () => {
+    console.log("onComplete");
     teardownIfInitialized();
   });
 

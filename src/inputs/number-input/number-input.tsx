@@ -81,9 +81,9 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
         }}
         {...inputProps}
       />
-      {helperText2 && (
+      {/*helperText2 && (
         <div className="bp3-form-helper-text">Please enter a value</div>
-      )}
+      )*/}
     </FormGroup>
   );
 };

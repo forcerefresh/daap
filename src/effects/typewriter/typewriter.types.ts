@@ -9,6 +9,7 @@ export interface ITypeWriterEffect extends IEffectBase {
   emptySpaceDeleteTime: number;
   cursorBlinking: number;
   initialDelay: number;
+  timeAfterWrite: number;
   cursorPadding: number;
   text1: string;
   text2: string;

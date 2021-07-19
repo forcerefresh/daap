@@ -7,19 +7,14 @@ import {
   tilesCompleteHandler,
   tilesStartHandler,
 } from "../common";
-import {
-  ITilesSlideInnerEffect,
-  tilesSlideInner,
-} from "./tiles-slide-inner.types";
+import { ITilesSlideInnerEffect, tilesSlideInner } from "./tiles-slide.types";
 
 gsap.registerEffect({
   name: tilesSlideInner,
   effect: function (targets: any, config: ITilesSlideInnerEffect) {
     // get element and html
-    const {
-      objectContentElement,
-      objectContentHtml,
-    } = getObjectContentElementAndHtml(targets[0]);
+    const { objectContentElement, objectContentHtml } =
+      getObjectContentElementAndHtml(targets[0]);
 
     // create title elements
     const elements = createTilesFromHtml(

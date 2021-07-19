@@ -64,7 +64,7 @@ export function initializeSlideAndLayer(): any {
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
         duration: {
           inheritFrom: "custom",
-          customValue: 5000,
+          customValue: 20000,
         },
         layerIds: [],
         nextLayerIdCounter: 1,
@@ -102,7 +102,7 @@ export function addNewSlide(slideType = SlideType.Normal): any {
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "custom",
-        customValue: 5000,
+        customValue: 20000,
       },
       layerIds: [],
       nextLayerIdCounter: 1,

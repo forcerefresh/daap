@@ -360,3 +360,5 @@ export interface HtmlProperties {
 export interface CanvasProperties {
   source: ITextInput;
 }
+
+export interface FrameProperties {}

@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { getMethodByType, getObjectContentElementAndHtml } from "../common";
+import { getMethodByType } from "../common";
 import { fade, IFadeEffect } from "./fade.types";
 
 gsap.registerEffect({

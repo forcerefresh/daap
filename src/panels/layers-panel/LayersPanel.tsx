@@ -27,24 +27,31 @@ import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import EffectPanel from "../effect-panel/EffectPanel";
+import { getEffectDefinition } from "../../effects/effects";
 
 function calculateTimelineRect(
   slideDuration: number,
-  objectDelay: number,
-  objectDuration: number,
+  effectDelay: number,
+  effectDuration: number,
   holderWidth: number = 1,
   isOut = false
 ) {
+  const realEffectDuration =
+    effectDuration === -1 ? slideDuration : effectDuration;
+
   let left: number;
   if (isOut) {
     left =
-      ((slideDuration - objectDelay - objectDuration) / slideDuration) *
+      ((slideDuration - effectDelay - realEffectDuration) / slideDuration) *
       holderWidth;
   } else {
-    left = (objectDelay / slideDuration) * holderWidth;
+    left = effectDelay === 0 ? 0 : (effectDelay / slideDuration) * holderWidth;
   }
 
-  const width = (objectDuration / slideDuration) * holderWidth;
+  let width = (realEffectDuration / slideDuration) * holderWidth;
+
+  //keep it in a range 0-340
+  width = Math.min(Math.max(0, width), holderWidth);
 
   return { left, width };
 }
@@ -274,7 +281,33 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         width: sizeOut.width + "px",
                       };
 
-                      // TODO: OUTEFFECT
+                      // ****************** TODO: Make this code to looks better
+
+                      const effDef = getEffectDefinition(
+                        object?.transitions?.effect?.effect?.id || "none"
+                      );
+
+                      let effDur = effDef.defaults.hasOwnDuration
+                        ? effDef.getDuration?.(
+                            object,
+                            object?.transitions?.effect
+                          ) || 0
+                        : object?.transitions?.effect?.duration;
+
+                      const sizeEffect = calculateTimelineRect(
+                        slide?.duration.customValue || 0,
+                        object?.transitions?.effect?.delay || 0,
+                        effDur || 0,
+                        340
+                      );
+                      const timelineEffectStyle = {
+                        left: sizeEffect.left + "px",
+                        width: sizeEffect.width + "px",
+                      };
+
+                      // *************************
+
+                      // TODO: OUT EFFECT
                       return (
                         <div
                           key={objectId}
@@ -377,7 +410,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             className={cx(css.timelineHolder, {
                               [css.hideMe]:
                                 object.transitions.in?.effect.id === "none" &&
-                                object.transitions.out?.effect.id === "none",
+                                object.transitions.out?.effect.id === "none" &&
+                                object.transitions.effect?.effect.id === "none",
                             })}
                           >
                             {object.transitions.in?.effect.id !== "none" && (
@@ -390,6 +424,13 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               <div
                                 className={css.timeline}
                                 style={timelineOutStyle}
+                              />
+                            )}
+                            {object.transitions.effect?.effect.id !==
+                              "none" && (
+                              <div
+                                className={css.timeline}
+                                style={timelineEffectStyle}
                               />
                             )}
                           </div>

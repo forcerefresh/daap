@@ -2,8 +2,22 @@ import gsap, { SteppedEase } from "gsap";
 import { typewriter, ITypeWriterEffect } from "./typewriter.types";
 import { SplitText } from "gsap/SplitText";
 import { nl2br, space2nbsp } from "../../utils/doom-utils/common";
+import { createRootTimelineForTextEffect } from "../text.utils";
 
 //gsap.registerPlugin(SplitText);
+export function getTypewriterEffectDuration(object?: any, config?: any) {
+  const effValues = config?.effect?.values!;
+  const wordsArr = object.definition.properties.text.value.split(" ");
+  const charsStr = wordsArr?.join("");
+  return (
+    effValues.initialDelay +
+    effValues.timeAfterWrite +
+    wordsArr!.length * effValues.emptySpaceTypeTime +
+    charsStr!.length * effValues.typeCharacterSpeed +
+    wordsArr!.length * effValues.emptySpaceDeleteTime +
+    charsStr!.length * effValues.deleteCharacterSpeed
+  );
+}
 
 gsap.registerEffect({
   name: typewriter,
@@ -16,21 +30,23 @@ gsap.registerEffect({
     let textChars: SplitText;
     let cursorEl: HTMLDivElement;
 
-    const rootTimeline = gsap.timeline({
+    /*const rootTimeline = gsap.timeline({
       duration: config.duration!,
       yoyo: true,
       repeat: -1,
-    });
+    });*/
 
+    let cursorBlinkingTween: gsap.core.Tween;
     let currentId: number;
     const initializeEffect = (idx = 1) => {
       currentId = idx;
-      initializeTextEffect((config as any)["text" + idx] as string);
+
+      initializeTextEffect(pEl.innerText); //(config as any)["text" + idx] as string);
     };
     const initializeTextEffect = (text: string) => {
+      console.log("init typewriter");
       // - create characters
       pEl.innerText = text;
-
       pEl.innerHTML = space2nbsp(pEl.innerHTML);
       pEl.style.opacity = "1";
       textChars = new SplitText(pEl, {
@@ -53,22 +69,14 @@ gsap.registerEffect({
 
       // - set animation
       let delay = 0;
+      let cursorX;
+      let cursorY;
       for (let i = 0; i < chars.length; i++) {
-        let positionX;
-        let positionY;
-
-        positionX =
+        cursorX =
           parseInt((chars[i] as HTMLElement).style.left) +
           parseInt((chars[i] as HTMLElement).style.width) +
           config.cursorPadding;
-
-        positionY = parseInt((chars[i] as HTMLElement).style.top, 10);
-
-        /* //deleteCharacterSpeed: number;
-        //emptySpaceDeleteTime: number;
-        cursorBlinking: number;
-        initialDelay: number;
-        cursorPadding: number;*/
+        cursorY = parseInt((chars[i] as HTMLElement).style.top, 10);
 
         const add =
           chars[i].innerHTML === "&nbsp;"
@@ -79,8 +87,8 @@ gsap.registerEffect({
         rootTimeline.set(
           cursorEl,
           {
-            x: positionX,
-            y: positionY,
+            x: cursorX,
+            y: cursorY,
             delay,
           },
           config.initialDelay / 1000
@@ -93,105 +101,95 @@ gsap.registerEffect({
           config.initialDelay / 1000
         );
 
+        console.log(delay);
         delay += add;
       }
 
-      const repeat = (delay / (config.cursorBlinking / 1000)) * 2;
-      console.log(repeat);
-      //cursor blinking
-      rootTimeline.to(
+      // time after text is written
+      delay += !!config.timeAfterWrite ? config.timeAfterWrite / 1000 : 0;
+      rootTimeline.set(
         cursorEl,
         {
-          duration: config.cursorBlinking / 1000,
-          autoAlpha: 0,
-          repeat: 5, //-1, //repeat, //-1
-          yoyo: true,
-          ease: SteppedEase.config(1),
+          x: cursorX,
+          delay,
         },
-        0
+        config.initialDelay / 1000
       );
+
+      // delete text
+      for (let i = chars.length - 1; i >= 0; i--) {
+        // diff
+        cursorX =
+          parseInt((chars[i] as HTMLElement).style.left) +
+          //parseInt((chars[i] as HTMLElement).style.width) +
+          config.cursorPadding;
+        cursorY = parseInt((chars[i] as HTMLElement).style.top, 10);
+
+        const add =
+          chars[i].innerHTML === "&nbsp;"
+            ? config.emptySpaceDeleteTime / 1000 // diff
+            : config.deleteCharacterSpeed / 1000;
+
+        // move cursor to right position
+        rootTimeline.set(
+          cursorEl,
+          {
+            x: cursorX,
+            y: cursorY,
+            delay,
+          },
+          config.initialDelay / 1000
+        );
+
+        // show char at right time
+        rootTimeline.set(
+          chars[i],
+          { opacity: 0, delay }, // diff
+          config.initialDelay / 1000
+        );
+
+        console.log(delay);
+        delay += add;
+      }
+
+      console.log(rootTimeline.duration());
+      // EFFECT SETUP ENDEND
+
+      const repeat = (delay / (config.cursorBlinking / 1000)) * 2;
+      console.log(repeat);
+
+      //cursor blinking
+      cursorBlinkingTween = gsap.to(cursorEl, {
+        duration: config.cursorBlinking / 1000,
+        autoAlpha: 0,
+        repeat: -1, //5, //-1, //repeat, //-1
+        yoyo: true,
+        ease: SteppedEase.config(1),
+      });
     };
 
-    console.log(rootTimeline.duration());
-    console.log(rootTimeline.totalDuration());
+    const teardownEffect = () => {
+      pEl.style.opacity = "0";
+      textChars.revert(); // cleanup SplitText outcome
+      pEl.innerHTML = originalInnerHTML; // revert text
+      cursorEl.parentElement?.removeChild(cursorEl); // remove cursor
+      cursorBlinkingTween.kill();
+    };
 
-    let isStarted = false;
-    rootTimeline.eventCallback("onStart", () => {
-      if (!isStarted) {
-        // NOTE: wait for element to be visible on dom
-        if ((targets[0] as HTMLElement).offsetWidth === 0) {
-          return;
-        }
+    //const totalDuration = config.duration!;
 
-        initializeEffect();
-
-        isStarted = true;
-      }
+    const rootTimeline = createRootTimelineForTextEffect({
+      timelineConfig: {
+        duration: 1,
+      },
+      target: targets[0] as HTMLElement,
+      initializeEffect,
+      teardownEffect,
     });
 
-    rootTimeline.eventCallback("onUpdate", () => {
-      if (!isStarted) {
-        // NOTE: wait for element to be visible on dom
-        if ((targets[0] as HTMLElement).offsetWidth === 0) {
-          return;
-        }
-
-        initializeEffect();
-
-        isStarted = true;
-      }
-
-      if (
-        rootTimeline.progress() >
-        (config.duration! + config.initialDelay) / 1000
-      ) {
-        rootTimeline.repeat(0).progress(1).kill();
-      }
-    });
-
-    rootTimeline.eventCallback("onComplete", () => {
-      console.log("onComplete");
-      if (isStarted) {
-        // celanup
-        textChars.revert(); // cleanup SplitText outcome
-        pEl.innerHTML = originalInnerHTML; // revert text
-        cursorEl.parentElement?.removeChild(cursorEl); // remove cursor
-
-        isStarted = false;
-      }
-    });
-
-    console.log(rootTimeline.duration());
     return rootTimeline;
   },
 
   defaults: {},
   extendTimeline: true,
 });
-/*
-
-
-let delay = 0;
-for (let i = 0; i < chars.length; i++) {
-  if (i < chars.length - 1) {
-    position = parseInt(chars[i + 1].style.left) + cs;
-  } else {
-    position = width + cs;
-  }
-
-  console.log(chars[i].innerHTML);
-  console.log(chars[i].style.top);
-  const add = chars[i].innerHTML == "&nbsp;" ? 1 : 0.2;
-
-  tl.set(
-    "#cursor",
-    { x: position, y: parseInt(chars[i].style.top, 10) },
-    delay
-  );
-  tl.set(chars[i], { opacity: 1 }, delay);
-
-  delay += add;
-  //tl.set("#wrapper", { x: "-=" + width / 2 / chars.length }, i * delay);
-}
-
-*/

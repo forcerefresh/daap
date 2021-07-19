@@ -14,6 +14,7 @@ export enum ObjectType {
   SVG = "svg",
   CANVAS = "canvas",
   SOURCE_IMAGE = "source_image",
+  FRAME = "frame",
 }
 
 export interface IDefinition<
