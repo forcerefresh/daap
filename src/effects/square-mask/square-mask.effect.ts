@@ -11,15 +11,18 @@ gsap.registerEffect({
   effect: function (targets: any, config: ISquareMaskEffect) {
     const borderColor = colorToString(config.borderColor);
     let borderEl: HTMLElement;
-
-    borderEl = document.createElement("div");
-    borderEl.style.position = "absolute";
-    borderEl.style.top = "0";
-    borderEl.style.left = "0";
-    borderEl.style.border = `solid ${borderColor} 0px`;
-    borderEl.style.width = `${config.objectProperties?.width}px`;
-    borderEl.style.height = `${config.objectProperties?.height}px`;
-    targets[0].appendChild(borderEl);
+    const existSquareMaskEl = document.getElementsByClassName("square-mask")[0];
+    if (existSquareMaskEl === undefined) {
+      borderEl = document.createElement("div");
+      borderEl.className = "square-mask";
+      borderEl.style.position = "absolute";
+      borderEl.style.top = "0";
+      borderEl.style.left = "0";
+      borderEl.style.border = `solid ${borderColor} 0px`;
+      borderEl.style.width = `${config.objectProperties?.width}px`;
+      borderEl.style.height = `${config.objectProperties?.height}px`;
+      targets[0].appendChild(borderEl);
+    }
 
     const initializeEffect = () => {
       addSquareMaskEffectPartToTimeline({
