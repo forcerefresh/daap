@@ -11,20 +11,27 @@ gsap.registerEffect({
   effect: function (targets: any, config: ISquareMaskEffect) {
     const borderColor = colorToString(config.borderColor);
     let borderEl: HTMLElement;
-    const existSquareMaskEl = document.getElementsByClassName("square-mask")[0];
-    if (existSquareMaskEl === undefined) {
-      borderEl = document.createElement("div");
-      borderEl.className = "square-mask";
-      borderEl.style.position = "absolute";
-      borderEl.style.top = "0";
-      borderEl.style.left = "0";
+
+    const initializeEffect = () => {
+      borderEl = document.getElementsByClassName(
+        "square-mask"
+      )[0] as HTMLElement;
+
+      if (borderEl === undefined) {
+        borderEl = document.createElement("div");
+        borderEl.className = "square-mask";
+        borderEl.style.position = "absolute";
+        borderEl.style.top = "0";
+        borderEl.style.left = "0";
+
+        targets[0].appendChild(borderEl);
+      }
+
       borderEl.style.border = `solid ${borderColor} 0px`;
       borderEl.style.width = `${config.objectProperties?.width}px`;
       borderEl.style.height = `${config.objectProperties?.height}px`;
-      targets[0].appendChild(borderEl);
-    }
 
-    const initializeEffect = () => {
+      console.log("As");
       addSquareMaskEffectPartToTimeline({
         timeline: rootTimeline,
         borderEl,
@@ -59,9 +66,8 @@ gsap.registerEffect({
     };
 
     const teardownEffect = () => {
-      borderEl.parentElement?.removeChild(borderEl);
-      if (!config.hideMaskOnComplete) {
-        targets[0].appendChild(borderEl);
+      if (config.hideMaskOnComplete) {
+        borderEl.parentElement?.removeChild(borderEl);
       }
     };
 
