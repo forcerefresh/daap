@@ -6,30 +6,48 @@ export const squareMaskDefinition = {
   name: "Square Mask",
   form: [
     {
-      displayName: "Bottom mask",
+      displayName: "Border color",
+      helperText: null,
+      propertyName: "borderColor",
+      inputType: InputType.COLOR,
+    },
+    {
+      displayName: "Bottom width",
       helperText: null,
       propertyName: "borderBottom",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
-      displayName: "Top mask",
+      displayName: "Top width",
       helperText: null,
       propertyName: "borderTop",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
-      displayName: "Left mask",
+      displayName: "Left width",
       helperText: null,
       propertyName: "borderLeft",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
     },
     {
-      displayName: "Right mask",
+      displayName: "Right width",
       helperText: null,
       propertyName: "borderRight",
-      inputType: InputType.NUMBER,
+      inputType: InputType.NUMERIC_TIMELINE,
+    },
+    {
+      displayName: "Hide on complete",
+      helperText: "Hide mask element on complete",
+      propertyName: "hideMaskOnComplete",
+      inputType: InputType.CHECKBOX,
     },
   ],
+};
+
+const delayAndDuration = {
+  hasTimelineProperties: false,
+  delay: 0,
+  duration: 1000,
 };
 
 export const squareMaskDefaults: ISquareMaskEffect = {
@@ -41,8 +59,10 @@ export const squareMaskDefaults: ISquareMaskEffect = {
   ease: "none",
   supportedEffectTypes: ["in", "out"],
   // specific this effect
-  borderBottom: 0,
-  borderLeft: 0,
-  borderRight: 0,
-  borderTop: 0,
+  borderBottom: { value: 0, ...delayAndDuration },
+  borderLeft: { value: 0, ...delayAndDuration },
+  borderRight: { value: 0, ...delayAndDuration },
+  borderTop: { value: 0, ...delayAndDuration },
+  borderColor: { r: 255, g: 255, b: 255, a: 1 },
+  hideMaskOnComplete: false,
 };

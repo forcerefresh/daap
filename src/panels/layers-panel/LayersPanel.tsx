@@ -142,7 +142,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   const handleClickOutside = () => {
     setShowEffectPanelForId({ id: EmptyID });
   };
-  useOnClickOutside(effectPanelRef, handleClickOutside);
+  useOnClickOutside(effectPanelRef, handleClickOutside, [
+    "color-picker-holder",
+  ]);
 
   // render panels in Portal
   const renderPanels = () => {

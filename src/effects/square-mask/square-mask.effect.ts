@@ -1,55 +1,103 @@
 import gsap from "gsap";
+import { RGBColor } from "react-color";
+import { INumericTimelineValue } from "../../inputs/types";
+import { getMethodByType } from "../common";
+import { IEffectBase } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";
 
 gsap.registerEffect({
   name: squareMask,
   effect: function (targets: any, config: ISquareMaskEffect) {
-    const rootTimeline = gsap.timeline();
+    const objectEl = targets[0] as HTMLElement;
+    const borderColor = colorToString(config.borderColor);
 
+    let borderEl: HTMLElement;
+
+    let started: boolean;
+
+    //let initialized = false
     const initializeEffect = () => {
-      const objectEl = targets[0]! as HTMLElement;
-			const photo = objectEl.firstChild;
+      borderEl = document.getElementsByClassName(
+        "square-mask"
+      )[0] as HTMLElement;
 
-      var borderEl = document.createElement("div");
-      borderEl.style.position = "absolute";
-      borderEl.style.top = "0";
-      borderEl.style.left = "0";
-      borderEl.style.borderStyle = "solid";
-      borderEl.style.borderWidth = "0px";
-      borderEl.style.borderColor = "aqua";
-      borderEl.style.width = "300px";
-      borderEl.style.height = "300px";
-      targets[0].appendChild(borderEl);
+      if (borderEl === undefined) {
+        borderEl = document.createElement("div");
+        borderEl.className = "square-mask";
+        borderEl.style.position = "absolute";
+        borderEl.style.top = "0";
+        borderEl.style.left = "0";
+        objectEl.appendChild(borderEl);
+      }
 
-      rootTimeline.to(borderEl, {
-				duration: config.duration!,
-				ease: config.ease!,
-				borderTopWidth: config.borderTop,
-				borderBottomWidth: config.borderBottom,
-				borderLeftWidth: config.borderLeft,
-				borderRightWidth: config.borderRight,
+      borderEl.style.border = `solid ${borderColor} 0px`;
+      borderEl.style.width = `${config.objectProperties?.width}px`;
+      borderEl.style.height = `${config.objectProperties?.height}px`;
+
+      rootTimeline.clear();
+
+      addSquareMaskEffectPartToTimeline({
+        timeline: rootTimeline,
+        borderEl,
+        config: config,
+        value: config.borderBottom,
+        propertyName: "borderBottomWidth",
+      });
+
+      addSquareMaskEffectPartToTimeline({
+        timeline: rootTimeline,
+        borderEl,
+        config: config,
+        value: config.borderTop,
+        propertyName: "borderTopWidth",
+      });
+
+      addSquareMaskEffectPartToTimeline({
+        timeline: rootTimeline,
+        borderEl,
+        config: config,
+        value: config.borderLeft,
+        propertyName: "borderLeftWidth",
+      });
+
+      addSquareMaskEffectPartToTimeline({
+        timeline: rootTimeline,
+        borderEl,
+        config: config,
+        value: config.borderRight,
+        propertyName: "borderRightWidth",
       });
     };
 
-    let isStarted = false;
+    const teardownEffect = () => {
+      if (config.hideMaskOnComplete) {
+        borderEl.parentElement?.removeChild(borderEl);
+      }
+    };
+
+    const rootTimeline = gsap.timeline({
+      duration: config.duration!,
+      ease: config.ease!,
+    });
+
+    rootTimeline.eventCallback("onComplete", () => {
+      if (started) {
+        teardownEffect();
+        started = false;
+      }
+    });
+
     rootTimeline.eventCallback("onStart", () => {
-      if (!isStarted) {
+      if (!started) {
         initializeEffect();
-        isStarted = true;
+        started = true;
       }
     });
 
     rootTimeline.eventCallback("onUpdate", () => {
-      if (!isStarted) {
+      if (!started) {
         initializeEffect();
-        isStarted = true;
-      }
-    });
-
-    rootTimeline.eventCallback("onComplete", () => {
-      console.log("onComplete");
-      if (isStarted) {
-        isStarted = false;
+        started = true;
       }
     });
 
@@ -58,3 +106,34 @@ gsap.registerEffect({
   defaults: {},
   extendTimeline: true,
 });
+
+function colorToString(color: RGBColor) {
+  const { r, g, b, a } = color;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+function addSquareMaskEffectPartToTimeline({
+  borderEl,
+  timeline,
+  config,
+  propertyName,
+  value,
+}: {
+  borderEl: Element;
+  timeline: gsap.core.Timeline;
+  config: IEffectBase;
+  propertyName: string;
+  value: INumericTimelineValue;
+}) {
+  return timeline[getMethodByType(config.type, true)](
+    borderEl,
+    {
+      ease: config.ease,
+      duration: value.hasTimelineProperties
+        ? value.duration / 1000
+        : config.duration!,
+      [propertyName]: value.value,
+    },
+    value.hasTimelineProperties ? value.delay / 1000 : 0
+  );
+}
