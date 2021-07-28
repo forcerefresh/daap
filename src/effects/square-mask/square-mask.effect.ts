@@ -2,16 +2,20 @@ import gsap from "gsap";
 import { RGBColor } from "react-color";
 import { INumericTimelineValue } from "../../inputs/types";
 import { getMethodByType } from "../common";
-import { createRootTimelineForTextEffect } from "../text.utils";
 import { IEffectBase } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";
 
 gsap.registerEffect({
   name: squareMask,
   effect: function (targets: any, config: ISquareMaskEffect) {
+    const objectEl = targets[0] as HTMLElement;
     const borderColor = colorToString(config.borderColor);
+
     let borderEl: HTMLElement;
 
+    let started: boolean;
+
+    //let initialized = false
     const initializeEffect = () => {
       borderEl = document.getElementsByClassName(
         "square-mask"
@@ -23,15 +27,15 @@ gsap.registerEffect({
         borderEl.style.position = "absolute";
         borderEl.style.top = "0";
         borderEl.style.left = "0";
-
-        targets[0].appendChild(borderEl);
+        objectEl.appendChild(borderEl);
       }
 
       borderEl.style.border = `solid ${borderColor} 0px`;
       borderEl.style.width = `${config.objectProperties?.width}px`;
       borderEl.style.height = `${config.objectProperties?.height}px`;
 
-      console.log("As");
+      rootTimeline.clear();
+
       addSquareMaskEffectPartToTimeline({
         timeline: rootTimeline,
         borderEl,
@@ -71,14 +75,30 @@ gsap.registerEffect({
       }
     };
 
-    const rootTimeline = createRootTimelineForTextEffect({
-      timelineConfig: {
-        duration: config.duration!,
-        ease: config.ease!,
-      },
-      target: targets[0] as HTMLElement,
-      initializeEffect,
-      teardownEffect,
+    const rootTimeline = gsap.timeline({
+      duration: config.duration!,
+      ease: config.ease!,
+    });
+
+    rootTimeline.eventCallback("onComplete", () => {
+      if (started) {
+        teardownEffect();
+        started = false;
+      }
+    });
+
+    rootTimeline.eventCallback("onStart", () => {
+      if (!started) {
+        initializeEffect();
+        started = true;
+      }
+    });
+
+    rootTimeline.eventCallback("onUpdate", () => {
+      if (!started) {
+        initializeEffect();
+        started = true;
+      }
     });
 
     return rootTimeline;
@@ -105,7 +125,7 @@ function addSquareMaskEffectPartToTimeline({
   propertyName: string;
   value: INumericTimelineValue;
 }) {
-  timeline[getMethodByType(config.type, true)](
+  return timeline[getMethodByType(config.type, true)](
     borderEl,
     {
       ease: config.ease,
