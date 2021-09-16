@@ -65,6 +65,15 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   };
   useOnClickOutside(ref, handleClickOutside, "color-picker-holder");
 
+  //
+  const isSlideInPlay = (slideId: string) => {
+    return (
+      previewState.previewState === "play" &&
+      previewState.scope?.entityType === "slide" &&
+      previewState.scope?.entityId === slideId
+    );
+  };
+
   // render panels in Portal
   const renderPanels = () => {
     return (
@@ -113,17 +122,9 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               <div className={css.actionButtons}>
                 <Button
                   minimal
-                  active={
-                    previewState.previewState === "play" &&
-                    previewState.scope?.entityType === "slide" &&
-                    previewState.scope?.entityId === slideId
-                  }
+                  active={isSlideInPlay(slideId)}
                   onClick={() => {
-                    if (
-                      previewState.previewState === "play" &&
-                      previewState.scope?.entityType === "slide" &&
-                      previewState.scope?.entityId === slideId
-                    ) {
+                    if (isSlideInPlay(slideId)) {
                       _setStagePreview({
                         previewState: "stop",
                         isPreview: false,
@@ -142,7 +143,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   }}
                   className={css.playButton}
                   small={true}
-                  icon="play"
+                  icon={isSlideInPlay(slideId) ? "stop" : "play"}
                 ></Button>
                 <Button
                   minimal

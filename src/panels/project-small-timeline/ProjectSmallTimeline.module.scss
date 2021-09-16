@@ -1,0 +1,63 @@
+.smallTimeline {
+  position: relative;
+  z-index: 100;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
+  .smallTimelineInner {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .line {
+    background: #d88d12;
+    height: 4px;
+    position: absolute;
+    bottom: 17px;
+    left: 130px;
+    right: 180px;
+  }
+
+  .pagination {
+    position: absolute;
+    top: 11px;
+    left: 14px;
+  }
+
+  .thumbHolder {
+    position: absolute;
+    left: 120px;
+    top: 11px;
+
+    .thumb {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      background: #03ae2b;
+      left: 0px;
+      top: 0px;
+      border-radius: 100px;
+    }
+  }
+
+  .actionHolder {
+    position: absolute;
+    right: 0px;
+    margin: 5px;
+    top: 0px;
+
+    * + * {
+      margin-left: 5px;
+    }
+  }
+}

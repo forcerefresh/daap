@@ -23,10 +23,15 @@ import {
 import { TextProperties } from "../../inputs/types";
 import { getTextHtml } from "../../export/export-html";
 import { load } from "webfontloader";
-import { BreakpointsConfiguration, ISettings } from "../reducers/settings";
+import {
+  BreakpointConfiguration,
+  BreakpointsConfiguration,
+  ISettings,
+} from "../reducers/settings";
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/objects";
 import { ISelection } from "../reducers/selection";
+import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -703,11 +708,24 @@ function handleTextUpdate(
   // * handle auto height
   const properties = object.definition.properties as TextProperties;
   if (properties.autoHeight.value === true) {
-    const html = getTextHtml(object);
+    // TODO: IMPORTANT hardcoded
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+        (breakpointConfig) => breakpointConfig.icon === "laptop"
+      );
+    // todo: calculate for all not only for one
+    const calculatedObjectSize = calculateObjectSize(
+      object,
+      breakpointConfig!,
+      {
+        resetPosition: false,
+      }
+    );
+    const html = getTextHtml(object, calculatedObjectSize);
     const holder = document.createElement("div");
     holder.innerHTML = html;
     holder.querySelector("p")!.style.position = "relative";
-    holder.querySelector("p")!.style.width = object.width + "px";
+    holder.querySelector("p")!.style.width = `${calculatedObjectSize.width}`;
     document.body.appendChild(holder);
     object.height = holder.querySelector("p")?.offsetHeight;
   }

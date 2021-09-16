@@ -33,6 +33,11 @@ export interface BreakpointConfiguration {
       left: number;
       right: number;
     };
+    /* "grid" are used for easier positioning*/
+    grid: {
+      vertical: number;
+      horizontal: number;
+    };
     /* keepProportion will scale content when width is lover that breakpoint width*/
     //keepProportion: boolean;
     /* horizontal  fit to */
@@ -76,6 +81,10 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           page: { width: 480 },
           slide: { width: 480, height: 850 },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
+          grid: {
+            vertical: 6,
+            horizontal: 6,
+          },
           //keepProportion: false,
           horizontalFitTo: "viewport",
           verticalFitTo: "viewport",
@@ -90,6 +99,10 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           page: { width: 1024 },
           slide: { width: 1024, height: 1365 },
           guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
+          grid: {
+            vertical: 6,
+            horizontal: 6,
+          },
           //keepProportion: false,
           horizontalFitTo: "viewport",
           verticalFitTo: "viewport",
@@ -104,6 +117,10 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           page: { width: 1450 },
           slide: { width: 1244, height: 700 },
           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
+          grid: {
+            vertical: 6,
+            horizontal: 6,
+          },
           //keepProportion: false,
           horizontalFitTo: "viewport",
           verticalFitTo: "viewport",

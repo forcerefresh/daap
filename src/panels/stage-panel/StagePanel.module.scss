@@ -136,6 +136,19 @@
   pointer-events: none;
 }
 
+.gridHorizontalLine {
+  position: absolute;
+  height: 0px;
+  border-top: 1px dotted #5b5a5a;
+  pointer-events: none;
+}
+.gridVerticalLine {
+  position: absolute;
+  width: 0px;
+  border-left: 1px dotted #5b5a5a;
+  pointer-events: none;
+}
+
 .layoutBox {
   position: relative;
   //background: #565656;

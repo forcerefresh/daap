@@ -1,7 +1,9 @@
 import { forOwn, mapValues, pick } from "lodash-es";
+import React from "react";
 import {
   CanvasProperties,
   CoverImageProperties,
+  GridImageProperties,
   ICoverPlacementValue,
   ImageProperties,
   SourceImageProperties,
@@ -162,7 +164,7 @@ export function generatePlayerData(
         html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
         //console.log(object);
-        const objectHtml = getObjectHtml(object, true);
+        const objectHtml = getObjectHtml(object, calculatedObjectSize, true);
 
         transitionsData.push({
           objectClass: objectClass,
@@ -219,22 +221,28 @@ function getObjectArr(objects: IObjects, objectIds: string[]): IObject[] {
   return objectIds.map((objectId) => objects.objectById[objectId]);
 }
 
-export function getObjectHtml(object: IObject, isPlayer: boolean) {
+export function getObjectHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
   switch (object.type) {
     case ObjectType.TEXT:
-      return getTextHtml(object);
+      return getTextHtml(object, calculatedObjectSize);
     case ObjectType.IMAGE:
-      return getImageHtml(object);
+      return getImageHtml(object, calculatedObjectSize);
     case ObjectType.COVER_IMAGE:
-      return getCoverImageHtml(object);
+      return getCoverImageHtml(object, calculatedObjectSize);
+    case ObjectType.GRID_IMAGE:
+      return getGridImageHtml(object, calculatedObjectSize);
     case ObjectType.VIDEO:
-      return getVideoHtml(object, isPlayer);
+      return getVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
-      return getSvgHtml(object);
+      return getSvgHtml(object, calculatedObjectSize);
     case ObjectType.CANVAS:
-      return getCanvasHtml(object, isPlayer);
+      return getCanvasHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SOURCE_IMAGE:
-      return getSourceImageHtml(object, isPlayer);
+      return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
       return "";
   }
@@ -242,7 +250,10 @@ export function getObjectHtml(object: IObject, isPlayer: boolean) {
 
 // OBJECT HTML CREATOR FUNCTIONS **********************
 
-export function getTextHtml(object: IObject) {
+export function getTextHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
   const textProperties = object.definition.properties as TextProperties;
 
   let style = "";
@@ -251,8 +262,8 @@ export function getTextHtml(object: IObject) {
   const c = textProperties.color.value;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
   style += "font-weight: " + textProperties.weight.value + ";";
-  style += "width: " + object.width + "px;";
-  style += "height:" + object.height + "px;";
+  style += "width: " + calculatedObjectSize.width + ";";
+  style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
 
   return `<p class="object-content" style="${style}">${nl2br(
@@ -260,7 +271,10 @@ export function getTextHtml(object: IObject) {
   )}</p>`;
 }
 
-function getImageHtml(object: IObject) {
+function getImageHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
   const imageProperties = object.definition.properties as ImageProperties;
 
   if (imageProperties.url.value.isPlaceholder) {
@@ -273,12 +287,15 @@ function getImageHtml(object: IObject) {
   return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }
 
-function getCoverImageHtml(object: IObject) {
+function getCoverImageHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
   const imageProperties = object.definition.properties as CoverImageProperties;
 
   // if placeholder
   if (imageProperties.url.value.isPlaceholder) {
-    return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+    return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">COVER IMAGE<br/>PLACEHOLDER</div>`;
   }
 
   let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
@@ -303,7 +320,49 @@ function getCoverImageHtml(object: IObject) {
   return `<div class="object-content" style="${style}"></div>`;
 }
 
-function getSourceImageHtml(object: IObject, isPlayer: boolean) {
+function getGridImageHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
+  const imageProperties = object.definition.properties as GridImageProperties;
+
+  // if placeholder
+  if (imageProperties.url.value.isPlaceholder) {
+    return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">GRID IMAGE<br/>PLACEHOLDER</div>`;
+  }
+  /*
+  let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
+    .size as "cover" | "fit" | "100% 100%";
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  const aH = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionHorizontal;
+  const aV = (imageProperties.placement.value as ICoverPlacementValue)
+    .positionVertical;
+*/
+  //TMP
+  const backgroundSize = "cover";
+  const aH = "center";
+  const aV = "center";
+
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-repeat:no-repeat;`;
+  style += `background-size: ${backgroundSize};`;
+  style += `background-position: ${aH} ${aV};`;
+
+  return `<div class="object-content" style="${style}"></div>`;
+}
+
+function getSourceImageHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
   const imageProperties = object.definition.properties as SourceImageProperties;
   if (imageProperties.url.value.isPlaceholder) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
@@ -332,7 +391,11 @@ function getSourceImageHtml(object: IObject, isPlayer: boolean) {
   return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageProperties.id.value}" src="${imageProperties.url.value.url}"></div>`;
 }
 
-function getVideoHtml(object: IObject, isPlayer: boolean) {
+function getVideoHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
   const imageProperties = object.definition.properties as ImageProperties;
 
   if (imageProperties.url.value.isPlaceholder) {
@@ -356,7 +419,10 @@ function getVideoHtml(object: IObject, isPlayer: boolean) {
   //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
 }
 
-function getSvgHtml(object: IObject) {
+function getSvgHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
   const imageProperties = object.definition.properties as SvgProperties;
   if (imageProperties.svg.value) {
     return imageProperties.svg.value;
@@ -364,7 +430,11 @@ function getSvgHtml(object: IObject) {
   return ``;
 }
 
-function getCanvasHtml(object: IObject, isPlayer: boolean) {
+function getCanvasHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
   const canvasProperties = object.definition.properties as CanvasProperties;
 
   let style = "";

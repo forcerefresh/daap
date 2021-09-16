@@ -8,6 +8,7 @@ import {
 export enum ObjectType {
   TEXT = "text",
   COVER_IMAGE = "cover_image",
+  GRID_IMAGE = "grid_image",
   IMAGE = "image",
   VIDEO = "video",
   HTML = "html",
@@ -40,6 +41,21 @@ export interface ICommonObjectProperties {
   heightType?: "px" | "em" | "%" | "vw" | "vh";
 }
 
+export interface IAbsoluteLayout {
+  left: number;
+  width: number;
+  top: number;
+  height: number;
+}
+
+export interface ICoverLayout {
+  // TODO
+  tmp1: number;
+}
+export interface IGridLayout {
+  // TODO
+  tmp2: number;
+}
 export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   id: string;
   name: string;
@@ -47,7 +63,23 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   type: ObjectType;
   isVisible: boolean;
   isLocked: boolean;
-  hasNoPosition?: boolean;
+  supportedLayout: {
+    cover: boolean;
+    grid: boolean;
+    absolute: boolean;
+  };
+  layout:
+    | "absolute"
+    | "grid"
+    | "cover"
+    | "fit_page"
+    | "fit_stage"
+    | "fit_guidelines";
+  absoluteLayout?: IAbsoluteLayout;
+  gridLayout?: IGridLayout;
+  coverLayout?: ICoverLayout;
+  isCoverPlacement?: boolean; // DEPRECIATED
+  isGridPlacement?: boolean; // DEPRECIATED
   // hasTimeline: boolean; // show in timeline
   transitions: ITransitions;
   definition: IDefinition<T>;

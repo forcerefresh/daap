@@ -18,7 +18,8 @@ export enum InputType {
   FONT_SELECT = "font_select",
   EVENTS = "events",
   PARALLAX = "parallax",
-  COVER_PLACEMENT = "cover_placement",
+  COVER_LAYOUT = "cover_placement",
+  GRID_LAYOUT = "grid_layout",
   TEXT_START_POSITION = "text_start_position",
   CORNER_RADIUS = "corner-radius",
 }
@@ -49,6 +50,7 @@ export interface IUpdateInput {
           followTime: number;
         }
       | ICoverPlacementValue
+      | IGridPlacementValue
       | INumericTimelineValue
       | ITextStartPositionValue
       | ICornerRadiusValue
@@ -198,12 +200,28 @@ export interface ICoverPlacementValue {
 }
 
 export interface ICoverPlacementInput {
-  inputType: InputType.COVER_PLACEMENT;
+  inputType: InputType.COVER_LAYOUT;
   displayName: string;
   helperText?: string;
   propertyName: string;
   value: ICoverPlacementValue;
   defaultValue: ICoverPlacementValue;
+}
+
+export interface IGridPlacementValue {
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+}
+
+export interface IGridPlacementInput {
+  inputType: InputType.GRID_LAYOUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: IGridPlacementValue;
+  defaultValue: IGridPlacementValue;
 }
 
 export interface ICornerRadiusValue {
@@ -335,6 +353,11 @@ export interface ImageProperties {
 
 export interface CoverImageProperties {
   placement: ICoverPlacementInput;
+  url: IImageInput;
+}
+
+export interface GridImageProperties {
+  placement: IGridPlacementInput;
   url: IImageInput;
 }
 

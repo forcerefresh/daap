@@ -9,7 +9,7 @@ export interface AppPlayerProps {
   playerData: IPlayerData | null;
   previewState: IPreviewState;
   manualProgress: number;
-  onProgress: (progress: number) => void;
+  onProgress: (progress: number, slideIdx: number) => void;
   requestStop: () => void;
 }
 
@@ -27,36 +27,36 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   const playerHolderRef = useRef<HTMLDivElement>(null);
 
   // manual rogress
-  /*useEffect(() => {
-    if (tl.paused()) {
+  useEffect(() => {
+    if (previewState.previewState === "pause") {
       console.log(manualProgress);
-      tl.progress(manualProgress, true);
+      player.current?.getCurrentTimeline()?.progress(manualProgress, true);
     }
-  }, [manualProgress]);*/
+  }, [manualProgress]);
 
   // play/pause switch
-  /*useEffect(() => {
+  useEffect(() => {
     switch (previewState.previewState) {
       case "play":
-        tl.paused(false);
+        player.current?.paused(false);
         break;
       case "pause":
-        tl.paused(true);
+        player.current?.paused(true);
         break;
     }
-  }, [previewState.previewState]);*/
+  }, [previewState.previewState]);
 
   // change preview speed
-  /*useEffect(() => {
-    tl.timeScale(previewState.previewSpeed);
-  }, [previewState.previewSpeed]);*/
+  useEffect(() => {
+    player.current?.getCurrentTimeline()?.timeScale(previewState.previewSpeed);
+  }, [previewState.previewSpeed]);
 
   // when we turn off repeat it stops playing on end and reset position to start
-  /*useEffect(() => {
-    tl.eventCallback("onRepeat", () => {
+  useEffect(() => {
+    player.current?.getCurrentTimeline()?.eventCallback("onRepeat", () => {
       if (!previewState.repeat) {
-        tl.progress(0);
-        tl.pause();
+        player.current?.getCurrentTimeline()?.progress(0);
+        player.current?.getCurrentTimeline()?.pause();
         requestStop();
       } else {
         document.querySelectorAll(".effect-main-element").forEach((el) => {
@@ -64,25 +64,36 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         });
       }
     });
-  }, [previewState.repeat]);*/
-
-  /*useEffect(() => {
-    tl.eventCallback("onUpdate", () => {
-      onProgress(tl.progress());
-    });
-    return () => {
-      // TODO: do we need to cleanup;
-    };
-  }, [tl]);*/
+  }, [previewState.repeat]);
 
   let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
+    console.log("AAAAAAAAAAAAAAAAAAAAAAAAA");
     if (!isEmpty(playerData?.slideDataArr)) {
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/
       const pl = new Player(playerData, playerHolderRef.current!);
       player.current = pl;
+
+      // TODO: DUPLICATE CODE 1
+      pl.onUpdate(() => {
+        onProgress(
+          player.current?.getCurrentTimeline()?.progress() || 0,
+          player.current?.getCurrentTimelineIdx() || 0
+        );
+      });
+
+      pl.onCurrentTimelineChange(() => {
+        console.log("onCurrentTimelineChange");
+        // TODO: DUPLICATE CODE 2
+        pl.onUpdate(() => {
+          onProgress(
+            player.current?.getCurrentTimeline()?.progress() || 0,
+            player.current?.getCurrentTimelineIdx() || 0
+          );
+        });
+      });
 
       pl.playSlide(0);
 
@@ -95,7 +106,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   }, [playerData]);
 
   useEffect(() => {
-    currentPlayer.current?.setPaused(!!previewState.paused);
+    currentPlayer.current?.setRootPaused(!!previewState.paused);
   }, [previewState.paused]);
 
   return (

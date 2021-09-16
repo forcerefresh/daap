@@ -1,6 +1,10 @@
-import { mapValues, pick } from "lodash-es";
+import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
-import { CoverImageProperties, ICoverPlacementValue } from "../../inputs/types";
+import {
+  CoverImageProperties,
+  GridImageProperties,
+  ICoverPlacementValue,
+} from "../../inputs/types";
 import { IObject } from "../../objects/types";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
@@ -20,8 +24,9 @@ export function calculateObjectSize(
   const stageSize = breakpointConfig.normal.slide;
 
   // 1. if object has position
-  if (!object.hasNoPosition) {
-    const sizeObj = pick(object, "left", "top", "width", "height");
+  if (object.layout === "absolute") {
+    const sizeObj = cloneDeep(object.absoluteLayout)!;
+
     if (resetPosition) {
       sizeObj.left = 0;
       sizeObj.top = 0;
@@ -29,7 +34,27 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  // 2. if we use cover placement
+  // 3. if we use GRID
+  if (object.isGridPlacement) {
+    const gridImageProperties = object.definition
+      .properties as GridImageProperties;
+
+    const wPerCell = stageSize.width / 6;
+    const hPerCell = stageSize.height / 6;
+    const sizeObj = {
+      left: wPerCell * gridImageProperties.placement.value.left,
+      top: hPerCell * gridImageProperties.placement.value.top,
+      width: wPerCell * gridImageProperties.placement.value.right,
+      height: hPerCell * gridImageProperties.placement.value.bottom,
+    };
+    if (resetPosition) {
+      //sizeObj.left = 0;
+      //sizeObj.top = 0;
+    }
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
+
+  // 3. if we use COVER placement
   const coverImageProperties = object.definition
     .properties as CoverImageProperties;
   const relativeTo = coverImageProperties.placement.value.relativeTo;
@@ -103,7 +128,23 @@ export function calculateObjectSize(
 }
 
 export function getPositionInfo(object: IObject) {
-  if (object.hasNoPosition) {
+  if (object.layout === "absolute") {
+    return (
+      <>
+        <span> {"X:" + roundNumber(object.absoluteLayout!.left!, 2)}</span>
+        <span> {"Y:" + roundNumber(object.absoluteLayout!.top!, 2)}</span>
+        {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
+      <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
+      </>
+    );
+  }
+
+  if (object.layout === "fit_page") {
+    return null; // todo
+  }
+
+  /*
+  if (object.layout === "cover") {
     return (
       <>
         <b>
@@ -127,15 +168,9 @@ export function getPositionInfo(object: IObject) {
       </>
     );
   }
+  */
 
-  return (
-    <>
-      <span> {"X:" + roundNumber(object.left!, 2)}</span>
-      <span> {"Y:" + roundNumber(object.top!, 2)}</span>
-      {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
-      <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
-    </>
-  );
+  return null;
 }
 
 export function getStageSize(breakpointConfig: BreakpointConfiguration): ISize {

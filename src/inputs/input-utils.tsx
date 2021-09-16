@@ -136,3 +136,45 @@ export function getTextField<T>(
 
   return getInputForm(InputType.TEXT, objectDef, onChange);
 }
+
+export function getCoverLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.COVER_LAYOUT,
+    value: value,
+  };
+
+  return getInputForm(InputType.COVER_LAYOUT, objectDef, onChange);
+}
+
+export function getGridLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.GRID_LAYOUT,
+    value: value,
+  };
+
+  return getInputForm(InputType.GRID_LAYOUT, objectDef, onChange);
+}
+
+export function getAbsoluteLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.TRANSFORM,
+    value: value,
+  };
+
+  return getInputForm(InputType.TRANSFORM, objectDef, onChange);
+}

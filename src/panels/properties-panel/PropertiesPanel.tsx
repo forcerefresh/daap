@@ -3,8 +3,14 @@ import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getInputForm } from "../../inputs/input-factory";
+import {
+  getAbsoluteLayoutField,
+  getCoverLayoutField,
+  getGridLayoutField,
+  getSelectField,
+} from "../../inputs/input-utils";
 import { InputType } from "../../inputs/types";
-import { IObject } from "../../objects/types";
+import { IAbsoluteLayout, IObject } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./PropertiesPanel.module.scss";
@@ -18,7 +24,30 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   const renderObjectProperties = (object: IObject) => {
     return (
       <>
-        {!object.hasNoPosition && renderPositionAndSize(object)}
+        {renderLayoutOptions(object)}
+        {object.layout === "cover" && getCoverLayoutField("", {}, () => {})}
+        {object.layout === "grid" &&
+          getGridLayoutField(
+            "",
+            { top: 0, bottom: 3, left: 3, right: 3 },
+            () => {}
+          )}
+        {object.layout === "absolute" &&
+          getAbsoluteLayoutField(
+            "",
+            object.absoluteLayout,
+            (absoluteLayout?: IAbsoluteLayout) => {
+              const retObj = cloneDeep(object);
+              retObj.absoluteLayout = absoluteLayout;
+              _updateObject(retObj);
+            }
+          )}
+
+        {/*TO BE REMOVED*/}
+        {/*!object.isCoverPlacement &&
+          !object.isGridPlacement &&
+        renderPositionAndSize(object)*/}
+
         {renderProperties(object.definition.properties)}
         <hr />
         {renderEvents(object)}
@@ -26,6 +55,28 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         {renderCommonObjectProperties(object)}
       </>
     );
+  };
+
+  const renderLayoutOptions = (object: IObject) => {
+    const options = [];
+    object.supportedLayout.absolute &&
+      options.push({ label: "Absolute", value: "absolute" });
+    object.supportedLayout.grid &&
+      options.push({ label: "Grid", value: "grid" });
+    //o//bject.supportedLayout.cover &&
+    //options.push({ label: "Cover", value: "cover" });
+
+    options.push({ label: "Fit Page", value: "fit_page" });
+    options.push({ label: "Fit Stage", value: "fit_stage" });
+    options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
+
+    const onChange = (layout: any) => {
+      const retObj = cloneDeep(object);
+      retObj.layout = layout;
+      _updateObject(retObj);
+    };
+
+    return getSelectField("Layout", object.layout, options, onChange);
   };
 
   const renderEvents = (object: IObject) => {

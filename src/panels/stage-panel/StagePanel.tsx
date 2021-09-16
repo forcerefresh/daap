@@ -15,7 +15,7 @@ import {
 } from "../../export/export-html";
 
 import gsap from "gsap"; // TODO: remove player from here
-import SmallTimeline from "../small-timeline/SmallTimeline";
+import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { ISlide } from "../../store/reducers/slides";
 import {
   activateObject,
@@ -49,6 +49,10 @@ import {
   getPreviewLayout,
 } from "./StagePanelUtils";
 import { getBgColor } from "../../utils/utils";
+import ProjectSmallTimeline, {
+  ProjectTimelineData,
+  SlideTimelineData,
+} from "../project-small-timeline/ProjectSmallTimeline";
 
 interface ISize {
   width: number;
@@ -91,6 +95,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   // generate data for player
   let exportData: IPlayerData | null = null;
+  let projectTimelineData: ProjectTimelineData | null = null;
   if (previewState.isPreview) {
     exportData = generatePlayerData(
       { slides, layers, objects },
@@ -98,12 +103,38 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       //stageSize,
       breakpointConfig!
     );
+
+    let totalDuration = 0;
+    const slideTimelineDataArr: SlideTimelineData[] =
+      exportData.slideDataArr.map((slideData) => {
+        console.log(slideData.slide);
+        const transitionDuration =
+          slideData.slide.slideTransition.duration || 0;
+        const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
+        const slideDuration = slideData.slide.duration.customValue || 0;
+
+        totalDuration += slideDuration;
+        //slideData.slide.slideTransition.overlap
+        return {
+          duration: slideDuration,
+          transitionDuration:
+            slideData.slide.slideTransition.effect.id === "none"
+              ? 0
+              : transitionDuration,
+          transitionOverlap:
+            slideData.slide.slideTransition.effect.id === "none"
+              ? 0
+              : transitionOverlap,
+        };
+      });
+
+    projectTimelineData = { slides: slideTimelineDataArr };
   }
 
   const { ctrlDown, spaceDown, escapeDown } = useKeyDown();
 
   // preview progress
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState({ progress: 0, slideIdx: 0 });
   const [manualProgress, setManualProgress] = useState(0);
 
   const [resizeData, setResizeData] = useState<{
@@ -272,6 +303,26 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
     height: stageSize.height * stageZoom + "px",
   };
+  // grid
+  const numOfGridHFields = breakpointConfig?.normal?.grid?.horizontal || 0;
+  const totalHeight = stageSize.height; // could be page|stage|guidelines
+  const oneHFieldHeight = totalHeight / numOfGridHFields;
+  const horizontalGridLines: { top: number; width: number }[] = [];
+  for (let i = 1; i < numOfGridHFields; i++) {
+    horizontalGridLines.push({
+      top: oneHFieldHeight * i,
+      width: stageSize.width,
+    });
+  }
+  const totalWidth = stageSize.width; // could be page|stage|guidelines
+  const oneVFieldWidth = totalWidth / numOfGridHFields;
+  const verticalGridLines: { left: number; height: number }[] = [];
+  for (let i = 1; i < numOfGridHFields; i++) {
+    verticalGridLines.push({
+      left: oneVFieldWidth * i,
+      height: stageSize.height,
+    });
+  }
 
   useEffect(() => {
     function resetAll(force = false) {
@@ -328,10 +379,20 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [rootRef]);
 
-  const renderTimeInfo = () => {
+  const renderSlideTimelineInfo = () => {
     return (
-      <SmallTimeline
-        progress={progress}
+      <SlideSmallTimeline
+        slideProgress={progress}
+        onManualProgress={(progress) => setManualProgress(progress)}
+      />
+    );
+  };
+
+  const renderProjectTimelineInfo = () => {
+    return (
+      <ProjectSmallTimeline
+        projectTimelineData={projectTimelineData}
+        slideProgress={progress}
         onManualProgress={(progress) => setManualProgress(progress)}
       />
     );
@@ -357,11 +418,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   function renderObjectHandles(object: IObject) {
+    const isAbsolutePosition = object.layout === "absolute";
+    if (!isAbsolutePosition) {
+      return null;
+    }
+
     const objectId = object.id;
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
     if (!isSelected) return null;
 
-    const sizeObj = pick(object, "left", "top", "width", "height");
+    const sizeObj = pick(
+      object.absoluteLayout,
+      "left",
+      "top",
+      "width",
+      "height"
+    );
     const topLeftStyle: any = {
       left: sizeObj.left! * stageZoom - 4 + "px",
       top: sizeObj.top! * stageZoom - 4 + "px",
@@ -421,9 +493,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       </React.Fragment>
     );
   }
+
   function renderObject(object: IObject) {
     const objectId = object.id;
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+    const isAbsolutePosition = object.layout === "absolute";
 
     // *** NOTE: we are rendering different for selected and non selected object
 
@@ -431,19 +505,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     if (!isSelected) {
       //
-      const objectStyle = calculateObjectSize(object, breakpointConfig!, {
-        resetPosition: false,
-      });
+      const calculatedObjectSize = calculateObjectSize(
+        object,
+        breakpointConfig!,
+        {
+          resetPosition: false,
+        }
+      );
 
-      console.log(objectStyle);
+      const objectStyle = { ...calculatedObjectSize };
+      objectStyle.position = "absolute";
 
-      (objectStyle as any).position = "absolute";
       return (
         <div style={{ zIndex: 100, position: "absolute" }}>
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
-              __html: getObjectHtml(object, false),
+              __html: getObjectHtml(object, calculatedObjectSize, false),
             }}
             style={objectStyle}
             className={cx({
@@ -465,19 +543,35 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     // 2. SELECTED  (DRAGGABLE)
 
     // reset position to 0 (position gonna be set in Draggable)
-    const objectStyle2 = calculateObjectSize(object, breakpointConfig!, {
-      resetPosition: true,
-    });
+    const calculatedObjectSize = calculateObjectSize(
+      object,
+      breakpointConfig!,
+      {
+        resetPosition: true,
+      }
+    );
+
+    const objectStyle2 = { ...calculatedObjectSize };
 
     objectStyle2.position = "absolute";
     objectStyle2.borderWidth = 1 + "px";
 
     let widthAndHeightStyle = {
+      width: calculatedObjectSize.width,
+      height: calculatedObjectSize.height,
+    };
+
+    let widthAndHeightObject = {
+      width: parseInt(calculatedObjectSize.width! as any),
+      height: parseInt(calculatedObjectSize.height! as any),
+    };
+
+    /* let widthAndHeightStyle = {
       width: object.width + "px",
       height: object.height + "px",
     };
 
-    if (object.hasNoPosition) {
+    if (object.isCoverPlacement || object.isGridPlacement) {
       widthAndHeightStyle = {
         width: objectStyle2.width as string, //page:
         height: objectStyle2.height as string, //+ "px",
@@ -488,12 +582,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       width: object.width,
       height: object.height,
     };
-    if (object.hasNoPosition) {
+    if (object.isCoverPlacement || object.isGridPlacement) {
       widthAndHeightObject = {
         width: parseInt(objectStyle2.width! as any),
         height: parseInt(objectStyle2.height! as any),
       };
-    }
+    }*/
 
     if (resizeRect && resizeData?.objectId === object.id) {
       widthAndHeightStyle.width = resizeRect.w + "px";
@@ -504,22 +598,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     console.log(resizeRect);
     console.log(resizeData?.objectId === object.id);
-    console.log({ x: object.left!, y: object.top! });
 
     const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
-    if (!object.hasNoPosition) {
+    if (isAbsolutePosition) {
       if (resizeRect && resizeData?.objectId === object.id) {
         objDraggablePos.x = resizeRect.x;
         objDraggablePos.y = resizeRect.y;
       } else {
-        objDraggablePos.x = object.left!;
-        objDraggablePos.y = object.top!;
+        objDraggablePos.x = object.absoluteLayout!.left!;
+        objDraggablePos.y = object.absoluteLayout!.top!;
       }
     }
+
     return (
       <Draggable
         disabled={
-          stageToolInternal !== StageTools.SELECT || object.hasNoPosition
+          stageToolInternal !== StageTools.SELECT || !isAbsolutePosition
         }
         key={objectId + "_drag"}
         position={objDraggablePos}
@@ -586,6 +680,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             dangerouslySetInnerHTML={{
               __html: getObjectHtml(
                 { ...object, ...widthAndHeightObject },
+                calculatedObjectSize,
                 false
               ),
             }}
@@ -640,10 +735,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       const obj = objectById[resizeData.objectId];
       const objectRect = {
-        x: obj.left!,
-        y: obj.top!,
-        w: obj.width!,
-        h: obj.height!,
+        x: obj.absoluteLayout!.left!,
+        y: obj.absoluteLayout!.top!,
+        w: obj.absoluteLayout!.width!,
+        h: obj.absoluteLayout!.height!,
       };
       switch (resizeData.handle) {
         case "tl": {
@@ -832,11 +927,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         e.stopPropagation();
         if (resizeStartPosition !== null && resizeData !== null) {
           const obj = { ...objectById[resizeData?.objectId!] };
-          obj.left! = resizeRect?.x!;
-          obj.top! = resizeRect?.y!;
-          obj.width! = resizeRect?.w!;
-          obj.height! = resizeRect?.h!;
-
+          obj.absoluteLayout = {
+            left: resizeRect!.x!,
+            top: resizeRect!.y!,
+            width: resizeRect!.w!,
+            height: resizeRect!.h!,
+          };
           _updateObject(obj);
 
           setResizeStartPosition(null);
@@ -866,10 +962,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               if (activeLayerId) {
                 const rect2 = multiplyRect(rect, 1 / stageZoom);
                 _addNewObject(activeLayerId, stageToolObjectType, {
-                  left: rect2.x,
-                  top: rect2.y,
-                  width: rect2.w,
-                  height: rect2.h,
+                  layout: "absolute",
+                  absoluteLayout: {
+                    left: rect2.x,
+                    top: rect2.y,
+                    width: rect2.w,
+                    height: rect2.h,
+                  },
                 });
                 _resetStageTool();
               }
@@ -903,7 +1002,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       {!isPreview && (
         <div ref={selectionBoxRef} className={css.selectionBox}></div>
       )}
-      {isPreview && renderTimeInfo()}
+      {isPreview &&
+        previewState.scope?.entityType === "slide" &&
+        renderSlideTimelineInfo()}
+      {isPreview &&
+        previewState.scope?.entityType === "project" &&
+        renderProjectTimelineInfo()}
       <div style={stageStyle} className={cx("tmp-stage-selector", css.stage)}>
         <div className="preview-scrollable-holder" style={scrollableDivStyle}>
           {isPreview && previewLayout.header.component}
@@ -916,8 +1020,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   playerData={exportData}
                   previewState={previewState}
                   manualProgress={manualProgress}
-                  onProgress={(progress: number) => {
-                    setProgress(progress);
+                  onProgress={(progress: number, slideIdx: number) => {
+                    // TODO: PERFORMANCE ISSUE (cause render)
+                    setProgress({ progress, slideIdx });
                   }}
                   requestStop={() => {
                     _setStagePreview({ previewState: "stop", scope: null });
@@ -937,12 +1042,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 layerArr?.map((layer) => {
                   return layer.objectIds.map((objectId) => {
                     const object = objectByIdLocal[objectId];
-                    if (object.hasNoPosition) {
+                    const isAbsolutePosition = object.layout === "absolute";
+
+                    if (!isAbsolutePosition) {
                       return null;
                     }
 
                     const sizeObj = pick(
-                      object,
+                      object.absoluteLayout,
                       "left",
                       "top",
                       "width",
@@ -1000,6 +1107,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   style={guidelinesBorderStyle}
                   className={cx(css.borderBase, css.guidelinesBorder)}
                 ></div>
+
+                {horizontalGridLines.map((item) => (
+                  <div
+                    style={{ top: item.top + "px", width: item.width + "px" }}
+                    className={cx(css.gridHorizontalLine)}
+                  ></div>
+                ))}
+                {verticalGridLines.map((item) => (
+                  <div
+                    style={{
+                      left: item.left + "px",
+                      height: item.height + "px",
+                      top: "0px",
+                    }}
+                    className={cx(css.gridVerticalLine)}
+                  ></div>
+                ))}
               </>
             )}
           </div>

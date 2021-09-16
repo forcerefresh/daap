@@ -30,6 +30,7 @@ function createCube(target: HTMLDivElement) {
 gsap.registerEffect({
   name: cube,
   effect: function (targets: any, config: ICubeEffect) {
+    console.log(config);
     const slideTransitionHolder = document.getElementsByClassName(
       "slideTransitionHolder"
     )[0];
@@ -99,10 +100,10 @@ gsap.registerEffect({
     //tl.to(cube, { rotateX: 0, rotateY: -270, duration: 1 });
     //tl.to(cube, { rotateX: -90, rotateY: -360, duration: 1 });
     //tl.to(cube, { rotateX: 90, rotateY: -360, duration: 1 });
-    tl.to(".container", { scale: 0.5, duration: 1 });
+    tl.to(".container", { scale: 0.5, duration: config.duration! / 3 });
     //tl.to(cube, { scaleX: 0.6, scaleY: 0.6, scaleZ: 0.6, duration: 1 }); // short rotation back to 1
-    tl.to(cube, { rotateX: 90, rotateY: 0, duration: 1 }); // short rotation back to 1
-    tl.to(".container", { scale: 0.75, duration: 1 });
+    tl.to(cube, { rotateX: 90, rotateY: 0, duration: config.duration! / 3 }); // short rotation back to 1
+    tl.to(".container", { scale: 0.75, duration: config.duration! / 3 });
     //tl.to(cube, { rotateX: 90, rotateY: 90, duration: 1 }); // short rotation back to 1
     //tl.to(cube, { rotateX: 180, rotateY: 180, duration: 1 }); // short rotation back to 1
     //tl.to(cube, { rotateX: 0, rotateY: 360, duration: 1 }); // short rotation back to 1

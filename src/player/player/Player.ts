@@ -22,6 +22,7 @@ export class Player {
   private staticTimelines: gsap.core.Timeline[];
 
   private currentSlideTimeline?: gsap.core.Timeline;
+  private currentSlideTimelineIdx: number = 0;
   private slideTransitionTimeline?: gsap.core.Timeline;
 
   private nextZIndex = 1;
@@ -34,6 +35,9 @@ export class Player {
   private oneSlide: boolean;
 
   private currentSlideEl?: HTMLDivElement;
+
+  private onUpdateCallback: any;
+  private onCurrentTimelineChangeCallback: any;
 
   constructor(
     playerData: IPlayerData | null,
@@ -72,7 +76,16 @@ export class Player {
     });
   }
 
-  public setPaused(p: boolean) {
+  public onUpdate(onUpdateCallback: any) {
+    console.log(onUpdateCallback);
+    this.onUpdateCallback = onUpdateCallback;
+  }
+
+  onCurrentTimelineChange(onCurrentTimelineChangeCallback: any) {
+    this.onCurrentTimelineChangeCallback = onCurrentTimelineChangeCallback;
+  }
+
+  public setRootPaused(p: boolean) {
     if (p) {
       this.timelines.forEach((tl) => {
         tl.pause();
@@ -84,6 +97,25 @@ export class Player {
 
       this.slideTransitionTimeline?.pause();
     }
+  }
+
+  public getCurrentTimeline(): gsap.core.Timeline | undefined {
+    return this.currentSlideTimeline;
+  }
+  public getCurrentTimelineIdx(): number {
+    return this.currentSlideTimelineIdx;
+  }
+
+  public paused(p: boolean) {
+    this.timelines.forEach((tl) => {
+      tl.paused(p);
+    });
+
+    this.staticTimelines.forEach((tl) => {
+      tl.paused(p);
+    });
+
+    this.slideTransitionTimeline?.paused(p);
   }
 
   public clear() {
@@ -119,6 +151,8 @@ export class Player {
     const bettwenSlideEff: ISlideTransition | undefined =
       this.normalSlideDataArr?.[slideIdx]?.slide?.slideTransition;
 
+    console.log(bettwenSlideEff);
+
     const prevSlideEl = this.currentSlideEl;
 
     const slideEl = getSlideById(
@@ -132,6 +166,7 @@ export class Player {
         : "block";*/
     //console.log(slideIdx);
     this.currentSlideTimeline = this.timelines[slideIdx];
+    this.currentSlideTimelineIdx = slideIdx;
 
     const hasEffect = (bettwenSlideEff?: ISlideTransition) => {
       return (
@@ -149,7 +184,7 @@ export class Player {
           height: 485,
         },
         type: "effect",
-        duration: 1,
+        duration: bettwenSlideEff.duration / 1000,
         //ease: bettwenSlideEff.ease,
         //childEase: bettwenSlideEff.childEase,
         //timeDistribution: bettwenSlideEff.timeDistribution,
@@ -172,7 +207,9 @@ export class Player {
     //slideEl.style.display = "block";
 
     let isUpdated = false;
-    this.currentSlideTimeline.eventCallback("onUpdate", function () {
+    this.currentSlideTimeline.eventCallback("onUpdate", () => {
+      this.onUpdateCallback?.();
+
       if (!isUpdated) {
         slideEl.style.display = "block";
         isUpdated = true;
@@ -201,6 +238,8 @@ export class Player {
     }
 
     this.currentSlideEl = slideEl;
+
+    this.onCurrentTimelineChangeCallback?.();
   }
 
   public manualPlaySlide(slideIdx: number) {

@@ -1,11 +1,12 @@
-import { forEach, forIn } from "lodash-es";
 import { v4 as uuid } from "uuid";
 import {
   CanvasProperties,
   CoverImageProperties,
   FrameProperties,
+  GridImageProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
+  IGridPlacementValue,
   ImageProperties,
   InputType,
   SourceImageProperties,
@@ -41,10 +42,10 @@ export function createObject(
   switch (type) {
     case ObjectType.TEXT: {
       return {
-        ...objectProps,
         ...createTextObject(initialValue, {
           hasOverflowProperty: true,
         }),
+        ...objectProps,
       };
     }
     case ObjectType.IMAGE: {
@@ -59,6 +60,14 @@ export function createObject(
       return {
         ...objectProps,
         ...createCoverImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.GRID_IMAGE: {
+      return {
+        ...objectProps,
+        ...createGridImageObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -190,6 +199,18 @@ function createCommonObject(
     isLocked: false,
     transitions: getDefaultTransitionsForObject(),
     events: [],
+    supportedLayout: {
+      absolute: true,
+      cover: true,
+      grid: true,
+    },
+    layout: "absolute",
+    absoluteLayout: {
+      left: 100,
+      top: 100,
+      width: 300,
+      height: 200,
+    },
   };
 }
 
@@ -359,7 +380,7 @@ function createCoverImageObject(
 
   return {
     ...object,
-    hasNoPosition: true,
+    isCoverPlacement: true,
     definition: {
       id: uuid(),
       type: ObjectType.COVER_IMAGE,
@@ -367,9 +388,74 @@ function createCoverImageObject(
         placement: {
           displayName: "Placement",
           propertyName: "placement",
-          inputType: InputType.COVER_PLACEMENT,
+          inputType: InputType.COVER_LAYOUT,
           value: initialValue?.placement || getDefaultCoveragePlacement(),
           defaultValue: getDefaultCoveragePlacement(),
+        },
+        url: {
+          displayName: "Image url",
+          propertyName: "url",
+          inputType: InputType.IMAGE,
+          value: {
+            url: initialValue?.url || "",
+            width: 300,
+            height: 300,
+            isPlaceholder: !initialValue?.url,
+          },
+          defaultValue: {
+            url: "",
+            width: 300,
+            height: 300,
+            isPlaceholder: true,
+          },
+        },
+
+        ...(commonProperties?.hasOverflowProperty
+          ? {
+              overflow: {
+                displayName: "Overflow",
+                propertyName: "overflow",
+                inputType: InputType.SELECT,
+                value: "visible",
+                defaultValue: "visible",
+                options: [
+                  { value: "visible", label: "visible" },
+                  { value: "hidden", label: "hidden" },
+                ],
+              },
+            }
+          : {}),
+      },
+    },
+  };
+}
+
+function createGridImageObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<GridImageProperties>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.GRID_IMAGE);
+
+  return {
+    ...object,
+    isGridPlacement: true,
+    definition: {
+      id: uuid(),
+      type: ObjectType.GRID_IMAGE,
+      properties: {
+        placement: {
+          displayName: "Grid",
+          propertyName: "gridPlacement",
+          inputType: InputType.GRID_LAYOUT,
+          value: initialValue?.placement || getDefaultGridPlacement(),
+          defaultValue: getDefaultGridPlacement(),
         },
         url: {
           displayName: "Image url",
@@ -424,7 +510,7 @@ function createSourceImageObject(
 
   return {
     ...object,
-    hasNoPosition: true,
+    isCoverPlacement: true,
     definition: {
       id: uuid(),
       type: ObjectType.SOURCE_IMAGE,
@@ -446,7 +532,7 @@ function createSourceImageObject(
         placement: {
           displayName: "Placement",
           propertyName: "placement",
-          inputType: InputType.COVER_PLACEMENT,
+          inputType: InputType.COVER_LAYOUT,
           value: initialValue?.placement || getDefaultCoveragePlacement(),
           defaultValue: getDefaultCoveragePlacement(),
         },
@@ -670,5 +756,14 @@ function getDefaultCoveragePlacement(): ICoverPlacementValue {
     size: "cover",
     positionHorizontal: "center",
     positionVertical: "center",
+  };
+}
+
+function getDefaultGridPlacement(): IGridPlacementValue {
+  return {
+    left: 1,
+    right: 3,
+    top: 1,
+    bottom: 3,
   };
 }

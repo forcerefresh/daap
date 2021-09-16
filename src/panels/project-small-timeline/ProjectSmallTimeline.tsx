@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import gsap from "gsap";
-
-import css from "./SmallTimeline.module.scss";
+import useDeepCompareEffect from "use-deep-compare-effect";
+import css from "./ProjectSmallTimeline.module.scss";
 import { Button, HTMLSelect } from "@blueprintjs/core";
 import { ReactComponent as RepeatIcon } from "../../assets/icons/repeat.svg";
 import { IStore } from "../../store/store";
@@ -11,16 +10,83 @@ import { connect } from "react-redux";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
 
-type ISmallTimelineProps = typeof mapDispatchToProps &
+export interface SlideTimelineData {
+  duration: number;
+  transitionDuration: number;
+  transitionOverlap: number;
+}
+
+export interface ProjectTimelineData {
+  slides: SlideTimelineData[];
+  totalTime?: number;
+}
+
+type IProjectTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    progress: number;
+    slideProgress: { progress: number; slideIdx: number };
+    projectTimelineData: ProjectTimelineData | null;
     onManualProgress: (progress: number) => void;
   };
 
-const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
-  const { progress, onManualProgress, previewState, _setStagePreview } = props;
+const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
+  const {
+    slideProgress,
+    projectTimelineData,
+    onManualProgress,
+    previewState,
+    _setStagePreview,
+  } = props;
 
   //const [progress, setProgress] = useState<number>(0);
+
+  // get total duration
+  let totalTime = 0;
+  projectTimelineData?.slides.forEach((slideData) => {
+    totalTime += slideData.duration - slideData.transitionOverlap;
+  });
+
+  let currPos = 0;
+  const slideLeftArr: number[] = [];
+  const slidePosMultiplierArr: number[] = [];
+
+  projectTimelineData?.slides.forEach((slideData, idx) => {
+    const slideLeft = currPos === 0 ? 0 : currPos / totalTime;
+    const slidePosMultiplier =
+      (slideData.duration - slideData.transitionOverlap) / totalTime;
+    slideLeftArr[idx] = slideLeft;
+    slidePosMultiplierArr[idx] = slidePosMultiplier;
+
+    currPos += slideData.duration - slideData.transitionOverlap;
+  });
+
+  useDeepCompareEffect(() => {
+    //render timeline content
+
+    if (lineRef.current) {
+      console.log(totalTime, "TOTAL TIME");
+
+      const lineDiv = lineRef.current! as HTMLDivElement;
+      const lineWidth = lineDiv.offsetWidth;
+
+      console.log(lineWidth);
+
+      // NOTE: html is only for transitions
+      let html = "";
+      let currentPosition = 0;
+      projectTimelineData?.slides.forEach((slideData, idx) => {
+        const left = (lineWidth / totalTime) * currentPosition;
+        const transitionWidth =
+          (slideData.transitionDuration / totalTime) * lineWidth;
+        const overlapWidth =
+          (slideData.transitionOverlap / totalTime) * lineWidth;
+        html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${left}px "></div>`;
+        html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
+
+        currentPosition += slideData.duration - slideData.transitionOverlap;
+      });
+      lineDiv.innerHTML = html;
+    }
+  }, [projectTimelineData]);
 
   const lineRef = React.useRef(null);
 
@@ -37,7 +103,17 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   //};
 
-  const left = ((lineRef?.current as any)?.offsetWidth || 0) * progress;
+  console.log((lineRef?.current as any)?.offsetWidth);
+  const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
+  let left =
+    lineWidth *
+    slideProgress.progress *
+    slidePosMultiplierArr[slideProgress.slideIdx];
+
+  left = left + lineWidth * slideLeftArr[slideProgress.slideIdx];
+
+  console.log(slideLeftArr, "LEFT PER");
+  console.log(left, "LEFT");
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 
@@ -46,9 +122,16 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
     onManualProgress(multiplier);
     //tl.progress(multiplier, true);
   };
+
+  console.log(left);
   return (
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>
+        <div className={css.pagination}>
+          Slide <strong>{slideProgress.slideIdx + 1}</strong>
+          {" of "}
+          {projectTimelineData?.slides.length}
+        </div>
         <div className={css.line} ref={lineRef}></div>
         <div className={css.thumbHolder}>
           <Draggable
@@ -101,7 +184,7 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
               },
             ]}
           ></HTMLSelect>
-          <Button
+          {/*<Button
             active={previewState.repeat}
             minimal
             color={"#a7b6c2"}
@@ -114,15 +197,26 @@ const SmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
             <RepeatIcon
               style={{ width: "14px", height: "16px", fill: "#a7b6c2" }}
             />
-          </Button>
+          </Button>*/}
           <Button
             active={previewState.previewState === "play"}
             minimal
-            icon="play"
+            icon={previewState.previewState === "play" ? "pause" : "play"}
             onClick={() => {
               _setStagePreview({
                 previewState:
                   previewState.previewState === "play" ? "pause" : "play",
+              });
+            }}
+          />
+          <Button
+            minimal
+            icon={"stop"}
+            onClick={() => {
+              _setStagePreview({
+                previewState: "stop",
+                isPreview: false,
+                scope: null,
               });
             }}
           />
@@ -145,4 +239,7 @@ const mapDispatchToProps = {
     setStagePreview(preview),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SmallTimeline);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ProjectSmallTimeline);

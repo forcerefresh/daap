@@ -176,6 +176,30 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
               )}
             </div>
           </div>
+
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Grid</Text>
+            <div className="input60 labelOneLetter">
+              {getNumericFiled(
+                "V",
+                breakpointConfiguration.normal.grid.vertical,
+                (value: number) => {
+                  set(breakpointConfiguration, "normal.grid.vertical", value);
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+            <div className="input60 labelOneLetter">
+              {getNumericFiled(
+                "H",
+                breakpointConfiguration.normal.grid.horizontal,
+                (value: number) => {
+                  set(breakpointConfiguration, "normal.grid.horizontal", value);
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

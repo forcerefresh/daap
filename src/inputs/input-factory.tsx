@@ -8,6 +8,7 @@ import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
+import { GridPlacementInputForm } from "./grid-placement/grid-placement";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { NumbericTimelineInputForm as NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
@@ -77,15 +78,7 @@ export function getInputForm<T>(
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
     }
-    case InputType.COVER_PLACEMENT: {
-      return (
-        <CoverPlacementInputForm
-          key={key}
-          {...inputProps}
-          onChange={onChange}
-        />
-      );
-    }
+
     case InputType.VIDEO: {
       return <VideoInputForm key={key} {...inputProps} onChange={onChange} />;
     }
@@ -112,6 +105,20 @@ export function getInputForm<T>(
     case InputType.TRANSFORM: {
       return (
         <TransformInputForm key={key} {...inputProps} onChange={onChange} />
+      );
+    }
+    case InputType.COVER_LAYOUT: {
+      return (
+        <CoverPlacementInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+        />
+      );
+    }
+    case InputType.GRID_LAYOUT: {
+      return (
+        <GridPlacementInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
     case InputType.CHECKBOX: {
