@@ -34,30 +34,44 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  // 3. if we use GRID
-  if (object.isGridPlacement) {
-    const gridImageProperties = object.definition
-      .properties as GridImageProperties;
+  // 2. if we use GRID
+  if (object.layout === "grid") {
+    const { gridLayout } = object;
 
-    const wPerCell = stageSize.width / 6;
-    const hPerCell = stageSize.height / 6;
+    const wPerCell = stageSize.width / breakpointConfig.normal.grid.horizontal;
+    const hPerCell = stageSize.height / breakpointConfig.normal.grid.vertical;
     const sizeObj = {
-      left: wPerCell * gridImageProperties.placement.value.left,
-      top: hPerCell * gridImageProperties.placement.value.top,
-      width: wPerCell * gridImageProperties.placement.value.right,
-      height: hPerCell * gridImageProperties.placement.value.bottom,
+      left: wPerCell * gridLayout!.left,
+      top: hPerCell * gridLayout!.top,
+      width: wPerCell * gridLayout!.right,
+      height: hPerCell * gridLayout!.bottom,
     };
     if (resetPosition) {
-      //sizeObj.left = 0;
-      //sizeObj.top = 0;
+      sizeObj.left = 0;
+      sizeObj.top = 0;
     }
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
+  if (object.layout === "fit_page") {
+    const sizeObj = {
+      top: 0,
+      left:
+        -(
+          (breakpointConfig?.normal?.page.width || stageSize.width) -
+          stageSize.width
+        ) / 2,
+      width: breakpointConfig?.normal?.page.width || 0,
+      height: stageSize.height,
+    };
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
+  /*
   // 3. if we use COVER placement
   const coverImageProperties = object.definition
     .properties as CoverImageProperties;
   const relativeTo = coverImageProperties.placement.value.relativeTo;
+
 
   if (relativeTo === "page") {
     return {
@@ -89,6 +103,7 @@ export function calculateObjectSize(
       ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
         (breakpointConfig?.normal?.guidelinesPadding.bottom || 0))
   );
+
   if (relativeTo === "guidelines") {
     console.log({
       top: (breakpointConfig?.normal?.guidelinesPadding.top || 0) + "px",
@@ -123,7 +138,7 @@ export function calculateObjectSize(
         "px",
     };
   }
-
+*/
   return {};
 }
 
@@ -131,7 +146,8 @@ export function getPositionInfo(object: IObject) {
   if (object.layout === "absolute") {
     return (
       <>
-        <span> {"X:" + roundNumber(object.absoluteLayout!.left!, 2)}</span>
+        <span> Absolute | </span>
+        <span>{"X:" + roundNumber(object.absoluteLayout!.left!, 2)}</span>
         <span> {"Y:" + roundNumber(object.absoluteLayout!.top!, 2)}</span>
         {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
       <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
@@ -139,8 +155,22 @@ export function getPositionInfo(object: IObject) {
     );
   }
 
+  if (object.layout === "grid") {
+    return (
+      <>
+        <span> Grid | </span>
+        <span> {"left:" + object.gridLayout!.left!}</span>
+        <span> {"right:" + object.gridLayout!.right!}</span>
+      </>
+    );
+  }
+
   if (object.layout === "fit_page") {
-    return null; // todo
+    return (
+      <>
+        <span> Fit page </span>
+      </>
+    );
   }
 
   /*

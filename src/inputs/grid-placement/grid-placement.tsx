@@ -22,7 +22,7 @@ export const GridPlacementInputForm: React.FC<
       </div>
 
       <div className="input60">
-        {getNumericFiled("Right", value.left, (right: any) => {
+        {getNumericFiled("Right", value.right, (right: any) => {
           const valueClone = cloneDeep(value);
           valueClone.right = right;
           onChange(valueClone);
@@ -30,7 +30,7 @@ export const GridPlacementInputForm: React.FC<
       </div>
 
       <div className="input60">
-        {getNumericFiled("Top", value.bottom, (top: any) => {
+        {getNumericFiled("Top", value.top, (top: any) => {
           const valueClone = cloneDeep(value);
           valueClone.top = top;
           onChange(valueClone);

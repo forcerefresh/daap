@@ -53,8 +53,10 @@ export interface ICoverLayout {
   tmp1: number;
 }
 export interface IGridLayout {
-  // TODO
-  tmp2: number;
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
 }
 export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   id: string;

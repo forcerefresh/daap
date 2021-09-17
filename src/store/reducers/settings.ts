@@ -82,8 +82,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           slide: { width: 480, height: 850 },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
           grid: {
-            vertical: 6,
-            horizontal: 6,
+            vertical: 12,
+            horizontal: 12,
           },
           //keepProportion: false,
           horizontalFitTo: "viewport",
@@ -100,8 +100,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           slide: { width: 1024, height: 1365 },
           guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
           grid: {
-            vertical: 6,
-            horizontal: 6,
+            vertical: 12,
+            horizontal: 12,
           },
           //keepProportion: false,
           horizontalFitTo: "viewport",
@@ -118,8 +118,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
           slide: { width: 1244, height: 700 },
           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
           grid: {
-            vertical: 6,
-            horizontal: 6,
+            vertical: 12,
+            horizontal: 12,
           },
           //keepProportion: false,
           horizontalFitTo: "viewport",

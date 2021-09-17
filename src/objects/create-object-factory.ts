@@ -211,6 +211,12 @@ function createCommonObject(
       width: 300,
       height: 200,
     },
+    gridLayout: {
+      left: 1,
+      right: 3,
+      top: 1,
+      bottom: 2,
+    },
   };
 }
 

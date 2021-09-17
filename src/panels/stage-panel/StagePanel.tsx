@@ -215,8 +215,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // 2. apply only delta to selected objects only
   selectedObjectIds.forEach((objectId) => {
     if (!objectByIdLocal[objectId].isLocked) {
-      objectByIdLocal[objectId].left! += selRectDelta.x;
-      objectByIdLocal[objectId].top! += selRectDelta.y;
+      objectByIdLocal[objectId].absoluteLayout!.left! += selRectDelta.x;
+      objectByIdLocal[objectId].absoluteLayout!.top! += selRectDelta.y;
     }
   });
 
@@ -547,7 +547,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       object,
       breakpointConfig!,
       {
-        resetPosition: true,
+        resetPosition: false,
       }
     );
 
@@ -600,15 +600,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     console.log(resizeData?.objectId === object.id);
 
     const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
-    if (isAbsolutePosition) {
-      if (resizeRect && resizeData?.objectId === object.id) {
-        objDraggablePos.x = resizeRect.x;
-        objDraggablePos.y = resizeRect.y;
-      } else {
-        objDraggablePos.x = object.absoluteLayout!.left!;
-        objDraggablePos.y = object.absoluteLayout!.top!;
-      }
+    //if (isAbsolutePosition) {
+    if (resizeRect && resizeData?.objectId === object.id) {
+      objDraggablePos.x = resizeRect.x;
+      objDraggablePos.y = resizeRect.y;
+    } else {
+      objDraggablePos.x = parseInt(calculatedObjectSize.left!.toString(), 10);
+      objDraggablePos.y = parseInt(calculatedObjectSize.top!.toString(), 10);
     }
+    //}
 
     return (
       <Draggable
@@ -680,11 +680,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             dangerouslySetInnerHTML={{
               __html: getObjectHtml(
                 { ...object, ...widthAndHeightObject },
-                calculatedObjectSize,
+                { ...calculatedObjectSize },
                 false
               ),
             }}
-            style={{ ...objectStyle2, ...widthAndHeightStyle }}
+            style={{
+              ...objectStyle2,
+              ...widthAndHeightStyle,
+              left: "0px",
+              top: "0px",
+            }}
             className={cx({
               [css.notVisible]: !object.isVisible,
             })}
@@ -693,7 +698,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             ref={resizingSelectionRef}
             key={object.id}
             className={cx(css.selection, css[object.type])}
-            style={objectStyle2}
+            style={{ ...objectStyle2, left: "0px", top: "0px" }}
           />
 
           <div className={css.selectionInfo}>
@@ -1044,24 +1049,33 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                     const object = objectByIdLocal[objectId];
                     const isAbsolutePosition = object.layout === "absolute";
 
-                    if (!isAbsolutePosition) {
+                    /*if (!isAbsolutePosition) {
                       return null;
-                    }
+                    }*/
 
+                    const calculatedObjectSize = calculateObjectSize(
+                      object,
+                      breakpointConfig!,
+                      {
+                        resetPosition: false,
+                      }
+                    );
                     const sizeObj = pick(
-                      object.absoluteLayout,
+                      calculatedObjectSize,
                       "left",
                       "top",
                       "width",
                       "height"
                     );
+
                     const isSelected =
                       selectedObjectIds.indexOf(objectId) !== -1;
 
                     //   sizeObj.left = sizeObj.top = 0;
                     const objectStyle2 = mapValues(
                       sizeObj,
-                      (size) => `${size! * stageZoom}px`
+                      (size) =>
+                        `${parseInt(size!.toString()!, 10) * stageZoom}px`
                     );
                     (objectStyle2 as any).position = "absolute";
                     (objectStyle2 as any).borderWidth = 1 + "px";

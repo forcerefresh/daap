@@ -568,12 +568,27 @@ export function selectObjectsByRect(rect: IRect): any {
     getState().project.objects.allObjects.map((objectId) => {
       const object = getState().project.objects.objectById[objectId];
 
+      // TODO
+      // TODO: IMPORTANT hardcoded
+      const breakpointConfig: BreakpointConfiguration | undefined =
+        getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+          (breakpointConfig) => breakpointConfig.icon === "laptop"
+        );
+
+      const calculatedObjectSize = calculateObjectSize(
+        object,
+        breakpointConfig!,
+        {
+          resetPosition: false,
+        }
+      );
+
       if (
         isIntersectingRect(rect, {
-          x: object.left!,
-          y: object.top!,
-          w: object.width!,
-          h: object.height!,
+          x: parseInt(calculatedObjectSize.left!.toString(), 10),
+          y: parseInt(calculatedObjectSize.top!.toString(), 10),
+          w: parseInt(calculatedObjectSize.width!.toString(), 10),
+          h: parseInt(calculatedObjectSize.height!.toString(), 10),
         })
       ) {
         objectToSelectIds.push(object.id);

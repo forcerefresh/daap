@@ -10,7 +10,7 @@ import {
   getSelectField,
 } from "../../inputs/input-utils";
 import { InputType } from "../../inputs/types";
-import { IAbsoluteLayout, IObject } from "../../objects/types";
+import { IAbsoluteLayout, IGridLayout, IObject } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./PropertiesPanel.module.scss";
@@ -29,8 +29,12 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         {object.layout === "grid" &&
           getGridLayoutField(
             "",
-            { top: 0, bottom: 3, left: 3, right: 3 },
-            () => {}
+            object.gridLayout,
+            (gridLayout?: IGridLayout) => {
+              const retObj = cloneDeep(object);
+              retObj.gridLayout = gridLayout;
+              _updateObject(retObj);
+            }
           )}
         {object.layout === "absolute" &&
           getAbsoluteLayoutField(
