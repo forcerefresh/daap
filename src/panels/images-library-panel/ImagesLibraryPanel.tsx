@@ -299,7 +299,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           if (activeLayerId) {
                             _addNewObject(
                               activeLayerId,
-                              ObjectType.COVER_IMAGE,
+                              ObjectType.IMAGE, //cover
                               {},
                               {
                                 url: `${

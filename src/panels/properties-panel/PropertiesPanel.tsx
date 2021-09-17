@@ -25,7 +25,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     return (
       <>
         {renderLayoutOptions(object)}
-        {object.layout === "cover" && getCoverLayoutField("", {}, () => {})}
         {object.layout === "grid" &&
           getGridLayoutField(
             "",
@@ -47,11 +46,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
             }
           )}
 
-        {/*TO BE REMOVED*/}
-        {/*!object.isCoverPlacement &&
-          !object.isGridPlacement &&
-        renderPositionAndSize(object)*/}
-
         {renderProperties(object.definition.properties)}
         <hr />
         {renderEvents(object)}
@@ -67,9 +61,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       options.push({ label: "Absolute", value: "absolute" });
     object.supportedLayout.grid &&
       options.push({ label: "Grid", value: "grid" });
-    //o//bject.supportedLayout.cover &&
-    //options.push({ label: "Cover", value: "cover" });
-
     options.push({ label: "Fit Page", value: "fit_page" });
     options.push({ label: "Fit Stage", value: "fit_stage" });
     options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
@@ -96,7 +87,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       }
     };
 
-    //console.log(objectDef);
     return getInputForm(InputType.EVENTS, objectDef, onChange);
   };
 
@@ -117,22 +107,6 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
 
     //console.log(objectDef);
     return getInputForm(InputType.CORNER_RADIUS, objectDef, onChange);
-  };
-
-  const renderPositionAndSize = (object: IObject) => {
-    const objectDef = {
-      inputType: InputType.TRANSFORM,
-      value: pick(object, "left", "top", "width", "height"),
-    };
-
-    const onChange = (value: any) => {
-      const retObj = cloneDeep(object);
-      if (retObj) {
-        _updateObject({ ...retObj, ...value });
-      }
-    };
-
-    return getInputForm(InputType.TRANSFORM, objectDef, onChange);
   };
 
   const renderProperties = (properties: any) => {

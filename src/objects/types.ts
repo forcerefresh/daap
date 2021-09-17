@@ -7,8 +7,6 @@ import {
 
 export enum ObjectType {
   TEXT = "text",
-  COVER_IMAGE = "cover_image",
-  GRID_IMAGE = "grid_image",
   IMAGE = "image",
   VIDEO = "video",
   HTML = "html",

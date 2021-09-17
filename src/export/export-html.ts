@@ -2,8 +2,6 @@ import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import {
   CanvasProperties,
-  CoverImageProperties,
-  GridImageProperties,
   ICoverPlacementValue,
   ImageProperties,
   SourceImageProperties,
@@ -231,10 +229,6 @@ export function getObjectHtml(
       return getTextHtml(object, calculatedObjectSize);
     case ObjectType.IMAGE:
       return getImageHtml(object, calculatedObjectSize);
-    case ObjectType.COVER_IMAGE:
-      return getCoverImageHtml(object, calculatedObjectSize);
-    case ObjectType.GRID_IMAGE:
-      return getGridImageHtml(object, calculatedObjectSize);
     case ObjectType.VIDEO:
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
@@ -281,13 +275,35 @@ function getImageHtml(
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
 
+  const coverPlacementValue = imageProperties.fit.value as ICoverPlacementValue;
+
+  let backgroundSize = coverPlacementValue.size as
+    | "cover"
+    | "fit"
+    | "100% 100%";
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  const aH = coverPlacementValue.positionHorizontal;
+  const aV = coverPlacementValue.positionVertical;
+
+  //let style = "";
+  //style += addCommonPropertiesToStyle(style, object);
+  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-repeat:no-repeat;`;
+  style += `background-size: ${backgroundSize};`;
+  style += `background-position: ${aH} ${aV};`;
 
-  return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+  return `<div class="object-content" style="${style}"></div>`;
 }
 
-function getCoverImageHtml(
+/*function getCoverImageHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
@@ -319,7 +335,8 @@ function getCoverImageHtml(
 
   return `<div class="object-content" style="${style}"></div>`;
 }
-
+*/
+/*
 function getGridImageHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
@@ -330,17 +347,7 @@ function getGridImageHtml(
   if (imageProperties.url.value.isPlaceholder) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">GRID IMAGE<br/>PLACEHOLDER</div>`;
   }
-  /*
-  let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
-    .size as "cover" | "fit" | "100% 100%";
 
-  if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
-  const aH = (imageProperties.placement.value as ICoverPlacementValue)
-    .positionHorizontal;
-  const aV = (imageProperties.placement.value as ICoverPlacementValue)
-    .positionVertical;
-*/
   //TMP
   const backgroundSize = "cover";
   const aH = "center";
@@ -356,7 +363,7 @@ function getGridImageHtml(
   style += `background-position: ${aH} ${aV};`;
 
   return `<div class="object-content" style="${style}"></div>`;
-}
+}*/
 
 function getSourceImageHtml(
   object: IObject,

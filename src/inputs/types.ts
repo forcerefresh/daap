@@ -193,7 +193,6 @@ export interface IVideoInput {
 }
 
 export interface ICoverPlacementValue {
-  relativeTo: "page" | "stage" | "guidelines";
   size: "cover" | "fit";
   positionHorizontal?: "left" | "center" | "right";
   positionVertical?: "top" | "center" | "bottom";
@@ -348,16 +347,7 @@ export interface TextProperties {
 }
 
 export interface ImageProperties {
-  url: IImageInput;
-}
-
-export interface CoverImageProperties {
-  placement: ICoverPlacementInput;
-  url: IImageInput;
-}
-
-export interface GridImageProperties {
-  placement: IGridPlacementInput;
+  fit: ICoverPlacementInput;
   url: IImageInput;
 }
 

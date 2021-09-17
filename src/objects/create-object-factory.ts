@@ -1,9 +1,7 @@
 import { v4 as uuid } from "uuid";
 import {
   CanvasProperties,
-  CoverImageProperties,
   FrameProperties,
-  GridImageProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
   IGridPlacementValue,
@@ -52,22 +50,6 @@ export function createObject(
       return {
         ...objectProps,
         ...createImageObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
-      };
-    }
-    case ObjectType.COVER_IMAGE: {
-      return {
-        ...objectProps,
-        ...createCoverImageObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
-      };
-    }
-    case ObjectType.GRID_IMAGE: {
-      return {
-        ...objectProps,
-        ...createGridImageObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -349,54 +331,20 @@ function createImageObject(
               },
             }
           : {}),
-        url: {
-          displayName: "Image url",
-          propertyName: "url",
-          inputType: InputType.IMAGE,
-          value: {
-            url: initialValue?.url || "",
-            width: 300,
-            height: 300,
-            isPlaceholder: !initialValue?.url,
-          },
-          defaultValue: {
-            url: "",
-            width: 300,
-            height: 300,
-            isPlaceholder: true,
-          },
-        },
-      },
-    },
-  };
-}
-
-function createCoverImageObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<CoverImageProperties>,
-  keyof ICommonObjectProperties | "layerId"
-> {
-  const object = createCommonObject(ObjectType.COVER_IMAGE);
-
-  return {
-    ...object,
-    isCoverPlacement: true,
-    definition: {
-      id: uuid(),
-      type: ObjectType.COVER_IMAGE,
-      properties: {
-        placement: {
-          displayName: "Placement",
-          propertyName: "placement",
+        fit: {
           inputType: InputType.COVER_LAYOUT,
-          value: initialValue?.placement || getDefaultCoveragePlacement(),
-          defaultValue: getDefaultCoveragePlacement(),
+          displayName: "Fit",
+          propertyName: "fit",
+          value: {
+            size: "fit",
+            positionHorizontal: "center",
+            positionVertical: "center",
+          },
+          defaultValue: {
+            size: "fit",
+            positionHorizontal: "center",
+            positionVertical: "center",
+          },
         },
         url: {
           displayName: "Image url",
@@ -415,87 +363,6 @@ function createCoverImageObject(
             isPlaceholder: true,
           },
         },
-
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-      },
-    },
-  };
-}
-
-function createGridImageObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<GridImageProperties>,
-  keyof ICommonObjectProperties | "layerId"
-> {
-  const object = createCommonObject(ObjectType.GRID_IMAGE);
-
-  return {
-    ...object,
-    isGridPlacement: true,
-    definition: {
-      id: uuid(),
-      type: ObjectType.GRID_IMAGE,
-      properties: {
-        placement: {
-          displayName: "Grid",
-          propertyName: "gridPlacement",
-          inputType: InputType.GRID_LAYOUT,
-          value: initialValue?.placement || getDefaultGridPlacement(),
-          defaultValue: getDefaultGridPlacement(),
-        },
-        url: {
-          displayName: "Image url",
-          propertyName: "url",
-          inputType: InputType.IMAGE,
-          value: {
-            url: initialValue?.url || "",
-            width: 300,
-            height: 300,
-            isPlaceholder: !initialValue?.url,
-          },
-          defaultValue: {
-            url: "",
-            width: 300,
-            height: 300,
-            isPlaceholder: true,
-          },
-        },
-
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
       },
     },
   };
@@ -758,18 +625,8 @@ function createFrameObject(
 
 function getDefaultCoveragePlacement(): ICoverPlacementValue {
   return {
-    relativeTo: "stage",
     size: "cover",
     positionHorizontal: "center",
     positionVertical: "center",
-  };
-}
-
-function getDefaultGridPlacement(): IGridPlacementValue {
-  return {
-    left: 1,
-    right: 3,
-    top: 1,
-    bottom: 3,
   };
 }

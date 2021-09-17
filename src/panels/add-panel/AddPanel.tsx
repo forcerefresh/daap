@@ -129,48 +129,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>IMAGE</h3>
           <p>Position image relative or absolute</p>
         </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.COVER_IMAGE, {});
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="media"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>COVER IMAGE</h3>
-          <p>Fit image to page, stage or guidelines</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.GRID_IMAGE, {});
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="media"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>GRID IMAGE</h3>
-          <p>Fit image to grid</p>
-        </Card>
       </div>
 
       <div>

@@ -38,21 +38,16 @@ export const CoverPlacementInputForm: React.FC<
   return (
     <>
       <div className="input60">
-        {getSelectField(
-          "Relative to",
-          value.relativeTo,
-          RELATIVE_TO_OPTIONS,
-          (relativeTo: any) => {
-            const valueClone = cloneDeep(value);
-            valueClone.relativeTo = relativeTo;
-            onChange(valueClone);
-          }
-        )}
+        {getSelectField("Fit", value.size, SIZE_OPTIONS, (size: any) => {
+          const valueClone = cloneDeep(value);
+          valueClone.size = size;
+          onChange(valueClone);
+        })}
       </div>
 
       <div className={cx(css.alignHolder, "input60")}>
         <div className="bp3-form-group bp3-inline">
-          <Label>Align</Label>
+          <Label>Fit align</Label>
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {getSelectField(
               "H",
@@ -77,14 +72,6 @@ export const CoverPlacementInputForm: React.FC<
             )}
           </div>
         </div>
-      </div>
-
-      <div className="input60">
-        {getSelectField("Size", value.size, SIZE_OPTIONS, (size: any) => {
-          const valueClone = cloneDeep(value);
-          valueClone.size = size;
-          onChange(valueClone);
-        })}
       </div>
 
       <hr />

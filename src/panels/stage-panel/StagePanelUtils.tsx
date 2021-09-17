@@ -1,10 +1,5 @@
 import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
-import {
-  CoverImageProperties,
-  GridImageProperties,
-  ICoverPlacementValue,
-} from "../../inputs/types";
 import { IObject } from "../../objects/types";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
