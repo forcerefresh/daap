@@ -61,6 +61,36 @@ export function calculateObjectSize(
     };
     return mapValues(sizeObj, (size) => `${size}px`);
   }
+
+  if (object.layout === "fit_stage") {
+    const sizeObj = {
+      top: 0,
+      left: 0,
+      width: stageSize.width,
+      height: stageSize.height,
+    };
+
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
+
+  if (object.layout === "fit_guidelines") {
+    const sizeObj = {
+      top: breakpointConfig?.normal?.guidelinesPadding.top || 0,
+      left: breakpointConfig?.normal?.guidelinesPadding.left || 0,
+
+      width:
+        stageSize.width -
+        ((breakpointConfig?.normal?.guidelinesPadding.left || 0) +
+          (breakpointConfig?.normal?.guidelinesPadding.right || 0)),
+      height:
+        stageSize.height -
+        ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
+          (breakpointConfig?.normal?.guidelinesPadding.bottom || 0)),
+    };
+
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
+
   /*
   // 3. if we use COVER placement
   const coverImageProperties = object.definition
@@ -163,7 +193,23 @@ export function getPositionInfo(object: IObject) {
   if (object.layout === "fit_page") {
     return (
       <>
-        <span> Fit page </span>
+        <span> Fit Page </span>
+      </>
+    );
+  }
+
+  if (object.layout === "fit_stage") {
+    return (
+      <>
+        <span> Fit Stage</span>
+      </>
+    );
+  }
+
+  if (object.layout === "fit_guidelines") {
+    return (
+      <>
+        <span> Fit Guidelines</span>
       </>
     );
   }

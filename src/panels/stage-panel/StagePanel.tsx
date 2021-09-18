@@ -310,8 +310,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const horizontalGridLines: { top: number; width: number }[] = [];
   for (let i = 1; i < numOfGridHFields; i++) {
     horizontalGridLines.push({
-      top: oneHFieldHeight * i,
-      width: stageSize.width,
+      top: oneHFieldHeight * i * stageZoom,
+      width: stageSize.width * stageZoom,
     });
   }
   const totalWidth = stageSize.width; // could be page|stage|guidelines
@@ -319,8 +319,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const verticalGridLines: { left: number; height: number }[] = [];
   for (let i = 1; i < numOfGridHFields; i++) {
     verticalGridLines.push({
-      left: oneVFieldWidth * i,
-      height: stageSize.height,
+      left: oneVFieldWidth * i * stageZoom,
+      height: stageSize.height * stageZoom,
     });
   }
 
