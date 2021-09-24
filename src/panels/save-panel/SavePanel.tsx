@@ -106,7 +106,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           message: "Slider is successfully saved.",
         });
       })
-      .catch(() => {
+      .catch((e) => {
+        throw e;
         _updateProjectMeta({ inSaving: false });
         onRequestClose();
         AppToaster.show({

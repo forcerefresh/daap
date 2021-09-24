@@ -82,6 +82,9 @@ function useMediaHookFactory() {
 function useAPIHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
     return require("./integration/hooks/wp-use-api-hook").useAPIHook;
+  }
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/electron-use-api-hook").useAPIHook;
   } else {
     return require("./integration/hooks/use-api-hook").useAPIHook;
   }

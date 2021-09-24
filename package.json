@@ -1,5 +1,5 @@
 {
-  "name": "visualiser-ts",
+  "name": "web-slider",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,6 +21,8 @@
     "classnames": "^2.2.6",
     "clone-deep": "^4.0.1",
     "deep-diff": "^1.0.2",
+    "electron": "^15.0.0",
+    "electron-reloader": "^1.2.1",
     "env-cmd": "^10.1.0",
     "gsap": "file:gsap-bonus.tgz",
     "immutability-helper": "^3.1.1",
@@ -39,6 +41,7 @@
     "uuid": "^8.3.1",
     "webfontloader": "^1.6.28"
   },
+  "main": "electron/main.js",
   "scripts": {
     "start": "env-cmd -f env/.env react-scripts start",
     "start:wp": "env-cmd -f env/wp.env react-scripts start",
