@@ -9,7 +9,13 @@ gsap.registerEffect({
   name: squareMask,
   effect: function (targets: any, config: ISquareMaskEffect) {
     const objectEl = targets[0] as HTMLElement;
-    const borderColor = colorToString(config.borderColor);
+    const borderColor = colorToString(config.borderColor.borderColor);
+    const topBorderColor = colorToString(config.borderColor.topBorderColor);
+    const bottomBorderColor = colorToString(
+      config.borderColor.bottomBorderColor
+    );
+    const leftBorderColor = colorToString(config.borderColor.leftBorderColor);
+    const rightBorderColor = colorToString(config.borderColor.rightBorderColor);
 
     let borderEl: HTMLElement;
 
@@ -30,7 +36,15 @@ gsap.registerEffect({
         objectEl.appendChild(borderEl);
       }
 
-      borderEl.style.border = `solid ${borderColor} 0px`;
+      if (config.borderColor.useDifferentValues) {
+        borderEl.style.borderTop = `solid ${topBorderColor} 0px`;
+        borderEl.style.borderBottom = `solid ${bottomBorderColor} 0px`;
+        borderEl.style.borderLeft = `solid ${leftBorderColor} 0px`;
+        borderEl.style.borderRight = `solid ${rightBorderColor} 0px`;
+      } else {
+        borderEl.style.border = `solid ${borderColor} 0px`;
+      }
+
       borderEl.style.width = `${config.objectProperties?.width}px`;
       borderEl.style.height = `${config.objectProperties?.height}px`;
 

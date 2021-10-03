@@ -22,6 +22,7 @@ export enum InputType {
   GRID_LAYOUT = "grid_layout",
   TEXT_START_POSITION = "text_start_position",
   CORNER_RADIUS = "corner-radius",
+  BORDER_COLOR = "border_color",
 }
 
 // TODO: create interfaces for all input values
@@ -52,6 +53,7 @@ export interface IUpdateInput {
       | ICoverPlacementValue
       | IGridPlacementValue
       | INumericTimelineValue
+      | IBorderColorValue
       | ITextStartPositionValue
       | ICornerRadiusValue
   ) => void;
@@ -84,6 +86,24 @@ export interface IUnitsNumberInput {
   value: string;
   defaultValue: string;
   inputProps?: { disabled: boolean };
+}
+
+export interface IBorderColorValue {
+  useDifferentValues: boolean;
+  borderColor: RGBColor;
+  topBorderColor: RGBColor;
+  bottomBorderColor: RGBColor;
+  leftBorderColor: RGBColor;
+  rightBorderColor: RGBColor;
+}
+
+export interface IBorderColorInput {
+  inputType: InputType.BORDER_COLOR;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: IBorderColorValue;
+  defaultValue: IBorderColorValue;
 }
 
 // timeline numeric value (delay and duration)

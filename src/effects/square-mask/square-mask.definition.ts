@@ -9,7 +9,7 @@ export const squareMaskDefinition = {
       displayName: "Border color",
       helperText: null,
       propertyName: "borderColor",
-      inputType: InputType.COLOR,
+      inputType: InputType.BORDER_COLOR,
     },
     {
       displayName: "Bottom width",
@@ -59,10 +59,17 @@ export const squareMaskDefaults: ISquareMaskEffect = {
   ease: "none",
   supportedEffectTypes: ["in", "out"],
   // specific this effect
+  borderColor: {
+    useDifferentValues: false,
+    borderColor: { r: 255, g: 255, b: 255, a: 1 },
+    topBorderColor: { r: 255, g: 255, b: 255, a: 1 },
+    bottomBorderColor: { r: 255, g: 255, b: 255, a: 1 },
+    leftBorderColor: { r: 255, g: 255, b: 255, a: 1 },
+    rightBorderColor: { r: 255, g: 255, b: 255, a: 1 },
+  },
   borderBottom: { value: 0, ...delayAndDuration },
   borderLeft: { value: 0, ...delayAndDuration },
   borderRight: { value: 0, ...delayAndDuration },
   borderTop: { value: 0, ...delayAndDuration },
-  borderColor: { r: 255, g: 255, b: 255, a: 1 },
   hideMaskOnComplete: false,
 };

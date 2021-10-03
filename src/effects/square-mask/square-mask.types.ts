@@ -1,5 +1,4 @@
-import { RGBColor } from "react-color";
-import { INumericTimelineValue } from "../../inputs/types";
+import { IBorderColorValue, INumericTimelineValue } from "../../inputs/types";
 import { IEffectBase } from "../types";
 
 export const squareMask = "squareMask";
@@ -9,6 +8,6 @@ export interface ISquareMaskEffect extends IEffectBase {
   borderBottom: INumericTimelineValue;
   borderLeft: INumericTimelineValue;
   borderRight: INumericTimelineValue;
-  borderColor: RGBColor;
+  borderColor: IBorderColorValue;
   hideMaskOnComplete: boolean;
 }
