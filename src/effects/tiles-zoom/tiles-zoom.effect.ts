@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
   getMethodByType,
@@ -16,10 +16,8 @@ gsap.registerEffect({
     const target = targets[0];
 
     // get element and html
-    const {
-      objectContentElement,
-      objectContentHtml,
-    } = getObjectContentElementAndHtml(target);
+    const { objectContentElement, objectContentHtml } =
+      getObjectContentElementAndHtml(target);
 
     // create title elements
     const elements = createTilesFromHtml(

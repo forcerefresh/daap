@@ -8,65 +8,20 @@ import {
   SvgProperties,
   TextProperties,
 } from "../inputs/types";
-import {
-  IObject,
-  IObjectEvent,
-  ISlideTransition,
-  ITransitions,
-  ObjectType,
-} from "../objects/types";
+import { IObject, ObjectType } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
-import { ILayer, ILayers } from "../store/reducers/layers";
-import { IObjects } from "../store/reducers/objects";
+import { ILayer, ILayers } from "../store/reducers/i-layers";
+import { IObjects } from "../store/reducers/i-objects";
+import { ISlide, ISlides } from "../store/reducers/i-slides";
 import { BreakpointConfiguration } from "../store/reducers/settings";
-import {
-  ISlide,
-  ISlideDuration,
-  ISlides,
-  SlideType,
-} from "../store/reducers/slides";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
-
-export interface ITransitionsData {
-  objectClass: string;
-  transitions: ITransitions;
-  events: IObjectEvent[];
-  data: {
-    slideDuration: ISlideDuration;
-    objectWidth?: number;
-    objectHeight?: number;
-    objectLeft?: number;
-    objectTop?: number;
-    objectHtml?: string;
-    overflow: string;
-  };
-}
-
-export interface ISlideTransitionData {
-  transitions: ITransitions;
-}
-
-export interface IPlayerData {
-  html: string;
-  slideDataArr: ISlideData[];
-}
-
-export interface ISources {
-  slides: ISlides;
-  layers: ILayers;
-  objects: IObjects;
-}
-
-export interface ISlideData {
-  slide: {
-    id: string;
-    slideType: SlideType;
-    slideTransition: ISlideTransition;
-    duration: ISlideDuration;
-  };
-  transitionsData: ITransitionsData[];
-}
+import {
+  IPlayerData,
+  ISlideData,
+  ISources,
+  ITransitionsData,
+} from "./i-export-html";
 
 export function generatePlayerData(
   sources: ISources,

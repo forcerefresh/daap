@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ITransitionsData } from "../export/export-html";
+import { ITransitionsData } from "../export/i-export-html";
 import { ITransition } from "../objects/types";
 
 export function createTimelineForObject(

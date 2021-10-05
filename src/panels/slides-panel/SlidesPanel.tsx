@@ -18,7 +18,7 @@ import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
-import { SlideType } from "../../store/reducers/slides";
+import { SlideType } from "../../store/reducers/i-slides";
 import { getRealSlideDurationVisual } from "../../utils/utils";
 
 type ISlidesPanel = typeof mapDispatchToProps &
@@ -102,7 +102,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         ></Button>
       </div>
       <div className={css.slidesHolder}>
-        {allSlides.map((slideId) => {
+        {allSlides.map((slideId: string) => {
           return (
             <div
               key={slideId}

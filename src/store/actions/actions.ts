@@ -1,5 +1,5 @@
-import { ISlide, ISlides, SlideType } from "../reducers/slides";
-import { ILayer, ILayers } from "../reducers/layers";
+import { ISlide, ISlides, SlideType } from "../reducers/i-slides";
+import { ILayer, ILayers } from "../reducers/i-layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
@@ -29,7 +29,7 @@ import {
   ISettings,
 } from "../reducers/settings";
 import { IMeta } from "../reducers/meta";
-import { IObjects } from "../reducers/objects";
+import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
 
@@ -145,7 +145,7 @@ export function deleteSlideThree(slideId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerIds = getState().project.slides.slideById[slideId].layerIds;
     const objectIds = getState().project.objects.allObjects.filter(
-      (objectId) =>
+      (objectId: string) =>
         layerIds.indexOf(
           getState().project.objects.objectById[objectId].layerId
         ) !== -1
@@ -565,7 +565,7 @@ export function selectObjects(objectsId: string[]): SelectObjectAction {
 export function selectObjectsByRect(rect: IRect): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const objectToSelectIds: string[] = [];
-    getState().project.objects.allObjects.map((objectId) => {
+    getState().project.objects.allObjects.map((objectId: string) => {
       const object = getState().project.objects.objectById[objectId];
 
       // TODO

@@ -1,8 +1,7 @@
 import React from "react";
 import { IObject } from "../objects/types";
-import { ILayer } from "../store/reducers/layers";
-import { ISlide } from "../store/reducers/slides";
 import { BorderColorInputForm } from "./border-color-input/border-color-input";
+import { ILayer } from "../store/reducers/i-layers";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";

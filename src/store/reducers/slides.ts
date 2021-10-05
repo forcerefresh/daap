@@ -10,33 +10,7 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { ISlideTransition, ITransitions } from "../../objects/types";
-
-export interface ISlideDuration {
-  inheritFrom: "inherit" | "custom";
-  customValue: number;
-}
-
-export enum SlideType {
-  Normal = "normal",
-  Static = "static",
-}
-
-export interface ISlide {
-  id: string;
-  name: string;
-  duration: ISlideDuration;
-  layerIds: string[];
-  nextLayerIdCounter: number;
-  slideType: SlideType;
-  slideTransition: ISlideTransition;
-}
-
-export interface ISlides {
-  slideById: { [id: string]: ISlide };
-  allSlides: string[];
-  nextSlideIdCounter: number;
-}
+import { ISlides } from "./i-slides";
 
 export function slides(
   state: ISlides = { nextSlideIdCounter: 1, slideById: {}, allSlides: [] },

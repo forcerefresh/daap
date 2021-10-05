@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { tilesFade, ITilesFadeEffect } from "./tiles-fade.types";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
   getMethodByType,
@@ -13,10 +13,8 @@ gsap.registerEffect({
   name: tilesFade,
   effect: function (targets: any, config: ITilesFadeEffect) {
     // get element and html
-    const {
-      objectContentElement,
-      objectContentHtml,
-    } = getObjectContentElementAndHtml(targets[0]);
+    const { objectContentElement, objectContentHtml } =
+      getObjectContentElementAndHtml(targets[0]);
 
     // create title elements
     const elements = createTilesFromHtml(

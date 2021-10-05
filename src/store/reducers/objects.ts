@@ -1,5 +1,4 @@
 import { omit, without } from "lodash-es";
-import { IObject } from "../../objects/types";
 import {
   ActionTypes,
   ADD_OBJECT,
@@ -7,11 +6,7 @@ import {
   OPEN_PROJECT,
   UPDATE_OBJECT,
 } from "../actions/actions";
-
-export interface IObjects {
-  objectById: { [id: string]: IObject<{}> };
-  allObjects: string[];
-}
+import { IObjects } from "./i-objects";
 
 export function objects(
   state: IObjects = { objectById: {}, allObjects: [] },

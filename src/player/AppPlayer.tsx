@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { isEmpty } from "lodash-es";
 import useDeepCompareEffect from "use-deep-compare-effect";
-import { IPlayerData } from "../export/export-html";
 import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
+import { IPlayerData } from "../export/i-export-html";
 
 export interface AppPlayerProps {
   playerData: IPlayerData | null;
@@ -73,6 +73,9 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/
+      console.log(playerData);
+      console.log(JSON.stringify(playerData));
+
       const pl = new Player(playerData, playerHolderRef.current!);
       player.current = pl;
 

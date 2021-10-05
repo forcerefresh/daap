@@ -5,7 +5,7 @@ import { Text } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { getNumericFiled, getSelectField } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
-import { ISlide, SlideType } from "../../store/reducers/slides";
+import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 
 import css from "./SlideSettingsPanel.module.scss";

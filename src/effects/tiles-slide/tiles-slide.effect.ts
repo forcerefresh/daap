@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
   getMethodByType,
