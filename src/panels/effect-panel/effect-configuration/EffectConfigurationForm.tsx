@@ -14,8 +14,8 @@ import {
   updateObject,
   updateSlide,
 } from "../../../store/actions/actions";
-import { ILayer } from "../../../store/reducers/layers";
-import { ISlide, slides } from "../../../store/reducers/slides";
+import { ILayer } from "../../../store/reducers/i-layers";
+import { ISlide } from "../../../store/reducers/i-slides";
 import { IStore } from "../../../store/store";
 
 import css from "./EffectConfigurationForm.module.scss";
@@ -51,7 +51,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   let layerObjects: IObject[] | undefined;
   if (objectType === "layer") {
     layer = layerById[objectId];
-    layerObjects = layer.objectIds.map((id) => objectById[id]);
+    layerObjects = layer?.objectIds.map((id) => objectById[id]);
   }
 
   const renderEffectForm = (

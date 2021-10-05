@@ -7,17 +7,20 @@ import thunk from "redux-thunk";
 import diff from "../3rd-party-libs/undo-redo/reducer";
 
 import { composeWithDevTools } from "redux-devtools-extension";
-import { ISlides, slides } from "./reducers/slides";
-import { ILayers, layers } from "./reducers/layers";
+import { slides } from "./reducers/slides";
+import { layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
 import { IStage, stage } from "./reducers/stage";
-import { IObjects, objects } from "./reducers/objects";
+import { objects } from "./reducers/objects";
 import { ISettings, settings } from "./reducers/settings";
 import initialState from "./initial-state.json";
 import { IDocument, document } from "./reducers/document";
 import { IGlobals, globals } from "./reducers/globals";
 import { IFonts, fonts } from "./reducers/fonts";
 import { IMeta, meta } from "./reducers/meta";
+import { ISlides } from "./reducers/i-slides";
+import { ILayers } from "./reducers/i-layers";
+import { IObjects } from "./reducers/i-objects";
 
 export interface IStore {
   project: {

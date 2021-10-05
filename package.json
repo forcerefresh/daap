@@ -36,6 +36,7 @@
     "react-redux": "^7.2.1",
     "react-scripts": "^4.0.1",
     "redux-devtools-extension": "^2.13.8",
+    "source-map-explorer": "^2.5.2",
     "typescript": "^3.8.3",
     "use-deep-compare-effect": "^1.5.0",
     "uuid": "^8.3.1",
@@ -43,12 +44,16 @@
   },
   "main": "electron/main.js",
   "scripts": {
-    "start": "env-cmd -f env/.env react-scripts start",
-    "start:wp": "env-cmd -f env/wp.env react-scripts start",
-    "start:electron": "env-cmd -f env/electron.env react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run start:app",
+    "start:app": "env-cmd -f env/.env react-scripts start",
+    "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
+    "start:app:electron": "env-cmd -f env/electron.env react-scripts start",
+    "start:player": "env-cmd -f env/player-dev.env react-scripts start",
+    "build:app": "react-scripts build",
+    "build:player": "env-cmd -f env/player.env react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"

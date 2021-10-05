@@ -1,13 +1,12 @@
 import gsap from "gsap";
 import { last } from "lodash-es";
-import { ISlideEffect } from "../../effects/slide/slide.types";
-import { IPlayerData, ISlideData } from "../../export/export-html";
+import { IPlayerData, ISlideData } from "../../export/i-export-html";
 import {
   IGoToSlideAction,
   IObjectEvent,
   ISlideTransition,
 } from "../../objects/types";
-import { SlideType } from "../../store/reducers/slides";
+import { SlideType } from "../../store/reducers/i-slides";
 import { createTimelineForObject } from "../AppPlayerUtils";
 
 /*export interface IPlayerConfig {

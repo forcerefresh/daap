@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Player</title>
+  </head>
+
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script>
+      !(function (e) {
+        function r(r) {
+          for (
+            var n, l, i = r[0], f = r[1], a = r[2], c = 0, s = [];
+            c < i.length;
+            c++
+          )
+            (l = i[c]),
+              Object.prototype.hasOwnProperty.call(o, l) &&
+                o[l] &&
+                s.push(o[l][0]),
+              (o[l] = 0);
+          for (n in f)
+            Object.prototype.hasOwnProperty.call(f, n) && (e[n] = f[n]);
+          for (p && p(r); s.length; ) s.shift()();
+          return u.push.apply(u, a || []), t();
+        }
+        function t() {
+          for (var e, r = 0; r < u.length; r++) {
+            for (var t = u[r], n = !0, i = 1; i < t.length; i++) {
+              var f = t[i];
+              0 !== o[f] && (n = !1);
+            }
+            n && (u.splice(r--, 1), (e = l((l.s = t[0]))));
+          }
+          return e;
+        }
+        var n = {},
+          o = { 1: 0 },
+          u = [];
+        function l(r) {
+          if (n[r]) return n[r].exports;
+          var t = (n[r] = { i: r, l: !1, exports: {} });
+          return e[r].call(t.exports, t, t.exports, l), (t.l = !0), t.exports;
+        }
+        (l.m = e),
+          (l.c = n),
+          (l.d = function (e, r, t) {
+            l.o(e, r) ||
+              Object.defineProperty(e, r, { enumerable: !0, get: t });
+          }),
+          (l.r = function (e) {
+            "undefined" != typeof Symbol &&
+              Symbol.toStringTag &&
+              Object.defineProperty(e, Symbol.toStringTag, { value: "Module" }),
+              Object.defineProperty(e, "__esModule", { value: !0 });
+          }),
+          (l.t = function (e, r) {
+            if ((1 & r && (e = l(e)), 8 & r)) return e;
+            if (4 & r && "object" == typeof e && e && e.__esModule) return e;
+            var t = Object.create(null);
+            if (
+              (l.r(t),
+              Object.defineProperty(t, "default", { enumerable: !0, value: e }),
+              2 & r && "string" != typeof e)
+            )
+              for (var n in e)
+                l.d(
+                  t,
+                  n,
+                  function (r) {
+                    return e[r];
+                  }.bind(null, n)
+                );
+            return t;
+          }),
+          (l.n = function (e) {
+            var r =
+              e && e.__esModule
+                ? function () {
+                    return e.default;
+                  }
+                : function () {
+                    return e;
+                  };
+            return l.d(r, "a", r), r;
+          }),
+          (l.o = function (e, r) {
+            return Object.prototype.hasOwnProperty.call(e, r);
+          }),
+          (l.p = "/");
+        var i = (this["webpackJsonpweb-slider"] =
+            this["webpackJsonpweb-slider"] || []),
+          f = i.push.bind(i);
+        (i.push = r), (i = i.slice());
+        for (var a = 0; a < i.length; a++) r(i[a]);
+        var p = f;
+        t();
+      })([]);
+    </script>
+    <script src="../build/static/js/2.0c83fad0.chunk.js"></script>
+
+    <script src="../build/static/js/main.440720fe.chunk.js"></script>
+
+    <script>
+      const data = {
+        html: '<div class=\'slidesHolder\'>  <div style=\'position: absolute;\' class=\'slide-d2895d21-f996-4d14-839d-e972d3ee4b3b\'>    <div class="layer-29a54d38-990c-4f2e-8ad2-57534fb3e1a9" style="width:1000px; height: 500px">      <div class="object" style=\'left:100px;top:100px;width:300px;height:200px;position: absolute;overflow: visible;\'>      <div class="object object-7da628ba-e2cf-4995-87d3-f413da2f69cc" style=\'left:100px;top:100px;width:300px;height:200px;position: absolute;overflow: visible;position: relative; left:initial; top: initial; overflow: visible\'><p class="object-content" style="font-family: Courier New;font-size: 45px;color: rgba(51,76,206,1);font-weight: 400;width: 300px;height:200px;position: absolute;">Sample test</p>      </div>      </div>      <div class="object" style=\'left:180px;top:338px;width:669px;height:133px;position: absolute;overflow: visible;\'>      <div class="object object-db29c649-7435-4078-92cd-3d34190f897d" style=\'left:180px;top:338px;width:669px;height:133px;position: absolute;overflow: visible;position: relative; left:initial; top: initial; overflow: visible\'><p class="object-content" style="font-family: Courier New;font-size: 8em;color: rgba(221,27,27,1);font-weight: 900;width: 669px;height:133px;position: absolute;">Sample test</p>      </div>      </div>    </div>  </div></div>',
+        slideDataArr: [
+          {
+            slide: {
+              id: "d2895d21-f996-4d14-839d-e972d3ee4b3b",
+              slideType: "normal",
+              slideTransition: {
+                duration: 2000,
+                overlap: 1000,
+                effect: {
+                  id: "none",
+                  values: {},
+                },
+              },
+              duration: {
+                inheritFrom: "custom",
+                customValue: 20000,
+              },
+            },
+            transitionsData: [
+              {
+                objectClass: "layer-29a54d38-990c-4f2e-8ad2-57534fb3e1a9",
+                transitions: {
+                  layer: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: 1000,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "none",
+                      values: {},
+                    },
+                  },
+                },
+                events: [],
+                data: {
+                  slideDuration: {
+                    inheritFrom: "custom",
+                    customValue: 20000,
+                  },
+                  objectWidth: 1000,
+                  objectHeight: 500,
+                  objectLeft: 0,
+                  objectTop: 0,
+                  overflow: "",
+                  objectHtml: " ",
+                },
+              },
+              {
+                objectClass: "object-7da628ba-e2cf-4995-87d3-f413da2f69cc",
+                transitions: {
+                  in: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: 1000,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "zoomIn",
+                      values: {
+                        scaleX: 100,
+                        scaleY: 100,
+                      },
+                    },
+                  },
+                  out: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: 1000,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "none",
+                      values: {},
+                    },
+                  },
+                  effect: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: -1,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "none",
+                      values: {},
+                    },
+                  },
+                },
+                events: [],
+                data: {
+                  slideDuration: {
+                    inheritFrom: "custom",
+                    customValue: 20000,
+                  },
+                  objectWidth: 300,
+                  objectHeight: 200,
+                  objectLeft: 100,
+                  objectTop: 100,
+                  overflow: "visible",
+                  objectHtml:
+                    '<p class="object-content" style="font-family: Courier New;font-size: 45px;color: rgba(51,76,206,1);font-weight: 400;width: 300px;height:200px;position: absolute;">Sample test</p>',
+                },
+              },
+              {
+                objectClass: "object-db29c649-7435-4078-92cd-3d34190f897d",
+                transitions: {
+                  in: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: 5000,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "splitText",
+                      values: {
+                        columns: 10,
+                        rows: 10,
+                        startFrom: {
+                          startFrom: "start",
+                          customOrder:
+                            "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20",
+                          fromCharacter: 1,
+                        },
+                        transformOrigin: {
+                          x: 50,
+                          y: 50,
+                        },
+                        durationPerChar: 1000,
+                        delayBetweenChar: 200,
+                        opacity: {
+                          value: 0,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        blur: {
+                          value: 0,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        scaleX: {
+                          value: 2,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        scaleY: {
+                          value: 1,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        rotationPerChar: {
+                          value: 0,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        positionX: {
+                          value: 40,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                        positionY: {
+                          value: 0,
+                          hasTimelineProperties: false,
+                          delay: 0,
+                          duration: 1000,
+                        },
+                      },
+                    },
+                  },
+                  out: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: 1000,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "none",
+                      values: {},
+                    },
+                  },
+                  effect: {
+                    relativeTo: "stage",
+                    delay: 0,
+                    duration: -1,
+                    ease: "none",
+                    timeDistribution: 50,
+                    effect: {
+                      id: "none",
+                      values: {},
+                    },
+                  },
+                },
+                events: [],
+                data: {
+                  slideDuration: {
+                    inheritFrom: "custom",
+                    customValue: 20000,
+                  },
+                  objectWidth: 669,
+                  objectHeight: 133,
+                  objectLeft: 180,
+                  objectTop: 338,
+                  overflow: "visible",
+                  objectHtml:
+                    '<p class="object-content" style="font-family: Courier New;font-size: 8em;color: rgba(221,27,27,1);font-weight: 900;width: 669px;height:133px;position: absolute;">Sample test</p>',
+                },
+              },
+            ],
+          },
+        ],
+      };
+      window.addEventListener("load", function () {
+        const player = new window.WebSliderPlayer(
+          data,
+          document.getElementById("player")
+        );
+        player.playSlide(0);
+      });
+    </script>
+    <div style="overflow: visible" id="player"></div>
+  </body>
+</html>

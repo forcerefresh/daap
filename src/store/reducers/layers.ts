@@ -11,23 +11,7 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { ITransitions } from "../../objects/types";
-
-export interface ILayer {
-  id: string;
-  slideId: string;
-  //isBackground: boolean;
-  name: string;
-  isVisible: boolean;
-  hasTimeline: boolean;
-  objectIds: string[];
-  transitions: ITransitions;
-}
-
-export interface ILayers {
-  layerById: { [id: string]: ILayer };
-  allLayers: string[];
-}
+import { ILayers } from "./i-layers";
 
 export function layers(
   state: ILayers = { layerById: {}, allLayers: [] },

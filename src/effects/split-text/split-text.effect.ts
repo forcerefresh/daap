@@ -13,20 +13,24 @@ import { pick } from "lodash-es";
 gsap.registerEffect({
   name: splitText,
   effect: function (targets: any, config: ISplitTextEffect) {
+    console.log("splitText");
     const objectEL = targets[0]! as HTMLElement;
     const pElOriginal = objectEL.firstChild as HTMLParagraphElement;
-    const pElClone = pElOriginal.cloneNode(true) as HTMLElement;
-    objectEL.appendChild(pElClone);
-    pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
-    pElClone.style.opacity = config.type === "in" ? "0" : "1";
 
-    const numberOfChars = pElClone.innerHTML.length;
+    pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
+
+    const numberOfChars = pElOriginal.innerHTML.length;
 
     let textChars: SplitText;
     console.log(config);
 
+    let pElClone: any = null;
     const initializeEffect = () => {
+      pElClone = pElOriginal.cloneNode(true) as HTMLElement;
+      objectEL.appendChild(pElClone);
+      pElClone.style.opacity = config.type === "in" ? "0" : "1";
       pElClone.innerHTML = space2nbsp(pElClone.innerHTML);
+
       pElClone.style.opacity = "1"; // config.type === "in" ? "0" : "1";
       pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
 
@@ -129,6 +133,7 @@ gsap.registerEffect({
       pElClone.parentElement?.removeChild(pElClone);
       pElClone.style.opacity = "0";
       pElOriginal.style.opacity = config.type === "in" ? "1" : "0";
+      pElClone = null;
     };
 
     const totalDuration =

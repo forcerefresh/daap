@@ -2,6 +2,16 @@ import React from "react";
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
+  useAssetsHook: () => ({
+    addMedia: (): Promise<{ url: string }> =>
+      Promise.resolve({
+        source: "", //"external-assets-library"
+        url: "",
+        originalUrl: "",
+        mediaName: "",
+      }),
+  }),
+
   useMediaHook: () => ({
     requestMedia: (type: "image" | "video"): Promise<{ url: string }> =>
       Promise.resolve({ url: "" }),
@@ -73,21 +83,29 @@ export function useAppRootSelector() {
 
 function useMediaHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
-    return require("./integration/hooks/wp-use-media-hook").useMediaHook;
+    return require("./integration/hooks/media-hook/wp-use-media-hook")
+      .useMediaHook;
   } else {
-    return require("./integration/hooks/use-media-hook").useMediaHook;
+    return require("./integration/hooks/media-hook/use-media-hook")
+      .useMediaHook;
   }
 }
 
 function useAPIHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
-    return require("./integration/hooks/wp-use-api-hook").useAPIHook;
+    return require("./integration/hooks/api-hook/wp-use-api-hook").useAPIHook;
   }
   if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/electron-use-api-hook").useAPIHook;
+    return require("./integration/hooks/api-hook/electron-use-api-hook")
+      .useAPIHook;
   } else {
-    return require("./integration/hooks/use-api-hook").useAPIHook;
+    return require("./integration/hooks/api-hook/use-api-hook").useAPIHook;
   }
+}
+
+function useAssetsHookFactory() {
+  return require("./integration/hooks/assets-hook/use-assets-hook")
+    .useAssetsHook;
 }
 
 export const IntegrationContextProvider = (
@@ -98,6 +116,7 @@ export const IntegrationContextProvider = (
       value={{
         useMediaHook: useMediaHookFactory(),
         useAPIHook: useAPIHookFactory(),
+        useAssetsHook: useAssetsHookFactory(),
       }}
     >
       {props.children}

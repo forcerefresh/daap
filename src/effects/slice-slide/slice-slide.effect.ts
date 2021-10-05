@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
-import { merge } from "lodash";
+import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
   getMethodByType,
@@ -13,10 +13,8 @@ gsap.registerEffect({
   name: sliceSlide,
   effect: function (targets: any, config: ISliceSlideEffect) {
     // get element and html
-    const {
-      objectContentElement,
-      objectContentHtml,
-    } = getObjectContentElementAndHtml(targets[0]);
+    const { objectContentElement, objectContentHtml } =
+      getObjectContentElementAndHtml(targets[0]);
 
     const photoGrid = { r: 1, c: 1 };
 

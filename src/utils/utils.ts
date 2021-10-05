@@ -1,7 +1,7 @@
 import React from "react";
 import { RGBColor } from "react-color";
 import { ISettings } from "../store/reducers/settings";
-import { ISlide } from "../store/reducers/slides";
+import { ISlide } from "../store/reducers/i-slides";
 
 export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
   return slide.duration.inheritFrom === "inherit"

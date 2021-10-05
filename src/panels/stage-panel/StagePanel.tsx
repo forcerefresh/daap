@@ -4,19 +4,15 @@ import { Icon } from "@blueprintjs/core";
 
 import { connect } from "react-redux";
 import cx from "classnames";
-import { ILayer } from "../../store/reducers/layers";
+import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 
 import css from "./StagePanel.module.scss";
-import {
-  generatePlayerData,
-  getObjectHtml,
-  IPlayerData,
-} from "../../export/export-html";
+import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 
-import gsap from "gsap"; // TODO: remove player from here
+// from "gsap"; // TODO: remove player from here
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
-import { ISlide } from "../../store/reducers/slides";
+import { ISlide } from "../../store/reducers/i-slides";
 import {
   activateObject,
   addNewObject,
@@ -53,6 +49,7 @@ import ProjectSmallTimeline, {
   ProjectTimelineData,
   SlideTimelineData,
 } from "../project-small-timeline/ProjectSmallTimeline";
+import { IPlayerData } from "../../export/i-export-html";
 
 interface ISize {
   width: number;
@@ -1158,7 +1155,7 @@ const mapStateToProps = (state: IStore) => {
 
   if (selection.activeSlideId) {
     const layerIds = slides.slideById[selection.activeSlideId].layerIds;
-    layerArr = layerIds.map((layerId) => layers.layerById[layerId]);
+    layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
     slide = slides.slideById[selection.activeSlideId];
   }
 

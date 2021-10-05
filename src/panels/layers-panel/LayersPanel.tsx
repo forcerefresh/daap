@@ -19,9 +19,9 @@ import {
   removeObjectsFromSelection,
   deactivateObject,
 } from "../../store/actions/actions";
-import { ILayer } from "../../store/reducers/layers";
+import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
-import { ISlide } from "../../store/reducers/slides";
+import { ISlide } from "../../store/reducers/i-slides";
 import { get, isEmpty } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -459,7 +459,7 @@ const mapStateToProps = (state: IStore) => {
 
   if (selection.activeSlideId) {
     const layerIds = slides.slideById[selection.activeSlideId].layerIds;
-    layerArr = layerIds.map((layerId) => layers.layerById[layerId]);
+    layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
     slide = slides.slideById[selection.activeSlideId];
   }
 
