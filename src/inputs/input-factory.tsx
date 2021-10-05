@@ -2,6 +2,7 @@ import React from "react";
 import { IObject } from "../objects/types";
 import { ILayer } from "../store/reducers/layers";
 import { ISlide } from "../store/reducers/slides";
+import { BorderColorInputForm } from "./border-color-input/border-color-input";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
@@ -62,6 +63,16 @@ export function getInputForm<T>(
     case InputType.NUMERIC_TIMELINE: {
       return (
         <NumericTimelineInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.BORDER_COLOR: {
+      return (
+        <BorderColorInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
