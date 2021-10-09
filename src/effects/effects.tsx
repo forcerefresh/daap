@@ -60,6 +60,9 @@ import {
   squareMaskDefinition,
 } from "./square-mask/square-mask.definition";
 
+// NOTE effect for development
+import { devDefaults, devDefinition } from "./dev/dev.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -81,6 +84,8 @@ import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
 import "./square-mask/square-mask.effect";
+import "./dev/dev.effect";
+
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 
 // interfaces for APP >>>
@@ -124,6 +129,7 @@ registerEffect(
 registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
+registerEffect(devDefinition, devDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

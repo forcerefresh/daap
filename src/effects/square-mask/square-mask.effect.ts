@@ -23,7 +23,7 @@ gsap.registerEffect({
 
     //let initialized = false
     const initializeEffect = () => {
-      borderEl = document.getElementsByClassName(
+      borderEl = objectEl.getElementsByClassName(
         "square-mask"
       )[0] as HTMLElement;
 
