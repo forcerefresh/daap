@@ -16,7 +16,7 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
         <Button
           minimal
           onClick={() => {
-            onChange([...value, { r: 256, g: 265, b: 265, a: 1 }]);
+            onChange([...value, { r: 256, g: 256, b: 256, a: 1 }]);
           }}
           small={true}
           icon="add"
