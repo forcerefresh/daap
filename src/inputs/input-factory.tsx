@@ -23,6 +23,7 @@ import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import { InputType } from "./types";
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
+import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -72,6 +73,16 @@ export function getInputForm<T>(
     case InputType.BORDER_COLOR: {
       return (
         <BorderColorInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.COLOR_ARRAY: {
+      return (
+        <ColorArrayInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
