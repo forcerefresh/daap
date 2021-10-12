@@ -1,4 +1,14 @@
 export const useAPIHook = () => {
+  const getNextProjectId = (): Promise<number> => {
+    return new Promise((resolve, reject) => {
+      const { ipcRenderer } = window.require("electron");
+
+      ipcRenderer.invoke("apiGetNextProjectId").then((result: any) => {
+        resolve(result);
+      });
+    });
+  };
+
   const getProject = (id: number): Promise<any> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
@@ -101,5 +111,11 @@ export const useAPIHook = () => {
     });
   };
 
-  return { getProject, getProjects, saveProject, deleteProject };
+  return {
+    getProject,
+    getProjects,
+    saveProject,
+    deleteProject,
+    getNextProjectId,
+  };
 };

@@ -21,6 +21,8 @@ import { IMeta, meta } from "./reducers/meta";
 import { ISlides } from "./reducers/i-slides";
 import { ILayers } from "./reducers/i-layers";
 import { IObjects } from "./reducers/i-objects";
+import { editor, IEditor } from "./reducers/editor";
+import { updateEditor } from "./actions/actions";
 
 export interface IStore {
   project: {
@@ -35,6 +37,7 @@ export interface IStore {
       next: any[];
     };
   };
+  editor: IEditor;
   meta: IMeta;
   stage: IStage;
   globals: IGlobals;
@@ -70,6 +73,7 @@ const rootReducer = combineReducers({
   stage,
   globals,
   fonts,
+  editor,
 }) as any;
 
 const logger = (store: any) => (next: any) => (action: any) => {
@@ -79,8 +83,17 @@ const logger = (store: any) => (next: any) => (action: any) => {
   return result;
 };
 
+const documentChange = (store: any) => (next: any) => (action: any) => {
+  if (action.isUndoable) {
+    store.dispatch(updateEditor({ sliderChanged: true }));
+  }
+
+  let result = next(action);
+  return result;
+};
+
 export const store = createStore(
   rootReducer,
   //initialState as unknown as IStore,
-  composeWithDevTools(applyMiddleware(logger, thunk))
+  composeWithDevTools(applyMiddleware(documentChange, logger, thunk))
 );
