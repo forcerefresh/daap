@@ -23,6 +23,7 @@ export enum InputType {
   TEXT_START_POSITION = "text_start_position",
   CORNER_RADIUS = "corner-radius",
   BORDER_COLOR = "border_color",
+  COLOR_ARRAY = "color_array",
 }
 
 // TODO: create interfaces for all input values
@@ -55,6 +56,7 @@ export interface IUpdateInput {
       | INumericTimelineValue
       | IBorderColorValue
       | ITextStartPositionValue
+      | RGBColor[]
       | ICornerRadiusValue
   ) => void;
   onInput?: (
@@ -86,6 +88,14 @@ export interface IUnitsNumberInput {
   value: string;
   defaultValue: string;
   inputProps?: { disabled: boolean };
+}
+export interface IColorArrayInput {
+  inputType: InputType.COLOR_ARRAY;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: RGBColor[];
+  defaultValue: RGBColor[];
 }
 
 export interface IBorderColorValue {
