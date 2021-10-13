@@ -84,7 +84,7 @@ const logger = (store: any) => (next: any) => (action: any) => {
 };
 
 const documentChange = (store: any) => (next: any) => (action: any) => {
-  if (action.isUndoable) {
+  if (action.isUndoable && !action.skipHistory) {
     store.dispatch(updateEditor({ sliderChanged: true }));
   }
 

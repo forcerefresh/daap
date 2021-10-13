@@ -6,7 +6,11 @@ import { Button, Label, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./SavePanel.module.scss";
 import { IObject } from "../../objects/types";
-import { updateObject, updateProjectMeta } from "../../store/actions/actions";
+import {
+  updateObject,
+  updateProjectMeta,
+  updateEditor,
+} from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import {
   getCheckboxField,
@@ -17,6 +21,7 @@ import { IMeta } from "../../store/reducers/meta";
 import { generatePlayerData } from "../../export/export-html";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { IEditor } from "../../store/reducers/editor";
 
 const THUMB_WIDTH = 200;
 
@@ -37,6 +42,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     objects,
     breakpointConfig,
     _updateProjectMeta,
+    _updateEditor,
     onRequestClose,
   } = props;
 
@@ -109,6 +115,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           modified,
           inSaving: false,
         });
+        _updateEditor({ sliderChanged: false });
         onRequestClose();
         AppToaster.show({
           intent: "success",
@@ -188,7 +195,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             icon="floppy-disk"
             onClick={() => onClickSave()}
           >
-            {isEdit ? "Update" : "Create"}
+            {isEdit ? "Update" : "Save"}
           </Button>
           <Button
             disabled={meta.inSaving}
@@ -225,6 +232,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SavePanel);

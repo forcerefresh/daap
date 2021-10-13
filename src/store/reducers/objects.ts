@@ -2,14 +2,17 @@ import { omit, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_OBJECT,
+  CREATE_NEW_PROJECT,
   DELETE_OBJECTS,
   OPEN_PROJECT,
   UPDATE_OBJECT,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 
+const getObjectsDefault = () => ({ objectById: {}, allObjects: [] });
+
 export function objects(
-  state: IObjects = { objectById: {}, allObjects: [] },
+  state: IObjects = getObjectsDefault(),
   action: ActionTypes
 ) {
   switch (action.type) {
@@ -42,6 +45,9 @@ export function objects(
       return {
         ...action.payload.objects,
       };
+    }
+    case CREATE_NEW_PROJECT: {
+      return getObjectsDefault();
     }
     default:
       return state;

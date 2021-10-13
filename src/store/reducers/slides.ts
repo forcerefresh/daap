@@ -3,6 +3,7 @@ import {
   ActionTypes,
   ADD_LAYER,
   ADD_SLIDE,
+  CREATE_NEW_PROJECT,
   DELETE_LAYERS,
   DELETE_SLIDE,
   OPEN_PROJECT,
@@ -12,8 +13,14 @@ import update from "immutability-helper";
 import { EmptyID } from "../types";
 import { ISlides } from "./i-slides";
 
+const getSlidesDefault = () => ({
+  nextSlideIdCounter: 1,
+  slideById: {},
+  allSlides: [],
+});
+
 export function slides(
-  state: ISlides = { nextSlideIdCounter: 1, slideById: {}, allSlides: [] },
+  state: ISlides = getSlidesDefault(),
   action: ActionTypes
 ) {
   switch (action.type) {
@@ -88,6 +95,9 @@ export function slides(
       return {
         ...action.payload.slides,
       };
+    }
+    case CREATE_NEW_PROJECT: {
+      return getSlidesDefault();
     }
     default:
       return state;

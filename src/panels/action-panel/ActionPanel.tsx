@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Button } from "@blueprintjs/core";
+import { Alert, Button, Intent } from "@blueprintjs/core";
 import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
-import { setStagePreview } from "../../store/actions/actions";
+import {
+  createNewProject,
+  doClearHistory,
+  initializeSlideAndLayer,
+  setStagePreview,
+  updateEditor,
+} from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";
 import cx from "classnames";
 
@@ -12,9 +18,37 @@ type IActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const ActionPanel: React.FC<IActionPanel> = (props) => {
-  const { _setStagePreview, previewState, meta, editor } = props;
+  const {
+    _setStagePreview,
+    _createNewProject,
+    _resetChangedState,
+    _doClearHistory,
+    _initializeSlideAndLayer,
+    previewState,
+    meta,
+    editor,
+  } = props;
 
+  const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
+
+  const tryToCreateNew = () => {
+    if (editor.sliderChanged) {
+      setIsDiscartConfirmOpen(true);
+    } else {
+      createNewSlider();
+    }
+  };
+
+  const createNewSlider = () => {
+    _createNewProject();
+    _doClearHistory();
+    _initializeSlideAndLayer();
+    _resetChangedState();
+    if (isDiscartConfirmOpen) {
+      setIsDiscartConfirmOpen(false);
+    }
+  };
 
   return (
     <div className={css.actionPanel}>
@@ -29,7 +63,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         <div>
           <Button
             minimal
-            onClick={() => undefined}
+            onClick={() => tryToCreateNew()}
             className={css.addNewSlide}
             small={true}
             icon="add"
@@ -65,21 +99,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             _setStagePreview({ ...previewState, paused: !previewState.paused });
           }}
         />
-
-        {/*<Button
-          minimal
-          outlined
-          large
-          active={previewState.scrollbar}
-          onClick={() => {
-            _setStagePreview({
-              ...previewState,
-              scrollbar: !previewState.scrollbar,
-            });
-          }}
-        >
-          SCROLL
-        </Button>*/}
         <Button minimal outlined large icon="desktop" />
         <Button minimal outlined large>
           <TabletPreviewIcon
@@ -88,6 +107,23 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         </Button>
         <Button minimal outlined large icon="mobile-phone" />
       </div>
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Discard changes and create new slider"
+        canOutsideClickCancel={false}
+        icon="trash"
+        //loading={isDeleteLoading}
+        intent={Intent.DANGER}
+        isOpen={isDiscartConfirmOpen}
+        onCancel={() => setIsDiscartConfirmOpen(false)}
+        onConfirm={createNewSlider}
+        className="bp3-dark"
+      >
+        <p>
+          There are unsaved changes. Press "Cancel" to go back to existing
+          project.
+        </p>
+      </Alert>
     </div>
   );
 };
@@ -101,6 +137,10 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _setStagePreview: (previewState: Partial<IPreviewState>) =>
     setStagePreview(previewState),
+  _createNewProject: () => createNewProject(),
+  _doClearHistory: () => doClearHistory(),
+  _resetChangedState: () => updateEditor({ sliderChanged: false }),
+  _initializeSlideAndLayer: initializeSlideAndLayer,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);

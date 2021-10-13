@@ -81,7 +81,7 @@ export function initializeSlideAndLayer(): any {
       dispatch(activateSlide(slide.id));
       dispatch(selectSlides([slide.id]));
       dispatch(addNewLayer(slide.id, true));
-
+      dispatch(updateEditor({ sliderChanged: false }));
       /*slide = {
         id: uuid(),
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
@@ -1002,6 +1002,21 @@ export function openProject(project: {
   };
 }
 
+// ***
+
+export const CREATE_NEW_PROJECT = "Create new project";
+
+export interface CreateNewProjectAction extends IUndoableAction<false> {
+  type: typeof CREATE_NEW_PROJECT;
+}
+
+export function createNewProject(): CreateNewProjectAction {
+  return {
+    type: CREATE_NEW_PROJECT,
+    isUndoable: false,
+  };
+}
+
 // *** UNDO - REDO
 /*
 const ignoreActions = [
@@ -1220,6 +1235,7 @@ export type ActionTypes =
 
   // open project
   | OpenProjectAction
+  | CreateNewProjectAction
 
   // editor related actions
   | UpdateEditorAction;

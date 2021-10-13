@@ -1,4 +1,8 @@
-import { ActionTypes, UPDATE_PROJECT_META } from "../actions/actions";
+import {
+  ActionTypes,
+  CREATE_NEW_PROJECT,
+  UPDATE_PROJECT_META,
+} from "../actions/actions";
 
 export interface IMeta {
   id?: number;
@@ -10,7 +14,9 @@ export interface IMeta {
   inSaving?: boolean;
 }
 
-export function meta(state: IMeta = {}, action: ActionTypes) {
+const getMetaDefault = () => ({});
+
+export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
   switch (action.type) {
     case UPDATE_PROJECT_META: {
       return {
@@ -18,7 +24,9 @@ export function meta(state: IMeta = {}, action: ActionTypes) {
         ...action.payload,
       };
     }
-
+    case CREATE_NEW_PROJECT: {
+      return getMetaDefault();
+    }
     default:
       return state;
   }

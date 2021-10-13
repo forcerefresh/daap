@@ -2,6 +2,7 @@ import { cloneDeep } from "lodash-es";
 import { RGBColor } from "react-color";
 import {
   ActionTypes,
+  CREATE_NEW_PROJECT,
   OPEN_PROJECT,
   UPDATE_PROJECT_SETTINGS,
   UPDATE_SLIDE_BREAKPOINTS,
@@ -131,19 +132,20 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
   };
 }
 
-export function settings(
-  state: ISettings = {
-    // slide
-    slideDuration: 10000,
-    sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
-    // preview
-    pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },
-    layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },
-    transparentHeader: false,
-    // breakpoints
-    breakpointsConfiguration: getDefaultBreakpointConfiguration(),
-  },
+const getSettingsDefault = () => ({
+  // slide
+  slideDuration: 10000,
+  sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
+  // preview
+  pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },
+  layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },
+  transparentHeader: false,
+  // breakpoints
+  breakpointsConfiguration: getDefaultBreakpointConfiguration(),
+});
 
+export function settings(
+  state: ISettings = getSettingsDefault(),
   action: ActionTypes
 ) {
   switch (action.type) {
@@ -169,6 +171,9 @@ export function settings(
       return {
         ...action.payload.settings,
       };
+    }
+    case CREATE_NEW_PROJECT: {
+      return getSettingsDefault();
     }
     default:
       return state;

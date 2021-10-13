@@ -3,6 +3,7 @@ import {
   ActionTypes,
   ADD_LAYER,
   ADD_OBJECT,
+  CREATE_NEW_PROJECT,
   DELETE_LAYERS,
   DELETE_OBJECTS,
   DELETE_SLIDE,
@@ -13,8 +14,10 @@ import update from "immutability-helper";
 import { EmptyID } from "../types";
 import { ILayers } from "./i-layers";
 
+const getLayersDefault = () => ({ layerById: {}, allLayers: [] });
+
 export function layers(
-  state: ILayers = { layerById: {}, allLayers: [] },
+  state: ILayers = getLayersDefault(),
   action: ActionTypes
 ) {
   switch (action.type) {
@@ -98,6 +101,9 @@ export function layers(
       return {
         ...action.payload.layers,
       };
+    }
+    case CREATE_NEW_PROJECT: {
+      return getLayersDefault();
     }
     default:
       return state;
