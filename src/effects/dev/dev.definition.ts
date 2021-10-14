@@ -1,9 +1,17 @@
+import { InputType } from "../../inputs/types";
 import { dev, IDevEffect } from "./dev.types";
 
 export const devDefinition = {
   id: dev,
   name: "Dev *",
-  form: [],
+  form: [
+    {
+      displayName: "Colors",
+      helperText: "ccc",
+      propertyName: "colors1",
+      inputType: InputType.COLOR_ARRAY,
+    },
+  ],
 };
 
 export const devDefaults: IDevEffect = {
@@ -14,4 +22,5 @@ export const devDefaults: IDevEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  colors1: [{ r: 256, g: 256, b: 256, a: 1 }],
 };
