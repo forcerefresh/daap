@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, Intent } from "@blueprintjs/core";
+import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
@@ -111,9 +111,8 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         cancelButtonText="Cancel"
         confirmButtonText="Discard changes and create new slider"
         canOutsideClickCancel={false}
-        icon="trash"
-        //loading={isDeleteLoading}
-        intent={Intent.DANGER}
+        icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
+        intent={Intent.PRIMARY}
         isOpen={isDiscartConfirmOpen}
         onCancel={() => setIsDiscartConfirmOpen(false)}
         onConfirm={createNewSlider}
