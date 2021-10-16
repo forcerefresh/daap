@@ -1,8 +1,24 @@
 // *** this file contains implementation for development
 
-import { forEach, forOwn, remove } from "lodash-es";
+import { forEach, remove } from "lodash-es";
 
 export const useAPIHook = () => {
+  const getNextProjectId = (): Promise<number> => {
+    const projects: any[] = JSON.parse(
+      localStorage.getItem("projects") || "[]"
+    );
+
+    let maxId = 1;
+
+    projects.forEach((p) => {
+      maxId = Math.max(maxId, p.id);
+    });
+
+    return new Promise((resolve) => {
+      resolve(maxId + 1);
+    });
+  };
+
   const getProject = (id: number): Promise<any> => {
     const projects: any[] = JSON.parse(
       localStorage.getItem("projects") || "[]"
@@ -130,5 +146,11 @@ export const useAPIHook = () => {
       }, 500); // use timeout to simulate real network network
     });
   };
-  return { getProject, getProjects, saveProject, deleteProject };
+  return {
+    getProject,
+    getProjects,
+    saveProject,
+    deleteProject,
+    getNextProjectId,
+  };
 };

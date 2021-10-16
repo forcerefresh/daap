@@ -32,6 +32,7 @@ import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
+import { IEditor } from "../reducers/editor";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1143,6 +1144,23 @@ export function updateProjectMeta(meta: IMeta): UpdateProjectMetaAction {
 }
 
 // ***
+
+export const UPDATE_EDITOR = "Update editor";
+
+export interface UpdateEditorAction extends IUndoableAction<false> {
+  type: typeof UPDATE_EDITOR;
+  payload: Partial<IEditor>;
+}
+
+export function updateEditor(editor: Partial<IEditor>): UpdateEditorAction {
+  return {
+    type: UPDATE_EDITOR,
+    payload: editor,
+    isUndoable: false,
+  };
+}
+
+// ***
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -1201,4 +1219,7 @@ export type ActionTypes =
   | UpdateProjectMetaAction
 
   // open project
-  | OpenProjectAction;
+  | OpenProjectAction
+
+  // editor related actions
+  | UpdateEditorAction;

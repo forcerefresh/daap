@@ -28,6 +28,9 @@ export const IntegrationContext = React.createContext({
     /* delete project */
     deleteProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
+    /* get next id for project (NOTE: use only for slider name) */
+    getNextProjectId: (): Promise<number> => Promise.resolve(1),
+
     /* save project */
     saveProject: ({
       id,

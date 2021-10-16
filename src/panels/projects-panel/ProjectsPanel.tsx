@@ -21,6 +21,7 @@ import {
   addNewObject,
   doClearHistory,
   openProject,
+  updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
@@ -54,8 +55,13 @@ export type IProjectsMergedProps = typeof mapDispatchToProps &
   IProjectsPanelProps;
 
 const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
-  const { onRequestClose, _updateProjectMeta, _openProject, _doClearHistory } =
-    props;
+  const {
+    onRequestClose,
+    _updateProjectMeta,
+    _openProject,
+    _doClearHistory,
+    _resetChangedState,
+  } = props;
 
   const [projects, setProjects] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -155,6 +161,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       _openProject(project);
 
       _doClearHistory();
+
+      _resetChangedState();
 
       onRequestClose();
     });
@@ -320,6 +328,7 @@ const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),
+  _resetChangedState: () => updateEditor({ sliderChanged: false }),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

@@ -172,6 +172,18 @@ ipcMain.handle("apiGetProject", async (event, dataStr) => {
   return { project };
 });
 
+ipcMain.handle("apiGetNextProjectId", async (event) => {
+  const projects = await loadProjects();
+
+  let maxId = 1;
+
+  projects.forEach((p) => {
+    maxId = Math.max(maxId, p.id);
+  });
+
+  return maxId + 1;
+});
+
 function checkFileExists(file) {
   return fs.promises
     .access(file, fs.constants.F_OK)

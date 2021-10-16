@@ -40,6 +40,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     onRequestClose,
   } = props;
 
+  const isEdit = !!meta.id;
+
+  // api
+  const globalContext = useContext(IntegrationContext);
+  const { saveProject, getNextProjectId } = globalContext.useAPIHook();
+
   // spinner
   //const [showSpinner, setShowSpinner] = useState(false);
 
@@ -50,10 +56,16 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const [localMeta, setLocalMeta] = useState(meta);
   useEffect(() => {
     const metaClone = cloneDeep(meta);
-    if (!metaClone.id) metaClone.name = "Slider";
-    if (!metaClone.name) metaClone.name = "";
-    if (!metaClone.description) metaClone.description = "";
-    setLocalMeta(metaClone);
+    if (metaClone.id) {
+      setLocalMeta(metaClone);
+    } else {
+      // todo: loader
+      getNextProjectId().then((nextId) => {
+        metaClone.name = `Slider ${nextId}`;
+        metaClone.description = "";
+        setLocalMeta(metaClone);
+      });
+    }
   }, [meta]);
 
   useEffect(() => {
@@ -71,9 +83,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     setHtml(exportData.html);
   }, []);
 
-  // api
-  const globalContext = useContext(IntegrationContext);
-  const { saveProject } = globalContext.useAPIHook();
   const onClickSave = (duplicate = false) => {
     _updateProjectMeta({ inSaving: true });
 
@@ -147,6 +156,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           )}
         </div>
       </div>
+
       <div className={css.saveHolder}>
         {/*<Label>Align</Label>*/}
         <div className={cx("input260", css.inputHolder)}>
@@ -178,7 +188,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             icon="floppy-disk"
             onClick={() => onClickSave()}
           >
-            Save
+            {isEdit ? "Update" : "Create"}
           </Button>
           <Button
             disabled={meta.inSaving}
