@@ -60,6 +60,10 @@ import {
   squareMaskDefinition,
 } from "./square-mask/square-mask.definition";
 
+import {
+  trianglifyDefaults,
+  trianlifyDefinition,
+} from "./trianglify/trianglify.definition";
 // NOTE effect for development
 import { devDefaults, devDefinition } from "./dev/dev.definition";
 
@@ -87,6 +91,7 @@ import "./square-mask/square-mask.effect";
 import "./dev/dev.effect";
 
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
+import "./trianglify/trianglify.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -129,6 +134,7 @@ registerEffect(
 registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
+registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(devDefinition, devDefaults);
 
 function registerEffect(
