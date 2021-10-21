@@ -1,8 +1,11 @@
 import React from "react";
-import { Button } from "@blueprintjs/core";
+import { Button, Label } from "@blueprintjs/core";
 import { getColorField } from "../input-utils";
 import { IColorArrayInput, IUpdateInput } from "../types";
 import { cloneDeep } from "lodash";
+import css from "./color-array-input.module.scss";
+
+const getDefaultColor = () => ({ r: 256, g: 256, b: 256, a: 1 });
 
 export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
   props
@@ -11,52 +14,56 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
 
   const renderAddBtn = () => {
     return (
-      <div>
-        <p>Add color</p>
-        <Button
-          minimal
-          onClick={() => {
-            onChange([...value, { r: 256, g: 256, b: 256, a: 1 }]);
-          }}
-          small={true}
-          icon="add"
-        ></Button>
-      </div>
+      <Button
+        className={css.addButton}
+        minimal
+        onClick={() => {
+          onChange([...value, getDefaultColor()]);
+        }}
+        small={true}
+        icon="add"
+      >
+        Add color
+      </Button>
     );
   };
 
   return (
-    <div>
-      <ul>
+    <div className={css.main}>
+      <div>
         {value.map((color, index) => (
           <>
-            <div>
+            <div className={css.colorRow}>
               <div className="input60">
-                {getColorField(
-                  "color:",
-                  color,
-                  (colorValue: any) => {
-                    const valueClone = cloneDeep(value);
-                    valueClone[index] = colorValue;
-                    onChange(valueClone);
-                  },
-                  ""
-                )}
+                <Label> {index === 0 ? "Colors" : null}</Label>
               </div>
-              <Button
-                disabled={value.length === 1}
-                minimal
-                onClick={() => {
-                  value.splice(index, 1);
-                  onChange(value);
-                }}
-                small={true}
-                icon="delete"
-              ></Button>
+              {getColorField(
+                "",
+                color,
+                (colorValue: any) => {
+                  const valueClone = cloneDeep(value);
+                  valueClone[index] = colorValue;
+                  onChange(valueClone);
+                },
+                ""
+              )}
+
+              {value.length > 1 && (
+                <Button
+                  className={css.deleteColorBtn}
+                  minimal
+                  onClick={() => {
+                    value.splice(index, 1);
+                    onChange(value);
+                  }}
+                  small={true}
+                  icon="delete"
+                ></Button>
+              )}
             </div>
           </>
         ))}
-      </ul>
+      </div>
       {renderAddBtn()}
     </div>
   );

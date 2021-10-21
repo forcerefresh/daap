@@ -109,7 +109,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
       </div>
       <Alert
         cancelButtonText="Cancel"
-        confirmButtonText="Discard changes and create new slider"
+        confirmButtonText="Discard changes and create new Slider"
         canOutsideClickCancel={false}
         icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
         intent={Intent.PRIMARY}
@@ -118,10 +118,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         onConfirm={createNewSlider}
         className="bp3-dark"
       >
-        <p>
-          There are unsaved changes. Press "Cancel" to go back to existing
-          project.
-        </p>
+        <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
       </Alert>
     </div>
   );

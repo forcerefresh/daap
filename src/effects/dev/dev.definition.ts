@@ -9,7 +9,7 @@ export const devDefinition = {
       displayName: "Colors",
       helperText: "ccc",
       propertyName: "colors1",
-      inputType: InputType.COLOR_ARRAY,
+      inputType: InputType.COLOR_ARRAY_PRESETS,
     },
   ],
 };

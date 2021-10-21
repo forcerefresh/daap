@@ -1,4 +1,5 @@
 import React from "react";
+import { Preset, PresetGroup } from "./inputs/types";
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
@@ -69,6 +70,22 @@ export const IntegrationContext = React.createContext({
         modified: "",
       }), // todo: add interface for api response
   }),
+
+  usePresets: () => ({
+    /* add preset */
+    //addPreset: (
+    // type: PresetGroup,
+    // preset: Preset<any>
+    //): Promise<Preset<any>[]> => Promise.resolve([]), // todo: add interface for api response
+
+    /* returns presets */
+    getPresets: (type: PresetGroup): Promise<Preset<any>[]> =>
+      Promise.resolve([]), // todo: add interface for api response
+
+    /* delete preset */
+    //deletePreset: (type: PresetGroup, name: string): Promise<Preset<any>[]> =>
+    //  Promise.resolve([]), // todo: add interface for api response
+  }),
 });
 
 // *** PUBLIC INTEGRATION FACTORY FUNCTIONS ***
@@ -120,6 +137,27 @@ export const IntegrationContextProvider = (
         useMediaHook: useMediaHookFactory(),
         useAPIHook: useAPIHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
+        usePresets: () => ({
+          getPresets: (type: PresetGroup) => {
+            return Promise.resolve([
+              {
+                name: "preset1",
+                value: [
+                  { r: 234, g: 123, b: 234, a: 1 },
+                  { r: 34, g: 123, b: 234, a: 1 },
+                  { r: 234, g: 1, b: 200, a: 1 },
+                ],
+              },
+              {
+                name: "preset2",
+                value: [
+                  { r: 255, g: 33, b: 33, a: 1 },
+                  { r: 255, g: 255, b: 33, a: 1 },
+                ],
+              },
+            ]);
+          },
+        }),
       }}
     >
       {props.children}

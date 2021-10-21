@@ -24,6 +24,20 @@ export enum InputType {
   CORNER_RADIUS = "corner-radius",
   BORDER_COLOR = "border_color",
   COLOR_ARRAY = "color_array",
+  COLOR_ARRAY_PRESETS = "color_array_preset",
+}
+
+export enum PresetGroup {
+  color = "color",
+  colors = "colors",
+  effects = "effects",
+}
+
+export interface Preset<T> {
+  name: string;
+  value: T;
+  created?: Date;
+  modified?: Date;
 }
 
 // TODO: create interfaces for all input values

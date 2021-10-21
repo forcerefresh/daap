@@ -238,9 +238,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
                     <div className={css.layerName}>{layer.name}</div>
 
-                    <div className={css.objectCount}>
-                      (objects: {layer.objectIds.length})
-                    </div>
+                    {/*<div className={css.objectCount}>
+                      Objects: {layer.objectIds.length}
+                    </div>*/}
                   </div>
                   <div>
                     <Button
@@ -255,7 +255,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                     ></Button>
                   </div>
                 </div>
-                {openLayerById[layer.id] && (
+                {openLayerById[layer.id] && layer.objectIds.length > 0 ? (
                   <>
                     {layer.objectIds.map((objectId) => {
                       const object = objectById[objectId];
@@ -440,6 +440,13 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       );
                     })}
                   </>
+                ) : (
+                  <div
+                    className={css.objectCountClosed}
+                    onClick={() => toggleLayer(layer.id)}
+                  >
+                    ... objects {layer.objectIds.length}
+                  </div>
                 )}
               </div>
             );

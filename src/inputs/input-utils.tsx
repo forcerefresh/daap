@@ -56,11 +56,30 @@ export function getColorField<T>(
     helperText: helperText,
     inputType: InputType.COLOR,
     value: value,
-    defaultValue: 0,
+    defaultValue: value,
     inputProps,
   };
 
   return getInputForm(InputType.COLOR, objectDef, onChange);
+}
+
+export function getColorArrayField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.COLOR_ARRAY,
+    value: value,
+    defaultValue: value,
+    inputProps,
+  };
+
+  return getInputForm(InputType.COLOR_ARRAY, objectDef, onChange);
 }
 
 export function getSelectField<T>(

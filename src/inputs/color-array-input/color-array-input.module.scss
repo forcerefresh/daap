@@ -1,0 +1,34 @@
+.main {
+  padding-bottom: 15px;
+}
+
+.colorRow {
+  display: flex;
+  align-items: flex-start;
+
+  > * + * {
+    margin-left: 10px;
+  }
+
+  .deleteColorBtn {
+    margin-left: 50px;
+
+    :global {
+      .bp3-icon-delete {
+        color: #555 !important;
+      }
+    }
+  }
+
+  &:hover .deleteColorBtn {
+    :global {
+      .bp3-icon-delete {
+        color: #ff5151 !important;
+      }
+    }
+  }
+}
+
+.addButton {
+  margin-left: 90px;
+}
