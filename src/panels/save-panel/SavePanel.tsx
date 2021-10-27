@@ -217,7 +217,7 @@ const mapStateToProps = (state: IStore) => {
   // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
-      (breakpointConfig) => breakpointConfig.icon === "laptop"
+      (breakpointConfig) => breakpointConfig.type === state.stage.selectedDevice
     );
 
   return {

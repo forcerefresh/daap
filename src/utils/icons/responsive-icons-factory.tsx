@@ -1,24 +1,61 @@
 import React from "react";
-import { ResponsiveIcon } from "../../store/reducers/settings";
 
 import { ReactComponent as PhoneIcon } from "../../assets/icons/phone.svg";
 import { ReactComponent as TabletIcon } from "../../assets/icons/tablet.svg";
 import { ReactComponent as LaptopIcon } from "../../assets/icons/laptop.svg";
 import { ReactComponent as MonitorIcon } from "../../assets/icons/monitor.svg";
 
-export function getResponsiveIcon(icon: ResponsiveIcon) {
+export function getResponsiveIcon(
+  icon: string,
+  w?: string,
+  h?: string,
+  c?: string,
+  rotate?: boolean
+) {
   switch (icon) {
     case "phone":
       return (
-        <PhoneIcon style={{ width: "30px", height: "30px", fill: "gray" }} />
+        <PhoneIcon
+          style={{
+            width: w ? w : "30px",
+            height: h ? h : "30px",
+            fill: c ? c : "gray",
+            transform: rotate ? "rotate(90deg)" : "",
+          }}
+        />
       );
     case "tablet":
       return (
-        <TabletIcon style={{ width: "36px", height: "36px", fill: "gray" }} />
+        <TabletIcon
+          style={{
+            width: w ? w : "36px",
+            height: h ? h : "36px",
+            fill: c ? c : "gray",
+            transform: rotate ? "rotate(90deg)" : "",
+          }}
+        />
       );
     case "laptop":
       return (
-        <LaptopIcon style={{ width: "56px", height: "56px", fill: "gray" }} />
+        <LaptopIcon
+          style={{
+            width: w ? w : "56px",
+            height: h ? h : "56px",
+            fill: c ? c : "gray",
+            transform: rotate ? "rotate(90deg)" : "",
+          }}
+        />
+      );
+    case "desktop":
+      return (
+        <MonitorIcon
+          style={{
+            width: w ? w : "56px",
+            height: h ? h : "56px",
+            fill: c ? c : "gray",
+            transform: rotate ? "rotate(90deg)" : "",
+          }}
+        />
       );
     default:
       return null;

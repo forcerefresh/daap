@@ -16,7 +16,10 @@ import css from "./Breakpoint.module.scss";
 
 import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
 import { getResponsiveIcon } from "../../../utils/icons/responsive-icons-factory";
-import { BreakpointConfiguration } from "../../../store/reducers/settings";
+import {
+  BreakpointConfiguration,
+  getIconByType,
+} from "../../../store/reducers/settings";
 import { BreakpointPreview } from "../breakpoint-preview/BreakpointPreview";
 import { set } from "lodash-es";
 
@@ -29,7 +32,9 @@ export interface IBreakpointSettingsProps {
 export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
   const { breakpointConfiguration, pixelMultiplier, onChange } = props;
 
-  const responsiveIcon = getResponsiveIcon(breakpointConfiguration.icon);
+  const responsiveIcon = getResponsiveIcon(
+    getIconByType(breakpointConfiguration.type)
+  );
 
   return (
     <div className={css.breakpointSettings}>

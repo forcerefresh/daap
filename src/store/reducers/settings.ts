@@ -9,18 +9,73 @@ import {
   UPDATE_SLIDE_DURATION,
 } from "../actions/actions";
 
-export type ResponsiveIcon =
-  | "none"
-  | "phone"
-  | "tablet"
-  | "laptop"
-  | "desktop"
-  | "watch"
-  | "tv";
+export function isAllowedPortrait(type: DeviceType) {
+  return (
+    [
+      "small-1",
+      "small-2",
+      "small-3",
+      "small-4",
+      "small-5",
+      "medium-1",
+      "medium-2",
+      "medium-3",
+      "medium-4",
+      "medium-5",
+    ].indexOf(type) === -1
+  );
+}
+const mapSizeIcon = {
+  xsmall: "watch",
+  small: "phone",
+  medium: "tablet",
+  large: "laptop",
+  xlarge: "desktop",
+  xxlarge: "tv",
+} as any;
+
+export function getIconByType(type: DeviceType): string {
+  const size = type.split("-")[0];
+  return mapSizeIcon[size];
+}
+
+export type DeviceType =
+  | "xsmall-1"
+  | "xsmall-2"
+  | "xsmall-3"
+  | "xsmall-4"
+  | "xsmall-5"
+  | "small-1"
+  | "small-2"
+  | "small-3"
+  | "small-4"
+  | "small-5"
+  | "medium-1"
+  | "medium-2"
+  | "medium-3"
+  | "medium-4"
+  | "medium-5"
+  | "large-1"
+  | "large-2"
+  | "large-3"
+  | "large-4"
+  | "large-5"
+  | "xlarge-1"
+  | "xlarge-2"
+  | "xlarge-3"
+  | "xlarge-4"
+  | "xlarge-5"
+  | "xxlarge-1"
+  | "xxlarge-2"
+  | "xxlarge-3"
+  | "xxlarge-4"
+  | "xxlarge-5";
 export interface BreakpointConfiguration {
+  type: DeviceType;
   name: string;
-  icon: ResponsiveIcon;
+  //icon: ResponsiveIcon;
   layout: "normal" | "fullViewport";
+  portrait?: boolean;
   /*configuration for normal layout */
   normal: {
     /* "page" is the most outer size, usually browser width */
@@ -75,8 +130,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
   return {
     breakpointsConfiguration: [
       {
+        type: "small-1",
         name: "Small devices",
-        icon: "phone",
         layout: "normal",
         normal: {
           page: { width: 480 },
@@ -93,8 +148,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
       },
       {
+        type: "medium-1",
         name: "Medium devices",
-        icon: "tablet",
         layout: "normal",
         normal: {
           page: { width: 1024 },
@@ -111,8 +166,8 @@ function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
       },
       {
+        type: "large-1",
         name: "Large devices",
-        icon: "laptop",
         layout: "normal",
         normal: {
           page: { width: 1450 },

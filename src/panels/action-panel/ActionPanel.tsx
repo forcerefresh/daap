@@ -8,12 +8,32 @@ import {
   createNewProject,
   doClearHistory,
   initializeSlideAndLayer,
+  setDevice,
   setStagePreview,
   updateEditor,
 } from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";
 import cx from "classnames";
+import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
+import {
+  BreakpointConfiguration,
+  getIconByType,
+} from "../../store/reducers/settings";
 
+export const getIconSize = (type: string): { w: string; h: string } => {
+  if (type === "phone") {
+    return { w: "20px", h: "20px" };
+  } else if (type === "tablet") {
+    return { w: "22px", h: "22px" };
+  } else if (type === "laptop") {
+    return { w: "24px", h: "24px" };
+  } else if (type === "desktop") {
+    return { w: "24px", h: "24px" };
+  } else if (type === "tv") {
+    return { w: "24px", h: "24px" };
+  }
+  return { w: "24px", h: "24px" };
+};
 type IActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
@@ -24,9 +44,12 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     _resetChangedState,
     _doClearHistory,
     _initializeSlideAndLayer,
+    _setDevice,
     previewState,
     meta,
     editor,
+    breakpointsConfiguration,
+    selectedDevice,
   } = props;
 
   const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
@@ -50,6 +73,35 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     }
   };
 
+  const renderBreakpointButton = (conf: BreakpointConfiguration) => {
+    const icon = getIconByType(conf.type);
+    const size = getIconSize(icon);
+    console.log(selectedDevice);
+
+    console.log(conf.type);
+    return (
+      <Button
+        active={selectedDevice === conf.type}
+        minimal
+        outlined
+        large
+        icon={getResponsiveIcon(
+          icon,
+          size.w,
+          size.h,
+          "lightgray",
+          conf.portrait
+        )}
+        className={css.responsiveButton}
+        onClick={() => {
+          _setDevice(conf.type);
+        }}
+      >
+        <div className={css.responsiveButtonNumber}></div>
+      </Button>
+    );
+  };
+
   return (
     <div className={css.actionPanel}>
       <div className={css.panelHeader}>
@@ -61,6 +113,21 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           {isChanged && <span className={css.changed}>*</span>}
         </div>
         <div>
+          <Button
+            minimal
+            small
+            active={previewState.paused}
+            icon={"pause"}
+            style={{ marginRight: "20px" }}
+            onClick={() => {
+              const isPreview = !previewState.isPreview;
+              _setStagePreview({
+                ...previewState,
+                paused: !previewState.paused,
+              });
+            }}
+          />
+
           <Button
             minimal
             onClick={() => tryToCreateNew()}
@@ -88,24 +155,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             });
           }}
         />
-        <Button
-          minimal
-          outlined
-          large
-          active={previewState.paused}
-          icon={"pause"}
-          onClick={() => {
-            const isPreview = !previewState.isPreview;
-            _setStagePreview({ ...previewState, paused: !previewState.paused });
-          }}
-        />
-        <Button minimal outlined large icon="desktop" />
-        <Button minimal outlined large>
-          <TabletPreviewIcon
-            style={{ width: "16px", height: "16px", fill: "white" }}
-          />
-        </Button>
-        <Button minimal outlined large icon="mobile-phone" />
+        <div>
+          {[...breakpointsConfiguration].reverse().map(renderBreakpointButton)}
+        </div>
       </div>
       <Alert
         cancelButtonText="Cancel"
@@ -128,6 +180,9 @@ const mapStateToProps = (state: IStore) => ({
   previewState: state.stage.previewState,
   meta: state.meta,
   editor: state.editor,
+  breakpointsConfiguration:
+    state.project.settings.breakpointsConfiguration.breakpointsConfiguration,
+  selectedDevice: state.stage.selectedDevice,
 });
 
 const mapDispatchToProps = {
@@ -137,6 +192,7 @@ const mapDispatchToProps = {
   _doClearHistory: () => doClearHistory(),
   _resetChangedState: () => updateEditor({ sliderChanged: false }),
   _initializeSlideAndLayer: initializeSlideAndLayer,
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);

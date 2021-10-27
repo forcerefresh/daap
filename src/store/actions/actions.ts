@@ -573,7 +573,8 @@ export function selectObjectsByRect(rect: IRect): any {
       // TODO: IMPORTANT hardcoded
       const breakpointConfig: BreakpointConfiguration | undefined =
         getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
-          (breakpointConfig) => breakpointConfig.icon === "laptop"
+          (breakpointConfig) =>
+            breakpointConfig.type === getState().stage.selectedDevice
         );
 
       const calculatedObjectSize = calculateObjectSize(
@@ -727,7 +728,8 @@ function handleTextUpdate(
     // TODO: IMPORTANT hardcoded
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
-        (breakpointConfig) => breakpointConfig.icon === "laptop"
+        (breakpointConfig) =>
+          breakpointConfig.type === getState().stage.selectedDevice
       );
     // todo: calculate for all not only for one
     const calculatedObjectSize = calculateObjectSize(
@@ -1123,6 +1125,21 @@ export function setStageTool(
 }
 
 // ***
+export const SET_DEVICE = "Set device";
+
+export interface SetDeviceAction extends IUndoableAction<false> {
+  type: typeof SET_DEVICE;
+  payload: string;
+}
+
+export function setDevice(device: string): SetDeviceAction {
+  return {
+    type: SET_DEVICE,
+    payload: device,
+    isUndoable: false,
+  };
+}
+// ***
 
 export const EXTERNAL_FONT_LOADED = "External font loaded";
 
@@ -1238,4 +1255,7 @@ export type ActionTypes =
   | CreateNewProjectAction
 
   // editor related actions
-  | UpdateEditorAction;
+  | UpdateEditorAction
+
+  // responive device
+  | SetDeviceAction;
