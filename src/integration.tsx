@@ -73,18 +73,24 @@ export const IntegrationContext = React.createContext({
 
   usePresets: () => ({
     /* add preset */
-    //addPreset: (
-    // type: PresetGroup,
-    // preset: Preset<any>
-    //): Promise<Preset<any>[]> => Promise.resolve([]), // todo: add interface for api response
+    addPreset: (
+      type: PresetGroup,
+      preset: Preset<any>
+    ): Promise<Preset<any>[]> => Promise.resolve([]),
 
     /* returns presets */
     getPresets: (type: PresetGroup): Promise<Preset<any>[]> =>
-      Promise.resolve([]), // todo: add interface for api response
+      Promise.resolve([]),
+
+    /* update preset */
+    updatePreset: (
+      type: PresetGroup,
+      preset: Preset<any>
+    ): Promise<Preset<any>[]> => Promise.resolve([]),
 
     /* delete preset */
-    //deletePreset: (type: PresetGroup, name: string): Promise<Preset<any>[]> =>
-    //  Promise.resolve([]), // todo: add interface for api response
+    deletePreset: (type: PresetGroup, name: string): Promise<Preset<any>[]> =>
+      Promise.resolve([]),
   }),
 });
 
@@ -128,6 +134,11 @@ function useAssetsHookFactory() {
     .useAssetsHook;
 }
 
+function usePresetsHookFactory() {
+  return require("./integration/hooks/presets-hook/use-presets-hook")
+    .usePresets;
+}
+
 export const IntegrationContextProvider = (
   props: React.PropsWithChildren<React.ReactNode>
 ) => {
@@ -137,27 +148,7 @@ export const IntegrationContextProvider = (
         useMediaHook: useMediaHookFactory(),
         useAPIHook: useAPIHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
-        usePresets: () => ({
-          getPresets: (type: PresetGroup) => {
-            return Promise.resolve([
-              {
-                name: "preset1",
-                value: [
-                  { r: 234, g: 123, b: 234, a: 1 },
-                  { r: 34, g: 123, b: 234, a: 1 },
-                  { r: 234, g: 1, b: 200, a: 1 },
-                ],
-              },
-              {
-                name: "preset2",
-                value: [
-                  { r: 255, g: 33, b: 33, a: 1 },
-                  { r: 255, g: 255, b: 33, a: 1 },
-                ],
-              },
-            ]);
-          },
-        }),
+        usePresets: usePresetsHookFactory(),
       }}
     >
       {props.children}
