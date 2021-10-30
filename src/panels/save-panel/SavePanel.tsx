@@ -23,10 +23,11 @@ import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 
-const THUMB_WIDTH = 200;
+export const THUMB_WIDTH = 200;
 
 interface ISavePanelProps {
   onRequestClose: () => void;
+  isSaveAs?: boolean;
 }
 
 export type ISavePanelMergedProps = typeof mapDispatchToProps &
@@ -35,6 +36,7 @@ export type ISavePanelMergedProps = typeof mapDispatchToProps &
 
 const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const {
+    isSaveAs = false,
     project,
     meta,
     slides,
@@ -62,9 +64,9 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const [localMeta, setLocalMeta] = useState(meta);
   useEffect(() => {
     const metaClone = cloneDeep(meta);
-    if (metaClone.id) {
-      setLocalMeta(metaClone);
-    } else {
+    if (!metaClone.id || isSaveAs) {
+      //setLocalMeta(metaClone);
+      //} else if (!metaClone.id || isSaveAs) {
       // todo: loader
       getNextProjectId().then((nextId) => {
         metaClone.name = `Slider ${nextId}`;
@@ -72,11 +74,9 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         setLocalMeta(metaClone);
       });
     }
-  }, [meta]);
+  }, []);
 
   useEffect(() => {
-    breakpointConfig?.normal.slide.width!;
-
     const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
     const thumbHeight = scale * breakpointConfig!.normal.slide.height!;
     setThumbSize({ width: THUMB_WIDTH, height: thumbHeight, scale: scale });
@@ -89,11 +89,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     setHtml(exportData.html);
   }, []);
 
-  const onClickSave = (duplicate = false) => {
+  const onClickSave = (saveAs?: boolean) => {
     _updateProjectMeta({ inSaving: true });
 
     saveProject({
-      id: duplicate ? undefined : localMeta.id,
+      id: saveAs ? undefined : localMeta.id,
       name: localMeta.name!,
       description: localMeta.description!,
       project,
@@ -123,7 +123,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         });
       })
       .catch((e) => {
-        throw e;
         _updateProjectMeta({ inSaving: false });
         onRequestClose();
         AppToaster.show({
@@ -193,11 +192,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             disabled={meta.inSaving}
             intent="primary"
             icon="floppy-disk"
-            onClick={() => onClickSave()}
+            onClick={() => onClickSave(isSaveAs)}
           >
-            {isEdit ? "Update" : "Save"}
+            {"Save"}
           </Button>
-          <Button
+          {/*<Button
             disabled={meta.inSaving}
             intent="primary"
             icon="floppy-disk"
@@ -206,7 +205,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             style={{ marginLeft: "40px" }}
           >
             Save as new slider
-          </Button>
+          </Button>*/}
         </div>
       </div>
     </div>
@@ -217,7 +216,7 @@ const mapStateToProps = (state: IStore) => {
   // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
-      (breakpointConfig) => breakpointConfig.type === state.stage.selectedDevice
+      (breakpointConfig) => breakpointConfig.type === "large-1"
     );
 
   return {

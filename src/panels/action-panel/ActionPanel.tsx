@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Alert, Button, Icon, Intent, Portal } from "@blueprintjs/core";
 import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
@@ -11,6 +11,7 @@ import {
   setDevice,
   setStagePreview,
   updateEditor,
+  updateProjectMeta,
 } from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";
 import cx from "classnames";
@@ -19,9 +20,13 @@ import {
   BreakpointConfiguration,
   getIconByType,
 } from "../../store/reducers/settings";
-import SavePanel from "../save-panel/SavePanel";
+import SavePanel, { THUMB_WIDTH } from "../save-panel/SavePanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { generatePlayerData } from "../../export/export-html";
+import { IMeta } from "../../store/reducers/meta";
+import { IEditor } from "../../store/reducers/editor";
+import { IntegrationContext } from "../../integration";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -49,15 +54,20 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const {
     _setStagePreview,
     _createNewProject,
-    _resetChangedState,
+    _updateEditor,
     _doClearHistory,
     _initializeSlideAndLayer,
     _setDevice,
+    _updateProjectMeta,
     previewState,
     meta,
     editor,
     breakpointsConfiguration,
     selectedDevice,
+    project,
+    slides,
+    layers,
+    objects,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // logic for handling click outside
@@ -70,6 +80,10 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
   ]);
+
+  // api
+  const globalContext = useContext(IntegrationContext);
+  const { saveProject } = globalContext.useAPIHook();
 
   const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
@@ -87,7 +101,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     _createNewProject();
     _doClearHistory();
     _initializeSlideAndLayer();
-    _resetChangedState();
+    _updateEditor({ isExistingProject: false, sliderChanged: false });
     if (isDiscartConfirmOpen) {
       setIsDiscartConfirmOpen(false);
     }
@@ -122,7 +136,61 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     );
   };
 
-  const onClickSave = () => {};
+  const onClickSave = () => {
+    const breakpointConfig = breakpointsConfiguration.find(
+      (p) => p.type === "large-1"
+    );
+
+    const exportData = generatePlayerData(
+      { slides, layers, objects },
+      { entityType: "slide", entityId: slides.allSlides[0] },
+      breakpointConfig!
+    );
+
+    const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
+    const thumbHeight = scale * breakpointConfig!.normal.slide.height!;
+    const thumbSize = { width: THUMB_WIDTH, height: thumbHeight, scale: scale };
+
+    _updateProjectMeta({ inSaving: true });
+
+    saveProject({
+      id: meta.id,
+      name: meta.name!,
+      description: meta.description!,
+      project,
+      preview: {
+        width: thumbSize.width,
+        height: thumbSize.height,
+        scale: thumbSize.scale,
+        html: exportData.html,
+      },
+    })
+      .then(({ id, name, description, slides, created, modified }) => {
+        console.log({ id, name, description });
+        _updateProjectMeta({
+          id,
+          name,
+          description,
+          slides,
+          created,
+          modified,
+          inSaving: false,
+        });
+        _updateEditor({ sliderChanged: false, isExistingProject: true });
+
+        AppToaster.show({
+          intent: "success",
+          message: "Slider is successfully saved.",
+        });
+      })
+      .catch((e) => {
+        _updateProjectMeta({ inSaving: false });
+        AppToaster.show({
+          intent: "danger",
+          message: "Something went wrong. Slider is not saved.",
+        });
+      });
+  };
 
   return (
     <div className={css.actionPanel}>
@@ -150,7 +218,31 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             }}
           />*/}
 
-          {isExistingProject && (
+          {isExistingProject ? (
+            <>
+              <Button
+                intent={isChanged ? "danger" : "none"}
+                minimal
+                small
+                icon={"floppy-disk"}
+                style={{ marginRight: "5px" }}
+                onClick={() => {
+                  onClickSave();
+                }}
+              ></Button>
+              <Button
+                minimal
+                small
+                icon={"floppy-disk"}
+                style={{ marginRight: "5px" }}
+                onClick={() => {
+                  setShowPanel(VisiblePanel.Save);
+                }}
+              >
+                as ...
+              </Button>
+            </>
+          ) : (
             <Button
               intent={isChanged ? "danger" : "none"}
               minimal
@@ -158,27 +250,16 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
               icon={"floppy-disk"}
               style={{ marginRight: "5px" }}
               onClick={() => {
-                onClickSave();
+                setShowPanel(VisiblePanel.Save);
               }}
             ></Button>
           )}
-
-          <Button
-            minimal
-            small
-            icon={"floppy-disk"}
-            style={{ marginRight: "5px" }}
-            onClick={() => {
-              setShowPanel(VisiblePanel.Save);
-            }}
-          >
-            as ...
-          </Button>
 
           <Portal>
             {showPanel === VisiblePanel.Save && (
               <div ref={sharedRef} className={css.floatingSavePanel}>
                 <SavePanel
+                  isSaveAs={isExistingProject}
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>
@@ -241,6 +322,10 @@ const mapStateToProps = (state: IStore) => ({
   breakpointsConfiguration:
     state.project.settings.breakpointsConfiguration.breakpointsConfiguration,
   selectedDevice: state.stage.selectedDevice,
+  project: state.project,
+  slides: state.project.slides,
+  layers: state.project.layers,
+  objects: state.project.objects,
 });
 
 const mapDispatchToProps = {
@@ -248,9 +333,10 @@ const mapDispatchToProps = {
     setStagePreview(previewState),
   _createNewProject: () => createNewProject(),
   _doClearHistory: () => doClearHistory(),
-  _resetChangedState: () => updateEditor({ sliderChanged: false }),
   _initializeSlideAndLayer: initializeSlideAndLayer,
   _setDevice: setDevice,
+  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);
