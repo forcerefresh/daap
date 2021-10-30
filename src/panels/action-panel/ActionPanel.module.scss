@@ -34,6 +34,7 @@
   .responsiveButton {
     width: 40px;
     margin-right: 5px;
+    margin-top: 5px;
     position: relative;
 
     :global {
@@ -55,6 +56,10 @@
   }
 }
 
+.previewPlayStop {
+  margin-top: 5px;
+  margin-left: 5px;
+}
 .previewButtons {
   display: flex;
   > *:last-child {
@@ -69,4 +74,14 @@
       background: #3a80b5 !important;
     }
   }
+}
+
+.floatingSavePanel {
+  z-index: 200;
+  position: absolute;
+  right: 350px;
+  //top: 10vh;
+  background: #252526;
+  //width: 340px;
+  // height: 80vh;
 }

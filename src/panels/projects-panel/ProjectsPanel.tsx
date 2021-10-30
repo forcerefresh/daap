@@ -328,7 +328,8 @@ const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),
-  _resetChangedState: () => updateEditor({ sliderChanged: false }),
+  _resetChangedState: () =>
+    updateEditor({ sliderChanged: false, isExistingProject: true }),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

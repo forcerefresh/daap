@@ -81,7 +81,9 @@ export function initializeSlideAndLayer(): any {
       dispatch(activateSlide(slide.id));
       dispatch(selectSlides([slide.id]));
       dispatch(addNewLayer(slide.id, true));
-      dispatch(updateEditor({ sliderChanged: false }));
+      dispatch(
+        updateEditor({ sliderChanged: false, isExistingProject: false })
+      );
       /*slide = {
         id: uuid(),
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,

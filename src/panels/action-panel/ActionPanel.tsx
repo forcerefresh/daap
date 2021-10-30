@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { connect } from "react-redux";
-import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
+import { Alert, Button, Icon, Intent, Portal } from "@blueprintjs/core";
 import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
@@ -19,6 +19,9 @@ import {
   BreakpointConfiguration,
   getIconByType,
 } from "../../store/reducers/settings";
+import SavePanel from "../save-panel/SavePanel";
+import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -37,6 +40,11 @@ export const getIconSize = (type: string): { w: string; h: string } => {
 type IActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
+enum VisiblePanel {
+  None = "none",
+  Save = "save",
+}
+
 export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const {
     _setStagePreview,
@@ -51,9 +59,21 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     breakpointsConfiguration,
     selectedDevice,
   } = props;
+  const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
+  // logic for handling click outside
+  const sharedRef = useRef(null);
+  const handleClickOutside = () => {
+    setShowPanel(VisiblePanel.None);
+  };
+  useOnClickOutside(sharedRef, handleClickOutside, [
+    "image-preview-popover",
+    "color-picker-holder",
+    "bp3-overlay-scroll-container", // alert
+  ]);
 
   const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
+  const isExistingProject = editor.isExistingProject;
 
   const tryToCreateNew = () => {
     if (editor.sliderChanged) {
@@ -102,18 +122,20 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     );
   };
 
+  const onClickSave = () => {};
+
   return (
     <div className={css.actionPanel}>
       <div className={css.panelHeader}>
         <div>
           SLIDER
-          <span className={cx(css.sliderName, { [css.changed]: isChanged })}>
+          <span className={cx(css.sliderName)}>
             {!!meta.id ? " [ " + meta.name + " ] " : " [ Untitled ] "}
           </span>
-          {isChanged && <span className={css.changed}>*</span>}
+          {/*{isChanged && <span className={css.changed}>*</span>}*/}
         </div>
         <div>
-          <Button
+          {/*<Button
             minimal
             small
             active={previewState.paused}
@@ -126,7 +148,42 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
                 paused: !previewState.paused,
               });
             }}
-          />
+          />*/}
+
+          {isExistingProject && (
+            <Button
+              intent={isChanged ? "danger" : "none"}
+              minimal
+              small
+              icon={"floppy-disk"}
+              style={{ marginRight: "5px" }}
+              onClick={() => {
+                onClickSave();
+              }}
+            ></Button>
+          )}
+
+          <Button
+            minimal
+            small
+            icon={"floppy-disk"}
+            style={{ marginRight: "5px" }}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Save);
+            }}
+          >
+            as ...
+          </Button>
+
+          <Portal>
+            {showPanel === VisiblePanel.Save && (
+              <div ref={sharedRef} className={css.floatingSavePanel}>
+                <SavePanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
 
           <Button
             minimal
@@ -140,6 +197,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
       <div className={css.previewButtons}>
         <Button
+          className={css.previewPlayStop}
           intent={previewState.isPreview ? "danger" : "success"}
           large
           icon={previewState.isPreview ? "stop" : "play"}

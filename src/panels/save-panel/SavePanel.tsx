@@ -115,7 +115,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           modified,
           inSaving: false,
         });
-        _updateEditor({ sliderChanged: false });
+        _updateEditor({ sliderChanged: false, isExistingProject: true });
         onRequestClose();
         AppToaster.show({
           intent: "success",
