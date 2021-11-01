@@ -18,12 +18,14 @@ import {
   doUndo,
   doRedo,
   setStageTool,
+  setZoomFit,
 } from "../../store/actions/actions";
 import HistoryPanel from "../history-panel/HistoryPanel";
 import { StageTools } from "../../store/reducers/stage";
 import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
 import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
 import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel";
+import { getZoom } from "../../store/helpers/calculateZoom";
 
 enum VisiblePanel {
   None = "none",
@@ -44,6 +46,7 @@ type IToolbarPanel = typeof mapDispatchToProps &
 const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const {
     zoom,
+    zoomFit,
     increaseStageZoom,
     decreaseStageZoom,
     doUndo,
@@ -52,6 +55,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     hasRedoItem,
     stageTool,
     _setStageTool,
+    setZoomFit,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
@@ -65,6 +69,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
   ]);
+
+  const displayZoom = Number.isInteger(zoom * 100)
+    ? zoom * 100
+    : (zoom * 100).toFixed(2);
 
   return (
     <div className={css.toolbar}>
@@ -124,13 +132,38 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Button>
         </div>
         <div>
-          <Text>{zoom * 100} %</Text>
+          <Text>{displayZoom} %</Text>
           <div>
-            <Button minimal small onClick={() => increaseStageZoom()}>
+            <Button
+              minimal
+              small
+              onClick={() => {
+                increaseStageZoom(zoom);
+                setZoomFit(false);
+              }}
+            >
               <Icon icon="zoom-in" iconSize={SMALL_ICON_SIZE} color={"gray"} />
             </Button>
-            <Button minimal small onClick={() => decreaseStageZoom()}>
+            <Button
+              minimal
+              small
+              onClick={() => {
+                decreaseStageZoom(zoom);
+                setZoomFit(false);
+              }}
+            >
               <Icon icon="zoom-out" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+            </Button>
+          </div>
+          <div>
+            <Button
+              active={zoomFit}
+              minimal
+              small
+              onClick={() => setZoomFit(!zoomFit)}
+              style={{ width: "100%" }}
+            >
+              FIT
             </Button>
           </div>
           <Button
@@ -249,16 +282,25 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  zoom: state.stage.zoom,
-  hasUndoItem: state.project.diff.prev.length !== 0,
-  hasRedoItem: state.project.diff.next.length !== 0,
-  stageTool: state.stage.stageTool.tool,
-});
+const mapStateToProps = (state: IStore) => {
+  const { stage, project } = state;
+  const { settings } = project;
+
+  const zoom = getZoom(stage, settings);
+
+  return {
+    zoom: zoom,
+    zoomFit: state.stage.zoomFit,
+    hasUndoItem: state.project.diff.prev.length !== 0,
+    hasRedoItem: state.project.diff.next.length !== 0,
+    stageTool: state.stage.stageTool.tool,
+  };
+};
 
 const mapDispatchToProps = {
   increaseStageZoom: increaseStageZoom,
   decreaseStageZoom: decreaseStageZoom,
+  setZoomFit: setZoomFit,
   doUndo: () => doUndo(),
   doRedo: () => doRedo(),
   _setStageTool: (tool: StageTools) => setStageTool(tool),

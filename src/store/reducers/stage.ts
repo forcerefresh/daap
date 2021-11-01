@@ -1,3 +1,4 @@
+import { omit } from "lodash";
 import { ObjectType } from "../../objects/types";
 import {
   ActionTypes,
@@ -6,6 +7,8 @@ import {
   SET_STAGE_PREVIEW,
   SET_STAGE_TOOL,
   SET_STAGE_ZOOM,
+  VIEWPORT_SIZE,
+  ZOOM_FIT,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -30,6 +33,8 @@ export enum StageTools {
 }
 
 export interface IStage {
+  stageViewportSize: { w: number; h: number };
+  zoomFit: boolean;
   zoom: number;
   previewState: IPreviewState;
   stageTool: { tool: StageTools; objectType?: ObjectType };
@@ -37,6 +42,8 @@ export interface IStage {
 }
 
 const getStageDefault = (): IStage => ({
+  stageViewportSize: { w: 0, h: 0 },
+  zoomFit: true,
   zoom: 1,
   previewState: {
     previewState: "stop",
@@ -51,10 +58,22 @@ const getStageDefault = (): IStage => ({
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
   switch (action.type) {
+    case VIEWPORT_SIZE: {
+      return {
+        ...state,
+        stageViewportSize: action.payload,
+      };
+    }
     case SET_STAGE_ZOOM: {
       return {
         ...state,
         zoom: action.payload,
+      };
+    }
+    case ZOOM_FIT: {
+      return {
+        ...state,
+        zoomFit: action.payload,
       };
     }
     case SET_STAGE_PREVIEW: {
@@ -76,7 +95,7 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
       };
     }
     case CREATE_NEW_PROJECT: {
-      return getStageDefault();
+      return { ...state, ...omit(getStageDefault(), "stageViewportSize") };
     }
     default:
       return state;

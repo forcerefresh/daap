@@ -23,6 +23,7 @@ import {
   selectObjectsByRect,
   setStagePreview,
   setStageTool,
+  setViewPortSize,
   updateObject,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
@@ -50,6 +51,8 @@ import ProjectSmallTimeline, {
   SlideTimelineData,
 } from "../project-small-timeline/ProjectSmallTimeline";
 import { IPlayerData } from "../../export/i-export-html";
+import { useWindowSize } from "../../utils/hooks/window-size";
+import { getZoom } from "../../store/helpers/calculateZoom";
 
 interface ISize {
   width: number;
@@ -72,6 +75,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     activeObjectId,
     selectedObjectIds,
     activeLayerId,
+    viewPortSize,
     _setStagePreview,
     _updateObject,
     _selectObjects,
@@ -81,6 +85,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _deactivateObject,
     _selectObjectsByRect,
     _addNewObject,
+    _setViewPortSize,
     stageTool,
     stageToolObjectType,
     _resetStageTool,
@@ -129,6 +134,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }
 
   const { ctrlDown, spaceDown, escapeDown } = useKeyDown();
+
+  const { height: windowHeight, width: windowWidth } = useWindowSize();
 
   // preview progress
   const [progress, setProgress] = useState({ progress: 0, slideIdx: 0 });
@@ -228,21 +235,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [isPreview]);
 
-  // size of visible panel area
-  const [viewPortSize, setViewPortSize] = useState<ISize>({
-    width: 0,
-    height: 0,
-  });
-
   const rootRef = useRef(null);
 
   const stageXOffset = Math.round(
-    (viewPortSize.width - stageSize.width * stageZoom) / 2 +
+    (viewPortSize.w - stageSize.width * stageZoom) / 2 +
       panMove.x +
       panMoveStart.x
   );
   const stageYOffset = Math.round(
-    (viewPortSize.height - stageSize.height * stageZoom) / 2 +
+    (viewPortSize.h - stageSize.height * stageZoom) / 2 +
       panMove.y +
       panMoveStart.y
   );
@@ -369,12 +370,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   useEffect(() => {
     if (rootRef.current) {
-      setViewPortSize({
-        width: (rootRef.current as any).clientWidth,
-        height: (rootRef.current as any).clientHeight,
+      _setViewPortSize({
+        w: (rootRef.current as any).clientWidth,
+        h: (rootRef.current as any).clientHeight,
       });
     }
-  }, [rootRef]);
+  }, [rootRef, windowWidth, windowHeight]);
 
   const renderSlideTimelineInfo = () => {
     return (
@@ -1159,18 +1160,19 @@ const mapStateToProps = (state: IStore) => {
     slide = slides.slideById[selection.activeSlideId];
   }
 
-  // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpointsConfiguration.breakpointsConfiguration.find(
       (breakpointConfig) => breakpointConfig.type === state.stage.selectedDevice
     );
+
+  const zoom = getZoom(stage, settings);
 
   return {
     slides,
     layers,
     objects,
     stageSize: document.documentSize,
-    stageZoom: stage.zoom,
+    stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,
     slide,
@@ -1182,6 +1184,7 @@ const mapStateToProps = (state: IStore) => {
     stageToolObjectType: state.stage.stageTool.objectType,
     breakpointConfig,
     settings,
+    viewPortSize: stage.stageViewportSize,
   };
 };
 
@@ -1203,6 +1206,7 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
+  _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

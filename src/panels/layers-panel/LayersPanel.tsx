@@ -233,7 +233,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       }}
                       className={css.slideProperties}
                       small={true}
-                      icon="cog"
+                      icon="walk"
                     ></Button>
 
                     <div className={css.layerName}>{layer.name}</div>

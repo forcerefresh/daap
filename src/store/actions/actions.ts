@@ -861,24 +861,60 @@ export function setStageZoom(zoom: number): SetStageZoomAction {
   };
 }
 
-export function increaseStageZoom(): any {
+export function increaseStageZoom(currZoom?: number): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const zoomPerc = getZoomScale().find(
-      (item) => item / 100 > getState().stage.zoom
-    );
+    const compZoom = currZoom ? currZoom : getState().stage.zoom;
+    const zoomPerc = getZoomScale().find((item) => item / 100 > compZoom);
     if (zoomPerc) {
       dispatch(setStageZoom(zoomPerc / 100));
     }
   };
 }
-export function decreaseStageZoom(): any {
+export function decreaseStageZoom(currZoom?: number): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    const compZoom = currZoom ? currZoom : getState().stage.zoom;
     const zoomPerc = getZoomScale()
       .reverse()
-      .find((item) => item / 100 < getState().stage.zoom);
+      .find((item) => item / 100 < compZoom);
     if (zoomPerc) {
       dispatch(setStageZoom(zoomPerc / 100));
     }
+  };
+}
+
+// ******
+
+export const ZOOM_FIT = "Set zoom fit";
+
+export interface SetZoomFitAction extends IUndoableAction<false> {
+  type: typeof ZOOM_FIT;
+  payload: boolean;
+}
+
+export function setZoomFit(zoomFit: boolean): SetZoomFitAction {
+  return {
+    type: ZOOM_FIT,
+    payload: zoomFit,
+    isUndoable: false,
+  };
+}
+// ******
+
+export const VIEWPORT_SIZE = "Set viewport size";
+
+export interface SetViewportSizeAction extends IUndoableAction<false> {
+  type: typeof VIEWPORT_SIZE;
+  payload: { w: number; h: number };
+}
+
+export function setViewPortSize(viewportSize: {
+  w: number;
+  h: number;
+}): SetViewportSizeAction {
+  return {
+    type: VIEWPORT_SIZE,
+    payload: viewportSize,
+    isUndoable: false,
   };
 }
 
@@ -1238,6 +1274,8 @@ export type ActionTypes =
   //stage
   | SetDocumentSizeAction
   | SetStageZoomAction
+  | SetZoomFitAction
+  | SetViewportSizeAction
   | SetStagePreviewAction
 
   //global
