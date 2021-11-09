@@ -103,6 +103,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         scale: thumbSize.scale,
         html: html,
       },
+      playerData: {} as any,
     })
       .then(({ id, name, description, slides, created, modified }) => {
         console.log({ id, name, description });

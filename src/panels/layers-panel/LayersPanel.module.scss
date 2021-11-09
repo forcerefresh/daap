@@ -78,9 +78,28 @@
 
     .layerName {
       max-width: 90px;
+      width: 90px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .layerResponseVisibility {
+      font-weight: bold;
+      color: lightgray;
+
+      .layerResponseVisibilityAll {
+        color: #34ec43;
+      }
+      .layerResponseVisibilityNone {
+        color: #ff5f6d;
+      }
+
+      :global {
+        .bp3-popover-target {
+          width: 140px;
+        }
+      }
     }
 
     &:hover .deleteLayer {
@@ -220,4 +239,18 @@
   padding-left: 40px;
   border-bottom: 1px solid #353536;
   cursor: pointer;
+}
+
+.devicePopup {
+  padding: 10px;
+  background-color: #282828;
+
+  hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #555;
+    margin: 1em 0;
+    padding: 0;
+  }
 }

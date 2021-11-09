@@ -10,7 +10,8 @@ export function getResponsiveIcon(
   w?: string,
   h?: string,
   c?: string,
-  rotate?: boolean
+  rotate?: boolean,
+  cssStyle: React.CSSProperties = {}
 ) {
   switch (icon) {
     case "phone":
@@ -21,6 +22,7 @@ export function getResponsiveIcon(
             height: h ? h : "30px",
             fill: c ? c : "gray",
             transform: rotate ? "rotate(90deg)" : "",
+            ...cssStyle,
           }}
         />
       );
@@ -32,6 +34,7 @@ export function getResponsiveIcon(
             height: h ? h : "36px",
             fill: c ? c : "gray",
             transform: rotate ? "rotate(90deg)" : "",
+            ...cssStyle,
           }}
         />
       );
@@ -43,6 +46,7 @@ export function getResponsiveIcon(
             height: h ? h : "56px",
             fill: c ? c : "gray",
             transform: rotate ? "rotate(90deg)" : "",
+            ...cssStyle,
           }}
         />
       );
@@ -54,6 +58,7 @@ export function getResponsiveIcon(
             height: h ? h : "56px",
             fill: c ? c : "gray",
             transform: rotate ? "rotate(90deg)" : "",
+            ...cssStyle,
           }}
         />
       );

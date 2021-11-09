@@ -56,6 +56,11 @@ export const useAPIHook = () => {
 
     localStorage.setItem("projects", JSON.stringify(projects));
 
+    // player data
+    const exports = JSON.parse(localStorage.getItem("exports") || "{}");
+    delete exports[id];
+    localStorage.setItem("exports", JSON.stringify(exports));
+
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         //reject(); // use reject to simulate error
@@ -71,6 +76,7 @@ export const useAPIHook = () => {
     slides,
     project,
     preview,
+    playerData,
   }: {
     id?: number;
     name: string;
@@ -80,6 +86,7 @@ export const useAPIHook = () => {
     modified?: string;
     project: any;
     preview: any;
+    playerData: any;
   }): Promise<{
     id: number;
     name: string;
@@ -131,6 +138,12 @@ export const useAPIHook = () => {
     }
 
     localStorage.setItem("projects", JSON.stringify(projects));
+
+    // player data
+    const exports = JSON.parse(localStorage.getItem("exports") || "{}");
+    playerData.name = name;
+    exports[id] = playerData;
+    localStorage.setItem("exports", JSON.stringify(exports));
 
     return new Promise((resolve, reject) => {
       setTimeout(() => {

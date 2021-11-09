@@ -42,6 +42,22 @@ export const getIconSize = (type: string): { w: string; h: string } => {
   }
   return { w: "24px", h: "24px" };
 };
+
+export const getIconStyle = (type: string): React.CSSProperties => {
+  if (type === "phone") {
+    return { marginBottom: "-1px" };
+  } else if (type === "tablet") {
+    return {};
+  } else if (type === "laptop") {
+    return { marginBottom: "-3px", marginLeft: "3px" };
+  } else if (type === "desktop") {
+    return {};
+  } else if (type === "tv") {
+    return {};
+  }
+  return {};
+};
+
 type IActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
@@ -137,11 +153,12 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   };
 
   const onClickSave = () => {
+    // prepare preview thumbnail data >>>> START
     const breakpointConfig = breakpointsConfiguration.find(
       (p) => p.type === "large-1"
     );
 
-    const exportData = generatePlayerData(
+    const previewExportData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "slide", entityId: slides.allSlides[0] },
       breakpointConfig!
@@ -150,6 +167,13 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
     const thumbHeight = scale * breakpointConfig!.normal.slide.height!;
     const thumbSize = { width: THUMB_WIDTH, height: thumbHeight, scale: scale };
+    // prepare preview thumbnail data <<<< END
+
+    const playerData = generatePlayerData(
+      { slides, layers, objects },
+      { entityType: "project", entityId: "current-project" },
+      breakpointConfig!
+    );
 
     _updateProjectMeta({ inSaving: true });
 
@@ -162,8 +186,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         width: thumbSize.width,
         height: thumbSize.height,
         scale: thumbSize.scale,
-        html: exportData.html,
+        html: previewExportData.html,
       },
+      playerData,
     })
       .then(({ id, name, description, slides, created, modified }) => {
         console.log({ id, name, description });
@@ -203,20 +228,22 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           {/*{isChanged && <span className={css.changed}>*</span>}*/}
         </div>
         <div>
-          {/*<Button
-            minimal
-            small
-            active={previewState.paused}
-            icon={"pause"}
-            style={{ marginRight: "20px" }}
-            onClick={() => {
-              const isPreview = !previewState.isPreview;
-              _setStagePreview({
-                ...previewState,
-                paused: !previewState.paused,
-              });
-            }}
-          />*/}
+          {
+            <Button
+              minimal
+              small
+              active={previewState.paused}
+              icon={"pause"}
+              style={{ marginRight: "20px" }}
+              onClick={() => {
+                const isPreview = !previewState.isPreview;
+                _setStagePreview({
+                  ...previewState,
+                  paused: !previewState.paused,
+                });
+              }}
+            />
+          }
 
           {isExistingProject ? (
             <>

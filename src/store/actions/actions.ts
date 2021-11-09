@@ -210,6 +210,7 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
       hasTimeline: true,
       objectIds: [],
       transitions: getDefaultTransitionsForLayer(),
+      responsiveVisibility: { showAll: true, displayOn: [] },
     };
 
     dispatch(addLayer(layer));

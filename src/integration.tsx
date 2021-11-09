@@ -1,4 +1,5 @@
 import React from "react";
+import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
@@ -53,6 +54,7 @@ export const IntegrationContext = React.createContext({
         scale: number;
         html: string;
       };
+      playerData: IPlayerData;
     }): Promise<{
       id: number;
       name: string;

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Button, Portal } from "@blueprintjs/core";
+import { Button, Checkbox, Icon, Popover, Portal } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -18,16 +18,20 @@ import {
   addObjectsToSelection,
   removeObjectsFromSelection,
   deactivateObject,
+  updateLayer,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import { get, isEmpty } from "lodash-es";
+import { cloneDeep, get, includes, isEmpty, remove } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import EffectPanel from "../effect-panel/EffectPanel";
 import { getEffectDefinition } from "../../effects/effects";
+import { getIconByType } from "../../store/reducers/settings";
+import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
+import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 
 function calculateTimelineRect(
   slideDuration: number,
@@ -70,6 +74,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     selectedLayerIds,
     selectedObjectIds,
     layoutStaticEffectsPanel,
+    breakpointsConfiguration,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -83,6 +88,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _addObjectsToSelection,
     _removeObjectsFromSelection,
     _deactivateObject,
+    _updateLayer,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -167,6 +173,90 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     );
   };
 
+  /*const iconName = getIconByType("large-1");
+  const size = getIconSize(iconName);
+  const icon = getResponsiveIcon(iconName, size.w, size.h, "lightgray", false);*/
+
+  const renderSelectedDevices = (layer: ILayer) => {
+    const resVis = layer.responsiveVisibility;
+    if (resVis.showAll) {
+      return <span className={css.layerResponseVisibilityAll}>ALL</span>;
+    } else if (resVis.displayOn.length === 0) {
+      return <span className={css.layerResponseVisibilityNone}>NONE</span>;
+    } else {
+      return breakpointsConfiguration.breakpointsConfiguration.map(
+        (bpConfig) => {
+          if (!includes(resVis.displayOn, bpConfig.type)) {
+            return null;
+          }
+          const iconName = getIconByType(bpConfig.type);
+          const size = getIconSize(iconName);
+          const iconStyle = getIconStyle(iconName);
+
+          const icon = getResponsiveIcon(
+            iconName,
+            size.w,
+            size.h,
+            "lightgray",
+            bpConfig.portrait,
+            { verticalAlign: "text-bottom", ...iconStyle }
+          );
+
+          return icon;
+        }
+      );
+    }
+  };
+
+  const renderDeviceOptions = (layer: ILayer) => {
+    return breakpointsConfiguration.breakpointsConfiguration.map((bpConfig) => {
+      const iconName = getIconByType(bpConfig.type);
+      const size = getIconSize(iconName);
+
+      const icon = getResponsiveIcon(
+        iconName,
+        size.w,
+        size.h,
+        "lightgray",
+        bpConfig.portrait
+      );
+
+      return (
+        <Checkbox
+          disabled={layer.responsiveVisibility.showAll}
+          checked={
+            layer.responsiveVisibility.showAll ||
+            includes(layer.responsiveVisibility.displayOn, bpConfig.type)
+          }
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            let newLayer = cloneDeep(layer);
+            remove(
+              newLayer.responsiveVisibility.displayOn,
+              (type) => type === bpConfig.type
+            );
+
+            if (event.target.checked) {
+              newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
+            }
+
+            newLayer.responsiveVisibility.showAll = false;
+            _updateLayer(newLayer);
+          }}
+        >
+          <span
+            style={{
+              marginRight: "5px",
+              verticalAlign: "middle",
+            }}
+          >
+            {icon}
+          </span>
+          {bpConfig.name}
+        </Checkbox>
+      );
+    });
+  };
+
   return (
     <>
       <div className={css.layerPanel}>
@@ -238,6 +328,57 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
                     <div className={css.layerName}>{layer.name}</div>
 
+                    <div className={css.layerResponseVisibility}>
+                      <Popover
+                        position="bottom"
+                        usePortal={true}
+                        minimal
+                        popoverClassName={css.devicePopup}
+                      >
+                        <div style={{ cursor: "pointer" }}>
+                          {renderSelectedDevices(layer)}{" "}
+                          <Icon
+                            icon="caret-down"
+                            style={{ marginBottom: "2px" }}
+                          />
+                        </div>
+                        <div className={css.devicePopup}>
+                          <div
+                            style={{
+                              textAlign: "left",
+                              marginBottom: "15px",
+                              color: "gray",
+                            }}
+                          >
+                            {layer.name}
+                          </div>
+
+                          <Checkbox
+                            checked={layer.responsiveVisibility.showAll}
+                            onChange={(
+                              event: React.ChangeEvent<HTMLInputElement>
+                            ) => {
+                              const newLayer = cloneDeep(layer);
+                              newLayer.responsiveVisibility.showAll =
+                                event.target.checked;
+                              _updateLayer(newLayer);
+                            }}
+                          >
+                            <span
+                              style={{
+                                marginRight: "5px",
+                                verticalAlign: "middle",
+                              }}
+                            >
+                              {null}
+                            </span>
+                            ALL
+                          </Checkbox>
+                          <hr />
+                          {renderDeviceOptions(layer)}
+                        </div>
+                      </Popover>
+                    </div>
                     {/*<div className={css.objectCount}>
                       Objects: {layer.objectIds.length}
                     </div>*/}
@@ -480,6 +621,7 @@ const mapStateToProps = (state: IStore) => {
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
     layoutStaticEffectsPanel: layoutType === "default-layers",
+    breakpointsConfiguration: state.project.settings.breakpointsConfiguration,
   };
 };
 
@@ -504,6 +646,7 @@ const mapDispatchToProps = {
     removeObjectsFromSelection(objectIds),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
   _updateObject: (object: IObject) => updateObject(object),
+  _updateLayer: (layer: ILayer) => updateLayer(layer),
   _deactivateObject: (objectId: string) => deactivateObject(objectId),
 };
 
