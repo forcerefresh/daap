@@ -92,6 +92,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const onClickSave = (saveAs?: boolean) => {
     _updateProjectMeta({ inSaving: true });
 
+    const playerData = generatePlayerData(
+      { slides, layers, objects },
+      { entityType: "project", entityId: "current-project" },
+      breakpointConfig!
+    );
+
     saveProject({
       id: saveAs ? undefined : localMeta.id,
       name: localMeta.name!,
@@ -103,7 +109,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         scale: thumbSize.scale,
         html: html,
       },
-      playerData: {} as any,
+      playerData,
     })
       .then(({ id, name, description, slides, created, modified }) => {
         console.log({ id, name, description });

@@ -109,6 +109,27 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         </div>
         <div>
           <Button
+            minimal
+            active={showPanel === VisiblePanel.MediaLibrary}
+            onClick={() => {
+              setShowPanel(VisiblePanel.MediaLibrary);
+            }}
+          >
+            <Icon icon="media" iconSize={ICON_SIZE} color={"gray"} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.MediaLibrary && (
+              <div ref={sharedRef}>
+                <MediaLibraryPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+        <div className={css.delimiter}></div>
+        <div>
+          <Button
             small
             minimal
             onClick={() => _setStageTool(StageTools.SELECT)}
@@ -213,26 +234,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             />
           </Button>
         </div>
-        <div>
-          <Button
-            minimal
-            active={showPanel === VisiblePanel.MediaLibrary}
-            onClick={() => {
-              setShowPanel(VisiblePanel.MediaLibrary);
-            }}
-          >
-            <Icon icon="media" iconSize={ICON_SIZE} color={"gray"} />
-          </Button>
-          <Portal>
-            {showPanel === VisiblePanel.MediaLibrary && (
-              <div ref={sharedRef}>
-                <MediaLibraryPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
-                />
-              </div>
-            )}
-          </Portal>
-        </div>
+        <div className={css.delimiter}></div>
         <div>
           <Button
             minimal
