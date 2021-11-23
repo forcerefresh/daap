@@ -63,12 +63,12 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     //render timeline content
 
     if (lineRef.current) {
-      console.log(totalTime, "TOTAL TIME");
+      //console.log(totalTime, "TOTAL TIME");
 
       const lineDiv = lineRef.current! as HTMLDivElement;
       const lineWidth = lineDiv.offsetWidth;
 
-      console.log(lineWidth);
+      //console.log(lineWidth);
 
       // NOTE: html is only for transitions
       let html = "";
@@ -103,7 +103,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   //};
 
-  console.log((lineRef?.current as any)?.offsetWidth);
+  //console.log((lineRef?.current as any)?.offsetWidth);
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
   let left =
     lineWidth *
@@ -112,8 +112,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   left = left + lineWidth * slideLeftArr[slideProgress.slideIdx];
 
-  console.log(slideLeftArr, "LEFT PER");
-  console.log(left, "LEFT");
+  //console.log(slideLeftArr, "LEFT PER");
+  //console.log(left, "LEFT");
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 
@@ -123,7 +123,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     //tl.progress(multiplier, true);
   };
 
-  console.log(left);
+  //console.log(left);
   return (
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>

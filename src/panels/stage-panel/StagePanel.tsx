@@ -594,8 +594,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       widthAndHeightObject.height = resizeRect.h;
     }
 
-    console.log(resizeRect);
-    console.log(resizeData?.objectId === object.id);
+    // IMPORTANT: TODO: LEAKING rerender...
+    //console.log(resizeRect);
+    //console.log(resizeData?.objectId === object.id);
 
     const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
     //if (isAbsolutePosition) {
