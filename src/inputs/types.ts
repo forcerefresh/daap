@@ -25,6 +25,9 @@ export enum InputType {
   BORDER_COLOR = "border_color",
   COLOR_ARRAY = "color_array",
   COLOR_ARRAY_PRESETS = "color_array_preset",
+  CSS_INPUT = "css_input",
+  RELATIVE_POSITION_INPUT = "relative_position_input",
+  RELATIVE_ROTATION_INPUT = "relative_rotation_input",
 }
 
 export enum PresetGroup {
@@ -65,6 +68,9 @@ export interface IUpdateInput {
           setToInitialPositionOnComplete: boolean;
           followTime: number;
         }
+      | { value: number; position: string }
+      | { value: number; position: string; direction: string }
+      | ICssPluginValue
       | ICoverPlacementValue
       | IGridPlacementValue
       | INumericTimelineValue
@@ -128,6 +134,45 @@ export interface IBorderColorInput {
   propertyName: string;
   value: IBorderColorValue;
   defaultValue: IBorderColorValue;
+}
+
+export interface ICssPluginValue {
+  points: { time: number; css: any; easing: string }[];
+}
+
+export interface ICssPluginInput {
+  inputType: InputType.CSS_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: ICssPluginValue;
+  defaultValue: ICssPluginValue;
+}
+
+export interface IRelativePositionInput {
+  inputType: InputType.RELATIVE_POSITION_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: { value: number; position: "rel" | "abs" };
+  defaultValue: { value: number; position: "rel" | "abs" };
+}
+
+export interface IRelativeRotationInput {
+  inputType: InputType.RELATIVE_ROTATION_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: {
+    value: number;
+    position: "rel" | "abs";
+    direction: "_cw" | "_ccw" | "_short";
+  };
+  defaultValue: {
+    value: number;
+    position: "rel" | "abs";
+    direction: "_cw" | "_ccw" | "_short";
+  };
 }
 
 // timeline numeric value (delay and duration)
