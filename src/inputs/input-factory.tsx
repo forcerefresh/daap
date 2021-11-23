@@ -26,6 +26,8 @@ import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
 import { CSSPointsInputForm } from "./css-plugin-input/css-plugin-input";
+import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
+import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -95,6 +97,26 @@ export function getInputForm<T>(
     case InputType.CSS_POINTS: {
       return (
         <CSSPointsInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.RELATIVE_POSITION_INPUT: {
+      return (
+        <RelativePositionInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.RELATIVE_ROTATION_INPUT: {
+      return (
+        <RelativeRotationInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
