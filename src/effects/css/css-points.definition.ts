@@ -27,11 +27,11 @@ export const cssPluginDefaults: ICSSPointsEffect = {
       {
         time: 50,
         css: {
-          x: 100,
-          y: 100,
-          width: 200,
-          height: 300,
-          rotation: 0,
+          x: { value: 100, position: "abs" },
+          y: { value: 100, position: "abs" },
+          width: { value: 100, position: "abs" },
+          height: { value: 100, position: "abs" },
+          rotation: { value: 0, position: "abs", direction: "_ccw" },
         },
         easing: "none",
       },

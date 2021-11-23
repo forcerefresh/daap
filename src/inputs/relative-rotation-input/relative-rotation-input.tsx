@@ -6,15 +6,15 @@ import { IRelativeRotationInput, IUpdateInput } from "../types";
 import { Label } from "@blueprintjs/core";
 import css from "./relative-rotation-input.module.scss";
 
-const RELATIVE_POSTITION_OPTIONS = [
+const RELATIVE_POSITION_OPTIONS = [
   { label: "rel", value: "rel" },
   { label: "abs", value: "abs" },
 ];
 
 const RELATIVE_ROTATION_OPTIONS = [
-  { label: "_cw", value: "_cw" },
-  { label: "_ccw", value: "_ccw" },
-  { label: "_short", value: "_short" },
+  { label: "cw", value: "_cw" },
+  { label: "ccw", value: "_ccw" },
+  { label: "short", value: "_short" },
 ];
 
 export const RelativeRotationInputForm: React.FC<
@@ -31,7 +31,7 @@ export const RelativeRotationInputForm: React.FC<
             {getSelectField(
               "",
               value.position,
-              RELATIVE_POSTITION_OPTIONS,
+              RELATIVE_POSITION_OPTIONS,
               (position: any) => {
                 const valueClone = cloneDeep(value);
                 valueClone.position = position;

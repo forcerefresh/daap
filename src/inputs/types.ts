@@ -69,8 +69,8 @@ export interface IUpdateInput {
           followTime: number;
         }
       | ICSSPointsValue
-      | { value: number; position: string }
-      | { value: number; position: string; direction: string }
+      | IRelativePositionValue
+      | IRelativeRotationValue
       | ICoverPlacementValue
       | IGridPlacementValue
       | INumericTimelineValue
@@ -137,11 +137,11 @@ export interface IBorderColorInput {
 }
 
 export interface ICSSPluginCSSValue {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  rotation: number;
+  x: IRelativePositionValue;
+  y: IRelativePositionValue;
+  width: IRelativePositionValue;
+  height: IRelativePositionValue;
+  rotation: IRelativeRotationValue;
 }
 
 export interface ICSSPointsValue {
@@ -157,13 +157,24 @@ export interface ICSSPointsInput {
   defaultValue: ICSSPointsValue;
 }
 
+export interface IRelativePositionValue {
+  value: number;
+  position: "rel" | "abs";
+}
+
 export interface IRelativePositionInput {
   inputType: InputType.RELATIVE_POSITION_INPUT;
   displayName: string;
   helperText?: string;
   propertyName: string;
-  value: { value: number; position: "rel" | "abs" };
-  defaultValue: { value: number; position: "rel" | "abs" };
+  value: IRelativePositionValue;
+  defaultValue: IRelativePositionValue;
+}
+
+export interface IRelativeRotationValue {
+  value: number;
+  position: "rel" | "abs";
+  direction: "_cw" | "_ccw" | "_short";
 }
 
 export interface IRelativeRotationInput {
@@ -171,16 +182,8 @@ export interface IRelativeRotationInput {
   displayName: string;
   helperText?: string;
   propertyName: string;
-  value: {
-    value: number;
-    position: "rel" | "abs";
-    direction: "_cw" | "_ccw" | "_short";
-  };
-  defaultValue: {
-    value: number;
-    position: "rel" | "abs";
-    direction: "_cw" | "_ccw" | "_short";
-  };
+  value: IRelativeRotationValue;
+  defaultValue: IRelativeRotationValue;
 }
 
 // timeline numeric value (delay and duration)

@@ -21,27 +21,27 @@ const formDefinition = [
   {
     displayName: "X",
     propertyName: "x",
-    inputType: InputType.NUMBER,
+    inputType: InputType.RELATIVE_POSITION_INPUT,
   },
   {
     displayName: "Y",
     propertyName: "y",
-    inputType: InputType.NUMBER,
+    inputType: InputType.RELATIVE_POSITION_INPUT,
   },
   {
     displayName: "Width",
     propertyName: "width",
-    inputType: InputType.NUMBER,
+    inputType: InputType.RELATIVE_POSITION_INPUT,
   },
   {
     displayName: "Height",
     propertyName: "height",
-    inputType: InputType.NUMBER,
+    inputType: InputType.RELATIVE_POSITION_INPUT,
   },
   {
     displayName: "Rotation",
     propertyName: "rotation",
-    inputType: InputType.NUMBER,
+    inputType: InputType.RELATIVE_ROTATION_INPUT,
   },
 ];
 
@@ -52,7 +52,15 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
   const lineRef = React.useRef(null);
 
   const [localValue, setLocalValue] = useState(value);
-  const [selectedIndex, setSelectedIndex] = useState<number | undefined>();
+  const [selectedIndex, setSelectedIndex] = useState<number | undefined>(0);
+
+  const setLocalValueSorted = (val: ICSSPointsValue) => {
+    val.points.sort((a, b) => {
+      return a.time > b.time ? 1 : -1;
+    });
+
+    setLocalValue(val);
+  };
 
   useEffect(() => {
     debounceOnChange(localValue);
@@ -63,10 +71,12 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
   }, 100);
 
   const deletePoint = (index: number) => {
-    setSelectedIndex(undefined);
+    if (localValue.points.length === 1) return;
+
     const newValue = cloneDeep(localValue);
     newValue.points.splice(index, 1);
-    setLocalValue(newValue);
+    setLocalValueSorted(newValue);
+    setSelectedIndex(index - 1);
   };
 
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
@@ -84,10 +94,16 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
             const newValue = cloneDeep(localValue);
             newValue.points.push({
               time: roundNumber(time * 100, 2),
-              css: { x: 0, y: 0, width: 0, height: 0, rotation: 0 },
+              css: {
+                x: { value: 0, position: "abs" },
+                y: { value: 0, position: "abs" },
+                width: { value: 0, position: "abs" },
+                height: { value: 0, position: "abs" },
+                rotation: { value: 0, position: "abs", direction: "_ccw" },
+              },
               easing: "abc",
             });
-            setLocalValue(newValue);
+            setLocalValueSorted(newValue);
             setSelectedIndex(newValue.points.length - 1);
           }}
         ></div>
@@ -115,7 +131,7 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
                   const newTime = percMultiplier * 100;
                   const newValue = cloneDeep(localValue);
                   newValue.points[idx].time = roundNumber(newTime, 2);
-                  setLocalValue(newValue);
+                  setLocalValueSorted(newValue);
                 }}
                 onMouseDown={() => {
                   setSelectedIndex(idx);
@@ -153,9 +169,7 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
               (newLocalValue.points[selectedIndex!].css as any)[
                 formDefinition.propertyName
               ] = value;
-
-              console.log(newLocalValue);
-              setLocalValue(newLocalValue);
+              setLocalValueSorted(newLocalValue);
             }
 
             const val = (localValue.points[selectedIndex!].css as any)[
@@ -165,7 +179,6 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
             return getInputForm(
               formDefinition.inputType,
               { ...formDefinition, value: val },
-              onChange,
               onChange
             );
           })}
