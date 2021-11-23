@@ -109,7 +109,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     let totalDuration = 0;
     const slideTimelineDataArr: SlideTimelineData[] =
       exportData.slideDataArr.map((slideData) => {
-        console.log(slideData.slide);
+        //console.log(slideData.slide);
         const transitionDuration =
           slideData.slide.slideTransition.duration || 0;
         const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
