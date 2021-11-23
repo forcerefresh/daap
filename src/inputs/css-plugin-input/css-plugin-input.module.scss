@@ -1,0 +1,32 @@
+.cssPlugin {
+  position: relative;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
+
+  .line {
+    background: #d88d12;
+    height: 6px;
+    margin: 35px 0px 35px 0px;
+    cursor: pointer;
+  }
+
+  .thumb {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    background: #03ae2b;
+    left: -5px;
+    top: -5px;
+    border-radius: 100px;
+  }
+
+  .selectedThumb {
+    background: red;
+  }
+}

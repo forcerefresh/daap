@@ -67,6 +67,11 @@ import {
 // NOTE effect for development
 import { devDefaults, devDefinition } from "./dev/dev.definition";
 
+import {
+  cssPluginDefaults,
+  cssPluginDefinition,
+} from "./css/css-points.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -92,6 +97,7 @@ import "./dev/dev.effect";
 
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 import "./trianglify/trianglify.effect";
+import "./css/css-points.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -136,6 +142,7 @@ registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(devDefinition, devDefaults);
+registerEffect(cssPluginDefinition, cssPluginDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

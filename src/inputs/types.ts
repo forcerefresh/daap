@@ -25,6 +25,7 @@ export enum InputType {
   BORDER_COLOR = "border_color",
   COLOR_ARRAY = "color_array",
   COLOR_ARRAY_PRESETS = "color_array_preset",
+  CSS_POINTS = "css_points",
 }
 
 export enum PresetGroup {
@@ -65,6 +66,7 @@ export interface IUpdateInput {
           setToInitialPositionOnComplete: boolean;
           followTime: number;
         }
+      | ICSSPointsValue
       | ICoverPlacementValue
       | IGridPlacementValue
       | INumericTimelineValue
@@ -128,6 +130,27 @@ export interface IBorderColorInput {
   propertyName: string;
   value: IBorderColorValue;
   defaultValue: IBorderColorValue;
+}
+
+export interface ICSSPluginCSSValue {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+}
+
+export interface ICSSPointsValue {
+  points: { time: number; css: ICSSPluginCSSValue; easing: string }[];
+}
+
+export interface ICSSPointsInput {
+  inputType: InputType.CSS_POINTS;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: ICSSPointsValue;
+  defaultValue: ICSSPointsValue;
 }
 
 // timeline numeric value (delay and duration)

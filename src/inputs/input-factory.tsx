@@ -25,6 +25,7 @@ import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
+import { CSSPointsInputForm } from "./css-plugin-input/css-plugin-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -84,6 +85,16 @@ export function getInputForm<T>(
     case InputType.COLOR_ARRAY: {
       return (
         <ColorArrayInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.CSS_POINTS: {
+      return (
+        <CSSPointsInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
