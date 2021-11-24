@@ -14,6 +14,7 @@ export enum ObjectType {
   CANVAS = "canvas",
   SOURCE_IMAGE = "source_image",
   FRAME = "frame",
+  BUTTON = "button",
 }
 
 export interface IDefinition<

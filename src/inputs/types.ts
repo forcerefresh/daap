@@ -451,6 +451,11 @@ export interface ImageProperties {
   url: IImageInput;
 }
 
+export interface ButtonProperties {
+  borderSize: INumberInput;
+  backgroundColor: IColorInput;
+}
+
 export interface SourceImageProperties {
   id: ITextInput;
   visible: ICheckboxInput;

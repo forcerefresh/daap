@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import {
+  ButtonProperties,
   CanvasProperties,
   FrameProperties,
   ICoverPlacementValue,
@@ -60,6 +61,12 @@ export function createObject(
         ...createVideoObject(initialValue, {
           hasOverflowProperty: true,
         }),
+      };
+    }
+    case ObjectType.BUTTON: {
+      return {
+        ...objectProps,
+        ...createButtonObject(initialValue),
       };
     }
     case ObjectType.SVG: {
@@ -294,6 +301,36 @@ function createTextObject(
             { value: "900", label: "900	Black" },
             { value: "950", label: "950	Extra Black" },
           ],
+        },
+      },
+    },
+  };
+}
+
+function createButtonObject(initialValue?: {
+  [key: string]: any;
+}): Omit<IObject<ButtonProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.BUTTON);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.BUTTON,
+      properties: {
+        borderSize: {
+          displayName: "Border size",
+          propertyName: "borderSize",
+          inputType: InputType.NUMBER,
+          value: 1,
+          defaultValue: 1,
+        },
+        backgroundColor: {
+          displayName: "Background color",
+          propertyName: "backgroundColor",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
         },
       },
     },

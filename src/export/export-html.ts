@@ -1,6 +1,8 @@
+import { debug } from "console";
 import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import {
+  ButtonProperties,
   CanvasProperties,
   ICoverPlacementValue,
   ImageProperties,
@@ -190,6 +192,8 @@ export function getObjectHtml(
       return getSvgHtml(object, calculatedObjectSize);
     case ObjectType.CANVAS:
       return getCanvasHtml(object, calculatedObjectSize, isPlayer);
+    case ObjectType.BUTTON:
+      return getButtonHtml(object, calculatedObjectSize);
     case ObjectType.SOURCE_IMAGE:
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
@@ -218,6 +222,23 @@ export function getTextHtml(
   return `<p class="object-content" style="${style}">${nl2br(
     textProperties.text.value
   )}</p>`;
+}
+
+export function getButtonHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
+  const buttonProperties = object.definition.properties as ButtonProperties;
+
+  let style = "";
+  const c = buttonProperties.backgroundColor.value;
+  style += `background-color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
+  style += `border: ${buttonProperties.borderSize.value}px solid red;`;
+  style += "position: absolute;";
+  debugger;
+  return `<button class="object-content" style="${style}">${nl2br(
+    "Sample button"
+  )}</button>`;
 }
 
 function getImageHtml(
