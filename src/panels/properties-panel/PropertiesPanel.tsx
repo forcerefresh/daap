@@ -136,7 +136,12 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         }
       }
 
-      return getInputForm(properties[key].inputType, properties[key], onChange);
+      return getInputForm(
+        properties[key].inputType,
+        properties[key],
+        onChange,
+        onChange
+      );
     });
   };
 

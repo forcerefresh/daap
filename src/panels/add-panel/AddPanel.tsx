@@ -163,6 +163,39 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
       <div>
         <Card interactive={false} className={css.sectionCard}>
+          <h1>Button</h1>
+          <p>Place button</p>
+        </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.BUTTON, {
+                left: (documentSize.width - 300) / 2,
+                top: (documentSize.height - 300) / 2,
+                width: 300,
+                height: 100,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <Icon
+            icon="link"
+            iconSize={36}
+            color="gray"
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>BUTTON</h3>
+          <p>Add button</p>
+        </Card>
+      </div>
+
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
           <h1>HTML</h1>
           <p>Place html content</p>
         </Card>
