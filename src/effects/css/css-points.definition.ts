@@ -8,7 +8,7 @@ export const cssPluginDefinition = {
     {
       displayName: "CSS Timeline",
       propertyName: "cssPointsValue",
-      inputType: InputType.CSS_POINTS,
+      inputType: InputType.CSS_TIMELINES,
     },
   ],
 };
