@@ -455,6 +455,36 @@ export interface ButtonProperties {
   borderSize: INumberInput;
   backgroundColor: IColorInput;
 }
+/*
+export const ButtonLayout = [
+  {
+    groupName: "basic",
+    optional: false,
+    properties: [
+      { property: "xyz", optional: true },
+      {
+        property: "dimensionsChoice",
+        isTabs: true,
+        tabsNames: ["Solid", "Gradient"],
+        tabsProps: [
+          [
+            { property: "borderSize", optional: true },
+            { property: "backgroundColor", optional: true },
+          ],
+          [
+            { property: "borderSize-2", optional: true },
+            { property: "backgroundColor-2", optional: true },
+          ],
+        ],
+      },
+    ],
+  },
+  {
+    groupName: "shadow",
+    optional: true,
+    properties: [{ property: "boxShadow", optional: true }],
+  },
+];*/
 
 export interface SourceImageProperties {
   id: ITextInput;
