@@ -22,6 +22,8 @@ gsap.registerEffect({
           : {}),
       };
       const dur = config.duration! * (time / 100);
+
+      console.log(dur);
       tl.add(gsap.to(objectEl, { duration: dur, css: cssValue }));
     }
 

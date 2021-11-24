@@ -94,7 +94,7 @@ export function getInputForm<T>(
         />
       );
     }
-    case InputType.CSS_POINTS: {
+    case InputType.CSS_TIMELINES: {
       return (
         <CSSPointsInputForm
           key={key}

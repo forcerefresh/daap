@@ -5,10 +5,10 @@ import Draggable, {
   DraggableEvent,
 } from "react-draggable";
 import {
-  ICSSPointsInput,
-  ICSSPointsValue,
+  ICSSTimelineInput,
   InputType,
   IUpdateInput,
+  ICSSTimelinesValue,
 } from "../types";
 import css from "./css-plugin-input.module.scss";
 import cx from "classnames";
@@ -45,7 +45,7 @@ const formDefinition = [
   },
 ];
 
-export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
+export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
   props
 ) => {
   const { value, onChange } = props;
@@ -54,9 +54,13 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
   const [localValue, setLocalValue] = useState(value);
   const [selectedIndex, setSelectedIndex] = useState<number | undefined>(0);
 
-  const setLocalValueSorted = (val: ICSSPointsValue) => {
-    val.points.sort((a, b) => {
-      return a.time > b.time ? 1 : -1;
+  const setLocalValueSorted = (val: ICSSTimelinesValue) => {
+    val.timelines.map((timeline) => {
+      timeline.points.sort((a, b) => {
+        return a.time > b.time ? 1 : -1;
+      });
+
+      return timeline;
     });
 
     setLocalValue(val);
@@ -66,17 +70,17 @@ export const CSSPointsInputForm: React.FC<ICSSPointsInput & IUpdateInput> = (
     debounceOnChange(localValue);
   }, [localValue]);
 
-  const debounceOnChange = debounce((newValue: ICSSPointsValue) => {
+  const debounceOnChange = debounce((newValue: ICSSTimelinesValue) => {
     onChange(newValue);
   }, 100);
 
-  const deletePoint = (index: number) => {
-    if (localValue.points.length === 1) return;
+  const deletePoint = (timelineIndex: number, index: number) => {
+    if (localValue.timelines[timelineIndex].points.length === 1) return;
 
     const newValue = cloneDeep(localValue);
-    newValue.points.splice(index, 1);
+    newValue.timelines[timelineIndex].points.splice(index, 1);
     setLocalValueSorted(newValue);
-    setSelectedIndex(index - 1);
+    setSelectedIndex(index > 0 ? index - 1 : 0);
   };
 
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;

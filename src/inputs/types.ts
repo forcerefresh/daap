@@ -25,7 +25,7 @@ export enum InputType {
   BORDER_COLOR = "border_color",
   COLOR_ARRAY = "color_array",
   COLOR_ARRAY_PRESETS = "color_array_preset",
-  CSS_POINTS = "css_points",
+  CSS_TIMELINES = "css_timelines",
   RELATIVE_POSITION_INPUT = "relative_position_input",
   RELATIVE_ROTATION_INPUT = "relative_rotation_input",
 }
@@ -68,7 +68,7 @@ export interface IUpdateInput {
           setToInitialPositionOnComplete: boolean;
           followTime: number;
         }
-      | ICSSPointsValue
+      | ICSSTimelinesValue
       | IRelativePositionValue
       | IRelativeRotationValue
       | ICoverPlacementValue
@@ -144,17 +144,26 @@ export interface ICSSPluginCSSValue {
   rotation: IRelativeRotationValue;
 }
 
-export interface ICSSPointsValue {
-  points: { time: number; css: ICSSPluginCSSValue; easing: string }[];
+export interface ICSSPoint {
+  time: number;
+  css: ICSSPluginCSSValue;
+  easing: string;
 }
 
-export interface ICSSPointsInput {
-  inputType: InputType.CSS_POINTS;
+export interface ICSSPointsValue {
+  points: ICSSPoint[];
+}
+export interface ICSSTimelinesValue {
+  timelines: ICSSPointsValue[];
+}
+
+export interface ICSSTimelineInput {
+  inputType: InputType.CSS_TIMELINES;
   displayName: string;
   helperText?: string;
   propertyName: string;
-  value: ICSSPointsValue;
-  defaultValue: ICSSPointsValue;
+  value: ICSSTimelinesValue;
+  defaultValue: ICSSTimelinesValue;
 }
 
 export interface IRelativePositionValue {
