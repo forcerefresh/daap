@@ -150,11 +150,11 @@ export interface ICSSPoint {
   easing: string;
 }
 
-export interface ICSSPointsValue {
+export interface ICSSTimelineValue {
   points: ICSSPoint[];
 }
 export interface ICSSTimelinesValue {
-  timelines: ICSSPointsValue[];
+  timelines: ICSSTimelineValue[];
 }
 
 export interface ICSSTimelineInput {

@@ -66,6 +66,7 @@ import {
 } from "./trianglify/trianglify.definition";
 // NOTE effect for development
 import { devDefaults, devDefinition } from "./dev/dev.definition";
+import { dev2Defaults, dev2Definition } from "./dev2/dev2.definition";
 
 import {
   cssPluginDefaults,
@@ -94,6 +95,7 @@ import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
 import "./square-mask/square-mask.effect";
 import "./dev/dev.effect";
+import "./dev2/dev2.effect";
 
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 import "./trianglify/trianglify.effect";
@@ -111,6 +113,7 @@ interface IEffectDefaultsWrapper {
 interface IEffectHolder {
   definition: IEffectDefinitionWrapper;
   defaults: IEffectDefaultsWrapper;
+  formConfiguration: any;
   getDuration?: (object?: any, config?: any) => number;
 }
 // <<<
@@ -135,6 +138,7 @@ registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(
   typewriterDefinition,
   typewriterDefaults,
+  undefined,
   getTypewriterEffectDuration
 );
 registerEffect(splitTextDefinition, splitTextDefaults);
@@ -142,17 +146,20 @@ registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(devDefinition, devDefaults);
+registerEffect(dev2Definition, dev2Defaults);
 registerEffect(cssPluginDefinition, cssPluginDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
   defaults: IEffectDefaultsWrapper,
+  formConfiguration?: any,
   getDuration?: (object?: any, config?: any) => number
 ) {
   effects.push({
     definition,
     defaults,
     getDuration,
+    formConfiguration,
   });
 }
 

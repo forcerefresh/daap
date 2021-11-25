@@ -9,7 +9,7 @@ import {
   InputType,
   IUpdateInput,
   ICSSTimelinesValue,
-  ICSSPointsValue,
+  ICSSTimelineValue,
 } from "../types";
 import css from "./css-plugin-input.module.scss";
 import cx from "classnames";
@@ -18,6 +18,28 @@ import { getNumericFiled } from "../input-utils";
 import { roundNumber } from "../../utils/doom-utils/common";
 import { getInputForm } from "../input-factory";
 import { Button } from "@blueprintjs/core";
+
+export const getDefaultTimeline = (): ICSSTimelineValue => {
+  return {
+    points: [
+      {
+        time: 100,
+        easing: "none",
+        css: {
+          x: { value: 0, position: "abs" },
+          y: { value: 0, position: "abs" },
+          width: { value: 0, position: "abs" },
+          height: { value: 0, position: "abs" },
+          rotation: {
+            value: 0,
+            position: "abs" as "abs" | "rel",
+            direction: "_ccw" as "_ccw" | "_cw" | "_short",
+          },
+        },
+      },
+    ],
+  };
+};
 
 const formDefinition = [
   {
@@ -122,21 +144,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
     const newValue = cloneDeep(localValue);
     const prevLength = newValue.timelines.length;
 
-    newValue.timelines.push({
-      points: [
-        {
-          time: 50,
-          easing: "none",
-          css: {
-            x: { value: 100, position: "abs" },
-            y: { value: 100, position: "abs" },
-            width: { value: 100, position: "abs" },
-            height: { value: 100, position: "abs" },
-            rotation: { value: 0, position: "abs", direction: "_ccw" },
-          },
-        },
-      ],
-    });
+    newValue.timelines.push(getDefaultTimeline());
     setLocalValueSorted(newValue);
 
     setSelectedIndex({
@@ -150,7 +158,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
     setLineWidth((lineRef?.current as any)?.offsetWidth || 0);
   }, [lineRef?.current]);
 
-  const renderTimeline = (timeline: ICSSPointsValue, timelineIdx: number) => {
+  const renderTimeline = (timeline: ICSSTimelineValue, timelineIdx: number) => {
     return (
       <div className={css.timelineHolder}>
         <div

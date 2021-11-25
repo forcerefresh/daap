@@ -62,7 +62,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   ) => {
     const effectDefinition = getEffectDefinition(effectId);
 
-    return effectDefinition.definition.form.map((item) => {
+    const inputs = effectDefinition.definition.form.map((item) => {
       function onChange(value: any) {
         const retObj = cloneDeep(object);
         if (retObj) {
@@ -83,10 +83,15 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         ...item,
         value: typeof value !== "undefined" ? value : defaultValue,
       };
-      return getInputForm(item.inputType, inputProps, onChange, onChange, {
-        layerData: { layer: objectOrLayer as ILayer, objects: layerObjects },
-      });
+      return {
+        input: getInputForm(item.inputType, inputProps, onChange, onChange, {
+          layerData: { layer: objectOrLayer as ILayer, objects: layerObjects },
+        }),
+        propertyName: item.propertyName,
+      };
     });
+
+    return inputs.map((item) => item.input);
   };
 
   const effDef = (type: string) => {
