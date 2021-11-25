@@ -23,17 +23,53 @@ export const cssPluginDefaults: ICSSPointsEffect = {
   supportedEffectTypes: ["in", "out"],
   // specific to this effect
   cssPointsValue: {
-    points: [
+    timelines: [
       {
-        time: 50,
-        css: {
-          x: { value: 100, position: "abs" },
-          y: { value: 100, position: "abs" },
-          width: { value: 100, position: "abs" },
-          height: { value: 100, position: "abs" },
-          rotation: { value: 0, position: "abs", direction: "_ccw" },
-        },
-        easing: "none",
+        points: [
+          {
+            time: 50,
+            css: {
+              x: { value: 100, position: "abs" },
+              y: { value: 100, position: "abs" },
+              width: { value: 100, position: "abs" },
+              height: { value: 100, position: "abs" },
+              rotation: { value: 0, position: "abs", direction: "_ccw" },
+            },
+            easing: "none",
+          },
+        ],
+      },
+
+      {
+        points: [
+          {
+            time: 50,
+            css: {
+              x: { value: 100, position: "abs" },
+              y: { value: 100, position: "abs" },
+              width: { value: 100, position: "abs" },
+              height: { value: 100, position: "abs" },
+              rotation: { value: 0, position: "abs", direction: "_ccw" },
+            },
+            easing: "none",
+          },
+        ],
+      },
+
+      {
+        points: [
+          {
+            time: 50,
+            css: {
+              x: { value: 100, position: "abs" },
+              y: { value: 100, position: "abs" },
+              width: { value: 100, position: "abs" },
+              height: { value: 100, position: "abs" },
+              rotation: { value: 0, position: "abs", direction: "_ccw" },
+            },
+            easing: "none",
+          },
+        ],
       },
     ],
   },

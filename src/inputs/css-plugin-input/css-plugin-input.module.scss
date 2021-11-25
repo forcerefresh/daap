@@ -10,22 +10,39 @@
   }
 
   .line {
-    background: #d88d12;
-    height: 6px;
-    margin: 35px 0px 35px 0px;
+    background: #1f2123;
+    border: 1px solid #484848;
+
+    height: 15px;
+    margin: 5px 0px 15px 0px;
     cursor: pointer;
   }
 
   .thumb {
     width: 10px;
-    height: 15px;
+    height: 13px;
     position: absolute;
-    background: #03ae2b;
+    background: #aeaeae;
     left: -5px;
-    top: -5px;
+    top: 6px;
   }
 
   .selectedThumb {
-    background: red;
+    background: #5c7cff;
+    z-index: 100;
   }
+
+  .timelineHolder {
+    position: relative;
+    display: flex;
+
+    > *:first-child {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+  }
+}
+
+.addNewTimeline {
+  margin-bottom: 10px;
 }
