@@ -29,8 +29,8 @@ export const devDefinition = {
       },
     },
     {
-      displayName: "Button Group",
-      helperText: "",
+      displayName: "Opcije",
+      helperText: "dsfdsfsd safdsa das dsad sa das",
       propertyName: "buttonGroup",
       inputType: InputType.BUTTON_GROUP_INPUT,
       options: [

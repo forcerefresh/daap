@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ISliderInput, IUpdateInput } from "../types";
 import { FormGroup, Slider } from "@blueprintjs/core";
 import css from "./slider-input.module.scss";
 import classnames from "classnames";
+import { debounce } from "lodash-es";
 
 export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   props
@@ -25,9 +26,18 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
     hideLabels = false,
   } = inputProperties;
 
-  const updateValue = (val: any) => {
-    onChange(val);
-  };
+  const [localValue, setLocalValue] = useState(value);
+  useEffect(() => {
+    if (value !== localValue) updateValue(localValue);
+  }, [localValue]);
+
+  const updateValue = useCallback(debounce(onChange, 5000), [onChange]);
+
+  useEffect(() => {
+    return () => {
+      updateValue.flush();
+    };
+  }, []);
 
   const labelValue = (val: number) => {
     return `${Math.round(val)}${sufix}`;
@@ -50,8 +60,8 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
         stepSize={stepSize}
         labelStepSize={(max - min) / labelStepSize}
         labelRenderer={labelValue}
-        onChange={updateValue}
-        value={value}
+        onChange={setLocalValue}
+        value={localValue}
         showTrackFill={trackFill}
       />
     </FormGroup>

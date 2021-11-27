@@ -1,35 +1,28 @@
-import React, { useState } from "react";
-import { Button, ButtonGroup } from "@blueprintjs/core";
+import React from "react";
+import { Button, ButtonGroup, FormGroup } from "@blueprintjs/core";
 import { IButtonGroupInput, IUpdateInput } from "../types";
 // import css from "./button-group-input.module.scss";
 
 export const ButtonGroupInputForm: React.FC<IButtonGroupInput & IUpdateInput> =
   (props) => {
-    const { value, options, onChange } = props;
-
-    const [selectedIndex, setSelectedIndex] = useState(0);
-
-    const changeTab = (index: number) => {
-      setSelectedIndex(index);
-    };
-
-    const renderTabContent = () => {
-      return <div>{options[selectedIndex].value}</div>;
-    };
+    const { value, options, onChange, displayName, helperText } = props;
 
     return (
-      <div>
+      <FormGroup
+        label={displayName}
+        helperText={!!helperText && helperText}
+        inline
+      >
         <ButtonGroup>
           {options.map((el, idx) => (
             <Button
-              className={selectedIndex === idx ? "bp3-active" : ""}
-              onClick={() => changeTab(idx)}
+              active={options[idx].value === value}
+              onClick={() => onChange(options[idx].value)}
             >
               {el.label}
             </Button>
           ))}
         </ButtonGroup>
-        {renderTabContent()}
-      </div>
+      </FormGroup>
     );
   };
