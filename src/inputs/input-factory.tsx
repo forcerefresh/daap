@@ -28,6 +28,8 @@ import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-arra
 import { CSSPointsInputForm } from "./css-plugin-input/css-plugin-input";
 import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
+import { SliderInputForm } from "./slider-input/slider-input";
+import { ButtonGroupInputForm } from "./buttonGroupInput/button-group-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -117,6 +119,26 @@ export function getInputForm<T>(
     case InputType.RELATIVE_ROTATION_INPUT: {
       return (
         <RelativeRotationInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.SLIDER_INPUT: {
+      return (
+        <SliderInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.BUTTON_GROUP_INPUT: {
+      return (
+        <ButtonGroupInputForm
           key={key}
           {...inputProps}
           onChange={onChange}

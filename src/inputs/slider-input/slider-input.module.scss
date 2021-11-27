@@ -1,0 +1,30 @@
+.main {
+  :global {
+    .bp3-form-content {
+      width: 90%;
+    }
+  }
+}
+
+.thumbPositionTop {
+  margin-top: 20px;
+
+  :global {
+    .bp3-slider-handle > .bp3-slider-label {
+      margin-top: -40px;
+    }
+  }
+}
+
+.hideLabels {
+  &:not(.thumbPositionTop) {
+    margin-bottom: 0px;
+  }
+  margin-bottom: -20px;
+
+  :global {
+    .bp3-slider-axis {
+      display: none !important;
+    }
+  }
+}
