@@ -465,13 +465,15 @@ export interface ISliderInput {
   propertyName: string;
   value: number;
   defaultValue: number;
-  inputProperties: {
-    min: number;
-    max: number;
-    sufix: string;
-    stepSize: number;
-    labelStepSize: number;
-    trackFill: true;
+  inputProperties?: {
+    min?: number;
+    max?: number;
+    sufix?: string;
+    stepSize?: number;
+    labelStepSize?: number;
+    trackFill?: true;
+    thumbPosition?: "top" | "bottom";
+    hideLabels?: boolean;
   };
 }
 

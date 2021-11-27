@@ -18,12 +18,14 @@ export const devDefinition = {
       propertyName: "slider",
       inputType: InputType.SLIDER_INPUT,
       inputProperties: {
-        min: 0,
-        max: 100,
+        min: -200,
+        max: 1000,
         sufix: "%",
         stepSize: 1,
-        labelStepSize: 2,
-        trackFill: true,
+        labelStepSize: 5,
+        trackFill: false,
+        thumbPosition: "top",
+        hideLabels: false,
       },
     },
     {
