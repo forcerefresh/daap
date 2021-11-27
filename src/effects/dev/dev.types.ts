@@ -5,4 +5,6 @@ export const dev = "dev";
 
 export interface IDevEffect extends IEffectBase {
   colors1: RGBColor[];
+  slider: number;
+  buttonGroup: string;
 }

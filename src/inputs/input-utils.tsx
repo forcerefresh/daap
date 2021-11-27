@@ -100,6 +100,31 @@ export function getSelectField<T>(
   return getInputForm(InputType.SELECT, objectDef, onChange);
 }
 
+export function getSelectSlider<T>(
+  label: string,
+  value: T,
+  inputProperties: {
+    min: number;
+    max: number;
+    sufix: string;
+    stepSize: number;
+    labelStepSize: number;
+    trackFill: boolean;
+  },
+  onChange: (value: T) => void,
+  inputProps: { disabled?: boolean } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.SLIDER_INPUT,
+    value: value,
+    inputProperties: inputProperties,
+    inputProps,
+  };
+
+  return getInputForm(InputType.SLIDER_INPUT, objectDef, onChange);
+}
+
 export function getCheckboxField<T>(
   label: string,
   value: T,

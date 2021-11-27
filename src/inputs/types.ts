@@ -28,6 +28,8 @@ export enum InputType {
   CSS_POINTS = "css_points",
   RELATIVE_POSITION_INPUT = "relative_position_input",
   RELATIVE_ROTATION_INPUT = "relative_rotation_input",
+  SLIDER_INPUT = "slider_input",
+  BUTTON_GROUP_INPUT = "button_group_input",
 }
 
 export enum PresetGroup {
@@ -455,6 +457,34 @@ export interface ButtonProperties {
   borderSize: INumberInput;
   backgroundColor: IColorInput;
 }
+
+export interface ISliderInput {
+  inputType: InputType.SLIDER_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: number;
+  defaultValue: number;
+  inputProperties: {
+    min: number;
+    max: number;
+    sufix: string;
+    stepSize: number;
+    labelStepSize: number;
+    trackFill: true;
+  };
+}
+
+export interface IButtonGroupInput {
+  inputType: InputType.BUTTON_GROUP_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: string;
+  value: string;
+  defaultValue: string;
+  options: { value: string; label: string }[];
+}
+
 /*
 export const ButtonLayout = [
   {
