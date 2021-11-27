@@ -14,6 +14,7 @@ export const dev2Definition = {
       displayName: "Number 1",
       propertyName: "number1",
       inputType: InputType.NUMBER,
+      optional: true,
     },
     {
       displayName: "Number 2",
@@ -29,6 +30,11 @@ export const dev2Definition = {
       displayName: "Number 4",
       propertyName: "number4",
       inputType: InputType.NUMBER,
+    },
+    {
+      displayName: "",
+      propertyName: "hasAdvancedOptions",
+      inputType: InputType.CHECKBOX,
     },
     {
       displayName: "Number 5",
@@ -57,6 +63,56 @@ export const dev2Defaults: IDev2Effect = {
   number2: 2,
   number3: 3,
   number4: 4,
+  hasAdvancedOptions: false,
   number5: 5,
   number6: 6,
 };
+
+export type IFormConfiguration = IFormPanelConfiguration[];
+
+export interface IFormPanelConfiguration {
+  groupName: string;
+  optional?: boolean;
+  optionalProperty?: string;
+  properties: { property: string; optional?: boolean }[];
+}
+
+export const dev2FormConfiguration: IFormConfiguration = [
+  {
+    groupName: "basic",
+    optional: false,
+    properties: [
+      { property: "colors1", optional: true },
+      { property: "number1", optional: true },
+      { property: "number2" },
+      { property: "number3" },
+      { property: "number4" },
+    ],
+  },
+  {
+    groupName: "advanced",
+    optional: true,
+    optionalProperty: "hasAdvancedOptions",
+    properties: [
+      { property: "number5" },
+      { property: "number6", optional: true },
+    ],
+  },
+];
+
+/*
+      {
+        property: "dimensionsChoice",
+        isTabs: true,
+        tabsNames: ["Solid", "Gradient"],
+        tabsProps: [
+          [
+            { property: "borderSize", optional: true },
+            { property: "backgroundColor", optional: true },
+          ],
+          [
+            { property: "borderSize-2", optional: true },
+            { property: "backgroundColor-2", optional: true },
+          ],
+        ],
+      },*/

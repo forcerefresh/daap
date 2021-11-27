@@ -17,6 +17,7 @@ import {
 import { ILayer } from "../../../store/reducers/i-layers";
 import { ISlide } from "../../../store/reducers/i-slides";
 import { IStore } from "../../../store/store";
+import { FormWithLayout } from "../../../utils/form-layout/form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
 
@@ -91,7 +92,17 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
       };
     });
 
-    return inputs.map((item) => item.input);
+    if (!effectDefinition.formConfiguration) {
+      return inputs.map((item) => item.input);
+    } else {
+      return (
+        <FormWithLayout
+          values={get(object, valuesPath) || {}}
+          inputs={inputs}
+          formConfiguration={effectDefinition.formConfiguration}
+        />
+      );
+    }
   };
 
   const effDef = (type: string) => {

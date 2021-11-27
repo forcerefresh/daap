@@ -1,7 +1,9 @@
 import { FormGroup, Intent, NumericInput } from "@blueprintjs/core";
 import { isEqual, noop } from "lodash-es";
 import React, { useEffect, useState } from "react";
+import { getCheckboxField } from "../input-utils";
 import { INumberInput, IUpdateInput } from "../types";
+import css from "./number-input.module.scss";
 
 export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
   props
@@ -13,6 +15,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
     value,
     onInput = noop,
     inputProps = {},
+    optional,
   } = props;
 
   const id = `${propertyName}_input_number`;
@@ -65,21 +68,26 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
 
   return (
     <FormGroup
+      className={css.main}
       label={displayName}
       labelFor={id}
       helperText={!!helperText && helperText}
       inline
     >
-      <NumericInput
-        buttonPosition={"none"}
-        intent={!valid ? Intent.WARNING : Intent.NONE}
-        id={id}
-        value={internalValue}
-        onValueChange={(value, valueAsString) => {
-          updateValue(valueAsString);
-        }}
-        {...inputProps}
-      />
+      <div className={css.row}>
+        {optional && getCheckboxField("", false, () => {})}
+        <NumericInput
+          className={css.numberInput}
+          buttonPosition={"none"}
+          intent={!valid ? Intent.WARNING : Intent.NONE}
+          id={id}
+          value={internalValue}
+          onValueChange={(value, valueAsString) => {
+            updateValue(valueAsString);
+          }}
+          {...inputProps}
+        />
+      </div>
     </FormGroup>
   );
 };

@@ -1,0 +1,19 @@
+.main {
+}
+
+.optionalCheckbox {
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.row {
+  display: flex;
+}
+
+.numberInput {
+  :global {
+    input {
+      max-width: 100px !important;
+    }
+  }
+}

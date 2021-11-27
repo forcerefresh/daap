@@ -66,7 +66,12 @@ import {
 } from "./trianglify/trianglify.definition";
 // NOTE effect for development
 import { devDefaults, devDefinition } from "./dev/dev.definition";
-import { dev2Defaults, dev2Definition } from "./dev2/dev2.definition";
+import {
+  dev2Defaults,
+  dev2Definition,
+  dev2FormConfiguration,
+  IFormConfiguration,
+} from "./dev2/dev2.definition";
 
 import {
   cssPluginDefaults,
@@ -113,7 +118,7 @@ interface IEffectDefaultsWrapper {
 interface IEffectHolder {
   definition: IEffectDefinitionWrapper;
   defaults: IEffectDefaultsWrapper;
-  formConfiguration: any;
+  formConfiguration?: IFormConfiguration;
   getDuration?: (object?: any, config?: any) => number;
 }
 // <<<
@@ -146,20 +151,20 @@ registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(devDefinition, devDefaults);
-registerEffect(dev2Definition, dev2Defaults);
+registerEffect(dev2Definition, dev2Defaults, dev2FormConfiguration);
 registerEffect(cssPluginDefinition, cssPluginDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
   defaults: IEffectDefaultsWrapper,
-  formConfiguration?: any,
+  formConfiguration?: IFormConfiguration,
   getDuration?: (object?: any, config?: any) => number
 ) {
   effects.push({
     definition,
     defaults,
+    formConfiguration: formConfiguration,
     getDuration,
-    formConfiguration,
   });
 }
 

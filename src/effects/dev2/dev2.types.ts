@@ -9,6 +9,7 @@ export interface IDev2Effect extends IEffectBase {
   number2: number;
   number3: number;
   number4: number;
+  hasAdvancedOptions: boolean; // optional tab
   number5: number;
   number6: number;
 }

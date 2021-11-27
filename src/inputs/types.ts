@@ -93,6 +93,7 @@ export interface INumberInput {
   value: number;
   defaultValue: number;
   inputProps?: { disabled: boolean };
+  optional?: boolean;
 }
 
 type Units = "px" | "em" | "%";

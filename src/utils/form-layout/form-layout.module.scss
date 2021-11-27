@@ -1,0 +1,35 @@
+.formSections {
+  section {
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+
+    .sectionHeader {
+      cursor: pointer;
+      width: 100%;
+      align-content: flex-start;
+      font-weight: bold;
+      color: #808080;
+      padding: 5px 0px 5px 0px;
+      display: flex;
+      align-items: center;
+      min-height: 36px;
+
+      .checkboxInHeader {
+        margin-bottom: 5px;
+        display: inline-block;
+      }
+      margin-bottom: 5px;
+
+      :global {
+        .bp3-form-group {
+          display: inline-block;
+          margin: 0px !important;
+        }
+        .bp3-checkbox {
+          margin-bottom: 5px;
+        }
+      }
+    }
+  }
+}
