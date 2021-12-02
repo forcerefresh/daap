@@ -235,7 +235,6 @@ export function getButtonHtml(
   style += `background-color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
   style += `border: ${buttonProperties.borderSize.value}px solid red;`;
   style += "position: absolute;";
-  debugger;
   return `<button class="object-content" style="${style}">${nl2br(
     "Sample button"
   )}</button>`;
