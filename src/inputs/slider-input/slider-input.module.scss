@@ -1,7 +1,15 @@
 .main {
   :global {
     .bp3-form-content {
-      width: 90%;
+      flex-grow: 1;
+    }
+  }
+  &.showLabels {
+    :global {
+      .bp3-form-content {
+        margin-left: 10px;
+        margin-right: 15px;
+      }
     }
   }
 }

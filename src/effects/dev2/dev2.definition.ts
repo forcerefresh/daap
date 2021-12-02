@@ -68,51 +68,9 @@ export const dev2Defaults: IDev2Effect = {
   number6: 6,
 };
 
-export type IFormConfiguration = IFormPanelConfiguration[];
-
 export interface IFormPanelConfiguration {
   groupName: string;
   optional?: boolean;
   optionalProperty?: string;
   properties: { property: string; optional?: boolean }[];
 }
-
-export const dev2FormConfiguration: IFormConfiguration = [
-  {
-    groupName: "basic",
-    optional: false,
-    properties: [
-      { property: "colors1", optional: true },
-      { property: "number1", optional: true },
-      { property: "number2" },
-      { property: "number3" },
-      { property: "number4" },
-    ],
-  },
-  {
-    groupName: "advanced",
-    optional: true,
-    optionalProperty: "hasAdvancedOptions",
-    properties: [
-      { property: "number5" },
-      { property: "number6", optional: true },
-    ],
-  },
-];
-
-/*
-      {
-        property: "dimensionsChoice",
-        isTabs: true,
-        tabsNames: ["Solid", "Gradient"],
-        tabsProps: [
-          [
-            { property: "borderSize", optional: true },
-            { property: "backgroundColor", optional: true },
-          ],
-          [
-            { property: "borderSize-2", optional: true },
-            { property: "backgroundColor-2", optional: true },
-          ],
-        ],
-      },*/

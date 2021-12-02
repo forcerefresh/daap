@@ -10,7 +10,7 @@ const getDefaultColor = () => ({ r: 256, g: 256, b: 256, a: 1 });
 export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
   props
 ) => {
-  const { value, onChange } = props;
+  const { displayName, value, onChange } = props;
 
   const renderAddBtn = () => {
     return (
@@ -35,7 +35,7 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
           <>
             <div className={css.colorRow}>
               <div className="input60">
-                <Label> {index === 0 ? "Colors" : null}</Label>
+                <Label> {index === 0 ? displayName : null}</Label>
               </div>
               {getColorField(
                 "",

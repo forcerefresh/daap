@@ -14,7 +14,7 @@ gsap.registerEffect({
     }) as any;
     console.log(pattern);
     objectEl.appendChild(pattern.toSVG());
-    
+
     // ****
 
     return gsap.to([], {

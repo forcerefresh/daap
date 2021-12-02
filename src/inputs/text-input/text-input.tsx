@@ -4,9 +4,20 @@ import React from "react";
 import { ITextInput, IUpdateInput } from "../types";
 
 export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
-  const { displayName, value, onChange = noop, onInput = noop } = props;
+  const {
+    displayName,
+    helperText,
+    value,
+    onChange = noop,
+    onInput = noop,
+  } = props;
   return (
-    <FormGroup label={displayName} labelFor="text-input" inline>
+    <FormGroup
+      label={displayName}
+      labelFor="text-input"
+      inline
+      helperText={!!helperText && helperText}
+    >
       <InputGroup
         id="text-input"
         placeholder="Placeholder text"

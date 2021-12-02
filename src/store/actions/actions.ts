@@ -33,6 +33,7 @@ import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
 import { IEditor } from "../reducers/editor";
+import { IFormState } from "../reducers/i-uiforms";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1232,6 +1233,28 @@ export function updateEditor(editor: Partial<IEditor>): UpdateEditorAction {
 }
 
 // ***
+
+// ***
+
+export const SET_FORM_STATE = "Set form state";
+
+export interface SetFormStateAction extends IUndoableAction<false> {
+  type: typeof SET_FORM_STATE;
+  payload: { formId: string; formState: IFormState };
+}
+
+export function setFormState(payload: {
+  formId: string;
+  formState: IFormState;
+}): SetFormStateAction {
+  return {
+    type: SET_FORM_STATE,
+    payload: payload,
+    isUndoable: false,
+  };
+}
+
+// ***
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -1299,4 +1322,7 @@ export type ActionTypes =
   | UpdateEditorAction
 
   // responive device
-  | SetDeviceAction;
+  | SetDeviceAction
+
+  // form state
+  | SetFormStateAction;

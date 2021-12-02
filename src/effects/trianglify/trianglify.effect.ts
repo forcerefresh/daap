@@ -16,6 +16,15 @@ gsap.registerEffect({
       )[0] as HTMLElement;
 
       if (trianglifyEl === undefined) {
+        if (config.strokeColorSG == "color") {
+          const trianglifyStyle = document.createElement("style");
+          trianglifyStyle.innerHTML = `
+        .trianglify > svg > path {
+          stroke: ${colorToString(config.strokeColor)};
+        }
+        `;
+          objectEl.appendChild(trianglifyStyle);
+        }
         trianglifyEl = document.createElement("div");
         trianglifyEl.className = "trianglify";
         trianglifyEl.style.position = "absolute";
@@ -24,17 +33,32 @@ gsap.registerEffect({
         objectEl.appendChild(trianglifyEl);
       }
 
-      const pattern = trianglify({
+      const trConfig = {
         width: config.objectProperties?.width,
         height: config.objectProperties?.height,
         cellSize: config.cellSize,
         variance: config.variance / 100,
         seed: config.seed,
-        xColors: config.colors.map(colorToString),
-        yColors: config.colors.map(colorToString),
-        fill: config.fill,
+        xColors: config.colorsX.map(colorToString),
+        yColors: config.colorsY.map(colorToString),
+        fill: true, //config.fill,
         strokeWidth: config.strokeWidth,
-      } as any) as any;
+        //colorSpace: "hsi",
+        colorFunction: (trianglify as any).colorFunctions.interpolateLinear(
+          0.5
+        ),
+      };
+
+      if (config.colorsSG === "match") {
+        trConfig.xColors = config.colors.map(colorToString);
+        trConfig.yColors = "match" as any;
+      } /*else if (config.colorsSG === "random") {
+        trConfig.xColors = "random" as any;
+        trConfig.yColors = "random" as any;
+        delete (trConfig as any).seed;
+      }*/
+
+      const pattern = trianglify(trConfig as any) as any;
 
       trianglifyEl.appendChild(pattern.toSVG());
     };

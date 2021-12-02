@@ -23,6 +23,7 @@ import { ILayers } from "./reducers/i-layers";
 import { IObjects } from "./reducers/i-objects";
 import { editor, IEditor } from "./reducers/editor";
 import { updateEditor } from "./actions/actions";
+import { IUIForms, uiforms } from "./reducers/uiforms";
 
 export interface IStore {
   project: {
@@ -41,6 +42,7 @@ export interface IStore {
   meta: IMeta;
   stage: IStage;
   globals: IGlobals;
+  uiforms: IUIForms;
   fonts: IFonts;
 }
 
@@ -74,6 +76,7 @@ const rootReducer = combineReducers({
   globals,
   fonts,
   editor,
+  uiforms,
 }) as any;
 
 const logger = (store: any) => (next: any) => (action: any) => {

@@ -8,13 +8,7 @@ import { debounce } from "lodash-es";
 export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   props
 ) => {
-  const {
-    displayName,
-    helperText,
-    value,
-    onChange,
-    inputProperties = {},
-  } = props;
+  const { displayName, helperText, value, onChange, inputProps = {} } = props;
   const {
     trackFill = false,
     thumbPosition = "bottom",
@@ -22,16 +16,16 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
     stepSize = 1,
     min = 0,
     max = 100,
-    labelStepSize = 5,
+    labelStepSize = 2,
     hideLabels = false,
-  } = inputProperties;
+  } = inputProps;
 
   const [localValue, setLocalValue] = useState(value);
   useEffect(() => {
     if (value !== localValue) updateValue(localValue);
   }, [localValue]);
 
-  const updateValue = useCallback(debounce(onChange, 5000), [onChange]);
+  const updateValue = useCallback(debounce(onChange, 100), [onChange]);
 
   useEffect(() => {
     return () => {
@@ -45,7 +39,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
 
   return (
     <FormGroup
-      className={css.main}
+      className={classnames(css.main, { [css.showLabels]: !hideLabels })}
       label={displayName}
       helperText={!!helperText && helperText}
       inline

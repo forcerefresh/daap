@@ -1,4 +1,4 @@
-import { cloneDeep, get, set } from "lodash-es";
+import { cloneDeep, get, set, without } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import {
@@ -17,7 +17,11 @@ import {
 import { ILayer } from "../../../store/reducers/i-layers";
 import { ISlide } from "../../../store/reducers/i-slides";
 import { IStore } from "../../../store/store";
-import { FormWithLayout } from "../../../utils/form-layout/form-layout";
+import FormWithLayout, {
+  flattenForm,
+  IFormItem,
+  FormType,
+} from "../../../utils/form-layout/form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
 
@@ -63,38 +67,59 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
   ) => {
     const effectDefinition = getEffectDefinition(effectId);
 
-    const inputs = effectDefinition.definition.form.map((item) => {
-      function onChange(value: any) {
-        const retObj = cloneDeep(object);
-        if (retObj) {
-          const values = get(retObj, valuesPath) || {};
-          values[item.propertyName] = value;
-          set(retObj, valuesPath, values);
-          if (objectType === "object") _updateObject(retObj as any as IObject);
-          else if (objectType === "layer")
-            _updateLayer(retObj as any as ILayer);
-          else if (objectType === "slide")
-            _updateSlide(retObj as any as ISlide);
+    const flatForm = flattenForm(
+      effectDefinition.definition.form as IFormItem[]
+    );
+
+    const inputs = flatForm
+      //.filter((item) => !item.formType || item.formType === FormType.INPUT)
+      .map((item: any) => {
+        function onChange(value: any) {
+          const retObj = cloneDeep(object);
+          if (retObj) {
+            const values = get(retObj, valuesPath) || {};
+            values[item.propertyName] = value;
+            set(retObj, valuesPath, values);
+            if (objectType === "object")
+              _updateObject(retObj as any as IObject);
+            else if (objectType === "layer")
+              _updateLayer(retObj as any as ILayer);
+            else if (objectType === "slide")
+              _updateSlide(retObj as any as ISlide);
+          }
         }
-      }
 
-      const value = get(object, valuesPath)[item.propertyName];
-      const defaultValue = effectDefinition.defaults[item.propertyName];
-      const inputProps = {
-        ...item,
-        value: typeof value !== "undefined" ? value : defaultValue,
-      };
-      return {
-        input: getInputForm(item.inputType, inputProps, onChange, onChange, {
-          layerData: { layer: objectOrLayer as ILayer, objects: layerObjects },
-        }),
-        propertyName: item.propertyName,
-      };
-    });
+        const value = get(object, valuesPath)[item.propertyName];
+        const defaultValue = effectDefinition.defaults[item.propertyName];
+        const inputProps = {
+          ...item,
+          value: typeof value !== "undefined" ? value : defaultValue,
+        };
+        return {
+          input: getInputForm(item.inputType, inputProps, onChange, onChange, {
+            layerData: {
+              layer: objectOrLayer as ILayer,
+              objects: layerObjects,
+            },
+          }),
+          propertyName: item.propertyName,
+        };
+      });
 
-    if (!effectDefinition.formConfiguration) {
-      return inputs.map((item) => item.input);
-    } else {
+    return (
+      <FormWithLayout
+        values={get(object, valuesPath) || {}}
+        inputs={inputs}
+        form={effectDefinition.definition.form as IFormItem[]}
+        formId={valuesPath}
+      />
+    );
+
+    //return inputs.map((item: any) => item.input);
+
+    //if (!effectDefinition.formConfiguration) {
+    //return inputs.map((item: any) => item.input);
+    /*} else {
       return (
         <FormWithLayout
           values={get(object, valuesPath) || {}}
@@ -102,7 +127,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           formConfiguration={effectDefinition.formConfiguration}
         />
       );
-    }
+    }*/
   };
 
   const effDef = (type: string) => {
@@ -181,7 +206,8 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
           const values =
             get(obj, `transitions.${effectType}.effect.values`) || {};
           const effDef = getEffectDefinition(value);
-          effDef.definition.form.forEach((item) => {
+          const flatEffDef = flattenForm(effDef.definition.form as IFormItem[]);
+          flatEffDef.forEach((item) => {
             values[item.propertyName] = effDef.defaults[item.propertyName];
           });
           set(obj, `transitions.${effectType}.effect.values`, values);

@@ -1,21 +1,78 @@
 import { Button, Checkbox, Icon } from "@blueprintjs/core";
-import React, { useState } from "react";
-import { IFormConfiguration } from "../../effects/dev2/dev2.definition";
+import classnames from "classnames";
+import React, { useEffect, useState } from "react";
+import { InputType } from "../../inputs/types";
+import { AppToaster } from "../components/app-toaster/AppToaster";
 import css from "./form-layout.module.scss";
-
-export interface FormWithLayoutProps {
-  inputs: { propertyName: string; input: React.ReactElement | undefined }[];
-  formConfiguration: IFormConfiguration;
-  values: any;
+import { flatten } from "lodash";
+import { IFormState } from "../../store/reducers/i-uiforms";
+import { connect } from "react-redux";
+import { IStore } from "../../store/store";
+import { setFormState } from "../../store/actions/actions";
+export interface IFormItem {
+  type?: FormType;
+  inputType: InputType;
+  displayName: string;
+  propertyName: string;
+  elements?: IFormItem[];
+  optional?: boolean;
+  options?: { value: string | number; label: string }[];
+  // tab groups
+  groups?: {
+    groupName: string;
+    groupValue: string;
+    propertyName: string;
+    elements?: IFormItem[];
+  }[];
 }
 
-export const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
-  const { inputs, values, formConfiguration } = props;
+export enum FormType {
+  INPUT = "input",
+  GROUP = "group",
+  SWITCH_GROUP = "switchGroup",
+}
 
-  console.log(values);
-  const [visibleSectionIds, setVisibleSectionIds] = useState<{
-    [key: string]: boolean;
-  }>({});
+type FormWithLayoutProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> & {
+    inputs: { propertyName: string; input: React.ReactElement | undefined }[];
+    form: IFormItem[];
+    values: any;
+    formId: string;
+    depth?: number;
+  };
+
+const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
+  const {
+    inputs,
+    values,
+    form,
+    depth = 0,
+    formId,
+    uiFormSate,
+    _setFormState,
+  } = props;
+
+  const visibleSectionIds = uiFormSate[formId] ?? {};
+  const setVisibleSectionIds = (formState: IFormState) => {
+    _setFormState(formId, formState);
+  };
+
+  /*const [visibleSectionIds, setVisibleSectionIds] = useState<IFormState>({});
+
+  useEffect(() => {
+    console.log(uiFormSate[formId]);
+    setVisibleSectionIds(uiFormSate[formId] ?? {});
+    //return () => {
+     // console.log(visibleSectionIds);
+     // _setFormState(formId, visibleSectionIds);
+    //};
+  }, []);
+
+  useEffect(() => {
+    console.log(visibleSectionIds);
+    _setFormState(formId, visibleSectionIds);
+  }, [visibleSectionIds, formId, _setFormState]);
+*/
 
   const toggleSection = (section: string) => {
     setVisibleSectionIds({
@@ -24,21 +81,78 @@ export const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     });
   };
 
+  const renderElement = (
+    element: IFormItem
+  ): React.ReactElement | undefined => {
+    if (element.type === FormType.GROUP) {
+      return (
+        <FormWithLayoutConnected
+          inputs={inputs}
+          values={values}
+          form={[element]}
+          depth={depth + 1}
+          formId={formId}
+        />
+      );
+    } else if (element.type === FormType.SWITCH_GROUP) {
+      return (
+        <>
+          {findInput(element.propertyName, inputs)}
+          {renderSwitchGroups(element.propertyName, element.groups!, values)}
+        </>
+      );
+    }
+
+    return findInputWithWrapper(element.propertyName, inputs);
+  };
+
+  const renderSwitchGroups = (
+    propertyName: string,
+    groups: {
+      groupName: string;
+      groupValue: string;
+      propertyName: string;
+      elements?: IFormItem[] | undefined;
+    }[],
+    values: any
+  ) => {
+    return groups.map((group) => {
+      if (values[propertyName] === group.groupValue) {
+        return group?.elements?.map((element: any) => {
+          return renderElement(element);
+        });
+      }
+      return null;
+    });
+
+    //return <section className={css.tabPanel}></section>;
+  };
+
   const renderPanel = (
     title: string,
     optional: boolean = false,
     optionalProperty: string = "",
-    properties: { property: string; optional?: boolean }[],
+    elements: IFormItem[] = [],
     inputs: any,
     values: any
   ) => {
     return (
-      <section>
+      <section className={classnames(css[`depth${depth}`])}>
         <Button
           className={css.sectionHeader}
-          onClick={() => toggleSection(title)}
+          onClick={() => {
+            if (!values[optionalProperty] && optional) {
+              AppToaster.show({
+                intent: "warning",
+                message:
+                  "Group options are disabled. Please click on checkbox to enable it.",
+              });
+            } else {
+              toggleSection(title);
+            }
+          }}
           icon={
-            visibleSectionIds[title] && values[optionalProperty]
+            visibleSectionIds[title] && (!optional || values[optionalProperty])
               ? "caret-down"
               : "caret-right"
           }
@@ -46,50 +160,150 @@ export const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
           minimal
           alignText={"left"}
         >
-          {optional &&
-            inputs.find((item: any) => item.propertyName === optionalProperty)
-              .input}
+          <span
+            onClick={(e) => {
+              if (!values[optionalProperty]) {
+                e.stopPropagation();
+                setVisibleSectionIds({
+                  ...visibleSectionIds,
+                  [title]: true,
+                });
+              } else {
+              }
+            }}
+          >
+            {!!optional &&
+              inputs.find((item: any) => item.propertyName === optionalProperty)
+                .input}
+          </span>
           {title}
         </Button>
         {visibleSectionIds[title] &&
-          (!optional || values[optionalProperty]) &&
-          properties.map((property) => findInput(property.property, inputs))}
+          (!optional || values[optionalProperty]) && (
+            <div className={css.elementsHolder}>
+              {elements.map((element) => renderElement(element))}
+            </div>
+          )}
       </section>
     );
   };
 
   return (
     <>
-      {formConfiguration.map((panel) => (
-        <div className={css.formSections}>
-          {renderPanel(
-            panel.groupName,
-            panel.optional,
-            panel.optionalProperty,
-            panel.properties,
-            inputs,
-            values
-          )}
-        </div>
-      ))}
+      {form.map((formItem) => {
+        if (formItem.type === FormType.GROUP) {
+          return (
+            <div className={css.formSections}>
+              {renderPanel(
+                formItem.displayName,
+                formItem.optional,
+                formItem.propertyName,
+                formItem.elements,
+                inputs,
+                values
+              )}
+            </div>
+          );
+        } else if (formItem.type === FormType.INPUT) {
+          return findInputWithWrapper(formItem.propertyName, inputs);
+        } else if (formItem.type === FormType.SWITCH_GROUP) {
+          return (
+            <>
+              {findInput(formItem.propertyName, inputs)}
+              {renderSwitchGroups(
+                formItem.propertyName,
+                formItem.groups!,
+                values
+              )}
+            </>
+          );
+        }
+        return null;
+      })}
     </>
   );
 };
-/*
-export const renderFormWithLayout = (
-  inputs: { propertyName: string; input: React.ReactElement | undefined }[],
-  formConfiguration: IFormConfiguration
-) => {
-  return formConfiguration.map((panel) => (
-    <div className={css.formSections}>
-      {renderPanel(panel.groupName, panel.properties, inputs)}
-    </div>
-  ));
+
+const mapStateToProps = (state: IStore) => {
+  const {
+    uiforms: { uiFormSate },
+  } = state;
+  return { uiFormSate };
 };
-*/
+
+const mapDispatchToProps = {
+  _setFormState: (formId: string, formState: IFormState) =>
+    setFormState({ formId, formState }),
+};
+
+const FormWithLayoutConnected = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FormWithLayout);
+export default FormWithLayoutConnected;
+
+export function flattenForm(form: IFormItem[]): IFormItem[] {
+  const itemsArr: IFormItem[] = [];
+  flattenFormRec(itemsArr, form);
+  return itemsArr;
+}
+
+export function flattenFormRec(itemsArr: IFormItem[], form: IFormItem[]): void {
+  form.forEach((formItem) => {
+    // set default type if not set
+    if (!formItem.type) formItem.type = FormType.INPUT;
+
+    switch (formItem.type) {
+      case FormType.INPUT: {
+        itemsArr.push(formItem);
+        break;
+      }
+      case FormType.GROUP: {
+        itemsArr.push({
+          displayName: "",
+          propertyName: formItem.propertyName,
+          inputType: InputType.CHECKBOX,
+        });
+
+        flattenFormRec(itemsArr, formItem.elements ?? []);
+        break;
+      }
+      case FormType.SWITCH_GROUP: {
+        itemsArr.push({
+          displayName: formItem.displayName,
+          propertyName: formItem.propertyName,
+          inputType: InputType.BUTTON_GROUP_INPUT,
+          options: formItem.groups?.map((group) => ({
+            value: group.groupValue,
+            label: group.groupName,
+          })),
+        });
+
+        const allElements = flatten(
+          formItem?.groups?.map((group) => group.elements!)
+        );
+
+        flattenFormRec(itemsArr, allElements ?? []);
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+  });
+}
+
 const findInput = (
   propertyName: string,
   inputs: { propertyName: string; input: React.ReactElement | undefined }[]
 ): React.ReactElement | undefined => {
   return inputs.find((item) => item.propertyName === propertyName)?.input;
+};
+
+const findInputWithWrapper = (
+  propertyName: string,
+  inputs: { propertyName: string; input: React.ReactElement | undefined }[]
+): React.ReactElement | undefined => {
+  return <div className={css.input}>{findInput(propertyName, inputs)}</div>;
 };

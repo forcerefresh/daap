@@ -475,7 +475,7 @@ export interface ISliderInput {
   propertyName: string;
   value: number;
   defaultValue: number;
-  inputProperties?: {
+  inputProps?: {
     min?: number;
     max?: number;
     sufix?: string;
