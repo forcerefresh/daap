@@ -330,7 +330,7 @@ function createButtonObject(initialValue?: {
     {
       displayName: "Basic",
       type: FormType.GROUP,
-      propertyName: "basic",
+      propertyName: "hasBasic",
       elements: [
         {
           displayName: "Text",
@@ -345,7 +345,7 @@ function createButtonObject(initialValue?: {
     {
       displayName: "Size",
       type: FormType.GROUP,
-      propertyName: "size",
+      propertyName: "hasSize",
       elements: [
         {
           type: FormType.SWITCH_GROUP,
@@ -396,7 +396,7 @@ function createButtonObject(initialValue?: {
     {
       displayName: "Font",
       type: FormType.GROUP,
-      propertyName: "font",
+      propertyName: "hasFont",
       elements: [
         {
           displayName: "Font family",
@@ -499,7 +499,8 @@ function createButtonObject(initialValue?: {
     {
       displayName: "Background",
       type: FormType.GROUP,
-      propertyName: "background",
+      propertyName: "hasBackground",
+      optional: true,
       elements: [
         {
           type: FormType.SWITCH_GROUP,
@@ -543,6 +544,204 @@ function createButtonObject(initialValue?: {
         },
       ],
     },
+    {
+      displayName: "Text shadow",
+      type: FormType.GROUP,
+      propertyName: "hasTextShadow",
+      optional: true,
+      elements: [
+        {
+          displayName: "Distance X",
+          propertyName: "textShadowDistanceX",
+          inputType: InputType.UNITS_NUMBER,
+          value: "3px",
+          defaultValue: "3px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Distance Y",
+          propertyName: "textShadowDistanceY",
+          inputType: InputType.UNITS_NUMBER,
+          value: "3px",
+          defaultValue: "3px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Blur",
+          propertyName: "textShadowBlur",
+          inputType: InputType.UNITS_NUMBER,
+          value: "5px",
+          defaultValue: "5px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Shadow color",
+          propertyName: "textShadowColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+      ],
+    },
+    {
+      displayName: "Button shadow",
+      type: FormType.GROUP,
+      propertyName: "hasBoxShadow",
+      optional: true,
+      elements: [
+        {
+          displayName: "Distance X",
+          propertyName: "boxShadowDistanceX",
+          inputType: InputType.UNITS_NUMBER,
+          value: "3px",
+          defaultValue: "3px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Distance Y",
+          propertyName: "boxShadowDistanceY",
+          inputType: InputType.UNITS_NUMBER,
+          value: "3px",
+          defaultValue: "3px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Blur",
+          propertyName: "boxShadowBlur",
+          inputType: InputType.UNITS_NUMBER,
+          value: "5px",
+          defaultValue: "5px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+
+        {
+          displayName: "Spread",
+          propertyName: "boxShadowSpread",
+          inputType: InputType.UNITS_NUMBER,
+          value: "0px",
+          defaultValue: "0px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Shadow color",
+          propertyName: "boxShadowColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Inset",
+          propertyName: "boxShadowInset",
+          inputType: InputType.CHECKBOX,
+          value: false,
+          defaultValue: false,
+        },
+      ],
+    },
+
+    {
+      displayName: "Hover border",
+      type: FormType.GROUP,
+      propertyName: "hasHoverBorder",
+      optional: true,
+      elements: [
+        {
+          displayName: "Hover border style",
+          propertyName: "hoverBorderStyle",
+          inputType: InputType.SELECT,
+          value: "solid",
+          defaultValue: "solid",
+          options: [
+            { label: "solid", value: "solid" },
+            { label: "dotted", value: "dotted" },
+            { label: "dashed", value: "dashed" },
+            { label: "double", value: "double" },
+            { label: "groove", value: "groove" },
+            { label: "ridge", value: "ridge" },
+            { label: "inset", value: "inset" },
+            { label: "outset", value: "outset" },
+            { label: "none", value: "none" },
+            { label: "hidden", value: "hidden" },
+          ],
+        },
+        {
+          displayName: "Border size",
+          propertyName: "hoverBorderSize",
+          inputType: InputType.BOX,
+          value: { common: "1px" },
+          defaultValue: { common: "1px" },
+        },
+        {
+          displayName: "Border color",
+          propertyName: "hoverBorderColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Border radius",
+          propertyName: "hoverBorderRadius",
+          inputType: InputType.CORNER_RADIUS,
+          value: { common: "5px" },
+          defaultValue: { common: "5px" },
+        },
+      ],
+    },
+    {
+      displayName: "Hover background",
+      type: FormType.GROUP,
+      propertyName: "hasHoverBackground",
+      optional: true,
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "hoverBackgroundType",
+          groups: [
+            {
+              groupName: "Solid",
+              groupValue: "solid",
+              elements: [
+                {
+                  displayName: "Background color",
+                  propertyName: "hoverBackgroundColor",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+            {
+              groupName: "Gradient",
+              groupValue: "gradient",
+              elements: [
+                {
+                  displayName: "Color 1",
+                  propertyName: "hoverBackgroundGradientColor1",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+                {
+                  displayName: "Color 2",
+                  propertyName: "hoverBackgroundGradientColor2",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   const values: ButtonValues = {
@@ -568,10 +767,37 @@ function createButtonObject(initialValue?: {
     borderColor: { r: 0, g: 0, b: 0, a: 1 },
     borderRadius: { common: "5px" },
     //background
+    hasBackground: true,
     backgroundType: "solid",
     backgroundColor: { r: 99, g: 99, b: 99, a: 1 },
     backgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
     backgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
+    //text shadow
+    hasTextShadow: false,
+    textShadowDistanceX: "3px",
+    textShadowDistanceY: "3px",
+    textShadowBlur: "5px",
+    textShadowColor: { r: 0, g: 0, b: 0, a: 1 },
+    //box shadow
+    hasBoxShadow: false,
+    boxShadowDistanceX: "3px",
+    boxShadowDistanceY: "3px",
+    boxShadowBlur: "5px",
+    boxShadowSpread: "0px",
+    boxShadowColor: { r: 0, g: 0, b: 0, a: 1 },
+    boxShadowInset: false,
+    //hover border
+    hasHoverBorder: false,
+    hoverBorderSize: { common: "1px" },
+    hoverBorderStyle: "solid",
+    hoverBorderColor: { r: 0, g: 0, b: 0, a: 1 },
+    hoverBorderRadius: { common: "5px" },
+    //hover background
+    hasHoverBackground: false,
+    hoverBackgroundType: "solid",
+    hoverBackgroundColor: { r: 99, g: 99, b: 99, a: 1 },
+    hoverBackgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
+    hoverBackgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
   };
 
   return {

@@ -771,6 +771,7 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
     object.absoluteLayout!.width = holder.querySelector("button")?.offsetWidth!;
     object.absoluteLayout!.height =
       holder.querySelector("button")?.offsetHeight!;
+    document.body.removeChild(holder);
   }
 }
 function handleButtonUpdate(
@@ -812,6 +813,7 @@ function handleTextUpdate(
     holder.querySelector("p")!.style.width = `${calculatedObjectSize.width}`;
     document.body.appendChild(holder);
     object.height = holder.querySelector("p")?.offsetHeight;
+    document.body.removeChild(holder);
   }
 
   // * handle font loading

@@ -542,15 +542,41 @@ export interface ButtonValues extends CommonObjectValues {
   borderColor: RGBColor;
   borderRadius: ICornerRadiusValue;
   //background
+  hasBackground: boolean;
   backgroundType: "solid" | "gradient";
   backgroundColor: RGBColor;
   backgroundGradientColor1: RGBColor;
   backgroundGradientColor2: RGBColor;
+  // text shadow
+  hasTextShadow: boolean;
+  textShadowDistanceX: string;
+  textShadowDistanceY: string;
+  textShadowBlur: string;
+  textShadowColor: RGBColor;
+  //box shadow
+  hasBoxShadow: boolean;
+  boxShadowDistanceX: string;
+  boxShadowDistanceY: string;
+  boxShadowBlur: string;
+  boxShadowSpread: string;
+  boxShadowColor: RGBColor;
+  boxShadowInset: boolean;
+  //hover border
+  hasHoverBorder: boolean;
+  hoverBorderSize: IBoxValue;
+  hoverBorderStyle: string;
+  hoverBorderColor: RGBColor;
+  hoverBorderRadius: ICornerRadiusValue;
+  //hover background
+  hasHoverBackground: boolean;
+  hoverBackgroundType: "solid" | "gradient";
+  hoverBackgroundColor: RGBColor;
+  hoverBackgroundGradientColor1: RGBColor;
+  hoverBackgroundGradientColor2: RGBColor;
 }
 
 export type ButtonPropertiesTuple = [
   IFormGroupItem<[ITextAreaInput<"text">]>,
-
   IFormGroupItem<
     [
       IFormSwitchGroupItem<
@@ -564,7 +590,6 @@ export type ButtonPropertiesTuple = [
       >
     ]
   >,
-
   IFormGroupItem<
     [
       IFontSelectInput<"font">,
@@ -581,7 +606,6 @@ export type ButtonPropertiesTuple = [
       ICornerRadiusInput<"borderRadius">
     ]
   >,
-
   IFormGroupItem<
     [
       IFormSwitchGroupItem<
@@ -592,6 +616,48 @@ export type ButtonPropertiesTuple = [
             [
               IColorInput<"backgroundGradientColor1">,
               IColorInput<"backgroundGradientColor2">
+            ]
+          >
+        ]
+      >
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IUnitsNumberInput<"textShadowDistanceX">,
+      IUnitsNumberInput<"textShadowDistanceY">,
+      IUnitsNumberInput<"textShadowBlur">,
+      IColorInput<"textShadowColor">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IUnitsNumberInput<"boxShadowDistanceX">,
+      IUnitsNumberInput<"boxShadowDistanceY">,
+      IUnitsNumberInput<"boxShadowBlur">,
+      IUnitsNumberInput<"boxShadowSpread">,
+      IColorInput<"boxShadowColor">,
+      ICheckboxInput<"boxShadowInset">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      ISelectInput<"hoverBorderStyle">,
+      IBoxInput<"hoverBorderSize">,
+      IColorInput<"hoverBorderColor">,
+      ICornerRadiusInput<"hoverBorderRadius">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "hoverBackgroundType",
+        [
+          IFormSwitchGroup<[IColorInput<"hoverBackgroundColor">]>,
+          IFormSwitchGroup<
+            [
+              IColorInput<"hoverBackgroundGradientColor1">,
+              IColorInput<"hoverBackgroundGradientColor2">
             ]
           >
         ]

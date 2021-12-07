@@ -148,23 +148,24 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       });
     }
 
-    const isOpen =
-      visibleSectionIds[title] && (!optional || values[optionalProperty]);
+    const isOpen = visibleSectionIds[title]; // && (!optional || values[optionalProperty]);
+
+    const isDisabled = optional && !values[optionalProperty];
 
     return (
       <section className={classnames(css[`depth${depth}`])}>
         <Button
           className={css.sectionHeader}
           onClick={() => {
-            if (!values[optionalProperty] && optional) {
+            /*if (!values[optionalProperty] && optional) {
               AppToaster.show({
                 intent: "warning",
                 message:
                   "Group options are disabled. Please click on checkbox to enable it.",
               });
-            } else {
-              toggleSection(title);
-            }
+            } else {*/
+            toggleSection(title);
+            /* }*/
           }}
           icon={isOpen ? "caret-down" : "caret-right"}
           small
@@ -189,9 +190,18 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
           </span>
           {title}
         </Button>
-        {isOpen && (
+        {isOpen && !isDisabled && (
           <div className={css.elementsHolder}>
             {elements.map((element) => renderElement(element))}
+          </div>
+        )}
+
+        {isOpen && isDisabled && (
+          <div className={css.elementsHolder}>
+            <i>
+              Group is disabled.
+              <br /> To activate options enable group.
+            </i>
           </div>
         )}
       </section>

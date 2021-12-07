@@ -243,19 +243,22 @@ export function getButtonHtml(
   style += "font-weight: " + buttonProperties.fontWeight + ";";
   //
 
-  // background-image: linear-gradient(red, yellow);
-  switch (buttonProperties.backgroundType) {
-    case "solid": {
-      const bgc = buttonProperties.backgroundColor;
-      style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
-      break;
+  if (buttonProperties.hasBackground) {
+    switch (buttonProperties.backgroundType) {
+      case "solid": {
+        const bgc = buttonProperties.backgroundColor;
+        style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
+        break;
+      }
+      case "gradient": {
+        const bgc1 = buttonProperties.backgroundGradientColor1;
+        const bgc2 = buttonProperties.backgroundGradientColor2;
+        style += `background-image: linear-gradient(rgba(${bgc1?.r},${bgc1?.g},${bgc1?.b},${bgc1?.a}), rgba(${bgc2?.r},${bgc2?.g},${bgc2?.b},${bgc2?.a}));`;
+        break;
+      }
     }
-    case "gradient": {
-      const bgc1 = buttonProperties.backgroundGradientColor1;
-      const bgc2 = buttonProperties.backgroundGradientColor2;
-      style += `background-image: linear-gradient(rgba(${bgc1?.r},${bgc1?.g},${bgc1?.b},${bgc1?.a}), rgba(${bgc2?.r},${bgc2?.g},${bgc2?.b},${bgc2?.a}));`;
-      break;
-    }
+  } else {
+    style += `background: none;`;
   }
 
   if (buttonProperties.hasBorder) {
@@ -281,11 +284,68 @@ export function getButtonHtml(
     }
   }
 
+  if (buttonProperties.hasTextShadow) {
+    const tsc = buttonProperties.textShadowColor;
+    style += `text-shadow: ${buttonProperties.textShadowDistanceX} ${buttonProperties.textShadowDistanceY} ${buttonProperties.textShadowBlur} rgba(${tsc?.r},${tsc?.g},${tsc?.b},${tsc?.a});`;
+  }
+
+  if (buttonProperties.hasBoxShadow) {
+    const bsc = buttonProperties.boxShadowColor;
+    const bsInset = buttonProperties.boxShadowInset ? " inset" : "";
+    style += `box-shadow: ${buttonProperties.boxShadowDistanceX} ${buttonProperties.boxShadowDistanceY} ${buttonProperties.boxShadowBlur} ${buttonProperties.boxShadowSpread} rgba(${bsc?.r},${bsc?.g},${bsc?.b},${bsc?.a})${bsInset};`;
+  }
+
   style += "position: absolute;";
   style += "white-space: nowrap;";
-  return `<button class="object-content" style="${style}">${nl2br(
-    buttonProperties.text
-  )}</button>`;
+
+  // HOVER START >>>>
+  let cssHoverStyle = "";
+
+  if (buttonProperties.hasHoverBorder) {
+    cssHoverStyle = addBorderBox(
+      cssHoverStyle,
+      buttonProperties.hoverBorderSize
+    );
+
+    cssHoverStyle += `border-style: ${buttonProperties.hoverBorderStyle};`;
+    const bhc = buttonProperties.hoverBorderColor;
+    cssHoverStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
+    cssHoverStyle = addBorderRadius(
+      cssHoverStyle,
+      buttonProperties.hoverBorderRadius
+    );
+  } else {
+    //cssHoverStyle += "border-style: none;";
+  }
+
+  if (buttonProperties.hasHoverBackground) {
+    switch (buttonProperties.hoverBackgroundType) {
+      case "solid": {
+        const hbgc = buttonProperties.hoverBackgroundColor;
+        cssHoverStyle += `background-color: rgba(${hbgc?.r},${hbgc?.g},${hbgc?.b},${hbgc?.a});`;
+        break;
+      }
+      case "gradient": {
+        const hbgc1 = buttonProperties.hoverBackgroundGradientColor1;
+        const hbgc2 = buttonProperties.hoverBackgroundGradientColor2;
+        cssHoverStyle += `background-image: linear-gradient(rgba(${hbgc1?.r},${hbgc1?.g},${hbgc1?.b},${hbgc1?.a}), rgba(${hbgc2?.r},${hbgc2?.g},${hbgc2?.b},${hbgc2?.a}));`;
+        break;
+      }
+    }
+  } else {
+    //cssHoverStyle += `background: none;`;
+  }
+
+  const css = `<style>
+  .object-content-${object.id}:hover {
+    ${cssHoverStyle.replaceAll(";", " !important;")}
+  }
+  </style>`;
+
+  // HOVER END <<<
+  return `${css}<button class="object-content object-content-${
+    object.id
+  }" style="${style}">${nl2br(buttonProperties.text)}</button>`;
 }
 
 function getImageHtml(
