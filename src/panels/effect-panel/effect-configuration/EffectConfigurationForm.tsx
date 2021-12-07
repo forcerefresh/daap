@@ -111,7 +111,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
         values={get(object, valuesPath) || {}}
         inputs={inputs}
         form={effectDefinition.definition.form as IFormItem[]}
-        formId={valuesPath}
+        formId={`${valuesPath}_${effectDefinition.definition.id}`}
       />
     );
 

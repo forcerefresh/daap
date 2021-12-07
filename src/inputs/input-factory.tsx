@@ -30,6 +30,7 @@ import { RelativeRotationInputForm } from "./relative-rotation-input/relative-ro
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
 import { SliderInputForm } from "./slider-input/slider-input";
 import { ButtonGroupInputForm } from "./buttonGroupInput/button-group-input";
+import { BoxInputForm } from "./box-input/box-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -242,6 +243,9 @@ export function getInputForm<T>(
       return (
         <CornerRadiusInputForm key={key} {...inputProps} onChange={onChange} />
       );
+    }
+    case InputType.BOX: {
+      return <BoxInputForm key={key} {...inputProps} onChange={onChange} />;
     }
   }
 }

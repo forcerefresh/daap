@@ -1,3 +1,4 @@
+import { omit } from "lodash";
 import {
   IColorInput,
   INumberInput,
@@ -17,12 +18,11 @@ export enum ObjectType {
   BUTTON = "button",
 }
 
-export interface IDefinition<
-  T = ITextInput | INumberInput | IColorInput | ITransformOriginInput
-> {
+export interface IDefinition {
   id: string;
   type: ObjectType;
-  properties: T;
+  properties: any[];
+  values: { [key: string]: any };
 }
 
 export interface ICommonObjectProperties {
@@ -83,7 +83,7 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   isGridPlacement?: boolean; // DEPRECIATED
   // hasTimeline: boolean; // show in timeline
   transitions: ITransitions;
-  definition: IDefinition<T>;
+  definition: IDefinition;
   events: IObjectEvent[];
   commonProperties?: {
     borderRadius?: {

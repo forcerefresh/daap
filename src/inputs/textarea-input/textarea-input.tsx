@@ -7,6 +7,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props
 ) => {
   const { displayName, value, onInput = noop, inputProps = {} } = props;
+  const { rows = 5 } = inputProps;
 
   const throttledOnChange = useCallback(
     debounce((value: any) => onInput(value), 500),
@@ -34,7 +35,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
       <TextArea
         id="textarea-input"
         growVertically={true}
-        rows={5}
+        rows={rows}
         fill
         value={localValue}
         onChange={(event: any) => {

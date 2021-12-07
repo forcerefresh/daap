@@ -1,14 +1,15 @@
-import { debug } from "console";
 import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import {
-  ButtonProperties,
-  CanvasProperties,
+  ButtonValues,
+  CanvasValues,
+  IBoxValue,
+  ICornerRadiusValue,
   ICoverPlacementValue,
-  ImageProperties,
-  SourceImageProperties,
-  SvgProperties,
-  TextProperties,
+  ImageValues,
+  SourceImageValues,
+  SvgValues,
+  TextValues,
 } from "../inputs/types";
 import { IObject, ObjectType } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
@@ -89,6 +90,8 @@ export function generatePlayerData(
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {
+        const objectValues = object.definition.values;
+
         const objectClass = "object-" + object.id;
 
         // >> "left", "top", "width", "height"
@@ -107,7 +110,7 @@ export function generatePlayerData(
           style += key + ":" + value + ";";
         });
         style += "position: absolute;";
-        const overflow = (object.definition.properties as any).overflow.value;
+        const overflow = objectValues.overflow;
         style += `overflow: ${overflow};`;
         // << "left", "top", "width", "height"
 
@@ -207,20 +210,20 @@ export function getTextHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const textProperties = object.definition.properties as TextProperties;
+  const textProperties = object.definition.values as TextValues;
 
   let style = "";
-  style += "font-family: " + textProperties.font.value.fontFamily + ";";
-  style += "font-size: " + textProperties.fontSize.value + ";";
-  const c = textProperties.color.value;
+  style += "font-family: " + textProperties.font.fontFamily + ";";
+  style += "font-size: " + textProperties.fontSize + ";";
+  const c = textProperties.color;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
-  style += "font-weight: " + textProperties.weight.value + ";";
+  style += "font-weight: " + textProperties.weight + ";";
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
 
   return `<p class="object-content" style="${style}">${nl2br(
-    textProperties.text.value
+    textProperties.text
   )}</p>`;
 }
 
@@ -228,15 +231,47 @@ export function getButtonHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const buttonProperties = object.definition.properties as ButtonProperties;
+  const buttonProperties = object.definition.values as ButtonValues;
 
   let style = "";
-  const c = buttonProperties.backgroundColor.value;
-  style += `background-color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
-  style += `border: ${buttonProperties.borderSize.value}px solid red;`;
+
+  // text properties
+  style += "font-family: " + buttonProperties.font.fontFamily + ";";
+  style += "font-size: " + buttonProperties.fontSize + ";";
+  const fc = buttonProperties.fontColor;
+  style += `color: rgba(${fc?.r},${fc?.g},${fc?.b},${fc?.a});`;
+  style += "font-weight: " + buttonProperties.fontWeight + ";";
+  //
+  const bgc = buttonProperties.backgroundColor;
+  style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
+
+  if (buttonProperties.hasBorder) {
+    style = addBorderBox(style, buttonProperties.borderSize);
+
+    style += `border-style: ${buttonProperties.borderStyle};`;
+    const bc = buttonProperties.borderColor;
+    style += `border-color: rgba(${bc?.r},${bc?.g},${bc?.b},${bc?.a});`;
+    style = addBorderRadius(style, buttonProperties.borderRadius);
+  } else {
+    style += "border-style: none;";
+  }
+
+  switch (buttonProperties.sizeType) {
+    case "padding": {
+      style = addPaddingBox(style, buttonProperties.sizePadding);
+      break;
+    }
+    case "size": {
+      style += `width: ${buttonProperties.sizeWidth};`;
+      style += `height: ${buttonProperties.sizeHeight};`;
+      break;
+    }
+  }
+
   style += "position: absolute;";
+  style += "white-space: nowrap;";
   return `<button class="object-content" style="${style}">${nl2br(
-    "Sample button"
+    buttonProperties.text
   )}</button>`;
 }
 
@@ -244,13 +279,13 @@ function getImageHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const imageProperties = object.definition.properties as ImageProperties;
+  const imageProperties = object.definition.values as ImageValues;
 
-  if (imageProperties.url.value.isPlaceholder) {
+  if (imageProperties.url.isPlaceholder) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
 
-  const coverPlacementValue = imageProperties.fit.value as ICoverPlacementValue;
+  const coverPlacementValue = imageProperties.fit as ICoverPlacementValue;
 
   let backgroundSize = coverPlacementValue.size as
     | "cover"
@@ -270,7 +305,7 @@ function getImageHtml(
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-image:url('${imageProperties.url.url}');`;
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
@@ -345,32 +380,33 @@ function getSourceImageHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const imageProperties = object.definition.properties as SourceImageProperties;
-  if (imageProperties.url.value.isPlaceholder) {
+  const imageProperties = object.definition.values as SourceImageValues;
+
+  if (imageProperties.url.isPlaceholder) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
 
-  let backgroundSize = (imageProperties.placement.value as ICoverPlacementValue)
+  let backgroundSize = (imageProperties.placement as ICoverPlacementValue)
     .size as "cover" | "fit" | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
   if (backgroundSize === "fit") backgroundSize = "100% 100%";
-  const aH = (imageProperties.placement.value as ICoverPlacementValue)
+  const aH = (imageProperties.placement as ICoverPlacementValue)
     .positionHorizontal;
-  const aV = (imageProperties.placement.value as ICoverPlacementValue)
+  const aV = (imageProperties.placement as ICoverPlacementValue)
     .positionVertical;
 
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.value.url}');`;
+  style += `background-image:url('${imageProperties.url.url}');`;
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
-  style += `opacity: ${imageProperties.visible.value ? 1 : 0};`;
+  style += `opacity: ${imageProperties.visible ? 1 : 0};`;
 
-  return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageProperties.id.value}" src="${imageProperties.url.value.url}"></div>`;
+  return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageProperties.id}" src="${imageProperties.url.url}"></div>`;
 }
 
 function getVideoHtml(
@@ -378,9 +414,9 @@ function getVideoHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const imageProperties = object.definition.properties as ImageProperties;
+  const imageProperties = object.definition.values as ImageValues;
 
-  if (imageProperties.url.value.isPlaceholder) {
+  if (imageProperties.url.isPlaceholder) {
     return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
   }
 
@@ -392,7 +428,7 @@ function getVideoHtml(
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
-  const url = imageProperties.url.value.url;
+  const url = imageProperties.url.url;
 
   const videoHtml = `<video style="${style}" ${attrs}><source src="${url}" type="video/mp4"></video>`;
 
@@ -405,9 +441,10 @@ function getSvgHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const imageProperties = object.definition.properties as SvgProperties;
-  if (imageProperties.svg.value) {
-    return imageProperties.svg.value;
+  const imageProperties = object.definition.values as SvgValues;
+
+  if (imageProperties.svg) {
+    return imageProperties.svg;
   }
   return ``;
 }
@@ -417,7 +454,7 @@ function getCanvasHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const canvasProperties = object.definition.properties as CanvasProperties;
+  const canvasProperties = object.definition.values as CanvasValues;
 
   let style = "";
   console.log(object);
@@ -434,23 +471,63 @@ function getCanvasHtml(
 function addCommonPropertiesToStyle(style: string, object: IObject) {
   console.log(object.commonProperties);
   if (object.commonProperties?.borderRadius) {
-    if (object.commonProperties?.borderRadius.common) {
-      style +=
-        "border-radius: " + object.commonProperties?.borderRadius.common + ";";
-    } else if (object.commonProperties?.borderRadius.tl) {
-      style +=
-        "border-radius: " +
-        object.commonProperties?.borderRadius.tl +
-        " " +
-        object.commonProperties?.borderRadius.tr +
-        " " +
-        object.commonProperties?.borderRadius.br +
-        " " +
-        object.commonProperties?.borderRadius.bl +
-        ";";
-    }
+    style = addBorderRadius(style, object.commonProperties?.borderRadius);
   }
 
   console.log(style);
+  return style;
+}
+
+function addBorderBox(style: string, boxValue: IBoxValue) {
+  if (boxValue.common) {
+    style += "border-width: " + boxValue.common + ";";
+  } else if (boxValue.t) {
+    style +=
+      "border-width: " +
+      boxValue.t +
+      " " +
+      boxValue.r +
+      " " +
+      boxValue.b +
+      " " +
+      boxValue.l +
+      ";";
+  }
+  return style;
+}
+
+function addPaddingBox(style: string, boxValue: IBoxValue) {
+  if (boxValue.common) {
+    style += "padding: " + boxValue.common + ";";
+  } else if (boxValue.t) {
+    style +=
+      "padding: " +
+      boxValue.t +
+      " " +
+      boxValue.r +
+      " " +
+      boxValue.b +
+      " " +
+      boxValue.l +
+      ";";
+  }
+  return style;
+}
+
+function addBorderRadius(style: string, borderRadius: ICornerRadiusValue) {
+  if (borderRadius.common) {
+    style += "border-radius: " + borderRadius.common + ";";
+  } else if (borderRadius.tl) {
+    style +=
+      "border-radius: " +
+      borderRadius.tl +
+      " " +
+      borderRadius.tr +
+      " " +
+      borderRadius.br +
+      " " +
+      borderRadius.bl +
+      ";";
+  }
   return style;
 }

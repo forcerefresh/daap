@@ -2,7 +2,7 @@ import React from "react";
 import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Button, Icon, Label } from "@blueprintjs/core";
-import { getCheckboxField, getUnitNumericFiled } from "../input-utils";
+import { getUnitNumericFiled } from "../input-utils";
 import { ICornerRadiusInput, IUpdateInput } from "../types";
 import css from "./corner-radius-input.module.scss";
 

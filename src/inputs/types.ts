@@ -1,4 +1,9 @@
 import { RGBColor } from "react-color";
+import {
+  IFormGroupItem,
+  IFormSwitchGroup,
+  IFormSwitchGroupItem,
+} from "../effects/trianglify/trianglify.definition";
 import { IObjectEvent } from "../objects/types";
 
 export enum InputType {
@@ -30,6 +35,7 @@ export enum InputType {
   RELATIVE_ROTATION_INPUT = "relative_rotation_input",
   SLIDER_INPUT = "slider_input",
   BUTTON_GROUP_INPUT = "button_group_input",
+  BOX = "box",
 }
 
 export enum PresetGroup {
@@ -80,6 +86,7 @@ export interface IUpdateInput {
       | ITextStartPositionValue
       | RGBColor[]
       | ICornerRadiusValue
+      | IBoxValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -87,11 +94,11 @@ export interface IUpdateInput {
 }
 
 //  number input
-export interface INumberInput {
+export interface INumberInput<T = string> {
   inputType: InputType.NUMBER;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: number;
   defaultValue: number;
   inputProps?: { disabled: boolean };
@@ -101,22 +108,22 @@ export interface INumberInput {
 type Units = "px" | "em" | "%";
 
 //  advanced number input
-export interface IUnitsNumberInput {
+export interface IUnitsNumberInput<T = string> {
   inputType: InputType.UNITS_NUMBER;
   placeholderText: string;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   allowedUnits: Units[];
   value: string;
   defaultValue: string;
   inputProps?: { disabled: boolean };
 }
-export interface IColorArrayInput {
+export interface IColorArrayInput<T = string> {
   inputType: InputType.COLOR_ARRAY;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: RGBColor[];
   defaultValue: RGBColor[];
 }
@@ -130,11 +137,11 @@ export interface IBorderColorValue {
   rightBorderColor: RGBColor;
 }
 
-export interface IBorderColorInput {
+export interface IBorderColorInput<T = string> {
   inputType: InputType.BORDER_COLOR;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: IBorderColorValue;
   defaultValue: IBorderColorValue;
 }
@@ -160,11 +167,11 @@ export interface ICSSTimelinesValue {
   timelines: ICSSTimelineValue[];
 }
 
-export interface ICSSTimelineInput {
+export interface ICSSTimelineInput<T = string> {
   inputType: InputType.CSS_TIMELINES;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: ICSSTimelinesValue;
   defaultValue: ICSSTimelinesValue;
 }
@@ -174,11 +181,11 @@ export interface IRelativePositionValue {
   position: "rel" | "abs";
 }
 
-export interface IRelativePositionInput {
+export interface IRelativePositionInput<T = string> {
   inputType: InputType.RELATIVE_POSITION_INPUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: IRelativePositionValue;
   defaultValue: IRelativePositionValue;
 }
@@ -189,11 +196,11 @@ export interface IRelativeRotationValue {
   direction: "_cw" | "_ccw" | "_short";
 }
 
-export interface IRelativeRotationInput {
+export interface IRelativeRotationInput<T = string> {
   inputType: InputType.RELATIVE_ROTATION_INPUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: IRelativeRotationValue;
   defaultValue: IRelativeRotationValue;
 }
@@ -206,11 +213,11 @@ export interface INumericTimelineValue {
   duration: number;
 }
 
-export interface INumericTimelineInput {
+export interface INumericTimelineInput<T = string> {
   inputType: InputType.NUMERIC_TIMELINE;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: INumericTimelineValue;
   defaultValue: INumericTimelineValue;
 }
@@ -222,74 +229,71 @@ export interface ITextStartPositionValue {
   customOrder?: string;
 }
 
-export interface ITextStartPositionInput {
+export interface ITextStartPositionInput<T = string> {
   inputType: InputType.TEXT_START_POSITION;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: ITextStartPositionValue;
   defaultValue: ITextStartPositionValue;
 }
 
 //  text input
-export interface ITextInput {
+export interface ITextInput<T = string> {
   inputType: InputType.TEXT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: string;
   defaultValue: string;
 }
-export interface ICheckboxInput {
+export interface ICheckboxInput<T = string> {
   inputType: InputType.CHECKBOX;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: boolean;
   defaultValue: boolean;
 }
-export interface ITextAreaInput {
+export interface ITextAreaInput<T = string> {
   inputType: InputType.TEXTAREA;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: string;
   defaultValue: string;
-  inputProps?: { disableDebounce?: boolean };
+  inputProps?: { disableDebounce?: boolean; rows?: number };
 }
-export interface ITransformInput {
+export interface ITransformInput<T = string> {
   inputType: InputType.TEXT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: { left: number; top: number; width: number; height: number };
   defaultValue: { left: number; top: number; width: number; height: number };
 }
 
-export interface IImageInput {
+export interface IImageInputValue {
+  url: string;
+  width: number;
+  height: number;
+  isPlaceholder?: boolean;
+}
+
+export interface IImageInput<T = string> {
   inputType: InputType.IMAGE;
   displayName: string;
   helperText?: string;
-  propertyName: string;
-  value: {
-    url: string;
-    width: number;
-    height: number;
-    isPlaceholder?: boolean;
-  };
-  defaultValue: {
-    url: string;
-    width: number;
-    height: number;
-    isPlaceholder?: boolean;
-  };
+  propertyName: T;
+  value: IImageInputValue;
+  defaultValue: IImageInputValue;
 }
 
-export interface IVideoInput {
+export interface IVideoInput<T = string> {
   inputType: InputType.VIDEO;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: {
     url: string;
     width: number;
@@ -310,11 +314,11 @@ export interface ICoverPlacementValue {
   positionVertical?: "top" | "center" | "bottom";
 }
 
-export interface ICoverPlacementInput {
+export interface ICoverPlacementInput<T = string> {
   inputType: InputType.COVER_LAYOUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: ICoverPlacementValue;
   defaultValue: ICoverPlacementValue;
 }
@@ -326,13 +330,30 @@ export interface IGridPlacementValue {
   right: number;
 }
 
-export interface IGridPlacementInput {
+export interface IGridPlacementInput<T = string> {
   inputType: InputType.GRID_LAYOUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: IGridPlacementValue;
   defaultValue: IGridPlacementValue;
+}
+
+export interface IBoxValue {
+  common?: string;
+  t?: string;
+  b?: string;
+  l?: string;
+  r?: string;
+}
+
+export interface IBoxInput<T = string> {
+  inputType: InputType.BOX;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IBoxValue;
+  defaultValue: IBoxValue;
 }
 
 export interface ICornerRadiusValue {
@@ -343,29 +364,29 @@ export interface ICornerRadiusValue {
   br?: string;
 }
 
-export interface ICornerRadiusInput {
+export interface ICornerRadiusInput<T = string> {
   inputType: InputType.CORNER_RADIUS;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: ICornerRadiusValue;
   defaultValue: ICornerRadiusValue;
 }
 
-export interface ITransformOriginInput {
+export interface ITransformOriginInput<T = string> {
   inputType: InputType.TRANSFORM_ORIGIN;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: { x: number; y: number };
   defaultValue: { x: number; y: number };
 }
 
-export interface ISplitInput {
+export interface ISplitInput<T = string> {
   inputType: InputType.SPLIT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: {
     center: { x: number; y: number };
     points: { x: number; y: number }[];
@@ -376,11 +397,11 @@ export interface ISplitInput {
   };
 }
 
-export interface IParallaxInput {
+export interface IParallaxInput<T = string> {
   inputType: InputType.PARALLAX;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: {
     objects: { id: string; depth: number }[];
     smooth: boolean;
@@ -403,30 +424,30 @@ export interface IParallaxInput {
   };
 }
 
-export interface IColorInput {
+export interface IColorInput<T = string> {
   inputType: InputType.COLOR;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: RGBColor | null;
   defaultValue: RGBColor | null;
 }
 
-export interface ISelectInput {
+export interface ISelectInput<T = string> {
   inputType: InputType.SELECT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: string;
   defaultValue: string | null;
   options: { value: string; label: string }[];
 }
 
-export interface IEventsInput {
+export interface IEventsInput<T = string> {
   inputType: InputType.EVENTS;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: { events: IObjectEvent[] };
   defaultValue: { events: IObjectEvent[] };
 }
@@ -439,11 +460,11 @@ export interface IFontSelectInputOption {
   value: IFontSelectInputValue;
   label: string;
 }
-export interface IFontSelectInput {
+export interface IFontSelectInput<T = string> {
   inputType: InputType.FONT_SELECT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: IFontSelectInputValue;
   defaultValue: IFontSelectInputValue;
 }
@@ -458,15 +479,107 @@ export interface TextProperties {
   weight: ISelectInput;
 }
 
+export interface TextValues {
+  text: string;
+  autoHeight: boolean;
+  font: IFontSelectInputValue;
+  color: RGBColor;
+  fontSize: string;
+  weight: string;
+}
+
+export type TextPropertiesTuple = [
+  ITextAreaInput<"text">,
+  ICheckboxInput<"autoHeight">,
+  IFontSelectInput<"font">,
+  IColorInput<"color">,
+  IUnitsNumberInput<"fontSize">,
+  ISelectInput<"weight">
+];
+
 export interface ImageProperties {
   fit: ICoverPlacementInput;
   url: IImageInput;
 }
 
-export interface ButtonProperties {
+export interface ImageValues {
+  fit: ICoverPlacementValue;
+  url: IImageInputValue;
+}
+
+export type ImagePropertiesTuple = [
+  ICoverPlacementInput<"fit">,
+  IImageInput<"url">
+];
+
+export interface CommonObjectValues {
+  overflow?: boolean;
+}
+/*export interface ButtonProperties {
+  fontFamily: IFontSelectInput;
+  fontSize: INumberInput;
   borderSize: INumberInput;
   backgroundColor: IColorInput;
+}*/
+
+export interface ButtonValues extends CommonObjectValues {
+  //basic
+  text: string;
+  //size
+  sizeType: "padding" | "size";
+  sizePadding: IBoxValue;
+  sizeWidth: string;
+  sizeHeight: string;
+  // font
+  font: IFontSelectInputValue;
+  fontSize: string;
+  fontColor: RGBColor;
+  fontWeight: string;
+  //border
+  hasBorder: boolean;
+  borderSize: IBoxValue;
+  borderStyle: string;
+  borderColor: RGBColor;
+  borderRadius: ICornerRadiusValue;
+  //background
+  backgroundColor: RGBColor;
 }
+
+export type ButtonPropertiesTuple = [
+  IFormGroupItem<[ITextAreaInput<"text">]>,
+
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "sizeType",
+        [
+          IFormSwitchGroup<[IBoxInput<"sizePadding">]>,
+          IFormSwitchGroup<
+            [IUnitsNumberInput<"sizeWidth">, IUnitsNumberInput<"sizeHeight">]
+          >
+        ]
+      >
+    ]
+  >,
+
+  IFormGroupItem<
+    [
+      IFontSelectInput<"font">,
+      IUnitsNumberInput<"fontSize">,
+      IColorInput<"fontColor">,
+      ISelectInput<"fontWeight">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      ISelectInput<"borderStyle">,
+      IBoxInput<"borderSize">,
+      IColorInput<"borderColor">,
+      ICornerRadiusInput<"borderRadius">
+    ]
+  >,
+  IFormGroupItem<[IColorInput<"backgroundColor">]>
+];
 
 export interface ISliderInput {
   inputType: InputType.SLIDER_INPUT;
@@ -535,6 +648,20 @@ export interface SourceImageProperties {
   url: IImageInput;
 }
 
+export interface SourceImageValues {
+  id: string;
+  visible: boolean;
+  placement: ICoverPlacementValue;
+  url: IImageInputValue;
+}
+
+export type SourceImagePropertiesTuple = [
+  ITextInput<"id">,
+  ICheckboxInput<"visible">,
+  ICoverPlacementInput<"placement">,
+  IImageInput<"url">
+];
+
 export interface VideoProperties {
   url: IVideoInput;
 }
@@ -543,12 +670,28 @@ export interface SvgProperties {
   svg: ITextAreaInput;
 }
 
+export interface SvgValues {
+  svg: string;
+}
+
+export type SvgPropertiesTuple = [ITextAreaInput<"svg">];
+
 export interface HtmlProperties {
   html: ITextAreaInput;
 }
 
+export type HtmlPropertiesTuple = [ITextAreaInput<"html">];
+
 export interface CanvasProperties {
   source: ITextInput;
 }
+
+export interface CanvasValues {
+  source: string;
+}
+
+export type CanvasPropertiesTuple = [ITextInput<"source">];
+
+export type FramePropertiesTuple = [];
 
 export interface FrameProperties {}

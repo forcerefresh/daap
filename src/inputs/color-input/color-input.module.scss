@@ -26,4 +26,9 @@
 .buttonHolder {
   display: flex;
   flex-direction: row-reverse;
+
+  button,
+  :focus {
+    outline: none;
+  }
 }

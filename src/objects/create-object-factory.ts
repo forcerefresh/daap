@@ -1,18 +1,28 @@
 import { v4 as uuid } from "uuid";
 import {
-  ButtonProperties,
+  ButtonPropertiesTuple,
+  ButtonValues,
   CanvasProperties,
+  CanvasPropertiesTuple,
   FrameProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
   IGridPlacementValue,
   ImageProperties,
+  ImagePropertiesTuple,
   InputType,
   SourceImageProperties,
+  SourceImagePropertiesTuple,
+  SourceImageValues,
   SvgProperties,
+  SvgPropertiesTuple,
+  SvgValues,
   TextProperties,
+  TextPropertiesTuple,
+  TextValues,
   VideoProperties,
 } from "../inputs/types";
+import { FormType } from "../utils/form-layout/form-layout";
 import {
   ICommonObjectProperties,
   IObject,
@@ -219,53 +229,178 @@ function createTextObject(
 ): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.TEXT);
 
+  const properties: TextPropertiesTuple = [
+    {
+      displayName: "Text",
+      propertyName: "text",
+      inputType: InputType.TEXTAREA,
+      value: (initialValue?.text as string) || "",
+      defaultValue: "",
+    },
+    {
+      displayName: "Auto height",
+      propertyName: "autoHeight",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
+
+    {
+      displayName: "Font",
+      propertyName: "font",
+      inputType: InputType.FONT_SELECT,
+      value: (initialValue?.font as IFontSelectInputValue) || {
+        fontFamily: "Arial",
+        source: "system-fonts",
+      },
+      defaultValue: {
+        fontFamily: "Arial",
+        source: "system-fonts",
+      },
+    },
+    {
+      displayName: "Color",
+      propertyName: "color",
+      inputType: InputType.COLOR,
+      value: { r: 255, g: 255, b: 255, a: 1 },
+      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+    },
+    {
+      displayName: "Font size",
+      placeholderText: "Enter font size",
+      allowedUnits: ["px", "em", "%"],
+      propertyName: "fontSize",
+      inputType: InputType.UNITS_NUMBER,
+      value: initialValue?.fontSize || "1em",
+      defaultValue: "1em",
+    },
+    {
+      displayName: "Weight",
+      propertyName: "weight",
+      inputType: InputType.SELECT,
+      value: "400",
+      defaultValue: "400",
+      options: [
+        { value: "100", label: "100	Thin" },
+        { value: "200", label: "200	Extra Light" },
+        { value: "300", label: "300	Light" },
+        { value: "400", label: "400	Normal" },
+        { value: "500", label: "500	Medium" },
+        { value: "600", label: "600	Semi Bold" },
+        { value: "700", label: "700	Bold" },
+        { value: "800", label: "800	Extra Bold" },
+        { value: "900", label: "900	Black" },
+        { value: "950", label: "950	Extra Black" },
+      ],
+    },
+  ];
+
+  const values: TextValues = {
+    text: (initialValue?.text as string) || "",
+    autoHeight: false,
+    font: (initialValue?.font as IFontSelectInputValue) || {
+      fontFamily: "Arial",
+      source: "system-fonts",
+    },
+    color: { r: 255, g: 255, b: 255, a: 1 },
+    fontSize: initialValue?.fontSize || "1em",
+    weight: "400",
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.TEXT,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-        fontSize: {
-          displayName: "Font size",
-          placeholderText: "Enter font size",
-          allowedUnits: ["px", "em", "%"],
-          propertyName: "string",
-          inputType: InputType.UNITS_NUMBER,
-          value: initialValue?.fontSize || "1em",
-          defaultValue: "1em",
-        },
-        text: {
+      properties,
+      values,
+    },
+  };
+}
+
+function createButtonObject(initialValue?: {
+  [key: string]: any;
+}): Omit<
+  IObject<ButtonPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.BUTTON);
+
+  const properties: ButtonPropertiesTuple = [
+    {
+      displayName: "Basic",
+      type: FormType.GROUP,
+      propertyName: "basic",
+      elements: [
+        {
           displayName: "Text",
           propertyName: "text",
           inputType: InputType.TEXTAREA,
-          value: (initialValue?.text as string) || "",
+          value: "",
           defaultValue: "",
+          inputProps: { rows: 2 },
         },
-        autoHeight: {
-          displayName: "Auto height",
-          propertyName: "autoHeight",
-          inputType: InputType.CHECKBOX,
-          value: false,
-          defaultValue: false,
+      ],
+    },
+    {
+      displayName: "Size",
+      type: FormType.GROUP,
+      propertyName: "size",
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "sizeType",
+          groups: [
+            {
+              groupName: "Padding",
+              groupValue: "padding",
+              elements: [
+                {
+                  displayName: "Padding",
+                  propertyName: "sizePadding",
+                  inputType: InputType.BOX,
+                  value: { common: "10px" },
+                  defaultValue: { common: "10px" },
+                },
+              ],
+            },
+            {
+              groupName: "Size",
+              groupValue: "size",
+              elements: [
+                {
+                  displayName: "Width",
+                  propertyName: "sizeWidth",
+                  inputType: InputType.UNITS_NUMBER,
+                  value: "1em",
+                  defaultValue: "1em",
+                  placeholderText: "",
+                  allowedUnits: ["%", "px", "em"],
+                },
+                {
+                  displayName: "Height",
+                  propertyName: "sizeHeight",
+                  inputType: InputType.UNITS_NUMBER,
+                  value: "1em",
+                  defaultValue: "1em",
+                  placeholderText: "",
+                  allowedUnits: ["%", "px", "em"],
+                },
+              ],
+            },
+          ],
         },
-        font: {
-          displayName: "Font",
-          propertyName: "fontFamily",
+      ],
+    },
+    {
+      displayName: "Font",
+      type: FormType.GROUP,
+      propertyName: "font",
+      elements: [
+        {
+          displayName: "Font family",
+          propertyName: "font",
           inputType: InputType.FONT_SELECT,
           value: (initialValue?.font as IFontSelectInputValue) || {
             fontFamily: "Arial",
@@ -276,16 +411,25 @@ function createTextObject(
             source: "system-fonts",
           },
         },
-        color: {
-          displayName: "Color",
-          propertyName: "color",
+        {
+          displayName: "Font size",
+          propertyName: "fontSize",
+          inputType: InputType.UNITS_NUMBER,
+          value: "1em",
+          defaultValue: "1em",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Font color",
+          propertyName: "fontColor",
           inputType: InputType.COLOR,
           value: { r: 255, g: 255, b: 255, a: 1 },
           defaultValue: { r: 255, g: 255, b: 255, a: 1 },
         },
-        weight: {
-          displayName: "Weight",
-          propertyName: "weight",
+        {
+          displayName: "Font Weight",
+          propertyName: "fontWeight",
           inputType: InputType.SELECT,
           value: "400",
           defaultValue: "400",
@@ -302,37 +446,105 @@ function createTextObject(
             { value: "950", label: "950	Extra Black" },
           ],
         },
-      },
+      ],
     },
-  };
-}
-
-function createButtonObject(initialValue?: {
-  [key: string]: any;
-}): Omit<IObject<ButtonProperties>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(ObjectType.BUTTON);
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.BUTTON,
-      properties: {
-        borderSize: {
+    {
+      displayName: "Border",
+      type: FormType.GROUP,
+      propertyName: "hasBorder",
+      optional: true,
+      elements: [
+        {
+          displayName: "Border style",
+          propertyName: "borderStyle",
+          inputType: InputType.SELECT,
+          value: "solid",
+          defaultValue: "solid",
+          options: [
+            { label: "solid", value: "solid" },
+            { label: "dotted", value: "dotted" },
+            { label: "dashed", value: "dashed" },
+            { label: "double", value: "double" },
+            { label: "groove", value: "groove" },
+            { label: "ridge", value: "ridge" },
+            { label: "inset", value: "inset" },
+            { label: "outset", value: "outset" },
+            { label: "none", value: "none" },
+            { label: "hidden", value: "hidden" },
+          ],
+        },
+        {
           displayName: "Border size",
           propertyName: "borderSize",
-          inputType: InputType.NUMBER,
-          value: 1,
-          defaultValue: 1,
+          inputType: InputType.BOX,
+          value: { common: "1px" },
+          defaultValue: { common: "1px" },
         },
-        backgroundColor: {
+        {
+          displayName: "Border color",
+          propertyName: "borderColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Border radius",
+          propertyName: "borderRadius",
+          inputType: InputType.CORNER_RADIUS,
+          value: { common: "5px" },
+          defaultValue: { common: "5px" },
+        },
+      ],
+    },
+    {
+      displayName: "Background",
+      type: FormType.GROUP,
+      propertyName: "basic",
+      elements: [
+        {
           displayName: "Background color",
           propertyName: "backgroundColor",
           inputType: InputType.COLOR,
           value: { r: 255, g: 255, b: 255, a: 1 },
           defaultValue: { r: 255, g: 255, b: 255, a: 1 },
         },
-      },
+      ],
+    },
+  ];
+
+  const values: ButtonValues = {
+    //basic
+    text: "Button",
+    //size
+    sizeType: "padding",
+    sizePadding: { t: "10px", l: "30px", r: "30px", b: "10px" },
+    sizeWidth: "200px",
+    sizeHeight: "50px",
+    //font
+    font: (initialValue?.font as IFontSelectInputValue) || {
+      fontFamily: "Arial",
+      source: "system-fonts",
+    },
+    fontSize: "1em",
+    fontColor: { r: 255, g: 255, b: 255, a: 1 },
+    fontWeight: "400",
+    //border
+    hasBorder: true,
+    borderSize: { common: "1px" },
+    borderStyle: "solid",
+    borderColor: { r: 0, g: 0, b: 0, a: 1 },
+    borderRadius: { common: "5px" },
+    //background
+    backgroundColor: { r: 255, g: 255, b: 255, a: 0.3 },
+  };
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.BUTTON,
+      properties,
+      values,
     },
   };
 }
@@ -347,60 +559,78 @@ function createImageObject(
 ): Omit<IObject<ImageProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.IMAGE);
 
+  const properties: ImagePropertiesTuple = [
+    {
+      inputType: InputType.COVER_LAYOUT,
+      displayName: "Fit",
+      propertyName: "fit",
+      value: {
+        size: "fit",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      defaultValue: {
+        size: "fit",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+    },
+    {
+      displayName: "Image url",
+      propertyName: "url",
+      inputType: InputType.IMAGE,
+      value: {
+        url: initialValue?.url || "",
+        width: 300,
+        height: 300,
+        isPlaceholder: !initialValue?.url,
+      },
+      defaultValue: {
+        url: "",
+        width: 300,
+        height: 300,
+        isPlaceholder: true,
+      },
+    },
+  ];
+
+  /*   ...(commonProperties?.hasOverflowProperty
+      ? [
+          {
+            displayName: "Overflow",
+            propertyName: "overflow",
+            inputType: InputType.SELECT,
+            value: "visible",
+            defaultValue: "visible",
+            options: [
+              { value: "visible", label: "visible" },
+              { value: "hidden", label: "hidden" },
+            ],
+          },
+        ]
+      : []), */
+
+  const values = {
+    fit: {
+      size: "fit",
+      positionHorizontal: "center",
+      positionVertical: "center",
+    },
+    url: {
+      url: initialValue?.url || "",
+      width: 300,
+      height: 300,
+      isPlaceholder: !initialValue?.url,
+    },
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.IMAGE,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-        fit: {
-          inputType: InputType.COVER_LAYOUT,
-          displayName: "Fit",
-          propertyName: "fit",
-          value: {
-            size: "fit",
-            positionHorizontal: "center",
-            positionVertical: "center",
-          },
-          defaultValue: {
-            size: "fit",
-            positionHorizontal: "center",
-            positionVertical: "center",
-          },
-        },
-        url: {
-          displayName: "Image url",
-          propertyName: "url",
-          inputType: InputType.IMAGE,
-          value: {
-            url: initialValue?.url || "",
-            width: 300,
-            height: 300,
-            isPlaceholder: !initialValue?.url,
-          },
-          defaultValue: {
-            url: "",
-            width: 300,
-            height: 300,
-            isPlaceholder: true,
-          },
-        },
-      },
+      properties,
+      values,
     },
   };
 }
@@ -418,68 +648,67 @@ function createSourceImageObject(
 > {
   const object = createCommonObject(ObjectType.SOURCE_IMAGE);
 
+  const properties: SourceImagePropertiesTuple = [
+    {
+      displayName: "Identifier",
+      propertyName: "id",
+      inputType: InputType.TEXT,
+      value: "",
+      defaultValue: "",
+    },
+    {
+      displayName: "Visible",
+      propertyName: "visible",
+      inputType: InputType.CHECKBOX,
+      value: true,
+      defaultValue: true,
+    },
+    {
+      displayName: "Placement",
+      propertyName: "placement",
+      inputType: InputType.COVER_LAYOUT,
+      value: initialValue?.placement || getDefaultCoveragePlacement(),
+      defaultValue: getDefaultCoveragePlacement(),
+    },
+    {
+      displayName: "Image url",
+      propertyName: "url",
+      inputType: InputType.IMAGE,
+      value: {
+        url: initialValue?.url || "",
+        width: 300,
+        height: 300,
+        isPlaceholder: !initialValue?.url,
+      },
+      defaultValue: {
+        url: "",
+        width: 300,
+        height: 300,
+        isPlaceholder: true,
+      },
+    },
+  ];
+
+  const values: SourceImageValues = {
+    id: "",
+    visible: true,
+    placement: initialValue?.placement || getDefaultCoveragePlacement(),
+    url: {
+      url: initialValue?.url || "",
+      width: 300,
+      height: 300,
+      isPlaceholder: !initialValue?.url,
+    },
+  };
+
   return {
     ...object,
     isCoverPlacement: true,
     definition: {
       id: uuid(),
       type: ObjectType.SOURCE_IMAGE,
-      properties: {
-        id: {
-          displayName: "Identifier",
-          propertyName: "id",
-          inputType: InputType.TEXT,
-          value: "",
-          defaultValue: "",
-        },
-        visible: {
-          displayName: "Visible",
-          propertyName: "visible",
-          inputType: InputType.CHECKBOX,
-          value: true,
-          defaultValue: true,
-        },
-        placement: {
-          displayName: "Placement",
-          propertyName: "placement",
-          inputType: InputType.COVER_LAYOUT,
-          value: initialValue?.placement || getDefaultCoveragePlacement(),
-          defaultValue: getDefaultCoveragePlacement(),
-        },
-        url: {
-          displayName: "Image url",
-          propertyName: "url",
-          inputType: InputType.IMAGE,
-          value: {
-            url: initialValue?.url || "",
-            width: 300,
-            height: 300,
-            isPlaceholder: !initialValue?.url,
-          },
-          defaultValue: {
-            url: "",
-            width: 300,
-            height: 300,
-            isPlaceholder: true,
-          },
-        },
-
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-      },
+      properties,
+      values,
     },
   };
 }
@@ -494,40 +723,32 @@ function createVideoObject(
 ): Omit<IObject<VideoProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.VIDEO);
 
+  const properties = [
+    {
+      displayName: "Video url",
+      propertyName: "url",
+      inputType: InputType.VIDEO,
+      value: { url: "", width: 960, height: 540, isPlaceholder: true },
+      defaultValue: {
+        url: "",
+        width: 960,
+        height: 540,
+        isPlaceholder: true,
+      },
+    },
+  ];
+
+  const values = {
+    url: { url: "", width: 960, height: 540, isPlaceholder: true },
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.VIDEO,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-        url: {
-          displayName: "Video url",
-          propertyName: "url",
-          inputType: InputType.VIDEO,
-          value: { url: "", width: 960, height: 540, isPlaceholder: true },
-          defaultValue: {
-            url: "",
-            width: 960,
-            height: 540,
-            isPlaceholder: true,
-          },
-        },
-      },
+      properties,
+      values,
     },
   };
 }
@@ -542,39 +763,33 @@ function createSvgObject(
 ): Omit<IObject<SvgProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.SVG);
 
+  const properties: SvgPropertiesTuple = [
+    {
+      displayName: "SVG code",
+      propertyName: "svg",
+      inputType: InputType.TEXTAREA,
+      value: `<svg height="100" width="100">
+<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>`,
+      defaultValue: `<svg height="100" width="100">
+<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+</svg>`,
+    },
+  ];
+
+  const values: SvgValues = {
+    svg: `<svg height="100" width="100">
+    <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+    </svg>`,
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.SVG,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-        svg: {
-          displayName: "SVG code",
-          propertyName: "svg",
-          inputType: InputType.TEXTAREA,
-          value: `<svg height="100" width="100">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-</svg>`,
-          defaultValue: `<svg height="100" width="100">
-  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-</svg>`,
-        },
-      },
+      properties,
+      values,
     },
   };
 }
@@ -589,35 +804,27 @@ function createCanvasObject(
 ): Omit<IObject<CanvasProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.CANVAS);
 
+  const properties: CanvasPropertiesTuple = [
+    {
+      displayName: "Source",
+      propertyName: "source",
+      inputType: InputType.TEXT,
+      value: "",
+      defaultValue: "",
+    },
+  ];
+
+  const values = {
+    svg: "",
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.CANVAS,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-        source: {
-          displayName: "SVG code",
-          propertyName: "svg",
-          inputType: InputType.TEXT,
-          value: "",
-          defaultValue: "",
-        },
-      },
+      properties,
+      values,
     },
   };
 }
@@ -637,23 +844,8 @@ function createFrameObject(
     definition: {
       id: uuid(),
       type: ObjectType.FRAME,
-      properties: {
-        ...(commonProperties?.hasOverflowProperty
-          ? {
-              overflow: {
-                displayName: "Overflow",
-                propertyName: "overflow",
-                inputType: InputType.SELECT,
-                value: "visible",
-                defaultValue: "visible",
-                options: [
-                  { value: "visible", label: "visible" },
-                  { value: "hidden", label: "hidden" },
-                ],
-              },
-            }
-          : {}),
-      },
+      properties: [],
+      values: {},
     },
   };
 }

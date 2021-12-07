@@ -1,6 +1,6 @@
 import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
-import { IObject } from "../../objects/types";
+import { IObject, ObjectType } from "../../objects/types";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
@@ -26,6 +26,7 @@ export function calculateObjectSize(
       sizeObj.left = 0;
       sizeObj.top = 0;
     }
+
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 

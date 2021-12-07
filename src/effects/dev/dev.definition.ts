@@ -1,5 +1,6 @@
 import { InputType } from "../../inputs/types";
 import { FormType } from "../../utils/form-layout/form-layout";
+import { IEffectDefinition } from "../trianglify/trianglify.definition";
 import { dev, IDevEffect } from "./dev.types";
 
 /*
@@ -29,7 +30,7 @@ import { dev, IDevEffect } from "./dev.types";
 },
 */
 
-export const devDefinition = {
+export const devDefinition: IEffectDefinition = {
   id: dev,
   name: "Dev *",
   form: [

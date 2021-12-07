@@ -87,10 +87,10 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
         <div className={cx("color-picker-holder", css.popover)}>
           <div className={css.buttonHolder}>
-            <Button minimal icon="tick" small onClick={handleClose}>
+            <Button icon="tick" small onClick={handleClose} intent="success">
               Apply
             </Button>
-            <Button minimal icon="cross" small onClick={handleClose}>
+            <Button icon="cross" small onClick={handleClose} intent="none">
               Cancel
             </Button>
           </div>

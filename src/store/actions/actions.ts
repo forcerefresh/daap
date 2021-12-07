@@ -20,8 +20,12 @@ import {
   isIntersectingRect,
   roundNumber,
 } from "../../utils/doom-utils/common";
-import { TextProperties } from "../../inputs/types";
-import { getTextHtml } from "../../export/export-html";
+import {
+  TextProperties,
+  TextPropertiesTuple,
+  TextValues,
+} from "../../inputs/types";
+import { getButtonHtml, getTextHtml } from "../../export/export-html";
 import { load } from "webfontloader";
 import {
   BreakpointConfiguration,
@@ -660,12 +664,26 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const object = createObject(type, objectProps, {
-      ...values,
-      text: "Sample test",
-    });
+    const object = {
+      ...createObject(type, objectProps, {
+        ...values,
+        //text: "Sample test",
+      }),
+      layerId,
+    };
     object.name = type + " " + Math.round(Math.random() * 100);
-    dispatch(addObject({ ...object, layerId }));
+
+    switch (object.type) {
+      case ObjectType.BUTTON: {
+        postProcessButton(object, getState);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+
+    dispatch(addObject(object));
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
   };
@@ -715,10 +733,53 @@ function handleObjectUpdate(
       handleTextUpdate(object, dispatch, getState);
       break;
     }
+    case ObjectType.BUTTON: {
+      handleButtonUpdate(object, dispatch, getState);
+      break;
+    }
     default: {
       dispatch(_updateObject(object));
     }
   }
+}
+/* This method mutate object*/
+function postProcessButton(object: IObject, getState: () => IStore): void {
+  if (object.layout === "absolute") {
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+        (breakpointConfig) =>
+          breakpointConfig.type === getState().stage.selectedDevice
+      );
+    // todo: calculate for all not only for one
+    const calculatedObjectSize = calculateObjectSize(
+      object,
+      breakpointConfig!,
+      {
+        resetPosition: false,
+      }
+    );
+    const html = getButtonHtml(object, {
+      ...calculatedObjectSize,
+      width: undefined,
+      height: undefined,
+    });
+    const holder = document.createElement("div");
+    holder.style.overflow = "visible";
+    holder.innerHTML = html;
+    holder.querySelector("button")!.style.position = "relative";
+    document.body.appendChild(holder);
+    object.absoluteLayout!.width = holder.querySelector("button")?.offsetWidth!;
+    object.absoluteLayout!.height =
+      holder.querySelector("button")?.offsetHeight!;
+  }
+}
+function handleButtonUpdate(
+  object: IObject,
+  dispatch: Dispatch,
+  getState: () => IStore
+): void {
+  postProcessButton(object, getState);
+  dispatch(_updateObject(object));
 }
 
 function handleTextUpdate(
@@ -727,8 +788,9 @@ function handleTextUpdate(
   getState: () => IStore
 ): void {
   // * handle auto height
-  const properties = object.definition.properties as TextProperties;
-  if (properties.autoHeight.value === true) {
+  const objectValues = object.definition.values as TextValues;
+
+  if (objectValues.autoHeight === true) {
     // TODO: IMPORTANT hardcoded
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
@@ -756,10 +818,11 @@ function handleTextUpdate(
   const objectPrevState = getState().project.objects.objectById[object.id];
   const { loadedFontFamilies } = getState().fonts;
 
-  const newProperties = object.definition.properties as TextProperties;
-  const oldProperties = objectPrevState.definition.properties as TextProperties;
-  const newFont = newProperties.font.value.fontFamily;
-  const oldFont = oldProperties.font.value.fontFamily;
+  const newObjectValues = object.definition.values as TextValues;
+  const oldObjectValues = objectPrevState.definition.values as TextValues;
+
+  const newFont = newObjectValues.font.fontFamily;
+  const oldFont = oldObjectValues.font.fontFamily;
 
   // NOTE: update object once. update either after font is loaded or after 500ms
   const updateObjectOnce = once(() => {
@@ -768,7 +831,7 @@ function handleTextUpdate(
 
   // NOTE: check if we need to load fonts
   if (
-    newProperties.font.value.source !== "system" &&
+    newObjectValues.font.source !== "system" &&
     newFont !== oldFont &&
     loadedFontFamilies.indexOf(newFont) === -1
   ) {

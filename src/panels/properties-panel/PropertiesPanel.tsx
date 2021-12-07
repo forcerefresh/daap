@@ -13,6 +13,10 @@ import { InputType } from "../../inputs/types";
 import { IAbsoluteLayout, IGridLayout, IObject } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
+import FormWithLayout, {
+  flattenForm,
+  IFormItem,
+} from "../../utils/form-layout/form-layout";
 import css from "./PropertiesPanel.module.scss";
 
 type ISlidesPanel = typeof mapDispatchToProps &
@@ -46,7 +50,10 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
             }
           )}
 
-        {renderProperties(object.definition.properties)}
+        {renderProperties(
+          object.definition.properties,
+          object.definition.values
+        )}
         <hr />
         {renderEvents(object)}
         <hr />
@@ -109,20 +116,24 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     return getInputForm(InputType.CORNER_RADIUS, objectDef, onChange);
   };
 
-  const renderProperties = (properties: any) => {
-    return Object.keys(properties).map((key) => {
+  const renderProperties = (properties: any[], values: any) => {
+    const flatForm = flattenForm(properties as IFormItem[]);
+
+    const inputs = flatForm.map((property, idx) => {
+      const { propertyName } = property;
+
       function onChange(value: any) {
         const retObj = cloneDeep(object);
 
         if (retObj) {
-          const properties = retObj.definition.properties as any;
-          properties[key].value = value;
+          const values = retObj.definition.values as { [key: string]: any };
+          values[propertyName] = value;
 
           // >>> exception for image
           // use image w and h for the object
-          if (properties[key].inputType === InputType.IMAGE) {
+          if (property.inputType === InputType.IMAGE) {
             // set placeholder to false
-            properties[key].value.isPlaceholder = false;
+            values[propertyName].isPlaceholder = false;
             if (retObj.width === 0) {
               retObj.width = value.width;
             }
@@ -136,13 +147,29 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         }
       }
 
-      return getInputForm(
-        properties[key].inputType,
-        properties[key],
-        onChange,
-        onChange
-      );
+      const inputProps = {
+        ...property,
+        value: values[propertyName],
+      };
+
+      return {
+        input: getInputForm(property.inputType, inputProps, onChange, onChange),
+        propertyName: property.propertyName,
+      };
     });
+
+    return (
+      <FormWithLayout
+        values={values}
+        inputs={inputs}
+        form={properties as IFormItem[]}
+        formId={object?.type as string}
+      />
+    );
+    //
+    //
+    //
+    //
   };
 
   return (

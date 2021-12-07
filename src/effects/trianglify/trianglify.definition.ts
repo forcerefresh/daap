@@ -2,16 +2,32 @@ import { InputType } from "../../inputs/types";
 import { FormType } from "../../utils/form-layout/form-layout";
 import { ITrianglifyEffect, trianglifyPhoto } from "./trianglify.types";
 
-interface IEffectDefinition {
+export interface IEffectDefinition {
   id: string;
   name: string;
   form: IFormItem[];
 }
-interface IFormSwitchGroupItem {
+
+export interface IFormSwitchGroup<T = {}> {
+  groupName: string;
+  groupValue: string;
+  elements: T;
+}
+
+export interface IFormSwitchGroupItem<NAME = string, GROUPS = {}> {
   type: FormType.SWITCH_GROUP;
   displayName: string;
+  propertyName: NAME;
+  groups: GROUPS;
+}
+
+export interface IFormGroupItem<T = {}> {
+  type: FormType.GROUP;
+  displayName: string;
   propertyName: string;
-  groups: { groupName: string; groupValue: string; elements: IFormItem[] }[];
+  optional?: boolean;
+  initiallyOpen?: boolean;
+  elements: T;
 }
 
 interface IFormInputItem {
@@ -25,7 +41,7 @@ interface IFormInputItem {
   };
 }
 
-type IFormItem = IFormSwitchGroupItem | IFormInputItem;
+type IFormItem = IFormGroupItem | IFormSwitchGroupItem | IFormInputItem;
 
 export const trianlifyDefinition: IEffectDefinition = {
   id: trianglifyPhoto,

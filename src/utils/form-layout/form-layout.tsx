@@ -53,6 +53,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
   } = props;
 
   const visibleSectionIds = uiFormSate[formId] ?? {};
+
   const setVisibleSectionIds = (formState: IFormState) => {
     _setFormState(formId, formState);
   };
@@ -134,8 +135,22 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     optionalProperty: string = "",
     elements: IFormItem[] = [],
     inputs: any,
-    values: any
+    values: any,
+    indexInArray: number
   ) => {
+    const shouldBeOpenAnyhow =
+      typeof visibleSectionIds[title] === "undefined" && indexInArray === 0;
+
+    if (shouldBeOpenAnyhow) {
+      setVisibleSectionIds({
+        ...visibleSectionIds,
+        [title]: !visibleSectionIds[title],
+      });
+    }
+
+    const isOpen =
+      visibleSectionIds[title] && (!optional || values[optionalProperty]);
+
     return (
       <section className={classnames(css[`depth${depth}`])}>
         <Button
@@ -151,11 +166,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
               toggleSection(title);
             }
           }}
-          icon={
-            visibleSectionIds[title] && (!optional || values[optionalProperty])
-              ? "caret-down"
-              : "caret-right"
-          }
+          icon={isOpen ? "caret-down" : "caret-right"}
           small
           minimal
           alignText={"left"}
@@ -178,19 +189,18 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
           </span>
           {title}
         </Button>
-        {visibleSectionIds[title] &&
-          (!optional || values[optionalProperty]) && (
-            <div className={css.elementsHolder}>
-              {elements.map((element) => renderElement(element))}
-            </div>
-          )}
+        {isOpen && (
+          <div className={css.elementsHolder}>
+            {elements.map((element) => renderElement(element))}
+          </div>
+        )}
       </section>
     );
   };
 
   return (
     <>
-      {form.map((formItem) => {
+      {form.map((formItem, indexInArray) => {
         if (formItem.type === FormType.GROUP) {
           return (
             <div className={css.formSections}>
@@ -200,7 +210,8 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
                 formItem.propertyName,
                 formItem.elements,
                 inputs,
-                values
+                values,
+                indexInArray
               )}
             </div>
           );
@@ -259,11 +270,14 @@ export function flattenFormRec(itemsArr: IFormItem[], form: IFormItem[]): void {
         break;
       }
       case FormType.GROUP: {
-        itemsArr.push({
-          displayName: "",
-          propertyName: formItem.propertyName,
-          inputType: InputType.CHECKBOX,
-        });
+        // TODO: check if optional ??
+        if (formItem.optional) {
+          itemsArr.push({
+            displayName: "",
+            propertyName: formItem.propertyName,
+            inputType: InputType.CHECKBOX,
+          });
+        }
 
         flattenFormRec(itemsArr, formItem.elements ?? []);
         break;
