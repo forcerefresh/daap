@@ -499,14 +499,47 @@ function createButtonObject(initialValue?: {
     {
       displayName: "Background",
       type: FormType.GROUP,
-      propertyName: "basic",
+      propertyName: "background",
       elements: [
         {
-          displayName: "Background color",
-          propertyName: "backgroundColor",
-          inputType: InputType.COLOR,
-          value: { r: 255, g: 255, b: 255, a: 1 },
-          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "backgroundType",
+          groups: [
+            {
+              groupName: "Solid",
+              groupValue: "solid",
+              elements: [
+                {
+                  displayName: "Background color",
+                  propertyName: "backgroundColor",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+            {
+              groupName: "Gradient",
+              groupValue: "gradient",
+              elements: [
+                {
+                  displayName: "Color 1",
+                  propertyName: "backgroundGradientColor1",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+                {
+                  displayName: "Color 2",
+                  propertyName: "backgroundGradientColor2",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+          ],
         },
       ],
     },
@@ -535,7 +568,10 @@ function createButtonObject(initialValue?: {
     borderColor: { r: 0, g: 0, b: 0, a: 1 },
     borderRadius: { common: "5px" },
     //background
-    backgroundColor: { r: 255, g: 255, b: 255, a: 0.3 },
+    backgroundType: "solid",
+    backgroundColor: { r: 99, g: 99, b: 99, a: 1 },
+    backgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
+    backgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
   };
 
   return {

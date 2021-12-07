@@ -242,8 +242,21 @@ export function getButtonHtml(
   style += `color: rgba(${fc?.r},${fc?.g},${fc?.b},${fc?.a});`;
   style += "font-weight: " + buttonProperties.fontWeight + ";";
   //
-  const bgc = buttonProperties.backgroundColor;
-  style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
+
+  // background-image: linear-gradient(red, yellow);
+  switch (buttonProperties.backgroundType) {
+    case "solid": {
+      const bgc = buttonProperties.backgroundColor;
+      style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
+      break;
+    }
+    case "gradient": {
+      const bgc1 = buttonProperties.backgroundGradientColor1;
+      const bgc2 = buttonProperties.backgroundGradientColor2;
+      style += `background-image: linear-gradient(rgba(${bgc1?.r},${bgc1?.g},${bgc1?.b},${bgc1?.a}), rgba(${bgc2?.r},${bgc2?.g},${bgc2?.b},${bgc2?.a}));`;
+      break;
+    }
+  }
 
   if (buttonProperties.hasBorder) {
     style = addBorderBox(style, buttonProperties.borderSize);

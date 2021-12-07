@@ -542,7 +542,10 @@ export interface ButtonValues extends CommonObjectValues {
   borderColor: RGBColor;
   borderRadius: ICornerRadiusValue;
   //background
+  backgroundType: "solid" | "gradient";
   backgroundColor: RGBColor;
+  backgroundGradientColor1: RGBColor;
+  backgroundGradientColor2: RGBColor;
 }
 
 export type ButtonPropertiesTuple = [
@@ -578,7 +581,23 @@ export type ButtonPropertiesTuple = [
       ICornerRadiusInput<"borderRadius">
     ]
   >,
-  IFormGroupItem<[IColorInput<"backgroundColor">]>
+
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "backgroundType",
+        [
+          IFormSwitchGroup<[IColorInput<"backgroundColor">]>,
+          IFormSwitchGroup<
+            [
+              IColorInput<"backgroundGradientColor1">,
+              IColorInput<"backgroundGradientColor2">
+            ]
+          >
+        ]
+      >
+    ]
+  >
 ];
 
 export interface ISliderInput {
