@@ -1,6 +1,7 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import {
+  BulletsValues,
   ButtonValues,
   CanvasValues,
   IBoxValue,
@@ -19,6 +20,7 @@ import { ISlide, ISlides } from "../store/reducers/i-slides";
 import { BreakpointConfiguration } from "../store/reducers/settings";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
+import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
   IPlayerData,
   ISlideData,
@@ -48,6 +50,13 @@ export function generatePlayerData(
       break;
     }
   }
+
+  // generate thumbnails
+  const thumbnailHtmlArr = getThumbnailHtmlArr(
+    previewSlidesArr,
+    layers,
+    objects
+  );
 
   const slideDataArr: ISlideData[] = [];
 
@@ -122,7 +131,13 @@ export function generatePlayerData(
         html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
         //console.log(object);
-        const objectHtml = getObjectHtml(object, calculatedObjectSize, true);
+        const objectHtml = getObjectHtml(
+          object,
+          calculatedObjectSize,
+          true,
+          thumbnailHtmlArr,
+          previewSlidesArr.length
+        );
 
         transitionsData.push({
           objectClass: objectClass,
@@ -161,32 +176,47 @@ export function generatePlayerData(
 /**
  * Returns array of slides from store>slides
  */
-function getSlideArr(slides: ISlides): ISlide[] {
+export function getSlideArr(slides: ISlides): ISlide[] {
   return slides.allSlides.map((slideId) => slides.slideById[slideId]);
 }
 
 /**
  * Returns array of layers from store>layers
  */
-function getLayerArr(layers: ILayers, layerIds: string[]): ILayer[] {
+export function getLayerArr(layers: ILayers, layerIds: string[]): ILayer[] {
   return layerIds.map((layerId) => layers.layerById[layerId]);
 }
 
 /**
  * Returns array of object from store>objects
  */
-function getObjectArr(objects: IObjects, objectIds: string[]): IObject[] {
+export function getObjectArr(
+  objects: IObjects,
+  objectIds: string[]
+): IObject[] {
   return objectIds.map((objectId) => objects.objectById[objectId]);
 }
 
 export function getObjectHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
+  isPlayer: boolean,
+  thumbnailHtmlArr: (string | undefined)[],
+  sliderCounter = 3
 ) {
   switch (object.type) {
     case ObjectType.TEXT:
       return getTextHtml(object, calculatedObjectSize);
+    case ObjectType.RICH_TEXT:
+      return getRichTextHtml(object, calculatedObjectSize);
+    case ObjectType.BULLETS:
+      return getBulletsHtml(
+        object,
+        calculatedObjectSize,
+        isPlayer,
+        thumbnailHtmlArr,
+        sliderCounter
+      );
     case ObjectType.IMAGE:
       return getImageHtml(object, calculatedObjectSize);
     case ObjectType.VIDEO:
@@ -225,6 +255,157 @@ export function getTextHtml(
   return `<p class="object-content" style="${style}">${nl2br(
     textProperties.text
   )}</p>`;
+}
+
+export function getRichTextHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
+  const textProperties = object.definition.values as TextValues;
+
+  let style = "";
+  style += "font-family: " + textProperties.font.fontFamily + ";";
+  style += "font-size: " + textProperties.fontSize + ";";
+  const c = textProperties.color;
+  style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
+  style += "font-weight: " + textProperties.weight + ";";
+  style += "width: " + calculatedObjectSize.width + ";";
+  style += "height:" + calculatedObjectSize.height + ";";
+  style += "position: absolute;";
+
+  const ret = `<div class="object-content" style="${style}"> 
+  ${textProperties.text} 
+  </div>`;
+  return ret;
+}
+
+export function getBulletsHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean,
+  thumbnailHtmlArr: (string | undefined)[],
+  slidesCounter = 3
+) {
+  const buttonProperties = object.definition.values as BulletsValues;
+
+  let style = "";
+
+  // text properties
+  style += "width: " + buttonProperties.circleWidth + ";";
+  style += "height: " + buttonProperties.circleWidth + ";";
+  //
+
+  if (buttonProperties.hasBackground) {
+    switch (buttonProperties.backgroundType) {
+      case "solid": {
+        const bgc = buttonProperties.backgroundColor;
+        style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
+        break;
+      }
+      case "gradient": {
+        const bgc1 = buttonProperties.backgroundGradientColor1;
+        const bgc2 = buttonProperties.backgroundGradientColor2;
+        style += `background-image: linear-gradient(rgba(${bgc1?.r},${bgc1?.g},${bgc1?.b},${bgc1?.a}), rgba(${bgc2?.r},${bgc2?.g},${bgc2?.b},${bgc2?.a}));`;
+        break;
+      }
+    }
+  } else {
+    style += `background: none;`;
+  }
+
+  if (buttonProperties.hasBorder) {
+    style = addBorderBox(style, buttonProperties.borderSize);
+
+    style += `border-style: ${buttonProperties.borderStyle};`;
+    const bc = buttonProperties.borderColor;
+    style += `border-color: rgba(${bc?.r},${bc?.g},${bc?.b},${bc?.a});`;
+    style = addBorderRadius(style, buttonProperties.borderRadius);
+  } else {
+    style += "border-style: none;";
+  }
+
+  if (buttonProperties.type === "circle") {
+    style += "border-radius: 50%;";
+  }
+  /*
+  if (buttonProperties.hasBoxShadow) {
+    const bsc = buttonProperties.boxShadowColor;
+    const bsInset = buttonProperties.boxShadowInset ? " inset" : "";
+    style += `box-shadow: ${buttonProperties.boxShadowDistanceX} ${buttonProperties.boxShadowDistanceY} ${buttonProperties.boxShadowBlur} ${buttonProperties.boxShadowSpread} rgba(${bsc?.r},${bsc?.g},${bsc?.b},${bsc?.a})${bsInset};`;
+  }
+*/
+
+  /*
+  // HOVER START >>>>
+  let cssHoverStyle = "";
+
+  if (buttonProperties.hasHoverBorder) {
+    cssHoverStyle = addBorderBox(
+      cssHoverStyle,
+      buttonProperties.hoverBorderSize
+    );
+
+    cssHoverStyle += `border-style: ${buttonProperties.hoverBorderStyle};`;
+    const bhc = buttonProperties.hoverBorderColor;
+    cssHoverStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
+    cssHoverStyle = addBorderRadius(
+      cssHoverStyle,
+      buttonProperties.hoverBorderRadius
+    );
+  } else {
+    //cssHoverStyle += "border-style: none;";
+  }
+
+  if (buttonProperties.hasHoverBackground) {
+    switch (buttonProperties.hoverBackgroundType) {
+      case "solid": {
+        const hbgc = buttonProperties.hoverBackgroundColor;
+        cssHoverStyle += `background-color: rgba(${hbgc?.r},${hbgc?.g},${hbgc?.b},${hbgc?.a});`;
+        break;
+      }
+      case "gradient": {
+        const hbgc1 = buttonProperties.hoverBackgroundGradientColor1;
+        const hbgc2 = buttonProperties.hoverBackgroundGradientColor2;
+        cssHoverStyle += `background-image: linear-gradient(rgba(${hbgc1?.r},${hbgc1?.g},${hbgc1?.b},${hbgc1?.a}), rgba(${hbgc2?.r},${hbgc2?.g},${hbgc2?.b},${hbgc2?.a}));`;
+        break;
+      }
+    }
+  } else {
+    //cssHoverStyle += `background: none;`;
+  }
+*/
+  const cssHoverStyle = "";
+  const css = `
+  <style>
+  .object-content-item-${object.id} {
+    ${style}
+    cursor: pointer;
+    overflow: hidden;
+  }
+  .object-content-item-${object.id}:not(:first-child) {
+    margin-left: ${buttonProperties.gap};
+  }
+
+  .object-content-item-${object.id} > div {
+    background-size: ${buttonProperties.thumbnailSize};
+  }
+
+  .object-content-item-${object.id}:hover {
+    ${cssHoverStyle.replaceAll(";", " !important;")}
+  }
+  </style>`;
+
+  let bulletsHtml = "";
+  for (let i = 0; i < slidesCounter; i++) {
+    bulletsHtml += `<div class="object-content-item-${object.id}">
+        ${thumbnailHtmlArr?.[i] ? thumbnailHtmlArr?.[i] : ""}
+      </div>`;
+  }
+  // HOVER END <<<
+  return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="position:absolute; display: flex;">
+    ${bulletsHtml}
+  </div>s
+  `;
 }
 
 export function getButtonHtml(
@@ -382,6 +563,23 @@ function getImageHtml(
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
+
+  return `<div class="object-content" style="${style}"></div>`;
+}
+
+export function getImageThumbnailHtml(object: IObject) {
+  const imageProperties = object.definition.values as ImageValues;
+
+  if (imageProperties.url.isPlaceholder) {
+    return `<div></div>`;
+  }
+
+  let style = "width: 100%;";
+  style += "height: 100%;";
+  style += `background-image:url('${imageProperties.url.url}');`;
+  style += `background-repeat:no-repeat;`;
+  //style += `background-size: cover;`;
+  style += `background-position: center center;`;
 
   return `<div class="object-content" style="${style}"></div>`;
 }

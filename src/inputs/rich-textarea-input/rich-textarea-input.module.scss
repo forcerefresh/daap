@@ -1,0 +1,46 @@
+.main {
+  :global {
+    .bp3-form-content > * {
+      background: none; //reset
+      border: none;
+      > * {
+        border: none;
+      }
+
+      button {
+        background: none;
+        border: none;
+        > span {
+          filter: invert(1);
+        }
+      }
+
+      button[class*="IconButton__isActive"] {
+        background: rgba(138, 155, 168, 0.3) !important;
+      }
+    }
+    .DraftEditor-editorContainer {
+      min-height: 100px;
+      max-height: 250px;
+      overflow: hidden;
+      overflow-y: scroll;
+
+      background: rgba(16, 22, 26, 0.3);
+      box-shadow: 0 0 0 0 rgba(19, 124, 189, 0), 0 0 0 0 rgba(19, 124, 189, 0),
+        0 0 0 0 rgba(19, 124, 189, 0), inset 0 0 0 1px rgba(16, 22, 26, 0.3),
+        inset 0 1px 1px rgba(16, 22, 26, 0.4);
+      color: #f5f8fa;
+
+      outline: none;
+
+      //  &:hover,
+      &:focus {
+        box-shadow: 0 0 0 1px #137cbd, 0 0 0 1px #137cbd,
+          0 0 0 3px rgba(19, 124, 189, 0.3),
+          inset 0 0 0 1px rgba(16, 22, 26, 0.3),
+          inset 0 1px 1px rgba(16, 22, 26, 0.4);
+        background: rgba(16, 22, 26, 0.3);
+      }
+    }
+  }
+}

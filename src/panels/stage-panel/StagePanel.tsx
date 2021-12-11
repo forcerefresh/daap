@@ -8,7 +8,11 @@ import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 
 import css from "./StagePanel.module.scss";
-import { generatePlayerData, getObjectHtml } from "../../export/export-html";
+import {
+  generatePlayerData,
+  getObjectHtml,
+  getSlideArr,
+} from "../../export/export-html";
 
 // from "gsap"; // TODO: remove player from here
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
@@ -53,6 +57,7 @@ import ProjectSmallTimeline, {
 import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
+import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 
 interface ISize {
   width: number;
@@ -497,6 +502,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
     const isAbsolutePosition = object.layout === "absolute";
 
+    // thumbnail arr
+    const slidesArr = getSlideArr(slides);
+    const slidesCounter = slidesArr.length;
+    const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
+
     // *** NOTE: we are rendering different for selected and non selected object
 
     // 1. NON SELECTED  (NON-DRAGGABLE)
@@ -519,7 +529,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
-              __html: getObjectHtml(object, calculatedObjectSize, false),
+              __html: getObjectHtml(
+                object,
+                calculatedObjectSize,
+                false,
+                thumbnailHtmlArr,
+                slidesCounter
+              ),
             }}
             style={objectStyle}
             className={cx({
@@ -680,7 +696,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               __html: getObjectHtml(
                 { ...object, ...widthAndHeightObject },
                 { ...calculatedObjectSize },
-                false
+                false,
+                thumbnailHtmlArr,
+                slidesCounter
               ),
             }}
             style={{

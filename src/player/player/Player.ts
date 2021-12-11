@@ -52,6 +52,8 @@ export class Player {
     rootDiv.style.display = "none";
     rootDiv.innerHTML = playerData?.html || "";
 
+    this.createNavigationEvents(rootDiv);
+
     this.playerData = playerData;
 
     this.timelines = [];
@@ -75,6 +77,17 @@ export class Player {
     });
   }
 
+  private createNavigationEvents(rootDiv: HTMLDivElement) {
+    const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
+    bulletHolders.forEach((holderEL) => {
+      holderEL.childNodes.forEach((el, index: number) => {
+        el.addEventListener("click", () => {
+          console.log(index);
+          this.manualPlaySlide(index);
+        });
+      });
+    });
+  }
   public onUpdate(onUpdateCallback: any) {
     console.log(onUpdateCallback);
     this.onUpdateCallback = onUpdateCallback;

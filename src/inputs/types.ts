@@ -12,6 +12,7 @@ export enum InputType {
   NUMERIC_TIMELINE = "numeric_timeline",
   TEXT = "text",
   TEXTAREA = "textarea",
+  RICH_TEXTAREA = "rich_textarea",
   SELECT = "select",
   COLOR = "color",
   TRANSFORM_ORIGIN = "transform_origin",
@@ -264,6 +265,15 @@ export interface ITextAreaInput<T = string> {
   defaultValue: string;
   inputProps?: { disableDebounce?: boolean; rows?: number };
 }
+export interface IRichTextAreaInput<T = string> {
+  inputType: InputType.RICH_TEXTAREA;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: string;
+  defaultValue: string;
+  inputProps?: { disableDebounce?: boolean; rows?: number };
+}
 export interface ITransformInput<T = string> {
   inputType: InputType.TEXT;
   displayName: string;
@@ -497,6 +507,22 @@ export type TextPropertiesTuple = [
   ISelectInput<"weight">
 ];
 
+export interface RichTextValues {
+  text: string;
+  autoHeight: boolean;
+  font: IFontSelectInputValue;
+  color: RGBColor;
+  fontSize: string;
+}
+
+export type RichTextPropertiesTuple = [
+  IRichTextAreaInput<"text">,
+  ICheckboxInput<"autoHeight">,
+  IFontSelectInput<"font">,
+  IColorInput<"color">,
+  IUnitsNumberInput<"fontSize">
+];
+
 export interface ImageProperties {
   fit: ICoverPlacementInput;
   url: IImageInput;
@@ -505,11 +531,13 @@ export interface ImageProperties {
 export interface ImageValues {
   fit: ICoverPlacementValue;
   url: IImageInputValue;
+  useForThumbnail: boolean;
 }
 
 export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IImageInput<"url">
+  IImageInput<"url">,
+  ICheckboxInput<"useForThumbnail">
 ];
 
 export interface CommonObjectValues {
@@ -521,6 +549,73 @@ export interface CommonObjectValues {
   borderSize: INumberInput;
   backgroundColor: IColorInput;
 }*/
+
+export interface BulletsValues extends CommonObjectValues {
+  //basic
+  type: "circle" | "rectangle";
+  circleWidth: string;
+  rectWidth: string;
+  rectHeight: string;
+  gap: string;
+  useThumbnails: boolean;
+  thumbnailSize: string;
+  //border
+  hasBorder: boolean;
+  borderSize: IBoxValue;
+  borderStyle: string;
+  borderColor: RGBColor;
+  borderRadius: ICornerRadiusValue;
+  //background
+  hasBackground: boolean;
+  backgroundType: "solid" | "gradient";
+  backgroundColor: RGBColor;
+  backgroundGradientColor1: RGBColor;
+  backgroundGradientColor2: RGBColor;
+}
+
+export type BulletsPropertiesTuple = [
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "type",
+        [
+          IFormSwitchGroup<[IUnitsNumberInput<"circleWidth">]>,
+          IFormSwitchGroup<
+            [IUnitsNumberInput<"rectWidth">, IUnitsNumberInput<"rectHeight">]
+          >
+        ]
+      >,
+      IUnitsNumberInput<"gap">,
+      ICheckboxInput<"useThumbnails">,
+      IUnitsNumberInput<"thumbnailSize">
+    ]
+  >,
+
+  IFormGroupItem<
+    [
+      ISelectInput<"borderStyle">,
+      IBoxInput<"borderSize">,
+      IColorInput<"borderColor">,
+      ICornerRadiusInput<"borderRadius">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "backgroundType",
+        [
+          IFormSwitchGroup<[IColorInput<"backgroundColor">]>,
+          IFormSwitchGroup<
+            [
+              IColorInput<"backgroundGradientColor1">,
+              IColorInput<"backgroundGradientColor2">
+            ]
+          >
+        ]
+      >
+    ]
+  >
+];
 
 export interface ButtonValues extends CommonObjectValues {
   //basic
@@ -685,11 +780,11 @@ export interface ISliderInput {
   };
 }
 
-export interface IButtonGroupInput {
+export interface IButtonGroupInput<T = string> {
   inputType: InputType.BUTTON_GROUP_INPUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: string;
   defaultValue: string;
   options: { value: string; label: string }[];

@@ -11,7 +11,7 @@ const SMALL_ICON_SIZE = 18;
 export const CornerRadiusInputForm: React.FC<
   ICornerRadiusInput & IUpdateInput
 > = (props) => {
-  const { displayName, value, onChange } = props;
+  const { displayName, helperText, value, onChange } = props;
 
   const isLinked = !!value.common;
 
@@ -105,6 +105,9 @@ export const CornerRadiusInputForm: React.FC<
                 })}
                 {renderLinkBtn()}
               </div>
+            )}
+            {helperText && (
+              <div className="bp3-form-helper-text">{helperText}</div>
             )}
           </div>
         </div>

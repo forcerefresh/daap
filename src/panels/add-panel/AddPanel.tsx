@@ -100,6 +100,64 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
       <div>
         <Card interactive={false} className={css.sectionCard}>
+          <h1>Navigation</h1>
+          <p>Page navigation</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.BULLETS, {
+                left: documentSize.width / 4,
+                top: documentSize.height / 4,
+                width: documentSize.width / 2,
+                height: documentSize.height / 2,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <AddTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>Bullets</h3>
+          <p>Add bullets navigation</p>
+        </Card>
+      </div>
+
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Rich Text</h1>
+          <p>Add rich text content</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.RICH_TEXT, {
+                left: documentSize.width / 4,
+                top: documentSize.height / 4,
+                width: documentSize.width / 2,
+                height: documentSize.height / 2,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <AddTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>ADD RICH TEXT BOX</h3>
+          <p>Add empty rich text field to active layer</p>
+        </Card>
+      </div>
+
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
           <h1>Image</h1>
           <p>Place image content</p>
         </Card>

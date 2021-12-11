@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
 import {
+  BulletsPropertiesTuple,
+  BulletsValues,
   ButtonPropertiesTuple,
   ButtonValues,
   CanvasProperties,
@@ -10,7 +12,10 @@ import {
   IGridPlacementValue,
   ImageProperties,
   ImagePropertiesTuple,
+  ImageValues,
   InputType,
+  RichTextPropertiesTuple,
+  RichTextValues,
   SourceImageProperties,
   SourceImagePropertiesTuple,
   SourceImageValues,
@@ -52,6 +57,14 @@ export function createObject(
     case ObjectType.TEXT: {
       return {
         ...createTextObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+        ...objectProps,
+      };
+    }
+    case ObjectType.RICH_TEXT: {
+      return {
+        ...createRichTextObject(initialValue, {
           hasOverflowProperty: true,
         }),
         ...objectProps,
@@ -117,6 +130,12 @@ export function createObject(
         ...createFrameObject(initialValue, {
           hasOverflowProperty: true,
         }),
+      };
+    }
+    case ObjectType.BULLETS: {
+      return {
+        ...createBulletsObject(initialValue),
+        ...objectProps,
       };
     }
   }
@@ -219,6 +238,87 @@ function createCommonObject(
   };
 }
 
+function createRichTextObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<RichTextPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.RICH_TEXT);
+
+  const properties: RichTextPropertiesTuple = [
+    {
+      displayName: "Text",
+      propertyName: "text",
+      inputType: InputType.RICH_TEXTAREA,
+      value: (initialValue?.text as string) || "",
+      defaultValue: "",
+    },
+    {
+      displayName: "Auto height",
+      propertyName: "autoHeight",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
+    {
+      displayName: "Font",
+      propertyName: "font",
+      inputType: InputType.FONT_SELECT,
+      value: (initialValue?.font as IFontSelectInputValue) || {
+        fontFamily: "Arial",
+        source: "system-fonts",
+      },
+      defaultValue: {
+        fontFamily: "Arial",
+        source: "system-fonts",
+      },
+    },
+    {
+      displayName: "Color",
+      propertyName: "color",
+      inputType: InputType.COLOR,
+      value: { r: 255, g: 255, b: 255, a: 1 },
+      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+    },
+    {
+      displayName: "Font size",
+      placeholderText: "Enter font size",
+      allowedUnits: ["px", "em", "%"],
+      propertyName: "fontSize",
+      inputType: InputType.UNITS_NUMBER,
+      value: initialValue?.fontSize || "1em",
+      defaultValue: "1em",
+    },
+  ];
+
+  const values: RichTextValues = {
+    text: (initialValue?.text as string) || "",
+    autoHeight: false,
+    font: (initialValue?.font as IFontSelectInputValue) || {
+      fontFamily: "Arial",
+      source: "system-fonts",
+    },
+    color: { r: 255, g: 255, b: 255, a: 1 },
+    fontSize: initialValue?.fontSize || "1em",
+  };
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.RICH_TEXT,
+      properties,
+      values,
+    },
+  };
+}
+
 function createTextObject(
   initialValue?: {
     [key: string]: any;
@@ -312,6 +412,227 @@ function createTextObject(
     definition: {
       id: uuid(),
       type: ObjectType.TEXT,
+      properties,
+      values,
+    },
+  };
+}
+
+function createBulletsObject(initialValue?: {
+  [key: string]: any;
+}): Omit<
+  IObject<BulletsPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.BULLETS);
+
+  const properties: BulletsPropertiesTuple = [
+    {
+      displayName: "Basic",
+      type: FormType.GROUP,
+      propertyName: "hasBasic",
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "type",
+          groups: [
+            {
+              groupName: "Circle",
+              groupValue: "circle",
+              elements: [
+                {
+                  displayName: "Radius",
+                  propertyName: "circleWidth",
+                  inputType: InputType.UNITS_NUMBER,
+                  value: "10px",
+                  defaultValue: "10px",
+                  allowedUnits: ["%", "em", "px"],
+                  placeholderText: "",
+                },
+              ],
+            },
+            {
+              groupName: "Rect",
+              groupValue: "rectangle",
+              elements: [
+                {
+                  displayName: "Width",
+                  propertyName: "rectWidth",
+                  inputType: InputType.UNITS_NUMBER,
+                  value: "10px",
+                  defaultValue: "10px",
+                  placeholderText: "",
+                  allowedUnits: ["%", "px", "em"],
+                },
+                {
+                  displayName: "Height",
+                  propertyName: "rectHeight",
+                  inputType: InputType.UNITS_NUMBER,
+                  value: "10px",
+                  defaultValue: "10px",
+                  placeholderText: "",
+                  allowedUnits: ["%", "px", "em"],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          displayName: "Gap",
+          propertyName: "gap",
+          inputType: InputType.UNITS_NUMBER,
+          value: "10px",
+          defaultValue: "10px",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+        {
+          displayName: "Thumbnails",
+          propertyName: "useThumbnails",
+          inputType: InputType.CHECKBOX,
+          value: false,
+          defaultValue: false,
+        },
+        {
+          displayName: "Thumbnail size",
+          propertyName: "thumbnailSize",
+          inputType: InputType.UNITS_NUMBER,
+          value: "100%",
+          defaultValue: "100%",
+          placeholderText: "",
+          allowedUnits: ["%", "px", "em"],
+        },
+      ],
+    },
+
+    {
+      displayName: "Border",
+      type: FormType.GROUP,
+      propertyName: "hasBorder",
+      optional: true,
+      elements: [
+        {
+          displayName: "Border style",
+          propertyName: "borderStyle",
+          inputType: InputType.SELECT,
+          value: "solid",
+          defaultValue: "solid",
+          options: [
+            { label: "solid", value: "solid" },
+            { label: "dotted", value: "dotted" },
+            { label: "dashed", value: "dashed" },
+            { label: "double", value: "double" },
+            { label: "groove", value: "groove" },
+            { label: "ridge", value: "ridge" },
+            { label: "inset", value: "inset" },
+            { label: "outset", value: "outset" },
+            { label: "none", value: "none" },
+            { label: "hidden", value: "hidden" },
+          ],
+        },
+        {
+          displayName: "Border size",
+          propertyName: "borderSize",
+          inputType: InputType.BOX,
+          value: { common: "1px" },
+          defaultValue: { common: "1px" },
+        },
+        {
+          displayName: "Border color",
+          propertyName: "borderColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Border radius",
+          propertyName: "borderRadius",
+          inputType: InputType.CORNER_RADIUS,
+          value: { common: "0px" },
+          defaultValue: { common: "0px" },
+          helperText: "Applicable to Rect type only",
+        },
+      ],
+    },
+    {
+      displayName: "Background",
+      type: FormType.GROUP,
+      propertyName: "hasBackground",
+      optional: true,
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "backgroundType",
+          groups: [
+            {
+              groupName: "Solid",
+              groupValue: "solid",
+              elements: [
+                {
+                  displayName: "Background color",
+                  propertyName: "backgroundColor",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+            {
+              groupName: "Gradient",
+              groupValue: "gradient",
+              elements: [
+                {
+                  displayName: "Color 1",
+                  propertyName: "backgroundGradientColor1",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+                {
+                  displayName: "Color 2",
+                  propertyName: "backgroundGradientColor2",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  ];
+
+  const values: BulletsValues = {
+    //basic
+    type: "circle",
+    circleWidth: "15px",
+    rectHeight: "15px",
+    rectWidth: "15px",
+    gap: "10px",
+    useThumbnails: false,
+    thumbnailSize: "200%",
+    //border
+    hasBorder: true,
+    borderSize: { common: "3px" },
+    borderStyle: "solid",
+    borderColor: { r: 41, g: 41, b: 41, a: 1 },
+    borderRadius: { common: "0px" },
+    //background
+    hasBackground: true,
+    backgroundType: "solid",
+    backgroundColor: { r: 140, g: 140, b: 140, a: 1 },
+    backgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
+    backgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
+  };
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.BULLETS,
       properties,
       values,
     },
@@ -448,6 +769,7 @@ function createButtonObject(initialValue?: {
         },
       ],
     },
+
     {
       displayName: "Border",
       type: FormType.GROUP,
@@ -854,6 +1176,14 @@ function createImageObject(
         isPlaceholder: true,
       },
     },
+
+    {
+      displayName: "Use for thumbnail",
+      propertyName: "useForThumbnail",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
   ];
 
   /*   ...(commonProperties?.hasOverflowProperty
@@ -872,7 +1202,7 @@ function createImageObject(
         ]
       : []), */
 
-  const values = {
+  const values: ImageValues = {
     fit: {
       size: "fit",
       positionHorizontal: "center",
@@ -884,6 +1214,7 @@ function createImageObject(
       height: 300,
       isPlaceholder: !initialValue?.url,
     },
+    useForThumbnail: false,
   };
 
   return {

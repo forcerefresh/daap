@@ -5,7 +5,7 @@ import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
-import { delay, differenceWith, isEqual, once } from "lodash-es";
+import { cloneDeep, delay, differenceWith, isEqual, once } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import {
   createObject,
@@ -21,11 +21,17 @@ import {
   roundNumber,
 } from "../../utils/doom-utils/common";
 import {
+  ImageValues,
   TextProperties,
   TextPropertiesTuple,
   TextValues,
 } from "../../inputs/types";
-import { getButtonHtml, getTextHtml } from "../../export/export-html";
+import {
+  getBulletsHtml,
+  getButtonHtml,
+  getRichTextHtml,
+  getTextHtml,
+} from "../../export/export-html";
 import { load } from "webfontloader";
 import {
   BreakpointConfiguration,
@@ -678,6 +684,10 @@ export function addNewObject(
         postProcessButton(object, getState);
         break;
       }
+      case ObjectType.BULLETS: {
+        postProcessBullet(object, getState);
+        break;
+      }
       default: {
         break;
       }
@@ -729,7 +739,8 @@ function handleObjectUpdate(
   object.height = roundNumber(object.height!, 2);
 
   switch (object.type) {
-    case ObjectType.TEXT: {
+    case ObjectType.TEXT:
+    case ObjectType.RICH_TEXT: {
       handleTextUpdate(object, dispatch, getState);
       break;
     }
@@ -737,11 +748,117 @@ function handleObjectUpdate(
       handleButtonUpdate(object, dispatch, getState);
       break;
     }
+    case ObjectType.BULLETS: {
+      handleBulletsUpdate(object, dispatch, getState);
+      break;
+    }
+    case ObjectType.IMAGE: {
+      handleImageUpdate(object, dispatch, getState);
+      break;
+    }
     default: {
       dispatch(_updateObject(object));
     }
   }
 }
+
+function handleImageUpdate(
+  object: IObject,
+  dispatch: Dispatch,
+  getState: () => IStore
+): void {
+  // only one image object can have useForThumbnail
+  const object2 = postProcessImage(object, getState);
+  if (object2) {
+    const object2Clone = cloneDeep(object2);
+    (object2Clone.definition.values as ImageValues).useForThumbnail = false;
+    dispatch(_updateObject(object2Clone));
+  }
+
+  dispatch(_updateObject(object));
+}
+
+/* This method mutate object*/
+function postProcessImage(
+  object: IObject,
+  getState: () => IStore
+): IObject | undefined {
+  if (!(object.definition.values as ImageValues).useForThumbnail) {
+    return undefined;
+  }
+
+  const layer = getState().project.layers.layerById[object.layerId];
+  const slideId = layer.slideId;
+  const slide = getState().project.slides.slideById[slideId];
+  const layerById = getState().project.layers.layerById;
+
+  let objectIdsInSlide: any[] = [];
+  slide.layerIds.forEach((layerId) => {
+    objectIdsInSlide = [...objectIdsInSlide, ...layerById[layerId].objectIds];
+  });
+
+  let retObj: IObject | undefined;
+  const objectById = getState().project.objects.objectById;
+  objectIdsInSlide.forEach((objectId) => {
+    if (
+      objectId !== object.id &&
+      (objectById[objectId].definition.values as ImageValues).useForThumbnail
+    ) {
+      retObj = objectById[objectId];
+    }
+  });
+
+  return retObj;
+}
+
+function handleBulletsUpdate(
+  object: IObject,
+  dispatch: Dispatch,
+  getState: () => IStore
+): void {
+  postProcessBullet(object, getState);
+  dispatch(_updateObject(object));
+}
+
+/* This method mutate object*/
+function postProcessBullet(object: IObject, getState: () => IStore): void {
+  if (object.layout === "absolute") {
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+        (breakpointConfig) =>
+          breakpointConfig.type === getState().stage.selectedDevice
+      );
+    // todo: calculate for all not only for one
+    const calculatedObjectSize = calculateObjectSize(
+      object,
+      breakpointConfig!,
+      {
+        resetPosition: false,
+      }
+    );
+    const html = getBulletsHtml(
+      object,
+      {
+        ...calculatedObjectSize,
+        width: undefined,
+        height: undefined,
+      },
+      false,
+      [],
+      getState().project.slides.allSlides.length
+    );
+    const holder = document.createElement("div");
+    holder.style.overflow = "visible";
+    holder.innerHTML = html;
+    const el = holder.querySelector("div")! as HTMLDivElement;
+    //el.style.position = "relative";
+    document.body.appendChild(holder);
+    object.absoluteLayout!.width = el.offsetWidth!;
+    object.absoluteLayout!.height = el.offsetHeight!;
+    document.body.removeChild(holder);
+  }
+}
+
 /* This method mutate object*/
 function postProcessButton(object: IObject, getState: () => IStore): void {
   if (object.layout === "absolute") {
@@ -806,13 +923,22 @@ function handleTextUpdate(
         resetPosition: false,
       }
     );
-    const html = getTextHtml(object, calculatedObjectSize);
+    const html =
+      object.type === ObjectType.TEXT
+        ? getTextHtml(object, calculatedObjectSize)
+        : getRichTextHtml(object, calculatedObjectSize);
+
     const holder = document.createElement("div");
     holder.innerHTML = html;
-    holder.querySelector("p")!.style.position = "relative";
-    holder.querySelector("p")!.style.width = `${calculatedObjectSize.width}`;
+    const pEl = holder.firstChild! as HTMLElement;
+    pEl.style.position = "relative";
+    pEl.style.width = `${calculatedObjectSize.width}`;
+    pEl.style.height = `auto`;
     document.body.appendChild(holder);
-    object.height = holder.querySelector("p")?.offsetHeight;
+    object.height = pEl.offsetHeight;
+    if (object.absoluteLayout) {
+      object.absoluteLayout.height = pEl.offsetHeight;
+    }
     document.body.removeChild(holder);
   }
 

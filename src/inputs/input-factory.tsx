@@ -31,6 +31,7 @@ import { RelativePositionInputForm } from "./relative-position-input/relative-po
 import { SliderInputForm } from "./slider-input/slider-input";
 import { ButtonGroupInputForm } from "./buttonGroupInput/button-group-input";
 import { BoxInputForm } from "./box-input/box-input";
+import { RichTextAreaInputForm } from "./rich-textarea-input/rich-textarea-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -162,6 +163,11 @@ export function getInputForm<T>(
     }
     case InputType.TEXTAREA: {
       return <TextAreaInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
+    case InputType.RICH_TEXTAREA: {
+      return (
+        <RichTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
+      );
     }
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;

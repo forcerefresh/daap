@@ -17,6 +17,7 @@ function createCube(target: HTMLDivElement, peaces: number) {
 gsap.registerEffect({
   name: split,
   effect: function (targets: any, config: ISplitEffect) {
+    console.log(targets);
     const areaW = config.objectProperties?.width || 0;
     const areaH = config.objectProperties?.height || 0;
 

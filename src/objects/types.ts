@@ -1,13 +1,6 @@
-import { omit } from "lodash";
-import {
-  IColorInput,
-  INumberInput,
-  ITextInput,
-  ITransformOriginInput,
-} from "../inputs/types";
-
 export enum ObjectType {
   TEXT = "text",
+  RICH_TEXT = "rich_text",
   IMAGE = "image",
   VIDEO = "video",
   HTML = "html",
@@ -16,6 +9,7 @@ export enum ObjectType {
   SOURCE_IMAGE = "source_image",
   FRAME = "frame",
   BUTTON = "button",
+  BULLETS = "bullets",
 }
 
 export interface IDefinition {
