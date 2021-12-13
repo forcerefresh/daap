@@ -1,5 +1,6 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
+import { RGBColor } from "react-color";
 import {
   BulletsValues,
   ButtonValues,
@@ -7,7 +8,9 @@ import {
   IBoxValue,
   ICornerRadiusValue,
   ICoverPlacementValue,
+  IImageInputValue,
   ImageValues,
+  MultiImageValues,
   SourceImageValues,
   SvgValues,
   TextValues,
@@ -219,6 +222,8 @@ export function getObjectHtml(
       );
     case ObjectType.IMAGE:
       return getImageHtml(object, calculatedObjectSize);
+    case ObjectType.MULTI_IMAGE:
+      return getMultiImageHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.VIDEO:
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
@@ -291,8 +296,14 @@ export function getBulletsHtml(
   let style = "";
 
   // text properties
-  style += "width: " + buttonProperties.circleWidth + ";";
-  style += "height: " + buttonProperties.circleWidth + ";";
+  if (buttonProperties.type === "circle") {
+    style += "width: " + buttonProperties.circleWidth + ";";
+    style += "height: " + buttonProperties.circleWidth + ";";
+  } else {
+    style += "width: " + buttonProperties.rectWidth + ";";
+    style += "height: " + buttonProperties.rectHeight + ";";
+  }
+
   //
 
   if (buttonProperties.hasBackground) {
@@ -327,15 +338,9 @@ export function getBulletsHtml(
   if (buttonProperties.type === "circle") {
     style += "border-radius: 50%;";
   }
-  /*
-  if (buttonProperties.hasBoxShadow) {
-    const bsc = buttonProperties.boxShadowColor;
-    const bsInset = buttonProperties.boxShadowInset ? " inset" : "";
-    style += `box-shadow: ${buttonProperties.boxShadowDistanceX} ${buttonProperties.boxShadowDistanceY} ${buttonProperties.boxShadowBlur} ${buttonProperties.boxShadowSpread} rgba(${bsc?.r},${bsc?.g},${bsc?.b},${bsc?.a})${bsInset};`;
-  }
-*/
 
-  /*
+  style += `transition-duration: ${buttonProperties.hoverTransitionDuration}ms;`;
+
   // HOVER START >>>>
   let cssHoverStyle = "";
 
@@ -356,6 +361,10 @@ export function getBulletsHtml(
     //cssHoverStyle += "border-style: none;";
   }
 
+  if (buttonProperties.type === "circle") {
+    cssHoverStyle += "border-radius: 50%;";
+  }
+
   if (buttonProperties.hasHoverBackground) {
     switch (buttonProperties.hoverBackgroundType) {
       case "solid": {
@@ -373,8 +382,51 @@ export function getBulletsHtml(
   } else {
     //cssHoverStyle += `background: none;`;
   }
-*/
-  const cssHoverStyle = "";
+  // HOVER END <<
+
+  // ACTIVE START >>>>
+  let cssActiveStyle = "";
+
+  if (buttonProperties.hasActiveBorder) {
+    cssActiveStyle = addBorderBox(
+      cssActiveStyle,
+      buttonProperties.activeBorderSize
+    );
+
+    cssActiveStyle += `border-style: ${buttonProperties.activeBorderStyle};`;
+    const bhc = buttonProperties.activeBorderColor;
+    cssActiveStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
+    cssActiveStyle = addBorderRadius(
+      cssActiveStyle,
+      buttonProperties.activeBorderRadius
+    );
+  } else {
+    //cssActiveStyle += "border-style: none;";
+  }
+
+  if (buttonProperties.type === "circle") {
+    cssActiveStyle += "border-radius: 50%;";
+  }
+
+  if (buttonProperties.hasActiveBackground) {
+    switch (buttonProperties.activeBackgroundType) {
+      case "solid": {
+        const hbgc = buttonProperties.activeBackgroundColor;
+        cssActiveStyle += `background-color: rgba(${hbgc?.r},${hbgc?.g},${hbgc?.b},${hbgc?.a});`;
+        break;
+      }
+      case "gradient": {
+        const hbgc1 = buttonProperties.activeBackgroundGradientColor1;
+        const hbgc2 = buttonProperties.activeBackgroundGradientColor2;
+        cssActiveStyle += `background-image: linear-gradient(rgba(${hbgc1?.r},${hbgc1?.g},${hbgc1?.b},${hbgc1?.a}), rgba(${hbgc2?.r},${hbgc2?.g},${hbgc2?.b},${hbgc2?.a}));`;
+        break;
+      }
+    }
+  } else {
+    //cssHoverStyle += `background: none;`;
+  }
+  // ACTIVE END <<
+
   const css = `
   <style>
   .object-content-item-${object.id} {
@@ -393,18 +445,25 @@ export function getBulletsHtml(
   .object-content-item-${object.id}:hover {
     ${cssHoverStyle.replaceAll(";", " !important;")}
   }
+
+  .object-content-item-${object.id}.active {
+    ${cssActiveStyle.replaceAll(";", " !important;")}
+  }
+
   </style>`;
 
   let bulletsHtml = "";
   for (let i = 0; i < slidesCounter; i++) {
     bulletsHtml += `<div class="object-content-item-${object.id}">
-        ${thumbnailHtmlArr?.[i] ? thumbnailHtmlArr?.[i] : ""}
+        ${
+          buttonProperties.useThumbnails && thumbnailHtmlArr?.[i]
+            ? thumbnailHtmlArr?.[i]
+            : ""
+        }
       </div>`;
   }
   // HOVER END <<<
-  return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="position:absolute; display: flex;">
-    ${bulletsHtml}
-  </div>s
+  return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="position:absolute; display: flex;">${bulletsHtml}</div>
   `;
 }
 
@@ -478,6 +537,7 @@ export function getButtonHtml(
 
   style += "position: absolute;";
   style += "white-space: nowrap;";
+  style += `transition-duration: ${buttonProperties.hoverTransitionDuration}ms;`;
 
   // HOVER START >>>>
   let cssHoverStyle = "";
@@ -565,6 +625,60 @@ function getImageHtml(
   style += `background-position: ${aH} ${aV};`;
 
   return `<div class="object-content" style="${style}"></div>`;
+}
+
+function getMultiImageHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
+  const multiImageProperties = object.definition.values as MultiImageValues;
+  const url = multiImageProperties.urls[0];
+
+  if (url.isPlaceholder) {
+    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+  }
+
+  const coverPlacementValue = multiImageProperties.fit as ICoverPlacementValue;
+
+  let backgroundSize = coverPlacementValue.size as
+    | "cover"
+    | "fit"
+    | "100% 100%";
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  const aH = coverPlacementValue.positionHorizontal;
+  const aV = coverPlacementValue.positionVertical;
+
+  //let style = "";
+  //style += addCommonPropertiesToStyle(style, object);
+  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+  style += `background-repeat:no-repeat;`;
+  style += `background-size: ${backgroundSize};`;
+  style += `background-position: ${aH} ${aV};`;
+
+  let ret = "";
+  ret += `<div class="object-content" style="width: 100%; height: 100%;">`;
+  multiImageProperties.urls.forEach((url: IImageInputValue, idx: number) => {
+    let styleOne = style;
+    styleOne += `background-image:url('${url.url}');`;
+    styleOne += `position: absolute;`;
+    if (isPlayer) {
+    } else {
+      styleOne += `top: -${idx * 20}px;`;
+      styleOne += `left: ${idx * 20}px;`;
+      styleOne += `z-index: ${100 - idx};`;
+    }
+    ret += `<div class="object-content" style="${styleOne}"></div>`;
+  });
+  ret += `</div>`;
+  return ret;
 }
 
 export function getImageThumbnailHtml(object: IObject) {
@@ -712,12 +826,36 @@ function getSvgHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const imageProperties = object.definition.values as SvgValues;
+  const svgValues = object.definition.values as SvgValues;
 
-  if (imageProperties.svg) {
-    return imageProperties.svg;
+  const svgWidth = 24;
+  const svgHeight = 24;
+
+  const w = parseInt(calculatedObjectSize.width as string);
+  const h = parseInt(calculatedObjectSize.height as string);
+
+  let scaleX = 1;
+  let scaleY = 1;
+  scaleY = h / w;
+
+  const css = `
+  <style>
+  .object-content-${object.id}{
+    transform: scaleX(${scaleX}) scaleY(${scaleY});
+    transform-origin: top left;
   }
-  return ``;
+  .object-content-${object.id} svg {
+    fill: ${color2rgba(svgValues.fill)};
+    stroke: ${color2rgba(svgValues.stroke)};
+    width: 100%;
+    height: 100%;
+  }
+  </style>`;
+
+  //if (svgValues.svg) {
+  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg}</div>`;
+  //}
+  //return ``;
 }
 
 function getCanvasHtml(
@@ -801,4 +939,8 @@ function addBorderRadius(style: string, borderRadius: ICornerRadiusValue) {
       ";";
   }
   return style;
+}
+
+function color2rgba(c: RGBColor): string {
+  return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
 }

@@ -5,9 +5,25 @@ import { IStore } from "../../store/store";
 import css from "./MediaLibraryPanel.module.scss";
 import { Tab, Tabs } from "@blueprintjs/core";
 import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
+import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
+import { includes, noop } from "lodash-es";
+import { ObjectType } from "../../objects/types";
+
+export enum Panels {
+  Images = "images",
+  MyVectors = "myVectors",
+  Vectors = "vectors",
+}
 
 interface IMediaLibraryPanelProps {
+  panelsToShow?: Panels[];
+  addObject?: boolean;
+  onSelect?: (item: {
+    type: ObjectType;
+    initialValues: { [key: string]: any }[];
+  }) => void;
   onRequestClose: () => void;
+  className?: string;
 }
 
 export type IMediaLibraryPanelMergedProps = typeof mapDispatchToProps &
@@ -15,15 +31,44 @@ export type IMediaLibraryPanelMergedProps = typeof mapDispatchToProps &
   IMediaLibraryPanelProps;
 
 const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
+  const {
+    addObject = true,
+    onSelect = noop,
+    onRequestClose,
+    className,
+    panelsToShow = [Panels.Images, Panels.Vectors],
+  } = props;
   return (
-    <div className={cx("bp3-dark", css.mediaLibraryPanel)}>
+    <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
       <div>
-        <Tabs className={css.tabs}>
-          <Tab
-            id="project"
-            title="Images library"
-            panel={<ImagesLibraryPanel onRequestClose={props.onRequestClose} />}
-          />
+        <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
+          {includes(panelsToShow, Panels.Images) && (
+            <Tab
+              id="images"
+              title="Images library"
+              panel={
+                <ImagesLibraryPanel
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
+          {includes(panelsToShow, Panels.Vectors) && (
+            <Tab
+              id="Vector"
+              title="Vector library"
+              panel={
+                <VectorsLibraryPanel
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
+
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}
         </Tabs>

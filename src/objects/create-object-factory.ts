@@ -14,6 +14,8 @@ import {
   ImagePropertiesTuple,
   ImageValues,
   InputType,
+  MultiImagePropertiesTuple,
+  MultiImageValues,
   RichTextPropertiesTuple,
   RichTextValues,
   SourceImageProperties,
@@ -74,6 +76,14 @@ export function createObject(
       return {
         ...objectProps,
         ...createImageObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
+    case ObjectType.MULTI_IMAGE: {
+      return {
+        ...objectProps,
+        ...createMultiImageObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -226,7 +236,7 @@ function createCommonObject(
     absoluteLayout: {
       left: 100,
       top: 100,
-      width: 300,
+      width: 200,
       height: 200,
     },
     gridLayout: {
@@ -603,6 +613,206 @@ function createBulletsObject(initialValue?: {
         },
       ],
     },
+
+    {
+      displayName: "Hover border",
+      type: FormType.GROUP,
+      propertyName: "hasHoverBorder",
+      optional: true,
+      elements: [
+        {
+          displayName: "Hover border style",
+          propertyName: "hoverBorderStyle",
+          inputType: InputType.SELECT,
+          value: "solid",
+          defaultValue: "solid",
+          options: [
+            { label: "solid", value: "solid" },
+            { label: "dotted", value: "dotted" },
+            { label: "dashed", value: "dashed" },
+            { label: "double", value: "double" },
+            { label: "groove", value: "groove" },
+            { label: "ridge", value: "ridge" },
+            { label: "inset", value: "inset" },
+            { label: "outset", value: "outset" },
+            { label: "none", value: "none" },
+            { label: "hidden", value: "hidden" },
+          ],
+        },
+        {
+          displayName: "Border size",
+          propertyName: "hoverBorderSize",
+          inputType: InputType.BOX,
+          value: { common: "1px" },
+          defaultValue: { common: "1px" },
+        },
+        {
+          displayName: "Border color",
+          propertyName: "hoverBorderColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Border radius",
+          propertyName: "hoverBorderRadius",
+          inputType: InputType.CORNER_RADIUS,
+          value: { common: "5px" },
+          defaultValue: { common: "5px" },
+        },
+      ],
+    },
+    {
+      displayName: "Hover background",
+      type: FormType.GROUP,
+      propertyName: "hasHoverBackground",
+      optional: true,
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "hoverBackgroundType",
+          groups: [
+            {
+              groupName: "Solid",
+              groupValue: "solid",
+              elements: [
+                {
+                  displayName: "Background color",
+                  propertyName: "hoverBackgroundColor",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+            {
+              groupName: "Gradient",
+              groupValue: "gradient",
+              elements: [
+                {
+                  displayName: "Color 1",
+                  propertyName: "hoverBackgroundGradientColor1",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+                {
+                  displayName: "Color 2",
+                  propertyName: "hoverBackgroundGradientColor2",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      displayName: "Hover transition duration",
+      propertyName: "hoverTransitionDuration",
+      inputType: InputType.NUMBER,
+      value: 500,
+      defaultValue: 500,
+    },
+    {
+      displayName: "Active border",
+      type: FormType.GROUP,
+      propertyName: "hasActiveBorder",
+      optional: true,
+      elements: [
+        {
+          displayName: "Active border style",
+          propertyName: "activeBorderStyle",
+          inputType: InputType.SELECT,
+          value: "solid",
+          defaultValue: "solid",
+          options: [
+            { label: "solid", value: "solid" },
+            { label: "dotted", value: "dotted" },
+            { label: "dashed", value: "dashed" },
+            { label: "double", value: "double" },
+            { label: "groove", value: "groove" },
+            { label: "ridge", value: "ridge" },
+            { label: "inset", value: "inset" },
+            { label: "outset", value: "outset" },
+            { label: "none", value: "none" },
+            { label: "hidden", value: "hidden" },
+          ],
+        },
+        {
+          displayName: "Border size",
+          propertyName: "activeBorderSize",
+          inputType: InputType.BOX,
+          value: { common: "1px" },
+          defaultValue: { common: "1px" },
+        },
+        {
+          displayName: "Border color",
+          propertyName: "activeBorderColor",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+        {
+          displayName: "Border radius",
+          propertyName: "activeBorderRadius",
+          inputType: InputType.CORNER_RADIUS,
+          value: { common: "5px" },
+          defaultValue: { common: "5px" },
+        },
+      ],
+    },
+    {
+      displayName: "Active background",
+      type: FormType.GROUP,
+      propertyName: "hasActiveBackground",
+      optional: true,
+      elements: [
+        {
+          type: FormType.SWITCH_GROUP,
+          displayName: "",
+          propertyName: "activeBackgroundType",
+          groups: [
+            {
+              groupName: "Solid",
+              groupValue: "solid",
+              elements: [
+                {
+                  displayName: "Background color",
+                  propertyName: "activeBackgroundColor",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+            {
+              groupName: "Gradient",
+              groupValue: "gradient",
+              elements: [
+                {
+                  displayName: "Color 1",
+                  propertyName: "activeBackgroundGradientColor1",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+                {
+                  displayName: "Color 2",
+                  propertyName: "activeBackgroundGradientColor2",
+                  inputType: InputType.COLOR,
+                  value: { r: 255, g: 255, b: 255, a: 1 },
+                  defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
   ];
 
   const values: BulletsValues = {
@@ -626,6 +836,32 @@ function createBulletsObject(initialValue?: {
     backgroundColor: { r: 140, g: 140, b: 140, a: 1 },
     backgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
     backgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
+    //hover border
+    hasHoverBorder: false,
+    hoverBorderSize: { common: "1px" },
+    hoverBorderStyle: "solid",
+    hoverBorderColor: { r: 0, g: 0, b: 0, a: 1 },
+    hoverBorderRadius: { common: "5px" },
+    //hover background
+    hasHoverBackground: false,
+    hoverBackgroundType: "solid",
+    hoverBackgroundColor: { r: 99, g: 99, b: 99, a: 1 },
+    hoverBackgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
+    hoverBackgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
+    //hover transition
+    hoverTransitionDuration: 100,
+    //active border
+    hasActiveBorder: false,
+    activeBorderSize: { common: "1px" },
+    activeBorderStyle: "solid",
+    activeBorderColor: { r: 0, g: 0, b: 0, a: 1 },
+    activeBorderRadius: { common: "5px" },
+    //hover background
+    hasActiveBackground: false,
+    activeBackgroundType: "solid",
+    activeBackgroundColor: { r: 99, g: 99, b: 99, a: 1 },
+    activeBackgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
+    activeBackgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
   };
 
   return {
@@ -1064,6 +1300,13 @@ function createButtonObject(initialValue?: {
         },
       ],
     },
+    {
+      displayName: "Hover transition duration",
+      propertyName: "hoverTransitionDuration",
+      inputType: InputType.NUMBER,
+      value: 500,
+      defaultValue: 500,
+    },
   ];
 
   const values: ButtonValues = {
@@ -1120,6 +1363,8 @@ function createButtonObject(initialValue?: {
     hoverBackgroundColor: { r: 99, g: 99, b: 99, a: 1 },
     hoverBackgroundGradientColor1: { r: 0, g: 255, b: 255, a: 1 },
     hoverBackgroundGradientColor2: { r: 255, g: 255, b: 0, a: 1 },
+    //hover transition
+    hoverTransitionDuration: 100,
   };
 
   return {
@@ -1140,7 +1385,10 @@ function createImageObject(
   commonProperties?: {
     hasOverflowProperty: boolean;
   }
-): Omit<IObject<ImageProperties>, keyof ICommonObjectProperties | "layerId"> {
+): Omit<
+  IObject<ImagePropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
   const object = createCommonObject(ObjectType.IMAGE);
 
   const properties: ImagePropertiesTuple = [
@@ -1160,7 +1408,7 @@ function createImageObject(
       },
     },
     {
-      displayName: "Image url",
+      displayName: "Path",
       propertyName: "url",
       inputType: InputType.IMAGE,
       value: {
@@ -1186,22 +1434,6 @@ function createImageObject(
     },
   ];
 
-  /*   ...(commonProperties?.hasOverflowProperty
-      ? [
-          {
-            displayName: "Overflow",
-            propertyName: "overflow",
-            inputType: InputType.SELECT,
-            value: "visible",
-            defaultValue: "visible",
-            options: [
-              { value: "visible", label: "visible" },
-              { value: "hidden", label: "hidden" },
-            ],
-          },
-        ]
-      : []), */
-
   const values: ImageValues = {
     fit: {
       size: "fit",
@@ -1222,6 +1454,89 @@ function createImageObject(
     definition: {
       id: uuid(),
       type: ObjectType.IMAGE,
+      properties,
+      values,
+    },
+  };
+}
+
+function createMultiImageObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<MultiImagePropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.MULTI_IMAGE);
+
+  const properties: MultiImagePropertiesTuple = [
+    {
+      inputType: InputType.COVER_LAYOUT,
+      displayName: "Fit",
+      propertyName: "fit",
+      value: {
+        size: "fit",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      defaultValue: {
+        size: "fit",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+    },
+    {
+      displayName: "Paths",
+      propertyName: "urls",
+      inputType: InputType.MULTI_IMAGE,
+      value: initialValue?.urls
+        ? initialValue?.urls
+        : [
+            {
+              url: "",
+              width: 300,
+              height: 300,
+              isPlaceholder: true,
+            },
+          ],
+      defaultValue: [
+        {
+          url: "",
+          width: 300,
+          height: 300,
+          isPlaceholder: true,
+        },
+      ],
+    },
+  ];
+
+  const values: MultiImageValues = {
+    fit: {
+      size: "fit",
+      positionHorizontal: "center",
+      positionVertical: "center",
+    },
+    urls: initialValue?.urls
+      ? initialValue?.urls
+      : [
+          {
+            url: "",
+            width: 300,
+            height: 300,
+            isPlaceholder: true,
+          },
+        ],
+  };
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.MULTI_IMAGE,
       properties,
       values,
     },
@@ -1360,7 +1675,7 @@ function createSvgObject(
     {
       displayName: "SVG code",
       propertyName: "svg",
-      inputType: InputType.TEXTAREA,
+      inputType: InputType.SVG_TEXTAREA,
       value: `<svg height="100" width="100">
 <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 </svg>`,
@@ -1368,12 +1683,31 @@ function createSvgObject(
 <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
 </svg>`,
     },
+
+    {
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR,
+      value: { r: 255, g: 255, b: 255, a: 1 },
+      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+    },
+    {
+      displayName: "Stroke",
+      propertyName: "stroke",
+      inputType: InputType.COLOR,
+      value: { r: 0, g: 0, b: 0, a: 1 },
+      defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+    },
   ];
 
   const values: SvgValues = {
-    svg: `<svg height="100" width="100">
+    svg: initialValue?.svg
+      ? initialValue.svg
+      : `<svg height="100" width="100">
     <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
     </svg>`,
+    fill: { r: 255, g: 255, b: 255, a: 1 },
+    stroke: { r: 0, g: 0, b: 0, a: 0 },
   };
 
   return {

@@ -32,6 +32,8 @@ import { SliderInputForm } from "./slider-input/slider-input";
 import { ButtonGroupInputForm } from "./buttonGroupInput/button-group-input";
 import { BoxInputForm } from "./box-input/box-input";
 import { RichTextAreaInputForm } from "./rich-textarea-input/rich-textarea-input";
+import { SVGTextAreaInputForm } from "./svg-textarea-input/svg-textarea-input";
+import { MultiImageInputForm } from "./multi-image-input/multi-image-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -164,6 +166,11 @@ export function getInputForm<T>(
     case InputType.TEXTAREA: {
       return <TextAreaInputForm key={key} {...inputProps} onInput={onChange} />;
     }
+    case InputType.SVG_TEXTAREA: {
+      return (
+        <SVGTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
+      );
+    }
     case InputType.RICH_TEXTAREA: {
       return (
         <RichTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
@@ -172,7 +179,11 @@ export function getInputForm<T>(
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
     }
-
+    case InputType.MULTI_IMAGE: {
+      return (
+        <MultiImageInputForm key={key} {...inputProps} onChange={onChange} />
+      );
+    }
     case InputType.VIDEO: {
       return <VideoInputForm key={key} {...inputProps} onChange={onChange} />;
     }

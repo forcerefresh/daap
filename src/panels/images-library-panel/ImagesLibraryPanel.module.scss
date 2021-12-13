@@ -51,5 +51,13 @@
 }
 
 .selectedImage {
+  border: 8px solid rgba(99, 99, 99, 0.5) !important;
   box-shadow: 0 0 0 1px #137cbd;
+}
+
+.image {
+  border: 8px solid transparent;
+  &:hover {
+    border: 8px solid rgba(99, 99, 99, 0.5);
+  }
 }

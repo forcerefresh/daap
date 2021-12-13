@@ -17,7 +17,8 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, uniq } from "lodash-es";
+import { debounce, noop, uniq } from "lodash-es";
+import classnames from "classnames";
 
 interface ImageItem {
   url: string;
@@ -44,6 +45,11 @@ interface ImageData {
 }
 
 interface IMediaLibraryPanelProps {
+  addObject?: boolean;
+  onSelect?: (item: {
+    type: ObjectType;
+    initialValues: { [key: string]: any }[];
+  }) => void;
   onRequestClose: () => void;
 }
 
@@ -52,7 +58,13 @@ export type IImagesPanelMergedProps = typeof mapDispatchToProps &
   IMediaLibraryPanelProps;
 
 const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
-  const { activeLayerId, _addNewObject, onRequestClose } = props;
+  const {
+    activeLayerId,
+    _addNewObject,
+    onRequestClose,
+    addObject = true,
+    onSelect = noop,
+  } = props;
 
   const [images, setImages] = useState<ImageData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -254,7 +266,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   isOpen={selectedImage === idx}
                 >
                   <img
-                    className={selectedImage === idx ? css.selectedImage : ""}
+                    className={classnames(css.image, {
+                      [css.selectedImage]: selectedImage === idx,
+                    })}
                     width="200px"
                     key={idx}
                     src={`${process.env.REACT_APP_ASSETS_BASE_URL}/${image.images.small.url}`}
@@ -294,14 +308,41 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           </p>
                         )
                       )}
-                      <Button
-                        onClick={() => {
-                          if (activeLayerId) {
-                            _addNewObject(
-                              activeLayerId,
-                              ObjectType.IMAGE, //cover
-                              {},
-                              {
+                      {addObject && (
+                        <Button
+                          onClick={() => {
+                            if (activeLayerId) {
+                              if (addObject) {
+                                _addNewObject(
+                                  activeLayerId,
+                                  ObjectType.IMAGE, //cover
+                                  {},
+                                  {
+                                    url: `${
+                                      process.env.REACT_APP_ASSETS_BASE_URL
+                                    }/${
+                                      (image?.images as any)[selectedResolution]
+                                        ?.url
+                                    }`,
+                                    //placement: getDefaultCoveragePlacement,
+                                  }
+                                );
+                              }
+
+                              onRequestClose();
+                            }
+                          }}
+                        >
+                          Cover image
+                        </Button>
+                      )}
+
+                      {!addObject && (
+                        <Button
+                          onClick={() => {
+                            onSelect?.({
+                              type: ObjectType.IMAGE,
+                              initialValues: {
                                 url: `${
                                   process.env.REACT_APP_ASSETS_BASE_URL
                                 }/${
@@ -309,45 +350,14 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     ?.url
                                 }`,
                                 //placement: getDefaultCoveragePlacement,
-                              }
-                            );
-                            onRequestClose();
-                          }
-                        }}
-                      >
-                        Cover image
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          if (activeLayerId) {
-                            _addNewObject(
-                              activeLayerId,
-                              ObjectType.IMAGE,
-                              {
-                                left: 0,
-                                top: 0,
-                                width: (image?.images as any)[
-                                  selectedResolution
-                                ]?.size.width,
-                                height: (image?.images as any)[
-                                  selectedResolution
-                                ]?.size.height,
                               },
-                              {
-                                url: `${
-                                  process.env.REACT_APP_ASSETS_BASE_URL
-                                }/${
-                                  (image?.images as any)[selectedResolution]
-                                    ?.url
-                                }`,
-                              }
-                            );
+                            });
                             onRequestClose();
-                          }
-                        }}
-                      >
-                        Block image
-                      </Button>
+                          }}
+                        >
+                          Select image
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </Popover>

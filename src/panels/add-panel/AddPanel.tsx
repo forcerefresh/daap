@@ -187,6 +187,32 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>IMAGE</h3>
           <p>Position image relative or absolute</p>
         </Card>
+
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.MULTI_IMAGE, {
+                left: (documentSize.width - 300) / 2,
+                top: (documentSize.height - 300) / 2,
+                width: 300,
+                height: 300,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <Icon
+            icon="media"
+            iconSize={36}
+            color="gray"
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>MULTIPLE IMAGES</h3>
+          <p>Add multiple images as one object</p>
+        </Card>
       </div>
 
       <div>

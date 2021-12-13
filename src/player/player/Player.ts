@@ -81,12 +81,31 @@ export class Player {
     const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
     bulletHolders.forEach((holderEL) => {
       holderEL.childNodes.forEach((el, index: number) => {
+        console.log(el);
         el.addEventListener("click", () => {
           console.log(index);
           this.manualPlaySlide(index);
         });
       });
     });
+  }
+
+  private addClassToBullet(rootDiv: HTMLDivElement, idx: number) {
+    const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
+    bulletHolders.forEach((holderEL) => {
+      holderEL.childNodes.forEach((el, index: number) => {
+        //console.log(el);
+        (el as HTMLDivElement).classList.remove("active");
+        if (index === idx) {
+          (el as HTMLDivElement).classList.add("active");
+        }
+      });
+    });
+
+    let allElements = Array.from(document.querySelectorAll(".widget.hover"));
+    for (let element of allElements) {
+      element.classList.remove("hover");
+    }
   }
   public onUpdate(onUpdateCallback: any) {
     console.log(onUpdateCallback);
@@ -143,6 +162,8 @@ export class Player {
   }
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
+    this.addClassToBullet(this.rootDiv, slideIdx);
+
     this.rootDiv.style.display = "block";
     if (!this.normalSlideDataArr?.[slideIdx]) {
       //slide does not exist

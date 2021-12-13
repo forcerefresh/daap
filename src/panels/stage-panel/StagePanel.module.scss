@@ -46,6 +46,7 @@
 
 .selectionInfo {
   position: absolute;
+  z-index: 100;
   top: -24px;
   height: 24px;
   width: max-content;

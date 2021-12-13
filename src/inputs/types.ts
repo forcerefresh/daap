@@ -12,6 +12,7 @@ export enum InputType {
   NUMERIC_TIMELINE = "numeric_timeline",
   TEXT = "text",
   TEXTAREA = "textarea",
+  SVG_TEXTAREA = "svg_textarea",
   RICH_TEXTAREA = "rich_textarea",
   SELECT = "select",
   COLOR = "color",
@@ -19,6 +20,7 @@ export enum InputType {
   SPLIT = "split",
   TRANSFORM = "transform",
   IMAGE = "image",
+  MULTI_IMAGE = "multi_image",
   VIDEO = "video",
   CHECKBOX = "checkbox",
   FONT_SELECT = "font_select",
@@ -265,6 +267,17 @@ export interface ITextAreaInput<T = string> {
   defaultValue: string;
   inputProps?: { disableDebounce?: boolean; rows?: number };
 }
+
+export interface ISVGTextAreaInput<T = string> {
+  inputType: InputType.SVG_TEXTAREA;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: string;
+  defaultValue: string;
+  inputProps?: { disableDebounce?: boolean; rows?: number };
+}
+
 export interface IRichTextAreaInput<T = string> {
   inputType: InputType.RICH_TEXTAREA;
   displayName: string;
@@ -297,6 +310,15 @@ export interface IImageInput<T = string> {
   propertyName: T;
   value: IImageInputValue;
   defaultValue: IImageInputValue;
+}
+
+export interface IMultiImageInput<T = string> {
+  inputType: InputType.MULTI_IMAGE;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IImageInputValue[];
+  defaultValue: IImageInputValue[];
 }
 
 export interface IVideoInput<T = string> {
@@ -540,6 +562,16 @@ export type ImagePropertiesTuple = [
   ICheckboxInput<"useForThumbnail">
 ];
 
+export interface MultiImageValues {
+  fit: ICoverPlacementValue;
+  urls: IImageInputValue[];
+}
+
+export type MultiImagePropertiesTuple = [
+  ICoverPlacementInput<"fit">,
+  IMultiImageInput<"urls">
+];
+
 export interface CommonObjectValues {
   overflow?: boolean;
 }
@@ -571,6 +603,32 @@ export interface BulletsValues extends CommonObjectValues {
   backgroundColor: RGBColor;
   backgroundGradientColor1: RGBColor;
   backgroundGradientColor2: RGBColor;
+  //hover border
+  hasHoverBorder: boolean;
+  hoverBorderSize: IBoxValue;
+  hoverBorderStyle: string;
+  hoverBorderColor: RGBColor;
+  hoverBorderRadius: ICornerRadiusValue;
+  //hover background
+  hasHoverBackground: boolean;
+  hoverBackgroundType: "solid" | "gradient";
+  hoverBackgroundColor: RGBColor;
+  hoverBackgroundGradientColor1: RGBColor;
+  hoverBackgroundGradientColor2: RGBColor;
+  // transition duration
+  hoverTransitionDuration: number;
+  //active border
+  hasActiveBorder: boolean;
+  activeBorderSize: IBoxValue;
+  activeBorderStyle: string;
+  activeBorderColor: RGBColor;
+  activeBorderRadius: ICornerRadiusValue;
+  //active background
+  hasActiveBackground: boolean;
+  activeBackgroundType: "solid" | "gradient";
+  activeBackgroundColor: RGBColor;
+  activeBackgroundGradientColor1: RGBColor;
+  activeBackgroundGradientColor2: RGBColor;
 }
 
 export type BulletsPropertiesTuple = [
@@ -609,6 +667,55 @@ export type BulletsPropertiesTuple = [
             [
               IColorInput<"backgroundGradientColor1">,
               IColorInput<"backgroundGradientColor2">
+            ]
+          >
+        ]
+      >
+    ]
+  >,
+  IFormGroupItem<
+    [
+      ISelectInput<"hoverBorderStyle">,
+      IBoxInput<"hoverBorderSize">,
+      IColorInput<"hoverBorderColor">,
+      ICornerRadiusInput<"hoverBorderRadius">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "hoverBackgroundType",
+        [
+          IFormSwitchGroup<[IColorInput<"hoverBackgroundColor">]>,
+          IFormSwitchGroup<
+            [
+              IColorInput<"hoverBackgroundGradientColor1">,
+              IColorInput<"hoverBackgroundGradientColor2">
+            ]
+          >
+        ]
+      >
+    ]
+  >,
+  INumberInput<"hoverTransitionDuration">,
+  IFormGroupItem<
+    [
+      ISelectInput<"activeBorderStyle">,
+      IBoxInput<"activeBorderSize">,
+      IColorInput<"activeBorderColor">,
+      ICornerRadiusInput<"activeBorderRadius">
+    ]
+  >,
+  IFormGroupItem<
+    [
+      IFormSwitchGroupItem<
+        "activeBackgroundType",
+        [
+          IFormSwitchGroup<[IColorInput<"activeBackgroundColor">]>,
+          IFormSwitchGroup<
+            [
+              IColorInput<"activeBackgroundGradientColor1">,
+              IColorInput<"activeBackgroundGradientColor2">
             ]
           >
         ]
@@ -668,6 +775,8 @@ export interface ButtonValues extends CommonObjectValues {
   hoverBackgroundColor: RGBColor;
   hoverBackgroundGradientColor1: RGBColor;
   hoverBackgroundGradientColor2: RGBColor;
+  // transition duration
+  hoverTransitionDuration: number;
 }
 
 export type ButtonPropertiesTuple = [
@@ -758,7 +867,8 @@ export type ButtonPropertiesTuple = [
         ]
       >
     ]
-  >
+  >,
+  INumberInput<"hoverTransitionDuration">
 ];
 
 export interface ISliderInput {
@@ -852,9 +962,15 @@ export interface SvgProperties {
 
 export interface SvgValues {
   svg: string;
+  fill: RGBColor;
+  stroke: RGBColor;
 }
 
-export type SvgPropertiesTuple = [ITextAreaInput<"svg">];
+export type SvgPropertiesTuple = [
+  ISVGTextAreaInput<"svg">,
+  IColorInput<"fill">,
+  IColorInput<"stroke">
+];
 
 export interface HtmlProperties {
   html: ITextAreaInput;

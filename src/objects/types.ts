@@ -2,6 +2,7 @@ export enum ObjectType {
   TEXT = "text",
   RICH_TEXT = "rich_text",
   IMAGE = "image",
+  MULTI_IMAGE = "multi_image",
   VIDEO = "video",
   HTML = "html",
   SVG = "svg",
