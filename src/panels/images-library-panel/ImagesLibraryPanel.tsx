@@ -19,6 +19,7 @@ import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, noop, uniq } from "lodash-es";
 import classnames from "classnames";
+import { SelectionType } from "../media-library/MediaLibraryPanel";
 
 interface ImageItem {
   url: string;
@@ -45,6 +46,7 @@ interface ImageData {
 }
 
 interface IMediaLibraryPanelProps {
+  selectionType?: SelectionType;
   addObject?: boolean;
   onSelect?: (item: {
     type: ObjectType;
@@ -59,6 +61,7 @@ export type IImagesPanelMergedProps = typeof mapDispatchToProps &
 
 const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const {
+    selectionType = SelectionType.Single,
     activeLayerId,
     _addNewObject,
     onRequestClose,
@@ -174,7 +177,38 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     return null;
   };
 
-  console.log(process.env);
+  const [selection, setSelection] = useState<any[]>([]);
+  const addToSelection = (data: any) => {
+    setSelection([...selection, data]);
+  };
+
+  const renderSelectedImage = (image: any, idx: number) => {
+    return (
+      <div className={css.selectionImageHolder}>
+        <div className={css.removeSelection}>
+          <Button
+            onClick={(event: any) => {
+              event.stopPropagation();
+              const newSelection = [...selection];
+              newSelection.splice(idx, 1);
+              setSelection(newSelection);
+            }}
+            className={css.deleteLayer}
+            small={true}
+            icon="delete"
+          ></Button>
+        </div>
+        <img
+          className={css.selectionImage}
+          key={image + idx}
+          src={`${image.url}`}
+          alt=""
+          onClick={(e) => {}}
+        />
+      </div>
+    );
+  };
+
   return (
     <div
       className={css.imageLibraryPanel}
@@ -223,8 +257,40 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           </Tag>
         ))}
       </div>
+      {selectionType === SelectionType.Multiple && (
+        <div className={css.selectionSectionHolder}>
+          <div className={css.selectionSection}>
+            {selection.map((sel, idx) => renderSelectedImage(sel, idx))}
+            {selection.length === 0 && (
+              <div className={css.emptySelection}>Image selection is empty</div>
+            )}
+          </div>
+          <div className={css.selectionActions}>
+            {addObject && (
+              <Button intent={"primary"} disabled={selection.length === 0}>
+                Add multi image
+              </Button>
+            )}
+            <br />
+            {!addObject && (
+              <Button
+                intent={"success"}
+                disabled={selection.length === 0}
+                onClick={() => {
+                  onSelect(selection);
+                  onRequestClose();
+                }}
+              >
+                Add selected images
+              </Button>
+            )}
+          </div>
+        </div>
+      )}
       <div
-        className={css.mainSection}
+        className={classnames(css.mainSection, {
+          [css.mainSectionMultiple]: selectionType === SelectionType.Multiple,
+        })}
         id="mediaHolder"
         onScroll={() => {
           setSelectedImage(-1);
@@ -308,7 +374,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           </p>
                         )
                       )}
-                      {addObject && (
+
+                      {/* Create new object*/}
+                      {addObject && selectionType === SelectionType.Single && (
                         <Button
                           onClick={() => {
                             if (activeLayerId) {
@@ -333,11 +401,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             }
                           }}
                         >
-                          Cover image
+                          Add image to stage
                         </Button>
                       )}
 
-                      {!addObject && (
+                      {!addObject && selectionType === SelectionType.Single && (
                         <Button
                           onClick={() => {
                             onSelect?.({
@@ -356,6 +424,22 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           }}
                         >
                           Select image
+                        </Button>
+                      )}
+
+                      {selectionType === SelectionType.Multiple && (
+                        <Button
+                          onClick={() => {
+                            addToSelection({
+                              url: `${process.env.REACT_APP_ASSETS_BASE_URL}/${
+                                (image?.images as any)[selectedResolution]?.url
+                              }`,
+                              //placement: getDefaultCoveragePlacement,
+                            });
+                            setSelectedImage(-1);
+                          }}
+                        >
+                          Add image to selection
                         </Button>
                       )}
                     </div>

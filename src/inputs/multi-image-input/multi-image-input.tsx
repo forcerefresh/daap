@@ -10,6 +10,7 @@ import { cloneDeep, noop } from "lodash-es";
 import React, { useRef, useState } from "react";
 import MediaLibraryPanel, {
   Panels,
+  SelectionType,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IImageInputValue, IMultiImageInput, IUpdateInput } from "../types";
@@ -21,12 +22,15 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
   const { displayName, value, onChange = noop } = props;
 
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [multiSelectLibraryOpen, setMultiSelectLibraryOpen] = useState(false);
+
   const [currentIndex, setCurrentIndex] = useState(-1);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
   const handleClickOutside = () => {
     setLibraryOpen(false);
+    setMultiSelectLibraryOpen(false);
   };
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
@@ -36,17 +40,44 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
 
   const renderAddBtn = () => {
     return (
-      <Button
-        className={css.addButton}
+      <Popover
+        interactionKind={PopoverInteractionKind.CLICK}
+        position={Position.LEFT}
+        modifiers={{ preventOverflow: { enabled: true } }}
+        boundary={"window"}
+        usePortal={true}
         minimal
-        onClick={() => {
-          onChange([...value, { url: "", isPlaceholder: true }]);
-        }}
-        small={true}
-        icon="add"
+        popoverClassName={css.mediaLibraryPanelPopup}
+        isOpen={multiSelectLibraryOpen}
       >
-        Add image
-      </Button>
+        <Button
+          small
+          minimal
+          className={css.addImagesButton}
+          icon={"folder-open"}
+          onClick={() => {
+            setMultiSelectLibraryOpen(true);
+          }}
+        >
+          Add images
+        </Button>
+        <div ref={sharedRef}>
+          <MediaLibraryPanel
+            selectionType={SelectionType.Multiple}
+            onRequestClose={() => {
+              setMultiSelectLibraryOpen(false);
+            }}
+            className={css.mediaLibraryPanel}
+            addObject={false}
+            onSelect={(items) => {
+              const newValue = [...value, ...items];
+              onChange(newValue);
+              setLibraryOpen(false);
+            }}
+            panelsToShow={[Panels.Images]}
+          />
+        </div>
+      </Popover>
     );
   };
 
@@ -101,18 +132,17 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
           />
         </div>
       </Popover>
-      {value.length > 1 && (
-        <Button
-          className={css.deleteColorBtn}
-          minimal
-          onClick={() => {
-            value.splice(idx, 1);
-            onChange(value);
-          }}
-          small={true}
-          icon="delete"
-        ></Button>
-      )}
+
+      <Button
+        className={css.deleteColorBtn}
+        minimal
+        onClick={() => {
+          value.splice(idx, 1);
+          onChange(value);
+        }}
+        small={true}
+        icon="delete"
+      ></Button>
     </div>
   );
 

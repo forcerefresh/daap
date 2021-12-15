@@ -10,18 +10,29 @@ import { includes, noop } from "lodash-es";
 import { ObjectType } from "../../objects/types";
 
 export enum Panels {
+  MyImages = "myImages",
   Images = "images",
   MyVectors = "myVectors",
   Vectors = "vectors",
 }
 
+export enum SelectionType {
+  Single = "single",
+  Multiple = "multiple",
+}
+
 interface IMediaLibraryPanelProps {
+  selectionType?: SelectionType;
   panelsToShow?: Panels[];
   addObject?: boolean;
-  onSelect?: (item: {
-    type: ObjectType;
-    initialValues: { [key: string]: any }[];
-  }) => void;
+  onSelect?: (
+    item:
+      | {
+          type: ObjectType;
+          initialValues: { [key: string]: any }[];
+        }
+      | any
+  ) => void;
   onRequestClose: () => void;
   className?: string;
 }
@@ -32,6 +43,7 @@ export type IMediaLibraryPanelMergedProps = typeof mapDispatchToProps &
 
 const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const {
+    selectionType = SelectionType.Single,
     addObject = true,
     onSelect = noop,
     onRequestClose,
@@ -48,6 +60,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="Images library"
               panel={
                 <ImagesLibraryPanel
+                  selectionType={selectionType}
                   onRequestClose={onRequestClose}
                   addObject={addObject}
                   onSelect={onSelect}

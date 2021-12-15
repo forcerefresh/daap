@@ -633,10 +633,10 @@ function getMultiImageHtml(
   isPlayer: boolean
 ) {
   const multiImageProperties = object.definition.values as MultiImageValues;
-  const url = multiImageProperties.urls[0];
+  //const url = multiImageProperties.urls[0];
 
-  if (url.isPlaceholder) {
-    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
+  if (multiImageProperties.urls.length === 0) {
+    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">MULTI IMAGE<br/>PLACEHOLDER</div>`;
   }
 
   const coverPlacementValue = multiImageProperties.fit as ICoverPlacementValue;

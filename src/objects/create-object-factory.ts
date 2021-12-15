@@ -1493,24 +1493,8 @@ function createMultiImageObject(
       displayName: "Paths",
       propertyName: "urls",
       inputType: InputType.MULTI_IMAGE,
-      value: initialValue?.urls
-        ? initialValue?.urls
-        : [
-            {
-              url: "",
-              width: 300,
-              height: 300,
-              isPlaceholder: true,
-            },
-          ],
-      defaultValue: [
-        {
-          url: "",
-          width: 300,
-          height: 300,
-          isPlaceholder: true,
-        },
-      ],
+      value: initialValue?.urls ? initialValue?.urls : [],
+      defaultValue: [],
     },
   ];
 
@@ -1520,16 +1504,7 @@ function createMultiImageObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    urls: initialValue?.urls
-      ? initialValue?.urls
-      : [
-          {
-            url: "",
-            width: 300,
-            height: 300,
-            isPlaceholder: true,
-          },
-        ],
+    urls: initialValue?.urls ? initialValue?.urls : [],
   };
 
   return {

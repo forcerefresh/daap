@@ -62,7 +62,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
 
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
-        position={Position.RIGHT}
+        position={Position.LEFT}
         modifiers={{ preventOverflow: { enabled: true } }}
         boundary={"window"}
         usePortal={true}

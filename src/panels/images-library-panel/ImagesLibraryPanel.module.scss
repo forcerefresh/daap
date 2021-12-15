@@ -24,6 +24,26 @@
   }
 }
 
+.selectionSectionHolder {
+  display: flex;
+}
+
+.selectionSection {
+  min-height: 80px;
+  margin: 10px 0px;
+  overflow-x: auto;
+  white-space: nowrap;
+  overflow-y: hidden;
+  flex-grow: 1;
+}
+.selectionActions {
+  min-width: 200px;
+  padding: 10px;
+}
+.mainSectionMultiple {
+  height: calc(100vh - 410px);
+}
+
 .mediaHolder {
   //height: 2000px;
   //background-color: darkcyan;
@@ -60,4 +80,34 @@
   &:hover {
     border: 8px solid rgba(99, 99, 99, 0.5);
   }
+}
+
+.selectionImageHolder {
+  position: relative;
+  display: inline-block;
+}
+
+.removeSelection {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  :global {
+    .bp3-icon-delete {
+      color: #ff5151 !important;
+    }
+  }
+}
+
+.selectionImageHolder:hover > .removeSelection {
+  display: block;
+}
+
+.selectionImage {
+  height: 80px;
+  margin: 0 10px;
+}
+
+.emptySelection {
+  padding: 30px;
 }
