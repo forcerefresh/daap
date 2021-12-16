@@ -2,6 +2,7 @@ import { forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
+  ArrowValues,
   BulletsValues,
   ButtonValues,
   CanvasValues,
@@ -228,6 +229,8 @@ export function getObjectHtml(
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
       return getSvgHtml(object, calculatedObjectSize);
+    case ObjectType.ARROW:
+      return getArrowHtml(object, calculatedObjectSize);
     case ObjectType.CANVAS:
       return getCanvasHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.BUTTON:
@@ -848,6 +851,43 @@ function getSvgHtml(
     fill: ${color2rgba(svgValues.fill)};
     stroke: ${color2rgba(svgValues.stroke)};
     width: 100%;
+    height: 100%;
+  }
+  </style>`;
+
+  //if (svgValues.svg) {
+  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg}</div>`;
+  //}
+  //return ``;
+}
+
+function getArrowHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties
+) {
+  const svgValues = object.definition.values as ArrowValues;
+
+  const svgWidth = 24;
+  const svgHeight = 24;
+
+  const w = parseInt(calculatedObjectSize.width as string);
+  const h = parseInt(calculatedObjectSize.height as string);
+
+  let scaleX = 1;
+  let scaleY = 1;
+  scaleY = svgValues.keepAspectRatio ? 1 : h / w;
+
+  const css = `
+  <style>
+  .object-content-${object.id}{
+    transform: scaleX(${scaleX}) scaleY(${scaleY});
+    transform-origin: top left;
+    ${svgValues.keepAspectRatio ? "width:100%;height:100%;" : ""}
+  }
+  .object-content-${object.id} svg {
+    fill: ${color2rgba(svgValues.fill)};
+    stroke: ${color2rgba(svgValues.stroke)};
+    width: 100%; 
     height: 100%;
   }
   </style>`;

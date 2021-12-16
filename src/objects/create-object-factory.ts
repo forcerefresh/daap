@@ -1,5 +1,7 @@
 import { v4 as uuid } from "uuid";
 import {
+  ArrowPropertiesTuple,
+  ArrowValues,
   BulletsPropertiesTuple,
   BulletsValues,
   ButtonPropertiesTuple,
@@ -100,6 +102,12 @@ export function createObject(
       return {
         ...objectProps,
         ...createButtonObject(initialValue),
+      };
+    }
+    case ObjectType.ARROW: {
+      return {
+        ...objectProps,
+        ...createArrowObject(initialValue),
       };
     }
     case ObjectType.SVG: {
@@ -1651,12 +1659,12 @@ function createSvgObject(
       displayName: "SVG code",
       propertyName: "svg",
       inputType: InputType.SVG_TEXTAREA,
-      value: `<svg height="100" width="100">
-<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-</svg>`,
-      defaultValue: `<svg height="100" width="100">
-<circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-</svg>`,
+      value: `<svg height="100" width="100" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+      </svg>`,
+      defaultValue: `<svg height="100" width="100" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+      </svg>`,
     },
 
     {
@@ -1678,11 +1686,110 @@ function createSvgObject(
   const values: SvgValues = {
     svg: initialValue?.svg
       ? initialValue.svg
-      : `<svg height="100" width="100">
-    <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-    </svg>`,
+      : `<svg height="100" width="100" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+      </svg>`,
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 0 },
+  };
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.SVG,
+      properties,
+      values,
+    },
+  };
+}
+
+function createArrowObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<
+  IObject<ArrowPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
+  const object = createCommonObject(ObjectType.ARROW);
+
+  const properties: ArrowPropertiesTuple = [
+    {
+      displayName: "SVG code",
+      propertyName: "svg",
+      inputType: InputType.SVG_INPUT,
+      value: ``,
+      defaultValue: ``,
+    },
+    {
+      displayName: "Keep aspect ratio",
+      propertyName: "keepAspectRatio",
+      inputType: InputType.CHECKBOX,
+      value: true,
+      defaultValue: true,
+    },
+    {
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR,
+      value: { r: 255, g: 255, b: 255, a: 1 },
+      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+    },
+    {
+      displayName: "Stroke",
+      propertyName: "stroke",
+      inputType: InputType.COLOR,
+      value: { r: 0, g: 0, b: 0, a: 1 },
+      defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+    },
+    {
+      displayName: "Hover",
+      type: FormType.GROUP,
+      propertyName: "hasHover",
+      optional: true,
+      elements: [
+        {
+          displayName: "Fill",
+          propertyName: "hoverFill",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+        },
+        {
+          displayName: "Stroke",
+          propertyName: "hoverStroke",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+        },
+      ],
+    },
+    {
+      displayName: "Hover transition duration",
+      propertyName: "hoverTransitionDuration",
+      inputType: InputType.NUMBER,
+      value: 500,
+      defaultValue: 500,
+    },
+  ];
+
+  const values: ArrowValues = {
+    svg: initialValue?.svg
+      ? initialValue.svg
+      : `<svg height="100" width="100" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
+    </svg>`,
+    keepAspectRatio: true,
+    hasHover: true,
+    fill: { r: 255, g: 255, b: 255, a: 1 },
+    stroke: { r: 0, g: 0, b: 0, a: 0 },
+    hoverFill: { r: 255, g: 255, b: 255, a: 1 },
+    hoverStroke: { r: 0, g: 0, b: 0, a: 0 },
+    hoverTransitionDuration: 500,
   };
 
   return {

@@ -34,6 +34,7 @@ import { BoxInputForm } from "./box-input/box-input";
 import { RichTextAreaInputForm } from "./rich-textarea-input/rich-textarea-input";
 import { SVGTextAreaInputForm } from "./svg-textarea-input/svg-textarea-input";
 import { MultiImageInputForm } from "./multi-image-input/multi-image-input";
+import { SVGInputForm } from "./svg-input/svg-input";
 
 export function getInputForm<T>(
   inputType: InputType,
@@ -170,6 +171,9 @@ export function getInputForm<T>(
       return (
         <SVGTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
       );
+    }
+    case InputType.SVG_INPUT: {
+      return <SVGInputForm key={key} {...inputProps} onInput={onChange} />;
     }
     case InputType.RICH_TEXTAREA: {
       return (

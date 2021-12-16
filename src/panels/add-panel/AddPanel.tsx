@@ -122,8 +122,30 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <AddTextboxIcon
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>Bullets</h3>
+          <h3>BULLETS</h3>
           <p>Add bullets navigation</p>
+        </Card>
+        <Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.ARROW, {
+                left: documentSize.width / 4,
+                top: documentSize.height / 4,
+                width: documentSize.width / 2,
+                height: documentSize.height / 2,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <AddTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>ARROW</h3>
+          <p>Add arrow</p>
         </Card>
       </div>
 
@@ -280,7 +302,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
       <div>
         <Card interactive={false} className={css.sectionCard}>
-          <h1>HTML</h1>
+          <h1>HTML & SVG</h1>
           <p>Place html content</p>
         </Card>
 

@@ -13,6 +13,7 @@ export enum InputType {
   TEXT = "text",
   TEXTAREA = "textarea",
   SVG_TEXTAREA = "svg_textarea",
+  SVG_INPUT = "svg_input",
   RICH_TEXTAREA = "rich_textarea",
   SELECT = "select",
   COLOR = "color",
@@ -266,6 +267,15 @@ export interface ITextAreaInput<T = string> {
   value: string;
   defaultValue: string;
   inputProps?: { disableDebounce?: boolean; rows?: number };
+}
+
+export interface ISVGInput<T = string> {
+  inputType: InputType.SVG_INPUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: string;
+  defaultValue: string;
 }
 
 export interface ISVGTextAreaInput<T = string> {
@@ -971,6 +981,26 @@ export type SvgPropertiesTuple = [
   IColorInput<"fill">,
   IColorInput<"stroke">
 ];
+
+export type ArrowPropertiesTuple = [
+  ISVGInput<"svg">,
+  ICheckboxInput<"keepAspectRatio">,
+  IColorInput<"fill">,
+  IColorInput<"stroke">,
+  IFormGroupItem<[IColorInput<"hoverFill">, IColorInput<"hoverStroke">]>,
+  INumberInput<"hoverTransitionDuration">
+];
+
+export interface ArrowValues {
+  svg: string;
+  keepAspectRatio: boolean;
+  fill: RGBColor;
+  stroke: RGBColor;
+  hasHover: boolean;
+  hoverFill: RGBColor;
+  hoverStroke: RGBColor;
+  hoverTransitionDuration: number;
+}
 
 export interface HtmlProperties {
   html: ITextAreaInput;

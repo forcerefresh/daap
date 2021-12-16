@@ -11,6 +11,7 @@ export enum ObjectType {
   FRAME = "frame",
   BUTTON = "button",
   BULLETS = "bullets",
+  ARROW = "arrow",
 }
 
 export interface IDefinition {
