@@ -707,11 +707,11 @@ function getMultiImageHtml(
     styleOne += `position: absolute;`;
     if (isPlayer) {
     } else {
-      styleOne += `top: -${idx * 20}px;`;
-      styleOne += `left: ${idx * 20}px;`;
+      styleOne += `top: -${idx * 80}px;`;
+      styleOne += `left: ${idx * 80}px;`;
       styleOne += `z-index: ${100 - idx};`;
     }
-    ret += `<div class="object-content" style="${styleOne}"></div>`;
+    ret += `<div class="object-content-item" style="${styleOne}"></div>`;
   });
   ret += `</div>`;
   return ret;
@@ -998,7 +998,7 @@ function getCanvasHtml(
   const canvasProperties = object.definition.values as CanvasValues;
 
   let style = "";
-  console.log(object);
+  //console.log(object);
   style += addCommonPropertiesToStyle(style, object);
   style += "position: absolute;";
   if (!isPlayer) {
@@ -1010,12 +1010,12 @@ function getCanvasHtml(
 // UTILS FUNCTIONS **************
 
 function addCommonPropertiesToStyle(style: string, object: IObject) {
-  console.log(object.commonProperties);
+  //console.log(object.commonProperties);
   if (object.commonProperties?.borderRadius) {
     style = addBorderRadius(style, object.commonProperties?.borderRadius);
   }
 
-  console.log(style);
+  //console.log(style);
   return style;
 }
 
