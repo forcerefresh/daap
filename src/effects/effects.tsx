@@ -73,6 +73,8 @@ import {
   cssPluginDefinition,
 } from "./css/css-points.definition";
 
+import { flipDefaults, flipDefinition } from "./flip/flip.definition";
+
 // import all effects
 import "./none/none.effect";
 import "./fade/fade.effect";
@@ -100,6 +102,7 @@ import "./dev2/dev2.effect";
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 import "./trianglify/trianglify.effect";
 import "./css/css-points.effect";
+import "./flip/flip.effect";
 
 // interfaces for APP >>>
 interface IEffectDefinitionWrapper {
@@ -146,6 +149,7 @@ registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(devDefinition, devDefaults);
 registerEffect(dev2Definition, dev2Defaults);
 registerEffect(cssPluginDefinition, cssPluginDefaults);
+registerEffect(flipDefinition, flipDefaults);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,
