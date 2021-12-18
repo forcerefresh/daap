@@ -236,6 +236,7 @@ function createCommonObject(
     isLocked: false,
     transitions: getDefaultTransitionsForObject(),
     events: [],
+    selfSize: false,
     supportedLayout: {
       absolute: true,
       cover: true,
@@ -454,6 +455,10 @@ function createBulletsObject(initialValue?: {
   keyof ICommonObjectProperties | "layerId"
 > {
   const object = createCommonObject(ObjectType.BULLETS);
+  object.selfSize = true;
+
+  object.supportedLayout.cover = false;
+  object.supportedLayout.grid = false;
 
   const properties: BulletsPropertiesTuple = [
     {

@@ -23,6 +23,11 @@ html {
     color: #c3c3c3;
   }
 
+  .bp3-dark .bp3-input:disabled,
+  .bp3-dark .bp3-input.bp3-disabled {
+    background: rgba(57, 75, 89, 0.1);
+  }
+
   .labelOneLetter .bp3-label {
     width: 10px;
   }

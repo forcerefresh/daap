@@ -1,13 +1,17 @@
 import gsap, { SteppedEase } from "gsap";
 import { typewriter, ITypeWriterEffect } from "./typewriter.types";
 import { SplitText } from "gsap/SplitText";
-import { nl2br, space2nbsp } from "../../utils/doom-utils/common";
+import { space2nbsp } from "../../utils/doom-utils/common";
 import { createRootTimelineForTextEffect } from "../text.utils";
+import { IObject } from "../../objects/types";
+import { TextValues } from "../../inputs/types";
 
 //gsap.registerPlugin(SplitText);
-export function getTypewriterEffectDuration(object?: any, config?: any) {
+export function getTypewriterEffectDuration(object?: IObject, config?: any) {
   const effValues = config?.effect?.values!;
-  const wordsArr = object.definition.properties.text.value.split(" ");
+  const values = object?.definition.values as TextValues;
+
+  const wordsArr = values.text.split(" ");
   const charsStr = wordsArr?.join("");
   return (
     effValues.initialDelay +

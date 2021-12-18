@@ -27,7 +27,7 @@ const EDGE_OPTIONS = [
 ];
 
 export const EdgeInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
-  const { value, onChange = noop } = props;
+  const { value, onChange = noop, inputProps = {} } = props;
 
   return (
     <div className={css.main}>
@@ -47,7 +47,8 @@ export const EdgeInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
         { width: value.width, height: value.height },
         (newWH) => {
           onChange({ ...value, width: newWH.width, height: newWH.height });
-        }
+        },
+        { disabled: inputProps.selfSize }
       )}
       {getNumericFiled("Gap", value.gap, (newGap) => {
         onChange({ ...value, gap: newGap });

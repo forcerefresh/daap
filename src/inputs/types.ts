@@ -324,6 +324,7 @@ export interface ITransformInput<T = string> {
   propertyName: T;
   value: { left: number; top: number; width: number; height: number };
   defaultValue: { left: number; top: number; width: number; height: number };
+  inputProps?: { selfSize?: boolean };
 }
 
 export interface IEdgeInput<T = string> {
@@ -345,6 +346,7 @@ export interface IEdgeInput<T = string> {
     edge: string;
     relativeTo: string;
   };
+  inputProps?: { selfSize?: boolean };
 }
 
 export interface ISizeInput<T = string> {
@@ -354,6 +356,7 @@ export interface ISizeInput<T = string> {
   propertyName: T;
   value: { width: number; height: number };
   defaultValue: { width: number; height: number };
+  inputProps?: { disabled?: boolean };
 }
 
 export interface IImageInputValue {

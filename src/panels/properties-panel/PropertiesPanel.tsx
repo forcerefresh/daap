@@ -56,7 +56,8 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
               const retObj = cloneDeep(object);
               retObj.absoluteLayout = absoluteLayout;
               _updateObject(retObj);
-            }
+            },
+            { selfSize: object.selfSize }
           )}
 
         {object.layout === "snap" &&
@@ -67,7 +68,8 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
               const retObj = cloneDeep(object);
               retObj.edgeLayout = edgeLayout;
               _updateObject(retObj);
-            }
+            },
+            { selfSize: object.selfSize }
           )}
 
         {renderProperties(
@@ -89,9 +91,12 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       options.push({ label: "Absolute", value: "absolute" });
     object.supportedLayout.grid &&
       options.push({ label: "Grid", value: "grid" });
-    options.push({ label: "Fit Page", value: "fit_page" });
-    options.push({ label: "Fit Stage", value: "fit_stage" });
-    options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
+    object.supportedLayout.cover &&
+      options.push({ label: "Fit Page", value: "fit_page" });
+    object.supportedLayout.cover &&
+      options.push({ label: "Fit Stage", value: "fit_stage" });
+    object.supportedLayout.cover &&
+      options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
 
     options.push({ label: "Snap", value: "snap" });
 

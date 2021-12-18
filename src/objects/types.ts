@@ -72,7 +72,7 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   isVisible: boolean;
   isLocked: boolean;
   /** object itself is setting size */
-  //selfSize: boolean;
+  selfSize: boolean;
   supportedLayout: {
     cover: boolean;
     grid: boolean;

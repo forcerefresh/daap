@@ -822,7 +822,7 @@ function handleBulletsUpdate(
 
 /* This method mutate object*/
 function postProcessBullet(object: IObject, getState: () => IStore): void {
-  if (object.layout === "absolute") {
+  if (object.layout === "absolute" || object.layout === "snap") {
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
         (breakpointConfig) =>

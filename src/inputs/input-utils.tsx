@@ -212,12 +212,14 @@ export function getGridLayoutField<T>(
 export function getAbsoluteLayoutField<T>(
   label: string,
   value: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  inputProps: { selfSize: boolean }
 ) {
   const objectDef = {
     displayName: label,
     inputType: InputType.TRANSFORM,
     value: value,
+    inputProps,
   };
 
   return getInputForm(InputType.TRANSFORM, objectDef, onChange);
@@ -226,12 +228,14 @@ export function getAbsoluteLayoutField<T>(
 export function getSizeLayoutField<T>(
   label: string,
   value: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  inputProps?: { disabled?: boolean }
 ) {
   const objectDef = {
     displayName: label,
     inputType: InputType.SIZE,
     value: value,
+    inputProps,
   };
 
   return getInputForm(InputType.SIZE, objectDef, onChange);
@@ -240,12 +244,14 @@ export function getSizeLayoutField<T>(
 export function getEdgeLayoutField<T>(
   label: string,
   value: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  inputProps: { selfSize: boolean }
 ) {
   const objectDef = {
     displayName: label,
     inputType: InputType.EDGE,
     value: value,
+    inputProps,
   };
 
   return getInputForm(InputType.EDGE, objectDef, onChange);

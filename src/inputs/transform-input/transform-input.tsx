@@ -9,7 +9,7 @@ const SMALL_ICON_SIZE = 18;
 export const TransformInputForm: React.FC<ITransformInput & IUpdateInput> = (
   props
 ) => {
-  const { value, onChange = noop } = props;
+  const { value, onChange = noop, inputProps = {} } = props;
 
   const [internalValue, setInternalValue] = useState<{
     left: string;
@@ -135,6 +135,7 @@ export const TransformInputForm: React.FC<ITransformInput & IUpdateInput> = (
       <div>
         <FormGroup label={"W"} labelFor="text-input-W" inline>
           <InputGroup
+            disabled={inputProps.selfSize}
             inputRef={(el) => {
               if (el) el!.autocomplete = "off";
             }}
@@ -148,6 +149,7 @@ export const TransformInputForm: React.FC<ITransformInput & IUpdateInput> = (
         </FormGroup>
         <FormGroup label={"H"} labelFor="text-input-H" inline>
           <InputGroup
+            disabled={inputProps.selfSize}
             inputRef={(el) => {
               if (el) el!.autocomplete = "off";
             }}
