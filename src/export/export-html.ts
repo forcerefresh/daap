@@ -856,9 +856,33 @@ function getSvgHtml(
   </style>`;
 
   //if (svgValues.svg) {
-  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg}</div>`;
+  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg.source}</div>`;
   //}
   //return ``;
+}
+
+function replaceColors(svgSource: string, colors: RGBColor[]) {
+  let idx = 0;
+  /*
+  let s;
+  s = svgSource.replace(/fill:(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
+    const retColor = colors[idx];
+    idx++;
+    return "fill:" + color2rgba(retColor);
+  });
+  s = s.replace(/fill="(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
+    const retColor = colors[idx];
+    idx++;
+    return `fill="` + color2rgba(retColor);
+  });
+
+  return s;*/
+
+  return svgSource.replace(/(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
+    const retColor = colors[idx];
+    idx++;
+    return color2rgba(retColor);
+  });
 }
 
 function getArrowHtml(
@@ -866,6 +890,12 @@ function getArrowHtml(
   calculatedObjectSize: React.CSSProperties
 ) {
   const svgValues = object.definition.values as ArrowValues;
+  const svgValuesMetadata = object.definition.valuesMetadata;
+
+  const svgCode =
+    svgValues.svg.colors && svgValues.hasCustomColors
+      ? replaceColors(svgValues.svg.source, svgValues.svg.colors)
+      : svgValues.svg.source;
 
   const svgWidth = 24;
   const svgHeight = 24;
@@ -877,23 +907,52 @@ function getArrowHtml(
   let scaleY = 1;
   scaleY = svgValues.keepAspectRatio ? 1 : h / w;
 
+  const fill =
+    !svgValuesMetadata["fill"].disabled && svgValues.hasStrokeFill
+      ? `fill: ${color2rgba(svgValues.fill)};
+    `
+      : "";
+  const stroke =
+    !svgValuesMetadata["stroke"].disabled && svgValues.hasStrokeFill
+      ? `stroke: ${color2rgba(svgValues.stroke)};
+    `
+      : "";
+
+  // hover START>>
+  const hoverFill =
+    !svgValuesMetadata["hoverFill"].disabled && svgValues.hasHover
+      ? `fill: ${color2rgba(svgValues.hoverFill)};
+   `
+      : "";
+  const hoverStroke =
+    !svgValuesMetadata["hoverStroke"].disabled && svgValues.hasHover
+      ? `stroke: ${color2rgba(svgValues.hoverStroke)};
+   `
+      : "";
+  // hover END <<
   const css = `
   <style>
   .object-content-${object.id}{
     transform: scaleX(${scaleX}) scaleY(${scaleY});
     transform-origin: top left;
     ${svgValues.keepAspectRatio ? "width:100%;height:100%;" : ""}
+   
   }
   .object-content-${object.id} svg {
-    fill: ${color2rgba(svgValues.fill)};
-    stroke: ${color2rgba(svgValues.stroke)};
+    ${fill}
+    ${stroke}
     width: 100%; 
     height: 100%;
+    transition-duration: ${svgValues.hoverTransitionDuration}ms;
+  }
+  .object-content-${object.id}:hover svg {
+    ${hoverFill}
+    ${hoverStroke}
   }
   </style>`;
 
   //if (svgValues.svg) {
-  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg}</div>`;
+  return `${css}<div class="object-content object-content-${object.id}">${svgCode}</div>`;
   //}
   //return ``;
 }
@@ -981,6 +1040,6 @@ function addBorderRadius(style: string, borderRadius: ICornerRadiusValue) {
   return style;
 }
 
-function color2rgba(c: RGBColor): string {
+export function color2rgba(c: RGBColor): string {
   return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
 }

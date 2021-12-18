@@ -14,12 +14,15 @@ export enum InputType {
   TEXTAREA = "textarea",
   SVG_TEXTAREA = "svg_textarea",
   SVG_INPUT = "svg_input",
+  SVG_CUSTOM_COLORS = "svg_custom_colors",
   RICH_TEXTAREA = "rich_textarea",
   SELECT = "select",
   COLOR = "color",
   TRANSFORM_ORIGIN = "transform_origin",
   SPLIT = "split",
   TRANSFORM = "transform",
+  SIZE = "size",
+  EDGE = "edge",
   IMAGE = "image",
   MULTI_IMAGE = "multi_image",
   VIDEO = "video",
@@ -269,13 +272,19 @@ export interface ITextAreaInput<T = string> {
   inputProps?: { disableDebounce?: boolean; rows?: number };
 }
 
+export interface ISVGValue {
+  source: string;
+  colorsType?: "unique" | "all";
+  colors?: RGBColor[];
+  disableCustomColors?: boolean;
+}
 export interface ISVGInput<T = string> {
   inputType: InputType.SVG_INPUT;
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: string;
-  defaultValue: string;
+  value: ISVGValue;
+  defaultValue: ISVGValue;
 }
 
 export interface ISVGTextAreaInput<T = string> {
@@ -283,9 +292,20 @@ export interface ISVGTextAreaInput<T = string> {
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: string;
-  defaultValue: string;
+  value: ISVGValue;
+  defaultValue: ISVGValue;
   inputProps?: { disableDebounce?: boolean; rows?: number };
+  duplicate?: string;
+}
+
+export interface ISVGCustomColorsInput<T = string> {
+  inputType: InputType.SVG_CUSTOM_COLORS;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: ISVGValue;
+  defaultValue: ISVGValue;
+  duplicate?: string;
 }
 
 export interface IRichTextAreaInput<T = string> {
@@ -304,6 +324,36 @@ export interface ITransformInput<T = string> {
   propertyName: T;
   value: { left: number; top: number; width: number; height: number };
   defaultValue: { left: number; top: number; width: number; height: number };
+}
+
+export interface IEdgeInput<T = string> {
+  inputType: InputType.TEXT;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: {
+    width: number;
+    height: number;
+    gap: number;
+    edge: string;
+    relativeTo: string;
+  };
+  defaultValue: {
+    width: number;
+    height: number;
+    gap: number;
+    edge: string;
+    relativeTo: string;
+  };
+}
+
+export interface ISizeInput<T = string> {
+  inputType: InputType.TEXT;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: { width: number; height: number };
+  defaultValue: { width: number; height: number };
 }
 
 export interface IImageInputValue {
@@ -466,6 +516,11 @@ export interface IParallaxInput<T = string> {
   };
 }
 
+export interface IInputMetadataValues {
+  disabled?: boolean;
+  exportForWizard?: boolean;
+}
+
 export interface IColorInput<T = string> {
   inputType: InputType.COLOR;
   displayName: string;
@@ -473,6 +528,8 @@ export interface IColorInput<T = string> {
   propertyName: T;
   value: RGBColor | null;
   defaultValue: RGBColor | null;
+  optional?: boolean;
+  metadata?: IInputMetadataValues;
 }
 
 export interface ISelectInput<T = string> {
@@ -971,7 +1028,7 @@ export interface SvgProperties {
 }
 
 export interface SvgValues {
-  svg: string;
+  svg: ISVGValue;
   fill: RGBColor;
   stroke: RGBColor;
 }
@@ -985,15 +1042,17 @@ export type SvgPropertiesTuple = [
 export type ArrowPropertiesTuple = [
   ISVGInput<"svg">,
   ICheckboxInput<"keepAspectRatio">,
-  IColorInput<"fill">,
-  IColorInput<"stroke">,
+  IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
   IFormGroupItem<[IColorInput<"hoverFill">, IColorInput<"hoverStroke">]>,
-  INumberInput<"hoverTransitionDuration">
+  INumberInput<"hoverTransitionDuration">,
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
 ];
 
 export interface ArrowValues {
-  svg: string;
+  svg: ISVGValue;
+  hasCustomColors: boolean;
   keepAspectRatio: boolean;
+  hasStrokeFill: boolean;
   fill: RGBColor;
   stroke: RGBColor;
   hasHover: boolean;

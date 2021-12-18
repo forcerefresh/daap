@@ -12,6 +12,7 @@ import {
   ICoverPlacementValue,
   IFontSelectInputValue,
   IGridPlacementValue,
+  IInputMetadataValues,
   ImageProperties,
   ImagePropertiesTuple,
   ImageValues,
@@ -239,6 +240,7 @@ function createCommonObject(
       absolute: true,
       cover: true,
       grid: true,
+      edge: true,
     },
     layout: "absolute",
     absoluteLayout: {
@@ -252,6 +254,13 @@ function createCommonObject(
       right: 3,
       top: 1,
       bottom: 2,
+    },
+    edgeLayout: {
+      width: 200,
+      height: 200,
+      gap: 0,
+      edge: "left",
+      relativeTo: "stage",
     },
   };
 }
@@ -333,6 +342,7 @@ function createRichTextObject(
       type: ObjectType.RICH_TEXT,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -432,6 +442,7 @@ function createTextObject(
       type: ObjectType.TEXT,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -879,6 +890,7 @@ function createBulletsObject(initialValue?: {
       type: ObjectType.BULLETS,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1382,6 +1394,7 @@ function createButtonObject(initialValue?: {
       type: ObjectType.BUTTON,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1464,6 +1477,7 @@ function createImageObject(
       type: ObjectType.IMAGE,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1522,6 +1536,7 @@ function createMultiImageObject(
       type: ObjectType.MULTI_IMAGE,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1600,6 +1615,7 @@ function createSourceImageObject(
       type: ObjectType.SOURCE_IMAGE,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1640,6 +1656,7 @@ function createVideoObject(
       type: ObjectType.VIDEO,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1656,15 +1673,19 @@ function createSvgObject(
 
   const properties: SvgPropertiesTuple = [
     {
-      displayName: "SVG code",
+      displayName: "SVG",
       propertyName: "svg",
       inputType: InputType.SVG_TEXTAREA,
-      value: `<svg height="100" width="100" viewBox="0 0 100 100">
+      value: {
+        source: `<svg height="100" width="100" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
       </svg>`,
-      defaultValue: `<svg height="100" width="100" viewBox="0 0 100 100">
+      },
+      defaultValue: {
+        source: `<svg height="100" width="100" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
       </svg>`,
+      },
     },
 
     {
@@ -1686,9 +1707,11 @@ function createSvgObject(
   const values: SvgValues = {
     svg: initialValue?.svg
       ? initialValue.svg
-      : `<svg height="100" width="100" viewBox="0 0 100 100">
+      : {
+          source: `<svg height="100" width="100" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
       </svg>`,
+        },
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 0 },
   };
@@ -1700,6 +1723,7 @@ function createSvgObject(
       type: ObjectType.SVG,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1719,33 +1743,44 @@ function createArrowObject(
 
   const properties: ArrowPropertiesTuple = [
     {
-      displayName: "SVG code",
+      displayName: "SVG",
       propertyName: "svg",
       inputType: InputType.SVG_INPUT,
-      value: ``,
-      defaultValue: ``,
+      value: { source: "" },
+      defaultValue: { source: "" },
     },
     {
-      displayName: "Keep aspect ratio",
+      displayName: "Aspect ratio",
       propertyName: "keepAspectRatio",
       inputType: InputType.CHECKBOX,
       value: true,
       defaultValue: true,
     },
     {
-      displayName: "Fill",
-      propertyName: "fill",
-      inputType: InputType.COLOR,
-      value: { r: 255, g: 255, b: 255, a: 1 },
-      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+      displayName: "Fill and Stroke",
+      type: FormType.GROUP,
+      propertyName: "hasStrokeFill",
+      optional: true,
+      elements: [
+        {
+          displayName: "Fill",
+          propertyName: "fill",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          optional: true,
+        },
+        {
+          displayName: "Stroke",
+          propertyName: "stroke",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+          optional: true,
+        },
+      ],
     },
-    {
-      displayName: "Stroke",
-      propertyName: "stroke",
-      inputType: InputType.COLOR,
-      value: { r: 0, g: 0, b: 0, a: 1 },
-      defaultValue: { r: 0, g: 0, b: 0, a: 1 },
-    },
+
     {
       displayName: "Hover",
       type: FormType.GROUP,
@@ -1758,6 +1793,7 @@ function createArrowObject(
           inputType: InputType.COLOR,
           value: { r: 255, g: 255, b: 255, a: 1 },
           defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          optional: true,
         },
         {
           displayName: "Stroke",
@@ -1765,6 +1801,7 @@ function createArrowObject(
           inputType: InputType.COLOR,
           value: { r: 0, g: 0, b: 0, a: 1 },
           defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+          optional: true,
         },
       ],
     },
@@ -1775,21 +1812,51 @@ function createArrowObject(
       value: 500,
       defaultValue: 500,
     },
+    {
+      displayName: "Custom colors",
+      type: FormType.GROUP,
+      propertyName: "hasCustomColors",
+      optional: true,
+      elements: [
+        {
+          displayName: "",
+          duplicate: "1",
+          propertyName: "svg",
+          inputType: InputType.SVG_CUSTOM_COLORS,
+          value: { source: "" },
+          defaultValue: { source: "" },
+        },
+      ],
+    },
   ];
 
   const values: ArrowValues = {
+    hasCustomColors: false,
     svg: initialValue?.svg
       ? initialValue.svg
-      : `<svg height="100" width="100" viewBox="0 0 100 100">
+      : {
+          source: `<svg height="100" width="100" viewBox="0 0 100 100">
     <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
     </svg>`,
+          colors: [],
+          colorsType: "unique",
+          disableCustomColors: false,
+        },
     keepAspectRatio: true,
     hasHover: true,
+    hasStrokeFill: true,
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 0 },
     hoverFill: { r: 255, g: 255, b: 255, a: 1 },
     hoverStroke: { r: 0, g: 0, b: 0, a: 0 },
     hoverTransitionDuration: 500,
+  };
+
+  const valuesMetadata: { [key: string]: IInputMetadataValues } = {
+    fill: { exportForWizard: false, disabled: false },
+    stroke: { exportForWizard: false, disabled: false },
+    hoverFill: { exportForWizard: false, disabled: false },
+    hoverStroke: { exportForWizard: false, disabled: false },
   };
 
   return {
@@ -1799,6 +1866,7 @@ function createArrowObject(
       type: ObjectType.SVG,
       properties,
       values,
+      valuesMetadata,
     },
   };
 }
@@ -1834,6 +1902,7 @@ function createCanvasObject(
       type: ObjectType.CANVAS,
       properties,
       values,
+      valuesMetadata: {},
     },
   };
 }
@@ -1855,6 +1924,7 @@ function createFrameObject(
       type: ObjectType.FRAME,
       properties: [],
       values: {},
+      valuesMetadata: {},
     },
   };
 }

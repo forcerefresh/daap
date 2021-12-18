@@ -2,15 +2,24 @@ import { Text } from "@blueprintjs/core";
 import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import { getInputForm } from "../../inputs/input-factory";
+import {
+  getInputForm,
+  getInputFormWithOptions,
+} from "../../inputs/input-factory";
 import {
   getAbsoluteLayoutField,
   getCoverLayoutField,
+  getEdgeLayoutField,
   getGridLayoutField,
   getSelectField,
 } from "../../inputs/input-utils";
-import { InputType } from "../../inputs/types";
-import { IAbsoluteLayout, IGridLayout, IObject } from "../../objects/types";
+import { IInputMetadataValues, InputType } from "../../inputs/types";
+import {
+  IAbsoluteLayout,
+  IEdgeLayout,
+  IGridLayout,
+  IObject,
+} from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
@@ -50,9 +59,21 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
             }
           )}
 
+        {object.layout === "snap" &&
+          getEdgeLayoutField(
+            "",
+            object.edgeLayout,
+            (edgeLayout?: IEdgeLayout) => {
+              const retObj = cloneDeep(object);
+              retObj.edgeLayout = edgeLayout;
+              _updateObject(retObj);
+            }
+          )}
+
         {renderProperties(
           object.definition.properties,
-          object.definition.values
+          object.definition.values,
+          object.definition.valuesMetadata
         )}
         <hr />
         {renderEvents(object)}
@@ -71,6 +92,8 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     options.push({ label: "Fit Page", value: "fit_page" });
     options.push({ label: "Fit Stage", value: "fit_stage" });
     options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
+
+    options.push({ label: "Snap", value: "snap" });
 
     const onChange = (layout: any) => {
       const retObj = cloneDeep(object);
@@ -116,7 +139,11 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
     return getInputForm(InputType.CORNER_RADIUS, objectDef, onChange);
   };
 
-  const renderProperties = (properties: any[], values: any) => {
+  const renderProperties = (
+    properties: any[],
+    values: any,
+    valuesMetadata: any
+  ) => {
     const flatForm = flattenForm(properties as IFormItem[]);
 
     const inputs = flatForm.map((property, idx) => {
@@ -147,14 +174,36 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
         }
       }
 
+      function onMetadataChange(metadata: IInputMetadataValues) {
+        console.log(metadata);
+        const retObj = cloneDeep(object);
+
+        if (retObj) {
+          const valuesMetadata = retObj.definition.valuesMetadata as {
+            [key: string]: any;
+          };
+          valuesMetadata[propertyName] = metadata;
+
+          _updateObject(retObj);
+        }
+      }
+
       const inputProps = {
         ...property,
         value: values[propertyName],
+        metadata: valuesMetadata[propertyName],
       };
 
       return {
-        input: getInputForm(property.inputType, inputProps, onChange, onChange),
+        input: getInputFormWithOptions(
+          property.inputType,
+          inputProps,
+          onChange,
+          onChange,
+          onMetadataChange
+        ),
         propertyName: property.propertyName,
+        duplicate: property.duplicate ? property.duplicate : "",
       };
     });
 

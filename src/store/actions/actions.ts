@@ -855,6 +855,8 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
     document.body.appendChild(holder);
     object.absoluteLayout!.width = el.offsetWidth!;
     object.absoluteLayout!.height = el.offsetHeight!;
+    object.edgeLayout!.width = el.offsetWidth!;
+    object.edgeLayout!.height = el.offsetHeight!;
     document.body.removeChild(holder);
   }
 }

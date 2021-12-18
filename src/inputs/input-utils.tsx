@@ -222,3 +222,49 @@ export function getAbsoluteLayoutField<T>(
 
   return getInputForm(InputType.TRANSFORM, objectDef, onChange);
 }
+
+export function getSizeLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.SIZE,
+    value: value,
+  };
+
+  return getInputForm(InputType.SIZE, objectDef, onChange);
+}
+
+export function getEdgeLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.EDGE,
+    value: value,
+  };
+
+  return getInputForm(InputType.EDGE, objectDef, onChange);
+}
+
+export function getButtonGroupField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  options: { value: string; label: string }[],
+  helperText = ""
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.BUTTON_GROUP_INPUT,
+    value: value,
+    options,
+    helperText,
+  };
+
+  return getInputForm(InputType.BUTTON_GROUP_INPUT, objectDef, onChange);
+}

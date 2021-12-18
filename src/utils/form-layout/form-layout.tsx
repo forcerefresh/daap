@@ -24,6 +24,7 @@ export interface IFormItem {
     propertyName: string;
     elements?: IFormItem[];
   }[];
+  duplicate?: string;
 }
 
 export enum FormType {
@@ -98,13 +99,17 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     } else if (element.type === FormType.SWITCH_GROUP) {
       return (
         <>
-          {findInput(element.propertyName, inputs)}
+          {findInput(element.propertyName, inputs, element.duplicate)}
           {renderSwitchGroups(element.propertyName, element.groups!, values)}
         </>
       );
     }
 
-    return findInputWithWrapper(element.propertyName, inputs);
+    return findInputWithWrapper(
+      element.propertyName,
+      inputs,
+      element.duplicate
+    );
   };
 
   const renderSwitchGroups = (
@@ -226,11 +231,15 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
             </div>
           );
         } else if (formItem.type === FormType.INPUT) {
-          return findInputWithWrapper(formItem.propertyName, inputs);
+          return findInputWithWrapper(
+            formItem.propertyName,
+            inputs,
+            formItem.duplicate
+          );
         } else if (formItem.type === FormType.SWITCH_GROUP) {
           return (
             <>
-              {findInput(formItem.propertyName, inputs)}
+              {findInput(formItem.propertyName, inputs, formItem.duplicate)}
               {renderSwitchGroups(
                 formItem.propertyName,
                 formItem.groups!,
@@ -320,14 +329,30 @@ export function flattenFormRec(itemsArr: IFormItem[], form: IFormItem[]): void {
 
 const findInput = (
   propertyName: string,
-  inputs: { propertyName: string; input: React.ReactElement | undefined }[]
+  inputs: {
+    propertyName: string;
+    input: React.ReactElement | undefined;
+    duplicate?: string;
+  }[],
+  duplicate = ""
 ): React.ReactElement | undefined => {
-  return inputs.find((item) => item.propertyName === propertyName)?.input;
+  return inputs.find(
+    (item) => item.propertyName === propertyName && item.duplicate === duplicate
+  )?.input;
 };
 
 const findInputWithWrapper = (
   propertyName: string,
-  inputs: { propertyName: string; input: React.ReactElement | undefined }[]
+  inputs: {
+    propertyName: string;
+    input: React.ReactElement | undefined;
+    duplicate?: string;
+  }[],
+  duplicate = ""
 ): React.ReactElement | undefined => {
-  return <div className={css.input}>{findInput(propertyName, inputs)}</div>;
+  return (
+    <div className={css.input}>
+      {findInput(propertyName, inputs, duplicate)}
+    </div>
+  );
 };

@@ -1,20 +1,18 @@
 import {
   Button,
   FormGroup,
-  InputGroup,
-  Intent,
   Popover,
   PopoverInteractionKind,
-  PopoverPosition,
   Position,
-  TextArea,
 } from "@blueprintjs/core";
-import { cloneDeep, debounce, noop, throttle } from "lodash-es";
+import { cloneDeep, debounce, noop, throttle, uniq } from "lodash-es";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { RGBColor } from "react-color";
 import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { getCheckboxField } from "../input-utils";
 import { ISVGInput, IUpdateInput } from "../types";
 import css from "./svg-input.module.scss";
 
@@ -34,11 +32,15 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
     "bp3-overlay-scroll-container", // alert
   ]);
 
+  const [isCustomColor, setIsCustomColor] = useState(false);
+  const [customColors, setCustomColors] = useState<RGBColor[]>([]);
+
+  console.log(customColors);
   return (
     <FormGroup label={displayName} labelFor="textarea-input">
       <div
         className={css.svgHolder}
-        dangerouslySetInnerHTML={{ __html: value }}
+        dangerouslySetInnerHTML={{ __html: value.source }}
       ></div>
 
       <Popover
@@ -70,7 +72,12 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
             className={css.mediaLibraryPanel}
             addObject={false}
             onSelect={(item) => {
-              onInput((item.initialValues as any).svg);
+              onInput({
+                source: (item.initialValues as any).svg,
+                colors: undefined,
+                colorsType: "unique",
+                disableCustomColors: false,
+              });
               setLibraryOpen(false);
             }}
             panelsToShow={[Panels.MyVectors, Panels.Vectors]}
@@ -80,3 +87,34 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
     </FormGroup>
   );
 };
+
+function getColors(svgSource: string): RGBColor[] {
+  let colors: string[] = [];
+  svgSource.replace(/fill:(#[abcdef0-9]{6})/gi, function (v, c: string) {
+    console.log(c);
+    colors.push(c);
+    return v;
+  });
+  svgSource.replace(/fill="(#[abcdef0-9]{6})/gi, function (v, c: string) {
+    console.log(c);
+    colors.push(c);
+    return v;
+  });
+
+  colors = uniq(colors);
+
+  console.log(colors);
+  return colors.map(hexToRGB);
+}
+
+function hexToRGB(hex: string, a?: number) {
+  var r = parseInt(hex.slice(1, 3), 16),
+    g = parseInt(hex.slice(3, 5), 16),
+    b = parseInt(hex.slice(5, 7), 16);
+
+  if (a) {
+    return { r, g, b, a };
+  } else {
+    return { r, g, b, a: 1 };
+  }
+}

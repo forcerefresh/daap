@@ -50,49 +50,211 @@ export function calculateObjectSize(
   }
 
   if (object.layout === "fit_page") {
-    const sizeObj = {
-      top: 0,
-      left:
-        -(
-          (breakpointConfig?.normal?.page.width || stageSize.width) -
-          stageSize.width
-        ) / 2,
-      width: breakpointConfig?.normal?.page.width || 0,
-      height: stageSize.height,
-    };
+    const sizeObj = getPSGSize("page", breakpointConfig);
+
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
   if (object.layout === "fit_stage") {
-    const sizeObj = {
-      top: 0,
-      left: 0,
-      width: stageSize.width,
-      height: stageSize.height,
-    };
-
+    const sizeObj = getPSGSize("stage", breakpointConfig);
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
   if (object.layout === "fit_guidelines") {
-    const sizeObj = {
-      top: breakpointConfig?.normal?.guidelinesPadding.top || 0,
-      left: breakpointConfig?.normal?.guidelinesPadding.left || 0,
+    const sizeObj = getPSGSize("guidelines", breakpointConfig);
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
 
-      width:
-        stageSize.width -
-        ((breakpointConfig?.normal?.guidelinesPadding.left || 0) +
-          (breakpointConfig?.normal?.guidelinesPadding.right || 0)),
-      height:
-        stageSize.height -
-        ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
-          (breakpointConfig?.normal?.guidelinesPadding.bottom || 0)),
-    };
+  const gap = object.edgeLayout!.gap;
+
+  if (object.layout === "snap") {
+    const relativeToSize = getPSGSize(
+      object.edgeLayout?.relativeTo!,
+      breakpointConfig
+    )!;
+
+    let sizeObj;
+    switch (object.edgeLayout?.edge!) {
+      case "left": {
+        const top =
+          relativeToSize.top +
+          relativeToSize.height / 2 -
+          object.edgeLayout!.height / 2;
+
+        sizeObj = {
+          top,
+          left: relativeToSize.left + gap,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+      case "top": {
+        const left =
+          relativeToSize.left +
+          relativeToSize.width / 2 -
+          object.edgeLayout!.width / 2;
+
+        sizeObj = {
+          top: relativeToSize.top + gap,
+          left,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+      case "right": {
+        const left =
+          relativeToSize.left +
+          relativeToSize.width -
+          object.edgeLayout!.width -
+          gap;
+        const top =
+          relativeToSize.top +
+          relativeToSize.height / 2 -
+          object.edgeLayout!.height / 2;
+
+        sizeObj = {
+          top,
+          left,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+
+      case "bottom": {
+        const left =
+          relativeToSize.left +
+          relativeToSize.width / 2 -
+          object.edgeLayout!.width / 2;
+        const top =
+          relativeToSize.top +
+          relativeToSize.height -
+          object.edgeLayout!.height -
+          gap;
+
+        sizeObj = {
+          top,
+          left,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+      case "top-left": {
+        sizeObj = {
+          top: relativeToSize.top + gap,
+          left: relativeToSize.left + gap,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+      case "top-right": {
+        const left =
+          relativeToSize.left +
+          relativeToSize.width -
+          object.edgeLayout!.width -
+          gap;
+
+        sizeObj = {
+          top: relativeToSize.top + gap,
+          left,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+
+      case "bottom-left": {
+        const top =
+          relativeToSize.top +
+          relativeToSize.height -
+          object.edgeLayout!.height;
+
+        sizeObj = {
+          top: top - gap,
+          left: relativeToSize.left + gap,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+      case "bottom-right": {
+        const top =
+          relativeToSize.top +
+          relativeToSize.height -
+          object.edgeLayout!.height -
+          gap;
+        const left =
+          relativeToSize.left +
+          relativeToSize.width -
+          object.edgeLayout!.width -
+          gap;
+
+        sizeObj = {
+          top: top,
+          left: left,
+          width: object.edgeLayout!.width,
+          height: object.edgeLayout!.height,
+        };
+        break;
+      }
+    }
 
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  /*
+  return {};
+}
+
+function getPSGSize(
+  type: "page" | "stage" | "guidelines" | string,
+  breakpointConfig: BreakpointConfiguration
+) {
+  const stageSize = breakpointConfig.normal.slide;
+
+  switch (type) {
+    case "page": {
+      return {
+        top: 0,
+        left:
+          -(
+            (breakpointConfig?.normal?.page.width || stageSize.width) -
+            stageSize.width
+          ) / 2,
+        width: breakpointConfig?.normal?.page.width || 0,
+        height: stageSize.height,
+      };
+    }
+    case "stage": {
+      return {
+        top: 0,
+        left: 0,
+        width: stageSize.width,
+        height: stageSize.height,
+      };
+    }
+    case "guidelines": {
+      return {
+        top: breakpointConfig?.normal?.guidelinesPadding.top || 0,
+        left: breakpointConfig?.normal?.guidelinesPadding.left || 0,
+
+        width:
+          stageSize.width -
+          ((breakpointConfig?.normal?.guidelinesPadding.left || 0) +
+            (breakpointConfig?.normal?.guidelinesPadding.right || 0)),
+        height:
+          stageSize.height -
+          ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
+            (breakpointConfig?.normal?.guidelinesPadding.bottom || 0)),
+      };
+    }
+  }
+}
+
+/*
   // 3. if we use COVER placement
   const coverImageProperties = object.definition
     .properties as CoverImageProperties;
@@ -165,8 +327,6 @@ export function calculateObjectSize(
     };
   }
 */
-  return {};
-}
 
 export function getPositionInfo(object: IObject) {
   if (object.layout === "absolute") {
@@ -211,6 +371,14 @@ export function getPositionInfo(object: IObject) {
     return (
       <>
         <span> Fit Guidelines</span>
+      </>
+    );
+  }
+
+  if (object.layout === "snap") {
+    return (
+      <>
+        <span> Snap</span>
       </>
     );
   }

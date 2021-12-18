@@ -20,7 +20,7 @@ import { TextStartPositionInputForm } from "./text-start-position-input/text-sta
 import { TextAreaInputForm } from "./textarea-input/textarea-input";
 import { TransformInputForm } from "./transform-input/transform-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
-import { InputType } from "./types";
+import { IInputMetadataValues, InputType } from "./types";
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
@@ -35,7 +35,39 @@ import { RichTextAreaInputForm } from "./rich-textarea-input/rich-textarea-input
 import { SVGTextAreaInputForm } from "./svg-textarea-input/svg-textarea-input";
 import { MultiImageInputForm } from "./multi-image-input/multi-image-input";
 import { SVGInputForm } from "./svg-input/svg-input";
+import { SVGCustomColorsForm } from "./svg-custom-colors-input/svg-custom-colors-input";
+import { OptionalInput } from "./optional-input/optional-input";
+import { noop } from "lodash-es";
+import { SizeInputForm } from "./size-input/size-input";
+import { EdgeInputForm } from "./edge-input/edge-input";
 
+export function getInputFormWithOptions<T>(
+  inputType: InputType,
+  inputProps: T | any,
+  onChange: (config: any) => void,
+  onInput?: (config: any) => void,
+  onMetadataChange?: (metadata: IInputMetadataValues) => void,
+  data?: {
+    layerData?: {
+      layer?: ILayer;
+      objects?: IObject[];
+    };
+  }
+): React.ReactElement | undefined {
+  const input = getInputForm(inputType, inputProps, onChange, onInput, data);
+
+  if (inputProps.optional) {
+    return (
+      <OptionalInput
+        metadataValues={inputProps.metadata}
+        onMetadataChange={onMetadataChange || noop}
+      >
+        {input}
+      </OptionalInput>
+    );
+  }
+  return input;
+}
 export function getInputForm<T>(
   inputType: InputType,
   inputProps: T | any,
@@ -175,6 +207,12 @@ export function getInputForm<T>(
     case InputType.SVG_INPUT: {
       return <SVGInputForm key={key} {...inputProps} onInput={onChange} />;
     }
+    case InputType.SVG_CUSTOM_COLORS: {
+      return (
+        <SVGCustomColorsForm key={key} {...inputProps} onChange={onChange} />
+      );
+    }
+
     case InputType.RICH_TEXTAREA: {
       return (
         <RichTextAreaInputForm key={key} {...inputProps} onInput={onChange} />
@@ -215,6 +253,12 @@ export function getInputForm<T>(
       return (
         <TransformInputForm key={key} {...inputProps} onChange={onChange} />
       );
+    }
+    case InputType.SIZE: {
+      return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.EDGE: {
+      return <EdgeInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.COVER_LAYOUT: {
       return (

@@ -10,6 +10,15 @@ html {
     z-index: 1000;
   }
 
+  .bp3-overlay-content:focus,
+  .bp3-menu:focus {
+    outline: none !important;
+  }
+
+  .bp3-menu {
+    background: #44494e !important;
+  }
+
   .bp3-dark label.bp3-control {
     color: #c3c3c3;
   }

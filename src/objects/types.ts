@@ -1,3 +1,5 @@
+import { IInputMetadataValues } from "../inputs/types";
+
 export enum ObjectType {
   TEXT = "text",
   RICH_TEXT = "rich_text",
@@ -19,6 +21,7 @@ export interface IDefinition {
   type: ObjectType;
   properties: any[];
   values: { [key: string]: any };
+  valuesMetadata: { [key: string]: IInputMetadataValues };
 }
 
 export interface ICommonObjectProperties {
@@ -43,6 +46,14 @@ export interface IAbsoluteLayout {
   height: number;
 }
 
+export interface IEdgeLayout {
+  width: number;
+  height: number;
+  gap: number;
+  edge: string;
+  relativeTo: string;
+}
+
 export interface ICoverLayout {
   // TODO
   tmp1: number;
@@ -60,19 +71,24 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
   type: ObjectType;
   isVisible: boolean;
   isLocked: boolean;
+  /** object itself is setting size */
+  //selfSize: boolean;
   supportedLayout: {
     cover: boolean;
     grid: boolean;
     absolute: boolean;
+    edge: boolean;
   };
   layout:
     | "absolute"
     | "grid"
     | "cover"
+    | "snap"
     | "fit_page"
     | "fit_stage"
     | "fit_guidelines";
   absoluteLayout?: IAbsoluteLayout;
+  edgeLayout?: IEdgeLayout;
   gridLayout?: IGridLayout;
   coverLayout?: ICoverLayout;
   isCoverPlacement?: boolean; // DEPRECIATED
