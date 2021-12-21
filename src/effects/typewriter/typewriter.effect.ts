@@ -16,9 +16,9 @@ export function getTypewriterEffectDuration(object?: IObject, config?: any) {
   return (
     effValues.initialDelay +
     effValues.timeAfterWrite +
-    wordsArr!.length * effValues.emptySpaceTypeTime +
+    (wordsArr!.length - 1) * effValues.emptySpaceTypeTime +
     charsStr!.length * effValues.typeCharacterSpeed +
-    wordsArr!.length * effValues.emptySpaceDeleteTime +
+    (wordsArr!.length - 1) * effValues.emptySpaceDeleteTime +
     charsStr!.length * effValues.deleteCharacterSpeed
   );
 }

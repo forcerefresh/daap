@@ -1,25 +1,25 @@
 import gsap from "gsap";
-import { format } from "path";
+import { MultiImageValues } from "../../inputs/types";
+import { IObject } from "../../objects/types";
 import { flip, IFlipEffect } from "./flip.types";
+
+export function getFlipEffectDuration(object?: IObject, config?: any) {
+  const effValues = config?.effect?.values!;
+  const timePerCard = effValues.durationPerItem;
+  const timeBetweenCard = effValues.durationBetweenItems;
+  const images = object?.definition.values as MultiImageValues;
+  const cards = images.urls.length;
+  return cards * (timePerCard + timeBetweenCard) - timePerCard / 2;
+}
 
 gsap.registerEffect({
   name: flip,
   effect: function (targets: any, config: IFlipEffect) {
-    /////
-    const durationPerItem = 2;
-    const durationBetweenItems = 3;
-    // ///
     const main = targets[0] as HTMLElement;
     const cardCont = main.firstChild as HTMLDivElement;
     const images: HTMLDivElement[] = [];
-
-    /*let firstPhoto: HTMLDivElement;
-    firstPhoto = document.createElement("div");
-    firstPhoto.style.position = "absolute";
-    firstPhoto.style.width = "100%";
-    firstPhoto.style.height = "100%";
-    firstPhoto.style.backfaceVisibility = "hidden";*/
-    // cardCont.prepend(firstPhoto);
+    const durationBetweenItems = config.durationBetweenItems / 1000;
+    const durationPerItem = config.durationPerItem / 1000;
 
     if (cardCont?.hasChildNodes()) {
       let children = cardCont.childNodes;
@@ -29,8 +29,6 @@ gsap.registerEffect({
       }
     }
 
-    console.log(images);
-
     const containers = [];
     const emptyDiv = document.createElement("div");
     images.unshift(emptyDiv);
@@ -39,12 +37,12 @@ gsap.registerEffect({
       card.style.position = "absolute";
       card.style.display = "none";
       card.style.transformStyle = "preserve-3d";
-      card.style.transformOrigin = "center right";
+      card.style.transformOrigin = `center ${
+        config.spinDirection === "cc" ? "right" : "left"
+      }`;
       containers.push(card);
       main.appendChild(card);
     }
-
-    console.log(containers);
 
     gsap.set(main, {
       perspective: "600px",
@@ -59,25 +57,14 @@ gsap.registerEffect({
     });
 
     cardCont.style.display = "none";
-    //images.forEach((img, idx) => {
-    //img.style.backfaceVisibility = "hidden";
-    //img.style.display = "none";
-    //img.style.zIndex = 100 - idx + "";
-    //});
-
     const tl = gsap.timeline();
-
-    //images[0].style.display = "block";
-    //images[1].style.display = "block";
-    //images[1].style.transform = "rotateY(180deg)";
-
     tl.to(
       containers[0],
       {
         duration: 0,
         display: "block",
-        rotateY: -90,
-        translateX: "-50%",
+        rotateY: config.spinDirection === "cc" ? -90 : 90,
+        translateX: `${config.spinDirection === "cc" ? "-" : ""}50%`,
       },
       0
     );
@@ -87,21 +74,16 @@ gsap.registerEffect({
       {
         duration: durationPerItem / 2,
         display: "block",
-        rotateY: -180,
-        translateX: "-100%",
+        rotateY: config.spinDirection === "cc" ? -180 : 180,
+        translateX: `${config.spinDirection === "cc" ? "-" : ""}100%`,
         ease: config.ease,
       },
       0
     );
 
-    // 4 slike imam 3 rotacije
     let currentPosition = 0;
-    //durationPerItem / 2 + durationBetweenItems;
-
-    console.log(currentPosition);
 
     for (let i = 0; i < containers.length; i++) {
-      console.log(currentPosition);
       // turn on card
       tl.to(
         containers[i],
@@ -117,8 +99,8 @@ gsap.registerEffect({
         containers[i],
         {
           duration: durationPerItem,
-          rotateY: -180,
-          translateX: "-100%",
+          rotateY: config.spinDirection === "cc" ? -180 : 180,
+          translateX: `${config.spinDirection === "cc" ? "-" : ""}100%`,
           ease: config.ease,
         },
         currentPosition
