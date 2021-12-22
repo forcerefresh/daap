@@ -43,10 +43,13 @@
       height: 11vh;
     }
     .layers {
-      height: 20vh;
+      height: 30vh;
+      max-height: 30vh;
     }
     .properties {
-      height: 60vh;
+      height: 50vh;
+      max-height: 50vh;
+      min-height: 50vh;
     }
     .action {
       height: 95px;

@@ -19,6 +19,7 @@ import {
   removeObjectsFromSelection,
   deactivateObject,
   updateLayer,
+  forceActivateLayer,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
@@ -75,6 +76,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     selectedObjectIds,
     layoutStaticEffectsPanel,
     breakpointsConfiguration,
+    forceShowLayer,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -89,6 +91,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _removeObjectsFromSelection,
     _deactivateObject,
     _updateLayer,
+    _forceActivateLayer,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -122,7 +125,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         ? _addLayersToSelection([layerId])
         : _removeLayersFromSelection([layerId]);
     } else {
-      _activateLayer(layerId);
+      _forceActivateLayer(layerId);
       _selectLayers([layerId]);
     }
   };
@@ -293,7 +296,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   key={layer?.id}
                   onClick={(event) => onLayerClick(event, layer.id)}
                   className={cx(css.layerInner, {
-                    [css.active]: activeLayerId === layer.id,
+                    [css.active]: activeLayerId === layer.id && forceShowLayer,
                   })}
                 >
                   <div>
@@ -321,11 +324,25 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           type: "layer",
                         });
                       }}
-                      className={css.slideProperties}
+                      className={css.slideEffect}
                       small={true}
                       icon="walk"
                     ></Button>
 
+                    {layer.definition.values.hasLayoutChildren && (
+                      <Icon icon="page-layout" className={css.layoutIcon} />
+                    )}
+                    {/*<Button
+                      minimal
+                      onClick={(event: any) => {
+                        event.stopPropagation();
+                        _forceActivateLayer(layer.id);
+                        _selectLayers([layer.id]);
+                      }}
+                      className={css.slideProperties}
+                      small={true}
+                      icon="properties"
+                    ></Button>*/}
                     <div className={css.layerName}>{layer.name}</div>
 
                     <div className={css.layerResponseVisibility}>
@@ -513,7 +530,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             </div>
                             <div className={css.objectDescription}>
                               <div>{objectById[objectId].name} </div>
-                              <div>
+                              {/*<div>
                                 delay:{" "}
                                 <span className={css.inlineValue}>
                                   {get(object, "transitions.in.delay")}ms
@@ -534,7 +551,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                     {get(object, "transitions.in.delay")}ms
                                   </span>
                                 </div>
-                              )}
+                              )} */}
                             </div>
                             <div>
                               <Button
@@ -622,6 +639,7 @@ const mapStateToProps = (state: IStore) => {
     selectedObjectIds: selection.selectedObjectIds,
     layoutStaticEffectsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpointsConfiguration,
+    forceShowLayer: selection.forceShowLayer,
   };
 };
 
@@ -632,6 +650,7 @@ const mapDispatchToProps = {
     removeLayersFromSelection(layerIds),
   _deleteLayers: (layerIds: string[]) => deleteLayers(layerIds),
   _activateLayer: (layerId: string) => activateLayer(layerId),
+  _forceActivateLayer: (layerId: string) => forceActivateLayer(layerId),
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (
     layerId: string,

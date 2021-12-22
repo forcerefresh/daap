@@ -45,6 +45,14 @@
   font-weight: bold;
   color: gray;
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+  .panelName {
+    color: #1f82c0;
+    margin-left: 10px;
+  }
+  .panelNameLayer {
+    color: lightcoral;
+  }
 }
 
 .propertiesHolder {

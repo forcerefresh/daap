@@ -275,6 +275,7 @@ export default FormWithLayoutConnected;
 export function flattenForm(form: IFormItem[]): IFormItem[] {
   const itemsArr: IFormItem[] = [];
   flattenFormRec(itemsArr, form);
+  console.log(itemsArr);
   return itemsArr;
 }
 

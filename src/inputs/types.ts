@@ -22,7 +22,7 @@ export enum InputType {
   SPLIT = "split",
   TRANSFORM = "transform",
   SIZE = "size",
-  EDGE = "edge",
+  SNAP = "snap",
   IMAGE = "image",
   MULTI_IMAGE = "multi_image",
   VIDEO = "video",
@@ -43,6 +43,7 @@ export enum InputType {
   SLIDER_INPUT = "slider_input",
   BUTTON_GROUP_INPUT = "button_group_input",
   BOX = "box",
+  LAYOUT_CHILDREN = "layout_children",
 }
 
 export enum PresetGroup {
@@ -94,6 +95,7 @@ export interface IUpdateInput {
       | RGBColor[]
       | ICornerRadiusValue
       | IBoxValue
+      | ILayoutChildrenValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -324,7 +326,7 @@ export interface ITransformInput<T = string> {
   propertyName: T;
   value: { left: number; top: number; width: number; height: number };
   defaultValue: { left: number; top: number; width: number; height: number };
-  inputProps?: { selfSize?: boolean };
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean };
 }
 
 export interface IEdgeInput<T = string> {
@@ -346,17 +348,39 @@ export interface IEdgeInput<T = string> {
     edge: string;
     relativeTo: string;
   };
-  inputProps?: { selfSize?: boolean };
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean };
 }
 
 export interface ISizeInput<T = string> {
-  inputType: InputType.TEXT;
+  inputType: InputType.SIZE;
   displayName: string;
   helperText?: string;
   propertyName: T;
   value: { width: number; height: number };
   defaultValue: { width: number; height: number };
   inputProps?: { disabled?: boolean };
+}
+
+export enum LayoutChildrenType {
+  Column = "column",
+  Row = "row",
+  Table = "table",
+  Inline = "inline",
+}
+export interface ILayoutChildrenValue {
+  type: LayoutChildrenType;
+  align: "start" | "center" | "end";
+  justify: "start" | "center" | "end";
+}
+
+export interface ILayoutChildrenInput<T = string> {
+  inputType: InputType.LAYOUT_CHILDREN;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: ILayoutChildrenValue;
+  defaultValue: ILayoutChildrenValue;
+  inputProps?: {};
 }
 
 export interface IImageInputValue {
@@ -432,6 +456,7 @@ export interface IGridPlacementInput<T = string> {
   propertyName: T;
   value: IGridPlacementValue;
   defaultValue: IGridPlacementValue;
+  inputProps?: { disablePosition?: boolean };
 }
 
 export interface IBoxValue {
@@ -543,6 +568,7 @@ export interface ISelectInput<T = string> {
   value: string;
   defaultValue: string | null;
   options: { value: string; label: string }[];
+  inputProps?: { disabled?: boolean };
 }
 
 export interface IEventsInput<T = string> {

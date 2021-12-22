@@ -87,7 +87,8 @@ export function getSelectField<T>(
   value: T,
   options: { value: string | number; label: string }[],
   onChange: (value: T) => void,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabled?: boolean } = {},
+  helperText?: string
 ) {
   const objectDef = {
     displayName: label,
@@ -95,6 +96,7 @@ export function getSelectField<T>(
     value: value,
     options: options,
     inputProps,
+    helperText,
   };
 
   return getInputForm(InputType.SELECT, objectDef, onChange);
@@ -198,12 +200,14 @@ export function getCoverLayoutField<T>(
 export function getGridLayoutField<T>(
   label: string,
   value: T,
-  onChange: (value: T) => void
+  onChange: (value: T) => void,
+  inputProps?: { disablePosition?: boolean }
 ) {
   const objectDef = {
     displayName: label,
     inputType: InputType.GRID_LAYOUT,
     value: value,
+    inputProps,
   };
 
   return getInputForm(InputType.GRID_LAYOUT, objectDef, onChange);
@@ -213,7 +217,7 @@ export function getAbsoluteLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps: { selfSize: boolean }
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean }
 ) {
   const objectDef = {
     displayName: label,
@@ -241,20 +245,20 @@ export function getSizeLayoutField<T>(
   return getInputForm(InputType.SIZE, objectDef, onChange);
 }
 
-export function getEdgeLayoutField<T>(
+export function getSnapLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps: { selfSize: boolean }
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean }
 ) {
   const objectDef = {
     displayName: label,
-    inputType: InputType.EDGE,
+    inputType: InputType.SNAP,
     value: value,
     inputProps,
   };
 
-  return getInputForm(InputType.EDGE, objectDef, onChange);
+  return getInputForm(InputType.SNAP, objectDef, onChange);
 }
 
 export function getButtonGroupField<T>(

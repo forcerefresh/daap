@@ -18,7 +18,7 @@ import {
 } from "../inputs/types";
 import { IObject, ObjectType } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
-import { ILayer, ILayers } from "../store/reducers/i-layers";
+import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide, ISlides } from "../store/reducers/i-slides";
 import { BreakpointConfiguration } from "../store/reducers/settings";
@@ -81,6 +81,8 @@ export function generatePlayerData(
 
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
+      layer.definition.values as ILayerValues;
+
       const layerClassName = "layer-" + layer.id;
       transitionsData.push({
         objectClass: layerClassName,
@@ -99,7 +101,17 @@ export function generatePlayerData(
 
       // TODO: IMPORTANT
       // IMPORTANT: !!!!!! SIZE HARDCODED
-      html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
+      //html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
+      let layerStyle = `position:absolute;`;
+      layerStyle += `border: 1px solid red;`;
+      const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
+        resetPosition: false,
+      });
+      forOwn(calculatedLayerSize, function (value, key) {
+        layerStyle += key + ":" + value + ";";
+      });
+
+      html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
 
       const objectArr = getObjectArr(objects, layer.objectIds);
       objectArr.forEach((object) => {

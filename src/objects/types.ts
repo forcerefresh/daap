@@ -46,7 +46,7 @@ export interface IAbsoluteLayout {
   height: number;
 }
 
-export interface IEdgeLayout {
+export interface ISnapLayout {
   width: number;
   height: number;
   gap: number;
@@ -54,32 +54,24 @@ export interface IEdgeLayout {
   relativeTo: string;
 }
 
-export interface ICoverLayout {
-  // TODO
-  tmp1: number;
-}
+export interface IFitLayout {}
 export interface IGridLayout {
   left: number;
   top: number;
   right: number;
   bottom: number;
 }
-export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
-  id: string;
-  name: string;
-  layerId: string;
-  type: ObjectType;
-  isVisible: boolean;
-  isLocked: boolean;
-  /** object itself is setting size */
-  selfSize: boolean;
+
+export interface ILayout {
   supportedLayout: {
-    cover: boolean;
+    none: boolean;
+    fit: boolean;
     grid: boolean;
     absolute: boolean;
-    edge: boolean;
+    snap: boolean;
   };
   layout:
+    | "none"
     | "absolute"
     | "grid"
     | "cover"
@@ -87,12 +79,25 @@ export interface IObject<T extends {} = {}> extends ICommonObjectProperties {
     | "fit_page"
     | "fit_stage"
     | "fit_guidelines";
+
   absoluteLayout?: IAbsoluteLayout;
-  edgeLayout?: IEdgeLayout;
+  snapLayout?: ISnapLayout;
   gridLayout?: IGridLayout;
-  coverLayout?: ICoverLayout;
-  isCoverPlacement?: boolean; // DEPRECIATED
-  isGridPlacement?: boolean; // DEPRECIATED
+  fitLayout?: IFitLayout;
+  /** object itself is setting size */
+  selfSize: boolean;
+}
+
+export interface IObject<T extends {} = {}>
+  extends ICommonObjectProperties,
+    ILayout {
+  id: string;
+  name: string;
+  layerId: string;
+  type: ObjectType;
+  isVisible: boolean;
+  isLocked: boolean;
+
   // hasTimeline: boolean; // show in timeline
   transitions: ITransitions;
   definition: IDefinition;

@@ -107,6 +107,7 @@ export const TransformInputForm: React.FC<ITransformInput & IUpdateInput> = (
       <div>
         <FormGroup label={"X"} labelFor="text-input-X" inline>
           <InputGroup
+            disabled={inputProps.disablePosition}
             inputRef={(el) => {
               if (el) el!.autocomplete = "off";
             }}
@@ -120,6 +121,7 @@ export const TransformInputForm: React.FC<ITransformInput & IUpdateInput> = (
         </FormGroup>
         <FormGroup label={"Y"} labelFor="text-input-Y" inline>
           <InputGroup
+            disabled={inputProps.disablePosition}
             inputRef={(el) => {
               if (el) el!.autocomplete = "off";
             }}

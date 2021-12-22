@@ -1,6 +1,6 @@
 import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
-import { IObject, ObjectType } from "../../objects/types";
+import { ILayout, IObject, ObjectType } from "../../objects/types";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
@@ -11,12 +11,16 @@ import { RGBColor } from "react-color";
 import { Body1 } from "./preview/Body1/Body1";
 
 export function calculateObjectSize(
-  object: IObject,
+  object: ILayout,
   //stageSize: { width: number; height: number },
   breakpointConfig: BreakpointConfiguration,
   { resetPosition }: { resetPosition: boolean }
 ): React.CSSProperties {
   const stageSize = breakpointConfig.normal.slide;
+
+  if (object.layout === "none") {
+    return { left: 0, top: 0, width: 0, height: 0 };
+  }
 
   // 1. if object has position
   if (object.layout === "absolute") {
@@ -65,27 +69,27 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  const gap = object.edgeLayout!.gap;
+  const gap = object.snapLayout!.gap;
 
   if (object.layout === "snap") {
     const relativeToSize = getPSGSize(
-      object.edgeLayout?.relativeTo!,
+      object.snapLayout?.relativeTo!,
       breakpointConfig
     )!;
 
     let sizeObj;
-    switch (object.edgeLayout?.edge!) {
+    switch (object.snapLayout?.edge!) {
       case "left": {
         const top =
           relativeToSize.top +
           relativeToSize.height / 2 -
-          object.edgeLayout!.height / 2;
+          object.snapLayout!.height / 2;
 
         sizeObj = {
           top,
           left: relativeToSize.left + gap,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -93,13 +97,13 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width / 2 -
-          object.edgeLayout!.width / 2;
+          object.snapLayout!.width / 2;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -107,18 +111,18 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width -
-          object.edgeLayout!.width -
+          object.snapLayout!.width -
           gap;
         const top =
           relativeToSize.top +
           relativeToSize.height / 2 -
-          object.edgeLayout!.height / 2;
+          object.snapLayout!.height / 2;
 
         sizeObj = {
           top,
           left,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -127,18 +131,18 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width / 2 -
-          object.edgeLayout!.width / 2;
+          object.snapLayout!.width / 2;
         const top =
           relativeToSize.top +
           relativeToSize.height -
-          object.edgeLayout!.height -
+          object.snapLayout!.height -
           gap;
 
         sizeObj = {
           top,
           left,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -146,8 +150,8 @@ export function calculateObjectSize(
         sizeObj = {
           top: relativeToSize.top + gap,
           left: relativeToSize.left + gap,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -155,14 +159,14 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width -
-          object.edgeLayout!.width -
+          object.snapLayout!.width -
           gap;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -171,13 +175,13 @@ export function calculateObjectSize(
         const top =
           relativeToSize.top +
           relativeToSize.height -
-          object.edgeLayout!.height;
+          object.snapLayout!.height;
 
         sizeObj = {
           top: top - gap,
           left: relativeToSize.left + gap,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }
@@ -185,19 +189,19 @@ export function calculateObjectSize(
         const top =
           relativeToSize.top +
           relativeToSize.height -
-          object.edgeLayout!.height -
+          object.snapLayout!.height -
           gap;
         const left =
           relativeToSize.left +
           relativeToSize.width -
-          object.edgeLayout!.width -
+          object.snapLayout!.width -
           gap;
 
         sizeObj = {
           top: top,
           left: left,
-          width: object.edgeLayout!.width,
-          height: object.edgeLayout!.height,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
         };
         break;
       }

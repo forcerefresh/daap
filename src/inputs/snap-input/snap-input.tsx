@@ -7,7 +7,7 @@ import {
   getSizeLayoutField,
 } from "../input-utils";
 import { IEdgeInput, IUpdateInput } from "../types";
-import css from "./edge-input.module.scss";
+import css from "./snap-input.module.scss";
 
 const RELATIVE_TO_OPTIONS = [
   { label: "Page", value: "page" },
@@ -26,7 +26,7 @@ const EDGE_OPTIONS = [
   { label: "Bottom-Right", value: "bottom-right" },
 ];
 
-export const EdgeInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
+export const SnapInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
   const { value, onChange = noop, inputProps = {} } = props;
 
   return (
@@ -37,11 +37,21 @@ export const EdgeInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
         RELATIVE_TO_OPTIONS,
         (newRelativeTo) => {
           onChange({ ...value, relativeTo: newRelativeTo });
-        }
+        },
+        { disabled: inputProps.disablePosition }
       )}
-      {getSelectField("Snap to", value.edge, EDGE_OPTIONS, (newEdge) => {
-        onChange({ ...value, edge: newEdge });
-      })}
+      {getSelectField(
+        "Snap to",
+        value.edge,
+        EDGE_OPTIONS,
+        (newEdge) => {
+          onChange(
+            { ...value, edge: newEdge },
+            { disabled: inputProps.disablePosition }
+          );
+        },
+        { disabled: inputProps.disablePosition }
+      )}
       {getSizeLayoutField(
         "Size",
         { width: value.width, height: value.height },
@@ -50,9 +60,15 @@ export const EdgeInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {
         },
         { disabled: inputProps.selfSize }
       )}
-      {getNumericFiled("Gap", value.gap, (newGap) => {
-        onChange({ ...value, gap: newGap });
-      })}
+      {getNumericFiled(
+        "Gap",
+        value.gap,
+        (newGap) => {
+          onChange({ ...value, gap: newGap });
+        },
+        "",
+        { disabled: inputProps.disablePosition }
+      )}
     </div>
   );
 };

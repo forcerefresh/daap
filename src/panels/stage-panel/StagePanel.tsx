@@ -1,5 +1,11 @@
 import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  CSSProperties,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Icon } from "@blueprintjs/core";
 
 import { connect } from "react-redux";
@@ -58,6 +64,8 @@ import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
+import { ILayoutChildrenValue } from "../../inputs/types";
+import { selection } from "../../store/reducers/selection";
 
 interface ISize {
   width: number;
@@ -420,8 +428,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   };
 
-  function renderObjectHandles(object: IObject) {
-    const isAbsolutePosition = object.layout === "absolute";
+  function renderObjectHandles(
+    object: IObject,
+    layoutChildren?: ILayoutChildrenValue
+  ) {
+    const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
     if (!isAbsolutePosition) {
       return null;
     }
@@ -496,22 +507,67 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       </React.Fragment>
     );
   }
+  function renderLayer(layer: ILayer) {
+    const layerValues = layer.definition.values;
+    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
+      resetPosition: false,
+    });
 
-  function renderObject(object: IObject) {
+    const layerStyle = { ...calculatedLayerSize };
+    layerStyle.position = "absolute";
+    //layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
+    //layerStyle.border = "1px solid red";
+
+    if (layerValues.hasLayoutChildren) {
+      const t = layerValues.layoutChildren.type;
+      if (t === "row" || t === "column") {
+        layerStyle.display = "flex";
+        layerStyle.alignItems = layerValues.layoutChildren.align;
+        layerStyle.justifyContent = layerValues.layoutChildren.justify;
+
+        if (t === "row") {
+          layerStyle.flexDirection = "row";
+        }
+        if (t === "column") {
+          layerStyle.display = "flex";
+          layerStyle.flexDirection = "column";
+        }
+      }
+    }
+
+    return (
+      <div className={cx("LAYER", css.layer)} style={layerStyle}>
+        {layer.objectIds.map((objectId) => {
+          const object = objectByIdLocal[objectId];
+          const layoutChildren = layer.definition.values.hasLayoutChildren
+            ? layer.definition.values.layoutChildren
+            : undefined;
+          return renderObject(object, layoutChildren);
+        })}
+      </div>
+    );
+  }
+
+  function renderObject(
+    object: IObject,
+    layoutChildren?: ILayoutChildrenValue
+  ) {
     const objectId = object.id;
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
-    const isAbsolutePosition = object.layout === "absolute";
+    const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
 
     // thumbnail arr
     const slidesArr = getSlideArr(slides);
     const slidesCounter = slidesArr.length;
     const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
 
+    const cssPosition = !layoutChildren ? "absolute" : "static";
+
     // *** NOTE: we are rendering different for selected and non selected object
 
     // 1. NON SELECTED  (NON-DRAGGABLE)
 
-    if (!isSelected) {
+    if (!isSelected || !isAbsolutePosition) {
       //
       const calculatedObjectSize = calculateObjectSize(
         object,
@@ -522,10 +578,23 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       );
 
       const objectStyle = { ...calculatedObjectSize };
-      objectStyle.position = "absolute";
+
+      objectStyle.position = cssPosition;
+
+      // object holder
+      const objectHolderStyle: CSSProperties = {
+        zIndex: 100,
+        position: "relative",
+      };
+      if (layoutChildren?.type === "inline") {
+        objectHolderStyle.display = "inline-block";
+      }
 
       return (
-        <div style={{ zIndex: 100, position: "absolute" }}>
+        <div
+          style={objectHolderStyle}
+          className="NOT_isSelected_OR_NOT_isAbsolutePosition"
+        >
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
@@ -540,16 +609,57 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             style={objectStyle}
             className={cx({
               [css.notVisible]: !object.isVisible,
+              [css.layoutChildrenSelected]: isSelected,
             })}
           />
-          <div
-            onClick={(event) => {
-              onObjectClick(event, objectId);
-            }}
-            key={object.id}
-            className={cx(css[object.type])}
-            style={objectStyle}
-          />
+          {!isSelected && (
+            <div
+              onClick={(event) => {
+                onObjectClick(event, objectId);
+              }}
+              key={object.id}
+              className={cx(
+                css[object.type],
+                "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
+              )}
+              style={{
+                ...objectStyle,
+                position: "absolute",
+                //left: "0px",
+                //top: "0px",
+              }}
+            />
+          )}
+
+          {isSelected && (
+            <>
+              {
+                <div
+                  ref={resizingSelectionRef}
+                  key={object.id}
+                  className={cx(css.selection, css[object.type])}
+                  style={{
+                    ...objectStyle,
+                    position: "absolute",
+                    borderWidth: 1 + "px",
+                    left: "0px",
+                    top: "0px",
+                  }}
+                />
+              }
+
+              <div className={css.selectionInfo}>
+                {object.isLocked ? (
+                  <div className={css.lockIconHolder}>
+                    <Icon icon="lock" />
+                  </div>
+                ) : null}
+                <div className={css.currentPosition}>
+                  {getPositionInfo(object)} asasa
+                </div>
+              </div>
+            </>
+          )}
         </div>
       );
     }
@@ -566,8 +676,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
 
     const objectStyle2 = { ...calculatedObjectSize };
-
-    objectStyle2.position = "absolute";
+    objectStyle2.position = cssPosition;
     objectStyle2.borderWidth = 1 + "px";
 
     let widthAndHeightStyle = {
@@ -616,6 +725,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
     //if (isAbsolutePosition) {
+
+    // AKO RESUJZIJEMO OBJEKAT
     if (resizeRect && resizeData?.objectId === object.id) {
       objDraggablePos.x = resizeRect.x;
       objDraggablePos.y = resizeRect.y;
@@ -623,111 +734,120 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       objDraggablePos.x = parseInt(calculatedObjectSize.left!.toString(), 10);
       objDraggablePos.y = parseInt(calculatedObjectSize.top!.toString(), 10);
     }
+
     //}
+    // object holder
+    const objectHolderStyle: CSSProperties = {
+      position: "relative",
+    };
 
     return (
-      <Draggable
-        disabled={
-          stageToolInternal !== StageTools.SELECT || !isAbsolutePosition
-        }
-        key={objectId + "_drag"}
-        position={objDraggablePos}
-        // workaround to prevent move when object is locked
-        grid={object.isLocked ? [10000000, 10000000] : [1, 1]}
-        scale={1 * stageZoom}
-        bounds={{}}
-        onStart={(evt: DraggableEvent, data: DraggableData) => {
-          if (stageToolInternal !== StageTools.SELECT) {
-            evt.stopPropagation();
-            return;
+      <div style={objectHolderStyle} className="HOLDER123">
+        <Draggable
+          disabled={
+            stageToolInternal !== StageTools.SELECT || !isAbsolutePosition
           }
+          key={objectId + "_drag"}
+          position={objDraggablePos}
+          // workaround to prevent move when object is locked
+          grid={object.isLocked ? [10000000, 10000000] : [1, 1]}
+          scale={1 * stageZoom}
+          bounds={{}}
+          onStart={(evt: DraggableEvent, data: DraggableData) => {
+            if (stageToolInternal !== StageTools.SELECT) {
+              evt.stopPropagation();
+              return;
+            }
 
-          setDragStartPosition({ x: data.x, y: data.y });
-          setSelectionStartPosition(null);
-        }}
-        onDrag={(evt: DraggableEvent, data: DraggableData) => {
-          if (stageToolInternal !== StageTools.SELECT) {
-            evt.stopPropagation();
-            return;
-          }
+            setDragStartPosition({ x: data.x, y: data.y });
+            setSelectionStartPosition(null);
+          }}
+          onDrag={(evt: DraggableEvent, data: DraggableData) => {
+            if (stageToolInternal !== StageTools.SELECT) {
+              evt.stopPropagation();
+              return;
+            }
 
-          setSelectionStartPosition(null);
-          setSelRectDelta((_delta) => ({
-            x: _delta.x + data.deltaX, // Math.round(_delta.x + data.deltaX),
-            y: _delta.y + data.deltaY, // Math.round(_delta.y + data.deltaY),
-          }));
-          //object.left! = object.left! + data.deltaX;
-          //object.top! = object.top! + data.deltaY;
-        }}
-        onStop={(evt: DraggableEvent, data: DraggableData) => {
-          if (stageToolInternal !== StageTools.SELECT) {
-            evt.stopPropagation();
-            return;
-          }
+            setSelectionStartPosition(null);
+            setSelRectDelta((_delta) => ({
+              x: _delta.x + data.deltaX, // Math.round(_delta.x + data.deltaX),
+              y: _delta.y + data.deltaY, // Math.round(_delta.y + data.deltaY),
+            }));
+            //object.left! = object.left! + data.deltaX;
+            //object.top! = object.top! + data.deltaY;
+          }}
+          onStop={(evt: DraggableEvent, data: DraggableData) => {
+            if (stageToolInternal !== StageTools.SELECT) {
+              evt.stopPropagation();
+              return;
+            }
 
-          // check if start end position are the same (mean object is on the same place)
-          // this means we have "mouse click" event
-          if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
-            onObjectClick(evt as any, objectId);
-          } else {
-            // reset delta
-            setSelRectDelta({ x: 0, y: 0 });
-            // update objects
-            selectedObjectIds.forEach((objectId) => {
-              if (!objectByIdLocal[objectId].isLocked) {
-                _updateObject(objectByIdLocal[objectId]);
-              }
-            });
-          }
-        }}
-      >
-        <div
-          data-draggable-object-id={object.id}
-          //onMouseUp={(e) => e.stopPropagation()}
-          style={{ zIndex: 100, position: "absolute" }}
-          className={cx({
-            [css.notVisibleHolder]: !object.isVisible,
-          })}
+            // check if start end position are the same (mean object is on the same place)
+            // this means we have "mouse click" event
+            if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
+              onObjectClick(evt as any, objectId);
+            } else {
+              // reset delta
+              setSelRectDelta({ x: 0, y: 0 });
+              // update objects
+              selectedObjectIds.forEach((objectId) => {
+                if (!objectByIdLocal[objectId].isLocked) {
+                  _updateObject(objectByIdLocal[objectId]);
+                }
+              });
+            }
+          }}
         >
           <div
-            ref={resizingObjectRef}
-            key={object.id + "_1"}
-            dangerouslySetInnerHTML={{
-              __html: getObjectHtml(
-                { ...object, ...widthAndHeightObject },
-                { ...calculatedObjectSize },
-                false,
-                thumbnailHtmlArr,
-                slidesCounter
-              ),
-            }}
-            style={{
-              ...objectStyle2,
-              ...widthAndHeightStyle,
-              left: "0px",
-              top: "0px",
-            }}
+            data-draggable-object-id={object.id}
+            //onMouseUp={(e) => e.stopPropagation()}
+            style={{ zIndex: 100, position: "absolute" }}
             className={cx({
-              [css.notVisible]: !object.isVisible,
+              [css.notVisibleHolder]: !object.isVisible,
             })}
-          />
-          <div
-            ref={resizingSelectionRef}
-            key={object.id}
-            className={cx(css.selection, css[object.type])}
-            style={{ ...objectStyle2, left: "0px", top: "0px" }}
-          />
+          >
+            <div
+              ref={resizingObjectRef}
+              key={object.id + "_1"}
+              dangerouslySetInnerHTML={{
+                __html: getObjectHtml(
+                  { ...object, ...widthAndHeightObject },
+                  { ...calculatedObjectSize },
+                  false,
+                  thumbnailHtmlArr,
+                  slidesCounter
+                ),
+              }}
+              style={{
+                ...objectStyle2,
+                ...widthAndHeightStyle,
+                left: "0px",
+                top: "0px",
+              }}
+              className={cx({
+                [css.notVisible]: !object.isVisible,
+              })}
+            />
+            <div
+              ref={resizingSelectionRef}
+              key={object.id}
+              className={cx(css.selection, css[object.type])}
+              style={{ ...objectStyle2, left: "0px", top: "0px" }}
+            />
 
-          <div className={css.selectionInfo}>
-            {object.isLocked ? (
-              <div className={css.lockIconHolder}>
-                <Icon icon="lock" />
+            <div className={css.selectionInfo}>
+              {object.isLocked ? (
+                <div className={css.lockIconHolder}>
+                  <Icon icon="lock" />
+                </div>
+              ) : null}
+              <div className={css.currentPosition}>
+                {getPositionInfo(object)}
               </div>
-            ) : null}
-            <div className={css.currentPosition}>{getPositionInfo(object)}</div>
+            </div>
           </div>
-        </div>
-      </Draggable>
+        </Draggable>
+      </div>
     );
   }
 
@@ -908,6 +1028,98 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     ...getBgColor(settings.sliderBackgroundColor),
   };
 
+  const renderResizerWithLayer = (layer: ILayer) => {
+    const layerValues = layer.definition.values;
+    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
+      resetPosition: false,
+    });
+
+    const layerStyle = {
+      ...calculatedLayerSize,
+      left: parseInt(calculatedLayerSize.left as string) * stageZoom + "px",
+      top: parseInt(calculatedLayerSize.top as string) * stageZoom + "px",
+    };
+    layerStyle.position = "absolute";
+
+    layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
+    layerStyle.height =
+      parseInt(layerStyle.height as string) * stageZoom + "px";
+
+    return (
+      <div
+        className={cx(css.layerMoveForResizerWTF, "LAYER_MOVE_FOR_RESIZER")}
+        style={layerStyle}
+      >
+        {renderResizer(layer)}
+      </div>
+    );
+  };
+
+  const renderResizer = (layer: ILayer) => {
+    return layer.objectIds.map((objectId) => {
+      const layoutChildren = layer.definition.values.hasLayoutChildren
+        ? layer.definition.values.layoutChildren
+        : undefined;
+      const object = objectByIdLocal[objectId];
+      const isAbsolutePosition = object.layout === "absolute";
+
+      /*if (!isAbsolutePosition) {
+          return null;
+        }*/
+
+      const calculatedObjectSize = calculateObjectSize(
+        object,
+        breakpointConfig!,
+        {
+          resetPosition: false,
+        }
+      );
+      const sizeObj = pick(
+        calculatedObjectSize,
+        "left",
+        "top",
+        "width",
+        "height"
+      );
+
+      const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
+
+      //   sizeObj.left = sizeObj.top = 0;
+      const objectStyle2 = mapValues(
+        sizeObj,
+        (size) => `${parseInt(size!.toString()!, 10) * stageZoom}px`
+      );
+      (objectStyle2 as any).position = "absolute";
+      (objectStyle2 as any).borderWidth = 1 + "px";
+
+      if (resizeRect && resizeData?.objectId === object.id) {
+        objectStyle2.left = resizeRect.x * stageZoom + "px";
+        objectStyle2.top = resizeRect.y * stageZoom + "px";
+        objectStyle2.width = resizeRect.w * stageZoom + "px";
+        objectStyle2.height = resizeRect.h * stageZoom + "px";
+      }
+
+      return (
+        <>
+          {!layoutChildren && (
+            <div
+              ref={resizingSelectionRef}
+              key={`selbox_${object.id}`}
+              className={cx(css.selection, css[object.type], {
+                [css.active]:
+                  selectedObjectIds.length > 0 /*1*/ &&
+                  selectedObjectIds.indexOf(object.id) !== -1,
+                [css.selected]: isSelected,
+              })}
+              style={{ ...objectStyle2, pointerEvents: "none" }}
+            />
+          )}
+          {renderObjectHandles(object, layoutChildren)}
+        </>
+      );
+    });
+  };
+
   return (
     <div
       key={rerender}
@@ -1051,77 +1263,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   }}
                 />
               )}
-              {!isPreview &&
-                layerArr?.map((layer) => {
-                  return layer.objectIds.map((objectId) => {
-                    const object = objectByIdLocal[objectId];
-                    return renderObject(object);
-                  });
-                })}
+              {!isPreview && layerArr?.map(renderLayer)}
             </div>
             <div className="resizeHolder">
-              {!isPreview &&
-                layerArr?.map((layer) => {
-                  return layer.objectIds.map((objectId) => {
-                    const object = objectByIdLocal[objectId];
-                    const isAbsolutePosition = object.layout === "absolute";
-
-                    /*if (!isAbsolutePosition) {
-                      return null;
-                    }*/
-
-                    const calculatedObjectSize = calculateObjectSize(
-                      object,
-                      breakpointConfig!,
-                      {
-                        resetPosition: false,
-                      }
-                    );
-                    const sizeObj = pick(
-                      calculatedObjectSize,
-                      "left",
-                      "top",
-                      "width",
-                      "height"
-                    );
-
-                    const isSelected =
-                      selectedObjectIds.indexOf(objectId) !== -1;
-
-                    //   sizeObj.left = sizeObj.top = 0;
-                    const objectStyle2 = mapValues(
-                      sizeObj,
-                      (size) =>
-                        `${parseInt(size!.toString()!, 10) * stageZoom}px`
-                    );
-                    (objectStyle2 as any).position = "absolute";
-                    (objectStyle2 as any).borderWidth = 1 + "px";
-
-                    if (resizeRect && resizeData?.objectId === object.id) {
-                      objectStyle2.left = resizeRect.x * stageZoom + "px";
-                      objectStyle2.top = resizeRect.y * stageZoom + "px";
-                      objectStyle2.width = resizeRect.w * stageZoom + "px";
-                      objectStyle2.height = resizeRect.h * stageZoom + "px";
-                    }
-
-                    return (
-                      <>
-                        <div
-                          ref={resizingSelectionRef}
-                          key={`selbox_${object.id}`}
-                          className={cx(css.selection, css[object.type], {
-                            [css.active]:
-                              selectedObjectIds.length > 0 /*1*/ &&
-                              selectedObjectIds.indexOf(object.id) !== -1,
-                            [css.selected]: isSelected,
-                          })}
-                          style={{ ...objectStyle2, pointerEvents: "none" }}
-                        />
-                        {renderObjectHandles(object)}
-                      </>
-                    );
-                  });
-                })}
+              {!isPreview && layerArr?.map(renderResizerWithLayer)}
             </div>
             {!isPreview && (
               <>

@@ -9,20 +9,26 @@ import css from "./grid-placement.module.scss";
 export const GridPlacementInputForm: React.FC<
   IGridPlacementInput & IUpdateInput
 > = (props) => {
-  const { value, onChange } = props;
+  const { value, onChange, inputProps = {} } = props;
 
   return (
     <>
       <div className="input60">
-        {getNumericFiled("Left", value.left, (left: any) => {
-          const valueClone = cloneDeep(value);
-          valueClone.left = left;
-          onChange(valueClone);
-        })}
+        {getNumericFiled(
+          "Left",
+          value.left,
+          (left: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.left = left;
+            onChange(valueClone);
+          },
+          "",
+          { disabled: inputProps.disablePosition }
+        )}
       </div>
 
       <div className="input60">
-        {getNumericFiled("Right", value.right, (right: any) => {
+        {getNumericFiled("Width", value.right, (right: any) => {
           const valueClone = cloneDeep(value);
           valueClone.right = right;
           onChange(valueClone);
@@ -30,15 +36,21 @@ export const GridPlacementInputForm: React.FC<
       </div>
 
       <div className="input60">
-        {getNumericFiled("Top", value.top, (top: any) => {
-          const valueClone = cloneDeep(value);
-          valueClone.top = top;
-          onChange(valueClone);
-        })}
+        {getNumericFiled(
+          "Top",
+          value.top,
+          (top: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.top = top;
+            onChange(valueClone);
+          },
+          "",
+          { disabled: inputProps.disablePosition }
+        )}
       </div>
 
       <div className="input60">
-        {getNumericFiled("Bottom", value.bottom, (bottom: any) => {
+        {getNumericFiled("Height", value.bottom, (bottom: any) => {
           const valueClone = cloneDeep(value);
           valueClone.bottom = bottom;
           onChange(valueClone);

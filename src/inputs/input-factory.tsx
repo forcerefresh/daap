@@ -39,7 +39,8 @@ import { SVGCustomColorsForm } from "./svg-custom-colors-input/svg-custom-colors
 import { OptionalInput } from "./optional-input/optional-input";
 import { noop } from "lodash-es";
 import { SizeInputForm } from "./size-input/size-input";
-import { EdgeInputForm } from "./edge-input/edge-input";
+import { SnapInputForm } from "./snap-input/snap-input";
+import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -254,11 +255,20 @@ export function getInputForm<T>(
         <TransformInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
+    case InputType.LAYOUT_CHILDREN: {
+      return (
+        <LayoutChildrenInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+        />
+      );
+    }
     case InputType.SIZE: {
       return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
     }
-    case InputType.EDGE: {
-      return <EdgeInputForm key={key} {...inputProps} onChange={onChange} />;
+    case InputType.SNAP: {
+      return <SnapInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.COVER_LAYOUT: {
       return (

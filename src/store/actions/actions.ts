@@ -22,6 +22,7 @@ import {
 } from "../../utils/doom-utils/common";
 import {
   ImageValues,
+  LayoutChildrenType,
   TextProperties,
   TextPropertiesTuple,
   TextValues,
@@ -213,6 +214,7 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
 
     const layer: ILayer = {
       id: uuid(),
+      type: "layer",
       slideId,
       // isBackground: isBackground,
       // name: isBackground ? `Background layer` : `Layer ${nextId}`,
@@ -222,6 +224,45 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
       objectIds: [],
       transitions: getDefaultTransitionsForLayer(),
       responsiveVisibility: { showAll: true, displayOn: [] },
+      definition: {
+        values: {
+          hasLayoutChildren: false,
+          layoutChildren: {
+            type: LayoutChildrenType.Column,
+            align: "start",
+            justify: "start",
+          },
+        },
+        valuesMetadata: {},
+      },
+      layout: "none",
+      supportedLayout: {
+        none: true,
+        absolute: true,
+        snap: true,
+        fit: true,
+        grid: true,
+      },
+      selfSize: false,
+      absoluteLayout: {
+        left: 100,
+        top: 100,
+        width: 200,
+        height: 200,
+      },
+      gridLayout: {
+        left: 1,
+        right: 3,
+        top: 1,
+        bottom: 2,
+      },
+      snapLayout: {
+        width: 200,
+        height: 200,
+        gap: 0,
+        edge: "left",
+        relativeTo: "stage",
+      },
     };
 
     dispatch(addLayer(layer));
@@ -344,6 +385,37 @@ export function activateLayer(layerId: string): any {
 }
 
 // ****
+export const FORCE_ACTIVATE_LAYER = "Force activate layer";
+
+export interface ForceActivateLayerAction extends IUndoableAction<true, true> {
+  type: typeof FORCE_ACTIVATE_LAYER;
+  payload: string;
+}
+
+function _forceActivateLayer(layerId: string): ForceActivateLayerAction {
+  return {
+    type: FORCE_ACTIVATE_LAYER,
+    payload: layerId,
+    isUndoable: true,
+    skipHistory: true,
+  };
+}
+
+export function forceActivateLayer(layerId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    if (
+      getState().project.selection.activeLayerId === layerId &&
+      getState().project.selection.forceShowLayer
+    ) {
+      // console.log("layer is already active");
+      return;
+    }
+    dispatch(_forceActivateLayer(layerId));
+  };
+}
+
+// ****
+
 export const ACTIVATE_OBJECT = "Activate object";
 
 export interface ActivateObjectAction extends IUndoableAction<true, true> {
@@ -376,6 +448,7 @@ export function activateObject(objectId: string | null): any {
       getState().project.objects.objectById[objectId as string].layerId;
 
     dispatch(_activateLayer(layerId));
+    dispatch(_selectLayers([layerId]));
     dispatch(_activateObject(objectId));
   };
 }
@@ -855,8 +928,8 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
     document.body.appendChild(holder);
     object.absoluteLayout!.width = el.offsetWidth!;
     object.absoluteLayout!.height = el.offsetHeight!;
-    object.edgeLayout!.width = el.offsetWidth!;
-    object.edgeLayout!.height = el.offsetHeight!;
+    object.snapLayout!.width = el.offsetWidth!;
+    object.snapLayout!.height = el.offsetHeight!;
     document.body.removeChild(holder);
   }
 }
@@ -1481,6 +1554,7 @@ export type ActionTypes =
   // activate
   | ActivateSlideAction
   | ActivateLayerAction
+  | ForceActivateLayerAction
   | ActivateObjectAction
 
   //settings

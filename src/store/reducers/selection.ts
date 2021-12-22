@@ -17,6 +17,7 @@ import {
   REMOVE_OBJECTS_FROM_SELECTION,
   OPEN_PROJECT,
   CREATE_NEW_PROJECT,
+  FORCE_ACTIVATE_LAYER,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { uniq } from "lodash-es";
@@ -29,6 +30,8 @@ export interface ISelection {
   selectedSlideIds: string[];
   selectedLayerIds: string[];
   selectedObjectIds: string[];
+
+  forceShowLayer: boolean;
 }
 
 const getSelectionDefault = () => ({
@@ -38,6 +41,7 @@ const getSelectionDefault = () => ({
   selectedSlideIds: [],
   selectedLayerIds: [],
   selectedObjectIds: [],
+  forceShowLayer: false,
 });
 
 export function selection(
@@ -69,11 +73,23 @@ export function selection(
         selectedObjectIds: [],
       };
     }
+    case FORCE_ACTIVATE_LAYER: {
+      const activeLayerId = action.payload;
+
+      // reset layerSelection (selectedLayerIds: [])
+      return {
+        ...state,
+        activeLayerId,
+        activeObjectId: null,
+        selectedObjectIds: [],
+        forceShowLayer: true,
+      };
+    }
     case ACTIVATE_OBJECT: {
       const activeObjectId = action.payload;
 
       // reset layerSelection (selectedLayerIds: [])
-      return { ...state, activeObjectId };
+      return { ...state, activeObjectId, forceShowLayer: false };
     }
     case SELECT_SLIDES: {
       const selectedSlideIds = action.payload;

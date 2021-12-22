@@ -52,6 +52,7 @@
     border-bottom: 1px solid #353536;
     display: flex;
     align-items: center;
+    cursor: default;
 
     > *:first-child {
       flex-grow: 1;
@@ -60,14 +61,23 @@
     }
 
     .layerToggle {
-      margin-right: 5px;
+      margin-right: 0px;
       /*&.layerOpen {
         transform: rotate(90deg);
       }*/
     }
 
+    .slideEffect {
+      margin-right: 0px;
+    }
+
     .slideProperties {
       margin-right: 5px;
+    }
+
+    .layoutIcon {
+      margin-right: 5px;
+      color: #3a80b5;
     }
 
     .objectCount {
@@ -77,8 +87,8 @@
     }
 
     .layerName {
-      max-width: 90px;
-      width: 90px;
+      max-width: 80px;
+      width: 80px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -131,6 +141,7 @@
   .objectHolder {
     border: 1px solid rgba(0, 0, 0, 0);
     border-bottom: 1px solid #444;
+    cursor: default;
 
     .locked svg {
       // consider lock to be red

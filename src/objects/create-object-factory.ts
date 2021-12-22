@@ -238,10 +238,11 @@ function createCommonObject(
     events: [],
     selfSize: false,
     supportedLayout: {
+      none: false,
       absolute: true,
-      cover: true,
+      fit: true,
       grid: true,
-      edge: true,
+      snap: true,
     },
     layout: "absolute",
     absoluteLayout: {
@@ -256,7 +257,7 @@ function createCommonObject(
       top: 1,
       bottom: 2,
     },
-    edgeLayout: {
+    snapLayout: {
       width: 200,
       height: 200,
       gap: 0,
@@ -457,7 +458,7 @@ function createBulletsObject(initialValue?: {
   const object = createCommonObject(ObjectType.BULLETS);
   object.selfSize = true;
 
-  object.supportedLayout.cover = false;
+  object.supportedLayout.fit = false;
   object.supportedLayout.grid = false;
 
   const properties: BulletsPropertiesTuple = [
@@ -1614,7 +1615,6 @@ function createSourceImageObject(
 
   return {
     ...object,
-    isCoverPlacement: true,
     definition: {
       id: uuid(),
       type: ObjectType.SOURCE_IMAGE,

@@ -103,6 +103,7 @@ const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (props) => {
             },
           }),
           propertyName: item.propertyName,
+          duplicate: "",
         };
       });
 

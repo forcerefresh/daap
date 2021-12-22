@@ -91,6 +91,35 @@
   border: 1px dotted #48aff0;
 }
 
+.layer {
+  &::after {
+    content: "";
+    position: absolute;
+    width: inherit;
+    height: inherit;
+    z-index: 10000;
+    box-shadow: 10px 10px 0px 10000px rgba(255, 255, 255, 0.3);
+  }
+}
+
+.layerMoveForResizerWTF {
+  pointer-events: none;
+  border: 1px solid red;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-top: 3px dotted red;
+    border-left: 3px dotted red;
+    width: 30px;
+    height: 30px;
+  }
+}
+.layoutChildrenSelected {
+  border: 1px solid #48aff0;
+}
+
 .panCursor {
   cursor: url("../../assets/cursors/hand.png"), auto;
 }
