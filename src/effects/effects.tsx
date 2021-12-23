@@ -56,6 +56,10 @@ import {
 } from "./canvas-copy/canvas-copy.definition";
 
 import {
+  flipDefaults,
+  flipSlideDefinition,
+} from "./flip-slide/flip-slide.definition";
+import {
   squareMaskDefaults,
   squareMaskDefinition,
 } from "./square-mask/square-mask.definition";
@@ -88,6 +92,7 @@ import "./tiles-slide/tiles-slide.effect";
 import "./tiles-slide/tiles-slide.effect";
 import "./falling-leaves/falling-leaves.effect";
 import "./cube/cube.effect";
+import "./flip-slide/flip-slide.effect";
 import "./split/split.effect";
 import "./parallax/parallax.effect";
 import "./morph/morph.effect";
@@ -147,6 +152,7 @@ registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 registerEffect(trianlifyDefinition, trianglifyDefaults);
+registerEffect(flipSlideDefinition, flipDefaults);
 registerEffect(devDefinition, devDefaults);
 registerEffect(dev2Definition, dev2Defaults);
 registerEffect(flipDefinition, flipDefaults, getFlipEffectDuration);

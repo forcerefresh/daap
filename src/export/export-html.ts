@@ -75,6 +75,8 @@ export function generatePlayerData(
 
     let slideStyle = "";
     slideStyle += "position: absolute;";
+    slideStyle += `width: ${breakpointConfig.normal.slide.width}px;`;
+    slideStyle += `height: ${breakpointConfig.normal.slide.height}px;`;
 
     html += "  <div style='" + slideStyle + "' class='slide-" + slide.id + "'>"; // slide open
     slideIds.push(slide.id);
