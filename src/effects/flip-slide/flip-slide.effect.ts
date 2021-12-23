@@ -78,11 +78,13 @@ gsap.registerEffect({
         if (config?.prevSlideEl) {
           //config.prevSlideEl.style.width = "1244px";
           //config.prevSlideEl.style.height = "700px";
+          config.prevSlideEl.style.backfaceVisibility = "hidden";
           card.appendChild(config?.prevSlideEl);
         }
 
         if (config?.nextSlideEl) {
           config.nextSlideEl.style.transform = "rotateY(180deg)";
+          config.nextSlideEl.style.backfaceVisibility = "hidden";
           //config.nextSlideEl.style.width = "1244px";
           //config.nextSlideEl.style.height = "700px";
 
