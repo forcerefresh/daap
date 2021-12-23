@@ -24,21 +24,12 @@ gsap.registerEffect({
       card.style.width = "100%";
       card.style.height = "100%";
       card.style.transformStyle = "preserve-3d";
+      card.style.transformOrigin = "center center";
       card.className = "slideTransitionHolder";
       slidesHolder.append(card);
     } else {
       card = slideTransitionHolder as HTMLDivElement;
     }
-    slidesHolder.appendChild(card);
-
-    const front = config.prevSlideEl as HTMLDivElement;
-    front.style.backfaceVisibility = "hidden";
-    card.appendChild(front);
-
-    const back = config.nextSlideEl as HTMLDivElement;
-    back.style.backfaceVisibility = "hidden";
-    back.style.transform = "rotateY(180deg)";
-    card.appendChild(back);
 
     const tl = gsap.timeline({
       paused: true,
@@ -55,7 +46,22 @@ gsap.registerEffect({
     let started = false;
     tl.eventCallback("onComplete", () => {
       if (started) {
+        gsap.set(slidesHolder, {
+          perspective: "none",
+        });
+
+        if (config?.prevSlideEl) {
+          slidesHolder.appendChild(config?.prevSlideEl);
+          config.prevSlideEl.style.display = "none";
+        }
+
+        if (config?.nextSlideEl) {
+          config.nextSlideEl.style.transform = "rotateY(0deg)";
+          slidesHolder.appendChild(config?.nextSlideEl!);
+        }
+
         started = false;
+
         const slideTransitionHolder2 = document.getElementsByClassName(
           "slideTransitionHolder"
         )[0];
@@ -65,6 +71,23 @@ gsap.registerEffect({
 
     tl.eventCallback("onUpdate", () => {
       if (!started) {
+        // NOTE: reattach slide
+        if (config?.prevSlideEl) {
+          config.prevSlideEl.style.width = "1244px";
+          config.prevSlideEl.style.height = "700px";
+          card.appendChild(config?.prevSlideEl);
+        }
+
+        if (config?.nextSlideEl) {
+          config.nextSlideEl.style.transform = "rotateY(180deg)";
+          config.nextSlideEl.style.width = "1244px";
+          config.nextSlideEl.style.height = "700px";
+
+          card.appendChild(config?.nextSlideEl);
+        }
+
+        config!.nextSlideEl!.style.display = "block";
+
         started = true;
       }
     });
