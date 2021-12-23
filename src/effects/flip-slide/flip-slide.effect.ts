@@ -31,6 +31,8 @@ gsap.registerEffect({
       card = slideTransitionHolder as HTMLDivElement;
     }
 
+    card.style.transformOrigin = `center right`;
+
     const tl = gsap.timeline({
       paused: true,
     });
@@ -38,6 +40,7 @@ gsap.registerEffect({
     tl.to(card, {
       duration: durationBetweenItems,
       rotateY: -180,
+      translateX: "-100%",
       ease: config.ease,
     });
 
@@ -73,15 +76,15 @@ gsap.registerEffect({
       if (!started) {
         // NOTE: reattach slide
         if (config?.prevSlideEl) {
-          config.prevSlideEl.style.width = "1244px";
-          config.prevSlideEl.style.height = "700px";
+          //config.prevSlideEl.style.width = "1244px";
+          //config.prevSlideEl.style.height = "700px";
           card.appendChild(config?.prevSlideEl);
         }
 
         if (config?.nextSlideEl) {
           config.nextSlideEl.style.transform = "rotateY(180deg)";
-          config.nextSlideEl.style.width = "1244px";
-          config.nextSlideEl.style.height = "700px";
+          //config.nextSlideEl.style.width = "1244px";
+          //config.nextSlideEl.style.height = "700px";
 
           card.appendChild(config?.nextSlideEl);
         }
