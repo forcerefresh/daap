@@ -14,7 +14,7 @@ export const flipSlideDefinition = {
   ],
 };
 
-export const flipDefaults: IFlipSlideEffect = {
+export const flipSlideDefaults: IFlipSlideEffect = {
   id: flipSlide,
   hasDelay: true,
   hasDuration: false,

@@ -56,7 +56,7 @@ import {
 } from "./canvas-copy/canvas-copy.definition";
 
 import {
-  flipDefaults,
+  flipSlideDefaults,
   flipSlideDefinition,
 } from "./flip-slide/flip-slide.definition";
 import {
@@ -152,7 +152,7 @@ registerEffect(splitTextDefinition, splitTextDefaults);
 registerEffect(canvasCopyDefinition, canvasCopyDefaults);
 registerEffect(squareMaskDefinition, squareMaskDefaults);
 registerEffect(trianlifyDefinition, trianglifyDefaults);
-registerEffect(flipSlideDefinition, flipDefaults);
+registerEffect(flipSlideDefinition, flipSlideDefaults);
 registerEffect(devDefinition, devDefaults);
 registerEffect(dev2Definition, dev2Defaults);
 registerEffect(flipDefinition, flipDefaults, getFlipEffectDuration);
