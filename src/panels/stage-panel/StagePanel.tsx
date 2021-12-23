@@ -66,6 +66,7 @@ import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "../../inputs/types";
 import { selection } from "../../store/reducers/selection";
+import { relative } from "path";
 
 interface ISize {
   width: number;
@@ -104,6 +105,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _resetStageTool,
     breakpointConfig,
     settings,
+    forceShowLayerId,
   } = props;
 
   const stageSize = breakpointConfig?.normal.slide!;
@@ -508,6 +510,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
   }
   function renderLayer(layer: ILayer) {
+    const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
+    const hasLayout = layer.layout !== "none";
+
     const layerValues = layer.definition.values;
     const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
       resetPosition: false,
@@ -536,7 +541,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
 
     return (
-      <div className={cx("LAYER", css.layer)} style={layerStyle}>
+      <div
+        className={cx("LAYER", { [css.layer]: isLayerActive && hasLayout })}
+        style={layerStyle}
+      >
         {layer.objectIds.map((objectId) => {
           const object = objectByIdLocal[objectId];
           const layoutChildren = layer.definition.values.hasLayoutChildren
@@ -577,14 +585,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         }
       );
 
-      const objectStyle = { ...calculatedObjectSize };
+      const objectStyle = { ...calculatedObjectSize, left: "0px", top: "0px" };
 
       objectStyle.position = cssPosition;
 
       // object holder
       const objectHolderStyle: CSSProperties = {
         zIndex: 100,
-        position: "relative",
+        position: "relative", //!layoutChildren ? "relative" : "static",
+        left: !layoutChildren ? calculatedObjectSize.left : "0px",
+        top: !layoutChildren ? calculatedObjectSize.top : "0px",
       };
       if (layoutChildren?.type === "inline") {
         objectHolderStyle.display = "inline-block";
@@ -633,20 +643,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
           {isSelected && (
             <>
-              {
-                <div
-                  ref={resizingSelectionRef}
-                  key={object.id}
-                  className={cx(css.selection, css[object.type])}
-                  style={{
-                    ...objectStyle,
-                    position: "absolute",
-                    borderWidth: 1 + "px",
-                    left: "0px",
-                    top: "0px",
-                  }}
-                />
-              }
+              <div
+                ref={resizingSelectionRef}
+                key={object.id}
+                className={cx(css.selection, css[object.type])}
+                style={{
+                  ...objectStyle,
+                  position: "absolute",
+                  borderWidth: 1 + "px",
+                  left: "0px",
+                  top: "0px",
+                }}
+              />
 
               <div className={css.selectionInfo}>
                 {object.isLocked ? (
@@ -655,7 +663,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   </div>
                 ) : null}
                 <div className={css.currentPosition}>
-                  {getPositionInfo(object)} asasa
+                  {getPositionInfo(object)}
                 </div>
               </div>
             </>
@@ -1029,6 +1037,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   const renderResizerWithLayer = (layer: ILayer) => {
+    const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
+    const hasLayout = layer.layout !== "none";
+
     const layerValues = layer.definition.values;
     const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
       resetPosition: false,
@@ -1047,7 +1058,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     return (
       <div
-        className={cx(css.layerMoveForResizerWTF, "LAYER_MOVE_FOR_RESIZER")}
+        className={cx(
+          css.layerMoveForResizerWTF,
+          { [css.layerMoveForResizerWTFActive]: isLayerActive && hasLayout },
+          "LAYER_MOVE_FOR_RESIZER"
+        )}
         style={layerStyle}
       >
         {renderResizer(layer)}
@@ -1331,6 +1346,10 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = getZoom(stage, settings);
 
+  const forceShowLayerId = selection.forceShowLayer
+    ? selection.activeLayerId
+    : undefined;
+
   return {
     slides,
     layers,
@@ -1349,6 +1368,7 @@ const mapStateToProps = (state: IStore) => {
     breakpointConfig,
     settings,
     viewPortSize: stage.stageViewportSize,
+    forceShowLayerId,
   };
 };
 

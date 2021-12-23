@@ -40,6 +40,8 @@ export const useAPIHook = () => {
       localStorage.getItem("projects") || "[]"
     );
 
+    projects.reverse();
+
     const retArr = projects.splice(from, from + perPage);
 
     return new Promise((resolve) => {

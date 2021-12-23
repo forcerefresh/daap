@@ -6,6 +6,8 @@ import {
   ILayoutChildrenInput,
   LayoutChildrenType,
   ILayoutChildrenValue,
+  ICheckboxInput,
+  ISelectInput,
 } from "../../inputs/types";
 import { IDefinition, ILayout, ITransitions } from "../../objects/types";
 import { FormType } from "../../utils/form-layout/form-layout";
@@ -33,6 +35,7 @@ export interface ILayer extends ILayout {
 }
 
 export interface ILayerValues {
+  overflow: string;
   hasLayoutChildren: boolean;
   layoutChildren: ILayoutChildrenValue;
 }
@@ -43,10 +46,24 @@ export interface ILayers {
 }
 
 export type LayerTuple = [
+  ISelectInput<"overflow">,
   IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>
 ];
 
 export const layerDefinition: LayerTuple = [
+  {
+    displayName: "Overflow",
+    propertyName: "overflow",
+    inputType: InputType.SELECT,
+    options: [
+      { label: "Visible", value: "visible" },
+      { label: "Hidden", value: "hidden" },
+      { label: "Scroll", value: "scroll" },
+      { label: "Auto Scroll", value: "auto" },
+    ],
+    value: "visible",
+    defaultValue: "visible",
+  },
   {
     displayName: "Layout children",
     type: FormType.GROUP,

@@ -98,20 +98,22 @@
     width: inherit;
     height: inherit;
     z-index: 10000;
-    box-shadow: 10px 10px 0px 10000px rgba(255, 255, 255, 0.3);
+    box-shadow: 10px 10px 0px 10000px rgba(125, 125, 125, 0.2);
   }
 }
 
 .layerMoveForResizerWTF {
   pointer-events: none;
-  border: 1px solid red;
+}
+.layerMoveForResizerWTFActive {
+  border: 1px solid #f438ca;
   &::after {
     content: "";
     position: absolute;
     top: 0px;
     left: 0px;
-    border-top: 3px dotted red;
-    border-left: 3px dotted red;
+    border-top: 3px dotted #f438ca;
+    border-left: 3px dotted #f438ca;
     width: 30px;
     height: 30px;
   }

@@ -329,9 +329,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       icon="walk"
                     ></Button>
 
-                    {layer.definition.values.hasLayoutChildren && (
+                    {/*layer.definition.values.hasLayoutChildren && (
                       <Icon icon="page-layout" className={css.layoutIcon} />
-                    )}
+                    )*/}
                     {/*<Button
                       minimal
                       onClick={(event: any) => {

@@ -212,6 +212,16 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
     const nextId =
       getState().project.slides.slideById[slideId].nextLayerIdCounter;
 
+    // size fro absolute posstion from breakpoint;
+    const breakpointsConfiguration =
+      getState().project.settings.breakpointsConfiguration
+        .breakpointsConfiguration;
+    const breakpointConfig = breakpointsConfiguration.find(
+      (p) => p.type === "large-1"
+    );
+    const absoluteSize = breakpointConfig?.normal.slide;
+    const gridSize = breakpointConfig?.normal.grid;
+
     const layer: ILayer = {
       id: uuid(),
       type: "layer",
@@ -226,6 +236,7 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
       responsiveVisibility: { showAll: true, displayOn: [] },
       definition: {
         values: {
+          overflow: "visible",
           hasLayoutChildren: false,
           layoutChildren: {
             type: LayoutChildrenType.Column,
@@ -245,16 +256,15 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
       },
       selfSize: false,
       absoluteLayout: {
-        left: 100,
-        top: 100,
-        width: 200,
-        height: 200,
+        left: 0,
+        top: 0,
+        ...absoluteSize!,
       },
       gridLayout: {
-        left: 1,
-        right: 3,
-        top: 1,
-        bottom: 2,
+        left: 0,
+        right: gridSize?.horizontal!,
+        top: 0,
+        bottom: gridSize?.vertical!,
       },
       snapLayout: {
         width: 200,

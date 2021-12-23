@@ -81,7 +81,7 @@ export function generatePlayerData(
 
     const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
     layerArr.forEach((layer) => {
-      layer.definition.values as ILayerValues;
+      const layerValues = layer.definition.values as ILayerValues;
 
       const layerClassName = "layer-" + layer.id;
       transitionsData.push({
@@ -103,7 +103,26 @@ export function generatePlayerData(
       // IMPORTANT: !!!!!! SIZE HARDCODED
       //html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
       let layerStyle = `position:absolute;`;
-      layerStyle += `border: 1px solid red;`;
+      //layerStyle += `border: 1px solid red;`;
+      layerStyle += `overflow: ${layerValues.overflow};`;
+
+      if (layerValues.hasLayoutChildren) {
+        const t = layerValues.layoutChildren.type;
+        if (t === "row" || t === "column") {
+          layerStyle += "display:flex;";
+          layerStyle += `align-items: ${layerValues.layoutChildren.align};`;
+          layerStyle += `justify-content: ${layerValues.layoutChildren.justify};`;
+
+          if (t === "row") {
+            layerStyle += `flex-direction:row;`;
+          }
+          if (t === "column") {
+            layerStyle += `display:flex;`;
+            layerStyle += `flex-direction: column;`;
+          }
+        }
+      }
+
       const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
         resetPosition: false,
       });
@@ -134,7 +153,9 @@ export function generatePlayerData(
         forOwn(calculatedObjectSize, function (value, key) {
           style += key + ":" + value + ";";
         });
-        style += "position: absolute;";
+        style += layerValues.hasLayoutChildren
+          ? "position: static;"
+          : "position: relative;";
         const overflow = objectValues.overflow;
         style += `overflow: ${overflow};`;
         // << "left", "top", "width", "height"

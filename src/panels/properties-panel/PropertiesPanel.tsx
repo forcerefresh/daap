@@ -66,9 +66,16 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
     const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
+    const parentHasLayout = objectLayer.layout !== "none";
+
     return (
       <>
-        {renderLayoutOptions(object, _updateObject, layoutedByParent)}
+        {renderLayoutOptions(
+          object,
+          _updateObject,
+          layoutedByParent,
+          parentHasLayout
+        )}
         {renderLayoutOptionProperties(object, _updateObject, layoutedByParent)}
 
         {renderProperties(
@@ -138,7 +145,8 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   const renderLayoutOptions = (
     object: ILayout,
     updateFunction: any,
-    layoutedByParent = false
+    layoutedByParent = false,
+    parentHasLayout = false
   ) => {
     const options = [];
     object.supportedLayout.none &&
@@ -162,9 +170,23 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
       updateFunction(retObj);
     };
 
-    const helperText = layoutedByParent
-      ? "Object is layouted by parent layer. Some configuration might be disabled (Width and Height are used, Left and Top are ignored)."
-      : undefined;
+    let helperText: any;
+    if (layoutedByParent || parentHasLayout) {
+      helperText = (
+        <>
+          {parentHasLayout && (
+            <div>Note: Object position is relative to layer.</div>
+          )}
+          {layoutedByParent && (
+            <div>
+              Note: Object is layouted by parent layer. Some configuration might
+              be disabled (Width and Height are used, Left and Top are ignored).
+            </div>
+          )}
+        </>
+      );
+    }
+
     return getSelectField(
       "Layout",
       object.layout,
@@ -312,7 +334,7 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   return (
     <div className={css.propertiesPanel} key={object?.id}>
       <div className={css.panelHeader}>
-        PROPERTIES PANEL
+        {panelName?.type === "layer" ? "LAYER PROPERTIES" : "OBJECT PROPERTIES"}
         {panelName && (
           <span
             className={classnames(css.panelName, {

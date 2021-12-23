@@ -1,3 +1,4 @@
+import { ReactText } from "react";
 import { RGBColor } from "react-color";
 import {
   IFormGroupItem,
@@ -563,7 +564,7 @@ export interface IColorInput<T = string> {
 export interface ISelectInput<T = string> {
   inputType: InputType.SELECT;
   displayName: string;
-  helperText?: string;
+  helperText?: string | React.ReactNode;
   propertyName: T;
   value: string;
   defaultValue: string | null;
