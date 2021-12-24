@@ -81,9 +81,9 @@ export class Player {
     const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
     bulletHolders.forEach((holderEL) => {
       holderEL.childNodes.forEach((el, index: number) => {
-        console.log(el);
+        //console.log(el);
         el.addEventListener("click", () => {
-          console.log(index);
+          //console.log(index);
           this.manualPlaySlide(index);
         });
       });
@@ -108,7 +108,7 @@ export class Player {
     }
   }
   public onUpdate(onUpdateCallback: any) {
-    console.log(onUpdateCallback);
+    //console.log(onUpdateCallback);
     this.onUpdateCallback = onUpdateCallback;
   }
 
@@ -162,6 +162,8 @@ export class Player {
   }
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
+    console.log("Play slide: " + slideIdx);
+
     this.addClassToBullet(this.rootDiv, slideIdx);
 
     this.rootDiv.style.display = "block";
@@ -184,7 +186,7 @@ export class Player {
     const bettwenSlideEff: ISlideTransition | undefined =
       this.normalSlideDataArr?.[slideIdx]?.slide?.slideTransition;
 
-    console.log(bettwenSlideEff);
+    //console.log(bettwenSlideEff);
 
     const prevSlideEl = this.currentSlideEl;
 
@@ -216,6 +218,10 @@ export class Player {
           width: 960,
           height: 485,
         },
+        breakpointData: {
+          width: this.playerData?.breakpointData.width,
+          height: this.playerData?.breakpointData.height,
+        },
         type: "effect",
         duration: bettwenSlideEff.duration / 1000,
         //ease: bettwenSlideEff.ease,
@@ -236,16 +242,20 @@ export class Player {
     }
 
     // PLAY SLIDE :)
+    console.log("Play slide (prevTlTime): " + prevTlTime);
+
     this.currentSlideTimeline.play(prevTlTime);
     //slideEl.style.display = "block";
 
     let isUpdated = false;
     this.currentSlideTimeline.eventCallback("onUpdate", () => {
+      console.log("onUpdate 123");
       this.onUpdateCallback?.();
 
       if (!isUpdated) {
         slideEl.style.display = "block";
         isUpdated = true;
+        console.log("onUpdate 123 true");
       }
       if (!hasEffect(bettwenSlideEff)) {
         // ako nema effekat
@@ -262,7 +272,7 @@ export class Player {
 
     if (!this.oneSlide) {
       triggerTimeline?.eventCallback("onComplete", () => {
-        //console.log(slideIdx, "END ");
+        console.log(slideIdx, "END ");
         this.transitionEndBreakpointHandler(
           slideIdx,
           this.currentSlideTimeline!
@@ -355,11 +365,12 @@ export class Player {
     let overlap = 0;
     // 2. if effect exit use it
     if (bettwenSlideEff?.effect.id !== "none") {
-      overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+      overlap = bettwenSlideEff?.duration || 0; // bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     }
     // 3. add breakpoint timeline
     //console.log(data.slide.duration.customValue);
     //console.log(overlap);
+    // trigger
     const transitionTween = gsap.to(
       {},
       { duration: (data.slide.duration.customValue - overlap) / 1000 }
@@ -371,6 +382,8 @@ export class Player {
     slideIdx: number,
     prevTl: gsap.core.Timeline
   ) {
+    console.log("transitionEndBreakpointHandler: " + slideIdx);
+
     const total = this.normalSlideDataArr?.length || -1;
 
     //console.log(slideIdx, "WWW");
@@ -386,13 +399,21 @@ export class Player {
       let overlap = 0;
       // 2. if effect exit use it
       if (bettwenSlideEff?.effect.id !== "none") {
-        overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+        overlap = bettwenSlideEff?.duration || 0; //bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
       }
 
+      console.log(overlap);
+      console.log(
+        this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
+      );
+
       const overlapPosition =
-        this.normalSlideDataArr?.[newSlideIdx]?.slide?.duration?.customValue! -
+        this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue! -
         overlap;
 
+      console.log(overlapPosition);
+      console.log(prevTl.time());
+      console.log(prevTl.time() - overlapPosition / 1000);
       //console.log(overlapPosition);
       this.playSlide(newSlideIdx, prevTl.time() - overlapPosition / 1000); //- overlap ? overlap / 1000 : 0
     }

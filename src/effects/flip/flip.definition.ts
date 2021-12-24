@@ -6,15 +6,13 @@ export const flipDefinition = {
   name: "Flip",
   form: [
     {
-      displayName: "Item",
-      helperText: "Duration per item",
-      propertyName: "durationPerItem",
+      displayName: "Rotation time",
+      propertyName: "rotationTime",
       inputType: InputType.NUMBER,
     },
     {
-      displayName: "Flip",
-      helperText: "Duration between items",
-      propertyName: "durationBetweenItems",
+      displayName: "Pause time",
+      propertyName: "pauseTime",
       inputType: InputType.NUMBER,
     },
     {
@@ -38,7 +36,7 @@ export const flipDefaults: IFlipEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["effect"],
-  durationPerItem: 2000,
-  durationBetweenItems: 3000,
+  rotationTime: 1000,
+  pauseTime: 500,
   spinDirection: "cc",
 };

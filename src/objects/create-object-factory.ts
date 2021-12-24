@@ -163,7 +163,6 @@ export function createObject(
 export function getDefaultSlideTransition(): ISlideTransition {
   return {
     duration: 2000,
-    overlap: 1000,
     effect: {
       id: "none",
       values: {},

@@ -25,6 +25,10 @@ export interface ISlideTransitionData {
 export interface IPlayerData {
   html: string;
   slideDataArr: ISlideData[];
+  breakpointData: {
+    width: number;
+    height: number;
+  };
 }
 
 export interface ISources {

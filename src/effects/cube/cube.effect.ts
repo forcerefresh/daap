@@ -2,11 +2,12 @@ import gsap from "gsap";
 import { RGBColor } from "react-color";
 import { cube, ICubeEffect } from "./cube.types";
 
-const areaW = 1000;
-const areaH = 500;
-const ratio = areaH / areaW;
+let areaW = 1000;
+let areaH = 500;
+let ratio = areaH / areaW;
+let moveP2 = (areaW - areaH) / 2;
+let moveP2ForZet = (areaW - areaH) / 2;
 const moveP = ratio * areaH;
-const moveP2 = (areaW - areaH) / 2;
 
 //console.log(areaH / 2);
 //console.log(moveP);
@@ -27,9 +28,24 @@ function createCube(target: HTMLDivElement) {
   `;
 }
 
+let perc = 0.75;
+
 gsap.registerEffect({
   name: cube,
   effect: function (targets: any, config: ICubeEffect) {
+    areaW = config.breakpointData?.width || 0;
+    areaH = config.breakpointData?.height || 0;
+    ratio = areaH / areaW;
+    moveP2 = areaH / 2; //(areaW - areaH) / 2;
+    moveP2ForZet = (areaW - areaH) / 2;
+
+    perc = 0.65;
+    //perc = 0.575;
+    perc = 1;
+    perc = 0.5; //areaW
+    perc = 0.75; // areaW*2
+
+    console.log(config);
     console.log(config);
     const slideTransitionHolder = document.getElementsByClassName(
       "slideTransitionHolder"
@@ -103,7 +119,7 @@ gsap.registerEffect({
     tl.to(".container", { scale: 0.5, duration: config.duration! / 3 });
     //tl.to(cube, { scaleX: 0.6, scaleY: 0.6, scaleZ: 0.6, duration: 1 }); // short rotation back to 1
     tl.to(cube, { rotateX: 90, rotateY: 0, duration: config.duration! / 3 }); // short rotation back to 1
-    tl.to(".container", { scale: 0.75, duration: config.duration! / 3 });
+    tl.to(".container", { scale: perc, duration: config.duration! / 3 });
     //tl.to(cube, { rotateX: 90, rotateY: 90, duration: 1 }); // short rotation back to 1
     //tl.to(cube, { rotateX: 180, rotateY: 180, duration: 1 }); // short rotation back to 1
     //tl.to(cube, { rotateX: 0, rotateY: 360, duration: 1 }); // short rotation back to 1
@@ -185,19 +201,22 @@ function addCSS(target: HTMLDivElement, config: ICubeEffect) {
   target.innerHTML = `
     <style>
       .container {
-        width: ${areaH}px;
+        width: ${areaW}px;
         height: ${areaH}px;
-        perspective: 1000px; /* psst...something fun happens when this is a really small number */
+        perspective: ${
+          areaH * 2
+        }px; /* psst...something fun happens when this is a really small number */
 
         position:absolute;
         opacity: 1;
-        left: 25%;
-        transform: scale(0.75);
+        left22: 25%;
+        transform: scale(${perc});
         top: 0px;
       }
       .face {
         background: ${bgColor};
         border: 1px solid ${edgeColor};
+        backface-visibility: hidden;
       }
       .cube, .face {
         position: absolute;
@@ -207,25 +226,22 @@ function addCSS(target: HTMLDivElement, config: ICubeEffect) {
         background-size: 100% 100%;
       }
       .front {
-        left: -${moveP2}px;
         width: ${areaW}px;
         height: ${areaH}px;
       }
       .back {
-        left: -${moveP2}px;
         width: ${areaW}px;
         height: ${areaH}px;
       }
       .left {
-        left: -${moveP2}px;
-      
+        left22: -${moveP2}px;
       }
       .right {
         left: ${moveP2}px;
       
       }
       .bottom{
-        left: -${moveP2}px;
+        left33: -${moveP2}px;
         width:${areaW}px;
         height: ${areaH}px;
       }

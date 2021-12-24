@@ -127,7 +127,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         //console.log(slideData.slide);
         const transitionDuration =
           slideData.slide.slideTransition.duration || 0;
-        const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
+
+        //const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
         const slideDuration = slideData.slide.duration.customValue || 0;
 
         totalDuration += slideDuration;
@@ -138,10 +139,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             slideData.slide.slideTransition.effect.id === "none"
               ? 0
               : transitionDuration,
-          transitionOverlap:
+          /*transitionOverlap:
             slideData.slide.slideTransition.effect.id === "none"
               ? 0
-              : transitionOverlap,
+              : transitionOverlap,*/
         };
       });
 

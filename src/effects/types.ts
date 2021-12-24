@@ -8,6 +8,10 @@ export interface IEffectBase {
     height: number;
     objectHtml: string;
   };
+  breakpointData?: {
+    width: number;
+    height: number;
+  };
   // >> flags beginning (TODO: make flags optional as by default they are false)
   hasDelay: boolean;
   hasDuration: boolean;

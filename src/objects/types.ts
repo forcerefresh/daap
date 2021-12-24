@@ -148,7 +148,7 @@ export interface ITransition {
 }
 
 export interface ISlideTransition {
-  overlap: number;
+  //overlap: number;
   duration: number;
   effect: IEffect;
 }

@@ -13,7 +13,7 @@ import cx from "classnames";
 export interface SlideTimelineData {
   duration: number;
   transitionDuration: number;
-  transitionOverlap: number;
+  //transitionOverlap: number;
 }
 
 export interface ProjectTimelineData {
@@ -39,24 +39,35 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   //const [progress, setProgress] = useState<number>(0);
 
+  console.log(projectTimelineData);
   // get total duration
   let totalTime = 0;
-  projectTimelineData?.slides.forEach((slideData) => {
-    totalTime += slideData.duration - slideData.transitionOverlap;
+  projectTimelineData?.slides.forEach((slideData, idx) => {
+    /*if (idx == 0) {
+      totalTime += slideData.duration;
+    } else {*/
+    totalTime += slideData.duration; //-slideData.transitionDuration;
+    /*}*/
   });
+
+  console.log(totalTime);
 
   let currPos = 0;
   const slideLeftArr: number[] = [];
   const slidePosMultiplierArr: number[] = [];
 
   projectTimelineData?.slides.forEach((slideData, idx) => {
-    const slideLeft = currPos === 0 ? 0 : currPos / totalTime;
-    const slidePosMultiplier =
-      (slideData.duration - slideData.transitionOverlap) / totalTime;
+    // left position of slide
+    // slide left is currPos - transitionDuration
+    const slideLeft =
+      currPos === 0 ? 0 : (currPos - slideData.transitionDuration) / totalTime;
+    currPos += slideData.duration;
     slideLeftArr[idx] = slideLeft;
-    slidePosMultiplierArr[idx] = slidePosMultiplier;
 
-    currPos += slideData.duration - slideData.transitionOverlap;
+    //slide multiplier
+    const slidePosMultiplier =
+      (slideData.duration + slideData.transitionDuration) / totalTime;
+    slidePosMultiplierArr[idx] = slidePosMultiplier;
   });
 
   useDeepCompareEffect(() => {
@@ -74,15 +85,17 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       let html = "";
       let currentPosition = 0;
       projectTimelineData?.slides.forEach((slideData, idx) => {
-        const left = (lineWidth / totalTime) * currentPosition;
+        const transitionLeft =
+          (lineWidth / totalTime) *
+          (currentPosition - slideData.transitionDuration);
         const transitionWidth =
           (slideData.transitionDuration / totalTime) * lineWidth;
-        const overlapWidth =
-          (slideData.transitionOverlap / totalTime) * lineWidth;
-        html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${left}px "></div>`;
-        html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
+        /*const overlapWidth =
+          (slideData.transitionOverlap / totalTime) * lineWidth;*/
+        html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${transitionLeft}px "></div>`;
+        //html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
 
-        currentPosition += slideData.duration - slideData.transitionOverlap;
+        currentPosition += slideData.duration;
       });
       lineDiv.innerHTML = html;
     }

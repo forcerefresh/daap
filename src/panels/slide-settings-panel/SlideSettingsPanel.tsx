@@ -22,7 +22,7 @@ type ISlideSettingsPanel = typeof mapDispatchToProps &
 const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   const { slide, settings, _updateSlide } = props;
 
-  const overlapInput = () => (
+  /*const overlapInput = () => (
     <div className="input60">
       {getNumericFiled(
         "Overlap",
@@ -34,12 +34,12 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
         }
       )}
     </div>
-  );
+  );*/
 
   const durationInput = () => (
     <div className="input60">
       {getNumericFiled(
-        "Duration",
+        "Transition duration",
         get(slide, "slideTransition.duration"),
         (value: any) => {
           const obj = cloneDeep(slide);
@@ -147,7 +147,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           )}
 
           <div>
-            {overlapInput()}
+            {/*overlapInput()*/}
             {durationInput()}
           </div>
 

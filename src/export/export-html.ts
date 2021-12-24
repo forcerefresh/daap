@@ -209,7 +209,14 @@ export function generatePlayerData(
 
   html += "</div>"; //slides holder close
 
-  return { html, slideDataArr };
+  return {
+    html,
+    slideDataArr,
+    breakpointData: {
+      width: breakpointConfig.normal.slide.width,
+      height: breakpointConfig.normal.slide.height,
+    },
+  };
 }
 
 /**
