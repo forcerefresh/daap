@@ -1,15 +1,16 @@
 import gsap from "gsap";
 import { MultiImageValues } from "../../inputs/types";
-import { IObject } from "../../objects/types";
+import { IObject, ITransition } from "../../objects/types";
 import { flip, IFlipEffect } from "./flip.types";
 
-export function getFlipEffectDuration(object?: IObject, config?: any) {
-  const effValues = config?.effect?.values!;
-  const timePerCard = effValues.durationPerItem;
-  const timeBetweenCard = effValues.durationBetweenItems;
-  const images = object?.definition.values as MultiImageValues;
+export function getFlipEffectDuration(object: IObject, config: ITransition) {
+  const effValues = config?.effect?.values as IFlipEffect;
+  console.log(config);
+  const rotationTime = effValues.rotationTime;
+  const pauseTime = effValues.pauseTime;
+  const images = object.definition.values as MultiImageValues;
   const cards = images.urls.length;
-  return cards * (timePerCard + timeBetweenCard) - timePerCard / 2;
+  return cards * (rotationTime + pauseTime) - rotationTime / 2;
 }
 
 gsap.registerEffect({
@@ -18,8 +19,8 @@ gsap.registerEffect({
     const main = targets[0] as HTMLElement;
     const cardCont = main.firstChild as HTMLDivElement;
     const images: HTMLDivElement[] = [];
-    const durationBetweenItems = config.durationBetweenItems / 1000;
-    const durationPerItem = config.durationPerItem / 1000;
+    const rotationTime = config.rotationTime / 1000;
+    const pauseTime = config.pauseTime / 1000;
 
     if (cardCont?.hasChildNodes()) {
       let children = cardCont.childNodes;
@@ -72,7 +73,7 @@ gsap.registerEffect({
     tl.to(
       containers[0],
       {
-        duration: durationPerItem / 2,
+        duration: rotationTime / 2,
         display: "block",
         rotateY: config.spinDirection === "cc" ? -180 : 180,
         translateX: `${config.spinDirection === "cc" ? "-" : ""}100%`,
@@ -98,7 +99,7 @@ gsap.registerEffect({
       tl.to(
         containers[i],
         {
-          duration: durationPerItem,
+          duration: rotationTime,
           rotateY: config.spinDirection === "cc" ? -180 : 180,
           translateX: `${config.spinDirection === "cc" ? "-" : ""}100%`,
           ease: config.ease,
@@ -113,10 +114,10 @@ gsap.registerEffect({
           duration: 0,
           display: "none",
         },
-        currentPosition + durationPerItem + durationBetweenItems
+        currentPosition + pauseTime + rotationTime
       );
 
-      currentPosition += durationPerItem + durationBetweenItems;
+      currentPosition += pauseTime + rotationTime;
     }
 
     return tl;
