@@ -13,6 +13,7 @@ import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { getInputForm } from "../../inputs/input-factory";
 import { SlideDurationOptions, SlideTypeOptions } from "../../store/types";
 import { getRealSlideDuration } from "../../utils/utils";
+import { EasingOptions } from "../../effects/types";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -80,6 +81,9 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   };
 
   if (!slide) return null;
+
+  const effDef = getEffectDefinition(get(slide, `slideTransition.effect.id`));
+  console.log(effDef);
 
   return (
     <div className={cx("bp3-dark", css.slideSettings)}>
@@ -151,6 +155,17 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             {durationInput()}
           </div>
 
+          {effDef.defaults.hasEase &&
+            getSelectField(
+              "Easing",
+              get(slide, "slideTransition.effect.values.ease"),
+              EasingOptions,
+              (value: any) => {
+                const newSlide = cloneDeep(slide);
+                set(newSlide, `slideTransition.effect.values.ease`, value);
+                _updateSlide(newSlide);
+              }
+            )}
           <div className={css.dynamicFields}>
             {renderEffectForm(
               get(slide, `slideTransition.effect.id`),

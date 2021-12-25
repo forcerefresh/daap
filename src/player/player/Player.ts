@@ -221,6 +221,7 @@ export class Player {
         breakpointData: {
           width: this.playerData?.breakpointData.width,
           height: this.playerData?.breakpointData.height,
+          pageWidth: this.playerData?.breakpointData.pageWidth,
         },
         type: "effect",
         duration: bettwenSlideEff.duration / 1000,

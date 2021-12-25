@@ -1,6 +1,12 @@
 import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+
+import { CustomWiggle } from "gsap/CustomWiggle";
 import { RGBColor } from "react-color";
 import { split, ISplitEffect } from "./split.types";
+
+gsap.registerPlugin(CustomEase);
+gsap.registerPlugin(CustomWiggle);
 
 function createCube(target: HTMLDivElement, peaces: number) {
   let html = `<div class="container">`;
@@ -18,8 +24,12 @@ gsap.registerEffect({
   name: split,
   effect: function (targets: any, config: ISplitEffect) {
     console.log(targets);
-    const areaW = config.objectProperties?.width || 0;
-    const areaH = config.objectProperties?.height || 0;
+    console.log(config);
+    //const areaW = config.objectProperties?.width || 0;
+    //const areaH = config.objectProperties?.height || 0;
+    const areaW = config.breakpointData?.width || 0;
+    const areaH = config.breakpointData?.height || 0;
+    const pageAreaW = config.breakpointData?.pageWidth || 0;
 
     console.log(config);
 
@@ -38,7 +48,7 @@ gsap.registerEffect({
 
       document.getElementsByClassName("slidesHolder")[0].append(target);
 
-      addCSS(target, config, areaW, areaH);
+      addCSS(target, config, areaW, areaH, pageAreaW);
 
       createCube(target, config.split.points.length);
     } else {
@@ -49,8 +59,10 @@ gsap.registerEffect({
       paused: true,
     });
 
-    const move = 330;
-    const ease = "power4.in";
+    const move = 800;
+
+    //CustomWiggle.create("myWiggle", { wiggles: 6 });
+    const ease = config.ease;
 
     for (let i = 0; i < config.split.points.length; i++) {
       const peace = target.getElementsByClassName("peace" + (i + 1))[0];
@@ -84,8 +96,8 @@ gsap.registerEffect({
       tl.add(
         gsap.to(".peace" + (i + 1), {
           scale: "+=1",
-          y: vMoveSign + Math.abs(vMove / center) * 330,
-          x: hMoveSign + Math.abs(hMove / center) * 330,
+          y: vMoveSign + Math.abs(vMove / center) * move,
+          x: hMoveSign + Math.abs(hMove / center) * move,
           rotation:
             config.rotation < 0 ? "-=" : "+=" + Math.abs(config.rotation),
           duration: config.duration!,
@@ -133,7 +145,8 @@ function addCSS(
   target: HTMLDivElement,
   config: ISplitEffect,
   areaW: number,
-  areaH: number
+  areaH: number,
+  pageAreaW: number
 ) {
   let peaces = "";
   for (let i = 0; i < config.split.points.length; i++) {
@@ -173,16 +186,18 @@ function addCSS(
     <style>
       .container {
         position: absolute;
-        width: ${areaW}px;
+        width: ${pageAreaW}px;
         height: ${areaH}px;
         position:absolute;
       }
       .peace {
         position: absolute;
-        width: ${areaW}px;
+        width: ${pageAreaW}px;
         height: ${areaH}px;
-        overflow: hidden;
+        overflow: visible;
        box-shadow: 5px 10px 10px red;
+       border-left: ${(pageAreaW - areaW) / 2}px solid transparent;
+        left: -${(pageAreaW - areaW) / 2}px;
       }
       ${peaces}
     </style>

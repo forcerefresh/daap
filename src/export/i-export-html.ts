@@ -28,6 +28,7 @@ export interface IPlayerData {
   breakpointData: {
     width: number;
     height: number;
+    pageWidth: number;
   };
 }
 

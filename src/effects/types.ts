@@ -11,6 +11,7 @@ export interface IEffectBase {
   breakpointData?: {
     width: number;
     height: number;
+    pageWidth: number;
   };
   // >> flags beginning (TODO: make flags optional as by default they are false)
   hasDelay: boolean;

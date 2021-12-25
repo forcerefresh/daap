@@ -88,8 +88,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
         const transitionLeft =
           (lineWidth / totalTime) *
           (currentPosition - slideData.transitionDuration);
-        const transitionWidth =
+        let transitionWidth =
           (slideData.transitionDuration / totalTime) * lineWidth;
+        if (transitionWidth === 0) transitionWidth = 2;
         /*const overlapWidth =
           (slideData.transitionOverlap / totalTime) * lineWidth;*/
         html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${transitionLeft}px "></div>`;

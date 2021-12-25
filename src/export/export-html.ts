@@ -1,4 +1,5 @@
 import { forOwn, mapValues, pick } from "lodash-es";
+import { isAbsolute } from "path";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -157,6 +158,8 @@ export function generatePlayerData(
         });
         style += layerValues.hasLayoutChildren
           ? "position: static;"
+          : object.layout === "absolute"
+          ? "position: absolute;"
           : "position: relative;";
         const overflow = objectValues.overflow;
         style += `overflow: ${overflow};`;
@@ -215,6 +218,7 @@ export function generatePlayerData(
     breakpointData: {
       width: breakpointConfig.normal.slide.width,
       height: breakpointConfig.normal.slide.height,
+      pageWidth: breakpointConfig.normal.page.width,
     },
   };
 }
