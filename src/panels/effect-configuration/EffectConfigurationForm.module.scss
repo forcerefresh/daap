@@ -1,6 +1,7 @@
 .effectConfigurationForm {
   // background: rgba(222, 222, 222, 0.4);
   padding: 8px;
+  padding-top: 0px;
 
   :global {
     .labelAuto .bp3-label {
@@ -30,5 +31,17 @@
       line-height: 20px;
       padding-top: 5px;
     }
+  }
+}
+
+.selectEffectRow {
+  margin-bottom: 10px;
+  > *:first-child {
+    margin-bottom: 0px !important;
+  }
+  > *:nth-child(2) {
+    flex-grow: 1;
+    display: flex;
+    justify-content: end;
   }
 }

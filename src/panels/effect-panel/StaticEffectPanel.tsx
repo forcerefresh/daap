@@ -1,26 +1,30 @@
 import React from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import EffectPanel from "./EffectPanel";
+import EffectPanelTabs from "./EffectPanelTabs";
 
 type IStaticEffectPanel = typeof mapDispatchToProps &
-  ReturnType<typeof mapStateToProps>;
+  ReturnType<typeof mapStateToProps> & {
+    hideHeader?: boolean;
+    className?: string;
+  };
 
 const StaticEffectPanel: React.FC<IStaticEffectPanel> = (props) => {
-  const { objectId } = props;
+  const { selectionForProperties, hideHeader, className } = props;
 
   return (
-    <EffectPanel
-      sections={["IN", "OUT", "EFFECT"]}
-      id={objectId}
-      objectType="object"
+    <EffectPanelTabs
+      id={selectionForProperties?.id}
+      itemType={selectionForProperties?.type}
+      hideHeader={hideHeader}
+      className={className}
     />
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const activeObjectId = state.project.selection.activeObjectId;
-  return { objectId: activeObjectId };
+  const selectionForProperties = state.project.selection.selectionForProperties;
+  return { selectionForProperties };
 };
 
 const mapDispatchToProps = {};

@@ -172,55 +172,15 @@ export function getDefaultSlideTransition(): ISlideTransition {
 
 export function getDefaultTransitionsForObject(): ITransitions {
   return {
-    in: {
-      relativeTo: "stage",
-      delay: 0,
-      duration: 1000,
-      ease: "none",
-      timeDistribution: 50,
-      effect: {
-        id: "none",
-        values: {},
-      },
-    },
-    out: {
-      relativeTo: "stage",
-      delay: 0,
-      duration: 1000,
-      ease: "none",
-      timeDistribution: 50,
-      effect: {
-        id: "none",
-        values: {},
-      },
-    },
-    effect: {
-      relativeTo: "stage",
-      delay: 0,
-      duration: -1,
-      ease: "none",
-      timeDistribution: 50,
-      effect: {
-        id: "none",
-        values: {},
-      },
-    },
+    in: [],
+    out: [],
+    effect: [],
   };
 }
 
 export function getDefaultTransitionsForLayer(): ITransitions {
   return {
-    layer: {
-      relativeTo: "stage",
-      delay: 0,
-      duration: 1000,
-      ease: "none",
-      timeDistribution: 50,
-      effect: {
-        id: "none",
-        values: {},
-      },
-    },
+    layer: [],
   };
 }
 

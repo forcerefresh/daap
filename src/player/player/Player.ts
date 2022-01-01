@@ -43,6 +43,7 @@ export class Player {
     rootDiv: HTMLDivElement
     //config: IPlayerConfig = { oneSlide: false }
   ) {
+    console.log(playerData);
     //console.log(playerData);
     this.oneSlide = playerData?.slideDataArr.length === 1;
     //console.log(config);
@@ -149,16 +150,19 @@ export class Player {
     this.slideTransitionTimeline?.paused(p);
   }
 
-  public clear() {
+  public clear(destroy = false) {
     this.timelines.forEach((tl) => {
       tl.clear();
+      if (destroy) tl.kill();
     });
 
     this.staticTimelines.forEach((tl) => {
       tl.clear();
+      if (destroy) tl.kill();
     });
 
     this.slideTransitionTimeline?.clear();
+    if (destroy) this.slideTransitionTimeline?.kill();
   }
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
@@ -269,6 +273,23 @@ export class Player {
       slideEl.style.display = "none";
     });
 
+    // trigger on slide end
+
+    const currSlideTl = this.currentSlideTimeline; //
+    currSlideTl
+      .getById("slideDurationTimeline")
+      .eventCallback("onComplete", () => {
+        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + slideIdx);
+        /*this.transitionEndBreakpointHandler(
+          slideIdx,
+          this.currentSlideTimeline!
+        );*/
+        currSlideTl?.kill();
+        slideEl.style.display = "none";
+      });
+
+    //if (hasEffect(bettwenSlideEff)) {
+    // trigger when transition have to start
     const triggerTimeline: any = last(this.currentSlideTimeline?.getChildren());
 
     if (!this.oneSlide) {
@@ -280,6 +301,9 @@ export class Player {
         );
       });
     }
+    //}
+    // OTHER
+    //
 
     this.currentSlideEl = slideEl;
 
@@ -341,17 +365,31 @@ export class Player {
 
     this.createEvents(slideIdx, data);
 
-    const tl = gsap.timeline({ paused: true });
-    this.timelines[slideIdx] = tl;
+    const slideTimeline = gsap.timeline({ paused: true });
+    this.timelines[slideIdx] = slideTimeline;
 
+    // add slide duration timeline (we ise it to kill if effects lats more than set time)
+    const slideDurationTimeline = gsap.timeline({
+      id: "slideDurationTimeline",
+      duration: data.slide.duration.customValue / 1000,
+    });
+    slideTimeline.add(slideDurationTimeline);
+
+    // add objects effects timelines
     data.transitionsData.forEach((transitionData) => {
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
-        tl.add(pTl, 0);
+        console.log(pTl);
+        console.log(pTl.getChildren());
+        slideTimeline.add(pTl, 0);
       });
     });
 
-    // refactoer
+    console.log(slideTimeline);
+    console.log(slideTimeline.getChildren());
+    console.log(slideTimeline.getById("slideDurationTimeline"));
+
+    // refactor
     const total = this.normalSlideDataArr?.length || -1;
     //console.log(slideIdx, "WWW");
 
@@ -376,7 +414,7 @@ export class Player {
       {},
       { duration: (data.slide.duration.customValue - overlap) / 1000 }
     );
-    tl.add(transitionTween, 0);
+    slideTimeline.add(transitionTween, 0);
   }
 
   private transitionEndBreakpointHandler(

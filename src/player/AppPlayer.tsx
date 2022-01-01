@@ -4,12 +4,13 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
 import { IPlayerData } from "../export/i-export-html";
+import { TimelineMax } from "gsap/all";
 
 export interface AppPlayerProps {
   playerData: IPlayerData | null;
   previewState: IPreviewState;
   manualProgress: number;
-  onProgress: (progress: number, slideIdx: number) => void;
+  onProgress: (progress: number, time: number, slideIdx: number) => void;
   requestStop: () => void;
 }
 
@@ -42,6 +43,10 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         break;
       case "pause":
         player.current?.paused(true);
+        break;
+      case "stop":
+        debugger;
+        player.current?.clear();
         break;
     }
   }, [previewState.previewState]);
@@ -81,8 +86,11 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
       // TODO: DUPLICATE CODE 1
       pl.onUpdate(() => {
+        console.log(player.current?.getCurrentTimeline()?.progress());
+        //
         onProgress(
           player.current?.getCurrentTimeline()?.progress() || 0,
+          player.current?.getCurrentTimeline()?.time() || 0,
           player.current?.getCurrentTimelineIdx() || 0
         );
       });
@@ -90,9 +98,17 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       pl.onCurrentTimelineChange(() => {
         console.log("onCurrentTimelineChange");
         // TODO: DUPLICATE CODE 2
+
         pl.onUpdate(() => {
+          const tl = player.current?.getCurrentTimeline() as TimelineMax;
+          console.log(player.current?.getCurrentTimeline()?.progress());
+          console.log(tl.duration());
+          console.log(tl.endTime());
+          console.log(tl.totalTime());
+          console.log(tl.time());
           onProgress(
             player.current?.getCurrentTimeline()?.progress() || 0,
+            player.current?.getCurrentTimeline()?.time() || 0,
             player.current?.getCurrentTimelineIdx() || 0
           );
         });
@@ -103,7 +119,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       currentPlayer.current = pl;
 
       return () => {
-        pl.clear();
+        pl.clear(true);
       };
     }
   }, [playerData]);

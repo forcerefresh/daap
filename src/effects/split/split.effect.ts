@@ -59,7 +59,7 @@ gsap.registerEffect({
       paused: true,
     });
 
-    const move = 800;
+    const move = 100;
 
     //CustomWiggle.create("myWiggle", { wiggles: 6 });
     const ease = config.ease;

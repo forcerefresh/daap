@@ -12,7 +12,7 @@ import cx from "classnames";
 
 type ISmallTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    slideProgress: { progress: number; slideIdx: number };
+    slideProgress: { progress: number; time: number; slideIdx: number };
     onManualProgress: (progress: number) => void;
   };
 

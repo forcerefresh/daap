@@ -16,6 +16,8 @@ export enum ObjectType {
   ARROW = "arrow",
 }
 
+export type ItemType = "object" | "layer" | "slide";
+
 export interface IDefinition {
   id: string;
   type: ObjectType;
@@ -130,14 +132,14 @@ export interface INavigateToUrlAction {
 }
 
 export interface ITransitions {
-  in?: ITransition;
-  out?: ITransition;
-  effect?: ITransition;
-  layer?: ITransition;
+  in?: ITransition[];
+  out?: ITransition[];
+  effect?: ITransition[];
+  layer?: ITransition[];
+  slide?: ITransition[];
 }
 
 export interface ITransition {
-  relativeTo: "stage";
   delay: number;
   duration: number;
   timeDistribution?: number;

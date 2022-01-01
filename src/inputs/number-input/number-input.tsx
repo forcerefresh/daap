@@ -17,7 +17,6 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
     inputProps = {},
     optional,
   } = props;
-  console.log(inputProps);
   const id = `${propertyName}_input_number`;
 
   const [internalValue, setInternalValue] = useState<string>(value.toString());

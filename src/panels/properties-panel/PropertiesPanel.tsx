@@ -33,18 +33,23 @@ import css from "./PropertiesPanel.module.scss";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
-type ISlidesPanel = typeof mapDispatchToProps &
-  ReturnType<typeof mapStateToProps>;
+type IPropertiesPanel = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> & {
+    hideHeader?: boolean;
+    className?: string;
+  };
 
-export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
+export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const {
     object,
     objectLayer,
     layer,
-    forceShowLayer,
+    selectionForProperties,
     panelName,
     _updateObject,
     _updateLayer,
+    hideHeader,
+    className,
   } = props;
 
   const renderLayerProperties = (layer: ILayer) => {
@@ -318,33 +323,38 @@ export const PropertiesPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   const renderObjectOrLayer = () => {
-    if (!forceShowLayer && !object) {
+    if (!selectionForProperties) {
       return <div>No object selected</div>;
     }
 
-    if (forceShowLayer && layer) {
+    if (selectionForProperties?.type === "layer" && layer) {
       return renderLayerProperties(layer);
     }
 
-    if (!forceShowLayer && object) {
+    if (selectionForProperties?.type === "object" && object) {
       return renderObjectProperties(object, objectLayer);
     }
   };
 
   return (
-    <div className={css.propertiesPanel} key={object?.id}>
-      <div className={css.panelHeader}>
-        {panelName?.type === "layer" ? "LAYER PROPERTIES" : "OBJECT PROPERTIES"}
-        {panelName && (
-          <span
-            className={classnames(css.panelName, {
-              [css.panelNameLayer]: panelName.type === "layer",
-            })}
-          >
-            {" [ " + panelName.name + " ] "}
-          </span>
-        )}
-      </div>
+    <div
+      className={classnames(css.propertiesPanel, className)}
+      key={object?.id}
+    >
+      {!hideHeader && (
+        <div className={css.panelHeader}>
+          {panelName?.type === "layer" ? "LAYER" : "OBJECT"}
+          {panelName && (
+            <span
+              className={classnames(css.panelName, {
+                [css.panelNameLayer]: panelName.type === "layer",
+              })}
+            >
+              {" [ " + panelName.name + " ] "}
+            </span>
+          )}
+        </div>
+      )}
       <div className={css.propertiesHolder}>{renderObjectOrLayer()}</div>
     </div>
   );
@@ -360,11 +370,11 @@ const mapStateToProps = (state: IStore) => {
 
   let panelName: { name: string; type: "object" | "layer" } | undefined;
 
-  if (selection.forceShowLayer && layer) {
+  if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer" };
   }
 
-  if (!selection.forceShowLayer && object) {
+  if (selection.selectionForProperties?.type === "object" && object) {
     panelName = { name: object.name, type: "object" };
   }
 
@@ -373,7 +383,7 @@ const mapStateToProps = (state: IStore) => {
     object,
     objectLayer,
     layer,
-    forceShowLayer: selection.forceShowLayer,
+    selectionForProperties: selection.selectionForProperties,
     panelName,
   };
 };

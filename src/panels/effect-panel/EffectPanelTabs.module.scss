@@ -1,0 +1,136 @@
+.effect {
+  //z-index: 80;
+  //position: absolute;
+  //right: 350px;
+  //top: 20vh;
+  //background: #252526;
+  //width: 340px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  :global {
+    .bp3-tab-indicator-wrapper {
+      // workaround for bpjs bug(nested tabs)
+      min-width: 36px !important;
+      height: 100% !important;
+    }
+  }
+
+  .tab {
+    // todo:  pad with depend on different classes: in/out/effect/layer
+    //width: 50px;
+  }
+
+  .tag {
+    padding: 0 6px !important;
+    font-weight: bold;
+  }
+
+  .addEffect {
+    margin: 2px 5px 5px 5px;
+    padding: 2px 0px;
+  }
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+
+  .panelHeader {
+    display: flex;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    font-weight: bold;
+    color: gray;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+    > *:first-child {
+      flex-grow: 1;
+    }
+
+    .effectName {
+      color: #1f82c0;
+      margin-left: 10px;
+    }
+  }
+
+  .effectsHolder {
+    padding: 10px;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+
+  section {
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+
+    .sectionHeader {
+      font-weight: bold;
+      color: #808080;
+      padding: 5px 0px 0px 0px;
+    }
+  }
+
+  .effectConfigurationFormHolder {
+    display: flex;
+    padding-top: 8px;
+    border-top: 1px solid #3a3d40;
+
+    .noHolderEmpty {
+      display: none !important;
+    }
+
+    > div:first-child {
+      //noHolderEmpty
+      display: flex;
+      flex-direction: column;
+
+      > div:last-child {
+        flex-grow: 1;
+      }
+      > div {
+        background: #3a3d40;
+        width: 25px;
+        height: 25px;
+        text-align: center;
+        cursor: pointer;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.active {
+          border: 1px solid #3a3d40;
+          border-right: none;
+
+          background: #252526;
+        }
+      }
+    }
+
+    > div:nth-child(2) {
+      flex-grow: 1;
+    }
+  }
+
+  .effLabels {
+    padding: 7px 5px;
+    > * {
+      margin-right: 10px;
+      display: inline-block;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      color: #48aff0;
+    }
+  }
+}

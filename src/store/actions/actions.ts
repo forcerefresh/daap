@@ -6,7 +6,7 @@ import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
 import { cloneDeep, delay, differenceWith, isEqual, once } from "lodash-es";
-import { IObject, ObjectType } from "../../objects/types";
+import { IObject, ItemType, ObjectType } from "../../objects/types";
 import {
   createObject,
   getDefaultSlideTransition,
@@ -395,32 +395,39 @@ export function activateLayer(layerId: string): any {
 }
 
 // ****
-export const FORCE_ACTIVATE_LAYER = "Force activate layer";
+export const SELECT_FOR_PROPERTIES = "Select for properties";
 
-export interface ForceActivateLayerAction extends IUndoableAction<true, true> {
-  type: typeof FORCE_ACTIVATE_LAYER;
-  payload: string;
+export interface selectForPropertiesProps {
+  type: ItemType;
+  id: string;
+}
+export interface SelectForPropertiesAction extends IUndoableAction<true, true> {
+  type: typeof SELECT_FOR_PROPERTIES;
+  payload: selectForPropertiesProps;
 }
 
-function _forceActivateLayer(layerId: string): ForceActivateLayerAction {
+function _selectForProperties(
+  payload: selectForPropertiesProps
+): SelectForPropertiesAction {
   return {
-    type: FORCE_ACTIVATE_LAYER,
-    payload: layerId,
+    type: SELECT_FOR_PROPERTIES,
+    payload: payload,
     isUndoable: true,
     skipHistory: true,
   };
 }
 
-export function forceActivateLayer(layerId: string): any {
+export function selectForProperties(payload: selectForPropertiesProps): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (
-      getState().project.selection.activeLayerId === layerId &&
-      getState().project.selection.forceShowLayer
+      getState().project.selection.selectionForProperties?.type ===
+        payload.type &&
+      getState().project.selection.selectionForProperties?.id === payload.id
     ) {
       // console.log("layer is already active");
       return;
     }
-    dispatch(_forceActivateLayer(layerId));
+    dispatch(_selectForProperties(payload));
   };
 }
 
@@ -779,6 +786,7 @@ export function addNewObject(
     dispatch(addObject(object));
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
+    dispatch(selectForProperties({ id: object.id, type: "object" }));
   };
 }
 
@@ -1564,8 +1572,10 @@ export type ActionTypes =
   // activate
   | ActivateSlideAction
   | ActivateLayerAction
-  | ForceActivateLayerAction
   | ActivateObjectAction
+
+  // selection fro properties
+  | SelectForPropertiesAction
 
   //settings
   | UpdateProjectSettingsAction

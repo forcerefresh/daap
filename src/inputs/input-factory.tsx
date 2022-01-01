@@ -25,7 +25,7 @@ import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
-import { CSSPointsInputForm } from "./css-plugin-input/css-plugin-input";
+import { CSSPointsInputForm } from "./timelines-input/timelines-input";
 import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
 import { SliderInputForm } from "./slider-input/slider-input";

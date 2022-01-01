@@ -5,18 +5,42 @@ import { ITransition } from "../objects/types";
 export function createTimelineForObject(
   data: ITransitionsData
 ): gsap.core.Timeline[] {
-  const getDuration = (eff: ITransition) => {
-    return eff.duration === -1
-      ? data.data.slideDuration.customValue
-      : eff.duration;
-  };
-
-  let tl;
   const parallelTimelines: gsap.core.Timeline[] = [];
 
-  const effIn = data.transitions.in;
-  const effOut = data.transitions.out;
-  const effEffect = data.transitions.effect || data.transitions.layer; // TODO: layer is added adhock
+  data.transitions.in?.forEach((_, idx) => {
+    const effIn = data.transitions.in?.[idx];
+    const effOut = data.transitions.out?.[idx];
+    const effEffect =
+      data.transitions.effect?.[idx] || data.transitions.layer?.[idx]; // TODO: layer is added adhock
+
+    populatesTimelinesForObject(data, parallelTimelines, {
+      effIn,
+      effOut,
+      effEffect,
+    });
+  });
+
+  return parallelTimelines;
+}
+
+function getDuration(data: ITransitionsData, eff: ITransition) {
+  return eff.duration === -1
+    ? data.data.slideDuration.customValue
+    : eff.duration;
+}
+
+function populatesTimelinesForObject(
+  data: ITransitionsData,
+  parallelTimelines: gsap.core.Timeline[],
+  effProps: {
+    effIn?: ITransition;
+    effOut?: ITransition;
+    effEffect?: ITransition;
+  }
+) {
+  const { effIn, effOut, effEffect } = effProps;
+
+  let tl;
 
   if (effIn || effOut) {
     tl = gsap.timeline();
@@ -24,13 +48,14 @@ export function createTimelineForObject(
 
     let totalDuration = 0;
     if (effIn) {
+      console.log(effIn);
       totalDuration += effIn.delay;
 
       // ONE: delay for IN effect
       (tl as any).add(
         gsap.to("." + data.objectClass, { duration: effIn.delay / 1000 })
       );
-      totalDuration += getDuration(effIn);
+      totalDuration += getDuration(data, effIn);
 
       //console.log(getDuration(effIn));
       // TWO: duration for IN effect
@@ -45,7 +70,7 @@ export function createTimelineForObject(
           objectHtml: data.data.objectHtml,
         },
         type: "in",
-        duration: getDuration(effIn) / 1000,
+        duration: getDuration(data, effIn) / 1000,
         ease: effIn.ease,
         childEase: effIn.childEase,
         timeDistribution: effIn.timeDistribution,
@@ -56,11 +81,11 @@ export function createTimelineForObject(
     if (effOut) {
       let betweenGap =
         data.data.slideDuration.customValue -
-        (getDuration(effOut) + effOut.delay);
+        (getDuration(data, effOut) + effOut.delay);
 
       //console.log(betweenGap);
       if (effIn) {
-        betweenGap -= getDuration(effIn) + effIn?.delay;
+        betweenGap -= getDuration(data, effIn) + effIn?.delay;
         //console.log(betweenGap);
       }
       //console.log(betweenGap);
@@ -76,7 +101,7 @@ export function createTimelineForObject(
 
       //console.log(totalDuration);
 
-      totalDuration += getDuration(effOut);
+      totalDuration += getDuration(data, effOut);
       (tl as any).add(
         gsap.effects[effOut.effect.id](
           "." + data.objectClass,
@@ -90,14 +115,14 @@ export function createTimelineForObject(
               objectHtml: data.data.objectHtml,
             },
             type: "out",
-            duration: getDuration(effOut) / 1000,
+            duration: getDuration(data, effOut) / 1000,
             delay: effOut.delay / 1000,
             ease: effOut.ease,
             childEase: effOut.childEase,
             timeDistribution: effOut.timeDistribution,
           },
           (data.data.slideDuration.customValue -
-            getDuration(effOut) -
+            getDuration(data, effOut) -
             effOut.delay) /
             1000
         )
@@ -127,7 +152,7 @@ export function createTimelineForObject(
       gsap.to("." + data.objectClass, { duration: effEffect.delay / 1000 })
     );
 
-    totalDuration += getDuration(effEffect);
+    totalDuration += getDuration(data, effEffect);
     // TWO: duration for IN effect
     const eff = gsap.effects[effEffect.effect.id]("." + data.objectClass, {
       ...effEffect.effect.values,
@@ -139,7 +164,7 @@ export function createTimelineForObject(
         objectHtml: data.data.objectHtml,
       },
       type: "in",
-      duration: getDuration(effEffect) / 1000,
+      duration: getDuration(data, effEffect) / 1000,
       ease: effEffect.ease,
       childEase: effEffect.childEase,
       timeDistribution: effEffect.timeDistribution,
@@ -149,11 +174,17 @@ export function createTimelineForObject(
     // THREE end gap
     let betweenGap =
       data.data.slideDuration.customValue -
-      (getDuration(effEffect) + effEffect.delay);
+      (getDuration(data, effEffect) + effEffect.delay);
     (tl as any).add(
       gsap.to("." + data.objectClass, { duration: betweenGap / 1000 })
     );
   }
+
+  /* const endPointTl = gsap.to(
+    {},
+    { delay: data.data.slideDuration.customValue / 1000, duration: 0 }
+  );
+  parallelTimelines.push(endPointTl as any);*/
 
   return parallelTimelines;
 }

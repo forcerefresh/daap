@@ -5,12 +5,26 @@ import { IZoomInEffect, zoomIn } from "./zoom.types";
 gsap.registerEffect({
   name: zoomIn,
   effect: function (targets: any, config: IZoomInEffect) {
-    return gsap[getMethodByType(config.type)](targets, {
-      ease: config.ease,
-      duration: config.duration!,
-      scaleX: 0,
-      scaleY: 0,
-    });
+    console.log(config);
+    if (config.type === "in") {
+      return gsap.fromTo(
+        targets,
+        { scaleX: 0, scaleY: 0 },
+        {
+          ease: config.ease,
+          duration: config.duration!,
+          scaleX: config.scaleX / 100,
+          scaleY: config.scaleY / 100,
+        }
+      );
+    } else {
+      return gsap[getMethodByType(config.type)](targets, {
+        ease: config.ease,
+        duration: config.duration!,
+        scaleX: 0,
+        scaleY: 0,
+      });
+    }
   },
   defaults: {},
   extendTimeline: true,

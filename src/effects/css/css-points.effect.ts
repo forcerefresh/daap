@@ -16,7 +16,10 @@ gsap.registerEffect({
       const tlTl = gsap.timeline();
       tl.add(tlTl, 0);
       const points = config.cssPointsValue.timelines[j].points;
+
+      sortPoints(points);
       let currentTime = 0;
+      let startFrom = 0;
       for (let i = 0; i < points.length; i++) {
         const { time, css, easing } = points[i];
         const cssValue = {
@@ -34,9 +37,19 @@ gsap.registerEffect({
         };
         const dur = config.duration! * (time / 100) - currentTime;
         currentTime = dur;
-        tlTl.add(gsap.to(objectEl, { duration: dur, css: cssValue }));
+        tlTl.add(
+          gsap.to(objectEl, { duration: dur, css: cssValue }),
+          startFrom
+        );
+        startFrom += dur;
       }
     }
     return tl;
   },
 });
+
+function sortPoints(points: any[]) {
+  points.sort((a, b) => {
+    return a.time > b.time ? 1 : -1;
+  });
+}

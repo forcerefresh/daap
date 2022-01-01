@@ -23,7 +23,7 @@ export interface ProjectTimelineData {
 
 type IProjectTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    slideProgress: { progress: number; slideIdx: number };
+    slideProgress: { progress: number; time: number; slideIdx: number };
     projectTimelineData: ProjectTimelineData | null;
     onManualProgress: (progress: number) => void;
   };
@@ -39,7 +39,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   //const [progress, setProgress] = useState<number>(0);
 
-  console.log(projectTimelineData);
+  //console.log(projectTimelineData);
   // get total duration
   let totalTime = 0;
   projectTimelineData?.slides.forEach((slideData, idx) => {
@@ -50,7 +50,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     /*}*/
   });
 
-  console.log(totalTime);
+  //console.log(totalTime);
 
   let currPos = 0;
   const slideLeftArr: number[] = [];
@@ -61,8 +61,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     // slide left is currPos - transitionDuration
     const slideLeft =
       currPos === 0 ? 0 : (currPos - slideData.transitionDuration) / totalTime;
-    currPos += slideData.duration;
     slideLeftArr[idx] = slideLeft;
+    currPos += slideData.duration;
 
     //slide multiplier
     const slidePosMultiplier =
@@ -116,12 +116,20 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   //const thumbStyle = {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   //};
+  const currentSlideDuration =
+    (projectTimelineData?.slides[slideProgress.slideIdx].duration || 10000) /
+    1000;
+  const progress = slideProgress.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
+  console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);
+  console.log(slideProgress.time);
+  console.log(progress);
+  console.log(slideProgress.progress);
   //console.log((lineRef?.current as any)?.offsetWidth);
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
   let left =
     lineWidth *
-    slideProgress.progress *
+    /*slideProgress.progress*/ progress *
     slidePosMultiplierArr[slideProgress.slideIdx];
 
   left = left + lineWidth * slideLeftArr[slideProgress.slideIdx];

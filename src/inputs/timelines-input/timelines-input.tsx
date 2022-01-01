@@ -11,13 +11,14 @@ import {
   ICSSTimelinesValue,
   ICSSTimelineValue,
 } from "../types";
-import css from "./css-plugin-input.module.scss";
+import css from "./timelines-input.module.scss";
 import cx from "classnames";
-import { cloneDeep, debounce, isNumber } from "lodash";
+import { cloneDeep, debounce } from "lodash";
 import { getNumericFiled } from "../input-utils";
 import { roundNumber } from "../../utils/doom-utils/common";
 import { getInputForm } from "../input-factory";
 import { Button } from "@blueprintjs/core";
+import classnames from "classnames";
 
 export const getDefaultTimeline = (): ICSSTimelineValue => {
   return {
@@ -26,13 +27,13 @@ export const getDefaultTimeline = (): ICSSTimelineValue => {
         time: 100,
         easing: "none",
         css: {
-          x: { value: 0, position: "abs" },
-          y: { value: 0, position: "abs" },
-          width: { value: 0, position: "abs" },
-          height: { value: 0, position: "abs" },
+          x: { value: 0, position: "rel" },
+          y: { value: 0, position: "rel" },
+          width: { value: 0, position: "rel" },
+          height: { value: 0, position: "rel" },
           rotation: {
             value: 0,
-            position: "abs" as "abs" | "rel",
+            position: "rel" as "abs" | "rel",
             direction: "_ccw" as "_ccw" | "_cw" | "_short",
           },
         },
@@ -158,6 +159,21 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
     setLineWidth((lineRef?.current as any)?.offsetWidth || 0);
   }, [lineRef?.current]);
 
+  // NOTE: WORKAROUND TO SET LINE WIDTH
+  useEffect(() => {
+    const int = setInterval(() => {
+      const w = (lineRef?.current as any)?.offsetWidth || 0;
+      if (lineWidth === 0 && w !== 0) {
+        setLineWidth(w);
+        clearInterval(int);
+      }
+    }, 10);
+
+    return () => {
+      clearInterval(int);
+    };
+  }, []);
+
   const renderTimeline = (timeline: ICSSTimelineValue, timelineIdx: number) => {
     return (
       <div className={css.timelineHolder}>
@@ -169,7 +185,6 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
             const rect = event.currentTarget.getBoundingClientRect();
             const time = (event.clientX - rect.left) / lineWidth + adjustment;
             const newValue = cloneDeep(localValue);
-            console.log(timelineIdx);
 
             let newTime = roundNumber(time * 100, 2);
             newTime = Math.min(Math.max(newTime, 0), 100);
@@ -267,7 +282,9 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
           renderTimeline(timeline, timelineIdx)
         )}
       </div>
-
+      <div className={classnames("bp3-form-helper-text", css.helperText)}>
+        Click on line to add or double click on point to remove it.
+      </div>
       <div>
         <Button
           minimal
@@ -284,10 +301,10 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
         <>
           <div>
             {getNumericFiled(
-              "time",
+              "Point position",
               localValue.timelines[selectedIndex.timelineIdx].points[
                 selectedIndex.pointIdx!
-              ].time,
+              ].time + "%",
               () => {},
               "",
               { disabled: true }

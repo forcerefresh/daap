@@ -7,13 +7,14 @@ import ToolbarPanel from "../../panels/toolbar-panel/ToolbarPanel";
 import ActionPanel from "../../panels/action-panel/ActionPanel";
 import StagePanel from "../../panels/stage-panel/StagePanel";
 import StaticEffectPanel from "../../panels/effect-panel/StaticEffectPanel";
+import PropertiesPanelAll from "../../panels/properties-panel-all/PropertiesPanelAll";
 
 function Editor() {
   return (
     <MainLayout
       slides={<SlidesPanel />}
       layers={<LayersPanel />}
-      properties={<PropertiesPanel />}
+      properties={<PropertiesPanelAll />}
       action={<ActionPanel />}
       toolbar={<ToolbarPanel />}
       content={<StagePanel />}

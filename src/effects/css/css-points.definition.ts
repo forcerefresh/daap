@@ -1,4 +1,4 @@
-import { getDefaultTimeline } from "../../inputs/css-plugin-input/css-plugin-input";
+import { getDefaultTimeline } from "../../inputs/timelines-input/timelines-input";
 import { InputType } from "../../inputs/types";
 import { cssEffect, ICSSPointsEffect } from "./css-points.types";
 

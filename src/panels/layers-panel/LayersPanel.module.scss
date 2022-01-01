@@ -48,8 +48,10 @@
   }
 
   .layerInner {
-    padding: 8px;
+    padding: 2px 4px;
     border-bottom: 1px solid #353536;
+    background: #2b2b2b;
+
     display: flex;
     align-items: center;
     cursor: default;
@@ -152,7 +154,7 @@
     .objectHolderInner {
       display: flex;
       align-items: center;
-      padding: 8px !important;
+      padding: 2px 4px 2px 8px !important;
     }
 
     &.active {

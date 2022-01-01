@@ -19,7 +19,8 @@ import {
   removeObjectsFromSelection,
   deactivateObject,
   updateLayer,
-  forceActivateLayer,
+  selectForProperties,
+  selectForPropertiesProps,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
@@ -28,7 +29,6 @@ import { cloneDeep, get, includes, isEmpty, remove } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
-import EffectPanel from "../effect-panel/EffectPanel";
 import { getEffectDefinition } from "../../effects/effects";
 import { getIconByType } from "../../store/reducers/settings";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
@@ -76,7 +76,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     selectedObjectIds,
     layoutStaticEffectsPanel,
     breakpointsConfiguration,
-    forceShowLayer,
+    //forceShowLayer,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -91,7 +91,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _removeObjectsFromSelection,
     _deactivateObject,
     _updateLayer,
-    _forceActivateLayer,
+    _selectForProperties,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -125,8 +125,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         ? _addLayersToSelection([layerId])
         : _removeLayersFromSelection([layerId]);
     } else {
-      _forceActivateLayer(layerId);
+      _activateLayer(layerId);
       _selectLayers([layerId]);
+      _selectForProperties({ type: "layer", id: layerId });
     }
   };
 
@@ -144,6 +145,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     } else {
       _activateObject(objectId);
       _selectObjects([objectId]);
+      _selectForProperties({ type: "object", id: objectId });
     }
   };
   // logic for handling click outside
@@ -154,27 +156,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   useOnClickOutside(effectPanelRef, handleClickOutside, [
     "color-picker-holder",
   ]);
-
-  // render panels in Portal
-  const renderPanels = () => {
-    return (
-      <Portal className="bp3-dark">
-        {showEffectPanelForId.id !== EmptyID && (
-          <div ref={effectPanelRef} className={css.floatingEffectPanel}>
-            <EffectPanel
-              sections={
-                showEffectPanelForId.type === "object"
-                  ? ["IN", "OUT", "EFFECT"]
-                  : ["LAYER"]
-              }
-              id={showEffectPanelForId.id}
-              objectType={showEffectPanelForId.type}
-            />
-          </div>
-        )}
-      </Portal>
-    );
-  };
 
   /*const iconName = getIconByType("large-1");
   const size = getIconSize(iconName);
@@ -296,7 +277,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   key={layer?.id}
                   onClick={(event) => onLayerClick(event, layer.id)}
                   className={cx(css.layerInner, {
-                    [css.active]: activeLayerId === layer.id && forceShowLayer,
+                    [css.active]: activeLayerId === layer.id, //&& forceShowLayer,
                   })}
                 >
                   <div>
@@ -420,8 +401,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
                       const sizeIn = calculateTimelineRect(
                         slide?.duration.customValue || 1,
-                        object?.transitions?.in?.delay || 1,
-                        object?.transitions?.in?.duration || 1,
+                        object?.transitions?.in?.[0]?.delay || 1,
+                        object?.transitions?.in?.[0]?.duration || 1,
                         340
                       );
                       const timelineInStyle = {
@@ -431,8 +412,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
                       const sizeOut = calculateTimelineRect(
                         slide?.duration.customValue || 1,
-                        object?.transitions?.out?.delay || 1,
-                        object?.transitions?.out?.duration || 1,
+                        object?.transitions?.out?.[0]?.delay || 1,
+                        object?.transitions?.out?.[0]?.duration || 1,
                         340,
                         true
                       );
@@ -444,7 +425,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       // ****************** TODO: Make this code to looks better
 
                       const effDef = getEffectDefinition(
-                        object?.transitions?.effect?.effect?.id || "none"
+                        object?.transitions?.effect?.[0]?.effect?.id || "none"
                       );
 
                       let effDur = effDef.defaults.hasOwnDuration
@@ -452,11 +433,11 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             object,
                             object?.transitions?.effect
                           ) || 0
-                        : object?.transitions?.effect?.duration;
+                        : object?.transitions?.effect?.[0]?.duration;
 
                       const sizeEffect = calculateTimelineRect(
                         slide?.duration.customValue || 0,
-                        object?.transitions?.effect?.delay || 0,
+                        object?.transitions?.effect?.[0]?.delay || 0,
                         effDur || 0,
                         340
                       );
@@ -569,24 +550,29 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           <div
                             className={cx(css.timelineHolder, {
                               [css.hideMe]:
-                                object.transitions.in?.effect.id === "none" &&
-                                object.transitions.out?.effect.id === "none" &&
-                                object.transitions.effect?.effect.id === "none",
+                                object.transitions.in?.[0]?.effect.id ===
+                                  "none" &&
+                                object.transitions.out?.[0]?.effect.id ===
+                                  "none" &&
+                                object.transitions.effect?.[0]?.effect.id ===
+                                  "none",
                             })}
                           >
-                            {object.transitions.in?.effect.id !== "none" && (
+                            {object.transitions.in?.[0]?.effect.id !==
+                              "none" && (
                               <div
                                 className={css.timeline}
                                 style={timelineInStyle}
                               />
                             )}
-                            {object.transitions.out?.effect.id !== "none" && (
+                            {object.transitions.out?.[0]?.effect.id !==
+                              "none" && (
                               <div
                                 className={css.timeline}
                                 style={timelineOutStyle}
                               />
                             )}
-                            {object.transitions.effect?.effect.id !==
+                            {object.transitions.effect?.[0]?.effect.id !==
                               "none" && (
                               <div
                                 className={css.timeline}
@@ -611,7 +597,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
           })}
         </div>
       </div>
-      {renderPanels()}
     </>
   );
 };
@@ -639,7 +624,7 @@ const mapStateToProps = (state: IStore) => {
     selectedObjectIds: selection.selectedObjectIds,
     layoutStaticEffectsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpointsConfiguration,
-    forceShowLayer: selection.forceShowLayer,
+    //forceShowLayer: selection.selectionForProperties?.type === "layer",
   };
 };
 
@@ -650,7 +635,8 @@ const mapDispatchToProps = {
     removeLayersFromSelection(layerIds),
   _deleteLayers: (layerIds: string[]) => deleteLayers(layerIds),
   _activateLayer: (layerId: string) => activateLayer(layerId),
-  _forceActivateLayer: (layerId: string) => forceActivateLayer(layerId),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (
     layerId: string,

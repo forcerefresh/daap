@@ -36,11 +36,16 @@ export const LayoutChildrenInputForm: React.FC<
   return (
     <>
       <div className="input60">
-        {getSelectField("Fit", value.type, LAYOUT_TYPE_OPTIONS, (type: any) => {
-          const valueClone = cloneDeep(value);
-          valueClone.type = type;
-          onChange(valueClone);
-        })}
+        {getSelectField(
+          "Type",
+          value.type,
+          LAYOUT_TYPE_OPTIONS,
+          (type: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.type = type;
+            onChange(valueClone);
+          }
+        )}
       </div>
 
       <div className={cx("input60")}>
