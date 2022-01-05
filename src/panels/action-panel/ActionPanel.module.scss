@@ -26,6 +26,11 @@
     .sliderName {
       color: #1f82c0;
       margin-left: 10px;
+
+      max-width: 120px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .changed {
       color: #ff5151;

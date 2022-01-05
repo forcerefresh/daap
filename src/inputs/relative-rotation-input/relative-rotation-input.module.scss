@@ -1,5 +1,15 @@
+.main {
+  :global {
+    .bp3-form-group {
+      margin-bottom: 5px !important;
+    }
+  }
+}
+
 .row {
   display: flex;
+  flex-wrap: wrap;
+
   > * + * {
     margin-left: 10px;
   }

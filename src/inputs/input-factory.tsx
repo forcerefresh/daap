@@ -6,7 +6,8 @@ import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
-import { EventsInputForm } from "./events-input/events-input";
+// deprecated
+//import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { GridPlacementInputForm } from "./grid-placement/grid-placement";
 import { ImageInputForm } from "./image-input/image-input";
@@ -25,7 +26,7 @@ import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
-import { CSSPointsInputForm } from "./timelines-input/timelines-input";
+import { TimelinesInputForm } from "./timelines-input/timelines-input";
 import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
 import { SliderInputForm } from "./slider-input/slider-input";
@@ -134,9 +135,9 @@ export function getInputForm<T>(
         />
       );
     }
-    case InputType.CSS_TIMELINES: {
+    case InputType.TIMELINES: {
       return (
-        <CSSPointsInputForm
+        <TimelinesInputForm
           key={key}
           {...inputProps}
           onChange={onChange}
@@ -289,9 +290,10 @@ export function getInputForm<T>(
         <CheckboxInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
+    /** deprecated 
     case InputType.EVENTS: {
       return <EventsInputForm key={key} {...inputProps} onChange={onChange} />;
-    }
+    }*/
     case InputType.SPLIT: {
       return <SplitInputForm key={key} {...inputProps} onChange={onChange} />;
     }

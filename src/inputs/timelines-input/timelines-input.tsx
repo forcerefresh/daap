@@ -5,40 +5,46 @@ import Draggable, {
   DraggableEvent,
 } from "react-draggable";
 import {
-  ICSSTimelineInput,
+  ITimelinesInput,
   InputType,
   IUpdateInput,
-  ICSSTimelinesValue,
-  ICSSTimelineValue,
+  ITimelinesValue,
+  ITimelineValue,
+  ITimelinePoint,
 } from "../types";
 import css from "./timelines-input.module.scss";
 import cx from "classnames";
 import { cloneDeep, debounce } from "lodash";
-import { getNumericFiled } from "../input-utils";
+import { getNumericFiled, getSelectField } from "../input-utils";
 import { roundNumber } from "../../utils/doom-utils/common";
 import { getInputForm } from "../input-factory";
 import { Button } from "@blueprintjs/core";
 import classnames from "classnames";
+import { EasingOptions } from "../../effects/types";
 
-export const getDefaultTimeline = (): ICSSTimelineValue => {
+export const getDefaultTimeline = (): ITimelineValue => {
   return {
-    points: [
-      {
-        time: 100,
-        easing: "none",
-        css: {
-          x: { value: 0, position: "rel" },
-          y: { value: 0, position: "rel" },
-          width: { value: 0, position: "rel" },
-          height: { value: 0, position: "rel" },
-          rotation: {
-            value: 0,
-            position: "rel" as "abs" | "rel",
-            direction: "_ccw" as "_ccw" | "_cw" | "_short",
-          },
-        },
+    points: [getDefaultPoint()],
+  };
+};
+
+export const getDefaultPoint = (time = 100): ITimelinePoint => {
+  return {
+    time,
+    easing: "none",
+    pointValue: {
+      x: { enabled: false, value: 0, position: "rel", easing: "none" },
+      y: { enabled: false, value: 0, position: "rel", easing: "none" },
+      width: { enabled: false, value: 0, position: "rel", easing: "none" },
+      height: { enabled: false, value: 0, position: "rel", easing: "none" },
+      rotation: {
+        enabled: false,
+        value: 0,
+        position: "rel" as "abs" | "rel",
+        direction: "_ccw" as "_ccw" | "_cw" | "_short",
       },
-    ],
+      opacity: { enabled: false, value: 100, position: "rel", easing: "none" },
+    },
   };
 };
 
@@ -68,9 +74,14 @@ const formDefinition = [
     propertyName: "rotation",
     inputType: InputType.RELATIVE_ROTATION_INPUT,
   },
+  {
+    displayName: "Opacity",
+    propertyName: "opacity",
+    inputType: InputType.RELATIVE_POSITION_INPUT,
+  },
 ];
 
-export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
+export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
   props
 ) => {
   const { value, onChange } = props;
@@ -82,7 +93,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
     timelineIdx: number;
   }>({ pointIdx: 0, timelineIdx: 0 });
 
-  const setLocalValueSorted = (val: ICSSTimelinesValue) => {
+  const setLocalValueSorted = (val: ITimelinesValue) => {
     /*val.timelines.map((timeline) => {
       timeline.points.sort((a, b) => {
         return a.time > b.time ? 1 : -1;
@@ -99,7 +110,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
   }, [localValue]);
 
   const debounceOnChange = useCallback(
-    debounce((newValue: ICSSTimelinesValue) => {
+    debounce((newValue: ITimelinesValue) => {
       onChange(newValue);
     }, 100),
     [onChange]
@@ -174,7 +185,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
     };
   }, []);
 
-  const renderTimeline = (timeline: ICSSTimelineValue, timelineIdx: number) => {
+  const renderTimeline = (timeline: ITimelineValue, timelineIdx: number) => {
     return (
       <div className={css.timelineHolder}>
         <div
@@ -189,17 +200,9 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
             let newTime = roundNumber(time * 100, 2);
             newTime = Math.min(Math.max(newTime, 0), 100);
 
-            newValue.timelines[timelineIdx].points.push({
-              time: newTime,
-              css: {
-                x: { value: 0, position: "abs" },
-                y: { value: 0, position: "abs" },
-                width: { value: 0, position: "abs" },
-                height: { value: 0, position: "abs" },
-                rotation: { value: 0, position: "abs", direction: "_ccw" },
-              },
-              easing: "abc",
-            });
+            newValue.timelines[timelineIdx].points.push(
+              getDefaultPoint(newTime)
+            );
             setLocalValueSorted(newValue);
             setSelectedIndex({
               pointIdx: newValue.timelines[timelineIdx].points.length - 1,
@@ -230,7 +233,8 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
                 scale={1}
                 bounds={{ left: 6, right: lineWidth - 6 }}
                 onDrag={(evt: DraggableEvent, data: DraggableData) => {
-                  const percMultiplier = data.x === 0 ? 0 : data.x / lineWidth;
+                  const percMultiplier =
+                    data.x === 0 ? 0 : (data.x - 6) / (lineWidth - 12);
                   const newTime = percMultiplier * 100;
                   const newValue = cloneDeep(localValue);
                   newValue.timelines[timelineIdx].points[idx].time =
@@ -311,13 +315,30 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
             )}
           </div>
 
+          <div>
+            {getSelectField(
+              "",
+              localValue.timelines[selectedIndex.timelineIdx].points[
+                selectedIndex.pointIdx!
+              ].easing,
+              EasingOptions,
+              (value: any) => {
+                const newLocalValue = cloneDeep(localValue);
+                newLocalValue.timelines[selectedIndex.timelineIdx].points[
+                  selectedIndex.pointIdx!
+                ].easing = value;
+                setLocalValueSorted(newLocalValue);
+              }
+            )}
+          </div>
+
           {formDefinition.map((formDefinition) => {
             function onChange(value: any) {
               const newLocalValue = cloneDeep(localValue);
               (
                 newLocalValue.timelines[selectedIndex.timelineIdx].points[
                   selectedIndex.pointIdx!
-                ].css as any
+                ].pointValue as any
               )[formDefinition.propertyName] = value;
               setLocalValueSorted(newLocalValue);
             }
@@ -325,7 +346,7 @@ export const CSSPointsInputForm: React.FC<ICSSTimelineInput & IUpdateInput> = (
             const val = (
               localValue.timelines[selectedIndex.timelineIdx].points[
                 selectedIndex.pointIdx!
-              ].css as any
+              ].pointValue as any
             )[formDefinition.propertyName];
 
             return getInputForm(

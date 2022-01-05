@@ -121,10 +121,10 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     1000;
   const progress = slideProgress.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
-  console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);
-  console.log(slideProgress.time);
-  console.log(progress);
-  console.log(slideProgress.progress);
+  // console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);
+  // console.log(slideProgress.time);
+  // console.log(progress);
+  // console.log(slideProgress.progress);
   //console.log((lineRef?.current as any)?.offsetWidth);
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
   let left =

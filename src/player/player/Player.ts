@@ -3,8 +3,9 @@ import { last } from "lodash-es";
 import { IPlayerData, ISlideData } from "../../export/i-export-html";
 import {
   IGoToSlideAction,
-  IObjectEvent,
+  INavigationValues,
   ISlideTransition,
+  NavigationType,
 } from "../../objects/types";
 import { SlideType } from "../../store/reducers/i-slides";
 import { createTimelineForObject } from "../AppPlayerUtils";
@@ -254,13 +255,13 @@ export class Player {
 
     let isUpdated = false;
     this.currentSlideTimeline.eventCallback("onUpdate", () => {
-      console.log("onUpdate 123");
+      //console.log("onUpdate 123");
       this.onUpdateCallback?.();
 
       if (!isUpdated) {
         slideEl.style.display = "block";
         isUpdated = true;
-        console.log("onUpdate 123 true");
+        //console.log("onUpdate 123 true");
       }
       if (!hasEffect(bettwenSlideEff)) {
         // ako nema effekat
@@ -306,6 +307,7 @@ export class Player {
     //
 
     this.currentSlideEl = slideEl;
+    this.currentSlide = slideIdx;
 
     this.onCurrentTimelineChangeCallback?.();
   }
@@ -328,20 +330,50 @@ export class Player {
 
   private createEvent(
     no: number,
-    objectEvent: IObjectEvent,
-    className: string
+    className: string,
+    objectEvent?: INavigationValues
   ) {
-    const el = document.getElementsByClassName(className)[0];
-    el?.addEventListener(objectEvent.type as string, () => {
-      this.manualPlaySlide((objectEvent.action as IGoToSlideAction).slideId!);
+    if (!objectEvent) {
+      return;
+    }
+
+    if (objectEvent.navigationType === NavigationType.None) {
+      return;
+    } else if (objectEvent.navigationType === NavigationType.Slide) {
+      const el = document.getElementsByClassName(className)[0];
+
+      el?.addEventListener(objectEvent?.slideEvent, () => {
+        if (objectEvent.slideReferenceType === "slideNo") {
+          this.manualPlaySlide(parseInt(objectEvent?.slideNo, 10) - 1);
+        } else if (objectEvent.slideReferenceType === "slideId") {
+          const slideIdx = this.getSlideIdxByID(objectEvent.slideId);
+          if (slideIdx) this.manualPlaySlide(slideIdx);
+        } else if (objectEvent.slideReferenceType === "next") {
+          const slideIdx = this.getNextSlideIdx(this.currentSlide);
+          this.manualPlaySlide(slideIdx);
+        } else if (objectEvent.slideReferenceType === "prev") {
+          const slideIdx = this.getPrevSlideIdx(this.currentSlide);
+          this.manualPlaySlide(slideIdx);
+        }
+      });
+    }
+  }
+
+  private getSlideIdxByID(userId: string): number | undefined {
+    const slide = this.normalSlideDataArr?.find((slideData) => {
+      return slideData.slide.userId === userId;
     });
+
+    return slide ? this.normalSlideDataArr?.indexOf(slide) : undefined;
   }
 
   private createEvents(slideIdx: number, data: ISlideData) {
     data.transitionsData.forEach((transitionData) => {
-      transitionData.events?.forEach((event) => {
-        this.createEvent(slideIdx, event, transitionData.objectClass);
-      });
+      this.createEvent(
+        slideIdx,
+        transitionData.objectClass,
+        transitionData.events
+      );
     });
   }
 
@@ -359,6 +391,20 @@ export class Player {
     });
   }
 
+  private getNextSlideIdx(currIdx: number) {
+    const total = this.normalSlideDataArr?.length || -1;
+    const nextSlideIdx = currIdx >= total - 1 ? 0 : currIdx + 1;
+    return nextSlideIdx;
+  }
+
+  private getPrevSlideIdx(currIdx: number) {
+    const total = this.normalSlideDataArr?.length || -1;
+    console.log(total);
+    console.log(currIdx);
+
+    const nextSlideIdx = currIdx === 0 ? total - 1 : currIdx - 1;
+    return nextSlideIdx;
+  }
   private createSlide(slideIdx: number, data: ISlideData) {
     const slideEl = getSlideById(data.slide.id);
     slideEl.style.display = "none";
@@ -389,11 +435,7 @@ export class Player {
     console.log(slideTimeline.getChildren());
     console.log(slideTimeline.getById("slideDurationTimeline"));
 
-    // refactor
-    const total = this.normalSlideDataArr?.length || -1;
-    //console.log(slideIdx, "WWW");
-
-    const nextSlideIdx = slideIdx >= total - 1 ? 0 : slideIdx + 1;
+    const nextSlideIdx = this.getNextSlideIdx(slideIdx);
 
     // 0. get effect definition
     const bettwenSlideEff: ISlideTransition | undefined =

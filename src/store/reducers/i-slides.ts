@@ -12,6 +12,7 @@ export enum SlideType {
 
 export interface ISlide {
   id: string;
+  userId: string;
   name: string;
   duration: ISlideDuration;
   layerIds: string[];

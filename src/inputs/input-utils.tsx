@@ -169,7 +169,7 @@ export function getTextField<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabled?: boolean; placeholderText?: string } = {}
 ) {
   const objectDef = {
     displayName: label,

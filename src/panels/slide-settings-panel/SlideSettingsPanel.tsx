@@ -3,7 +3,11 @@ import cx from "classnames";
 import React from "react";
 import { Text } from "@blueprintjs/core";
 import { connect } from "react-redux";
-import { getNumericFiled, getSelectField } from "../../inputs/input-utils";
+import {
+  getNumericFiled,
+  getSelectField,
+  getTextField,
+} from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
@@ -97,7 +101,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           </div>
         </div>
         <div className={css.slidePropertiesHolder}>
-          {getSelectField(
+          {/*getSelectField(
             "Type",
             slide.slideType,
             SlideTypeOptions,
@@ -106,6 +110,18 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               obj.slideType = value as SlideType;
               _updateSlide(obj);
             }
+          )*/}
+
+          {getTextField(
+            "Id",
+            slide.userId,
+            (value: string) => {
+              const obj = cloneDeep(slide);
+              obj.userId = value;
+              _updateSlide(obj as any as ISlide);
+            },
+            "",
+            { placeholderText: "Enter slide ID" }
           )}
 
           {getSelectField(

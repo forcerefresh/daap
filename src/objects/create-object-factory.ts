@@ -38,6 +38,8 @@ import {
   IObject,
   ISlideTransition,
   ITransitions,
+  NavigationEvent,
+  NavigationType,
   ObjectType,
 } from "./types";
 
@@ -194,8 +196,22 @@ function createCommonObject(
     isVisible: true,
     isLocked: false,
     transitions: getDefaultTransitionsForObject(),
-    events: [],
     selfSize: false,
+    //nav
+    navigationDefinition: {
+      values: {
+        navigationType: NavigationType.None,
+        linkEvent: NavigationEvent.click,
+        linkTarget: "_blank",
+        linkHref: "",
+        slideEvent: NavigationEvent.click,
+        slideReferenceType: "slideNo",
+        slideNo: "1",
+        slideId: "",
+      },
+      valuesMetadata: {},
+    },
+    //layout
     supportedLayout: {
       none: false,
       absolute: true,
@@ -1410,7 +1426,6 @@ function createImageObject(
         isPlaceholder: true,
       },
     },
-
     {
       displayName: "Use for thumbnail",
       propertyName: "useForThumbnail",

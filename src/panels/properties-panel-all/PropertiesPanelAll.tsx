@@ -8,6 +8,7 @@ import { updateLayer, updateObject } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 import StaticEffectPanel from "../effect-panel/StaticEffectPanel";
+import NavigationPanel from "../navigation-panel/NavigationPanel";
 import PropertiesPanel from "../properties-panel/PropertiesPanel";
 
 import css from "./PropertiesPanelAll.module.scss";
@@ -40,7 +41,7 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           panel={<PropertiesPanel hideHeader className={css.propertiesPanel} />}
         />
         <Tab
-          id="global"
+          id="effects-panel"
           title={
             <>
               <span>Effect</span> &nbsp;
@@ -52,6 +53,16 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           panel={
             <StaticEffectPanel hideHeader className={css.propertiesPanel} />
           }
+        />
+
+        <Tab
+          id="nav-panel"
+          title={
+            <>
+              <span>Nav</span>
+            </>
+          }
+          panel={<NavigationPanel />}
         />
 
         {/*<Tabs.Expander />

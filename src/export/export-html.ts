@@ -69,8 +69,15 @@ export function generatePlayerData(
 
   previewSlidesArr.forEach((slide) => {
     const transitionsData: ITransitionsData[] = [];
+
     const slideData: ISlideData = {
-      slide: pick(slide, ["id", "slideType", "slideTransition", "duration"]),
+      slide: pick(slide, [
+        "id",
+        "slideType",
+        "slideTransition",
+        "duration",
+        "userId",
+      ]),
       transitionsData,
     };
 
@@ -90,7 +97,6 @@ export function generatePlayerData(
       transitionsData.push({
         objectClass: layerClassName,
         transitions: layer.transitions,
-        events: [],
         data: {
           slideDuration: slide.duration,
           objectWidth: 1000,
@@ -184,7 +190,7 @@ export function generatePlayerData(
         transitionsData.push({
           objectClass: objectClass,
           transitions: object.transitions,
-          events: object.events,
+          events: getObjectEvents(object),
           data: {
             slideDuration: slide.duration,
             // TODO: IMPORTANT (size issue)
@@ -221,6 +227,11 @@ export function generatePlayerData(
       pageWidth: breakpointConfig.normal.page.width,
     },
   };
+}
+
+function getObjectEvents(object: IObject) {
+  const navValues = object.navigationDefinition.values;
+  return navValues;
 }
 
 /**

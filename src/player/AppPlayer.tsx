@@ -96,16 +96,16 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       });
 
       pl.onCurrentTimelineChange(() => {
-        console.log("onCurrentTimelineChange");
+        // console.log("onCurrentTimelineChange");
         // TODO: DUPLICATE CODE 2
 
         pl.onUpdate(() => {
           const tl = player.current?.getCurrentTimeline() as TimelineMax;
-          console.log(player.current?.getCurrentTimeline()?.progress());
-          console.log(tl.duration());
-          console.log(tl.endTime());
-          console.log(tl.totalTime());
-          console.log(tl.time());
+          // console.log(player.current?.getCurrentTimeline()?.progress());
+          // console.log(tl.duration());
+          // console.log(tl.endTime());
+          // console.log(tl.totalTime());
+          // console.log(tl.time());
           onProgress(
             player.current?.getCurrentTimeline()?.progress() || 0,
             player.current?.getCurrentTimeline()?.time() || 0,

@@ -1,4 +1,3 @@
-import { Text } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
@@ -9,7 +8,6 @@ import {
 } from "../../inputs/input-factory";
 import {
   getAbsoluteLayoutField,
-  getCoverLayoutField,
   getSnapLayoutField,
   getGridLayoutField,
   getSelectField,
@@ -90,8 +88,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           object,
           _updateObject
         )}
-        <hr />
-        {renderEvents(object)}
         <hr />
         {renderCommonObjectProperties(object)}
       </>
@@ -202,7 +198,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     );
   };
 
-  const renderEvents = (object: IObject) => {
+  /*const renderEvents = (object: IObject) => {
     const objectDef = {
       inputType: InputType.EVENTS,
       value: pick(object, "events"),
@@ -216,7 +212,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     };
 
     return getInputForm(InputType.EVENTS, objectDef, onChange);
-  };
+  };*/
 
   const renderCommonObjectProperties = (object: IObject) => {
     const objectDef = {

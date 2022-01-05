@@ -1,6 +1,6 @@
 import { FormGroup, InputGroup } from "@blueprintjs/core";
 import { noop } from "lodash-es";
-import React from "react";
+import React, { useMemo } from "react";
 import { ITextInput, IUpdateInput } from "../types";
 
 export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
@@ -10,17 +10,24 @@ export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
     value,
     onChange = noop,
     onInput = noop,
+    inputProps = {},
   } = props;
+
+  const inputId = useMemo(() => {
+    return displayName + Math.random();
+  }, []);
+
   return (
     <FormGroup
       label={displayName}
-      labelFor="text-input"
+      labelFor={inputId}
       inline
       helperText={!!helperText && helperText}
     >
       <InputGroup
-        id="text-input"
-        placeholder="Placeholder text"
+        disabled={inputProps.disabled}
+        id={inputId}
+        placeholder={inputProps.placeholderText}
         value={value}
         onChange={(event: any) => onChange(event.target.value)}
         onInput={(event: any) => onInput(event.target.value)}

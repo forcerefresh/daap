@@ -1,21 +1,21 @@
 import { getDefaultTimeline } from "../../inputs/timelines-input/timelines-input";
 import { InputType } from "../../inputs/types";
-import { cssEffect, ICSSPointsEffect } from "./css-points.types";
+import { timelinesEffect, ITimelinesEffect } from "./timelines.types";
 
 export const cssPluginDefinition = {
-  id: cssEffect,
-  name: "CSS Timeline",
+  id: timelinesEffect,
+  name: "Timelines",
   form: [
     {
-      displayName: "CSS Timeline",
-      propertyName: "cssPointsValue",
-      inputType: InputType.CSS_TIMELINES,
+      displayName: "Timelines",
+      propertyName: "timelines",
+      inputType: InputType.TIMELINES,
     },
   ],
 };
 
-export const cssPluginDefaults: ICSSPointsEffect = {
-  id: cssEffect,
+export const cssPluginDefaults: ITimelinesEffect = {
+  id: timelinesEffect,
   hasDelay: true,
   hasDuration: true,
   hasEase: false,
@@ -23,7 +23,7 @@ export const cssPluginDefaults: ICSSPointsEffect = {
   ease: "none",
   supportedEffectTypes: ["in", "out"],
   // specific to this effect
-  cssPointsValue: {
+  timelines: {
     timelines: [getDefaultTimeline()],
   },
 };

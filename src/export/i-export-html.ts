@@ -1,4 +1,8 @@
-import { IObjectEvent, ISlideTransition, ITransitions } from "../objects/types";
+import {
+  INavigationValues,
+  ISlideTransition,
+  ITransitions,
+} from "../objects/types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
@@ -6,7 +10,7 @@ import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
 export interface ITransitionsData {
   objectClass: string;
   transitions: ITransitions;
-  events: IObjectEvent[];
+  events?: INavigationValues;
   data: {
     slideDuration: ISlideDuration;
     objectWidth?: number;
@@ -41,6 +45,7 @@ export interface ISources {
 export interface ISlideData {
   slide: {
     id: string;
+    userId: string;
     slideType: SlideType;
     slideTransition: ISlideTransition;
     duration: ISlideDuration;

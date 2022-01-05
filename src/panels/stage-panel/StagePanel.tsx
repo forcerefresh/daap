@@ -154,7 +154,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const { height: windowHeight, width: windowWidth } = useWindowSize();
 
   // preview progress
-  const [progress, setProgress] = useState({ progress: 0, time: 0, slideIdx: 0 });
+  const [progress, setProgress] = useState({
+    progress: 0,
+    time: 0,
+    slideIdx: 0,
+  });
   const [manualProgress, setManualProgress] = useState(0);
 
   const [resizeData, setResizeData] = useState<{
@@ -1270,9 +1274,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   playerData={exportData}
                   previewState={previewState}
                   manualProgress={manualProgress}
-                  onProgress={(progress: number, time: number, slideIdx: number) => {
+                  onProgress={(
+                    progress: number,
+                    time: number,
+                    slideIdx: number
+                  ) => {
                     // TODO: PERFORMANCE ISSUE (cause render)
-                    console.log({ progress, time, slideIdx });
+                    // console.log({ progress, time, slideIdx });
                     setProgress({ progress, time, slideIdx });
                   }}
                   requestStop={() => {
@@ -1348,7 +1356,10 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = getZoom(stage, settings);
 
-  const forceShowLayerId = selection.selectionForProperties?.type==="layer" ? selection.selectionForProperties?.id : undefined;
+  const forceShowLayerId =
+    selection.selectionForProperties?.type === "layer"
+      ? selection.selectionForProperties?.id
+      : undefined;
 
   return {
     slides,

@@ -75,7 +75,7 @@ import { dev2Defaults, dev2Definition } from "./dev2/dev2.definition";
 import {
   cssPluginDefaults,
   cssPluginDefinition,
-} from "./css/css-points.definition";
+} from "./timelines/timelines.definition";
 
 import { flipDefaults, flipDefinition } from "./flip/flip.definition";
 
@@ -106,7 +106,7 @@ import "./dev2/dev2.effect";
 
 import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 import "./trianglify/trianglify.effect";
-import "./css/css-points.effect";
+import "./timelines/timelines.effect";
 import "./flip/flip.effect";
 import { getFlipEffectDuration } from "./flip/flip.effect";
 

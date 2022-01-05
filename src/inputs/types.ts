@@ -5,7 +5,6 @@ import {
   IFormSwitchGroup,
   IFormSwitchGroupItem,
 } from "../effects/trianglify/trianglify.definition";
-import { IObjectEvent } from "../objects/types";
 
 export enum InputType {
   NUMBER = "number",
@@ -29,7 +28,7 @@ export enum InputType {
   VIDEO = "video",
   CHECKBOX = "checkbox",
   FONT_SELECT = "font_select",
-  EVENTS = "events",
+  //EVENTS = "events",
   PARALLAX = "parallax",
   COVER_LAYOUT = "cover_placement",
   GRID_LAYOUT = "grid_layout",
@@ -38,7 +37,7 @@ export enum InputType {
   BORDER_COLOR = "border_color",
   COLOR_ARRAY = "color_array",
   COLOR_ARRAY_PRESETS = "color_array_preset",
-  CSS_TIMELINES = "css_timelines",
+  TIMELINES = "timelines",
   RELATIVE_POSITION_INPUT = "relative_position_input",
   RELATIVE_ROTATION_INPUT = "relative_rotation_input",
   SLIDER_INPUT = "slider_input",
@@ -69,7 +68,6 @@ export interface IUpdateInput {
       | IFontSelectInputValue
       | string
       | number
-      | { events: IObjectEvent[] }
       | {
           center: { x: number; y: number };
           points: { x: number; y: number }[];
@@ -85,7 +83,7 @@ export interface IUpdateInput {
           setToInitialPositionOnComplete: boolean;
           followTime: number;
         }
-      | ICSSTimelinesValue
+      | ITimelinesValue
       | IRelativePositionValue
       | IRelativeRotationValue
       | ICoverPlacementValue
@@ -156,39 +154,42 @@ export interface IBorderColorInput<T = string> {
   defaultValue: IBorderColorValue;
 }
 
-export interface ICSSPluginCSSValue {
+export interface ITimelinePointValue {
   x: IRelativePositionValue;
   y: IRelativePositionValue;
   width: IRelativePositionValue;
   height: IRelativePositionValue;
   rotation: IRelativeRotationValue;
+  opacity: IRelativePositionValue;
 }
 
-export interface ICSSPoint {
+export interface ITimelinePoint {
   time: number;
-  css: ICSSPluginCSSValue;
+  pointValue: ITimelinePointValue;
   easing: string;
 }
 
-export interface ICSSTimelineValue {
-  points: ICSSPoint[];
+export interface ITimelineValue {
+  points: ITimelinePoint[];
 }
-export interface ICSSTimelinesValue {
-  timelines: ICSSTimelineValue[];
+export interface ITimelinesValue {
+  timelines: ITimelineValue[];
 }
 
-export interface ICSSTimelineInput<T = string> {
-  inputType: InputType.CSS_TIMELINES;
+export interface ITimelinesInput<T = string> {
+  inputType: InputType.TIMELINES;
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: ICSSTimelinesValue;
-  defaultValue: ICSSTimelinesValue;
+  value: ITimelinesValue;
+  defaultValue: ITimelinesValue;
 }
 
 export interface IRelativePositionValue {
+  enabled: boolean;
   value: number;
   position: "rel" | "abs";
+  easing: string;
 }
 
 export interface IRelativePositionInput<T = string> {
@@ -201,6 +202,7 @@ export interface IRelativePositionInput<T = string> {
 }
 
 export interface IRelativeRotationValue {
+  enabled: boolean;
   value: number;
   position: "rel" | "abs";
   direction: "_cw" | "_ccw" | "_short";
@@ -256,6 +258,7 @@ export interface ITextInput<T = string> {
   propertyName: T;
   value: string;
   defaultValue: string;
+  inputProps?: { disabled?: boolean; placeholderText?: string };
 }
 export interface ICheckboxInput<T = string> {
   inputType: InputType.CHECKBOX;
@@ -572,14 +575,14 @@ export interface ISelectInput<T = string> {
   inputProps?: { disabled?: boolean };
 }
 
-export interface IEventsInput<T = string> {
+/*export interface IEventsInput<T = string> {
   inputType: InputType.EVENTS;
   displayName: string;
   helperText?: string;
   propertyName: T;
   value: { events: IObjectEvent[] };
   defaultValue: { events: IObjectEvent[] };
-}
+}*/
 
 export interface IFontSelectInputValue {
   fontFamily: string;

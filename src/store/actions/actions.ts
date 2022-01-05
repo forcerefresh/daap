@@ -79,6 +79,7 @@ export function initializeSlideAndLayer(): any {
       let slide: ISlide;
       slide = {
         id: uuid(),
+        userId: "",
         name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
         duration: {
           inheritFrom: "custom",
@@ -119,6 +120,7 @@ export function addNewSlide(slideType = SlideType.Normal): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: ISlide = {
       id: uuid(),
+      userId: "",
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "custom",
