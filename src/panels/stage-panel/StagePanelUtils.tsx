@@ -40,11 +40,23 @@ export function calculateObjectSize(
 
     const wPerCell = stageSize.width / breakpointConfig.normal.grid.horizontal;
     const hPerCell = stageSize.height / breakpointConfig.normal.grid.vertical;
+
+    let gridValue =
+      gridLayouts?.type === "common"
+        ? gridLayouts!.common
+        : gridLayouts?.perDevice.find(
+            (item) => item.deviceType === breakpointConfig.type
+          );
+
+    if (!gridValue) {
+      gridValue = gridLayouts!.common;
+    }
+
     const sizeObj = {
-      left: wPerCell * gridLayouts!.common.left,
-      top: hPerCell * gridLayouts!.common.top,
-      width: wPerCell * gridLayouts!.common.right,
-      height: hPerCell * gridLayouts!.common.bottom,
+      left: wPerCell * gridValue!.left,
+      top: hPerCell * gridValue!.top,
+      width: wPerCell * gridValue!.right,
+      height: hPerCell * gridValue!.bottom,
     };
     if (resetPosition) {
       sizeObj.left = 0;

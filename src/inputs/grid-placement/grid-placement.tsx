@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { cloneDeep } from "lodash-es";
 import { getButtonGroupField, getNumericFiled } from "../input-utils";
 import { IGridPlacementInput, IUpdateInput } from "../types";
@@ -14,6 +14,7 @@ import {
   getIconStyle,
 } from "../../panels/action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
+import { DeviceType } from "../../store/reducers/i-settings";
 
 export const GridPlacementInputForm: React.FC<
   IGridPlacementInput & IUpdateInput
@@ -27,8 +28,27 @@ export const GridPlacementInputForm: React.FC<
     onChangeDevice = (device: string) => undefined,
   } = props;
   const { type, perDevice, common } = value;
-
   const switchValue = type === "common" ? "common" : "perDevice";
+  const bpcArr = breakpoints.breakpointsConfiguration;
+
+  useEffect(() => {
+    if (type === "perDevice") {
+      let updateValue = false;
+      const newValue = cloneDeep(value);
+      // check if there are values for all devices
+      bpcArr.forEach((bpc) => {
+        const v = perDevice.find((item) => item.deviceType === bpc.type);
+        if (!v) {
+          newValue.perDevice.push({ ...value.common, deviceType: bpc.type });
+          updateValue = true;
+        }
+      });
+
+      if (updateValue) {
+        onChange(newValue);
+      }
+    }
+  }, [type]);
 
   const getIcon = (bpConfig: BreakpointConfiguration) => {
     const iconName = getIconByType(bpConfig.type);
@@ -126,6 +146,38 @@ export const GridPlacementInputForm: React.FC<
     );
   };
 
+  const renderOneInput = (
+    t: DeviceType,
+    propertyName: "left" | "right" | "top" | "bottom"
+  ) => {
+    let oneValue = perDevice.find((item) => item.deviceType === t);
+    if (!oneValue) {
+      return null;
+    }
+
+    return (
+      <td>
+        {getNumericFiled(
+          "",
+          oneValue?.[propertyName],
+          (v: any) => {
+            const newValue = cloneDeep(value);
+            const oneV = newValue.perDevice.find(
+              (item) => item.deviceType === t
+            );
+            if (oneV) oneV[propertyName] = v;
+            onChange(newValue);
+          },
+          "",
+          {
+            disabled: t !== selectedDevice,
+            className: css.perDeviceInput,
+          }
+        )}
+      </td>
+    );
+  };
+
   const renderPerDevice = () => {
     console.log(breakpoints.breakpointsConfiguration);
     const { breakpointsConfiguration: bcArr } = breakpoints;
@@ -161,43 +213,16 @@ export const GridPlacementInputForm: React.FC<
               <Label>Left</Label>
             </td>
             {bcArr.map((bc) => {
-              let oneValue = perDevice.find(
-                (item) => item.deviceType === bc.type
-              );
-              if (!oneValue) {
-                oneValue = { ...common, deviceType: bc.type };
-              }
-
-              return (
-                <td>
-                  {getNumericFiled("", oneValue?.left, (v: any) => {}, "", {
-                    disabled: bc.type !== selectedDevice,
-                    className: css.perDeviceInput,
-                  })}
-                </td>
-              );
+              return renderOneInput(bc.type, "left");
             })}
           </tr>
+
           <tr>
             <td>
               <Label>Width</Label>
             </td>
             {bcArr.map((bc) => {
-              let oneValue = perDevice.find(
-                (item) => item.deviceType === bc.type
-              );
-              if (!oneValue) {
-                oneValue = { ...common, deviceType: bc.type };
-              }
-
-              return (
-                <td>
-                  {getNumericFiled("", oneValue?.right, (v: any) => {}, "", {
-                    disabled: bc.type !== selectedDevice,
-                    className: css.perDeviceInput,
-                  })}
-                </td>
-              );
+              return renderOneInput(bc.type, "right");
             })}
           </tr>
           <tr>
@@ -205,21 +230,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Top</Label>
             </td>
             {bcArr.map((bc) => {
-              let oneValue = perDevice.find(
-                (item) => item.deviceType === bc.type
-              );
-              if (!oneValue) {
-                oneValue = { ...common, deviceType: bc.type };
-              }
-
-              return (
-                <td>
-                  {getNumericFiled("", oneValue?.top, (v: any) => {}, "", {
-                    disabled: bc.type !== selectedDevice,
-                    className: css.perDeviceInput,
-                  })}
-                </td>
-              );
+              return renderOneInput(bc.type, "top");
             })}
           </tr>
           <tr>
@@ -227,21 +238,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Height</Label>
             </td>
             {bcArr.map((bc) => {
-              let oneValue = perDevice.find(
-                (item) => item.deviceType === bc.type
-              );
-              if (!oneValue) {
-                oneValue = { ...common, deviceType: bc.type };
-              }
-
-              return (
-                <td>
-                  {getNumericFiled("", oneValue?.bottom, (v: any) => {}, "", {
-                    disabled: bc.type !== selectedDevice,
-                    className: css.perDeviceInput,
-                  })}
-                </td>
-              );
+              return renderOneInput(bc.type, "bottom");
             })}
           </tr>
         </table>
@@ -269,6 +266,4 @@ export const GridPlacementInputForm: React.FC<
       {type === "perDevice" && renderPerDevice()}
     </>
   );
-
-  return null;
 };
