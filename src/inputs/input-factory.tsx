@@ -42,6 +42,7 @@ import { noop } from "lodash-es";
 import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
+import { Breakpoints } from "../store/reducers/settings";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -54,6 +55,9 @@ export function getInputFormWithOptions<T>(
       layer?: ILayer;
       objects?: IObject[];
     };
+    breakpoints?: Breakpoints;
+    selectedDevice?: string;
+    onChangeDevice?: (device: string) => void;
   }
 ): React.ReactElement | undefined {
   const input = getInputForm(inputType, inputProps, onChange, onInput, data);
@@ -80,6 +84,9 @@ export function getInputForm<T>(
       layer?: ILayer;
       objects?: IObject[];
     };
+    breakpoints?: Breakpoints;
+    selectedDevice?: string;
+    onChangeDevice?: (device: string) => void;
   }
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
@@ -282,7 +289,14 @@ export function getInputForm<T>(
     }
     case InputType.GRID_LAYOUT: {
       return (
-        <GridPlacementInputForm key={key} {...inputProps} onChange={onChange} />
+        <GridPlacementInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          breakpoints={data?.breakpoints}
+          selectedDevice={data?.selectedDevice}
+          onChangeDevice={data?.onChangeDevice}
+        />
       );
     }
     case InputType.CHECKBOX: {

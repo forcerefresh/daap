@@ -11,12 +11,15 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { ISlides } from "./i-slides";
+import { ISlides, SlideType } from "./i-slides";
 
 const getSlidesDefault = () => ({
   nextSlideIdCounter: 1,
   slideById: {},
   allSlides: [],
+  normalSlides: [],
+  frontSlides: [],
+  backSlides: [],
 });
 
 export function slides(
@@ -27,20 +30,54 @@ export function slides(
     case ADD_SLIDE: {
       const slide = action.payload;
 
+      const allSlides = [...state.allSlides, slide.id];
+
+      const frontSlides =
+        slide.slideType === SlideType.Front
+          ? [...state.frontSlides, slide.id]
+          : state.frontSlides;
+
+      const backSlides =
+        slide.slideType === SlideType.Back
+          ? [...state.backSlides, slide.id]
+          : state.backSlides;
+
+      const normalSlides =
+        slide.slideType === SlideType.Normal
+          ? [...state.normalSlides, slide.id]
+          : state.normalSlides;
+
       return Object.assign({}, state, {
         slideById: {
           ...state.slideById,
           ...{ [slide.id]: slide },
         },
-        allSlides: [...state.allSlides, slide.id],
-        nextSlideIdCounter: state.nextSlideIdCounter + 1,
+        allSlides,
+        normalSlides,
+        frontSlides,
+        backSlides,
+        nextSlideIdCounter:
+          slide.slideType === SlideType.Normal
+            ? state.nextSlideIdCounter + 1
+            : state.nextSlideIdCounter,
       });
     }
     case DELETE_SLIDE: {
       const deleteId = action.payload.slideId;
       const slideById = omit(state.slideById, [deleteId]);
       const allSlides = without(state.allSlides, deleteId);
-      return { ...state, slideById, allSlides };
+      const normalSlides = without(state.normalSlides, deleteId);
+      const frontSlides = without(state.frontSlides, deleteId);
+      const backSlides = without(state.backSlides, deleteId);
+
+      return {
+        ...state,
+        slideById,
+        allSlides,
+        normalSlides,
+        backSlides,
+        frontSlides,
+      };
     }
     case ADD_LAYER: {
       const layer = action.payload;

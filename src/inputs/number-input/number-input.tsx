@@ -1,4 +1,5 @@
 import { FormGroup, Intent, NumericInput } from "@blueprintjs/core";
+import classnames from "classnames";
 import { isEqual, noop } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { getCheckboxField } from "../input-utils";
@@ -71,7 +72,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
 
   return (
     <FormGroup
-      className={css.main}
+      className={classnames(css.main, props.inputProps?.className)}
       label={displayName}
       labelFor={id}
       helperText={!!helperText && helperText}

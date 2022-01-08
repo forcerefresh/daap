@@ -347,7 +347,7 @@ const mapStateToProps = (state: IStore) => ({
   meta: state.meta,
   editor: state.editor,
   breakpointsConfiguration:
-    state.project.settings.breakpointsConfiguration.breakpointsConfiguration,
+    state.project.settings.breakpoints.breakpointsConfiguration,
   selectedDevice: state.stage.selectedDevice,
   project: state.project,
   slides: state.project.slides,

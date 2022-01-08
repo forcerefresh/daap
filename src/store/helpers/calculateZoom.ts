@@ -3,7 +3,7 @@ import { IStage } from "../reducers/stage";
 
 export function getZoom(stage: IStage, settings: ISettings): number {
   const breakpointConfig: BreakpointConfiguration | undefined =
-    settings.breakpointsConfiguration.breakpointsConfiguration.find(
+    settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig) => breakpointConfig.type === stage.selectedDevice
     );
 

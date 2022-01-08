@@ -1,4 +1,5 @@
 import { noop } from "lodash-es";
+import { Breakpoints } from "../store/reducers/settings";
 import { getInputForm } from "./input-factory";
 import { InputType } from "./types";
 
@@ -26,7 +27,7 @@ export function getNumericFiled<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean } = {}
+  inputProps: { disabled?: boolean; className?: string } = {}
 ) {
   const objectDef = {
     displayName: label,
@@ -201,7 +202,10 @@ export function getGridLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps?: { disablePosition?: boolean }
+  inputProps?: { disablePosition?: boolean },
+  breakpoints: Breakpoints = { breakpointsConfiguration: [] },
+  selectedDevice: string = "",
+  onChangeDevice: (device: string) => void = (device: string) => undefined
 ) {
   const objectDef = {
     displayName: label,
@@ -210,7 +214,11 @@ export function getGridLayoutField<T>(
     inputProps,
   };
 
-  return getInputForm(InputType.GRID_LAYOUT, objectDef, onChange);
+  return getInputForm(InputType.GRID_LAYOUT, objectDef, onChange, onChange, {
+    breakpoints,
+    selectedDevice,
+    onChangeDevice,
+  });
 }
 
 export function getAbsoluteLayoutField<T>(

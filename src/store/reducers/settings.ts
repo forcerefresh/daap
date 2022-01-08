@@ -81,7 +81,7 @@ export interface BreakpointConfiguration {
     };
   };
 }
-export interface BreakpointsConfiguration {
+export interface Breakpoints {
   breakpointsConfiguration: BreakpointConfiguration[];
 }
 export interface ISettings {
@@ -93,10 +93,10 @@ export interface ISettings {
   layoutBoxBackgroundColor: RGBColor;
   transparentHeader: boolean;
   // breakpoint
-  breakpointsConfiguration: BreakpointsConfiguration;
+  breakpoints: Breakpoints;
 }
 
-function getDefaultBreakpointConfiguration(): BreakpointsConfiguration {
+function getDefaultBreakpointConfiguration(): Breakpoints {
   return {
     breakpointsConfiguration: [
       {
@@ -166,7 +166,7 @@ const getSettingsDefault = () => ({
   layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },
   transparentHeader: false,
   // breakpoints
-  breakpointsConfiguration: getDefaultBreakpointConfiguration(),
+  breakpoints: getDefaultBreakpointConfiguration(),
 });
 
 export function settings(

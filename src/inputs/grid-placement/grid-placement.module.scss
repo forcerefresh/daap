@@ -22,3 +22,20 @@
     }
   }
 }
+
+.row {
+  display: flex;
+
+  :global {
+    input {
+      width: 40px !important;
+      margin-right: 5px;
+    }
+  }
+}
+
+.perDeviceInput {
+  input {
+    width: 42px !important;
+  }
+}

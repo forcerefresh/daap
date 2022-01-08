@@ -1,7 +1,7 @@
 .propertiesPanel {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  //height: 100%;
 
   :global {
     .bp3-control input:focus ~ .bp3-control-indicator,

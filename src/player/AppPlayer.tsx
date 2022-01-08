@@ -81,7 +81,9 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       console.log(playerData);
       console.log(JSON.stringify(playerData));
 
-      const pl = new Player(playerData, playerHolderRef.current!);
+      const pl = new Player(playerData, playerHolderRef.current!, {
+        isApp: true,
+      });
       player.current = pl;
 
       // TODO: DUPLICATE CODE 1

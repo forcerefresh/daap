@@ -32,6 +32,7 @@ import {
   TextValues,
   VideoProperties,
 } from "../inputs/types";
+import { ISlide, SlideType } from "../store/reducers/i-slides";
 import { FormType } from "../utils/form-layout/form-layout";
 import {
   ICommonObjectProperties,
@@ -162,6 +163,22 @@ export function createObject(
   }
 }
 
+export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
+  return {
+    id: uuid(),
+    userId: "",
+    name,
+    duration: {
+      inheritFrom: "custom",
+      customValue: 20000,
+    },
+    layerIds: [],
+    nextLayerIdCounter: 1,
+    slideType,
+    slideTransition: getDefaultSlideTransition(),
+  };
+}
+
 export function getDefaultSlideTransition(): ISlideTransition {
   return {
     duration: 2000,
@@ -226,11 +243,16 @@ function createCommonObject(
       width: 200,
       height: 200,
     },
-    gridLayout: {
-      left: 1,
-      right: 3,
-      top: 1,
-      bottom: 2,
+    gridLayouts: {
+      type: "common",
+      perDevice:[],
+      common: {
+        deviceType: "common",
+        left: 1,
+        right: 3,
+        top: 1,
+        bottom: 2,
+      },
     },
     snapLayout: {
       width: 200,

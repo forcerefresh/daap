@@ -8,6 +8,7 @@ import {
   ISelectInput,
   ITextInput,
 } from "../inputs/types";
+import { DeviceType } from "../store/reducers/i-settings";
 import { FormType } from "../utils/form-layout/form-layout";
 
 export enum ObjectType {
@@ -67,11 +68,19 @@ export interface ISnapLayout {
 }
 
 export interface IFitLayout {}
+
 export interface IGridLayout {
+  deviceType: DeviceType | "common";
   left: number;
   top: number;
   right: number;
   bottom: number;
+}
+
+export interface IGridLayouts {
+  type: "common" | "perDevice";
+  common: IGridLayout;
+  perDevice: IGridLayout[];
 }
 
 export enum NavigationType {
@@ -267,7 +276,7 @@ export interface ILayout {
 
   absoluteLayout?: IAbsoluteLayout;
   snapLayout?: ISnapLayout;
-  gridLayout?: IGridLayout;
+  gridLayouts?: IGridLayouts;
   fitLayout?: IFitLayout;
   /** object itself is setting size */
   selfSize: boolean;

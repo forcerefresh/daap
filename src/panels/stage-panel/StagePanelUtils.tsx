@@ -36,15 +36,15 @@ export function calculateObjectSize(
 
   // 2. if we use GRID
   if (object.layout === "grid") {
-    const { gridLayout } = object;
+    const { gridLayouts } = object;
 
     const wPerCell = stageSize.width / breakpointConfig.normal.grid.horizontal;
     const hPerCell = stageSize.height / breakpointConfig.normal.grid.vertical;
     const sizeObj = {
-      left: wPerCell * gridLayout!.left,
-      top: hPerCell * gridLayout!.top,
-      width: wPerCell * gridLayout!.right,
-      height: hPerCell * gridLayout!.bottom,
+      left: wPerCell * gridLayouts!.common.left,
+      top: hPerCell * gridLayouts!.common.top,
+      width: wPerCell * gridLayouts!.common.right,
+      height: hPerCell * gridLayouts!.common.bottom,
     };
     if (resetPosition) {
       sizeObj.left = 0;
@@ -348,9 +348,9 @@ export function getPositionInfo(object: IObject) {
   if (object.layout === "grid") {
     return (
       <>
-        <span> Grid | </span>
-        <span> {"left:" + object.gridLayout!.left!}</span>
-        <span> {"right:" + object.gridLayout!.right!}</span>
+        <span> Grid | TODO!!!</span>
+        {/*  <span> {"left:" + object.gridLayout!.left!}</span>
+        <span> {"right:" + object.gridLayout!.right!}</span>*/}
       </>
     );
   }

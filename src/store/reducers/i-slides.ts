@@ -7,7 +7,8 @@ export interface ISlideDuration {
 
 export enum SlideType {
   Normal = "normal",
-  Static = "static",
+  Front = "front",
+  Back = "back",
 }
 
 export interface ISlide {
@@ -25,4 +26,7 @@ export interface ISlides {
   slideById: { [id: string]: ISlide };
   allSlides: string[];
   nextSlideIdCounter: number;
+  normalSlides: string[];
+  frontSlides: string[];
+  backSlides: string[];
 }

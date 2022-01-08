@@ -1350,7 +1350,7 @@ const mapStateToProps = (state: IStore) => {
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
-    settings.breakpointsConfiguration.breakpointsConfiguration.find(
+    settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig) => breakpointConfig.type === state.stage.selectedDevice
     );
 

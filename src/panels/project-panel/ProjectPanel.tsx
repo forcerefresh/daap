@@ -31,7 +31,7 @@ import { Breakpoint } from "./breakpoint-component/Breakpoint";
 import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
 import {
   BreakpointConfiguration,
-  BreakpointsConfiguration,
+  Breakpoints,
   ISettings,
 } from "../../store/reducers/settings";
 
@@ -260,14 +260,14 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
 
 const mapStateToProps = (state: IStore) => ({
   settings: state.project.settings,
-  breakpointConfiguration: state.project.settings.breakpointsConfiguration,
+  breakpointConfiguration: state.project.settings.breakpoints,
 });
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: number) => updateSlideDuration(newValue),
   _updateProjectSettings: (newValue: Partial<ISettings>) =>
     updateProjectSettings(newValue),
-  _updateSlideBreakpoints: (slideBreakpoints: BreakpointsConfiguration) =>
+  _updateSlideBreakpoints: (slideBreakpoints: Breakpoints) =>
     updateSlideBreakpoints(slideBreakpoints),
 };
 

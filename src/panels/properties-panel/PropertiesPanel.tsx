@@ -19,8 +19,13 @@ import {
   IGridLayout,
   ILayout,
   IObject,
+  IGridLayouts,
 } from "../../objects/types";
-import { updateLayer, updateObject } from "../../store/actions/actions";
+import {
+  setDevice,
+  updateLayer,
+  updateObject,
+} from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
@@ -39,6 +44,8 @@ type IPropertiesPanel = typeof mapDispatchToProps &
 
 export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const {
+    selectedDevice,
+    breakpoints,
     object,
     objectLayer,
     layer,
@@ -46,6 +53,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     panelName,
     _updateObject,
     _updateLayer,
+    _setDevice,
     hideHeader,
     className,
   } = props;
@@ -104,13 +112,18 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         {objectOrLayer.layout === "grid" &&
           getGridLayoutField(
             "",
-            objectOrLayer.gridLayout,
-            (gridLayout?: IGridLayout) => {
+            objectOrLayer.gridLayouts,
+            (gridLayouts?: IGridLayouts) => {
               const retObj = cloneDeep(objectOrLayer);
-              retObj.gridLayout = gridLayout;
+              retObj.gridLayouts = gridLayouts;
               updateFunction(retObj);
             },
-            { disablePosition: layoutedByParent }
+            { disablePosition: layoutedByParent },
+            breakpoints,
+            selectedDevice,
+            (device: string) => {
+              _setDevice(device);
+            }
           )}
         {objectOrLayer.layout === "absolute" &&
           getAbsoluteLayoutField(
@@ -357,8 +370,12 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection } = state.project;
+  const { objects, layers, selection, settings } = state.project;
+  const { selectedDevice } = state.stage;
+
   const { activeObjectId, activeLayerId } = selection;
+
+  const { breakpoints } = settings;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
@@ -376,6 +393,8 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     // activeObjectId,
+    selectedDevice,
+    breakpoints,
     object,
     objectLayer,
     layer,
@@ -387,6 +406,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);

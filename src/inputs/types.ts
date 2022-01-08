@@ -5,6 +5,9 @@ import {
   IFormSwitchGroup,
   IFormSwitchGroupItem,
 } from "../effects/trianglify/trianglify.definition";
+import { IGridLayout } from "../objects/types";
+import { DeviceType } from "../store/reducers/i-settings";
+import { Breakpoints } from "../store/reducers/settings";
 
 export enum InputType {
   NUMBER = "number",
@@ -109,7 +112,7 @@ export interface INumberInput<T = string> {
   propertyName: T;
   value: number;
   defaultValue: number;
-  inputProps?: { disabled: boolean };
+  inputProps?: { disabled: boolean; className?: string };
   optional?: boolean;
 }
 
@@ -447,10 +450,9 @@ export interface ICoverPlacementInput<T = string> {
 }
 
 export interface IGridPlacementValue {
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
+  type: "perDevice" | "common";
+  common: IGridLayout;
+  perDevice: IGridLayout[];
 }
 
 export interface IGridPlacementInput<T = string> {
@@ -461,6 +463,9 @@ export interface IGridPlacementInput<T = string> {
   value: IGridPlacementValue;
   defaultValue: IGridPlacementValue;
   inputProps?: { disablePosition?: boolean };
+  breakpoints?: Breakpoints;
+  selectedDevice?: string;
+  onChangeDevice?: (device: string) => void;
 }
 
 export interface IBoxValue {

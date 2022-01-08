@@ -9,6 +9,7 @@ import { cloneDeep, delay, differenceWith, isEqual, once } from "lodash-es";
 import { IObject, ItemType, ObjectType } from "../../objects/types";
 import {
   createObject,
+  getDefaultSlide,
   getDefaultSlideTransition,
   getDefaultTransitionsForLayer,
 } from "../../objects/create-object-factory";
@@ -36,7 +37,7 @@ import {
 import { load } from "webfontloader";
 import {
   BreakpointConfiguration,
-  BreakpointsConfiguration,
+  Breakpoints,
   ISettings,
 } from "../reducers/settings";
 import { IMeta } from "../reducers/meta";
@@ -76,42 +77,26 @@ export interface AddSlideAction extends IUndoableAction<true> {
 export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     if (getState().project.slides.allSlides.length === 0) {
-      let slide: ISlide;
-      slide = {
-        id: uuid(),
-        userId: "",
-        name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
-        duration: {
-          inheritFrom: "custom",
-          customValue: 20000,
-        },
-        layerIds: [],
-        nextLayerIdCounter: 1,
-        slideType: SlideType.Normal,
-        slideTransition: getDefaultSlideTransition(),
-      };
+      // back
+      const backSlide = getDefaultSlide("Back", SlideType.Back);
+      dispatch(addSlide(backSlide));
+      dispatch(addNewLayer(backSlide.id));
+      // front
+      const frontSlide = getDefaultSlide("Front", SlideType.Front);
+      dispatch(addSlide(frontSlide));
+      dispatch(addNewLayer(frontSlide.id));
+      // normal
+      const slideName = `Slide ${getState().project.slides.nextSlideIdCounter}`;
+      const slide = getDefaultSlide(slideName, SlideType.Normal);
       dispatch(addSlide(slide));
+      // select
       dispatch(activateSlide(slide.id));
       dispatch(selectSlides([slide.id]));
-      dispatch(addNewLayer(slide.id, true));
+      // layer
+      dispatch(addNewLayer(slide.id));
       dispatch(
         updateEditor({ sliderChanged: false, isExistingProject: false })
       );
-      /*slide = {
-        id: uuid(),
-        name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
-        duration: {
-          inheritFrom: "custom",
-          customValue: 5000,
-        },
-        layerIds: [],
-        nextLayerIdCounter: 0,
-        slideType: SlideType.Normal,
-      };
-      dispatch(addSlide(slide));
-      dispatch(activateSlide(slide.id));
-      dispatch(selectSlides([slide.id]));
-      dispatch(addNewLayer(slide.id, true));*/
     }
   };
 }
@@ -209,15 +194,14 @@ export interface AddLayerAction extends IUndoableAction<true> {
   payload: ILayer;
 }
 
-export function addNewLayer(slideId: string, _isBackground = false): any {
+export function addNewLayer(slideId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const nextId =
       getState().project.slides.slideById[slideId].nextLayerIdCounter;
 
     // size fro absolute posstion from breakpoint;
     const breakpointsConfiguration =
-      getState().project.settings.breakpointsConfiguration
-        .breakpointsConfiguration;
+      getState().project.settings.breakpoints.breakpointsConfiguration;
     const breakpointConfig = breakpointsConfiguration.find(
       (p) => p.type === "large-1"
     );
@@ -262,11 +246,16 @@ export function addNewLayer(slideId: string, _isBackground = false): any {
         top: 0,
         ...absoluteSize!,
       },
-      gridLayout: {
-        left: 0,
-        right: gridSize?.horizontal!,
-        top: 0,
-        bottom: gridSize?.vertical!,
+      gridLayouts: {
+        type: "common",
+        perDevice: [],
+        common: {
+          deviceType: "common",
+          left: 0,
+          right: gridSize?.horizontal!,
+          top: 0,
+          bottom: gridSize?.vertical!,
+        },
       },
       snapLayout: {
         width: 200,
@@ -678,7 +667,7 @@ export function selectObjectsByRect(rect: IRect): any {
       // TODO
       // TODO: IMPORTANT hardcoded
       const breakpointConfig: BreakpointConfiguration | undefined =
-        getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+        getState().project.settings.breakpoints.breakpointsConfiguration.find(
           (breakpointConfig) =>
             breakpointConfig.type === getState().stage.selectedDevice
         );
@@ -917,7 +906,7 @@ function handleBulletsUpdate(
 function postProcessBullet(object: IObject, getState: () => IStore): void {
   if (object.layout === "absolute" || object.layout === "snap") {
     const breakpointConfig: BreakpointConfiguration | undefined =
-      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+      getState().project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
@@ -938,7 +927,7 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
       },
       false,
       [],
-      getState().project.slides.allSlides.length
+      getState().project.slides.normalSlides.length
     );
     const holder = document.createElement("div");
     holder.style.overflow = "visible";
@@ -958,7 +947,7 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
 function postProcessButton(object: IObject, getState: () => IStore): void {
   if (object.layout === "absolute") {
     const breakpointConfig: BreakpointConfiguration | undefined =
-      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+      getState().project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
@@ -1006,7 +995,7 @@ function handleTextUpdate(
   if (objectValues.autoHeight === true) {
     // TODO: IMPORTANT hardcoded
     const breakpointConfig: BreakpointConfiguration | undefined =
-      getState().project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+      getState().project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
@@ -1267,11 +1256,11 @@ export const UPDATE_SLIDE_BREAKPOINTS = "Update slide breakpoints";
 
 export interface UpdateSlideBreakpointsAction extends IUndoableAction<true> {
   type: typeof UPDATE_SLIDE_BREAKPOINTS;
-  payload: BreakpointsConfiguration;
+  payload: Breakpoints;
 }
 
 export function updateSlideBreakpoints(
-  slideBreakpoints: BreakpointsConfiguration
+  slideBreakpoints: Breakpoints
 ): UpdateSlideBreakpointsAction {
   return {
     type: UPDATE_SLIDE_BREAKPOINTS,

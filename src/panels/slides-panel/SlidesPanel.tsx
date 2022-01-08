@@ -26,12 +26,14 @@ type ISlidesPanel = typeof mapDispatchToProps &
 
 const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   const {
-    allSlides,
+    normalSlides,
     slideById,
     selectedSlideIds,
     activeSlideId,
     previewState,
     settings,
+    frontSlideId,
+    backSlideId,
     _addNewSlide,
     _deleteSlideThree,
     _activateSlide,
@@ -89,86 +91,34 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     );
   };
 
-  const renderStaticSlide = (statisSlide: { name: string }) => {
-    return null;
-
-    const slideId = "static slide TODO";
-    return (
-      <div
-        key={slideId}
-        onClick={(event) => onSlideClick(event, slideId)}
-        className={cx(
-          css.slide,
-          {
-            [css.selected]:
-              selectedSlideIds.length > 0 /*1*/ &&
-              selectedSlideIds.indexOf(slideId) !== -1,
-          },
-          {
-            [css.active]: activeSlideId === slideId,
-          }
-        )}
-      >
-        <div className={css.actionButtons}>
-          <Button
-            minimal
-            active={isSlideInPlay(slideId)}
-            onClick={() => {
-              if (isSlideInPlay(slideId)) {
-                _setStagePreview({
-                  previewState: "stop",
-                  isPreview: false,
-                  scope: null,
-                });
-              } else {
-                _setStagePreview({
-                  previewState: "play",
-                  isPreview: true,
-                  scope: {
-                    entityType: "slide",
-                    entityId: slideId,
-                  },
-                });
-              }
-            }}
-            className={css.playButton}
-            small={true}
-            icon={isSlideInPlay(slideId) ? "stop" : "play"}
-          ></Button>
-          <Button
-            minimal
-            onClick={() => setShowSettingsPanelForSlideId(slideId)}
-            className={css.slideProperties}
-            small={true}
-            icon="cog"
-          ></Button>
-        </div>
-        <div className={css.slideDescription}>
-          <span>{statisSlide.name!} </span>
-          <span className={css.durationLabel}>
-            {/*getRealSlideDurationVisual(slideById[slideId], settings)*/}
-          </span>
-          {/*slideById[slideId].slideType === SlideType.Static ? (
-            <span className={css.staticLabel}>STATIC</span>
-          ) : null*/}
-        </div>
-        {/*<Button
-          minimal
-          onClick={(event: any) => {
-            event.stopPropagation();
-            _deleteSlideThree(slideId);
-          }}
-          className={css.deleteSlide}
-          small={true}
-          icon="delete"
-        ></Button>*/}
-      </div>
-    );
-  };
   return (
     <div className={css.panel}>
       <div className={css.panelHeader}>
-        SLIDES
+        <div>SLIDES</div>
+        <div>
+          <Button
+            small
+            minimal
+            active={activeSlideId === frontSlideId}
+            onClick={() => {
+              _activateSlide(frontSlideId);
+              _selectSlides([frontSlideId]);
+            }}
+          >
+            Front
+          </Button>
+          <Button
+            small
+            minimal
+            active={activeSlideId === backSlideId}
+            onClick={() => {
+              _activateSlide(backSlideId);
+              _selectSlides([backSlideId]);
+            }}
+          >
+            Back
+          </Button>
+        </div>
         <Button
           minimal
           onClick={() => _addNewSlide()}
@@ -178,8 +128,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         ></Button>
       </div>
       <div className={css.slidesHolder}>
-        {renderStaticSlide({ name: "Foreground" })}
-        {allSlides.map((slideId: string) => {
+        {normalSlides.map((slideId: string) => {
           return (
             <div
               key={slideId}
@@ -235,9 +184,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                 <span className={css.durationLabel}>
                   {getRealSlideDurationVisual(slideById[slideId], settings)}
                 </span>
-                {slideById[slideId].slideType === SlideType.Static ? (
-                  <span className={css.staticLabel}>STATIC</span>
-                ) : null}
               </div>
               <Button
                 minimal
@@ -252,7 +198,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             </div>
           );
         })}
-        {renderStaticSlide({ name: "Background" })}
       </div>
       {renderPanels()}
     </div>
@@ -262,13 +207,20 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 const mapStateToProps = (state: IStore) => {
   const { slides, selection, settings } = state.project;
   const { previewState } = state.stage;
+
+  // NOTE:  only one front and back slide
+  const frontSlideId = slides.frontSlides[0];
+  const backSlideId = slides.backSlides[0];
+
   return {
-    allSlides: slides.allSlides,
+    normalSlides: slides.normalSlides,
     slideById: slides.slideById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
     previewState,
     settings,
+    backSlideId,
+    frontSlideId,
   };
 };
 

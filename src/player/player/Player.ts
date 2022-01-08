@@ -13,6 +13,9 @@ import { createTimelineForObject } from "../AppPlayerUtils";
 /*export interface IPlayerConfig {
   oneSlide: boolean;
 }*/
+export interface IPlayerConfig {
+  isApp?: boolean;
+}
 export class Player {
   protected playerData: IPlayerData | null;
   protected rootDiv: HTMLDivElement;
@@ -39,11 +42,15 @@ export class Player {
   private onUpdateCallback: any;
   private onCurrentTimelineChangeCallback: any;
 
+  private playerConfig: IPlayerConfig;
   constructor(
     playerData: IPlayerData | null,
-    rootDiv: HTMLDivElement
+    rootDiv: HTMLDivElement,
+    playerConfig: IPlayerConfig = {}
     //config: IPlayerConfig = { oneSlide: false }
   ) {
+    this.playerConfig = playerConfig;
+
     console.log(playerData);
     //console.log(playerData);
     this.oneSlide = playerData?.slideDataArr.length === 1;
@@ -68,7 +75,8 @@ export class Player {
       (sliderData) => sliderData.slide.slideType === SlideType.Normal
     );
     this.staticSlideDataArr = this.playerData?.slideDataArr.filter(
-      (sliderData) => sliderData.slide.slideType === SlideType.Static
+      (sliderData) =>
+        sliderData.slide.slideType === SlideType.Front || SlideType.Back
     );
 
     this.normalSlideDataArr?.forEach((data, idx) => {
@@ -339,9 +347,19 @@ export class Player {
 
     if (objectEvent.navigationType === NavigationType.None) {
       return;
+    } else if (objectEvent.navigationType === NavigationType.Link) {
+      const el = document.getElementsByClassName(className)[0];
+      console.log(objectEvent?.slideEvent);
+      el?.addEventListener(objectEvent?.linkEvent, () => {
+        console.log(objectEvent?.linkEvent);
+        let a = document.createElement("a");
+        // NOTE: when player runs in  app open in new window (_blank)
+        a.target = this.playerConfig.isApp ? "_blank" : objectEvent.linkTarget;
+        a.href = objectEvent.linkHref;
+        a.click();
+      });
     } else if (objectEvent.navigationType === NavigationType.Slide) {
       const el = document.getElementsByClassName(className)[0];
-
       el?.addEventListener(objectEvent?.slideEvent, () => {
         if (objectEvent.slideReferenceType === "slideNo") {
           this.manualPlaySlide(parseInt(objectEvent?.slideNo, 10) - 1);

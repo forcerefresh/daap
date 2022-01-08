@@ -222,7 +222,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => {
   // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
-    state.project.settings.breakpointsConfiguration.breakpointsConfiguration.find(
+    state.project.settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig) => breakpointConfig.type === "large-1"
     );
 

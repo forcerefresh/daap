@@ -623,7 +623,7 @@ const mapStateToProps = (state: IStore) => {
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
     layoutStaticEffectsPanel: layoutType === "default-layers",
-    breakpointsConfiguration: state.project.settings.breakpointsConfiguration,
+    breakpointsConfiguration: state.project.settings.breakpoints,
     //forceShowLayer: selection.selectionForProperties?.type === "layer",
   };
 };
