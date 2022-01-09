@@ -74,9 +74,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     activeObjectId,
     selectedLayerIds,
     selectedObjectIds,
-    layoutStaticEffectsPanel,
+    //layoutStaticEffectsPanel,
     breakpointsConfiguration,
-    //forceShowLayer,
+    selectionForProperties,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -277,7 +277,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   key={layer?.id}
                   onClick={(event) => onLayerClick(event, layer.id)}
                   className={cx(css.layerInner, {
-                    [css.active]: activeLayerId === layer.id, //&& forceShowLayer,
+                    [css.active]:
+                      selectionForProperties?.id === layer.id &&
+                      selectionForProperties.type === "layer", //activeLayerId === layer.id,
                   })}
                 >
                   <div>
@@ -296,7 +298,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       }
                     ></Button>
 
-                    <Button
+                    {/*<Button
                       minimal
                       onClick={(event: any) => {
                         event.stopPropagation();
@@ -308,7 +310,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       className={css.slideEffect}
                       small={true}
                       icon="walk"
-                    ></Button>
+                    ></Button>*/}
 
                     {/*layer.definition.values.hasLayoutChildren && (
                       <Icon icon="page-layout" className={css.layoutIcon} />
@@ -333,7 +335,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         minimal
                         popoverClassName={css.devicePopup}
                       >
-                        <div style={{ cursor: "pointer" }}>
+                        <div className={css.devicesHolder}>
                           {renderSelectedDevices(layer)}{" "}
                           <Icon
                             icon="caret-down"
@@ -456,7 +458,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             onObjectClick(event, objectId);
                           }}
                           className={cx(css.objectHolder, {
-                            [css.active]: activeObjectId === objectId,
+                            [css.active]:
+                              selectionForProperties?.id === objectId &&
+                              selectionForProperties.type === "object", // activeObjectId === objectId,
                             [css.selected]:
                               selectedObjectIds.length > 0 /*1*/ &&
                               selectedObjectIds.indexOf(objectId) !== -1,
@@ -464,7 +468,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                         >
                           <div className={css.objectHolderInner}>
                             <div className={css.actionButtons}>
-                              {!layoutStaticEffectsPanel && (
+                              {/*!layoutStaticEffectsPanel && (
                                 <Button
                                   active={object.id === showEffectPanelForId.id}
                                   minimal
@@ -478,7 +482,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                   small={true}
                                   icon="walk"
                                 ></Button>
-                              )}
+                                )*/}
                               <Button
                                 active={object.isVisible}
                                 minimal
@@ -603,7 +607,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
 const mapStateToProps = (state: IStore) => {
   const { slides, layers, objects, selection } = state.project;
-  const { layoutType } = state.globals;
+  //const { layoutType } = state.globals;
   let layerArr: ILayer[] | null = null;
   let slide: ISlide | null = null;
 
@@ -622,9 +626,9 @@ const mapStateToProps = (state: IStore) => {
     activeObjectId: selection.activeObjectId,
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
-    layoutStaticEffectsPanel: layoutType === "default-layers",
+    selectionForProperties: selection.selectionForProperties,
+    //layoutStaticEffectsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpoints,
-    //forceShowLayer: selection.selectionForProperties?.type === "layer",
   };
 };
 

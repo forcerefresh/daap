@@ -126,7 +126,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       exportData.slideDataArr.map((slideData) => {
         //console.log(slideData.slide);
         const transitionDuration =
-          slideData.slide.slideTransition.duration || 0;
+          slideData.slide.transitions.slide?.[0]?.duration || 0;
 
         //const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
         const slideDuration = slideData.slide.duration.customValue || 0;
@@ -136,7 +136,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         return {
           duration: slideDuration,
           transitionDuration:
-            slideData.slide.slideTransition.effect.id === "none"
+            slideData.slide.transitions.slide?.[0]?.effect.id === "none"
               ? 0
               : transitionDuration,
           /*transitionOverlap:

@@ -1,4 +1,9 @@
-import { ISlideTransition } from "../../objects/types";
+import {
+  IInputMetadataValues,
+  ISlideDurationInput,
+  ITextInput,
+} from "../../inputs/types";
+import { ISlideTransition, ITransitions } from "../../objects/types";
 
 export interface ISlideDuration {
   inheritFrom: "inherit" | "custom";
@@ -13,13 +18,14 @@ export enum SlideType {
 
 export interface ISlide {
   id: string;
-  userId: string;
-  name: string;
-  duration: ISlideDuration;
   layerIds: string[];
   nextLayerIdCounter: number;
   slideType: SlideType;
-  slideTransition: ISlideTransition;
+  transitions: ITransitions;
+  //props
+  userId: string;
+  name: string;
+  duration: ISlideDuration;
 }
 
 export interface ISlides {
@@ -30,3 +36,60 @@ export interface ISlides {
   frontSlides: string[];
   backSlides: string[];
 }
+
+/*
+definition: {
+    values: ISlideValues;
+    valuesMetadata: { [key: string]: IInputMetadataValues };
+  };
+export interface ISlideValues {
+  userId: string;
+  name: string;
+  duration: ISlideDuration;
+}
+
+export type SlideTuple = [
+  ITextInput<"name">,
+  ITextInput<"userId">,
+  ISlideDurationInput<"duration">
+];
+
+export const layerDefinition: LayerTuple = [
+  {
+    displayName: "Overflow",
+    propertyName: "overflow",
+    inputType: InputType.SELECT,
+    options: [
+      { label: "Visible", value: "visible" },
+      { label: "Hidden", value: "hidden" },
+      { label: "Scroll", value: "scroll" },
+      { label: "Auto Scroll", value: "auto" },
+    ],
+    value: "visible",
+    defaultValue: "visible",
+  },
+  {
+    displayName: "Layout children",
+    type: FormType.GROUP,
+    propertyName: "hasLayoutChildren",
+    optional: true,
+    elements: [
+      {
+        displayName: "",
+        propertyName: "layoutChildren",
+        inputType: InputType.LAYOUT_CHILDREN,
+        value: {
+          type: LayoutChildrenType.Column,
+          align: "start",
+          justify: "start",
+        },
+        defaultValue: {
+          type: LayoutChildrenType.Column,
+          align: "start",
+          justify: "start",
+        },
+      },
+    ],
+  },
+];
+*/

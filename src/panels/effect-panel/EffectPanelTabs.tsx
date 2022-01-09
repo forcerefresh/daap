@@ -81,8 +81,8 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
         break;
       }
       case "slide": {
-        //item = objectById[id];
-        //transitions = (slideById[id] as ISlide).transitions;
+        item = slideById[id];
+        transitions = (slideById[id] as ISlide).transitions;
         break;
       }
     }

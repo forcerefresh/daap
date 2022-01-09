@@ -74,7 +74,7 @@ export function generatePlayerData(
       slide: pick(slide, [
         "id",
         "slideType",
-        "slideTransition",
+        "transitions",
         "duration",
         "userId",
       ]),

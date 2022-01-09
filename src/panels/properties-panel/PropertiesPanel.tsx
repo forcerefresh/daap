@@ -11,6 +11,8 @@ import {
   getSnapLayoutField,
   getGridLayoutField,
   getSelectField,
+  getTextField,
+  getSlideDurationField,
 } from "../../inputs/input-utils";
 import { IInputMetadataValues, InputType } from "../../inputs/types";
 import {
@@ -25,8 +27,10 @@ import {
   setDevice,
   updateLayer,
   updateObject,
+  updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
+import { ISlide, ISlideDuration } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
@@ -49,14 +53,44 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     object,
     objectLayer,
     layer,
+    slide,
     selectionForProperties,
     panelName,
+    commonSlideDuration,
     _updateObject,
     _updateLayer,
+    _updateSlide,
     _setDevice,
     hideHeader,
     className,
   } = props;
+
+  const renderSlideProperties = (slide: ISlide) => {
+    return (
+      <>
+        {getTextField("Name", slide.name, (name: string) => {
+          const retObj = cloneDeep(slide);
+          retObj.name = name;
+          _updateSlide(retObj);
+        })}
+        {getTextField("Custom ID", slide.userId, (userId: string) => {
+          const retObj = cloneDeep(slide);
+          retObj.userId = userId;
+          _updateSlide(retObj);
+        })}
+        {getSlideDurationField(
+          "",
+          slide.duration,
+          (duration: ISlideDuration) => {
+            const retObj = cloneDeep(slide);
+            retObj.duration = duration;
+            _updateSlide(retObj);
+          },
+          commonSlideDuration
+        )}
+      </>
+    );
+  };
 
   const renderLayerProperties = (layer: ILayer) => {
     return (
@@ -331,7 +365,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     //
   };
 
-  const renderObjectOrLayer = () => {
+  const renderObjectOrLayerOrSlide = () => {
     if (!selectionForProperties) {
       return <div>No object selected</div>;
     }
@@ -343,6 +377,10 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     if (selectionForProperties?.type === "object" && object) {
       return renderObjectProperties(object, objectLayer);
     }
+
+    if (selectionForProperties?.type === "slide" && slide) {
+      return renderSlideProperties(slide);
+    }
   };
 
   return (
@@ -352,11 +390,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     >
       {!hideHeader && (
         <div className={css.panelHeader}>
-          {panelName?.type === "layer" ? "LAYER" : "OBJECT"}
+          {panelName?.type.toUpperCase()}
           {panelName && (
             <span
               className={classnames(css.panelName, {
-                [css.panelNameLayer]: panelName.type === "layer",
+                //[css.panelNameLayer]: panelName.type === "layer",
               })}
             >
               {" [ " + panelName.name + " ] "}
@@ -364,24 +402,27 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           )}
         </div>
       )}
-      <div className={css.propertiesHolder}>{renderObjectOrLayer()}</div>
+      <div className={css.propertiesHolder}>{renderObjectOrLayerOrSlide()}</div>
     </div>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings } = state.project;
+  const { objects, layers, selection, settings, slides } = state.project;
   const { selectedDevice } = state.stage;
 
-  const { activeObjectId, activeLayerId } = selection;
+  const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
-  const { breakpoints } = settings;
+  const { breakpoints, slideDuration: commonSlideDuration } = settings;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
+  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
-  let panelName: { name: string; type: "object" | "layer" } | undefined;
+  let panelName:
+    | { name: string; type: "object" | "layer" | "slide" }
+    | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer" };
@@ -391,6 +432,10 @@ const mapStateToProps = (state: IStore) => {
     panelName = { name: object.name, type: "object" };
   }
 
+  if (selection.selectionForProperties?.type === "slide" && slide) {
+    panelName = { name: slide.name, type: "slide" };
+  }
+
   return {
     // activeObjectId,
     selectedDevice,
@@ -398,14 +443,17 @@ const mapStateToProps = (state: IStore) => {
     object,
     objectLayer,
     layer,
+    slide,
     selectionForProperties: selection.selectionForProperties,
     panelName,
+    commonSlideDuration,
   };
 };
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
+  _updateSlide: (slide: ISlide) => updateSlide(slide),
   _setDevice: setDevice,
 };
 

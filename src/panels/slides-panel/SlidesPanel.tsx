@@ -11,6 +11,8 @@ import {
   addSlidesToSelection,
   removeSlidesFromSelection,
   setStagePreview,
+  selectForProperties,
+  selectForPropertiesProps,
 } from "../../store/actions/actions";
 import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
@@ -34,6 +36,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     settings,
     frontSlideId,
     backSlideId,
+    selectionForProperties,
+    _selectForProperties,
     _addNewSlide,
     _deleteSlideThree,
     _activateSlide,
@@ -57,6 +61,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     } else {
       _activateSlide(slideId);
       _selectSlides([slideId]);
+      _selectForProperties({ id: slideId, type: "slide" });
     }
   };
 
@@ -103,6 +108,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             onClick={() => {
               _activateSlide(frontSlideId);
               _selectSlides([frontSlideId]);
+              _selectForProperties({ id: frontSlideId, type: "slide" });
             }}
           >
             Front
@@ -114,6 +120,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             onClick={() => {
               _activateSlide(backSlideId);
               _selectSlides([backSlideId]);
+              _selectForProperties({ id: backSlideId, type: "slide" });
             }}
           >
             Back
@@ -141,7 +148,9 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     selectedSlideIds.indexOf(slideId) !== -1,
                 },
                 {
-                  [css.active]: activeSlideId === slideId,
+                  [css.active]:
+                    selectionForProperties?.id === slideId &&
+                    selectionForProperties.type === "slide",
                 }
               )}
             >
@@ -171,13 +180,13 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   small={true}
                   icon={isSlideInPlay(slideId) ? "stop" : "play"}
                 ></Button>
-                <Button
+                {/*<Button
                   minimal
                   onClick={() => setShowSettingsPanelForSlideId(slideId)}
                   className={css.slideProperties}
                   small={true}
                   icon="cog"
-                ></Button>
+                ></Button>*/}
               </div>
               <div className={css.slideDescription}>
                 <span>{slideById[slideId].name} </span>
@@ -221,6 +230,7 @@ const mapStateToProps = (state: IStore) => {
     settings,
     backSlideId,
     frontSlideId,
+    selectionForProperties: selection.selectionForProperties,
   };
 };
 
@@ -233,6 +243,8 @@ const mapDispatchToProps = {
   _removeSlidesFromSelection: removeSlidesFromSelection,
   _setStagePreview: (preview: Partial<IPreviewState>) =>
     setStagePreview(preview),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

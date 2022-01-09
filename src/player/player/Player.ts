@@ -197,7 +197,7 @@ export class Player {
     }
 
     const bettwenSlideEff: ISlideTransition | undefined =
-      this.normalSlideDataArr?.[slideIdx]?.slide?.slideTransition;
+      this.normalSlideDataArr?.[slideIdx]?.slide?.transitions.slide?.[0];
 
     //console.log(bettwenSlideEff);
 
@@ -237,7 +237,7 @@ export class Player {
           pageWidth: this.playerData?.breakpointData.pageWidth,
         },
         type: "effect",
-        duration: bettwenSlideEff.duration / 1000,
+        duration: bettwenSlideEff!.duration / 1000,
         //ease: bettwenSlideEff.ease,
         //childEase: bettwenSlideEff.childEase,
         //timeDistribution: bettwenSlideEff.timeDistribution,
@@ -457,7 +457,7 @@ export class Player {
 
     // 0. get effect definition
     const bettwenSlideEff: ISlideTransition | undefined =
-      this.normalSlideDataArr?.[nextSlideIdx]?.slide?.slideTransition;
+      this.normalSlideDataArr?.[nextSlideIdx]?.slide?.transitions.slide?.[0];
 
     // create breakpoint for slide transition
     // 1. if no slide transition set to 0
@@ -492,7 +492,7 @@ export class Player {
 
       // 0. get effect definition
       const bettwenSlideEff: ISlideTransition | undefined =
-        this.normalSlideDataArr?.[newSlideIdx]?.slide?.slideTransition;
+        this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];
       // create breakpoint for slide transition
       // 1. if no slide transition set to 0
       let overlap = 0;

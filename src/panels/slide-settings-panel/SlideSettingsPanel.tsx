@@ -134,7 +134,6 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               _updateSlide(obj);
             }
           )}
-
           {getNumericFiled(
             " ",
             getRealSlideDuration(slide, settings),

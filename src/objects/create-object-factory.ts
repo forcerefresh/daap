@@ -38,6 +38,7 @@ import {
   ICommonObjectProperties,
   IObject,
   ISlideTransition,
+  ITransition,
   ITransitions,
   NavigationEvent,
   NavigationType,
@@ -175,17 +176,7 @@ export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
     layerIds: [],
     nextLayerIdCounter: 1,
     slideType,
-    slideTransition: getDefaultSlideTransition(),
-  };
-}
-
-export function getDefaultSlideTransition(): ISlideTransition {
-  return {
-    duration: 2000,
-    effect: {
-      id: "none",
-      values: {},
-    },
+    transitions: getDefaultTransitionsForSlide(),
   };
 }
 
@@ -200,6 +191,12 @@ export function getDefaultTransitionsForObject(): ITransitions {
 export function getDefaultTransitionsForLayer(): ITransitions {
   return {
     layer: [],
+  };
+}
+
+export function getDefaultTransitionsForSlide(): ITransitions {
+  return {
+    slide: [],
   };
 }
 
@@ -245,7 +242,7 @@ function createCommonObject(
     },
     gridLayouts: {
       type: "common",
-      perDevice:[],
+      perDevice: [],
       common: {
         deviceType: "common",
         left: 1,

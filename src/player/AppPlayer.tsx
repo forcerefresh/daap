@@ -45,7 +45,6 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         player.current?.paused(true);
         break;
       case "stop":
-        debugger;
         player.current?.clear();
         break;
     }

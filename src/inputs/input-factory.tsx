@@ -43,6 +43,7 @@ import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
 import { Breakpoints } from "../store/reducers/settings";
+import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -337,6 +338,11 @@ export function getInputForm<T>(
     }
     case InputType.BOX: {
       return <BoxInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.SLIDE_DURATION: {
+      return (
+        <SlideDurationInputForm key={key} {...inputProps} onChange={onChange} />
+      );
     }
   }
 }

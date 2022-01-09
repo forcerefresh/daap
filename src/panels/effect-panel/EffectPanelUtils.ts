@@ -74,5 +74,14 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
           values: {},
         },
       };
+    case "slide":
+      return {
+        delay: 0,
+        duration: 2000,
+        effect: {
+          id: "none",
+          values: {},
+        },
+      };
   }
 };

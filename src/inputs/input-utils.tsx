@@ -184,6 +184,22 @@ export function getTextField<T>(
   return getInputForm(InputType.TEXT, objectDef, onChange);
 }
 
+export function getSlideDurationField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  commonDuration: number
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.SLIDE_DURATION,
+    value: value,
+    commonDuration,
+  };
+
+  return getInputForm(InputType.SLIDE_DURATION, objectDef, onChange);
+}
+
 export function getCoverLayoutField<T>(
   label: string,
   value: T,

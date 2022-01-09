@@ -47,7 +47,7 @@ export interface ISlideData {
     id: string;
     userId: string;
     slideType: SlideType;
-    slideTransition: ISlideTransition;
+    transitions: ITransitions;
     duration: ISlideDuration;
   };
   transitionsData: ITransitionsData[];

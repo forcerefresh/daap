@@ -10,8 +10,8 @@ import { IObject, ItemType, ObjectType } from "../../objects/types";
 import {
   createObject,
   getDefaultSlide,
-  getDefaultSlideTransition,
   getDefaultTransitionsForLayer,
+  getDefaultTransitionsForSlide,
 } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocument, IDocumentSize } from "../reducers/document";
@@ -78,13 +78,13 @@ export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     if (getState().project.slides.allSlides.length === 0) {
       // back
-      const backSlide = getDefaultSlide("Back", SlideType.Back);
-      dispatch(addSlide(backSlide));
-      dispatch(addNewLayer(backSlide.id));
+      //const backSlide = getDefaultSlide("Back", SlideType.Back);
+      //dispatch(addSlide(backSlide));
+      //dispatch(addNewLayer(backSlide.id));
       // front
-      const frontSlide = getDefaultSlide("Front", SlideType.Front);
-      dispatch(addSlide(frontSlide));
-      dispatch(addNewLayer(frontSlide.id));
+      //const frontSlide = getDefaultSlide("Front", SlideType.Front);
+      //dispatch(addSlide(frontSlide));
+      //dispatch(addNewLayer(frontSlide.id));
       // normal
       const slideName = `Slide ${getState().project.slides.nextSlideIdCounter}`;
       const slide = getDefaultSlide(slideName, SlideType.Normal);
@@ -114,7 +114,7 @@ export function addNewSlide(slideType = SlideType.Normal): any {
       layerIds: [],
       nextLayerIdCounter: 1,
       slideType,
-      slideTransition: getDefaultSlideTransition(),
+      transitions: getDefaultTransitionsForSlide(),
     };
     dispatch(addSlide(slide));
     dispatch(activateSlide(slide.id));

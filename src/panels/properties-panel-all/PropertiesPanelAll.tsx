@@ -22,11 +22,11 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
   return (
     <div className={css.propertiesPanelAll} key={panelName?.id}>
       <div className={css.panelHeader}>
-        {panelName?.type === "layer" ? "LAYER" : "OBJECT"}
+        {panelName?.type.toUpperCase() || "PROPERTIES"}
         {panelName && (
           <span
             className={classnames(css.panelName, {
-              [css.panelNameLayer]: panelName.type === "layer",
+              /*[css.panelNameLayer]: panelName.type === "layer",*/
             })}
           >
             {" [ " + panelName.name + " ] "}
@@ -73,20 +73,27 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection } = state.project;
-  const { activeObjectId, activeLayerId } = selection;
+  const { objects, layers, slides, selection } = state.project;
+  const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
+  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   let totalEffectCounter = 0;
 
   let panelName:
-    | { name: string; type: "object" | "layer"; id: string }
+    | { name: string; type: "object" | "layer" | "slide"; id: string }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer", id: layer.id };
+    totalEffectCounter = layer?.transitions?.layer?.length || 0;
+  }
+
+  if (selection.selectionForProperties?.type === "slide" && slide) {
+    panelName = { name: slide.name, type: "slide", id: slide.id };
+    totalEffectCounter = slide?.transitions?.slide?.length || 0;
   }
 
   if (selection.selectionForProperties?.type === "object" && object) {

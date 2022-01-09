@@ -7,6 +7,7 @@ import {
 } from "../effects/trianglify/trianglify.definition";
 import { IGridLayout } from "../objects/types";
 import { DeviceType } from "../store/reducers/i-settings";
+import { ISlideDuration } from "../store/reducers/i-slides";
 import { Breakpoints } from "../store/reducers/settings";
 
 export enum InputType {
@@ -47,6 +48,7 @@ export enum InputType {
   BUTTON_GROUP_INPUT = "button_group_input",
   BOX = "box",
   LAYOUT_CHILDREN = "layout_children",
+  SLIDE_DURATION = "slide_duration",
 }
 
 export enum PresetGroup {
@@ -146,6 +148,16 @@ export interface IBorderColorValue {
   bottomBorderColor: RGBColor;
   leftBorderColor: RGBColor;
   rightBorderColor: RGBColor;
+}
+
+export interface ISlideDurationInput<T = string> {
+  inputType: InputType.SLIDE_DURATION;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: ISlideDuration;
+  defaultValue: ISlideDuration;
+  commonDuration: number;
 }
 
 export interface IBorderColorInput<T = string> {
