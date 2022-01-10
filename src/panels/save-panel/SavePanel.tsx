@@ -43,6 +43,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     layers,
     objects,
     breakpointConfig,
+    settings,
     _updateProjectMeta,
     _updateEditor,
     onRequestClose,
@@ -84,7 +85,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const exportData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "slide", entityId: slides.allSlides[0] },
-      breakpointConfig!
+      breakpointConfig!,
+      settings
     );
     setHtml(exportData.html);
   }, []);
@@ -95,7 +97,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const playerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
-      breakpointConfig!
+      breakpointConfig!,
+      settings
     );
 
     saveProject({
@@ -233,6 +236,7 @@ const mapStateToProps = (state: IStore) => {
     layers: state.project.layers,
     objects: state.project.objects,
     breakpointConfig,
+    settings: state.project.settings,
   };
 };
 

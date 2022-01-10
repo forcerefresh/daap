@@ -158,7 +158,8 @@ export const trianglifyDefaults: ITrianglifyEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
-  // specific this effect
+  canBeCombined: false,
+  // effect properties
   colorsSG: "match",
   colors: [
     { r: 255, g: 255, b: 255, a: 1 },

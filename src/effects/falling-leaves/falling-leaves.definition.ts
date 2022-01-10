@@ -37,7 +37,8 @@ export const fallingLeavesDefaults: IFallingLeaves = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["effect"],
-  // specific to this effect
+  canBeCombined: false,
+  // effect properties
   number: 30,
   image: {
     url: "/images/leaf.png",

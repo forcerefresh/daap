@@ -17,7 +17,7 @@ import css from "./StagePanel.module.scss";
 import {
   generatePlayerData,
   getObjectHtml,
-  getSlideArr,
+  getNormalSlideArr,
 } from "../../export/export-html";
 
 // from "gsap"; // TODO: remove player from here
@@ -118,7 +118,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       { slides, layers, objects },
       previewState.scope,
       //stageSize,
-      breakpointConfig!
+      breakpointConfig!,
+      settings
     );
 
     let totalDuration = 0;
@@ -570,7 +571,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
 
     // thumbnail arr
-    const slidesArr = getSlideArr(slides);
+    const slidesArr = getNormalSlideArr(slides);
     const slidesCounter = slidesArr.length;
     const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
 

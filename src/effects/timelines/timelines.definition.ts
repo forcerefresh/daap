@@ -22,7 +22,8 @@ export const cssPluginDefaults: ITimelinesEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
-  // specific to this effect
+  canBeCombined: true,
+  // effect properties
   timelines: {
     timelines: [getDefaultTimeline()],
   },

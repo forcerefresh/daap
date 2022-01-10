@@ -214,6 +214,8 @@ export const devDefaults: IDevEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  canBeCombined: true,
+  //effect properties
   color1: { r: 256, g: 256, b: 256, a: 1 },
   color2: { r: 256, g: 256, b: 256, a: 1 },
   color3: { r: 256, g: 256, b: 256, a: 1 },

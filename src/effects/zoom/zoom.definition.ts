@@ -28,7 +28,8 @@ export const zoomInDefaults: IZoomInEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
-  // specific to this effect
+  canBeCombined: true,
+  // effect properties
   scaleX: 100,
   scaleY: 100,
 };

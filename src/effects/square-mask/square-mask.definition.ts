@@ -58,7 +58,8 @@ export const squareMaskDefaults: ISquareMaskEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
-  // specific this effect
+  canBeCombined: false,
+  // effect properties
   borderColor: {
     useDifferentValues: false,
     borderColor: { r: 255, g: 255, b: 255, a: 1 },

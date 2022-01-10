@@ -15,4 +15,5 @@ export const fadeDefaults: IFadeEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: true,
 };

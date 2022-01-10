@@ -15,4 +15,5 @@ export const canvasCopyDefaults: ICanvasCopyEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: false,
 };

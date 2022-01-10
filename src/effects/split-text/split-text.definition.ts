@@ -81,6 +81,8 @@ export const splitTextDefaults: ISplitTextEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: false,
+  // effect properties
   durationPerChar: 1000,
   delayBetweenChar: 50,
   opacity: { value: 0, ...delayAndDuration },

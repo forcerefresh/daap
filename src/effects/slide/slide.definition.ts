@@ -34,6 +34,7 @@ export const slideDefaults: ISlideEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: true,
   // specific this effect
   distance: 100,
   from: "right",

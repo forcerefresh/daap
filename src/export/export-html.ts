@@ -22,9 +22,10 @@ import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide, ISlides } from "../store/reducers/i-slides";
-import { BreakpointConfiguration } from "../store/reducers/settings";
+import { BreakpointConfiguration, ISettings } from "../store/reducers/settings";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
+import { getRealSlideDuration } from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
   IPlayerData,
@@ -36,7 +37,8 @@ import {
 export function generatePlayerData(
   sources: ISources,
   scope: IPreviewScope | null,
-  breakpointConfig: BreakpointConfiguration
+  breakpointConfig: BreakpointConfiguration,
+  settings: ISettings
 ): IPlayerData {
   const { slides, layers, objects } = sources;
 
@@ -45,13 +47,13 @@ export function generatePlayerData(
   let previewSlidesArr: ISlide[] = [];
   switch (scope?.entityType) {
     case "slide": {
-      previewSlidesArr = getSlideArr(slides).filter(
+      previewSlidesArr = getNormalSlideArr(slides).filter(
         (slide) => slide.id === scope?.entityId
       );
       break;
     }
     default: {
-      previewSlidesArr = getSlideArr(slides);
+      previewSlidesArr = getNormalSlideArr(slides);
       break;
     }
   }
@@ -69,15 +71,17 @@ export function generatePlayerData(
 
   previewSlidesArr.forEach((slide) => {
     const transitionsData: ITransitionsData[] = [];
-
+    const someSlideData = pick(slide, [
+      "id",
+      "slideType",
+      "transitions",
+      "duration",
+      "userId",
+    ]);
+    someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
+    // slide data
     const slideData: ISlideData = {
-      slide: pick(slide, [
-        "id",
-        "slideType",
-        "transitions",
-        "duration",
-        "userId",
-      ]),
+      slide: someSlideData,
       transitionsData,
     };
 
@@ -237,8 +241,8 @@ function getObjectEvents(object: IObject) {
 /**
  * Returns array of slides from store>slides
  */
-export function getSlideArr(slides: ISlides): ISlide[] {
-  return slides.allSlides.map((slideId) => slides.slideById[slideId]);
+export function getNormalSlideArr(slides: ISlides): ISlide[] {
+  return slides.normalSlides.map((slideId) => slides.slideById[slideId]);
 }
 
 /**

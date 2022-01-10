@@ -28,6 +28,8 @@ export const cubeDefaults: ICubeEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["slide"],
+  canBeCombined: false,
+  // effect properties
   cubeBackgroundColor: { r: 255, g: 255, b: 255, a: 0 },
   cubeEdgeColor: { r: 255, g: 255, b: 255, a: 0 },
 };

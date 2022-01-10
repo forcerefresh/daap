@@ -14,4 +14,5 @@ export const noneDefaults: INoneEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  canBeCombined: true,
 };

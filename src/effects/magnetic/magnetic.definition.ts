@@ -40,6 +40,8 @@ export const magneticDefaults: IMagneticEffect = {
   hasChildEase: false,
   ease: "back.in(2)",
   supportedEffectTypes: ["effect"],
+  canBeCombined: false,
+  //effect properties
   followTime: 400,
   setToInitialPositionOnComplete: true,
   strengthX: 10,

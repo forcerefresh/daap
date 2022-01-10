@@ -64,7 +64,8 @@ export const sliceSlideDefaults: ISliceSlideEffect = {
   ease: "none",
   childEase: "none",
   supportedEffectTypes: ["in", "out"],
-  // specific to this effect
+  canBeCombined: false,
+  // effect properties
   slices: 5,
   orientation: "horizontal",
   startingPoint: "random",

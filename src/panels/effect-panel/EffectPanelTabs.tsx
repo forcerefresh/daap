@@ -1,4 +1,4 @@
-import { Button, Tab, Tabs, Tag } from "@blueprintjs/core";
+import { Button, Tab, Tabs, Tag, Tooltip } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { useState } from "react";
@@ -130,6 +130,10 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     const effLen = transitions?.[section]?.length || 0;
     const effects = transitions?.[section] || [];
 
+    const isAddDisabled = section === "slide" && effLen >= 1 ? true : false;
+    const disabledMessage =
+      section === "slide" && effLen >= 1 ? "Only one effect is allowed" : "";
+
     return (
       <Tab
         className={css.tab}
@@ -159,16 +163,36 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
               })}
             </div>
             <div>
+              <Tooltip
+                disabled={!isAddDisabled}
+                content={disabledMessage}
+                position={"left"}
+                openOnTargetFocus={false}
+              >
+                <Button
+                  disabled={isAddDisabled}
+                  small
+                  minimal
+                  className={css.addEffect}
+                  icon={"grid-view"}
+                  onClick={() => {
+                    addEffectToSection(section);
+                  }}
+                >
+                  Add Structural Effect
+                </Button>
+              </Tooltip>
               <Button
+                disabled={isAddDisabled}
                 small
                 minimal
                 className={css.addEffect}
-                icon={"add"}
+                icon={"graph"}
                 onClick={() => {
                   addEffectToSection(section);
                 }}
               >
-                Add new effect
+                Add Attribute Effect
               </Button>
             </div>
 
@@ -192,7 +216,6 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                     </div>
                   );
                 })}
-                <div> </div>
               </div>
               {/*transitions?.[section]?.map((transition, idx) => (
                   <EffectConfigurationForm
@@ -204,6 +227,16 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                   />
                   ))*/}
 
+              {effLen === 0 ? (
+                <div>
+                  Helper text goes here...Helper text goes here...Helper text
+                  goes here...Helper text goes here...Helper text goes
+                  here...Helper text goes here...Helper text goes here...Helper
+                  text goes here...Helper text goes here... Helper text goes
+                  here...Helper text goes here...Helper text goes here...Helper
+                  text goes here...
+                </div>
+              ) : null}
               {transitions?.[section]?.[selectedNo[section]] !== undefined && (
                 <EffectConfigurationForm
                   effectType={section}

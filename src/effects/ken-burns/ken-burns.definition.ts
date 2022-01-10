@@ -28,6 +28,7 @@ export const kenBurnsDefaults: IKenBurnsEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: false,
   // specific to this effect
   scaleFactor: 10,
   transformOrigin: { x: 50, y: 50 },

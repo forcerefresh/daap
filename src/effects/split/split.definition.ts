@@ -34,6 +34,8 @@ export const splitDefaults: ISplitEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["slide"],
+  canBeCombined: false,
+  // effect properties
   split: {
     center: {
       x: 50,

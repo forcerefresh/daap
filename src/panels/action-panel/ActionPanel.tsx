@@ -84,6 +84,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     slides,
     layers,
     objects,
+    settings,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // logic for handling click outside
@@ -161,7 +162,8 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     const previewExportData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "slide", entityId: slides.allSlides[0] },
-      breakpointConfig!
+      breakpointConfig!,
+      settings
     );
 
     const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
@@ -172,7 +174,8 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     const playerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
-      breakpointConfig!
+      breakpointConfig!,
+      settings
     );
 
     _updateProjectMeta({ inSaving: true });
@@ -353,6 +356,7 @@ const mapStateToProps = (state: IStore) => ({
   slides: state.project.slides,
   layers: state.project.layers,
   objects: state.project.objects,
+  settings: state.project.settings,
 });
 
 const mapDispatchToProps = {

@@ -36,6 +36,8 @@ export const flipDefaults: IFlipEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["effect"],
+  canBeCombined: false,
+  // effect properties
   rotationTime: 1000,
   pauseTime: 500,
   spinDirection: "cc",

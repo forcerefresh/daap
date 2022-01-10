@@ -23,5 +23,7 @@ export const flipSlideDefaults: IFlipSlideEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["slide"],
+  canBeCombined: false,
+  // effect properties
   durationBetweenItems: 3000,
 };

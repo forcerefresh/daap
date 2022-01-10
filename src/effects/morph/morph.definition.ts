@@ -14,4 +14,5 @@ export const morphDefaults: IFadeEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out"],
+  canBeCombined: false,
 };

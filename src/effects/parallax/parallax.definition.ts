@@ -21,6 +21,8 @@ export const parallaxDefaults: IParallaxEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["layer"],
+  canBeCombined: false,
+  // effect properties
   parallax: {
     objects: [],
     autoDepthInc: 5,

@@ -90,6 +90,8 @@ export const typewriterDefaults: ITypeWriterEffect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["effect"],
+  canBeCombined: false,
+  // effect properties
   typeCharacterSpeed: 150,
   deleteCharacterSpeed: 50,
   emptySpaceTypeTime: 500,

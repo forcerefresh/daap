@@ -20,6 +20,7 @@ export interface IEffectBase {
   hasEase: boolean;
   hasChildEase: boolean;
   hasTimeDistribution?: boolean;
+  canBeCombined: boolean;
   // << flags end
   supportedEffectTypes: EffectType[];
   timeDistribution?: number;

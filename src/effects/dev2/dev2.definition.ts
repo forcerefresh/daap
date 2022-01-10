@@ -58,6 +58,8 @@ export const dev2Defaults: IDev2Effect = {
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  canBeCombined: true,
+  // effect properties
   colors1: [{ r: 256, g: 256, b: 256, a: 1 }],
   number1: 1,
   number2: 2,
