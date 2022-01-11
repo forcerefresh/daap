@@ -18,7 +18,7 @@ import {
   _updateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
-import { ISlide } from "../../store/reducers/i-slides";
+import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import { EffectConfigurationForm } from "../effect-configuration/EffectConfigurationForm";
 
@@ -139,6 +139,11 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
       ? "Only one Structure Effect is allowed"
       : "";
 
+    const hideAddStructuralEffect =
+      itemType === "slide" &&
+      ((item as ISlide).slideType === SlideType.Back ||
+        (item as ISlide).slideType === SlideType.Front);
+
     return (
       <Tab
         className={css.tab}
@@ -180,25 +185,27 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
               })}
             </div>
             <div>
-              <Tooltip
-                disabled={!isAddDisabled}
-                content={disabledMessage}
-                position={"left"}
-                openOnTargetFocus={false}
-              >
-                <Button
-                  disabled={isAddDisabled}
-                  small
-                  minimal
-                  className={css.addEffect}
-                  icon={"grid-view"}
-                  onClick={() => {
-                    addEffectToSection(section, true);
-                  }}
+              {!hideAddStructuralEffect && (
+                <Tooltip
+                  disabled={!isAddDisabled}
+                  content={disabledMessage}
+                  position={"left"}
+                  openOnTargetFocus={false}
                 >
-                  Add Structural Effect
-                </Button>
-              </Tooltip>
+                  <Button
+                    disabled={isAddDisabled}
+                    small
+                    minimal
+                    className={css.addEffect}
+                    icon={"grid-view"}
+                    onClick={() => {
+                      addEffectToSection(section, true);
+                    }}
+                  >
+                    Add Structural Effect
+                  </Button>
+                </Tooltip>
+              )}
               <Button
                 small
                 minimal

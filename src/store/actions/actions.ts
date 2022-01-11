@@ -273,6 +273,7 @@ export function addNewLayer(slideId: string): any {
     };
 
     dispatch(addLayer(layer));
+    dispatch(selectLayers([layer.id]));
     dispatch(activateLayer(layer.id));
     dispatch(selectForProperties({ type: "layer", id: layer.id }));
   };
@@ -360,6 +361,13 @@ export function activateSlide(slideId: string) {
       return;
     }
     dispatch(_activateSlide(slideId));
+    // activate first layer (BY DESING)
+    const firstLayerId =
+      getState().project.slides.slideById[slideId].layerIds[0];
+    if (firstLayerId) {
+      dispatch(activateLayer(firstLayerId));
+      dispatch(selectLayers([firstLayerId]));
+    }
   };
 }
 

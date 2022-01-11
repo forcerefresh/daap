@@ -98,6 +98,22 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     [key: string]: boolean;
   }>({});
 
+  // when layer is added set open state to be default
+  useEffect(() => {
+    let updateState = false;
+    const openLayerByIdClone = cloneDeep(openLayerById);
+    layerArr?.forEach((layer) => {
+      if (typeof openLayerById[layer.id] === "undefined") {
+        openLayerByIdClone[layer.id] = true;
+        updateState = true;
+      }
+    });
+
+    if (updateState) {
+      setOpenLayerById(openLayerByIdClone);
+    }
+  }, [layerArr]);
+
   const [showEffectPanelForId, setShowEffectPanelForId] = useState<{
     id: string;
     type?: "object" | "layer";
@@ -486,7 +502,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                                 ></Button>
                                 )*/}
                               <Button
-                                active={object.isVisible}
+                                active={!object.isVisible}
                                 minimal
                                 onClick={(event: any) => {
                                   event.stopPropagation();

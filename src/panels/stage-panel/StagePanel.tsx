@@ -1296,20 +1296,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             </div>
             {!isPreview && (
               <>
-                <div
-                  style={pageBorderStyle}
-                  className={cx(css.borderBase, css.pageBorder)}
-                ></div>
-                <div
-                  style={stageBorderStyle}
-                  className={cx(css.borderBase, css.stageBorder)}
-                ></div>
-
-                <div
-                  style={guidelinesBorderStyle}
-                  className={cx(css.borderBase, css.guidelinesBorder)}
-                ></div>
-
                 {horizontalGridLines.map((item) => (
                   <div
                     style={{ top: item.top + "px", width: item.width + "px" }}
@@ -1326,6 +1312,20 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                     className={cx(css.gridVerticalLine)}
                   ></div>
                 ))}
+
+                <div
+                  style={pageBorderStyle}
+                  className={cx(css.borderBase, css.pageBorder)}
+                ></div>
+                <div
+                  style={stageBorderStyle}
+                  className={cx(css.borderBase, css.stageBorder)}
+                ></div>
+
+                <div
+                  style={guidelinesBorderStyle}
+                  className={cx(css.borderBase, css.guidelinesBorder)}
+                ></div>
               </>
             )}
           </div>
