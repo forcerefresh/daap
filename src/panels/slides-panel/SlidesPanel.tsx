@@ -22,6 +22,7 @@ import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
 import { SlideType } from "../../store/reducers/i-slides";
 import { getRealSlideDurationVisual } from "../../utils/utils";
+import { delay } from "lodash-es";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -96,6 +97,14 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     );
   };
 
+  const slidesHolderRef = useRef<HTMLDivElement | null>(null);
+  const scrollToBottomDelayed = () => {
+    delay(() => {
+      slidesHolderRef.current?.scrollTo({ top: 10000000 });
+      console.log("scrollTo");
+    }, 1);
+  };
+
   return (
     <div className={css.panel}>
       <div className={css.panelHeader}>
@@ -128,13 +137,16 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         </div>
         <Button
           minimal
-          onClick={() => _addNewSlide(SlideType.Normal, true)}
+          onClick={() => {
+            _addNewSlide(SlideType.Normal, true);
+            scrollToBottomDelayed();
+          }}
           className={css.addNewSlide}
           small={true}
           icon="add"
         ></Button>
       </div>
-      <div className={css.slidesHolder}>
+      <div className={css.slidesHolder} ref={slidesHolderRef}>
         {normalSlides.map((slideId: string) => {
           return (
             <div

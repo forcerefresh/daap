@@ -25,7 +25,7 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import { cloneDeep, get, includes, isEmpty, remove } from "lodash-es";
+import { cloneDeep, delay, get, includes, isEmpty, remove } from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
@@ -257,6 +257,14 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     });
   };
 
+  const layersHolderRef = useRef<HTMLDivElement | null>(null);
+  const scrollToBottomDelayed = () => {
+    delay(() => {
+      layersHolderRef.current?.scrollTo({ top: 10000000 });
+      console.log("scrollTo");
+    }, 1);
+  };
+
   return (
     <>
       <div className={css.layerPanel}>
@@ -271,14 +279,17 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
             <Button
               minimal
               disabled={!activeSlideId}
-              onClick={() => _addNewLayer(activeSlideId as string)}
+              onClick={() => {
+                _addNewLayer(activeSlideId as string);
+                scrollToBottomDelayed();
+              }}
               className={css.addNewLayer}
               small={true}
               icon="add"
             ></Button>
           </div>
         </div>
-        <div className={css.layersHolder}>
+        <div className={css.layersHolder} ref={layersHolderRef}>
           {layerArr?.map((layer) => {
             return (
               <div
