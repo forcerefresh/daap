@@ -1,6 +1,11 @@
 import { EffectType } from "./types";
 import { fadeDefaults, fadeDefinition } from "./fade/fade.definition";
 import { noneDefaults, noneDefinition } from "./none/none.definition";
+import {
+  noneStructuralDefaults,
+  noneStructuralDefinition,
+} from "./none-structural/none-structural.definition";
+
 import { zoomInDefaults, zoomInDefinition } from "./zoom/zoom.definition";
 import { slideDefaults, slideDefinition } from "./slide/slide.definition";
 import {
@@ -129,6 +134,8 @@ interface IEffectHolder {
 const effects: IEffectHolder[] = [];
 
 registerEffect(noneDefinition, noneDefaults);
+registerEffect(noneStructuralDefinition, noneStructuralDefaults);
+//
 registerEffect(fadeDefinition, fadeDefaults);
 registerEffect(zoomInDefinition, zoomInDefaults);
 registerEffect(slideDefinition, slideDefaults);
@@ -177,7 +184,8 @@ export function getEffectDefinition(effectId: string): IEffectHolder {
 }
 
 export function getEffectsOptions(
-  effectType: EffectType
+  effectType: EffectType,
+  canBeCombined?: boolean
 ): { label: string; value: string }[] {
   return effects
     .filter(
@@ -185,6 +193,11 @@ export function getEffectsOptions(
         (eff.defaults.supportedEffectTypes as EffectType[]).indexOf(
           effectType
         ) !== -1
+    )
+    .filter(
+      (eff) =>
+        typeof canBeCombined === "undefined" ||
+        eff.defaults.canBeCombined === canBeCombined
     )
     .map((item) => ({
       value: item.definition.id,

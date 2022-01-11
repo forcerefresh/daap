@@ -1,4 +1,4 @@
-import { Button, Tab, Tabs, Tag } from "@blueprintjs/core";
+import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import classnames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
@@ -55,15 +55,17 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           }
         />
 
-        <Tab
-          id="nav-panel"
-          title={
-            <>
-              <span>Nav</span>
-            </>
-          }
-          panel={<NavigationPanel />}
-        />
+        {panelName?.type === "object" && (
+          <Tab
+            id="nav-panel"
+            title={
+              <>
+                <span>Navigation</span>
+              </>
+            }
+            panel={<NavigationPanel />}
+          />
+        )}
 
         {/*<Tabs.Expander />
         <Button minimal icon="cog" />*/}

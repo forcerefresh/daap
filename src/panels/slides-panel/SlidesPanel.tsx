@@ -128,7 +128,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         </div>
         <Button
           minimal
-          onClick={() => _addNewSlide()}
+          onClick={() => _addNewSlide(SlideType.Normal, true)}
           className={css.addNewSlide}
           small={true}
           icon="add"
@@ -148,9 +148,12 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     selectedSlideIds.indexOf(slideId) !== -1,
                 },
                 {
-                  [css.active]:
+                  [css.propertiesActive]:
                     selectionForProperties?.id === slideId &&
                     selectionForProperties.type === "slide",
+                },
+                {
+                  [css.active]: slideId === activeSlideId,
                 }
               )}
             >

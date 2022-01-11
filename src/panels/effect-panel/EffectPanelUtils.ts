@@ -28,7 +28,10 @@ export const effectType2Name = (effectType: EffectType) => {
   return def[effectType];
 };
 
-export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
+export const getDefaultEffectConfigForType = (
+  effectType: EffectType,
+  isStructural: boolean
+): any => {
   switch (effectType) {
     case "in":
       return {
@@ -36,8 +39,9 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
         duration: 1000,
         ease: "none",
         timeDistribution: 50,
+        canBeCombined: !isStructural,
         effect: {
-          id: "none",
+          id: isStructural ? "none-structural" : "none",
           values: {},
         },
       };
@@ -47,8 +51,9 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
         duration: 1000,
         ease: "none",
         timeDistribution: 50,
+        canBeCombined: !isStructural,
         effect: {
-          id: "none",
+          id: isStructural ? "none-structural" : "none",
           values: {},
         },
       };
@@ -58,8 +63,9 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
         duration: -1,
         ease: "none",
         timeDistribution: 50,
+        canBeCombined: !isStructural,
         effect: {
-          id: "none",
+          id: isStructural ? "none-structural" : "none",
           values: {},
         },
       };
@@ -69,8 +75,9 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
         duration: -1,
         ease: "none",
         timeDistribution: 50,
+        canBeCombined: !isStructural,
         effect: {
-          id: "none",
+          id: isStructural ? "none-structural" : "none",
           values: {},
         },
       };
@@ -78,8 +85,9 @@ export const getDefaultEffectConfigForType = (effectType: EffectType): any => {
       return {
         delay: 0,
         duration: 2000,
+        canBeCombined: !isStructural,
         effect: {
-          id: "none",
+          id: isStructural ? "none-structural" : "none",
           values: {},
         },
       };

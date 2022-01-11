@@ -277,7 +277,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   key={layer?.id}
                   onClick={(event) => onLayerClick(event, layer.id)}
                   className={cx(css.layerInner, {
-                    [css.active]:
+                    [css.active]: activeLayerId === layer.id,
+                    [css.propertiesActive]:
                       selectionForProperties?.id === layer.id &&
                       selectionForProperties.type === "layer", //activeLayerId === layer.id,
                   })}
@@ -458,7 +459,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             onObjectClick(event, objectId);
                           }}
                           className={cx(css.objectHolder, {
-                            [css.active]:
+                            [css.active]: activeObjectId === objectId,
+                            [css.propertiesActive]:
                               selectionForProperties?.id === objectId &&
                               selectionForProperties.type === "object", // activeObjectId === objectId,
                             [css.selected]:

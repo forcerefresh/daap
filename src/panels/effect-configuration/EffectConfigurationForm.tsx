@@ -180,18 +180,19 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     </div>
   );
 
-  const selectedEffectName = getEffectsOptions(effectType).find(
-    (item) => item.value === transition.effect.id
-  )?.label;
+  const selectedEffectName = getEffectsOptions(
+    effectType,
+    transition.canBeCombined
+  ).find((item) => item.value === transition.effect.id)?.label;
 
   return (
     <>
       <div className={css.effectConfigurationForm}>
         <div className={classnames(css.inlineFlex, css.selectEffectRow)}>
           {getSelectField(
-            "Effect",
+            transition.canBeCombined ? "Attribute Effect" : "Structural Effect",
             transition.effect.id,
-            getEffectsOptions(effectType),
+            getEffectsOptions(effectType, transition.canBeCombined),
             (value: any) => {
               const newTransition = cloneDeep(transition);
               newTransition.effect.id = value;

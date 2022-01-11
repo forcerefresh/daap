@@ -101,7 +101,10 @@ export function initializeSlideAndLayer(): any {
   };
 }
 
-export function addNewSlide(slideType = SlideType.Normal): any {
+export function addNewSlide(
+  slideType = SlideType.Normal,
+  addLayer = false
+): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: ISlide = {
       id: uuid(),
@@ -119,6 +122,9 @@ export function addNewSlide(slideType = SlideType.Normal): any {
     dispatch(addSlide(slide));
     dispatch(activateSlide(slide.id));
     dispatch(selectSlides([slide.id]));
+    if (addLayer) {
+      dispatch(addNewLayer(slide.id));
+    }
   };
 }
 
@@ -268,6 +274,7 @@ export function addNewLayer(slideId: string): any {
 
     dispatch(addLayer(layer));
     dispatch(activateLayer(layer.id));
+    dispatch(selectForProperties({ type: "layer", id: layer.id }));
   };
 }
 

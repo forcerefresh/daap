@@ -64,6 +64,7 @@
 
     .layerToggle {
       margin-right: 0px;
+      margin-right: 5px;
       /*&.layerOpen {
         transform: rotate(90deg);
       }*/
@@ -194,6 +195,11 @@
         }
       }
     }
+  }
+
+  .propertiesActive {
+    color: #f5f337;
+    font-weight: bold;
   }
 
   .active {

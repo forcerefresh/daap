@@ -41,6 +41,7 @@
   }
 
   .slide {
+    cursor: default;
     display: flex;
     align-items: center;
     padding: 2px 4px;
@@ -78,6 +79,11 @@
         color: #444 !important;
       }
     }
+  }
+
+  .propertiesActive {
+    color: #f5f337;
+    font-weight: bold;
   }
 
   .active {

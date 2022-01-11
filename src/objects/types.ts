@@ -346,6 +346,7 @@ export interface ITransition {
   childEase?: string;
   effect: IEffect;
   overlap?: number;
+  canBeCombined: boolean;
 }
 
 export interface ISlideTransition {
