@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -8,6 +8,7 @@ import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
 import { ObjectType } from "../../objects/types";
+import { IntegrationContext } from "../../integration";
 
 export enum Panels {
   MyImages = "myImages",
@@ -48,18 +49,45 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     onSelect = noop,
     onRequestClose,
     className,
-    panelsToShow = [Panels.Images, Panels.Vectors],
+    panelsToShow = [Panels.MyImages, Panels.Images, Panels.Vectors],
   } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const ImageSelectComponent = globalContext?.getMyImageUploadComponent;
+
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
       <div>
         <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
+          {includes(panelsToShow, Panels.MyImages) && (
+            <Tab
+              id="myImages"
+              title="My Images"
+              panel={
+                <ImagesLibraryPanel
+                  uploadComponent={
+                    <ImageSelectComponent
+                      onSelect={(items) => {
+                        alert(items);
+                      }}
+                    />
+                  }
+                  api={`${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`}
+                  selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
           {includes(panelsToShow, Panels.Images) && (
             <Tab
               id="images"
               title="Images library"
               panel={
                 <ImagesLibraryPanel
+                  api={`${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`}
                   selectionType={selectionType}
                   onRequestClose={onRequestClose}
                   addObject={addObject}

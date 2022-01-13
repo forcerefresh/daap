@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -20,6 +20,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, noop, uniq } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
+import { getImageTags } from "../../utils/tags/tags";
 
 interface ImageItem {
   url: string;
@@ -48,6 +49,8 @@ interface ImageData {
 interface IMediaLibraryPanelProps {
   selectionType?: SelectionType;
   addObject?: boolean;
+  api: string;
+  uploadComponent?: ReactNode;
   onSelect?: (item: {
     type: ObjectType;
     initialValues: { [key: string]: any }[];
@@ -67,6 +70,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     onRequestClose,
     addObject = true,
     onSelect = noop,
+    api,
+    uploadComponent,
   } = props;
 
   const [images, setImages] = useState<ImageData[]>([]);
@@ -85,7 +90,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     console.log({ ...selectedTags });
     from = from === -1 ? images?.length || 0 : from;
 
-    let url = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1?from=${from}`;
+    let url = `${api}?from=${from}`;
     if (searchValue) {
       url += `&search=${encodeURIComponent(searchValue)}`;
     }
@@ -124,28 +129,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const tags = [
-    "Abstract",
-    "Architecture",
-    "Background",
-    "Baking",
-    "Texture",
-    "Business",
-    "Duotone",
-    "Fashion",
-    "Food",
-    "Drink",
-    "Holidays",
-    "Letters",
-    "Love",
-    "Nature",
-    "Animals",
-    "People",
-    "Roads",
-    "Sports",
-    "Technology",
-    "Transportation",
-  ];
+  const tags = getImageTags();
 
   const [selectedTags, setSelectedTags] = useState<{ [key: string]: boolean }>(
     {}
@@ -216,6 +200,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         setSelectedImage(-1);
       }}
     >
+      {uploadComponent}
       <div className={css.headerSection}>
         <InputGroup
           large

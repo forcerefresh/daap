@@ -1,9 +1,20 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
+import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
+import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
+import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
+
+export interface getMyImageUploadComponentProps {
+  onSelect: (items: any[]) => void;
+}
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
+  getMyImageUploadComponent: (() => {
+    return <div></div>;
+  }) as React.FC<getMyImageUploadComponentProps>,
+
   useAssetsHook: () => ({
     addMedia: (): Promise<{ url: string }> =>
       Promise.resolve({
@@ -131,6 +142,17 @@ function useAPIHookFactory() {
   }
 }
 
+function getMyImageUploadComponentFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "wp") {
+    return WPMyImageSelect;
+  }
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return ElectronMyImageSelect;
+  } else {
+    return MyImageSelect;
+  }
+}
+
 function useAssetsHookFactory() {
   return require("./integration/hooks/assets-hook/use-assets-hook")
     .useAssetsHook;
@@ -151,6 +173,7 @@ export const IntegrationContextProvider = (
         useAPIHook: useAPIHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
+        getMyImageUploadComponent: getMyImageUploadComponentFactory(),
       }}
     >
       {props.children}
