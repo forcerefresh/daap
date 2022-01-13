@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -17,10 +17,12 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, noop, uniq } from "lodash-es";
+import { debounce, noop, startsWith, uniq } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
+import { IntegrationContext } from "../../integration";
+import { ImageSetData } from "../../integration/hooks/my-images/my-images-common";
 
 interface ImageItem {
   url: string;
@@ -74,7 +76,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     uploadComponent,
   } = props;
 
-  const [images, setImages] = useState<ImageData[]>([]);
+  const globalContext = useContext(IntegrationContext);
+  const { fetchImages } = globalContext.useMyImagesHook();
+
+  const [images, setImages] = useState<ImageSetData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -99,8 +104,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         .map((tag) => encodeURIComponent(tag))
         .join(",")}`;
     }
-    fetch(url)
-      .then((res) => res.json())
+    fetchImages({} as any)
+      //fetch(url)
+      //.then((res) => res.json())
       .then(
         (result) => {
           console.log(result);
@@ -191,6 +197,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         />
       </div>
     );
+  };
+
+  const getImageUrl = (path: string) => {
+    return startsWith(path, "data:")
+      ? path
+      : `${process.env.REACT_APP_ASSETS_BASE_URL}/${path}`;
   };
 
   return (
@@ -322,7 +334,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     })}
                     width="200px"
                     key={idx}
-                    src={`${process.env.REACT_APP_ASSETS_BASE_URL}/${image.images.small.url}`}
+                    src={getImageUrl(image.images.small.url)}
                     alt=""
                     onClick={(e) => {
                       e.stopPropagation();
@@ -371,12 +383,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                   ObjectType.IMAGE, //cover
                                   {},
                                   {
-                                    url: `${
-                                      process.env.REACT_APP_ASSETS_BASE_URL
-                                    }/${
+                                    url: getImageUrl(
                                       (image?.images as any)[selectedResolution]
                                         ?.url
-                                    }`,
+                                    ),
                                     //placement: getDefaultCoveragePlacement,
                                   }
                                 );

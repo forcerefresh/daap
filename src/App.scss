@@ -10,6 +10,16 @@ html {
     z-index: 1000;
   }
 
+  .bp3-overlay-backdrop {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .bp3-dark {
+    .bp3-dialog {
+      background: #222222 !important;
+    }
+  }
+
   .bp3-overlay-content:focus,
   .bp3-menu:focus {
     outline: none !important;

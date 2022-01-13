@@ -55,9 +55,10 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const ImageSelectComponent = globalContext?.getMyImageUploadComponent;
 
+  const [forceUpdate, setForceUpdate] = useState(0);
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
-      <div>
+      <div key={forceUpdate}>
         <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
@@ -67,8 +68,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                 <ImagesLibraryPanel
                   uploadComponent={
                     <ImageSelectComponent
-                      onSelect={(items) => {
-                        alert(items);
+                      onComplete={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                      onStop={() => {
+                        setForceUpdate(Math.random());
                       }}
                     />
                   }

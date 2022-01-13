@@ -4,16 +4,36 @@ import { Preset, PresetGroup } from "./inputs/types";
 import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
+import { ImageSetData } from "./integration/hooks/my-images/my-images-common";
 
 export interface getMyImageUploadComponentProps {
-  onSelect: (items: any[]) => void;
+  onComplete: () => void;
+  onStop: () => void;
 }
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
-  getMyImageUploadComponent: (() => {
+  getMyImageUploadComponent: ((props) => {
     return <div></div>;
   }) as React.FC<getMyImageUploadComponentProps>,
+
+  useMyImagesHook: () => ({
+    upload: (
+      file: File
+    ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> =>
+      Promise.resolve({
+        status: "OK",
+      }),
+
+    fetchImages: (props: {
+      page: number;
+      tag?: string;
+      category?: string;
+      search?: string;
+    }): Promise<{ photos: ImageSetData[] }> => {
+      return Promise.resolve({ photos: [] });
+    },
+  }),
 
   useAssetsHook: () => ({
     addMedia: (): Promise<{ url: string }> =>
@@ -120,6 +140,15 @@ export function useAppRootSelector() {
 
 // *** PRIVATE INTEGRATION FACTORY FUNCTIONS ***
 
+function useMyImagesHookFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/my-images/electron-my-images-hook")
+      .myImagesHook;
+  } else {
+    return require("./integration/hooks/my-images/my-images-hook").myImagesHook;
+  }
+}
+
 function useMediaHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
     return require("./integration/hooks/media-hook/wp-use-media-hook")
@@ -143,14 +172,14 @@ function useAPIHookFactory() {
 }
 
 function getMyImageUploadComponentFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "wp") {
+  /*if (process.env.REACT_APP_INTEGRATION === "wp") {
     return WPMyImageSelect;
   }
   if (process.env.REACT_APP_INTEGRATION === "electron") {
     return ElectronMyImageSelect;
-  } else {
-    return MyImageSelect;
-  }
+  } else {*/
+  return MyImageSelect;
+  /** }*/
 }
 
 function useAssetsHookFactory() {
@@ -169,6 +198,7 @@ export const IntegrationContextProvider = (
   return (
     <IntegrationContext.Provider
       value={{
+        useMyImagesHook: useMyImagesHookFactory(),
         useMediaHook: useMediaHookFactory(),
         useAPIHook: useAPIHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
