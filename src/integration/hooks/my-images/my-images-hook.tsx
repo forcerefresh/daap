@@ -1,34 +1,36 @@
 // *** this file contains implementation for development
 
+import { ImageDataInfo, ImageData } from "../../../utils/assets/types";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
-import { ImageSetData, ImageSetDataMetadata } from "./my-images-common";
 
 export const myImagesHook = () => {
   const upload = (
     file: File,
-    fileMetadata: ImageSetDataMetadata
+    fileMetadata: ImageDataInfo
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     return new Promise(async (resolve) => {
-      const thumbFile = await resizeFile(file);
+      const thumbFile = await resizeFile(file, 80, 80, 70);
+      const smallFile = await resizeFile(file, 120, 120, 70);
+      const mediumFile = await resizeFile(file, 200, 200, 70);
 
       const myImages: any[] = JSON.parse(
         localStorage.getItem(`my-images`) || "[]"
       );
 
-      const item: ImageSetData = {
+      const item: ImageData = {
         ...fileMetadata,
         images: {
           original: {
             url: thumbFile as string,
-            size: { width: 100, height: 100, type: "jpg" },
+            size: { width: 80, height: 80, type: "jpg" },
           },
           small: {
-            url: thumbFile as string,
-            size: { width: 100, height: 100, type: "jpg" },
+            url: smallFile as string,
+            size: { width: 120, height: 120, type: "jpg" },
           },
           medium: {
-            url: thumbFile as string,
-            size: { width: 100, height: 100, type: "jpg" },
+            url: mediumFile as string,
+            size: { width: 200, height: 200, type: "jpg" },
           },
         },
       };
@@ -40,20 +42,27 @@ export const myImagesHook = () => {
       console.log(thumbFile);
       setTimeout(() => {
         resolve({ status: "OK" });
-      }, 2000);
+      }, 1);
     });
   };
 
   const fetchImages = async (props: {
-    page: number;
+    from: number;
     tag?: string;
-    category?: string;
     search?: string;
-  }): Promise<ImageSetData[]> => {
+    perPage?: number;
+  }): Promise<ImageData[]> => {
+    const { from, tag, search, perPage = 10 } = props;
+
     const myImages: any[] = JSON.parse(
       localStorage.getItem(`my-images`) || "[]"
     );
-    return { photos: myImages } as any; //ImageSetData[];
+
+    console.log(myImages.length);
+    console.log(props);
+    const retArr = myImages.splice(from, from + perPage);
+
+    return { photos: retArr } as any; //ImageSetData[];
   };
 
   return { upload, fetchImages };

@@ -4,8 +4,7 @@ import { Preset, PresetGroup } from "./inputs/types";
 import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
-import { ImageSetData } from "./integration/hooks/my-images/my-images-common";
-
+import { ImageData } from "./utils/assets/types";
 export interface getMyImageUploadComponentProps {
   onComplete: () => void;
   onStop: () => void;
@@ -26,11 +25,10 @@ export const IntegrationContext = React.createContext({
       }),
 
     fetchImages: (props: {
-      page: number;
-      tag?: string;
-      category?: string;
+      from: number;
+      tags?: string[];
       search?: string;
-    }): Promise<{ photos: ImageSetData[] }> => {
+    }): Promise<{ photos: ImageData[] }> => {
       return Promise.resolve({ photos: [] });
     },
   }),

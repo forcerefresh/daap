@@ -22,42 +22,22 @@ import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
 import { IntegrationContext } from "../../integration";
-import { ImageSetData } from "../../integration/hooks/my-images/my-images-common";
-
-interface ImageItem {
-  url: string;
-  size: {
-    height: number;
-    width: number;
-    type: string;
-  };
-}
-
-interface ImageData {
-  title: string;
-  images: {
-    thumbnail: ImageItem;
-    small: ImageItem;
-    medium: ImageItem;
-    large: ImageItem;
-    xlarge: ImageItem;
-    xxlarge: ImageItem;
-  };
-  categories: string[];
-  tags: string[];
-  rating: number;
-}
+import { ImageData } from "../../utils/assets/types";
 
 interface IMediaLibraryPanelProps {
   selectionType?: SelectionType;
   addObject?: boolean;
-  api: string;
   uploadComponent?: ReactNode;
   onSelect?: (item: {
     type: ObjectType;
     initialValues: { [key: string]: any }[];
   }) => void;
   onRequestClose: () => void;
+  fetchImagesFunc: (props: {
+    from: number;
+    tags?: string[];
+    search?: string;
+  }) => Promise<{ photos: ImageData[] }>;
 }
 
 export type IImagesPanelMergedProps = typeof mapDispatchToProps &
@@ -72,14 +52,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     onRequestClose,
     addObject = true,
     onSelect = noop,
-    api,
+
     uploadComponent,
+    fetchImagesFunc,
   } = props;
 
-  const globalContext = useContext(IntegrationContext);
-  const { fetchImages } = globalContext.useMyImagesHook();
-
-  const [images, setImages] = useState<ImageSetData[]>([]);
+  const [images, setImages] = useState<ImageData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -91,38 +69,28 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const fetchData = (from = -1) => {
     setLoading(true);
 
-    console.log("LOAD DATA");
-    console.log({ ...selectedTags });
     from = from === -1 ? images?.length || 0 : from;
 
-    let url = `${api}?from=${from}`;
-    if (searchValue) {
-      url += `&search=${encodeURIComponent(searchValue)}`;
-    }
-    if (Object.keys(selectedTags).length > 0) {
-      url += `&tags=${Object.keys(selectedTags)
-        .map((tag) => encodeURIComponent(tag))
-        .join(",")}`;
-    }
-    fetchImages({} as any)
-      //fetch(url)
-      //.then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          setImages([...images, ...result.photos]);
-          setLoading(false);
-          setHasMore(result.photos.length > 0);
-        },
+    fetchImagesFunc({
+      from,
+      search: searchValue,
+      tags: Object.keys(selectedTags),
+    }).then(
+      (result) => {
+        console.log(result);
+        setImages([...images, ...result.photos]);
+        setLoading(false);
+        setHasMore(result.photos.length > 0);
+      },
 
-        (error) => {
-          console.log(error);
-          /*this.setState({
+      (error) => {
+        console.log(error);
+        /*this.setState({
             isLoaded: true,
             error,
           });*/
-        }
-      );
+      }
+    );
 
     setTimeout(() => {
       console.log(uniq(badImages.current));
@@ -351,7 +319,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       <img
                         style={{ maxHeight: "400px", maxWidth: "400px" }}
                         key={idx}
-                        src={`${process.env.REACT_APP_ASSETS_BASE_URL}/${image.images.medium.url}`}
+                        src={getImageUrl(image.images.medium?.url || "")}
                         alt=""
                       />
                     </div>
@@ -366,7 +334,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                 setSelectedResolution(sizeAlias);
                               }}
                             >
-                              {oneimg.size.width}px x {oneimg.size.height}px
+                              {oneimg?.size.width}px x {oneimg?.size.height}px
                             </Checkbox>
                           </p>
                         )

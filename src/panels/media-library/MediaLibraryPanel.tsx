@@ -9,6 +9,7 @@ import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
 import { ObjectType } from "../../objects/types";
 import { IntegrationContext } from "../../integration";
+import { ImageData } from "../../utils/assets/types";
 
 export enum Panels {
   MyImages = "myImages",
@@ -55,7 +56,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const ImageSelectComponent = globalContext?.getMyImageUploadComponent;
 
+  const { fetchImages } = globalContext.useMyImagesHook();
+
   const [forceUpdate, setForceUpdate] = useState(0);
+
+  const apiUrl = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`;
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
       <div key={forceUpdate}>
@@ -66,6 +71,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="My Images"
               panel={
                 <ImagesLibraryPanel
+                  fetchImagesFunc={fetchImages}
                   uploadComponent={
                     <ImageSelectComponent
                       onComplete={() => {
@@ -76,7 +82,6 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                       }}
                     />
                   }
-                  api={`${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`}
                   selectionType={selectionType}
                   onRequestClose={onRequestClose}
                   addObject={addObject}
@@ -91,7 +96,23 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="Images library"
               panel={
                 <ImagesLibraryPanel
-                  api={`${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`}
+                  fetchImagesFunc={(props: {
+                    from: number;
+                    tags?: string[];
+                    search?: string;
+                  }): Promise<{ photos: ImageData[] }> => {
+                    const { from, tags = [], search } = props;
+                    let url = `${apiUrl}?from=${from}`;
+                    if (search) {
+                      url += `&search=${encodeURIComponent(search)}`;
+                    }
+                    if (tags.length > 0) {
+                      url += `&tags=${tags
+                        .map((tag) => encodeURIComponent(tag))
+                        .join(",")}`;
+                    }
+                    return fetch(url).then((res) => res.json());
+                  }}
                   selectionType={selectionType}
                   onRequestClose={onRequestClose}
                   addObject={addObject}
