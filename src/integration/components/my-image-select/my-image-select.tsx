@@ -8,6 +8,7 @@ import {
   getMyImageUploadComponentProps,
   IntegrationContext,
 } from "../../../integration";
+import { ImageDataInfo } from "../../../utils/assets/types";
 import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
 import { getImageTags } from "../../../utils/tags/tags";
 import { formatBytes, getCroppedFileName } from "../../../utils/utils";
@@ -19,7 +20,7 @@ import {
 } from "./common-styles";
 import css from "./my-image-select.module.scss";
 
-interface UploadFileInfo {
+export interface UploadFileInfo {
   tag: string;
   title: string;
   filename: string;
@@ -150,7 +151,7 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
       {uploadInProgress && (
         <UploadDialog
           files={acceptedFiles}
-          filesInfo={formData}
+          filesInfoArr={formData}
           onFile={(file: File) => {
             const newFormData = [...formData];
             const idx = acceptedFiles.indexOf(file);
@@ -186,13 +187,13 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
 /** UPLOAD DIALOG */
 interface UploadDialogProps {
   files: File[];
-  filesInfo: any[];
+  filesInfoArr: UploadFileInfo[];
   onFile: (file: File) => void;
   onAll: () => void;
   onCancel: () => void;
 }
 function UploadDialog(props: UploadDialogProps) {
-  const { files, filesInfo, onFile, onAll, onCancel } = props;
+  const { files, filesInfoArr, onFile, onAll, onCancel } = props;
 
   const totalFiles = files.length;
 
@@ -211,18 +212,22 @@ function UploadDialog(props: UploadDialogProps) {
 
   useEffect(() => {
     const file = files[currentUploadIndex];
-    upload(file).then((status) => {
-      if (isUnMounted.current) return;
+    const filesInfo = filesInfoArr[currentUploadIndex];
+    //(file.name as any) = filesInfo.filename;
+    upload(file, { tags: [filesInfo.tag], title: filesInfo.title }).then(
+      (status) => {
+        if (isUnMounted.current) return;
 
-      onFile(file);
+        onFile(file);
 
-      if (currentUploadIndex + 1 === totalFiles) {
-        onAll();
-      } else {
-        // THIS WILL START NEXT FILE UPLOAD
-        setCurrentUploadIndex(currentUploadIndex + 1);
+        if (currentUploadIndex + 1 === totalFiles) {
+          onAll();
+        } else {
+          // THIS WILL START NEXT FILE UPLOAD
+          setCurrentUploadIndex(currentUploadIndex + 1);
+        }
       }
-    });
+    );
   }, [currentUploadIndex]);
 
   return (

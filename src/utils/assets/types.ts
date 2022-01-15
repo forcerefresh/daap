@@ -4,10 +4,10 @@ export interface ImageItem {
 }
 
 export interface ImageDataInfo {
-  title: "";
-  categories: string[];
-  tags: string[];
-  rating: number;
+  title: string;
+  categories?: string[];
+  tags?: string[];
+  rating?: number;
 }
 
 export interface ImageData extends ImageDataInfo {

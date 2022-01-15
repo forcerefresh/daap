@@ -2,9 +2,12 @@ import React, { ReactNode } from "react";
 import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
 import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
-import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
+import {
+  MyImageSelect,
+  UploadFileInfo,
+} from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
-import { ImageData } from "./utils/assets/types";
+import { ImageData, ImageDataInfo } from "./utils/assets/types";
 export interface getMyImageUploadComponentProps {
   onComplete: () => void;
   onStop: () => void;
@@ -18,7 +21,8 @@ export const IntegrationContext = React.createContext({
 
   useMyImagesHook: () => ({
     upload: (
-      file: File
+      file: File,
+      filesInfo: ImageDataInfo
     ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> =>
       Promise.resolve({
         status: "OK",
@@ -26,7 +30,7 @@ export const IntegrationContext = React.createContext({
 
     fetchImages: (props: {
       from: number;
-      tags?: string[];
+      tag?: string;
       search?: string;
     }): Promise<{ photos: ImageData[] }> => {
       return Promise.resolve({ photos: [] });

@@ -1,4 +1,10 @@
-import React, { ReactNode, useContext, useEffect, useState } from "react";
+import React, {
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -35,7 +41,7 @@ interface IMediaLibraryPanelProps {
   onRequestClose: () => void;
   fetchImagesFunc: (props: {
     from: number;
-    tags?: string[];
+    tag?: string;
     search?: string;
   }) => Promise<{ photos: ImageData[] }>;
 }
@@ -64,20 +70,33 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [selectedResolution, setSelectedResolution] =
     useState<string>("medium");
 
+  const [requestReload, setRequestReload] = useState<number>(0);
+
+  const reload = () => {
+    setRequestReload(requestReload + 1);
+  };
+
   const badImages = React.useRef<number[]>([]);
 
+  const resetImages = () => {
+    setImages([]);
+  };
   const fetchData = (from = -1) => {
     setLoading(true);
 
     from = from === -1 ? images?.length || 0 : from;
 
+    console.log(images);
+
     fetchImagesFunc({
       from,
       search: searchValue,
-      tags: Object.keys(selectedTags),
+      tag: Object.keys(selectedTags)[0],
     }).then(
       (result) => {
         console.log(result);
+        console.log(images);
+
         setImages([...images, ...result.photos]);
         setLoading(false);
         setHasMore(result.photos.length > 0);
@@ -92,16 +111,19 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       }
     );
 
-    setTimeout(() => {
+    /*setTimeout(() => {
       console.log(uniq(badImages.current));
-    }, 500);
+    }, 500);*/
   };
 
   useEffect(() => {
     debounceFetchData();
   }, []);
 
-  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
+  const debounceFetchData = useMemo(
+    () => debounce((from = -1) => fetchData(from), 100),
+    [images]
+  );
 
   const tags = getImageTags();
 
@@ -112,17 +134,22 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const toggleTag = (tag: string) => {
     setSelectedImage(-1);
     setSearchValue("");
+    let selectedTagsClone = { ...selectedTags };
+    selectedTagsClone[tag]
+      ? (selectedTagsClone = {})
+      : (selectedTagsClone = { [tag]: true });
     setSelectedTags(
-      { [tag]: !selectedTags[tag] }
+      selectedTagsClone
       //removeFalsy({ ...selectedTags, [tag]: !selectedTags[tag] })
     );
-    setImages([]);
+    resetImages();
+    reload();
   };
 
   useEffect(() => {
     console.log({ ...selectedTags });
     debounceFetchData(0);
-  }, [selectedTags]);
+  }, [requestReload]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
 
@@ -191,8 +218,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
               large
               icon="arrow-right"
               onClick={() => {
-                setImages(() => []);
-                debounceFetchData(0);
+                setSelectedImage(-1);
+                resetImages();
+                reload();
               }}
             />
           }
@@ -202,8 +230,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
-              setImages(() => []);
-              debounceFetchData(0);
+              setSelectedImage(-1);
+              resetImages();
+              reload();
             }
           }}
         ></InputGroup>
@@ -262,6 +291,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         }}
       >
         <InfiniteScroll
+          className={css.infScroll}
           dataLength={images?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
@@ -296,19 +326,23 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   minimal
                   isOpen={selectedImage === idx}
                 >
-                  <img
-                    className={classnames(css.image, {
+                  <div
+                    className={classnames(css.imageListHolder, {
                       [css.selectedImage]: selectedImage === idx,
                     })}
-                    width="200px"
-                    key={idx}
-                    src={getImageUrl(image.images.small.url)}
-                    alt=""
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedImage(idx);
-                    }}
-                  />
+                  >
+                    <img
+                      width="200px"
+                      key={idx}
+                      src={getImageUrl(image.images.small.url)}
+                      alt=""
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage(idx);
+                      }}
+                    />
+                    <div className={css.imageListTitle}>{image.title}</div>
+                  </div>
                   <div
                     className={css.popoverHolder}
                     onClick={(event) => {

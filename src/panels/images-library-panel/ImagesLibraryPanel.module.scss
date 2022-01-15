@@ -17,7 +17,7 @@
   //height: calc(100vh - 310px);
 
   img {
-    margin: 8px;
+    // margin: 8px;
   }
   :global {
     .infinite-scroll-component {
@@ -67,22 +67,40 @@
   }
 }
 
+.infScroll {
+  padding: 2px;
+}
 .previewTitle {
   padding: 0px 0px 10px 0px;
   font-weight: bold;
 }
 
+.imageListTitle {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .selectedImage {
-  border: 8px solid rgba(99, 99, 99, 0.5) !important;
+  //border: 8px solid rgba(99, 99, 99, 0.5) !important;
   box-shadow: 0 0 0 1px #137cbd;
 }
 
+.imageListHolder {
+  border: 8px solid transparent;
+  &:hover {
+    background: rgba(99, 99, 99, 0.5);
+    //border: 8px solid rgba(99, 99, 99, 0.5);
+  }
+}
+/*
 .image {
   border: 8px solid transparent;
   &:hover {
     border: 8px solid rgba(99, 99, 99, 0.5);
   }
-}
+}*/
 
 .selectionImageHolder {
   position: relative;

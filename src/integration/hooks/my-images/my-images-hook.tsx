@@ -8,6 +8,7 @@ export const myImagesHook = () => {
     file: File,
     fileMetadata: ImageDataInfo
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
+    console.log(fileMetadata);
     return new Promise(async (resolve) => {
       const thumbFile = await resizeFile(file, 80, 80, 70);
       const smallFile = await resizeFile(file, 120, 120, 70);
@@ -54,9 +55,20 @@ export const myImagesHook = () => {
   }): Promise<ImageData[]> => {
     const { from, tag, search, perPage = 10 } = props;
 
-    const myImages: any[] = JSON.parse(
+    let myImages: ImageData[] = JSON.parse(
       localStorage.getItem(`my-images`) || "[]"
     );
+
+    console.log(tag);
+    if (tag) {
+      myImages = myImages.filter(
+        (image) => image.tags && image.tags.indexOf(tag) !== -1
+      );
+    }
+
+    if (search) {
+      myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
+    }
 
     console.log(myImages.length);
     console.log(props);
