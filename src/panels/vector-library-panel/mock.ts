@@ -1,4 +1,4 @@
-import { VectorData } from "./VectorLibraryPanel";
+import { VectorData } from "../../utils/assets/types";
 
 const dataArr: VectorData[] = [
   {
@@ -1318,8 +1318,8 @@ const dataArr: VectorData[] = [
     rating: 5,
   },
 ];
-export function fetchMock(): Promise<{ vectors: VectorData[] }> {
+export function fetchMock(): Promise<{ data: VectorData[]; hasMore: boolean }> {
   return new Promise((resolve, rejecte) => {
-    resolve({ vectors: dataArr });
+    resolve({ data: dataArr, hasMore: false });
   });
 }

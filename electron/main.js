@@ -184,13 +184,6 @@ ipcMain.handle("apiGetNextProjectId", async (event) => {
   return maxId + 1;
 });
 
-function checkFileExists(file) {
-  return fs.promises
-    .access(file, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
-}
-
 async function loadProjects() {
   const projectPath = getProjectPath();
 
@@ -218,4 +211,128 @@ function getProjectPath() {
     fs.mkdirSync(projectsDir);
   }
   return path.join(userDataPath, "projects", "projects.json");
+}
+
+// MY IMAGES ---------
+
+function convertToBlob(base64image) {
+  // convert base64 to raw binary data held in a string
+  var byteString = atob(base64image.split(",")[1]);
+  // separate out the mime component
+  var mimeString = base64image.split(",")[0].split(":")[1].split(";")[0];
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+  var dw = new DataView(ab);
+  for (var i = 0; i < byteString.length; i++) {
+    dw.setUint8(i, byteString.charCodeAt(i));
+    alert("arrived here");
+
+    // write the ArrayBuffer to a blob, and you're done
+    return new Blob([ab], {
+      type: mimeString,
+    });
+  }
+}
+
+ipcMain.handle("myImagesUpload", async (event, dataStr) => {
+  const data = JSON.parse(dataStr);
+  const { fileBase64, fileMetadata } = data;
+
+  let myImages = await loadMyImages();
+
+  //const data2 = await fetch(fileBase64).then((res) => res.blob());
+
+  const userDataPath = app.getPath("userData");
+  const myImagePath = path.join(userDataPath, "my-images", "image.jpg");
+
+  let base64Image = fileBase64.split(";base64,").pop();
+
+  await fsPromise.writeFile(myImagePath, base64Image, { encoding: "base64" });
+
+  /// const data2 = convertToBlob(fileBase64);
+  //console.log(fileBase64);
+  return { status: "OK" };
+});
+
+ipcMain.handle("myImagesFetchImages", async (event, dataStr) => {
+  const data = JSON.parse(dataStr);
+  const { from, tag, search, perPage } = data;
+
+  let myImages = await loadMyImages();
+
+  if (tag) {
+    myImages = myImages.filter(
+      (image) => image.tags && image.tags.indexOf(tag) !== -1
+    );
+  }
+
+  if (search) {
+    myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
+  }
+
+  myImages = myImages.splice(from, from + perPage);
+
+  return { photos: myImages };
+});
+
+async function loadMyImages() {
+  const myImagesPath = getMyImagePath();
+
+  const exist = await checkFileExists(myImagesPath);
+  let myImages = [];
+  if (exist) {
+    const myImagesStr = await fsPromise.readFile(myImagesPath, "utf-8");
+    myImages = JSON.parse(myImagesStr);
+  }
+
+  return myImages;
+}
+
+async function saveMyImages(projects) {
+  await fsPromise.writeFile(
+    getMyImagePath(),
+    JSON.stringify(projects, undefined, 2)
+  );
+}
+
+function getMyImagePath() {
+  const userDataPath = app.getPath("userData");
+  const myImagesDir = path.join(userDataPath, "my-images");
+  if (!fs.existsSync(myImagesDir)) {
+    fs.mkdirSync(myImagesDir);
+  }
+  return path.join(userDataPath, "my-images", "my-images.json");
+}
+
+/*
+const { from, tag, search, perPage = 10 } = props;
+
+let myImages: ImageData[] = JSON.parse(
+  localStorage.getItem(`my-images`) || "[]"
+);
+
+console.log(tag);
+if (tag) {
+  myImages = myImages.filter(
+    (image) => image.tags && image.tags.indexOf(tag) !== -1
+  );
+}
+
+if (search) {
+  myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
+}
+
+console.log(myImages.length);
+console.log(props);
+const retArr = myImages.splice(from, from + perPage);
+
+return { photos: retArr } as any; //ImageSetData[];*/
+
+// UTILS -------
+
+function checkFileExists(file) {
+  return fs.promises
+    .access(file, fs.constants.F_OK)
+    .then(() => true)
+    .catch(() => false);
 }

@@ -9,12 +9,14 @@ import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
 import { ObjectType } from "../../objects/types";
 import { IntegrationContext } from "../../integration";
-import { ImageData } from "../../utils/assets/types";
+import { ImageData, VectorData } from "../../utils/assets/types";
+import { fetchMock } from "../vector-library-panel/mock";
 
 export enum Panels {
   MyImages = "myImages",
-  Images = "images",
+  MyVideos = "myVideos",
   MyVectors = "myVectors",
+  Images = "images",
   Vectors = "vectors",
 }
 
@@ -50,20 +52,26 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     onSelect = noop,
     onRequestClose,
     className,
-    panelsToShow = [Panels.MyImages, Panels.Images, Panels.Vectors],
+    panelsToShow = [
+      Panels.MyImages,
+      Panels.MyVideos,
+      Panels.MyVectors,
+      Panels.Images,
+      Panels.Vectors,
+    ],
   } = props;
 
   const globalContext = useContext(IntegrationContext);
-  const ImageSelectComponent = globalContext?.getMyImageUploadComponent;
+  const UploadComponent = globalContext?.getMyUploadComponent;
 
-  const { fetchImages } = globalContext.useMyImagesHook();
+  const { fetchImages, deleteImages } = globalContext.useMyImagesHook();
 
   const [forceUpdate, setForceUpdate] = useState(0);
 
   const apiUrl = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`;
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
-      <div key={forceUpdate}>
+      <div>
         <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
@@ -71,9 +79,13 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="My Images"
               panel={
                 <ImagesLibraryPanel
+                  type="image"
+                  key={forceUpdate}
+                  deleteImagesFunc={deleteImages}
                   fetchImagesFunc={fetchImages}
                   uploadComponent={
-                    <ImageSelectComponent
+                    <UploadComponent
+                      type="image"
                       onComplete={() => {
                         setForceUpdate(Math.random());
                       }}
@@ -90,17 +102,75 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               }
             />
           )}
+          {includes(panelsToShow, Panels.MyVideos) && (
+            <Tab
+              id="myVideos"
+              title="My Videos"
+              panel={
+                <ImagesLibraryPanel
+                  type="video"
+                  key={forceUpdate}
+                  deleteImagesFunc={deleteImages}
+                  fetchImagesFunc={fetchImages}
+                  uploadComponent={
+                    <UploadComponent
+                      type="video"
+                      onComplete={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                      onStop={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                    />
+                  }
+                  selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
+          {includes(panelsToShow, Panels.MyVectors) && (
+            <Tab
+              id="myVectors"
+              title="My Vectors"
+              panel={
+                <VectorsLibraryPanel
+                  key={forceUpdate}
+                  deleteImagesFunc={deleteImages}
+                  fetchImagesFunc={fetchImages}
+                  uploadComponent={
+                    <UploadComponent
+                      type="vector"
+                      onComplete={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                      onStop={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                    />
+                  }
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
           {includes(panelsToShow, Panels.Images) && (
             <Tab
               id="images"
-              title="Images library"
+              title="Image library"
               panel={
                 <ImagesLibraryPanel
+                  type="image"
+                  key={forceUpdate}
                   fetchImagesFunc={(props: {
                     from: number;
                     tags?: string[];
                     search?: string;
-                  }): Promise<{ photos: ImageData[] }> => {
+                  }): Promise<{ data: ImageData[]; hasMore: boolean }> => {
                     const { from, tags = [], search } = props;
                     let url = `${apiUrl}?from=${from}`;
                     if (search) {
@@ -127,6 +197,14 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="Vector library"
               panel={
                 <VectorsLibraryPanel
+                  fetchImagesFunc={(props: {
+                    from: number;
+                    tags?: string[];
+                    search?: string;
+                  }): Promise<{ data: VectorData[]; hasMore: boolean }> => {
+                    return fetchMock();
+                  }}
+                  key={forceUpdate}
                   onRequestClose={onRequestClose}
                   addObject={addObject}
                   onSelect={onSelect}

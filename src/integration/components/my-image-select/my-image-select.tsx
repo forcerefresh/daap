@@ -5,10 +5,10 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
 import { getSelectField, getTextField } from "../../../inputs/input-utils";
 import {
-  getMyImageUploadComponentProps,
+  getMyUploadComponentProps,
   IntegrationContext,
 } from "../../../integration";
-import { ImageDataInfo } from "../../../utils/assets/types";
+import { MediaDataInfo, MediaType } from "../../../utils/assets/types";
 import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
 import { getImageTags } from "../../../utils/tags/tags";
 import { formatBytes, getCroppedFileName } from "../../../utils/utils";
@@ -26,16 +26,14 @@ export interface UploadFileInfo {
   filename: string;
   uploaded?: boolean;
 }
-
+/*
 interface MyImageSelectProps {
   onComplete: () => void;
   onStop: () => void;
 }
-
-export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
-  props
-) => {
-  const { onStop, onComplete } = props;
+*/
+export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
+  const { onStop, onComplete, type } = props;
   const {
     acceptedFiles,
     getRootProps,
@@ -44,7 +42,14 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept: "image/jpeg, image/png, image/gif",
+    accept:
+      type === "image"
+        ? "image/jpeg, image/png, image/gif"
+        : type === "video"
+        ? "video/mp4"
+        : type === "vector"
+        ? "image/svg+xml"
+        : undefined,
   });
   const [formData, setFormData] = useState<UploadFileInfo[]>([]);
 
@@ -109,7 +114,19 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
       <section className="container">
         <div {...getRootProps({ style: style as any })}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          {type === "image" ? (
+            <p>
+              Drag 'n' drop some Images here, or click to open select dialog.
+            </p>
+          ) : type === "video" ? (
+            <p>
+              Drag 'n' drop some Videos here, or click to open select dialog.
+            </p>
+          ) : type === "vector" ? (
+            <p>
+              Drag 'n' drop some SVG files here, or click to open select dialog.
+            </p>
+          ) : null}
         </div>
         {acceptedFiles.length > 0 && (
           <div className={css.uploadFileHolder}>
@@ -150,6 +167,7 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
 
       {uploadInProgress && (
         <UploadDialog
+          type={type}
           files={acceptedFiles}
           filesInfoArr={formData}
           onFile={(file: File) => {
@@ -186,6 +204,7 @@ export const MyImageSelect: React.FC<getMyImageUploadComponentProps> = (
 
 /** UPLOAD DIALOG */
 interface UploadDialogProps {
+  type: MediaType;
   files: File[];
   filesInfoArr: UploadFileInfo[];
   onFile: (file: File) => void;
@@ -193,7 +212,7 @@ interface UploadDialogProps {
   onCancel: () => void;
 }
 function UploadDialog(props: UploadDialogProps) {
-  const { files, filesInfoArr, onFile, onAll, onCancel } = props;
+  const { type, files, filesInfoArr, onFile, onAll, onCancel } = props;
 
   const totalFiles = files.length;
 
@@ -214,7 +233,7 @@ function UploadDialog(props: UploadDialogProps) {
     const file = files[currentUploadIndex];
     const filesInfo = filesInfoArr[currentUploadIndex];
     //(file.name as any) = filesInfo.filename;
-    upload(file, { tags: [filesInfo.tag], title: filesInfo.title }).then(
+    upload(type, file, { tags: [filesInfo.tag], title: filesInfo.title }).then(
       (status) => {
         if (isUnMounted.current) return;
 

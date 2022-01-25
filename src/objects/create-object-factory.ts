@@ -1644,7 +1644,12 @@ function createVideoObject(
   ];
 
   const values = {
-    url: { url: "", width: 960, height: 540, isPlaceholder: true },
+    url: initialValue?.url || {
+      url: "",
+      width: 960,
+      height: 540,
+      isPlaceholder: true,
+    },
   };
 
   return {
@@ -1685,7 +1690,6 @@ function createSvgObject(
       </svg>`,
       },
     },
-
     {
       displayName: "Fill",
       propertyName: "fill",

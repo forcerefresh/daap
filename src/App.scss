@@ -18,6 +18,12 @@ html {
     .bp3-dialog {
       background: #222222 !important;
     }
+    .bp3-popover {
+      background: #333333;
+    }
+    .bp3-popover-content {
+      background: none !important;
+    }
   }
 
   .bp3-overlay-content:focus,

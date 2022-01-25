@@ -1,0 +1,9 @@
+## Effects review
+
+### square-mask
+
+- types: added,
+- test: done
+- bugs: ...
+- improve effect: ...
+- improve form: ...

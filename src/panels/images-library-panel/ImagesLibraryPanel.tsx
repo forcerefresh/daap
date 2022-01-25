@@ -1,18 +1,17 @@
-import React, {
-  ReactNode,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ImagesLibraryPanel.module.scss";
 import {
+  Alert,
   Button,
   Checkbox,
+  Icon,
   InputGroup,
+  Intent,
+  Menu,
+  MenuItem,
   Popover,
   PopoverInteractionKind,
   Position,
@@ -23,27 +22,35 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, noop, startsWith, uniq } from "lodash-es";
+import { debounce, filter, noop, startsWith } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
-import { IntegrationContext } from "../../integration";
-import { ImageData } from "../../utils/assets/types";
+import { ImageData, MediaType, VideoData } from "../../utils/assets/types";
+import TagsView from "../../utils/components/tags-view/TagsView";
 
 interface IMediaLibraryPanelProps {
+  type: "image" | "video";
+  uploadComponent?: ReactNode;
+  fetchImagesFunc: (props: {
+    type: MediaType;
+    from: number;
+    tags?: string[];
+    search?: string;
+    perPage?: number;
+  }) => Promise<{ data: ImageData[]; hasMore: boolean }>;
+  deleteImagesFunc?: (
+    type: MediaType,
+    ids: string[]
+  ) => Promise<{ deletedIds: string[] }>;
+  //
   selectionType?: SelectionType;
   addObject?: boolean;
-  uploadComponent?: ReactNode;
   onSelect?: (item: {
     type: ObjectType;
     initialValues: { [key: string]: any }[];
   }) => void;
   onRequestClose: () => void;
-  fetchImagesFunc: (props: {
-    from: number;
-    tag?: string;
-    search?: string;
-  }) => Promise<{ photos: ImageData[] }>;
 }
 
 export type IImagesPanelMergedProps = typeof mapDispatchToProps &
@@ -52,15 +59,17 @@ export type IImagesPanelMergedProps = typeof mapDispatchToProps &
 
 const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const {
+    uploadComponent,
+    fetchImagesFunc,
+    deleteImagesFunc,
+    //
+    type,
     selectionType = SelectionType.Single,
     activeLayerId,
     _addNewObject,
     onRequestClose,
     addObject = true,
     onSelect = noop,
-
-    uploadComponent,
-    fetchImagesFunc,
   } = props;
 
   const [images, setImages] = useState<ImageData[]>([]);
@@ -71,6 +80,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     useState<string>("medium");
 
   const [requestReload, setRequestReload] = useState<number>(0);
+
+  const [imagesForDelete, setImagesForDelete] = useState<
+    ImageData[] | undefined
+  >(undefined);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const reload = () => {
     setRequestReload(requestReload + 1);
@@ -89,17 +103,19 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     console.log(images);
 
     fetchImagesFunc({
+      type: type,
       from,
       search: searchValue,
-      tag: Object.keys(selectedTags)[0],
+      tags: Object.keys(selectedTags),
+      perPage: 20,
     }).then(
       (result) => {
         console.log(result);
         console.log(images);
-
-        setImages([...images, ...result.photos]);
+        const data = result.data || (result as any).photos;
+        setImages([...images, ...data]);
         setLoading(false);
-        setHasMore(result.photos.length > 0);
+        setHasMore(result.hasMore);
       },
 
       (error) => {
@@ -133,7 +149,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   const toggleTag = (tag: string) => {
     setSelectedImage(-1);
-    setSearchValue("");
+    //setSearchValue("");
     let selectedTagsClone = { ...selectedTags };
     selectedTagsClone[tag]
       ? (selectedTagsClone = {})
@@ -154,11 +170,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [selectedImage, setSelectedImage] = useState<number>(-1);
 
   const qwe = (image: any, idx: number) => {
-    if (!image.images.small) {
-      badImages.current.push(idx);
-      //console.log(image.title);
+    if (image.images) {
+      if (!image.images.small) {
+        badImages.current.push(idx);
+        //console.log(image.title);
+      }
     }
-
     return null;
   };
 
@@ -316,7 +333,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           {images?.map((image, idx) => (
             <>
               {qwe(image, idx)}
-              {image?.images?.small ? (
+              {image?.images?.small || (image as any)?.videos ? (
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.RIGHT}
@@ -334,7 +351,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     <img
                       width="200px"
                       key={idx}
-                      src={getImageUrl(image.images.small.url)}
+                      src={getImageUrl(
+                        image?.images?.small?.url ||
+                          (image as any).thumbnails?.small.url
+                      )}
                       alt=""
                       onClick={(e) => {
                         e.stopPropagation();
@@ -342,6 +362,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       }}
                     />
                     <div className={css.imageListTitle}>{image.title}</div>
+                    <div className={css.imageListTabs}>
+                      <TagsView tags={image?.tags || []} />
+                    </div>
                   </div>
                   <div
                     className={css.popoverHolder}
@@ -350,48 +373,89 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     }}
                   >
                     <div>
-                      <img
-                        style={{ maxHeight: "400px", maxWidth: "400px" }}
-                        key={idx}
-                        src={getImageUrl(image.images.medium?.url || "")}
-                        alt=""
-                      />
+                      {type === "image" && (
+                        <img
+                          style={{ maxHeight: "400px", maxWidth: "400px" }}
+                          key={idx}
+                          src={getImageUrl(
+                            image.images?.medium?.url ||
+                              (image as any).thumbnails?.medium.url ||
+                              ""
+                          )}
+                          alt=""
+                        />
+                      )}
+
+                      {type === "video" && (
+                        <video
+                          autoPlay
+                          style={{ maxHeight: "400px", maxWidth: "400px" }}
+                          key={idx}
+                          src={(image as any as VideoData).videos.original.url}
+                        />
+                      )}
                     </div>
-                    <div>
-                      <Text className={css.previewTitle}>Chose resolution</Text>
-                      {Object.entries(image.images).map(
-                        ([sizeAlias, oneimg]) => (
-                          <p>
-                            <Checkbox
-                              checked={selectedResolution === sizeAlias}
-                              onChange={() => {
-                                setSelectedResolution(sizeAlias);
-                              }}
-                            >
-                              {oneimg?.size.width}px x {oneimg?.size.height}px
-                            </Checkbox>
-                          </p>
-                        )
+                    <div style={{ paddingBottom: "40px" }}>
+                      {!!image.images && (
+                        <>
+                          <Text className={css.previewTitle}>
+                            Chose resolution
+                          </Text>
+                          {Object.entries(image.images).map(
+                            ([sizeAlias, oneimg]) => (
+                              <p>
+                                <Checkbox
+                                  checked={selectedResolution === sizeAlias}
+                                  onChange={() => {
+                                    setSelectedResolution(sizeAlias);
+                                  }}
+                                >
+                                  {oneimg?.size.width}px x {oneimg?.size.height}
+                                  px
+                                </Checkbox>
+                              </p>
+                            )
+                          )}
+                        </>
                       )}
 
                       {/* Create new object*/}
                       {addObject && selectionType === SelectionType.Single && (
                         <Button
+                          intent="primary"
                           onClick={() => {
                             if (activeLayerId) {
                               if (addObject) {
-                                _addNewObject(
-                                  activeLayerId,
-                                  ObjectType.IMAGE, //cover
-                                  {},
-                                  {
-                                    url: getImageUrl(
-                                      (image?.images as any)[selectedResolution]
-                                        ?.url
-                                    ),
-                                    //placement: getDefaultCoveragePlacement,
-                                  }
-                                );
+                                if (type === "image") {
+                                  _addNewObject(
+                                    activeLayerId,
+                                    ObjectType.IMAGE, //cover
+                                    {},
+                                    {
+                                      url: getImageUrl(
+                                        (image?.images as any)[
+                                          selectedResolution
+                                        ]?.url
+                                      ),
+                                    }
+                                  );
+                                }
+                                if (type === "video") {
+                                  _addNewObject(
+                                    activeLayerId,
+                                    ObjectType.VIDEO, //cover
+                                    {},
+                                    {
+                                      url: {
+                                        url: (image as any as VideoData).videos
+                                          .original.url,
+                                        width: 960,
+                                        height: 540,
+                                        isPlaceholder: false,
+                                      },
+                                    }
+                                  );
+                                }
                               }
 
                               onRequestClose();
@@ -404,6 +468,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
                       {!addObject && selectionType === SelectionType.Single && (
                         <Button
+                          intent="primary"
                           onClick={() => {
                             onSelect?.({
                               type: ObjectType.IMAGE,
@@ -426,6 +491,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
                       {selectionType === SelectionType.Multiple && (
                         <Button
+                          intent="primary"
                           onClick={() => {
                             addToSelection({
                               url: `${process.env.REACT_APP_ASSETS_BASE_URL}/${
@@ -439,6 +505,18 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           Add image to selection
                         </Button>
                       )}
+
+                      {!!deleteImagesFunc && (
+                        <Button
+                          className={css.deleteImageButton}
+                          onClick={() => {
+                            setSelectedImage(-1);
+                            setImagesForDelete([image]);
+                          }}
+                          icon="trash"
+                          minimal
+                        ></Button>
+                      )}
                     </div>
                   </div>
                 </Popover>
@@ -447,6 +525,35 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           ))}
         </InfiniteScroll>
       </div>
+
+      <Alert
+        cancelButtonText="Cancel"
+        loading={isDeleting}
+        confirmButtonText="Remove"
+        canOutsideClickCancel={false}
+        icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
+        intent={Intent.PRIMARY}
+        isOpen={!!imagesForDelete || isDeleting}
+        onCancel={() => setImagesForDelete(undefined)}
+        onConfirm={() => {
+          deleteImagesFunc?.(type, [imagesForDelete?.[0].id!]).then((resp) => {
+            console.log(images);
+            const newImages = filter(images, (image) => {
+              return resp.deletedIds.indexOf(image?.id!) === -1;
+            });
+            console.log(newImages);
+            setImages(newImages as any); // any is there as lodash has type bug for "filter"
+            setIsDeleting(false);
+            setSelectedImage(-1);
+          });
+          setIsDeleting(true);
+          setImagesForDelete(undefined);
+        }}
+        className="bp3-dark"
+        style={{ zIndex: 1001 }}
+      >
+        <p>Delete "{imagesForDelete?.[0].title}" image?</p>
+      </Alert>
     </div>
   );
 };

@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./VectorLibraryPanel.module.scss";
 import {
+  Alert,
   Button,
   Checkbox,
+  Icon,
   InputGroup,
+  Intent,
   Popover,
   PopoverInteractionKind,
   Position,
@@ -17,18 +20,28 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, noop, uniq } from "lodash-es";
+import { debounce, filter, noop, uniq } from "lodash-es";
 import { fetchMock } from "./mock";
-
-export interface VectorData {
-  title: string;
-  svgString: string;
-  categories: string[];
-  tags: string[];
-  rating: number;
-}
+import { MediaType, VectorData } from "../../utils/assets/types";
+import classnames from "classnames";
+import TagsView from "../../utils/components/tags-view/TagsView";
+import { getImageTags } from "../../utils/tags/tags";
 
 interface IMediaLibraryPanelProps {
+  uploadComponent?: ReactNode;
+  fetchImagesFunc: (props: {
+    type: MediaType;
+    from: number;
+    tags?: string[];
+    search?: string;
+    perPage?: number;
+  }) => Promise<{ data: VectorData[]; hasMore: boolean }>;
+  deleteImagesFunc?: (
+    type: MediaType,
+    ids: string[]
+  ) => Promise<{ deletedIds: string[] }>;
+  //
+  //
   addObject?: boolean;
   onSelect?: (item: {
     type: ObjectType;
@@ -43,6 +56,10 @@ export type IVectorPanelMergedProps = typeof mapDispatchToProps &
 
 const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   const {
+    uploadComponent,
+    fetchImagesFunc,
+    deleteImagesFunc,
+    //
     activeLayerId,
     _addNewObject,
     onRequestClose,
@@ -55,42 +72,57 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
 
+  const [requestReload, setRequestReload] = useState<number>(0);
+
+  const [imagesForDelete, setImagesForDelete] = useState<
+    VectorData[] | undefined
+  >(undefined);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const reload = () => {
+    setRequestReload(requestReload + 1);
+  };
+
+  const resetImages = () => {
+    setImages([]);
+  };
+
   const fetchData = (from = -1) => {
+    console.log(from);
     setLoading(true);
 
-    console.log("LOAD DATA");
-    console.log({ ...selectedTags });
     from = from === -1 ? images?.length || 0 : from;
 
-    let url = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1?from=${from}`;
-    if (searchValue) {
-      url += `&search=${encodeURIComponent(searchValue)}`;
-    }
-    if (Object.keys(selectedTags).length > 0) {
-      url += `&tags=${Object.keys(selectedTags)
-        .map((tag) => encodeURIComponent(tag))
-        .join(",")}`;
-    }
-    // TODO
-    fetchMock()
-      //fetch(url)
-      //.then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(result);
-          setImages([...images, ...result.vectors]);
-          setLoading(false);
-          setHasMore(result.vectors.length > 0);
-        },
+    console.log(images);
 
-        (error) => {
-          console.log(error);
-          //this.setState({
-          //  isLoaded: true,
-          //  error,
-          //});
-        }
-      );
+    fetchImagesFunc({
+      type: "vector",
+      from,
+      search: searchValue,
+      tags: Object.keys(selectedTags),
+      perPage: 20,
+    }).then(
+      (result) => {
+        console.log(result);
+        console.log(images);
+
+        setImages([...images, ...result.data]);
+        setLoading(false);
+        setHasMore(result.hasMore);
+      },
+
+      (error) => {
+        console.log(error);
+        /*this.setState({
+            isLoaded: true,
+            error,
+          });*/
+      }
+    );
+
+    /*setTimeout(() => {
+      console.log(uniq(badImages.current));
+    }, 500);*/
   };
 
   useEffect(() => {
@@ -99,7 +131,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const tags = ["Arrows", "Emotions", "Animals", "People"];
+  const tags = getImageTags();
 
   const [selectedTags, setSelectedTags] = useState<{ [key: string]: boolean }>(
     {}
@@ -107,26 +139,25 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
 
   const toggleTag = (tag: string) => {
     setSelectedImage(-1);
-    setSearchValue("");
+    //setSearchValue("");
+    let selectedTagsClone = { ...selectedTags };
+    selectedTagsClone[tag]
+      ? (selectedTagsClone = {})
+      : (selectedTagsClone = { [tag]: true });
     setSelectedTags(
-      { [tag]: !selectedTags[tag] }
+      selectedTagsClone
       //removeFalsy({ ...selectedTags, [tag]: !selectedTags[tag] })
     );
-    setImages([]);
+    resetImages();
+    reload();
   };
-
-  useEffect(() => {
-    console.log({ ...selectedTags });
-    debounceFetchData(0);
-  }, [selectedTags]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
 
   useEffect(() => {
-    return () => {
-      setSelectedImage(-1);
-    };
-  }, []);
+    console.log({ ...selectedTags });
+    debounceFetchData(0);
+  }, [requestReload]);
 
   return (
     <div
@@ -135,6 +166,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
         setSelectedImage(-1);
       }}
     >
+      {uploadComponent}
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -145,8 +177,9 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
               large
               icon="arrow-right"
               onClick={() => {
-                setImages(() => []);
-                debounceFetchData(0);
+                setSelectedImage(-1);
+                resetImages();
+                reload();
               }}
             />
           }
@@ -156,8 +189,9 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
-              setImages(() => []);
-              debounceFetchData(0);
+              setSelectedImage(-1);
+              resetImages();
+              reload();
             }
           }}
         ></InputGroup>
@@ -218,24 +252,33 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                   isOpen={selectedImage === idx}
                 >
                   <div
-                    className={cx(css.imageHolder, {
+                    className={classnames(css.imageListHolder, {
                       [css.selectedImage]: selectedImage === idx,
                     })}
-                    key={idx}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedImage(idx);
-                    }}
-                    dangerouslySetInnerHTML={{ __html: image.svgString }}
-                  ></div>
+                  >
+                    <div
+                      className={cx(css.imageHolder)}
+                      key={idx}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedImage(idx);
+                      }}
+                      dangerouslySetInnerHTML={{ __html: image.svgString }}
+                    ></div>
+                    <div className={css.imageListTitle}>{image.title}</div>
+                    <div className={css.imageListTabs}>
+                      <TagsView tags={image?.tags || []} />
+                    </div>
+                  </div>
                   <div
                     className={css.popoverHolder}
                     onClick={(event) => {
                       event.stopPropagation();
                     }}
                   >
-                    <div>
+                    <div style={{ paddingBottom: "50px" }}>
                       <Button
+                        intent="primary"
                         onClick={() => {
                           if (activeLayerId) {
                             if (addObject) {
@@ -265,6 +308,18 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                       >
                         {addObject ? "Add SVG" : "Select SVG"}
                       </Button>
+
+                      {!!deleteImagesFunc && (
+                        <Button
+                          className={css.deleteImageButton}
+                          onClick={() => {
+                            setSelectedImage(-1);
+                            setImagesForDelete([image]);
+                          }}
+                          icon="trash"
+                          minimal
+                        ></Button>
+                      )}
                     </div>
                   </div>
                 </Popover>
@@ -273,6 +328,36 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           ))}
         </InfiniteScroll>
       </div>
+      <Alert
+        cancelButtonText="Cancel"
+        loading={isDeleting}
+        confirmButtonText="Remove"
+        canOutsideClickCancel={false}
+        icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
+        intent={Intent.PRIMARY}
+        isOpen={!!imagesForDelete || isDeleting}
+        onCancel={() => setImagesForDelete(undefined)}
+        onConfirm={() => {
+          deleteImagesFunc?.("image", [imagesForDelete?.[0].id!]).then(
+            (resp) => {
+              console.log(images);
+              const newImages = filter(images, (image) => {
+                return resp.deletedIds.indexOf(image?.id!) === -1;
+              });
+              console.log(newImages);
+              setImages(newImages as any); // any is there as lodash has type bug for "filter"
+              setIsDeleting(false);
+              setSelectedImage(-1);
+            }
+          );
+          setIsDeleting(true);
+          setImagesForDelete(undefined);
+        }}
+        className="bp3-dark"
+        style={{ zIndex: 1001 }}
+      >
+        <p>Delete "{imagesForDelete?.[0].title}" image?</p>
+      </Alert>
     </div>
   );
 };

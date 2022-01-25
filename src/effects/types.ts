@@ -1,5 +1,11 @@
 export type EffectType = "in" | "out" | "effect" | "slide" | "layer";
 
+export interface IEffectDefinition<T> {
+  id: string;
+  name: string;
+  form: T;
+}
+
 export interface IEffectBase {
   id: string;
   type?: EffectType;

@@ -1,45 +1,69 @@
-import { InputType } from "../../inputs/types";
+import {
+  IBorderColorInput,
+  ICheckboxInput,
+  IColorInput,
+  InputType,
+  INumericTimelineInput,
+  INumericTimelineValue,
+} from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";
 
-export const squareMaskDefinition = {
+export type ISquareMaskTuple = [
+  IBorderColorInput<"borderColor">,
+  INumericTimelineInput<"borderTop">,
+  INumericTimelineInput<"borderBottom">,
+  INumericTimelineInput<"borderLeft">,
+  INumericTimelineInput<"borderRight">,
+  ICheckboxInput<"hideMaskOnComplete">
+];
+
+export const squareMaskDefinition: IEffectDefinition<ISquareMaskTuple> = {
   id: squareMask,
   name: "Square Mask",
   form: [
     {
       displayName: "Border color",
-      helperText: null,
       propertyName: "borderColor",
       inputType: InputType.BORDER_COLOR,
-    },
-    {
-      displayName: "Bottom width",
-      helperText: null,
-      propertyName: "borderBottom",
-      inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Top width",
-      helperText: null,
       propertyName: "borderTop",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
+    },
+    {
+      displayName: "Bottom width",
+      propertyName: "borderBottom",
+      inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Left width",
-      helperText: null,
       propertyName: "borderLeft",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Right width",
-      helperText: null,
       propertyName: "borderRight",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Hide on complete",
       helperText: "Hide mask element on complete",
       propertyName: "hideMaskOnComplete",
       inputType: InputType.CHECKBOX,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

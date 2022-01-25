@@ -7,33 +7,52 @@ import {
   UploadFileInfo,
 } from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
-import { ImageData, ImageDataInfo } from "./utils/assets/types";
-export interface getMyImageUploadComponentProps {
+import {
+  ImageData,
+  MediaDataInfo,
+  MediaType,
+  VectorData,
+} from "./utils/assets/types";
+export interface getMyUploadComponentProps {
+  type: MediaType;
   onComplete: () => void;
   onStop: () => void;
 }
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
-  getMyImageUploadComponent: ((props) => {
+  getMyUploadComponent: ((props) => {
     return <div></div>;
-  }) as React.FC<getMyImageUploadComponentProps>,
+  }) as React.FC<getMyUploadComponentProps>,
 
   useMyImagesHook: () => ({
     upload: (
+      type: MediaType,
       file: File,
-      filesInfo: ImageDataInfo
+      filesInfo: MediaDataInfo
     ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> =>
       Promise.resolve({
         status: "OK",
       }),
 
     fetchImages: (props: {
+      type: MediaType;
       from: number;
-      tag?: string;
+      tags?: string[];
       search?: string;
-    }): Promise<{ photos: ImageData[] }> => {
-      return Promise.resolve({ photos: [] });
+      perPage?: number;
+    }): Promise<{
+      data: /*ImageData[] | VectorData[] |*/ any[];
+      hasMore: boolean;
+    }> => {
+      return Promise.resolve({ data: [], hasMore: false });
+    },
+
+    deleteImages: (
+      type: MediaType,
+      ids: string[]
+    ): Promise<{ deletedIds: string[] }> => {
+      return Promise.resolve({ deletedIds: [] });
     },
   }),
 
@@ -173,7 +192,7 @@ function useAPIHookFactory() {
   }
 }
 
-function getMyImageUploadComponentFactory() {
+function getMyUploadComponentFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "wp") {
     return WPMyImageSelect;
   }
@@ -205,7 +224,7 @@ export const IntegrationContextProvider = (
         useAPIHook: useAPIHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
-        getMyImageUploadComponent: getMyImageUploadComponentFactory(),
+        getMyUploadComponent: getMyUploadComponentFactory(),
       }}
     >
       {props.children}

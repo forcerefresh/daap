@@ -3,6 +3,8 @@
   padding: 3px;
   padding-right: 30px;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .headerSection {
@@ -12,7 +14,7 @@
 .mainSection {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 310px);
+  //height: calc(100vh - 310px);
 
   img {
     margin: 8px;
@@ -20,6 +22,7 @@
   :global {
     .infinite-scroll-component {
       padding-bottom: 100px;
+      min-height: 80vh; // DO no remove this!  scrollbar iz visible to load next page
     }
   }
 }
@@ -55,6 +58,21 @@
   box-shadow: 0 0 0 1px #137cbd;
 }
 
+.imageListTitle {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.imageListHolder {
+  border: 8px solid transparent;
+  &:hover {
+    background: rgba(99, 99, 99, 0.5);
+    //border: 8px solid rgba(99, 99, 99, 0.5);
+  }
+}
+
 .image {
   border: 8px solid transparent;
   &:hover {
@@ -68,15 +86,50 @@
   // margin: 50px;
   padding: 30px;
   margin: 5px;
-  border: 8px solid transparent;
+  // border: 8px solid transparent;
 
   &:hover {
-    border: 8px solid rgba(99, 99, 99, 0.5);
+    // border: 8px solid rgba(99, 99, 99, 0.5);
   }
 
   > svg {
     width: 100%;
     height: 100%;
     //fill: white;
+  }
+}
+
+.deleteImageButton {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
+
+.imageListTabs {
+  :global {
+    .bp3-tag {
+      cursor: default;
+      margin-top: 5px;
+      margin-right: 5px;
+    }
+  }
+}
+
+.tooltipMore {
+  :global {
+    .bp3-tag {
+      cursor: default;
+      margin-top: 5px;
+      margin-right: 5px;
+    }
+  }
+
+  :global {
+    .bp3-popover {
+      background: #333333;
+    }
+    .bp3-popover-content {
+      background: none !important;
+    }
   }
 }

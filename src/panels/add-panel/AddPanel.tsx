@@ -262,8 +262,8 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <PredefinedTextIcon
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>EXTERNAL VIDEO</h3>
-          <p>Pick predefined style</p>
+          <h3>VIDEO</h3>
+          <p>Select video from library</p>
         </Card>
       </div>
 
