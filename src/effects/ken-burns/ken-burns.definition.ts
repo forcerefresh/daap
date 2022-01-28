@@ -1,7 +1,17 @@
-import { InputType } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  ITransformOriginInput,
+} from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { IKenBurnsEffect, kenBurns } from "./ken-burns.types";
 
-export const kenBurnsDefinition = {
+export type IKenBurnsTuple = [
+  INumberInput<"scaleFactor">,
+  ITransformOriginInput<"transformOrigin">
+];
+
+export const kenBurnsDefinition: IEffectDefinition<IKenBurnsTuple> = {
   id: kenBurns,
   name: "Ken burns",
   form: [
@@ -10,12 +20,16 @@ export const kenBurnsDefinition = {
       helperText: "Percentage value (default 10%)",
       propertyName: "scaleFactor",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Scale center",
       helperText: "Center will keep same position in a time",
       propertyName: "transformOrigin",
       inputType: InputType.TRANSFORM_ORIGIN,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

@@ -1,7 +1,14 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput, ISplitInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { split, ISplitEffect } from "./split.types";
 
-export const splitDefinition = {
+export type ISplitTuple = [
+  ISplitInput<"split">,
+  INumberInput<"rotation">,
+  INumberInput<"randomStrength">
+];
+
+export const splitDefinition: IEffectDefinition<ISplitTuple> = {
   id: split,
   name: "Split",
   form: [
@@ -10,18 +17,24 @@ export const splitDefinition = {
       helperText: "Click on border to add point; Click on point to remove it",
       propertyName: "split",
       inputType: InputType.SPLIT,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Rotation",
       helperText: "Angle from -360 to 360",
       propertyName: "rotation",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Random intensity",
       helperText: "Random intensity; Set 0 to disable random move",
       propertyName: "randomStrength",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

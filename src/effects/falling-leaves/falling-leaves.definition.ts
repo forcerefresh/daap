@@ -1,30 +1,46 @@
-import { InputType } from "../../inputs/types";
+import { IImageInput, InputType, INumberInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
 
-export const fallingLeavesDefinition = {
+export type IFallingLeavesTuple = [
+  INumberInput<"number">,
+  IImageInput<"image">,
+  INumberInput<"width">,
+  INumberInput<"height">
+];
+
+export const fallingLeavesDefinition: IEffectDefinition<IFallingLeavesTuple> = {
   id: fallingLeaves,
   name: "Falling Leaves",
   form: [
     {
-      inputType: InputType.NUMBER,
-      propertyName: "number",
       displayName: "Number",
       helperText: "Recommended up to 50 items.",
+      propertyName: "number",
+      inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
-      inputType: InputType.IMAGE,
-      propertyName: "image",
       displayName: "Image",
+      propertyName: "image",
+      inputType: InputType.IMAGE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
-      inputType: InputType.NUMBER,
-      propertyName: "width",
       displayName: "Width",
+      propertyName: "width",
+      inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
-      inputType: InputType.NUMBER,
-      propertyName: "height",
       displayName: "Height",
+      propertyName: "height",
+      inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

@@ -1,7 +1,10 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { flipSlide, IFlipSlideEffect } from "./flip-slide.types";
 
-export const flipSlideDefinition = {
+export type IFlipSlideTuple = [INumberInput<"durationBetweenItems">];
+
+export const flipSlideDefinition: IEffectDefinition<IFlipSlideTuple> = {
   id: flipSlide,
   name: "Flip Slide",
   form: [
@@ -10,6 +13,8 @@ export const flipSlideDefinition = {
       helperText: "Duration between items",
       propertyName: "durationBetweenItems",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

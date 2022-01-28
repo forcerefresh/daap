@@ -1,8 +1,11 @@
 import { getDefaultTimeline } from "../../inputs/timelines-input/timelines-input";
-import { InputType } from "../../inputs/types";
+import { InputType, ITimelinesInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { timelinesEffect, ITimelinesEffect } from "./timelines.types";
 
-export const cssPluginDefinition = {
+export type ITimelinesEffectTuple = [ITimelinesInput<"timelines">];
+
+export const cssPluginDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
   id: timelinesEffect,
   name: "Timelines",
   form: [
@@ -10,6 +13,8 @@ export const cssPluginDefinition = {
       displayName: "Timelines",
       propertyName: "timelines",
       inputType: InputType.TIMELINES,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

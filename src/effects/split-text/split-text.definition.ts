@@ -1,7 +1,26 @@
-import { InputType } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  INumericTimelineInput,
+  ITextStartPositionInput,
+} from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { ISplitTextEffect, splitText } from "./split-text.types";
 
-export const splitTextDefinition = {
+export type ISplitTextTuple = [
+  INumberInput<"durationPerChar">,
+  INumberInput<"delayBetweenChar">,
+  INumericTimelineInput<"opacity">,
+  INumericTimelineInput<"blur">,
+  INumericTimelineInput<"scaleX">,
+  INumericTimelineInput<"scaleY">,
+  INumericTimelineInput<"rotationPerChar">,
+  INumericTimelineInput<"positionX">,
+  INumericTimelineInput<"positionY">,
+  ITextStartPositionInput<"startFrom">
+];
+
+export const splitTextDefinition: IEffectDefinition<ISplitTextTuple> = {
   id: splitText,
   name: "Split Text",
   form: [
@@ -10,59 +29,79 @@ export const splitTextDefinition = {
       helperText: "Time takes to display one char (default 0.2)",
       propertyName: "durationPerChar",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Delay per char",
       helperText: "Time taken between two chars(default 0.05)",
       propertyName: "delayBetweenChar",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Opacity",
       helperText: "Percentage value (default 0)",
       propertyName: "opacity",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Blur",
       //helperText: "Percentage value (default 0)",
       propertyName: "blur",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Scale X",
       helperText: "Percentage value (default 0)",
       propertyName: "scaleX",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Scale Y",
       helperText: "Percentage value (default 0)",
       propertyName: "scaleY",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Rotation",
       helperText: "Rotate char ( default 0)",
       propertyName: "rotationPerChar",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Position X",
       helperText: "Move along X axis (default 0)",
       propertyName: "positionX",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Position Y",
       helperText: "Move along Y axis (default 0)",
       propertyName: "positionY",
       inputType: InputType.NUMERIC_TIMELINE,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Start from",
       propertyName: "startFrom",
       inputType: InputType.TEXT_START_POSITION,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

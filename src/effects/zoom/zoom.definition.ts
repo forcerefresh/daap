@@ -1,7 +1,10 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { IZoomInEffect, zoomIn } from "./zoom.types";
 
-export const zoomInDefinition = {
+export type IZoomInTuple = [INumberInput<"scaleX">, INumberInput<"scaleY">];
+
+export const zoomInDefinition: IEffectDefinition<IZoomInTuple> = {
   id: zoomIn,
   name: "Zoom",
   form: [
@@ -10,12 +13,16 @@ export const zoomInDefinition = {
       helperText: "Percentage value (default 0)",
       propertyName: "scaleX",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Scale Y",
       helperText: "Percentage value (default 100)",
       propertyName: "scaleY",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

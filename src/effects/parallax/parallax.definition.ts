@@ -1,7 +1,10 @@
-import { InputType } from "../../inputs/types";
+import { InputType, IParallaxInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { parallax, IParallaxEffect } from "./parallax.types";
 
-export const parallaxDefinition = {
+export type IParallaxTuple = [IParallaxInput<"parallax">];
+
+export const parallaxDefinition: IEffectDefinition<IParallaxTuple> = {
   id: parallax,
   name: "Parallax",
   form: [
@@ -9,6 +12,8 @@ export const parallaxDefinition = {
       displayName: "Parallax",
       propertyName: "parallax",
       inputType: InputType.PARALLAX,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

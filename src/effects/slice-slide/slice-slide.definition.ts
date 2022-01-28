@@ -1,21 +1,32 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput, ISelectInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
 
-export const sliceSlideDefinition = {
+export type ISliceSlideTuple = [
+  INumberInput<"slices">,
+  ISelectInput<"orientation">,
+  ISelectInput<"startingPoint">,
+  ISelectInput<"from">,
+  INumberInput<"distance">
+];
+
+export const sliceSlideDefinition: IEffectDefinition<ISliceSlideTuple> = {
   id: sliceSlide,
   name: "Slice Slide",
   form: [
     {
       displayName: "Slices",
-      helperText: null,
       propertyName: "slices",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Orientation",
-      helperText: null,
       propertyName: "orientation",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Horizontal", value: "horizontal" },
         { label: "Vertical", value: "vertical" },
@@ -23,9 +34,10 @@ export const sliceSlideDefinition = {
     },
     {
       displayName: "Start from",
-      helperText: null,
       propertyName: "startingPoint",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Random", value: "random" },
         { label: "Center", value: "center" },
@@ -35,9 +47,10 @@ export const sliceSlideDefinition = {
     },
     {
       displayName: "Slide from",
-      helperText: null,
       propertyName: "from",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Left", value: "left" },
         { label: "Right", value: "right" },
@@ -47,9 +60,10 @@ export const sliceSlideDefinition = {
     },
     {
       displayName: "Distance",
-      helperText: null,
       propertyName: "distance",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

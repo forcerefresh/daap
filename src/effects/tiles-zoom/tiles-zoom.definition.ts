@@ -1,7 +1,20 @@
-import { InputType } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  ISelectInput,
+  ITransformOriginInput,
+} from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
 
-export const tilesZoomDefinition = {
+export type ITilesZoomTuple = [
+  INumberInput<"columns">,
+  INumberInput<"rows">,
+  ISelectInput<"startFrom">,
+  ITransformOriginInput<"transformOrigin">
+];
+
+export const tilesZoomDefinition: IEffectDefinition<ITilesZoomTuple> = {
   id: tilesZoom,
   name: "Tiles Zoom",
   form: [
@@ -10,17 +23,23 @@ export const tilesZoomDefinition = {
       helperText: "Number of columns (default 10)",
       propertyName: "columns",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Rows",
       helperText: "Number of rows (default 10)",
       propertyName: "rows",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Start from",
       propertyName: "startFrom",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Random", value: "random" },
         { label: "Center", value: "center" },
@@ -40,6 +59,8 @@ export const tilesZoomDefinition = {
       helperText: "Center will keep same position in a time",
       propertyName: "transformOrigin",
       inputType: InputType.TRANSFORM_ORIGIN,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

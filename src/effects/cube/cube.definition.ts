@@ -1,7 +1,13 @@
-import { InputType } from "../../inputs/types";
+import { IColorInput, InputType } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { cube, ICubeEffect } from "./cube.types";
 
-export const cubeDefinition = {
+export type ICubeTuple = [
+  IColorInput<"cubeBackgroundColor">,
+  IColorInput<"cubeEdgeColor">
+];
+
+export const cubeDefinition: IEffectDefinition<ICubeTuple> = {
   id: cube,
   name: "Cube",
   form: [
@@ -10,12 +16,16 @@ export const cubeDefinition = {
       helperText: "Cube background color",
       propertyName: "cubeBackgroundColor",
       inputType: InputType.COLOR,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Edge color",
       helperText: "Cube edge color",
       propertyName: "cubeEdgeColor",
       inputType: InputType.COLOR,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

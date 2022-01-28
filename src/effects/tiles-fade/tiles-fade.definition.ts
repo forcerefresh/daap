@@ -1,7 +1,14 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput, ISelectInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { tilesFade, ITilesFadeEffect } from "./tiles-fade.types";
 
-export const tilesFadeDefinition = {
+export type ITilesFadeTuple = [
+  INumberInput<"columns">,
+  INumberInput<"rows">,
+  ISelectInput<"startFrom">
+];
+
+export const tilesFadeDefinition: IEffectDefinition<ITilesFadeTuple> = {
   id: tilesFade,
   name: "Tiles Fade",
   form: [
@@ -10,17 +17,23 @@ export const tilesFadeDefinition = {
       helperText: "Default column value (default 10)",
       propertyName: "columns",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Tile row",
       helperText: "Default row value (default 10)",
       propertyName: "rows",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Start From",
       propertyName: "startFrom",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Random", value: "random" },
         { label: "Center", value: "center" },

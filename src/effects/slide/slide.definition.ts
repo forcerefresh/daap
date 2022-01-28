@@ -1,15 +1,19 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput, ISelectInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { ISlideEffect, slide } from "./slide.types";
 
-export const slideDefinition = {
+export type ISlideTuple = [ISelectInput<"from">, INumberInput<"distance">];
+
+export const slideDefinition: IEffectDefinition<ISlideTuple> = {
   id: slide,
   name: "Slide",
   form: [
     {
       displayName: "Slide from",
-      helperText: null,
       propertyName: "from",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Left", value: "left" },
         { label: "Right", value: "right" },
@@ -19,9 +23,10 @@ export const slideDefinition = {
     },
     {
       displayName: "Distance",
-      helperText: null,
       propertyName: "distance",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
   ],
 };

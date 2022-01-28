@@ -1,10 +1,8 @@
 import {
   IBorderColorInput,
   ICheckboxInput,
-  IColorInput,
   InputType,
   INumericTimelineInput,
-  INumericTimelineValue,
 } from "../../inputs/types";
 import { IEffectDefinition } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";

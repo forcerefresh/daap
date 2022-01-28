@@ -1,7 +1,14 @@
-import { InputType } from "../../inputs/types";
+import { InputType, INumberInput, ISelectInput } from "../../inputs/types";
+import { IEffectDefinition } from "../types";
 import { flip, IFlipEffect } from "./flip.types";
 
-export const flipDefinition = {
+export type IFlipTuple = [
+  INumberInput<"rotationTime">,
+  INumberInput<"pauseTime">,
+  ISelectInput<"spinDirection">
+];
+
+export const flipDefinition: IEffectDefinition<IFlipTuple> = {
   id: flip,
   name: "Flip",
   form: [
@@ -9,16 +16,22 @@ export const flipDefinition = {
       displayName: "Rotation time",
       propertyName: "rotationTime",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Pause time",
       propertyName: "pauseTime",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
     },
     {
       displayName: "Spin direction",
       propertyName: "spinDirection",
       inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
       options: [
         { label: "Clockwise", value: "cc" },
         { label: "Counterclockwise", value: "ccw" },
