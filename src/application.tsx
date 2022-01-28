@@ -1,3 +1,4 @@
+import "./objects/exec-code-effect";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./application.css";
@@ -6,6 +7,8 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
+require("./objects/register-object");
+//require("./objects/exec-code-effect");
 
 function application(): {
   component: React.ReactElement;

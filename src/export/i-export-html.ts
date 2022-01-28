@@ -1,13 +1,19 @@
+import React from "react";
 import {
   INavigationValues,
   ISlideTransition,
   ITransitions,
+  ObjectType,
 } from "../objects/types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
 
 export interface ITransitionsData {
+  itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
+  itemValues: { [key: string]: any };
+  hasExecutionCode?: boolean;
+  calculatedObjectSize?: React.CSSProperties;
   objectClass: string;
   transitions: ITransitions;
   events?: INavigationValues;

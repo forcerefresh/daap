@@ -420,13 +420,14 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       )}
 
                       {/* Create new object*/}
-                      {addObject && selectionType === SelectionType.Single && (
-                        <Button
-                          intent="primary"
-                          onClick={() => {
-                            if (activeLayerId) {
-                              if (addObject) {
-                                if (type === "image") {
+                      {addObject &&
+                        type === "image" &&
+                        selectionType === SelectionType.Single && (
+                          <Button
+                            intent="primary"
+                            onClick={() => {
+                              if (activeLayerId) {
+                                if (addObject) {
                                   _addNewObject(
                                     activeLayerId,
                                     ObjectType.IMAGE, //cover
@@ -440,7 +441,24 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     }
                                   );
                                 }
-                                if (type === "video") {
+
+                                onRequestClose();
+                              }
+                            }}
+                          >
+                            Add Image to stage
+                          </Button>
+                        )}
+
+                      {/* Create new object*/}
+                      {addObject &&
+                        type === "video" &&
+                        selectionType === SelectionType.Single && (
+                          <Button
+                            intent="primary"
+                            onClick={() => {
+                              if (activeLayerId) {
+                                if (addObject) {
                                   _addNewObject(
                                     activeLayerId,
                                     ObjectType.VIDEO, //cover
@@ -456,55 +474,77 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     }
                                   );
                                 }
+
+                                onRequestClose();
                               }
+                            }}
+                          >
+                            Add Video to stage
+                          </Button>
+                        )}
 
+                      {!addObject &&
+                        type === "image" &&
+                        selectionType === SelectionType.Single && (
+                          <Button
+                            intent="primary"
+                            onClick={() => {
+                              onSelect?.({
+                                type: ObjectType.IMAGE,
+                                initialValues: {
+                                  url: getImageUrl(
+                                    (image?.images as any)[selectedResolution]
+                                      ?.url
+                                  ),
+                                },
+                              });
                               onRequestClose();
-                            }
-                          }}
-                        >
-                          Add image to stage
-                        </Button>
-                      )}
+                            }}
+                          >
+                            Select image
+                          </Button>
+                        )}
 
-                      {!addObject && selectionType === SelectionType.Single && (
-                        <Button
-                          intent="primary"
-                          onClick={() => {
-                            onSelect?.({
-                              type: ObjectType.IMAGE,
-                              initialValues: {
-                                url: `${
-                                  process.env.REACT_APP_ASSETS_BASE_URL
-                                }/${
+                      {!addObject &&
+                        type === "video" &&
+                        selectionType === SelectionType.Single && (
+                          <Button
+                            intent="primary"
+                            onClick={() => {
+                              onSelect?.({
+                                type: ObjectType.VIDEO,
+                                initialValues: {
+                                  url: (image as any as VideoData).videos
+                                    .original.url,
+                                  width: 960,
+                                  height: 540,
+                                  isPlaceholder: false,
+                                },
+                              });
+                              onRequestClose();
+                            }}
+                          >
+                            Select Video
+                          </Button>
+                        )}
+
+                      {type === "image" &&
+                        selectionType === SelectionType.Multiple && (
+                          <Button
+                            intent="primary"
+                            onClick={() => {
+                              addToSelection({
+                                url: getImageUrl(
                                   (image?.images as any)[selectedResolution]
                                     ?.url
-                                }`,
-                                //placement: getDefaultCoveragePlacement,
-                              },
-                            });
-                            onRequestClose();
-                          }}
-                        >
-                          Select image
-                        </Button>
-                      )}
-
-                      {selectionType === SelectionType.Multiple && (
-                        <Button
-                          intent="primary"
-                          onClick={() => {
-                            addToSelection({
-                              url: `${process.env.REACT_APP_ASSETS_BASE_URL}/${
-                                (image?.images as any)[selectedResolution]?.url
-                              }`,
-                              //placement: getDefaultCoveragePlacement,
-                            });
-                            setSelectedImage(-1);
-                          }}
-                        >
-                          Add image to selection
-                        </Button>
-                      )}
+                                ),
+                              });
+                              setSelectedImage(-1);
+                            }}
+                          >
+                            Add Image to selection
+                          </Button>
+                        )}
 
                       {!!deleteImagesFunc && (
                         <Button

@@ -11,6 +11,8 @@ import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefi
 import { IObject, ObjectType } from "../../objects/types";
 import { StageTools } from "../../store/reducers/stage";
 import { ColorInputForm } from "../../inputs/color-input/color-input";
+import { getObjectDefinitionsByGroup } from "../../objects/objects-factory";
+import SVG, { Props as SVGProps } from "react-inlinesvg";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -31,8 +33,146 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     onRequestFontPreview,
   } = props;
 
+  const renderObjectsCards = (group: string) => {
+    const objDeffs = getObjectDefinitionsByGroup(group);
+
+    return (
+      <>
+        {objDeffs.map((deff) => (
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, deff.type, {
+                  left: (documentSize.width - 960) / 2,
+                  top: (documentSize.height - 540) / 2,
+                  width: 960,
+                  height: 540,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <SVG src={deff.meta.icon || ""} />
+            <h3>{deff.meta.name}</h3>
+            <p>{deff.meta.description}</p>
+          </Card>
+        ))}
+      </>
+    );
+  };
+
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Media</h1>
+          <p>Place image content</p>
+        </Card>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.IMAGE, {
+                  left: (documentSize.width - 300) / 2,
+                  top: (documentSize.height - 300) / 2,
+                  width: 300,
+                  height: 300,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <Icon
+              icon="media"
+              iconSize={36}
+              color="gray"
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>IMAGE</h3>
+            <p>Position image relative or absolute</p>
+          </Card>
+
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.MULTI_IMAGE, {
+                  left: (documentSize.width - 300) / 2,
+                  top: (documentSize.height - 300) / 2,
+                  width: 300,
+                  height: 300,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <Icon
+              icon="media"
+              iconSize={36}
+              color="gray"
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>MULTIPLE IMAGES</h3>
+            <p>Add multiple images as one object</p>
+          </Card>
+
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.VIDEO, {
+                  left: (documentSize.width - 960) / 2,
+                  top: (documentSize.height - 540) / 2,
+                  width: 960,
+                  height: 540,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <PredefinedTextIcon
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>VIDEO</h3>
+            <p>Select video from library</p>
+          </Card>
+
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.SVG, {
+                  left: (documentSize.width - 100) / 2,
+                  top: (documentSize.height - 100) / 2,
+                  width: 100,
+                  height: 100,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <PredefinedTextIcon
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>SVG</h3>
+            <p>Add Inline SVG</p>
+          </Card>
+
+          {renderObjectsCards("media")}
+        </div>
+      </div>
       <div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Text</h1>
@@ -66,6 +206,28 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
+              _addNewObject(activeLayerId, ObjectType.RICH_TEXT, {
+                left: documentSize.width / 4,
+                top: documentSize.height / 4,
+                width: documentSize.width / 2,
+                height: documentSize.height / 2,
+              });
+              onRequestClose();
+            }
+          }}
+        >
+          <AddTextboxIcon
+            style={{ width: "36px", height: "36px", fill: "gray" }}
+          />
+          <h3>ADD RICH TEXT BOX</h3>
+          <p>Add empty rich text field to active layer</p>
+        </Card>
+        {/*<Card
+          interactive={!!activeLayerId}
+          elevation={Elevation.TWO}
+          className={cx(css.card, { [css.disabled]: !activeLayerId })}
+          onClick={() => {
+            if (activeLayerId) {
               _setStageTool(StageTools.DRAW, ObjectType.TEXT);
               onRequestClose();
             }
@@ -76,6 +238,12 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           />
           <h3>DRAW TEXT BOX</h3>
           <p>Draw text box using text tool</p>
+        </Card>*/}
+      </div>
+      <div>
+        <Card interactive={false} className={css.sectionCard}>
+          <h1>Navigation</h1>
+          <p>Page navigation</p>
         </Card>
         <Card
           interactive={!!activeLayerId}
@@ -83,25 +251,24 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              onRequestFontPreview();
+              _addNewObject(activeLayerId, ObjectType.BUTTON, {
+                left: (documentSize.width - 300) / 2,
+                top: (documentSize.height - 300) / 2,
+                width: 300,
+                height: 100,
+              });
+              onRequestClose();
             }
           }}
         >
           <Icon
-            icon="font"
+            icon="link"
             iconSize={36}
             color="gray"
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>PREVIEW FONT</h3>
-          <p>Add text by choosing font</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>Navigation</h1>
-          <p>Page navigation</p>
+          <h3>BUTTON</h3>
+          <p>Add button</p>
         </Card>
         <Card
           interactive={!!activeLayerId}
@@ -146,187 +313,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           />
           <h3>ARROW</h3>
           <p>Add arrow</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>Rich Text</h1>
-          <p>Add rich text content</p>
-        </Card>
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.RICH_TEXT, {
-                left: documentSize.width / 4,
-                top: documentSize.height / 4,
-                width: documentSize.width / 2,
-                height: documentSize.height / 2,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <AddTextboxIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>ADD RICH TEXT BOX</h3>
-          <p>Add empty rich text field to active layer</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>Image</h1>
-          <p>Place image content</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.IMAGE, {
-                left: (documentSize.width - 300) / 2,
-                top: (documentSize.height - 300) / 2,
-                width: 300,
-                height: 300,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="media"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>IMAGE</h3>
-          <p>Position image relative or absolute</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.MULTI_IMAGE, {
-                left: (documentSize.width - 300) / 2,
-                top: (documentSize.height - 300) / 2,
-                width: 300,
-                height: 300,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="media"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>MULTIPLE IMAGES</h3>
-          <p>Add multiple images as one object</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>Video</h1>
-          <p>Place video content</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.VIDEO, {
-                left: (documentSize.width - 960) / 2,
-                top: (documentSize.height - 540) / 2,
-                width: 960,
-                height: 540,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <PredefinedTextIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>VIDEO</h3>
-          <p>Select video from library</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>Button</h1>
-          <p>Place button</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.BUTTON, {
-                left: (documentSize.width - 300) / 2,
-                top: (documentSize.height - 300) / 2,
-                width: 300,
-                height: 100,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="link"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>BUTTON</h3>
-          <p>Add button</p>
-        </Card>
-      </div>
-
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
-          <h1>HTML & SVG</h1>
-          <p>Place html content</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.SVG, {
-                left: (documentSize.width - 100) / 2,
-                top: (documentSize.height - 100) / 2,
-                width: 100,
-                height: 100,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <PredefinedTextIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>SVG</h3>
-          <p>Add Inline SVG</p>
         </Card>
       </div>
 
@@ -380,8 +366,8 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
       <div>
         <Card interactive={false} className={css.sectionCard}>
-          <h1>Empty</h1>
-          <p>Add empty element</p>
+          <h1>Other</h1>
+          <p>Various elements</p>
         </Card>
 
         <Card
@@ -406,7 +392,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             color="gray"
             style={{ width: "36px", height: "36px", fill: "gray" }}
           />
-          <h3>FRAME</h3>
+          <h3>EMPTY FRAME</h3>
           <p>Add empty frame</p>
         </Card>
       </div>
@@ -422,7 +408,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: ObjectType | string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _setStageTool: (tool: StageTools, objectType: ObjectType) =>

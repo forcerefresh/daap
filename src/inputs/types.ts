@@ -427,23 +427,20 @@ export interface IMultiImageInput<T = string> {
   defaultValue: IImageInputValue[];
 }
 
+export interface IVideoInputValue {
+  url: string;
+  width: number;
+  height: number;
+  isPlaceholder?: boolean;
+}
+
 export interface IVideoInput<T = string> {
   inputType: InputType.VIDEO;
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: {
-    url: string;
-    width: number;
-    height: number;
-    isPlaceholder?: boolean;
-  };
-  defaultValue: {
-    url: string;
-    width: number;
-    height: number;
-    isPlaceholder?: boolean;
-  };
+  value: IVideoInputValue;
+  defaultValue: IVideoInputValue;
 }
 
 export interface ICoverPlacementValue {
@@ -1048,13 +1045,6 @@ export const ButtonLayout = [
   },
 ];*/
 
-export interface SourceImageProperties {
-  id: ITextInput;
-  visible: ICheckboxInput;
-  placement: ICoverPlacementInput;
-  url: IImageInput;
-}
-
 export interface SourceImageValues {
   id: string;
   visible: boolean;
@@ -1069,9 +1059,11 @@ export type SourceImagePropertiesTuple = [
   IImageInput<"url">
 ];
 
-export interface VideoProperties {
-  url: IVideoInput;
+export interface VideoValues {
+  url: IVideoInputValue;
 }
+
+export type VideoPropertiesTuple = [IVideoInput<"url">];
 
 export interface SvgProperties {
   svg: ITextAreaInput;

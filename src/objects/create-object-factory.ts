@@ -21,7 +21,6 @@ import {
   MultiImageValues,
   RichTextPropertiesTuple,
   RichTextValues,
-  SourceImageProperties,
   SourceImagePropertiesTuple,
   SourceImageValues,
   SvgProperties,
@@ -30,15 +29,15 @@ import {
   TextProperties,
   TextPropertiesTuple,
   TextValues,
-  VideoProperties,
+  VideoPropertiesTuple,
+  VideoValues,
 } from "../inputs/types";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
 import { FormType } from "../utils/form-layout/form-layout";
+import { getObjectDefinition } from "./objects-factory";
 import {
   ICommonObjectProperties,
   IObject,
-  ISlideTransition,
-  ITransition,
   ITransitions,
   NavigationEvent,
   NavigationType,
@@ -56,7 +55,7 @@ type Exclude<T, U> = T extends U ? never : T;
 type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 export function createObject(
-  type: ObjectType,
+  type: ObjectType | string,
   objectProps: Partial<IObject>,
   initialValue?: {
     [key: string]: string;
@@ -161,6 +160,16 @@ export function createObject(
         ...objectProps,
       };
     }
+    default: {
+      const objDeff = getObjectDefinition(type);
+
+      return {
+        ...objectProps,
+        ...objDeff.createObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+      };
+    }
   }
 }
 
@@ -200,8 +209,8 @@ export function getDefaultTransitionsForSlide(): ITransitions {
   };
 }
 
-function createCommonObject(
-  type: ObjectType
+export function createCommonObject(
+  type: ObjectType | string
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId" | "definition"> {
   return {
     id: uuid(),
@@ -1548,7 +1557,7 @@ function createSourceImageObject(
     hasOverflowProperty: boolean;
   }
 ): Omit<
-  IObject<SourceImageProperties>,
+  IObject<SourceImagePropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
 > {
   const object = createCommonObject(ObjectType.SOURCE_IMAGE);
@@ -1625,10 +1634,13 @@ function createVideoObject(
   commonProperties?: {
     hasOverflowProperty: boolean;
   }
-): Omit<IObject<VideoProperties>, keyof ICommonObjectProperties | "layerId"> {
+): Omit<
+  IObject<VideoPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
   const object = createCommonObject(ObjectType.VIDEO);
 
-  const properties = [
+  const properties: VideoPropertiesTuple = [
     {
       displayName: "Video url",
       propertyName: "url",
@@ -1643,7 +1655,7 @@ function createVideoObject(
     },
   ];
 
-  const values = {
+  const values: VideoValues = {
     url: initialValue?.url || {
       url: "",
       width: 960,

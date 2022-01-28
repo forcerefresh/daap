@@ -6,6 +6,7 @@ import { IStore } from "../../store/store";
 import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
 import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
 import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-tool.svg";
+import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
 
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -127,6 +128,30 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             )}
           </Portal>
         </div>
+
+        <div>
+          <Button
+            minimal
+            active={showPanel === VisiblePanel.FontPreview}
+            onClick={() => {
+              setShowPanel(VisiblePanel.FontPreview);
+            }}
+          >
+            <AddTextboxIcon
+              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+            />{" "}
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.FontPreview && (
+              <div ref={sharedRef}>
+                <FontPreviewPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
         <div className={css.delimiter}></div>
         <div>
           <Button

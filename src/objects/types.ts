@@ -17,6 +17,7 @@ export enum ObjectType {
   IMAGE = "image",
   MULTI_IMAGE = "multi_image",
   VIDEO = "video",
+  //YOUTUBE_VIDEO = "youtube_video",
   HTML = "html",
   SVG = "svg",
   CANVAS = "canvas",
@@ -31,7 +32,7 @@ export type ItemType = "object" | "layer" | "slide";
 
 export interface IDefinition {
   id: string;
-  type: ObjectType;
+  type: ObjectType | string;
   properties: any[];
   values: { [key: string]: any };
   valuesMetadata: { [key: string]: IInputMetadataValues };
@@ -299,7 +300,7 @@ export interface IObject<T extends {} = {}>
   id: string;
   name: string;
   layerId: string;
-  type: ObjectType;
+  type: ObjectType | string;
   isVisible: boolean;
   isLocked: boolean;
   navigationDefinition: {

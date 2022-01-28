@@ -761,7 +761,7 @@ export interface AddObjectAction extends IUndoableAction<true> {
 
 export function addNewObject(
   layerId: string,
-  type: ObjectType,
+  type: ObjectType | string,
   objectProps: Partial<IObject>,
   values?: { [key: string]: string }
 ): any {

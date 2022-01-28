@@ -1,5 +1,4 @@
 import { forOwn, mapValues, pick } from "lodash-es";
-import { isAbsolute } from "path";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -17,6 +16,7 @@ import {
   SvgValues,
   TextValues,
 } from "../inputs/types";
+import { getObjectDefinition } from "../objects/objects-factory";
 import { IObject, ObjectType } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
@@ -99,6 +99,8 @@ export function generatePlayerData(
 
       const layerClassName = "layer-" + layer.id;
       transitionsData.push({
+        itemType: "layer",
+        itemValues: layer.definition.values,
         objectClass: layerClassName,
         transitions: layer.transitions,
         data: {
@@ -192,6 +194,10 @@ export function generatePlayerData(
         );
 
         transitionsData.push({
+          itemType: object.type,
+          itemValues: object.definition.values,
+          hasExecutionCode: !!getObjectDefinition(object.type).executionCode,
+          calculatedObjectSize,
           objectClass: objectClass,
           transitions: object.transitions,
           events: getObjectEvents(object),
@@ -288,6 +294,8 @@ export function getObjectHtml(
       return getMultiImageHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.VIDEO:
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
+    //case ObjectType.YOUTUBE_VIDEO:
+    //return getYoutubeVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
       return getSvgHtml(object, calculatedObjectSize);
     case ObjectType.ARROW:
@@ -299,6 +307,10 @@ export function getObjectHtml(
     case ObjectType.SOURCE_IMAGE:
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
+      const objDeff = getObjectDefinition(object.type);
+      if (objDeff && objDeff.getHtml) {
+        return objDeff.getHtml(object, calculatedObjectSize, isPlayer);
+      }
       return "";
   }
 }
@@ -866,7 +878,7 @@ function getVideoHtml(
   const imageProperties = object.definition.values as ImageValues;
 
   if (imageProperties.url.isPlaceholder) {
-    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
+    return `<div style="border: 6px dashed gray; text-shadow: 1px 1px 2px black; color: gray; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">VIDEO<br/>PLACEHOLDER</div>`;
   }
 
   let style = "";

@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { last } from "lodash-es";
 import { IPlayerData, ISlideData } from "../../export/i-export-html";
+import { getObjectDefinition } from "../../objects/objects-factory";
 import {
   IGoToSlideAction,
   INavigationValues,
@@ -8,7 +9,11 @@ import {
   NavigationType,
 } from "../../objects/types";
 import { SlideType } from "../../store/reducers/i-slides";
-import { createTimelineForObject } from "../AppPlayerUtils";
+import {
+  createTimelineForExecutionCode,
+  createTimelineForObject,
+} from "../AppPlayerUtils";
+(window as any).YTPlayer = require("yt-player");
 
 /*export interface IPlayerConfig {
   oneSlide: boolean;
@@ -447,6 +452,21 @@ export class Player {
         console.log(pTl.getChildren());
         slideTimeline.add(pTl, 0);
       });
+
+      // execution code for objects
+      if (transitionData.hasExecutionCode) {
+        const execCode = getObjectDefinition(
+          transitionData.itemType
+        ).executionCode;
+
+        const execTl = createTimelineForExecutionCode(
+          transitionData,
+          execCode!,
+          transitionData.itemValues,
+          transitionData.calculatedObjectSize
+        );
+        slideTimeline.add(execTl, 0);
+      }
     });
 
     console.log(slideTimeline);
