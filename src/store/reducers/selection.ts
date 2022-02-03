@@ -21,7 +21,7 @@ import {
   selectForPropertiesProps,
 } from "../actions/actions";
 import update from "immutability-helper";
-import { uniq } from "lodash-es";
+import { cloneDeep, uniq } from "lodash-es";
 
 export interface ISelection {
   activeSlideId: string | null;
@@ -154,6 +154,11 @@ export function selection(
           $apply: (selIds: string[]) =>
             selIds.filter((id) => layerIds.indexOf(id) === -1),
         },
+        selectionForProperties: {
+          $apply: (curr) => {
+            return curr && layerIds.indexOf(curr.id) !== -1 ? null : curr;
+          },
+        },
       });
     }
     case DELETE_SLIDE: {
@@ -178,6 +183,11 @@ export function selection(
         selectedSlideIds: {
           $apply: (selIds: string[]) =>
             selIds.filter((id) => action.payload.slideId !== id),
+        },
+        selectionForProperties: {
+          $apply: (curr) => {
+            return curr && action.payload.slideId === curr.id ? null : curr;
+          },
         },
       });
     }
@@ -215,6 +225,14 @@ export function selection(
         selectedObjectIds: {
           $apply: (selIds: string[]) =>
             selIds.filter((id) => deletedObjectIds.indexOf(id) === -1),
+        },
+
+        selectionForProperties: {
+          $apply: (curr) => {
+            return curr && deletedObjectIds.indexOf(curr.id) !== -1
+              ? null
+              : curr;
+          },
         },
       });
     }

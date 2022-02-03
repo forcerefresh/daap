@@ -1,5 +1,14 @@
 import { IObject } from "./types";
-import { youtubeVideoMeta } from "./youtube-video/youtube-video";
+
+export enum PreloadOrder {
+  FIRST = "first",
+  MIDDLE = "middle",
+  LAST = "last",
+}
+
+export enum CoreObjectType {
+  SPINNER = "spinner",
+}
 
 type createObjectFuncType = (
   initialValue?: {
@@ -16,11 +25,24 @@ type getHtmlFuncType = (
   isPlayer: boolean
 ) => string;
 
-export type executionCodeFuncType = (
-  className: string,
-  values: { [key: string]: any },
-  calculatedObjectSize: any
-) => void;
+export type executionCodeFuncType = (props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}) => void;
+
+export type preloadFuncType = (props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}) => Promise<string>;
+
+export type postProcessFuncType = (
+  prevObject: IObject,
+  object: IObject
+) => IObject;
 
 export interface IObjectDefinitionHolder {
   type: string;
@@ -29,33 +51,54 @@ export interface IObjectDefinitionHolder {
     name: string;
     description?: string;
     icon?: string;
+    preloadOrder?: PreloadOrder;
+    coreType?: CoreObjectType;
   };
   createObject: createObjectFuncType;
   getHtml?: getHtmlFuncType;
-  executionCode?: executionCodeFuncType;
+  executionCode_Start?: executionCodeFuncType;
+  executionCode_Stop?: executionCodeFuncType;
+  preload?: preloadFuncType;
+  postProcess?: postProcessFuncType;
 }
+
 // <<<
 const objects: IObjectDefinitionHolder[] = [];
 
 export function registerObject(
   type: string,
   group: string,
+  meta: {
+    name: string;
+    description?: string;
+    icon?: string;
+    preloadOrder?: PreloadOrder;
+    coreType?: CoreObjectType;
+  },
   createObject: createObjectFuncType,
   getHtml?: getHtmlFuncType,
-  executionCode?: executionCodeFuncType
+  preload?: preloadFuncType,
+  executionCode_Start?: executionCodeFuncType,
+  executionCode_Stop?: executionCodeFuncType,
+  postProcess?: postProcessFuncType
 ) {
   objects.push({
     type,
     group,
-    meta: youtubeVideoMeta,
+    meta,
     createObject,
     getHtml,
-    executionCode,
+    executionCode_Start,
+    executionCode_Stop,
+    preload,
+    postProcess,
   });
 }
 
-export function getObjectDefinition(type: string): IObjectDefinitionHolder {
-  return objects.find((item) => item.type === type) as IObjectDefinitionHolder;
+export function getObjectDefinition(
+  type: string
+): IObjectDefinitionHolder | undefined {
+  return objects.find((item) => item.type === type);
 }
 export function getObjectDefinitionsByGroup(
   group: string

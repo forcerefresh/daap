@@ -239,7 +239,11 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
         } else if (formItem.type === FormType.SWITCH_GROUP) {
           return (
             <>
-              {findInput(formItem.propertyName, inputs, formItem.duplicate)}
+              {findInputWithWrapper(
+                formItem.propertyName,
+                inputs,
+                formItem.duplicate
+              )}
               {renderSwitchGroups(
                 formItem.propertyName,
                 formItem.groups!,

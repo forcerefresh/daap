@@ -1,4 +1,5 @@
 import React from "react";
+import { CoreObjectType } from "../objects/objects-factory";
 import {
   INavigationValues,
   ISlideTransition,
@@ -10,9 +11,10 @@ import { IObjects } from "../store/reducers/i-objects";
 import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
 
 export interface ITransitionsData {
+  itemId: string;
   itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
   itemValues: { [key: string]: any };
-  hasExecutionCode?: boolean;
+  itemSystemType?: CoreObjectType;
   calculatedObjectSize?: React.CSSProperties;
   objectClass: string;
   transitions: ITransitions;
@@ -35,6 +37,7 @@ export interface ISlideTransitionData {
 export interface IPlayerData {
   html: string;
   slideDataArr: ISlideData[];
+  frontSlideDataArr: ISlideData[];
   breakpointData: {
     width: number;
     height: number;

@@ -1,14 +1,22 @@
 import gsap from "gsap";
 import { last } from "lodash-es";
-import { IPlayerData, ISlideData } from "../../export/i-export-html";
-import { getObjectDefinition } from "../../objects/objects-factory";
 import {
-  IGoToSlideAction,
+  IPlayerData,
+  ISlideData,
+  ITransitionsData,
+} from "../../export/i-export-html";
+import {
+  CoreObjectType,
+  getObjectDefinition,
+  PreloadOrder,
+} from "../../objects/objects-factory";
+import { SpinnerValues } from "../../objects/spinner/spinner";
+import {
   INavigationValues,
   ISlideTransition,
   NavigationType,
 } from "../../objects/types";
-import { SlideType } from "../../store/reducers/i-slides";
+import { addClass, removeClass } from "../../utils/doom-utils/common";
 import {
   createTimelineForExecutionCode,
   createTimelineForObject,
@@ -36,7 +44,7 @@ export class Player {
   private nextZIndex = 1;
 
   private normalSlideDataArr?: ISlideData[];
-  private staticSlideDataArr?: ISlideData[];
+  private frontSlideDataArr?: ISlideData[];
 
   //protected config: IPlayerConfig;
 
@@ -48,6 +56,14 @@ export class Player {
   private onCurrentTimelineChangeCallback: any;
 
   private playerConfig: IPlayerConfig;
+
+  private preloaders: { [key: string]: Promise<string>[] };
+  private pagePreloaderEls: {
+    el: HTMLDivElement;
+    inTime: number;
+    outTime: number;
+  }[];
+
   constructor(
     playerData: IPlayerData | null,
     rootDiv: HTMLDivElement,
@@ -76,18 +92,20 @@ export class Player {
     // NOTE: this implementation initialize all slides
     // TODO: lazy loading for requested slide should be implemented
 
-    this.normalSlideDataArr = this.playerData?.slideDataArr.filter(
-      (sliderData) => sliderData.slide.slideType === SlideType.Normal
-    );
-    this.staticSlideDataArr = this.playerData?.slideDataArr.filter(
-      (sliderData) =>
-        sliderData.slide.slideType === SlideType.Front || SlideType.Back
-    );
+    this.normalSlideDataArr = this.playerData?.slideDataArr;
+    this.frontSlideDataArr = this.playerData?.frontSlideDataArr;
+
+    this.preloaders = {
+      first: [],
+      middle: [],
+      last: [],
+    };
+    this.pagePreloaderEls = [];
 
     this.normalSlideDataArr?.forEach((data, idx) => {
       this.createSlide(idx, data);
     });
-    this.staticSlideDataArr?.forEach((data, idx) => {
+    this.frontSlideDataArr?.forEach((data, idx) => {
       this.createStaticSlide(idx, data);
     });
   }
@@ -166,6 +184,7 @@ export class Player {
 
   public clear(destroy = false) {
     this.timelines.forEach((tl) => {
+      tl.getChildren(true).forEach((intl) => intl?.vars?.onComplete?.());
       tl.clear();
       if (destroy) tl.kill();
     });
@@ -179,12 +198,42 @@ export class Player {
     if (destroy) this.slideTransitionTimeline?.kill();
   }
 
+  public async play() {
+    // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
+    this.rootDiv.style.display = "block";
+    this.pagePreloaderEls.forEach((item) => {
+      item.el.style.display = "block";
+      addClass(item.el, "wsSpinnerFadeIn");
+    });
+    console.log(this.preloaders[PreloadOrder.LAST]);
+    const ctime = Date.now();
+
+    await Promise.all(this.preloaders[PreloadOrder.FIRST]);
+    await Promise.all(this.preloaders[PreloadOrder.MIDDLE]);
+    await Promise.all(this.preloaders[PreloadOrder.LAST]);
+
+    this.pagePreloaderEls.forEach(function (item) {
+      if (Date.now() - ctime < 50) {
+        item.el.style.display = "none";
+      } else {
+        addClass(item.el, "wsSpinnerFadeOut");
+        removeClass(item.el, "wsSpinnerFadeIn");
+
+        setTimeout(() => {
+          item.el.style.display = "none";
+        }, item.outTime);
+      }
+    });
+
+    this.playSlide(0);
+  }
+
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
     console.log("Play slide: " + slideIdx);
 
     this.addClassToBullet(this.rootDiv, slideIdx);
 
-    this.rootDiv.style.display = "block";
+    //this.rootDiv.style.display = "block";
     if (!this.normalSlideDataArr?.[slideIdx]) {
       //slide does not exist
       return;
@@ -407,6 +456,10 @@ export class Player {
     this.staticTimelines[no] = tl;
 
     data.transitionsData.forEach((transitionData) => {
+      // Note: prepare page loader/s
+      this.populatePageSpinners(transitionData);
+
+      // Note: create timelines
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
         tl.add(pTl, 0);
@@ -428,6 +481,27 @@ export class Player {
     const nextSlideIdx = currIdx === 0 ? total - 1 : currIdx - 1;
     return nextSlideIdx;
   }
+
+  private populatePageSpinners(transitionData: ITransitionsData) {
+    if (
+      transitionData.itemSystemType === CoreObjectType.SPINNER &&
+      transitionData.itemValues.applyTo === "page"
+    ) {
+      const ppEl = document.querySelector(".object-" + transitionData.itemId);
+      if (ppEl) {
+        const inTime = (transitionData.itemValues as any).fadeInTime;
+        const outTime = (transitionData.itemValues as any).fadeOutTime;
+
+        // ppEl.style.display = "none";
+        this.pagePreloaderEls.push({
+          el: ppEl as HTMLDivElement,
+          inTime,
+          outTime,
+        });
+      }
+    }
+  }
+
   private createSlide(slideIdx: number, data: ISlideData) {
     const slideEl = getSlideById(data.slide.id);
     slideEl.style.display = "none";
@@ -446,6 +520,10 @@ export class Player {
 
     // add objects effects timelines
     data.transitionsData.forEach((transitionData) => {
+      // Note: prepare page loader/s
+      this.populatePageSpinners(transitionData);
+
+      // Note: create effects tls
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
         console.log(pTl);
@@ -453,22 +531,36 @@ export class Player {
         slideTimeline.add(pTl, 0);
       });
 
-      // execution code for objects
-      if (transitionData.hasExecutionCode) {
-        const execCode = getObjectDefinition(
-          transitionData.itemType
-        ).executionCode;
+      // Note: create logic for objects (start, stop, preloaders, ....)
+      const objDef = getObjectDefinition(transitionData.itemType);
 
+      // execution code for objects
+      if (!!objDef?.executionCode_Start) {
         const execTl = createTimelineForExecutionCode(
           transitionData,
-          execCode!,
+          objDef.executionCode_Start!,
+          objDef.executionCode_Stop!,
           transitionData.itemValues,
           transitionData.calculatedObjectSize
         );
         slideTimeline.add(execTl, 0);
       }
+
+      // preload
+      if (transitionData.itemValues.preload && !!objDef?.preload) {
+        const preloadPromise = objDef.preload({
+          id: transitionData.itemId,
+          values: transitionData.itemValues,
+          className: transitionData.objectClass,
+          calculatedObjectSize: transitionData.calculatedObjectSize,
+        });
+        this.preloaders[objDef.meta.preloadOrder || PreloadOrder.MIDDLE].push(
+          preloadPromise
+        );
+      }
     });
 
+    console.log(this.preloaders.length, "Preloaders");
     console.log(slideTimeline);
     console.log(slideTimeline.getChildren());
     console.log(slideTimeline.getById("slideDurationTimeline"));

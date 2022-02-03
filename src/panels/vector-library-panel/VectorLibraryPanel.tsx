@@ -292,7 +292,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                                   height: 100,
                                 },
                                 {
-                                  svg: image.svgString,
+                                  svg: { source: image.svgString },
                                 }
                               );
                             }

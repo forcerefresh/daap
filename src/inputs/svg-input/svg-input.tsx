@@ -12,7 +12,6 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { getCheckboxField } from "../input-utils";
 import { ISVGInput, IUpdateInput } from "../types";
 import css from "./svg-input.module.scss";
 

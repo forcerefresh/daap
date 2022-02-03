@@ -217,6 +217,25 @@ export function calculateObjectSize(
         };
         break;
       }
+      case "center": {
+        const left =
+          relativeToSize.left +
+          relativeToSize.width / 2 -
+          object.snapLayout!.width / 2;
+
+        const top =
+          relativeToSize.top +
+          relativeToSize.height / 2 -
+          object.snapLayout!.height / 2;
+
+        sizeObj = {
+          top,
+          left,
+          width: object.snapLayout!.width,
+          height: object.snapLayout!.height,
+        };
+        break;
+      }
     }
 
     return mapValues(sizeObj, (size) => `${size}px`);

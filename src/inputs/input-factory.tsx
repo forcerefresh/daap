@@ -44,6 +44,7 @@ import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
 import { Breakpoints } from "../store/reducers/settings";
 import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
+import { InfoInputForm } from "./info-input/info-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -222,7 +223,9 @@ export function getInputForm<T>(
         <SVGCustomColorsForm key={key} {...inputProps} onChange={onChange} />
       );
     }
-
+    case InputType.INFO: {
+      return <InfoInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
     case InputType.RICH_TEXTAREA: {
       return (
         <RichTextAreaInputForm key={key} {...inputProps} onInput={onChange} />

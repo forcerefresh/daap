@@ -14,10 +14,10 @@ import { FormType } from "../utils/form-layout/form-layout";
 export enum ObjectType {
   TEXT = "text",
   RICH_TEXT = "rich_text",
-  IMAGE = "image",
+  //IMAGE = "image", << external
   MULTI_IMAGE = "multi_image",
   VIDEO = "video",
-  //YOUTUBE_VIDEO = "youtube_video",
+  //YOUTUBE_VIDEO = "youtube_video", << external
   HTML = "html",
   SVG = "svg",
   CANVAS = "canvas",
@@ -26,6 +26,7 @@ export enum ObjectType {
   BUTTON = "button",
   BULLETS = "bullets",
   ARROW = "arrow",
+  //SPINNER = "spinner", << external
 }
 
 export type ItemType = "object" | "layer" | "slide";

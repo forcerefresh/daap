@@ -1,10 +1,11 @@
 import gsap from "gsap";
-import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { executionCodeFuncType } from "./objects-factory";
 
 export interface ExecCodeConfig {
-  execCodeFunc: executionCodeFuncType;
+  execCodeFunc_Start: executionCodeFuncType;
+  execCodeFunc_Stop: executionCodeFuncType;
   values: { [key: string]: any };
+  id: string;
   className: string;
   calculatedObjectSize: any;
   slideDuration: number;
@@ -14,21 +15,27 @@ gsap.registerEffect({
   name: "execCode",
   effect: function (targets: any, config: ExecCodeConfig) {
     const {
+      id,
       values,
       className,
       slideDuration,
       calculatedObjectSize,
-      execCodeFunc,
+      execCodeFunc_Start,
+      execCodeFunc_Stop,
     } = config;
     let isStarted = false;
 
     const onStart = () => {
-      execCodeFunc(className, values, calculateObjectSize);
+      console.log("onstart exec code");
+      execCodeFunc_Start({ id, className, values, calculatedObjectSize });
     };
-    const onStop = () => {};
+    const onStop = () => {
+      console.log("onstop exec code");
+      execCodeFunc_Stop({ id, className, values, calculatedObjectSize });
+    };
 
     var effConfig = {
-      duration: config.slideDuration,
+      duration: slideDuration,
 
       onComplete: () => {
         onStop();

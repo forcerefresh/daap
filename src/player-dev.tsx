@@ -26,7 +26,7 @@ selectEl?.addEventListener("change", (e: any) => {
   console.log(e.target.value);
 
   const player = new Player(selPlayerData as any, divEl);
-  player.playSlide(0);
+  player.play();
 });
 //**** */
 const divEl = document.createElement("div");

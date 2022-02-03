@@ -11,6 +11,7 @@ import { ISlideDuration } from "../store/reducers/i-slides";
 import { Breakpoints } from "../store/reducers/settings";
 
 export enum InputType {
+  INFO = "info",
   NUMBER = "number",
   UNITS_NUMBER = "units_number",
   NUMERIC_TIMELINE = "numeric_timeline",
@@ -275,6 +276,12 @@ export interface ITextInput<T = string> {
   defaultValue: string;
   inputProps?: { disabled?: boolean; placeholderText?: string };
 }
+export interface IInfoInput<T = string> {
+  inputType: InputType.INFO;
+  displayName: string;
+  helperText?: string;
+}
+
 export interface ICheckboxInput<T = string> {
   inputType: InputType.CHECKBOX;
   displayName: string;
@@ -659,23 +666,6 @@ export type RichTextPropertiesTuple = [
   IUnitsNumberInput<"fontSize">
 ];
 
-export interface ImageProperties {
-  fit: ICoverPlacementInput;
-  url: IImageInput;
-}
-
-export interface ImageValues {
-  fit: ICoverPlacementValue;
-  url: IImageInputValue;
-  useForThumbnail: boolean;
-}
-
-export type ImagePropertiesTuple = [
-  ICoverPlacementInput<"fit">,
-  IImageInput<"url">,
-  ICheckboxInput<"useForThumbnail">
-];
-
 export interface MultiImageValues {
   fit: ICoverPlacementValue;
   urls: IImageInputValue[];
@@ -985,11 +975,11 @@ export type ButtonPropertiesTuple = [
   INumberInput<"hoverTransitionDuration">
 ];
 
-export interface ISliderInput {
+export interface ISliderInput<T = string> {
   inputType: InputType.SLIDER_INPUT;
   displayName: string;
   helperText?: string;
-  propertyName: string;
+  propertyName: T;
   value: number;
   defaultValue: number;
   inputProps?: {
@@ -1065,20 +1055,18 @@ export interface VideoValues {
 
 export type VideoPropertiesTuple = [IVideoInput<"url">];
 
-export interface SvgProperties {
-  svg: ITextAreaInput;
-}
-
 export interface SvgValues {
   svg: ISVGValue;
+  hasCustomColors: boolean;
+  hasFillAndStroke: boolean;
   fill: RGBColor;
   stroke: RGBColor;
 }
 
 export type SvgPropertiesTuple = [
-  ISVGTextAreaInput<"svg">,
-  IColorInput<"fill">,
-  IColorInput<"stroke">
+  ISVGInput<"svg">,
+  IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
 ];
 
 export type ArrowPropertiesTuple = [

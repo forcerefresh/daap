@@ -22,7 +22,6 @@ import {
   roundNumber,
 } from "../../utils/doom-utils/common";
 import {
-  ImageValues,
   LayoutChildrenType,
   TextProperties,
   TextPropertiesTuple,
@@ -46,6 +45,8 @@ import { ISelection } from "../reducers/selection";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
 import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
+import { getObjectDefinition } from "../../objects/objects-factory";
+import { ImageValues } from "../../objects/image/image";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -829,12 +830,21 @@ function handleObjectUpdate(
   dispatch: Dispatch,
   getState: () => IStore
 ) {
+  const prevObject = getState().project.objects.objectById[object.id];
+
   // round to max two decimals
   object.left = roundNumber(object.left!, 2);
   object.width = roundNumber(object.width!, 2);
   object.top = roundNumber(object.top!, 2);
   object.height = roundNumber(object.height!, 2);
 
+  const objDeff = getObjectDefinition(object.type);
+  object = !!objDeff?.postProcess
+    ? objDeff.postProcess(prevObject, object)
+    : object;
+
+  console.log(object);
+  console.log(objDeff?.postProcess);
   switch (object.type) {
     case ObjectType.TEXT:
     case ObjectType.RICH_TEXT: {
@@ -849,7 +859,7 @@ function handleObjectUpdate(
       handleBulletsUpdate(object, dispatch, getState);
       break;
     }
-    case ObjectType.IMAGE: {
+    case "image": {
       handleImageUpdate(object, dispatch, getState);
       break;
     }
@@ -865,7 +875,7 @@ function handleImageUpdate(
   getState: () => IStore
 ): void {
   // only one image object can have useForThumbnail
-  const object2 = postProcessImage(object, getState);
+  const object2 = getObjectThatHaveThumbnailSet(object, getState);
   if (object2) {
     const object2Clone = cloneDeep(object2);
     (object2Clone.definition.values as ImageValues).useForThumbnail = false;
@@ -876,7 +886,7 @@ function handleImageUpdate(
 }
 
 /* This method mutate object*/
-function postProcessImage(
+function getObjectThatHaveThumbnailSet(
   object: IObject,
   getState: () => IStore
 ): IObject | undefined {

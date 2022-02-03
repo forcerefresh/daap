@@ -94,7 +94,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
               onChange(newValue);
               setLibraryOpen(false);
             }}
-            panelsToShow={[Panels.Images]}
+            panelsToShow={[Panels.MyImages, Panels.Images]}
           />
         </div>
       </Popover>

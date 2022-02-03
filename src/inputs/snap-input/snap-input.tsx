@@ -24,6 +24,7 @@ const EDGE_OPTIONS = [
   { label: "Top-Right", value: "top-right" },
   { label: "Bottom-Left", value: "bottom-left" },
   { label: "Bottom-Right", value: "bottom-right" },
+  { label: "Center", value: "center" },
 ];
 
 export const SnapInputForm: React.FC<IEdgeInput & IUpdateInput> = (props) => {

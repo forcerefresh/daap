@@ -78,32 +78,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             className={cx(css.card, { [css.disabled]: !activeLayerId })}
             onClick={() => {
               if (activeLayerId) {
-                _addNewObject(activeLayerId, ObjectType.IMAGE, {
-                  left: (documentSize.width - 300) / 2,
-                  top: (documentSize.height - 300) / 2,
-                  width: 300,
-                  height: 300,
-                });
-                onRequestClose();
-              }
-            }}
-          >
-            <Icon
-              icon="media"
-              iconSize={36}
-              color="gray"
-              style={{ width: "36px", height: "36px", fill: "gray" }}
-            />
-            <h3>IMAGE</h3>
-            <p>Position image relative or absolute</p>
-          </Card>
-
-          <Card
-            interactive={!!activeLayerId}
-            elevation={Elevation.TWO}
-            className={cx(css.card, { [css.disabled]: !activeLayerId })}
-            onClick={() => {
-              if (activeLayerId) {
                 _addNewObject(activeLayerId, ObjectType.MULTI_IMAGE, {
                   left: (documentSize.width - 300) / 2,
                   top: (documentSize.height - 300) / 2,
@@ -245,75 +219,78 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h1>Navigation</h1>
           <p>Page navigation</p>
         </Card>
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.BUTTON, {
-                left: (documentSize.width - 300) / 2,
-                top: (documentSize.height - 300) / 2,
-                width: 300,
-                height: 100,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="link"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>BUTTON</h3>
-          <p>Add button</p>
-        </Card>
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.BULLETS, {
-                left: documentSize.width / 4,
-                top: documentSize.height / 4,
-                width: documentSize.width / 2,
-                height: documentSize.height / 2,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <AddTextboxIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>BULLETS</h3>
-          <p>Add bullets navigation</p>
-        </Card>
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.ARROW, {
-                left: documentSize.width / 4,
-                top: documentSize.height / 4,
-                width: documentSize.width / 2,
-                height: documentSize.height / 2,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <AddTextboxIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>ARROW</h3>
-          <p>Add arrow</p>
-        </Card>
+        <div>
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.BUTTON, {
+                  left: (documentSize.width - 300) / 2,
+                  top: (documentSize.height - 300) / 2,
+                  width: 300,
+                  height: 100,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <Icon
+              icon="link"
+              iconSize={36}
+              color="gray"
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>BUTTON</h3>
+            <p>Add button</p>
+          </Card>
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.BULLETS, {
+                  left: documentSize.width / 4,
+                  top: documentSize.height / 4,
+                  width: documentSize.width / 2,
+                  height: documentSize.height / 2,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <AddTextboxIcon
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>BULLETS</h3>
+            <p>Add bullets navigation</p>
+          </Card>
+          <Card
+            interactive={!!activeLayerId}
+            elevation={Elevation.TWO}
+            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, ObjectType.ARROW, {
+                  left: documentSize.width / 4,
+                  top: documentSize.height / 4,
+                  width: documentSize.width / 2,
+                  height: documentSize.height / 2,
+                });
+                onRequestClose();
+              }
+            }}
+          >
+            <AddTextboxIcon
+              style={{ width: "36px", height: "36px", fill: "gray" }}
+            />
+            <h3>ARROW</h3>
+            <p>Add arrow</p>
+          </Card>
+          {renderObjectsCards("navigation")}
+        </div>
       </div>
 
       <div>

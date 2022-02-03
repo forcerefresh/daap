@@ -115,7 +115,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         });
       });
 
-      pl.playSlide(0);
+      pl.play();
 
       currentPlayer.current = pl;
 

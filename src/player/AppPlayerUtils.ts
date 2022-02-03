@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import React from "react";
 import { ITransitionsData } from "../export/i-export-html";
+import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { executionCodeFuncType } from "../objects/objects-factory";
 import { ITransition } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
@@ -195,22 +196,24 @@ function populatesTimelinesForObject(
 
 export function createTimelineForExecutionCode(
   data: ITransitionsData,
-  execCodeFunc: executionCodeFuncType,
+  execCodeFunc_Start: executionCodeFuncType,
+  execCodeFunc_Stop: executionCodeFuncType,
+
   values: { [key: string]: any },
   calculatedObjectSize: any
 ): gsap.core.Timeline {
   const tl = new gsap.core.Timeline();
 
-  const execCodeTween = gsap.effects["execCode"](
-    {},
-    {
-      execCodeFunc,
-      values: values,
-      className: data.objectClass,
-      calculatedObjectSize,
-      slideDuration: data.data.slideDuration.customValue / 1000,
-    }
-  );
-  (tl as any).add(execCodeTween);
+  const conf: ExecCodeConfig = {
+    execCodeFunc_Start,
+    execCodeFunc_Stop,
+    values: values,
+    id: data.itemId,
+    className: data.objectClass,
+    calculatedObjectSize,
+    slideDuration: data.data.slideDuration.customValue / 1000,
+  };
+  const execCodeTween = gsap.effects["execCode"]({}, conf);
+  tl.add(execCodeTween);
   return tl;
 }

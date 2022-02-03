@@ -10,18 +10,19 @@ import {
   ICornerRadiusValue,
   ICoverPlacementValue,
   IImageInputValue,
-  ImageValues,
   MultiImageValues,
   SourceImageValues,
   SvgValues,
   TextValues,
 } from "../inputs/types";
+import { ImageValues } from "../objects/image/image";
+import { getObjectPlaceholder } from "../objects/object-helpers";
 import { getObjectDefinition } from "../objects/objects-factory";
 import { IObject, ObjectType } from "../objects/types";
 import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
-import { ISlide, ISlides } from "../store/reducers/i-slides";
+import { ISlide, ISlides, SlideType } from "../store/reducers/i-slides";
 import { BreakpointConfiguration, ISettings } from "../store/reducers/settings";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
@@ -42,201 +43,250 @@ export function generatePlayerData(
 ): IPlayerData {
   const { slides, layers, objects } = sources;
 
-  const slideIds: string[] = [];
+  //const slideIds: string[] = [];
 
-  let previewSlidesArr: ISlide[] = [];
+  let normalSlidesArr: ISlide[] = [];
+  let frontSlidesArr: ISlide[] = [];
+  let backSlidesArr: ISlide[] = [];
+
   switch (scope?.entityType) {
     case "slide": {
-      previewSlidesArr = getNormalSlideArr(slides).filter(
+      normalSlidesArr = getNormalSlideArr(slides).filter(
         (slide) => slide.id === scope?.entityId
       );
+
       break;
     }
     default: {
-      previewSlidesArr = getNormalSlideArr(slides);
+      normalSlidesArr = getNormalSlideArr(slides);
+      frontSlidesArr = getFrontSlideArr(slides);
+      backSlidesArr = getFrontSlideArr(slides);
       break;
     }
   }
 
   // generate thumbnails
   const thumbnailHtmlArr = getThumbnailHtmlArr(
-    previewSlidesArr,
+    normalSlidesArr,
     layers,
     objects
   );
 
   const slideDataArr: ISlideData[] = [];
+  const frontSlideDataArr: ISlideData[] = [];
+  const backSlideDataArr: ISlideData[] = [];
 
   let html = "<div class='slidesHolder'>"; // slides holder open
 
-  previewSlidesArr.forEach((slide) => {
-    const transitionsData: ITransitionsData[] = [];
-    const someSlideData = pick(slide, [
-      "id",
-      "slideType",
-      "transitions",
-      "duration",
-      "userId",
-    ]);
-    someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
-    // slide data
-    const slideData: ISlideData = {
-      slide: someSlideData,
-      transitionsData,
-    };
-
-    let slideStyle = "";
-    slideStyle += "position: absolute;";
-    slideStyle += `width: ${breakpointConfig.normal.slide.width}px;`;
-    slideStyle += `height: ${breakpointConfig.normal.slide.height}px;`;
-
-    html += "  <div style='" + slideStyle + "' class='slide-" + slide.id + "'>"; // slide open
-    slideIds.push(slide.id);
-
-    const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
-    layerArr.forEach((layer) => {
-      const layerValues = layer.definition.values as ILayerValues;
-
-      const layerClassName = "layer-" + layer.id;
-      transitionsData.push({
-        itemType: "layer",
-        itemValues: layer.definition.values,
-        objectClass: layerClassName,
-        transitions: layer.transitions,
-        data: {
-          slideDuration: slide.duration,
-          objectWidth: 1000,
-          objectHeight: 500,
-          objectLeft: 0,
-          objectTop: 0,
-          overflow: "",
-          objectHtml: " ",
-        },
-      });
-
-      // TODO: IMPORTANT
-      // IMPORTANT: !!!!!! SIZE HARDCODED
-      //html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
-      let layerStyle = `position:absolute;`;
-      //layerStyle += `border: 1px solid red;`;
-      layerStyle += `overflow: ${layerValues.overflow};`;
-
-      if (layerValues.hasLayoutChildren) {
-        const t = layerValues.layoutChildren.type;
-        if (t === "row" || t === "column") {
-          layerStyle += "display:flex;";
-          layerStyle += `align-items: ${layerValues.layoutChildren.align};`;
-          layerStyle += `justify-content: ${layerValues.layoutChildren.justify};`;
-
-          if (t === "row") {
-            layerStyle += `flex-direction:row;`;
-          }
-          if (t === "column") {
-            layerStyle += `display:flex;`;
-            layerStyle += `flex-direction: column;`;
-          }
-        }
-      }
-
-      const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
-        resetPosition: false,
-      });
-      forOwn(calculatedLayerSize, function (value, key) {
-        layerStyle += key + ":" + value + ";";
-      });
-
-      html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
-
-      const objectArr = getObjectArr(objects, layer.objectIds);
-      objectArr.forEach((object) => {
-        const objectValues = object.definition.values;
-
-        const objectClass = "object-" + object.id;
-
-        // >> "left", "top", "width", "height"
-        const sizeObj = pick(object, "left", "top", "width", "height");
-        const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
-
-        // TODO: IMPORTANT (size issue)
-        const calculatedObjectSize = calculateObjectSize(
-          object,
-          breakpointConfig,
-          { resetPosition: false }
-        );
-
-        let style = "";
-        forOwn(calculatedObjectSize, function (value, key) {
-          style += key + ":" + value + ";";
-        });
-        style += layerValues.hasLayoutChildren
-          ? "position: static;"
-          : object.layout === "absolute"
-          ? "position: absolute;"
-          : "position: relative;";
-        const overflow = objectValues.overflow;
-        style += `overflow: ${overflow};`;
-        // << "left", "top", "width", "height"
-
-        const wrapperStyle = style;
-        style +=
-          "position: relative; left:initial; top: initial; overflow: visible";
-
-        html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
-        html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
-
-        //console.log(object);
-        const objectHtml = getObjectHtml(
-          object,
-          calculatedObjectSize,
-          true,
-          thumbnailHtmlArr,
-          previewSlidesArr.length
-        );
-
-        transitionsData.push({
-          itemType: object.type,
-          itemValues: object.definition.values,
-          hasExecutionCode: !!getObjectDefinition(object.type).executionCode,
-          calculatedObjectSize,
-          objectClass: objectClass,
-          transitions: object.transitions,
-          events: getObjectEvents(object),
-          data: {
-            slideDuration: slide.duration,
-            // TODO: IMPORTANT (size issue)
-            objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
-            objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
-            objectLeft: parseInt(calculatedObjectSize!.left + "", 10),
-            objectTop: parseInt(calculatedObjectSize!.top + "", 10),
-            overflow,
-            objectHtml,
-          },
-        });
-        html += objectHtml;
-
-        html += "      </div>"; // object close
-        html += "      </div>"; // object close wrapper
-      });
-
-      html += "    </div>"; // layer close
-    });
-
-    html += "  </div>"; // slide close
-
-    slideDataArr.push(slideData);
+  normalSlidesArr.forEach((slide) => {
+    const slideDataRes = generateSlideData(
+      slide,
+      layers,
+      objects,
+      breakpointConfig,
+      settings,
+      thumbnailHtmlArr,
+      normalSlidesArr.length
+    );
+    slideDataArr.push(slideDataRes.slideData);
+    html += slideDataRes.html;
   });
 
+  frontSlidesArr.forEach((slide) => {
+    const slideDataRes = generateSlideData(
+      slide,
+      layers,
+      objects,
+      breakpointConfig,
+      settings,
+      thumbnailHtmlArr,
+      normalSlidesArr.length
+    );
+    frontSlideDataArr.push(slideDataRes.slideData);
+    html += slideDataRes.html;
+  });
   html += "</div>"; //slides holder close
 
   return {
     html,
     slideDataArr,
+    frontSlideDataArr,
     breakpointData: {
       width: breakpointConfig.normal.slide.width,
       height: breakpointConfig.normal.slide.height,
       pageWidth: breakpointConfig.normal.page.width,
     },
   };
+}
+
+function generateSlideData(
+  slide: ISlide,
+  layers: ILayers,
+  objects: IObjects,
+  breakpointConfig: BreakpointConfiguration,
+  settings: ISettings,
+  thumbnailHtmlArr: (string | undefined)[],
+  slidesLength: number
+): { slideData: ISlideData; html: string } {
+  let html: string = "";
+  const transitionsData: ITransitionsData[] = [];
+  const someSlideData = pick(slide, [
+    "id",
+    "slideType",
+    "transitions",
+    "duration",
+    "userId",
+  ]);
+  someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
+  // slide data
+  const slideData: ISlideData = {
+    slide: someSlideData,
+    transitionsData,
+  };
+
+  let slideStyle = "";
+  slideStyle += "position: absolute;";
+  slideStyle += `width: ${breakpointConfig.normal.slide.width}px;`;
+  slideStyle += `height: ${breakpointConfig.normal.slide.height}px;`;
+  if (slide.slideType === SlideType.Front) slideStyle += `z-index:1000;`;
+
+  html += "  <div style='" + slideStyle + "' class='slide-" + slide.id + "'>"; // slide open
+  //slideIds.push(slide.id);
+
+  const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
+  layerArr.forEach((layer) => {
+    const layerValues = layer.definition.values as ILayerValues;
+
+    const layerClassName = "layer-" + layer.id;
+    transitionsData.push({
+      itemId: layer.id,
+      itemType: "layer",
+      itemValues: layer.definition.values,
+      objectClass: layerClassName,
+      transitions: layer.transitions,
+      data: {
+        slideDuration: slide.duration,
+        objectWidth: 1000,
+        objectHeight: 500,
+        objectLeft: 0,
+        objectTop: 0,
+        overflow: "",
+        objectHtml: " ",
+      },
+    });
+
+    // TODO: IMPORTANT
+    // IMPORTANT: !!!!!! SIZE HARDCODED
+    //html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
+    let layerStyle = `position:absolute;`;
+    //layerStyle += `border: 1px solid red;`;
+    layerStyle += `overflow: ${layerValues.overflow};`;
+
+    if (layerValues.hasLayoutChildren) {
+      const t = layerValues.layoutChildren.type;
+      if (t === "row" || t === "column") {
+        layerStyle += "display:flex;";
+        layerStyle += `align-items: ${layerValues.layoutChildren.align};`;
+        layerStyle += `justify-content: ${layerValues.layoutChildren.justify};`;
+
+        if (t === "row") {
+          layerStyle += `flex-direction:row;`;
+        }
+        if (t === "column") {
+          layerStyle += `display:flex;`;
+          layerStyle += `flex-direction: column;`;
+        }
+      }
+    }
+
+    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
+      resetPosition: false,
+    });
+    forOwn(calculatedLayerSize, function (value, key) {
+      layerStyle += key + ":" + value + ";";
+    });
+
+    html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
+
+    const objectArr = getObjectArr(objects, layer.objectIds);
+    objectArr.forEach((object) => {
+      const objectValues = object.definition.values;
+
+      const objectClass = "object-" + object.id;
+
+      // >> "left", "top", "width", "height"
+      const sizeObj = pick(object, "left", "top", "width", "height");
+      const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
+
+      // TODO: IMPORTANT (size issue)
+      const calculatedObjectSize = calculateObjectSize(
+        object,
+        breakpointConfig,
+        { resetPosition: false }
+      );
+
+      let style = "";
+      forOwn(calculatedObjectSize, function (value, key) {
+        style += key + ":" + value + ";";
+      });
+      style += layerValues.hasLayoutChildren
+        ? "position: static;"
+        : object.layout === "absolute"
+        ? "position: absolute;"
+        : "position: relative;";
+      const overflow = objectValues.overflow;
+      style += `overflow: ${overflow};`;
+      // << "left", "top", "width", "height"
+
+      const wrapperStyle = style;
+      style +=
+        "position: relative; left:initial; top: initial; overflow: visible";
+
+      html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
+      html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
+
+      //console.log(object);
+      const objectHtml = getObjectHtml(
+        object,
+        calculatedObjectSize,
+        true,
+        thumbnailHtmlArr, // for bullets
+        slidesLength // for bullets
+      );
+      console.log(getObjectDefinition(object.type)?.meta?.coreType);
+      // alert(getObjectDefinition(object.type)?.meta?.coreType);
+      transitionsData.push({
+        itemId: object.id,
+        itemType: object.type,
+        itemValues: object.definition.values,
+        itemSystemType: getObjectDefinition(object.type)?.meta?.coreType,
+        calculatedObjectSize,
+        objectClass: objectClass,
+        transitions: object.transitions,
+        events: getObjectEvents(object),
+        data: {
+          slideDuration: slide.duration,
+          // TODO: IMPORTANT (size issue)
+          objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
+          objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
+          objectLeft: parseInt(calculatedObjectSize!.left + "", 10),
+          objectTop: parseInt(calculatedObjectSize!.top + "", 10),
+          overflow,
+          objectHtml,
+        },
+      });
+      html += objectHtml;
+
+      html += "      </div>"; // object close
+      html += "      </div>"; // object close wrapper
+    });
+
+    html += "    </div>"; // layer close
+  });
+
+  html += "  </div>"; // slide close
+
+  return { slideData, html };
 }
 
 function getObjectEvents(object: IObject) {
@@ -249,6 +299,20 @@ function getObjectEvents(object: IObject) {
  */
 export function getNormalSlideArr(slides: ISlides): ISlide[] {
   return slides.normalSlides.map((slideId) => slides.slideById[slideId]);
+}
+
+/**
+ * Returns array of front slides from store>slides
+ */
+export function getFrontSlideArr(slides: ISlides): ISlide[] {
+  return slides.frontSlides.map((slideId) => slides.slideById[slideId]);
+}
+
+/**
+ * Returns array of front slides from store>slides
+ */
+export function getBackSlideArr(slides: ISlides): ISlide[] {
+  return slides.backSlides.map((slideId) => slides.slideById[slideId]);
 }
 
 /**
@@ -288,8 +352,6 @@ export function getObjectHtml(
         thumbnailHtmlArr,
         sliderCounter
       );
-    case ObjectType.IMAGE:
-      return getImageHtml(object, calculatedObjectSize);
     case ObjectType.MULTI_IMAGE:
       return getMultiImageHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.VIDEO:
@@ -297,7 +359,7 @@ export function getObjectHtml(
     //case ObjectType.YOUTUBE_VIDEO:
     //return getYoutubeVideoHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.SVG:
-      return getSvgHtml(object, calculatedObjectSize);
+      return getSvgHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.ARROW:
       return getArrowHtml(object, calculatedObjectSize);
     case ObjectType.CANVAS:
@@ -665,44 +727,6 @@ export function getButtonHtml(
   }" style="${style}">${nl2br(buttonProperties.text)}</button>`;
 }
 
-function getImageHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
-  const imageProperties = object.definition.values as ImageValues;
-
-  if (imageProperties.url.isPlaceholder) {
-    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
-  }
-
-  const coverPlacementValue = imageProperties.fit as ICoverPlacementValue;
-
-  let backgroundSize = coverPlacementValue.size as
-    | "cover"
-    | "fit"
-    | "100% 100%";
-
-  if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
-  const aH = coverPlacementValue.positionHorizontal;
-  const aV = coverPlacementValue.positionVertical;
-
-  //let style = "";
-  //style += addCommonPropertiesToStyle(style, object);
-  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
-
-  let style = "";
-  style += addCommonPropertiesToStyle(style, object);
-  style += "width: 100%;";
-  style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.url}');`;
-  style += `background-repeat:no-repeat;`;
-  style += `background-size: ${backgroundSize};`;
-  style += `background-position: ${aH} ${aV};`;
-
-  return `<div class="object-content" style="${style}"></div>`;
-}
-
 function getMultiImageHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
@@ -900,12 +924,31 @@ function getVideoHtml(
 
 function getSvgHtml(
   object: IObject,
-  calculatedObjectSize: React.CSSProperties
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
 ) {
   const svgValues = object.definition.values as SvgValues;
+  const svgValuesMetadata = object.definition.valuesMetadata;
 
-  const svgWidth = 24;
-  const svgHeight = 24;
+  if (!isPlayer) {
+    if (!svgValues.svg.source) {
+      return getObjectPlaceholder(`SVG<br/>(SVG is not set)`);
+    }
+  }
+
+  const svgCode =
+    svgValues.svg.colors && svgValues.hasCustomColors
+      ? replaceColors(svgValues.svg.source, svgValues.svg.colors)
+      : svgValues.svg.source;
+
+  const fill =
+    !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
+      ? `fill: ${color2rgba(svgValues.fill)};`
+      : "";
+  const stroke =
+    !svgValuesMetadata["stroke"].disabled && svgValues.hasFillAndStroke
+      ? `stroke: ${color2rgba(svgValues.stroke)};`
+      : "";
 
   const w = parseInt(calculatedObjectSize.width as string);
   const h = parseInt(calculatedObjectSize.height as string);
@@ -914,22 +957,30 @@ function getSvgHtml(
   let scaleY = 1;
   scaleY = h / w;
 
-  const css = `
+  let css = `
   <style>
   .object-content-${object.id}{
     transform: scaleX(${scaleX}) scaleY(${scaleY});
     transform-origin: top left;
   }
   .object-content-${object.id} svg {
-    fill: ${color2rgba(svgValues.fill)};
-    stroke: ${color2rgba(svgValues.stroke)};
     width: 100%;
     height: 100%;
   }
   </style>`;
 
+  if (svgValues.hasFillAndStroke) {
+    css += `
+    <style>
+    .object-content-${object.id} svg {
+      ${fill}
+      ${stroke}
+    }
+    </style>`;
+  }
+
   //if (svgValues.svg) {
-  return `${css}<div class="object-content object-content-${object.id}">${svgValues.svg.source}</div>`;
+  return `${css}<div class="object-content object-content-${object.id}">${svgCode}</div>`;
   //}
   //return ``;
 }
@@ -1049,7 +1100,7 @@ function getCanvasHtml(
 
 // UTILS FUNCTIONS **************
 
-function addCommonPropertiesToStyle(style: string, object: IObject) {
+export function addCommonPropertiesToStyle(style: string, object: IObject) {
   //console.log(object.commonProperties);
   if (object.commonProperties?.borderRadius) {
     style = addBorderRadius(style, object.commonProperties?.borderRadius);

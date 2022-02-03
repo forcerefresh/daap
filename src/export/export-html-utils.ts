@@ -1,4 +1,4 @@
-import { ImageValues } from "../inputs/types";
+import { ImageValues } from "../objects/image/image";
 import { IObject } from "../objects/types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";

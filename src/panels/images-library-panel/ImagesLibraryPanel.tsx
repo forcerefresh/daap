@@ -430,7 +430,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                 if (addObject) {
                                   _addNewObject(
                                     activeLayerId,
-                                    ObjectType.IMAGE, //cover
+                                    "image", //cover
                                     {},
                                     {
                                       url: getImageUrl(
@@ -490,7 +490,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             intent="primary"
                             onClick={() => {
                               onSelect?.({
-                                type: ObjectType.IMAGE,
+                                type: "image",
                                 initialValues: {
                                   url: getImageUrl(
                                     (image?.images as any)[selectedResolution]
@@ -606,7 +606,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: ObjectType | string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

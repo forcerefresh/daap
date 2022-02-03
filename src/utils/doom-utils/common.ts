@@ -116,3 +116,18 @@ export function nl2br(str: string | undefined): string {
 export function roundNumber(num: number, places: number): number {
   return Math.round(num * 10 * places) / (10 * places);
 }
+
+export function hasClass(el: Element, className: string) {
+  return new RegExp("\\b" + className + "\\b").test(el.className);
+}
+export function addClass(el: Element, className: string) {
+  if (!hasClass(el, className)) {
+    el.className += " " + className;
+  }
+}
+export function removeClass(el: Element, className: string) {
+  el.className = el.className.replace(
+    new RegExp("\\b" + className + "\\b", "g"),
+    ""
+  );
+}

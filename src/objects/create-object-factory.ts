@@ -11,11 +11,7 @@ import {
   FrameProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
-  IGridPlacementValue,
   IInputMetadataValues,
-  ImageProperties,
-  ImagePropertiesTuple,
-  ImageValues,
   InputType,
   MultiImagePropertiesTuple,
   MultiImageValues,
@@ -23,7 +19,6 @@ import {
   RichTextValues,
   SourceImagePropertiesTuple,
   SourceImageValues,
-  SvgProperties,
   SvgPropertiesTuple,
   SvgValues,
   TextProperties,
@@ -76,14 +71,6 @@ export function createObject(
           hasOverflowProperty: true,
         }),
         ...objectProps,
-      };
-    }
-    case ObjectType.IMAGE: {
-      return {
-        ...objectProps,
-        ...createImageObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
       };
     }
     case ObjectType.MULTI_IMAGE: {
@@ -165,7 +152,7 @@ export function createObject(
 
       return {
         ...objectProps,
-        ...objDeff.createObject(initialValue, {
+        ...objDeff!.createObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -1408,88 +1395,6 @@ function createButtonObject(initialValue?: {
   };
 }
 
-function createImageObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<ImagePropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
-  const object = createCommonObject(ObjectType.IMAGE);
-
-  const properties: ImagePropertiesTuple = [
-    {
-      inputType: InputType.COVER_LAYOUT,
-      displayName: "Fit",
-      propertyName: "fit",
-      value: {
-        size: "fit",
-        positionHorizontal: "center",
-        positionVertical: "center",
-      },
-      defaultValue: {
-        size: "fit",
-        positionHorizontal: "center",
-        positionVertical: "center",
-      },
-    },
-    {
-      displayName: "Path",
-      propertyName: "url",
-      inputType: InputType.IMAGE,
-      value: {
-        url: initialValue?.url || "",
-        width: 300,
-        height: 300,
-        isPlaceholder: !initialValue?.url,
-      },
-      defaultValue: {
-        url: "",
-        width: 300,
-        height: 300,
-        isPlaceholder: true,
-      },
-    },
-    {
-      displayName: "Use for thumbnail",
-      propertyName: "useForThumbnail",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-    },
-  ];
-
-  const values: ImageValues = {
-    fit: {
-      size: "fit",
-      positionHorizontal: "center",
-      positionVertical: "center",
-    },
-    url: {
-      url: initialValue?.url || "",
-      width: 300,
-      height: 300,
-      isPlaceholder: !initialValue?.url,
-    },
-    useForThumbnail: false,
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.IMAGE,
-      properties,
-      values,
-      valuesMetadata: {},
-    },
-  };
-}
-
 function createMultiImageObject(
   initialValue?: {
     [key: string]: any;
@@ -1683,14 +1588,17 @@ function createSvgObject(
   commonProperties?: {
     hasOverflowProperty: boolean;
   }
-): Omit<IObject<SvgProperties>, keyof ICommonObjectProperties | "layerId"> {
+): Omit<
+  IObject<SvgPropertiesTuple>,
+  keyof ICommonObjectProperties | "layerId"
+> {
   const object = createCommonObject(ObjectType.SVG);
 
   const properties: SvgPropertiesTuple = [
     {
       displayName: "SVG",
       propertyName: "svg",
-      inputType: InputType.SVG_TEXTAREA,
+      inputType: InputType.SVG_INPUT,
       value: {
         source: `<svg height="100" width="100" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
@@ -1703,18 +1611,44 @@ function createSvgObject(
       },
     },
     {
-      displayName: "Fill",
-      propertyName: "fill",
-      inputType: InputType.COLOR,
-      value: { r: 255, g: 255, b: 255, a: 1 },
-      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+      displayName: "Fill & Stroke",
+      type: FormType.GROUP,
+      propertyName: "hasFillAndStroke",
+      optional: true,
+      elements: [
+        {
+          displayName: "Fill",
+          propertyName: "fill",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          optional: true,
+        },
+        {
+          displayName: "Stroke",
+          propertyName: "stroke",
+          inputType: InputType.COLOR,
+          value: { r: 0, g: 0, b: 0, a: 1 },
+          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+          optional: true,
+        },
+      ],
     },
     {
-      displayName: "Stroke",
-      propertyName: "stroke",
-      inputType: InputType.COLOR,
-      value: { r: 0, g: 0, b: 0, a: 1 },
-      defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+      displayName: "Custom colors",
+      type: FormType.GROUP,
+      propertyName: "hasCustomColors",
+      optional: true,
+      elements: [
+        {
+          displayName: "",
+          duplicate: "1",
+          propertyName: "svg",
+          inputType: InputType.SVG_CUSTOM_COLORS,
+          value: { source: "" },
+          defaultValue: { source: "" },
+        },
+      ],
     },
   ];
 
@@ -1722,12 +1656,17 @@ function createSvgObject(
     svg: initialValue?.svg
       ? initialValue.svg
       : {
-          source: `<svg height="100" width="100" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-      </svg>`,
+          source: ``,
         },
+    hasCustomColors: false,
+    hasFillAndStroke: false,
     fill: { r: 255, g: 255, b: 255, a: 1 },
-    stroke: { r: 0, g: 0, b: 0, a: 0 },
+    stroke: { r: 0, g: 0, b: 0, a: 1 },
+  };
+
+  const valuesMetadata: { [key: string]: IInputMetadataValues } = {
+    fill: { exportForWizard: false, disabled: false },
+    stroke: { exportForWizard: false, disabled: false },
   };
 
   return {
@@ -1737,7 +1676,7 @@ function createSvgObject(
       type: ObjectType.SVG,
       properties,
       values,
-      valuesMetadata: {},
+      valuesMetadata,
     },
   };
 }
