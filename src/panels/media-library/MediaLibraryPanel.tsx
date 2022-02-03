@@ -202,7 +202,17 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     tags?: string[];
                     search?: string;
                   }): Promise<{ data: VectorData[]; hasMore: boolean }> => {
-                    return fetchMock();
+                    const { from, tags = [], search } = props;
+                    let url = `${apiUrl}?from=${from}&type=vectors`;
+                    if (search) {
+                      url += `&search=${encodeURIComponent(search)}`;
+                    }
+                    if (tags.length > 0) {
+                      url += `&tags=${tags
+                        .map((tag) => encodeURIComponent(tag))
+                        .join(",")}`;
+                    }
+                    return fetch(url).then((res) => res.json());
                   }}
                   key={forceUpdate}
                   onRequestClose={onRequestClose}

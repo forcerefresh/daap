@@ -21,7 +21,6 @@ import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, noop, uniq } from "lodash-es";
-import { fetchMock } from "./mock";
 import { MediaType, VectorData } from "../../utils/assets/types";
 import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
