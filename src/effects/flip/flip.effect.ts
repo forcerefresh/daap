@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { MultiImageValues } from "../../inputs/types";
+import { MultiImageValues } from "../../objects/multiple-images/multiple-images";
 import { IObject, ITransition } from "../../objects/types";
 import { flip, IFlipEffect } from "./flip.types";
 

@@ -33,33 +33,7 @@ import { getEffectDefinition } from "../../effects/effects";
 import { getIconByType } from "../../store/reducers/settings";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-
-function calculateTimelineRect(
-  slideDuration: number,
-  effectDelay: number,
-  effectDuration: number,
-  holderWidth: number = 1,
-  isOut = false
-) {
-  const realEffectDuration =
-    effectDuration === -1 ? slideDuration : effectDuration;
-
-  let left: number;
-  if (isOut) {
-    left =
-      ((slideDuration - effectDelay - realEffectDuration) / slideDuration) *
-      holderWidth;
-  } else {
-    left = effectDelay === 0 ? 0 : (effectDelay / slideDuration) * holderWidth;
-  }
-
-  let width = (realEffectDuration / slideDuration) * holderWidth;
-
-  //keep it in a range 0-340
-  width = Math.min(Math.max(0, width), holderWidth);
-
-  return { left, width };
-}
+import TimelineView from "./TimelineView";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -429,56 +403,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                     {layer.objectIds.map((objectId) => {
                       const object = objectById[objectId];
 
-                      const sizeIn = calculateTimelineRect(
-                        slide?.duration.customValue || 1,
-                        object?.transitions?.in?.[0]?.delay || 1,
-                        object?.transitions?.in?.[0]?.duration || 1,
-                        340
-                      );
-                      const timelineInStyle = {
-                        left: sizeIn.left + "px",
-                        width: sizeIn.width + "px",
-                      };
-
-                      const sizeOut = calculateTimelineRect(
-                        slide?.duration.customValue || 1,
-                        object?.transitions?.out?.[0]?.delay || 1,
-                        object?.transitions?.out?.[0]?.duration || 1,
-                        340,
-                        true
-                      );
-                      const timelineOutStyle = {
-                        left: sizeOut.left + "px",
-                        width: sizeOut.width + "px",
-                      };
-
-                      // ****************** TODO: Make this code to looks better
-
-                      const effDef = getEffectDefinition(
-                        object?.transitions?.effect?.[0]?.effect?.id || "none"
-                      );
-
-                      let effDur = effDef.defaults.hasOwnDuration
-                        ? effDef.getDuration?.(
-                            object,
-                            object?.transitions?.effect
-                          ) || 0
-                        : object?.transitions?.effect?.[0]?.duration;
-
-                      const sizeEffect = calculateTimelineRect(
-                        slide?.duration.customValue || 0,
-                        object?.transitions?.effect?.[0]?.delay || 0,
-                        effDur || 0,
-                        340
-                      );
-                      const timelineEffectStyle = {
-                        left: sizeEffect.left + "px",
-                        width: sizeEffect.width + "px",
-                      };
-
-                      // *************************
-
-                      // TODO: OUT EFFECT
                       return (
                         <div
                           key={objectId}
@@ -580,39 +504,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               ></Button>
                             </div>
                           </div>
-                          <div
-                            className={cx(css.timelineHolder, {
-                              [css.hideMe]:
-                                object.transitions.in?.[0]?.effect.id ===
-                                  "none" &&
-                                object.transitions.out?.[0]?.effect.id ===
-                                  "none" &&
-                                object.transitions.effect?.[0]?.effect.id ===
-                                  "none",
-                            })}
-                          >
-                            {object.transitions.in?.[0]?.effect.id !==
-                              "none" && (
-                              <div
-                                className={css.timeline}
-                                style={timelineInStyle}
-                              />
-                            )}
-                            {object.transitions.out?.[0]?.effect.id !==
-                              "none" && (
-                              <div
-                                className={css.timeline}
-                                style={timelineOutStyle}
-                              />
-                            )}
-                            {object.transitions.effect?.[0]?.effect.id !==
-                              "none" && (
-                              <div
-                                className={css.timeline}
-                                style={timelineEffectStyle}
-                              />
-                            )}
-                          </div>
+                          <TimelineView
+                            object={object}
+                            slideDuration={slide?.duration.customValue || 1}
+                          ></TimelineView>
                         </div>
                       );
                     })}

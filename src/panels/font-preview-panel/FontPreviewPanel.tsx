@@ -7,13 +7,12 @@ import css from "./FontPreviewPanel.module.scss";
 import {
   addNewObject,
   setExternalFontLoaded,
-  setStageTool,
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../objects/types";
 
 import { load } from "webfontloader";
-import { indexOf } from "lodash-es";
 import { getGlobals } from "../../globals";
+import { TEXT } from "../../objects/text/text";
 
 enum FontSections {
   SystemFonts = "system-fonts",
@@ -211,7 +210,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
               if (activeLayerId) {
                 _addNewObject(
                   activeLayerId,
-                  ObjectType.TEXT,
+                  TEXT,
                   {
                     left: documentSize.width / 4,
                     top: documentSize.height / 4,
@@ -254,7 +253,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: ObjectType | string,
     objectProps: Partial<IObject>,
     values: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

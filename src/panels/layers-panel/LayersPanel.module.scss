@@ -223,23 +223,6 @@
   .inlineValue {
     font-weight: bold;
   }
-
-  .timelineHolder {
-    height: 3px;
-    background: #1a1a1a;
-    position: relative;
-
-    .timeline {
-      position: absolute;
-      top: 0px;
-      bottom: 0px;
-      background: #d88d12;
-    }
-  }
-
-  .hideMe {
-    display: none;
-  }
 }
 
 .floatingEffectPanel {

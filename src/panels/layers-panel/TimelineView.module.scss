@@ -1,0 +1,31 @@
+.timelineHolder {
+  height: 3px;
+  background: #1f2123;
+  position: relative;
+  height: 14px;
+
+  background: linear-gradient(90deg, #1f2123 (4px), transparent 1%) center,
+    linear-gradient(#1f2123 (4px), transparent 1%) center, #6c6e70;
+  background-size: 5px 5px;
+
+  .timeline {
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    background: #d88d12;
+    color: #000000;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+    line-height: 12px;
+    font-size: 12px;
+    padding-left: 1px;
+  }
+  .timelineSep {
+    border: 1px solid gray;
+  }
+}
+
+.hideMe {
+  display: none;
+}

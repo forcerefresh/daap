@@ -212,7 +212,8 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               newTransition.effect.values = values;
 
               onTransitionChange(newTransition);
-            }
+            },
+            { disabled: true }
           )}
           <div>
             <Button

@@ -9,11 +9,9 @@ import {
   IBoxValue,
   ICornerRadiusValue,
   ICoverPlacementValue,
-  IImageInputValue,
-  MultiImageValues,
+  RichTextValues,
   SourceImageValues,
   SvgValues,
-  TextValues,
 } from "../inputs/types";
 import { ImageValues } from "../objects/image/image";
 import { getObjectPlaceholder } from "../objects/object-helpers";
@@ -42,7 +40,6 @@ export function generatePlayerData(
   settings: ISettings
 ): IPlayerData {
   const { slides, layers, objects } = sources;
-
   //const slideIds: string[] = [];
 
   let normalSlidesArr: ISlide[] = [];
@@ -340,8 +337,6 @@ export function getObjectHtml(
   sliderCounter = 3
 ) {
   switch (object.type) {
-    case ObjectType.TEXT:
-      return getTextHtml(object, calculatedObjectSize);
     case ObjectType.RICH_TEXT:
       return getRichTextHtml(object, calculatedObjectSize);
     case ObjectType.BULLETS:
@@ -352,8 +347,6 @@ export function getObjectHtml(
         thumbnailHtmlArr,
         sliderCounter
       );
-    case ObjectType.MULTI_IMAGE:
-      return getMultiImageHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.VIDEO:
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
     //case ObjectType.YOUTUBE_VIDEO:
@@ -379,39 +372,18 @@ export function getObjectHtml(
 
 // OBJECT HTML CREATOR FUNCTIONS **********************
 
-export function getTextHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
-  const textProperties = object.definition.values as TextValues;
-
-  let style = "";
-  style += "font-family: " + textProperties.font.fontFamily + ";";
-  style += "font-size: " + textProperties.fontSize + ";";
-  const c = textProperties.color;
-  style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
-  style += "font-weight: " + textProperties.weight + ";";
-  style += "width: " + calculatedObjectSize.width + ";";
-  style += "height:" + calculatedObjectSize.height + ";";
-  style += "position: absolute;";
-
-  return `<p class="object-content" style="${style}">${nl2br(
-    textProperties.text
-  )}</p>`;
-}
-
 export function getRichTextHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties
 ) {
-  const textProperties = object.definition.values as TextValues;
+  const textProperties = object.definition.values as RichTextValues;
 
   let style = "";
   style += "font-family: " + textProperties.font.fontFamily + ";";
   style += "font-size: " + textProperties.fontSize + ";";
   const c = textProperties.color;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
-  style += "font-weight: " + textProperties.weight + ";";
+  //style += "font-weight: " + textProperties.weight + ";";
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
@@ -725,60 +697,6 @@ export function getButtonHtml(
   return `${css}<button class="object-content object-content-${
     object.id
   }" style="${style}">${nl2br(buttonProperties.text)}</button>`;
-}
-
-function getMultiImageHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
-  const multiImageProperties = object.definition.values as MultiImageValues;
-  //const url = multiImageProperties.urls[0];
-
-  if (multiImageProperties.urls.length === 0) {
-    return `<div style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">MULTI IMAGE<br/>PLACEHOLDER</div>`;
-  }
-
-  const coverPlacementValue = multiImageProperties.fit as ICoverPlacementValue;
-
-  let backgroundSize = coverPlacementValue.size as
-    | "cover"
-    | "fit"
-    | "100% 100%";
-
-  if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
-  const aH = coverPlacementValue.positionHorizontal;
-  const aV = coverPlacementValue.positionVertical;
-
-  //let style = "";
-  //style += addCommonPropertiesToStyle(style, object);
-  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
-
-  let style = "";
-  style += addCommonPropertiesToStyle(style, object);
-  style += "width: 100%;";
-  style += "height: 100%;";
-  style += `background-repeat:no-repeat;`;
-  style += `background-size: ${backgroundSize};`;
-  style += `background-position: ${aH} ${aV};`;
-
-  let ret = "";
-  ret += `<div class="object-content" style="width: 100%; height: 100%;">`;
-  multiImageProperties.urls.forEach((url: IImageInputValue, idx: number) => {
-    let styleOne = style;
-    styleOne += `background-image:url('${url.url}');`;
-    styleOne += `position: absolute;`;
-    if (isPlayer) {
-    } else {
-      styleOne += `top: -${idx * 80}px;`;
-      styleOne += `left: ${idx * 80}px;`;
-      styleOne += `z-index: ${100 - idx};`;
-    }
-    ret += `<div class="object-content-item" style="${styleOne}"></div>`;
-  });
-  ret += `</div>`;
-  return ret;
 }
 
 export function getImageThumbnailHtml(object: IObject) {

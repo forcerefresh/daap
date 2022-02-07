@@ -13,17 +13,12 @@ import {
   IFontSelectInputValue,
   IInputMetadataValues,
   InputType,
-  MultiImagePropertiesTuple,
-  MultiImageValues,
   RichTextPropertiesTuple,
   RichTextValues,
   SourceImagePropertiesTuple,
   SourceImageValues,
   SvgPropertiesTuple,
   SvgValues,
-  TextProperties,
-  TextPropertiesTuple,
-  TextValues,
   VideoPropertiesTuple,
   VideoValues,
 } from "../inputs/types";
@@ -57,28 +52,12 @@ export function createObject(
   }
 ): Omit<IObject, "layerId"> {
   switch (type) {
-    case ObjectType.TEXT: {
-      return {
-        ...createTextObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
-        ...objectProps,
-      };
-    }
     case ObjectType.RICH_TEXT: {
       return {
         ...createRichTextObject(initialValue, {
           hasOverflowProperty: true,
         }),
         ...objectProps,
-      };
-    }
-    case ObjectType.MULTI_IMAGE: {
-      return {
-        ...objectProps,
-        ...createMultiImageObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
       };
     }
     case ObjectType.VIDEO: {
@@ -332,106 +311,6 @@ function createRichTextObject(
     definition: {
       id: uuid(),
       type: ObjectType.RICH_TEXT,
-      properties,
-      values,
-      valuesMetadata: {},
-    },
-  };
-}
-
-function createTextObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<IObject<TextProperties>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(ObjectType.TEXT);
-
-  const properties: TextPropertiesTuple = [
-    {
-      displayName: "Text",
-      propertyName: "text",
-      inputType: InputType.TEXTAREA,
-      value: (initialValue?.text as string) || "",
-      defaultValue: "",
-    },
-    {
-      displayName: "Auto height",
-      propertyName: "autoHeight",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-    },
-
-    {
-      displayName: "Font",
-      propertyName: "font",
-      inputType: InputType.FONT_SELECT,
-      value: (initialValue?.font as IFontSelectInputValue) || {
-        fontFamily: "Arial",
-        source: "system-fonts",
-      },
-      defaultValue: {
-        fontFamily: "Arial",
-        source: "system-fonts",
-      },
-    },
-    {
-      displayName: "Color",
-      propertyName: "color",
-      inputType: InputType.COLOR,
-      value: { r: 255, g: 255, b: 255, a: 1 },
-      defaultValue: { r: 255, g: 255, b: 255, a: 1 },
-    },
-    {
-      displayName: "Font size",
-      placeholderText: "Enter font size",
-      allowedUnits: ["px", "em", "%"],
-      propertyName: "fontSize",
-      inputType: InputType.UNITS_NUMBER,
-      value: initialValue?.fontSize || "1em",
-      defaultValue: "1em",
-    },
-    {
-      displayName: "Weight",
-      propertyName: "weight",
-      inputType: InputType.SELECT,
-      value: "400",
-      defaultValue: "400",
-      options: [
-        { value: "100", label: "100	Thin" },
-        { value: "200", label: "200	Extra Light" },
-        { value: "300", label: "300	Light" },
-        { value: "400", label: "400	Normal" },
-        { value: "500", label: "500	Medium" },
-        { value: "600", label: "600	Semi Bold" },
-        { value: "700", label: "700	Bold" },
-        { value: "800", label: "800	Extra Bold" },
-        { value: "900", label: "900	Black" },
-        { value: "950", label: "950	Extra Black" },
-      ],
-    },
-  ];
-
-  const values: TextValues = {
-    text: (initialValue?.text as string) || "",
-    autoHeight: false,
-    font: (initialValue?.font as IFontSelectInputValue) || {
-      fontFamily: "Arial",
-      source: "system-fonts",
-    },
-    color: { r: 255, g: 255, b: 255, a: 1 },
-    fontSize: initialValue?.fontSize || "1em",
-    weight: "400",
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.TEXT,
       properties,
       values,
       valuesMetadata: {},
@@ -1388,65 +1267,6 @@ function createButtonObject(initialValue?: {
     definition: {
       id: uuid(),
       type: ObjectType.BUTTON,
-      properties,
-      values,
-      valuesMetadata: {},
-    },
-  };
-}
-
-function createMultiImageObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<MultiImagePropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
-  const object = createCommonObject(ObjectType.MULTI_IMAGE);
-
-  const properties: MultiImagePropertiesTuple = [
-    {
-      inputType: InputType.COVER_LAYOUT,
-      displayName: "Fit",
-      propertyName: "fit",
-      value: {
-        size: "fit",
-        positionHorizontal: "center",
-        positionVertical: "center",
-      },
-      defaultValue: {
-        size: "fit",
-        positionHorizontal: "center",
-        positionVertical: "center",
-      },
-    },
-    {
-      displayName: "Paths",
-      propertyName: "urls",
-      inputType: InputType.MULTI_IMAGE,
-      value: initialValue?.urls ? initialValue?.urls : [],
-      defaultValue: [],
-    },
-  ];
-
-  const values: MultiImageValues = {
-    fit: {
-      size: "fit",
-      positionHorizontal: "center",
-      positionVertical: "center",
-    },
-    urls: initialValue?.urls ? initialValue?.urls : [],
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.MULTI_IMAGE,
       properties,
       values,
       valuesMetadata: {},

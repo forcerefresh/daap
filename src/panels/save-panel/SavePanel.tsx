@@ -14,6 +14,7 @@ import {
 import { IntegrationContext } from "../../integration";
 import {
   getCheckboxField,
+  getSelectField,
   getTextArea,
   getTextField,
 } from "../../inputs/input-utils";
@@ -84,7 +85,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const exportData = generatePlayerData(
       { slides, layers, objects },
-      { entityType: "slide", entityId: slides.allSlides[0] },
+      { entityType: "slide", entityId: slides.normalSlides[0] },
       breakpointConfig!,
       settings
     );
@@ -144,7 +145,15 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp3-dark", css.savePanel)}>
-      <div className={cx("bp3-label", css.thumbTitle)}>Thumbnail</div>
+      <div className={cx("bp3-label", css.thumbTitle)}>
+        Thumbnail
+        {/*getSelectField(
+          "Thumbnail",
+          "",
+          [],
+          () => {}
+        )*/}
+      </div>
       <div
         className={css.thumbHolder}
         style={{

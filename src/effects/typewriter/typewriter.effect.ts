@@ -4,7 +4,7 @@ import { SplitText } from "gsap/SplitText";
 import { space2nbsp } from "../../utils/doom-utils/common";
 import { createRootTimelineForTextEffect } from "../text.utils";
 import { IObject } from "../../objects/types";
-import { TextValues } from "../../inputs/types";
+import { TextValues } from "../../objects/text/text";
 
 //gsap.registerPlugin(SplitText);
 export function getTypewriterEffectDuration(object?: IObject, config?: any) {

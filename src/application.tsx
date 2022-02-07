@@ -7,7 +7,8 @@ import { store } from "./store/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
-require("./objects/register-object");
+import "./objects/register-object";
+import "./objects/font-preloader";
 //require("./objects/exec-code-effect");
 
 function application(): {

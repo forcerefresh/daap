@@ -12,10 +12,10 @@ import { DeviceType } from "../store/reducers/i-settings";
 import { FormType } from "../utils/form-layout/form-layout";
 
 export enum ObjectType {
-  TEXT = "text",
+  //TEXT = "text", << external
   RICH_TEXT = "rich_text",
   //IMAGE = "image", << external
-  MULTI_IMAGE = "multi_image",
+  //MULTI_IMAGE = "multi_image",<< external
   VIDEO = "video",
   //YOUTUBE_VIDEO = "youtube_video", << external
   HTML = "html",

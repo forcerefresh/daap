@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import React from "react";
+import { EffectType } from "../effects/types";
 import { ITransitionsData } from "../export/i-export-html";
 import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { executionCodeFuncType } from "../objects/objects-factory";
@@ -12,7 +13,13 @@ export function createTimelineForObject(
   console.log(data);
   const parallelTimelines: gsap.core.Timeline[] = [];
 
-  data.transitions.in?.forEach((_, idx) => {
+  data.transitions.in?.forEach((effIn) => {
+    populatesTimelinesForObject(data, parallelTimelines, effIn, "in");
+  });
+  data.transitions.out?.forEach((effIn) => {
+    populatesTimelinesForObject(data, parallelTimelines, effIn, "out");
+  });
+  /*data.transitions.in?.forEach((_, idx) => {
     const effIn = data.transitions.in?.[idx];
     const effOut = data.transitions.out?.[idx];
     const effEffect =
@@ -23,7 +30,7 @@ export function createTimelineForObject(
       effOut,
       effEffect,
     });
-  });
+  });*/
 
   return parallelTimelines;
 }
@@ -37,159 +44,36 @@ function getDuration(data: ITransitionsData, eff: ITransition) {
 function populatesTimelinesForObject(
   data: ITransitionsData,
   parallelTimelines: gsap.core.Timeline[],
-  effProps: {
-    effIn?: ITransition;
-    effOut?: ITransition;
-    effEffect?: ITransition;
-  }
+  eff: ITransition,
+  effType: EffectType
 ) {
-  const { effIn, effOut, effEffect } = effProps;
+  // only out effect is different
+  const delay =
+    effType === "out"
+      ? data.data.slideDuration.customValue -
+        (getDuration(data, eff) + eff.delay)
+      : eff.delay / 1000;
 
-  let tl;
+  const tl = gsap.timeline();
+  parallelTimelines.push(tl);
 
-  if (effIn || effOut) {
-    tl = gsap.timeline();
-    parallelTimelines.push(tl);
+  const effTl = gsap.effects[eff.effect.id]("." + data.objectClass, {
+    ...eff.effect.values,
+    objectProperties: {
+      width: data.data.objectWidth,
+      height: data.data.objectHeight,
+      left: data.data.objectLeft,
+      top: data.data.objectTop,
+      objectHtml: data.data.objectHtml,
+    },
+    type: effType,
+    duration: getDuration(data, eff) / 1000,
+    ease: eff.ease,
+    childEase: eff.childEase,
+    timeDistribution: eff.timeDistribution,
+  });
 
-    let totalDuration = 0;
-    if (effIn) {
-      console.log(effIn);
-      totalDuration += effIn.delay;
-
-      // ONE: delay for IN effect
-      (tl as any).add(
-        gsap.to("." + data.objectClass, { duration: effIn.delay / 1000 })
-      );
-      totalDuration += getDuration(data, effIn);
-
-      //console.log(getDuration(effIn));
-      // TWO: duration for IN effect
-
-      const ineff = gsap.effects[effIn.effect.id]("." + data.objectClass, {
-        ...effIn.effect.values,
-        objectProperties: {
-          width: data.data.objectWidth,
-          height: data.data.objectHeight,
-          left: data.data.objectLeft,
-          top: data.data.objectTop,
-          objectHtml: data.data.objectHtml,
-        },
-        type: "in",
-        duration: getDuration(data, effIn) / 1000,
-        ease: effIn.ease,
-        childEase: effIn.childEase,
-        timeDistribution: effIn.timeDistribution,
-      });
-      (tl as any).add(ineff);
-    }
-
-    if (effOut) {
-      let betweenGap =
-        data.data.slideDuration.customValue -
-        (getDuration(data, effOut) + effOut.delay);
-
-      //console.log(betweenGap);
-      if (effIn) {
-        betweenGap -= getDuration(data, effIn) + effIn?.delay;
-        //console.log(betweenGap);
-      }
-      //console.log(betweenGap);
-
-      if (betweenGap > 0) {
-        totalDuration += betweenGap;
-
-        //console.log(betweenGap, "betweenGap");
-        (tl as any).add(
-          gsap.to("." + data.objectClass, { duration: betweenGap / 1000 })
-        );
-      }
-
-      //console.log(totalDuration);
-
-      totalDuration += getDuration(data, effOut);
-      (tl as any).add(
-        gsap.effects[effOut.effect.id](
-          "." + data.objectClass,
-          {
-            ...effOut.effect.values,
-            objectProperties: {
-              width: data.data.objectWidth,
-              height: data.data.objectHeight,
-              left: data.data.objectLeft,
-              top: data.data.objectTop,
-              objectHtml: data.data.objectHtml,
-            },
-            type: "out",
-            duration: getDuration(data, effOut) / 1000,
-            delay: effOut.delay / 1000,
-            ease: effOut.ease,
-            childEase: effOut.childEase,
-            timeDistribution: effOut.timeDistribution,
-          },
-          (data.data.slideDuration.customValue -
-            getDuration(data, effOut) -
-            effOut.delay) /
-            1000
-        )
-      );
-
-      totalDuration += effOut.delay;
-
-      //console.log(totalDuration);
-      (tl as any).add(
-        gsap.to("." + data.objectClass, { duration: effOut.delay / 1000 })
-      );
-    }
-
-    //console.log("total", totalDuration);
-    //console.log("slide dur", data.data.slideDuration.customValue);
-  }
-
-  if (effEffect) {
-    tl = gsap.timeline();
-    parallelTimelines.push(tl);
-
-    let totalDuration = 0;
-    totalDuration += effEffect.delay;
-
-    // ONE: delay for IN effect
-    (tl as any).add(
-      gsap.to("." + data.objectClass, { duration: effEffect.delay / 1000 })
-    );
-
-    totalDuration += getDuration(data, effEffect);
-    // TWO: duration for IN effect
-    const eff = gsap.effects[effEffect.effect.id]("." + data.objectClass, {
-      ...effEffect.effect.values,
-      objectProperties: {
-        width: data.data.objectWidth,
-        height: data.data.objectHeight,
-        left: data.data.objectLeft,
-        top: data.data.objectTop,
-        objectHtml: data.data.objectHtml,
-      },
-      type: "in",
-      duration: getDuration(data, effEffect) / 1000,
-      ease: effEffect.ease,
-      childEase: effEffect.childEase,
-      timeDistribution: effEffect.timeDistribution,
-    });
-    (tl as any).add(eff);
-
-    // THREE end gap
-    let betweenGap =
-      data.data.slideDuration.customValue -
-      (getDuration(data, effEffect) + effEffect.delay);
-    (tl as any).add(
-      gsap.to("." + data.objectClass, { duration: betweenGap / 1000 })
-    );
-  }
-
-  /* const endPointTl = gsap.to(
-    {},
-    { delay: data.data.slideDuration.customValue / 1000, duration: 0 }
-  );
-  parallelTimelines.push(endPointTl as any);*/
+  tl.add(effTl, delay);
 
   return parallelTimelines;
 }

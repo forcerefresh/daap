@@ -1,9 +1,17 @@
-import { Button, Icon, Tab, Tabs, Tag, Tooltip } from "@blueprintjs/core";
+import {
+  Button,
+  HTMLSelect,
+  Icon,
+  Tab,
+  Tabs,
+  Tag,
+  Tooltip,
+} from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { connect } from "react-redux";
-import { getEffectsOptions } from "../../effects/effects";
+import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { EffectType } from "../../effects/types";
 import {
   IObject,
@@ -20,6 +28,7 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
+import { flattenForm, IFormItem } from "../../utils/form-layout/form-layout";
 import { EffectConfigurationForm } from "../effect-configuration/EffectConfigurationForm";
 
 import css from "./EffectPanelTabs.module.scss";
@@ -109,17 +118,28 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     if (itemType === "slide") _updateSlide(newItem);
   };
 
-  const addEffectToSection = (
-    effectType: EffectType,
-    isStructural: boolean
-  ) => {
+  const addEffectToSection = (effId: string, effectType: EffectType) => {
+    const effDef = getEffectDefinition(effId);
+    const isStructural = !effDef.defaults.canBeCombined;
+
     const newItem = cloneDeep(item);
     const length = newItem.transitions[effectType].length;
     setSelectedNo({ ...selectedNo, [effectType]: length });
 
-    newItem.transitions[effectType].push(
-      getDefaultEffectConfigForType(effectType, isStructural)
-    );
+    const transition = getDefaultEffectConfigForType(effectType, isStructural);
+    transition.effect.id = effId;
+
+    const values = {} as {
+      [key: string]: any;
+    };
+
+    const flatEffDef = flattenForm(effDef.definition.form as IFormItem[]);
+    flatEffDef.forEach((item) => {
+      values[item.propertyName] = effDef.defaults[item.propertyName];
+    });
+    transition.effect.values = values;
+
+    newItem.transitions[effectType].push(transition);
     if (itemType === "object") _updateObject(newItem);
     if (itemType === "layer") _updateLayer(newItem);
     if (itemType === "slide") _updateSlide(newItem);
@@ -159,6 +179,46 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
         }
         panel={
           <>
+            <div
+              style={{
+                marginTop: "10px",
+
+                marginLeft: "5px",
+              }}
+            >
+              <HTMLSelect
+                options={
+                  [
+                    {
+                      label: `Add ${section.toLocaleUpperCase()} animation to object...`,
+                      value: "",
+                      readonly: true,
+                    },
+
+                    {
+                      label: "Attribute effects",
+                      value: "Disabled1",
+                      disabled: true,
+                    },
+                    ...getEffectsOptions(section, true),
+                    {
+                      label: "Structural effect",
+                      value: "Disabled2",
+                      disabled: true,
+                    },
+                    ...getEffectsOptions(section, false),
+                  ] as any
+                }
+                value={""}
+                onChange={(event: ChangeEvent) => {
+                  addEffectToSection(
+                    (event.currentTarget as any).value,
+                    section
+                  );
+                }}
+              />
+            </div>
+
             <div className={css.effLabels}>
               {effects.map((effect, effectIdx) => {
                 return (
@@ -184,7 +244,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                 );
               })}
             </div>
-            <div>
+            {/*<div>
               {!hideAddStructuralEffect && (
                 <Tooltip
                   disabled={!isAddDisabled}
@@ -217,10 +277,9 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
               >
                 Add Attribute Effect
               </Button>
-            </div>
-
+              </div>*/}
             <div className={css.effectConfigurationFormHolder}>
-              <div
+              {/*<div
                 className={classnames(css.noHolder, {
                   [css.noHolderEmpty]: effLen <= 1,
                 })}
@@ -239,8 +298,8 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                     </div>
                   );
                 })}
-                <div>{/*Empty div, do not remove it*/}</div>
-              </div>
+                <div>{//Empty div, do not remove it}</div>
+              </div>*/}
 
               {/*transitions?.[section]?.map((transition, idx) => (
                   <EffectConfigurationForm

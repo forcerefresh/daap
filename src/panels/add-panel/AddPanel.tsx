@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject, setStageTool } from "../../store/actions/actions";
-import { ReactComponent as DrawTextboxIcon } from "../../assets/icons/draw-textbox.svg";
 import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
 import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefined-text2.svg";
 import { IObject, ObjectType } from "../../objects/types";
@@ -72,7 +71,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <p>Place image content</p>
         </Card>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
-          <Card
+          {/*<Card
             interactive={!!activeLayerId}
             elevation={Elevation.TWO}
             className={cx(css.card, { [css.disabled]: !activeLayerId })}
@@ -96,7 +95,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             />
             <h3>MULTIPLE IMAGES</h3>
             <p>Add multiple images as one object</p>
-          </Card>
+          </Card>*/}
 
           <Card
             interactive={!!activeLayerId}
@@ -158,28 +157,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           className={cx(css.card, { [css.disabled]: !activeLayerId })}
           onClick={() => {
             if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.TEXT, {
-                left: documentSize.width / 4,
-                top: documentSize.height / 4,
-                width: documentSize.width / 2,
-                height: documentSize.height / 2,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <AddTextboxIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>ADD TEXT BOX</h3>
-          <p>Add empty text field to active layer</p>
-        </Card>
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
               _addNewObject(activeLayerId, ObjectType.RICH_TEXT, {
                 left: documentSize.width / 4,
                 top: documentSize.height / 4,
@@ -196,23 +173,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>ADD RICH TEXT BOX</h3>
           <p>Add empty rich text field to active layer</p>
         </Card>
-        {/*<Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _setStageTool(StageTools.DRAW, ObjectType.TEXT);
-              onRequestClose();
-            }
-          }}
-        >
-          <DrawTextboxIcon
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>DRAW TEXT BOX</h3>
-          <p>Draw text box using text tool</p>
-        </Card>*/}
+        {renderObjectsCards("text")}
       </div>
       <div>
         <Card interactive={false} className={css.sectionCard}>
@@ -293,7 +254,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         </div>
       </div>
 
-      <div>
+      {/*<div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Canvas</h1>
           <p>Add canvas</p>
@@ -339,7 +300,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>CANVAS</h3>
           <p>Add canvas</p>
         </Card>
-      </div>
+        </div>*/}
 
       <div>
         <Card interactive={false} className={css.sectionCard}>

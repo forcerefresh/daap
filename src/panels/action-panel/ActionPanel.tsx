@@ -161,7 +161,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
     const previewExportData = generatePlayerData(
       { slides, layers, objects },
-      { entityType: "slide", entityId: slides.allSlides[0] },
+      { entityType: "slide", entityId: slides.normalSlides[0] },
       breakpointConfig!,
       settings
     );

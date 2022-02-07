@@ -86,7 +86,7 @@
       display: none !important;
     }
 
-    > div:first-child {
+    /*> div:first-child {
       //noHolderEmpty
       display: flex;
       flex-direction: column;
@@ -112,9 +112,9 @@
           background: #252526;
         }
       }
-    }
+    }*/
 
-    > div:nth-child(2) {
+    > div:nth-child(1) {
       flex-grow: 1;
     }
   }
@@ -129,7 +129,9 @@
     }
 
     > * {
-      margin-right: 10px;
+      margin: 3px;
+      display: inline-block;
+      margin-right: 5px;
       cursor: pointer;
       &:hover {
         background: rgb(83, 83, 83);

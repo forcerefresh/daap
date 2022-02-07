@@ -289,6 +289,7 @@ export interface ICheckboxInput<T = string> {
   propertyName: T;
   value: boolean;
   defaultValue: boolean;
+  inputProps?: { disabled?: boolean };
 }
 export interface ITextAreaInput<T = string> {
   inputType: InputType.TEXTAREA;
@@ -622,34 +623,6 @@ export interface IFontSelectInput<T = string> {
   defaultValue: IFontSelectInputValue;
 }
 
-// Full form for text
-export interface TextProperties {
-  text: ITextAreaInput;
-  autoHeight: ICheckboxInput;
-  font: IFontSelectInput;
-  color: IColorInput;
-  fontSize: IUnitsNumberInput;
-  weight: ISelectInput;
-}
-
-export interface TextValues {
-  text: string;
-  autoHeight: boolean;
-  font: IFontSelectInputValue;
-  color: RGBColor;
-  fontSize: string;
-  weight: string;
-}
-
-export type TextPropertiesTuple = [
-  ITextAreaInput<"text">,
-  ICheckboxInput<"autoHeight">,
-  IFontSelectInput<"font">,
-  IColorInput<"color">,
-  IUnitsNumberInput<"fontSize">,
-  ISelectInput<"weight">
-];
-
 export interface RichTextValues {
   text: string;
   autoHeight: boolean;
@@ -664,16 +637,6 @@ export type RichTextPropertiesTuple = [
   IFontSelectInput<"font">,
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">
-];
-
-export interface MultiImageValues {
-  fit: ICoverPlacementValue;
-  urls: IImageInputValue[];
-}
-
-export type MultiImagePropertiesTuple = [
-  ICoverPlacementInput<"fit">,
-  IMultiImageInput<"urls">
 ];
 
 export interface CommonObjectValues {

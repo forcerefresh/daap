@@ -21,17 +21,11 @@ import {
   isIntersectingRect,
   roundNumber,
 } from "../../utils/doom-utils/common";
-import {
-  LayoutChildrenType,
-  TextProperties,
-  TextPropertiesTuple,
-  TextValues,
-} from "../../inputs/types";
+import { LayoutChildrenType } from "../../inputs/types";
 import {
   getBulletsHtml,
   getButtonHtml,
   getRichTextHtml,
-  getTextHtml,
 } from "../../export/export-html";
 import { load } from "webfontloader";
 import {
@@ -47,6 +41,7 @@ import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
 import { getObjectDefinition } from "../../objects/objects-factory";
 import { ImageValues } from "../../objects/image/image";
+import { TextValues } from "../../objects/text/text";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -846,7 +841,7 @@ function handleObjectUpdate(
   console.log(object);
   console.log(objDeff?.postProcess);
   switch (object.type) {
-    case ObjectType.TEXT:
+    case "text":
     case ObjectType.RICH_TEXT: {
       handleTextUpdate(object, dispatch, getState);
       break;
@@ -1032,10 +1027,14 @@ function handleTextUpdate(
         resetPosition: false,
       }
     );
-    const html =
-      object.type === ObjectType.TEXT
-        ? getTextHtml(object, calculatedObjectSize)
-        : getRichTextHtml(object, calculatedObjectSize);
+
+    const objDeff = getObjectDefinition(object.type);
+    let html = "";
+    if (!!objDeff?.getHtml) {
+      html = objDeff?.getHtml(object, calculatedObjectSize, true);
+    } else if (object.type === ObjectType.RICH_TEXT) {
+      html = getRichTextHtml(object, calculatedObjectSize);
+    }
 
     const holder = document.createElement("div");
     holder.innerHTML = html;

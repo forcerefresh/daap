@@ -36,6 +36,7 @@ export interface IEffectBase {
   childCustomEase?: string;
   duration?: number;
   delay?: number;
+  seek?: number;
 }
 
 export interface IEasing {
