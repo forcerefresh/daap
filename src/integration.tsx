@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { boolean } from "yup/lib/locale";
 import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
 import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
@@ -7,6 +8,7 @@ import {
   UploadFileInfo,
 } from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
+import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import {
   ImageData,
   MediaDataInfo,
@@ -21,6 +23,46 @@ export interface getMyUploadComponentProps {
 
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
+  useObjectStorageHook: () => ({
+    supportStorageObjects: false,
+    listStorageObjects: (req: {
+      projectId?: number;
+    }): Promise<ObjectStorageItem[]> => Promise.resolve([]),
+
+    listAssignedStorageObjects: (req: {
+      projectId: number;
+    }): Promise<ObjectStorageItem[]> => Promise.resolve([]),
+
+    addStorageObject: (
+      so: Omit<ObjectStorageItem, "id">
+    ): Promise<ObjectStorageItem> => Promise.resolve({} as ObjectStorageItem),
+
+    deleteStorageObject: (req: {
+      id: string;
+    }): Promise<{ deletedId: string }> => Promise.resolve({ deletedId: "" }),
+
+    uploadPlayerToStorageObject: (req: {
+      id: string;
+    }): Promise<{ status: "OK" | "ERROR"; error?: string }> =>
+      Promise.resolve({ status: "OK" }),
+
+    assignBucketToProject: (req: {
+      bucketId: string;
+      projectId: number;
+    }): Promise<{ status: string; error?: string }> =>
+      Promise.resolve({ status: "" }),
+
+    getAssignedBucketIds: (req: { projectId: number }): Promise<string[]> =>
+      Promise.resolve([]),
+
+    publishToStorageObject: (req: {
+      bucketId: string;
+      projectId: number;
+      revision: number;
+    }): Promise<{ status: string; error?: string }> =>
+      Promise.resolve({ status: "" }),
+  }),
+
   getMyUploadComponent: ((props) => {
     return <div></div>;
   }) as React.FC<getMyUploadComponentProps>,
@@ -114,6 +156,7 @@ export const IntegrationContext = React.createContext({
       slides: number;
       created: string;
       modified: string;
+      saveRevision: number;
     }> =>
       Promise.resolve({
         id: 1,
@@ -122,6 +165,7 @@ export const IntegrationContext = React.createContext({
         slides: 0,
         created: "",
         modified: "",
+        saveRevision: 0,
       }), // todo: add interface for api response
   }),
 
@@ -160,6 +204,16 @@ export function useAppRootSelector() {
 }
 
 // *** PRIVATE INTEGRATION FACTORY FUNCTIONS ***
+
+function useObjectStorageFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/object-storage-hook/electron-object-storage-hook")
+      .useObjectStorageHook;
+  }
+  return () => ({
+    supportStorageObjects: false,
+  });
+}
 
 function useMyImagesHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "electron") {
@@ -225,6 +279,7 @@ export const IntegrationContextProvider = (
         useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),
+        useObjectStorageHook: useObjectStorageFactory(),
       }}
     >
       {props.children}

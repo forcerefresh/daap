@@ -1,6 +1,7 @@
-import { FormGroup, InputGroup } from "@blueprintjs/core";
+import { Classes, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { noop } from "lodash-es";
 import React, { useMemo } from "react";
+import { getUnderFieldText } from "../input-utils";
 import { ITextInput, IUpdateInput } from "../types";
 
 export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
@@ -11,26 +12,29 @@ export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
     onChange = noop,
     onInput = noop,
     inputProps = {},
+    externalError = "",
   } = props;
 
   const inputId = useMemo(() => {
     return displayName + Math.random();
   }, []);
 
+  const underFieldText = getUnderFieldText(helperText, externalError);
+
   return (
     <FormGroup
       label={displayName}
       labelFor={inputId}
       inline
-      helperText={!!helperText && helperText}
+      helperText={underFieldText}
     >
       <InputGroup
-        disabled={inputProps.disabled}
         id={inputId}
-        placeholder={inputProps.placeholderText}
         value={value}
+        intent={!!externalError ? Intent.WARNING : Intent.NONE}
         onChange={(event: any) => onChange(event.target.value)}
         onInput={(event: any) => onInput(event.target.value)}
+        {...inputProps}
       />
     </FormGroup>
   );

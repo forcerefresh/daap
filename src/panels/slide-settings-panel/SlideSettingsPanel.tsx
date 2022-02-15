@@ -121,7 +121,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               _updateSlide(obj as any as ISlide);
             },
             "",
-            { placeholderText: "Enter slide ID" }
+            { placeholder: "Enter slide ID" }
           )}
 
           {getSelectField(

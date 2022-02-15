@@ -72,6 +72,8 @@ export const useAPIHook = () => {
     slides: number;
     created: string;
     modified: string;
+    saveRevision: number;
+    publicRevision: number;
   }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");

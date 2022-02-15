@@ -1,3 +1,4 @@
+import React from "react";
 import { noop } from "lodash-es";
 import { Breakpoints } from "../store/reducers/settings";
 import { getInputForm } from "./input-factory";
@@ -88,8 +89,9 @@ export function getSelectField<T>(
   value: T,
   options: { value: string | number; label: string }[],
   onChange: (value: T) => void,
-  inputProps: { disabled?: boolean } = {},
-  helperText?: string
+  inputProps: { disabled?: boolean; placeholder?: string } = {},
+  helperText?: string,
+  externalError?: string | string[]
 ) {
   const objectDef = {
     displayName: label,
@@ -98,6 +100,7 @@ export function getSelectField<T>(
     options: options,
     inputProps,
     helperText,
+    externalError,
   };
 
   return getInputForm(InputType.SELECT, objectDef, onChange);
@@ -170,7 +173,11 @@ export function getTextField<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean; placeholderText?: string } = {}
+  inputProps: {
+    disabled?: boolean;
+    readOnly?: boolean;
+    placeholder?: string;
+  } = {}
 ) {
   const objectDef = {
     displayName: label,
@@ -301,4 +308,25 @@ export function getButtonGroupField<T>(
   };
 
   return getInputForm(InputType.BUTTON_GROUP_INPUT, objectDef, onChange);
+}
+
+export function getUnderFieldText(
+  helperText?: string | React.ReactNode,
+  externalError?: string | string[]
+) {
+  let ret;
+  if (!!helperText || !!externalError) {
+    ret = (
+      <>
+        {helperText}
+        {externalError && (
+          <>
+            {!!helperText && <br />}
+            <span className="warning">Ooops: {externalError}</span>
+          </>
+        )}
+      </>
+    );
+  }
+  return ret;
 }

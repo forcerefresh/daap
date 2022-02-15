@@ -88,7 +88,7 @@ export function createTextObject(
     },
     {
       displayName: "Font size",
-      placeholderText: "Enter font size",
+      placeholder: "Enter font size",
       allowedUnits: ["px", "em", "%"],
       propertyName: "fontSize",
       inputType: InputType.UNITS_NUMBER,

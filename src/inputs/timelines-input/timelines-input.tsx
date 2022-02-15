@@ -44,6 +44,7 @@ export const getDefaultPoint = (time = 100): ITimelinePoint => {
         direction: "_ccw" as "_ccw" | "_cw" | "_short",
       },
       opacity: { enabled: false, value: 100, position: "rel", easing: "none" },
+      zoom: { enabled: false, value: 100, position: "rel", easing: "none" },
     },
   };
 };
@@ -77,6 +78,11 @@ const formDefinition = [
   {
     displayName: "Opacity",
     propertyName: "opacity",
+    inputType: InputType.RELATIVE_POSITION_INPUT,
+  },
+  {
+    displayName: "Zoom",
+    propertyName: "zoom",
     inputType: InputType.RELATIVE_POSITION_INPUT,
   },
 ];

@@ -286,7 +286,7 @@ function createRichTextObject(
     },
     {
       displayName: "Font size",
-      placeholderText: "Enter font size",
+      placeholder: "Enter font size",
       allowedUnits: ["px", "em", "%"],
       propertyName: "fontSize",
       inputType: InputType.UNITS_NUMBER,
@@ -352,7 +352,7 @@ function createBulletsObject(initialValue?: {
                   value: "10px",
                   defaultValue: "10px",
                   allowedUnits: ["%", "em", "px"],
-                  placeholderText: "",
+                  placeholder: "",
                 },
               ],
             },
@@ -366,7 +366,7 @@ function createBulletsObject(initialValue?: {
                   inputType: InputType.UNITS_NUMBER,
                   value: "10px",
                   defaultValue: "10px",
-                  placeholderText: "",
+                  placeholder: "",
                   allowedUnits: ["%", "px", "em"],
                 },
                 {
@@ -375,7 +375,7 @@ function createBulletsObject(initialValue?: {
                   inputType: InputType.UNITS_NUMBER,
                   value: "10px",
                   defaultValue: "10px",
-                  placeholderText: "",
+                  placeholder: "",
                   allowedUnits: ["%", "px", "em"],
                 },
               ],
@@ -388,7 +388,7 @@ function createBulletsObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "10px",
           defaultValue: "10px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -404,7 +404,7 @@ function createBulletsObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "100%",
           defaultValue: "100%",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
       ],
@@ -827,7 +827,7 @@ function createButtonObject(initialValue?: {
                   inputType: InputType.UNITS_NUMBER,
                   value: "1em",
                   defaultValue: "1em",
-                  placeholderText: "",
+                  placeholder: "",
                   allowedUnits: ["%", "px", "em"],
                 },
                 {
@@ -836,7 +836,7 @@ function createButtonObject(initialValue?: {
                   inputType: InputType.UNITS_NUMBER,
                   value: "1em",
                   defaultValue: "1em",
-                  placeholderText: "",
+                  placeholder: "",
                   allowedUnits: ["%", "px", "em"],
                 },
               ],
@@ -869,7 +869,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "1em",
           defaultValue: "1em",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1009,7 +1009,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "3px",
           defaultValue: "3px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1018,7 +1018,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "3px",
           defaultValue: "3px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1027,7 +1027,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "5px",
           defaultValue: "5px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1051,7 +1051,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "3px",
           defaultValue: "3px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1060,7 +1060,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "3px",
           defaultValue: "3px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {
@@ -1069,7 +1069,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "5px",
           defaultValue: "5px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
 
@@ -1079,7 +1079,7 @@ function createButtonObject(initialValue?: {
           inputType: InputType.UNITS_NUMBER,
           value: "0px",
           defaultValue: "0px",
-          placeholderText: "",
+          placeholder: "",
           allowedUnits: ["%", "px", "em"],
         },
         {

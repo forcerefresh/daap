@@ -1503,10 +1503,12 @@ export const UPDATE_PROJECT_META = "Update project meta";
 
 export interface UpdateProjectMetaAction extends IUndoableAction<false> {
   type: typeof UPDATE_PROJECT_META;
-  payload: IMeta;
+  payload: Partial<IMeta>;
 }
 
-export function updateProjectMeta(meta: IMeta): UpdateProjectMetaAction {
+export function updateProjectMeta(
+  meta: Partial<IMeta>
+): UpdateProjectMetaAction {
   return {
     type: UPDATE_PROJECT_META,
     payload: meta,

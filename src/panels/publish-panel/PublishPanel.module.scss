@@ -1,0 +1,93 @@
+.publishPanel {
+  //z-index: 120;
+  //position: absolute;
+  //top: 0px;
+  //left: 68px;
+  width: 700px;
+  height: 100vh;
+
+  background: #252526;
+  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  flex-direction: column;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+
+  .panelHeader {
+    display: flex;
+    //flex-direction: column;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+    padding: 5px;
+    padding-left: 10px;
+    font-weight: bold;
+    color: gray;
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+
+    > *:first-child {
+      flex-grow: 1;
+    }
+  }
+
+  .publishHolder {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px 20px;
+    padding-bottom: 20px;
+    max-height: calc(100%-25px);
+
+    > div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .sectionCard {
+    background: rgba(133, 108, 108, 0) !important;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  .sectionHeader {
+    cursor: pointer;
+    font-weight: bold;
+    color: #808080;
+    padding: 8px 10px 5px 10px;
+    //    display: flex !important;
+    //   flex-direction: row !important;
+    //   align-items: center;
+  }
+
+  .bucketItem {
+    background: rgba(255, 255, 255, 0.02) !important;
+    margin: 10px;
+    padding: 10px;
+    position: relative;
+  }
+
+  .inSync {
+    background: #12581a;
+    padding: 5px;
+  }
+  .notInSync {
+    background: #ad2108;
+    padding: 5px;
+  }
+
+  .deleteButton {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+  }
+  .addNewBucket {
+    margin-top: 10px;
+    display: inline;
+  }
+}

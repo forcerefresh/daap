@@ -12,9 +12,11 @@ export interface IMeta {
   created?: string;
   modified?: string;
   inSaving?: boolean;
+  saveRevision: number;
+  // publishRevision: number;
 }
 
-const getMetaDefault = () => ({});
+const getMetaDefault = () => ({ saveRevision: 0, publishRevision: 0 });
 
 export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
   switch (action.type) {

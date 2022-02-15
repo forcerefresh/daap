@@ -1,17 +1,15 @@
-import { Card, Colors, Elevation, Icon } from "@blueprintjs/core";
+import { Card, Elevation, Icon } from "@blueprintjs/core";
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
-import { addNewObject, setStageTool } from "../../store/actions/actions";
+import { addNewObject } from "../../store/actions/actions";
 import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
 import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefined-text2.svg";
 import { IObject, ObjectType } from "../../objects/types";
-import { StageTools } from "../../store/reducers/stage";
-import { ColorInputForm } from "../../inputs/color-input/color-input";
 import { getObjectDefinitionsByGroup } from "../../objects/objects-factory";
-import SVG, { Props as SVGProps } from "react-inlinesvg";
+import SVG from "react-inlinesvg";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -25,7 +23,6 @@ export type IAddPanelMergedProps = typeof mapDispatchToProps &
 const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const {
     _addNewObject,
-    _setStageTool,
     documentSize,
     activeLayerId,
     onRequestClose,
@@ -349,8 +346,6 @@ const mapDispatchToProps = {
     type: ObjectType | string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
-  _setStageTool: (tool: StageTools, objectType: ObjectType) =>
-    setStageTool(tool, objectType),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddPanel);

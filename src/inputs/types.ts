@@ -124,13 +124,13 @@ type Units = "px" | "em" | "%";
 //  advanced number input
 export interface IUnitsNumberInput<T = string> {
   inputType: InputType.UNITS_NUMBER;
-  placeholderText: string;
   displayName: string;
   helperText?: string;
   propertyName: T;
   allowedUnits: Units[];
   value: string;
   defaultValue: string;
+  placeholder?: string;
   inputProps?: { disabled: boolean };
 }
 export interface IColorArrayInput<T = string> {
@@ -177,6 +177,7 @@ export interface ITimelinePointValue {
   height: IRelativePositionValue;
   rotation: IRelativeRotationValue;
   opacity: IRelativePositionValue;
+  zoom: IRelativePositionValue;
 }
 
 export interface ITimelinePoint {
@@ -274,7 +275,13 @@ export interface ITextInput<T = string> {
   propertyName: T;
   value: string;
   defaultValue: string;
-  inputProps?: { disabled?: boolean; placeholderText?: string };
+  inputProps?: {
+    disabled?: boolean;
+    readOnly?: boolean;
+    placeholder?: string;
+    style: any;
+  };
+  externalError?: string | string[];
 }
 export interface IInfoInput<T = string> {
   inputType: InputType.INFO;
@@ -594,7 +601,8 @@ export interface ISelectInput<T = string> {
   value: string;
   defaultValue: string | null;
   options: { value: string; label: string }[];
-  inputProps?: { disabled?: boolean };
+  inputProps?: { disabled?: boolean; placeholder?: string };
+  externalError?: string | string[];
 }
 
 /*export interface IEventsInput<T = string> {

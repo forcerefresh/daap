@@ -4,6 +4,10 @@ const fs = require("fs");
 const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
 
+const { checkFileExists } = require("./utils.js");
+
+require("./object-storage.js");
+
 try {
   require("electron-reloader")(module);
 } catch {}
@@ -22,7 +26,6 @@ function createWindow() {
   // and load the index.html of the app.
   //mainWindow.loadFile("electron/index.html");
   mainWindow.loadURL("http://localhost:3000/");
-
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 }
@@ -99,6 +102,8 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   const modified = new Date().getTime();
   created = projectItem ? projectItem.created : modified;
 
+  let saveRevision = 1;
+  let publishRevision = 0;
   if (projectItemIndex === -1) {
     projects.push({
       id,
@@ -109,8 +114,13 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       modified,
       project,
       preview,
+      saveRevision,
+      publishRevision,
     });
   } else {
+    saveRevision = projectItem.saveRevision + 1;
+    publishRevision = projectItem.publishRevision;
+
     projects[projectItemIndex] = {
       id,
       name,
@@ -120,6 +130,8 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       modified,
       project,
       preview,
+      saveRevision,
+      publishRevision,
     };
   }
 
@@ -132,6 +144,8 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
     slides: slides,
     created: created.toString(),
     modified: modified.toString(),
+    saveRevision,
+    publishRevision,
   };
 });
 
@@ -140,6 +154,8 @@ ipcMain.handle("apiGetProjects", async (event, dataStr) => {
   const { from, search, perPage } = data;
 
   const projects = await loadProjects();
+
+  projects.reverse();
 
   const retArr = projects.splice(from, from + perPage);
 
@@ -329,10 +345,3 @@ const retArr = myImages.splice(from, from + perPage);
 return { photos: retArr } as any; //ImageSetData[];*/
 
 // UTILS -------
-
-function checkFileExists(file) {
-  return fs.promises
-    .access(file, fs.constants.F_OK)
-    .then(() => true)
-    .catch(() => false);
-}

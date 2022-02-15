@@ -1,7 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { Alert, Button, Icon, Intent, Portal } from "@blueprintjs/core";
-import { ReactComponent as TabletPreviewIcon } from "../../assets/icons/tablet-preview.svg";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
 import {
@@ -20,13 +19,13 @@ import {
   BreakpointConfiguration,
   getIconByType,
 } from "../../store/reducers/settings";
-import SavePanel, { THUMB_WIDTH } from "../save-panel/SavePanel";
+import SavePanel from "../save-panel/SavePanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
-import { generatePlayerData } from "../../export/export-html";
 import { IMeta } from "../../store/reducers/meta";
 import { IEditor } from "../../store/reducers/editor";
 import { IntegrationContext } from "../../integration";
+import PublishPanel from "../publish-panel/PublishPanel";
+import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -64,6 +63,8 @@ type IActionPanel = typeof mapDispatchToProps &
 enum VisiblePanel {
   None = "none",
   Save = "save",
+  SaveAs = "saveAs",
+  Publish = "publish",
 }
 
 export const ActionPanel: React.FC<IActionPanel> = (props) => {
@@ -96,22 +97,46 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     "image-preview-popover",
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
+    "bp3-menu", //menu
   ]);
 
   // api
   const globalContext = useContext(IntegrationContext);
   const { saveProject } = globalContext.useAPIHook();
+  const { supportStorageObjects, listAssignedStorageObjects } =
+    globalContext.useObjectStorageHook();
 
   const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
   const isExistingProject = editor.isExistingProject;
 
-  const tryToCreateNew = () => {
-    if (editor.sliderChanged) {
-      setIsDiscartConfirmOpen(true);
-    } else {
-      createNewSlider();
+  const [assignedBuckets, setAssignedBuckets] = useState<ObjectStorageItem[]>(
+    []
+  );
+  const reloadAssignedStorageObjects = () => {
+    if (supportStorageObjects) {
+      listAssignedStorageObjects({ projectId: meta.id! }).then((res) => {
+        console.log(res);
+        setAssignedBuckets(res);
+      });
     }
+  };
+  useEffect(() => {
+    reloadAssignedStorageObjects();
+  }, [meta.saveRevision]);
+
+  const publishedToAll =
+    assignedBuckets.length === 0 ||
+    !assignedBuckets.find(
+      (bucket) => bucket.assignedProject?.revision !== meta.saveRevision
+    );
+
+  const tryToCreateNew = () => {
+    //if (editor.sliderChanged) {
+    setIsDiscartConfirmOpen(true);
+    //} else {
+    //  createNewSlider();
+    //}
   };
 
   const createNewSlider = () => {
@@ -153,7 +178,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     );
   };
 
-  const onClickSave = () => {
+  /*const onClickSave = () => {
     // prepare preview thumbnail data >>>> START
     const breakpointConfig = breakpointsConfiguration.find(
       (p) => p.type === "large-1"
@@ -218,7 +243,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           message: "Something went wrong. Slider is not saved.",
         });
       });
-  };
+  };*/
 
   return (
     <div className={css.actionPanel}>
@@ -230,80 +255,102 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           </span>
           {/*{isChanged && <span className={css.changed}>*</span>}*/}
         </div>
-        <div>
-          {
-            <Button
-              minimal
-              small
-              active={previewState.paused}
-              icon={"pause"}
-              style={{ marginRight: "20px" }}
-              onClick={() => {
-                const isPreview = !previewState.isPreview;
-                _setStagePreview({
-                  ...previewState,
-                  paused: !previewState.paused,
-                });
-              }}
-            />
-          }
+      </div>
 
-          {isExistingProject ? (
-            <>
-              <Button
-                intent={isChanged ? "danger" : "none"}
-                minimal
-                small
-                icon={"floppy-disk"}
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  onClickSave();
-                }}
-              ></Button>
-              <Button
-                minimal
-                small
-                icon={"floppy-disk"}
-                style={{ marginRight: "5px" }}
-                onClick={() => {
-                  setShowPanel(VisiblePanel.Save);
-                }}
-              >
-                as ...
-              </Button>
-            </>
-          ) : (
-            <Button
-              intent={isChanged ? "danger" : "none"}
-              minimal
-              small
-              icon={"floppy-disk"}
-              style={{ marginRight: "5px" }}
-              onClick={() => {
-                setShowPanel(VisiblePanel.Save);
-              }}
-            ></Button>
-          )}
-
-          <Portal>
-            {showPanel === VisiblePanel.Save && (
-              <div ref={sharedRef} className={css.floatingSavePanel}>
-                <SavePanel
-                  isSaveAs={isExistingProject}
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
-                />
-              </div>
-            )}
-          </Portal>
-
+      <div className={css.actionButtons}>
+        {false && (
           <Button
             minimal
-            onClick={() => tryToCreateNew()}
-            className={css.addNewSlide}
-            small={true}
-            icon="add"
-          ></Button>
-        </div>
+            small
+            active={previewState.paused}
+            icon={"pause"}
+            style={{ marginRight: "20px" }}
+            onClick={() => {
+              const isPreview = !previewState.isPreview;
+              _setStagePreview({
+                ...previewState,
+                paused: !previewState.paused,
+              });
+            }}
+          />
+        )}
+
+        <>
+          <Button
+            disabled={!isExistingProject}
+            intent={
+              !isExistingProject ? "none" : publishedToAll ? "none" : "primary"
+            }
+            minimal
+            small
+            icon={"globe"}
+            style={{ marginRight: "5px" }}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Publish);
+            }}
+          >
+            Publish
+          </Button>
+          <Button
+            intent={isChanged ? "primary" : "none"}
+            minimal
+            small
+            icon={"floppy-disk"}
+            style={{ marginRight: "5px" }}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Save);
+            }}
+          >
+            Save
+          </Button>
+          <Button
+            disabled={!isExistingProject}
+            minimal
+            small
+            icon={"floppy-disk"}
+            style={{ marginRight: "5px" }}
+            onClick={() => {
+              setShowPanel(VisiblePanel.SaveAs);
+            }}
+          >
+            Save as...
+          </Button>
+        </>
+
+        <Portal>
+          {(showPanel === VisiblePanel.Save ||
+            showPanel === VisiblePanel.SaveAs) && (
+            <div ref={sharedRef} className={css.floatingSavePanel}>
+              <SavePanel
+                isSaveAs={showPanel === VisiblePanel.SaveAs}
+                onRequestClose={() => setShowPanel(VisiblePanel.None)}
+              />
+            </div>
+          )}
+
+          {showPanel === VisiblePanel.Publish && (
+            <div ref={sharedRef} className={css.floatingSavePanel}>
+              <PublishPanel
+                onRequestClose={() => {
+                  setShowPanel(VisiblePanel.None);
+                }}
+                onChange={() => {
+                  reloadAssignedStorageObjects();
+                }}
+              />
+            </div>
+          )}
+        </Portal>
+
+        <Button
+          minimal
+          onClick={() => tryToCreateNew()}
+          className={css.addNewSlide}
+          small={true}
+          icon="add"
+        >
+          Add
+        </Button>
       </div>
 
       <div className={css.previewButtons}>
@@ -330,16 +377,34 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
       </div>
       <Alert
         cancelButtonText="Cancel"
-        confirmButtonText="Discard changes and create new Slider"
+        confirmButtonText={
+          editor.sliderChanged
+            ? "Discard changes and create new Slider"
+            : "Create new Slider"
+        }
         canOutsideClickCancel={false}
-        icon={<Icon icon="info-sign" size={36} intent={Intent.WARNING} />}
+        icon={
+          <Icon
+            icon="info-sign"
+            size={36}
+            intent={editor.sliderChanged ? Intent.WARNING : Intent.PRIMARY}
+          />
+        }
         intent={Intent.PRIMARY}
         isOpen={isDiscartConfirmOpen}
         onCancel={() => setIsDiscartConfirmOpen(false)}
         onConfirm={createNewSlider}
         className="bp3-dark"
       >
-        <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
+        {editor.sliderChanged ? (
+          <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
+        ) : (
+          <p>
+            Close current slider and create new one. <br />
+            It's safe to continue without save as you have not made any changes
+            to current project.
+          </p>
+        )}
       </Alert>
     </div>
   );

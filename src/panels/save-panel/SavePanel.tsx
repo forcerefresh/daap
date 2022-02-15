@@ -63,13 +63,19 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
 
   // local state
-  const [localMeta, setLocalMeta] = useState(meta);
+  const [localMeta, setLocalMeta] = useState({
+    ...meta,
+    ...(isSaveAs ? { name: "", id: undefined } : {}),
+  });
+
   useEffect(() => {
     const metaClone = cloneDeep(meta);
     if (!metaClone.id || isSaveAs) {
       //setLocalMeta(metaClone);
       //} else if (!metaClone.id || isSaveAs) {
       // todo: loader
+      metaClone.id = undefined;
+      metaClone.name = "";
       getNextProjectId().then((nextId) => {
         metaClone.name = `Slider ${nextId}`;
         metaClone.description = "";
@@ -115,24 +121,37 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       },
       playerData,
     })
-      .then(({ id, name, description, slides, created, modified }) => {
-        console.log({ id, name, description });
-        _updateProjectMeta({
+      .then(
+        ({
           id,
           name,
           description,
           slides,
           created,
           modified,
-          inSaving: false,
-        });
-        _updateEditor({ sliderChanged: false, isExistingProject: true });
-        onRequestClose();
-        AppToaster.show({
-          intent: "success",
-          message: "Slider is successfully saved.",
-        });
-      })
+          saveRevision,
+          //publishRevision,
+        }) => {
+          console.log({ id, name, description });
+          _updateProjectMeta({
+            id,
+            name,
+            description,
+            slides,
+            created,
+            modified,
+            inSaving: false,
+            saveRevision,
+            //publishRevision,
+          });
+          _updateEditor({ sliderChanged: false, isExistingProject: true });
+          onRequestClose();
+          AppToaster.show({
+            intent: "success",
+            message: "Slider is successfully saved.",
+          });
+        }
+      )
       .catch((e) => {
         _updateProjectMeta({ inSaving: false });
         onRequestClose();
@@ -172,7 +191,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         ></div>
       </div>
       <div className={css.panelHeader}>
-        <div>SAVE PANEL</div>
+        <div>{isSaveAs ? "SAVE AS..." : "SAVE PANEL"}</div>
         <div className={css.saving}>
           {meta.inSaving && (
             <>
@@ -186,7 +205,25 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         {/*<Label>Align</Label>*/}
         <div className={cx("input260", css.inputHolder)}>
           {getTextField(
-            "Name",
+            "ID" +
+              (isSaveAs ? " [From project ID: " + meta.id + "]" : "") +
+              " (readonly)",
+            localMeta.id,
+            (id: any) => {},
+            "",
+            {
+              readOnly: true,
+              placeholder: !localMeta.id
+                ? "ID will be generated after save"
+                : "",
+            }
+          )}
+        </div>
+
+        <div className={cx("input260", css.inputHolder)}>
+          {getTextField(
+            "Name" +
+              (isSaveAs ? " [From project name: " + meta.name + "]" : ""),
             localMeta.name,
             (name: any) => {
               setLocalMeta({ ...localMeta, name });

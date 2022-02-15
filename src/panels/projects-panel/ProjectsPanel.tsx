@@ -152,6 +152,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         description: response.project.description,
         modified: response.project.modified,
         created: response.project.created,
+        saveRevision: response.project.saveRevision,
+        //publishRevision: response.project.publishRevision,
       };
       _updateProjectMeta(meta);
 

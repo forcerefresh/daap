@@ -1,0 +1,226 @@
+import React, { useContext, useEffect, useState } from "react";
+import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
+import cx from "classnames";
+import { omit } from "lodash-es";
+import { connect } from "react-redux";
+import { Button, Menu, MenuItem } from "@blueprintjs/core";
+import { IStore } from "../../store/store";
+import css from "./PublishPanel.module.scss";
+import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
+import { IntegrationContext } from "../../integration";
+import { IMeta } from "../../store/reducers/meta";
+import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { IEditor } from "../../store/reducers/editor";
+import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
+import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
+
+interface IPublishPanelProps {
+  onRequestClose: () => void;
+  onChange: () => void;
+}
+
+export type IPublishPanelMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  IPublishPanelProps;
+
+const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
+  const { meta, onChange } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const {
+    publishToStorageObject,
+    listStorageObjects,
+    assignBucketToProject,
+    getAssignedBucketIds,
+  } = globalContext.useObjectStorageHook();
+
+  const [allBuckets, setAllBuckets] = useState<ObjectStorageItem[]>([]);
+  const [assignedIds, setAssignedIds] = useState<string[]>([]);
+
+  const [assignedBuckets, setVisibleBuckets] = useState<ObjectStorageItem[]>(
+    []
+  );
+
+  useEffect(() => {
+    reloadStorageObjects();
+    reloadAssignedIds();
+  }, []);
+
+  const reloadStorageObjects = () => {
+    listStorageObjects({ projectId: meta.id! }).then((result) => {
+      setAllBuckets(result);
+    });
+  };
+  const reloadAssignedIds = () => {
+    getAssignedBucketIds({ projectId: meta.id! }).then((result) => {
+      setAssignedIds(result);
+    });
+  };
+
+  useEffect(() => {
+    const viz = allBuckets.filter(
+      (bucket) => assignedIds.indexOf(bucket.id!) !== -1
+    );
+    setVisibleBuckets(viz);
+    console.log(viz);
+  }, [allBuckets, assignedIds]);
+
+  const bucketListMenu = (
+    <Menu>
+      {allBuckets.map((bucket) => (
+        <MenuItem
+          disabled={assignedIds.indexOf(bucket.id!) !== -1}
+          text={
+            `${bucket.bucketName} (${bucket.platform})` +
+            (assignedIds.indexOf(bucket.id!) !== -1 ? " (assigned)" : "")
+          }
+          onClick={() => {
+            assignBucketToProject({
+              projectId: meta.id!,
+              bucketId: bucket.id!,
+            }).then((res) => {
+              if (res.status === "OK") {
+                AppToaster.show({
+                  intent: "success",
+                  message: "Bucket is successfully assigned to project.",
+                });
+                onChange();
+              } else if (res.status === "ERROR") {
+                AppToaster.show({
+                  intent: "danger",
+                  message: "Bucket is NOT assigned. Error: " + res.error,
+                });
+              }
+              reloadAssignedIds();
+              reloadStorageObjects();
+            });
+          }}
+        />
+      ))}
+    </Menu>
+  );
+
+  return (
+    <div className={cx("bp3-dark", css.publishPanel)}>
+      <div className={css.panelHeader}>
+        <div>PUBLISH PANEL</div>
+      </div>
+      <div className={css.publishHolder}>
+        <div className={css.sectionHeader}>
+          <div>BUCKETS</div>
+
+          <Popover2
+            content={bucketListMenu}
+            placement="left-end"
+            shouldReturnFocusOnClose={false}
+            interactionKind={Popover2InteractionKind.CLICK}
+            hoverCloseDelay={10}
+            hoverOpenDelay={15}
+          >
+            <Button
+              minimal
+              onClick={() => undefined}
+              className={css.addNewBucket}
+              small={true}
+              icon="add"
+            >
+              Assign bucket to this project
+            </Button>
+          </Popover2>
+        </div>
+        {assignedBuckets.map((bucket) => (
+          <div className={css.bucketItem}>
+            <p>
+              Bucket:
+              <strong>
+                {" "}
+                {bucket.bucketName} ({bucket.platform})
+              </strong>
+            </p>
+            {bucket.description && <p>Description: {bucket.description} </p>}
+            {bucket.assignedProject?.revision === meta.saveRevision ? (
+              <p className={css.inSync}>
+                Status: Publish is in sync with save. <br />
+                Revision: 27.
+              </p>
+            ) : (
+              <p className={css.notInSync}>
+                Status: Publish is NOT in sync with save. <br />
+                Publish revision: {bucket.assignedProject?.revision}
+                <br /> Save revision: {meta.saveRevision}
+              </p>
+            )}
+
+            <p>
+              <ConfirmButton
+                intent="primary"
+                onConfirm={() => {
+                  publishToStorageObject({
+                    bucketId: bucket.id!,
+                    projectId: meta.id!,
+                    revision: meta.saveRevision,
+                  }).then(() => {
+                    reloadAssignedIds();
+                    reloadStorageObjects();
+                    onChange();
+                  });
+                }}
+                buttonProps={{}}
+                dialogProps={{}}
+                text="Publish"
+                title={"Publish to  bucket: " + bucket.bucketName}
+              >
+                <>
+                  <p>Please confirm publish to bucket.</p>
+                  <p>
+                    Note: Publish means that slider configuration file and
+                    assets will be transferred to bucket.
+                  </p>
+                  <p>
+                    Note: Assets urls will be updated in order to point to
+                    bucket files.
+                  </p>
+                </>
+              </ConfirmButton>
+              <Button minimal>Integration instructions</Button>
+            </p>
+            <Button minimal className={css.deleteButton} icon="trash"></Button>
+          </div>
+        ))}
+        <div className={css.sectionHeader}>DOWNLOAD</div>
+        <div className={css.bucketItem}>
+          <p>
+            <Button intent="primary">Download</Button>{" "}
+            <Button>Integration instructions</Button>
+          </p>
+        </div>{" "}
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state: IStore) => {
+  // TODO: IMPORTANT hardcoded
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    state.project.settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig) => breakpointConfig.type === "large-1"
+    );
+
+  return {
+    project: omit({ ...state.project }, "diff"),
+    meta: state.meta,
+    slides: state.project.slides,
+    layers: state.project.layers,
+    objects: state.project.objects,
+    breakpointConfig,
+    settings: state.project.settings,
+  };
+};
+
+const mapDispatchToProps = {
+  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PublishPanel);

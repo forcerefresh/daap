@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -19,6 +19,8 @@ import {
 import { getNumericFiled } from "../../inputs/input-utils";
 import { IGlobals } from "../../store/reducers/globals";
 import ProjectPanel from "../project-panel/ProjectPanel";
+import { ObjectStorage } from "../object-storage/ObjectStorage";
+import { IntegrationContext } from "../../integration";
 
 enum GlobalPanelSections {
   UiLayout = "uiLayout",
@@ -40,6 +42,9 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
     _updateSlideDuration,
     _updateGlobalConfiguration,
   } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const { supportStorageObjects } = globalContext.useObjectStorageHook();
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
@@ -138,6 +143,13 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
         <Tabs className={css.tabs}>
           <Tab id="project" title="Project Settings" panel={<ProjectPanel />} />
           <Tab id="global" title="App Settings" panel={<GlobalPanel />} />
+          {supportStorageObjects && (
+            <Tab
+              id="objectStorage"
+              title="Object Storage"
+              panel={<ObjectStorage />}
+            />
+          )}
 
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}

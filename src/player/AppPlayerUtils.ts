@@ -49,10 +49,10 @@ function populatesTimelinesForObject(
 ) {
   // only out effect is different
   const delay =
-    effType === "out"
+    (effType === "out"
       ? data.data.slideDuration.customValue -
         (getDuration(data, eff) + eff.delay)
-      : eff.delay / 1000;
+      : eff.delay) / 1000;
 
   const tl = gsap.timeline();
   parallelTimelines.push(tl);

@@ -46,6 +46,14 @@ gsap.registerEffect({
                 }),
               }
             : {}),
+          ...(pointValue.zoom.enabled
+            ? {
+                scale: relativePosition2Gsap({
+                  ...pointValue.zoom,
+                  value: pointValue.zoom.value / 100,
+                }),
+              }
+            : {}),
         };
         const dur = config.duration! * (time / 100) - currentTime;
         currentTime = dur;
