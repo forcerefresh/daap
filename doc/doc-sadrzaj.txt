@@ -1,0 +1,77 @@
+Dokumentacija - documentation.webslider.io
+
+
+- koncept aplikacije (intoduction)
+  Elementi: project, slide, layer, object, effect, navigation, layout, responsinve cofiguration.
+
+- layout aplikacije
+  * tool  bar
+    * tool 1 ....
+    * tool 2 ....
+  * right panels
+    * tool 1....
+  * stage
+    * edit mode
+      * page, stage i guidelines box, svi objekti selejektovanog slaja su visible
+    * play
+      * preview layout
+      * player controler
+
+- elements an its config
+  - slide
+    * regular slide
+    * front and back
+  - layer
+  - object
+  - effect
+  - navigation
+  - layout
+  
+- project settings (?)
+- responsive config (?)
+  
+- panels
+  - add object
+  - media (object)
+  - text (object)
+  - history
+  ----
+    - peoject settings (project level)
+  - breakpoints (project level)
+  - app settings (app level)
+  - storage objects (app level)
+  ----
+  - projects/templates
+  -----
+  - save
+  - publish
+
+  - layouting (object and layer)
+
+- core object
+  - text 
+  - image
+  - video
+  - svg
+  - bullets (?)
+  - arrows (?)
+  - button
+  - spinner (?)
+  - empty (za lisce, za clicable area) 
+
+- navigation (?)
+
+- efects
+    gde: na slide, layer i object
+    koliko: struct(1) vs attrubute(n)
+    napomena: za odredjene tipove ili tipove objekte imamo odredjene efekte  
+  
+- core effects
+  - fade
+  - zoom
+  - ...
+      
+- preview
+    * preview layout
+    * player controler     
+
