@@ -19,7 +19,7 @@ import {
   getTextField,
 } from "../../inputs/input-utils";
 import { IMeta } from "../../store/reducers/meta";
-import { generatePlayerData } from "../../export/export-html";
+import { generatePlayerData, getAllAssetsUrls } from "../../export/export-html";
 import { BreakpointConfiguration } from "../../store/reducers/settings";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
@@ -108,6 +108,10 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       settings
     );
 
+    const assetsUrls = getAllAssetsUrls(objects);
+
+    console.log(assetsUrls);
+
     saveProject({
       id: saveAs ? undefined : localMeta.id,
       name: localMeta.name!,
@@ -120,6 +124,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         html: html,
       },
       playerData,
+      assetsUrls,
     })
       .then(
         ({
@@ -130,6 +135,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           created,
           modified,
           saveRevision,
+          assetsUrls,
           //publishRevision,
         }) => {
           console.log({ id, name, description });
@@ -142,6 +148,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             modified,
             inSaving: false,
             saveRevision,
+            assetsUrls,
             //publishRevision,
           });
           _updateEditor({ sliderChanged: false, isExistingProject: true });

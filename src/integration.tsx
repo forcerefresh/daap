@@ -52,6 +52,12 @@ export const IntegrationContext = React.createContext({
     }): Promise<{ status: string; error?: string }> =>
       Promise.resolve({ status: "" }),
 
+    removeBucketFromProject: (req: {
+      bucketId: string;
+      projectId: number;
+    }): Promise<{ status: string; error?: string }> =>
+      Promise.resolve({ status: "" }),
+
     getAssignedBucketIds: (req: { projectId: number }): Promise<string[]> =>
       Promise.resolve([]),
 
@@ -149,6 +155,7 @@ export const IntegrationContext = React.createContext({
         html: string;
       };
       playerData: IPlayerData;
+      assetsUrls: { url: string; type: "url" | string }[];
     }): Promise<{
       id: number;
       name: string;
@@ -157,6 +164,7 @@ export const IntegrationContext = React.createContext({
       created: string;
       modified: string;
       saveRevision: number;
+      assetsUrls: { url: string; type: "url" | string }[];
     }> =>
       Promise.resolve({
         id: 1,
@@ -166,6 +174,7 @@ export const IntegrationContext = React.createContext({
         created: "",
         modified: "",
         saveRevision: 0,
+        assetsUrls: [],
       }), // todo: add interface for api response
   }),
 

@@ -1,14 +1,20 @@
+const fetch = require("node-fetch");
+var mime = require("mime-types");
 const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
+var url = require("url");
+var path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
 const { checkFileExists, getPlayerPath } = require("./utils");
+const { loadProject } = require("./project");
 const { v4: uuid } = require("uuid");
 const AWS = require("aws-sdk");
-const { omit, without } = require("lodash");
+const { omit, without, chunk } = require("lodash");
 const keytar = require("keytar");
 const cloneDeep = require("clone-deep");
+
+const PARALLEL_UPLOAD = 20;
 
 ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
   console.log("node: ObjectStorage::List");
@@ -157,6 +163,41 @@ ipcMain.handle("ObjectStorage::Get", async (event, reqJson) => {
 });
 
 ipcMain.handle(
+  "ObjectStorage::RemoveBucketFromProject",
+  async (event, reqJson) => {
+    const req = JSON.parse(reqJson);
+
+    const objectStorageList = await loadObjectStorage();
+
+    const item = objectStorageList.find((item) => item.id === req.bucketId);
+
+    if (!item.assignedProjects) {
+      return {
+        status: "ERROR",
+        error: "Project is not assigned to bucket",
+      };
+    }
+
+    // assign if not assigned
+    const assignedProject = item.assignedProjects.find(
+      (item) => item.projectId === req.projectId
+    );
+    if (!assignedProject) {
+      return {
+        status: "ERROR",
+        error: "Project is not assigned to bucket",
+      };
+    } else {
+      remove(item.assignedProjects, (item) => item.projectId === req.projectId);
+    }
+
+    await saveObjectStorage(objectStorageList);
+
+    return { status: "OK" };
+  }
+);
+
+ipcMain.handle(
   "ObjectStorage::AssignBucketToProject",
   async (event, reqJson) => {
     const req = JSON.parse(reqJson);
@@ -226,12 +267,41 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     };
   }
 
-  // todo: upload
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 2000);
-  });
+  // TODO
+  const project = await loadProject(req.projectId);
+  console.log(project);
+
+  const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
+  console.log("assetsUrlsChunks");
+  console.log(assetsUrlsChunks);
+
+  let error;
+  for (const assetsUrlsChunk of assetsUrlsChunks) {
+    const pArr = [];
+    for (const assetUrl of assetsUrlsChunk) {
+      var parsed = url.parse(assetUrl.url);
+      const filename = path.basename(parsed.pathname);
+      pArr.push(
+        uploadFileToBucket(
+          req.bucketId,
+          assetUrl.url,
+          `${req.projectId}/assets/${filename}`
+        )
+      );
+    }
+    try {
+      const result = await Promise.all(pArr);
+      console.log("result");
+      console.log(result);
+    } catch (ex) {
+      error = ex.toString();
+      break;
+    }
+  }
+
+  if (error) {
+    return { status: "ERROR", error };
+  }
 
   assignedProject.revision = req.revision;
 
@@ -299,4 +369,55 @@ async function uploadToS3(s3, bucketName, filePath, key) {
   });
 
   await p;
+}
+
+async function uploadBufferToS3(s3, bucketName, bufferStream, key) {
+  const p = new Promise((resolve, reject) => {
+    var putParams = {
+      Bucket: bucketName,
+      Key: key,
+      Body: bufferStream,
+      ContentType: mime.lookup(key),
+    };
+    s3.putObject(putParams, function (putErr, putData) {
+      if (putErr) {
+        reject(putErr);
+      } else {
+        resolve();
+      }
+    });
+  });
+
+  await p;
+}
+async function uploadFileToBucket(bucketId, fromUrl, toKey) {
+  const bucketWithKeys = await getBucketWithKeys(bucketId);
+
+  const s3 = new AWS.S3({
+    accessKeyId: bucketWithKeys.key,
+    secretAccessKey: bucketWithKeys.secretKey,
+  });
+
+  // download file
+  const bufferStream = await downloadToBuffer(fromUrl);
+
+  // upload file
+  await uploadBufferToS3(s3, bucketWithKeys.bucketName, bufferStream, toKey);
+}
+
+async function downloadToBuffer(url) {
+  return fetch(url).then((res) => res.buffer());
+}
+
+async function getBucketWithKeys(bucketId) {
+  const objectStorageList = await loadObjectStorage();
+
+  const item = objectStorageList.find((item) => item.id === bucketId);
+
+  const secretKey = await keytar.getPassword(
+    "wsSliderAppBucketKey",
+    item.platform + "_" + item.bucketName
+  );
+
+  return { ...item, secretKey };
 }

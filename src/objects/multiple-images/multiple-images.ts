@@ -171,6 +171,21 @@ export async function preloadMultiImage(props: {
   return id;
 }
 
+export const getMultiImageAssetsUrls = (props: {
+  values: { [key: string]: any };
+}) => {
+  const imageValues = props.values as MultiImageValues;
+
+  const ret: { url: string; type: "url" | string }[] = [];
+  imageValues.urls.forEach((item) => {
+    if (item.url && !item.isPlaceholder) {
+      ret.push({ url: item.url, type: "url" });
+    }
+  });
+
+  return ret;
+};
+
 export const multiImageMeta = {
   name: "MULTIPLE IMAGES",
   description: "Add multi-image object",

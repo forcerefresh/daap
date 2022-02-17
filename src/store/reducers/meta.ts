@@ -13,6 +13,7 @@ export interface IMeta {
   modified?: string;
   inSaving?: boolean;
   saveRevision: number;
+  assetsUrls?: { url: string; type: "url" | string }[];
   // publishRevision: number;
 }
 

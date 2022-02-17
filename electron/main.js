@@ -5,6 +5,7 @@ const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
 
 const { checkFileExists } = require("./utils.js");
+const { loadProject, loadProjects, saveProjects } = require("./project.js");
 
 require("./object-storage.js");
 
@@ -80,7 +81,7 @@ ipcMain.handle("apiSaveProject", async (event, data) => {
 
 ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
-  const { name, description, slides, project, preview } = data;
+  const { name, description, slides, project, preview, assetsUrls } = data;
 
   let { id, created } = data;
 
@@ -103,7 +104,7 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   created = projectItem ? projectItem.created : modified;
 
   let saveRevision = 1;
-  let publishRevision = 0;
+  //let publishRevision = 0;
   if (projectItemIndex === -1) {
     projects.push({
       id,
@@ -115,11 +116,12 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       project,
       preview,
       saveRevision,
-      publishRevision,
+      //publishRevision,
+      assetsUrls,
     });
   } else {
     saveRevision = projectItem.saveRevision + 1;
-    publishRevision = projectItem.publishRevision;
+    //publishRevision = projectItem.publishRevision;
 
     projects[projectItemIndex] = {
       id,
@@ -131,7 +133,8 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       project,
       preview,
       saveRevision,
-      publishRevision,
+      //publishRevision,
+      assetsUrls,
     };
   }
 
@@ -145,7 +148,9 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
     created: created.toString(),
     modified: modified.toString(),
     saveRevision,
-    publishRevision,
+    assetsUrls,
+
+    //publishRevision,
   };
 });
 
@@ -181,9 +186,7 @@ ipcMain.handle("apiGetProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { id } = data;
 
-  const projects = await loadProjects();
-
-  const project = projects.find((p) => p.id === id);
+  const project = await loadProject(id);
 
   return { project };
 });
@@ -199,35 +202,6 @@ ipcMain.handle("apiGetNextProjectId", async (event) => {
 
   return maxId + 1;
 });
-
-async function loadProjects() {
-  const projectPath = getProjectPath();
-
-  const exist = await checkFileExists(projectPath);
-  let projects = [];
-  if (exist) {
-    const projectsStr = await fsPromise.readFile(projectPath, "utf-8");
-    projects = JSON.parse(projectsStr);
-  }
-
-  return projects;
-}
-
-async function saveProjects(projects) {
-  await fsPromise.writeFile(
-    getProjectPath(),
-    JSON.stringify(projects, undefined, 2)
-  );
-}
-
-function getProjectPath() {
-  const userDataPath = app.getPath("userData");
-  const projectsDir = path.join(userDataPath, "projects");
-  if (!fs.existsSync(projectsDir)) {
-    fs.mkdirSync(projectsDir);
-  }
-  return path.join(userDataPath, "projects", "projects.json");
-}
 
 // MY IMAGES ---------
 
@@ -345,3 +319,7 @@ const retArr = myImages.splice(from, from + perPage);
 return { photos: retArr } as any; //ImageSetData[];*/
 
 // UTILS -------
+
+module.export = {
+  loadProject,
+};

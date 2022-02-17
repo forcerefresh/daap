@@ -56,6 +56,7 @@ export const useAPIHook = () => {
     slides,
     project,
     preview,
+    assetsUrls,
   }: {
     id?: number;
     name: string;
@@ -65,6 +66,7 @@ export const useAPIHook = () => {
     modified?: string;
     project: any;
     preview: any;
+    assetsUrls: { url: string; type: "url" | string }[];
   }): Promise<{
     id: number;
     name: string;
@@ -85,6 +87,7 @@ export const useAPIHook = () => {
         slides,
         project,
         preview,
+        assetsUrls,
       };
 
       ipcRenderer

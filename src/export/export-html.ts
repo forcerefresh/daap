@@ -1,4 +1,4 @@
-import { forOwn, mapValues, pick } from "lodash-es";
+import { flatten, forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -1084,4 +1084,15 @@ function addBorderRadius(style: string, borderRadius: ICornerRadiusValue) {
 
 export function color2rgba(c: RGBColor): string {
   return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
+}
+
+export function getAllAssetsUrls(objects: IObjects) {
+  return flatten(
+    objects.allObjects.map((objectId) => {
+      const object = objects.objectById[objectId];
+      const deff = getObjectDefinition(object.type);
+      console.log(object);
+      return deff?.getAssetsUrls?.({ values: object.definition.values }) || [];
+    })
+  );
 }

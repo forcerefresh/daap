@@ -32,6 +32,10 @@ export type executionCodeFuncType = (props: {
   calculatedObjectSize: any;
 }) => void;
 
+export type getAssetsUrlFuncType = (props: {
+  values: { [key: string]: any };
+}) => { url: string; type: "url" | string }[];
+
 export type preloadFuncType = (props: {
   id: string;
   className: string;
@@ -60,6 +64,7 @@ export interface IObjectDefinitionHolder {
   executionCode_Stop?: executionCodeFuncType;
   preload?: preloadFuncType;
   postProcess?: postProcessFuncType;
+  getAssetsUrls?: getAssetsUrlFuncType;
 }
 
 // <<<
@@ -80,7 +85,8 @@ export function registerObject(
   preload?: preloadFuncType,
   executionCode_Start?: executionCodeFuncType,
   executionCode_Stop?: executionCodeFuncType,
-  postProcess?: postProcessFuncType
+  postProcess?: postProcessFuncType,
+  getAssetsUrls?: getAssetsUrlFuncType
 ) {
   objects.push({
     type,
@@ -92,6 +98,7 @@ export function registerObject(
     executionCode_Stop,
     preload,
     postProcess,
+    getAssetsUrls,
   });
 }
 

@@ -84,6 +84,19 @@ export const useObjectStorageHook = () => {
     });
   };
 
+  const removeBucketFromProject = (req: {
+    bucketId: string;
+    projectId: number;
+  }): Promise<{ status: string; error?: string }> => {
+    return new Promise((resolve, reject) => {
+      const { ipcRenderer } = window.require("electron");
+
+      ipcRenderer
+        .invoke("ObjectStorage::RemoveBucketFromProject", JSON.stringify(req))
+        .then(resolve);
+    });
+  };
+
   const getAssignedBucketIds = (req: {
     projectId: number;
   }): Promise<string[]> => {
@@ -118,6 +131,7 @@ export const useObjectStorageHook = () => {
     deleteStorageObject,
     uploadPlayerToStorageObject,
     assignBucketToProject,
+    removeBucketFromProject,
     getAssignedBucketIds,
     publishToStorageObject,
   };

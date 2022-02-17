@@ -194,6 +194,14 @@ export async function preloadImage(props: {
   return id;
 }
 
+export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
+  const imageValues = props.values as ImageValues;
+  if (!imageValues.url.url || imageValues.url.isPlaceholder) {
+    return [];
+  }
+  return [{ url: (props.values as ImageValues).url.url, type: "url" }];
+};
+
 export const imageMeta = {
   name: "IMAGE",
   description: "Add Image",

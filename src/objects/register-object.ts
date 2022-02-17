@@ -1,11 +1,13 @@
 import {
   createImageObject,
+  getAssetsUrls,
   getImageHtml,
   imageMeta,
   preloadImage,
 } from "./image/image";
 import {
   createMultiImageObject,
+  getMultiImageAssetsUrls,
   getMultiImageHtml,
   multiImageMeta,
   preloadMultiImage,
@@ -59,7 +61,11 @@ registerObject(
   imageMeta,
   createImageObject,
   getImageHtml,
-  preloadImage
+  preloadImage,
+  undefined,
+  undefined,
+  undefined,
+  getAssetsUrls
 );
 
 registerObject(
@@ -68,7 +74,11 @@ registerObject(
   multiImageMeta,
   createMultiImageObject,
   getMultiImageHtml,
-  preloadMultiImage
+  preloadMultiImage,
+  undefined,
+  undefined,
+  undefined,
+  getMultiImageAssetsUrls
 );
 
 registerObject(

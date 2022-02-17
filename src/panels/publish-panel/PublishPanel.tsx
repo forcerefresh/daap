@@ -32,6 +32,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     publishToStorageObject,
     listStorageObjects,
     assignBucketToProject,
+    removeBucketFromProject,
     getAssignedBucketIds,
   } = globalContext.useObjectStorageHook();
 
@@ -160,7 +161,19 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                     bucketId: bucket.id!,
                     projectId: meta.id!,
                     revision: meta.saveRevision,
-                  }).then(() => {
+                  }).then((res) => {
+                    if (res.status === "OK") {
+                      AppToaster.show({
+                        intent: "success",
+                        message: "Project is successfully published.",
+                      });
+                    } else if (res.status === "ERROR") {
+                      AppToaster.show({
+                        intent: "danger",
+                        message:
+                          "Project is NOT published. Error: " + res.error,
+                      });
+                    }
                     reloadAssignedIds();
                     reloadStorageObjects();
                     onChange();
@@ -172,20 +185,40 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                 title={"Publish to  bucket: " + bucket.bucketName}
               >
                 <>
-                  <p>Please confirm publish to bucket.</p>
+                  <p>Upload slider configuration file and assets to bucket.</p>
                   <p>
-                    Note: Publish means that slider configuration file and
-                    assets will be transferred to bucket.
-                  </p>
-                  <p>
-                    Note: Assets urls will be updated in order to point to
-                    bucket files.
+                    Note: Assets urls in the slider configuration file will be
+                    updated in order to point to bucket files.
                   </p>
                 </>
               </ConfirmButton>
               <Button minimal>Integration instructions</Button>
             </p>
-            <Button minimal className={css.deleteButton} icon="trash"></Button>
+
+            <ConfirmButton
+              onConfirm={() => {
+                removeBucketFromProject({
+                  bucketId: bucket.id!,
+                  projectId: meta.id!,
+                }).then(() => {
+                  reloadAssignedIds();
+                  reloadStorageObjects();
+                  onChange();
+                });
+              }}
+              buttonProps={{
+                icon: "trash",
+                minimal: true,
+                className: css.deleteButton,
+              }}
+              dialogProps={{}}
+              text=""
+              title={"Remove bucket settings: " + bucket.bucketName}
+            >
+              <>
+                <p>Remove bucket settings from this project.</p>
+              </>
+            </ConfirmButton>
           </div>
         ))}
         <div className={css.sectionHeader}>DOWNLOAD</div>
