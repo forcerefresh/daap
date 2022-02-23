@@ -1,4 +1,3 @@
-import { InputType } from "../../inputs/types";
 import { fade, IFadeEffect } from "./fade.types";
 
 export const fadeDefinition = {

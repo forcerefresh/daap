@@ -23,7 +23,7 @@ import {
   VideoValues,
 } from "../inputs/types";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
-import { FormType } from "../utils/form-layout/form-layout";
+import { FormType } from "../utils/form-layout/i-form-layout";
 import { getObjectDefinition } from "./objects-factory";
 import {
   ICommonObjectProperties,

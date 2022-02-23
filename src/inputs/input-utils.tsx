@@ -1,6 +1,6 @@
 import React from "react";
 import { noop } from "lodash-es";
-import { Breakpoints } from "../store/reducers/settings";
+import { Breakpoints } from "../store/reducers/i-settings";
 import { getInputForm } from "./input-factory";
 import { InputType } from "./types";
 

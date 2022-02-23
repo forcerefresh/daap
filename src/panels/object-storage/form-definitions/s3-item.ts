@@ -4,9 +4,10 @@ import { object, string, ValidationError } from "yup";
 export type S3FormDefinitionTuple = [
   ISelectInput<"environment">,
   ITextInput<"bucketName">,
-  ITextInput<"description">,
+  ITextInput<"region">,
   ITextInput<"key">,
-  ITextInput<"secretKey">
+  ITextInput<"secretKey">,
+  ITextInput<"description">
 ];
 
 export const s3FormDefinition: S3FormDefinitionTuple = [
@@ -32,13 +33,14 @@ export const s3FormDefinition: S3FormDefinitionTuple = [
     inputProps: { style: { width: "300px" } },
   },
   {
-    displayName: "Description",
-    propertyName: "description",
+    displayName: "Region",
+    propertyName: "region",
     inputType: InputType.TEXT,
     value: "",
     defaultValue: "",
-    inputProps: { style: { width: "600px" } },
+    inputProps: { style: { width: "300px" } },
   },
+
   {
     displayName: "Key",
     propertyName: "key",
@@ -55,11 +57,20 @@ export const s3FormDefinition: S3FormDefinitionTuple = [
     defaultValue: "",
     inputProps: { style: { width: "500px" } },
   },
+  {
+    displayName: "Description (optional)",
+    propertyName: "description",
+    inputType: InputType.TEXT,
+    value: "",
+    defaultValue: "",
+    inputProps: { style: { width: "600px" } },
+  },
 ];
 
 const userSchema = object({
   environment: string().required("Environment is required"),
   bucketName: string().required("Bucket name is required"),
+  region: string().required("Region is required"),
   key: string().required("Key is required"),
   secretKey: string().required("Secret key is required"),
 });

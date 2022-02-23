@@ -49,7 +49,7 @@ import {
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
-import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 import {
   calculateObjectSize,
   getPositionInfo,
@@ -1352,7 +1352,8 @@ const mapStateToProps = (state: IStore) => {
 
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig) => breakpointConfig.type === state.stage.selectedDevice
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
     );
 
   const zoom = getZoom(stage, settings);

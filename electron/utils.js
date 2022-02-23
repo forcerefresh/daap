@@ -11,10 +11,15 @@ function checkFileExists(file) {
 
 function getPlayerPath() {
   const userDataPath = app.getPath("userData");
-  return path.join(userDataPath, "player");
+  return path.join(userDataPath, "player", "wsplayer", app.getVersion());
 }
 
+function getBucketPreviewPath() {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
+}
 module.exports = {
   checkFileExists,
   getPlayerPath,
+  getBucketPreviewPath,
 };

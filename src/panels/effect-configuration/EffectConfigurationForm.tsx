@@ -18,9 +18,11 @@ import { ISlide } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
-  IFormItem,
-  FormType,
 } from "../../utils/form-layout/form-layout";
+import {
+  IFormItem,
+  IFormLayoutItem,
+} from "../../utils/form-layout/i-form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
 /*
@@ -78,7 +80,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     const effectDefinition = getEffectDefinition(transition.effect.id);
 
     const flatForm = flattenForm(
-      effectDefinition.definition.form as IFormItem[]
+      effectDefinition.definition.form as IFormLayoutItem[]
     );
 
     const inputs = flatForm
@@ -125,7 +127,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
       <FormWithLayout
         values={transition.effect.values || {}}
         inputs={inputs}
-        form={effectDefinition.definition.form as IFormItem[]}
+        form={effectDefinition.definition.form as IFormLayoutItem[]}
         formId={`${effectType}_${effectDefinition.definition.id}`}
       />
     );
@@ -203,7 +205,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               };
               const effDef = getEffectDefinition(value);
               const flatEffDef = flattenForm(
-                effDef.definition.form as IFormItem[]
+                effDef.definition.form as IFormLayoutItem[]
               );
               console.log(flatEffDef);
               flatEffDef.forEach((item) => {

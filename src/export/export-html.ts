@@ -21,10 +21,18 @@ import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide, ISlides, SlideType } from "../store/reducers/i-slides";
-import { BreakpointConfiguration, ISettings } from "../store/reducers/settings";
+import {
+  BreakpointConfiguration,
+  ISettings,
+} from "../store/reducers/i-settings";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
-import { getRealSlideDuration } from "../utils/utils";
+import {
+  rgbColor2cssRgba,
+  getRealSlideDuration,
+  addBorderRadius,
+  addCommonPropertiesToStyle,
+} from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
   IPlayerData,
@@ -861,11 +869,11 @@ function getSvgHtml(
 
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
-      ? `fill: ${color2rgba(svgValues.fill)};`
+      ? `fill: ${rgbColor2cssRgba(svgValues.fill)};`
       : "";
   const stroke =
     !svgValuesMetadata["stroke"].disabled && svgValues.hasFillAndStroke
-      ? `stroke: ${color2rgba(svgValues.stroke)};`
+      ? `stroke: ${rgbColor2cssRgba(svgValues.stroke)};`
       : "";
 
   const w = parseInt(calculatedObjectSize.width as string);
@@ -910,12 +918,12 @@ function replaceColors(svgSource: string, colors: RGBColor[]) {
   s = svgSource.replace(/fill:(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return "fill:" + color2rgba(retColor);
+    return "fill:" + rgbColor2cssRgba(retColor);
   });
   s = s.replace(/fill="(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return `fill="` + color2rgba(retColor);
+    return `fill="` + rgbColor2cssRgba(retColor);
   });
 
   return s;*/
@@ -923,7 +931,7 @@ function replaceColors(svgSource: string, colors: RGBColor[]) {
   return svgSource.replace(/(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return color2rgba(retColor);
+    return rgbColor2cssRgba(retColor);
   });
 }
 
@@ -951,24 +959,24 @@ function getArrowHtml(
 
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasStrokeFill
-      ? `fill: ${color2rgba(svgValues.fill)};
+      ? `fill: ${rgbColor2cssRgba(svgValues.fill)};
     `
       : "";
   const stroke =
     !svgValuesMetadata["stroke"].disabled && svgValues.hasStrokeFill
-      ? `stroke: ${color2rgba(svgValues.stroke)};
+      ? `stroke: ${rgbColor2cssRgba(svgValues.stroke)};
     `
       : "";
 
   // hover START>>
   const hoverFill =
     !svgValuesMetadata["hoverFill"].disabled && svgValues.hasHover
-      ? `fill: ${color2rgba(svgValues.hoverFill)};
+      ? `fill: ${rgbColor2cssRgba(svgValues.hoverFill)};
    `
       : "";
   const hoverStroke =
     !svgValuesMetadata["hoverStroke"].disabled && svgValues.hasHover
-      ? `stroke: ${color2rgba(svgValues.hoverStroke)};
+      ? `stroke: ${rgbColor2cssRgba(svgValues.hoverStroke)};
    `
       : "";
   // hover END <<
@@ -1018,16 +1026,6 @@ function getCanvasHtml(
 
 // UTILS FUNCTIONS **************
 
-export function addCommonPropertiesToStyle(style: string, object: IObject) {
-  //console.log(object.commonProperties);
-  if (object.commonProperties?.borderRadius) {
-    style = addBorderRadius(style, object.commonProperties?.borderRadius);
-  }
-
-  //console.log(style);
-  return style;
-}
-
 function addBorderBox(style: string, boxValue: IBoxValue) {
   if (boxValue.common) {
     style += "border-width: " + boxValue.common + ";";
@@ -1062,28 +1060,6 @@ function addPaddingBox(style: string, boxValue: IBoxValue) {
       ";";
   }
   return style;
-}
-
-function addBorderRadius(style: string, borderRadius: ICornerRadiusValue) {
-  if (borderRadius.common) {
-    style += "border-radius: " + borderRadius.common + ";";
-  } else if (borderRadius.tl) {
-    style +=
-      "border-radius: " +
-      borderRadius.tl +
-      " " +
-      borderRadius.tr +
-      " " +
-      borderRadius.br +
-      " " +
-      borderRadius.bl +
-      ";";
-  }
-  return style;
-}
-
-export function color2rgba(c: RGBColor): string {
-  return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
 }
 
 export function getAllAssetsUrls(objects: IObjects) {

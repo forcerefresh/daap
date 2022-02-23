@@ -33,7 +33,7 @@ import {
   BreakpointConfiguration,
   Breakpoints,
   ISettings,
-} from "../../store/reducers/settings";
+} from "../../store/reducers/i-settings";
 
 enum ProjectPanelSections {
   Slider = "Slider",
@@ -74,7 +74,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
   };
 
   let pixelMultiplier = 1;
-  breakpointConfiguration.breakpointsConfiguration.forEach((item) => {
+  breakpointConfiguration.breakpointsConfiguration.forEach((item: any) => {
     pixelMultiplier = Math.min(
       pixelMultiplier,
       PREVIEW_SIZE / item.normal.page.width
@@ -230,7 +230,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
         {visibleSectionIds[ProjectPanelSections.Breakpoints] && (
           <div className={settingsCss.panel}>
             {breakpointConfiguration.breakpointsConfiguration.map(
-              (conf, idx) => (
+              (conf: any, idx: number) => (
                 <div>
                   <Card
                     interactive={false}

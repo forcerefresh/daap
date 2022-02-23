@@ -6,15 +6,19 @@ var path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
-const { checkFileExists, getPlayerPath } = require("./utils");
-const { loadProject } = require("./project");
+const {
+  checkFileExists,
+  getPlayerPath,
+  getBucketPreviewPath,
+} = require("./utils");
+const { loadProject, loadExport } = require("./project");
 const { v4: uuid } = require("uuid");
 const AWS = require("aws-sdk");
 const { omit, without, chunk } = require("lodash");
 const keytar = require("keytar");
 const cloneDeep = require("clone-deep");
 
-const PARALLEL_UPLOAD = 20;
+const PARALLEL_UPLOAD = 5;
 
 ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
   console.log("node: ObjectStorage::List");
@@ -113,28 +117,26 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
 
   const objectStorageList = await loadObjectStorage();
 
-  const item = objectStorageList.find((item) => item.id === req.id);
+  const bucket = objectStorageList.find((item) => item.id === req.id);
 
   const files = await getPlayerFiles();
 
   const secretKey = await keytar.getPassword(
     "wsSliderAppBucketKey",
-    item.platform + "_" + item.bucketName
+    bucket.platform + "_" + bucket.bucketName
   );
 
-  const s3 = new AWS.S3({
-    accessKeyId: item.key,
-    secretAccessKey: secretKey,
-  });
+  const s3 = createS3Instance({ ...bucket, secretKey });
 
+  console.log(files);
   let error = null;
   for (const file of files) {
     try {
       await uploadToS3(
         s3,
-        item.bucketName,
+        bucket.bucketName,
         path.join(getPlayerPath(), file),
-        "wsplayer/" + file
+        `wsplayer/${app.getVersion()}/${file}`
       );
     } catch (ex) {
       error = ex.toString();
@@ -146,7 +148,7 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
     return { status: "ERROR", error };
   }
 
-  item.playerStatus = "uploaded";
+  bucket.playerStatus = "uploaded";
 
   await saveObjectStorage(objectStorageList);
 
@@ -271,11 +273,18 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const project = await loadProject(req.projectId);
   console.log(project);
 
+  // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
   console.log("assetsUrlsChunks");
   console.log(assetsUrlsChunks);
 
+  BrowserWindow.getAllWindows()[0].webContents.send(
+    `ObjectStorageRenderer::SubscribeToPublishDetails`,
+    JSON.stringify([{ log: "Publish started" }])
+  );
+
   let error;
+  let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
     const pArr = [];
     for (const assetUrl of assetsUrlsChunk) {
@@ -291,6 +300,12 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     }
     try {
       const result = await Promise.all(pArr);
+      BrowserWindow.getAllWindows()[0].webContents.send(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`,
+        JSON.stringify(result)
+      );
+
+      uploadResult = [...uploadResult, ...result];
       console.log("result");
       console.log(result);
     } catch (ex) {
@@ -302,10 +317,54 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   if (error) {
     return { status: "ERROR", error };
   }
+  // upload assets <<
+
+  // upload export/playerdata >>
+  const exp = await loadExport(req.projectId);
+  let expString = JSON.stringify(exp);
+  for (let i = 0; i < uploadResult.length; i++) {
+    expString = expString.replaceAll(
+      `"${uploadResult[i].fromUrl}"`,
+      `"${uploadResult[i].toUrl}"`
+    );
+    expString = expString.replaceAll(
+      `'${uploadResult[i].fromUrl}'`,
+      `'${uploadResult[i].toUrl}'`
+    );
+  }
+  const expBuffer = Buffer.from(expString, "utf-8");
+  const bucketWithKeys = await getBucketWithKeys(req.bucketId);
+  const s3 = createS3Instance(bucketWithKeys);
+  await uploadBufferToS3(
+    s3,
+    bucketWithKeys.bucketName,
+    expBuffer,
+    `${req.projectId}/slider.json`
+  );
+  // upload export/playerdata <<
+
+  // upload preview html >>
+  const indexString = await fsPromise.readFile(
+    path.join(getBucketPreviewPath(), "index.html"),
+    "utf-8"
+  );
+  const indexBuffer = Buffer.from(indexString, "utf-8");
+  await uploadBufferToS3(
+    s3,
+    bucketWithKeys.bucketName,
+    indexBuffer,
+    `${req.projectId}/index.html`
+  );
+  // upload preview htlm <<
 
   assignedProject.revision = req.revision;
 
   await saveObjectStorage(objectStorageList);
+
+  BrowserWindow.getAllWindows()[0].webContents.send(
+    `ObjectStorageRenderer::SubscribeToPublishDetails`,
+    JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
+  );
 
   return { status: "OK" };
 });
@@ -358,6 +417,7 @@ async function uploadToS3(s3, bucketName, filePath, key) {
       Bucket: bucketName,
       Key: key,
       Body: fileStream,
+      ContentType: mime.lookup(key),
     };
     s3.putObject(putParams, function (putErr, putData) {
       if (putErr) {
@@ -393,16 +453,20 @@ async function uploadBufferToS3(s3, bucketName, bufferStream, key) {
 async function uploadFileToBucket(bucketId, fromUrl, toKey) {
   const bucketWithKeys = await getBucketWithKeys(bucketId);
 
-  const s3 = new AWS.S3({
-    accessKeyId: bucketWithKeys.key,
-    secretAccessKey: bucketWithKeys.secretKey,
-  });
+  const s3 = createS3Instance(bucketWithKeys);
 
   // download file
   const bufferStream = await downloadToBuffer(fromUrl);
 
   // upload file
   await uploadBufferToS3(s3, bucketWithKeys.bucketName, bufferStream, toKey);
+
+  const toUrl = `https://${bucketWithKeys.bucketName}.s3.${bucketWithKeys.region}.amazonaws.com/${toKey}`;
+  return {
+    log: `From '${fromUrl}' to '${toUrl}'`,
+    fromUrl,
+    toUrl,
+  };
 }
 
 async function downloadToBuffer(url) {
@@ -421,3 +485,23 @@ async function getBucketWithKeys(bucketId) {
 
   return { ...item, secretKey };
 }
+
+function createS3Instance(bucketWithKeys) {
+  switch (bucketWithKeys.platform) {
+    case "s3": {
+      return new AWS.S3({
+        accessKeyId: bucketWithKeys.key,
+        secretAccessKey: bucketWithKeys.secretKey,
+      });
+    }
+    case "linode": {
+      return new AWS.S3({
+        accessKeyId: bucketWithKeys.key,
+        secretAccessKey: bucketWithKeys.secretKey,
+        endpoint: `http://eu-central-1.linodeobjects.com`,
+      });
+    }
+  }
+}
+
+//${bucketWithKeys.bucketName}.

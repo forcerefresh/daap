@@ -7,7 +7,10 @@ import {
   InputGroup,
   Intent,
 } from "@blueprintjs/core";
-import React, { FormEvent } from "react";
+import classnames from "classnames";
+import React, { FormEvent, useEffect, useRef } from "react";
+import css from "./confirm-button.module.scss";
+
 export interface ConfirmButtonProps {
   children: React.ReactNode;
   buttonProps: ButtonProps;
@@ -16,11 +19,18 @@ export interface ConfirmButtonProps {
   confirm?: string;
   close?: string;
   disabled?: boolean;
-  onConfirm: () => void;
+  onConfirm: (callback?: () => void) => void;
+  onClose?: () => void;
+
   title: string;
   confirmText?: string;
   placeholder?: string;
   intent?: Intent;
+  //
+  hasActionOnConfirm?: boolean;
+  loadingText?: string;
+  logs?: any[];
+  successMsg?: string;
 }
 
 export default function ConfirmButton(props: ConfirmButtonProps) {
@@ -37,12 +47,41 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
     placeholder,
     disabled,
     onConfirm,
+    onClose,
+    //
+    hasActionOnConfirm,
+    loadingText,
+    logs = [],
+    successMsg,
   } = props;
   const [isOpen, setIsOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [done, setDone] = React.useState(false);
+
   const [enteredText, setEnteredText] = React.useState("");
 
   const handleButtonClick = React.useCallback(() => setIsOpen(!isOpen), []);
-  const handleClose = React.useCallback(() => setIsOpen(false), []);
+  const handleClose = React.useCallback(() => {
+    setIsOpen(false);
+    setLoading(false);
+    setDone(false);
+
+    onClose?.();
+  }, []);
+
+  console.log(logs);
+  const logString = logs.map((log, idx) => (
+    <div className={css.logItem}>
+      <div>{idx + 1}.</div>
+      <div>{log.log}</div>
+    </div>
+  ));
+  console.log(logString);
+
+  const preRef = useRef<HTMLPreElement>(null);
+  useEffect(() => {
+    preRef.current?.scrollTo(0, preRef.current?.scrollHeight || 0);
+  }, [logs]);
 
   return (
     <>
@@ -54,14 +93,30 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
         {...buttonProps}
       />
       <Dialog
-        className="bp3-dark"
+        className={classnames("bp3-dark", css.dialog, {
+          [css.logsView]: loading,
+        })}
         isOpen={isOpen}
         onClose={handleClose}
         {...dialogProps}
         title={title}
+        canOutsideClickClose={false}
       >
         <div style={{ margin: "20px" }}>
-          <div>{children}</div>
+          {logs.length === 0 ? (
+            <div>{children}</div>
+          ) : (
+            <>
+              <p>Logs: </p>
+              <pre
+                ref={preRef}
+                style={{ whiteSpace: "pre-wrap", overflow: "auto" }}
+              >
+                {logString}
+              </pre>
+            </>
+          )}
+
           {confirmText && (
             <InputGroup
               onChange={(e: FormEvent<HTMLInputElement>) => {
@@ -73,16 +128,43 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            <Button
-              onClick={() => {
-                onConfirm();
-                handleClose();
-              }}
-              disabled={!!confirmText && confirmText !== enteredText}
-            >
-              {confirm}
-            </Button>
-            <Button onClick={handleClose}>{close}</Button>
+            {done ? (
+              <>
+                <strong style={{ color: "#00ff4e", lineHeight: "28px" }}>
+                  {successMsg}
+                </strong>
+                <Button
+                  onClick={() => {
+                    handleClose();
+                  }}
+                >
+                  Close
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  loading={loading}
+                  onClick={() => {
+                    if (hasActionOnConfirm) {
+                      setLoading(true);
+                      onConfirm(() => {
+                        setDone(true);
+                      });
+                    } else {
+                      onConfirm();
+                      handleClose();
+                    }
+                  }}
+                  disabled={!!confirmText && confirmText !== enteredText}
+                >
+                  {confirm}
+                </Button>
+                <Button onClick={handleClose} disabled={loading}>
+                  {close}
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </Dialog>

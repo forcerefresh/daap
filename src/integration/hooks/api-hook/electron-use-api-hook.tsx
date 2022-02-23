@@ -56,6 +56,7 @@ export const useAPIHook = () => {
     slides,
     project,
     preview,
+    playerData,
     assetsUrls,
   }: {
     id?: number;
@@ -66,6 +67,7 @@ export const useAPIHook = () => {
     modified?: string;
     project: any;
     preview: any;
+    playerData: any;
     assetsUrls: { url: string; type: "url" | string }[];
   }): Promise<{
     id: number;
@@ -75,7 +77,6 @@ export const useAPIHook = () => {
     created: string;
     modified: string;
     saveRevision: number;
-    publicRevision: number;
   }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
@@ -87,6 +88,7 @@ export const useAPIHook = () => {
         slides,
         project,
         preview,
+        playerData,
         assetsUrls,
       };
 

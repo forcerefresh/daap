@@ -42,8 +42,46 @@ function getProjectPath() {
   return path.join(userDataPath, "projects", "projects.json");
 }
 
+function getExportsPath() {
+  const userDataPath = app.getPath("userData");
+  const projectsDir = path.join(userDataPath, "projects");
+  if (!fs.existsSync(projectsDir)) {
+    fs.mkdirSync(projectsDir);
+  }
+  return path.join(userDataPath, "projects", "exports.json");
+}
+
+async function loadExport(id) {
+  const exports = await loadExports();
+
+  return exports[id];
+}
+
+async function loadExports() {
+  const exportsPath = getExportsPath();
+
+  const exist = await checkFileExists(exportsPath);
+  let exports = {};
+  if (exist) {
+    const exportsStr = await fsPromise.readFile(exportsPath, "utf-8");
+    exports = JSON.parse(exportsStr);
+  }
+
+  return exports;
+}
+
+async function saveExports(exports) {
+  await fsPromise.writeFile(
+    getExportsPath(),
+    JSON.stringify(exports, undefined, 2)
+  );
+}
+
 module.exports = {
   loadProject,
   loadProjects,
   saveProjects,
+  loadExport,
+  loadExports,
+  saveExports,
 };

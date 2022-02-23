@@ -18,7 +18,6 @@ import { IInputMetadataValues, InputType } from "../../inputs/types";
 import {
   IAbsoluteLayout,
   ISnapLayout,
-  IGridLayout,
   ILayout,
   IObject,
   IGridLayouts,
@@ -34,8 +33,11 @@ import { ISlide, ISlideDuration } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
-  IFormItem,
 } from "../../utils/form-layout/form-layout";
+import {
+  IFormItem,
+  IFormLayoutItem,
+} from "../../utils/form-layout/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
 
 type IObjectOrLayer = any; // IObject | ILayer;
@@ -287,7 +289,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     objectOrLayer: IObjectOrLayer,
     updateFunction: (objectOrLayer: IObjectOrLayer) => any
   ) => {
-    const flatForm = flattenForm(properties as IFormItem[]);
+    const flatForm = flattenForm(properties as IFormLayoutItem[]);
 
     const inputs = flatForm.map((property, idx) => {
       const { propertyName } = property;
@@ -355,7 +357,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       <FormWithLayout
         values={values}
         inputs={inputs}
-        form={properties as IFormItem[]}
+        form={properties as IFormLayoutItem[]}
         formId={objectOrLayer?.type as string}
       />
     );

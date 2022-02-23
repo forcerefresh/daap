@@ -9,34 +9,12 @@ import { IFormState } from "../../store/reducers/i-uiforms";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import { setFormState } from "../../store/actions/actions";
-export interface IFormItem {
-  type?: FormType;
-  inputType: InputType;
-  displayName: string;
-  propertyName: string;
-  elements?: IFormItem[];
-  optional?: boolean;
-  options?: { value: string | number; label: string }[];
-  // tab groups
-  groups?: {
-    groupName: string;
-    groupValue: string;
-    propertyName: string;
-    elements?: IFormItem[];
-  }[];
-  duplicate?: string;
-}
-
-export enum FormType {
-  INPUT = "input",
-  GROUP = "group",
-  SWITCH_GROUP = "switchGroup",
-}
+import { FormType, IFormLayoutItem } from "./i-form-layout";
 
 type FormWithLayoutProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     inputs: { propertyName: string; input: React.ReactElement | undefined }[];
-    form: IFormItem[];
+    form: IFormLayoutItem[];
     values: any;
     formId: string;
     depth?: number;
@@ -84,7 +62,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
   };
 
   const renderElement = (
-    element: IFormItem
+    element: IFormLayoutItem
   ): React.ReactElement | undefined => {
     if (element.type === FormType.GROUP) {
       return (
@@ -118,7 +96,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       groupName: string;
       groupValue: string;
       propertyName: string;
-      elements?: IFormItem[] | undefined;
+      elements?: IFormLayoutItem[] | undefined;
     }[],
     values: any
   ) => {
@@ -138,7 +116,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     title: string,
     optional: boolean = false,
     optionalProperty: string = "",
-    elements: IFormItem[] = [],
+    elements: IFormLayoutItem[] = [],
     inputs: any,
     values: any,
     indexInArray: number
@@ -276,14 +254,17 @@ const FormWithLayoutConnected = connect(
 )(FormWithLayout);
 export default FormWithLayoutConnected;
 
-export function flattenForm(form: IFormItem[]): IFormItem[] {
-  const itemsArr: IFormItem[] = [];
+export function flattenForm(form: IFormLayoutItem[]): IFormLayoutItem[] {
+  const itemsArr: IFormLayoutItem[] = [];
   flattenFormRec(itemsArr, form);
   console.log(itemsArr);
   return itemsArr;
 }
 
-export function flattenFormRec(itemsArr: IFormItem[], form: IFormItem[]): void {
+export function flattenFormRec(
+  itemsArr: IFormLayoutItem[],
+  form: IFormLayoutItem[]
+): void {
   form.forEach((formItem) => {
     // set default type if not set
     if (!formItem.type) formItem.type = FormType.INPUT;

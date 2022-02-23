@@ -1,6 +1,8 @@
 import React from "react";
 import { RGBColor } from "react-color";
-import { ISettings } from "../store/reducers/settings";
+import { ICornerRadiusValue } from "../inputs/types";
+import { IObject } from "../objects/types";
+import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
 
 export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
@@ -51,4 +53,39 @@ export function getCroppedFileName(str: string, firstPart = 16, lastPart = 8) {
     return str.substr(0, firstPart) + "..." + str.substr(-lastPart);
   }
   return str;
+}
+
+export function rgbColor2cssRgba(c: RGBColor): string {
+  return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
+}
+
+export function addCommonPropertiesToStyle(style: string, object: IObject) {
+  //console.log(object.commonProperties);
+  if (object.commonProperties?.borderRadius) {
+    style = addBorderRadius(style, object.commonProperties?.borderRadius);
+  }
+
+  //console.log(style);
+  return style;
+}
+
+export function addBorderRadius(
+  style: string,
+  borderRadius: ICornerRadiusValue
+) {
+  if (borderRadius.common) {
+    style += "border-radius: " + borderRadius.common + ";";
+  } else if (borderRadius.tl) {
+    style +=
+      "border-radius: " +
+      borderRadius.tl +
+      " " +
+      borderRadius.tr +
+      " " +
+      borderRadius.br +
+      " " +
+      borderRadius.bl +
+      ";";
+  }
+  return style;
 }

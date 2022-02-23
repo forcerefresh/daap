@@ -2,14 +2,10 @@ import classnames from "classnames";
 import { cloneDeep, pick } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-import {
-  getInputForm,
-  getInputFormWithOptions,
-} from "../../inputs/input-factory";
+import { getInputFormWithOptions } from "../../inputs/input-factory";
 
 import FormWithLayout, {
   flattenForm,
-  IFormItem,
 } from "../../utils/form-layout/form-layout";
 
 import { IInputMetadataValues, InputType } from "../../inputs/types";
@@ -17,6 +13,7 @@ import { IObject, navigationDefinition } from "../../objects/types";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./NavigationPanel.module.scss";
+import { IFormLayoutItem } from "../../utils/form-layout/i-form-layout";
 
 type IPropertiesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -31,7 +28,7 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
     objectOrLayer: IObject,
     updateFunction: (objectOrLayer: IObject) => any
   ) => {
-    const flatForm = flattenForm(properties as IFormItem[]);
+    const flatForm = flattenForm(properties as IFormLayoutItem[]);
 
     const inputs = flatForm.map((property, idx) => {
       const { propertyName } = property;
@@ -86,7 +83,7 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
       <FormWithLayout
         values={values}
         inputs={inputs}
-        form={properties as IFormItem[]}
+        form={properties as IFormLayoutItem[]}
         formId={objectOrLayer?.type as string}
       />
     );

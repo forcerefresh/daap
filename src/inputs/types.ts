@@ -1,14 +1,12 @@
-import { ReactText } from "react";
 import { RGBColor } from "react-color";
+import { IGridLayout } from "../objects/types";
+import { Breakpoints } from "../store/reducers/i-settings";
+import { ISlideDuration } from "../store/reducers/i-slides";
 import {
   IFormGroupItem,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "../effects/trianglify/trianglify.definition";
-import { IGridLayout } from "../objects/types";
-import { DeviceType } from "../store/reducers/i-settings";
-import { ISlideDuration } from "../store/reducers/i-slides";
-import { Breakpoints } from "../store/reducers/settings";
+} from "../utils/form-layout/i-form-layout";
 
 export enum InputType {
   INFO = "info",

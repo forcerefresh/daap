@@ -123,6 +123,26 @@ export const useObjectStorageHook = () => {
     });
   };
 
+  const subscribeToPublishDetails = (
+    callback: (logs: any[]) => void
+  ): (() => void) => {
+    const { ipcRenderer } = window.require("electron");
+
+    ipcRenderer.on(
+      `ObjectStorageRenderer::SubscribeToPublishDetails`,
+      function (evt: any, message: any) {
+        console.log(message);
+        callback(JSON.parse(message));
+      }
+    );
+
+    return () => {
+      ipcRenderer.removeAllListeners(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`
+      );
+    };
+  };
+
   return {
     supportStorageObjects: true,
     listStorageObjects,
@@ -134,5 +154,6 @@ export const useObjectStorageHook = () => {
     removeBucketFromProject,
     getAssignedBucketIds,
     publishToStorageObject,
+    subscribeToPublishDetails,
   };
 };

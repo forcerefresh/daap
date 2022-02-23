@@ -73,12 +73,14 @@
   }
 
   .inSync {
-    background: #12581a;
-    padding: 5px;
+    //background: #12581a;
+    //padding: 5px;
+    color: #1bdd1b;
   }
   .notInSync {
-    background: #ad2108;
-    padding: 5px;
+    //background: #ad2108;
+    color: #ffa723;
+    //padding: 5px;
   }
 
   .deleteButton {

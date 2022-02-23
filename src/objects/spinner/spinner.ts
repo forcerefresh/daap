@@ -1,18 +1,18 @@
 import { RGBColor } from "react-color";
 import { v4 as uuid } from "uuid";
 import {
-  IFormSwitchGroup,
-  IFormSwitchGroupItem,
-} from "../../effects/trianglify/trianglify.definition";
-import { color2rgba } from "../../export/export-html";
-import {
   IColorInput,
   InputType,
   INumberInput,
   ISelectInput,
   ITextInput,
 } from "../../inputs/types";
-import { FormType } from "../../utils/form-layout/form-layout";
+import {
+  FormType,
+  IFormSwitchGroup,
+  IFormSwitchGroupItem,
+} from "../../utils/form-layout/i-form-layout";
+import { rgbColor2cssRgba } from "../../utils/utils";
 import { createCommonObject } from "../create-object-factory";
 import { getObjectPlaceholder } from "../object-helpers";
 import { CoreObjectType } from "../objects-factory";
@@ -163,7 +163,7 @@ export function getSpinnerHtml(
   .sk-plane {
     width: 100%;
     height: 100%;
-    background-color: ${color2rgba(spinnerValues.color)};
+    background-color: ${rgbColor2cssRgba(spinnerValues.color)};
     animation: sk-plane 1.5s infinite ease-in-out; 
   }
   `;
@@ -203,7 +203,7 @@ export function getSpinnerHtml(
         display: block;
         width: 25%;
         height: 25%;
-        background-color: ${color2rgba(spinnerValues.color)};
+        background-color: ${rgbColor2cssRgba(spinnerValues.color)};
         border-radius: 100%;
         animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
       }

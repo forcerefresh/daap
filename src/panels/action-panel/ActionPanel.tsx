@@ -15,10 +15,7 @@ import {
 import { IPreviewState } from "../../store/reducers/stage";
 import cx from "classnames";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import {
-  BreakpointConfiguration,
-  getIconByType,
-} from "../../store/reducers/settings";
+import { getIconByType } from "../../store/reducers/settings";
 import SavePanel from "../save-panel/SavePanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IMeta } from "../../store/reducers/meta";
@@ -26,6 +23,7 @@ import { IEditor } from "../../store/reducers/editor";
 import { IntegrationContext } from "../../integration";
 import PublishPanel from "../publish-panel/PublishPanel";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
+import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {

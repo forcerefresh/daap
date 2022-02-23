@@ -5,16 +5,16 @@ import { IGridPlacementInput, IUpdateInput } from "../types";
 import css from "./grid-placement.module.scss";
 import classnames from "classnames";
 import { Button, Label } from "@blueprintjs/core";
-import {
-  BreakpointConfiguration,
-  getIconByType,
-} from "../../store/reducers/settings";
+import { getIconByType } from "../../store/reducers/settings";
 import {
   getIconSize,
   getIconStyle,
 } from "../../panels/action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import { DeviceType } from "../../store/reducers/i-settings";
+import {
+  BreakpointConfiguration,
+  DeviceType,
+} from "../../store/reducers/i-settings";
 
 export const GridPlacementInputForm: React.FC<
   IGridPlacementInput & IUpdateInput

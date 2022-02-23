@@ -1,4 +1,4 @@
-import { BreakpointConfiguration, ISettings } from "../reducers/settings";
+import { BreakpointConfiguration, ISettings } from "../reducers/i-settings";
 import { IStage } from "../reducers/stage";
 
 export function getZoom(stage: IStage, settings: ISettings): number {

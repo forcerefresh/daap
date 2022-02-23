@@ -28,7 +28,8 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
-import { flattenForm, IFormItem } from "../../utils/form-layout/form-layout";
+import { flattenForm } from "../../utils/form-layout/form-layout";
+import { IFormLayoutItem } from "../../utils/form-layout/i-form-layout";
 import { EffectConfigurationForm } from "../effect-configuration/EffectConfigurationForm";
 
 import css from "./EffectPanelTabs.module.scss";
@@ -133,7 +134,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
       [key: string]: any;
     };
 
-    const flatEffDef = flattenForm(effDef.definition.form as IFormItem[]);
+    const flatEffDef = flattenForm(effDef.definition.form as IFormLayoutItem[]);
     flatEffDef.forEach((item) => {
       values[item.propertyName] = effDef.defaults[item.propertyName];
     });

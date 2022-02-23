@@ -12,7 +12,7 @@ import { layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
 import { IStage, stage } from "./reducers/stage";
 import { objects } from "./reducers/objects";
-import { ISettings, settings } from "./reducers/settings";
+import { settings } from "./reducers/settings";
 import initialState from "./initial-state.json";
 import { IDocument, document } from "./reducers/document";
 import { IGlobals, globals } from "./reducers/globals";
@@ -24,6 +24,7 @@ import { IObjects } from "./reducers/i-objects";
 import { editor, IEditor } from "./reducers/editor";
 import { updateEditor } from "./actions/actions";
 import { IUIForms, uiforms } from "./reducers/uiforms";
+import { ISettings } from "./reducers/i-settings";
 
 export interface IStore {
   project: {

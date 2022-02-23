@@ -159,7 +159,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
       return <span className={css.layerResponseVisibilityNone}>NONE</span>;
     } else {
       return breakpointsConfiguration.breakpointsConfiguration.map(
-        (bpConfig) => {
+        (bpConfig: any) => {
           if (!includes(resVis.displayOn, bpConfig.type)) {
             return null;
           }
@@ -183,52 +183,54 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   const renderDeviceOptions = (layer: ILayer) => {
-    return breakpointsConfiguration.breakpointsConfiguration.map((bpConfig) => {
-      const iconName = getIconByType(bpConfig.type);
-      const size = getIconSize(iconName);
+    return breakpointsConfiguration.breakpointsConfiguration.map(
+      (bpConfig: any) => {
+        const iconName = getIconByType(bpConfig.type);
+        const size = getIconSize(iconName);
 
-      const icon = getResponsiveIcon(
-        iconName,
-        size.w,
-        size.h,
-        "lightgray",
-        bpConfig.portrait
-      );
+        const icon = getResponsiveIcon(
+          iconName,
+          size.w,
+          size.h,
+          "lightgray",
+          bpConfig.portrait
+        );
 
-      return (
-        <Checkbox
-          disabled={layer.responsiveVisibility.showAll}
-          checked={
-            layer.responsiveVisibility.showAll ||
-            includes(layer.responsiveVisibility.displayOn, bpConfig.type)
-          }
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            let newLayer = cloneDeep(layer);
-            remove(
-              newLayer.responsiveVisibility.displayOn,
-              (type) => type === bpConfig.type
-            );
-
-            if (event.target.checked) {
-              newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
+        return (
+          <Checkbox
+            disabled={layer.responsiveVisibility.showAll}
+            checked={
+              layer.responsiveVisibility.showAll ||
+              includes(layer.responsiveVisibility.displayOn, bpConfig.type)
             }
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              let newLayer = cloneDeep(layer);
+              remove(
+                newLayer.responsiveVisibility.displayOn,
+                (type) => type === bpConfig.type
+              );
 
-            newLayer.responsiveVisibility.showAll = false;
-            _updateLayer(newLayer);
-          }}
-        >
-          <span
-            style={{
-              marginRight: "5px",
-              verticalAlign: "middle",
+              if (event.target.checked) {
+                newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
+              }
+
+              newLayer.responsiveVisibility.showAll = false;
+              _updateLayer(newLayer);
             }}
           >
-            {icon}
-          </span>
-          {bpConfig.name}
-        </Checkbox>
-      );
-    });
+            <span
+              style={{
+                marginRight: "5px",
+                verticalAlign: "middle",
+              }}
+            >
+              {icon}
+            </span>
+            {bpConfig.name}
+          </Checkbox>
+        );
+      }
+    );
   };
 
   const layersHolderRef = useRef<HTMLDivElement | null>(null);

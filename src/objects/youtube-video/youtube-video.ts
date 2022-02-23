@@ -1,10 +1,7 @@
 import { ClientRequest } from "http";
 import { cloneDeep } from "lodash-es";
 import { v4 as uuid } from "uuid";
-import {
-  IFormSwitchGroup,
-  IFormSwitchGroupItem,
-} from "../../effects/trianglify/trianglify.definition";
+
 import {
   ICheckboxInput,
   IInfoInput,
@@ -12,7 +9,11 @@ import {
   ISliderInput,
   ITextInput,
 } from "../../inputs/types";
-import { FormType } from "../../utils/form-layout/form-layout";
+import {
+  FormType,
+  IFormSwitchGroup,
+  IFormSwitchGroupItem,
+} from "../../utils/form-layout/i-form-layout";
 import { createCommonObject } from "../create-object-factory";
 import { getObjectPlaceholder } from "../object-helpers";
 import { PreloadOrder } from "../objects-factory";

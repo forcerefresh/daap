@@ -21,33 +21,10 @@ import { getInputForm } from "../input-factory";
 import { Button } from "@blueprintjs/core";
 import classnames from "classnames";
 import { EasingOptions } from "../../effects/types";
-
-export const getDefaultTimeline = (): ITimelineValue => {
-  return {
-    points: [getDefaultPoint()],
-  };
-};
-
-export const getDefaultPoint = (time = 100): ITimelinePoint => {
-  return {
-    time,
-    easing: "none",
-    pointValue: {
-      x: { enabled: false, value: 0, position: "rel", easing: "none" },
-      y: { enabled: false, value: 0, position: "rel", easing: "none" },
-      width: { enabled: false, value: 0, position: "rel", easing: "none" },
-      height: { enabled: false, value: 0, position: "rel", easing: "none" },
-      rotation: {
-        enabled: false,
-        value: 0,
-        position: "rel" as "abs" | "rel",
-        direction: "_ccw" as "_ccw" | "_cw" | "_short",
-      },
-      opacity: { enabled: false, value: 100, position: "rel", easing: "none" },
-      zoom: { enabled: false, value: 100, position: "rel", easing: "none" },
-    },
-  };
-};
+import {
+  getDefaultPoint,
+  getDefaultTimeline,
+} from "../../effects/timelines/timelines.definition";
 
 const formDefinition = [
   {

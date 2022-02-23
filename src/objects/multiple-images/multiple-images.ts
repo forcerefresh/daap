@@ -1,4 +1,3 @@
-import { addCommonPropertiesToStyle } from "../../export/export-html";
 import {
   ICoverPlacementInput,
   ICoverPlacementValue,
@@ -11,6 +10,7 @@ import { ICommonObjectProperties, IObject } from "../types";
 import { v4 as uuid } from "uuid";
 import svg from "./multiple-images-icon.svg";
 import { getObjectPlaceholder } from "../object-helpers";
+import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 const MULTI_IMAGE = "multi_image";
 

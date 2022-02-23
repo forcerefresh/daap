@@ -10,7 +10,6 @@ import {
   getObjectDefinition,
   PreloadOrder,
 } from "../../objects/objects-factory";
-import { SpinnerValues } from "../../objects/spinner/spinner";
 import {
   INavigationValues,
   ISlideTransition,
@@ -21,7 +20,8 @@ import {
   createTimelineForExecutionCode,
   createTimelineForObject,
 } from "../AppPlayerUtils";
-(window as any).YTPlayer = require("yt-player");
+
+//(window as any).YTPlayer = require("yt-player");
 
 /*export interface IPlayerConfig {
   oneSlide: boolean;

@@ -1,5 +1,9 @@
-import { getDefaultTimeline } from "../../inputs/timelines-input/timelines-input";
-import { InputType, ITimelinesInput } from "../../inputs/types";
+import {
+  InputType,
+  ITimelinePoint,
+  ITimelinesInput,
+  ITimelineValue,
+} from "../../inputs/types";
 import { IEffectDefinition } from "../types";
 import { timelinesEffect, ITimelinesEffect } from "./timelines.types";
 
@@ -17,6 +21,33 @@ export const cssPluginDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
       defaultValue: {} as any,
     },
   ],
+};
+
+export const getDefaultTimeline = (): ITimelineValue => {
+  return {
+    points: [getDefaultPoint()],
+  };
+};
+
+export const getDefaultPoint = (time = 100): ITimelinePoint => {
+  return {
+    time,
+    easing: "none",
+    pointValue: {
+      x: { enabled: false, value: 0, position: "rel", easing: "none" },
+      y: { enabled: false, value: 0, position: "rel", easing: "none" },
+      width: { enabled: false, value: 0, position: "rel", easing: "none" },
+      height: { enabled: false, value: 0, position: "rel", easing: "none" },
+      rotation: {
+        enabled: false,
+        value: 0,
+        position: "rel" as "abs" | "rel",
+        direction: "_ccw" as "_ccw" | "_cw" | "_short",
+      },
+      opacity: { enabled: false, value: 100, position: "rel", easing: "none" },
+      zoom: { enabled: false, value: 100, position: "rel", easing: "none" },
+    },
+  };
 };
 
 export const cssPluginDefaults: ITimelinesEffect = {

@@ -20,7 +20,7 @@ import {
 } from "../../inputs/input-utils";
 import { IMeta } from "../../store/reducers/meta";
 import { generatePlayerData, getAllAssetsUrls } from "../../export/export-html";
-import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 
@@ -279,7 +279,7 @@ const mapStateToProps = (state: IStore) => {
   // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig) => breakpointConfig.type === "large-1"
+      (breakpointConfig: any) => breakpointConfig.type === "large-1"
     );
 
   return {

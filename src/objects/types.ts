@@ -1,15 +1,15 @@
 import {
-  IFormSwitchGroup,
-  IFormSwitchGroupItem,
-} from "../effects/trianglify/trianglify.definition";
-import {
   IInputMetadataValues,
   InputType,
   ISelectInput,
   ITextInput,
 } from "../inputs/types";
 import { DeviceType } from "../store/reducers/i-settings";
-import { FormType } from "../utils/form-layout/form-layout";
+import {
+  FormType,
+  IFormSwitchGroup,
+  IFormSwitchGroupItem,
+} from "../utils/form-layout/i-form-layout";
 
 export enum ObjectType {
   //TEXT = "text", << external

@@ -42,7 +42,7 @@ import { noop } from "lodash-es";
 import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
-import { Breakpoints } from "../store/reducers/settings";
+import { Breakpoints } from "../store/reducers/i-settings";
 import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
 import { InfoInputForm } from "./info-input/info-input";
 

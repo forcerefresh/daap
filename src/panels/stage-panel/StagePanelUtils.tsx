@@ -1,7 +1,7 @@
 import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
 import { ILayout, IObject, ObjectType } from "../../objects/types";
-import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
 

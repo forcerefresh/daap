@@ -9,7 +9,7 @@ import css from "./PublishPanel.module.scss";
 import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import { IMeta } from "../../store/reducers/meta";
-import { BreakpointConfiguration } from "../../store/reducers/settings";
+import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
@@ -27,6 +27,7 @@ export type IPublishPanelMergedProps = typeof mapDispatchToProps &
 const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   const { meta, onChange } = props;
 
+  console.log(process.env);
   const globalContext = useContext(IntegrationContext);
   const {
     publishToStorageObject,
@@ -34,6 +35,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     assignBucketToProject,
     removeBucketFromProject,
     getAssignedBucketIds,
+    subscribeToPublishDetails,
   } = globalContext.useObjectStorageHook();
 
   const [allBuckets, setAllBuckets] = useState<ObjectStorageItem[]>([]);
@@ -42,6 +44,8 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   const [assignedBuckets, setVisibleBuckets] = useState<ObjectStorageItem[]>(
     []
   );
+
+  const [publishLogs, setPublishLogs] = useState<string[]>([]);
 
   useEffect(() => {
     reloadStorageObjects();
@@ -143,7 +147,8 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
             {bucket.assignedProject?.revision === meta.saveRevision ? (
               <p className={css.inSync}>
                 Status: Publish is in sync with save. <br />
-                Revision: 27.
+                Publish revision: {bucket.assignedProject?.revision}
+                <br /> Save revision: {meta.saveRevision}
               </p>
             ) : (
               <p className={css.notInSync}>
@@ -155,13 +160,31 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
 
             <p>
               <ConfirmButton
+                loadingText="Publishing to bucket ..."
+                logs={publishLogs}
+                hasActionOnConfirm={true}
+                successMsg="Publish is done!"
                 intent="primary"
-                onConfirm={() => {
+                onClose={() => {
+                  setPublishLogs((publishLogs) => []);
+                }}
+                onConfirm={(doneCallback) => {
+                  const unsubscribe = subscribeToPublishDetails((details) => {
+                    console.log(details);
+                    setPublishLogs((publishLogs) => [
+                      ...publishLogs,
+                      ...details,
+                    ]);
+                  });
+
                   publishToStorageObject({
                     bucketId: bucket.id!,
                     projectId: meta.id!,
                     revision: meta.saveRevision,
                   }).then((res) => {
+                    unsubscribe();
+                    doneCallback?.();
+
                     if (res.status === "OK") {
                       AppToaster.show({
                         intent: "success",
@@ -191,7 +214,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                     updated in order to point to bucket files.
                   </p>
                 </>
-              </ConfirmButton>
+              </ConfirmButton>{" "}
               <Button minimal>Integration instructions</Button>
             </p>
 
@@ -237,7 +260,7 @@ const mapStateToProps = (state: IStore) => {
   // TODO: IMPORTANT hardcoded
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig) => breakpointConfig.type === "large-1"
+      (breakpointConfig: any) => breakpointConfig.type === "large-1"
     );
 
   return {

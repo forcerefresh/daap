@@ -1,9 +1,4 @@
-import {
-  IInputMetadataValues,
-  ISlideDurationInput,
-  ITextInput,
-} from "../../inputs/types";
-import { ISlideTransition, ITransitions } from "../../objects/types";
+import { ITransitions } from "../../objects/types";
 
 export interface ISlideDuration {
   inheritFrom: "inherit" | "custom";

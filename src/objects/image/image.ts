@@ -9,10 +9,10 @@ import {
 import { createCommonObject } from "../create-object-factory";
 import { ICommonObjectProperties, IObject } from "../types";
 import { v4 as uuid } from "uuid";
-import { addCommonPropertiesToStyle } from "../../export/export-html";
 import { PreloadOrder } from "../objects-factory";
 import svg from "./image-icon.svg";
 import { getObjectPlaceholder } from "../object-helpers";
+import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 const IMAGE = "image";
 

@@ -5,7 +5,6 @@ import { ITransitionsData } from "../export/i-export-html";
 import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { executionCodeFuncType } from "../objects/objects-factory";
 import { ITransition } from "../objects/types";
-import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 
 export function createTimelineForObject(
   data: ITransitionsData

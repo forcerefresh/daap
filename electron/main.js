@@ -4,8 +4,16 @@ const fs = require("fs");
 const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
 
+console.log(app.getVersion());
+
 const { checkFileExists } = require("./utils.js");
-const { loadProject, loadProjects, saveProjects } = require("./project.js");
+const {
+  loadProject,
+  loadProjects,
+  saveProjects,
+  loadExports,
+  saveExports,
+} = require("./project.js");
 
 require("./object-storage.js");
 
@@ -81,7 +89,15 @@ ipcMain.handle("apiSaveProject", async (event, data) => {
 
 ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
-  const { name, description, slides, project, preview, assetsUrls } = data;
+  const {
+    name,
+    description,
+    slides,
+    project,
+    preview,
+    playerData,
+    assetsUrls,
+  } = data;
 
   let { id, created } = data;
 
@@ -139,6 +155,12 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   }
 
   await saveProjects(projects);
+
+  // player data
+  const exps = await loadExports();
+  playerData.name = name;
+  exps[id] = playerData;
+  await saveExports(exps);
 
   return {
     id: id,

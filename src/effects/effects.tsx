@@ -73,6 +73,7 @@ import {
   trianglifyDefaults,
   trianlifyDefinition,
 } from "./trianglify/trianglify.definition";
+
 // NOTE effect for development
 import { devDefaults, devDefinition } from "./dev/dev.definition";
 import { dev2Defaults, dev2Definition } from "./dev2/dev2.definition";
@@ -100,16 +101,17 @@ import "./cube/cube.effect";
 import "./flip-slide/flip-slide.effect";
 import "./split/split.effect";
 import "./parallax/parallax.effect";
+
 import "./morph/morph.effect";
 import "./magnetic/magnetic.effect";
 import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
 import "./square-mask/square-mask.effect";
+import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
+
 import "./dev/dev.effect";
 import "./dev2/dev2.effect";
-
-import { getTypewriterEffectDuration } from "./typewriter/typewriter.effect";
 import "./trianglify/trianglify.effect";
 import "./timelines/timelines.effect";
 import "./flip/flip.effect";
@@ -148,6 +150,7 @@ registerEffect(fallingLeavesDefinition, fallingLeavesDefaults);
 registerEffect(cubeDefinition, cubeDefaults);
 registerEffect(splitDefinition, splitDefaults);
 registerEffect(parallaxDefinition, parallaxDefaults);
+
 registerEffect(morphDefinition, morphDefaults);
 registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(
@@ -162,8 +165,8 @@ registerEffect(trianlifyDefinition, trianglifyDefaults);
 registerEffect(flipSlideDefinition, flipSlideDefaults);
 registerEffect(devDefinition, devDefaults);
 registerEffect(dev2Definition, dev2Defaults);
-registerEffect(flipDefinition, flipDefaults, getFlipEffectDuration);
 registerEffect(cssPluginDefinition, cssPluginDefaults);
+registerEffect(flipDefinition, flipDefaults, getFlipEffectDuration);
 
 function registerEffect(
   definition: IEffectDefinitionWrapper,

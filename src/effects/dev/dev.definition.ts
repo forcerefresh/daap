@@ -1,5 +1,5 @@
 import { InputType } from "../../inputs/types";
-import { FormType } from "../../utils/form-layout/form-layout";
+import { FormType } from "../../utils/form-layout/i-form-layout";
 import { IEffectDefinition } from "../trianglify/trianglify.definition";
 import { dev, IDevEffect } from "./dev.types";
 

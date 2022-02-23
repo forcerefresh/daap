@@ -1,8 +1,8 @@
 import { isArray, isEmpty, noop, uniq, uniqWith } from "lodash-es";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { RGBColor } from "react-color";
-import { color2rgba } from "../../export/export-html";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { rgbColor2cssRgba } from "../../utils/utils";
 import { getButtonGroupField, getColorField } from "../input-utils";
 import { ISVGInput, IUpdateInput } from "../types";
 import css from "./svg-input.module.scss";
@@ -38,7 +38,7 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
 
   const getColorsMemo = useMemo(() => {
     return uniqWith(getColors(value.source), (col1: any, col2: any) => {
-      return color2rgba(col1) === color2rgba(col2);
+      return rgbColor2cssRgba(col1) === rgbColor2cssRgba(col2);
     });
   }, [value.source]);
 
@@ -46,7 +46,7 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
     return <div>SVG does not contain colors for editing.</div>;
 
   const uniqueColors = uniqWith(value.colors, (col1: any, col2: any) => {
-    return color2rgba(col1) === color2rgba(col2);
+    return rgbColor2cssRgba(col1) === rgbColor2cssRgba(col2);
   });
 
   const arrayToShow =
@@ -93,7 +93,7 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
             } else {
               const oldColor = uniqueColors[idx];
               newColors = newColors.map((col) => {
-                if (color2rgba(col) === color2rgba(oldColor)) {
+                if (rgbColor2cssRgba(col) === rgbColor2cssRgba(oldColor)) {
                   return { ...newCol };
                 }
                 return col;

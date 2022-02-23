@@ -67,6 +67,9 @@ export const IntegrationContext = React.createContext({
       revision: number;
     }): Promise<{ status: string; error?: string }> =>
       Promise.resolve({ status: "" }),
+
+    subscribeToPublishDetails: (callback: (details: any) => void) => () =>
+      undefined,
   }),
 
   getMyUploadComponent: ((props) => {

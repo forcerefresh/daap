@@ -16,12 +16,10 @@ import css from "./Breakpoint.module.scss";
 
 import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
 import { getResponsiveIcon } from "../../../utils/icons/responsive-icons-factory";
-import {
-  BreakpointConfiguration,
-  getIconByType,
-} from "../../../store/reducers/settings";
+import { getIconByType } from "../../../store/reducers/settings";
 import { BreakpointPreview } from "../breakpoint-preview/BreakpointPreview";
 import { set } from "lodash-es";
+import { BreakpointConfiguration } from "../../../store/reducers/i-settings";
 
 export interface IBreakpointSettingsProps {
   breakpointConfiguration: BreakpointConfiguration;

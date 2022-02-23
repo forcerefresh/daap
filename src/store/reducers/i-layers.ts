@@ -1,16 +1,16 @@
-import { IFormGroupItem } from "../../effects/trianglify/trianglify.definition";
 import {
   IInputMetadataValues,
   InputType,
-  ISizeInput,
   ILayoutChildrenInput,
   LayoutChildrenType,
   ILayoutChildrenValue,
-  ICheckboxInput,
   ISelectInput,
 } from "../../inputs/types";
-import { IDefinition, ILayout, ITransitions } from "../../objects/types";
-import { FormType } from "../../utils/form-layout/form-layout";
+import { ILayout, ITransitions } from "../../objects/types";
+import {
+  FormType,
+  IFormGroupItem,
+} from "../../utils/form-layout/i-form-layout";
 import { DeviceType } from "./i-settings";
 
 export interface IResponsiveVisibility {

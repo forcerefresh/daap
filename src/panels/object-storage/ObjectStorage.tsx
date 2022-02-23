@@ -212,35 +212,6 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
                         <Icon icon="warning-sign" intent="warning" /> Player is
                         NOT uploaded to this bucket.
                       </p>
-
-                      <Button
-                        loading={uploadingPlayer === item.id}
-                        intent="success"
-                        onClick={() => {
-                          setUploadingPlayer(item.id!);
-                          uploadPlayerToStorageObject({ id: item.id! }).then(
-                            (result: any) => {
-                              setUploadingPlayer("-1");
-                              if (result.status === "ERROR") {
-                                AppToaster.show({
-                                  intent: "danger",
-                                  message:
-                                    "Something went wrong. Error: " +
-                                    result.error,
-                                });
-                              } else if (result.status === "ERROR") {
-                                AppToaster.show({
-                                  intent: "success",
-                                  message: "Player is uploaded to bucket.",
-                                });
-                              }
-                              reload();
-                            }
-                          );
-                        }}
-                      >
-                        Upload Player
-                      </Button>
                     </>
                   ) : (
                     <p>
@@ -248,6 +219,33 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
                       to this bucket.
                     </p>
                   )}
+                  <Button
+                    loading={uploadingPlayer === item.id}
+                    intent="success"
+                    onClick={() => {
+                      setUploadingPlayer(item.id!);
+                      uploadPlayerToStorageObject({ id: item.id! }).then(
+                        (result: any) => {
+                          setUploadingPlayer("-1");
+                          if (result.status === "ERROR") {
+                            AppToaster.show({
+                              intent: "danger",
+                              message:
+                                "Something went wrong. Error: " + result.error,
+                            });
+                          } else if (result.status === "ERROR") {
+                            AppToaster.show({
+                              intent: "success",
+                              message: "Player is uploaded to bucket.",
+                            });
+                          }
+                          reload();
+                        }
+                      );
+                    }}
+                  >
+                    Upload Player
+                  </Button>
                 </div>
               </div>
             ))}

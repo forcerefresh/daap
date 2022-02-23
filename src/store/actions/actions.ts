@@ -32,7 +32,7 @@ import {
   BreakpointConfiguration,
   Breakpoints,
   ISettings,
-} from "../reducers/settings";
+} from "../reducers/i-settings";
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
@@ -205,7 +205,7 @@ export function addNewLayer(slideId: string): any {
     const breakpointsConfiguration =
       getState().project.settings.breakpoints.breakpointsConfiguration;
     const breakpointConfig = breakpointsConfiguration.find(
-      (p) => p.type === "large-1"
+      (p: any) => p.type === "large-1"
     );
     const absoluteSize = breakpointConfig?.normal.slide;
     const gridSize = breakpointConfig?.normal.grid;
@@ -679,7 +679,7 @@ export function selectObjectsByRect(rect: IRect): any {
       // TODO: IMPORTANT hardcoded
       const breakpointConfig: BreakpointConfiguration | undefined =
         getState().project.settings.breakpoints.breakpointsConfiguration.find(
-          (breakpointConfig) =>
+          (breakpointConfig: any) =>
             breakpointConfig.type === getState().stage.selectedDevice
         );
 
@@ -927,7 +927,7 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
   if (object.layout === "absolute" || object.layout === "snap") {
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpoints.breakpointsConfiguration.find(
-        (breakpointConfig) =>
+        (breakpointConfig: any) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
     // todo: calculate for all not only for one
@@ -968,7 +968,7 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
   if (object.layout === "absolute") {
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpoints.breakpointsConfiguration.find(
-        (breakpointConfig) =>
+        (breakpointConfig: any) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
     // todo: calculate for all not only for one
@@ -1016,7 +1016,7 @@ function handleTextUpdate(
     // TODO: IMPORTANT hardcoded
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpoints.breakpointsConfiguration.find(
-        (breakpointConfig) =>
+        (breakpointConfig: any) =>
           breakpointConfig.type === getState().stage.selectedDevice
       );
     // todo: calculate for all not only for one
