@@ -143,6 +143,29 @@ export const useObjectStorageHook = () => {
     };
   };
 
+  const openPublishUrl = async (req: {
+    bucketId: string;
+    projectId: number;
+  }): Promise<void> => {
+    const { shell, ipcRenderer } = window.require("electron");
+    const {} = window.require("electron");
+
+    const res = await ipcRenderer.invoke(
+      "ObjectStorage::GetPublishUrl",
+      JSON.stringify(req)
+    );
+
+    shell.openExternal(res.publishUrl);
+  };
+
+  const downloadPackage = async (req: {
+    projectId: number;
+  }): Promise<string> => {
+    const { ipcRenderer } = window.require("electron");
+
+    return ipcRenderer.invoke("ObjectStorage::Download", JSON.stringify(req));
+  };
+
   return {
     supportStorageObjects: true,
     listStorageObjects,
@@ -155,5 +178,7 @@ export const useObjectStorageHook = () => {
     getAssignedBucketIds,
     publishToStorageObject,
     subscribeToPublishDetails,
+    openPublishUrl,
+    downloadPackage,
   };
 };

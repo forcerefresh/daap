@@ -14,6 +14,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
+import { base64ToBlob, downloadBlob } from "../../utils/file/file-utils";
 
 interface IPublishPanelProps {
   onRequestClose: () => void;
@@ -36,6 +37,8 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     removeBucketFromProject,
     getAssignedBucketIds,
     subscribeToPublishDetails,
+    openPublishUrl,
+    downloadPackage,
   } = globalContext.useObjectStorageHook();
 
   const [allBuckets, setAllBuckets] = useState<ObjectStorageItem[]>([]);
@@ -215,7 +218,17 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                   </p>
                 </>
               </ConfirmButton>{" "}
-              <Button minimal>Integration instructions</Button>
+              <Button
+                rightIcon="share"
+                onClick={(event: React.MouseEvent) => {
+                  openPublishUrl({ bucketId: bucket.id!, projectId: meta.id! });
+                }}
+              >
+                Open in browser
+              </Button>
+              <Button minimal style={{ float: "right" }}>
+                Integration instructions for {bucket.platform}
+              </Button>
             </p>
 
             <ConfirmButton
@@ -247,8 +260,25 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
         <div className={css.sectionHeader}>DOWNLOAD</div>
         <div className={css.bucketItem}>
           <p>
-            <Button intent="primary">Download</Button>{" "}
-            <Button>Integration instructions</Button>
+            <Button
+              intent="primary"
+              onClick={async () => {
+                const base64Zip = await downloadPackage({
+                  projectId: meta.id!,
+                });
+
+                const blob = base64ToBlob(base64Zip, "application/zip");
+                downloadBlob(
+                  blob,
+                  `WebSlider-ID-${meta.id!}-REV-${meta.saveRevision}.zip`
+                );
+              }}
+            >
+              Download
+            </Button>{" "}
+            <Button minimal style={{ float: "right" }}>
+              Integration instructions
+            </Button>
           </p>
         </div>{" "}
       </div>

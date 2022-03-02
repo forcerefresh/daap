@@ -17,8 +17,14 @@ const AWS = require("aws-sdk");
 const { omit, without, chunk } = require("lodash");
 const keytar = require("keytar");
 const cloneDeep = require("clone-deep");
+var JSZip = require("jszip");
 
-const PARALLEL_UPLOAD = 5;
+const {
+  getBucketManagerClass,
+} = require("./bucket-managers/bucket-manager-factory");
+
+const PARALLEL_UPLOAD = 5; // for publish (download and upload)
+const PARALLEL_DOWNLOAD = 5; // for download
 
 ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
   console.log("node: ObjectStorage::List");
@@ -126,15 +132,20 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
     bucket.platform + "_" + bucket.bucketName
   );
 
-  const s3 = createS3Instance({ ...bucket, secretKey });
+  //const s3 = createS3Instance({ ...bucket, secretKey });
+
+  const ManagerClass = getBucketManagerClass(bucket.platform);
+  const bucketManager = new ManagerClass({
+    ...bucket,
+    secretKey,
+  });
 
   console.log(files);
   let error = null;
   for (const file of files) {
     try {
-      await uploadToS3(
-        s3,
-        bucket.bucketName,
+      await bucketManager.uploadFileToBucket(
+        bucket,
         path.join(getPlayerPath(), file),
         `wsplayer/${app.getVersion()}/${file}`
       );
@@ -251,7 +262,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const req = JSON.parse(reqJson);
 
   const objectStorageList = await loadObjectStorage();
-
   const bucket = objectStorageList.find((item) => item.id === req.bucketId);
 
   if (!bucket.assignedProjects) {
@@ -269,14 +279,16 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     };
   }
 
+  // NODE: bucketWithKeys use only for upload
+  const bucketWithKeys = await getBucketWithKeys(req.bucketId);
+  const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
+  const bucketManager = new ManagerClass(bucketWithKeys);
+
   // TODO
   const project = await loadProject(req.projectId);
-  console.log(project);
 
   // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
-  console.log("assetsUrlsChunks");
-  console.log(assetsUrlsChunks);
 
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
@@ -291,8 +303,144 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       var parsed = url.parse(assetUrl.url);
       const filename = path.basename(parsed.pathname);
       pArr.push(
-        uploadFileToBucket(
+        bucketManager.uploadUrlToBucket(
+          bucketWithKeys,
+          assetUrl.url,
+          `${req.projectId}/assets/${filename}`
+        )
+        /*uploadUrlToBucket(
           req.bucketId,
+          assetUrl.url,
+          `${req.projectId}/assets/${filename}`
+        )*/
+      );
+    }
+    try {
+      const result = await Promise.all(pArr);
+      BrowserWindow.getAllWindows()[0].webContents.send(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`,
+        JSON.stringify(result)
+      );
+
+      uploadResult = [...uploadResult, ...result];
+      console.log("result");
+      console.log(result);
+    } catch (ex) {
+      error = ex.toString();
+      break;
+    }
+  }
+
+  if (error) {
+    return { status: "ERROR", error };
+  }
+  // upload assets <<
+
+  // upload export/playerdata >>
+  const exp = await loadExport(req.projectId);
+  let expString = JSON.stringify(exp);
+  for (let i = 0; i < uploadResult.length; i++) {
+    expString = expString.replaceAll(
+      `"${uploadResult[i].fromUrl}"`,
+      `"${uploadResult[i].toUrl}"`
+    );
+    expString = expString.replaceAll(
+      `'${uploadResult[i].fromUrl}'`,
+      `'${uploadResult[i].toUrl}'`
+    );
+  }
+  const expBuffer = Buffer.from(expString, "utf-8");
+  await bucketManager.uploadBufferToBucket(
+    bucketWithKeys,
+    expBuffer,
+    `${req.projectId}/slider.json`
+  );
+  /*
+  const s3 = createS3Instance(bucketWithKeys);
+  await uploadBufferToS3(
+    s3,
+    bucketWithKeys.bucketName,
+    expBuffer,
+    `${req.projectId}/slider.json`
+  );*/
+  // upload export/playerdata <<
+
+  // upload preview html >>
+  const indexString = await fsPromise.readFile(
+    path.join(getBucketPreviewPath(), "index.html"),
+    "utf-8"
+  );
+  const indexBuffer = Buffer.from(indexString, "utf-8");
+
+  await bucketManager.uploadBufferToBucket(
+    bucketWithKeys,
+    indexBuffer,
+    `${req.projectId}/index.html`
+  );
+  /*await uploadBufferToS3(
+    s3,
+    bucketWithKeys.bucketName,
+    indexBuffer,
+    `${req.projectId}/index.html`
+  );*/
+  // upload preview htlm <<
+
+  assignedProject.revision = req.revision;
+
+  await saveObjectStorage(objectStorageList);
+
+  BrowserWindow.getAllWindows()[0].webContents.send(
+    `ObjectStorageRenderer::SubscribeToPublishDetails`,
+    JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
+  );
+
+  return { status: "OK" };
+});
+
+ipcMain.handle("ObjectStorage::GetPublishUrl", async (event, reqJson) => {
+  const req = JSON.parse(reqJson);
+
+  const bucketWithKeys = await getBucketWithKeys(req.bucketId);
+  const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
+  const bucketManager = new ManagerClass(bucketWithKeys);
+  const publishUrl = await bucketManager.getPublishUrl(
+    bucketWithKeys,
+    req.projectId
+  );
+
+  return { publishUrl };
+});
+
+ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
+  const req = JSON.parse(reqJson);
+
+  const project = await loadProject(req.projectId);
+
+  // download assets
+  const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_DOWNLOAD);
+
+  BrowserWindow.getAllWindows()[0].webContents.send(
+    `ObjectStorageRenderer::SubscribeToPublishDetails`,
+    JSON.stringify([{ log: "Package download preparation has started" }])
+  );
+  var zip = new JSZip();
+
+  zip.file("hello.txt", "Hello World\n");
+
+  const base64Zip = zip.generateAsync({ type: "base64" });
+
+  return base64Zip;
+  /*
+  let error;
+  let uploadResult = [];
+  for (const assetsUrlsChunk of assetsUrlsChunks) {
+    const pArr = [];
+    for (const assetUrl of assetsUrlsChunk) {
+      var parsed = url.parse(assetUrl.url);
+      const filename = path.basename(parsed.pathname);
+      pArr.push(
+        bucketManager.uploadUrlToBucket(
+          bucketWithKeys,
           assetUrl.url,
           `${req.projectId}/assets/${filename}`
         )
@@ -333,11 +481,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     );
   }
   const expBuffer = Buffer.from(expString, "utf-8");
-  const bucketWithKeys = await getBucketWithKeys(req.bucketId);
-  const s3 = createS3Instance(bucketWithKeys);
-  await uploadBufferToS3(
-    s3,
-    bucketWithKeys.bucketName,
+  await bucketManager.uploadBufferToBucket(
+    bucketWithKeys,
     expBuffer,
     `${req.projectId}/slider.json`
   );
@@ -349,13 +494,12 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     "utf-8"
   );
   const indexBuffer = Buffer.from(indexString, "utf-8");
-  await uploadBufferToS3(
-    s3,
-    bucketWithKeys.bucketName,
+
+  await bucketManager.uploadBufferToBucket(
+    bucketWithKeys,
     indexBuffer,
     `${req.projectId}/index.html`
   );
-  // upload preview htlm <<
 
   assignedProject.revision = req.revision;
 
@@ -365,10 +509,9 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
   );
-
-  return { status: "OK" };
+*/
+  // return { status: "OK" };
 });
-
 //============================================
 
 async function loadObjectStorage() {
@@ -409,8 +552,8 @@ async function getPlayerFiles() {
   console.log(files);
   return files;
 }
-
-async function uploadToS3(s3, bucketName, filePath, key) {
+/*
+async function uploadFileToS3(s3, bucketName, filePath, key) {
   const p = new Promise((resolve, reject) => {
     var fileStream = fs.createReadStream(filePath);
     var putParams = {
@@ -429,8 +572,8 @@ async function uploadToS3(s3, bucketName, filePath, key) {
   });
 
   await p;
-}
-
+}*/
+/*
 async function uploadBufferToS3(s3, bucketName, bufferStream, key) {
   const p = new Promise((resolve, reject) => {
     var putParams = {
@@ -450,7 +593,7 @@ async function uploadBufferToS3(s3, bucketName, bufferStream, key) {
 
   await p;
 }
-async function uploadFileToBucket(bucketId, fromUrl, toKey) {
+async function uploadUrlToBucket(bucketId, fromUrl, toKey) {
   const bucketWithKeys = await getBucketWithKeys(bucketId);
 
   const s3 = createS3Instance(bucketWithKeys);
@@ -467,12 +610,12 @@ async function uploadFileToBucket(bucketId, fromUrl, toKey) {
     fromUrl,
     toUrl,
   };
-}
-
+}*/
+/*
 async function downloadToBuffer(url) {
   return fetch(url).then((res) => res.buffer());
 }
-
+*/
 async function getBucketWithKeys(bucketId) {
   const objectStorageList = await loadObjectStorage();
 
@@ -485,7 +628,7 @@ async function getBucketWithKeys(bucketId) {
 
   return { ...item, secretKey };
 }
-
+/*
 function createS3Instance(bucketWithKeys) {
   switch (bucketWithKeys.platform) {
     case "s3": {
@@ -503,5 +646,5 @@ function createS3Instance(bucketWithKeys) {
     }
   }
 }
-
+*/
 //${bucketWithKeys.bucketName}.

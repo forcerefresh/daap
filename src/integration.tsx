@@ -70,6 +70,12 @@ export const IntegrationContext = React.createContext({
 
     subscribeToPublishDetails: (callback: (details: any) => void) => () =>
       undefined,
+
+    openPublishUrl: (req: { bucketId: string; projectId: number }): void =>
+      undefined,
+
+    downloadPackage: (req: { projectId: number }): Promise<string> =>
+      Promise.resolve(""),
   }),
 
   getMyUploadComponent: ((props) => {

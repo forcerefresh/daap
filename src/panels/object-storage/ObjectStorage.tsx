@@ -184,71 +184,77 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
           </div>
 
           <div className={css.list}>
-            {list.map((item) => (
-              <div className={css.listItem}>
-                <div className={css.cb}>
-                  <Checkbox
-                    checked={item.id === selectedId}
-                    onChange={(e: FormEvent<HTMLInputElement>) => {
-                      setSelectedId(
-                        e.currentTarget.checked ? item.id : undefined
-                      );
-                    }}
-                  ></Checkbox>
-                </div>
-                <div className={css.content}>
-                  Platform: <strong>{getPlatformName(item.platform)}</strong>
-                  <br />
-                  Name: <strong>{item.bucketName}</strong>
-                  <br />
-                  Description: <strong>{item.description}</strong>
-                  <br />
-                  Environment: <strong>{item.environment}</strong>
-                </div>
-                <div className={css.status}>
-                  {!item.playerStatus || item.playerStatus === "notUploaded" ? (
-                    <>
+            {list.map((item) => {
+              const isUploaded =
+                item.playerStatus && item.playerStatus === "uploaded";
+
+              return (
+                <div className={css.listItem}>
+                  <div className={css.cb}>
+                    <Checkbox
+                      checked={item.id === selectedId}
+                      onChange={(e: FormEvent<HTMLInputElement>) => {
+                        setSelectedId(
+                          e.currentTarget.checked ? item.id : undefined
+                        );
+                      }}
+                    ></Checkbox>
+                  </div>
+                  <div className={css.content}>
+                    Platform: <strong>{getPlatformName(item.platform)}</strong>
+                    <br />
+                    Name: <strong>{item.bucketName}</strong>
+                    <br />
+                    Description: <strong>{item.description}</strong>
+                    <br />
+                    Environment: <strong>{item.environment}</strong>
+                  </div>
+                  <div className={css.status}>
+                    {!isUploaded ? (
+                      <>
+                        <p>
+                          <Icon icon="warning-sign" intent="warning" /> Player
+                          is NOT uploaded to this bucket.
+                        </p>
+                      </>
+                    ) : (
                       <p>
-                        <Icon icon="warning-sign" intent="warning" /> Player is
-                        NOT uploaded to this bucket.
+                        <Icon icon="tick" intent="success" /> Player is uploaded
+                        to this bucket.
                       </p>
-                    </>
-                  ) : (
-                    <p>
-                      <Icon icon="tick" intent="success" /> Player is uploaded
-                      to this bucket.
-                    </p>
-                  )}
-                  <Button
-                    loading={uploadingPlayer === item.id}
-                    intent="success"
-                    onClick={() => {
-                      setUploadingPlayer(item.id!);
-                      uploadPlayerToStorageObject({ id: item.id! }).then(
-                        (result: any) => {
-                          setUploadingPlayer("-1");
-                          if (result.status === "ERROR") {
-                            AppToaster.show({
-                              intent: "danger",
-                              message:
-                                "Something went wrong. Error: " + result.error,
-                            });
-                          } else if (result.status === "ERROR") {
-                            AppToaster.show({
-                              intent: "success",
-                              message: "Player is uploaded to bucket.",
-                            });
+                    )}
+                    <Button
+                      loading={uploadingPlayer === item.id}
+                      intent={isUploaded ? "none" : "success"}
+                      onClick={() => {
+                        setUploadingPlayer(item.id!);
+                        uploadPlayerToStorageObject({ id: item.id! }).then(
+                          (result: any) => {
+                            setUploadingPlayer("-1");
+                            if (result.status === "ERROR") {
+                              AppToaster.show({
+                                intent: "danger",
+                                message:
+                                  "Something went wrong. Error: " +
+                                  result.error,
+                              });
+                            } else if (result.status === "OK") {
+                              AppToaster.show({
+                                intent: "success",
+                                message: "Player is uploaded to bucket.",
+                              });
+                            }
+                            reload();
                           }
-                          reload();
-                        }
-                      );
-                    }}
-                  >
-                    Upload Player
-                  </Button>
+                        );
+                      }}
+                    >
+                      {isUploaded ? "Upload Player Again" : "Upload Player"}
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
