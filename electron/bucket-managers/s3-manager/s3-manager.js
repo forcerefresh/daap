@@ -2,6 +2,7 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 var mime = require("mime-types");
 const fetch = require("node-fetch");
+const { downloadToBuffer } = require("../../utils");
 
 class S3Manager {
   s3;
@@ -84,10 +85,6 @@ class S3Manager {
 
     await p;
   }
-}
-
-async function downloadToBuffer(url) {
-  return fetch(url).then((res) => res.buffer());
 }
 
 module.exports = {

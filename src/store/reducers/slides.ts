@@ -1,4 +1,4 @@
-import { forIn, omit, without } from "lodash-es";
+import { cloneDeep, forIn, omit, remove, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
@@ -6,6 +6,8 @@ import {
   CREATE_NEW_PROJECT,
   DELETE_LAYERS,
   DELETE_SLIDE,
+  MOVE_LAYERS,
+  MOVE_SLIDES,
   OPEN_PROJECT,
   UPDATE_SLIDE,
 } from "../actions/actions";
@@ -128,6 +130,62 @@ export function slides(
         },
       });
     }
+    case MOVE_LAYERS: {
+      const payload = action.payload;
+      const slideById = cloneDeep(state.slideById);
+
+      forIn(slideById, function (slide, _slideId) {
+        remove(slide.layerIds, (id) => {
+          return payload.moveIds.indexOf(id) !== -1;
+        });
+      });
+
+      // add layers above layer id
+      if (payload.where === "above") {
+        forIn(slideById, function (slide, _slideId) {
+          const idx = slide.layerIds.indexOf(payload.refId);
+          if (idx != -1) {
+            slide.layerIds.splice(idx, 0, ...payload.moveIds);
+          }
+        });
+      }
+
+      // add object in layer (at bottom)
+      if (payload.where === "slide") {
+        slideById[payload.refId].layerIds.splice(
+          slideById[payload.refId].layerIds.length,
+          0,
+          ...payload.moveIds
+        );
+      }
+
+      return { ...state, slideById };
+    }
+
+    case MOVE_SLIDES: {
+      const payload = action.payload;
+      const normalSlides = cloneDeep(state.normalSlides);
+
+      remove(normalSlides, (id) => {
+        return payload.moveIds.indexOf(id) !== -1;
+      });
+
+      // add layers above layer id
+      if (payload.where === "above") {
+        const idx = normalSlides.indexOf(payload.refId);
+        if (idx != -1) {
+          normalSlides.splice(idx, 0, ...payload.moveIds);
+        }
+      }
+
+      // add object in layer (at bottom)
+      if (payload.where === "bottom") {
+        normalSlides.splice(normalSlides.length, 0, ...payload.moveIds);
+      }
+
+      return { ...state, normalSlides };
+    }
+
     case OPEN_PROJECT: {
       return {
         ...action.payload.slides,

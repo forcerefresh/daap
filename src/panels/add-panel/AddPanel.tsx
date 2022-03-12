@@ -65,7 +65,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Media</h1>
-          <p>Place image content</p>
+          <p>Image, Video, Svg and other objects that use media resources</p>
         </Card>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {/*<Card
@@ -175,7 +175,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Navigation</h1>
-          <p>Page navigation</p>
+          <p>Navigate bettwen slides or point to extenal page</p>
         </Card>
         <div>
           <Card
@@ -302,7 +302,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Other</h1>
-          <p>Various elements</p>
+          <p>Various objects</p>
         </Card>
 
         <Card

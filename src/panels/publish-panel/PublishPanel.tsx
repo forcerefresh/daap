@@ -260,22 +260,52 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
         <div className={css.sectionHeader}>DOWNLOAD</div>
         <div className={css.bucketItem}>
           <p>
-            <Button
+            <ConfirmButton
+              loadingText="Preparing file for download ..."
+              logs={publishLogs}
+              hasActionOnConfirm={true}
+              successMsg=""
               intent="primary"
-              onClick={async () => {
+              onClose={() => {
+                setPublishLogs((publishLogs) => []);
+              }}
+              onConfirm={async (doneCallback) => {
+                const unsubscribe = subscribeToPublishDetails((details) => {
+                  console.log(details);
+                  setPublishLogs((publishLogs) => [...publishLogs, ...details]);
+                });
+
                 const base64Zip = await downloadPackage({
                   projectId: meta.id!,
                 });
 
+                console.log(base64Zip);
                 const blob = base64ToBlob(base64Zip, "application/zip");
                 downloadBlob(
                   blob,
                   `WebSlider-ID-${meta.id!}-REV-${meta.saveRevision}.zip`
                 );
+
+                unsubscribe();
+                doneCallback?.();
+                //reloadAssignedIds();
+                //reloadStorageObjects();
+                //onChange();
               }}
+              buttonProps={{}}
+              dialogProps={{}}
+              text="Download"
+              title={"Prepare and download slider package"}
             >
-              Download
-            </Button>{" "}
+              <>
+                <p>Download ZIP with slider configuration file and assets.</p>
+                <p>
+                  Note: Assets urls in the slider configuration file will be
+                  updated with relative urls in order to point to files in
+                  assets directory.
+                </p>
+              </>
+            </ConfirmButton>
             <Button minimal style={{ float: "right" }}>
               Integration instructions
             </Button>

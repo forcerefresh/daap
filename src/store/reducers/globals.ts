@@ -7,7 +7,7 @@ export interface IGlobals {
 
 export function globals(
   state: IGlobals = {
-    layoutType: "default",
+    layoutType: "default-layers",
     //layoutSlidesSelectionBox: false,
   },
   action: ActionTypes

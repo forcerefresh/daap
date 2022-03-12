@@ -537,7 +537,7 @@ function _selectLayers(layers: string[]): SelectLayersAction {
 
 export function selectLayers(layerIds: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (
+    /*if (
       differenceWith(
         layerIds,
         getState().project.selection.selectedLayerIds,
@@ -545,7 +545,7 @@ export function selectLayers(layerIds: string[]): any {
       ).length === 0
     ) {
       return;
-    }
+    }*/
 
     dispatch(_selectLayers(layerIds));
   };
@@ -743,6 +743,87 @@ export function removeObjectsFromSelection(
     payload: objectIds,
     isUndoable: true,
     skipHistory: true,
+  };
+}
+
+// ***
+export const MOVE_OBJECTS = "Move objects";
+
+export interface MoveObjectsActionPayload {
+  refId: string;
+  where: "above" | "below" | "layer" | "slide" | "bottom";
+  moveIds: string[];
+}
+
+export interface MoveObjectsAction extends IUndoableAction<true, false> {
+  type: typeof MOVE_OBJECTS;
+  payload: MoveObjectsActionPayload;
+}
+
+export function moveObjects(
+  refId: string,
+  where: "above" | "below" | "layer" | "slide" | "bottom",
+  moveIds: string[]
+): MoveObjectsAction {
+  return {
+    type: MOVE_OBJECTS,
+    payload: { refId, where, moveIds },
+    isUndoable: true,
+    skipHistory: false,
+  };
+}
+
+// move layers
+export const MOVE_LAYERS = "Move layers";
+
+export interface MoveLayerActionPayload {
+  refId: string;
+  where: "above" | "below" | "layer" | "slide" | "bottom";
+  moveIds: string[];
+}
+
+export interface MoveLayersAction extends IUndoableAction<true, false> {
+  type: typeof MOVE_LAYERS;
+  payload: MoveLayerActionPayload;
+}
+
+export function moveLayers(
+  refId: string,
+  where: "above" | "below" | "layer" | "slide" | "bottom",
+  moveIds: string[]
+): MoveLayersAction {
+  return {
+    type: MOVE_LAYERS,
+    payload: { refId, where, moveIds },
+    isUndoable: true,
+    skipHistory: false,
+  };
+}
+
+// move slides
+export const MOVE_SLIDES = "Move slides";
+
+export interface MoveSlidesActionPayload {
+  refId: string;
+  where: "above" | "bottom" | string;
+  moveIds: string[];
+}
+
+export interface MoveSlidesAction extends IUndoableAction<true, false> {
+  type: typeof MOVE_SLIDES;
+  payload: MoveSlidesActionPayload;
+}
+
+export function moveSlides(
+  refId: string,
+  where: "above" | "bottom" | string,
+  moveIds: string[]
+): MoveSlidesAction {
+  return {
+    type: MOVE_SLIDES,
+    payload: { refId, where, moveIds },
+    isUndoable: true,
+    skipHistory: false,
   };
 }
 
@@ -1574,6 +1655,9 @@ export type ActionTypes =
   | DeleteObjectsAction
   | AddObjectsToSelectionAction
   | RemoveObjectsFromSelectionAction
+  | MoveObjectsAction
+  | MoveLayersAction
+  | MoveSlidesAction
 
   // layer selection
   | SelectLayerAction

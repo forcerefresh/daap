@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { app } = require("electron");
 const path = require("path");
+const fetch = require("node-fetch");
 
 function checkFileExists(file) {
   return fs.promises
@@ -18,8 +19,14 @@ function getBucketPreviewPath() {
   const userDataPath = app.getPath("userData");
   return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
 }
+
+async function downloadToBuffer(url) {
+  return fetch(url).then((res) => res.buffer());
+}
+
 module.exports = {
   checkFileExists,
   getPlayerPath,
   getBucketPreviewPath,
+  downloadToBuffer,
 };

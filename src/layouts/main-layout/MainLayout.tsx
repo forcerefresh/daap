@@ -29,7 +29,6 @@ function MainLayout(props: IMainLayoutMergedProps) {
     action,
     effects,
     layoutType,
-    layoutStaticEffectsPanel,
   } = props;
 
   switch (layoutType) {
@@ -45,12 +44,9 @@ function MainLayout(props: IMainLayoutMergedProps) {
               <div className={css.layers}>{layers}</div>
             </div>
             <div>
+              <div className={css.action}>{action}</div>
               <div className={css.slides}>{slides}</div>
               <div className={css.properties}>{properties}</div>
-              {layoutStaticEffectsPanel ? (
-                <div className={css.effects}>{effects}</div>
-              ) : null}
-              <div className={css.action}>{action}</div>
             </div>
           </div>
         </div>
@@ -78,7 +74,6 @@ function MainLayout(props: IMainLayoutMergedProps) {
 
 const mapStateToProps = (state: IStore) => ({
   layoutType: state.globals.layoutType,
-  layoutStaticEffectsPanel: state.globals.layoutType === "default-layers",
 });
 
 const mapDispatchToProps = {};

@@ -338,7 +338,7 @@
     }
   },
   "globals": {
-    "layoutType": "default"
+    "layoutType": "default-layers"
   },
   "fonts": {
     "loadedFontFamilies": []

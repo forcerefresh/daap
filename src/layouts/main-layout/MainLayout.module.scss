@@ -53,14 +53,15 @@
     }
     .action {
       height: 105px;
+      min-height: 105px;
     }
   }
 }
 
 .defaultLayersStyle {
   .right {
-    width: 681px !important;
-    min-width: 681px !important;
+    width: 711px !important;
+    min-width: 711px !important;
     display: flex;
     flex-direction: row;
     box-shadow: none;
@@ -72,16 +73,18 @@
       width: 340px;
 
       &:last-child {
+        width: 370px;
         z-index: 100;
 
         .slides {
-          height: 20vh;
+          height: 30vh;
         }
         .properties {
           height: 35vh;
         }
         .action {
-          height: 10vh;
+          height: 105px;
+          min-height: 105px;
         }
         .effects {
           height: 35vh !important;

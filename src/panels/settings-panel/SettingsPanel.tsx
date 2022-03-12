@@ -96,7 +96,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
                 selectedValue={globals.layoutType}
               >
                 <Radio label="Default" value="default" />
-                <Radio label="Layers and Effects" value="default-layers" />
+                <Radio label="Extended layers" value="default-layers" />
               </RadioGroup>
             </FormGroup>
             {/*<FormGroup

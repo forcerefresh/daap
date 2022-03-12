@@ -33,8 +33,14 @@
     }
 
     .slideName {
+      vertical-align: text-bottom;
       color: #1f82c0;
       margin-left: 10px;
+      display: inline-block;
+      max-width: 140px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 
@@ -60,6 +66,20 @@
       flex-grow: 1;
       display: flex;
       align-items: center;
+    }
+
+    &.active {
+      font-weight: bolder;
+      //border-top: 1px solid #1f82c0;
+      //border-bottom: 1px solid #1f82c0;
+    }
+
+    &.selected {
+      //border: 1px solid #444;
+      background: #444;
+      //border: 1px solid rgba(0, 0, 0, 0);
+      //border-top: 1px solid #1f82c0;
+      //border-bottom: 1px solid #1f82c0;
     }
 
     .layerToggle {
@@ -159,16 +179,17 @@
     }
 
     &.active {
+      font-weight: bolder;
       //border-top: 1px solid #1f82c0;
       //border-bottom: 1px solid #1f82c0;
     }
 
     &.selected {
       //border: 1px solid #444;
-      //background: #444;
-      border: 1px solid rgba(0, 0, 0, 0);
-      border-top: 1px solid #1f82c0;
-      border-bottom: 1px solid #1f82c0;
+      background: #444;
+      //border: 1px solid rgba(0, 0, 0, 0);
+      //border-top: 1px solid #1f82c0;
+      //border-bottom: 1px solid #1f82c0;
     }
 
     .objectDescription {
@@ -202,23 +223,25 @@
     font-weight: bold;
   }
 
-  .active {
-    border: 1px solid #444;
-    background: #444;
+  /*.active {
+    font-weight: bolder; // **add
+    //**border: 1px solid #444;
+    //**background: #444;
     :global {
       .bp3-icon-delete {
         color: #555 !important;
       }
     }
-  }
+  }*/
 
-  .selected {
-    border: 1px solid #1f82c0;
-  }
+  //.selected {
+  //background: #444; // **add
+  //**border: 1px solid #1f82c0;
+  //}
 
-  .selected + .selected {
+  /*.selected + .selected {
     border-top: 1px solid #252526;
-  }
+  }*/
 
   .inlineValue {
     font-weight: bold;
@@ -266,5 +289,35 @@
   align-items: center;
   &:hover {
     background: #444444;
+  }
+}
+
+.dropObjectHandle {
+  position: relative;
+  > .dropObjectHandleLine {
+    position: absolute;
+    top: 0px;
+    height: 1px;
+    left: 0px;
+    right: 0px;
+    background: rgba(99, 99, 99, 1);
+    animation: top 1s;
+    animation: height 1s;
+    animation: background 1ms;
+  }
+  > .dropObjectHandleDropZone {
+    position: absolute;
+    top: -10px;
+    height: 20px;
+    left: 0px;
+    right: 0px;
+  }
+
+  &.dropObjectHandleOver {
+    > .dropObjectHandleLine {
+      top: -7px;
+      height: 15px;
+      background: rgba(77, 77, 77, 1);
+    }
   }
 }

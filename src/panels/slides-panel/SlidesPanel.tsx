@@ -13,6 +13,7 @@ import {
   setStagePreview,
   selectForProperties,
   selectForPropertiesProps,
+  moveSlides,
 } from "../../store/actions/actions";
 import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
@@ -23,6 +24,10 @@ import { IPreviewState } from "../../store/reducers/stage";
 import { SlideType } from "../../store/reducers/i-slides";
 import { getRealSlideDurationVisual } from "../../utils/utils";
 import { delay } from "lodash-es";
+import { SlideRow } from "./SlideRow";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -46,6 +51,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _addSlidesToSelection,
     _removeSlidesFromSelection,
     _setStagePreview,
+    _moveSlides,
   } = props;
 
   const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
@@ -105,126 +111,113 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     }, 1);
   };
 
+  // draging slides state
+  const [isDraggingSlides, setIsDraggingSlides] = useState(false);
+  const onDragingSlideChange = (isDragging: boolean) => {
+    setIsDraggingSlides(isDragging);
+  };
+
   return (
-    <div className={css.panel}>
-      <div className={css.panelHeader}>
-        <div>SLIDES</div>
-        <div>
-          <Button
-            small
-            minimal
-            active={activeSlideId === frontSlideId}
-            onClick={() => {
-              _activateSlide(frontSlideId);
-              _selectSlides([frontSlideId]);
-              _selectForProperties({ id: frontSlideId, type: "slide" });
-            }}
-          >
-            Front
-          </Button>
-          <Button
-            small
-            minimal
-            active={activeSlideId === backSlideId}
-            onClick={() => {
-              _activateSlide(backSlideId);
-              _selectSlides([backSlideId]);
-              _selectForProperties({ id: backSlideId, type: "slide" });
-            }}
-          >
-            Back
-          </Button>
-        </div>
-        <Button
-          minimal
-          onClick={() => {
-            _addNewSlide(SlideType.Normal, true);
-            scrollToBottomDelayed();
-          }}
-          className={css.addNewSlide}
-          small={true}
-          icon="add"
-        ></Button>
-      </div>
-      <div className={css.slidesHolder} ref={slidesHolderRef}>
-        {normalSlides.map((slideId: string) => {
-          return (
-            <div
-              key={slideId}
-              onClick={(event) => onSlideClick(event, slideId)}
-              className={cx(
-                css.slide,
-                {
-                  [css.selected]:
-                    selectedSlideIds.length > 0 /*1*/ &&
-                    selectedSlideIds.indexOf(slideId) !== -1,
-                },
-                {
-                  [css.propertiesActive]:
-                    selectionForProperties?.id === slideId &&
-                    selectionForProperties.type === "slide",
-                },
-                {
-                  [css.active]: slideId === activeSlideId,
-                }
-              )}
+    <>
+      <div className={css.panel}>
+        <div className={css.panelHeader}>
+          <div>SLIDES</div>
+          <div>
+            <Button
+              small
+              minimal
+              active={activeSlideId === frontSlideId}
+              onClick={() => {
+                _activateSlide(frontSlideId);
+                _selectSlides([frontSlideId]);
+                _selectForProperties({ id: frontSlideId, type: "slide" });
+              }}
             >
-              <div className={css.actionButtons}>
-                <Button
-                  minimal
-                  active={isSlideInPlay(slideId)}
-                  onClick={() => {
-                    if (isSlideInPlay(slideId)) {
-                      _setStagePreview({
-                        previewState: "stop",
-                        isPreview: false,
-                        scope: null,
-                      });
-                    } else {
-                      _setStagePreview({
-                        previewState: "play",
-                        isPreview: true,
-                        scope: {
-                          entityType: "slide",
-                          entityId: slideId,
-                        },
-                      });
-                    }
-                  }}
-                  className={css.playButton}
-                  small={true}
-                  icon={isSlideInPlay(slideId) ? "stop" : "play"}
-                ></Button>
-                {/*<Button
-                  minimal
-                  onClick={() => setShowSettingsPanelForSlideId(slideId)}
-                  className={css.slideProperties}
-                  small={true}
-                  icon="cog"
-                ></Button>*/}
-              </div>
-              <div className={css.slideDescription}>
-                <span>{slideById[slideId].name} </span>
-                <span className={css.durationLabel}>
-                  {getRealSlideDurationVisual(slideById[slideId], settings)}
-                </span>
-              </div>
-              <Button
-                minimal
-                onClick={(event: any) => {
-                  event.stopPropagation();
-                  _deleteSlideThree(slideId);
-                }}
-                className={css.deleteSlide}
-                small={true}
-                icon="delete"
-              ></Button>
-            </div>
-          );
-        })}
+              Front
+            </Button>
+            <Button
+              small
+              minimal
+              active={activeSlideId === backSlideId}
+              onClick={() => {
+                _activateSlide(backSlideId);
+                _selectSlides([backSlideId]);
+                _selectForProperties({ id: backSlideId, type: "slide" });
+              }}
+            >
+              Back
+            </Button>
+          </div>
+          <Button
+            minimal
+            onClick={() => {
+              _addNewSlide(SlideType.Normal, true);
+              scrollToBottomDelayed();
+            }}
+            className={css.addNewSlide}
+            small={true}
+            icon="add"
+          ></Button>
+        </div>
+        <div className={css.slidesHolder} ref={slidesHolderRef}>
+          {normalSlides.map((slideId: string, idx) => {
+            const slide = slideById[slideId];
+            const isLastSlide = idx === normalSlides.length - 1;
+            return (
+              <>
+                {isDraggingSlides && selectedSlideIds.indexOf(slide.id) === -1 && (
+                  <DropHandle
+                    type={"slide"}
+                    key={slide.id + "_drophandle"}
+                    refId={slide.id}
+                    where="above"
+                    onDrop={(dropItem: IDropItem) => {
+                      _moveSlides(
+                        dropItem.id,
+                        dropItem.where,
+                        dropItem.idsToMove
+                      );
+                    }}
+                  />
+                )}
+                <SlideRow
+                  key={slide.id}
+                  slide={slide}
+                  activeSlideId={activeSlideId}
+                  selectedSlideIds={selectedSlideIds}
+                  onSlideClick={onSlideClick}
+                  selectionForProperties={selectionForProperties}
+                  inPlay={isSlideInPlay(slideId)}
+                  realSlideDuration={getRealSlideDurationVisual(
+                    slide,
+                    settings
+                  )}
+                  setStagePreview={_setStagePreview}
+                  deleteSlideThree={_deleteSlideThree}
+                  onDragingChange={onDragingSlideChange}
+                />
+                {isDraggingSlides && isLastSlide && (
+                  <DropHandle
+                    type={"slide"}
+                    key={slide.id + "_drophandle_slide"}
+                    refId={slide!.id}
+                    where="bottom"
+                    onDrop={(dropItem: IDropItem) => {
+                      _moveSlides(
+                        dropItem.id,
+                        dropItem.where,
+                        dropItem.idsToMove
+                      );
+                    }}
+                  />
+                )}
+              </>
+            );
+          })}
+        </div>
+        {renderPanels()}
       </div>
-      {renderPanels()}
-    </div>
+    </>
   );
 };
 
@@ -260,6 +253,12 @@ const mapDispatchToProps = {
     setStagePreview(preview),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
+
+  _moveSlides: (
+    refId: string,
+    where: "above" | "bottom" | string,
+    moveIds: string[]
+  ) => moveSlides(refId, where, moveIds),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

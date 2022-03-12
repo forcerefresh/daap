@@ -13,12 +13,20 @@ gulp.task("bundle-player", function () {
 });
 
 gulp.task("bucket-preview-html", function () {
-  return (
-    gulp
-      .src("./player-static/bucket-preview/index.html")
-      .pipe(replace("{$VERSION}", package.version))
-      //.pipe(concat("wsplayer.js"))
-      .pipe(gulp.dest(`./dist/bucket-preview/${package.version}`))
-  );
+  return gulp
+    .src("./player-static/bucket-preview/index.html")
+    .pipe(replace("{$VERSION}", package.version))
+    .pipe(gulp.dest(`./dist/bucket-preview/${package.version}`));
 });
-gulp.task("default", gulp.series("bundle-player", "bucket-preview-html"));
+
+gulp.task("preview-with-json", function () {
+  return gulp
+    .src("./player-static/bucket-preview/preview-with-json.html")
+    .pipe(replace("{$VERSION}", package.version))
+    .pipe(gulp.dest(`./dist/bucket-preview/${package.version}`));
+});
+
+gulp.task(
+  "default",
+  gulp.series("bundle-player", "bucket-preview-html", "preview-with-json")
+);

@@ -347,7 +347,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           small={true}
           icon="add"
         >
-          Add
+          New
         </Button>
       </div>
 

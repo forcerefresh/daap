@@ -1,4 +1,4 @@
-import { forIn, omit, without } from "lodash-es";
+import { cloneDeep, forIn, omit, remove, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
@@ -7,6 +7,7 @@ import {
   DELETE_LAYERS,
   DELETE_OBJECTS,
   DELETE_SLIDE,
+  MOVE_OBJECTS,
   OPEN_PROJECT,
   UPDATE_LAYER,
 } from "../actions/actions";
@@ -97,6 +98,38 @@ export function layers(
         },
       });
     }
+    case MOVE_OBJECTS: {
+      const payload = action.payload;
+      const layerById = cloneDeep(state.layerById);
+
+      forIn(layerById, function (layer, _layerId) {
+        remove(layer.objectIds, (id) => {
+          return payload.moveIds.indexOf(id) !== -1;
+        });
+      });
+
+      // add object above object id
+      if (payload.where === "above") {
+        forIn(layerById, function (layer, _layerId) {
+          const idx = layer.objectIds.indexOf(payload.refId);
+          if (idx != -1) {
+            layer.objectIds.splice(idx, 0, ...payload.moveIds);
+          }
+        });
+      }
+
+      // add object in layer (at bottom)
+      if (payload.where === "layer") {
+        layerById[payload.refId].objectIds.splice(
+          layerById[payload.refId].objectIds.length,
+          0,
+          ...payload.moveIds
+        );
+      }
+
+      return { ...state, layerById };
+    }
+
     case OPEN_PROJECT: {
       return {
         ...action.payload.layers,

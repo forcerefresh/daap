@@ -8,18 +8,22 @@ import ActionPanel from "../../panels/action-panel/ActionPanel";
 import StagePanel from "../../panels/stage-panel/StagePanel";
 import StaticEffectPanel from "../../panels/effect-panel/StaticEffectPanel";
 import PropertiesPanelAll from "../../panels/properties-panel-all/PropertiesPanelAll";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 function Editor() {
   return (
-    <MainLayout
-      slides={<SlidesPanel />}
-      layers={<LayersPanel />}
-      properties={<PropertiesPanelAll />}
-      action={<ActionPanel />}
-      toolbar={<ToolbarPanel />}
-      content={<StagePanel />}
-      effects={<StaticEffectPanel />}
-    />
+    <DndProvider backend={HTML5Backend}>
+      <MainLayout
+        slides={<SlidesPanel />}
+        layers={<LayersPanel />}
+        properties={<PropertiesPanelAll />}
+        action={<ActionPanel />}
+        toolbar={<ToolbarPanel />}
+        content={<StagePanel />}
+        effects={<StaticEffectPanel />}
+      />
+    </DndProvider>
   );
 }
 

@@ -21,11 +21,21 @@ import {
   updateLayer,
   selectForProperties,
   selectForPropertiesProps,
+  moveObjects,
+  moveLayers,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import { cloneDeep, delay, get, includes, isEmpty, remove } from "lodash-es";
+import {
+  cloneDeep,
+  delay,
+  drop,
+  get,
+  includes,
+  isEmpty,
+  remove,
+} from "lodash-es";
 import { IObject, ObjectType } from "../../objects/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
@@ -34,6 +44,12 @@ import { getIconByType } from "../../store/reducers/settings";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 import TimelineView from "./TimelineView";
+import { ObjectRow } from "./ObjectRow";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import { DropHandle, IDropItem } from "./DropHandle";
+import { LayerRow } from "./LayerRow";
+//import { DragLayerComponent } from "./CustomDragLayer";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -66,6 +82,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _deactivateObject,
     _updateLayer,
     _selectForProperties,
+    _moveObjects,
+    _moveLayers,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -110,6 +128,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     layerId: string
   ) => {
+    console.log("SSSSSSSSSSSSSSSSSS");
     if (event.ctrlKey) {
       selectedLayerIds.indexOf(layerId) === -1
         ? _addLayersToSelection([layerId])
@@ -151,88 +170,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   const size = getIconSize(iconName);
   const icon = getResponsiveIcon(iconName, size.w, size.h, "lightgray", false);*/
 
-  const renderSelectedDevices = (layer: ILayer) => {
-    const resVis = layer.responsiveVisibility;
-    if (resVis.showAll) {
-      return <span className={css.layerResponseVisibilityAll}>ALL</span>;
-    } else if (resVis.displayOn.length === 0) {
-      return <span className={css.layerResponseVisibilityNone}>NONE</span>;
-    } else {
-      return breakpointsConfiguration.breakpointsConfiguration.map(
-        (bpConfig: any) => {
-          if (!includes(resVis.displayOn, bpConfig.type)) {
-            return null;
-          }
-          const iconName = getIconByType(bpConfig.type);
-          const size = getIconSize(iconName);
-          const iconStyle = getIconStyle(iconName);
-
-          const icon = getResponsiveIcon(
-            iconName,
-            size.w,
-            size.h,
-            "lightgray",
-            bpConfig.portrait,
-            { verticalAlign: "text-bottom", ...iconStyle }
-          );
-
-          return icon;
-        }
-      );
-    }
-  };
-
-  const renderDeviceOptions = (layer: ILayer) => {
-    return breakpointsConfiguration.breakpointsConfiguration.map(
-      (bpConfig: any) => {
-        const iconName = getIconByType(bpConfig.type);
-        const size = getIconSize(iconName);
-
-        const icon = getResponsiveIcon(
-          iconName,
-          size.w,
-          size.h,
-          "lightgray",
-          bpConfig.portrait
-        );
-
-        return (
-          <Checkbox
-            disabled={layer.responsiveVisibility.showAll}
-            checked={
-              layer.responsiveVisibility.showAll ||
-              includes(layer.responsiveVisibility.displayOn, bpConfig.type)
-            }
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              let newLayer = cloneDeep(layer);
-              remove(
-                newLayer.responsiveVisibility.displayOn,
-                (type) => type === bpConfig.type
-              );
-
-              if (event.target.checked) {
-                newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
-              }
-
-              newLayer.responsiveVisibility.showAll = false;
-              _updateLayer(newLayer);
-            }}
-          >
-            <span
-              style={{
-                marginRight: "5px",
-                verticalAlign: "middle",
-              }}
-            >
-              {icon}
-            </span>
-            {bpConfig.name}
-          </Checkbox>
-        );
-      }
-    );
-  };
-
   const layersHolderRef = useRef<HTMLDivElement | null>(null);
   const scrollToBottomDelayed = () => {
     delay(() => {
@@ -241,15 +178,25 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }, 1);
   };
 
+  // draging object state
+  const [isDraggingObjects, setIsDraggingObjects] = useState(false);
+  const onDragingObjectsChange = (isDragging: boolean) => {
+    setIsDraggingObjects(isDragging);
+  };
+
+  // draging layer state
+  const [isDraggingLayers, setIsDraggingLayers] = useState(false);
+  const onDragingLayerChange = (isDragging: boolean) => {
+    setIsDraggingLayers(isDragging);
+  };
+
   return (
     <>
       <div className={css.layerPanel}>
         <div className={css.panelHeader}>
           <div>
-            LAYERS AND OBJECTS
-            <span className={css.slideName}>
-              {slide && " [ " + slide.name + " ] "}
-            </span>
+            <span>LAYERS AND OBJECTS</span>
+            <span className={css.slideName}>[ {slide?.name} ]</span>
           </div>
           <div>
             <Button
@@ -266,251 +213,91 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
           </div>
         </div>
         <div className={css.layersHolder} ref={layersHolderRef}>
-          {layerArr?.map((layer) => {
+          {layerArr?.map((layer, idx) => {
+            const isLastLayer = idx === layerArr.length - 1;
             return (
-              <div
-                key={layer.id}
-                className={cx(css.layer, {
-                  [css.selected]:
-                    selectedLayerIds.length > 0 /*1*/ &&
-                    selectedLayerIds.indexOf(layer.id) !== -1,
-                })}
-              >
-                <div
-                  key={layer?.id}
-                  onClick={(event) => onLayerClick(event, layer.id)}
-                  className={cx(css.layerInner, {
-                    [css.active]: activeLayerId === layer.id,
-                    [css.propertiesActive]:
-                      selectionForProperties?.id === layer.id &&
-                      selectionForProperties.type === "layer", //activeLayerId === layer.id,
-                  })}
-                >
-                  <div>
-                    <Button
-                      minimal
-                      onClick={(event: any) => {
-                        event.stopPropagation();
-                        toggleLayer(layer.id);
-                      }}
-                      className={cx(css.layerToggle, {
-                        /*[css.layerOpen]: openLayerById[layer.id],*/
-                      })}
-                      small={true}
-                      icon={
-                        openLayerById[layer.id] ? "folder-open" : "folder-close"
-                      }
-                    ></Button>
-
-                    {/*<Button
-                      minimal
-                      onClick={(event: any) => {
-                        event.stopPropagation();
-                        setShowEffectPanelForId({
-                          id: layer.id,
-                          type: "layer",
-                        });
-                      }}
-                      className={css.slideEffect}
-                      small={true}
-                      icon="walk"
-                    ></Button>*/}
-
-                    {/*layer.definition.values.hasLayoutChildren && (
-                      <Icon icon="page-layout" className={css.layoutIcon} />
-                    )*/}
-                    {/*<Button
-                      minimal
-                      onClick={(event: any) => {
-                        event.stopPropagation();
-                        _forceActivateLayer(layer.id);
-                        _selectLayers([layer.id]);
-                      }}
-                      className={css.slideProperties}
-                      small={true}
-                      icon="properties"
-                    ></Button>*/}
-                    <div className={css.layerName}>{layer.name}</div>
-
-                    <div className={css.layerResponseVisibility}>
-                      <Popover
-                        position="bottom"
-                        usePortal={true}
-                        minimal
-                        popoverClassName={css.devicePopup}
-                      >
-                        <div className={css.devicesHolder}>
-                          {renderSelectedDevices(layer)}{" "}
-                          <Icon
-                            icon="caret-down"
-                            style={{ marginBottom: "2px" }}
-                          />
-                        </div>
-                        <div className={css.devicePopup}>
-                          <div
-                            style={{
-                              textAlign: "left",
-                              marginBottom: "15px",
-                              color: "gray",
-                            }}
-                          >
-                            {layer.name}
-                          </div>
-
-                          <Checkbox
-                            checked={layer.responsiveVisibility.showAll}
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              const newLayer = cloneDeep(layer);
-                              newLayer.responsiveVisibility.showAll =
-                                event.target.checked;
-                              _updateLayer(newLayer);
-                            }}
-                          >
-                            <span
-                              style={{
-                                marginRight: "5px",
-                                verticalAlign: "middle",
-                              }}
-                            >
-                              {null}
-                            </span>
-                            ALL
-                          </Checkbox>
-                          <hr />
-                          {renderDeviceOptions(layer)}
-                        </div>
-                      </Popover>
-                    </div>
-                    {/*<div className={css.objectCount}>
-                      Objects: {layer.objectIds.length}
-                    </div>*/}
-                  </div>
-                  <div>
-                    <Button
-                      minimal
-                      onClick={(event: any) => {
-                        event.stopPropagation();
-                        _deleteLayers([layer.id]);
-                      }}
-                      className={css.deleteLayer}
-                      small={true}
-                      icon="delete"
-                    ></Button>
-                  </div>
-                </div>
+              <div key={layer.id} className={cx(css.layer, {})}>
+                {isDraggingLayers && selectedLayerIds.indexOf(layer.id) === -1 && (
+                  <DropHandle
+                    type={"layer"}
+                    key={layer.id + "_drophandle"}
+                    refId={layer.id}
+                    where="above"
+                    onDrop={(dropItem: IDropItem) => {
+                      _moveLayers(
+                        dropItem.id,
+                        dropItem.where,
+                        dropItem.idsToMove
+                      );
+                    }}
+                  />
+                )}
+                <LayerRow
+                  layer={layer}
+                  isOpen={openLayerById[layer.id]}
+                  breakpointsConfiguration={breakpointsConfiguration}
+                  activeLayerId={activeLayerId}
+                  selectedLayerIds={selectedLayerIds}
+                  updateLayer={_updateLayer}
+                  deleteLayers={_deleteLayers}
+                  onLayerClick={onLayerClick}
+                  selectionForProperties={selectionForProperties}
+                  toggleLayer={toggleLayer}
+                  moveObjects={_moveObjects}
+                  onDragingChange={onDragingLayerChange}
+                />
                 {openLayerById[layer.id] && layer.objectIds.length > 0 ? (
                   <>
-                    {layer.objectIds.map((objectId) => {
+                    {layer.objectIds.map((objectId, idx) => {
                       const object = objectById[objectId];
+                      const isLast = idx === layer.objectIds.length - 1;
 
                       return (
-                        <div
-                          key={objectId}
-                          onClick={(event) => {
-                            onObjectClick(event, objectId);
-                          }}
-                          className={cx(css.objectHolder, {
-                            [css.active]: activeObjectId === objectId,
-                            [css.propertiesActive]:
-                              selectionForProperties?.id === objectId &&
-                              selectionForProperties.type === "object", // activeObjectId === objectId,
-                            [css.selected]:
-                              selectedObjectIds.length > 0 /*1*/ &&
-                              selectedObjectIds.indexOf(objectId) !== -1,
-                          })}
-                        >
-                          <div className={css.objectHolderInner}>
-                            <div className={css.actionButtons}>
-                              {/*!layoutStaticEffectsPanel && (
-                                <Button
-                                  active={object.id === showEffectPanelForId.id}
-                                  minimal
-                                  onClick={(event: any) => {
-                                    event.stopPropagation();
-                                    setShowEffectPanelForId({
-                                      id: objectId,
-                                      type: "object",
-                                    });
-                                  }}
-                                  small={true}
-                                  icon="walk"
-                                ></Button>
-                                )*/}
-                              <Button
-                                active={!object.isVisible}
-                                minimal
-                                onClick={(event: any) => {
-                                  event.stopPropagation();
-                                  _updateObject({
-                                    ...object,
-                                    isVisible: !object.isVisible,
-                                  });
+                        <>
+                          {isDraggingObjects &&
+                            selectedObjectIds.indexOf(object.id) === -1 && (
+                              <DropHandle
+                                type={"object"}
+                                key={object.id + "_drophandle"}
+                                refId={object.id}
+                                where="above"
+                                onDrop={(dropItem: IDropItem) => {
+                                  _moveObjects(
+                                    dropItem.id,
+                                    dropItem.where,
+                                    dropItem.idsToMove
+                                  );
                                 }}
-                                small={true}
-                                icon={object.isVisible ? "eye-open" : "eye-off"}
-                              ></Button>
-                              <Button
-                                minimal
-                                active={object.isLocked}
-                                onClick={(event: any) => {
-                                  event.stopPropagation();
-                                  _updateObject({
-                                    ...object,
-                                    isLocked: !object.isLocked,
-                                  });
-                                }}
-                                small={true}
-                                icon={object.isLocked ? "lock" : "unlock"}
-                                className={cx({
-                                  [css.locked]: object.isLocked,
-                                })}
-                              ></Button>
-                            </div>
-                            <div className={css.objectDescription}>
-                              <div>{objectById[objectId].name} </div>
-                              {/*<div>
-                                delay:{" "}
-                                <span className={css.inlineValue}>
-                                  {get(object, "transitions.in.delay")}ms
-                                </span>
-                                , in:{" "}
-                                <span className={css.inlineValue}>
-                                  {get(object, "transitions.in.duration")}ms
-                                </span>
-                              </div>
-                              {get(object, "transitions.out.duration") && (
-                                <div>
-                                  out:
-                                  <span className={css.inlineValue}>
-                                    {get(object, "transitions.out.duration")}ms
-                                  </span>
-                                  , gap:{" "}
-                                  <span className={css.inlineValue}>
-                                    {get(object, "transitions.in.delay")}ms
-                                  </span>
-                                </div>
-                              )} */}
-                            </div>
-                            <div>
-                              <Button
-                                minimal
-                                onClick={(event: any) => {
-                                  event.stopPropagation();
-                                  _deleteObjects([objectId]);
-                                }}
-                                className={css.deleteObject}
-                                small={true}
-                                icon="delete"
-                              ></Button>
-                            </div>
-                          </div>
-                          <TimelineView
+                              />
+                            )}
+                          <ObjectRow
+                            key={object.id}
                             object={object}
+                            activeObjectId={activeObjectId}
+                            selectedObjectIds={selectedObjectIds}
+                            selectionForProperties={selectionForProperties}
+                            updateObject={_updateObject}
+                            deleteObjects={_deleteObjects}
+                            onObjectClick={onObjectClick}
                             slideDuration={slide?.duration.customValue || 1}
-                          ></TimelineView>
-                        </div>
+                            onDragingChange={onDragingObjectsChange}
+                          />
+                          {isDraggingObjects && isLast && (
+                            <DropHandle
+                              type={"object"}
+                              key={object.id + "_drophandle_layer"}
+                              refId={layer.id}
+                              where="layer"
+                              onDrop={(dropItem: IDropItem) => {
+                                _moveObjects(
+                                  dropItem.id,
+                                  dropItem.where,
+                                  dropItem.idsToMove
+                                );
+                              }}
+                            />
+                          )}
+                        </>
                       );
                     })}
                   </>
@@ -521,6 +308,21 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   >
                     ... objects {layer.objectIds.length}
                   </div>
+                )}
+                {isDraggingLayers && isLastLayer && (
+                  <DropHandle
+                    type={"layer"}
+                    key={layer.id + "_drophandle_slide"}
+                    refId={slide!.id}
+                    where="slide"
+                    onDrop={(dropItem: IDropItem) => {
+                      _moveLayers(
+                        dropItem.id,
+                        dropItem.where,
+                        dropItem.idsToMove
+                      );
+                    }}
+                  />
                 )}
               </div>
             );
@@ -583,6 +385,17 @@ const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
   _deactivateObject: (objectId: string) => deactivateObject(objectId),
+  _moveObjects: (
+    refId: string,
+    where: "above" | "below" | "layer" | "slide" | "bottom",
+    moveIds: string[]
+  ) => moveObjects(refId, where, moveIds),
+
+  _moveLayers: (
+    refId: string,
+    where: "above" | "below" | "layer" | "slide" | "bottom",
+    moveIds: string[]
+  ) => moveLayers(refId, where, moveIds),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);
