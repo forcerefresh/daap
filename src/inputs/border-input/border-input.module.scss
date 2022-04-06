@@ -1,0 +1,16 @@
+.inlineRow {
+  :global {
+    .bp3-form-group,
+    .bp3-label {
+      display: inline-block;
+      vertical-align: text-bottom;
+    }
+    .bp3-label {
+      margin-bottom: 10px;
+    }
+  }
+
+  > *:not(:first-child) {
+    margin-left: 8px;
+  }
+}

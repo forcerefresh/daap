@@ -73,8 +73,6 @@ export const CoverPlacementInputForm: React.FC<
           </div>
         </div>
       </div>
-
-      <hr />
     </>
   );
 };

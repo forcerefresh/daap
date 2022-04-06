@@ -38,7 +38,12 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
         <Tab
           id="properties-panel"
           title="Properties"
-          panel={<PropertiesPanel hideHeader className={css.propertiesPanel} />}
+          panel={
+            <PropertiesPanel
+              hideHeader
+              className={"propertiesPanel " + css.propertiesPanel}
+            />
+          }
         />
         <Tab
           id="effects-panel"
@@ -51,7 +56,10 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
             </>
           }
           panel={
-            <StaticEffectPanel hideHeader className={css.propertiesPanel} />
+            <StaticEffectPanel
+              hideHeader
+              className={"propertiesPanel " + css.propertiesPanel}
+            />
           }
         />
 

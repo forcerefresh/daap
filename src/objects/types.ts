@@ -1,3 +1,4 @@
+import { RGBColor } from "react-color";
 import {
   IInputMetadataValues,
   InputType,
@@ -178,7 +179,7 @@ export const navigationDefinition: NavigationTuple = [
             defaultValue: "",
           },
           {
-            displayName: "Target",
+            displayName: "Url",
             propertyName: "linkHref",
             inputType: InputType.TEXT,
             value: "",
@@ -318,6 +319,7 @@ export interface IObject<T extends {} = {}>
       bl?: string;
       br?: string;
     };
+    backgroundColor?: RGBColor;
   };
 }
 export interface IGoToSlideAction {
@@ -341,8 +343,8 @@ export interface ITransitions {
 }
 
 export interface ITransition {
-  delay: number;
-  duration: number;
+  delay: string;
+  duration: string;
   timeDistribution?: number;
   ease?: string;
   childEase?: string;

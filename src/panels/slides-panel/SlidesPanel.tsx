@@ -1,6 +1,13 @@
 import React, { useRef, useState } from "react";
 import cx from "classnames";
-import { Button, Colors, Portal } from "@blueprintjs/core";
+import {
+  Button,
+  Colors,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  Portal,
+} from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -14,6 +21,7 @@ import {
   selectForProperties,
   selectForPropertiesProps,
   moveSlides,
+  duplicateSlides,
 } from "../../store/actions/actions";
 import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
@@ -28,6 +36,8 @@ import { SlideRow } from "./SlideRow";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -52,6 +62,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _removeSlidesFromSelection,
     _setStagePreview,
     _moveSlides,
+    _duplicatSlides,
   } = props;
 
   const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
@@ -117,6 +128,37 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     setIsDraggingSlides(isDragging);
   };
 
+  const moreMenu = (
+    <Menu>
+      <MenuItem
+        icon={"duplicate"}
+        text="Duplicate selected"
+        disabled={selectedSlideIds.length === 0}
+        onClick={() => {
+          _duplicatSlides(selectedSlideIds);
+        }}
+      />
+      <MenuDivider />
+      <MenuItem
+        icon={"delete"}
+        text="Delete selected"
+        disabled={selectedSlideIds.length === 0}
+        onClick={() => {
+          selectedSlideIds.forEach((slideId) => {
+            _deleteSlideThree(slideId);
+          });
+          AppToaster.show({
+            intent: "warning",
+            message:
+              selectedSlideIds.length === 1
+                ? "Slide has been deleted."
+                : "Multiple slides has been deleted.",
+          });
+        }}
+      />
+    </Menu>
+  );
+
   return (
     <>
       <div className={css.panel}>
@@ -148,16 +190,33 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               Back
             </Button>
           </div>
-          <Button
-            minimal
-            onClick={() => {
-              _addNewSlide(SlideType.Normal, true);
-              scrollToBottomDelayed();
-            }}
-            className={css.addNewSlide}
-            small={true}
-            icon="add"
-          ></Button>
+          <div>
+            <Button
+              minimal
+              onClick={() => {
+                _addNewSlide(SlideType.Normal, true);
+                scrollToBottomDelayed();
+              }}
+              className={css.addNewSlide}
+              small={true}
+              icon="add"
+            ></Button>
+            <Popover2
+              content={moreMenu}
+              placement="left-end"
+              shouldReturnFocusOnClose={false}
+              interactionKind={Popover2InteractionKind.CLICK}
+              hoverCloseDelay={100}
+              hoverOpenDelay={150}
+            >
+              <Button
+                minimal
+                className={css.moreBtn}
+                small={true}
+                icon="more"
+              ></Button>
+            </Popover2>
+          </div>
         </div>
         <div className={css.slidesHolder} ref={slidesHolderRef}>
           {normalSlides.map((slideId: string, idx) => {
@@ -193,7 +252,13 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     settings
                   )}
                   setStagePreview={_setStagePreview}
-                  deleteSlideThree={_deleteSlideThree}
+                  deleteSlideThree={(slideId: string) => {
+                    _deleteSlideThree(slideId);
+                    AppToaster.show({
+                      intent: "warning",
+                      message: "Slide has been deleted.",
+                    });
+                  }}
                   onDragingChange={onDragingSlideChange}
                 />
                 {isDraggingSlides && isLastSlide && (
@@ -244,6 +309,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {
   _addNewSlide: addNewSlide,
+  _duplicatSlides: (ids: string[]): any => duplicateSlides(ids),
   _deleteSlideThree: (id: string): any => deleteSlideThree(id),
   _activateSlide: (id: string): any => activateSlide(id),
   _selectSlides: (ids: string[]): any => selectSlides(ids),

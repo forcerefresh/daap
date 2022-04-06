@@ -24,6 +24,13 @@ import {
 } from "../inputs/types";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
 import { FormType } from "../utils/form-layout/i-form-layout";
+import {
+  CommonPropertiesTuple,
+  CommonPropertiesValues,
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "./common-properties";
 import { getObjectDefinition } from "./objects-factory";
 import {
   ICommonObjectProperties,
@@ -145,8 +152,8 @@ export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
     userId: "",
     name,
     duration: {
-      inheritFrom: "custom",
-      customValue: 20000,
+      inheritFrom: "inherit",
+      customValue: "20s",
     },
     layerIds: [],
     nextLayerIdCounter: 1,
@@ -293,6 +300,7 @@ function createRichTextObject(
       value: initialValue?.fontSize || "1em",
       defaultValue: "1em",
     },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: RichTextValues = {
@@ -304,6 +312,7 @@ function createRichTextObject(
     },
     color: { r: 255, g: 255, b: 255, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
+    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -313,7 +322,7 @@ function createRichTextObject(
       type: ObjectType.RICH_TEXT,
       properties,
       values,
-      valuesMetadata: {},
+      valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
     },
   };
 }
@@ -1378,6 +1387,7 @@ function createVideoObject(
         isPlaceholder: true,
       },
     },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: VideoValues = {
@@ -1387,6 +1397,7 @@ function createVideoObject(
       height: 540,
       isPlaceholder: true,
     },
+    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -1396,7 +1407,12 @@ function createVideoObject(
       type: ObjectType.VIDEO,
       properties,
       values,
-      valuesMetadata: {},
+      valuesMetadata: {
+        ...{
+          /* dodati meta ovde*/
+        },
+        ...getCommonPropertiesMetadataValues(),
+      },
     },
   };
 }
@@ -1470,6 +1486,7 @@ function createSvgObject(
         },
       ],
     },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: SvgValues = {
@@ -1482,11 +1499,13 @@ function createSvgObject(
     hasFillAndStroke: false,
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 1 },
+    ...getCommonPropertiesValues(),
   };
 
   const valuesMetadata: { [key: string]: IInputMetadataValues } = {
     fill: { exportForWizard: false, disabled: false },
     stroke: { exportForWizard: false, disabled: false },
+    ...getCommonPropertiesMetadataValues(),
   };
 
   return {
@@ -1690,14 +1709,22 @@ function createFrameObject(
 ): Omit<IObject<FrameProperties>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(ObjectType.FRAME);
 
+  const properties: CommonPropertiesTuple = [
+    ...getCommonObjectPropertiesDefinition(),
+  ];
+
+  const values: CommonPropertiesValues = {
+    ...getCommonPropertiesValues(),
+  };
+
   return {
     ...object,
     definition: {
       id: uuid(),
       type: ObjectType.FRAME,
-      properties: [],
-      values: {},
-      valuesMetadata: {},
+      properties,
+      values,
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }
@@ -1710,4 +1737,28 @@ function getDefaultCoveragePlacement(): ICoverPlacementValue {
     positionHorizontal: "center",
     positionVertical: "center",
   };
+}
+
+export function getBorderOptions() {
+  return [
+    { label: "solid", value: "solid" },
+    { label: "dotted", value: "dotted" },
+    { label: "dashed", value: "dashed" },
+    { label: "double", value: "double" },
+    { label: "groove", value: "groove" },
+    { label: "ridge", value: "ridge" },
+    { label: "inset", value: "inset" },
+    { label: "outset", value: "outset" },
+    { label: "none", value: "none" },
+    { label: "hidden", value: "hidden" },
+  ];
+}
+
+export function getOverflowOptions() {
+  return [
+    { label: "Visible", value: "visible" },
+    { label: "Hidden", value: "hidden" },
+    { label: "Scroll", value: "scroll" },
+    { label: "Auto", value: "auto" },
+  ];
 }

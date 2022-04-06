@@ -30,7 +30,7 @@ export default class Smoke {
   context: any = null;
 
   polyfillAnimFrame =
-    window.requestAnimationFrame || window.webkitRequestAnimationFrame;
+    window.requestAnimationFrame || (window as any).webkitRequestAnimationFrame;
 
   constructor(context: any, color: any) {
     this.context = context;

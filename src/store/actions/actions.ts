@@ -5,7 +5,14 @@ import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
-import { cloneDeep, delay, differenceWith, isEqual, once } from "lodash-es";
+import {
+  cloneDeep,
+  delay,
+  differenceWith,
+  intersection,
+  isEqual,
+  once,
+} from "lodash-es";
 import { IObject, ItemType, ObjectType } from "../../objects/types";
 import {
   createObject,
@@ -42,6 +49,7 @@ import { IFormState } from "../reducers/i-uiforms";
 import { getObjectDefinition } from "../../objects/objects-factory";
 import { ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
+import { humanizeSting } from "../../utils/utils";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -107,8 +115,8 @@ export function addNewSlide(
       userId: "",
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
-        inheritFrom: "custom",
-        customValue: 20000,
+        inheritFrom: "inherit",
+        customValue: "20s",
       },
       layerIds: [],
       nextLayerIdCounter: 1,
@@ -186,6 +194,72 @@ export function updateSlide(slide: ISlide): UpdateSlideAction {
   };
 }
 // ****
+
+// duplicate slides
+export const DUPLICATE = "Duplicate";
+
+export interface DuplicateSlidesAction extends IUndoableAction<true> {
+  type: typeof DUPLICATE;
+  payload: IDuplicateSchema;
+}
+
+export type IDuplicateSchema = {
+  fromId: string;
+  toId: string | null;
+  skipCreate?: boolean;
+  childs: IDuplicateSchema;
+}[];
+
+function _duplicateSlides(
+  duplicateSlidesSchema: IDuplicateSchema
+): DuplicateSlidesAction {
+  return {
+    type: DUPLICATE,
+    payload: duplicateSlidesSchema,
+    isUndoable: true,
+  };
+}
+
+export function duplicateSlides(slideIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const duplicateSlidesSchema: IDuplicateSchema = [];
+
+    slideIds.forEach((slideId) => {
+      const duplicateLayersSchema: IDuplicateSchema = [];
+      const layerIds = getState().project.slides.slideById[slideId].layerIds;
+      layerIds.forEach((layerId) => {
+        const duplicateObjectSchema: IDuplicateSchema = [];
+
+        const objectIds =
+          getState().project.layers.layerById[layerId].objectIds;
+
+        objectIds.forEach((objectId) => {
+          duplicateObjectSchema.push({
+            fromId: objectId,
+            toId: uuid(),
+            childs: [],
+          });
+        });
+
+        duplicateLayersSchema.push({
+          fromId: layerId,
+          toId: uuid(),
+          childs: duplicateObjectSchema,
+        });
+      });
+
+      duplicateSlidesSchema.push({
+        fromId: slideId,
+        toId: uuid(),
+        childs: duplicateLayersSchema,
+      });
+    });
+
+    console.log(duplicateSlidesSchema);
+
+    dispatch(_duplicateSlides(duplicateSlidesSchema));
+  };
+}
 
 // **** LAYERS ACTIONS
 
@@ -300,7 +374,71 @@ export function deleteLayers(layerIds: string[]): DeleteLayersAction {
   };
 }
 
+export function deleteLayersThree(layerIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectIds = getState().project.objects.allObjects.filter(
+      (objectId: string) =>
+        layerIds.indexOf(
+          getState().project.objects.objectById[objectId].layerId
+        ) !== -1
+    );
+
+    dispatch(deleteObjects(objectIds));
+    dispatch(deleteLayers(layerIds));
+  };
+}
+
 // ******
+
+// duplicate layers
+
+export function duplicateLayers(layerIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const duplicateSlidesSchema: IDuplicateSchema = [];
+
+    const allSlides = getState().project.slides.allSlides;
+    allSlides.forEach((allSlideId) => {
+      const duplicateLayersSchema: IDuplicateSchema = [];
+      const allLayerIds =
+        getState().project.slides.slideById[allSlideId].layerIds;
+      const currentLayersIds = intersection(allLayerIds, layerIds);
+
+      currentLayersIds.forEach((currentLayerId) => {
+        const duplicateObjectSchema: IDuplicateSchema = [];
+
+        const objectIds =
+          getState().project.layers.layerById[currentLayerId].objectIds;
+
+        objectIds.forEach((objectId) => {
+          duplicateObjectSchema.push({
+            fromId: objectId,
+            toId: uuid(),
+            childs: [],
+          });
+        });
+
+        duplicateLayersSchema.push({
+          fromId: currentLayerId,
+          toId: uuid(),
+          childs: duplicateObjectSchema,
+        });
+      });
+
+      duplicateSlidesSchema.push({
+        fromId: allSlideId,
+        toId: allSlideId,
+        skipCreate: true,
+        childs: duplicateLayersSchema,
+      });
+    });
+
+    console.log(duplicateSlidesSchema);
+
+    dispatch(_duplicateSlides(duplicateSlidesSchema));
+  };
+}
+
+//*****
 
 export const UPDATE_LAYER = "Update layer";
 
@@ -850,7 +988,9 @@ export function addNewObject(
       }),
       layerId,
     };
-    object.name = type + " " + Math.round(Math.random() * 100);
+
+    const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
+    object.name = humanizeSting(type) + " " + nextNameIdx;
 
     switch (object.type) {
       case ObjectType.BUTTON: {
@@ -896,6 +1036,57 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
     type: DELETE_OBJECTS,
     payload: objectIds,
     isUndoable: true,
+  };
+}
+
+// ******
+
+// duplicate objects
+
+export function duplicateObjects(objectIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const duplicateSlidesSchema: IDuplicateSchema = [];
+
+    const allSlides = getState().project.slides.allSlides;
+    allSlides.forEach((allSlideId) => {
+      const duplicateLayersSchema: IDuplicateSchema = [];
+      const allLayerIds =
+        getState().project.slides.slideById[allSlideId].layerIds;
+      //const currentLayersIds = intersection(allLayerIds, layerIds);
+      allLayerIds.forEach((allLayerId) => {
+        const duplicateObjectSchema: IDuplicateSchema = [];
+        const allObjectIds =
+          getState().project.layers.layerById[allLayerId].objectIds;
+
+        const currentObjectsIds = intersection(allObjectIds, objectIds);
+
+        currentObjectsIds.forEach((objectId) => {
+          duplicateObjectSchema.push({
+            fromId: objectId,
+            toId: uuid(),
+            childs: [],
+          });
+        });
+
+        duplicateLayersSchema.push({
+          fromId: allLayerId,
+          toId: allLayerId,
+          skipCreate: true,
+          childs: duplicateObjectSchema,
+        });
+      });
+
+      duplicateSlidesSchema.push({
+        fromId: allSlideId,
+        toId: allSlideId,
+        skipCreate: true,
+        childs: duplicateLayersSchema,
+      });
+    });
+
+    console.log(duplicateSlidesSchema);
+
+    dispatch(_duplicateSlides(duplicateSlidesSchema));
   };
 }
 
@@ -1342,11 +1533,11 @@ export const UPDATE_SLIDE_DURATION = "Update slide duration";
 
 export interface UpdateSlideDurationAction extends IUndoableAction<true> {
   type: typeof UPDATE_SLIDE_DURATION;
-  payload: number;
+  payload: string;
 }
 
 export function updateSlideDuration(
-  duration: number
+  duration: string
 ): UpdateSlideDurationAction {
   return {
     type: UPDATE_SLIDE_DURATION,
@@ -1642,6 +1833,7 @@ export type ActionTypes =
   | AddSlideAction
   | DeleteSlideAction
   | UpdateSlideAction
+  | DuplicateSlidesAction
 
   // layer
   | AddLayerAction

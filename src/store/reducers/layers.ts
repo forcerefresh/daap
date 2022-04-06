@@ -7,6 +7,7 @@ import {
   DELETE_LAYERS,
   DELETE_OBJECTS,
   DELETE_SLIDE,
+  DUPLICATE,
   MOVE_OBJECTS,
   OPEN_PROJECT,
   UPDATE_LAYER,
@@ -53,6 +54,23 @@ export function layers(
         },
       });
     }
+    case DUPLICATE: {
+      // Note: this part duplicate object
+      const newState = cloneDeep(state);
+      const dS = action.payload;
+      dS.forEach((slideItem) => {
+        slideItem.childs.forEach((layerItem) => {
+          const fromLayer = state.layerById[layerItem.fromId];
+          const toLayer = cloneDeep(fromLayer);
+          toLayer.id = layerItem.toId!;
+          toLayer.name += " (copy)";
+          toLayer.objectIds = layerItem.childs.map((item) => item.toId!);
+          newState.allLayers.push(toLayer.id);
+          newState.layerById[toLayer.id] = toLayer;
+        });
+      });
+      return newState;
+    }
     case DELETE_LAYERS: {
       const layersToDeleteIds = action.payload;
 
@@ -73,6 +91,21 @@ export function layers(
 
     case DELETE_OBJECTS: {
       const deleteObjectIds = action.payload;
+      const newState = cloneDeep(state);
+
+      forIn(newState.layerById, function (layer, _layerId) {
+        remove(layer.objectIds, (objectId) => {
+          return deleteObjectIds.indexOf(objectId) !== -1;
+        });
+      });
+
+      return newState;
+
+      forIn(newState.layerById, function (layer, _layerId) {
+        if (layer.objectIds.indexOf(deleteObjectIds[0]) !== -1) {
+          layerId = _layerId;
+        }
+      });
 
       // find layerId by first delete object id (all delete object ids belong to one layer)
       let layerId: string = EmptyID;

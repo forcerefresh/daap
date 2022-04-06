@@ -16,6 +16,7 @@ import {
   NavigationType,
 } from "../../objects/types";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
+import { convertTimeUnitToMs } from "../../utils/utils";
 import {
   createTimelineForExecutionCode,
   createTimelineForObject,
@@ -250,8 +251,15 @@ export class Player {
       //prevSlideTimeline.kill();
     }
 
-    const bettwenSlideEff: ISlideTransition | undefined =
+    // TODO: zasto prva, proveriti sta ovo radi
+    const firstSlideTransition =
       this.normalSlideDataArr?.[slideIdx]?.slide?.transitions.slide?.[0];
+    const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
+      ? {
+          effect: firstSlideTransition?.effect!,
+          duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
+        }
+      : undefined;
 
     //console.log(bettwenSlideEff);
 
@@ -514,7 +522,7 @@ export class Player {
     // add slide duration timeline (we ise it to kill if effects lats more than set time)
     const slideDurationTimeline = gsap.timeline({
       id: "slideDurationTimeline",
-      duration: data.slide.duration.customValue / 1000,
+      duration: convertTimeUnitToMs(data.slide.duration.customValue) / 1000,
     });
     slideTimeline.add(slideDurationTimeline);
 
@@ -568,8 +576,14 @@ export class Player {
     const nextSlideIdx = this.getNextSlideIdx(slideIdx);
 
     // 0. get effect definition
-    const bettwenSlideEff: ISlideTransition | undefined =
+    const firstSlideTransition =
       this.normalSlideDataArr?.[nextSlideIdx]?.slide?.transitions.slide?.[0];
+    const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
+      ? {
+          effect: firstSlideTransition?.effect!,
+          duration: convertTimeUnitToMs(firstSlideTransition?.duration),
+        }
+      : undefined;
 
     // create breakpoint for slide transition
     // 1. if no slide transition set to 0
@@ -584,7 +598,11 @@ export class Player {
     // trigger
     const transitionTween = gsap.to(
       {},
-      { duration: (data.slide.duration.customValue - overlap) / 1000 }
+      {
+        duration:
+          (convertTimeUnitToMs(data.slide.duration.customValue) - overlap) /
+          1000,
+      }
     );
     slideTimeline.add(transitionTween, 0);
   }
@@ -603,8 +621,17 @@ export class Player {
       //console.log(newSlideIdx);
 
       // 0. get effect definition
-      const bettwenSlideEff: ISlideTransition | undefined =
+      /*const bettwenSlideEff: ISlideTransition | undefined =
+        this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];*/
+      const firstSlideTransition =
         this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];
+      const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
+        ? {
+            effect: firstSlideTransition?.effect!,
+            duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
+          }
+        : undefined;
+
       // create breakpoint for slide transition
       // 1. if no slide transition set to 0
       let overlap = 0;
@@ -619,8 +646,9 @@ export class Player {
       );
 
       const overlapPosition =
-        this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue! -
-        overlap;
+        convertTimeUnitToMs(
+          this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
+        ) - overlap;
 
       console.log(overlapPosition);
       console.log(prevTl.time());

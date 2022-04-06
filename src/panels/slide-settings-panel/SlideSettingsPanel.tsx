@@ -7,6 +7,7 @@ import {
   getNumericFiled,
   getSelectField,
   getTextField,
+  getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
@@ -134,16 +135,17 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               _updateSlide(obj);
             }
           )}
-          {getNumericFiled(
+          {getUnitNumericFiled(
             " ",
             getRealSlideDuration(slide, settings),
-            (value: number) => {
+            (value: string) => {
               const obj = cloneDeep(slide);
               obj.duration.customValue = value;
               _updateSlide(obj as any as ISlide);
             },
             undefined,
-            { disabled: slide.duration.inheritFrom === "inherit" }
+            { disabled: slide.duration.inheritFrom === "inherit" },
+            ["ms", "s"]
           )}
 
           {getSelectField(

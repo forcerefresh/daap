@@ -51,7 +51,10 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               }
             }}
           >
-            <SVG src={deff.meta.icon || ""} />
+            <div style={{ minHeight: "40px" }}>
+              <SVG src={deff.meta.icon || ""} />
+            </div>
+
             <h3>{deff.meta.name}</h3>
             <p>{deff.meta.description}</p>
           </Card>

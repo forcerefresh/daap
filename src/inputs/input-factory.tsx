@@ -45,6 +45,7 @@ import { LayoutChildrenInputForm } from "./layout-children-input/layout-children
 import { Breakpoints } from "../store/reducers/i-settings";
 import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
 import { InfoInputForm } from "./info-input/info-input";
+import { BorderInputForm } from "./border-input/border-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -127,6 +128,16 @@ export function getInputForm<T>(
     case InputType.BORDER_COLOR: {
       return (
         <BorderColorInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.BORDER: {
+      return (
+        <BorderInputForm
           key={key}
           {...inputProps}
           onChange={onChange}

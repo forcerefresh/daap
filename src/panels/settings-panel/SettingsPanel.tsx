@@ -165,7 +165,7 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = {
-  _updateSlideDuration: (newValue: number) => updateSlideDuration(newValue),
+  _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),
   _updateGlobalConfiguration: (globals: Partial<IGlobals>) =>
     updateGlobalConfiguration(globals),
 };

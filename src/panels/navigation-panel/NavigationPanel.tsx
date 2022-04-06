@@ -112,7 +112,10 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   return (
-    <div className={classnames(css.propertiesPanel)} key={object?.id}>
+    <div
+      className={classnames("propertiesPanel", css.propertiesPanel)}
+      key={object?.id}
+    >
       <div className={css.propertiesHolder}>{renderObject()}</div>
     </div>
   );

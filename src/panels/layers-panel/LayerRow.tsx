@@ -84,7 +84,7 @@ export function LayerRow(props: ILayerRowProps) {
   }, [isDragging]);
 
   const dropHandler = (item: any, monitor: any) => {
-    moveObjects(layer.id, "layer", item.selectedObjectIds);
+    moveObjects(layer.id, "layer", item.ids);
   };
 
   const [{ isOver, item }, drop] = useDrop<any, any, any>(() => ({

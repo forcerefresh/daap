@@ -79,7 +79,7 @@ export interface Breakpoints {
 }
 export interface ISettings {
   // slide
-  slideDuration: number;
+  slideDuration: string;
   sliderBackgroundColor: RGBColor;
   //preview
   pageBackgroundColor: RGBColor;

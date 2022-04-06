@@ -30,8 +30,14 @@
   box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
 
   .panelName {
+    vertical-align: text-bottom;
     color: #1f82c0;
     margin-left: 10px;
+    display: inline-block;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .panelNameLayer {
     color: lightcoral;
@@ -48,5 +54,5 @@
 }
 
 .propertiesPanel {
-  height: calc(50vh - 67px);
+  height: calc(55vh - 67px);
 }

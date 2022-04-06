@@ -35,8 +35,8 @@ export const getDefaultEffectConfigForType = (
   switch (effectType) {
     case "in":
       return {
-        delay: 0,
-        duration: 1000,
+        delay: "0ms",
+        duration: "1000ms",
         ease: "none",
         timeDistribution: 50,
         canBeCombined: !isStructural,
@@ -47,8 +47,8 @@ export const getDefaultEffectConfigForType = (
       };
     case "out":
       return {
-        delay: 0,
-        duration: 1000,
+        delay: "0ms",
+        duration: "1000ms",
         ease: "none",
         timeDistribution: 50,
         canBeCombined: !isStructural,
@@ -59,8 +59,8 @@ export const getDefaultEffectConfigForType = (
       };
     case "effect":
       return {
-        delay: 0,
-        duration: -1,
+        delay: "0ms",
+        duration: "-1",
         ease: "none",
         timeDistribution: 50,
         canBeCombined: !isStructural,
@@ -71,8 +71,8 @@ export const getDefaultEffectConfigForType = (
       };
     case "layer":
       return {
-        delay: 0,
-        duration: -1,
+        delay: "0ms",
+        duration: "-1",
         ease: "none",
         timeDistribution: 50,
         canBeCombined: !isStructural,
@@ -83,8 +83,8 @@ export const getDefaultEffectConfigForType = (
       };
     case "slide":
       return {
-        delay: 0,
-        duration: 2000,
+        delay: "0ms",
+        duration: "2000ms",
         canBeCombined: !isStructural,
         effect: {
           id: isStructural ? "none-structural" : "none",

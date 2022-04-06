@@ -13,10 +13,17 @@ import { PreloadOrder } from "../objects-factory";
 import svg from "./image-icon.svg";
 import { getObjectPlaceholder } from "../object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
+import {
+  CommonPropertiesTuple,
+  CommonPropertiesValues,
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../common-properties";
 
 const IMAGE = "image";
 
-export interface ImageValues {
+export interface ImageValues extends CommonPropertiesValues {
   fit: ICoverPlacementValue;
   url: IImageInputValue;
   useForThumbnail: boolean;
@@ -27,7 +34,8 @@ export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
   IImageInput<"url">,
   ICheckboxInput<"useForThumbnail">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
+  ...CommonPropertiesTuple
 ];
 
 export function createImageObject(
@@ -60,7 +68,7 @@ export function createImageObject(
       },
     },
     {
-      displayName: "Path",
+      displayName: "Image",
       propertyName: "url",
       inputType: InputType.IMAGE,
       value: {
@@ -90,6 +98,7 @@ export function createImageObject(
       defaultValue: true,
       value: true,
     },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: ImageValues = {
@@ -106,6 +115,7 @@ export function createImageObject(
     },
     useForThumbnail: false,
     preload: true,
+    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -115,7 +125,12 @@ export function createImageObject(
       type: IMAGE,
       properties,
       values,
-      valuesMetadata: {},
+      valuesMetadata: {
+        ...{
+          /*dedine meta*/
+        },
+        ...getCommonPropertiesMetadataValues(),
+      },
     },
   };
 }
@@ -127,6 +142,7 @@ export function getImageHtml(
 ) {
   const imageProperties = object.definition.values as ImageValues;
 
+  console.log(imageProperties);
   if (!isPlayer) {
     if (imageProperties.url.isPlaceholder || !imageProperties.url.url) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
@@ -199,7 +215,13 @@ export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
   if (!imageValues.url.url || imageValues.url.isPlaceholder) {
     return [];
   }
-  return [{ url: (props.values as ImageValues).url.url, type: "url" }];
+  return [
+    {
+      url: imageValues.url.url,
+      fileName: imageValues.url.fileName,
+      type: "url",
+    },
+  ];
 };
 
 export const imageMeta = {

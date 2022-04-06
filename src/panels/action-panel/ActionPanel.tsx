@@ -275,20 +275,15 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
         <>
           <Button
-            disabled={!isExistingProject}
-            intent={
-              !isExistingProject ? "none" : publishedToAll ? "none" : "primary"
-            }
             minimal
-            small
-            icon={"globe"}
-            style={{ marginRight: "5px" }}
-            onClick={() => {
-              setShowPanel(VisiblePanel.Publish);
-            }}
+            onClick={() => tryToCreateNew()}
+            className={css.addNewSlide}
+            small={true}
+            icon="add"
           >
-            Publish
+            New
           </Button>
+
           <Button
             intent={isChanged ? "primary" : "none"}
             minimal
@@ -339,15 +334,20 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             </div>
           )}
         </Portal>
-
         <Button
+          disabled={!isExistingProject}
+          intent={
+            !isExistingProject ? "none" : publishedToAll ? "none" : "primary"
+          }
           minimal
-          onClick={() => tryToCreateNew()}
-          className={css.addNewSlide}
-          small={true}
-          icon="add"
+          small
+          icon={"globe"}
+          style={{ marginRight: "5px" }}
+          onClick={() => {
+            setShowPanel(VisiblePanel.Publish);
+          }}
         >
-          New
+          Publish
         </Button>
       </div>
 

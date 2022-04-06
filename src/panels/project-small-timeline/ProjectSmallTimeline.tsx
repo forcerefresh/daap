@@ -9,10 +9,11 @@ import { setStagePreview } from "../../store/actions/actions";
 import { connect } from "react-redux";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
+import { convertTimeUnitToMs } from "../../utils/utils";
 
 export interface SlideTimelineData {
-  duration: number;
-  transitionDuration: number;
+  duration: string;
+  transitionDuration: string;
   //transitionOverlap: number;
 }
 
@@ -46,7 +47,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     /*if (idx == 0) {
       totalTime += slideData.duration;
     } else {*/
-    totalTime += slideData.duration; //-slideData.transitionDuration;
+    totalTime += convertTimeUnitToMs(slideData.duration); //-slideData.transitionDuration;
     /*}*/
   });
 
@@ -60,13 +61,18 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     // left position of slide
     // slide left is currPos - transitionDuration
     const slideLeft =
-      currPos === 0 ? 0 : (currPos - slideData.transitionDuration) / totalTime;
+      currPos === 0
+        ? 0
+        : (currPos - convertTimeUnitToMs(slideData.transitionDuration)) /
+          totalTime;
     slideLeftArr[idx] = slideLeft;
-    currPos += slideData.duration;
+    currPos += convertTimeUnitToMs(slideData.duration);
 
     //slide multiplier
     const slidePosMultiplier =
-      (slideData.duration + slideData.transitionDuration) / totalTime;
+      (convertTimeUnitToMs(slideData.duration) +
+        convertTimeUnitToMs(slideData.transitionDuration)) /
+      totalTime;
     slidePosMultiplierArr[idx] = slidePosMultiplier;
   });
 
@@ -87,16 +93,17 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       projectTimelineData?.slides.forEach((slideData, idx) => {
         const transitionLeft =
           (lineWidth / totalTime) *
-          (currentPosition - slideData.transitionDuration);
+          (currentPosition - convertTimeUnitToMs(slideData.transitionDuration));
         let transitionWidth =
-          (slideData.transitionDuration / totalTime) * lineWidth;
+          (convertTimeUnitToMs(slideData.transitionDuration) / totalTime) *
+          lineWidth;
         if (transitionWidth === 0) transitionWidth = 2;
         /*const overlapWidth =
           (slideData.transitionOverlap / totalTime) * lineWidth;*/
         html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${transitionLeft}px "></div>`;
         //html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
 
-        currentPosition += slideData.duration;
+        currentPosition += convertTimeUnitToMs(slideData.duration);
       });
       lineDiv.innerHTML = html;
     }
@@ -117,8 +124,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   //};
   const currentSlideDuration =
-    (projectTimelineData?.slides[slideProgress.slideIdx].duration || 10000) /
-    1000;
+    convertTimeUnitToMs(
+      projectTimelineData?.slides[slideProgress.slideIdx].duration || "10000ms"
+    ) / 1000;
   const progress = slideProgress.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
   // console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);

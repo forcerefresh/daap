@@ -128,7 +128,7 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
               onChange(newValue);
               setLibraryOpen(false);
             }}
-            panelsToShow={[Panels.Images]}
+            panelsToShow={[Panels.MyImages, Panels.Images]}
           />
         </div>
       </Popover>

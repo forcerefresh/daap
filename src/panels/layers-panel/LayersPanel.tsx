@@ -1,12 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import { Button, Checkbox, Icon, Popover, Portal } from "@blueprintjs/core";
+import {
+  Button,
+  Checkbox,
+  Icon,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  Popover,
+  Portal,
+} from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
   addNewLayer,
   addLayersToSelection,
-  deleteLayers,
+  deleteLayersThree,
   activateLayer,
   selectLayers,
   addNewObject,
@@ -23,6 +32,8 @@ import {
   selectForPropertiesProps,
   moveObjects,
   moveLayers,
+  duplicateLayers,
+  duplicateObjects,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
@@ -49,6 +60,9 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DropHandle, IDropItem } from "./DropHandle";
 import { LayerRow } from "./LayerRow";
+import { convertTimeUnitToMs } from "../../utils/utils";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 //import { DragLayerComponent } from "./CustomDragLayer";
 
 type ISlidesPanel = typeof mapDispatchToProps &
@@ -70,7 +84,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
-    _deleteLayers,
+    _deleteLayersThree,
     _activateLayer,
     _selectLayers,
     _activateObject,
@@ -84,6 +98,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _selectForProperties,
     _moveObjects,
     _moveLayers,
+    _duplicateLayers,
+    _duplicateObjects,
   } = props;
 
   const [openLayerById, setOpenLayerById] = useState<{
@@ -190,6 +206,58 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     setIsDraggingLayers(isDragging);
   };
 
+  const moreMenu = (
+    <Menu>
+      <MenuItem
+        icon={"duplicate"}
+        text="Duplicate selected Objects"
+        disabled={selectedObjectIds.length === 0}
+        onClick={() => {
+          _duplicateObjects(selectedObjectIds);
+        }}
+      />
+      <MenuItem
+        icon={"duplicate"}
+        text="Duplicate selected Layers"
+        disabled={selectedLayerIds.length === 0}
+        onClick={() => {
+          _duplicateLayers(selectedLayerIds);
+        }}
+      />
+      <MenuDivider />
+      <MenuItem
+        icon={"delete"}
+        text="Delete selected Objects"
+        disabled={selectedObjectIds.length === 0}
+        onClick={() => {
+          _deleteObjects(selectedObjectIds);
+          AppToaster.show({
+            intent: "warning",
+            message:
+              selectedObjectIds.length === 1
+                ? "Object has been deleted."
+                : "Multiple objects has been deleted.",
+          });
+        }}
+      />
+      <MenuItem
+        icon={"delete"}
+        text="Delete selected Layers"
+        disabled={selectedLayerIds.length === 0}
+        onClick={() => {
+          _deleteLayersThree(selectedLayerIds);
+          AppToaster.show({
+            intent: "warning",
+            message:
+              selectedLayerIds.length === 1
+                ? "Layer has been deleted."
+                : "Multiple layers has been deleted.",
+          });
+        }}
+      />
+    </Menu>
+  );
+
   return (
     <>
       <div className={css.layerPanel}>
@@ -210,6 +278,21 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               small={true}
               icon="add"
             ></Button>
+            <Popover2
+              content={moreMenu}
+              placement="left-end"
+              shouldReturnFocusOnClose={false}
+              interactionKind={Popover2InteractionKind.CLICK}
+              hoverCloseDelay={100}
+              hoverOpenDelay={150}
+            >
+              <Button
+                minimal
+                className={css.moreBtn}
+                small={true}
+                icon="more"
+              ></Button>
+            </Popover2>
           </div>
         </div>
         <div className={css.layersHolder} ref={layersHolderRef}>
@@ -239,7 +322,16 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   activeLayerId={activeLayerId}
                   selectedLayerIds={selectedLayerIds}
                   updateLayer={_updateLayer}
-                  deleteLayers={_deleteLayers}
+                  deleteLayers={(layerIds) => {
+                    _deleteLayersThree(layerIds);
+                    AppToaster.show({
+                      intent: "warning",
+                      message:
+                        layerIds.length === 1
+                          ? "Layer has been deleted."
+                          : "Multiple layers has been deleted.",
+                    });
+                  }}
                   onLayerClick={onLayerClick}
                   selectionForProperties={selectionForProperties}
                   toggleLayer={toggleLayer}
@@ -277,56 +369,81 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             selectedObjectIds={selectedObjectIds}
                             selectionForProperties={selectionForProperties}
                             updateObject={_updateObject}
-                            deleteObjects={_deleteObjects}
+                            deleteObjects={(objectIds) => {
+                              _deleteObjects(objectIds);
+                              AppToaster.show({
+                                intent: "warning",
+                                message:
+                                  objectIds.length === 1
+                                    ? "Object has been deleted."
+                                    : "Multiple objects has been deleted.",
+                              });
+                            }}
                             onObjectClick={onObjectClick}
-                            slideDuration={slide?.duration.customValue || 1}
+                            slideDuration={convertTimeUnitToMs(
+                              slide?.duration.customValue || "1ms"
+                            )}
                             onDragingChange={onDragingObjectsChange}
                           />
-                          {isDraggingObjects && isLast && (
-                            <DropHandle
-                              type={"object"}
-                              key={object.id + "_drophandle_layer"}
-                              refId={layer.id}
-                              where="layer"
-                              onDrop={(dropItem: IDropItem) => {
-                                _moveObjects(
-                                  dropItem.id,
-                                  dropItem.where,
-                                  dropItem.idsToMove
-                                );
-                              }}
-                            />
-                          )}
                         </>
                       );
                     })}
+                    {isDraggingObjects && (
+                      <DropHandle
+                        type={"object"}
+                        key={layer.id + "_obj_drophandle_layer"}
+                        refId={layer.id}
+                        where="layer"
+                        onDrop={(dropItem: IDropItem) => {
+                          _moveObjects(
+                            dropItem.id,
+                            dropItem.where,
+                            dropItem.idsToMove
+                          );
+                        }}
+                      />
+                    )}
                   </>
                 ) : (
-                  <div
-                    className={css.objectCountClosed}
-                    onClick={() => toggleLayer(layer.id)}
-                  >
-                    ... objects {layer.objectIds.length}
-                  </div>
-                )}
-                {isDraggingLayers && isLastLayer && (
-                  <DropHandle
-                    type={"layer"}
-                    key={layer.id + "_drophandle_slide"}
-                    refId={slide!.id}
-                    where="slide"
-                    onDrop={(dropItem: IDropItem) => {
-                      _moveLayers(
-                        dropItem.id,
-                        dropItem.where,
-                        dropItem.idsToMove
-                      );
-                    }}
-                  />
+                  <>
+                    <div
+                      className={css.objectCountClosed}
+                      onClick={() => toggleLayer(layer.id)}
+                    >
+                      ... objects {layer.objectIds.length}
+                    </div>
+                    {isDraggingObjects && (
+                      <DropHandle
+                        type={"object"}
+                        key={layer.id + "_obj_drophandle_layer"}
+                        refId={layer.id}
+                        where="layer"
+                        onDrop={(dropItem: IDropItem) => {
+                          _moveObjects(
+                            dropItem.id,
+                            dropItem.where,
+                            dropItem.idsToMove
+                          );
+                        }}
+                      />
+                    )}
+                  </>
                 )}
               </div>
             );
           })}
+
+          {layerArr && layerArr.length > 0 && isDraggingLayers && (
+            <DropHandle
+              type={"layer"}
+              key={layerArr?.[layerArr?.length - 1].id + "_drophandle_slide"}
+              refId={slide!.id}
+              where="slide"
+              onDrop={(dropItem: IDropItem) => {
+                _moveLayers(dropItem.id, dropItem.where, dropItem.idsToMove);
+              }}
+            />
+          )}
         </div>
       </div>
     </>
@@ -365,7 +482,7 @@ const mapDispatchToProps = {
   _addLayersToSelection: (layerIds: string[]) => addLayersToSelection(layerIds),
   _removeLayersFromSelection: (layerIds: string[]) =>
     removeLayersFromSelection(layerIds),
-  _deleteLayers: (layerIds: string[]) => deleteLayers(layerIds),
+  _deleteLayersThree: (layerIds: string[]): any => deleteLayersThree(layerIds),
   _activateLayer: (layerId: string) => activateLayer(layerId),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
@@ -391,6 +508,8 @@ const mapDispatchToProps = {
     moveIds: string[]
   ) => moveObjects(refId, where, moveIds),
 
+  _duplicateLayers: (ids: string[]): any => duplicateLayers(ids),
+  _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
   _moveLayers: (
     refId: string,
     where: "above" | "below" | "layer" | "slide" | "bottom",

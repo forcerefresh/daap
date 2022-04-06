@@ -17,7 +17,7 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
     onMetadataChange,
   } = props;
 
-  const exampleMenu = (
+  const metaMenu = (
     <Menu>
       <MenuItem
         icon={metadataValues.disabled ? "square" : "tick"}
@@ -43,25 +43,31 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
     </Menu>
   );
 
+  const getIcon = () => {
+    if (metadataValues.disabled) {
+      return <Icon icon="disable" intent="danger" size={16} />;
+    } else if (metadataValues.exportForWizard) {
+      return <Icon icon="flash" intent="primary" size={16} />;
+    } else {
+      return <Icon icon="tick" intent="none" size={16} />;
+    }
+  };
+
   return (
     <div className={css.main}>
       {children}
       <div className={css.optionsHolder}>
-        {metadataValues.disabled && (
-          <Icon icon="disable" intent="danger" size={16} />
-        )}
-        {metadataValues.exportForWizard && (
-          <Icon icon="flash" intent="primary" size={16} />
-        )}
         <Popover2
-          content={exampleMenu}
+          content={metaMenu}
           placement="left-end"
           shouldReturnFocusOnClose={false}
           interactionKind={Popover2InteractionKind.CLICK}
           hoverCloseDelay={100}
           hoverOpenDelay={150}
         >
-          <Button icon={"more"} className={css.button} minimal small />
+          <Button className={css.button} minimal small>
+            {getIcon()}
+          </Button>
         </Popover2>
       </div>
     </div>

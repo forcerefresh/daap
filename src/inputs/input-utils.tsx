@@ -9,7 +9,8 @@ export function getUnitNumericFiled<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {}
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
+  allowedUnits?: string[]
 ) {
   const objectDef = {
     displayName: label,
@@ -18,6 +19,7 @@ export function getUnitNumericFiled<T>(
     value: value,
     defaultValue: 0,
     inputProps,
+    allowedUnits,
   };
 
   return getInputForm(InputType.UNITS_NUMBER, objectDef, onChange);
@@ -195,7 +197,7 @@ export function getSlideDurationField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  commonDuration: number
+  commonDuration: string
 ) {
   const objectDef = {
     displayName: label,

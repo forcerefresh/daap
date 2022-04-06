@@ -1,6 +1,7 @@
 import classnames from "classnames";
 import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
+import { RGBColor } from "react-color";
 import { connect } from "react-redux";
 import {
   getInputForm,
@@ -13,6 +14,7 @@ import {
   getSelectField,
   getTextField,
   getSlideDurationField,
+  getColorField,
 } from "../../inputs/input-utils";
 import { IInputMetadataValues, InputType } from "../../inputs/types";
 import {
@@ -97,6 +99,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const renderLayerProperties = (layer: ILayer) => {
     return (
       <>
+        {getTextField("Name", layer.name, (name: string) => {
+          const retObj = cloneDeep(layer);
+          retObj.name = name;
+          _updateLayer(retObj);
+        })}
         {renderLayoutOptions(layer, _updateLayer)}
         {renderLayoutOptionProperties(layer, _updateLayer)}
 
@@ -117,6 +124,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
 
     return (
       <>
+        {getTextField("Name", object.name, (name: string) => {
+          const retObj = cloneDeep(object);
+          retObj.name = name;
+          _updateObject(retObj);
+        })}
         {renderLayoutOptions(
           object,
           _updateObject,
@@ -132,8 +144,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           object,
           _updateObject
         )}
-        <hr />
-        {renderCommonObjectProperties(object)}
+        {/*renderCommonObjectProperties(object)*/}
       </>
     );
   };
@@ -210,7 +221,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     object.supportedLayout.fit &&
       options.push({ label: "Fit Stage", value: "fit_stage" });
     object.supportedLayout.fit &&
-      options.push({ label: "Fit Guidelines", value: "fit_guidelines" });
+      options.push({ label: "Fit Guidebox", value: "fit_guidelines" });
 
     options.push({ label: "Snap", value: "snap" });
 
@@ -279,7 +290,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     };
 
     //console.log(objectDef);
-    return getInputForm(InputType.CORNER_RADIUS, objectDef, onChange);
+    return <>{getInputForm(InputType.CORNER_RADIUS, objectDef, onChange)}</>;
   };
 
   const renderProperties = (
@@ -387,7 +398,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
 
   return (
     <div
-      className={classnames(css.propertiesPanel, className)}
+      className={classnames("propertiesPanel", css.propertiesPanel, className)}
       key={object?.id}
     >
       {!hideHeader && (

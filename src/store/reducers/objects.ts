@@ -1,15 +1,21 @@
-import { omit, without } from "lodash-es";
+import { cloneDeep, omit, without } from "lodash-es";
+import { object } from "yup";
 import {
   ActionTypes,
   ADD_OBJECT,
   CREATE_NEW_PROJECT,
   DELETE_OBJECTS,
+  DUPLICATE,
   OPEN_PROJECT,
   UPDATE_OBJECT,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 
-const getObjectsDefault = () => ({ objectById: {}, allObjects: [] });
+const getObjectsDefault = (): IObjects => ({
+  objectById: {},
+  allObjects: [],
+  nextObjectId: {},
+});
 
 export function objects(
   state: IObjects = getObjectsDefault(),
@@ -25,6 +31,12 @@ export function objects(
           ...{ [object.id]: object },
         },
         allObjects: [...state.allObjects, object.id],
+        nextObjectId: {
+          ...state.nextObjectId,
+          [object.type]: state.nextObjectId[object.type]
+            ? state.nextObjectId[object.type]++
+            : 2,
+        },
       });
     }
     case UPDATE_OBJECT: {
@@ -36,11 +48,31 @@ export function objects(
         },
       });
     }
-    case DELETE_OBJECTS:
+    case DELETE_OBJECTS: {
       const objectIds = action.payload;
       const objectById = omit(state.objectById, objectIds);
       const allObjects = without(state.allObjects, ...objectIds);
       return { ...state, objectById, allObjects };
+    }
+    case DUPLICATE: {
+      // Note: this part duplicate object
+      const newState = cloneDeep(state);
+      const dS = action.payload;
+      dS.forEach((slideItem) => {
+        slideItem.childs.forEach((layerItem) => {
+          layerItem.childs.forEach((objectItem) => {
+            const fromObject = state.objectById[objectItem.fromId];
+            const toObject = cloneDeep(fromObject);
+            toObject.id = objectItem.toId!; // CHEK THI !
+            toObject.name += " (copy)";
+            toObject.layerId = layerItem.toId!;
+            newState.allObjects.push(toObject.id);
+            newState.objectById[toObject.id] = toObject;
+          });
+        });
+      });
+      return newState;
+    }
     case OPEN_PROJECT: {
       return {
         ...action.payload.objects,

@@ -1,4 +1,8 @@
 import { RGBColor } from "react-color";
+import {
+  CommonPropertiesTuple,
+  CommonPropertiesValues,
+} from "../objects/common-properties";
 import { IGridLayout } from "../objects/types";
 import { Breakpoints } from "../store/reducers/i-settings";
 import { ISlideDuration } from "../store/reducers/i-slides";
@@ -7,6 +11,12 @@ import {
   IFormSwitchGroup,
   IFormSwitchGroupItem,
 } from "../utils/form-layout/i-form-layout";
+
+export type ConcatTuple<T> = T extends [infer A, ...infer Rest]
+  ? A extends any[]
+    ? [...A, ...ConcatTuple<Rest>]
+    : A
+  : T;
 
 export enum InputType {
   INFO = "info",
@@ -38,6 +48,7 @@ export enum InputType {
   TEXT_START_POSITION = "text_start_position",
   CORNER_RADIUS = "corner-radius",
   BORDER_COLOR = "border_color",
+  BORDER = "border",
   COLOR_ARRAY = "color_array",
   COLOR_ARRAY_PRESETS = "color_array_preset",
   TIMELINES = "timelines",
@@ -99,6 +110,7 @@ export interface IUpdateInput {
       | ICornerRadiusValue
       | IBoxValue
       | ILayoutChildrenValue
+      | IBorderValue
   ) => void;
   onInput?: (
     config: RGBColor | { x: number; y: number } | string | number
@@ -117,7 +129,7 @@ export interface INumberInput<T = string> {
   optional?: boolean;
 }
 
-type Units = "px" | "em" | "%";
+type Units = "px" | "em" | "%" | "ms" | "s" | null;
 
 //  advanced number input
 export interface IUnitsNumberInput<T = string> {
@@ -125,7 +137,7 @@ export interface IUnitsNumberInput<T = string> {
   displayName: string;
   helperText?: string;
   propertyName: T;
-  allowedUnits: Units[];
+  allowedUnits?: Units[];
   value: string;
   defaultValue: string;
   placeholder?: string;
@@ -140,13 +152,46 @@ export interface IColorArrayInput<T = string> {
   defaultValue: RGBColor[];
 }
 
+export interface IBorderSideValue {
+  width: string;
+  color: RGBColor;
+  style: string;
+}
+
+export interface IBorderValue {
+  useCommonValue: boolean;
+  commonBorder: IBorderSideValue;
+  top: IBorderSideValue;
+  bottom: IBorderSideValue;
+  left: IBorderSideValue;
+  right: IBorderSideValue;
+}
+
+export interface IBorderInput<T = string> {
+  inputType: InputType.BORDER;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IBorderValue;
+  defaultValue: IBorderValue;
+  optional: true;
+}
+
 export interface IBorderColorValue {
-  useDifferentValues: boolean;
+  useCommonValue: boolean;
   borderColor: RGBColor;
   topBorderColor: RGBColor;
   bottomBorderColor: RGBColor;
   leftBorderColor: RGBColor;
   rightBorderColor: RGBColor;
+}
+export interface IBorderColorInput<T = string> {
+  inputType: InputType.BORDER_COLOR;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IBorderColorValue;
+  defaultValue: IBorderColorValue;
 }
 
 export interface ISlideDurationInput<T = string> {
@@ -156,16 +201,7 @@ export interface ISlideDurationInput<T = string> {
   propertyName: T;
   value: ISlideDuration;
   defaultValue: ISlideDuration;
-  commonDuration: number;
-}
-
-export interface IBorderColorInput<T = string> {
-  inputType: InputType.BORDER_COLOR;
-  displayName: string;
-  helperText?: string;
-  propertyName: T;
-  value: IBorderColorValue;
-  defaultValue: IBorderColorValue;
+  commonDuration: string;
 }
 
 export interface ITimelinePointValue {
@@ -420,6 +456,7 @@ export interface IImageInputValue {
   width: number;
   height: number;
   isPlaceholder?: boolean;
+  fileName?: string;
 }
 
 export interface IImageInput<T = string> {
@@ -522,6 +559,7 @@ export interface ICornerRadiusInput<T = string> {
   propertyName: T;
   value: ICornerRadiusValue;
   defaultValue: ICornerRadiusValue;
+  optional?: boolean;
 }
 
 export interface ITransformOriginInput<T = string> {
@@ -601,6 +639,7 @@ export interface ISelectInput<T = string> {
   options: { value: string; label: string }[];
   inputProps?: { disabled?: boolean; placeholder?: string };
   externalError?: string | string[];
+  optional?: boolean;
 }
 
 /*export interface IEventsInput<T = string> {
@@ -642,7 +681,8 @@ export type RichTextPropertiesTuple = [
   ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
-  IUnitsNumberInput<"fontSize">
+  IUnitsNumberInput<"fontSize">,
+  ...CommonPropertiesTuple
 ];
 
 export interface CommonObjectValues {
@@ -1018,11 +1058,14 @@ export type SourceImagePropertiesTuple = [
   IImageInput<"url">
 ];
 
-export interface VideoValues {
+export interface VideoValues extends CommonPropertiesValues {
   url: IVideoInputValue;
 }
 
-export type VideoPropertiesTuple = [IVideoInput<"url">];
+export type VideoPropertiesTuple = [
+  IVideoInput<"url">,
+  ...CommonPropertiesTuple
+];
 
 export interface SvgValues {
   svg: ISVGValue;
@@ -1035,7 +1078,8 @@ export interface SvgValues {
 export type SvgPropertiesTuple = [
   ISVGInput<"svg">,
   IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
-  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
+  ...CommonPropertiesTuple
 ];
 
 export type ArrowPropertiesTuple = [

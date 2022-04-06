@@ -59,7 +59,7 @@ export const layerDefinition: LayerTuple = [
       { label: "Visible", value: "visible" },
       { label: "Hidden", value: "hidden" },
       { label: "Scroll", value: "scroll" },
-      { label: "Auto Scroll", value: "auto" },
+      { label: "Auto", value: "auto" },
     ],
     value: "visible",
     defaultValue: "visible",

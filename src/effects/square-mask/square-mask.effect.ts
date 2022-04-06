@@ -36,13 +36,13 @@ gsap.registerEffect({
         objectEl.appendChild(borderEl);
       }
 
-      if (config.borderColor.useDifferentValues) {
+      if (config.borderColor.useCommonValue) {
+        borderEl.style.border = `solid ${borderColor} 0px`;
+      } else {
         borderEl.style.borderTop = `solid ${topBorderColor} 0px`;
         borderEl.style.borderBottom = `solid ${bottomBorderColor} 0px`;
         borderEl.style.borderLeft = `solid ${leftBorderColor} 0px`;
         borderEl.style.borderRight = `solid ${rightBorderColor} 0px`;
-      } else {
-        borderEl.style.border = `solid ${borderColor} 0px`;
       }
 
       borderEl.style.width = `${config.objectProperties?.width}px`;

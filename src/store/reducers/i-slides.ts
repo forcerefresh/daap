@@ -2,7 +2,7 @@ import { ITransitions } from "../../objects/types";
 
 export interface ISlideDuration {
   inheritFrom: "inherit" | "custom";
-  customValue: number;
+  customValue: string;
 }
 
 export enum SlideType {

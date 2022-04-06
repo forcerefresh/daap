@@ -64,7 +64,7 @@ export const CornerRadiusInputForm: React.FC<
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {!isLinked ? (
               <>
-                <div className={cx(css.row, "input70-force")}>
+                <div className={cx(css.row, "input65-force")}>
                   {getUnitNumericFiled("TL", value.tl, (tl: any) => {
                     const valueClone = cloneDeep(value);
                     valueClone.tl = tl;
@@ -78,12 +78,11 @@ export const CornerRadiusInputForm: React.FC<
                       valueClone.tr = tr;
                       onChange(valueClone);
                     },
-                    "" /*,
-                    { style: { width: "80px" } }*/
+                    ""
                   )}
                   {renderLinkBtn()}
                 </div>
-                <div className={cx(css.row, "input70-force")}>
+                <div className={cx(css.row, "input65-force")}>
                   {getUnitNumericFiled("BL", value.bl, (bl: any) => {
                     const valueClone = cloneDeep(value);
                     valueClone.bl = bl;

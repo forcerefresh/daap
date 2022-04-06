@@ -50,6 +50,12 @@
       height: 50vh;
       max-height: 50vh;
       min-height: 50vh;
+
+      :global {
+        .propertiesPanel {
+          height: calc(50vh - 67px);
+        }
+      }
     }
     .action {
       height: 105px;
@@ -76,18 +82,23 @@
         width: 370px;
         z-index: 100;
 
-        .slides {
-          height: 30vh;
-        }
-        .properties {
-          height: 35vh;
-        }
+        max-width: 100vh;
         .action {
           height: 105px;
           min-height: 105px;
         }
-        .effects {
-          height: 35vh !important;
+        .slides {
+          min-height: 30vh;
+          flex-grow: 1;
+        }
+        .properties {
+          min-height: 55vh;
+
+          :global {
+            .propertiesPanel {
+              height: calc(55vh - 67px);
+            }
+          }
         }
       }
 

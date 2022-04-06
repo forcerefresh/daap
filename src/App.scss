@@ -6,6 +6,25 @@ html {
   overflow: hidden;
   color: var(--font-color);
 
+  // button group >>
+  .bp3-dark
+    .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]) {
+    background-color: #383b3e;
+  }
+
+  .bp3-dark
+    .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]):active,
+  .bp3-dark
+    .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]).bp3-active {
+    background-color: #2e3032;
+  }
+
+  .bp3-dark
+    .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]):hover {
+    background-color: #323436;
+  }
+  // button group <<
+
   .bp3-dialog.bp3-dark,
   .bp3-dark .bp3-dialog {
     background: #353535;
@@ -109,7 +128,9 @@ html {
   .input70-force input {
     width: 70px !important;
   }
-
+  .input65-force input {
+    width: 65px !important;
+  }
   .bp3-dark {
     color: #ccc;
 

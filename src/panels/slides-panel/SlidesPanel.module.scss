@@ -30,8 +30,16 @@
     box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
 
     .addNewSlide {
-      float: right;
+      //float: right;
       margin-top: -2px;
+
+      &:hover {
+        :global {
+          .bp3-icon {
+            color: #53e456 !important;
+          }
+        }
+      }
     }
   }
 
@@ -41,6 +49,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    vertical-align: text-bottom;
   }
 
   .slidesHolder {
@@ -56,10 +65,28 @@
     border: 1px solid #252526;
     border-bottom: 1px solid #353536;
 
+    .moreBtn {
+      margin-left: 5px;
+    }
+
+    .deleteSlide {
+      visibility: hidden;
+    }
     &:hover .deleteSlide {
-      :global {
-        .bp3-icon-delete {
-          color: gray !important;
+      visibility: visible;
+    }
+    .deleteSlide {
+      svg {
+        fill: #636363;
+      }
+      &:hover {
+        svg {
+          fill: #ff5151;
+        }
+        :global {
+          .bp3-icon-delete {
+            color: #ff5151 !important;
+          }
         }
       }
     }
@@ -95,22 +122,24 @@
   }
 
   .active {
-    border: 1px solid #444;
-    background: #444;
-    :global {
+    //border: 1px solid #444;
+    font-weight: bolder;
+    //background: #444;
+    /*:global {
       .bp3-icon-delete {
         color: #555 !important;
       }
-    }
+    }*/
   }
 
   .selected {
-    border: 1px solid #1f82c0;
+    //border: 1px solid #1f82c0;
+    background: #444;
   }
 
-  .selected + .selected {
+  /*.selected + .selected {
     border-top: 1px solid #252526;
-  }
+  }*/
 
   .settingsPanelHolder {
     // temporary - remove this

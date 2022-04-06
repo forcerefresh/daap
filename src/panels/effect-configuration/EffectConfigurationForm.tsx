@@ -6,7 +6,11 @@ import { connect } from "react-redux";
 import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { EasingOptions, EffectType } from "../../effects/types";
 import { getInputForm } from "../../inputs/input-factory";
-import { getNumericFiled, getSelectField } from "../../inputs/input-utils";
+import {
+  getNumericFiled,
+  getSelectField,
+  getUnitNumericFiled,
+} from "../../inputs/input-utils";
 import { IObject, ITransition } from "../../objects/types";
 import {
   updateLayer,
@@ -159,26 +163,36 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   );*/
 
   const delayInput = () => (
-    <div className="input60">
-      {getNumericFiled(
+    <div className="">
+      {getUnitNumericFiled(
         effectType === "out" ? "Gap" : "Delay",
         transition.delay,
-        (value: any) => {
+        (value: string) => {
           const newTransition = cloneDeep(transition);
           newTransition.delay = value;
           onTransitionChange(newTransition);
-        }
+        },
+        "",
+        { style: { width: "80px" } },
+        ["ms", "s"]
       )}
     </div>
   );
 
   const durationInput = () => (
-    <div className="input60">
-      {getNumericFiled("Duration", transition.duration, (value: any) => {
-        const newTransition = cloneDeep(transition);
-        newTransition.duration = value;
-        onTransitionChange(newTransition);
-      })}
+    <div className="">
+      {getUnitNumericFiled(
+        "Duration",
+        transition.duration,
+        (value: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.duration = value;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "80px" } },
+        ["ms", "s"]
+      )}
     </div>
   );
 

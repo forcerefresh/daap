@@ -5,6 +5,7 @@ import { ITransitionsData } from "../export/i-export-html";
 import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { executionCodeFuncType } from "../objects/objects-factory";
 import { ITransition } from "../objects/types";
+import { convertTimeUnitToMs } from "../utils/utils";
 
 export function createTimelineForObject(
   data: ITransitionsData
@@ -34,10 +35,10 @@ export function createTimelineForObject(
   return parallelTimelines;
 }
 
-function getDuration(data: ITransitionsData, eff: ITransition) {
-  return eff.duration === -1
-    ? data.data.slideDuration.customValue
-    : eff.duration;
+function getDuration(data: ITransitionsData, eff: ITransition): number {
+  return eff.duration === "-1"
+    ? convertTimeUnitToMs(data.data.slideDuration.customValue)
+    : convertTimeUnitToMs(eff.duration);
 }
 
 function populatesTimelinesForObject(
@@ -49,9 +50,9 @@ function populatesTimelinesForObject(
   // only out effect is different
   const delay =
     (effType === "out"
-      ? data.data.slideDuration.customValue -
-        (getDuration(data, eff) + eff.delay)
-      : eff.delay) / 1000;
+      ? convertTimeUnitToMs(data.data.slideDuration.customValue) -
+        (getDuration(data, eff) + convertTimeUnitToMs(eff.delay))
+      : convertTimeUnitToMs(eff.delay)) / 1000;
 
   const tl = gsap.timeline();
   parallelTimelines.push(tl);
@@ -94,7 +95,8 @@ export function createTimelineForExecutionCode(
     id: data.itemId,
     className: data.objectClass,
     calculatedObjectSize,
-    slideDuration: data.data.slideDuration.customValue / 1000,
+    slideDuration:
+      convertTimeUnitToMs(data.data.slideDuration.customValue) / 1000,
   };
   const execCodeTween = gsap.effects["execCode"]({}, conf);
   tl.add(execCodeTween);

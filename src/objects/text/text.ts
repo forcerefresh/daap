@@ -14,10 +14,18 @@ import { ICommonObjectProperties, IObject } from "../types";
 import { v4 as uuid } from "uuid";
 import { createCommonObject } from "../create-object-factory";
 import svg from "./text-icon.svg";
+import {
+  CommonPropertiesTuple,
+  CommonPropertiesValues,
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../common-properties";
+import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 export const TEXT = "text";
 
-export interface TextValues {
+export interface TextValues extends CommonPropertiesValues {
   text: string;
   autoHeight: boolean;
   font: IFontSelectInputValue;
@@ -34,7 +42,8 @@ export type TextPropertiesTuple = [
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">,
   ISelectInput<"weight">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
+  ...CommonPropertiesTuple
 ];
 
 export function createTextObject(
@@ -122,6 +131,7 @@ export function createTextObject(
       defaultValue: true,
       inputProps: { disabled: true },
     },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: TextValues = {
@@ -134,7 +144,8 @@ export function createTextObject(
     color: { r: 255, g: 255, b: 255, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
     weight: "400",
-    preload: true, // not visible
+    preload: true, // not visible,
+    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -144,7 +155,7 @@ export function createTextObject(
       type: TEXT,
       properties,
       values,
-      valuesMetadata: {},
+      valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
     },
   };
 }
@@ -156,6 +167,7 @@ export function getTextHtml(
   const textProperties = object.definition.values as TextValues;
 
   let style = "";
+  style += addCommonPropertiesToStyle(style, object);
   style += "font-family: " + textProperties.font.fontFamily + ";";
   style += "font-size: " + textProperties.fontSize + ";";
   const c = textProperties.color;

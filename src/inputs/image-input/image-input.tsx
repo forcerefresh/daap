@@ -48,56 +48,95 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
     "bp3-overlay-scroll-container", // alert
   ]);
 
-  return (
-    <FormGroup label={displayName} labelFor="text-input" inline>
-      <InputGroup
-        readOnly={true}
-        id="text-input"
-        placeholder="Placeholder text"
-        value={value.url}
-        //onClick={handleClick}
-        //onChange={(event: any) => onChange(event.target.value)}
-        //onInput={(event: any) => onInput(event.target.value)}
-      />
+  const onFileNameChange = (fileName: string) => {
+    const newValue = cloneDeep(value);
+    newValue.fileName = fileName;
+    onChange(newValue);
+  };
 
-      <Popover
-        interactionKind={PopoverInteractionKind.CLICK}
-        position={Position.LEFT}
-        modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
-        usePortal={true}
-        minimal
-        popoverClassName={css.mediaLibraryPanelPopup}
-        isOpen={libraryOpen}
-      >
-        <Button
-          small
+  const fileName =
+    value.fileName === undefined ? extractFileName(value.url) : value.fileName;
+  return (
+    <>
+      <FormGroup label={displayName} labelFor="text-input" inline>
+        {value.url ? (
+          <div
+            className={css.previewHolder}
+            style={{ backgroundImage: `url(${value.url}` }}
+          ></div>
+        ) : null}
+        {value.url.indexOf("data:") === -1 ? (
+          <div
+            className="bp3-text-small"
+            style={{ maxWidth: "250px", wordBreak: "break-all" }}
+          >
+            <a target="_blank" href={value.url}>
+              {value.url}
+            </a>
+          </div>
+        ) : null}
+
+        <Popover
+          interactionKind={PopoverInteractionKind.CLICK}
+          position={Position.LEFT}
+          modifiers={{ preventOverflow: { enabled: true } }}
+          boundary={"window"}
+          usePortal={true}
           minimal
-          className={css.browseButton}
-          icon={"folder-open"}
-          onClick={() => {
-            setLibraryOpen(true);
-          }}
+          popoverClassName={css.mediaLibraryPanelPopup}
+          isOpen={libraryOpen}
         >
-          Browse
-        </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            onRequestClose={() => {
-              setLibraryOpen(false);
+          <Button
+            small
+            minimal
+            className={css.browseButton}
+            icon={"folder-open"}
+            onClick={() => {
+              setLibraryOpen(true);
             }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(item) => {
-              const newValue = cloneDeep(value);
-              newValue.url = (item.initialValues as any).url;
-              onChange(newValue);
-              setLibraryOpen(false);
-            }}
-            panelsToShow={[Panels.MyImages, Panels.Images]}
-          />
-        </div>
-      </Popover>
-    </FormGroup>
+          >
+            Browse
+          </Button>
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              onRequestClose={() => {
+                setLibraryOpen(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(item) => {
+                const newValue = cloneDeep(value);
+                newValue.url = (item.initialValues as any).url;
+                newValue.fileName = extractFileName(newValue.url);
+                onChange(newValue);
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.MyImages, Panels.Images]}
+            />
+          </div>
+        </Popover>
+      </FormGroup>
+      <FormGroup label={"File name"} labelFor="fileName" inline>
+        <InputGroup
+          id="fileName"
+          placeholder=""
+          value={fileName}
+          onChange={(event: any) => onFileNameChange(event.target.value)}
+          onInput={(event: any) => onFileNameChange(event.target.value)}
+          //onChange={(event: any) => onChange(event.target.value)}
+          //onInput={(event: any) => onInput(event.target.value)}
+        />
+      </FormGroup>
+    </>
   );
 };
+
+function extractFileName(url: string) {
+  try {
+    const parts = url.split("/");
+    return parts[parts.length - 1].split(".")[0];
+  } catch (ex: any) {
+    return "";
+  }
+  return "";
+}

@@ -369,6 +369,8 @@ export function getObjectHtml(
       return getButtonHtml(object, calculatedObjectSize);
     case ObjectType.SOURCE_IMAGE:
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
+    case ObjectType.FRAME:
+      return getFrameHtml(object, calculatedObjectSize, isPlayer);
     default:
       const objDeff = getObjectDefinition(object.type);
       if (objDeff && objDeff.getHtml) {
@@ -395,6 +397,8 @@ export function getRichTextHtml(
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
+
+  style += addCommonPropertiesToStyle(style, object);
 
   const ret = `<div class="object-content" style="${style}"> 
   ${textProperties.text} 
@@ -833,6 +837,7 @@ function getVideoHtml(
 
   let style = "";
   style += "object-fit: fill;";
+  style += addCommonPropertiesToStyle(style, object);
 
   let attrs = "";
   if (isPlayer) attrs += " autoplay controls";
@@ -846,6 +851,21 @@ function getVideoHtml(
   return videoHtml;
 
   //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+}
+
+function getFrameHtml(
+  object: IObject,
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
+) {
+  let style = "";
+  style += addCommonPropertiesToStyle(style, object);
+  style += "width: 100%;";
+  style += "height: 100%;";
+
+  const html = `<div class="object-content" style="${style}"></div>`;
+
+  return html;
 }
 
 function getSvgHtml(
@@ -888,6 +908,7 @@ function getSvgHtml(
   .object-content-${object.id}{
     transform: scaleX(${scaleX}) scaleY(${scaleY});
     transform-origin: top left;
+    ${addCommonPropertiesToStyle("", object)}
   }
   .object-content-${object.id} svg {
     width: 100%;

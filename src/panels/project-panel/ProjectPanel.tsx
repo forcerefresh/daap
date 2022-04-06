@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   Checkbox,
+  Colors,
   Elevation,
   FormGroup,
   Radio,
@@ -24,6 +25,7 @@ import {
   getCheckboxField,
   getColorField,
   getNumericFiled,
+  getUnitNumericFiled,
 } from "../../inputs/input-utils";
 
 import settingsCss from "../settings-panel/SettingsPanel.module.scss";
@@ -112,13 +114,16 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
         {visibleSectionIds[ProjectPanelSections.Slider] && (
           <div className={settingsCss.panel}>
             <FormGroup>
-              <div className="input60">
-                {getNumericFiled(
+              <div className="">
+                {getUnitNumericFiled(
                   "Slide duration",
                   settings.slideDuration,
-                  (value: number) => {
+                  (value: string) => {
                     _updateSlideDuration(value);
-                  }
+                  },
+                  undefined,
+                  { style: { width: "100px" } },
+                  ["ms", "s"]
                 )}
               </div>
               <div className="input60">
@@ -154,14 +159,14 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
         </div>
         {visibleSectionIds[ProjectPanelSections.Preview] && (
           <div className={settingsCss.panel}>
-            {/* helperText="Choose app layout which make app easier for use, improves
-              performance, specificity specificity of the projects."
-              label="Layout type"
-              labelFor="layoutType" */}
-            <FormGroup
-
-            //requiredLabel={true}
+            <div
+              style={{ marginBottom: "15px", color: Colors.ORANGE5 }}
+              className="bp3-form-helper-text"
             >
+              Preview configuration are only used for preview inside app. They
+              are not aplied to slider configuration.
+            </div>
+            <FormGroup>
               <div className="input60">
                 {getColorField(
                   "Page background color",
@@ -264,7 +269,7 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = {
-  _updateSlideDuration: (newValue: number) => updateSlideDuration(newValue),
+  _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),
   _updateProjectSettings: (newValue: Partial<ISettings>) =>
     updateProjectSettings(newValue),
   _updateSlideBreakpoints: (slideBreakpoints: Breakpoints) =>

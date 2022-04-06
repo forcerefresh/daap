@@ -83,7 +83,7 @@ export const squareMaskDefaults: ISquareMaskEffect = {
   canBeCombined: false,
   // effect properties
   borderColor: {
-    useDifferentValues: false,
+    useCommonValue: true,
     borderColor: { r: 255, g: 255, b: 255, a: 1 },
     topBorderColor: { r: 255, g: 255, b: 255, a: 1 },
     bottomBorderColor: { r: 255, g: 255, b: 255, a: 1 },

@@ -3,25 +3,41 @@ import { isEqual } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { IUnitsNumberInput, IUpdateInput } from "../types";
 
+export type UnitType = "px" | "em" | "%" | "ms" | "s" | null;
 interface UnitValue {
   value: string;
-  unit: "px" | "em" | "%" | null;
+  unit: UnitType;
 }
 
-function value2UnitValue(inputValue: string): UnitValue {
+function value2UnitValue(
+  inputValue: string,
+  allowedUnits: UnitType[]
+): UnitValue {
   const inputValueStr = inputValue.toString();
-  let unit: "px" | "em" | "%" | null = null;
+  let unit: UnitType = null;
   let value = "";
 
-  if (inputValueStr.includes("px")) {
+  if (allowedUnits.indexOf("px") !== -1 && inputValueStr.includes("px")) {
     unit = "px";
     value = inputValueStr.split("px").join("");
-  } else if (inputValueStr.includes("em")) {
+  } else if (
+    allowedUnits.indexOf("em") !== -1 &&
+    inputValueStr.includes("em")
+  ) {
     unit = "em";
     value = inputValueStr.split("em").join("");
-  } else if (inputValueStr.includes("%")) {
+  } else if (allowedUnits.indexOf("%") !== -1 && inputValueStr.includes("%")) {
     unit = "%";
     value = inputValueStr.split("%").join("");
+  } else if (
+    allowedUnits.indexOf("ms") !== -1 &&
+    inputValueStr.includes("ms")
+  ) {
+    unit = "ms";
+    value = inputValueStr.split("ms").join("");
+  } else if (allowedUnits.indexOf("s") !== -1 && inputValueStr.includes("s")) {
+    unit = "s";
+    value = inputValueStr.split("s").join("");
   } else {
     value = inputValueStr;
   }
@@ -36,7 +52,7 @@ export const UnitsNumberInputForm: React.FC<
     displayName,
     propertyName,
     placeholder,
-    allowedUnits,
+    allowedUnits = ["px", "em", "%"],
     helperText,
     inputProps,
     value,
@@ -46,30 +62,30 @@ export const UnitsNumberInputForm: React.FC<
   const id = `${propertyName}_units_input_number`;
 
   console.log(inputProps);
-  const latestUnit = React.useRef<"px" | "em" | "%" | null>("px");
-  if (value2UnitValue(value).unit !== null) {
-    latestUnit.current = value2UnitValue(value).unit;
+  const latestUnit = React.useRef<UnitType>(allowedUnits[0]);
+  if (value2UnitValue(value, allowedUnits).unit !== null) {
+    latestUnit.current = value2UnitValue(value, allowedUnits).unit;
   }
 
   const [internalValue, setInternalValue] = useState<UnitValue>(
-    value2UnitValue(value)
+    value2UnitValue(value, allowedUnits)
   );
   const [latestValidValue, setLatestValidValue] = useState<UnitValue>(
-    value2UnitValue(value)
+    value2UnitValue(value, allowedUnits)
   );
 
   useEffect(() => {
-    if (!isEqual(value2UnitValue(value), latestValidValue)) {
-      setLatestValidValue(value2UnitValue(value));
-      setInternalValue(value2UnitValue(value));
+    if (!isEqual(value2UnitValue(value, allowedUnits), latestValidValue)) {
+      setLatestValidValue(value2UnitValue(value, allowedUnits));
+      setInternalValue(value2UnitValue(value, allowedUnits));
     }
   }, [value]);
 
   const [valid, setValid] = useState<boolean>(true);
 
   const updateValue = (newValue: string) => {
-    const newValueValue = value2UnitValue(newValue).value;
-    setInternalValue(value2UnitValue(newValue));
+    const newValueValue = value2UnitValue(newValue, allowedUnits).value;
+    setInternalValue(value2UnitValue(newValue, allowedUnits));
 
     const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(newValueValue);
 
@@ -80,7 +96,7 @@ export const UnitsNumberInputForm: React.FC<
       isValidValue = true;
 
       if (isValidValue) {
-        setLatestValidValue(value2UnitValue(newValue));
+        setLatestValidValue(value2UnitValue(newValue, allowedUnits));
       }
     } else {
       isValidValue = false;
@@ -88,7 +104,7 @@ export const UnitsNumberInputForm: React.FC<
 
     setValid(isValidValue);
 
-    if (!value2UnitValue(newValue).unit) {
+    if (!value2UnitValue(newValue, allowedUnits).unit) {
       newValue += latestUnit.current;
     }
 
@@ -108,7 +124,9 @@ export const UnitsNumberInputForm: React.FC<
         }}
         intent={!valid ? Intent.WARNING : Intent.NONE}
         id={id}
-        rightElement={<Tag minimal={true}>{value2UnitValue(value).unit}</Tag>}
+        rightElement={
+          <Tag minimal={true}>{value2UnitValue(value, allowedUnits).unit}</Tag>
+        }
         value={internalValue.value}
         onChange={(event: any) => updateValue(event.target.value)}
         onInput={(event: any) => updateValue(event.target.value)}

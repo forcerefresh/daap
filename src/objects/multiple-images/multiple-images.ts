@@ -54,7 +54,7 @@ export function createMultiImageObject(
       },
     },
     {
-      displayName: "Paths",
+      displayName: "Images",
       propertyName: "urls",
       inputType: InputType.MULTI_IMAGE,
       value: initialValue?.urls ? initialValue?.urls : [],

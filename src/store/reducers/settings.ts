@@ -103,7 +103,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
 
 const getSettingsDefault = () => ({
   // slide
-  slideDuration: 10000,
+  slideDuration: "10s",
   sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
   // preview
   pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },

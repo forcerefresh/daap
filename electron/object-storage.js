@@ -302,7 +302,11 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     const pArr = [];
     for (const assetUrl of assetsUrlsChunk) {
       var parsed = url.parse(assetUrl.url);
-      const filename = path.basename(parsed.pathname);
+      let filename = path.basename(parsed.pathname);
+      const extension = filename.substring(filename.indexOf("."));
+      if (assetUrl.fileName) {
+        filename = assetUrl.fileName + extension;
+      }
       pArr.push(
         bucketManager.uploadUrlToBucket(
           bucketWithKeys,
@@ -445,7 +449,12 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       console.log("process");
       bufferArr.forEach((buf, idx) => {
         var parsed = url.parse(assetsUrlsChunk[idx].url);
-        const filename = path.basename(parsed.pathname);
+        let filename = path.basename(parsed.pathname);
+        const extension = filename.substring(filename.indexOf("."));
+        if (assetsUrlsChunk[idx].fileName) {
+          filename = assetsUrlsChunk[idx].fileName + extension;
+        }
+
         const zipFilePath = `${req.projectId}/assets/${filename}`;
         zip.file(zipFilePath, buf);
 

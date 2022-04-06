@@ -4,6 +4,7 @@ import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { getEffectDefinition } from "../../effects/effects";
 import { max } from "lodash-es";
+import { convertTimeUnitToMs } from "../../utils/utils";
 
 export interface TimelineViewProps {
   object: IObject;
@@ -111,8 +112,8 @@ function createTimelines(
   effs.map((eff, idx) => {
     const size = calculateTimelineRect(
       slideDuration,
-      eff.delay,
-      eff.duration,
+      convertTimeUnitToMs(eff.delay),
+      convertTimeUnitToMs(eff.duration),
       340,
       isOut
     );

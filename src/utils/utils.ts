@@ -1,6 +1,12 @@
 import React from "react";
 import { RGBColor } from "react-color";
-import { ICornerRadiusValue } from "../inputs/types";
+import {
+  IBorderSideValue,
+  IBorderValue,
+  ICornerRadiusValue,
+  IInputMetadataValues,
+} from "../inputs/types";
+import { CommonPropertiesValues } from "../objects/common-properties";
 import { IObject } from "../objects/types";
 import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
@@ -13,7 +19,20 @@ export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
 
 export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {
   const dur = getRealSlideDuration(slide, settings);
-  return (dur / 1000).toString() + " sec";
+  const durMs = convertTimeUnitToMs(dur);
+  return (durMs / 1000).toString() + " sec";
+}
+
+export function convertTimeUnitToMs(timeUnit: string) {
+  let durMs: number;
+  if (timeUnit.indexOf("ms") !== -1) {
+    durMs = parseInt(timeUnit, 10);
+  } else if (timeUnit.indexOf("s") !== -1) {
+    durMs = parseInt(timeUnit, 10) * 1000;
+  } else {
+    durMs = parseInt(timeUnit, 10);
+  }
+  return durMs;
 }
 
 export function removeFalsy(obj: { [key: string]: any }) {
@@ -60,12 +79,29 @@ export function rgbColor2cssRgba(c: RGBColor): string {
 }
 
 export function addCommonPropertiesToStyle(style: string, object: IObject) {
-  //console.log(object.commonProperties);
-  if (object.commonProperties?.borderRadius) {
-    style = addBorderRadius(style, object.commonProperties?.borderRadius);
+  const comonProperties = object.definition.values as CommonPropertiesValues;
+
+  const comonPropertiesMeta = object.definition.valuesMetadata as {
+    [key: string]: IInputMetadataValues;
+  };
+
+  if (!comonProperties.hasCommonProperties) {
+    return "";
   }
 
-  //console.log(style);
+  if (!comonPropertiesMeta.commonCornerRadius.disabled) {
+    style = addBorderRadius(style, comonProperties.commonCornerRadius);
+  }
+
+  console.log(comonPropertiesMeta);
+  if (!comonPropertiesMeta.commonBorder.disabled) {
+    style = addBorder(style, comonProperties.commonBorder);
+  }
+
+  if (!comonPropertiesMeta.commonOverflow.disabled) {
+    style += `overflow: ${comonProperties.commonOverflow};`;
+  }
+
   return style;
 }
 
@@ -88,4 +124,37 @@ export function addBorderRadius(
       ";";
   }
   return style;
+}
+
+export function addBorder(style: string, border: IBorderValue) {
+  if (border.useCommonValue) {
+    style += "border-width: " + border.commonBorder.width + ";";
+    style +=
+      "border-color: " + rgbColor2cssRgba(border.commonBorder.color) + ";";
+    style += "border-style: " + border.commonBorder.style + ";";
+  } else {
+    style = addBorderSide(style, "top", border.top);
+    style = addBorderSide(style, "bottom", border.bottom);
+    style = addBorderSide(style, "left", border.left);
+    style = addBorderSide(style, "right", border.right);
+  }
+  return style;
+}
+
+export function addBorderSide(
+  style: string,
+  side: "left" | "bottom" | "right" | "top",
+  border: IBorderSideValue
+) {
+  style += "border-" + side + "-width: " + border.width + ";";
+  style += "border-" + side + "-color: " + rgbColor2cssRgba(border.color) + ";";
+  style += "border-" + side + "-style: " + border.style + ";";
+  console.log(style);
+  return style;
+}
+
+export function humanizeSting(str: string) {
+  let ret = str.replaceAll("_", " ");
+  ret = ret.charAt(0).toUpperCase() + ret.slice(1);
+  return ret;
 }

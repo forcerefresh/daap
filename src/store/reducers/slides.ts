@@ -1,4 +1,4 @@
-import { cloneDeep, forIn, omit, remove, without } from "lodash-es";
+import { cloneDeep, compact, forIn, omit, remove, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
@@ -6,6 +6,7 @@ import {
   CREATE_NEW_PROJECT,
   DELETE_LAYERS,
   DELETE_SLIDE,
+  DUPLICATE,
   MOVE_LAYERS,
   MOVE_SLIDES,
   OPEN_PROJECT,
@@ -13,7 +14,7 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { ISlides, SlideType } from "./i-slides";
+import { ISlide, ISlides, SlideType } from "./i-slides";
 
 const getSlidesDefault = () => ({
   nextSlideIdCounter: 1,
@@ -184,6 +185,34 @@ export function slides(
       }
 
       return { ...state, normalSlides };
+    }
+
+    case DUPLICATE: {
+      // Note: this part duplicate object
+      const newState = cloneDeep(state);
+      const dS = action.payload;
+      dS.forEach((slideItem) => {
+        const fromSlide = state.slideById[slideItem.fromId];
+        let toSlide: ISlide;
+        if (!slideItem.skipCreate) {
+          const toSlide = cloneDeep(fromSlide);
+          toSlide.id = slideItem.toId as string;
+          toSlide.name += " (copy)";
+          toSlide.layerIds = slideItem.childs.map((item) => item.toId!);
+          newState.allSlides.push(toSlide.id);
+          newState.normalSlides.push(toSlide.id);
+          newState.slideById[toSlide.id] = toSlide;
+        } else {
+          const toSlide = cloneDeep(fromSlide);
+          // add new layer ids if skipCreate is not true
+          const layerIdToAdd = slideItem.childs.map((item) =>
+            item.skipCreate ? undefined : item.toId!
+          );
+          toSlide.layerIds = [...toSlide.layerIds, ...compact(layerIdToAdd)];
+          newState.slideById[toSlide.id] = toSlide;
+        }
+      });
+      return newState;
     }
 
     case OPEN_PROJECT: {

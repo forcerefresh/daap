@@ -3,7 +3,7 @@ import classnames from "classnames";
 import { cloneDeep, noop } from "lodash-es";
 import React from "react";
 import { SlideDurationOptions } from "../../store/types";
-import { getNumericFiled, getSelectField } from "../input-utils";
+import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import { ISlideDurationInput, IUpdateInput } from "../types";
 import css from "./slide-duration-input.module.scss";
 
@@ -39,16 +39,20 @@ export const SlideDurationInputForm: React.FC<
         }
       )}
 
-      {getNumericFiled(
+      {getUnitNumericFiled(
         " ",
         value.inheritFrom === "inherit" ? commonDuration : value.customValue,
-        (val: number) => {
+        (val: string) => {
           const obj = cloneDeep(value);
           obj.customValue = val;
           onChange(obj);
         },
         undefined,
-        { disabled: value.inheritFrom === "inherit" }
+        {
+          disabled: value.inheritFrom === "inherit",
+          style: { width: "100px" },
+        },
+        ["ms", "s"]
       )}
     </FormGroup>
   );

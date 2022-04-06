@@ -55,7 +55,7 @@ import {
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
-import { getBgColor } from "../../utils/utils";
+import { convertTimeUnitToMs, getBgColor } from "../../utils/utils";
 import ProjectSmallTimeline, {
   ProjectTimelineData,
   SlideTimelineData,
@@ -127,18 +127,20 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       exportData.slideDataArr.map((slideData) => {
         //console.log(slideData.slide);
         const transitionDuration =
-          slideData.slide.transitions.slide?.[0]?.duration || 0;
+          slideData.slide.transitions.slide?.[0]?.duration || "0ms";
 
         //const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
-        const slideDuration = slideData.slide.duration.customValue || 0;
+        const slideDuration = convertTimeUnitToMs(
+          slideData.slide.duration.customValue || "0ms"
+        );
 
         totalDuration += slideDuration;
         //slideData.slide.slideTransition.overlap
         return {
-          duration: slideDuration,
+          duration: slideData.slide.duration.customValue || "0ms",
           transitionDuration:
             slideData.slide.transitions.slide?.[0]?.effect.id === "none"
-              ? 0
+              ? "0ms"
               : transitionDuration,
           /*transitionOverlap:
             slideData.slide.slideTransition.effect.id === "none"
@@ -1025,7 +1027,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     overflowX: isPreview ? "hidden" : "visible",
     overflowY: isPreview ? "scroll" : "visible",
     border: isPreview ? "1px solid #545454" : "1px solid transparent",
-    ...getBgColor(settings.pageBackgroundColor),
+    ...(isPreview ? getBgColor(settings.pageBackgroundColor) : {}),
   };
 
   const scrollableDivInnerStyle: React.CSSProperties = {

@@ -405,7 +405,7 @@ export function getPositionInfo(object: IObject) {
   if (object.layout === "fit_guidelines") {
     return (
       <>
-        <span> Fit Guidelines</span>
+        <span> Fit Guidebox</span>
       </>
     );
   }

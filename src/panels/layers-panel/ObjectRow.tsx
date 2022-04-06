@@ -128,7 +128,7 @@ export function ObjectRow(props: IObjectRowProps) {
           ></Button>
         </div>
         <div className={css.objectDescription}>
-          <div>{object.name} </div>
+          <div className={css.objectName}>{object.name}</div>
           {/*<div>
           delay:{" "}
           <span className={css.inlineValue}>
