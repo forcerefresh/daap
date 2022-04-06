@@ -193,7 +193,6 @@ export function slides(
       const dS = action.payload;
       dS.forEach((slideItem) => {
         const fromSlide = state.slideById[slideItem.fromId];
-        let toSlide: ISlide;
         if (!slideItem.skipCreate) {
           const toSlide = cloneDeep(fromSlide);
           toSlide.id = slideItem.toId as string;

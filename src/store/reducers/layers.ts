@@ -1,4 +1,4 @@
-import { cloneDeep, forIn, omit, remove, without } from "lodash-es";
+import { cloneDeep, compact, forIn, omit, remove, without } from "lodash-es";
 import {
   ActionTypes,
   ADD_LAYER,
@@ -61,12 +61,26 @@ export function layers(
       dS.forEach((slideItem) => {
         slideItem.childs.forEach((layerItem) => {
           const fromLayer = state.layerById[layerItem.fromId];
-          const toLayer = cloneDeep(fromLayer);
-          toLayer.id = layerItem.toId!;
-          toLayer.name += " (copy)";
-          toLayer.objectIds = layerItem.childs.map((item) => item.toId!);
-          newState.allLayers.push(toLayer.id);
-          newState.layerById[toLayer.id] = toLayer;
+
+          if (!layerItem.skipCreate) {
+            const toLayer = cloneDeep(fromLayer);
+            toLayer.id = layerItem.toId!;
+            toLayer.name += " (copy)";
+            toLayer.objectIds = layerItem.childs.map((item) => item.toId!);
+            newState.allLayers.push(toLayer.id);
+            newState.layerById[toLayer.id] = toLayer;
+          } else {
+            const toLayer = cloneDeep(fromLayer);
+            // add new layer ids if skipCreate is not true
+            const objectIdToAdd = layerItem.childs.map((item) =>
+              item.skipCreate ? undefined : item.toId!
+            );
+            toLayer.objectIds = [
+              ...toLayer.objectIds,
+              ...compact(objectIdToAdd),
+            ];
+            newState.layerById[toLayer.id] = toLayer;
+          }
         });
       });
       return newState;
