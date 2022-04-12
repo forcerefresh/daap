@@ -113,6 +113,17 @@ export function nl2br(str: string | undefined): string {
   );
 }
 
+export function nlRemove(str: string | undefined): string {
+  if (typeof str === "undefined" || str === null) {
+    return "";
+  }
+  var breakTag = "";
+  return (str + "").replace(
+    /([^>\r\n]?)(\r\n|\n\r|\r|\n)/g,
+    "$1" + breakTag + "$2"
+  );
+}
+
 export function roundNumber(num: number, places: number): number {
   return Math.round(num * 10 * places) / (10 * places);
 }

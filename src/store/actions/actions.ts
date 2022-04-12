@@ -43,7 +43,10 @@ import {
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
-import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
+import {
+  calculateObjectSize,
+  getSnapLayoutSize,
+} from "../../panels/stage-panel/StagePanelUtils";
 import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
 import { getObjectDefinition } from "../../objects/objects-factory";
@@ -318,9 +321,14 @@ export function addNewLayer(slideId: string): any {
       },
       selfSize: false,
       absoluteLayout: {
-        left: 0,
-        top: 0,
-        ...absoluteSize!,
+        type: "common",
+        perDevice: [],
+        common: {
+          deviceType: "common",
+          left: 0,
+          top: 0,
+          ...absoluteSize!,
+        },
       },
       gridLayouts: {
         type: "common",
@@ -334,11 +342,16 @@ export function addNewLayer(slideId: string): any {
         },
       },
       snapLayout: {
-        width: 200,
-        height: 200,
-        gap: 0,
+        type: "common",
         edge: "left",
         relativeTo: "stage",
+        perDevice: [],
+        common: {
+          deviceType: "common",
+          width: 200,
+          height: 200,
+          gap: 0,
+        },
       },
     };
 
@@ -1227,10 +1240,14 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
     const el = holder.querySelector("div")! as HTMLDivElement;
     //el.style.position = "relative";
     document.body.appendChild(holder);
-    object.absoluteLayout!.width = el.offsetWidth!;
-    object.absoluteLayout!.height = el.offsetHeight!;
-    object.snapLayout!.width = el.offsetWidth!;
-    object.snapLayout!.height = el.offsetHeight!;
+    object.absoluteLayout!.common.width = el.offsetWidth!;
+    object.absoluteLayout!.common.height = el.offsetHeight!;
+    const snapSizeObj = getSnapLayoutSize(
+      object.snapLayout!,
+      getState().stage.selectedDevice
+    );
+    snapSizeObj.width = el.offsetWidth!;
+    snapSizeObj.height = el.offsetHeight!;
     document.body.removeChild(holder);
   }
 }
@@ -1261,8 +1278,9 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
     holder.innerHTML = html;
     holder.querySelector("button")!.style.position = "relative";
     document.body.appendChild(holder);
-    object.absoluteLayout!.width = holder.querySelector("button")?.offsetWidth!;
-    object.absoluteLayout!.height =
+    object.absoluteLayout!.common.width =
+      holder.querySelector("button")?.offsetWidth!;
+    object.absoluteLayout!.common.height =
       holder.querySelector("button")?.offsetHeight!;
     document.body.removeChild(holder);
   }
@@ -1317,7 +1335,7 @@ function handleTextUpdate(
     document.body.appendChild(holder);
     object.height = pEl.offsetHeight;
     if (object.absoluteLayout) {
-      object.absoluteLayout.height = pEl.offsetHeight;
+      object.absoluteLayout.common.height = pEl.offsetHeight;
     }
     document.body.removeChild(holder);
   }

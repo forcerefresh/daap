@@ -20,6 +20,10 @@ export const SizeInputForm: React.FC<ISizeInput & IUpdateInput> = (props) => {
   }>(pick(value, "width", "height") as any);
 
   useEffect(() => {
+    setKeepAspectRatio(!!value.keepAspectRatio);
+  }, []);
+
+  useEffect(() => {
     if (!isEqual(value, latestValidValue)) {
       setLatestValidValue(pick(value, "width", "height") as any);
       setInternalValue(pick(value, "width", "height") as any);
@@ -130,8 +134,10 @@ export const SizeInputForm: React.FC<ISizeInput & IUpdateInput> = (props) => {
           small
           minimal
           onClick={() => {
-            setKeepAspectRatio(!keepAspectRatio);
+            onChange({ ...value, keepAspectRatio: !value.keepAspectRatio });
+            setKeepAspectRatio(!value.keepAspectRatio);
             if (!keepAspectRatio)
+              //inverse
               setAspectRatioMultiplier({
                 hMultiplier:
                   parseFloat(latestValidValue.height) /

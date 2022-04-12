@@ -3,6 +3,7 @@ import { cloneDeep, pick, set } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import { connect } from "react-redux";
+import { InfoInputForm } from "../../inputs/info-input/info-input";
 import {
   getInputForm,
   getInputFormWithOptions,
@@ -18,11 +19,12 @@ import {
 } from "../../inputs/input-utils";
 import { IInputMetadataValues, InputType } from "../../inputs/types";
 import {
-  IAbsoluteLayout,
   ISnapLayout,
   ILayout,
   IObject,
   IGridLayouts,
+  IAbsoluteLayouts,
+  ISnapLayouts,
 } from "../../objects/types";
 import {
   setDevice,
@@ -31,7 +33,11 @@ import {
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
-import { ISlide, ISlideDuration } from "../../store/reducers/i-slides";
+import {
+  ISlide,
+  ISlideDuration,
+  SlideType,
+} from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
@@ -70,30 +76,53 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   } = props;
 
   const renderSlideProperties = (slide: ISlide) => {
-    return (
-      <>
-        {getTextField("Name", slide.name, (name: string) => {
-          const retObj = cloneDeep(slide);
-          retObj.name = name;
-          _updateSlide(retObj);
-        })}
-        {getTextField("Custom ID", slide.userId, (userId: string) => {
-          const retObj = cloneDeep(slide);
-          retObj.userId = userId;
-          _updateSlide(retObj);
-        })}
-        {getSlideDurationField(
-          "",
-          slide.duration,
-          (duration: ISlideDuration) => {
+    if (slide.slideType === SlideType.Normal) {
+      return (
+        <>
+          {getTextField("Name", slide.name, (name: string) => {
             const retObj = cloneDeep(slide);
-            retObj.duration = duration;
+            retObj.name = name;
             _updateSlide(retObj);
-          },
-          commonSlideDuration
-        )}
-      </>
-    );
+          })}
+          {getTextField("Custom ID", slide.userId, (userId: string) => {
+            const retObj = cloneDeep(slide);
+            retObj.userId = userId;
+            _updateSlide(retObj);
+          })}
+          {getSlideDurationField(
+            "",
+            slide.duration,
+            (duration: ISlideDuration) => {
+              const retObj = cloneDeep(slide);
+              retObj.duration = duration;
+              _updateSlide(retObj);
+            },
+            commonSlideDuration
+          )}
+        </>
+      );
+    } else {
+      return (
+        <>
+          {getTextField(
+            "Name",
+            slide.name,
+            (name: string) => {
+              const retObj = cloneDeep(slide);
+              retObj.name = name;
+              _updateSlide(retObj);
+            },
+            undefined,
+            { disabled: true }
+          )}
+          <InfoInputForm
+            displayName=""
+            helperText={`${slide.name} slide has no properties. It's place is above all other slider and has unlimited duration.`}
+            inputType={InputType.INFO}
+          />
+        </>
+      );
+    }
   };
 
   const renderLayerProperties = (layer: ILayer) => {
@@ -176,7 +205,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           getAbsoluteLayoutField(
             "",
             objectOrLayer.absoluteLayout,
-            (absoluteLayout?: IAbsoluteLayout) => {
+            (absoluteLayout?: IAbsoluteLayouts) => {
               const retObj = cloneDeep(objectOrLayer);
               retObj.absoluteLayout = absoluteLayout;
               updateFunction(retObj);
@@ -184,13 +213,18 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
+            },
+            breakpoints,
+            selectedDevice,
+            (device: string) => {
+              _setDevice(device);
             }
           )}
         {objectOrLayer.layout === "snap" &&
           getSnapLayoutField(
             "",
             objectOrLayer.snapLayout,
-            (edgeLayout?: ISnapLayout) => {
+            (edgeLayout?: ISnapLayouts) => {
               const retObj = cloneDeep(objectOrLayer);
               retObj.snapLayout = edgeLayout;
               updateFunction(retObj);
@@ -198,6 +232,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
+            },
+            breakpoints,
+            selectedDevice,
+            (device: string) => {
+              _setDevice(device);
             }
           )}
       </>
@@ -216,14 +255,13 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       options.push({ label: "Absolute", value: "absolute" });
     object.supportedLayout.grid &&
       options.push({ label: "Grid", value: "grid" });
+    options.push({ label: "Snap", value: "snap" });
     object.supportedLayout.fit &&
       options.push({ label: "Fit Page", value: "fit_page" });
     object.supportedLayout.fit &&
       options.push({ label: "Fit Stage", value: "fit_stage" });
     object.supportedLayout.fit &&
       options.push({ label: "Fit Guidebox", value: "fit_guidelines" });
-
-    options.push({ label: "Snap", value: "snap" });
 
     const onChange = (layout: any) => {
       const retObj = cloneDeep(object);

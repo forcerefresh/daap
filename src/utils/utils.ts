@@ -10,6 +10,7 @@ import { CommonPropertiesValues } from "../objects/common-properties";
 import { IObject } from "../objects/types";
 import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
+import { nlRemove } from "./doom-utils/common";
 
 export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
   return slide.duration.inheritFrom === "inherit"
@@ -100,6 +101,11 @@ export function addCommonPropertiesToStyle(style: string, object: IObject) {
 
   if (!comonPropertiesMeta.commonOverflow.disabled) {
     style += `overflow: ${comonProperties.commonOverflow};`;
+  }
+
+  if (!comonPropertiesMeta.commonInlineStyle.disabled) {
+    const inlineStyle = nlRemove(comonProperties.commonInlineStyle);
+    style += inlineStyle;
   }
 
   return style;

@@ -80,11 +80,14 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
     from = from === -1 ? projects?.length || 0 : from;
 
-    console.log(from);
     getProjects(from, searchValue).then(
       (result) => {
         console.log(result);
-        setProjects([...projects, ...result.projects]);
+        if (from === 0) {
+          setProjects([...result.projects]);
+        } else {
+          setProjects([...projects, ...result.projects]);
+        }
         setLoading(false);
         setHasMore(result.projects.length > 0);
       },

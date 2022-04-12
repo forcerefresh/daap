@@ -12,14 +12,14 @@ import { FontSelectInputForm } from "./font-input/font-input";
 import { GridPlacementInputForm } from "./grid-placement/grid-placement";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
-import { NumbericTimelineInputForm as NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
+import { NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
 import { ParallaxInputForm } from "./parallax-input/parallax-input";
 import { SelectInputForm } from "./select-input/select-input";
 import { SplitInputForm } from "./split-input/split-input";
 import { TextInputForm } from "./text-input/text-input";
 import { TextStartPositionInputForm } from "./text-start-position-input/text-start-position-input";
 import { TextAreaInputForm } from "./textarea-input/textarea-input";
-import { TransformInputForm } from "./transform-input/transform-input";
+import { AbsolutePlacementForm } from "./absolute-placement/absolute-placement-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import { IInputMetadataValues, InputType } from "./types";
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
@@ -46,6 +46,7 @@ import { Breakpoints } from "../store/reducers/i-settings";
 import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
 import { InfoInputForm } from "./info-input/info-input";
 import { BorderInputForm } from "./border-input/border-input";
+import { SizePosInputForm } from "./size-pos-input/size-pos-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -63,6 +64,13 @@ export function getInputFormWithOptions<T>(
     onChangeDevice?: (device: string) => void;
   }
 ): React.ReactElement | undefined {
+  // force DISABLED if metadata.disabled===true
+  if (inputProps?.metadata?.disabled) {
+    //debugger;
+    if (!inputProps.inputProps) inputProps.inputProps = {};
+    inputProps.inputProps.disabled = true;
+  }
+
   const input = getInputForm(inputType, inputProps, onChange, onInput, data);
 
   if (inputProps.optional) {
@@ -273,9 +281,16 @@ export function getInputForm<T>(
         <FontSelectInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
-    case InputType.TRANSFORM: {
+    case InputType.ABSOLUTE_LAYOUT: {
       return (
-        <TransformInputForm key={key} {...inputProps} onChange={onChange} />
+        <AbsolutePlacementForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          breakpoints={data?.breakpoints}
+          selectedDevice={data?.selectedDevice}
+          onChangeDevice={data?.onChangeDevice}
+        />
       );
     }
     case InputType.LAYOUT_CHILDREN: {
@@ -290,8 +305,20 @@ export function getInputForm<T>(
     case InputType.SIZE: {
       return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
     }
+    case InputType.SIZE_POS: {
+      return <SizePosInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
     case InputType.SNAP: {
-      return <SnapInputForm key={key} {...inputProps} onChange={onChange} />;
+      return (
+        <SnapInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          breakpoints={data?.breakpoints}
+          selectedDevice={data?.selectedDevice}
+          onChangeDevice={data?.onChangeDevice}
+        />
+      );
     }
     case InputType.COVER_LAYOUT: {
       return (

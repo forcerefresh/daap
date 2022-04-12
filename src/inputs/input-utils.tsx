@@ -250,16 +250,29 @@ export function getAbsoluteLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps?: { selfSize?: boolean; disablePosition?: boolean }
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean },
+  breakpoints: Breakpoints = { breakpointsConfiguration: [] },
+  selectedDevice: string = "",
+  onChangeDevice: (device: string) => void = (device: string) => undefined
 ) {
   const objectDef = {
     displayName: label,
-    inputType: InputType.TRANSFORM,
+    inputType: InputType.ABSOLUTE_LAYOUT,
     value: value,
     inputProps,
   };
 
-  return getInputForm(InputType.TRANSFORM, objectDef, onChange);
+  return getInputForm(
+    InputType.ABSOLUTE_LAYOUT,
+    objectDef,
+    onChange,
+    onChange,
+    {
+      breakpoints,
+      selectedDevice,
+      onChangeDevice,
+    }
+  );
 }
 
 export function getSizeLayoutField<T>(
@@ -278,11 +291,30 @@ export function getSizeLayoutField<T>(
   return getInputForm(InputType.SIZE, objectDef, onChange);
 }
 
+export function getSizePosLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  inputProps?: { disabled?: boolean }
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.SIZE,
+    value: value,
+    inputProps,
+  };
+
+  return getInputForm(InputType.SIZE_POS, objectDef, onChange);
+}
+
 export function getSnapLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps?: { selfSize?: boolean; disablePosition?: boolean }
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean },
+  breakpoints: Breakpoints = { breakpointsConfiguration: [] },
+  selectedDevice: string = "",
+  onChangeDevice: (device: string) => void = (device: string) => undefined
 ) {
   const objectDef = {
     displayName: label,
@@ -291,7 +323,11 @@ export function getSnapLayoutField<T>(
     inputProps,
   };
 
-  return getInputForm(InputType.SNAP, objectDef, onChange);
+  return getInputForm(InputType.SNAP, objectDef, onChange, onChange, {
+    breakpoints,
+    selectedDevice,
+    onChangeDevice,
+  });
 }
 
 export function getButtonGroupField<T>(

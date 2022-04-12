@@ -217,10 +217,15 @@ export function createCommonObject(
     },
     layout: "absolute",
     absoluteLayout: {
-      left: 100,
-      top: 100,
-      width: 200,
-      height: 200,
+      type: "common",
+      perDevice: [],
+      common: {
+        deviceType: "common",
+        left: 100,
+        top: 100,
+        width: 200,
+        height: 200,
+      },
     },
     gridLayouts: {
       type: "common",
@@ -234,11 +239,16 @@ export function createCommonObject(
       },
     },
     snapLayout: {
-      width: 200,
-      height: 200,
-      gap: 0,
       edge: "left",
       relativeTo: "stage",
+      type: "common",
+      perDevice: [],
+      common: {
+        deviceType: "common",
+        gap: 0,
+        width: 200,
+        height: 200,
+      },
     },
   };
 }

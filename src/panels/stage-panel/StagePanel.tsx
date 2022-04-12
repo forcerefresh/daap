@@ -46,12 +46,14 @@ import {
   getRectFromPoints,
   IRect,
   multiplyRect,
+  roundNumber,
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
 import { BreakpointConfiguration } from "../../store/reducers/i-settings";
 import {
   calculateObjectSize,
+  getAbsoluteLayoutSize,
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
@@ -106,6 +108,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     breakpointConfig,
     settings,
     forceShowLayerId,
+    selectedDevice,
   } = props;
 
   const stageSize = breakpointConfig?.normal.slide!;
@@ -242,8 +245,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // 2. apply only delta to selected objects only
   selectedObjectIds.forEach((objectId) => {
     if (!objectByIdLocal[objectId].isLocked) {
-      objectByIdLocal[objectId].absoluteLayout!.left! += selRectDelta.x;
-      objectByIdLocal[objectId].absoluteLayout!.top! += selRectDelta.y;
+      const absoluteLayout = objectByIdLocal[objectId].absoluteLayout!;
+      const absSizeObj = getAbsoluteLayoutSize(absoluteLayout, selectedDevice);
+      absSizeObj.left! += selRectDelta.x;
+      absSizeObj.top! += selRectDelta.y;
     }
   });
 
@@ -452,7 +457,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (!isSelected) return null;
 
     const sizeObj = pick(
-      object.absoluteLayout,
+      getAbsoluteLayoutSize(object.absoluteLayout!, selectedDevice),
       "left",
       "top",
       "width",
@@ -808,6 +813,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               // update objects
               selectedObjectIds.forEach((objectId) => {
                 if (!objectByIdLocal[objectId].isLocked) {
+                  const absSizeObj = getAbsoluteLayoutSize(
+                    objectByIdLocal[objectId].absoluteLayout!,
+                    selectedDevice
+                  );
+                  absSizeObj.left = roundNumber(absSizeObj.left!, 1);
+                  absSizeObj.top = roundNumber(absSizeObj.top!, 1);
+                  absSizeObj.width = roundNumber(absSizeObj.width!, 1);
+                  absSizeObj.height = roundNumber(absSizeObj.height!, 1);
+
                   _updateObject(objectByIdLocal[objectId]);
                 }
               });
@@ -892,11 +906,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       const movePoint = getPointsDiff(resizeStartPosition, point);
 
       const obj = objectById[resizeData.objectId];
+      const absSizeObj = getAbsoluteLayoutSize(
+        obj.absoluteLayout!,
+        selectedDevice
+      );
       const objectRect = {
-        x: obj.absoluteLayout!.left!,
-        y: obj.absoluteLayout!.top!,
-        w: obj.absoluteLayout!.width!,
-        h: obj.absoluteLayout!.height!,
+        x: absSizeObj.left!,
+        y: absSizeObj.top!,
+        w: absSizeObj.width!,
+        h: absSizeObj.height!,
       };
       switch (resizeData.handle) {
         case "tl": {
@@ -1184,12 +1202,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         e.stopPropagation();
         if (resizeStartPosition !== null && resizeData !== null) {
           const obj = { ...objectById[resizeData?.objectId!] };
-          obj.absoluteLayout = {
-            left: resizeRect!.x!,
-            top: resizeRect!.y!,
-            width: resizeRect!.w!,
-            height: resizeRect!.h!,
-          };
+
+          const absSizeObj = getAbsoluteLayoutSize(
+            obj.absoluteLayout!,
+            selectedDevice
+          );
+          absSizeObj.left = roundNumber(resizeRect!.x!, 1);
+          absSizeObj.top = roundNumber(resizeRect!.y!, 1);
+          absSizeObj.width = roundNumber(resizeRect!.w!, 1);
+          absSizeObj.height = roundNumber(resizeRect!.h!, 1);
+
           _updateObject(obj);
 
           setResizeStartPosition(null);
@@ -1221,10 +1243,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 _addNewObject(activeLayerId, stageToolObjectType, {
                   layout: "absolute",
                   absoluteLayout: {
-                    left: rect2.x,
-                    top: rect2.y,
-                    width: rect2.w,
-                    height: rect2.h,
+                    type: "common",
+                    perDevice: [],
+                    common: {
+                      deviceType: "common",
+                      left: rect2.x,
+                      top: rect2.y,
+                      width: rect2.w,
+                      height: rect2.h,
+                    },
                   },
                 });
                 _resetStageTool();
@@ -1384,6 +1411,7 @@ const mapStateToProps = (state: IStore) => {
     settings,
     viewPortSize: stage.stageViewportSize,
     forceShowLayerId,
+    selectedDevice: state.stage.selectedDevice,
   };
 };
 

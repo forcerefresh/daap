@@ -42,7 +42,14 @@ export const useAPIHook = () => {
 
     projects.reverse();
 
-    const retArr = projects.splice(from, from + perPage);
+    console.log(search);
+
+    const retArr = projects
+      .filter((item) => {
+        console.log(item.name.indexOf(search) !== -1);
+        return !search || item.name.indexOf(search) !== -1;
+      })
+      .splice(from, from + perPage);
 
     return new Promise((resolve) => {
       resolve({ projects: retArr });

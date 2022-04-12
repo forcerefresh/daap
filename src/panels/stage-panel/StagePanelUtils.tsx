@@ -1,7 +1,16 @@
 import { cloneDeep, mapValues, pick } from "lodash-es";
 import React from "react";
-import { ILayout, IObject, ObjectType } from "../../objects/types";
-import { BreakpointConfiguration } from "../../store/reducers/i-settings";
+import {
+  IAbsoluteLayouts,
+  ILayout,
+  IObject,
+  ISnapLayouts,
+  ObjectType,
+} from "../../objects/types";
+import {
+  BreakpointConfiguration,
+  DeviceType,
+} from "../../store/reducers/i-settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
 
@@ -24,7 +33,20 @@ export function calculateObjectSize(
 
   // 1. if object has position
   if (object.layout === "absolute") {
-    const sizeObj = cloneDeep(object.absoluteLayout)!;
+    const { absoluteLayout } = object;
+
+    let absoluteValue =
+      absoluteLayout?.type === "common"
+        ? absoluteLayout!.common
+        : absoluteLayout?.perDevice.find(
+            (item) => item.deviceType === breakpointConfig.type
+          );
+
+    if (!absoluteValue) {
+      absoluteValue = absoluteLayout!.common;
+    }
+
+    const sizeObj = pick(absoluteValue, "left", "top", "width", "height")!;
 
     if (resetPosition) {
       sizeObj.left = 0;
@@ -81,9 +103,15 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  const gap = object.snapLayout!.gap;
+  // const gap = object.snapLayout!.gap;
 
   if (object.layout === "snap") {
+    const snapSizeObj = getSnapLayoutSize(
+      object.snapLayout!,
+      breakpointConfig.type
+    );
+    const gap = snapSizeObj.gap;
+
     const relativeToSize = getPSGSize(
       object.snapLayout?.relativeTo!,
       breakpointConfig
@@ -95,13 +123,13 @@ export function calculateObjectSize(
         const top =
           relativeToSize.top +
           relativeToSize.height / 2 -
-          object.snapLayout!.height / 2;
+          snapSizeObj.height / 2;
 
         sizeObj = {
           top,
           left: relativeToSize.left + gap,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
@@ -109,32 +137,29 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width / 2 -
-          object.snapLayout!.width / 2;
+          snapSizeObj.width / 2;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
       case "right": {
         const left =
-          relativeToSize.left +
-          relativeToSize.width -
-          object.snapLayout!.width -
-          gap;
+          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
         const top =
           relativeToSize.top +
           relativeToSize.height / 2 -
-          object.snapLayout!.height / 2;
+          snapSizeObj.height / 2;
 
         sizeObj = {
           top,
           left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
@@ -143,18 +168,15 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width / 2 -
-          object.snapLayout!.width / 2;
+          snapSizeObj.width / 2;
         const top =
-          relativeToSize.top +
-          relativeToSize.height -
-          object.snapLayout!.height -
-          gap;
+          relativeToSize.top + relativeToSize.height - snapSizeObj.height - gap;
 
         sizeObj = {
           top,
           left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
@@ -162,58 +184,47 @@ export function calculateObjectSize(
         sizeObj = {
           top: relativeToSize.top + gap,
           left: relativeToSize.left + gap,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
       case "top-right": {
         const left =
-          relativeToSize.left +
-          relativeToSize.width -
-          object.snapLayout!.width -
-          gap;
+          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
 
       case "bottom-left": {
         const top =
-          relativeToSize.top +
-          relativeToSize.height -
-          object.snapLayout!.height;
+          relativeToSize.top + relativeToSize.height - snapSizeObj.height;
 
         sizeObj = {
           top: top - gap,
           left: relativeToSize.left + gap,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
       case "bottom-right": {
         const top =
-          relativeToSize.top +
-          relativeToSize.height -
-          object.snapLayout!.height -
-          gap;
+          relativeToSize.top + relativeToSize.height - snapSizeObj.height - gap;
         const left =
-          relativeToSize.left +
-          relativeToSize.width -
-          object.snapLayout!.width -
-          gap;
+          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
 
         sizeObj = {
           top: top,
           left: left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
@@ -221,18 +232,18 @@ export function calculateObjectSize(
         const left =
           relativeToSize.left +
           relativeToSize.width / 2 -
-          object.snapLayout!.width / 2;
+          snapSizeObj.width / 2;
 
         const top =
           relativeToSize.top +
           relativeToSize.height / 2 -
-          object.snapLayout!.height / 2;
+          snapSizeObj.height / 2;
 
         sizeObj = {
           top,
           left,
-          width: object.snapLayout!.width,
-          height: object.snapLayout!.height,
+          width: snapSizeObj.width,
+          height: snapSizeObj.height,
         };
         break;
       }
@@ -242,6 +253,42 @@ export function calculateObjectSize(
   }
 
   return {};
+}
+
+export function getAbsoluteLayoutSize(
+  absoluteLayout: IAbsoluteLayouts,
+  selectedDevice: DeviceType | "common" | string | any
+) {
+  let absoluteValue =
+    absoluteLayout?.type === "common"
+      ? absoluteLayout!.common
+      : absoluteLayout?.perDevice.find(
+          (item) => item.deviceType === selectedDevice
+        );
+
+  if (!absoluteValue) {
+    absoluteValue = absoluteLayout!.common;
+  }
+
+  return absoluteValue;
+}
+
+export function getSnapLayoutSize(
+  snapLayout: ISnapLayouts,
+  selectedDevice: DeviceType | "common" | string | any
+) {
+  let snapValue =
+    snapLayout?.type === "common"
+      ? snapLayout!.common
+      : snapLayout?.perDevice.find(
+          (item) => item.deviceType === selectedDevice
+        );
+
+  if (!snapValue) {
+    snapValue = snapLayout!.common;
+  }
+
+  return snapValue;
 }
 
 function getPSGSize(
@@ -368,8 +415,13 @@ export function getPositionInfo(object: IObject) {
     return (
       <>
         <span> Absolute | </span>
-        <span>{"X:" + roundNumber(object.absoluteLayout!.left!, 2)}</span>
-        <span> {"Y:" + roundNumber(object.absoluteLayout!.top!, 2)}</span>
+        <span>
+          {"X:" + roundNumber(object.absoluteLayout!.common.left!, 2)}
+        </span>
+        <span>
+          {" "}
+          {"Y:" + roundNumber(object.absoluteLayout!.common.top!, 2)}
+        </span>
         {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
       <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
       </>

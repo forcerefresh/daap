@@ -15,7 +15,7 @@ import {
 } from "../types";
 import css from "./numeric-timeline-input.module.scss";
 
-export const NumbericTimelineInputForm: React.FC<
+export const NumericTimelineInputForm: React.FC<
   INumericTimelineInput & IUpdateInput
 > = (props) => {
   const { displayName, value, onChange } = props;

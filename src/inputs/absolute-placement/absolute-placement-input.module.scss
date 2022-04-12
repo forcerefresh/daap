@@ -26,7 +26,7 @@
 
     > .linkTop {
       border-top: 1px solid #4e4e4e;
-      border-right: 1px solid#4e4e4e;
+      border-right: 1px solid #4e4e4e;
       width: 16px;
       height: 10px;
       margin-bottom: 5px;
@@ -39,5 +39,17 @@
       height: 10px;
       margin-top: 5px;
     }
+  }
+}
+
+.perDeviceInput {
+  input {
+    width: 55px !important;
+  }
+}
+
+.headerRow {
+  td {
+    padding-left: 5px;
   }
 }

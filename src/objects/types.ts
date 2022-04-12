@@ -55,22 +55,38 @@ export interface ICommonObjectProperties {
   heightType?: "px" | "em" | "%" | "vw" | "vh";
 }
 
-export interface IAbsoluteLayout {
-  left: number;
-  width: number;
-  top: number;
-  height: number;
-}
+export interface IFitLayout {}
 
 export interface ISnapLayout {
+  deviceType: DeviceType | "common";
   width: number;
   height: number;
   gap: number;
+  keepAspectRatio?: boolean;
+}
+
+export interface ISnapLayouts {
+  type: "common" | "perDevice";
+  common: ISnapLayout;
+  perDevice: ISnapLayout[];
   edge: string;
   relativeTo: string;
 }
 
-export interface IFitLayout {}
+export interface IAbsoluteLayout {
+  deviceType: DeviceType | "common";
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  keepAspectRatio?: boolean;
+}
+
+export interface IAbsoluteLayouts {
+  type: "common" | "perDevice";
+  common: IAbsoluteLayout;
+  perDevice: IAbsoluteLayout[];
+}
 
 export interface IGridLayout {
   deviceType: DeviceType | "common";
@@ -277,8 +293,8 @@ export interface ILayout {
     | "fit_stage"
     | "fit_guidelines";
 
-  absoluteLayout?: IAbsoluteLayout;
-  snapLayout?: ISnapLayout;
+  absoluteLayout?: IAbsoluteLayouts;
+  snapLayout?: ISnapLayouts;
   gridLayouts?: IGridLayouts;
   fitLayout?: IFitLayout;
   /** object itself is setting size */

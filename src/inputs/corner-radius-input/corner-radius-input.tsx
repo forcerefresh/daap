@@ -11,7 +11,7 @@ const SMALL_ICON_SIZE = 18;
 export const CornerRadiusInputForm: React.FC<
   ICornerRadiusInput & IUpdateInput
 > = (props) => {
-  const { displayName, helperText, value, onChange } = props;
+  const { displayName, helperText, value, inputProps, onChange } = props;
 
   const isLinked = !!value.common;
 
@@ -27,6 +27,7 @@ export const CornerRadiusInputForm: React.FC<
   const renderLinkBtn = () => {
     return (
       <Button
+        disabled={inputProps?.disabled}
         className={css.linkButton}
         minimal
         small
@@ -97,11 +98,17 @@ export const CornerRadiusInputForm: React.FC<
               </>
             ) : (
               <div className={cx(css.row, "input70-force")}>
-                {getUnitNumericFiled("", value.common, (common: any) => {
-                  const valueClone = cloneDeep(value);
-                  valueClone.common = common;
-                  onChange(valueClone);
-                })}
+                {getUnitNumericFiled(
+                  "",
+                  value.common,
+                  (common: any) => {
+                    const valueClone = cloneDeep(value);
+                    valueClone.common = common;
+                    onChange(valueClone);
+                  },
+                  undefined,
+                  { disabled: inputProps?.disabled }
+                )}
                 {renderLinkBtn()}
               </div>
             )}

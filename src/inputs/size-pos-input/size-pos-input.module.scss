@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+
+    .bp3-label {
+      width: 10px !important;
+    }
+    .bp3-input {
+      width: 60px !important;
+      margin-right: 5px;
+    }
+  }
+}

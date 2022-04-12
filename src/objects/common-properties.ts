@@ -7,6 +7,7 @@ import {
   IInputMetadataValues,
   InputType,
   ISelectInput,
+  ITextAreaInput,
   SvgValues,
 } from "../inputs/types";
 import { FormType, IFormGroupItem } from "../utils/form-layout/i-form-layout";
@@ -17,7 +18,8 @@ export type CommonPropertiesTuple = [
     [
       ICornerRadiusInput<"commonCornerRadius">,
       IBorderInput<"commonBorder">,
-      ISelectInput<"commonOverflow">
+      ISelectInput<"commonOverflow">,
+      ITextAreaInput<"commonInlineStyle">
     ]
   >
 ];
@@ -27,6 +29,7 @@ export interface CommonPropertiesValues {
   commonCornerRadius: ICornerRadiusValue;
   commonBorder: IBorderValue;
   commonOverflow: string;
+  commonInlineStyle: string;
 }
 
 export const getCommonObjectPropertiesDefinition =
@@ -53,7 +56,6 @@ export const getCommonObjectPropertiesDefinition =
           defaultValue: getDefaultBorderValue(),
           optional: true,
         },
-
         {
           displayName: "Overflow",
           propertyName: "commonOverflow",
@@ -61,6 +63,14 @@ export const getCommonObjectPropertiesDefinition =
           options: getOverflowOptions(),
           value: "visible",
           defaultValue: "visible",
+          optional: true,
+        },
+        {
+          displayName: "Inline style",
+          propertyName: "commonInlineStyle",
+          inputType: InputType.TEXTAREA,
+          value: "",
+          defaultValue: "",
           optional: true,
         },
       ],
@@ -72,6 +82,7 @@ export const getCommonPropertiesValues = (): CommonPropertiesValues => ({
   commonCornerRadius: { tl: "0", tr: "0", bl: "0", br: "", common: "0" },
   commonBorder: getDefaultBorderValue(),
   commonOverflow: "visible",
+  commonInlineStyle: "",
 });
 
 export const getCommonPropertiesMetadataValues = (): {
@@ -81,6 +92,7 @@ export const getCommonPropertiesMetadataValues = (): {
     commonCornerRadius: { exportForWizard: false, disabled: true },
     commonBorder: { exportForWizard: false, disabled: true },
     commonOverflow: { exportForWizard: false, disabled: true },
+    commonInlineStyle: { exportForWizard: false, disabled: true },
   };
 };
 

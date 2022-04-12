@@ -3,7 +3,12 @@ import {
   CommonPropertiesTuple,
   CommonPropertiesValues,
 } from "../objects/common-properties";
-import { IGridLayout } from "../objects/types";
+import {
+  IAbsoluteLayout,
+  IGridLayout,
+  ISnapLayout,
+  ISnapLayouts,
+} from "../objects/types";
 import { Breakpoints } from "../store/reducers/i-settings";
 import { ISlideDuration } from "../store/reducers/i-slides";
 import {
@@ -33,8 +38,9 @@ export enum InputType {
   COLOR = "color",
   TRANSFORM_ORIGIN = "transform_origin",
   SPLIT = "split",
-  TRANSFORM = "transform",
+  ABSOLUTE_LAYOUT = "absolute_layout",
   SIZE = "size",
+  SIZE_POS = "size_pos",
   SNAP = "snap",
   IMAGE = "image",
   MULTI_IMAGE = "multi_image",
@@ -340,6 +346,7 @@ export interface ITextAreaInput<T = string> {
   value: string;
   defaultValue: string;
   inputProps?: { disableDebounce?: boolean; rows?: number };
+  optional?: boolean;
 }
 
 export interface ISVGValue {
@@ -387,36 +394,56 @@ export interface IRichTextAreaInput<T = string> {
   defaultValue: string;
   inputProps?: { disableDebounce?: boolean; rows?: number };
 }
-export interface ITransformInput<T = string> {
-  inputType: InputType.TEXT;
-  displayName: string;
-  helperText?: string;
-  propertyName: T;
-  value: { left: number; top: number; width: number; height: number };
-  defaultValue: { left: number; top: number; width: number; height: number };
-  inputProps?: { selfSize?: boolean; disablePosition?: boolean };
+
+export interface ISnapInputValue {
+  type: "perDevice" | "common";
+  common: ISnapLayout;
+  perDevice: ISnapLayout[];
 }
 
-export interface IEdgeInput<T = string> {
+export interface IGridPlacementInput<T = string> {
+  inputType: InputType.GRID_LAYOUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IGridPlacementValue;
+  defaultValue: IGridPlacementValue;
+  inputProps?: { disablePosition?: boolean };
+  breakpoints?: Breakpoints;
+  selectedDevice?: string;
+  onChangeDevice?: (device: string) => void;
+}
+
+export interface IAbsolutePlacementValue {
+  type: "perDevice" | "common";
+  common: IAbsoluteLayout;
+  perDevice: IAbsoluteLayout[];
+}
+
+export interface IAbsolutePlacamentInput<T = string> {
+  inputType: InputType.ABSOLUTE_LAYOUT;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: IAbsolutePlacementValue;
+  defaultValue: IAbsolutePlacementValue;
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean };
+  breakpoints?: Breakpoints;
+  selectedDevice?: string;
+  onChangeDevice?: (device: string) => void;
+}
+
+export interface ISnapInput<T = string> {
   inputType: InputType.TEXT;
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: {
-    width: number;
-    height: number;
-    gap: number;
-    edge: string;
-    relativeTo: string;
-  };
-  defaultValue: {
-    width: number;
-    height: number;
-    gap: number;
-    edge: string;
-    relativeTo: string;
-  };
+  value: ISnapLayouts;
+  defaultValue: ISnapLayouts;
   inputProps?: { selfSize?: boolean; disablePosition?: boolean };
+  breakpoints?: Breakpoints;
+  selectedDevice?: string;
+  onChangeDevice?: (device: string) => void;
 }
 
 export interface ISizeInput<T = string> {
@@ -424,8 +451,30 @@ export interface ISizeInput<T = string> {
   displayName: string;
   helperText?: string;
   propertyName: T;
-  value: { width: number; height: number };
-  defaultValue: { width: number; height: number };
+  value: { width: number; height: number; keepAspectRatio?: boolean };
+  defaultValue: { width: number; height: number; keepAspectRatio?: boolean };
+  inputProps?: { disabled?: boolean };
+}
+
+export interface ISizePosInput<T = string> {
+  inputType: InputType.SIZE;
+  displayName: string;
+  helperText?: string;
+  propertyName: T;
+  value: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    keepAspectRatio?: boolean;
+  };
+  defaultValue: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+    keepAspectRatio?: boolean;
+  };
   inputProps?: { disabled?: boolean };
 }
 
@@ -560,6 +609,7 @@ export interface ICornerRadiusInput<T = string> {
   value: ICornerRadiusValue;
   defaultValue: ICornerRadiusValue;
   optional?: boolean;
+  inputProps?: { disabled?: boolean };
 }
 
 export interface ITransformOriginInput<T = string> {
