@@ -333,6 +333,8 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           <h3>EMPTY FRAME</h3>
           <p>Add empty frame</p>
         </Card>
+
+        {renderObjectsCards("other")}
       </div>
     </div>
   );

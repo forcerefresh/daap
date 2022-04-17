@@ -27,11 +27,11 @@ gsap.registerEffect({
 
     const onStart = () => {
       console.log("onstart exec code");
-      execCodeFunc_Start({ id, className, values, calculatedObjectSize });
+      execCodeFunc_Start?.({ id, className, values, calculatedObjectSize });
     };
     const onStop = () => {
       console.log("onstop exec code");
-      execCodeFunc_Stop({ id, className, values, calculatedObjectSize });
+      execCodeFunc_Stop?.({ id, className, values, calculatedObjectSize });
     };
 
     var effConfig = {

@@ -1,4 +1,12 @@
 import {
+  createDelayObject,
+  delayMeta,
+  delayObject_Start,
+  delayObject_Stop,
+  getDelayHtml,
+  preloadDelay,
+} from "./delay/delay";
+import {
   createImageObject,
   getAssetsUrls,
   getImageHtml,
@@ -41,7 +49,6 @@ registerObject(
   createYoutubeVideoObject,
   getYoutubeVideoHtml,
   preloadYoutube,
-
   getYoutubeExecutionCode_Start,
   getYoutubeExecutionCode_Stop,
   postProcessYoutube
@@ -66,6 +73,17 @@ registerObject(
   undefined,
   undefined,
   getAssetsUrls
+);
+
+registerObject(
+  "delay",
+  "other",
+  delayMeta,
+  createDelayObject,
+  getDelayHtml,
+  preloadDelay,
+  delayObject_Start,
+  delayObject_Stop
 );
 
 registerObject(
