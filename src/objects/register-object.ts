@@ -36,7 +36,6 @@ import {
   createTrianglifyObject,
   getTrianglifyHtml,
   trianglifyMeta,
-  trianglifyObject_Start,
 } from "./trianglify/trianglify";
 import {
   createYoutubeVideoObject,
@@ -97,9 +96,7 @@ registerObject(
   "media",
   trianglifyMeta,
   createTrianglifyObject,
-  getTrianglifyHtml,
-  undefined,
-  trianglifyObject_Start
+  getTrianglifyHtml
 );
 
 registerObject(

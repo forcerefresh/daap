@@ -18,6 +18,7 @@ import {
   IFormSwitchGroupItem,
 } from "../../utils/form-layout/i-form-layout";
 import { RGBColor } from "react-color";
+import { getObjectPlaceholder } from "../object-helpers";
 
 const TRIANGLIFY = "trianglify";
 
@@ -242,54 +243,46 @@ export function getTrianglifyHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const trianglifyProperties = object.definition.values as TrianglifyValues;
-  return `<div class="object-content object-content-${object.id}"></div>`;
-}
-
-export function trianglifyObject_Start(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}) {
-  const { calculatedObjectSize, className } = props;
-  let trianglifyEl: HTMLElement;
-  let objectEl: HTMLElement;
-
-  objectEl = document.getElementsByClassName(className)[0] as HTMLElement;
-  trianglifyEl = document.createElement("div");
-  // trianglifyEl.className = "trianglify";
-  trianglifyEl.style.position = "absolute";
-  trianglifyEl.style.top = "0";
-  trianglifyEl.style.left = "0";
-  objectEl.appendChild(trianglifyEl);
+  const props = object.definition.values as TrianglifyValues;
 
   const trConfig = {
-    width: calculatedObjectSize.width.slice(0, -2),
-    height: calculatedObjectSize.height.slice(0, -2),
-    cellSize: props.values.cellSize,
-    variance: props.values.variance / 100,
-    seed: props.values.seed,
-    xColors: props.values.colorsX.map(colorToString),
-    yColors: props.values.colorsY.map(colorToString),
-    fill: props.values.fill,
-    strokeWidth: props.values.strokeWidth,
+    width: parseInt(`${calculatedObjectSize.width!}`),
+    height: parseInt(`${calculatedObjectSize.height!}`),
+    cellSize: props.cellSize,
+    variance: props.variance / 100,
+    seed: props.seed,
+    xColors: props.colorsX.map(colorToString),
+    yColors: props.colorsY.map(colorToString),
+    fill: props.fill,
+    strokeWidth: props.strokeWidth,
     colorFunction: (trianglify as any).colorFunctions.interpolateLinear(0.5),
   };
 
-  if (props.values.colorsSG === "match") {
-    trConfig.xColors = props.values.colors.map(colorToString);
+  if (props.colorsSG === "match") {
+    trConfig.xColors = props.colors.map(colorToString);
     trConfig.yColors = "match" as any;
   }
 
   const pattern = trianglify(trConfig as any) as any;
-  trianglifyEl.appendChild(pattern.toSVG());
+
+  const svg = pattern.toSVG() as SVGElement;
+
+  const objectClassname = "object-" + object.id;
+  let css = "";
+  if (props.strokeColorSG === "color") {
+    css = `<style>
+      .${objectClassname} svg > path {
+        stroke: ${colorToString(props.strokeColor)};
+      }</style>`;
+  }
+
+  return css + `<div class='${objectClassname}'>` + svg.outerHTML + "<div>";
 }
 
 export const trianglifyMeta = {
   name: "TRIANGLIFY",
   description: "Add Trianglify",
-  preloadOrder: PreloadOrder.FIRST,
+  //preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };
 
