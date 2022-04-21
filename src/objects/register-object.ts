@@ -33,6 +33,12 @@ import {
   textMeta,
 } from "./text/text";
 import {
+  createTrianglifyObject,
+  getTrianglifyHtml,
+  trianglifyMeta,
+  trianglifyObject_Start,
+} from "./trianglify/trianglify";
+import {
   createYoutubeVideoObject,
   getYoutubeExecutionCode_Start,
   getYoutubeExecutionCode_Stop,
@@ -84,6 +90,16 @@ registerObject(
   preloadDelay,
   delayObject_Start,
   delayObject_Stop
+);
+
+registerObject(
+  "trianglify",
+  "media",
+  trianglifyMeta,
+  createTrianglifyObject,
+  getTrianglifyHtml,
+  undefined,
+  trianglifyObject_Start
 );
 
 registerObject(
