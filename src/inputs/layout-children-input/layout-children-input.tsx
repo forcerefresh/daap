@@ -2,12 +2,18 @@ import React from "react";
 import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Label } from "@blueprintjs/core";
-import { getSelectField } from "../input-utils";
+import {
+  getButtonGroupField,
+  getSelectField,
+  getUnitNumericFiled,
+} from "../input-utils";
 import {
   ICoverPlacementInput,
   ILayoutChildrenInput,
   IUpdateInput,
 } from "../types";
+import { IObject } from "../../objects/types";
+import { objects } from "../../store/reducers/objects";
 //import css from "./layout-childern-input.module.scss";
 
 const LAYOUT_TYPE_OPTIONS = [
@@ -29,9 +35,15 @@ const JUSTIFY_OPTIONS = [
 ];
 
 export const LayoutChildrenInputForm: React.FC<
-  ILayoutChildrenInput & IUpdateInput
+  ILayoutChildrenInput &
+    IUpdateInput & {
+      layerData?: {
+        //layer?: ILayer;
+        objects?: IObject[];
+      };
+    }
 > = (props) => {
-  const { value, onChange } = props;
+  const { value, onChange, layerData } = props;
 
   return (
     <>
@@ -66,6 +78,55 @@ export const LayoutChildrenInputForm: React.FC<
           }
         )}
       </div>
+
+      <div>
+        {getButtonGroupField(
+          "Gap",
+          value.itemsGap.type,
+          (type: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.itemsGap.type = type;
+            onChange(valueClone);
+          },
+          [
+            { value: "common", label: "Common" },
+            { value: "each", label: "Each" },
+          ]
+        )}
+      </div>
+      {value.itemsGap.type === "common" && (
+        <div>
+          {getUnitNumericFiled(
+            "Common",
+            value.itemsGap.commonValue,
+            (commonValue: any) => {
+              const valueClone = cloneDeep(value);
+              valueClone.itemsGap.commonValue = commonValue;
+              onChange(valueClone);
+            }
+          )}
+        </div>
+      )}
+
+      {value.itemsGap.type === "each" && (
+        <div>
+          {layerData?.objects?.map((object, idx) => {
+            if (idx === layerData.objects!.length - 1) return null;
+
+            return getUnitNumericFiled(
+              `Gap ${idx + 1}`,
+              value.itemsGap.eachValues[idx]
+                ? value.itemsGap.eachValues[idx]
+                : "",
+              (eachValue: any) => {
+                const valueClone = cloneDeep(value);
+                valueClone.itemsGap.eachValues[idx] = eachValue;
+                onChange(valueClone);
+              }
+            );
+          })}
+        </div>
+      )}
     </>
   );
 };

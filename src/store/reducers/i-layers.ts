@@ -78,11 +78,21 @@ export const layerDefinition: LayerTuple = [
           type: LayoutChildrenType.Column,
           align: "start",
           justify: "start",
+          itemsGap: {
+            commonValue: "",
+            eachValues: [],
+            type: "common",
+          },
         },
         defaultValue: {
           type: LayoutChildrenType.Column,
           align: "start",
           justify: "start",
+          itemsGap: {
+            commonValue: "",
+            eachValues: [],
+            type: "common",
+          },
         },
       },
     ],

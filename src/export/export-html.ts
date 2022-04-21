@@ -211,6 +211,25 @@ function generateSlideData(
       layerStyle += key + ":" + value + ";";
     });
 
+    if (layerValues.layoutChildren.itemsGap.type === "common") {
+      html += `<style>
+      .${layerClassName} > * {
+        margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
+      }
+    </style>`;
+    } else {
+      html += `<style>`;
+      layerValues.layoutChildren.itemsGap.eachValues.forEach(
+        (eachValue, idx) => {
+          html += `.${layerClassName} > *:nth-child(${idx + 1}) {
+          margin-bottom: ${eachValue};
+        }`;
+        }
+      );
+
+      html += `</style>`;
+    }
+
     html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
 
     const objectArr = getObjectArr(objects, layer.objectIds);

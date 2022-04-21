@@ -73,6 +73,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     _setDevice,
     hideHeader,
     className,
+    objects,
   } = props;
 
   const renderSlideProperties = (slide: ISlide) => {
@@ -340,6 +341,13 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   ) => {
     const flatForm = flattenForm(properties as IFormLayoutItem[]);
 
+    let layerObjects: IObject[] = [];
+    if (objectOrLayer.type === "layer") {
+      layerObjects = objectOrLayer?.objectIds.map(
+        (id: any) => objects.objectById[id]
+      );
+    }
+
     const inputs = flatForm.map((property, idx) => {
       const { propertyName } = property;
 
@@ -395,7 +403,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           inputProps,
           onChange,
           onChange,
-          onMetadataChange
+          onMetadataChange,
+          { layerData: { layer: layer!, objects: layerObjects } }
         ),
         propertyName: property.propertyName,
         duplicate: property.duplicate ? property.duplicate : "",
@@ -489,6 +498,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     // activeObjectId,
+    objects,
     selectedDevice,
     breakpoints,
     object,

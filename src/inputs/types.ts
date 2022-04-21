@@ -488,6 +488,11 @@ export interface ILayoutChildrenValue {
   type: LayoutChildrenType;
   align: "start" | "center" | "end";
   justify: "start" | "center" | "end";
+  itemsGap: {
+    type: "common" | "each";
+    commonValue: string;
+    eachValues: string[];
+  };
 }
 
 export interface ILayoutChildrenInput<T = string> {

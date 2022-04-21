@@ -1,4 +1,12 @@
 import {
+  countdownMeta,
+  countdownObject_Start,
+  countdownObject_Stop,
+  createCountdownObject,
+  getCountdownHtml,
+  preloadCountdown,
+} from "./contdown/countdown";
+import {
   createDelayObject,
   delayMeta,
   delayObject_Start,
@@ -84,6 +92,17 @@ registerObject(
   preloadDelay,
   delayObject_Start,
   delayObject_Stop
+);
+
+registerObject(
+  "countdown",
+  "other",
+  countdownMeta,
+  createCountdownObject,
+  getCountdownHtml,
+  preloadCountdown,
+  countdownObject_Start,
+  countdownObject_Stop
 );
 
 registerObject(

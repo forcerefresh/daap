@@ -299,6 +299,7 @@ export function getInputForm<T>(
           key={key}
           {...inputProps}
           onChange={onChange}
+          layerData={data?.layerData}
         />
       );
     }

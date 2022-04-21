@@ -5,6 +5,7 @@ import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "../objects-factory";
 import svg from "./delay-icon.svg";
 import { convertTimeUnitToMs } from "../../utils/utils";
+import { getObjectPlaceholder } from "../object-helpers";
 
 const DELAY = "delay";
 
@@ -65,6 +66,11 @@ export function getDelayHtml(
   isPlayer: boolean
 ) {
   const delayValues = object.definition.values as DelayValues;
+
+  if (!isPlayer) {
+    return getObjectPlaceholder(`DELAY<br/>${delayValues.delay}`);
+  }
+
   return `<div class="object-content object-content-${object.id}" style="font-size:5em"></div>`;
 }
 

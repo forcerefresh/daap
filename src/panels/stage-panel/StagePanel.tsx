@@ -553,19 +553,44 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       }
     }
 
+    const layerClassName = "layer-" + layer.id;
+
+    let layerCss = "";
+    if (layerValues.layoutChildren.itemsGap.type === "common") {
+      layerCss += `
+      .${layerClassName} > * {
+        margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
+      }
+    `;
+    } else {
+      layerValues.layoutChildren.itemsGap.eachValues.forEach(
+        (eachValue, idx) => {
+          layerCss += `.${layerClassName} > *:nth-child(${idx + 1}) {
+          margin-bottom: ${eachValue};
+        }
+        `;
+        }
+      );
+    }
+
     return (
-      <div
-        className={cx("LAYER", { [css.layer]: isLayerActive && hasLayout })}
-        style={layerStyle}
-      >
-        {layer.objectIds.map((objectId) => {
-          const object = objectByIdLocal[objectId];
-          const layoutChildren = layer.definition.values.hasLayoutChildren
-            ? layer.definition.values.layoutChildren
-            : undefined;
-          return renderObject(object, layoutChildren);
-        })}
-      </div>
+      <>
+        <style>{layerCss}</style>
+        <div
+          className={cx(layerClassName, "LAYER", {
+            [css.layer]: isLayerActive && hasLayout,
+          })}
+          style={layerStyle}
+        >
+          {layer.objectIds.map((objectId) => {
+            const object = objectByIdLocal[objectId];
+            const layoutChildren = layer.definition.values.hasLayoutChildren
+              ? layer.definition.values.layoutChildren
+              : undefined;
+            return renderObject(object, layoutChildren);
+          })}
+        </div>
+      </>
     );
   }
 

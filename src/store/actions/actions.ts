@@ -307,6 +307,11 @@ export function addNewLayer(slideId: string): any {
             type: LayoutChildrenType.Column,
             align: "start",
             justify: "start",
+            itemsGap: {
+              commonValue: "",
+              eachValues: [],
+              type: "common",
+            },
           },
         },
         valuesMetadata: {},
