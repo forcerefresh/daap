@@ -41,6 +41,11 @@ import {
   textMeta,
 } from "./text/text";
 import {
+  createTrianglifyObject,
+  getTrianglifyHtml,
+  trianglifyMeta,
+} from "./trianglify/trianglify";
+import {
   createYoutubeVideoObject,
   getYoutubeExecutionCode_Start,
   getYoutubeExecutionCode_Stop,
@@ -103,6 +108,14 @@ registerObject(
   preloadCountdown,
   countdownObject_Start,
   countdownObject_Stop
+);
+
+registerObject(
+  "trianglify",
+  "media",
+  trianglifyMeta,
+  createTrianglifyObject,
+  getTrianglifyHtml
 );
 
 registerObject(
