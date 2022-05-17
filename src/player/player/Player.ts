@@ -6,9 +6,11 @@ import {
   ISlideData,
   ITransitionsData,
 } from "../../export/i-export-html";
+import { layerSizeUpdate } from "../../objects/layer/layer";
 import {
   CoreObjectType,
   getObjectDefinition,
+  IObjectDefinitionHolder,
   PreloadOrder,
 } from "../../objects/objects-factory";
 import {
@@ -262,13 +264,19 @@ export class Player {
         { resetPosition: false },
         this.scaleParams
       );
+      console.log(calObjSize);
       /*
       const calObjSize =
         transitionData.calculatedObjectSizePerDevice?.[
           this.currentDeviceType
         ] || transitionData.calculatedObjectSize;*/
 
-      const objDef = getObjectDefinition(transitionData.itemType);
+      let objDef = getObjectDefinition(transitionData.itemType);
+
+      if (transitionData.itemType === "layer") {
+        // NOTE: be cerful as we set only sizeUpdate
+        objDef = { sizeUpdate: layerSizeUpdate } as any;
+      }
 
       objDef?.sizeUpdate(
         {

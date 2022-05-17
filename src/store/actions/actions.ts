@@ -53,6 +53,10 @@ import { getObjectDefinition } from "../../objects/objects-factory";
 import { ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
+import {
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../../objects/common-properties";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -313,8 +317,9 @@ export function addNewLayer(slideId: string): any {
               type: "common",
             },
           },
+          ...getCommonPropertiesValues(),
         },
-        valuesMetadata: {},
+        valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
       },
       layout: "none",
       supportedLayout: {

@@ -1123,21 +1123,6 @@ export type VideoPropertiesTuple = [
   ...CommonPropertiesTuple
 ];
 
-export interface SvgValues {
-  svg: ISVGValue;
-  hasCustomColors: boolean;
-  hasFillAndStroke: boolean;
-  fill: RGBColor;
-  stroke: RGBColor;
-}
-
-export type SvgPropertiesTuple = [
-  ISVGInput<"svg">,
-  IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
-  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
-  ...CommonPropertiesTuple
-];
-
 export type ArrowPropertiesTuple = [
   ISVGInput<"svg">,
   ICheckboxInput<"keepAspectRatio">,
@@ -1175,7 +1160,3 @@ export interface CanvasValues {
 }
 
 export type CanvasPropertiesTuple = [ITextInput<"source">];
-
-export type FramePropertiesTuple = [];
-
-export interface FrameProperties {}

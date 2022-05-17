@@ -6,6 +6,10 @@ import {
   ILayoutChildrenValue,
   ISelectInput,
 } from "../../inputs/types";
+import {
+  CommonPropertiesTuple,
+  getCommonObjectPropertiesDefinition,
+} from "../../objects/common-properties";
 import { ILayout, ITransitions } from "../../objects/types";
 import {
   FormType,
@@ -47,7 +51,8 @@ export interface ILayers {
 
 export type LayerTuple = [
   ISelectInput<"overflow">,
-  IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>
+  IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>,
+  ...CommonPropertiesTuple
 ];
 
 export const layerDefinition: LayerTuple = [
@@ -97,4 +102,5 @@ export const layerDefinition: LayerTuple = [
       },
     ],
   },
+  ...getCommonObjectPropertiesDefinition(),
 ];

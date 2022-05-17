@@ -31,7 +31,7 @@ export class BreakpointChecker {
     setInterval(() => {
       this.check();
       this.checkVieport();
-    }, 100);
+    }, 10);
 
     this.check();
     this.checkVieport();

@@ -8,6 +8,7 @@ import {
 } from "../inputs/types";
 import { CommonPropertiesValues } from "../objects/common-properties";
 import { IObject } from "../objects/types";
+import { ILayer } from "../store/reducers/i-layers";
 import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
 import { nlRemove } from "./doom-utils/common";
@@ -79,7 +80,10 @@ export function rgbColor2cssRgba(c: RGBColor): string {
   return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
 }
 
-export function addCommonPropertiesToStyle(style: string, object: IObject) {
+export function addCommonPropertiesToStyle(
+  style: string,
+  object: IObject | ILayer
+) {
   const comonProperties = object.definition.values as CommonPropertiesValues;
 
   const comonPropertiesMeta = object.definition.valuesMetadata as {

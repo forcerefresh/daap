@@ -25,6 +25,7 @@ import { MediaType, VectorData } from "../../utils/assets/types";
 import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
+import { SVG } from "../../objects/svg/svg";
 
 interface IMediaLibraryPanelProps {
   uploadComponent?: ReactNode;
@@ -283,7 +284,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                             if (addObject) {
                               _addNewObject(
                                 activeLayerId,
-                                ObjectType.SVG,
+                                SVG,
                                 {
                                   left: 0,
                                   top: 0,
@@ -296,7 +297,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                               );
                             }
                             onSelect({
-                              type: ObjectType.SVG,
+                              type: SVG,
                               initialValues: {
                                 svg: image.svgString,
                               },
@@ -369,7 +370,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: ObjectType | string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

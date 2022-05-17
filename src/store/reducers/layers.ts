@@ -15,6 +15,10 @@ import {
 import update from "immutability-helper";
 import { EmptyID } from "../types";
 import { ILayers } from "./i-layers";
+import {
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../../objects/common-properties";
 
 const getLayersDefault = () => ({ layerById: {}, allLayers: [] });
 

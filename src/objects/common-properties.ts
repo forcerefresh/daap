@@ -10,7 +10,6 @@ import {
   InputType,
   ISelectInput,
   ITextAreaInput,
-  SvgValues,
 } from "../inputs/types";
 import { FormType, IFormGroupItem } from "../utils/form-layout/i-form-layout";
 import { getOverflowOptions } from "./create-object-factory";

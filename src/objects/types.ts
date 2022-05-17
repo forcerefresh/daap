@@ -20,10 +20,10 @@ export enum ObjectType {
   VIDEO = "video",
   //YOUTUBE_VIDEO = "youtube_video", << external
   HTML = "html",
-  SVG = "svg",
+  //SVG = "svg",
   CANVAS = "canvas",
   SOURCE_IMAGE = "source_image",
-  FRAME = "frame",
+  //FRAME = "frame",
   BUTTON = "button",
   BULLETS = "bullets",
   ARROW = "arrow",

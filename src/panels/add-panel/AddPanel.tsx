@@ -120,29 +120,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             <p>Select video from library</p>
           </Card>
 
-          <Card
-            interactive={!!activeLayerId}
-            elevation={Elevation.TWO}
-            className={cx(css.card, { [css.disabled]: !activeLayerId })}
-            onClick={() => {
-              if (activeLayerId) {
-                _addNewObject(activeLayerId, ObjectType.SVG, {
-                  left: (documentSize.width - 100) / 2,
-                  top: (documentSize.height - 100) / 2,
-                  width: 100,
-                  height: 100,
-                });
-                onRequestClose();
-              }
-            }}
-          >
-            <PredefinedTextIcon
-              style={{ width: "36px", height: "36px", fill: "gray" }}
-            />
-            <h3>SVG</h3>
-            <p>Add Inline SVG</p>
-          </Card>
-
           {renderObjectsCards("media")}
         </div>
       </div>
@@ -306,32 +283,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         <Card interactive={false} className={css.sectionCard}>
           <h1>Other</h1>
           <p>Various objects</p>
-        </Card>
-
-        <Card
-          interactive={!!activeLayerId}
-          elevation={Elevation.TWO}
-          className={cx(css.card, { [css.disabled]: !activeLayerId })}
-          onClick={() => {
-            if (activeLayerId) {
-              _addNewObject(activeLayerId, ObjectType.FRAME, {
-                left: (documentSize.width - 100) / 2,
-                top: (documentSize.height - 100) / 2,
-                width: 100,
-                height: 100,
-              });
-              onRequestClose();
-            }
-          }}
-        >
-          <Icon
-            icon="square"
-            iconSize={36}
-            color="gray"
-            style={{ width: "36px", height: "36px", fill: "gray" }}
-          />
-          <h3>EMPTY FRAME</h3>
-          <p>Add empty frame</p>
         </Card>
 
         {renderObjectsCards("other")}

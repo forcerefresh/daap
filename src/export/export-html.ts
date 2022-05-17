@@ -11,7 +11,6 @@ import {
   ICoverPlacementValue,
   RichTextValues,
   SourceImageValues,
-  SvgValues,
 } from "../inputs/types";
 import { ImageValues } from "../objects/image/image";
 import { getObjectPlaceholder } from "../objects/object-helpers";
@@ -228,6 +227,9 @@ function generateSlideData(
     let layerStyle = `position:absolute;`;
     //layerStyle += `border: 1px solid red;`;
     layerStyle += `overflow: ${layerValues.overflow};`;
+    layerStyle += `box-sizing: border-box;`;
+
+    layerStyle += addCommonPropertiesToStyle(layerStyle, layer);
 
     if (layerValues.hasLayoutChildren) {
       const t = layerValues.layoutChildren.type;
@@ -272,6 +274,7 @@ function generateSlideData(
       html += `</style>`;
     }
 
+    console.log(layerStyle);
     html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
 
     const objectArr = getObjectArr(objects, layer.objectIds);
@@ -431,8 +434,6 @@ export function getObjectHtml(
       return getVideoHtml(object, calculatedObjectSize, isPlayer);
     //case ObjectType.YOUTUBE_VIDEO:
     //return getYoutubeVideoHtml(object, calculatedObjectSize, isPlayer);
-    case ObjectType.SVG:
-      return getSvgHtml(object, calculatedObjectSize, isPlayer);
     case ObjectType.ARROW:
       return getArrowHtml(object, calculatedObjectSize);
     case ObjectType.CANVAS:
@@ -441,8 +442,6 @@ export function getObjectHtml(
       return getButtonHtml(object, calculatedObjectSize);
     case ObjectType.SOURCE_IMAGE:
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
-    case ObjectType.FRAME:
-      return getFrameHtml(object, calculatedObjectSize, isPlayer);
     default:
       const objDeff = getObjectDefinition(object.type);
       if (objDeff && objDeff.getHtml) {
@@ -923,85 +922,6 @@ function getVideoHtml(
   return videoHtml;
 
   //return `<img class="object-content" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
-}
-
-function getFrameHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
-  let style = "";
-  style += addCommonPropertiesToStyle(style, object);
-  style += "width: 100%;";
-  style += "height: 100%;";
-
-  const html = `<div class="object-content" style="${style}"></div>`;
-
-  return html;
-}
-
-function getSvgHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
-  const svgValues = object.definition.values as SvgValues;
-  const svgValuesMetadata = object.definition.valuesMetadata;
-
-  if (!isPlayer) {
-    if (!svgValues.svg.source) {
-      return getObjectPlaceholder(`SVG<br/>(SVG is not set)`);
-    }
-  }
-
-  const svgCode =
-    svgValues.svg.colors && svgValues.hasCustomColors
-      ? replaceColors(svgValues.svg.source, svgValues.svg.colors)
-      : svgValues.svg.source;
-
-  const fill =
-    !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
-      ? `fill: ${rgbColor2cssRgba(svgValues.fill)};`
-      : "";
-  const stroke =
-    !svgValuesMetadata["stroke"].disabled && svgValues.hasFillAndStroke
-      ? `stroke: ${rgbColor2cssRgba(svgValues.stroke)};`
-      : "";
-
-  const w = parseInt(calculatedObjectSize.width as string);
-  const h = parseInt(calculatedObjectSize.height as string);
-
-  let scaleX = 1;
-  let scaleY = 1;
-  scaleY = h / w;
-
-  let css = `
-  <style>
-  .object-content-${object.id}{
-    transform: scaleX(${scaleX}) scaleY(${scaleY});
-    transform-origin: top left;
-    ${addCommonPropertiesToStyle("", object)}
-  }
-  .object-content-${object.id} svg {
-    width: 100%;
-    height: 100%;
-  }
-  </style>`;
-
-  if (svgValues.hasFillAndStroke) {
-    css += `
-    <style>
-    .object-content-${object.id} svg {
-      ${fill}
-      ${stroke}
-    }
-    </style>`;
-  }
-
-  //if (svgValues.svg) {
-  return `${css}<div class="object-content object-content-${object.id}">${svgCode}</div>`;
-  //}
-  //return ``;
 }
 
 function replaceColors(svgSource: string, colors: RGBColor[]) {

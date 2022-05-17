@@ -59,7 +59,11 @@ import {
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
-import { convertTimeUnitToMs, getBgColor } from "../../utils/utils";
+import {
+  addCommonPropertiesToStyle,
+  convertTimeUnitToMs,
+  getBgColor,
+} from "../../utils/utils";
 import ProjectSmallTimeline, {
   ProjectTimelineData,
   SlideTimelineData,
@@ -580,12 +584,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const layerClassName = "layer-" + layer.id;
 
     let layerCss = "";
+    console.log(layerCss);
     if (layerValues.layoutChildren.itemsGap.type === "common") {
       layerCss += `
       .${layerClassName} > * {
         margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
       }
     `;
+      console.log(layerCss);
     } else {
       layerValues.layoutChildren.itemsGap.eachValues.forEach(
         (eachValue, idx) => {
@@ -595,8 +601,17 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         `;
         }
       );
+      console.log(layerCss);
     }
 
+    console.log(layerCss);
+
+    layerCss += `.${layerClassName} {
+     ${addCommonPropertiesToStyle("", layer)}
+     z-index: 100;
+    }`;
+
+    console.log(layerCss);
     return (
       <>
         <style>{layerCss}</style>

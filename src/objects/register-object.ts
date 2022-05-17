@@ -17,6 +17,12 @@ import {
   preloadDelay,
 } from "./delay/delay";
 import {
+  createFrameObject,
+  frameMeta,
+  frameSizeUpdate,
+  getFrameHtml,
+} from "./frame/frame";
+import {
   createImageObject,
   getAssetsUrls,
   getImageHtml,
@@ -39,6 +45,7 @@ import {
   spinnerMeta,
   spinnerSizeUpdate,
 } from "./spinner/spinner";
+import { createSvgObject, getSvgHtml, svgMeta, svgSizeUpdate } from "./svg/svg";
 import {
   createTextObject,
   getTextHtml,
@@ -97,6 +104,24 @@ registerObject(
   undefined,
   undefined,
   getAssetsUrls
+);
+
+registerObject(
+  "frame",
+  "other",
+  frameMeta,
+  createFrameObject,
+  frameSizeUpdate,
+  getFrameHtml
+);
+
+registerObject(
+  "svg",
+  "other",
+  svgMeta,
+  createSvgObject,
+  svgSizeUpdate,
+  getSvgHtml
 );
 
 registerObject(

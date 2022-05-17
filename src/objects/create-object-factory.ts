@@ -8,7 +8,6 @@ import {
   ButtonValues,
   CanvasProperties,
   CanvasPropertiesTuple,
-  FrameProperties,
   ICoverPlacementValue,
   IFontSelectInputValue,
   IInputMetadataValues,
@@ -17,8 +16,6 @@ import {
   RichTextValues,
   SourceImagePropertiesTuple,
   SourceImageValues,
-  SvgPropertiesTuple,
-  SvgValues,
   VideoPropertiesTuple,
   VideoValues,
 } from "../inputs/types";
@@ -32,6 +29,7 @@ import {
   getCommonPropertiesValues,
 } from "./common-properties";
 import { getObjectDefinition } from "./objects-factory";
+import { createSvgObject, SVG } from "./svg/svg";
 import {
   ICommonObjectProperties,
   IObject,
@@ -87,14 +85,6 @@ export function createObject(
         ...createArrowObject(initialValue),
       };
     }
-    case ObjectType.SVG: {
-      return {
-        ...objectProps,
-        ...createSvgObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
-      };
-    }
     case ObjectType.HTML: {
       return {
         ...objectProps,
@@ -115,14 +105,6 @@ export function createObject(
       return {
         ...objectProps,
         ...createSourceImageObject(initialValue, {
-          hasOverflowProperty: true,
-        }),
-      };
-    }
-    case ObjectType.FRAME: {
-      return {
-        ...objectProps,
-        ...createFrameObject(initialValue, {
           hasOverflowProperty: true,
         }),
       };
@@ -1427,109 +1409,6 @@ function createVideoObject(
   };
 }
 
-function createSvgObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<SvgPropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
-  const object = createCommonObject(ObjectType.SVG);
-
-  const properties: SvgPropertiesTuple = [
-    {
-      displayName: "SVG",
-      propertyName: "svg",
-      inputType: InputType.SVG_INPUT,
-      value: {
-        source: `<svg height="100" width="100" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-      </svg>`,
-      },
-      defaultValue: {
-        source: `<svg height="100" width="100" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-      </svg>`,
-      },
-    },
-    {
-      displayName: "Fill & Stroke",
-      type: FormType.GROUP,
-      propertyName: "hasFillAndStroke",
-      optional: true,
-      elements: [
-        {
-          displayName: "Fill",
-          propertyName: "fill",
-          inputType: InputType.COLOR,
-          value: { r: 255, g: 255, b: 255, a: 1 },
-          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
-          optional: true,
-        },
-        {
-          displayName: "Stroke",
-          propertyName: "stroke",
-          inputType: InputType.COLOR,
-          value: { r: 0, g: 0, b: 0, a: 1 },
-          defaultValue: { r: 0, g: 0, b: 0, a: 1 },
-          optional: true,
-        },
-      ],
-    },
-    {
-      displayName: "Custom colors",
-      type: FormType.GROUP,
-      propertyName: "hasCustomColors",
-      optional: true,
-      elements: [
-        {
-          displayName: "",
-          duplicate: "1",
-          propertyName: "svg",
-          inputType: InputType.SVG_CUSTOM_COLORS,
-          value: { source: "" },
-          defaultValue: { source: "" },
-        },
-      ],
-    },
-    ...getCommonObjectPropertiesDefinition(),
-  ];
-
-  const values: SvgValues = {
-    svg: initialValue?.svg
-      ? initialValue.svg
-      : {
-          source: ``,
-        },
-    hasCustomColors: false,
-    hasFillAndStroke: false,
-    fill: { r: 255, g: 255, b: 255, a: 1 },
-    stroke: { r: 0, g: 0, b: 0, a: 1 },
-    ...getCommonPropertiesValues(),
-  };
-
-  const valuesMetadata: { [key: string]: IInputMetadataValues } = {
-    fill: { exportForWizard: false, disabled: false },
-    stroke: { exportForWizard: false, disabled: false },
-    ...getCommonPropertiesMetadataValues(),
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.SVG,
-      properties,
-      values,
-      valuesMetadata,
-    },
-  };
-}
-
 function createArrowObject(
   initialValue?: {
     [key: string]: any;
@@ -1665,7 +1544,7 @@ function createArrowObject(
     ...object,
     definition: {
       id: uuid(),
-      type: ObjectType.SVG,
+      type: SVG,
       properties,
       values,
       valuesMetadata,
@@ -1705,36 +1584,6 @@ function createCanvasObject(
       properties,
       values,
       valuesMetadata: {},
-    },
-  };
-}
-
-function createFrameObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<IObject<FrameProperties>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(ObjectType.FRAME);
-
-  const properties: CommonPropertiesTuple = [
-    ...getCommonObjectPropertiesDefinition(),
-  ];
-
-  const values: CommonPropertiesValues = {
-    ...getCommonPropertiesValues(),
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: ObjectType.FRAME,
-      properties,
-      values,
-      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

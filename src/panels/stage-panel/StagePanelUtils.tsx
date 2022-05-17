@@ -215,60 +215,49 @@ export function calculateObjectSize(
         break;
       }
       case "top-right": {
-        const left =
-          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
+        const left = relativeToSize.left + relativeToSize.width - w - gap;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
 
       case "bottom-left": {
-        const top =
-          relativeToSize.top + relativeToSize.height - snapSizeObj.height;
+        const top = relativeToSize.top + relativeToSize.height - h;
 
         sizeObj = {
           top: top - gap,
           left: relativeToSize.left + gap,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
       case "bottom-right": {
-        const top =
-          relativeToSize.top + relativeToSize.height - snapSizeObj.height - gap;
-        const left =
-          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
+        const top = relativeToSize.top + relativeToSize.height - h - gap;
+        const left = relativeToSize.left + relativeToSize.width - w - gap;
 
         sizeObj = {
           top: top,
           left: left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
       case "center": {
-        const left =
-          relativeToSize.left +
-          relativeToSize.width / 2 -
-          snapSizeObj.width / 2;
-
-        const top =
-          relativeToSize.top +
-          relativeToSize.height / 2 -
-          snapSizeObj.height / 2;
+        const left = relativeToSize.left + relativeToSize.width / 2 - w / 2;
+        const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
 
         sizeObj = {
           top,
           left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
