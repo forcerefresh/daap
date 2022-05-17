@@ -59,8 +59,8 @@ export interface IFitLayout {}
 
 export interface ISnapLayout {
   deviceType: DeviceType | "common";
-  width: number;
-  height: number;
+  width: string;
+  height: string;
   gap: number;
   keepAspectRatio?: boolean;
 }
@@ -275,6 +275,15 @@ export const navigationDefinition: NavigationTuple = [
   },
 ];
 
+export type LayoutTypes =
+  | "none"
+  | "absolute"
+  | "grid"
+  //| "cover"
+  | "snap"
+  | "fit_page"
+  | "fit_stage"
+  | "fit_guidelines";
 export interface ILayout {
   supportedLayout: {
     none: boolean;
@@ -283,16 +292,7 @@ export interface ILayout {
     absolute: boolean;
     snap: boolean;
   };
-  layout:
-    | "none"
-    | "absolute"
-    | "grid"
-    | "cover"
-    | "snap"
-    | "fit_page"
-    | "fit_stage"
-    | "fit_guidelines";
-
+  layout: LayoutTypes;
   absoluteLayout?: IAbsoluteLayouts;
   snapLayout?: ISnapLayouts;
   gridLayouts?: IGridLayouts;

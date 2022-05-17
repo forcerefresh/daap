@@ -1,3 +1,4 @@
+import { Console } from "console";
 import gsap from "gsap";
 import { last } from "lodash-es";
 import {
@@ -11,16 +12,23 @@ import {
   PreloadOrder,
 } from "../../objects/objects-factory";
 import {
+  ILayout,
   INavigationValues,
   ISlideTransition,
   NavigationType,
 } from "../../objects/types";
+import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
+import {
+  BreakpointConfiguration,
+  DeviceType,
+} from "../../store/reducers/i-settings";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import {
   createTimelineForExecutionCode,
   createTimelineForObject,
 } from "../AppPlayerUtils";
+import { BreakpointChecker } from "./BreakpointChecker";
 
 //(window as any).YTPlayer = require("yt-player");
 
@@ -29,6 +37,7 @@ import {
 }*/
 export interface IPlayerConfig {
   isApp?: boolean;
+  deviceAuto?: boolean;
 }
 export class Player {
   protected playerData: IPlayerData | null;
@@ -58,6 +67,11 @@ export class Player {
 
   private playerConfig: IPlayerConfig;
 
+  private breakpointChecker: BreakpointChecker;
+  private currentDeviceType: DeviceType;
+  private currentBp: BreakpointConfiguration;
+  private scaleParams: { wScale: number; hScale: number } | undefined;
+
   private preloaders: { [key: string]: Promise<string>[] };
   private pagePreloaderEls: {
     el: HTMLDivElement;
@@ -68,9 +82,31 @@ export class Player {
   constructor(
     playerData: IPlayerData | null,
     rootDiv: HTMLDivElement,
-    playerConfig: IPlayerConfig = {}
+    playerConfig: IPlayerConfig = {
+      isApp: false,
+      deviceAuto: true,
+    }
     //config: IPlayerConfig = { oneSlide: false }
   ) {
+    this.playerData = playerData;
+
+    this.breakpointChecker = new BreakpointChecker(
+      playerData?.breakpoints || { breakpointsConfiguration: [] }
+    );
+    this.breakpointChecker.init();
+    /* this.breakpointChecker.setBPChangeHandler(
+      this.breakpointChangeHandler.bind(this)
+    );*/
+    this.breakpointChecker.setSizeChangeHandler(
+      this.sizeChangeHandler.bind(this)
+    );
+
+    this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
+    console.log(this.currentDeviceType);
+    this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
+      (bp) => bp.type === this.currentDeviceType
+    )!;
+
     this.playerConfig = playerConfig;
 
     console.log(playerData);
@@ -80,12 +116,10 @@ export class Player {
     //this.config = config;
     this.rootDiv = rootDiv;
 
-    rootDiv.style.display = "none";
+    //rootDiv.style.display = "none";
     rootDiv.innerHTML = playerData?.html || "";
 
     this.createNavigationEvents(rootDiv);
-
-    this.playerData = playerData;
 
     this.timelines = [];
     this.staticTimelines = [];
@@ -109,6 +143,191 @@ export class Player {
     this.frontSlideDataArr?.forEach((data, idx) => {
       this.createStaticSlide(idx, data);
     });
+
+    this.resizeAll();
+  }
+
+  private bpUpdateSlide() {
+    const slideEls = this.rootDiv.getElementsByClassName("slide");
+
+    const bp = this.currentBp;
+
+    console.log(this.scaleParams);
+    Array.from(slideEls).forEach((el) => {
+      console.log(bp?.normal.page);
+      console.log(this.breakpointChecker.currentViewportSize);
+
+      (el as HTMLElement).style.top =
+        (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
+        "px"; //* this.scaleParams?.wScale!
+
+      (el as HTMLElement).style.left =
+        (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
+
+      (el as HTMLElement).style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
+      (el as HTMLElement).style.height =
+        bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
+      (el as HTMLElement).style.background = "rgba(0,0,0,0.05)";
+      (el as HTMLElement).style.border = "1px dotted red";
+      (el as HTMLElement).style.boxSizing = "border-box";
+    });
+  }
+
+  private calculateSizeParameters(
+    bp: BreakpointConfiguration,
+    bounds: { width: number; height: number }
+  ) {
+    const wScale = this.getScale(bp.normal.page.width, bounds.width);
+    const hScale = this.getScale(bp.normal.page.height, bounds.height);
+
+    let _pageH = bp.normal.page.height;
+    let _pageW = bp.normal.page.width;
+
+    let _maxSliderH = bp.normal.maxSliderSize.height;
+    let _maxSliderW = bp.normal.maxSliderSize.width;
+
+    // WIDTH behaviour
+    if (bp.normal.breakpoint.width.toMax) {
+      _pageW = bounds.width;
+      //debugger;
+    } else {
+      _pageW = Math.min(_pageW, bounds.width);
+    }
+
+    _maxSliderW = Math.min(_maxSliderW, bounds.width);
+
+    const whRatio = bp.normal.page.width / bp.normal.page.height;
+    const wRatio = _pageW / bp.normal.page.width;
+
+    // HEIGHT  behaviour
+    if (bp.normal.heightBehavior.type === "viewport") {
+      _pageH = bounds.height;
+      _maxSliderH = bounds.height; //Math.min(bp.normal.maxSliderSize.height, bounds.height);
+    } else if (bp.normal.heightBehavior.type === "fixed") {
+      _pageH = bp.normal.page.height;
+      _maxSliderH = bp.normal.maxSliderSize.height;
+    } else if (bp.normal.heightBehavior.type === "keepAspectRatio") {
+      _pageH = bp.normal.page.height * wRatio;
+      _maxSliderH = bp.normal.maxSliderSize.height * wRatio;
+      console.log(whRatio);
+      console.log(wRatio);
+
+      console.log(_pageH);
+      console.log(_maxSliderH);
+    }
+
+    bp.normal._page = {
+      width: _pageW,
+      height: _pageH,
+    };
+
+    bp.normal._maxSliderSize = {
+      width: _maxSliderW,
+      height: _maxSliderH,
+    };
+
+    /*
+    const _pageW = 
+    const _pageH = 
+    bp.normal._page = {
+      width:
+      height:
+    }*/
+
+    return {
+      wScale,
+      hScale,
+    };
+  }
+
+  private getScale(width: number, newWidth: number) {
+    return newWidth / width;
+  }
+
+  private bpUpdateObjectsSize() {
+    this.normalSlideDataArr?.forEach((data, idx) => {
+      this.bpUpdateObjectSize(idx, data);
+    });
+    this.frontSlideDataArr?.forEach((data, idx) => {
+      this.bpUpdateObjectSize(idx, data);
+    });
+  }
+
+  private bpUpdateObjectSize(idx: number, data: ISlideData) {
+    data.transitionsData.forEach((transitionData) => {
+      // TODO: use only per device (add per device for layer)
+      const calObjSize = calculateObjectSize(
+        transitionData.layout as ILayout,
+        this.currentBp,
+        { resetPosition: false },
+        this.scaleParams
+      );
+      /*
+      const calObjSize =
+        transitionData.calculatedObjectSizePerDevice?.[
+          this.currentDeviceType
+        ] || transitionData.calculatedObjectSize;*/
+
+      const objDef = getObjectDefinition(transitionData.itemType);
+
+      objDef?.sizeUpdate(
+        {
+          id: transitionData.itemId,
+          values: transitionData.itemValues,
+          className: transitionData.objectClass,
+          calculatedObjectSize: calObjSize,
+        },
+        true
+      );
+    });
+  }
+
+  /*private breakpointChangeHandler(bp: BreakpointConfiguration) {
+    // if deviceAuto is true
+    if (this.playerConfig.deviceAuto) {
+      console.log("+++++++++++++++++++++++++++++++");
+      console.log(bp);
+      this.setBp(bp);
+    }
+  }*/
+
+  private sizeChangeHandler(
+    size: { width: number; height: number },
+    bp: BreakpointConfiguration
+  ) {
+    console.log(size);
+    console.log(bp);
+    this.setBp(bp);
+  }
+
+  public setBp(bp: BreakpointConfiguration) {
+    console.log(bp);
+    this.currentBp = bp;
+    this.currentDeviceType = bp.type;
+    // RESTART!!!! player!!
+    this.resizeAll();
+  }
+
+  public setDevice(device: DeviceType) {
+    this.currentDeviceType = device;
+
+    this.setBp(
+      this.playerData?.breakpoints.breakpointsConfiguration.find(
+        (bp) => bp.type === this.currentDeviceType
+      )!
+    );
+  }
+
+  private resizeAll() {
+    if (this.playerConfig.isApp) return;
+
+    this.scaleParams = this.calculateSizeParameters(
+      this.currentBp!,
+      this.breakpointChecker.currentViewportSize!
+    );
+
+    this.bpUpdateSlide();
+    this.bpUpdateObjectsSize();
   }
 
   private createNavigationEvents(rootDiv: HTMLDivElement) {
@@ -197,6 +416,9 @@ export class Player {
 
     this.slideTransitionTimeline?.clear();
     if (destroy) this.slideTransitionTimeline?.kill();
+
+    this.breakpointChecker.setBPChangeHandler(null);
+    this.breakpointChecker.setSizeChangeHandler(null);
   }
 
   public async play() {
@@ -439,9 +661,9 @@ export class Player {
     }
   }
 
-  private getSlideIdxByID(userId: string): number | undefined {
+  private getSlideIdxByID(customId: string): number | undefined {
     const slide = this.normalSlideDataArr?.find((slideData) => {
-      return slideData.slide.userId === userId;
+      return slideData.slide.customId === customId;
     });
 
     return slide ? this.normalSlideDataArr?.indexOf(slide) : undefined;
@@ -528,6 +750,12 @@ export class Player {
 
     // add objects effects timelines
     data.transitionsData.forEach((transitionData) => {
+      // TODO: use only per device (add per device for layer)
+      const calObjSize =
+        transitionData.calculatedObjectSizePerDevice?.[
+          this.currentDeviceType
+        ] || transitionData.calculatedObjectSize;
+
       // Note: prepare page loader/s
       this.populatePageSpinners(transitionData);
 
@@ -542,6 +770,27 @@ export class Player {
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getObjectDefinition(transitionData.itemType);
 
+      /*console.log(transitionData);
+      console.log(objDef);
+      console.log(objDef?.type);
+      console.log(objDef?.type);
+      console.log(objDef?.sizeUpdate);
+      objDef?.sizeUpdate(
+        {
+          id: transitionData.itemId,
+          values: transitionData.itemValues,
+          className: transitionData.objectClass,
+          calculatedObjectSize: calObjSize,
+        },
+        true
+      );
+
+      console.log(
+        transitionData.calculatedObjectSizePerDevice?.[this.currentDeviceType]
+      );
+      console.log(transitionData.calculatedObjectSizePerDevice);
+*/
+
       // execution code for objects
       if (!!objDef?.executionCode_Start) {
         const execTl = createTimelineForExecutionCode(
@@ -549,7 +798,7 @@ export class Player {
           objDef.executionCode_Start!,
           objDef.executionCode_Stop!,
           transitionData.itemValues,
-          transitionData.calculatedObjectSize
+          calObjSize
         );
         slideTimeline.add(execTl, 0);
       }
@@ -560,7 +809,7 @@ export class Player {
           id: transitionData.itemId,
           values: transitionData.itemValues,
           className: transitionData.objectClass,
-          calculatedObjectSize: transitionData.calculatedObjectSize,
+          calculatedObjectSize: calObjSize,
         });
         this.preloaders[objDef.meta.preloadOrder || PreloadOrder.MIDDLE].push(
           preloadPromise

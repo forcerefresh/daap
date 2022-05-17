@@ -14,6 +14,7 @@ import {
   getNumericFiled,
   getSelectField,
   getSizeLayoutField,
+  getSizeUnitLayoutField,
 } from "../input-utils";
 import { ISnapInput, IUpdateInput } from "../types";
 import css from "./snap-input.module.scss";
@@ -71,7 +72,7 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
   const renderCommon = () => {
     return (
       <>
-        {getSizeLayoutField(
+        {getSizeUnitLayoutField(
           "Size",
           { width: value.common.width, height: value.common.height },
           (newWH) => {
@@ -84,6 +85,7 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
               },
             });
           },
+          ["px", "%"],
           { disabled: inputProps.selfSize }
         )}
         {getNumericFiled(
@@ -198,7 +200,7 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
 
     return (
       <td>
-        {getSizeLayoutField(
+        {getSizeUnitLayoutField(
           "Size",
           {
             width: oneValue.width,
@@ -211,12 +213,13 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
               (item) => item.deviceType === t
             );
             if (oneV) {
-              oneV.width = roundNumber(newWH.width, 1);
-              oneV.height = roundNumber(newWH.height, 1);
+              oneV.width = newWH.width; //roundNumber(newWH.width, 1);
+              oneV.height = newWH.height; //roundNumber(, 1);
               oneV.keepAspectRatio = newWH.keepAspectRatio;
             }
             onChange(newValue);
           },
+          ["px", "%"],
           { disabled: t !== selectedDevice }
         )}
 

@@ -1,7 +1,9 @@
+import { RGBColor } from "react-color";
 import {
   IBorderInput,
   IBorderSideValue,
   IBorderValue,
+  IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
   IInputMetadataValues,
@@ -19,7 +21,8 @@ export type CommonPropertiesTuple = [
       ICornerRadiusInput<"commonCornerRadius">,
       IBorderInput<"commonBorder">,
       ISelectInput<"commonOverflow">,
-      ITextAreaInput<"commonInlineStyle">
+      ITextAreaInput<"commonInlineStyle">,
+      IColorInput<"commonBackgroundColor">
     ]
   >
 ];
@@ -30,6 +33,7 @@ export interface CommonPropertiesValues {
   commonBorder: IBorderValue;
   commonOverflow: string;
   commonInlineStyle: string;
+  commonBackgroundColor: RGBColor;
 }
 
 export const getCommonObjectPropertiesDefinition =
@@ -73,6 +77,15 @@ export const getCommonObjectPropertiesDefinition =
           defaultValue: "",
           optional: true,
         },
+        {
+          displayName: "Background color",
+          helperText: "",
+          propertyName: "commonBackgroundColor",
+          inputType: InputType.COLOR,
+          value: {} as any,
+          defaultValue: {} as any,
+          optional: true,
+        },
       ],
     },
   ];
@@ -83,6 +96,7 @@ export const getCommonPropertiesValues = (): CommonPropertiesValues => ({
   commonBorder: getDefaultBorderValue(),
   commonOverflow: "visible",
   commonInlineStyle: "",
+  commonBackgroundColor: { r: 255, g: 255, b: 255, a: 1 },
 });
 
 export const getCommonPropertiesMetadataValues = (): {
@@ -93,6 +107,7 @@ export const getCommonPropertiesMetadataValues = (): {
     commonBorder: { exportForWizard: false, disabled: true },
     commonOverflow: { exportForWizard: false, disabled: true },
     commonInlineStyle: { exportForWizard: false, disabled: true },
+    commonBackgroundColor: { exportForWizard: false, disabled: true },
   };
 };
 

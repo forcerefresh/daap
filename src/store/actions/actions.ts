@@ -115,7 +115,7 @@ export function addNewSlide(
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: ISlide = {
       id: uuid(),
-      userId: "",
+      customId: "",
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "inherit",
@@ -284,7 +284,7 @@ export function addNewLayer(slideId: string): any {
     const breakpointConfig = breakpointsConfiguration.find(
       (p: any) => p.type === "large-1"
     );
-    const absoluteSize = breakpointConfig?.normal.slide;
+    const absoluteSize = breakpointConfig?.normal.maxSliderSize;
     const gridSize = breakpointConfig?.normal.grid;
 
     const layer: ILayer = {
@@ -353,8 +353,8 @@ export function addNewLayer(slideId: string): any {
         perDevice: [],
         common: {
           deviceType: "common",
-          width: 200,
-          height: 200,
+          width: "200px",
+          height: "200px",
           gap: 0,
         },
       },
@@ -1251,8 +1251,8 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
       object.snapLayout!,
       getState().stage.selectedDevice
     );
-    snapSizeObj.width = el.offsetWidth!;
-    snapSizeObj.height = el.offsetHeight!;
+    snapSizeObj.width = el.offsetWidth! + "px";
+    snapSizeObj.height = el.offsetHeight! + "px";
     document.body.removeChild(holder);
   }
 }

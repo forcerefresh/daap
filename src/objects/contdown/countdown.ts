@@ -171,6 +171,17 @@ export function getCountdownHtml(
   return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
 
+export async function countdownSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("countdownSizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export async function preloadCountdown(props: {
   id: string;
   className: string;

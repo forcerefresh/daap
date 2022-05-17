@@ -29,6 +29,8 @@ import {
   addObjectsToSelection,
   deactivateObject,
   removeObjectsFromSelection,
+  selectForProperties,
+  selectForPropertiesProps,
   selectObjects,
   selectObjectsByRect,
   setStagePreview,
@@ -69,6 +71,7 @@ import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "../../inputs/types";
 import { selection } from "../../store/reducers/selection";
 import { relative } from "path";
+import ViewportSize from "../vieport-size/ViewportSize";
 
 interface ISize {
   width: number;
@@ -102,6 +105,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _selectObjectsByRect,
     _addNewObject,
     _setViewPortSize,
+    _selectForProperties,
     stageTool,
     stageToolObjectType,
     _resetStageTool,
@@ -109,9 +113,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     settings,
     forceShowLayerId,
     selectedDevice,
+    breakpoints,
   } = props;
 
-  const stageSize = breakpointConfig?.normal.slide!;
+  const stageSize = breakpointConfig?.normal.maxSliderSize!;
+  const pageSize = breakpointConfig?.normal.page!;
 
   // generate data for player
   let exportData: IPlayerData | null = null;
@@ -122,6 +128,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       previewState.scope,
       //stageSize,
       breakpointConfig!,
+      breakpoints,
       settings
     );
 
@@ -323,11 +330,17 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     ((breakpointConfig?.normal?.page.width || stageSize.width) -
       stageSize.width) /
     2;
+
+  const pageColumnHeight =
+    ((breakpointConfig?.normal?.page.height || stageSize.height) -
+      stageSize.height) /
+    2;
+
   const pageBorderStyle = {
-    top: 0 + "px",
+    top: -pageColumnHeight * stageZoom + "px",
     left: -pageColumnWidth * stageZoom + "px",
     width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
-    height: stageSize.height * stageZoom + "px",
+    height: (breakpointConfig?.normal?.page.height || 0) * stageZoom + "px",
   };
   // grid
   const numOfGridHFields = breakpointConfig?.normal?.grid?.horizontal || 0;
@@ -414,6 +427,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
   };
 
+  const renderVieportSize = () => {
+    return (
+      <ViewportSize
+        onChange={(size) => {
+          console.log(size);
+        }}
+      />
+    );
+  };
+
   const renderProjectTimelineInfo = () => {
     return (
       <ProjectSmallTimeline
@@ -440,6 +463,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     } else {
       _activateObject(objectId);
       _selectObjects([objectId]);
+      _selectForProperties({ type: "object", id: objectId });
     }
   };
 
@@ -1061,7 +1085,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const scrollableDivStyle: React.CSSProperties = {
     position: "relative",
     left: -pageColumnWidth * stageZoom + "px",
-    top: isPreview ? -previewLayout.header.height : 0 + "px",
+    top: isPreview
+      ? -previewLayout.header.height - pageColumnHeight * stageZoom
+      : -pageColumnHeight * stageZoom + "px",
     width: parseInt(pageBorderStyle.width, 10) + (isPreview ? 14 : 0) + "px",
     height:
       parseInt(pageBorderStyle.height, 10) +
@@ -1075,14 +1101,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const scrollableDivInnerStyle: React.CSSProperties = {
     position: "relative",
+    top: pageColumnHeight * stageZoom + "px",
     left: pageColumnWidth * stageZoom + "px",
-    height: stageSize.height * stageZoom + "px",
+    height: pageSize.height * stageZoom + "px",
   };
 
   const scrollableDivInnerSlideBackgroundStyle: React.CSSProperties = {
     position: "absolute",
+    top: -pageColumnHeight * stageZoom + "px",
     left: -pageColumnWidth * stageZoom + "px",
-    height: stageSize.height * stageZoom + "px",
+    height: breakpointConfig?.normal?.page.height! * stageZoom + "px",
     width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
     ...getBgColor(settings.sliderBackgroundColor),
   };
@@ -1314,6 +1342,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       {isPreview &&
         previewState.scope?.entityType === "slide" &&
         renderSlideTimelineInfo()}
+      {isPreview && renderVieportSize()}
       {isPreview &&
         previewState.scope?.entityType === "project" &&
         renderProjectTimelineInfo()}
@@ -1321,7 +1350,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         <div className="preview-scrollable-holder" style={scrollableDivStyle}>
           {isPreview && previewLayout.header.component}
           <div style={scrollableDivInnerStyle}>
-            <div style={scrollableDivInnerSlideBackgroundStyle}></div>
+            <div
+              className="scrollableDivInnerSlideBackground"
+              style={scrollableDivInnerSlideBackgroundStyle}
+            ></div>
 
             <div style={canvasStyle} className={css.canvas}>
               {isPreview && (
@@ -1437,6 +1469,7 @@ const mapStateToProps = (state: IStore) => {
     viewPortSize: stage.stageViewportSize,
     forceShowLayerId,
     selectedDevice: state.stage.selectedDevice,
+    breakpoints: state.project.settings.breakpoints,
   };
 };
 
@@ -1459,6 +1492,8 @@ const mapDispatchToProps = {
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
   _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);

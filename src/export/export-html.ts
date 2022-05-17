@@ -1,4 +1,4 @@
-import { flatten, forOwn, mapValues, pick } from "lodash-es";
+import { cloneDeep, flatten, forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -16,13 +16,17 @@ import {
 import { ImageValues } from "../objects/image/image";
 import { getObjectPlaceholder } from "../objects/object-helpers";
 import { getObjectDefinition } from "../objects/objects-factory";
-import { IObject, ObjectType } from "../objects/types";
-import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
+import { ILayout, IObject, LayoutTypes, ObjectType } from "../objects/types";
+import {
+  calculateObjectSize,
+  calculateObjectSizePerDevice,
+} from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide, ISlides, SlideType } from "../store/reducers/i-slides";
 import {
   BreakpointConfiguration,
+  Breakpoints,
   ISettings,
 } from "../store/reducers/i-settings";
 import { IPreviewScope } from "../store/reducers/stage";
@@ -45,6 +49,7 @@ export function generatePlayerData(
   sources: ISources,
   scope: IPreviewScope | null,
   breakpointConfig: BreakpointConfiguration,
+  breakpoints: Breakpoints,
   settings: ISettings
 ): IPlayerData {
   const { slides, layers, objects } = sources;
@@ -89,6 +94,7 @@ export function generatePlayerData(
       layers,
       objects,
       breakpointConfig,
+      breakpoints,
       settings,
       thumbnailHtmlArr,
       normalSlidesArr.length
@@ -103,6 +109,7 @@ export function generatePlayerData(
       layers,
       objects,
       breakpointConfig,
+      breakpoints,
       settings,
       thumbnailHtmlArr,
       normalSlidesArr.length
@@ -117,18 +124,47 @@ export function generatePlayerData(
     slideDataArr,
     frontSlideDataArr,
     breakpointData: {
-      width: breakpointConfig.normal.slide.width,
-      height: breakpointConfig.normal.slide.height,
+      width: breakpointConfig.normal.maxSliderSize.width,
+      height: breakpointConfig.normal.maxSliderSize.height,
       pageWidth: breakpointConfig.normal.page.width,
+      pageHeight: breakpointConfig.normal.page.height,
     },
+    breakpoints: cloneDeep(breakpoints),
   };
 }
 
+function pickLayoutFromLayouts(
+  layout: LayoutTypes,
+  layer: ILayout
+): Partial<
+  Pick<ILayout, "absoluteLayout" | "fitLayout" | "gridLayouts" | "snapLayout">
+> {
+  switch (layout) {
+    case "absolute": {
+      return { absoluteLayout: layer.absoluteLayout };
+    }
+    case "grid": {
+      return { gridLayouts: layer.gridLayouts };
+    }
+    case "fit_guidelines":
+    case "fit_page":
+    case "fit_stage": {
+      return { fitLayout: layer.fitLayout };
+    }
+    case "snap": {
+      return { snapLayout: layer.snapLayout };
+    }
+    case "none": {
+      return {};
+    }
+  }
+}
 function generateSlideData(
   slide: ISlide,
   layers: ILayers,
   objects: IObjects,
   breakpointConfig: BreakpointConfiguration,
+  breakpoints: Breakpoints,
   settings: ISettings,
   thumbnailHtmlArr: (string | undefined)[],
   slidesLength: number
@@ -140,7 +176,7 @@ function generateSlideData(
     "slideType",
     "transitions",
     "duration",
-    "userId",
+    "customId",
   ]);
   someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
   // slide data
@@ -151,11 +187,12 @@ function generateSlideData(
 
   let slideStyle = "";
   slideStyle += "position: absolute;";
-  slideStyle += `width: ${breakpointConfig.normal.slide.width}px;`;
-  slideStyle += `height: ${breakpointConfig.normal.slide.height}px;`;
+  slideStyle += `width: ${breakpointConfig.normal.maxSliderSize.width}px;`;
+  slideStyle += `height: ${breakpointConfig.normal.maxSliderSize.height}px;`;
   if (slide.slideType === SlideType.Front) slideStyle += `z-index:1000;`;
 
-  html += "  <div style='" + slideStyle + "' class='slide-" + slide.id + "'>"; // slide open
+  html +=
+    "  <div style='" + slideStyle + "' class='slide slide-" + slide.id + "'>"; // slide open
   //slideIds.push(slide.id);
 
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
@@ -177,6 +214,11 @@ function generateSlideData(
         objectTop: 0,
         overflow: "",
         objectHtml: " ",
+      },
+      layout: {
+        layout: layer.layout,
+        selfSize: layer.selfSize,
+        ...pickLayoutFromLayouts(layer.layout, layer),
       },
     });
 
@@ -249,6 +291,11 @@ function generateSlideData(
         { resetPosition: false }
       );
 
+      const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
+        object,
+        breakpoints
+      );
+
       let style = "";
       forOwn(calculatedObjectSize, function (value, key) {
         style += key + ":" + value + ";";
@@ -257,7 +304,7 @@ function generateSlideData(
         ? "position: static;"
         : object.layout === "absolute"
         ? "position: absolute;"
-        : "position: relative;";
+        : "position: absolute;"; //"position: relative;";
       const overflow = objectValues.overflow;
       style += `overflow: ${overflow};`;
       // << "left", "top", "width", "height"
@@ -277,7 +324,7 @@ function generateSlideData(
         thumbnailHtmlArr, // for bullets
         slidesLength // for bullets
       );
-      console.log(getObjectDefinition(object.type)?.meta?.coreType);
+      //console.log(getObjectDefinition(object.type)?.meta?.coreType);
       // alert(getObjectDefinition(object.type)?.meta?.coreType);
       transitionsData.push({
         itemId: object.id,
@@ -285,6 +332,7 @@ function generateSlideData(
         itemValues: object.definition.values,
         itemSystemType: getObjectDefinition(object.type)?.meta?.coreType,
         calculatedObjectSize,
+        calculatedObjectSizePerDevice,
         objectClass: objectClass,
         transitions: object.transitions,
         events: getObjectEvents(object),
@@ -297,6 +345,11 @@ function generateSlideData(
           objectTop: parseInt(calculatedObjectSize!.top + "", 10),
           overflow,
           objectHtml,
+        },
+        layout: {
+          layout: object.layout,
+          selfSize: object.selfSize,
+          ...pickLayoutFromLayouts(object.layout, object),
         },
       });
       html += objectHtml;

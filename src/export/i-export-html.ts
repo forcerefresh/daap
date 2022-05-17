@@ -1,6 +1,7 @@
 import React from "react";
 import { CoreObjectType } from "../objects/objects-factory";
 import {
+  ILayout,
   INavigationValues,
   ISlideTransition,
   ITransitions,
@@ -8,6 +9,7 @@ import {
 } from "../objects/types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
+import { Breakpoints } from "../store/reducers/i-settings";
 import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
 
 export interface ITransitionsData {
@@ -16,6 +18,7 @@ export interface ITransitionsData {
   itemValues: { [key: string]: any };
   itemSystemType?: CoreObjectType;
   calculatedObjectSize?: React.CSSProperties;
+  calculatedObjectSizePerDevice?: { [key: string]: React.CSSProperties };
   objectClass: string;
   transitions: ITransitions;
   events?: INavigationValues;
@@ -28,6 +31,13 @@ export interface ITransitionsData {
     objectHtml?: string;
     overflow: string;
   };
+  layout: Pick<ILayout, "layout" | "selfSize"> &
+    Partial<
+      Pick<
+        ILayout,
+        "absoluteLayout" | "fitLayout" | "gridLayouts" | "snapLayout"
+      >
+    >;
 }
 
 export interface ISlideTransitionData {
@@ -42,7 +52,9 @@ export interface IPlayerData {
     width: number;
     height: number;
     pageWidth: number;
+    pageHeight: number;
   };
+  breakpoints: Breakpoints;
 }
 
 export interface ISources {
@@ -54,7 +66,7 @@ export interface ISources {
 export interface ISlideData {
   slide: {
     id: string;
-    userId: string;
+    customId: string;
     slideType: SlideType;
     transitions: ITransitions;
     duration: ISlideDuration;

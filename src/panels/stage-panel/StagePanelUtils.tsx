@@ -9,6 +9,7 @@ import {
 } from "../../objects/types";
 import {
   BreakpointConfiguration,
+  Breakpoints,
   DeviceType,
 } from "../../store/reducers/i-settings";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
@@ -19,13 +20,30 @@ import { Header1 } from "./preview/Header1/Header1";
 import { RGBColor } from "react-color";
 import { Body1 } from "./preview/Body1/Body1";
 
+export function calculateObjectSizePerDevice(
+  object: IObject,
+  breakpoints: Breakpoints
+): { [key: string]: React.CSSProperties } {
+  const ret: { [key: string]: React.CSSProperties } = {};
+
+  breakpoints.breakpointsConfiguration.forEach((bp) => {
+    ret[bp.type] = calculateObjectSize(object, bp, { resetPosition: false });
+  });
+
+  return ret;
+}
+
 export function calculateObjectSize(
   object: ILayout,
   //stageSize: { width: number; height: number },
   breakpointConfig: BreakpointConfiguration,
-  { resetPosition }: { resetPosition: boolean }
+  { resetPosition }: { resetPosition: boolean },
+  scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 }
 ): React.CSSProperties {
-  const stageSize = breakpointConfig.normal.slide;
+  // Note: _maxSliderSize is calculated only in Player runtime
+  const stageSize =
+    breakpointConfig.normal._maxSliderSize ||
+    breakpointConfig.normal.maxSliderSize;
 
   if (object.layout === "none") {
     return { left: 0, top: 0, width: 0, height: 0 };
@@ -106,10 +124,17 @@ export function calculateObjectSize(
   // const gap = object.snapLayout!.gap;
 
   if (object.layout === "snap") {
-    const snapSizeObj = getSnapLayoutSize(
+    const snapSizeObjStr = getSnapLayoutSize(
       object.snapLayout!,
       breakpointConfig.type
     );
+
+    const snapSizeObj = {
+      height: parseFloat(snapSizeObjStr.height),
+      width: parseFloat(snapSizeObjStr.width),
+      gap: snapSizeObjStr.gap,
+    };
+
     const gap = snapSizeObj.gap;
 
     const relativeToSize = getPSGSize(
@@ -118,65 +143,65 @@ export function calculateObjectSize(
     )!;
 
     let sizeObj;
+
+    const w = unitValueToPx(
+      snapSizeObjStr.width,
+      "width",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+    const h = unitValueToPx(
+      snapSizeObjStr.height,
+      "height",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+
     switch (object.snapLayout?.edge!) {
       case "left": {
-        const top =
-          relativeToSize.top +
-          relativeToSize.height / 2 -
-          snapSizeObj.height / 2;
+        const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
 
         sizeObj = {
           top,
           left: relativeToSize.left + gap,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
       case "top": {
-        const left =
-          relativeToSize.left +
-          relativeToSize.width / 2 -
-          snapSizeObj.width / 2;
+        const left = relativeToSize.left + relativeToSize.width / 2 - w / 2;
 
         sizeObj = {
           top: relativeToSize.top + gap,
           left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
       case "right": {
-        const left =
-          relativeToSize.left + relativeToSize.width - snapSizeObj.width - gap;
-        const top =
-          relativeToSize.top +
-          relativeToSize.height / 2 -
-          snapSizeObj.height / 2;
+        const left = relativeToSize.left + relativeToSize.width - w - gap;
+        const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
 
         sizeObj = {
           top,
           left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
 
       case "bottom": {
-        const left =
-          relativeToSize.left +
-          relativeToSize.width / 2 -
-          snapSizeObj.width / 2;
-        const top =
-          relativeToSize.top + relativeToSize.height - snapSizeObj.height - gap;
+        const left = relativeToSize.left + relativeToSize.width / 2 - w / 2;
+        const top = relativeToSize.top + relativeToSize.height - h - gap;
 
         sizeObj = {
           top,
           left,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
@@ -184,8 +209,8 @@ export function calculateObjectSize(
         sizeObj = {
           top: relativeToSize.top + gap,
           left: relativeToSize.left + gap,
-          width: snapSizeObj.width,
-          height: snapSizeObj.height,
+          width: w,
+          height: h,
         };
         break;
       }
@@ -295,19 +320,21 @@ function getPSGSize(
   type: "page" | "stage" | "guidelines" | string,
   breakpointConfig: BreakpointConfiguration
 ) {
-  const stageSize = breakpointConfig.normal.slide;
+  console.info(breakpointConfig.normal._maxSliderSize);
+  const stageSize =
+    breakpointConfig.normal._maxSliderSize ||
+    breakpointConfig.normal.maxSliderSize;
+
+  const pageSize =
+    breakpointConfig.normal._page || breakpointConfig.normal.page;
 
   switch (type) {
     case "page": {
       return {
-        top: 0,
-        left:
-          -(
-            (breakpointConfig?.normal?.page.width || stageSize.width) -
-            stageSize.width
-          ) / 2,
-        width: breakpointConfig?.normal?.page.width || 0,
-        height: stageSize.height,
+        top: -((pageSize.height || stageSize.height) - stageSize.height) / 2,
+        left: -((pageSize.width || stageSize.width) - stageSize.width) / 2,
+        width: pageSize.width || 0,
+        height: pageSize.height || 0,
       };
     }
     case "stage": {
@@ -334,6 +361,45 @@ function getPSGSize(
       };
     }
   }
+}
+
+export function unitValueToPx(
+  value: string,
+  propertyName: "width" | "height",
+  relativeTo: string,
+  breakpointConfig: BreakpointConfiguration
+) {
+  if (value.indexOf("px") !== -1) {
+    return parseFloat(value);
+  } else if (value.indexOf("%") !== -1) {
+    let newVal =
+      breakpointConfig.normal._page?.[propertyName] ||
+      breakpointConfig.normal.page?.[propertyName];
+
+    if (relativeTo === "stage") {
+      newVal =
+        breakpointConfig.normal._maxSliderSize?.[propertyName] ||
+        breakpointConfig.normal.maxSliderSize?.[propertyName];
+    } else if (relativeTo === "guidelines") {
+      newVal =
+        breakpointConfig.normal._maxSliderSize?.[propertyName] ||
+        breakpointConfig.normal.maxSliderSize?.[propertyName];
+
+      if ((propertyName = "width")) {
+        newVal -=
+          (breakpointConfig?.normal?.guidelinesPadding.left || 0) +
+          (breakpointConfig?.normal?.guidelinesPadding.right || 0);
+      }
+      if ((propertyName = "height")) {
+        newVal -=
+          (breakpointConfig?.normal?.guidelinesPadding.top || 0) +
+          (breakpointConfig?.normal?.guidelinesPadding.bottom || 0);
+      }
+    }
+
+    return roundNumber((newVal * parseFloat(value)) / 100, 1);
+  }
+  return parseFloat(value);
 }
 
 /*
@@ -503,7 +569,7 @@ export function getPositionInfo(object: IObject) {
 export function getStageSize(breakpointConfig: BreakpointConfiguration): ISize {
   return {
     width: breakpointConfig.normal.page.width,
-    height: breakpointConfig.normal.slide.height,
+    height: breakpointConfig.normal.page.height,
   };
 }
 

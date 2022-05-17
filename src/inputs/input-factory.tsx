@@ -47,6 +47,7 @@ import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-in
 import { InfoInputForm } from "./info-input/info-input";
 import { BorderInputForm } from "./border-input/border-input";
 import { SizePosInputForm } from "./size-pos-input/size-pos-input";
+import { SizeUnitInputForm } from "./size-unit-input/size-unit-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -305,6 +306,12 @@ export function getInputForm<T>(
     }
     case InputType.SIZE: {
       return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+
+    case InputType.SIZE_UNIT: {
+      return (
+        <SizeUnitInputForm key={key} {...inputProps} onChange={onChange} />
+      );
     }
     case InputType.SIZE_POS: {
       return <SizePosInputForm key={key} {...inputProps} onChange={onChange} />;

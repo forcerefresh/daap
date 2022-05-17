@@ -76,18 +76,18 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
   };
 
   let pixelMultiplier = 1;
-  breakpointConfiguration.breakpointsConfiguration.forEach((item: any) => {
+  breakpointConfiguration.breakpointsConfiguration.forEach((item) => {
     pixelMultiplier = Math.min(
       pixelMultiplier,
       PREVIEW_SIZE / item.normal.page.width
     );
     pixelMultiplier = Math.min(
       pixelMultiplier,
-      PREVIEW_SIZE / item.normal.slide.width
+      PREVIEW_SIZE / item.normal.maxSliderSize.width
     );
     pixelMultiplier = Math.min(
       pixelMultiplier,
-      PREVIEW_SIZE / item.normal.slide.height
+      PREVIEW_SIZE / item.normal.maxSliderSize.height
     );
   });
 

@@ -108,6 +108,10 @@ export function addCommonPropertiesToStyle(style: string, object: IObject) {
     style += inlineStyle;
   }
 
+  if (!comonPropertiesMeta.commonBackgroundColor.disabled) {
+    style = addBackgroundColor(style, comonProperties.commonBackgroundColor);
+  }
+
   return style;
 }
 
@@ -128,6 +132,13 @@ export function addBorderRadius(
       " " +
       borderRadius.bl +
       ";";
+  }
+  return style;
+}
+
+export function addBackgroundColor(style: string, background: RGBColor) {
+  if (background) {
+    style += "background: " + getBgColor(background).backgroundColor + ";";
   }
   return style;
 }

@@ -278,6 +278,17 @@ export function getYoutubeVideoHtml(
   return videoHtml;
 }
 
+export async function youtubeVideoSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("youtubeVideoCalculateObjectSize: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export async function preloadYoutube(props: {
   id: string;
   className: string;

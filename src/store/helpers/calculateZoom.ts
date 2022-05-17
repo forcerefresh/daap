@@ -11,16 +11,16 @@ export function getZoom(stage: IStage, settings: ISettings): number {
 
   // Calculate zoom when zoomFit is true
   if (stage.zoomFit) {
-    const stageSize = breakpointConfig?.normal.slide!;
+    const stageSize = breakpointConfig?.normal.maxSliderSize!;
     const pageSize = breakpointConfig?.normal.page!;
 
     const mult = Math.min(
       stage.stageViewportSize.w / pageSize.width,
-      stage.stageViewportSize.h / stageSize.height
+      stage.stageViewportSize.h / pageSize.height
     );
     const adjustment =
       stage.stageViewportSize.w / pageSize.width >
-      stage.stageViewportSize.h / stageSize.height
+      stage.stageViewportSize.h / pageSize.height
         ? 0.8
         : 0.95;
 

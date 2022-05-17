@@ -264,6 +264,17 @@ export function getSpinnerHtml(
   return `<div class="object-content object-content-${object.id}" style="${style}">${html}</div>${css}`;
 }
 
+export async function spinnerSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("spinnerSizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export const spinnerMeta = {
   name: "SPINNER",
   description: "Add page or object spinner",

@@ -48,8 +48,10 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
         name: "Small devices",
         layout: "normal",
         normal: {
-          page: { width: 480 },
-          slide: { width: 480, height: 850 },
+          breakpoint: { width: { from: 320, fromMin: true, to: 480 } },
+          page: { width: 480, height: 850 },
+          maxSliderSize: { width: 480, height: 850 },
+          heightBehavior: { type: "keepAspectRatio" },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
           grid: {
             vertical: 24,
@@ -66,8 +68,10 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
         name: "Medium devices",
         layout: "normal",
         normal: {
-          page: { width: 1024 },
-          slide: { width: 1024, height: 1365 },
+          breakpoint: { width: { from: 481, to: 768 } },
+          page: { width: 768, height: 1366 },
+          maxSliderSize: { width: 768, height: 1366 },
+          heightBehavior: { type: "keepAspectRatio" },
           guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
           grid: {
             vertical: 24,
@@ -84,8 +88,30 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
         name: "Large devices",
         layout: "normal",
         normal: {
-          page: { width: 1450 },
-          slide: { width: 1244, height: 700 },
+          breakpoint: { width: { from: 769, to: 1024 } },
+          page: { width: 1024, height: 576 },
+          maxSliderSize: { width: 1024, height: 576 },
+          heightBehavior: { type: "keepAspectRatio" },
+          guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
+          grid: {
+            vertical: 24,
+            horizontal: 24,
+          },
+          //keepProportion: false,
+          horizontalFitTo: "viewport",
+          verticalFitTo: "viewport",
+        },
+        fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
+      },
+      {
+        type: "xlarge-1",
+        name: "Extra large devices",
+        layout: "normal",
+        normal: {
+          breakpoint: { width: { from: 1025, to: 1240, toMax: true } },
+          page: { width: 1240, height: 720 },
+          maxSliderSize: { width: 1100, height: 720 },
+          heightBehavior: { type: "keepAspectRatio" },
           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
           grid: {
             vertical: 24,

@@ -43,6 +43,16 @@ export type preloadFuncType = (props: {
   calculatedObjectSize: any;
 }) => Promise<string>;
 
+export type updateObjectSizeFuncType = (
+  props: {
+    id: string;
+    className: string;
+    values: { [key: string]: any };
+    calculatedObjectSize: any;
+  },
+  initial: boolean
+) => Promise<void>;
+
 export type postProcessFuncType = (
   prevObject: IObject,
   object: IObject
@@ -59,6 +69,7 @@ export interface IObjectDefinitionHolder {
     coreType?: CoreObjectType;
   };
   createObject: createObjectFuncType;
+  sizeUpdate: updateObjectSizeFuncType;
   getHtml?: getHtmlFuncType;
   executionCode_Start?: executionCodeFuncType;
   executionCode_Stop?: executionCodeFuncType;
@@ -81,6 +92,7 @@ export function registerObject(
     coreType?: CoreObjectType;
   },
   createObject: createObjectFuncType,
+  sizeUpdate: updateObjectSizeFuncType,
   getHtml?: getHtmlFuncType,
   preload?: preloadFuncType,
   executionCode_Start?: executionCodeFuncType,
@@ -93,6 +105,7 @@ export function registerObject(
     group,
     meta,
     createObject,
+    sizeUpdate,
     getHtml,
     executionCode_Start,
     executionCode_Stop,
@@ -105,10 +118,12 @@ export function registerObject(
 export function getObjectDefinition(
   type: string
 ): IObjectDefinitionHolder | undefined {
+  console.log(objects);
   return objects.find((item) => item.type === type);
 }
 export function getObjectDefinitionsByGroup(
   group: string
 ): IObjectDefinitionHolder[] {
+  console.log(objects);
   return objects.filter((item) => item.group === group);
 }

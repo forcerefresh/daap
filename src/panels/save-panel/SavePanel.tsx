@@ -45,6 +45,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     objects,
     breakpointConfig,
     settings,
+    breakpoints,
     _updateProjectMeta,
     _updateEditor,
     onRequestClose,
@@ -85,14 +86,15 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
-    const thumbHeight = scale * breakpointConfig!.normal.slide.height!;
+    const scale = THUMB_WIDTH / breakpointConfig!.normal.maxSliderSize.width!;
+    const thumbHeight = scale * breakpointConfig!.normal.maxSliderSize.height!;
     setThumbSize({ width: THUMB_WIDTH, height: thumbHeight, scale: scale });
 
     const exportData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "slide", entityId: slides.normalSlides[0] },
       breakpointConfig!,
+      breakpoints,
       settings
     );
     setHtml(exportData.html);
@@ -105,6 +107,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
       breakpointConfig!,
+      breakpoints,
       settings
     );
 
@@ -290,6 +293,7 @@ const mapStateToProps = (state: IStore) => {
     objects: state.project.objects,
     breakpointConfig,
     settings: state.project.settings,
+    breakpoints: state.project.settings.breakpoints,
   };
 };
 

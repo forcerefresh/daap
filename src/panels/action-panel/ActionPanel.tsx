@@ -150,9 +150,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {
     const icon = getIconByType(conf.type);
     const size = getIconSize(icon);
-    console.log(selectedDevice);
+    //console.log(selectedDevice);
 
-    console.log(conf.type);
+    //console.log(conf.type);
     return (
       <Button
         active={selectedDevice === conf.type}

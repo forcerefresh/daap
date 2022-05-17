@@ -40,10 +40,23 @@ export interface BreakpointConfiguration {
   portrait?: boolean;
   /*configuration for normal layout */
   normal: {
+    /* breakpoint */
+    breakpoint: {
+      width: { from: number; fromMin?: boolean; to: number; toMax?: boolean };
+      height?: { from: number; fromMin?: boolean; to: number; toMax?: boolean };
+    };
     /* "page" is the most outer size, usually browser width */
-    page: { width: number };
+    page: { width: number; height: number };
     /* "slide" size is a main area used during editing*/
-    slide: { width: number; height: number };
+    maxSliderSize: { width: number; height: number };
+    /* calculated in player runtime*/
+    _page?: { width: number; height: number };
+    /* calculated in player runtime*/
+    _maxSliderSize?: { width: number; height: number };
+    /* how we resize height*/
+    heightBehavior: {
+      type: "viewport" | "fixed" | "keepAspectRatio";
+    };
     /* "guidelines" are used for easier positioning, its a padding inside "slider" size */
     guidelinesPadding: {
       top: number;

@@ -279,6 +279,17 @@ export function getTrianglifyHtml(
   return css + `<div class='${objectClassname}'>` + svg.outerHTML + "<div>";
 }
 
+export async function trianglifySizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("trianglifySizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export const trianglifyMeta = {
   name: "TRIANGLIFY",
   description: "Add Trianglify",

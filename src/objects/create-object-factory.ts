@@ -149,7 +149,7 @@ export function createObject(
 export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
   return {
     id: uuid(),
-    userId: "",
+    customId: "",
     name,
     duration: {
       inheritFrom: "inherit",
@@ -246,8 +246,8 @@ export function createCommonObject(
       common: {
         deviceType: "common",
         gap: 0,
-        width: 200,
-        height: 200,
+        width: "200px",
+        height: "200px",
       },
     },
   };

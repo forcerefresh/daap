@@ -6,20 +6,31 @@ import {
   Checkbox,
   Elevation,
   FormGroup,
+  Icon,
   Radio,
   RadioGroup,
   Tab,
   Tabs,
   Text,
+  Tooltip,
 } from "@blueprintjs/core";
 import css from "./Breakpoint.module.scss";
 
-import { getNumericFiled, getSelectField } from "../../../inputs/input-utils";
+import {
+  getCheckboxField,
+  getNumericFiled,
+  getSelectField,
+} from "../../../inputs/input-utils";
 import { getResponsiveIcon } from "../../../utils/icons/responsive-icons-factory";
 import { getIconByType } from "../../../store/reducers/settings";
 import { BreakpointPreview } from "../breakpoint-preview/BreakpointPreview";
 import { set } from "lodash-es";
 import { BreakpointConfiguration } from "../../../store/reducers/i-settings";
+import {
+  Popover2,
+  Popover2InteractionKind,
+  Tooltip2,
+} from "@blueprintjs/popover2";
 
 export interface IBreakpointSettingsProps {
   breakpointConfiguration: BreakpointConfiguration;
@@ -42,7 +53,7 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
           <h3>{breakpointConfiguration.name}</h3>
         </div>
         <div>
-          <div className={css.inlineRow}>
+          {/*<div className={css.inlineRow}>
             <Text className={css.inlineRowLabel}>Horizontal fit</Text>
             <div>
               {getSelectField(
@@ -60,9 +71,9 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
                 }
               )}
             </div>
-          </div>
+          </div>*/}
 
-          <div className={css.inlineRow}>
+          {/*<div className={css.inlineRow}>
             <Text className={css.inlineRowLabel}>Vertical fit</Text>
             <div>
               {getSelectField(
@@ -80,10 +91,72 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
                 }
               )}
             </div>
+          </div>*/}
+
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Breakpoint width</Text>
+            <div className="input60">
+              {getNumericFiled(
+                "From",
+                breakpointConfiguration.normal.breakpoint.width.from,
+                (value: number) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.breakpoint.width.from",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+              {getCheckboxField(
+                "Ext. to Min",
+                !!breakpointConfiguration.normal.breakpoint.width.fromMin,
+                (value: boolean) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.breakpoint.width.fromMin",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+            <div className="input60">
+              {getNumericFiled(
+                "To",
+                breakpointConfiguration.normal.breakpoint.width.to,
+                (value: number) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.breakpoint.width.to",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+              {getCheckboxField(
+                "Ext. to Max",
+                !!breakpointConfiguration.normal.breakpoint.width.toMax,
+                (value: boolean) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.breakpoint.width.toMax",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+            <Tooltip2
+              popoverClassName={css.tooltip}
+              content={`Breakpoints width is range from minimum to maximum width in pixels. Configuration related to device is used when device/browser vieport width is in this range.`}
+            >
+              <Icon icon="info-sign" style={{ marginTop: "7px" }}></Icon>
+            </Tooltip2>
           </div>
 
           <div className={css.inlineRow}>
-            <Text className={css.inlineRowLabel}>Page</Text>
+            <Text className={css.inlineRowLabel}>Page size</Text>
             <div className="input60 labelOneLetter">
               {getNumericFiled(
                 "W",
@@ -91,18 +164,40 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
                 (value: number) => {
                   set(breakpointConfiguration, "normal.page.width", value);
                   onChange({ ...breakpointConfiguration });
+                },
+                "",
+                { disabled: true }
+              )}
+            </div>
+            <div className="input60 labelOneLetter">
+              {getNumericFiled(
+                "H",
+                breakpointConfiguration.normal.page.height,
+                (value: number) => {
+                  set(breakpointConfiguration, "normal.page.height", value);
+                  onChange({ ...breakpointConfiguration });
                 }
               )}
             </div>
+            <Tooltip2
+              popoverClassName={css.tooltip}
+              content={`Page size is a size during editing. Width is not editable, it's inherited form Breakpoint width and represents absolute maximal width.`}
+            >
+              <Icon icon="info-sign" style={{ marginTop: "7px" }}></Icon>
+            </Tooltip2>
           </div>
           <div className={css.inlineRow}>
-            <Text className={css.inlineRowLabel}>Slider size</Text>
+            <Text className={css.inlineRowLabel}>Max slider size</Text>
             <div className="input60 labelOneLetter">
               {getNumericFiled(
                 "W",
-                breakpointConfiguration.normal.slide.width,
+                breakpointConfiguration.normal.maxSliderSize.width,
                 (value: number) => {
-                  set(breakpointConfiguration, "normal.slide.width", value);
+                  set(
+                    breakpointConfiguration,
+                    "normal.maxSliderSize.width",
+                    value
+                  );
                   onChange({ ...breakpointConfiguration });
                 }
               )}
@@ -110,9 +205,36 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
             <div className="input60 labelOneLetter">
               {getNumericFiled(
                 "H",
-                breakpointConfiguration.normal.slide.height,
+                breakpointConfiguration.normal.maxSliderSize.height,
                 (value: number) => {
-                  set(breakpointConfiguration, "normal.slide.height", value);
+                  set(
+                    breakpointConfiguration,
+                    "normal.maxSliderSize.height",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+          </div>
+
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Slider height</Text>
+            <div className="input60">
+              {getSelectField(
+                "",
+                breakpointConfiguration.normal.heightBehavior?.type as any,
+                [
+                  { value: "viewport", label: "Viewport" },
+                  { value: "fixed", label: "Fixed" },
+                  { value: "keepAspectRatio", label: "Keep aspect ratio" },
+                ],
+                (value: any) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.heightBehavior.type",
+                    value
+                  );
                   onChange({ ...breakpointConfiguration });
                 }
               )}

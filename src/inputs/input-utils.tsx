@@ -2,7 +2,7 @@ import React from "react";
 import { noop } from "lodash-es";
 import { Breakpoints } from "../store/reducers/i-settings";
 import { getInputForm } from "./input-factory";
-import { InputType } from "./types";
+import { InputType, Units } from "./types";
 
 export function getUnitNumericFiled<T>(
   label: string,
@@ -10,7 +10,7 @@ export function getUnitNumericFiled<T>(
   onChange: (value: T) => void,
   helperText?: string,
   inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
-  allowedUnits?: string[]
+  allowedUnits?: Units[]
 ) {
   const objectDef = {
     displayName: label,
@@ -289,6 +289,24 @@ export function getSizeLayoutField<T>(
   };
 
   return getInputForm(InputType.SIZE, objectDef, onChange);
+}
+
+export function getSizeUnitLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  allowedUnits: Units[],
+  inputProps?: { disabled?: boolean }
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.SIZE,
+    value: value,
+    inputProps,
+    allowedUnits,
+  };
+
+  return getInputForm(InputType.SIZE_UNIT, objectDef, onChange);
 }
 
 export function getSizePosLayoutField<T>(

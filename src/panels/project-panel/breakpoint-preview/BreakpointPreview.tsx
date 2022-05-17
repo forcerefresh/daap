@@ -17,15 +17,18 @@ export const BreakpointPreview: React.FC<IBreakpointSettingsProps> = (
   const { breakpointConfiguration, pixelMultiplier } = props;
 
   const pageW = pixelMultiplier * breakpointConfiguration.normal.page.width;
+  const pageH = pixelMultiplier * breakpointConfiguration.normal.page.height;
 
-  const slideW = pixelMultiplier * breakpointConfiguration.normal.slide.width;
-  const slideH = pixelMultiplier * breakpointConfiguration.normal.slide.height;
+  const slideW =
+    pixelMultiplier * breakpointConfiguration.normal.maxSliderSize.width;
+  const slideH =
+    pixelMultiplier * breakpointConfiguration.normal.maxSliderSize.height;
 
   const pageStyle = {
     width: pageW + 4,
-    height: slideH + 4,
+    height: pageH + 4,
     left: (PREVIEW_SIZE - pageW) / 2 - 2,
-    top: (PREVIEW_SIZE - slideH) / 2 - 2,
+    top: (PREVIEW_SIZE - pageH) / 2 - 2,
   };
 
   const slideStyle = {

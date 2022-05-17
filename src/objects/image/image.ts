@@ -142,7 +142,7 @@ export function getImageHtml(
 ) {
   const imageProperties = object.definition.values as ImageValues;
 
-  console.log(imageProperties);
+  //console.log(imageProperties);
   if (!isPlayer) {
     if (imageProperties.url.isPlaceholder || !imageProperties.url.url) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
@@ -175,6 +175,30 @@ export function getImageHtml(
   style += `background-position: ${aH} ${aV};`;
 
   return `<div class="object-content" style="${style}"></div>`;
+}
+
+export async function imageSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize, className } = props;
+  // console.log("imageSizeUpdate: id> " + id);
+  // console.log(calculatedObjectSize);
+  // console.log(className);
+
+  const els = document.getElementsByClassName(className);
+  // console.log(els);
+  const imageDiv = els[0] as HTMLDivElement;
+  const parent = imageDiv.parentNode! as HTMLDivElement;
+  parent.style.width = calculatedObjectSize.width;
+  parent.style.height = calculatedObjectSize.height;
+  parent.style.left = calculatedObjectSize.left;
+  parent.style.top = calculatedObjectSize.top;
+
+  imageDiv.style.width = calculatedObjectSize.width;
+  imageDiv.style.height = calculatedObjectSize.height;
 }
 
 export async function preloadImage(props: {

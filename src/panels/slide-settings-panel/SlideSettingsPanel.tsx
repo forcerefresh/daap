@@ -115,10 +115,10 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
 
           {getTextField(
             "Id",
-            slide.userId,
+            slide.customId,
             (value: string) => {
               const obj = cloneDeep(slide);
-              obj.userId = value;
+              obj.customId = value;
               _updateSlide(obj as any as ISlide);
             },
             "",

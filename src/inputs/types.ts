@@ -40,6 +40,7 @@ export enum InputType {
   SPLIT = "split",
   ABSOLUTE_LAYOUT = "absolute_layout",
   SIZE = "size",
+  SIZE_UNIT = "size_unit",
   SIZE_POS = "size_pos",
   SNAP = "snap",
   IMAGE = "image",
@@ -135,7 +136,7 @@ export interface INumberInput<T = string> {
   optional?: boolean;
 }
 
-type Units = "px" | "em" | "%" | "ms" | "s" | null;
+export type Units = "px" | "em" | "%" | "ms" | "s" | null;
 
 //  advanced number input
 export interface IUnitsNumberInput<T = string> {

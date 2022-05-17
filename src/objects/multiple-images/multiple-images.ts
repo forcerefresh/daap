@@ -138,6 +138,17 @@ export function getMultiImageHtml(
   return ret;
 }
 
+export async function multiimageSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("multiimageSizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 function preloadImagePromise(url: string): Promise<void> {
   return new Promise<void>(function (resolve, reject) {
     let img = new Image();

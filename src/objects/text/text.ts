@@ -182,6 +182,17 @@ export function getTextHtml(
   )}</p>`;
 }
 
+export async function textSizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("textSizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export async function preloadText(props: {
   id: string;
   className: string;

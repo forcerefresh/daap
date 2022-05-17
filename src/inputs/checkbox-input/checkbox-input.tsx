@@ -11,7 +11,7 @@ import { ICheckboxInput, IUpdateInput } from "../types";
 export const CheckboxInputForm: React.FC<
   ICheckboxInput & IUpdateInput & { inputProps: ICheckboxProps }
 > = (props) => {
-  console.log(props);
+  //console.log(props);
   const { displayName, value, onChange = noop, helperText, inputProps } = props;
   const labelFor = Math.random() + displayName;
   return (

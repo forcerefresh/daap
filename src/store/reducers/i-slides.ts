@@ -18,7 +18,7 @@ export interface ISlide {
   slideType: SlideType;
   transitions: ITransitions;
   //props
-  userId: string;
+  customId: string;
   name: string;
   duration: ISlideDuration;
 }

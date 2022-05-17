@@ -85,9 +85,9 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             retObj.name = name;
             _updateSlide(retObj);
           })}
-          {getTextField("Custom ID", slide.userId, (userId: string) => {
+          {getTextField("Custom ID", slide.customId, (customId: string) => {
             const retObj = cloneDeep(slide);
-            retObj.userId = userId;
+            retObj.customId = customId;
             _updateSlide(retObj);
           })}
           {getSlideDurationField(

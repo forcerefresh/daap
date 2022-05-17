@@ -74,6 +74,17 @@ export function getDelayHtml(
   return `<div class="object-content object-content-${object.id}" style="font-size:5em"></div>`;
 }
 
+export async function delaySizeUpdate(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<void> {
+  const { id, calculatedObjectSize } = props;
+  console.log("delaySizeUpdate: id> " + id);
+  console.log(calculatedObjectSize);
+}
+
 export async function preloadDelay(props: {
   id: string;
   className: string;

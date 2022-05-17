@@ -2,6 +2,7 @@ import {
   countdownMeta,
   countdownObject_Start,
   countdownObject_Stop,
+  countdownSizeUpdate,
   createCountdownObject,
   getCountdownHtml,
   preloadCountdown,
@@ -11,6 +12,7 @@ import {
   delayMeta,
   delayObject_Start,
   delayObject_Stop,
+  delaySizeUpdate,
   getDelayHtml,
   preloadDelay,
 } from "./delay/delay";
@@ -19,6 +21,7 @@ import {
   getAssetsUrls,
   getImageHtml,
   imageMeta,
+  imageSizeUpdate,
   preloadImage,
 } from "./image/image";
 import {
@@ -26,6 +29,7 @@ import {
   getMultiImageAssetsUrls,
   getMultiImageHtml,
   multiImageMeta,
+  multiimageSizeUpdate,
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
 import { IObjectDefinitionHolder, registerObject } from "./objects-factory";
@@ -33,17 +37,20 @@ import {
   createSpinnerObject,
   getSpinnerHtml,
   spinnerMeta,
+  spinnerSizeUpdate,
 } from "./spinner/spinner";
 import {
   createTextObject,
   getTextHtml,
   preloadText,
   textMeta,
+  textSizeUpdate,
 } from "./text/text";
 import {
   createTrianglifyObject,
   getTrianglifyHtml,
   trianglifyMeta,
+  trianglifySizeUpdate,
 } from "./trianglify/trianglify";
 import {
   createYoutubeVideoObject,
@@ -52,6 +59,7 @@ import {
   getYoutubeVideoHtml,
   postProcessYoutube,
   preloadYoutube,
+  youtubeVideoSizeUpdate,
   youtubeVideoMeta,
 } from "./youtube-video/youtube-video";
 
@@ -60,6 +68,7 @@ registerObject(
   "media",
   youtubeVideoMeta,
   createYoutubeVideoObject,
+  youtubeVideoSizeUpdate,
   getYoutubeVideoHtml,
   preloadYoutube,
   getYoutubeExecutionCode_Start,
@@ -72,6 +81,7 @@ registerObject(
   "navigation",
   spinnerMeta,
   createSpinnerObject,
+  spinnerSizeUpdate,
   getSpinnerHtml
 );
 
@@ -80,6 +90,7 @@ registerObject(
   "media",
   imageMeta,
   createImageObject,
+  imageSizeUpdate,
   getImageHtml,
   preloadImage,
   undefined,
@@ -93,6 +104,7 @@ registerObject(
   "other",
   delayMeta,
   createDelayObject,
+  delaySizeUpdate,
   getDelayHtml,
   preloadDelay,
   delayObject_Start,
@@ -104,6 +116,7 @@ registerObject(
   "other",
   countdownMeta,
   createCountdownObject,
+  countdownSizeUpdate,
   getCountdownHtml,
   preloadCountdown,
   countdownObject_Start,
@@ -115,6 +128,7 @@ registerObject(
   "media",
   trianglifyMeta,
   createTrianglifyObject,
+  trianglifySizeUpdate,
   getTrianglifyHtml
 );
 
@@ -123,6 +137,7 @@ registerObject(
   "media",
   multiImageMeta,
   createMultiImageObject,
+  multiimageSizeUpdate,
   getMultiImageHtml,
   preloadMultiImage,
   undefined,
@@ -136,6 +151,7 @@ registerObject(
   "text",
   textMeta,
   createTextObject,
+  textSizeUpdate,
   getTextHtml,
   preloadText
 );
