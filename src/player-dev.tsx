@@ -1,7 +1,10 @@
 import { Player } from "./player/player/Player";
 
 import "./objects/register-object";
+import "./objects/font-preloader";
+
 import { BreakpointConfiguration } from "./store/reducers/i-settings";
+
 require("./effects/effects");
 
 (window as any).WebSliderPlayer = Player;
