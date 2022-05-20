@@ -14,9 +14,15 @@ export function getMethodByType(
 }
 
 export function getObjectContentElementAndHtml(root: HTMLDivElement) {
-  const objectContentElement = root.querySelector(
+  let objectContentElement = root.querySelector(
     ".object-content"
   ) as HTMLDivElement;
+
+  // TODO: THIS IS QUICK FIX FOR LAYER
+  if (root.className.indexOf("layer") !== -1) {
+    objectContentElement = root;
+  }
+
   /*if (objectContentElement) {
     objectContentElement.style.visibility = "hidden";
   }*/
@@ -66,7 +72,7 @@ export function createTilesFromHtml(
   for (let i = 0; i < grid.r; i++) {
     for (let j = 0; j < grid.c; j++) {
       html += `
-      <div style="
+      <div class="tile" style="
         outline: 1px solid transparent;
         transform: translateZ(0);
         width: ${tilesWidth + 0}px; 
@@ -92,4 +98,61 @@ export function createTilesFromHtml(
 
   holder.innerHTML = html;
   return Array.from(holder.children) as HTMLDivElement[];
+}
+
+export function updateTilesSize(
+  tiles: HTMLDivElement[],
+  size: { w: number; h: number },
+  grid: { r: number; c: number }
+) {
+  console.log(tiles);
+  console.log(size);
+  console.log(grid);
+
+  let counter = 0;
+  const tilesWidth = size.w / grid.c;
+  const tilesHeight = size.h / grid.r;
+  console.log(tilesWidth);
+  for (let i = 0; i < grid.r; i++) {
+    for (let j = 0; j < grid.c; j++) {
+      const tile = tiles[counter];
+      tile.style.width = tilesWidth + "px";
+      tile.style.height = tilesHeight + "px";
+      tile.style.left = j * tilesWidth + "px";
+      tile.style.top = i * tilesHeight + "px";
+
+      const child = tile.children[0] as HTMLDivElement;
+      if (child) {
+        child.style.left = -j * tilesWidth + "px";
+        child.style.top = -i * tilesHeight + "px";
+        child.style.width = size.w + "px";
+        child.style.height = size.h + "px";
+      }
+
+      counter++;
+      /*
+      html += `
+      <div class="tile" style="
+        outline: 1px solid transparent;
+        transform: translateZ(0);
+        width: ${tilesWidth + 0}px; 
+        height: ${tilesHeight + 0}px;
+        position: absolute; 
+        left: ${j * tilesWidth}px;
+        top: ${i * tilesHeight}px;
+        overflow: hidden;
+        visibility: ${visible ? "visible" : "hidden"};
+      ">
+        <div style="
+          position:absolute; 
+          left: ${-j * tilesWidth}px; 
+          top: ${-i * tilesHeight}px;
+          width: ${size.w}px; 
+          height: ${size.h}px;
+        ">
+          ${htmlString}
+        </div>
+      </div>`;*/
+    }
+  }
 }

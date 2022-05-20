@@ -73,7 +73,7 @@ gsap.registerEffect({
     tl.to(
       containers[0],
       {
-        duration: rotationTime / 2,
+        duration: rotationTime / 4,
         display: "block",
         rotateY: config.spinDirection === "cc" ? -180 : 180,
         translateX: `${config.spinDirection === "cc" ? "-" : ""}100%`,

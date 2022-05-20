@@ -29,14 +29,14 @@ gsap.registerEffect({
       pElClone = pElOriginal.cloneNode(true) as HTMLElement;
       objectEL.appendChild(pElClone);
       pElClone.style.opacity = config.type === "in" ? "0" : "1";
-      pElClone.innerHTML = space2nbsp(pElClone.innerHTML);
+      pElClone.innerHTML = pElClone.innerHTML; // space2nbsp(pElClone.innerHTML);
 
       pElClone.style.opacity = "1"; // config.type === "in" ? "0" : "1";
       pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
 
       textChars = new SplitText(pElClone, {
-        type: "chars",
-        position: "absolute",
+        type: "words,chars",
+        // position: "absolute",
       });
       const chars = arrangeChars(config.startFrom, textChars.chars);
       gsap.set(chars, { opacity: 1, visibility: "visible" });

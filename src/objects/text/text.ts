@@ -4,6 +4,7 @@ import {
   IColorInput,
   IFontSelectInput,
   IFontSelectInputValue,
+  IInputMetadataValues,
   InputType,
   ISelectInput,
   ITextAreaInput,
@@ -32,6 +33,10 @@ export interface TextValues extends CommonPropertiesValues {
   color: RGBColor;
   fontSize: string;
   weight: string;
+  italic: boolean;
+  underline: boolean;
+  lineHeight: string;
+  textAlign: string;
   preload: boolean;
 }
 
@@ -42,6 +47,10 @@ export type TextPropertiesTuple = [
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">,
   ISelectInput<"weight">,
+  ICheckboxInput<"italic">,
+  ICheckboxInput<"underline">,
+  IUnitsNumberInput<"lineHeight">,
+  ISelectInput<"textAlign">,
   ICheckboxInput<"preload">,
   ...CommonPropertiesTuple
 ];
@@ -123,6 +132,44 @@ export function createTextObject(
         { value: "950", label: "950	Extra Black" },
       ],
     },
+
+    {
+      displayName: "Italic",
+      propertyName: "italic",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
+
+    {
+      displayName: "Underline",
+      propertyName: "underline",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
+
+    {
+      displayName: "Line height",
+      propertyName: "lineHeight",
+      inputType: InputType.UNITS_NUMBER,
+      value: "",
+      defaultValue: "",
+      optional: true,
+    },
+
+    {
+      displayName: "Text align",
+      propertyName: "textAlign",
+      inputType: InputType.SELECT,
+      value: "left",
+      defaultValue: "left",
+      options: [
+        { value: "left", label: "Left" },
+        { value: "center", label: "Cente" },
+        { value: "right", label: "Right" },
+      ],
+    },
     {
       displayName: "Preload fonts",
       propertyName: "preload",
@@ -144,6 +191,10 @@ export function createTextObject(
     color: { r: 255, g: 255, b: 255, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
     weight: "400",
+    italic: false,
+    underline: false,
+    lineHeight: "20px",
+    textAlign: "left",
     preload: true, // not visible,
     ...getCommonPropertiesValues(),
   };
@@ -155,7 +206,10 @@ export function createTextObject(
       type: TEXT,
       properties,
       values,
-      valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
+      valuesMetadata: {
+        ...{ lineHeight: { exportForWizard: false, disabled: true } },
+        ...getCommonPropertiesMetadataValues(),
+      },
     },
   };
 }
@@ -165,6 +219,9 @@ export function getTextHtml(
   calculatedObjectSize: React.CSSProperties
 ) {
   const textProperties = object.definition.values as TextValues;
+  const textPropertiesMeta = object.definition.valuesMetadata as {
+    [key: string]: IInputMetadataValues;
+  };
 
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
@@ -176,6 +233,21 @@ export function getTextHtml(
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
+
+  if (!textPropertiesMeta.lineHeight?.disabled) {
+    style += "line-height: " + textProperties.lineHeight + ";";
+  }
+
+  if (textProperties.italic) {
+    style += "font-style: italic;";
+  }
+  if (textProperties.underline) {
+    style += "text-decoration: underline;";
+  }
+
+  style += "text-align:" + textProperties.textAlign + ";";
+
+  style += "margin: 0px;";
 
   return `<p class="object-content" style="${style}">${nl2br(
     textProperties.text
@@ -209,6 +281,11 @@ export async function preloadText(props: {
 }): Promise<string> {
   const { values } = props;
   const textValues = values as TextValues;
+
+  if (textValues.font.source === "system-fonts") {
+    return Promise.resolve(textValues.font.fontFamily);
+  }
+
   const p = (window as any).WSFontPreloader.subscribe(
     textValues.font.fontFamily
   );

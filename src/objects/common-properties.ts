@@ -8,6 +8,7 @@ import {
   ICornerRadiusValue,
   IInputMetadataValues,
   InputType,
+  INumberInput,
   ISelectInput,
   ITextAreaInput,
 } from "../inputs/types";
@@ -21,7 +22,8 @@ export type CommonPropertiesTuple = [
       IBorderInput<"commonBorder">,
       ISelectInput<"commonOverflow">,
       ITextAreaInput<"commonInlineStyle">,
-      IColorInput<"commonBackgroundColor">
+      IColorInput<"commonBackgroundColor">,
+      INumberInput<"commonPadding">
     ]
   >
 ];
@@ -33,6 +35,7 @@ export interface CommonPropertiesValues {
   commonOverflow: string;
   commonInlineStyle: string;
   commonBackgroundColor: RGBColor;
+  commonPadding: number;
 }
 
 export const getCommonObjectPropertiesDefinition =
@@ -85,6 +88,15 @@ export const getCommonObjectPropertiesDefinition =
           defaultValue: {} as any,
           optional: true,
         },
+        {
+          displayName: "Padding",
+          helperText: "",
+          propertyName: "commonPadding",
+          inputType: InputType.NUMBER,
+          value: 0,
+          defaultValue: 0,
+          optional: true,
+        },
       ],
     },
   ];
@@ -96,6 +108,7 @@ export const getCommonPropertiesValues = (): CommonPropertiesValues => ({
   commonOverflow: "visible",
   commonInlineStyle: "",
   commonBackgroundColor: { r: 255, g: 255, b: 255, a: 1 },
+  commonPadding: 0,
 });
 
 export const getCommonPropertiesMetadataValues = (): {
@@ -107,6 +120,7 @@ export const getCommonPropertiesMetadataValues = (): {
     commonOverflow: { exportForWizard: false, disabled: true },
     commonInlineStyle: { exportForWizard: false, disabled: true },
     commonBackgroundColor: { exportForWizard: false, disabled: true },
+    commonPadding: { exportForWizard: false, disabled: true },
   };
 };
 

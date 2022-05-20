@@ -116,6 +116,10 @@ export function addCommonPropertiesToStyle(
     style = addBackgroundColor(style, comonProperties.commonBackgroundColor);
   }
 
+  if (!comonPropertiesMeta.commonPadding.disabled) {
+    style = addPaddingColor(style, comonProperties.commonPadding);
+  }
+
   return style;
 }
 
@@ -143,6 +147,13 @@ export function addBorderRadius(
 export function addBackgroundColor(style: string, background: RGBColor) {
   if (background) {
     style += "background: " + getBgColor(background).backgroundColor + ";";
+  }
+  return style;
+}
+
+export function addPaddingColor(style: string, padding: number) {
+  if (padding) {
+    style += "padding: " + padding + "px;";
   }
   return style;
 }

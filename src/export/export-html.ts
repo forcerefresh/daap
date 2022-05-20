@@ -275,7 +275,7 @@ function generateSlideData(
     }
 
     console.log(layerStyle);
-    html += `    <div class="${layerClassName}" style="${layerStyle}">`; // layer open
+    html += `    <div class="layer ${layerClassName}" style="${layerStyle}">`; // layer open
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
@@ -471,7 +471,14 @@ export function getRichTextHtml(
 
   style += addCommonPropertiesToStyle(style, object);
 
-  const ret = `<div class="object-content" style="${style}"> 
+  const css = `
+  <style>
+  .object-content-${object.id} p {
+    margin: 0px;
+  }
+  </style>`;
+
+  const ret = `${css}<div class="object-content object-content-${object.id}" style="${style}"> 
   ${textProperties.text} 
   </div>`;
   return ret;

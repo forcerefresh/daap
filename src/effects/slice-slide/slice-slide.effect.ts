@@ -7,6 +7,7 @@ import {
   getObjectContentElementAndHtml,
   tilesCompleteHandler,
   tilesStartHandler,
+  updateTilesSize,
 } from "../common";
 
 gsap.registerEffect({
@@ -22,6 +23,17 @@ gsap.registerEffect({
       photoGrid.r = config.slices;
     } else {
       photoGrid.c = config.slices;
+    }
+
+    const elObserver = new ResizeObserver(sizeChangeHandler);
+
+    function sizeChangeHandler() {
+      const tileEls = targets[0].getElementsByClassName("tile");
+      updateTilesSize(
+        tileEls,
+        { w: targets[0].offsetWidth, h: targets[0].offsetHeight },
+        photoGrid
+      );
     }
 
     // create title elements
@@ -51,17 +63,23 @@ gsap.registerEffect({
         ease: config.childEase,
       },
       onComplete: () => {
+        elObserver.disconnect();
+
         tilesCompleteHandler(config.type, objectContentElement, elements);
         isStarted = false;
       },
       onStart: () => {
         if (!isStarted) {
+          elObserver.observe(targets[0]);
+
           tilesStartHandler(config.type, objectContentElement, elements);
           isStarted = true;
         }
       },
       onUpdate: () => {
         if (!isStarted) {
+          elObserver.observe(targets[0]);
+
           tilesStartHandler(config.type, objectContentElement, elements);
           isStarted = true;
         }

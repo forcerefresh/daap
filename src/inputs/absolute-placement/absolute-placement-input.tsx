@@ -195,7 +195,7 @@ export const AbsolutePlacementForm: React.FC<
         <div>
           <FormGroup label={"W"} labelFor="text-input-W" inline>
             <InputGroup
-              disabled={inputProps.selfSize}
+              disabled={inputProps.selfSize || inputProps.disableSize}
               inputRef={(el) => {
                 if (el) el!.autocomplete = "off";
               }}
@@ -211,7 +211,7 @@ export const AbsolutePlacementForm: React.FC<
           </FormGroup>
           <FormGroup label={"H"} labelFor="text-input-H" inline>
             <InputGroup
-              disabled={inputProps.selfSize}
+              disabled={inputProps.selfSize || inputProps.disableSize}
               inputRef={(el) => {
                 if (el) el!.autocomplete = "off";
               }}

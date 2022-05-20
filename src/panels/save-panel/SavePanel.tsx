@@ -111,6 +111,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       settings
     );
 
+    console.log(playerData);
     const assetsUrls = getAllAssetsUrls(objects);
 
     console.log(assetsUrls);

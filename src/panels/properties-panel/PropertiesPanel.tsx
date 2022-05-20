@@ -214,6 +214,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
+              disableSize: objectOrLayer.selfSize,
             },
             breakpoints,
             selectedDevice,

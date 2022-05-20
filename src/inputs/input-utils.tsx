@@ -250,7 +250,11 @@ export function getAbsoluteLayoutField<T>(
   label: string,
   value: T,
   onChange: (value: T) => void,
-  inputProps?: { selfSize?: boolean; disablePosition?: boolean },
+  inputProps?: {
+    selfSize?: boolean;
+    disablePosition?: boolean;
+    disableSize?: boolean;
+  },
   breakpoints: Breakpoints = { breakpointsConfiguration: [] },
   selectedDevice: string = "",
   onChangeDevice: (device: string) => void = (device: string) => undefined

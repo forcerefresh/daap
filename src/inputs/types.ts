@@ -149,6 +149,7 @@ export interface IUnitsNumberInput<T = string> {
   defaultValue: string;
   placeholder?: string;
   inputProps?: { disabled: boolean };
+  optional?: boolean;
 }
 export interface IColorArrayInput<T = string> {
   inputType: InputType.COLOR_ARRAY;
@@ -428,7 +429,11 @@ export interface IAbsolutePlacamentInput<T = string> {
   propertyName: T;
   value: IAbsolutePlacementValue;
   defaultValue: IAbsolutePlacementValue;
-  inputProps?: { selfSize?: boolean; disablePosition?: boolean };
+  inputProps?: {
+    selfSize?: boolean;
+    disablePosition?: boolean;
+    disableSize?: boolean;
+  };
   breakpoints?: Breakpoints;
   selectedDevice?: string;
   onChangeDevice?: (device: string) => void;

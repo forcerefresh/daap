@@ -98,7 +98,10 @@ const mapStateToProps = (state: IStore) => {
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer", id: layer.id };
-    totalEffectCounter = layer?.transitions?.layer?.length || 0;
+    totalEffectCounter =
+      (layer?.transitions?.in?.length || 0) +
+      (layer?.transitions?.out?.length || 0) +
+      (layer?.transitions?.layer?.length || 0);
   }
 
   if (selection.selectionForProperties?.type === "slide" && slide) {

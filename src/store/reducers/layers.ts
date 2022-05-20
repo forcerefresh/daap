@@ -182,6 +182,18 @@ export function layers(
     }
 
     case OPEN_PROJECT: {
+      action.payload.layers.allLayers.map((id: string) => {
+        const layer = action.payload.layers.layerById[id];
+        layer.definition.values = {
+          ...getCommonPropertiesValues(),
+          ...layer.definition.values,
+        };
+        layer.definition.valuesMetadata = {
+          ...getCommonPropertiesMetadataValues(),
+          ...layer.definition.valuesMetadata,
+        };
+      });
+
       return {
         ...action.payload.layers,
       };

@@ -34,7 +34,9 @@ export const SVG = "svg";
 
 export type SvgPropertiesTuple = [
   ISVGInput<"svg">,
-  IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
+  IFormGroupItem<
+    [IColorInput<"fill">, IColorInput<"stroke">, IColorInput<"color">]
+  >,
   IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
   ...CommonPropertiesTuple
 ];
@@ -45,6 +47,7 @@ export interface SvgValues extends CommonPropertiesValues {
   hasFillAndStroke: boolean;
   fill: RGBColor;
   stroke: RGBColor;
+  color: RGBColor;
 }
 
 export function createSvgObject(
@@ -98,6 +101,14 @@ export function createSvgObject(
           defaultValue: { r: 0, g: 0, b: 0, a: 1 },
           optional: true,
         },
+        {
+          displayName: "Color",
+          propertyName: "color",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          optional: true,
+        },
       ],
     },
     {
@@ -129,12 +140,14 @@ export function createSvgObject(
     hasFillAndStroke: false,
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 1 },
+    color: { r: 255, g: 255, b: 255, a: 1 },
     ...getCommonPropertiesValues(),
   };
 
   const valuesMetadata: { [key: string]: IInputMetadataValues } = {
     fill: { exportForWizard: false, disabled: false },
     stroke: { exportForWizard: false, disabled: false },
+    color: { exportForWizard: false, disabled: false },
     ...getCommonPropertiesMetadataValues(),
   };
 
@@ -171,7 +184,9 @@ export function getSvgHtml(
 
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
-      ? `fill: ${rgbColor2cssRgba(svgValues.fill)};`
+      ? `fill: ${rgbColor2cssRgba(svgValues.fill)}; color: ${rgbColor2cssRgba(
+          svgValues.fill
+        )};`
       : "";
   const stroke =
     !svgValuesMetadata["stroke"].disabled && svgValues.hasFillAndStroke

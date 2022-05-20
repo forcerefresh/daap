@@ -154,6 +154,8 @@ export function getDefaultTransitionsForObject(): ITransitions {
 
 export function getDefaultTransitionsForLayer(): ITransitions {
   return {
+    in: [],
+    out: [],
     layer: [],
   };
 }
@@ -778,6 +780,7 @@ function createButtonObject(initialValue?: {
   keyof ICommonObjectProperties | "layerId"
 > {
   const object = createCommonObject(ObjectType.BUTTON);
+  object.selfSize = true;
 
   const properties: ButtonPropertiesTuple = [
     {

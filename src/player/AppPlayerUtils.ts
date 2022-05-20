@@ -16,8 +16,11 @@ export function createTimelineForObject(
   data.transitions.in?.forEach((effIn) => {
     populatesTimelinesForObject(data, parallelTimelines, effIn, "in");
   });
-  data.transitions.out?.forEach((effIn) => {
-    populatesTimelinesForObject(data, parallelTimelines, effIn, "out");
+  data.transitions.out?.forEach((effOut) => {
+    populatesTimelinesForObject(data, parallelTimelines, effOut, "out");
+  });
+  data.transitions.effect?.forEach((effEffect) => {
+    populatesTimelinesForObject(data, parallelTimelines, effEffect, "effect");
   });
   /*data.transitions.in?.forEach((_, idx) => {
     const effIn = data.transitions.in?.[idx];

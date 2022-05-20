@@ -43,6 +43,9 @@ controlsEl.innerHTML += selectHtml;
 const refreshButtonHtml = "<button id='refreshButton'>Refresh</button>";
 controlsEl.innerHTML += refreshButtonHtml;
 
+const pauseButtonHtml = "<button id='pauseButton'>Pause</button>";
+controlsEl.innerHTML += pauseButtonHtml;
+
 let player: Player;
 let latestPlayerData: any;
 
@@ -73,6 +76,13 @@ refreshButtonEl?.addEventListener("click", (e: any) => {
 
   player = new Player(latestPlayerData, divEl);
   player.play();
+});
+
+const pauseButtonEl = document.getElementById("pauseButton");
+pauseButtonEl?.addEventListener("click", (e: any) => {
+  if (player) {
+    player.setRootPaused(true);
+  }
 });
 
 let breakpointsBtns: HTMLDivElement;

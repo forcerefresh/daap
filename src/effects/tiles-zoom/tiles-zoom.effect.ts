@@ -7,6 +7,7 @@ import {
   getObjectContentElementAndHtml,
   tilesCompleteHandler,
   tilesStartHandler,
+  updateTilesSize,
 } from "../common";
 
 //console.log("REGISTER EFFECT");
@@ -34,6 +35,17 @@ gsap.registerEffect({
       target.appendChild(element);
     });
 
+    const elObserver = new ResizeObserver(sizeChangeHandler);
+
+    function sizeChangeHandler() {
+      const tileEls = targets[0].getElementsByClassName("tile");
+      updateTilesSize(
+        tileEls,
+        { w: targets[0].offsetWidth, h: targets[0].offsetHeight },
+        { r: config.rows, c: config.columns }
+      );
+    }
+
     let isStarted = false;
 
     var baseConfig = {
@@ -47,26 +59,25 @@ gsap.registerEffect({
         ease: config.childEase,
       },
       onComplete: function () {
+        elObserver.disconnect();
+
         isStarted = false;
         tilesCompleteHandler(config.type, objectContentElement, elements);
       },
       onStart: function () {
-        //console.log("---------------- onStart");
         if (!isStarted) {
+          elObserver.observe(targets[0]);
+
           isStarted = true;
-          //console.log("START onStart ************************************");
-          //console.log(objectContentElement);
           tilesStartHandler(config.type, objectContentElement, elements);
-          //target.style.display = "block";
         }
       },
       onUpdate: function () {
         if (!isStarted) {
+          elObserver.observe(targets[0]);
+
           isStarted = true;
-          //console.log("START  ********** onUpdate **************************");
-          //console.log(objectContentElement);
           tilesStartHandler(config.type, objectContentElement, elements);
-          // target.style.display = "block";
         }
       },
     };

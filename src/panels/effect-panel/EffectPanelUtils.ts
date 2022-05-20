@@ -10,7 +10,7 @@ export function getEffectTypesForItem(itemType?: ItemType): EffectType[] {
     case "object":
       return ["in", "out", "effect"];
     case "layer":
-      return ["layer"];
+      return ["in", "out", "layer"];
     case "slide":
       return ["slide"];
   }

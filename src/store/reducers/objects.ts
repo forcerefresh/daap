@@ -1,6 +1,11 @@
 import { cloneDeep, omit, without } from "lodash-es";
 import { object } from "yup";
 import {
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../../objects/common-properties";
+import { getObjectDefinition } from "../../objects/objects-factory";
+import {
   ActionTypes,
   ADD_OBJECT,
   CREATE_NEW_PROJECT,
@@ -74,6 +79,18 @@ export function objects(
       return newState;
     }
     case OPEN_PROJECT: {
+      action.payload.objects.allObjects.map((id: string) => {
+        const object = action.payload.objects.objectById[id];
+        object.definition.values = {
+          ...getCommonPropertiesValues(),
+          ...object.definition.values,
+        };
+        object.definition.valuesMetadata = {
+          ...getCommonPropertiesMetadataValues(),
+          ...object.definition.valuesMetadata,
+        };
+      });
+
       return {
         ...action.payload.objects,
       };
