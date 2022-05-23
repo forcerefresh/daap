@@ -461,7 +461,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                 if (addObject) {
                                   _addNewObject(
                                     activeLayerId,
-                                    ObjectType.VIDEO, //cover
+                                    "video", //cover
                                     {},
                                     {
                                       url: {
@@ -512,7 +512,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             intent="primary"
                             onClick={() => {
                               onSelect?.({
-                                type: ObjectType.VIDEO,
+                                type: "video",
                                 initialValues: {
                                   url: (image as any as VideoData).videos
                                     .original.url,

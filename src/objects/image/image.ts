@@ -21,7 +21,7 @@ import {
   getCommonPropertiesValues,
 } from "../common-properties";
 
-const IMAGE = "image";
+export const IMAGE = "image";
 
 export interface ImageValues extends CommonPropertiesValues {
   fit: ICoverPlacementValue;

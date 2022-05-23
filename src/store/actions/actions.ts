@@ -29,11 +29,6 @@ import {
   roundNumber,
 } from "../../utils/doom-utils/common";
 import { LayoutChildrenType } from "../../inputs/types";
-import {
-  getBulletsHtml,
-  getButtonHtml,
-  getRichTextHtml,
-} from "../../export/export-html";
 import { load } from "webfontloader";
 import {
   BreakpointConfiguration,
@@ -50,13 +45,16 @@ import {
 import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
 import { getObjectDefinition } from "../../objects/objects-factory";
-import { ImageValues } from "../../objects/image/image";
+import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
 import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "../../objects/common-properties";
+import { BUTTON, getButtonHtml } from "../../objects/button/button";
+import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
+import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1016,11 +1014,11 @@ export function addNewObject(
     object.name = humanizeSting(type) + " " + nextNameIdx;
 
     switch (object.type) {
-      case ObjectType.BUTTON: {
+      case BUTTON: {
         postProcessButton(object, getState);
         break;
       }
-      case ObjectType.BULLETS: {
+      case BULLETS: {
         postProcessBullet(object, getState);
         break;
       }
@@ -1135,21 +1133,23 @@ function handleObjectUpdate(
 
   console.log(object);
   console.log(objDeff?.postProcess);
+
+  // TODO: REMOVE TO POSTPROCESS
   switch (object.type) {
     case "text":
-    case ObjectType.RICH_TEXT: {
+    case RICH_TEXT: {
       handleTextUpdate(object, dispatch, getState);
       break;
     }
-    case ObjectType.BUTTON: {
+    case BUTTON: {
       handleButtonUpdate(object, dispatch, getState);
       break;
     }
-    case ObjectType.BULLETS: {
+    case BULLETS: {
       handleBulletsUpdate(object, dispatch, getState);
       break;
     }
-    case "image": {
+    case IMAGE: {
       handleImageUpdate(object, dispatch, getState);
       break;
     }
@@ -1332,7 +1332,7 @@ function handleTextUpdate(
     let html = "";
     if (!!objDeff?.getHtml) {
       html = objDeff?.getHtml(object, calculatedObjectSize, true);
-    } else if (object.type === ObjectType.RICH_TEXT) {
+    } else if (object.type === RICH_TEXT) {
       html = getRichTextHtml(object, calculatedObjectSize);
     }
 

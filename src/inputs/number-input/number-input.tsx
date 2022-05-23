@@ -79,7 +79,6 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
       inline
     >
       <div className={css.row}>
-        {optional && getCheckboxField("", false, () => {})}
         <NumericInput
           className={css.numberInput}
           buttonPosition={"none"}

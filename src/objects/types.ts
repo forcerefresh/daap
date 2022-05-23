@@ -14,19 +14,19 @@ import {
 
 export enum ObjectType {
   //TEXT = "text", << external
-  RICH_TEXT = "rich_text",
+  //RICH_TEXT = "rich_text",
   //IMAGE = "image", << external
   //MULTI_IMAGE = "multi_image",<< external
-  VIDEO = "video",
+  //VIDEO = "video",
   //YOUTUBE_VIDEO = "youtube_video", << external
-  HTML = "html",
+  //HTML = "html",
   //SVG = "svg",
   CANVAS = "canvas",
   SOURCE_IMAGE = "source_image",
   //FRAME = "frame",
-  BUTTON = "button",
-  BULLETS = "bullets",
-  ARROW = "arrow",
+  //BUTTON = "button",
+  //BULLETS = "bullets",
+  //ARROW = "arrow",
   //SPINNER = "spinner", << external
 }
 

@@ -1,4 +1,22 @@
 import {
+  arrowMeta,
+  arrowSizeUpdate,
+  createArrowObject,
+  getArrowHtml,
+} from "./arrow/arrow";
+import {
+  bulletsMeta,
+  bulletsSizeUpdate,
+  createBulletsObject,
+  getBulletsHtml,
+} from "./bullets/bullets";
+import {
+  buttonMeta,
+  buttonSizeUpdate,
+  createButtonObject,
+  getButtonHtml,
+} from "./button/button";
+import {
   countdownMeta,
   countdownObject_Start,
   countdownObject_Stop,
@@ -23,6 +41,12 @@ import {
   getFrameHtml,
 } from "./frame/frame";
 import {
+  createHtmlObject,
+  getHtmlHtml,
+  htmlMeta,
+  htmlSizeUpdate,
+} from "./html/html";
+import {
   createImageObject,
   getAssetsUrls,
   getImageHtml,
@@ -39,6 +63,12 @@ import {
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
 import { IObjectDefinitionHolder, registerObject } from "./objects-factory";
+import {
+  createRichTextObject,
+  richMeta,
+  richTextSizeUpdate,
+  getRichTextHtml,
+} from "./rich-text/rich-text";
 import {
   createSpinnerObject,
   getSpinnerHtml,
@@ -60,6 +90,12 @@ import {
   trianglifySizeUpdate,
 } from "./trianglify/trianglify";
 import {
+  createVideoObject,
+  getVideoHtml,
+  videoMeta,
+  videoSizeUpdate,
+} from "./video/video";
+import {
   createYoutubeVideoObject,
   getYoutubeExecutionCode_Start,
   getYoutubeExecutionCode_Stop,
@@ -69,6 +105,33 @@ import {
   youtubeVideoSizeUpdate,
   youtubeVideoMeta,
 } from "./youtube-video/youtube-video";
+
+registerObject(
+  "button",
+  "navigation",
+  buttonMeta,
+  createButtonObject,
+  buttonSizeUpdate,
+  getButtonHtml
+);
+
+registerObject(
+  "arrow",
+  "navigation",
+  arrowMeta,
+  createArrowObject,
+  arrowSizeUpdate,
+  getArrowHtml
+);
+
+registerObject(
+  "bullets",
+  "navigation",
+  bulletsMeta,
+  createBulletsObject,
+  bulletsSizeUpdate,
+  getBulletsHtml
+);
 
 registerObject(
   "youtube_video",
@@ -125,6 +188,24 @@ registerObject(
 );
 
 registerObject(
+  "html",
+  "other",
+  htmlMeta,
+  createHtmlObject,
+  htmlSizeUpdate,
+  getHtmlHtml
+);
+
+registerObject(
+  "video",
+  "media",
+  videoMeta,
+  createVideoObject,
+  videoSizeUpdate,
+  getVideoHtml
+);
+
+registerObject(
   "delay",
   "other",
   delayMeta,
@@ -178,5 +259,15 @@ registerObject(
   createTextObject,
   textSizeUpdate,
   getTextHtml,
+  preloadText
+);
+
+registerObject(
+  "rich_text",
+  "text",
+  richMeta,
+  createRichTextObject,
+  richTextSizeUpdate,
+  getRichTextHtml,
   preloadText
 );

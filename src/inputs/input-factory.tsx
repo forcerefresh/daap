@@ -48,6 +48,7 @@ import { InfoInputForm } from "./info-input/info-input";
 import { BorderInputForm } from "./border-input/border-input";
 import { SizePosInputForm } from "./size-pos-input/size-pos-input";
 import { SizeUnitInputForm } from "./size-unit-input/size-unit-input";
+import { HTMLInputForm } from "./html-input/html-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -237,6 +238,9 @@ export function getInputForm<T>(
     }
     case InputType.SVG_INPUT: {
       return <SVGInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
+    case InputType.HTML_INPUT: {
+      return <HTMLInputForm key={key} {...inputProps} onInput={onChange} />;
     }
     case InputType.SVG_CUSTOM_COLORS: {
       return (

@@ -22,7 +22,9 @@ type createObjectFuncType = (
 type getHtmlFuncType = (
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
+  isPlayer: boolean,
+  thumbnailHtmlArr?: (string | undefined)[],
+  slidesCounter?: number
 ) => string;
 
 export type executionCodeFuncType = (props: {
