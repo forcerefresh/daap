@@ -1,3 +1,4 @@
+import { string } from "yup";
 import { getFonts } from "./utils/fonts/fonts";
 import { getGoogleFontList } from "./utils/fonts/google-fonts";
 
@@ -18,4 +19,11 @@ const WebSlider_GlogalScope = {
 };
 
 const globals = window as any as IGlobals;
-globals.WebSlider_GlogalScope = WebSlider_GlogalScope;
+if (!globals.WebSlider_GlogalScope) {
+  globals.WebSlider_GlogalScope = WebSlider_GlogalScope;
+} else {
+  globals.WebSlider_GlogalScope = {
+    ...globals.WebSlider_GlogalScope,
+    ...WebSlider_GlogalScope,
+  };
+}

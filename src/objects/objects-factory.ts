@@ -10,7 +10,7 @@ export enum CoreObjectType {
   SPINNER = "spinner",
 }
 
-type createObjectFuncType = (
+export type createObjectFuncType = (
   initialValue?: {
     [key: string]: any;
   },
@@ -19,7 +19,7 @@ type createObjectFuncType = (
   }
 ) => Omit<IObject, "layerId">;
 
-type getHtmlFuncType = (
+export type getHtmlFuncType = (
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
