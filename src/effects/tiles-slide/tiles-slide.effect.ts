@@ -6,6 +6,7 @@ import {
   getObjectContentElementAndHtml,
   tilesCompleteHandler,
   tilesStartHandler,
+  updateTilesSize,
 } from "../common";
 import { ITilesSlideInnerEffect, tilesSlideInner } from "./tiles-slide.types";
 
@@ -34,6 +35,19 @@ gsap.registerEffect({
       targets[0].appendChild(element);
     });
 
+    const elObserver = new ResizeObserver(sizeChangeHandler);
+
+    function sizeChangeHandler() {
+      const tileEls = targets[0].getElementsByClassName("tile");
+      updateTilesSize(
+        tileEls,
+        { w: targets[0].offsetWidth, h: targets[0].offsetHeight },
+        { r: config.rows, c: config.columns }
+      );
+    }
+
+    let isStarted = false;
+
     // 1. common config
     var baseConfig = {
       ease: config.ease,
@@ -50,11 +64,28 @@ gsap.registerEffect({
         ease: config.childEase,
         grid: [config.rows, config.columns],
       },
+
       onComplete: () => {
+        elObserver.disconnect();
+
         tilesCompleteHandler(config.type, objectContentElement, elements);
+        isStarted = false;
       },
       onStart: () => {
-        tilesStartHandler(config.type, objectContentElement, elements);
+        if (!isStarted) {
+          elObserver.observe(targets[0]);
+
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
+      },
+      onUpdate: () => {
+        if (!isStarted) {
+          elObserver.observe(targets[0]);
+
+          tilesStartHandler(config.type, objectContentElement, elements);
+          isStarted = true;
+        }
       },
     };
 
