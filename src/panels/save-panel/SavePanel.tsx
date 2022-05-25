@@ -57,6 +57,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { saveProject, getNextProjectId } = globalContext.useAPIHook();
 
+  const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
+
   // spinner
   //const [showSpinner, setShowSpinner] = useState(false);
 
@@ -100,15 +102,18 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     setHtml(exportData.html);
   }, []);
 
-  const onClickSave = (saveAs?: boolean) => {
+  const onClickSave = async (saveAs?: boolean) => {
     _updateProjectMeta({ inSaving: true });
+
+    const installedMarketItems = await getInstalledMarketItems();
 
     const playerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
       breakpointConfig!,
       breakpoints,
-      settings
+      settings,
+      installedMarketItems.items
     );
 
     console.log(playerData);

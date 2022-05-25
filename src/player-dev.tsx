@@ -6,6 +6,7 @@ import "./objects/font-preloader";
 import { BreakpointConfiguration } from "./store/reducers/i-settings";
 
 require("./effects/effects");
+require("./objects/exec-code-effect");
 
 (window as any).WebSliderPlayer = Player;
 

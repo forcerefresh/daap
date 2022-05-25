@@ -51,7 +51,13 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               }
             }}
           >
-            <div style={{ minHeight: "40px" }}>
+            <div
+              style={{
+                minHeight: "40px",
+                maxWidth: "36px",
+                margin: "auto",
+              }}
+            >
               <SVG src={deff.meta.icon || ""} />
             </div>
 

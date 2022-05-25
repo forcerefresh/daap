@@ -1,95 +1,67 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, remove, round, uniq } from "lodash-es";
+import { debounce } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  InputGroup,
-  Intent,
-  Popover,
-  PopoverInteractionKind,
-  Position,
-  Spinner,
-  Tag,
-  Text,
-} from "@blueprintjs/core";
-import {
-  addNewObject,
-  doClearHistory,
-  openProject,
-  updateEditor,
-  updateProjectMeta,
-} from "../../store/actions/actions";
-import { IObject, ObjectType } from "../../objects/types";
-
-import css from "./ProjectsPanel.module.scss";
+import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
-import { IMeta } from "../../store/reducers/meta";
+import css from "./MarketplacePanel.module.scss";
+import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
+import { IMarketItem } from "../../objects/i-marketplace";
 
-interface ImageItem {
-  url: string;
-  size: {
-    height: number;
-    width: number;
-    type: string;
-  };
-}
-
-interface ImageData {
-  id: string;
-  name: string;
-  description: string;
-}
-
-interface IProjectsPanelProps {
+interface IMarketplacePanelProps {
   onRequestClose: () => void;
 }
 
-export type IProjectsMergedProps = typeof mapDispatchToProps &
+export type IMarketplaceMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
-  IProjectsPanelProps;
+  IMarketplacePanelProps;
 
-const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
-  const {
-    onRequestClose,
-    _updateProjectMeta,
-    _openProject,
-    _doClearHistory,
-    _resetChangedState,
-  } = props;
+const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
+  const { onRequestClose, _registerObject, _unregisterObject } = props;
 
-  const [projects, setProjects] = useState<any[]>([]);
+  const [marketItems, setMarketItems] = useState<IMarketItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDeleteLoading, setDeleteLoading] = useState(false);
-
-  const badImages = React.useRef<number[]>([]);
+  const [isUninstallOpen, setIsUninstallOpen] = useState(false);
+  const [isUninstallLoading, setUninstallLoading] = useState(false);
+  const [installedMarketItems, setInstalledMarketItems] =
+    useState<IMarketItem[]>();
 
   const globalContext = useContext(IntegrationContext);
-  const { getProject, getProjects, deleteProject } = globalContext.useAPIHook();
+  const {
+    getMarketItems,
+    installMarketItem,
+    uninstallMarketItem,
+    getInstalledMarketItems,
+  } = globalContext.useMarketplaceHook();
+
+  useEffect(() => {
+    (() => {
+      return getInstalledMarketItems();
+    })().then((res: { items: IMarketItem[] }) => {
+      setInstalledMarketItems(res.items);
+    });
+  }, []);
 
   const fetchData = (from = -1) => {
     setLoading(true);
 
-    from = from === -1 ? projects?.length || 0 : from;
+    from = from === -1 ? marketItems?.length || 0 : from;
 
-    getProjects(from, searchValue).then(
+    getMarketItems(from, searchValue).then(
       (result) => {
         console.log(result);
         if (from === 0) {
-          setProjects([...result.projects]);
+          setMarketItems([...result.items]);
         } else {
-          setProjects([...projects, ...result.projects]);
+          setMarketItems([...marketItems, ...result.items]);
         }
         setLoading(false);
-        setHasMore(result.projects.length > 0);
+        setHasMore(result.items.length > 0);
       },
 
       (error) => {
@@ -100,10 +72,6 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
           });*/
       }
     );
-
-    setTimeout(() => {
-      console.log(uniq(badImages.current));
-    }, 500);
   };
 
   useEffect(() => {
@@ -112,68 +80,58 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const deleteIdRef = useRef(-1);
-  const onDeleteProject = (id: number) => {
-    setIsOpen(true);
-    deleteIdRef.current = id;
+  const uninstallIdRef = useRef<IMarketItem | undefined>();
+  const onUninstall = (marketItem: IMarketItem) => {
+    setIsUninstallOpen(true);
+    uninstallIdRef.current = marketItem;
   };
 
-  const deleteConfirm = () => {
-    setDeleteLoading(true);
+  const uninstallConfirm = () => {
+    setUninstallLoading(true);
 
-    console.log(deleteIdRef.current);
-    deleteProject(deleteIdRef.current).then(({ id }: { id: number }) => {
-      const newProjects = projects.concat();
-      remove(newProjects, (p: any) => {
-        return p.id === id;
-      });
-      setProjects(newProjects);
+    if (!uninstallIdRef.current?.id) return;
 
-      if (newProjects.length === 0) {
-        setHasMore(false);
+    uninstallMarketItem(uninstallIdRef.current.id).then(
+      ({ id }: { id: number }) => {
+        getInstalledMarketItems().then((res) => {
+          setInstalledMarketItems(res.items);
+        });
+
+        setIsUninstallOpen(false);
+        setUninstallLoading(false);
+        AppToaster.show({
+          intent: "success",
+          message: "Object is successfully uninstalled.",
+        });
       }
+    );
+  };
 
-      setIsOpen(false);
-      setDeleteLoading(false);
+  const uninstallCancel = () => {
+    setIsUninstallOpen(false);
+    setUninstallLoading(false);
+  };
+
+  const onInstall = (item: IMarketItem) => {
+    installMarketItem(item).then((mItem) => {
+      loadAndRegisterExternalComponent(mItem).then(() => {});
+
       AppToaster.show({
         intent: "success",
-        message: "Slider is successfully deleted.",
+        message: "Object is successfully installed.",
+      });
+
+      getInstalledMarketItems().then((res) => {
+        setInstalledMarketItems(res.items);
       });
     });
   };
 
-  const deleteCancel = () => {
-    setIsOpen(false);
-    setDeleteLoading(false);
-  };
-
-  const onOpenProject = (id: number) => {
-    getProject(id).then((response: any) => {
-      const meta: IMeta = {
-        id: response.project.id,
-        name: response.project.name,
-        description: response.project.description,
-        modified: response.project.modified,
-        created: response.project.created,
-        saveRevision: response.project.saveRevision,
-        //publishRevision: response.project.publishRevision,
-      };
-      _updateProjectMeta(meta);
-
-      const project = response.project.project;
-      delete project.diff;
-
-      _openProject(project);
-
-      _doClearHistory();
-
-      _resetChangedState();
-
-      onRequestClose();
-    });
-  };
+  if (!installedMarketItems) {
+    return null;
+  }
   return (
-    <div className={css.projectsPanel}>
+    <div className={css.marketplacePanel}>
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -184,7 +142,7 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
               large
               icon="arrow-right"
               onClick={() => {
-                setProjects(() => []);
+                setMarketItems(() => []);
                 debounceFetchData(0);
               }}
             />
@@ -195,7 +153,7 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
-              setProjects(() => []);
+              setMarketItems(() => []);
               debounceFetchData(0);
             }
           }}
@@ -204,9 +162,8 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
 
       <div className={cx(css.headerSection, css.tableHeader)}>
         <div className={css.id}>ID</div>
-        <div className={css.thumb}>Thumbnail</div>
+        <div className={css.thumb}></div>
         <div className={css.name}>Name &amp; Description</div>
-        <div className={css.slides}>Slides</div>
         <div className={css.created}>Created</div>
         <div className={css.modified}>Modified</div>
         <div className={css.action}>Action</div>
@@ -214,7 +171,7 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
 
       <div className={css.mainSection} id="mediaHolder">
         <InfiniteScroll
-          dataLength={projects?.length || -1} //This is important field to render the next data
+          dataLength={marketItems?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
@@ -231,7 +188,7 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              {projects.length === 0 ? (
+              {marketItems.length === 0 ? (
                 <b>There are no project for the selected criteria.</b>
               ) : (
                 <b>All projects are loaded for the selected criteria.</b>
@@ -239,60 +196,58 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
             </p>
           }
         >
-          {projects?.map((project, idx) => (
+          {marketItems?.map((marketItem, idx) => (
             <>
               <div className={cx(css.headerSection, css.tableRow)}>
-                <div className={css.id}>{project.id}</div>
+                <div className={css.id}>{marketItem.id}</div>
                 <div className={css.thumb}>
-                  <div
-                    className={css.thumbHolder}
-                    style={{
-                      width: project.preview.width + "px",
-                      height: project.preview.height + "px",
-                    }}
-                  >
-                    <div
-                      className={css.thumbHolderInner}
-                      dangerouslySetInnerHTML={{
-                        __html: project.preview.html,
-                      }}
-                      style={{
-                        transform: `scale(${round(project.preview.scale, 2)})`,
-                      }}
-                    ></div>
+                  <div className={css.thumbHolder}>
+                    <object
+                      data={`${process.env.REACT_APP_MARKETPLACE_BASE_URL}/${marketItem.logoUrl}`}
+                    ></object>
                   </div>
                 </div>
                 <div className={css.name}>
-                  {project.name}
+                  {marketItem.name}
                   <br />
-                  <span className={css.description}>{project.description}</span>
+                  <span className={css.description}>
+                    {marketItem.description}
+                  </span>
                 </div>
-                <div className={css.slides}>{project.slides}</div>
                 <div className={css.created}>
-                  {new Date(project.created).toLocaleDateString()}
+                  {new Date(marketItem.created).toLocaleDateString()}
                   <br />
-                  {new Date(project.created).toLocaleTimeString()}
+                  {new Date(marketItem.created).toLocaleTimeString()}
                 </div>
                 <div className={css.modified}>
-                  {new Date(project.modified).toLocaleDateString()}
+                  {new Date(marketItem.modified).toLocaleDateString()}
                   <br />
-                  {new Date(project.modified).toLocaleTimeString()}
+                  {new Date(marketItem.modified).toLocaleTimeString()}
                 </div>
                 <div className={css.action}>
-                  <Button
-                    intent="primary"
-                    onClick={() => onOpenProject(project.id)}
-                  >
-                    Open
-                  </Button>
-                  {/*<Button intent="primary">Integration</Button>*/}
-                  <Button
-                    intent="danger"
-                    icon="trash"
-                    className={css.delete}
-                    minimal
-                    onClick={() => onDeleteProject(project.id)}
-                  ></Button>
+                  {installedMarketItems &&
+                    !installedMarketItems?.find(
+                      (item) => item.id === marketItem.id
+                    ) && (
+                      <Button
+                        intent="primary"
+                        onClick={() => onInstall(marketItem)}
+                      >
+                        Install
+                      </Button>
+                    )}
+
+                  {installedMarketItems &&
+                    !!installedMarketItems?.find(
+                      (item) => item.id === marketItem.id
+                    ) && (
+                      <Button
+                        intent="warning"
+                        onClick={() => onUninstall(marketItem)}
+                      >
+                        Uninstall
+                      </Button>
+                    )}
                 </div>
               </div>
             </>
@@ -301,40 +256,30 @@ const MarketplacePanel: React.FC<IProjectsMergedProps> = (props) => {
       </div>
       <Alert
         cancelButtonText="Cancel"
-        confirmButtonText="Delete"
+        confirmButtonText="Uninstall"
         canOutsideClickCancel={false}
         icon="trash"
-        loading={isDeleteLoading}
+        loading={isUninstallLoading}
         intent={Intent.DANGER}
-        isOpen={isOpen}
-        onCancel={deleteCancel}
-        onConfirm={deleteConfirm}
+        isOpen={isUninstallOpen}
+        onCancel={uninstallCancel}
+        onConfirm={uninstallConfirm}
         className="bp3-dark"
       >
         <p>
-          Are you sure you want to delete <b>filename</b> slider?
+          Are you sure you want to uninstall{" "}
+          <b>{uninstallIdRef?.current?.name}</b> object?
         </p>
       </Alert>
     </div>
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-});
+const mapStateToProps = (state: IStore) => ({});
 
 const mapDispatchToProps = {
-  _addNewObject: (
-    layerId: string,
-    type: ObjectType,
-    objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
-  ) => addNewObject(layerId, type, objectProps, values),
-  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
-  _openProject: (project: any) => openProject(project),
-  _doClearHistory: () => doClearHistory(),
-  _resetChangedState: () =>
-    updateEditor({ sliderChanged: false, isExistingProject: true }),
+  _registerObject: (extObjectDef: any) => undefined,
+  _unregisterObject: (extObjectDef: any) => undefined,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MarketplacePanel);

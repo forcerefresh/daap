@@ -9,6 +9,7 @@ import {
 } from "./integration/components/my-image-select/my-image-select";
 import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
+import { IMarketItem } from "./objects/i-marketplace";
 import {
   ImageData,
   MediaDataInfo,
@@ -126,6 +127,28 @@ export const IntegrationContext = React.createContext({
   useMediaHook: () => ({
     requestMedia: (type: "image" | "video"): Promise<{ url: string }> =>
       Promise.resolve({ url: "" }),
+  }),
+
+  useMarketplaceHook: () => ({
+    /* get installed market items */
+    getInstalledMarketItems: (): Promise<{ items: IMarketItem[] }> =>
+      Promise.resolve({ items: [] as IMarketItem[] }),
+
+    /* get market items from server */
+    getMarketItems: (
+      from: number,
+      search?: string,
+      tags?: string[]
+    ): Promise<{ items: IMarketItem[] }> =>
+      Promise.resolve({ items: [] as IMarketItem[] }),
+
+    /* install market item */
+    installMarketItem: (marketItem: IMarketItem): Promise<any> =>
+      Promise.resolve({} as IMarketItem),
+
+    /* uninstall market item */
+    uninstallMarketItem: (id: number): Promise<any> =>
+      Promise.resolve({} as IMarketItem),
   }),
 
   useAPIHook: () => ({
@@ -285,6 +308,16 @@ function usePresetsHookFactory() {
     .usePresets;
 }
 
+function useMarketplaceHookFactory() {
+  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/marketplace-hook/electron-use-marketplace-hook")
+      .useMarketplaceHook;
+  } else {*/
+  return require("./integration/hooks/marketplace-hook/use-marketplace-hook")
+    .useMarketplaceHook;
+  /*}*/
+}
+
 export const IntegrationContextProvider = (
   props: React.PropsWithChildren<React.ReactNode>
 ) => {
@@ -298,6 +331,7 @@ export const IntegrationContextProvider = (
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
+        useMarketplaceHook: useMarketplaceHookFactory(),
       }}
     >
       {props.children}

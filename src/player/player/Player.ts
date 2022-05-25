@@ -6,6 +6,7 @@ import {
   ISlideData,
   ITransitionsData,
 } from "../../export/i-export-html";
+import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { layerSizeUpdate } from "../../objects/layer/layer";
 import {
   CoreObjectType,
@@ -75,6 +76,8 @@ export class Player {
   private scaleParams: { wScale: number; hScale: number } | undefined;
 
   private preloaders: { [key: string]: Promise<string>[] };
+  private extComponentPreloaders: Promise<any>[];
+
   private pagePreloaderEls: {
     el: HTMLDivElement;
     inTime: number;
@@ -139,6 +142,31 @@ export class Player {
     };
     this.pagePreloaderEls = [];
 
+    this.extComponentPreloaders = [];
+
+    // if is app do not load external components
+    if (playerConfig.isApp) {
+      this.createAllSlides();
+    } else {
+      this.playerData?.marketItems?.forEach((marketItem) => {
+        this.extComponentPreloaders.push(
+          loadAndRegisterExternalComponent(marketItem)
+        );
+      });
+
+      Promise.all(this.extComponentPreloaders)
+        .then(() => {
+          console.log("External components are loaded");
+        })
+        .catch((err) => console.warn)
+        .finally(() => {
+          this.createAllSlides();
+        });
+    }
+  }
+
+  // this we are calling after we load external components
+  private createAllSlides() {
     this.normalSlideDataArr?.forEach((data, idx) => {
       this.createSlide(idx, data);
     });
@@ -146,10 +174,9 @@ export class Player {
       this.createStaticSlide(idx, data);
     });
 
-    this.resizeAll();
+    this.resizeAll(true);
   }
-
-  private bpUpdateSlide() {
+  private bpUpdateSlide(isInitial = false) {
     const slideEls = this.rootDiv.getElementsByClassName("slide");
 
     const bp = this.currentBp;
@@ -246,16 +273,16 @@ export class Player {
     return newWidth / width;
   }
 
-  private bpUpdateObjectsSize() {
+  private bpUpdateObjectsSize(isInitial = false) {
     this.normalSlideDataArr?.forEach((data, idx) => {
-      this.bpUpdateObjectSize(idx, data);
+      this.bpUpdateObjectSize(idx, data, isInitial);
     });
     this.frontSlideDataArr?.forEach((data, idx) => {
-      this.bpUpdateObjectSize(idx, data);
+      this.bpUpdateObjectSize(idx, data, isInitial);
     });
   }
 
-  private bpUpdateObjectSize(idx: number, data: ISlideData) {
+  private bpUpdateObjectSize(idx: number, data: ISlideData, isInitial = false) {
     data.transitionsData.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize = calculateObjectSize(
@@ -284,6 +311,7 @@ export class Player {
           values: transitionData.itemValues,
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
+          isInitial,
         },
         true
       );
@@ -326,7 +354,7 @@ export class Player {
     );
   }
 
-  private resizeAll() {
+  private resizeAll(isInitial = false) {
     if (this.playerConfig.isApp) return;
 
     this.scaleParams = this.calculateSizeParameters(
@@ -334,8 +362,8 @@ export class Player {
       this.breakpointChecker.currentViewportSize!
     );
 
-    this.bpUpdateSlide();
-    this.bpUpdateObjectsSize();
+    this.bpUpdateSlide(isInitial);
+    this.bpUpdateObjectsSize(isInitial);
   }
 
   private createNavigationEvents(rootDiv: HTMLDivElement) {
@@ -430,6 +458,9 @@ export class Player {
   }
 
   public async play() {
+    console.log("ssss");
+    await Promise.all(this.extComponentPreloaders);
+    console.log("ssss 2");
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
     this.pagePreloaderEls.forEach((item) => {

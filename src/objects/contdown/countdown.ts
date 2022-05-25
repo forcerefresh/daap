@@ -1,4 +1,5 @@
 import {
+  ICheckboxInput,
   IColorInput,
   IFontSelectInput,
   IFontSelectInputValue,
@@ -30,6 +31,7 @@ export interface CountdownValues {
   fontSize: string;
   weight: string;
   preload: boolean;
+  textAlign: string;
 }
 
 export type CountdownPropertiesTuple = [
@@ -39,7 +41,8 @@ export type CountdownPropertiesTuple = [
       IFontSelectInput<"font">,
       IColorInput<"color">,
       IUnitsNumberInput<"fontSize">,
-      ISelectInput<"weight">
+      ISelectInput<"weight">,
+      ISelectInput<"textAlign">
     ]
   >
 ];
@@ -122,6 +125,18 @@ export function createCountdownObject(
             { value: "950", label: "950	Extra Black" },
           ],
         },
+        {
+          displayName: "Text align",
+          propertyName: "textAlign",
+          inputType: InputType.SELECT,
+          value: "left",
+          defaultValue: "left",
+          options: [
+            { value: "left", label: "Left" },
+            { value: "center", label: "Cente" },
+            { value: "right", label: "Right" },
+          ],
+        },
       ],
     },
   ];
@@ -135,6 +150,7 @@ export function createCountdownObject(
     },
     fontSize: "3em",
     weight: "normal",
+    textAlign: "center",
     preload: true,
   };
 
@@ -167,6 +183,7 @@ export function getCountdownHtml(
   const c = countdownValues.color;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
   style += "font-weight: " + countdownValues.weight + ";";
+  style += "text-align:" + countdownValues.textAlign + ";";
 
   return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
@@ -177,9 +194,19 @@ export async function countdownSizeUpdate(props: {
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<void> {
-  const { id, calculatedObjectSize } = props;
-  console.log("countdownSizeUpdate: id> " + id);
-  console.log(calculatedObjectSize);
+  const { id, calculatedObjectSize, className } = props;
+
+  const els = document.getElementsByClassName(className);
+
+  const div = els[0] as HTMLDivElement;
+  const parent = div.parentNode! as HTMLDivElement;
+  parent.style.width = calculatedObjectSize.width;
+  parent.style.height = calculatedObjectSize.height;
+  parent.style.left = calculatedObjectSize.left;
+  parent.style.top = calculatedObjectSize.top;
+
+  div.style.width = calculatedObjectSize.width;
+  div.style.height = calculatedObjectSize.height;
 }
 
 export async function preloadCountdown(props: {

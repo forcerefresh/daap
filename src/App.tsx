@@ -1,6 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import "./App.scss";
+import { IntegrationContext } from "./integration";
+import { loadAndRegisterExternalComponent } from "./objects/external-object-utils";
 import Editor from "./pages/editor/Editor";
 import { addNewSlide, initializeSlideAndLayer } from "./store/actions/actions";
 import { IStore } from "./store/store";
@@ -8,8 +10,21 @@ import { IStore } from "./store/store";
 type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
 function App(props: IAppProps) {
+  const globalContext = useContext(IntegrationContext);
+
+  const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
+
   useEffect(() => {
     props._initializeSlideAndLayer();
+
+    const loadExternalComponents = async () => {
+      const installedMarketItems = await getInstalledMarketItems();
+      for (let i = 0; i < installedMarketItems.items.length; i++) {
+        await loadAndRegisterExternalComponent(installedMarketItems.items[i]);
+      }
+    };
+
+    loadExternalComponents().then(() => {});
   }, []);
 
   return (

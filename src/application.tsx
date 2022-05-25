@@ -9,7 +9,6 @@ import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
 import "./objects/register-object";
 import "./objects/font-preloader";
-//require("./objects/exec-code-effect");
 
 function application(): {
   component: React.ReactElement;

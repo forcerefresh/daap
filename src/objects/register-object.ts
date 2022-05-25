@@ -16,6 +16,7 @@ import {
   createButtonObject,
   getButtonHtml,
 } from "./button/button";
+/*
 import {
   countdownMeta,
   countdownObject_Start,
@@ -24,7 +25,8 @@ import {
   createCountdownObject,
   getCountdownHtml,
   preloadCountdown,
-} from "./contdown/countdown";
+} from "./contdown/countdown";*/
+
 import {
   createDelayObject,
   delayMeta,
@@ -104,7 +106,7 @@ import {
   preloadYoutube,
   youtubeVideoSizeUpdate,
   youtubeVideoMeta,
-} from "./youtube-video/youtube-video";
+} from "./youtube-player-object/src/youtube-video";
 
 registerObject(
   "button",
@@ -134,7 +136,7 @@ registerObject(
 );
 
 registerObject(
-  "youtube_video",
+  "youtube_player",
   "media",
   youtubeVideoMeta,
   createYoutubeVideoObject,
@@ -217,6 +219,7 @@ registerObject(
   delayObject_Stop
 );
 
+/*
 registerObject(
   "countdown",
   "other",
@@ -227,7 +230,7 @@ registerObject(
   preloadCountdown,
   countdownObject_Start,
   countdownObject_Stop
-);
+);*/
 
 registerObject(
   "trianglify",

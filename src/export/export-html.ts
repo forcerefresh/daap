@@ -1,4 +1,12 @@
-import { cloneDeep, flatten, forOwn, mapValues, pick } from "lodash-es";
+import {
+  cloneDeep,
+  flatten,
+  forOwn,
+  mapValues,
+  pick,
+  uniq,
+  uniqWith,
+} from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -38,16 +46,20 @@ import {
   ISources,
   ITransitionsData,
 } from "./i-export-html";
+import { IMarketItem } from "../objects/i-marketplace";
 
 export function generatePlayerData(
   sources: ISources,
   scope: IPreviewScope | null,
   breakpointConfig: BreakpointConfiguration,
   breakpoints: Breakpoints,
-  settings: ISettings
+  settings: ISettings,
+  marketItems: IMarketItem[] = []
 ): IPlayerData {
   const { slides, layers, objects } = sources;
   //const slideIds: string[] = [];
+
+  let marketItemTypes: string[] = [];
 
   let normalSlidesArr: ISlide[] = [];
   let frontSlidesArr: ISlide[] = [];
@@ -95,6 +107,7 @@ export function generatePlayerData(
     );
     slideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
+    marketItemTypes = [...marketItemTypes, ...slideDataRes.marketItemTypes];
   });
 
   frontSlidesArr.forEach((slide) => {
@@ -110,6 +123,7 @@ export function generatePlayerData(
     );
     frontSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
+    marketItemTypes = [...marketItemTypes, ...slideDataRes.marketItemTypes];
   });
   html += "</div>"; //slides holder close
 
@@ -124,6 +138,9 @@ export function generatePlayerData(
       pageHeight: breakpointConfig.normal.page.height,
     },
     breakpoints: cloneDeep(breakpoints),
+    marketItems: marketItems.filter(
+      (item) => marketItemTypes.indexOf(item.type) !== -1
+    ),
   };
 }
 
@@ -162,8 +179,10 @@ function generateSlideData(
   settings: ISettings,
   thumbnailHtmlArr: (string | undefined)[],
   slidesLength: number
-): { slideData: ISlideData; html: string } {
+): { slideData: ISlideData; html: string; marketItemTypes: string[] } {
   let html: string = "";
+  const marketItemTypes: string[] = [];
+
   const transitionsData: ITransitionsData[] = [];
   const someSlideData = pick(slide, [
     "id",
@@ -274,6 +293,11 @@ function generateSlideData(
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
+      const objDeff = getObjectDefinition(object.type);
+      if (objDeff?.external) {
+        marketItemTypes.push(object.type);
+      }
+
       const objectValues = object.definition.values;
 
       const objectClass = "object-" + object.id;
@@ -361,7 +385,7 @@ function generateSlideData(
 
   html += "  </div>"; // slide close
 
-  return { slideData, html };
+  return { slideData, html, marketItemTypes };
 }
 
 function getObjectEvents(object: IObject) {

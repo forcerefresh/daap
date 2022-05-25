@@ -5,6 +5,7 @@ import { IStore } from "../../store/store";
 import css from "./ProjectsLibraryPanel.module.scss";
 import { Tab, Tabs } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
+import MarketplacePanel from "../marketplace-panel/MarketplacePanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;
@@ -27,8 +28,11 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             panel={<ProjectsPanel onRequestClose={props.onRequestClose} />}
           />
           <Tab id="templates" title="Templates" panel={<div />} />
-          {/*<Tabs.Expander />
-          <Button minimal icon="cog" />*/}
+          <Tab
+            id="marketplace"
+            title="Marketplace"
+            panel={<MarketplacePanel onRequestClose={props.onRequestClose} />}
+          />
         </Tabs>
       </div>
     </div>

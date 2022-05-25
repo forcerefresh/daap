@@ -1,4 +1,5 @@
 import React from "react";
+import { IMarketItem } from "../objects/i-marketplace";
 import { CoreObjectType } from "../objects/objects-factory";
 import {
   ILayout,
@@ -55,6 +56,7 @@ export interface IPlayerData {
     pageHeight: number;
   };
   breakpoints: Breakpoints;
+  marketItems: IMarketItem[];
 }
 
 export interface ISources {

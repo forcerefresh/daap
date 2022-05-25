@@ -51,6 +51,7 @@ export type updateObjectSizeFuncType = (
     className: string;
     values: { [key: string]: any };
     calculatedObjectSize: any;
+    isInitial?: boolean;
   },
   initial: boolean
 ) => Promise<void>;
@@ -78,10 +79,23 @@ export interface IObjectDefinitionHolder {
   preload?: preloadFuncType;
   postProcess?: postProcessFuncType;
   getAssetsUrls?: getAssetsUrlFuncType;
+  external?: boolean;
 }
 
 // <<<
 const objects: IObjectDefinitionHolder[] = [];
+
+export function registerExternalObject(extObjDef: IObjectDefinitionHolder) {
+  if (!isObjectRegistered(extObjDef.type)) {
+    objects.push({ ...extObjDef, external: true });
+  } else {
+    console.warn(`Object ${extObjDef.type} is already registered`);
+  }
+}
+
+export function isObjectRegistered(type: string) {
+  return !!objects.find((item) => item.type === type);
+}
 
 export function registerObject(
   type: string,
