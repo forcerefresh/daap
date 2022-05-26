@@ -141,5 +141,8 @@ export function getObjectDefinitionsByGroup(
   group: string
 ): IObjectDefinitionHolder[] {
   console.log(objects);
-  return objects.filter((item) => item.group === group);
+
+  const def = objects.filter((item) => item.group === group);
+
+  return def;
 }

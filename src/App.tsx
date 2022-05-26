@@ -19,6 +19,7 @@ function App(props: IAppProps) {
 
     const loadExternalComponents = async () => {
       const installedMarketItems = await getInstalledMarketItems();
+      console.log(installedMarketItems);
       for (let i = 0; i < installedMarketItems.items.length; i++) {
         await loadAndRegisterExternalComponent(installedMarketItems.items[i]);
       }

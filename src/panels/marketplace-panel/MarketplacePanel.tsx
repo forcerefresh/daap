@@ -202,9 +202,9 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
                 <div className={css.id}>{marketItem.id}</div>
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
-                    <object
-                      data={`${process.env.REACT_APP_MARKETPLACE_BASE_URL}/${marketItem.logoUrl}`}
-                    ></object>
+                    <img
+                      src={`${process.env.REACT_APP_MARKETPLACE_BASE_URL}/${marketItem.logoUrl}`}
+                    ></img>
                   </div>
                 </div>
                 <div className={css.name}>
