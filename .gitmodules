@@ -1,3 +1,6 @@
 [submodule "marketplace/objects/youtube-player-object"]
 	path = marketplace/objects/youtube-player-object
 	url = git@bitbucket.org:srdjanarsic/youtube-player-object.git
+[submodule "marketplace/objects/countdown-object"]
+	path = marketplace/objects/countdown-object
+	url = git@bitbucket.org:srdjanarsic/countdown-object.git
