@@ -118,7 +118,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
 
       AppToaster.show({
         intent: "success",
-        message: "Object is successfully installed.",
+        message: `Market component "${mItem.name}" is successfully installed.`,
       });
 
       getInstalledMarketItems().then((res) => {
@@ -208,6 +208,10 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
                   </div>
                 </div>
                 <div className={css.name}>
+                  <span className={css["type-" + marketItem.componentType]}>
+                    {marketItem.componentType.toUpperCase()}
+                  </span>
+                  <br />
                   {marketItem.name}
                   <br />
                   <span className={css.description}>
@@ -241,12 +245,17 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
                     !!installedMarketItems?.find(
                       (item) => item.id === marketItem.id
                     ) && (
-                      <Button
-                        intent="warning"
-                        onClick={() => onUninstall(marketItem)}
-                      >
-                        Uninstall
-                      </Button>
+                      <>
+                        <p className={css.installedMessage}>
+                          Component is installed.
+                        </p>
+                        <Button
+                          intent="none"
+                          onClick={() => onUninstall(marketItem)}
+                        >
+                          Uninstall
+                        </Button>
+                      </>
                     )}
                 </div>
               </div>

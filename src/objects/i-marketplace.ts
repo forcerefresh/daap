@@ -1,5 +1,6 @@
 export interface IMarketItem {
   id: number;
+  componentType: "object" | "effect";
   type: string;
   name: string;
   description: string;

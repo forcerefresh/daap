@@ -43,10 +43,6 @@ import {
 
 import { morphDefaults, morphDefinition } from "./morph/morph.definition";
 import {
-  magneticDefaults,
-  magneticDefinition,
-} from "./magnetic/magnetic.definition";
-import {
   typewriterDefaults,
   typewriterDefinition,
 } from "./typewriter/typewriter.definition";
@@ -103,7 +99,6 @@ import "./split/split.effect";
 import "./parallax/parallax.effect";
 
 import "./morph/morph.effect";
-import "./magnetic/magnetic.effect";
 import "./typewriter/typewriter.effect";
 import "./split-text/split-text.effect";
 import "./canvas-copy/canvas-copy.effect";
@@ -130,6 +125,7 @@ interface IEffectHolder {
   definition: IEffectDefinitionWrapper;
   defaults: IEffectDefaultsWrapper;
   getDuration?: (object?: any, config?: any) => number;
+  isExternal?: boolean;
 }
 // <<<
 
@@ -152,7 +148,6 @@ registerEffect(splitDefinition, splitDefaults);
 registerEffect(parallaxDefinition, parallaxDefaults);
 
 registerEffect(morphDefinition, morphDefaults);
-registerEffect(magneticDefinition, magneticDefaults);
 registerEffect(
   typewriterDefinition,
   typewriterDefaults,
@@ -168,16 +163,22 @@ registerEffect(dev2Definition, dev2Defaults);
 registerEffect(cssPluginDefinition, cssPluginDefaults);
 registerEffect(flipDefinition, flipDefaults, getFlipEffectDuration);
 
-function registerEffect(
+export function registerEffect(
   definition: IEffectDefinitionWrapper,
   defaults: IEffectDefaultsWrapper,
-  getDuration?: (object?: any, config?: any) => number
+  getDuration?: (object?: any, config?: any) => number,
+  isExternal = false
 ) {
   effects.push({
     definition,
     defaults,
     getDuration,
+    isExternal,
   });
+}
+
+export function isEffectRegistered(type: string) {
+  return !!effects.find((item) => item.definition.id === type);
 }
 
 export function getEffectDefinition(effectId: string): IEffectHolder {

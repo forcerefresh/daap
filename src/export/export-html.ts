@@ -1,6 +1,7 @@
 import {
   cloneDeep,
   flatten,
+  forEach,
   forOwn,
   mapValues,
   pick,
@@ -18,7 +19,13 @@ import {
 import { ImageValues } from "../objects/image/image";
 import { getObjectPlaceholder } from "../objects/object-helpers";
 import { getObjectDefinition } from "../objects/objects-factory";
-import { ILayout, IObject, LayoutTypes, ObjectType } from "../objects/types";
+import {
+  ILayout,
+  IObject,
+  ITransition,
+  LayoutTypes,
+  ObjectType,
+} from "../objects/types";
 import {
   calculateObjectSize,
   calculateObjectSizePerDevice,
@@ -47,6 +54,7 @@ import {
   ITransitionsData,
 } from "./i-export-html";
 import { IMarketItem } from "../objects/i-marketplace";
+import { getEffectDefinition } from "../effects/effects";
 
 export function generatePlayerData(
   sources: ISources,
@@ -293,11 +301,22 @@ function generateSlideData(
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
+      //part for externals
       const objDeff = getObjectDefinition(object.type);
       if (objDeff?.external) {
         marketItemTypes.push(object.type);
       }
 
+      forOwn(object.transitions, (tArr: ITransition[] | any) => {
+        tArr.forEach((t: ITransition | any) => {
+          const def = getEffectDefinition(t?.effect?.id);
+          if (def?.isExternal) {
+            marketItemTypes.push(t.effect.id);
+          }
+        });
+      });
+
+      // << part for externlas
       const objectValues = object.definition.values;
 
       const objectClass = "object-" + object.id;

@@ -97,11 +97,27 @@
 }
 .action {
   width: 20%;
-  display: flex;
-  flex-direction: column;
+  //display: flex;
+  // flex-direction: column;
   row-gap: 30px;
 }
 
 .description {
   color: gray;
+}
+
+.type-effect {
+  color: aqua;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.type-object {
+  color: #fbff00;
+  font-weight: 900;
+  font-size: 13px;
+}
+
+.installedMessage {
+  color: chartreuse;
 }

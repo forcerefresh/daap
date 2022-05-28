@@ -33,6 +33,8 @@ import {
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
 
+gsap.install(window);
+
 //(window as any).YTPlayer = require("yt-player");
 
 /*export interface IPlayerConfig {
@@ -163,6 +165,8 @@ export class Player {
           this.createAllSlides();
         });
     }
+
+    initSliderElement(this.rootDiv);
   }
 
   // this we are calling after we load external components
@@ -525,10 +529,13 @@ export class Player {
     //console.log(bettwenSlideEff);
 
     const prevSlideEl = this.currentSlideEl;
+    if (prevSlideEl) prevSlideEl.style.pointerEvents = "none";
 
     const slideEl = getSlideById(
       this.normalSlideDataArr?.[slideIdx]?.slide?.id
     ) as HTMLDivElement;
+    slideEl.style.pointerEvents = "auto";
+
     //slideEl.style.display = "block";
     /*slideIdx === 1 &&
       bettwenSlideEff?.effect.id &&
@@ -986,4 +993,16 @@ function getSlideById(id?: string) {
     slideClassname
   )[0] as HTMLElement;
   return slideEl;
+}
+
+function getAllSlider(rootDiv: HTMLDivElement): HTMLDivElement[] {
+  return Array.from(
+    rootDiv.getElementsByClassName("slide")
+  ) as HTMLDivElement[];
+}
+
+function initSliderElement(rootDiv: HTMLDivElement) {
+  getAllSlider(rootDiv).forEach((slideEl) => {
+    slideEl.style.pointerEvents = "none";
+  });
 }

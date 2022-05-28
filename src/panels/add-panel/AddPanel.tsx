@@ -1,4 +1,4 @@
-import { Card, Elevation, Icon } from "@blueprintjs/core";
+import { Card, Elevation, Icon, Tooltip } from "@blueprintjs/core";
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -63,6 +63,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
             <h3>{deff.meta.name}</h3>
             <p>{deff.meta.description}</p>
+            {deff.external && <div className={css.external}>MP</div>}
           </Card>
         ))}
       </>

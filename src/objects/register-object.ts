@@ -97,16 +97,6 @@ import {
   videoMeta,
   videoSizeUpdate,
 } from "./video/video";
-import {
-  createYoutubeVideoObject,
-  getYoutubeExecutionCode_Start,
-  getYoutubeExecutionCode_Stop,
-  getYoutubeVideoHtml,
-  postProcessYoutube,
-  preloadYoutube,
-  youtubeVideoSizeUpdate,
-  youtubeVideoMeta,
-} from "./youtube-player-object/src/youtube-video";
 
 registerObject(
   "button",
@@ -133,19 +123,6 @@ registerObject(
   createBulletsObject,
   bulletsSizeUpdate,
   getBulletsHtml
-);
-
-registerObject(
-  "youtube_player",
-  "media",
-  youtubeVideoMeta,
-  createYoutubeVideoObject,
-  youtubeVideoSizeUpdate,
-  getYoutubeVideoHtml,
-  preloadYoutube,
-  getYoutubeExecutionCode_Start,
-  getYoutubeExecutionCode_Stop,
-  postProcessYoutube
 );
 
 registerObject(

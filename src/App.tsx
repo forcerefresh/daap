@@ -7,6 +7,9 @@ import Editor from "./pages/editor/Editor";
 import { addNewSlide, initializeSlideAndLayer } from "./store/actions/actions";
 import { IStore } from "./store/store";
 
+import gsap from "gsap";
+gsap.install(window);
+
 type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
 function App(props: IAppProps) {
