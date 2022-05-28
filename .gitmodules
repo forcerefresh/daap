@@ -4,3 +4,6 @@
 [submodule "marketplace/objects/countdown-object"]
 	path = marketplace/objects/countdown-object
 	url = git@bitbucket.org:srdjanarsic/countdown-object.git
+[submodule "marketplace/effects/magnetic-effect"]
+	path = marketplace/effects/magnetic-effect
+	url = git@bitbucket.org:srdjanarsic/magnetic-effect.git
