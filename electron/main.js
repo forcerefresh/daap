@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
+const windowStateKeeper = require("electron-window-state");
 
 console.log(app.getVersion());
 
@@ -21,36 +22,82 @@ try {
   require("electron-reloader")(module);
 } catch {}
 
+let mainWindow;
 function createWindow() {
+  const mainWindowState = windowStateKeeper({
+    defaultWidth: 1000,
+    defaultHeight: 600,
+    maximize: false,
+  });
+
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    width: 1500,
-    height: 700,
+  mainWindow = new BrowserWindow({
+    show: false,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
-  mainWindow.webContents.openDevTools();
+  mainWindow.setBackgroundColor("#333");
+
+  mainWindowState.manage(mainWindow);
+
+  mainWindow.once("ready-to-show", () => {
+    mainWindow.show();
+  });
+
+  if (mainWindowState.isMaximized) {
+    mainWindow.maximize();
+  }
+
   // and load the index.html of the app.
-  //mainWindow.loadFile("electron/index.html");
-  mainWindow.loadURL("http://localhost:3000/");
+
+  if (process.env.ELECTRON_ENV === "development") {
+    mainWindow.webContents.openDevTools();
+    mainWindow.loadURL("http://localhost:3000/");
+  } else {
+    mainWindow.removeMenu();
+    mainWindow.loadFile("./build/index.html");
+  }
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
+  return mainWindow;
+}
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on(
+    "second-instance",
+    (event, commandLine, workingDirectory, additionalData) => {
+      // Someone tried to run a second instance, we should focus our window.
+      if (mainWindow) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.focus();
+      }
+    }
+  );
+
+  // Create myWindow, load the rest of the app, etc...
+  app.whenReady().then(() => {
+    mainWindow = createWindow();
+
+    app.on("activate", function () {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    });
+  });
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  createWindow();
-
-  app.on("activate", function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
-  });
-});
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits

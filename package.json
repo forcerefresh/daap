@@ -2,6 +2,27 @@
   "name": "web-slider",
   "version": "0.1.1",
   "private": true,
+  "homepage": "./",
+  "main": "electron/main.js",
+  "scripts": {
+    "start": "npm run start:app",
+    "start:app": "env-cmd -f env/.env react-scripts start",
+    "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
+    "start:app:electron": "env-cmd -f env/electron.env react-scripts start",
+    "start:main:electron": "cross-env ELECTRON_ENV=development electron .",
+    "start:player": "env-cmd -f env/player-dev.env react-scripts start",
+    "build:app": "react-scripts build",
+    "build:app:electron": "env-cmd -f env/electron.env react-scripts build",
+    "build:main:electron": "webpack --config=electron-config/electron.build.webpack.js --env=production",
+    "build:player": "env-cmd -f env/player.env react-scripts build",
+    "bundle:player": "webpack --config bundle-player.webpack.config.js",
+    "bb:player": "npm run build:player && npm run bundle:player",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "pack": "electron-builder --dir",
+    "build:package:electron": "yarn run build:app:electron && yarn run build:main:electron && electron-builder"
+  },
   "dependencies": {
     "@blueprintjs/core": "^3.46.0",
     "@blueprintjs/popover2": "^0.10.1",
@@ -23,8 +44,8 @@
     "classnames": "^2.2.6",
     "clone-deep": "^4.0.1",
     "deep-diff": "^1.0.2",
-    "electron": "^15.0.0",
     "electron-reloader": "^1.2.1",
+    "electron-window-state": "^5.0.3",
     "env-cmd": "^10.1.0",
     "gsap": "file:gsap-bonus.tgz",
     "gulp-replace": "^1.1.3",
@@ -57,29 +78,18 @@
     "uuid": "^8.3.2",
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
+    "webpack-node-externals": "^3.0.0",
     "yt-player": "^3.5.0",
     "yup": "^0.32.11"
-  },
-  "main": "electron/main.js",
-  "scripts": {
-    "start": "npm run start:app",
-    "start:app": "env-cmd -f env/.env react-scripts start",
-    "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
-    "start:app:electron": "env-cmd -f env/electron.env react-scripts start",
-    "start:player": "env-cmd -f env/player-dev.env react-scripts start",
-    "build:app": "react-scripts build",
-    "build:player": "env-cmd -f env/player.env react-scripts build",
-    "bundle:player": "webpack --config bundle-player.webpack.config.js",
-    "bb:player": "npm run build:player && npm run bundle:player",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "analyze": "source-map-explorer 'build/static/js/*.js'"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
   "devDependencies": {
     "@types/webfontloader": "^1.6.32",
+    "cross-env": "^7.0.3",
+    "electron": "^15.0.0",
+    "electron-builder": "^23.0.3",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-count": "^1.0.0",
@@ -96,5 +106,27 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "build": {
+    "appId": "io.webslider",
+    "productName": "Web Slider",
+    "mac": {
+      "category": "Web site builder",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "./public/icon.ico"
+    },
+    "linux": {
+      "target": "deb"
+    },
+    "files": [
+      "build/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "public"
+    }
   }
 }
