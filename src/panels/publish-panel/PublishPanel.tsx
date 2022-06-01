@@ -32,10 +32,10 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const {
     publishToStorageObject,
-    listStorageObjects,
+    listStorageObjects = (p: any) => Promise.resolve([]),
     assignBucketToProject,
     removeBucketFromProject,
-    getAssignedBucketIds,
+    getAssignedBucketIds = (p: any) => Promise.resolve([]),
     subscribeToPublishDetails,
     openPublishUrl,
     downloadPackage,
@@ -109,6 +109,12 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     </Menu>
   );
 
+  const noBucketAlert = () => {
+    AppToaster.show({
+      intent: "warning",
+      message: `You have no bucket. Please go to "Settings > Object Storage" in order to add bucket.`,
+    });
+  };
   return (
     <div className={cx("bp3-dark", css.publishPanel)}>
       <div className={css.panelHeader}>
@@ -119,7 +125,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
           <div>BUCKETS</div>
 
           <Popover2
-            content={bucketListMenu}
+            content={allBuckets?.length > 0 ? bucketListMenu : <></>}
             placement="left-end"
             shouldReturnFocusOnClose={false}
             interactionKind={Popover2InteractionKind.CLICK}
@@ -128,7 +134,9 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
           >
             <Button
               minimal
-              onClick={() => undefined}
+              onClick={() => {
+                if (allBuckets?.length === 0) noBucketAlert();
+              }}
               className={css.addNewBucket}
               small={true}
               icon="add"

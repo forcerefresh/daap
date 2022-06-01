@@ -202,16 +202,6 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                 )}
               </div>
             </FormGroup>
-            {/*<FormGroup
-              helperText="Helper text with details..."
-              label="Show select list for slides"
-              labelFor="layoutSlidesSelectionBox"
-            >
-              <Checkbox
-                id="layoutSlidesSelectionBox"
-                label="Enabled"
-              />
-            </FormGroup>*/}
           </div>
         )}
       </section>

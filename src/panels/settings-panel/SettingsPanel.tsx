@@ -7,6 +7,7 @@ import {
   Button,
   Checkbox,
   FormGroup,
+  HTMLSelect,
   Radio,
   RadioGroup,
   Tab,
@@ -88,6 +89,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
               //requiredLabel={true}
             >
               <RadioGroup
+                name="layoutType"
                 onChange={(e: React.FormEvent<HTMLInputElement>) => {
                   _updateGlobalConfiguration({
                     layoutType: e.currentTarget.value,
@@ -99,16 +101,6 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
                 <Radio label="Extended layers" value="default-layers" />
               </RadioGroup>
             </FormGroup>
-            {/*<FormGroup
-              helperText="Helper text with details..."
-              label="Show select list for slides"
-              labelFor="layoutSlidesSelectionBox"
-            >
-              <Checkbox
-                id="layoutSlidesSelectionBox"
-                label="Enabled"
-              />
-            </FormGroup>*/}
           </div>
         )}
       </section>
@@ -130,7 +122,48 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
         </div>
         {visibleSectionIds[GlobalPanelSections.OtherSettings] && (
           <div className={css.panel}>
-            <p>Other settings in one place</p>
+            <FormGroup
+              helperText={
+                <>
+                  Depend on the screen and resolution of your screen, choose
+                  proper scale factor to get comfortable working experience.
+                  <br />
+                  NOTE: This option requires app restart (scale won't be applied
+                  to all parts of app until app is restarted).
+                </>
+              }
+              label="Scale"
+              labelFor="appScale"
+              //requiredLabel={true}
+            >
+              <HTMLSelect
+                name="appScale"
+                options={[
+                  { value: "0.5", label: "50%" },
+                  { value: "0.6", label: "60%" },
+                  { value: "0.7", label: "70%" },
+                  { value: "0.8", label: "80%" },
+                  { value: "0.9", label: "90%" },
+                  { value: "1", label: "100%" },
+                  { value: "1.1", label: "110%" },
+                  { value: "1.2", label: "120%" },
+                  { value: "1.3", label: "130%" },
+                  { value: "1.4", label: "140%" },
+                  { value: "1.5", label: "150%" },
+                ]}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                  document.documentElement.style.transformOrigin = "top left";
+                  document.documentElement.style.transform =
+                    "scale(" + event.currentTarget.value + ")";
+
+                  document.documentElement.style.width =
+                    (1 / parseFloat(event.currentTarget.value)) * 100 + "%";
+
+                  document.documentElement.style.height =
+                    (1 / parseFloat(event.currentTarget.value)) * 100 + "%";
+                }}
+              ></HTMLSelect>
+            </FormGroup>
           </div>
         )}
       </section>

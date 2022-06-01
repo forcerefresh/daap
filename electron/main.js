@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
@@ -6,6 +6,36 @@ const { forEach, remove } = require("lodash");
 const windowStateKeeper = require("electron-window-state");
 
 console.log(app.getVersion());
+
+// menu
+if (process.platform === "darwin") {
+  const template = [
+    {
+      label: app.getName(),
+      submenu: [
+        { role: "about" },
+        { type: "separator" },
+        { role: "hide" },
+        { role: "hideothers" },
+        { role: "unhide" },
+        { type: "separator" },
+        { role: "quit" },
+      ],
+    },
+    {
+      label: "View",
+      submenu: [{ role: "togglefullscreen" }],
+    },
+    {
+      role: "window",
+      submenu: [{ role: "minimize" }, { role: "close" }],
+    },
+  ];
+
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+} else {
+  Menu.setApplicationMenu(null);
+}
 
 const { checkFileExists } = require("./utils.js");
 const {
@@ -47,6 +77,7 @@ function createWindow() {
   mainWindowState.manage(mainWindow);
 
   mainWindow.once("ready-to-show", () => {
+    //mainWindow.webContents.setZoomFactor(0.8);
     mainWindow.show();
   });
 

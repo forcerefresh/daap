@@ -1,0 +1,11 @@
+- [ ] Install node
+Make sure that /usr/local/bin is in your $PATH.
+Install brew
+Install yarn
+
+Unusual, then install node-gyp
+brew install pkg-config cairo libpng jpeg giflib
+
+https://flaviocopes.com/fix-node-canvas-error-pre-gyp-macos/
+
+https://www.codegrepper.com/code-examples/javascript/error+%2Fnode_modules%2Fnode-sass%3A+Command+failed

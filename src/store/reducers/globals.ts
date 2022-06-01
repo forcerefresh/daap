@@ -2,13 +2,13 @@ import { ActionTypes, SET_GLOBALS } from "../actions/actions";
 
 export interface IGlobals {
   layoutType: "default" | "default-layers";
-  //layoutSlidesSelectionBox: boolean;
+  scale: number;
 }
 
 export function globals(
   state: IGlobals = {
     layoutType: "default-layers",
-    //layoutSlidesSelectionBox: false,
+    scale: 1,
   },
   action: ActionTypes
 ) {
