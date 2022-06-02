@@ -13,3 +13,8 @@ rm -rf .git/modules/path/to/submodule
 git rm -f path/to/submodule
 
 ----
+
+----
+
+pull all submodules:
+git submodule update --init --recursive
