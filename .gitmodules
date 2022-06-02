@@ -7,3 +7,6 @@
 [submodule "marketplace/effects/magnetic-effect"]
 	path = marketplace/effects/magnetic-effect
 	url = git@bitbucket.org:srdjanarsic/magnetic-effect.git
+[submodule "src/webslider-sdk"]
+	path = src/webslider-sdk
+	url = git@bitbucket.org:srdjanarsic/webslider-sdk.git
