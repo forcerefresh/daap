@@ -1,21 +1,11 @@
-import React, { ReactNode } from "react";
-import { boolean } from "yup/lib/locale";
+import React from "react";
 import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
-import { ElectronMyImageSelect } from "./integration/components/my-image-select/electron-my-image-select";
-import {
-  MyImageSelect,
-  UploadFileInfo,
-} from "./integration/components/my-image-select/my-image-select";
-import { WPMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
+import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import { IMarketItem } from "./objects/i-marketplace";
-import {
-  ImageData,
-  MediaDataInfo,
-  MediaType,
-  VectorData,
-} from "./utils/assets/types";
+import { IAppSettings } from "./store/reducers/globals";
+import { MediaDataInfo, MediaType } from "./utils/assets/types";
 export interface getMyUploadComponentProps {
   type: MediaType;
   onComplete: () => void;
@@ -112,6 +102,18 @@ export const IntegrationContext = React.createContext({
     ): Promise<{ deletedIds: string[] }> => {
       return Promise.resolve({ deletedIds: [] });
     },
+  }),
+
+  useAppSettingsHook: () => ({
+    getSettings: (): Promise<IAppSettings | undefined> => {
+      return Promise.resolve({} as IAppSettings);
+    },
+
+    saveSettings: (settings: IAppSettings): Promise<IAppSettings> => {
+      return Promise.resolve({} as IAppSettings);
+    },
+
+    scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
   }),
 
   useAssetsHook: () => ({
@@ -298,6 +300,16 @@ function getMyUploadComponentFactory() {
   /** }*/
 }
 
+function useAppSettingsHookFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/app-settings-hook/electron-use-app-settings-hook")
+      .useAppSettingsHook;
+  } else {
+    return require("./integration/hooks/app-settings-hook/use-app-settings-hook")
+      .useAppSettingsHook;
+  }
+}
+
 function useAssetsHookFactory() {
   return require("./integration/hooks/assets-hook/use-assets-hook")
     .useAssetsHook;
@@ -332,6 +344,7 @@ export const IntegrationContextProvider = (
         getMyUploadComponent: getMyUploadComponentFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
         useMarketplaceHook: useMarketplaceHookFactory(),
+        useAppSettingsHook: useAppSettingsHookFactory(),
       }}
     >
       {props.children}

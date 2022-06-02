@@ -1,14 +1,14 @@
 import { ActionTypes, SET_GLOBALS } from "../actions/actions";
 
-export interface IGlobals {
+export interface IAppSettings {
   layoutType: "default" | "default-layers";
-  scale: number;
+  appZoom: number;
 }
 
 export function globals(
-  state: IGlobals = {
+  state: IAppSettings = {
     layoutType: "default-layers",
-    scale: 1,
+    appZoom: 1,
   },
   action: ActionTypes
 ) {

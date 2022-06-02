@@ -4,22 +4,31 @@ import "./App.scss";
 import { IntegrationContext } from "./integration";
 import { loadAndRegisterExternalComponent } from "./objects/external-object-utils";
 import Editor from "./pages/editor/Editor";
-import { addNewSlide, initializeSlideAndLayer } from "./store/actions/actions";
+import {
+  initializeSlideAndLayer,
+  updateGlobalConfiguration,
+} from "./store/actions/actions";
 import { IStore } from "./store/store";
 
 import gsap from "gsap";
+
 gsap.install(window);
 
 type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
 function App(props: IAppProps) {
+  const { _initializeSlideAndLayer, _updateGlobalConfiguration } = props;
+
   const globalContext = useContext(IntegrationContext);
 
   const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
+  const { getSettings, scaleUI } = globalContext.useAppSettingsHook();
 
   useEffect(() => {
-    props._initializeSlideAndLayer();
+    // **
+    _initializeSlideAndLayer();
 
+    // **
     const loadExternalComponents = async () => {
       const installedMarketItems = await getInstalledMarketItems();
       console.log(installedMarketItems);
@@ -27,8 +36,15 @@ function App(props: IAppProps) {
         await loadAndRegisterExternalComponent(installedMarketItems.items[i]);
       }
     };
-
     loadExternalComponents().then(() => {});
+
+    //**
+    getSettings().then((settings) => {
+      if (settings) {
+        _updateGlobalConfiguration(settings);
+        scaleUI(settings.appZoom);
+      }
+    });
   }, []);
 
   return (
@@ -50,6 +66,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {
   _initializeSlideAndLayer: initializeSlideAndLayer,
+  _updateGlobalConfiguration: updateGlobalConfiguration,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -22,7 +22,7 @@ import {
 } from "../../objects/create-object-factory";
 import { IPreviewState, StageTools } from "../reducers/stage";
 import { IDocument, IDocumentSize } from "../reducers/document";
-import { IGlobals } from "../reducers/globals";
+import { IAppSettings } from "../reducers/globals";
 import {
   IRect,
   isIntersectingRect,
@@ -1599,11 +1599,11 @@ export const SET_GLOBALS = "Set globals configuration";
 
 export interface SetGlobalConfigurationAction extends IUndoableAction<false> {
   type: typeof SET_GLOBALS;
-  payload: Partial<IGlobals>;
+  payload: Partial<IAppSettings>;
 }
 
 export function updateGlobalConfiguration(
-  globals: Partial<IGlobals>
+  globals: Partial<IAppSettings>
 ): SetGlobalConfigurationAction {
   return {
     type: SET_GLOBALS,

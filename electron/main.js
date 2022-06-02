@@ -45,8 +45,8 @@ const {
   loadExports,
   saveExports,
 } = require("./project.js");
-
 require("./object-storage.js");
+require("./app-settings");
 
 try {
   require("electron-reloader")(module);

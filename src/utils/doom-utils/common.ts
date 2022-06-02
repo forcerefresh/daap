@@ -136,6 +136,7 @@ export function addClass(el: Element, className: string) {
     el.className += " " + className;
   }
 }
+
 export function removeClass(el: Element, className: string) {
   el.className = el.className.replace(
     new RegExp("\\b" + className + "\\b", "g"),

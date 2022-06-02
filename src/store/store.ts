@@ -13,9 +13,8 @@ import { ISelection, selection } from "./reducers/selection";
 import { IStage, stage } from "./reducers/stage";
 import { objects } from "./reducers/objects";
 import { settings } from "./reducers/settings";
-import initialState from "./initial-state.json";
 import { IDocument, document } from "./reducers/document";
-import { IGlobals, globals } from "./reducers/globals";
+import { IAppSettings, globals } from "./reducers/globals";
 import { IFonts, fonts } from "./reducers/fonts";
 import { IMeta, meta } from "./reducers/meta";
 import { ISlides } from "./reducers/i-slides";
@@ -42,7 +41,7 @@ export interface IStore {
   editor: IEditor;
   meta: IMeta;
   stage: IStage;
-  globals: IGlobals;
+  globals: IAppSettings;
   uiforms: IUIForms;
   fonts: IFonts;
 }
@@ -98,6 +97,5 @@ const documentChange = (store: any) => (next: any) => (action: any) => {
 
 export const store = createStore(
   rootReducer,
-  //initialState as unknown as IStore,
   composeWithDevTools(applyMiddleware(documentChange, logger, thunk))
 );

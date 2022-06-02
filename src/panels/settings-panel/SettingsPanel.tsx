@@ -18,7 +18,7 @@ import {
   updateSlideDuration,
 } from "../../store/actions/actions";
 import { getNumericFiled } from "../../inputs/input-utils";
-import { IGlobals } from "../../store/reducers/globals";
+import { IAppSettings } from "../../store/reducers/globals";
 import ProjectPanel from "../project-panel/ProjectPanel";
 import { ObjectStorage } from "../object-storage/ObjectStorage";
 import { IntegrationContext } from "../../integration";
@@ -46,6 +46,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
 
   const globalContext = useContext(IntegrationContext);
   const { supportStorageObjects } = globalContext.useObjectStorageHook();
+  const { saveSettings, scaleUI } = globalContext.useAppSettingsHook();
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
@@ -91,9 +92,18 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
               <RadioGroup
                 name="layoutType"
                 onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                  const layoutType = e.currentTarget.value as any;
+
+                  // save settings
+                  saveSettings({
+                    ...globals,
+                    layoutType: layoutType,
+                  });
+
+                  //update store
                   _updateGlobalConfiguration({
-                    layoutType: e.currentTarget.value,
-                  } as Partial<IGlobals>);
+                    layoutType,
+                  } as Partial<IAppSettings>);
                 }}
                 selectedValue={globals.layoutType}
               >
@@ -138,6 +148,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
             >
               <HTMLSelect
                 name="appScale"
+                value={`${globals.appZoom}`}
                 options={[
                   { value: "0.5", label: "50%" },
                   { value: "0.6", label: "60%" },
@@ -152,15 +163,20 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
                   { value: "1.5", label: "150%" },
                 ]}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                  document.documentElement.style.transformOrigin = "top left";
-                  document.documentElement.style.transform =
-                    "scale(" + event.currentTarget.value + ")";
+                  const zoom = parseFloat(event.currentTarget.value);
+                  // save settings
+                  saveSettings({
+                    ...globals,
+                    appZoom: zoom,
+                  });
 
-                  document.documentElement.style.width =
-                    (1 / parseFloat(event.currentTarget.value)) * 100 + "%";
+                  //update store
+                  _updateGlobalConfiguration({
+                    appZoom: zoom,
+                  });
 
-                  document.documentElement.style.height =
-                    (1 / parseFloat(event.currentTarget.value)) * 100 + "%";
+                  // apply zoom to app
+                  scaleUI(zoom).then();
                 }}
               ></HTMLSelect>
             </FormGroup>
@@ -199,7 +215,7 @@ const mapStateToProps = (state: IStore) => ({
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),
-  _updateGlobalConfiguration: (globals: Partial<IGlobals>) =>
+  _updateGlobalConfiguration: (globals: Partial<IAppSettings>) =>
     updateGlobalConfiguration(globals),
 };
 
