@@ -2,7 +2,7 @@ import { RGBColor } from "react-color";
 import {
   CommonPropertiesTuple,
   CommonPropertiesValues,
-} from "../objects/common-properties";
+} from "../webslider-sdk/src/objects/common-properties";
 import {
   IAbsoluteLayout,
   IGridLayout,

@@ -9,7 +9,7 @@ import {
 import {
   CommonPropertiesTuple,
   getCommonObjectPropertiesDefinition,
-} from "../../objects/common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 import { ILayout, ITransitions } from "../../objects/types";
 import {
   FormType,

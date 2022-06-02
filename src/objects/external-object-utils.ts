@@ -1,5 +1,5 @@
 import { isEffectRegistered, registerEffect } from "../effects/effects";
-import { IMarketItem } from "./i-marketplace";
+import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
 import { isObjectRegistered, registerExternalObject } from "./objects-factory";
 
 export async function loadAndRegisterExternalComponent(

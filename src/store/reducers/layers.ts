@@ -18,7 +18,7 @@ import { ILayers } from "./i-layers";
 import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../objects/common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 
 const getLayersDefault = () => ({ layerById: {}, allLayers: [] });
 

@@ -51,7 +51,7 @@ import { humanizeSting } from "../../utils/utils";
 import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../objects/common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";

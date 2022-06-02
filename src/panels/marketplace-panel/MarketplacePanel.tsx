@@ -9,7 +9,7 @@ import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./MarketplacePanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
-import { IMarketItem } from "../../objects/i-marketplace";
+import { IMarketItem } from "../../webslider-sdk/src/objects/i-marketplace";
 
 interface IMarketplacePanelProps {
   onRequestClose: () => void;

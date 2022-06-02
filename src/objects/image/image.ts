@@ -19,7 +19,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 
 export const IMAGE = "image";
 

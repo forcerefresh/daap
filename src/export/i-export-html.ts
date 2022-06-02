@@ -1,5 +1,5 @@
 import React from "react";
-import { IMarketItem } from "../objects/i-marketplace";
+import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
 import { CoreObjectType } from "../objects/objects-factory";
 import {
   ILayout,

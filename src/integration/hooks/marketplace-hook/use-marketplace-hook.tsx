@@ -1,7 +1,7 @@
 // *** this file contains implementation for development
 
 import { remove } from "jszip";
-import { IMarketItem } from "../../../objects/i-marketplace";
+import { IMarketItem } from "../../../webslider-sdk/src/objects/i-marketplace";
 
 export const useMarketplaceHook = () => {
   /* returns projects */

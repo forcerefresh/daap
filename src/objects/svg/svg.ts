@@ -23,7 +23,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 import { RGBColor } from "react-color";
 import {
   FormType,

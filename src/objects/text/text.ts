@@ -21,7 +21,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../common-properties";
+} from "../../webslider-sdk/src/objects/common-properties";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 export const TEXT = "text";

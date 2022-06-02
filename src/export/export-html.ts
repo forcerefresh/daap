@@ -53,7 +53,7 @@ import {
   ISources,
   ITransitionsData,
 } from "./i-export-html";
-import { IMarketItem } from "../objects/i-marketplace";
+import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
 import { getEffectDefinition } from "../effects/effects";
 
 export function generatePlayerData(

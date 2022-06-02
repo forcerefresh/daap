@@ -3,7 +3,7 @@ import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./inputs/types";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
-import { IMarketItem } from "./objects/i-marketplace";
+import { IMarketItem } from "./webslider-sdk/src/objects/i-marketplace";
 import { IAppSettings } from "./store/reducers/globals";
 import { MediaDataInfo, MediaType } from "./utils/assets/types";
 export interface getMyUploadComponentProps {
