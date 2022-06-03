@@ -1,9 +1,5 @@
 import { RGBColor } from "react-color";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
-} from "../webslider-sdk/src/objects/common-properties";
-import {
   IAbsoluteLayout,
   IGridLayout,
   ISnapLayout,
@@ -11,17 +7,6 @@ import {
 } from "../objects/types";
 import { Breakpoints } from "../store/reducers/i-settings";
 import { ISlideDuration } from "../store/reducers/i-slides";
-import {
-  IFormGroupItem,
-  IFormSwitchGroup,
-  IFormSwitchGroupItem,
-} from "../utils/form-layout/i-form-layout";
-
-export type ConcatTuple<T> = T extends [infer A, ...infer Rest]
-  ? A extends any[]
-    ? [...A, ...ConcatTuple<Rest>]
-    : A
-  : T;
 
 export enum InputType {
   INFO = "info",
@@ -49,7 +34,6 @@ export enum InputType {
   VIDEO = "video",
   CHECKBOX = "checkbox",
   FONT_SELECT = "font_select",
-  //EVENTS = "events",
   PARALLAX = "parallax",
   COVER_LAYOUT = "cover_placement",
   GRID_LAYOUT = "grid_layout",
@@ -125,7 +109,6 @@ export interface IUpdateInput {
   ) => void;
 }
 
-//  number input
 export interface INumberInput<T = string> {
   inputType: InputType.NUMBER;
   displayName: string;
@@ -139,7 +122,6 @@ export interface INumberInput<T = string> {
 
 export type Units = "px" | "em" | "%" | "ms" | "s" | null;
 
-//  advanced number input
 export interface IUnitsNumberInput<T = string> {
   inputType: InputType.UNITS_NUMBER;
   displayName: string;
@@ -152,6 +134,7 @@ export interface IUnitsNumberInput<T = string> {
   inputProps?: { disabled: boolean };
   optional?: boolean;
 }
+
 export interface IColorArrayInput<T = string> {
   inputType: InputType.COLOR_ARRAY;
   displayName: string;
@@ -194,6 +177,7 @@ export interface IBorderColorValue {
   leftBorderColor: RGBColor;
   rightBorderColor: RGBColor;
 }
+
 export interface IBorderColorInput<T = string> {
   inputType: InputType.BORDER_COLOR;
   displayName: string;
@@ -232,6 +216,7 @@ export interface ITimelinePoint {
 export interface ITimelineValue {
   points: ITimelinePoint[];
 }
+
 export interface ITimelinesValue {
   timelines: ITimelineValue[];
 }
@@ -326,6 +311,7 @@ export interface ITextInput<T = string> {
   };
   externalError?: string | string[];
 }
+
 export interface IInfoInput<T = string> {
   inputType: InputType.INFO;
   displayName: string;
@@ -370,6 +356,7 @@ export interface ISVGInput<T = string> {
 export interface IHTMLValue {
   source: string;
 }
+
 export interface IHTMLInput<T = string> {
   inputType: InputType.HTML_INPUT;
   displayName: string;
@@ -504,6 +491,7 @@ export enum LayoutChildrenType {
   Table = "table",
   Inline = "inline",
 }
+
 export interface ILayoutChildrenValue {
   type: LayoutChildrenType;
   align: "start" | "center" | "end";
@@ -717,23 +705,16 @@ export interface ISelectInput<T = string> {
   optional?: boolean;
 }
 
-/*export interface IEventsInput<T = string> {
-  inputType: InputType.EVENTS;
-  displayName: string;
-  helperText?: string;
-  propertyName: T;
-  value: { events: IObjectEvent[] };
-  defaultValue: { events: IObjectEvent[] };
-}*/
-
 export interface IFontSelectInputValue {
   fontFamily: string;
   source: "system-fonts" | "google-fonts" | string;
 }
+
 export interface IFontSelectInputOption {
   value: IFontSelectInputValue;
   label: string;
 }
+
 export interface IFontSelectInput<T = string> {
   inputType: InputType.FONT_SELECT;
   displayName: string;
@@ -746,12 +727,6 @@ export interface IFontSelectInput<T = string> {
 export interface CommonObjectValues {
   overflow?: boolean;
 }
-/*export interface ButtonProperties {
-  fontFamily: IFontSelectInput;
-  fontSize: INumberInput;
-  borderSize: INumberInput;
-  backgroundColor: IColorInput;
-}*/
 
 export interface ISliderInput<T = string> {
   inputType: InputType.SLIDER_INPUT;
@@ -781,37 +756,6 @@ export interface IButtonGroupInput<T = string> {
   defaultValue: string;
   options: { value: string; label: string }[];
 }
-
-/*
-export const ButtonLayout = [
-  {
-    groupName: "basic",
-    optional: false,
-    properties: [
-      { property: "xyz", optional: true },
-      {
-        property: "dimensionsChoice",
-        isTabs: true,
-        tabsNames: ["Solid", "Gradient"],
-        tabsProps: [
-          [
-            { property: "borderSize", optional: true },
-            { property: "backgroundColor", optional: true },
-          ],
-          [
-            { property: "borderSize-2", optional: true },
-            { property: "backgroundColor-2", optional: true },
-          ],
-        ],
-      },
-    ],
-  },
-  {
-    groupName: "shadow",
-    optional: true,
-    properties: [{ property: "boxShadow", optional: true }],
-  },
-];*/
 
 export interface SourceImageValues {
   id: string;

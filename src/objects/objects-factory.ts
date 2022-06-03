@@ -93,6 +93,12 @@ export function registerExternalObject(extObjDef: IObjectDefinitionHolder) {
   }
 }
 
+if (!(window as any).WebSlider_GlogalScope) {
+  (window as any).WebSlider_GlogalScope = {};
+}
+(window as any).WebSlider_GlogalScope.registerExternalObject =
+  registerExternalObject;
+
 export function isObjectRegistered(type: string) {
   return !!objects.find((item) => item.type === type);
 }

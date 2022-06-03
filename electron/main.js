@@ -123,6 +123,16 @@ if (!gotTheLock) {
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
+
+    /*mainWindow.webContents.on("did-finish-load", function () {
+      var jsFile = fs.readFileSync(
+        path.join(getMarketplacePath(), "youtube-player.js")
+      );
+      mainWindow.webContents.executeJavaScript(jsFile);
+      mainWindow.webContents.executeJavaScript(
+        `window.WebSlider_GlogalScope.registerExternalObject(window.WebSlider_GlogalScope.objects["youtube_player"])`
+      );
+    });*/
   });
 }
 
@@ -383,6 +393,15 @@ async function saveMyImages(projects) {
     getMyImagePath(),
     JSON.stringify(projects, undefined, 2)
   );
+}
+
+function getMarketplacePath() {
+  const userDataPath = app.getPath("userData");
+  const marketplaceDir = path.join(userDataPath, "marketplace");
+  if (!fs.existsSync(marketplaceDir)) {
+    fs.mkdirSync(marketplaceDir);
+  }
+  return marketplaceDir;
 }
 
 function getMyImagePath() {

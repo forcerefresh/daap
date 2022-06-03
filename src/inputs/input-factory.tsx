@@ -6,8 +6,6 @@ import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
 import { ColorInputForm } from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
-// deprecated
-//import { EventsInputForm } from "./events-input/events-input";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { GridPlacementInputForm } from "./grid-placement/grid-placement";
 import { ImageInputForm } from "./image-input/image-input";
@@ -38,7 +36,6 @@ import { MultiImageInputForm } from "./multi-image-input/multi-image-input";
 import { SVGInputForm } from "./svg-input/svg-input";
 import { SVGCustomColorsForm } from "./svg-custom-colors-input/svg-custom-colors-input";
 import { OptionalInput } from "./optional-input/optional-input";
-import { noop } from "lodash-es";
 import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
@@ -68,7 +65,6 @@ export function getInputFormWithOptions<T>(
 ): React.ReactElement | undefined {
   // force DISABLED if metadata.disabled===true
   if (inputProps?.metadata?.disabled) {
-    //debugger;
     if (!inputProps.inputProps) inputProps.inputProps = {};
     inputProps.inputProps.disabled = true;
   }
@@ -79,7 +75,7 @@ export function getInputFormWithOptions<T>(
     return (
       <OptionalInput
         metadataValues={inputProps.metadata}
-        onMetadataChange={onMetadataChange || noop}
+        onMetadataChange={onMetadataChange || (() => {})}
       >
         {input}
       </OptionalInput>
@@ -358,10 +354,6 @@ export function getInputForm<T>(
         <CheckboxInputForm key={key} {...inputProps} onChange={onChange} />
       );
     }
-    /** deprecated 
-    case InputType.EVENTS: {
-      return <EventsInputForm key={key} {...inputProps} onChange={onChange} />;
-    }*/
     case InputType.SPLIT: {
       return <SplitInputForm key={key} {...inputProps} onChange={onChange} />;
     }

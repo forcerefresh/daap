@@ -1,12 +1,10 @@
-import { Card, Elevation, Icon, Tooltip } from "@blueprintjs/core";
+import { Card, Elevation } from "@blueprintjs/core";
 import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../store/actions/actions";
-import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
-import { ReactComponent as PredefinedTextIcon } from "../../assets/icons/predefined-text2.svg";
 import { IObject, ObjectType } from "../../objects/types";
 import { getObjectDefinitionsByGroup } from "../../objects/objects-factory";
 import SVG from "react-inlinesvg";
