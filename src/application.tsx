@@ -40,8 +40,8 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-if (!(window as any).WebSlider_GlogalScope) {
-  (window as any).WebSlider_GlogalScope = {};
+if (!(window as any).WebSlider_GlobalScope) {
+  (window as any).WebSlider_GlobalScope = {};
 }
-(window as any).WebSlider_GlogalScope.registerExternalObject =
+(window as any).WebSlider_GlobalScope.registerExternalObject =
   registerExternalObject;

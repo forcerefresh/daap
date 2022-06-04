@@ -25,10 +25,10 @@ export async function loadAndRegisterExternalComponent(
   );
 
   if (marketItem.componentType === "object") {
-    const obj = (window as any).WebSlider_GlogalScope.objects[marketItem.type];
+    const obj = (window as any).WebSlider_GlobalScope.objects[marketItem.type];
     registerExternalObject(obj);
   } else if (marketItem.componentType === "effect") {
-    const eff = (window as any).WebSlider_GlogalScope.effects[marketItem.type];
+    const eff = (window as any).WebSlider_GlobalScope.effects[marketItem.type];
     registerEffect(eff.definition, eff.defaults, eff.getDuration, true);
   } else {
     console.warn(

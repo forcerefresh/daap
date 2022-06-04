@@ -124,17 +124,17 @@ if (!gotTheLock) {
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
-
+    /*
     mainWindow.webContents.on("did-finish-load", function () {
       var jsFile = fs.readFileSync(
-        path.join(getMarketplacePath(), "youtube-player.js")
+        path.join(getMarketplacePath(), "sample-object.js")
       );
       mainWindow.webContents.executeJavaScript(jsFile);
       mainWindow.webContents.executeJavaScript(
-        `window.WebSlider_GlogalScope.registerExternalObject(window.WebSlider_GlogalScope.objects["youtube_player"])`
+        `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`
       );
       console.log(jsFile.length);
-    });
+    });*/
   });
 }
 
