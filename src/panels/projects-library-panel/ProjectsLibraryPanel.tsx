@@ -6,6 +6,7 @@ import css from "./ProjectsLibraryPanel.module.scss";
 import { Tab, Tabs } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import MarketplacePanel from "../marketplace-panel/MarketplacePanel";
+import DevelopmentPanel from "../development-panel/DevelopmentPanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;
@@ -32,6 +33,11 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             id="marketplace"
             title="Marketplace"
             panel={<MarketplacePanel onRequestClose={props.onRequestClose} />}
+          />
+          <Tab
+            id="development"
+            title="Development"
+            panel={<DevelopmentPanel onRequestClose={props.onRequestClose} />}
           />
         </Tabs>
       </div>

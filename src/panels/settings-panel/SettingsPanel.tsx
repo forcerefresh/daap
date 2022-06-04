@@ -17,7 +17,7 @@ import {
   updateGlobalConfiguration,
   updateSlideDuration,
 } from "../../store/actions/actions";
-import { getNumericFiled } from "../../inputs/input-utils";
+import { getCheckboxField, getNumericFiled } from "../../inputs/input-utils";
 import { IAppSettings } from "../../store/reducers/globals";
 import ProjectPanel from "../project-panel/ProjectPanel";
 import { ObjectStorage } from "../object-storage/ObjectStorage";
@@ -26,6 +26,7 @@ import { IntegrationContext } from "../../integration";
 enum GlobalPanelSections {
   UiLayout = "uiLayout",
   OtherSettings = "otherSettings",
+  DeveloperSettings = "developerSettings",
 }
 
 interface ISettingsPanelProps {
@@ -53,6 +54,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
   }>({
     [GlobalPanelSections.UiLayout]: true,
     [GlobalPanelSections.OtherSettings]: true,
+    [GlobalPanelSections.DeveloperSettings]: true,
   });
 
   const toggleSection = (section: string) => {
@@ -179,6 +181,52 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
                   scaleUI(zoom).then();
                 }}
               ></HTMLSelect>
+            </FormGroup>
+          </div>
+        )}
+      </section>
+
+      <section>
+        <div
+          className={css.sectionHeader}
+          onClick={() => toggleSection(GlobalPanelSections.DeveloperSettings)}
+        >
+          <Button
+            minimal
+            small={true}
+            icon={
+              visibleSectionIds[GlobalPanelSections.DeveloperSettings]
+                ? "caret-down"
+                : "caret-right"
+            }
+          ></Button>
+          Developer
+        </div>
+        {visibleSectionIds[GlobalPanelSections.DeveloperSettings] && (
+          <div className={css.panel}>
+            <FormGroup
+              labelFor="appScale"
+              helperText="By enabling this you will get option to test your Object or Effect directly in app."
+              //requiredLabel={true}
+            >
+              <div className="input60d">
+                {getCheckboxField(
+                  "Enable developer features",
+                  globals.enableDeveloper,
+                  (enableDeveloper: any) => {
+                    // save settings
+                    saveSettings({
+                      ...globals,
+                      enableDeveloper,
+                    });
+
+                    //update store
+                    _updateGlobalConfiguration({
+                      enableDeveloper,
+                    });
+                  }
+                )}
+              </div>
             </FormGroup>
           </div>
         )}

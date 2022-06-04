@@ -136,7 +136,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find slider..."
+          placeholder="Extend your app..."
           rightElement={
             <Button
               large
