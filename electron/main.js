@@ -92,6 +92,7 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:3000/");
   } else {
     mainWindow.removeMenu();
+    mainWindow.webContents.openDevTools();
     mainWindow.loadFile("./build/index.html");
   }
   // Open the DevTools.
@@ -124,7 +125,7 @@ if (!gotTheLock) {
       if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 
-    /*mainWindow.webContents.on("did-finish-load", function () {
+    mainWindow.webContents.on("did-finish-load", function () {
       var jsFile = fs.readFileSync(
         path.join(getMarketplacePath(), "youtube-player.js")
       );
@@ -132,7 +133,8 @@ if (!gotTheLock) {
       mainWindow.webContents.executeJavaScript(
         `window.WebSlider_GlogalScope.registerExternalObject(window.WebSlider_GlogalScope.objects["youtube_player"])`
       );
-    });*/
+      console.log(jsFile.length);
+    });
   });
 }
 

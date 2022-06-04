@@ -211,7 +211,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
             >
               <div className="input60d">
                 {getCheckboxField(
-                  "Enable developer features",
+                  "Development mode",
                   globals.enableDeveloper,
                   (enableDeveloper: any) => {
                     // save settings

@@ -467,6 +467,7 @@ export function getObjectHtml(
     default:
       const objDeff = getObjectDefinition(object.type);
       if (objDeff && objDeff.getHtml) {
+        //try {
         return objDeff.getHtml(
           object,
           calculatedObjectSize,
@@ -474,6 +475,10 @@ export function getObjectHtml(
           thumbnailHtmlArr,
           sliderCounter
         );
+        //} catch (e: any) {
+        // console.error(e.stack);
+        // console.error(e);
+        //}
       }
       return "";
   }

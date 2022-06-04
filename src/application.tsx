@@ -9,6 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
 import "./objects/register-object";
 import "./objects/font-preloader";
+import { registerExternalObject } from "./objects/objects-factory";
 
 function application(): {
   component: React.ReactElement;
@@ -38,3 +39,9 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+if (!(window as any).WebSlider_GlogalScope) {
+  (window as any).WebSlider_GlogalScope = {};
+}
+(window as any).WebSlider_GlogalScope.registerExternalObject =
+  registerExternalObject;
