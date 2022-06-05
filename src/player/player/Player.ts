@@ -11,7 +11,6 @@ import { layerSizeUpdate } from "../../objects/layer/layer";
 import {
   CoreObjectType,
   getObjectDefinition,
-  IObjectDefinitionHolder,
   PreloadOrder,
 } from "../../objects/objects-factory";
 import {

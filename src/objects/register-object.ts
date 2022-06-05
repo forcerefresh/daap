@@ -64,7 +64,7 @@ import {
   multiimageSizeUpdate,
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
-import { IObjectDefinitionHolder, registerObject } from "./objects-factory";
+import { registerObject } from "./objects-factory";
 import {
   createRichTextObject,
   richMeta,

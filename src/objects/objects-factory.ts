@@ -61,17 +61,21 @@ export type postProcessFuncType = (
   object: IObject
 ) => IObject;
 
-export interface IObjectDefinitionHolder {
-  type: string;
+export interface IObjectAppDefinition extends IObjectDefinition {
+  createObject: createObjectFuncType;
   group: string;
   meta: {
     name: string;
     description?: string;
     icon?: string;
+    /* depreciated */
     preloadOrder?: PreloadOrder;
     coreType?: CoreObjectType;
   };
-  createObject: createObjectFuncType;
+}
+
+export interface IObjectDefinition {
+  type: string;
   sizeUpdate: updateObjectSizeFuncType;
   getHtml?: getHtmlFuncType;
   executionCode_Start?: executionCodeFuncType;
@@ -80,12 +84,13 @@ export interface IObjectDefinitionHolder {
   postProcess?: postProcessFuncType;
   getAssetsUrls?: getAssetsUrlFuncType;
   external?: boolean;
+  PRELOAD_ORDER?: PreloadOrder;
 }
 
 // <<<
-const objects: IObjectDefinitionHolder[] = [];
+const objects: IObjectAppDefinition[] = [];
 
-export function registerExternalObject(extObjDef: IObjectDefinitionHolder) {
+export function registerExternalObject(extObjDef: IObjectAppDefinition) {
   if (!isObjectRegistered(extObjDef.type)) {
     objects.push({ ...extObjDef, external: true });
   } else {
@@ -133,13 +138,13 @@ export function registerObject(
 
 export function getObjectDefinition(
   type: string
-): IObjectDefinitionHolder | undefined {
+): IObjectAppDefinition | undefined {
   console.log(objects);
   return objects.find((item) => item.type === type);
 }
 export function getObjectDefinitionsByGroup(
   group: string
-): IObjectDefinitionHolder[] {
+): IObjectAppDefinition[] {
   console.log(objects);
 
   const def = objects.filter((item) => item.group === group);
