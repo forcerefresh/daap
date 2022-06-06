@@ -9,7 +9,7 @@ import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
 import "./objects/register-object";
 import "./objects/font-preloader";
-import { registerExternalObject } from "./objects/objects-factory";
+import { registerExternalObject } from "./webslider-sdk/src/objects/objects-register";
 
 function application(): {
   component: React.ReactElement;

@@ -5,9 +5,9 @@ import {
   IBorderValue,
   ICornerRadiusValue,
   IInputMetadataValues,
-} from "../inputs/types";
+} from "../webslider-sdk/src/inputs/i-inputs";
 import { CommonPropertiesValues } from "../webslider-sdk/src/objects/common-properties";
-import { IObject } from "../objects/types";
+import { IObject } from "../webslider-sdk/src/objects/i-object";
 import { ILayer } from "../store/reducers/i-layers";
 import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";

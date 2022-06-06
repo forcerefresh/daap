@@ -7,7 +7,7 @@ import {
   selectForPropertiesProps,
 } from "../../store/actions/actions";
 import { Button, Checkbox, Icon, Popover } from "@blueprintjs/core";
-import { Breakpoints } from "../../store/reducers/i-settings";
+import { Breakpoints } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 import { cloneDeep, includes, remove } from "lodash-es";
 import { getIconByType } from "../../store/reducers/settings";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";

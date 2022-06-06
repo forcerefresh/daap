@@ -1,7 +1,10 @@
 import { FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
 import { isEqual } from "lodash-es";
 import React, { useEffect, useState } from "react";
-import { IUnitsNumberInput, IUpdateInput } from "../types";
+import {
+  IUnitsNumberInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 export type UnitType = "px" | "em" | "%" | "ms" | "s" | null;
 interface UnitValue {

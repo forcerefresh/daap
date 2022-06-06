@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IObject } from "../../objects/types";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import cx from "classnames";
 import { selectForPropertiesProps } from "../../store/actions/actions";
 import { Button } from "@blueprintjs/core";

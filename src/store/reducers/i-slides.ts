@@ -1,9 +1,5 @@
-import { ITransitions } from "../../objects/types";
-
-export interface ISlideDuration {
-  inheritFrom: "inherit" | "custom";
-  customValue: string;
-}
+import { ITransitions } from "../../webslider-sdk/src/objects/i-object";
+import { ISlideDuration } from "../../webslider-sdk/src/common/i-slider-duration";
 
 export enum SlideType {
   Normal = "normal",

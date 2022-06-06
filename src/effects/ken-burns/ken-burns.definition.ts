@@ -2,7 +2,7 @@ import {
   InputType,
   INumberInput,
   ITransformOriginInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { IKenBurnsEffect, kenBurns } from "./ken-burns.types";
 

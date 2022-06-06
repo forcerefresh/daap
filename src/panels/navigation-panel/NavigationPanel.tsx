@@ -8,12 +8,16 @@ import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
 
-import { IInputMetadataValues, InputType } from "../../inputs/types";
-import { IObject, navigationDefinition } from "../../objects/types";
+import {
+  IInputMetadataValues,
+  InputType,
+} from "../../webslider-sdk/src/inputs/i-inputs";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
+import { navigationDefinition } from "../../objects/navigation-form";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./NavigationPanel.module.scss";
-import { IFormLayoutItem } from "../../utils/form-layout/i-form-layout";
+import { IFormLayoutItem } from "../../webslider-sdk/src/form/i-form-layout";
 
 type IPropertiesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;

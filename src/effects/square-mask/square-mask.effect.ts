@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { RGBColor } from "react-color";
-import { INumericTimelineValue } from "../../inputs/types";
+import { INumericTimelineValue } from "../../webslider-sdk/src/inputs/i-inputs";
 import { getMethodByType } from "../common";
 import { IEffectBase } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";

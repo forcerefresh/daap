@@ -2,7 +2,10 @@ import { Classes, FormGroup, InputGroup, Intent } from "@blueprintjs/core";
 import { noop } from "lodash-es";
 import React, { useMemo } from "react";
 import { getUnderFieldText } from "../input-utils";
-import { ITextInput, IUpdateInput } from "../types";
+import {
+  ITextInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 export const TextInputForm: React.FC<ITextInput & IUpdateInput> = (props) => {
   const {

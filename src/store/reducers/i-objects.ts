@@ -1,4 +1,4 @@
-import { IObject } from "../../objects/types";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 
 export interface IObjects {
   objectById: { [id: string]: IObject<{}> };

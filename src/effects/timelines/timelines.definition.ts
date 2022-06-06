@@ -3,7 +3,7 @@ import {
   ITimelinePoint,
   ITimelinesInput,
   ITimelineValue,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { timelinesEffect, ITimelinesEffect } from "./timelines.types";
 

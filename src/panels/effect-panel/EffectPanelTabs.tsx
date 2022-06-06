@@ -18,7 +18,7 @@ import {
   ItemType,
   ITransition,
   ITransitions,
-} from "../../objects/types";
+} from "../../webslider-sdk/src/objects/i-object";
 import {
   updateLayer,
   updateObject,
@@ -29,7 +29,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import { flattenForm } from "../../utils/form-layout/form-layout";
-import { IFormLayoutItem } from "../../utils/form-layout/i-form-layout";
+import { IFormLayoutItem } from "../../webslider-sdk/src/form/i-form-layout";
 import { EffectConfigurationForm } from "../effect-configuration/EffectConfigurationForm";
 
 import css from "./EffectPanelTabs.module.scss";

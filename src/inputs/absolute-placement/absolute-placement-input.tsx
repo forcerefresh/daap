@@ -1,12 +1,10 @@
 import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { cloneDeep, isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
-import { IAbsoluteLayout } from "../../objects/types";
+import { IAbsoluteLayout } from "../../webslider-sdk/src/objects/i-object";
 import { getIconSize } from "../../panels/action-panel/ActionPanel";
-import {
-  BreakpointConfiguration,
-  DeviceType,
-} from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 import { getIconByType } from "../../store/reducers/settings";
 import { roundNumber } from "../../utils/doom-utils/common";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
@@ -15,7 +13,10 @@ import {
   getNumericFiled,
   getSizePosLayoutField,
 } from "../input-utils";
-import { IAbsolutePlacamentInput, IUpdateInput } from "../types";
+import {
+  IAbsolutePlacamentInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./absolute-placement-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;

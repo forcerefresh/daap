@@ -5,7 +5,10 @@ import {
   getCheckboxField,
   getColorField,
 } from "../input-utils";
-import { IBorderColorInput, IUpdateInput } from "../types";
+import {
+  IBorderColorInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 export const BorderColorInputForm: React.FC<
   IBorderColorInput & IUpdateInput

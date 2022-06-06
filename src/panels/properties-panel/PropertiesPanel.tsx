@@ -17,7 +17,10 @@ import {
   getSlideDurationField,
   getColorField,
 } from "../../inputs/input-utils";
-import { IInputMetadataValues, InputType } from "../../inputs/types";
+import {
+  IInputMetadataValues,
+  InputType,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import {
   ISnapLayout,
   ILayout,
@@ -25,7 +28,7 @@ import {
   IGridLayouts,
   IAbsoluteLayouts,
   ISnapLayouts,
-} from "../../objects/types";
+} from "../../webslider-sdk/src/objects/i-object";
 import {
   setDevice,
   updateLayer,
@@ -33,11 +36,8 @@ import {
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
-import {
-  ISlide,
-  ISlideDuration,
-  SlideType,
-} from "../../store/reducers/i-slides";
+import { ISlide, SlideType } from "../../store/reducers/i-slides";
+import { ISlideDuration } from "../../webslider-sdk/src/common/i-slider-duration";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
@@ -45,7 +45,7 @@ import FormWithLayout, {
 import {
   IFormItem,
   IFormLayoutItem,
-} from "../../utils/form-layout/i-form-layout";
+} from "../../webslider-sdk/src/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
 
 type IObjectOrLayer = any; // IObject | ILayer;

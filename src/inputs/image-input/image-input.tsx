@@ -13,7 +13,10 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { IImageInput, IUpdateInput } from "../types";
+import {
+  IImageInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./image-input.module.scss";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {

@@ -1,4 +1,7 @@
-import { IRelativePositionValue, IRelativeRotationValue } from "./types";
+import {
+  IRelativePositionValue,
+  IRelativeRotationValue,
+} from "../webslider-sdk/src/inputs/i-inputs";
 
 export function relativePosition2Gsap(value: IRelativePositionValue): string {
   const sign = Math.sign(value.value);

@@ -1,5 +1,5 @@
 import React from "react";
-import { IObject, ITransition } from "../../objects/types";
+import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
 import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { getEffectDefinition } from "../../effects/effects";

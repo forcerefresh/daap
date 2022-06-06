@@ -1,7 +1,7 @@
 import { Button, Checkbox, Icon } from "@blueprintjs/core";
 import classnames from "classnames";
 import React, { useEffect, useState } from "react";
-import { InputType } from "../../inputs/types";
+import { InputType } from "../../webslider-sdk/src/inputs/i-inputs";
 import { AppToaster } from "../components/app-toaster/AppToaster";
 import css from "./form-layout.module.scss";
 import { flatten } from "lodash";
@@ -9,7 +9,10 @@ import { IFormState } from "../../store/reducers/i-uiforms";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import { setFormState } from "../../store/actions/actions";
-import { FormType, IFormLayoutItem } from "./i-form-layout";
+import {
+  FormType,
+  IFormLayoutItem,
+} from "../../webslider-sdk/src/form/i-form-layout";
 
 type FormWithLayoutProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

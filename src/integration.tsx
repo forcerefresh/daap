@@ -1,6 +1,6 @@
 import React from "react";
 import { IPlayerData } from "./export/i-export-html";
-import { Preset, PresetGroup } from "./inputs/types";
+import { Preset, PresetGroup } from "./webslider-sdk/src/inputs/i-inputs";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import { IMarketItem } from "./webslider-sdk/src/objects/i-marketplace";

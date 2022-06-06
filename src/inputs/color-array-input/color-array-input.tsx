@@ -1,7 +1,10 @@
 import React from "react";
 import { Button, Label } from "@blueprintjs/core";
 import { getColorField } from "../input-utils";
-import { IColorArrayInput, IUpdateInput } from "../types";
+import {
+  IColorArrayInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { cloneDeep } from "lodash";
 import css from "./color-array-input.module.scss";
 

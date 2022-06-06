@@ -47,7 +47,7 @@ import {
   isEmpty,
   remove,
 } from "lodash-es";
-import { IObject, ObjectType } from "../../objects/types";
+import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import { getEffectDefinition } from "../../effects/effects";

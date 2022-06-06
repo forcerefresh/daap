@@ -11,7 +11,11 @@ import {
   getSelectField,
   getUnitNumericFiled,
 } from "../input-utils";
-import { IBorderColorInput, IBorderInput, IUpdateInput } from "../types";
+import {
+  IBorderColorInput,
+  IBorderInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./border-input.module.scss";
 
 export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (

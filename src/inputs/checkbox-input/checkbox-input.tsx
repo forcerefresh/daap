@@ -6,7 +6,10 @@ import {
 } from "@blueprintjs/core";
 import { noop } from "lodash-es";
 import React from "react";
-import { ICheckboxInput, IUpdateInput } from "../types";
+import {
+  ICheckboxInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 export const CheckboxInputForm: React.FC<
   ICheckboxInput & IUpdateInput & { inputProps: ICheckboxProps }

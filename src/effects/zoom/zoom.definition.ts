@@ -1,4 +1,7 @@
-import { InputType, INumberInput } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { IZoomInEffect, zoomIn } from "./zoom.types";
 

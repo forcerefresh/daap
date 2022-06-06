@@ -3,7 +3,7 @@ import { Player } from "./player/player/Player";
 import "./objects/register-object";
 import "./objects/font-preloader";
 
-import { BreakpointConfiguration } from "./store/reducers/i-settings";
+import { BreakpointConfiguration } from "./webslider-sdk/src/common/i-breakpoint-configuration";
 
 require("./effects/effects");
 require("./objects/exec-code-effect");

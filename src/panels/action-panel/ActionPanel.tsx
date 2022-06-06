@@ -23,7 +23,7 @@ import { IEditor } from "../../store/reducers/editor";
 import { IntegrationContext } from "../../integration";
 import PublishPanel from "../publish-panel/PublishPanel";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
-import { BreakpointConfiguration } from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {

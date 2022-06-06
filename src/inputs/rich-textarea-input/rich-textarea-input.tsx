@@ -1,7 +1,10 @@
 import { FormGroup, TextArea } from "@blueprintjs/core";
 import { debounce, isEmpty, noop } from "lodash-es";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { ITextAreaInput, IUpdateInput } from "../types";
+import {
+  ITextAreaInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import RichTextEditor from "react-rte";
 import css from "./rich-textarea-input.module.scss";
 

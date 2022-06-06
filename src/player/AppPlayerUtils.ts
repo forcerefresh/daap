@@ -3,8 +3,8 @@ import React from "react";
 import { EffectType } from "../effects/types";
 import { ITransitionsData } from "../export/i-export-html";
 import { ExecCodeConfig } from "../objects/exec-code-effect";
-import { executionCodeFuncType } from "../objects/objects-factory";
-import { ITransition } from "../objects/types";
+import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
+import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 
 export function createTimelineForObject(

@@ -13,7 +13,11 @@ import MediaLibraryPanel, {
   SelectionType,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { IImageInputValue, IMultiImageInput, IUpdateInput } from "../types";
+import {
+  IImageInputValue,
+  IMultiImageInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./multi-image-input.module.scss";
 
 export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (

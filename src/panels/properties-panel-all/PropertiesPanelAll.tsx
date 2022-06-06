@@ -3,7 +3,7 @@ import classnames from "classnames";
 import React from "react";
 import { connect } from "react-redux";
 
-import { IObject } from "../../objects/types";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import { updateLayer, updateObject } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";

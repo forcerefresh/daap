@@ -5,18 +5,19 @@ import {
   InputType,
   INumberInput,
   ISelectInput,
-  ITextInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import {
   FormType,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "../../utils/form-layout/i-form-layout";
+} from "../../webslider-sdk/src/form/i-form-layout";
 import { rgbColor2cssRgba } from "../../utils/utils";
-import { createCommonObject } from "../create-object-factory";
-import { getObjectPlaceholder } from "../object-helpers";
-import { CoreObjectType } from "../objects-factory";
-import { ICommonObjectProperties, IObject } from "../types";
+import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+import { CoreObjectType } from "../../webslider-sdk/src/objects/objects-register";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "../../webslider-sdk/src/objects/i-object";
 import svg from "./spinner-icon.svg";
 
 const SPINNER = "spinner";

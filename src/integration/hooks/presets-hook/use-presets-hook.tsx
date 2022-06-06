@@ -1,5 +1,8 @@
 import { remove } from "lodash-es";
-import { Preset, PresetGroup } from "../../../inputs/types";
+import {
+  Preset,
+  PresetGroup,
+} from "../../../webslider-sdk/src/inputs/i-inputs";
 
 export const usePresets = () => {
   const getPresets = (type: PresetGroup): Promise<Preset<any>[]> => {

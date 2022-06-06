@@ -1,8 +1,8 @@
 import React from "react";
 import { noop } from "lodash-es";
-import { Breakpoints } from "../store/reducers/i-settings";
+import { Breakpoints } from "../webslider-sdk/src/common/i-breakpoint-configuration";
 import { getInputForm } from "./input-factory";
-import { InputType, Units } from "./types";
+import { InputType, Units } from "../webslider-sdk/src/inputs/i-inputs";
 
 export function getUnitNumericFiled<T>(
   label: string,

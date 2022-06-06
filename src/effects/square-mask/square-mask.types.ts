@@ -1,4 +1,7 @@
-import { IBorderColorValue, INumericTimelineValue } from "../../inputs/types";
+import {
+  IBorderColorValue,
+  INumericTimelineValue,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectBase } from "../types";
 
 export const squareMask = "squareMask";

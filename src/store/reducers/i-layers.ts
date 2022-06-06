@@ -5,17 +5,20 @@ import {
   LayoutChildrenType,
   ILayoutChildrenValue,
   ISelectInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import {
   CommonPropertiesTuple,
   getCommonObjectPropertiesDefinition,
 } from "../../webslider-sdk/src/objects/common-properties";
-import { ILayout, ITransitions } from "../../objects/types";
+import {
+  ILayout,
+  ITransitions,
+} from "../../webslider-sdk/src/objects/i-object";
 import {
   FormType,
   IFormGroupItem,
-} from "../../utils/form-layout/i-form-layout";
-import { DeviceType } from "./i-settings";
+} from "../../webslider-sdk/src/form/i-form-layout";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 
 export interface IResponsiveVisibility {
   showAll: boolean;

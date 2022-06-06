@@ -7,7 +7,7 @@ import { Tab, Tabs } from "@blueprintjs/core";
 import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
-import { ObjectType } from "../../objects/types";
+import { ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import { IntegrationContext } from "../../integration";
 import { ImageData, VectorData } from "../../utils/assets/types";
 import { fetchMock } from "../vector-library-panel/mock";

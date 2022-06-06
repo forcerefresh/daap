@@ -1,6 +1,9 @@
 import { Label } from "@blueprintjs/core";
 import React from "react";
-import { ITransformOriginInput, IUpdateInput } from "../types";
+import {
+  ITransformOriginInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./transform-origin.module.scss";
 
 const roundTo10 = (n: number) => {

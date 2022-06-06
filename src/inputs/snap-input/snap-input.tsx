@@ -2,10 +2,8 @@ import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { cloneDeep, isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { getIconSize } from "../../panels/action-panel/ActionPanel";
-import {
-  BreakpointConfiguration,
-  DeviceType,
-} from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 import { getIconByType } from "../../store/reducers/settings";
 import { roundNumber } from "../../utils/doom-utils/common";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
@@ -16,7 +14,10 @@ import {
   getSizeLayoutField,
   getSizeUnitLayoutField,
 } from "../input-utils";
-import { ISnapInput, IUpdateInput } from "../types";
+import {
+  ISnapInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./snap-input.module.scss";
 
 const RELATIVE_TO_OPTIONS = [

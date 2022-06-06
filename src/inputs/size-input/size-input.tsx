@@ -1,7 +1,10 @@
 import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
-import { ISizeInput, IUpdateInput } from "../types";
+import {
+  ISizeInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./size-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;

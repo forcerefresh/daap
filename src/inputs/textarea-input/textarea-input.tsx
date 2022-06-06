@@ -1,7 +1,10 @@
 import { FormGroup, InputGroup, Intent, TextArea } from "@blueprintjs/core";
 import { debounce, noop, throttle } from "lodash-es";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ITextAreaInput, IUpdateInput } from "../types";
+import {
+  ITextAreaInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props

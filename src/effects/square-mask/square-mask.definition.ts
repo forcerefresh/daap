@@ -3,7 +3,7 @@ import {
   ICheckboxInput,
   InputType,
   INumericTimelineInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { ISquareMaskEffect, squareMask } from "./square-mask.types";
 

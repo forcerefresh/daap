@@ -9,11 +9,14 @@ import {
   ISelectInput,
   ITextAreaInput,
   IUnitsNumberInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { nl2br } from "../../utils/doom-utils/common";
-import { ICommonObjectProperties, IObject } from "../types";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { createCommonObject } from "../create-object-factory";
+import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
 import svg from "./text-icon.svg";
 import {
   CommonPropertiesTuple,

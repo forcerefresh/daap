@@ -18,7 +18,7 @@ import {
   Text,
 } from "@blueprintjs/core";
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "../../objects/types";
+import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, noop, uniq } from "lodash-es";
 import { MediaType, VectorData } from "../../utils/assets/types";

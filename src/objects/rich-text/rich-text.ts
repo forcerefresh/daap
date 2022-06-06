@@ -6,17 +6,20 @@ import {
   InputType,
   IRichTextAreaInput,
   IUnitsNumberInput,
-} from "../../inputs/types";
-import { createCommonObject } from "../create-object-factory";
-import { ICommonObjectProperties, IObject } from "../types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
+import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "../objects-factory";
+import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
 import svg from "./rich-text-icon.svg";
 import {
   addCommonPropertiesToStyle,
   convertTimeUnitToMs,
 } from "../../utils/utils";
-import { getObjectPlaceholder } from "../object-helpers";
+import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import {
   CommonPropertiesTuple,
   getCommonObjectPropertiesDefinition,

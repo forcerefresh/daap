@@ -1,4 +1,7 @@
-import { IColorInput, InputType } from "../../inputs/types";
+import {
+  IColorInput,
+  InputType,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { cube, ICubeEffect } from "./cube.types";
 

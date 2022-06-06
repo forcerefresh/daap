@@ -1,4 +1,4 @@
-import { InputType } from "../../inputs/types";
+import { InputType } from "../../webslider-sdk/src/inputs/i-inputs";
 import { canvasCopy, ICanvasCopyEffect } from "./canvas-copy";
 
 export const canvasCopyDefinition = {

@@ -31,11 +31,11 @@ import {
 import settingsCss from "../settings-panel/SettingsPanel.module.scss";
 import { Breakpoint } from "./breakpoint-component/Breakpoint";
 import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
+import { ISettings } from "../../store/reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
-  ISettings,
-} from "../../store/reducers/i-settings";
+} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 
 enum ProjectPanelSections {
   Slider = "Slider",

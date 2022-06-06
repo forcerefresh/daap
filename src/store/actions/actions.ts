@@ -13,7 +13,11 @@ import {
   isEqual,
   once,
 } from "lodash-es";
-import { IObject, ItemType, ObjectType } from "../../objects/types";
+import {
+  IObject,
+  ItemType,
+  ObjectType,
+} from "../../webslider-sdk/src/objects/i-object";
 import {
   createObject,
   getDefaultSlide,
@@ -28,13 +32,13 @@ import {
   isIntersectingRect,
   roundNumber,
 } from "../../utils/doom-utils/common";
-import { LayoutChildrenType } from "../../inputs/types";
+import { LayoutChildrenType } from "../../webslider-sdk/src/inputs/i-inputs";
 import { load } from "webfontloader";
+import { ISettings } from "../reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
-  ISettings,
-} from "../reducers/i-settings";
+} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
@@ -44,7 +48,7 @@ import {
 } from "../../panels/stage-panel/StagePanelUtils";
 import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
-import { getObjectDefinition } from "../../objects/objects-factory";
+import { getObjectDefinition } from "../../webslider-sdk/src/objects/objects-register";
 import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";

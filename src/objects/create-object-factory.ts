@@ -6,29 +6,23 @@ import {
   InputType,
   SourceImagePropertiesTuple,
   SourceImageValues,
-} from "../inputs/types";
+} from "../webslider-sdk/src/inputs/i-inputs";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
-import { FormType } from "../utils/form-layout/i-form-layout";
-import { getObjectDefinition } from "./objects-factory";
+import { FormType } from "../webslider-sdk/src/form/i-form-layout";
+import { getObjectDefinition } from "../webslider-sdk/src/objects/objects-register";
 import { createSvgObject, SVG } from "./svg/svg";
 import {
   ICommonObjectProperties,
   IObject,
   ITransitions,
-  NavigationEvent,
-  NavigationType,
   ObjectType,
-} from "./types";
+} from "../webslider-sdk/src/objects/i-object";
+import { createCommonObject } from "../webslider-sdk/src/objects/create-common-object";
 
 /**
  * Exclude from T those types that are assignable to U
  */
 type Exclude<T, U> = T extends U ? never : T;
-
-/**
- * Construct a type with the properties of T except for those in type K.
- */
-type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
 
 export function createObject(
   type: ObjectType | string,
@@ -67,30 +61,6 @@ export function createObject(
   }
 }
 
-export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
-  return {
-    id: uuid(),
-    customId: "",
-    name,
-    duration: {
-      inheritFrom: "inherit",
-      customValue: "20s",
-    },
-    layerIds: [],
-    nextLayerIdCounter: 1,
-    slideType,
-    transitions: getDefaultTransitionsForSlide(),
-  };
-}
-
-export function getDefaultTransitionsForObject(): ITransitions {
-  return {
-    in: [],
-    out: [],
-    effect: [],
-  };
-}
-
 export function getDefaultTransitionsForLayer(): ITransitions {
   return {
     in: [],
@@ -102,77 +72,6 @@ export function getDefaultTransitionsForLayer(): ITransitions {
 export function getDefaultTransitionsForSlide(): ITransitions {
   return {
     slide: [],
-  };
-}
-
-export function createCommonObject(
-  type: ObjectType | string
-): Omit<IObject, keyof ICommonObjectProperties | "layerId" | "definition"> {
-  return {
-    id: uuid(),
-    name: "", // will be over written
-    type: type,
-    isVisible: true,
-    isLocked: false,
-    transitions: getDefaultTransitionsForObject(),
-    selfSize: false,
-    //nav
-    navigationDefinition: {
-      values: {
-        navigationType: NavigationType.None,
-        linkEvent: NavigationEvent.click,
-        linkTarget: "_blank",
-        linkHref: "",
-        slideEvent: NavigationEvent.click,
-        slideReferenceType: "slideNo",
-        slideNo: "1",
-        slideId: "",
-      },
-      valuesMetadata: {},
-    },
-    //layout
-    supportedLayout: {
-      none: false,
-      absolute: true,
-      fit: true,
-      grid: true,
-      snap: true,
-    },
-    layout: "absolute",
-    absoluteLayout: {
-      type: "common",
-      perDevice: [],
-      common: {
-        deviceType: "common",
-        left: 100,
-        top: 100,
-        width: 200,
-        height: 200,
-      },
-    },
-    gridLayouts: {
-      type: "common",
-      perDevice: [],
-      common: {
-        deviceType: "common",
-        left: 1,
-        right: 3,
-        top: 1,
-        bottom: 2,
-      },
-    },
-    snapLayout: {
-      edge: "left",
-      relativeTo: "stage",
-      type: "common",
-      perDevice: [],
-      common: {
-        deviceType: "common",
-        gap: 0,
-        width: "200px",
-        height: "200px",
-      },
-    },
   };
 }
 
@@ -315,11 +214,18 @@ export function getBorderOptions() {
   ];
 }
 
-export function getOverflowOptions() {
-  return [
-    { label: "Visible", value: "visible" },
-    { label: "Hidden", value: "hidden" },
-    { label: "Scroll", value: "scroll" },
-    { label: "Auto", value: "auto" },
-  ];
+export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
+  return {
+    id: uuid(),
+    customId: "",
+    name,
+    duration: {
+      inheritFrom: "inherit",
+      customValue: "20s",
+    },
+    layerIds: [],
+    nextLayerIdCounter: 1,
+    slideType,
+    transitions: getDefaultTransitionsForSlide(),
+  };
 }

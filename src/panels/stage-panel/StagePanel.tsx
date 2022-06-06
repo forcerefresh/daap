@@ -40,7 +40,7 @@ import {
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { IObject, ObjectType } from "../../objects/types";
+import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import {
   applyRectValuesToElement,
   getMousePosition,
@@ -52,7 +52,7 @@ import {
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
-import { BreakpointConfiguration } from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 import {
   calculateObjectSize,
   getAbsoluteLayoutSize,
@@ -72,7 +72,7 @@ import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
-import { ILayoutChildrenValue } from "../../inputs/types";
+import { ILayoutChildrenValue } from "../../webslider-sdk/src/inputs/i-inputs";
 import { selection } from "../../store/reducers/selection";
 import { relative } from "path";
 import ViewportSize from "../vieport-size/ViewportSize";

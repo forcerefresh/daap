@@ -1,7 +1,7 @@
 import {
   INumericTimelineValue,
   ITextStartPositionValue,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectBase } from "../types";
 
 export const splitText = "splitText";

@@ -1,17 +1,18 @@
 import React from "react";
 import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
-import { CoreObjectType } from "../objects/objects-factory";
+import { CoreObjectType } from "../webslider-sdk/src/objects/objects-register";
 import {
   ILayout,
-  INavigationValues,
   ISlideTransition,
   ITransitions,
   ObjectType,
-} from "../objects/types";
+} from "../webslider-sdk/src/objects/i-object";
+import { INavigationValues } from "../webslider-sdk/src/objects/i-navigation-types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
-import { Breakpoints } from "../store/reducers/i-settings";
-import { ISlideDuration, ISlides, SlideType } from "../store/reducers/i-slides";
+import { Breakpoints } from "../webslider-sdk/src/common/i-breakpoint-configuration";
+import { ISlides, SlideType } from "../store/reducers/i-slides";
+import { ISlideDuration } from "../webslider-sdk/src/common/i-slider-duration";
 
 export interface ITransitionsData {
   itemId: string;

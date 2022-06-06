@@ -11,8 +11,8 @@ import {
   ICoverPlacementInput,
   ILayoutChildrenInput,
   IUpdateInput,
-} from "../types";
-import { IObject } from "../../objects/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import { objects } from "../../store/reducers/objects";
 //import css from "./layout-childern-input.module.scss";
 

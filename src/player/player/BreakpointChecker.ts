@@ -2,7 +2,7 @@ import { noop } from "lodash-es";
 import {
   BreakpointConfiguration,
   Breakpoints,
-} from "../../store/reducers/i-settings";
+} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 
 export class BreakpointChecker {
   private breakpoints: Breakpoints;

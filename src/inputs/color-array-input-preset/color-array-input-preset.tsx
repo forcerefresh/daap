@@ -4,7 +4,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { RGBColor } from "react-color";
 import { IntegrationContext } from "../../integration";
 import { getColorArrayField, getSelectField } from "../input-utils";
-import { IColorArrayInput, IUpdateInput, Preset, PresetGroup } from "../types";
+import {
+  IColorArrayInput,
+  IUpdateInput,
+  Preset,
+  PresetGroup,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./color-array-input-preset.module.scss";
 
 const initalPreset: Preset<RGBColor[]> = {

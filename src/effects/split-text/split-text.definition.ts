@@ -3,7 +3,7 @@ import {
   INumberInput,
   INumericTimelineInput,
   ITextStartPositionInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { ISplitTextEffect, splitText } from "./split-text.types";
 

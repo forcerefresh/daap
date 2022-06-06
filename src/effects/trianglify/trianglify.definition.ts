@@ -1,5 +1,8 @@
-import { InputType } from "../../inputs/types";
-import { FormType, IFormItem } from "../../utils/form-layout/i-form-layout";
+import { InputType } from "../../webslider-sdk/src/inputs/i-inputs";
+import {
+  FormType,
+  IFormItem,
+} from "../../webslider-sdk/src/form/i-form-layout";
 import { ITrianglifyEffect, trianglifyPhoto } from "./trianglify.types";
 
 export interface IEffectDefinition {

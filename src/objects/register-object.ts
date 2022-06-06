@@ -64,7 +64,7 @@ import {
   multiimageSizeUpdate,
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
-import { registerObject } from "./objects-factory";
+import { registerObject } from "../webslider-sdk/src/objects/objects-register";
 import {
   createRichTextObject,
   richMeta,

@@ -2,7 +2,7 @@ import gsap from "gsap";
 import {
   INumericTimelineValue,
   ITextStartPositionValue,
-} from "../inputs/types";
+} from "../webslider-sdk/src/inputs/i-inputs";
 import { getMethodByType } from "./common";
 import { IEffectBase } from "./types";
 

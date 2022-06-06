@@ -1,6 +1,9 @@
 import React from "react";
 import cx from "classnames";
-import { IRelativePositionInput, IUpdateInput } from "../types";
+import {
+  IRelativePositionInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import {
   getCheckboxField,
   getNumericFiled,

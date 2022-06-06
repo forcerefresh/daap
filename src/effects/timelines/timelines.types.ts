@@ -1,4 +1,4 @@
-import { ITimelinesValue } from "../../inputs/types";
+import { ITimelinesValue } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectBase } from "../types";
 
 export const timelinesEffect = "timelinesEffect";

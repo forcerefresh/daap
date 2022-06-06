@@ -3,7 +3,10 @@ import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Label } from "@blueprintjs/core";
 import { getSelectField } from "../input-utils";
-import { ICoverPlacementInput, IUpdateInput } from "../types";
+import {
+  ICoverPlacementInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./cover-placement.module.scss";
 
 const HOR_POSITION_OPTIONS = [

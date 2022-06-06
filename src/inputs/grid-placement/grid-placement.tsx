@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
 import { cloneDeep } from "lodash-es";
 import { getButtonGroupField, getNumericFiled } from "../input-utils";
-import { IGridPlacementInput, IUpdateInput } from "../types";
+import {
+  IGridPlacementInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./grid-placement.module.scss";
 import classnames from "classnames";
 import { Button, Label } from "@blueprintjs/core";
@@ -11,10 +14,8 @@ import {
   getIconStyle,
 } from "../../panels/action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import {
-  BreakpointConfiguration,
-  DeviceType,
-} from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 
 export const GridPlacementInputForm: React.FC<
   IGridPlacementInput & IUpdateInput

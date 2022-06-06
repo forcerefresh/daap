@@ -3,7 +3,7 @@ import { typewriter, ITypeWriterEffect } from "./typewriter.types";
 import { SplitText } from "gsap/SplitText";
 import { space2nbsp } from "../../utils/doom-utils/common";
 import { createRootTimelineForTextEffect } from "../text.utils";
-import { IObject } from "../../objects/types";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import { TextValues } from "../../objects/text/text";
 
 //gsap.registerPlugin(SplitText);

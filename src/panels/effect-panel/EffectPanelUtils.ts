@@ -1,5 +1,5 @@
 import { EffectType } from "../../effects/types";
-import { ItemType } from "../../objects/types";
+import { ItemType } from "../../webslider-sdk/src/objects/i-object";
 
 export function getEffectTypesForItem(itemType?: ItemType): EffectType[] {
   if (!itemType) {

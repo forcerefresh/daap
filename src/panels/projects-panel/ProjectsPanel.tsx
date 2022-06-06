@@ -24,7 +24,7 @@ import {
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "../../objects/types";
+import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 
 import css from "./ProjectsPanel.module.scss";
 import { IntegrationContext } from "../../integration";

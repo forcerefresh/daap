@@ -6,7 +6,10 @@ import {
   getNumericFiled,
   getSelectField,
 } from "../input-utils";
-import { IRelativeRotationInput, IUpdateInput } from "../types";
+import {
+  IRelativeRotationInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { Label } from "@blueprintjs/core";
 import css from "./relative-rotation-input.module.scss";
 import { EasingOptions } from "../../effects/types";

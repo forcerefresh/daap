@@ -25,7 +25,7 @@ import { getResponsiveIcon } from "../../../utils/icons/responsive-icons-factory
 import { getIconByType } from "../../../store/reducers/settings";
 import { BreakpointPreview } from "../breakpoint-preview/BreakpointPreview";
 import { set } from "lodash-es";
-import { BreakpointConfiguration } from "../../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../../webslider-sdk/src/common/i-breakpoint-configuration";
 import {
   Popover2,
   Popover2InteractionKind,

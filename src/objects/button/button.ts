@@ -17,18 +17,22 @@ import {
   ISelectInput,
   ITextAreaInput,
   IUnitsNumberInput,
-} from "../../inputs/types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { nl2br } from "../../utils/doom-utils/common";
 import {
   FormType,
   IFormGroupItem,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "../../utils/form-layout/i-form-layout";
+} from "../../webslider-sdk/src/form/i-form-layout";
 import { addBorderRadius } from "../../utils/utils";
-import { createCommonObject } from "../create-object-factory";
-import { PreloadOrder } from "../objects-factory";
-import { ICommonObjectProperties, IObject, ObjectType } from "../types";
+import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+import {
+  ICommonObjectProperties,
+  IObject,
+  ObjectType,
+} from "../../webslider-sdk/src/objects/i-object";
 
 import buttonIcon from "./button-icon.svg";
 

@@ -1,4 +1,8 @@
-import { InputType, INumberInput, ITextAreaInput } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  ITextAreaInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { typewriter, ITypeWriterEffect } from "./typewriter.types";
 

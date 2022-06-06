@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Button, Label } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./AlignPanel.module.scss";
-import { IObject } from "../../objects/types";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import { updateObject } from "../../store/actions/actions";
 
 interface IAlignPanelProps {

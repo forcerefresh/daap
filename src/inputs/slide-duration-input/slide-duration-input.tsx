@@ -4,7 +4,10 @@ import { cloneDeep, noop } from "lodash-es";
 import React from "react";
 import { SlideDurationOptions } from "../../store/types";
 import { getSelectField, getUnitNumericFiled } from "../input-utils";
-import { ISlideDurationInput, IUpdateInput } from "../types";
+import {
+  ISlideDurationInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./slide-duration-input.module.scss";
 
 export const SlideDurationInputForm: React.FC<

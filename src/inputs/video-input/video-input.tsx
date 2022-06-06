@@ -12,7 +12,10 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { IUpdateInput, IVideoInput } from "../types";
+import {
+  IUpdateInput,
+  IVideoInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./video-input.module.scss";
 
 export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {

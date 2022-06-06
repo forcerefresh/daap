@@ -4,12 +4,15 @@ import {
   IImageInputValue,
   IMultiImageInput,
   InputType,
-} from "../../inputs/types";
-import { createCommonObject } from "../create-object-factory";
-import { ICommonObjectProperties, IObject } from "../types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
+import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+import {
+  ICommonObjectProperties,
+  IObject,
+} from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
 import svg from "./multiple-images-icon.svg";
-import { getObjectPlaceholder } from "../object-helpers";
+import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 const MULTI_IMAGE = "multi_image";

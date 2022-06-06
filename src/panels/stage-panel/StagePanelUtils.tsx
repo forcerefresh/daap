@@ -6,12 +6,12 @@ import {
   IObject,
   ISnapLayouts,
   ObjectType,
-} from "../../objects/types";
+} from "../../webslider-sdk/src/objects/i-object";
 import {
   BreakpointConfiguration,
   Breakpoints,
-  DeviceType,
-} from "../../store/reducers/i-settings";
+} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
 

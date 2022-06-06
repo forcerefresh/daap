@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "../../objects/types";
-import { getObjectDefinitionsByGroup } from "../../objects/objects-factory";
+import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
+import { getObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
 import SVG from "react-inlinesvg";
 
 interface IAddPanelProps {

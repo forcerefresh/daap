@@ -12,18 +12,16 @@ import {
   CoreObjectType,
   getObjectDefinition,
   PreloadOrder,
-} from "../../objects/objects-factory";
+} from "../../webslider-sdk/src/objects/objects-register";
 import {
   ILayout,
-  INavigationValues,
   ISlideTransition,
   NavigationType,
-} from "../../objects/types";
+} from "../../webslider-sdk/src/objects/i-object";
+import { INavigationValues } from "../../webslider-sdk/src/objects/i-navigation-types";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
-import {
-  BreakpointConfiguration,
-  DeviceType,
-} from "../../store/reducers/i-settings";
+import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import {

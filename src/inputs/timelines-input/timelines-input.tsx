@@ -11,7 +11,7 @@ import {
   ITimelinesValue,
   ITimelineValue,
   ITimelinePoint,
-} from "../types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./timelines-input.module.scss";
 import cx from "classnames";
 import { cloneDeep, debounce } from "lodash";

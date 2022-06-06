@@ -1,4 +1,7 @@
-import { InputType, IParallaxInput } from "../../inputs/types";
+import {
+  InputType,
+  IParallaxInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { parallax, IParallaxEffect } from "./parallax.types";
 

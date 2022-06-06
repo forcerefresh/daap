@@ -6,7 +6,7 @@ import {
   IFontSelectInput,
   IFontSelectInputValue,
   IUpdateInput,
-} from "../types";
+} from "../../webslider-sdk/src/inputs/i-inputs";
 
 const DELIMITER = "[DELIMITER]";
 
@@ -59,10 +59,9 @@ export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
         options={_options as any}
         value={value.fontFamily + DELIMITER + value.source}
         onChange={(event: ChangeEvent) => {
-          const [
-            fontFamily,
-            source,
-          ] = (event.currentTarget as HTMLSelectElement).value.split(DELIMITER);
+          const [fontFamily, source] = (
+            event.currentTarget as HTMLSelectElement
+          ).value.split(DELIMITER);
 
           onChange({ fontFamily, source });
         }}

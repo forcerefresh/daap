@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { executionCodeFuncType } from "./objects-factory";
+import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 
 export interface ExecCodeConfig {
   execCodeFunc_Start: executionCodeFuncType;

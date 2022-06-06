@@ -1,4 +1,8 @@
-import { IImageInput, InputType, INumberInput } from "../../inputs/types";
+import {
+  IImageInput,
+  InputType,
+  INumberInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
 

@@ -1,4 +1,8 @@
-import { InputType, INumberInput, ISelectInput } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  ISelectInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
 

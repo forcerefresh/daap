@@ -11,7 +11,7 @@ import {
   getSelectField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
-import { IObject, ITransition } from "../../objects/types";
+import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
 import {
   updateLayer,
   updateObject,
@@ -26,7 +26,7 @@ import FormWithLayout, {
 import {
   IFormItem,
   IFormLayoutItem,
-} from "../../utils/form-layout/i-form-layout";
+} from "../../webslider-sdk/src/form/i-form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
 /*

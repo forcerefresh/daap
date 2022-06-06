@@ -3,7 +3,10 @@ import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Label } from "@blueprintjs/core";
 import { getNumericFiled, getSelectField, getTextArea } from "../input-utils";
-import { ITextStartPositionInput, IUpdateInput } from "../types";
+import {
+  ITextStartPositionInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./text-start-position-input.module.scss";
 
 const START_POSITION_OPTIONS = [

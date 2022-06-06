@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { MultiImageValues } from "../../objects/multiple-images/multiple-images";
-import { IObject, ITransition } from "../../objects/types";
+import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
 import { flip, IFlipEffect } from "./flip.types";
 
 export function getFlipEffectDuration(object: IObject, config: ITransition) {

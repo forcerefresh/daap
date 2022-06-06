@@ -1,4 +1,8 @@
-import { InputType, INumberInput, ISplitInput } from "../../inputs/types";
+import {
+  InputType,
+  INumberInput,
+  ISplitInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { split, ISplitEffect } from "./split.types";
 

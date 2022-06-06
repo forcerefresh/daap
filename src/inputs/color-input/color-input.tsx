@@ -2,7 +2,10 @@ import React, { RefObject, useEffect, useRef, useState } from "react";
 import { isEqual } from "lodash-es";
 import cx from "classnames";
 import { Button, FormGroup, Popover } from "@blueprintjs/core";
-import { IColorInput, IUpdateInput } from "../types";
+import {
+  IColorInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
 

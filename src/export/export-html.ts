@@ -15,17 +15,17 @@ import {
   IBoxValue,
   ICoverPlacementValue,
   SourceImageValues,
-} from "../inputs/types";
+} from "../webslider-sdk/src/inputs/i-inputs";
 import { ImageValues } from "../objects/image/image";
-import { getObjectPlaceholder } from "../objects/object-helpers";
-import { getObjectDefinition } from "../objects/objects-factory";
+import { getObjectPlaceholder } from "../webslider-sdk/src/objects/object-helpers";
+import { getObjectDefinition } from "../webslider-sdk/src/objects/objects-register";
 import {
   ILayout,
   IObject,
   ITransition,
   LayoutTypes,
   ObjectType,
-} from "../objects/types";
+} from "../webslider-sdk/src/objects/i-object";
 import {
   calculateObjectSize,
   calculateObjectSizePerDevice,
@@ -33,11 +33,11 @@ import {
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide, ISlides, SlideType } from "../store/reducers/i-slides";
+import { ISettings } from "../store/reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
-  ISettings,
-} from "../store/reducers/i-settings";
+} from "../webslider-sdk/src/common/i-breakpoint-configuration";
 import { IPreviewScope } from "../store/reducers/stage";
 import { nl2br } from "../utils/doom-utils/common";
 import {

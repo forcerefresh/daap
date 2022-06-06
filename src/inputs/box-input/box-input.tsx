@@ -3,7 +3,10 @@ import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Button, Icon, Label } from "@blueprintjs/core";
 import { getUnitNumericFiled } from "../input-utils";
-import { IBoxInput, IUpdateInput } from "../types";
+import {
+  IBoxInput,
+  IUpdateInput,
+} from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./box-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
