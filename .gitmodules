@@ -13,3 +13,6 @@
 [submodule "marketplace/objects/sample-object"]
 	path = marketplace/objects/sample-object
 	url = git@bitbucket.org:srdjanarsic/sample-object.git
+[submodule "marketplace/objects/retina-image"]
+	path = marketplace/objects/retina-image
+	url = git@bitbucket.org:srdjanarsic/retina-image.git
