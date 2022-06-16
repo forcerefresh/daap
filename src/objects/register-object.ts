@@ -97,6 +97,13 @@ import {
   videoMeta,
   videoSizeUpdate,
 } from "./video/video";
+import {
+  createRetinaImageObject,
+  getRetinaImageHtml,
+  preloadRetinaImage,
+  retinaImageMeta,
+  retinaImageSizeUpdate,
+} from "./retina-image/retina-image";
 
 registerObject(
   "button",
@@ -142,6 +149,20 @@ registerObject(
   imageSizeUpdate,
   getImageHtml,
   preloadImage,
+  undefined,
+  undefined,
+  undefined,
+  getAssetsUrls
+);
+
+registerObject(
+  "retina_image",
+  "media",
+  retinaImageMeta,
+  createRetinaImageObject,
+  retinaImageSizeUpdate,
+  getRetinaImageHtml,
+  preloadRetinaImage,
   undefined,
   undefined,
   undefined,
