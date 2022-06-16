@@ -1525,6 +1525,23 @@ export function setViewPortSize(viewportSize: {
 
 // ******
 
+export const FORCE_REFRESH = "Force refresh stage";
+
+export interface ForceRefreshAction extends IUndoableAction<false> {
+  type: typeof FORCE_REFRESH;
+  payload: void;
+}
+
+export function forceRefresh(): ForceRefreshAction {
+  return {
+    type: FORCE_REFRESH,
+    payload: undefined,
+    isUndoable: false,
+  };
+}
+
+// ******
+
 export const SET_STAGE_PREVIEW = "Set stage preview";
 
 export interface SetStagePreviewAction extends IUndoableAction<false> {
@@ -1913,6 +1930,7 @@ export type ActionTypes =
   | SetZoomFitAction
   | SetViewportSizeAction
   | SetStagePreviewAction
+  | ForceRefreshAction
 
   //global
   | SetGlobalConfigurationAction

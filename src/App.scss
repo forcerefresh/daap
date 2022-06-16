@@ -121,6 +121,16 @@ html {
     width: 260px !important;
   }
 
+  .input400 input,
+  .input400 textarea {
+    width: 400px !important;
+  }
+
+  .input600 input,
+  .input600 textarea {
+    width: 600px !important;
+  }
+
   // this will override above
   .input50-force input {
     width: 50px !important;

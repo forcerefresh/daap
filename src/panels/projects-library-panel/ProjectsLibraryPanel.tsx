@@ -19,6 +19,8 @@ export type IProjectsLibraryPanelMergedProps = typeof mapDispatchToProps &
 const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
   props
 ) => {
+  const { enableDeveloper } = props;
+
   return (
     <div className={cx("bp3-dark", css.projectsLibraryPanel)}>
       <div>
@@ -34,18 +36,22 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             title="Marketplace"
             panel={<MarketplacePanel onRequestClose={props.onRequestClose} />}
           />
-          <Tab
-            id="development"
-            title="Development"
-            panel={<DevelopmentPanel onRequestClose={props.onRequestClose} />}
-          />
+          {enableDeveloper && (
+            <Tab
+              id="development"
+              title="Development"
+              panel={<DevelopmentPanel onRequestClose={props.onRequestClose} />}
+            />
+          )}
         </Tabs>
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state: IStore) => ({});
+const mapStateToProps = (state: IStore) => ({
+  enableDeveloper: state.globals.enableDeveloper,
+});
 
 const mapDispatchToProps = {};
 

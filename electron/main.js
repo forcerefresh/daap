@@ -5,8 +5,6 @@ const fsPromise = require("fs/promises");
 const { forEach, remove } = require("lodash");
 const windowStateKeeper = require("electron-window-state");
 
-console.log(app.getVersion());
-
 // menu
 if (process.platform === "darwin") {
   const template = [
@@ -133,7 +131,7 @@ if (!gotTheLock) {
       mainWindow.webContents.executeJavaScript(
         `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`
       );
-      console.log(jsFile.length);
+      // console.log(jsFile.length);
     });*/
   });
 }
@@ -414,32 +412,6 @@ function getMyImagePath() {
   }
   return path.join(userDataPath, "my-images", "my-images.json");
 }
-
-/*
-const { from, tag, search, perPage = 10 } = props;
-
-let myImages: ImageData[] = JSON.parse(
-  localStorage.getItem(`my-images`) || "[]"
-);
-
-console.log(tag);
-if (tag) {
-  myImages = myImages.filter(
-    (image) => image.tags && image.tags.indexOf(tag) !== -1
-  );
-}
-
-if (search) {
-  myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
-}
-
-console.log(myImages.length);
-console.log(props);
-const retArr = myImages.splice(from, from + perPage);
-
-return { photos: retArr } as any; //ImageSetData[];*/
-
-// UTILS -------
 
 module.export = {
   loadProject,

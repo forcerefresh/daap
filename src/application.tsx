@@ -9,7 +9,12 @@ import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
 import "./objects/register-object";
 import "./objects/font-preloader";
-import { registerExternalObject } from "./webslider-sdk/src/objects/objects-register";
+import {
+  registerExternalObject,
+  unregisterObject,
+} from "./webslider-sdk/src/objects/objects-register";
+import { DevelopmentManager } from "./utils/development/DevelopmentManager";
+import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
 
 function application(): {
   component: React.ReactElement;
@@ -18,11 +23,14 @@ function application(): {
   return {
     component: (
       <React.StrictMode>
-        <IntegrationContextProvider>
-          <Provider store={store}>
-            <App />
-          </Provider>
-        </IntegrationContextProvider>
+        <DevelopmentContextProvider>
+          <IntegrationContextProvider>
+            <Provider store={store}>
+              <DevelopmentManager />
+              <App />
+            </Provider>
+          </IntegrationContextProvider>
+        </DevelopmentContextProvider>
       </React.StrictMode>
     ),
     useAppRootSelector: useAppRootSelector,
@@ -45,3 +53,5 @@ if (!(window as any).WebSlider_GlobalScope) {
 }
 (window as any).WebSlider_GlobalScope.registerExternalObject =
   registerExternalObject;
+
+(window as any).WebSlider_GlobalScope.unregisterObject = unregisterObject;

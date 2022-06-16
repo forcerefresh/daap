@@ -206,7 +206,17 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
           <div className={css.panel}>
             <FormGroup
               labelFor="appScale"
-              helperText="By enabling this you will get option to test your Object or Effect directly in app."
+              helperText={
+                <>
+                  By enabling this you will get option to test your Object or
+                  Effect directly in app.
+                  <br />
+                  <span style={{ color: "yellow" }}>
+                    It's recommended to restart app if you change Development
+                    mode.
+                  </span>
+                </>
+              }
               //requiredLabel={true}
             >
               <div className="input60d">

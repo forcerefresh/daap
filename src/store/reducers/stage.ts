@@ -8,6 +8,7 @@ import {
   SET_STAGE_TOOL,
   SET_STAGE_ZOOM,
   VIEWPORT_SIZE,
+  FORCE_REFRESH,
   ZOOM_FIT,
 } from "../actions/actions";
 
@@ -39,6 +40,7 @@ export interface IStage {
   previewState: IPreviewState;
   stageTool: { tool: StageTools; objectType?: ObjectType };
   selectedDevice: string;
+  forceRefreshRand: number;
 }
 
 const getStageDefault = (): IStage => ({
@@ -54,6 +56,7 @@ const getStageDefault = (): IStage => ({
   },
   stageTool: { tool: StageTools.SELECT },
   selectedDevice: "large-1",
+  forceRefreshRand: 0,
 });
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
@@ -62,6 +65,12 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
       return {
         ...state,
         stageViewportSize: action.payload,
+      };
+    }
+    case FORCE_REFRESH: {
+      return {
+        ...state,
+        forceRefreshRand: Math.random(),
       };
     }
     case SET_STAGE_ZOOM: {

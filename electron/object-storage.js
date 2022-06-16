@@ -28,17 +28,13 @@ const PARALLEL_UPLOAD = 5; // for publish (download and upload)
 const PARALLEL_DOWNLOAD = 5; // for download
 
 ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
-  console.log("node: ObjectStorage::List");
   const req = JSON.parse(reqJson);
 
   let objectStorageList = await loadObjectStorage();
 
   if (req.projectId) {
-    console.log(req);
     objectStorageList = objectStorageList.map((bucket) => {
       const ret = cloneDeep(bucket);
-      console.log(bucket.assignedProjects);
-      console.log(req.projectId);
 
       ret.assignedProject = (bucket.assignedProjects || []).find(
         (item) => item.projectId === req.projectId
@@ -51,18 +47,13 @@ ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::ListAssigned", async (event, reqJson) => {
-  console.log("node: ObjectStorage::ListAssigned");
   const req = JSON.parse(reqJson);
-  console.log(req);
 
   let objectStorageList = await loadObjectStorage();
 
   if (req.projectId) {
-    console.log(req);
     objectStorageList = objectStorageList.map((bucket) => {
       const ret = cloneDeep(bucket);
-      console.log(bucket.assignedProjects);
-      console.log(req.projectId);
 
       ret.assignedProject = (bucket.assignedProjects || []).find(
         (item) => item.projectId === req.projectId
@@ -77,14 +68,10 @@ ipcMain.handle("ObjectStorage::ListAssigned", async (event, reqJson) => {
     objectStorageList = without(objectStorageList, undefined);
   }
 
-  console.log(objectStorageList);
   return objectStorageList.map((item) => omit(item, "secretKey"));
 });
 
 ipcMain.handle("ObjectStorage::Add", async (event, reqJson) => {
-  console.log("node: ObjectStorage::Add");
-  console.log(reqJson);
-
   const item = JSON.parse(reqJson);
   item.id = uuid();
 

@@ -11242,6 +11242,11 @@ react-transition-group@^2.9.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
+react-use-error-boundary@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-use-error-boundary/-/react-use-error-boundary-2.0.1.tgz#1daffc4a8ddb2b9a39062bc646d23251091f0f38"
+  integrity sha512-ebFzCag4xLNNTXD1XfFriyW8k1uq6j4OHgDnVU2jbDoY252uZA4iwiybG+oMqq58PElIan6H/vpcI7/QeCW9hg==
+
 react@^16.14.0:
   version "16.14.0"
   resolved "https://registry.npmjs.org/react/-/react-16.14.0.tgz"

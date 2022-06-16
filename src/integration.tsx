@@ -6,6 +6,8 @@ import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-obj
 import { IMarketItem } from "./webslider-sdk/src/objects/i-marketplace";
 import { IAppSettings } from "./store/reducers/globals";
 import { MediaDataInfo, MediaType } from "./utils/assets/types";
+import { DevelopmentItem } from "./panels/development-panel/i-development-types";
+
 export interface getMyUploadComponentProps {
   type: MediaType;
   onComplete: () => void;
@@ -114,6 +116,24 @@ export const IntegrationContext = React.createContext({
     },
 
     scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
+  }),
+
+  useDevelopmentHook: () => ({
+    getAll: (): Promise<DevelopmentItem[]> => {
+      return Promise.resolve([]);
+    },
+
+    addDevelopmentItem: (item: DevelopmentItem): Promise<void> => {
+      return Promise.resolve();
+    },
+
+    updateDevelopmentItem: (item: Partial<DevelopmentItem>): Promise<void> => {
+      return Promise.resolve();
+    },
+
+    deleteDevelopmentItem: (id: string): Promise<void> => {
+      return Promise.resolve();
+    },
   }),
 
   useAssetsHook: () => ({
@@ -330,6 +350,16 @@ function useMarketplaceHookFactory() {
   /*}*/
 }
 
+function useDevelopmentHookFactory() {
+  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/marketplace-hook/electron-use-marketplace-hook")
+      .useMarketplaceHook;
+  } else {*/
+  return require("./integration/hooks/development-hook/use-development-hook")
+    .useDevelopmentHook;
+  /*}*/
+}
+
 export const IntegrationContextProvider = (
   props: React.PropsWithChildren<React.ReactNode>
 ) => {
@@ -345,6 +375,7 @@ export const IntegrationContextProvider = (
         useObjectStorageHook: useObjectStorageFactory(),
         useMarketplaceHook: useMarketplaceHookFactory(),
         useAppSettingsHook: useAppSettingsHookFactory(),
+        useDevelopmentHook: useDevelopmentHookFactory(),
       }}
     >
       {props.children}

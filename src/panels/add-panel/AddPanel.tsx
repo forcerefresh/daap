@@ -62,6 +62,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             <h3>{deff.meta.name}</h3>
             <p>{deff.meta.description}</p>
             {deff.external && <div className={css.external}>MP</div>}
+            {deff.development && <div className={css.development}>DEV</div>}
           </Card>
         ))}
       </>

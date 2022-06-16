@@ -155,6 +155,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     //console.log(conf.type);
     return (
       <Button
+        key={conf.type}
         active={selectedDevice === conf.type}
         minimal
         outlined

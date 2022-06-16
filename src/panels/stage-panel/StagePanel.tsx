@@ -1,4 +1,5 @@
 import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
+import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
   useEffect,
@@ -7,7 +8,6 @@ import React, {
   useState,
 } from "react";
 import { Icon } from "@blueprintjs/core";
-
 import { connect } from "react-redux";
 import cx from "classnames";
 import { ILayer } from "../../store/reducers/i-layers";
@@ -118,7 +118,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     forceShowLayerId,
     selectedDevice,
     breakpoints,
+    forceRefreshRand: _forceRefreshRand,
   } = props;
+  const [error, resetError] = useErrorBoundary(
+    // You can optionally log the error to an error reporting service
+    (error, errorInfo) => console.log(error, errorInfo)
+  );
+
+  if (error) return null;
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
   const pageSize = breakpointConfig?.normal.page!;
@@ -1397,14 +1404,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             </div>
             {!isPreview && (
               <>
-                {horizontalGridLines.map((item) => (
+                {horizontalGridLines.map((item, hlIdx) => (
                   <div
+                    key={hlIdx}
                     style={{ top: item.top + "px", width: item.width + "px" }}
                     className={cx(css.gridHorizontalLine)}
                   ></div>
                 ))}
-                {verticalGridLines.map((item) => (
+                {verticalGridLines.map((item, hlIdx) => (
                   <div
+                    key={hlIdx}
                     style={{
                       left: item.left + "px",
                       height: item.height + "px",
@@ -1485,6 +1494,7 @@ const mapStateToProps = (state: IStore) => {
     forceShowLayerId,
     selectedDevice: state.stage.selectedDevice,
     breakpoints: state.project.settings.breakpoints,
+    forceRefreshRand: stage.forceRefreshRand,
   };
 };
 
@@ -1511,4 +1521,6 @@ const mapDispatchToProps = {
     selectForProperties(payload),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(StagePanel);
+export default withErrorBoundary(
+  connect(mapStateToProps, mapDispatchToProps)(StagePanel)
+);
