@@ -66,4 +66,7 @@ getConnector(objectId){
 
 
 * Image Target
+Source ID: text Inputs  weather-json
+JSON path: text Input   contents[0].title
+
 * Text Target
