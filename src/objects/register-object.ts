@@ -104,6 +104,21 @@ import {
   retinaImageMeta,
   retinaImageSizeUpdate,
 } from "./retina-image/retina-image";
+import {
+  createJsonSource,
+  getJsonSourceHtml,
+  jsonSourceMeta,
+  jsonSourcePreload,
+  jsonSourceSizeUpdate,
+  jsonSourceStart,
+} from "./json-loader/json-source";
+import {
+  createTextTarget,
+  getTextTargetHtml,
+  preloadTextTarget,
+  textTargetMeta,
+  textTargetSizeUpdate,
+} from "./text-target/text-target";
 
 registerObject(
   "button",
@@ -217,6 +232,17 @@ registerObject(
   delayObject_Stop
 );
 
+registerObject(
+  "json_source",
+  "other",
+  jsonSourceMeta,
+  createJsonSource,
+  jsonSourceSizeUpdate,
+  getJsonSourceHtml,
+  jsonSourcePreload,
+  jsonSourceStart
+);
+
 /*
 registerObject(
   "countdown",
@@ -261,6 +287,16 @@ registerObject(
   textSizeUpdate,
   getTextHtml,
   preloadText
+);
+
+registerObject(
+  "text_target",
+  "text",
+  textTargetMeta,
+  createTextTarget,
+  textTargetSizeUpdate,
+  getTextTargetHtml,
+  preloadTextTarget
 );
 
 registerObject(
