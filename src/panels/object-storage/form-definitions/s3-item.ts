@@ -23,9 +23,10 @@ export const s3FormDefinition: S3FormDefinitionTuple = [
     defaultValue: "",
     options: [
       { label: "Select use type...", value: "" },
-      { label: "Production", value: "production" },
       { label: "Development", value: "development" },
-      { label: "QA", value: "qa" },
+      { label: "Testing", value: "testing" },
+      { label: "Staging", value: "staging" },
+      { label: "Production", value: "production" },
     ],
   },
   {

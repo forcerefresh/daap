@@ -1,5 +1,8 @@
 const { S3Manager } = require("./s3-manager/s3-manager");
 const { LinodeManager } = require("./linode-manager/linode-manager");
+const {
+  DigitalOceanManager,
+} = require("./digital-ocean-manager/digital-ocean-manager");
 
 function getBucketManagerClass(platform) {
   switch (platform) {
@@ -8,6 +11,9 @@ function getBucketManagerClass(platform) {
     }
     case "linode": {
       return LinodeManager;
+    }
+    case "digital-ocean": {
+      return DigitalOceanManager;
     }
     default: {
       return S3Manager;

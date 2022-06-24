@@ -11,7 +11,7 @@ class LinodeManager {
     this.s3 = new AWS.S3({
       accessKeyId: bucketConfig.key,
       secretAccessKey: bucketConfig.secretKey,
-      endpoint: `http://eu-central-1.linodeobjects.com`,
+      endpoint: `https://${bucketConfig.region}.linodeobjects.com`,
     });
   }
 

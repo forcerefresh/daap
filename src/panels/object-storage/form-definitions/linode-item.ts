@@ -23,13 +23,14 @@ export const linodeOSFormDefinition: LinodeOSFormDefinitionTuple = [
     defaultValue: "",
     options: [
       { label: "Select use type...", value: "" },
-      { label: "Production", value: "production" },
       { label: "Development", value: "development" },
-      { label: "QA", value: "qa" },
+      { label: "Testing", value: "testing" },
+      { label: "Staging", value: "staging" },
+      { label: "Production", value: "production" },
     ],
   },
   {
-    displayName: "Bucket name (Linode object storage)",
+    displayName: "Bucket name (Linode Object Storage)",
     propertyName: "bucketName",
     inputType: InputType.TEXT,
     value: "",
@@ -37,7 +38,7 @@ export const linodeOSFormDefinition: LinodeOSFormDefinitionTuple = [
     inputProps: { style: { width: "300px" } },
   },
   {
-    displayName: "Bucket name (Linode object storage)",
+    displayName: "Region",
     propertyName: "region",
     inputType: InputType.TEXT,
     value: "",

@@ -2,6 +2,10 @@ import {
   linodeOSFormDefinition,
   validateLinodeOS,
 } from "./form-definitions/linode-item";
+import {
+  digitalOceanOSFormDefinition,
+  validateDigitalOceanOS,
+} from "./form-definitions/digital-ocean-item";
 import { s3FormDefinition, validateS3 } from "./form-definitions/s3-item";
 import { BucketType } from "./ObjectStorageItemForm";
 
@@ -11,6 +15,8 @@ export function getObjectStorageItemFormDefinition(type: BucketType): any[] {
       return s3FormDefinition;
     case "linode":
       return linodeOSFormDefinition;
+    case "digital-ocean":
+      return digitalOceanOSFormDefinition;
     default:
       return [];
   }
@@ -24,6 +30,8 @@ export function getObjectStorageValidationFunc(
       return validateS3;
     case "linode":
       return validateLinodeOS;
+    case "digital-ocean":
+      return validateDigitalOceanOS;
     default:
       return (d) => ({ valid: false });
   }
@@ -35,13 +43,15 @@ export function getPlatformName(type: string) {
       return "AWS S3";
     case "linode":
       return "Linode Object Storage";
+    case "digital-ocean":
+      return "Digital Ocean Space";
     default:
       return [];
   }
 }
 
 export function getPlatformList() {
-  return ["s3", "linode"].map((type) => ({
+  return ["s3", "linode", "digital-ocean"].map((type) => ({
     label: getPlatformName(type) as string,
     value: type,
   }));

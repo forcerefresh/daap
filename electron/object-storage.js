@@ -83,7 +83,7 @@ ipcMain.handle("ObjectStorage::Add", async (event, reqJson) => {
     );
     delete item.secretKey;
   } catch (ex) {
-    console.log("TODO");
+    console.log(ex);
   }
 
   const objectStorageList = await loadObjectStorage();
@@ -120,6 +120,8 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
     bucket.platform + "_" + bucket.bucketName
   );
 
+  console.log(bucket.platform + "_" + bucket.bucketName);
+  console.log("secretKey: " + secretKey);
   //const s3 = createS3Instance({ ...bucket, secretKey });
 
   const ManagerClass = getBucketManagerClass(bucket.platform);
@@ -503,8 +505,18 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   );
   previewString = previewString.replace(
     "{$DATA}",
-    expString.replaceAll(`\"`, `\\\"`)
+    expString
+      .replace(/[\\]/g, "\\\\")
+      .replace(/[\"]/g, '\\"')
+      .replace(/[\/]/g, "\\/")
+      .replace(/[\b]/g, "\\b")
+      .replace(/[\f]/g, "\\f")
+      .replace(/[\n]/g, "\\n")
+      .replace(/[\r]/g, "\\r")
+      .replace(/[\t]/g, "\\t")
+    //expString.replace(/\\n/g, "").replaceAll(`\"`, `\\\"`)
   );
+
   const previewBuffer = Buffer.from(previewString, "utf-8");
   zip.file(`${req.projectId}/preview-with-json.html`, previewBuffer);
 
