@@ -27,13 +27,14 @@ import {
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
+import { JSONSourceConnector } from "../json-loader/json-source-connector";
 
-export const TEXT_TARGET = "text-target";
+export const TEXT_TARGET = "text_target";
 
 export interface TextTargetValues extends CommonPropertiesValues {
   sourceId: string;
   jsonPath: string;
-  text: string;
+  sampleText: string;
   autoHeight: boolean;
   font: IFontSelectInputValue;
   color: RGBColor;
@@ -49,7 +50,7 @@ export interface TextTargetValues extends CommonPropertiesValues {
 export type TextTargetTuple = [
   ITextInput<"sourceId">,
   ITextInput<"jsonPath">,
-  ITextAreaInput<"text">,
+  ITextAreaInput<"sampleText">,
   ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
@@ -90,10 +91,11 @@ export function createTextTarget(
     },
     {
       displayName: "Text",
-      propertyName: "text",
+      propertyName: "sampleText",
       inputType: InputType.TEXTAREA,
       value: (initialValue?.text as string) || "",
       defaultValue: "",
+      helperText: "Sample text is used only during edit.", // TODO: fix this to work
     },
     {
       displayName: "Auto height",
@@ -102,7 +104,6 @@ export function createTextTarget(
       value: false,
       defaultValue: false,
     },
-
     {
       displayName: "Font",
       propertyName: "font",
@@ -203,7 +204,7 @@ export function createTextTarget(
   const values: TextTargetValues = {
     sourceId: "",
     jsonPath: "",
-    text: (initialValue?.text as string) || "",
+    sampleText: "Sample text for edit mode only",
     autoHeight: false,
     font: (initialValue?.font as IFontSelectInputValue) || {
       fontFamily: "Arial",
@@ -237,12 +238,10 @@ export function createTextTarget(
 
 export function getTextTargetHtml(
   object: IObject,
-  calculatedObjectSize: React.CSSProperties
-  // getConnector: (sourceId: string) => JSONSourceConnector
+  calculatedObjectSize: React.CSSProperties,
+  isPlayer: boolean
 ) {
   const textProperties = object.definition.values as TextTargetValues;
-  // const conn = getConnector(textProperties.sourceId);
-  // conn.getDataByPath(textProperties.jsonPath);
   const textPropertiesMeta = object.definition.valuesMetadata as {
     [key: string]: IInputMetadataValues;
   };
@@ -273,9 +272,9 @@ export function getTextTargetHtml(
 
   style += "margin: 0px;";
 
-  return `<p class="object-content" style="${style}">${nl2br(
-    textProperties.text
-  )}</p>`;
+  return `<p class="object-content object-content-${
+    object.id
+  }" style="${style}">${isPlayer ? "" : nl2br(textProperties.sampleText)}</p>`;
 }
 
 export async function textTargetSizeUpdate(props: {
@@ -295,6 +294,34 @@ export async function textTargetSizeUpdate(props: {
 
   div.style.width = calculatedObjectSize.width;
   div.style.height = calculatedObjectSize.height;
+}
+
+export async function textTargetStart(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+  getConnector?: (connectorId: string) => JSONSourceConnector;
+}) {
+  const { getConnector, values, id } = props;
+
+  let text = "";
+  if (getConnector) {
+    const conn = getConnector(values.sourceId);
+    text = await conn.getDataByPath(values.jsonPath);
+  } else {
+    console.warn(
+      `Connector with source id '${values.sourceId}' is not available. Make sure that you have source object and make sure it is in front or same slide as target object.`
+    );
+  }
+
+  const els = document.getElementsByClassName(`object-content-${id}`);
+  const el = document.getElementsByClassName(`object-content-${id}`)[0];
+  el.innerHTML = text;
+  // TODO: check if effect can run after object exec
+  Array.from(els).forEach((el) => {
+    el.innerHTML = text;
+  });
 }
 
 export async function preloadTextTarget(props: {

@@ -168,11 +168,11 @@ export class Player {
 
   // this we are calling after we load external components
   private createAllSlides() {
-    this.normalSlideDataArr?.forEach((data, idx) => {
-      this.createSlide(idx, data);
-    });
     this.frontSlideDataArr?.forEach((data, idx) => {
       this.createStaticSlide(idx, data);
+    });
+    this.normalSlideDataArr?.forEach((data, idx) => {
+      this.createSlide(idx, data);
     });
 
     this.resizeAll(true);
@@ -729,6 +729,12 @@ export class Player {
     this.staticTimelines[no] = tl;
 
     data.transitionsData.forEach((transitionData) => {
+      // TODO: use only per device (add per device for layer)
+      const calObjSize =
+        transitionData.calculatedObjectSizePerDevice?.[
+          this.currentDeviceType
+        ] || transitionData.calculatedObjectSize;
+
       // Note: prepare page loader/s
       this.populatePageSpinners(transitionData);
 
@@ -737,6 +743,21 @@ export class Player {
       slideParallelTls.forEach((pTl, idx) => {
         tl.add(pTl, 0);
       });
+      /*
+      debugger;
+      // Note: create logic for objects (start, stop, preloaders, ....)
+      const objDef = getObjectDefinition(transitionData.itemType);
+
+      if (!!objDef?.executionCode_Start) {
+        const execTl = createTimelineForExecutionCode(
+          transitionData,
+          objDef.executionCode_Start!,
+          objDef.executionCode_Stop!,
+          transitionData.itemValues,
+          calObjSize
+        );
+        tl.add(execTl, 0);
+      }*/
     });
   }
 
@@ -792,6 +813,7 @@ export class Player {
     slideTimeline.add(slideDurationTimeline);
 
     // add objects effects timelines
+    console.log(data.transitionsData);
     data.transitionsData.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize =
@@ -845,6 +867,8 @@ export class Player {
         );
         slideTimeline.add(execTl, 0);
       }
+
+      console.log(objDef);
 
       // preload
       if (transitionData.itemValues.preload && !!objDef?.preload) {

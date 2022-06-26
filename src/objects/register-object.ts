@@ -118,6 +118,7 @@ import {
   preloadTextTarget,
   textTargetMeta,
   textTargetSizeUpdate,
+  textTargetStart,
 } from "./text-target/text-target";
 
 registerObject(
@@ -296,7 +297,8 @@ registerObject(
   createTextTarget,
   textTargetSizeUpdate,
   getTextTargetHtml,
-  preloadTextTarget
+  preloadTextTarget,
+  textTargetStart
 );
 
 registerObject(

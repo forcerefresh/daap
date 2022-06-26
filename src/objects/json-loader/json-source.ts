@@ -14,7 +14,7 @@ import {
 import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
 import { getOrCreateConnectorById } from "./connectors-manager";
-import svg from "./json-source.svg";
+import logo from "./json-source-logo.svg";
 
 export const JSON_SOURCE = "json_source";
 
@@ -39,7 +39,30 @@ export function createJsonSource(
     hasOverflowProperty: boolean;
   }
 ): Omit<IObject<JSONSourceTuple>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(JSON_SOURCE);
+  const object = {
+    ...createCommonObject(JSON_SOURCE),
+    ...{
+      supportedLayout: {
+        none: false,
+        absolute: true,
+        fit: false,
+        grid: false,
+        snap: false,
+      },
+      layout: "absolute" as "absolute",
+      absoluteLayout: {
+        type: "common" as "common",
+        perDevice: [],
+        common: {
+          deviceType: "common" as "common",
+          left: 0,
+          top: 0,
+          width: 150,
+          height: 150,
+        },
+      },
+    },
+  };
 
   const properties: JSONSourceTuple = [
     {
@@ -71,6 +94,7 @@ export function createJsonSource(
     url: "",
     preload: true,
   };
+
   return {
     ...object,
     definition: {
@@ -89,12 +113,23 @@ export function getJsonSourceHtml(
   isPlayer: boolean
 ) {
   const jsonSourceValues = object.definition.values as JsonSourceValues;
-
+  debugger;
   if (!isPlayer) {
-    return getObjectPlaceholder(`JSONSource</br>${jsonSourceValues.sourceId}`);
+    return `<div style="
+      color: gray; 
+      font-weight: bold; 
+      display: flex; 
+      flex-direction:column;
+      justify-content: center; 
+      align-items: center; 
+      text-align: center; 
+      width: 100%; height: 100%;">
+       ${logo}
+      <p>JSON SOURCE</p>
+      </div>`;
+  } else {
+    return "";
   }
-
-  return `<div class="object-content">${jsonSourceValues.url}</div>`;
 }
 
 export async function jsonSourceStart(props: {
@@ -104,12 +139,12 @@ export async function jsonSourceStart(props: {
   calculatedObjectSize: any;
 }) {
   const { id, values } = props;
-  const connValues = values as JsonSourceValues;
+  const jsonSourceValues = values as JsonSourceValues;
 
-  const conn = getOrCreateConnectorById(id);
+  const conn = getOrCreateConnectorById(id, jsonSourceValues.sourceId);
 
-  if (!connValues.preload) {
-    await conn.loadData(connValues.url);
+  if (!jsonSourceValues.preload) {
+    await conn.loadData(jsonSourceValues.url);
   }
 }
 
@@ -128,21 +163,17 @@ export async function jsonSourcePreload(props: {
 }): Promise<string> {
   const { id, values } = props;
 
-  const connValues = values as JsonSourceValues;
-  const conn = getOrCreateConnectorById(id);
+  const jsonSourceValues = values as JsonSourceValues;
+  const conn = getOrCreateConnectorById(id, jsonSourceValues.sourceId);
 
-  await conn.loadData(connValues.url);
+  await conn.loadData(jsonSourceValues.url);
 
   return id;
-}
-
-export function getJsonSourceConnector(objectId: string) {
-  return getOrCreateConnectorById(objectId);
 }
 
 export const jsonSourceMeta = {
   name: "JSON SOURCE",
   description: "Add JSON Source",
   preloadOrder: PreloadOrder.FIRST,
-  icon: svg,
+  icon: logo,
 };

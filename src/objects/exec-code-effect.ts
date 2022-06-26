@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
+import { getConnectorBySourceId } from "./json-loader/connectors-manager";
 
 export interface ExecCodeConfig {
   execCodeFunc_Start: executionCodeFuncType;
@@ -14,6 +15,8 @@ export interface ExecCodeConfig {
 gsap.registerEffect({
   name: "execCode",
   effect: function (targets: any, config: ExecCodeConfig) {
+    const getConnector = (sourceId: string) => getConnectorBySourceId(sourceId);
+
     const {
       id,
       values,
@@ -27,11 +30,23 @@ gsap.registerEffect({
 
     const onStart = () => {
       console.log("onstart exec code");
-      execCodeFunc_Start?.({ id, className, values, calculatedObjectSize });
+      execCodeFunc_Start?.({
+        id,
+        className,
+        values,
+        calculatedObjectSize,
+        getConnector,
+      });
     };
     const onStop = () => {
       console.log("onstop exec code");
-      execCodeFunc_Stop?.({ id, className, values, calculatedObjectSize });
+      execCodeFunc_Stop?.({
+        id,
+        className,
+        values,
+        calculatedObjectSize,
+        getConnector,
+      });
     };
 
     var effConfig = {

@@ -13,7 +13,7 @@ import {
   registerExternalObject,
   unregisterObject,
 } from "./webslider-sdk/src/objects/objects-register";
-import { DevelopmentManager } from "./utils/development/DevelopmentManager";
+import DevelopmentManager from "./utils/development/DevelopmentManager";
 import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
 
 function application(): {

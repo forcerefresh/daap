@@ -1,12 +1,18 @@
 import { isEqual } from "lodash-es";
 import React, { useContext, useEffect, useRef } from "react";
+import { connect } from "react-redux";
 import { IntegrationContext } from "../../integration";
 import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
 import { forceRefresh } from "../../store/actions/actions";
-import { store } from "../../store/store";
+import { IStore, store } from "../../store/store";
 import { DevelopmentContext } from "./DevelopmentProvider";
 
-export const DevelopmentManager = () => {
+export type IDevelopmentManagerProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps>;
+
+const DevelopmentManager = (props: IDevelopmentManagerProps) => {
+  const { globals } = props;
+
   const globalContext = useContext(IntegrationContext);
   const { getAll, updateDevelopmentItem } = globalContext.useDevelopmentHook();
 
@@ -15,19 +21,13 @@ export const DevelopmentManager = () => {
   const developmentItemsRef = useRef<DevelopmentItem[]>(developmentItems);
   developmentItemsRef.current = [...developmentItems];
 
-  //const currentStateRef = useRef<{ [key: string]: DevelopmentItem }>({});
-
-  //useEffect(() => {
-  //  devItems = developmentItems;
-  //}, [developmentItems]);
-
-  console.log(developmentItems);
   useEffect(() => {
-    console.log("DEV getAll() - ONLY ONCE");
-    getAll();
-    restartDevelopmentInterval();
-    return () => stopDevelopmentInterval();
-  }, []);
+    if (globals.enableDeveloper) {
+      getAll();
+      restartDevelopmentInterval();
+      return () => stopDevelopmentInterval();
+    }
+  }, [globals.enableDeveloper]);
 
   useEffect(() => {
     console.log("DEVELOPMENT ITEMS CHANGE EFFECT");
@@ -109,3 +109,11 @@ export const DevelopmentManager = () => {
 
   return null;
 };
+
+const mapStateToProps = (state: IStore) => ({
+  globals: state.globals,
+});
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DevelopmentManager);
