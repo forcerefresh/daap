@@ -33,7 +33,7 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
           <Tab id="templates" title="Templates" panel={<div />} />
           <Tab
             id="marketplace"
-            title="Marketplace"
+            title="Extensions"
             panel={<MarketplacePanel onRequestClose={props.onRequestClose} />}
           />
           {enableDeveloper && (
