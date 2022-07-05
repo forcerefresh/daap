@@ -85,13 +85,14 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
     );
   };
 
+  // TODO: IMPORTANT
   const renderRow = (oneValue: IImageInputValue, idx: number) => (
     <div key={idx} className={css.row}>
       <InputGroup
         readOnly={true}
         placeholder="Placeholder text"
-        value={oneValue.url}
-        title={oneValue.url}
+        value={oneValue.image.url}
+        title={oneValue.image.url}
         //onClick={handleClick}
         //onChange={(event: any) => onChange(event.target.value)}
         //onInput={(event: any) => onInput(event.target.value)}
@@ -127,8 +128,9 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
             onSelect={(item) => {
               console.log(idx);
               const newValue = cloneDeep(value);
-              newValue[currentIndex].url = (item.initialValues as any).url;
-              newValue[currentIndex].isPlaceholder = false;
+              newValue[currentIndex].image.url = (
+                item.initialValues as any
+              ).url; // TODO: IMPORTANT
               onChange(newValue);
               setLibraryOpen(false);
             }}

@@ -114,18 +114,8 @@ function createSourceImageObject(
       displayName: "Image url",
       propertyName: "url",
       inputType: InputType.IMAGE,
-      value: {
-        url: initialValue?.url || "",
-        width: 300,
-        height: 300,
-        isPlaceholder: !initialValue?.url,
-      },
-      defaultValue: {
-        url: "",
-        width: 300,
-        height: 300,
-        isPlaceholder: true,
-      },
+      value: { image: {} }, // TODO: IMPORTANT
+      defaultValue: { image: {} }, // TODO: IMPORTANT
     },
   ];
 
@@ -133,12 +123,7 @@ function createSourceImageObject(
     id: "",
     visible: true,
     placement: initialValue?.placement || getDefaultCoveragePlacement(),
-    url: {
-      url: initialValue?.url || "",
-      width: 300,
-      height: 300,
-      isPlaceholder: !initialValue?.url,
-    },
+    url: { image: {} },
   };
 
   return {

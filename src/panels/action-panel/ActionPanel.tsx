@@ -100,7 +100,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
-  const { saveProject } = globalContext.useAPIHook();
+  const { saveProject } = globalContext.useProjectHook();
   const { supportStorageObjects, listAssignedStorageObjects } =
     globalContext.useObjectStorageHook();
 

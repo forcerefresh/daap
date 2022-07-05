@@ -127,7 +127,7 @@ export function getMultiImageHtml(
   ret += `<div class="object-content" style="width: 100%; height: 100%;">`;
   multiImageProperties.urls.forEach((url: IImageInputValue, idx: number) => {
     let styleOne = style;
-    styleOne += `background-image:url('${url.url}');`;
+    styleOne += `background-image:url('${url.image.url}');`; // TODO: IMPORTANT
     styleOne += `position: absolute;`;
     if (isPlayer) {
     } else {
@@ -152,7 +152,7 @@ export async function multiimageSizeUpdate(props: {
   console.log(calculatedObjectSize);
 }
 
-function preloadImagePromise(url: string): Promise<void> {
+function preloadImagePromise(imageItem: IImageInputValue): Promise<void> {
   return new Promise<void>(function (resolve, reject) {
     let img = new Image();
     img.onload = function () {
@@ -163,7 +163,7 @@ function preloadImagePromise(url: string): Promise<void> {
     img.onerror = function (err) {
       reject(err);
     };
-    img.src = url;
+    img.src = imageItem.image.url!; // TODO: IMPORTANT
   });
 }
 
@@ -176,8 +176,10 @@ export async function preloadMultiImage(props: {
   const { id, values } = props;
   const multiImageValues = values as MultiImageValues;
 
-  const loaders = multiImageValues.urls.map((url) => {
-    return url.isPlaceholder ? Promise.resolve() : preloadImagePromise(url.url);
+  const loaders = multiImageValues.urls.map((oneVal) => {
+    return oneVal.filename || oneVal.image.url // TODO: IMPORTANT
+      ? preloadImagePromise(oneVal)
+      : Promise.resolve();
   });
 
   await Promise.allSettled(loaders);
@@ -190,10 +192,17 @@ export const getMultiImageAssetsUrls = (props: {
 }) => {
   const imageValues = props.values as MultiImageValues;
 
-  const ret: { url: string; type: "url" | string }[] = [];
+  const ret: {
+    url?: string;
+    filename?: string;
+    type: "url" | "local" | string;
+  }[] = [];
   imageValues.urls.forEach((item) => {
-    if (item.url && !item.isPlaceholder) {
-      ret.push({ url: item.url, type: "url" });
+    if (item.image.url) {
+      ret.push({ url: item.image.url, type: "url" }); // TODO: rename to sourceType // TODO: IMPORTANT
+    }
+    if (item.filename) {
+      ret.push({ filename: item.filename, type: "local" }); // TODO: rename to sourceType // TODO: IMPORTANT
     }
   });
 

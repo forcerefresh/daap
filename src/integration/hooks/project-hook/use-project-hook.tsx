@@ -2,7 +2,7 @@
 
 import { forEach, remove } from "lodash-es";
 
-export const useAPIHook = () => {
+export const useProjectHook = () => {
   const getNextProjectId = (): Promise<number> => {
     const projects: any[] = JSON.parse(
       localStorage.getItem("projects") || "[]"

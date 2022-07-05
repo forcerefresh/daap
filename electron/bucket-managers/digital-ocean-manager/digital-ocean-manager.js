@@ -1,7 +1,7 @@
 const AWS = require("aws-sdk");
 const fs = require("fs");
 var mime = require("mime-types");
-const { downloadToBuffer } = require("../../utils");
+const { downloadToBuffer } = require("../../utils/utils");
 
 class DigitalOceanManager {
   s3;

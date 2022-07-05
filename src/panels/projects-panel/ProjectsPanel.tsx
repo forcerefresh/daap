@@ -73,7 +73,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const badImages = React.useRef<number[]>([]);
 
   const globalContext = useContext(IntegrationContext);
-  const { getProject, getProjects, deleteProject } = globalContext.useAPIHook();
+  const { getProject, getProjects, deleteProject } =
+    globalContext.useProjectHook();
 
   const fetchData = (from = -1) => {
     setLoading(true);

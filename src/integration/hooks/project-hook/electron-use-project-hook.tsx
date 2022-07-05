@@ -1,4 +1,4 @@
-export const useAPIHook = () => {
+export const useProjectHook = () => {
   const getNextProjectId = (): Promise<number> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");

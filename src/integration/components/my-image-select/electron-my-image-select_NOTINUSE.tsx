@@ -16,7 +16,9 @@ interface UploadFileInfo {
 interface MyImageSelectProps {
   onSelect: (data: any) => void;
 }
-export const ElectronMyImageSelect: React.FC<MyImageSelectProps> = (props) => {
+export const ElectronMyImageSelect__CURENTLYNOTINUSE: React.FC<
+  MyImageSelectProps
+> = (props) => {
   const { onSelect } = props;
 
   return (

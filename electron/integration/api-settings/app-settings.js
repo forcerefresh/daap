@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 var path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
-const { checkFileExists } = require("./utils");
+const { checkFileExists } = require("../../utils/utils");
 
 ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
   const req = JSON.parse(reqJson);

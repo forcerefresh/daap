@@ -39,8 +39,8 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
       <InputGroup
         readOnly={true}
         id="text-input"
-        placeholder="Placeholder text"
-        value={value.url}
+        placeholder=""
+        value={value.filename || value.url}
       />
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
@@ -74,6 +74,7 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
               /* const newValue = cloneDeep(value);
               newValue.url = (item.initialValues as any).url;
               onChange(newValue);*/
+
               onChange(item.initialValues as any);
               setLibraryOpen(false);
             }}

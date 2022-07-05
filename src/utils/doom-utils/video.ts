@@ -26,23 +26,34 @@ export async function getImageFromFile(
   return new Promise((resolve, reject) => {
     const video = createVideo(URL.createObjectURL(file));
     video.load();
+
     const videoItem: VideoItem = {
       size: { width: 0, height: 0, type: "jpg" },
       url: "",
     };
+
     video.addEventListener("loadedmetadata", function () {
       // Set canvas dimensions same as video dimensions
-      videoItem.size.width = video.videoWidth;
-      videoItem.size.height = video.videoHeight;
+      videoItem.size!.width = video.videoWidth;
+      videoItem.size!.height = video.videoHeight;
       console.log(video.videoWidth);
       console.log(video.videoHeight);
     });
 
     video.addEventListener("seeked", function () {
       console.log(videoItem);
-      const canvas = createCanvas(videoItem.size.width, videoItem.size.height);
+      const canvas = createCanvas(
+        videoItem.size!.width,
+        videoItem.size!.height
+      );
       const ctx = canvas.getContext("2d");
-      ctx?.drawImage(video, 0, 0, videoItem.size.width, videoItem.size.height);
+      ctx?.drawImage(
+        video,
+        0,
+        0,
+        videoItem.size!.width,
+        videoItem.size!.height
+      );
 
       //const image = canvas.toDataURL("image/jpeg", 0.9);
       canvas.toBlob(

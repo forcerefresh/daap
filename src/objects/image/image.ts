@@ -23,19 +23,21 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
+import { getMediaSrc } from "../../integration/utils/local-media";
+import { ImageItem } from "../../utils/assets/types";
 
 export const IMAGE = "image";
 
 export interface ImageValues extends CommonPropertiesValues {
   fit: ICoverPlacementValue;
-  url: IImageInputValue;
+  image: IImageInputValue;
   useForThumbnail: boolean;
   preload: boolean;
 }
 
 export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IImageInput<"url">,
+  IImageInput<"image">,
   ICheckboxInput<"useForThumbnail">,
   ICheckboxInput<"preload">,
   ...CommonPropertiesTuple
@@ -72,20 +74,10 @@ export function createImageObject(
     },
     {
       displayName: "Image",
-      propertyName: "url",
+      propertyName: "image",
       inputType: InputType.IMAGE,
-      value: {
-        url: initialValue?.url || "",
-        width: 300,
-        height: 300,
-        isPlaceholder: !initialValue?.url,
-      },
-      defaultValue: {
-        url: "",
-        width: 300,
-        height: 300,
-        isPlaceholder: true,
-      },
+      value: initialValue?.image || {},
+      defaultValue: { image: {} },
     },
     {
       displayName: "Use for thumbnail",
@@ -110,12 +102,7 @@ export function createImageObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    url: {
-      url: initialValue?.url || "",
-      width: 300,
-      height: 300,
-      isPlaceholder: !initialValue?.url,
-    },
+    image: initialValue?.image || {},
     useForThumbnail: false,
     preload: true,
     ...getCommonPropertiesValues(),
@@ -143,16 +130,16 @@ export function getImageHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const imageProperties = object.definition.values as ImageValues;
+  const imageValues = object.definition.values as ImageValues;
 
   //console.log(imageProperties);
   if (!isPlayer) {
-    if (imageProperties.url.isPlaceholder || !imageProperties.url.url) {
+    if (!imageValues.image.image.sourceType) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
     }
   }
 
-  const coverPlacementValue = imageProperties.fit as ICoverPlacementValue;
+  const coverPlacementValue = imageValues.fit as ICoverPlacementValue;
 
   let backgroundSize = coverPlacementValue.size as
     | "cover"
@@ -172,12 +159,26 @@ export function getImageHtml(
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.url}');`;
+  // style += `background-image:url('${imageValues.image.url}');`;
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
 
-  return `<div class="object-content" style="${style}"></div>`;
+  /*getMediaSrc("image", imageValues.image).then((imageItem: ImageItem) => {
+    const el = document.getElementsByClassName(
+      `object-content-${object.id}`
+    )[0];
+    if (el) {
+      (el as HTMLDivElement).style.backgroundImage = `url('${imageItem.src}')`;
+    }
+  });*/
+  const imageItem = getMediaSrc("image", imageValues.image.image);
+
+  console.log(imageItem);
+
+  style += `background-image:url('${imageItem.src}');`;
+
+  return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
 
 export async function imageSizeUpdate(props: {
@@ -189,7 +190,7 @@ export async function imageSizeUpdate(props: {
   const { id, calculatedObjectSize, className } = props;
   // console.log("imageSizeUpdate: id> " + id);
   // console.log(calculatedObjectSize);
-  // console.log(className);
+  // console.log(className);ge
 
   const els = document.getElementsByClassName(className);
   // console.log(els);
@@ -213,7 +214,10 @@ export async function preloadImage(props: {
   const { id, values } = props;
   const imageValues = values as ImageValues;
 
-  if (!imageValues.url.url || imageValues.url.isPlaceholder) {
+  const imageSrc = { src: "" }; // await getMediaSrc("image", imageValues.image.image); // as ImageItem;
+
+  // if there are no image to preload return instantly
+  if (!imageSrc.src) {
     return id;
   }
 
@@ -227,7 +231,7 @@ export async function preloadImage(props: {
     img.onerror = function (err) {
       reject(err);
     };
-    img.src = imageValues.url.url;
+    img.src = imageSrc.src!;
   });
 
   try {
@@ -239,14 +243,17 @@ export async function preloadImage(props: {
 
 export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
   const imageValues = props.values as ImageValues;
-  if (!imageValues.url.url || imageValues.url.isPlaceholder) {
+
+  if (!imageValues.image.image.sourceType) {
     return [];
   }
+
   return [
     {
-      url: imageValues.url.url,
-      fileName: imageValues.url.fileName,
-      type: "url",
+      id: imageValues.image.image.id,
+      url: imageValues.image.image.url,
+      filename: imageValues.image.filename,
+      sourceType: imageValues.image.image.sourceType,
     },
   ];
 };

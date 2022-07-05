@@ -24,9 +24,16 @@ async function downloadToBuffer(url) {
   return fetch(url).then((res) => res.buffer());
 }
 
+function appendToFileName(filename, appendStr) {
+  const idx = filename.lastIndexOf(".");
+  if (idx === -1) return filename + appendStr;
+  return filename.substr(0, idx) + appendStr + filename.substr(idx);
+}
+
 module.exports = {
   checkFileExists,
   getPlayerPath,
   getBucketPreviewPath,
   downloadToBuffer,
+  appendToFileName,
 };

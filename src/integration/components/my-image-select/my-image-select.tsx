@@ -49,6 +49,8 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         ? "video/mp4"
         : type === "vector"
         ? "image/svg+xml"
+        : type === "extension"
+        ? "application/zip"
         : undefined,
   });
   const [formData, setFormData] = useState<UploadFileInfo[]>([]);
@@ -125,6 +127,11 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
           ) : type === "vector" ? (
             <p>
               Drag 'n' drop some SVG files here, or click to open select dialog.
+            </p>
+          ) : type === "extension" ? (
+            <p>
+              Drag 'n' drop Extension ZIP file here, or click to open select
+              dialog.
             </p>
           ) : null}
         </div>
@@ -217,7 +224,7 @@ function UploadDialog(props: UploadDialogProps) {
   const totalFiles = files.length;
 
   const globalContext = useContext(IntegrationContext);
-  const { upload } = globalContext.useMyImagesHook();
+  const { upload } = globalContext.useMyMediaHook();
 
   const [currentUploadIndex, setCurrentUploadIndex] = useState(0);
 
@@ -233,20 +240,22 @@ function UploadDialog(props: UploadDialogProps) {
     const file = files[currentUploadIndex];
     const filesInfo = filesInfoArr[currentUploadIndex];
     //(file.name as any) = filesInfo.filename;
-    upload(type, file, { tags: [filesInfo.tag], title: filesInfo.title }).then(
-      (status) => {
-        if (isUnMounted.current) return;
+    upload(type, file, {
+      tags: [filesInfo.tag],
+      title: filesInfo.title,
+      filename: filesInfo.filename,
+    }).then((status) => {
+      if (isUnMounted.current) return;
 
-        onFile(file);
+      onFile(file);
 
-        if (currentUploadIndex + 1 === totalFiles) {
-          onAll();
-        } else {
-          // THIS WILL START NEXT FILE UPLOAD
-          setCurrentUploadIndex(currentUploadIndex + 1);
-        }
+      if (currentUploadIndex + 1 === totalFiles) {
+        onAll();
+      } else {
+        // THIS WILL START NEXT FILE UPLOAD
+        setCurrentUploadIndex(currentUploadIndex + 1);
       }
-    );
+    });
   }, [currentUploadIndex]);
 
   return (

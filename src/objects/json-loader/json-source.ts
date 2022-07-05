@@ -113,7 +113,7 @@ export function getJsonSourceHtml(
   isPlayer: boolean
 ) {
   const jsonSourceValues = object.definition.values as JsonSourceValues;
-  debugger;
+
   if (!isPlayer) {
     return `<div style="
       color: gray; 

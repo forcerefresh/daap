@@ -55,7 +55,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
-  const { saveProject, getNextProjectId } = globalContext.useAPIHook();
+  const { saveProject, getNextProjectId } = globalContext.useProjectHook();
 
   const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
 

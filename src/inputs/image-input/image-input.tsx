@@ -7,38 +7,36 @@ import {
   Position,
 } from "@blueprintjs/core";
 import { cloneDeep, noop } from "lodash-es";
-import React, { useContext, useRef, useState } from "react";
-import { IntegrationContext } from "../../integration";
+import React, { useEffect, useRef, useState } from "react";
 import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import {
   IImageInput,
+  IImageInputValue,
   IUpdateInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
+import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
+import { ImageItem } from "../../utils/assets/types";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop, onInput = noop } = props;
 
-  /*const globalContext = useContext(IntegrationContext);
-
-  const { requestMedia } = globalContext.useMediaHook();
-
-  const handleClick = () => {
-    requestMedia("image").then((mediaObject: { url: string }) => {
-      //const image = new Image();
-      //image.onload = function () {
-      //  console.log(image.width);
-      console.log(mediaObject);
-      onChange(mediaObject);
-      //};
-      //image.src = mediaObject.url;
-    });
-  };*/
-
   const [libraryOpen, setLibraryOpen] = useState(false);
+  const [previewSrc, setPreviewSrc] = useState("");
+
+  // we are using getMediaSrc to get image src
+  useEffect(() => {
+    /*const imageItem = getMediaSrc("image", value).then(
+      (imageItem: ImageItem) => {
+        setPreviewSrc(imageItem.src!);
+      }
+    );*/
+    const imageItem = getMediaSrc("image", value);
+    setPreviewSrc(imageItem.src!);
+  }, [value]);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
@@ -51,33 +49,41 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
     "bp3-overlay-scroll-container", // alert
   ]);
 
-  const onFileNameChange = (fileName: string) => {
+  const onFileNameChange = (filename: string) => {
     const newValue = cloneDeep(value);
-    newValue.fileName = fileName;
+    newValue.filename = filename;
     onChange(newValue);
   };
 
-  const fileName =
-    value.fileName === undefined ? extractFileName(value.url) : value.fileName;
+  const filename =
+    value.filename === undefined
+      ? extractFileName(value.image.filename!)
+      : value.filename; // TODO: ??
+
   return (
     <>
       <FormGroup label={displayName} labelFor="text-input" inline>
-        {value.url ? (
+        {previewSrc ? (
           <div
             className={css.previewHolder}
-            style={{ backgroundImage: `url(${value.url}` }}
+            style={{ backgroundImage: `url(${previewSrc}` }}
           ></div>
         ) : null}
-        {value.url.indexOf("data:") === -1 ? (
-          <div
-            className="bp3-text-small"
-            style={{ maxWidth: "250px", wordBreak: "break-all" }}
-          >
-            <a target="_blank" href={value.url}>
-              {value.url}
-            </a>
-          </div>
-        ) : null}
+        {
+          /* TODO */ value.image?.filename /* TODO: IMPORTANT */ ||
+          value.image?.url?.indexOf("data:") === -1 ? (
+            <div
+              className="bp3-text-small"
+              style={{ maxWidth: "250px", wordBreak: "break-all" }}
+            >
+              {value.image.url ? (
+                <a target="_blank" href={value.image.url}>
+                  {value.image.url}
+                </a>
+              ) : /*value.filename*/ null}
+            </div>
+          ) : null
+        }
 
         <Popover
           interactionKind={PopoverInteractionKind.CLICK}
@@ -107,23 +113,33 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
               }}
               className={css.mediaLibraryPanel}
               addObject={false}
-              onSelect={(item) => {
+              onSelect={(imageItem: { image: ImageItem }) => {
+                const newValue = cloneDeep(value);
+                newValue.image = imageItem.image;
+
+                /*
+                {
+                  image: (image?.images as any)[
+                    selectedResolution
+                  ],
+                }
+                /// 
                 const newValue = cloneDeep(value);
                 newValue.url = (item.initialValues as any).url;
-                newValue.fileName = extractFileName(newValue.url);
+                newValue.filename = extractFileName(newValue.url!); // TODO: fix
                 onChange(newValue);
-                setLibraryOpen(false);
+                setLibraryOpen(false);*/
               }}
               panelsToShow={[Panels.MyImages, Panels.Images]}
             />
           </div>
         </Popover>
       </FormGroup>
-      <FormGroup label={"File name"} labelFor="fileName" inline>
+      <FormGroup label={"File name"} labelFor="filename" inline>
         <InputGroup
-          id="fileName"
+          id="filename"
           placeholder=""
-          value={fileName}
+          value={filename}
           onChange={(event: any) => onFileNameChange(event.target.value)}
           onInput={(event: any) => onFileNameChange(event.target.value)}
           //onChange={(event: any) => onChange(event.target.value)}

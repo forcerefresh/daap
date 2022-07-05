@@ -1,9 +1,14 @@
-import { MediaDataInfo, ImageData } from "../../../utils/assets/types";
+import {
+  MediaDataInfo,
+  ImageData,
+  MediaType,
+} from "../../../utils/assets/types";
 import { file2Base64 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 
-export const myImagesHook = () => {
+export const useMyMediaHook = () => {
   const upload = async (
+    type: MediaType,
     file: File,
     fileMetadata: MediaDataInfo
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
@@ -13,7 +18,10 @@ export const myImagesHook = () => {
 
     return new Promise((resolve, reject) => {
       ipcRenderer
-        .invoke("myImagesUpload", JSON.stringify({ fileBase64, fileMetadata }))
+        .invoke(
+          "myImagesUpload",
+          JSON.stringify({ fileBase64, fileMetadata, type })
+        )
         .then((result: any) => {
           console.log(result);
           resolve(result);
@@ -61,6 +69,7 @@ export const myImagesHook = () => {
   };
 
   const fetchImages = async (props: {
+    type: MediaType;
     from: number;
     tag?: string;
     search?: string;

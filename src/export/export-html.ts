@@ -487,15 +487,15 @@ export function getObjectHtml(
 // OBJECT HTML CREATOR FUNCTIONS **********************
 
 export function getImageThumbnailHtml(object: IObject) {
-  const imageProperties = object.definition.values as ImageValues;
+  const imageValues = object.definition.values as ImageValues;
 
-  if (imageProperties.url.isPlaceholder) {
+  if (!imageValues.image.image.sourceType) {
     return `<div></div>`;
   }
 
   let style = "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.url}');`;
+  style += `background-image:url('${imageValues.image.image.src}');`; // TODO: IMPORTANT!!! Add promise
   style += `background-repeat:no-repeat;`;
   //style += `background-size: cover;`;
   style += `background-position: center center;`;
@@ -565,38 +565,39 @@ function getGridImageHtml(
   return `<div class="object-content" style="${style}"></div>`;
 }*/
 
+// TODO: should we remove this?
 function getSourceImageHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const imageProperties = object.definition.values as SourceImageValues;
+  const imageValues = object.definition.values as SourceImageValues;
 
-  if (imageProperties.url.isPlaceholder) {
+  if (!imageValues.url.image.sourceType) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
   }
 
-  let backgroundSize = (imageProperties.placement as ICoverPlacementValue)
-    .size as "cover" | "fit" | "100% 100%";
+  let backgroundSize = (imageValues.placement as ICoverPlacementValue).size as
+    | "cover"
+    | "fit"
+    | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
   if (backgroundSize === "fit") backgroundSize = "100% 100%";
-  const aH = (imageProperties.placement as ICoverPlacementValue)
-    .positionHorizontal;
-  const aV = (imageProperties.placement as ICoverPlacementValue)
-    .positionVertical;
+  const aH = (imageValues.placement as ICoverPlacementValue).positionHorizontal;
+  const aV = (imageValues.placement as ICoverPlacementValue).positionVertical;
 
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageProperties.url.url}');`;
+  style += `background-image:url('${imageValues.url.image.src}');`; //TODO: Important
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
-  style += `opacity: ${imageProperties.visible ? 1 : 0};`;
+  style += `opacity: ${imageValues.visible ? 1 : 0};`;
 
-  return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageProperties.id}" src="${imageProperties.url.url}"></div>`;
+  return `<div class="object-content" style="${style}"><img style="opacity:0;" id="${imageValues.id}" src="${imageValues.url.image.src}"></div>`; // TODO: important
 }
 
 export function replaceColors(svgSource: string, colors: RGBColor[]) {

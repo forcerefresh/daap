@@ -26,8 +26,15 @@ import { debounce, filter, noop, startsWith } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
-import { ImageData, MediaType, VideoData } from "../../utils/assets/types";
+import {
+  ImageData,
+  ImageItem,
+  MediaType,
+  VideoData,
+  VideoItem,
+} from "../../utils/assets/types";
 import TagsView from "../../utils/components/tags-view/TagsView";
+import { getMediaSrc } from "../../integration/utils/local-media";
 
 interface IMediaLibraryPanelProps {
   type: "image" | "video";
@@ -77,7 +84,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedResolution, setSelectedResolution] =
-    useState<string>("medium");
+    useState<string>("original");
 
   const [requestReload, setRequestReload] = useState<number>(0);
 
@@ -85,6 +92,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     ImageData[] | undefined
   >(undefined);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const [previewVideoSrc, setPreviewVideoSrc] = useState<string>("");
 
   const reload = () => {
     setRequestReload(requestReload + 1);
@@ -95,6 +104,24 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const resetImages = () => {
     setImages([]);
   };
+
+  // note: mutate existing data
+  const postProcessData = async (data: ImageData[]) => {
+    for (let i = 0; i < data.length; i++) {
+      const imageData = data[i];
+      const sizeKeys = Object.keys(imageData.images);
+      for (let j = 0; j < sizeKeys.length; j++) {
+        const iItem = (imageData.images as any)[sizeKeys[j]] as
+          | ImageItem
+          | undefined;
+
+        console.log(iItem);
+        const iItemWithSrc = getMediaSrc(type, iItem!);
+        (imageData.images as any)[sizeKeys[j]] = iItemWithSrc;
+      }
+    }
+  };
+
   const fetchData = (from = -1) => {
     setLoading(true);
 
@@ -109,10 +136,13 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       tags: Object.keys(selectedTags),
       perPage: 20,
     }).then(
-      (result) => {
+      async (result) => {
         console.log(result);
         console.log(images);
         const data = result.data || (result as any).photos;
+
+        await postProcessData(data);
+
         setImages([...images, ...data]);
         setLoading(false);
         setHasMore(result.hasMore);
@@ -203,7 +233,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         <img
           className={css.selectionImage}
           key={image + idx}
-          src={`${image.url}`}
+          src={`${getImageSrc(image)}`}
           alt=""
           onClick={(e) => {}}
         />
@@ -211,10 +241,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     );
   };
 
-  const getImageUrl = (path: string) => {
-    return startsWith(path, "data:")
-      ? path
-      : `${process.env.REACT_APP_ASSETS_BASE_URL}/${path}`;
+  const getImageSrc = (imageItem: ImageItem | undefined): string => {
+    return imageItem?.src || "";
   };
 
   return (
@@ -342,6 +370,13 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   portalClassName={"image-preview-popover"}
                   minimal
                   isOpen={selectedImage === idx}
+                  onOpened={async () => {
+                    const videoItem: VideoItem = await getMediaSrc(
+                      "video",
+                      (image as any as VideoData).videos.original
+                    );
+                    setPreviewVideoSrc(videoItem?.src || "");
+                  }}
                 >
                   <div
                     className={classnames(css.imageListHolder, {
@@ -351,10 +386,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     <img
                       width="200px"
                       key={idx}
-                      src={getImageUrl(
-                        image?.images?.small?.url ||
-                          (image as any).thumbnails?.small.url
-                      )}
+                      src={getImageSrc(image?.images?.small)}
                       alt=""
                       onClick={(e) => {
                         e.stopPropagation();
@@ -377,11 +409,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                         <img
                           style={{ maxHeight: "400px", maxWidth: "400px" }}
                           key={idx}
-                          src={getImageUrl(
-                            image.images?.medium?.url ||
-                              (image as any).thumbnails?.medium.url ||
-                              ""
-                          )}
+                          src={getImageSrc(image.images?.medium)}
                           alt=""
                         />
                       )}
@@ -391,7 +419,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           autoPlay
                           style={{ maxHeight: "400px", maxWidth: "400px" }}
                           key={idx}
-                          src={(image as any as VideoData).videos.original.url}
+                          src={previewVideoSrc}
                         />
                       )}
                     </div>
@@ -401,21 +429,21 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           <Text className={css.previewTitle}>
                             Chose resolution
                           </Text>
-                          {Object.entries(image.images).map(
-                            ([sizeAlias, oneimg]) => (
-                              <p>
-                                <Checkbox
-                                  checked={selectedResolution === sizeAlias}
-                                  onChange={() => {
-                                    setSelectedResolution(sizeAlias);
-                                  }}
-                                >
-                                  {oneimg?.size.width}px x {oneimg?.size.height}
-                                  px
-                                </Checkbox>
-                              </p>
-                            )
-                          )}
+                          {Object.entries<any>(
+                            ((image as any).videos as any) || image.images
+                          ).map(([sizeAlias, oneimg]) => (
+                            <p>
+                              <Checkbox
+                                checked={selectedResolution === sizeAlias}
+                                onChange={() => {
+                                  setSelectedResolution(sizeAlias);
+                                }}
+                              >
+                                {oneimg?.size.width}px x {oneimg?.size.height}
+                                px {sizeAlias === "original" && "(original)"}
+                              </Checkbox>
+                            </p>
+                          ))}
                         </>
                       )}
 
@@ -433,11 +461,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     "image", //cover
                                     {},
                                     {
-                                      url: getImageUrl(
-                                        (image?.images as any)[
+                                      image: {
+                                        image: (image?.images as any)[
                                           selectedResolution
-                                        ]?.url
-                                      ),
+                                        ],
+                                      },
                                     }
                                   );
                                 }
@@ -464,13 +492,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     "video", //cover
                                     {},
                                     {
-                                      url: {
-                                        url: (image as any as VideoData).videos
-                                          .original.url,
-                                        width: 960,
-                                        height: 540,
-                                        isPlaceholder: false,
-                                      },
+                                      video: (image as any).videos.original,
                                     }
                                   );
                                 }
@@ -490,13 +512,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             intent="primary"
                             onClick={() => {
                               onSelect?.({
-                                type: "image",
-                                initialValues: {
-                                  url: getImageUrl(
-                                    (image?.images as any)[selectedResolution]
-                                      ?.url
-                                  ),
-                                },
+                                image: (image?.images as any)[
+                                  selectedResolution
+                                ],
                               });
                               onRequestClose();
                             }}
@@ -534,9 +552,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             intent="primary"
                             onClick={() => {
                               addToSelection({
-                                url: getImageUrl(
+                                url: getImageSrc(
                                   (image?.images as any)[selectedResolution]
-                                    ?.url
                                 ),
                               });
                               setSelectedImage(-1);

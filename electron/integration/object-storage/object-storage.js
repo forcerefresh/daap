@@ -10,19 +10,21 @@ const {
   checkFileExists,
   getPlayerPath,
   getBucketPreviewPath,
-} = require("./utils");
-const { loadProject, loadExport } = require("./project");
+  downloadToBuffer,
+} = require("../../utils/utils");
+const {
+  loadProject,
+  loadExport,
+} = require("../../integration/project/project-utils");
 const { v4: uuid } = require("uuid");
 const AWS = require("aws-sdk");
 const { omit, without, chunk } = require("lodash");
 const keytar = require("keytar");
 const cloneDeep = require("clone-deep");
 var JSZip = require("jszip");
-const { downloadToBuffer } = require("./utils");
-
 const {
   getBucketManagerClass,
-} = require("./bucket-managers/bucket-manager-factory");
+} = require("../../bucket-managers/bucket-manager-factory");
 
 const PARALLEL_UPLOAD = 5; // for publish (download and upload)
 const PARALLEL_DOWNLOAD = 5; // for download
@@ -293,8 +295,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       var parsed = url.parse(assetUrl.url);
       let filename = path.basename(parsed.pathname);
       const extension = filename.substring(filename.indexOf("."));
-      if (assetUrl.fileName) {
-        filename = assetUrl.fileName + extension;
+      if (assetUrl.filename) {
+        filename = assetUrl.filename + extension;
       }
       pArr.push(
         bucketManager.uploadUrlToBucket(
@@ -440,8 +442,8 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         var parsed = url.parse(assetsUrlsChunk[idx].url);
         let filename = path.basename(parsed.pathname);
         const extension = filename.substring(filename.indexOf("."));
-        if (assetsUrlsChunk[idx].fileName) {
-          filename = assetsUrlsChunk[idx].fileName + extension;
+        if (assetsUrlsChunk[idx].filename) {
+          filename = assetsUrlsChunk[idx].filename + extension;
         }
 
         const zipFilePath = `${req.projectId}/assets/${filename}`;

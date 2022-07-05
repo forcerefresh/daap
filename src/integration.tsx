@@ -75,7 +75,7 @@ export const IntegrationContext = React.createContext({
     return <div></div>;
   }) as React.FC<getMyUploadComponentProps>,
 
-  useMyImagesHook: () => ({
+  useMyMediaHook: () => ({
     upload: (
       type: MediaType,
       file: File,
@@ -173,7 +173,7 @@ export const IntegrationContext = React.createContext({
       Promise.resolve({} as IMarketItem),
   }),
 
-  useAPIHook: () => ({
+  useProjectHook: () => ({
     /* returns project */
     getProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
@@ -209,7 +209,12 @@ export const IntegrationContext = React.createContext({
         html: string;
       };
       playerData: IPlayerData;
-      assetsUrls: { url: string; type: "url" | string }[];
+      assetsUrls: {
+        id?: string;
+        filename?: string;
+        url?: string;
+        sourceType?: "url" | "local" | string;
+      }[];
     }): Promise<{
       id: number;
       name: string;
@@ -278,12 +283,12 @@ function useObjectStorageFactory() {
   });
 }
 
-function useMyImagesHookFactory() {
+function useMyMediaHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/my-images/electron-my-images-hook")
-      .myImagesHook;
+    return require("./integration/hooks/my-media/electron-my-media-hook")
+      .useMyMediaHook;
   } else {
-    return require("./integration/hooks/my-images/my-images-hook").myImagesHook;
+    return require("./integration/hooks/my-media/my-media-hook").useMyMediaHook;
   }
 }
 
@@ -297,15 +302,17 @@ function useMediaHookFactory() {
   }
 }
 
-function useAPIHookFactory() {
+function useProjectHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
-    return require("./integration/hooks/api-hook/wp-use-api-hook").useAPIHook;
+    return require("./integration/hooks/project-hook/wp-use-project-hook")
+      .useProjectHook;
   }
   if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/api-hook/electron-use-api-hook")
-      .useAPIHook;
+    return require("./integration/hooks/project-hook/electron-use-project-hook")
+      .useProjectHook;
   } else {
-    return require("./integration/hooks/api-hook/use-api-hook").useAPIHook;
+    return require("./integration/hooks/project-hook/use-project-hook")
+      .useProjectHook;
   }
 }
 
@@ -366,9 +373,9 @@ export const IntegrationContextProvider = (
   return (
     <IntegrationContext.Provider
       value={{
-        useMyImagesHook: useMyImagesHookFactory(),
+        useMyMediaHook: useMyMediaHookFactory(),
         useMediaHook: useMediaHookFactory(),
-        useAPIHook: useAPIHookFactory(),
+        useProjectHook: useProjectHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),

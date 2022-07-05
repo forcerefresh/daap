@@ -219,7 +219,6 @@ export class Player {
     // WIDTH behaviour
     if (bp.normal.breakpoint.width.toMax) {
       _pageW = bounds.width;
-      //debugger;
     } else {
       _pageW = Math.min(_pageW, bounds.width);
     }
@@ -744,7 +743,6 @@ export class Player {
         tl.add(pTl, 0);
       });
       /*
-      debugger;
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getObjectDefinition(transitionData.itemType);
 

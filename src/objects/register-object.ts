@@ -255,8 +255,8 @@ registerObject(
   preloadMultiImage,
   undefined,
   undefined,
-  undefined,
-  getMultiImageAssetsUrls
+  undefined
+  //getMultiImageAssetsUrls // TODO: IMPORTANT
 );
 
 registerObject(

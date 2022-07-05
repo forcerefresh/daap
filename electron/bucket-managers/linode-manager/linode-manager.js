@@ -2,7 +2,7 @@ const AWS = require("aws-sdk");
 const fs = require("fs");
 var mime = require("mime-types");
 const fetch = require("node-fetch");
-const { downloadToBuffer } = require("../../utils");
+const { downloadToBuffer } = require("../../utils/utils");
 
 class LinodeManager {
   s3;

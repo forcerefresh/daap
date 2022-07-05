@@ -20,16 +20,18 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
+import { getMediaSrc } from "../../integration/utils/local-media";
+import { VideoItem } from "../../utils/assets/types";
 
 export const VIDEO = "video";
 
 export type VideoPropertiesTuple = [
-  IVideoInput<"url">,
+  IVideoInput<"video">,
   ...CommonPropertiesTuple
 ];
 
 export interface VideoValues extends CommonPropertiesValues {
-  url: IVideoInputValue;
+  video: IVideoInputValue;
 }
 
 export function createVideoObject(
@@ -47,27 +49,17 @@ export function createVideoObject(
 
   const properties: VideoPropertiesTuple = [
     {
-      displayName: "Video url",
-      propertyName: "url",
+      displayName: "Video",
+      propertyName: "video",
       inputType: InputType.VIDEO,
-      value: { url: "", width: 960, height: 540, isPlaceholder: true },
-      defaultValue: {
-        url: "",
-        width: 960,
-        height: 540,
-        isPlaceholder: true,
-      },
+      value: {},
+      defaultValue: {},
     },
     ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: VideoValues = {
-    url: initialValue?.url || {
-      url: "",
-      width: 960,
-      height: 540,
-      isPlaceholder: true,
-    },
+    video: initialValue?.video || {},
     ...getCommonPropertiesValues(),
   };
 
@@ -93,10 +85,10 @@ export function getVideoHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const videoProperties = object.definition.values as VideoValues;
+  const videoValues = object.definition.values as VideoValues;
 
   if (!isPlayer) {
-    if (!videoProperties.url) {
+    if (!videoValues.video.url && !videoValues.video.filename) {
       return getObjectPlaceholder(`VIDEO<br/>(placeholder)`);
     }
   }
@@ -110,8 +102,14 @@ export function getVideoHtml(
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
-  const url = videoProperties.url.url;
-  const videoHtml = `<video style="${style}" ${attrs}><source src="${url}" type="video/mp4"></video>`;
+  const videoHtml = `<video style="${style}" ${attrs}><source class="video-source-${object.id}" type="video/mp4"></video>`;
+
+  /*getMediaSrc("video", videoValues.video).then((videoItem: VideoItem) => {
+    const el = document.getElementsByClassName(`video-source-${object.id}`)[0];
+    if (el) {
+      (el as HTMLSourceElement).src = videoItem.src!;
+    }
+  });*/
 
   return videoHtml;
 }

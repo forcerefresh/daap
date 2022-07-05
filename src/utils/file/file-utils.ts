@@ -39,3 +39,9 @@ export function downloadBlob(blob: any, name = "file.zip") {
   // Remove link from body
   document.body.removeChild(link);
 }
+
+export function appendToFileName(fileName: string, appendStr: string) {
+  const idx = fileName.lastIndexOf(".");
+  if (idx === -1) return fileName + appendStr;
+  return fileName.substr(0, idx) + appendStr + fileName.substr(idx);
+}

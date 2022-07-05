@@ -1,7 +1,7 @@
 import React from "react";
 
 // TODO: implement this !
-export const useAPIHook = () => {
+export const useProjectHook = () => {
   const getProjects = (type: "image" | "video"): Promise<any> => {
     return new Promise((resolve) => {
       resolve({

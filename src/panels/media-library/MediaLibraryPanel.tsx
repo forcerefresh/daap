@@ -64,7 +64,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const UploadComponent = globalContext?.getMyUploadComponent;
 
-  const { fetchImages, deleteImages } = globalContext.useMyImagesHook();
+  const { fetchImages, deleteImages } = globalContext.useMyMediaHook();
 
   const [forceUpdate, setForceUpdate] = useState(0);
 

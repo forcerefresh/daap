@@ -38,6 +38,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
     uninstallMarketItem,
     getInstalledMarketItems,
   } = globalContext.useMarketplaceHook();
+  const UploadComponent = globalContext?.getMyUploadComponent;
 
   useEffect(() => {
     (() => {
@@ -132,6 +133,15 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
   }
   return (
     <div className={css.marketplacePanel}>
+      <UploadComponent
+        type="extension"
+        onComplete={() => {
+          //setForceUpdate(Math.random());
+        }}
+        onStop={() => {
+          //setForceUpdate(Math.random());
+        }}
+      />
       <div className={css.headerSection}>
         <InputGroup
           large

@@ -1,9 +1,8 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
-const { forEach, remove } = require("lodash");
-const { checkFileExists } = require("./utils.js");
+const { checkFileExists } = require("../../utils/utils.js");
 
 async function loadProject(id) {
   const projects = await loadProjects();
