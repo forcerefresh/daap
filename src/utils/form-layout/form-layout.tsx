@@ -199,7 +199,10 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       {form.map((formItem, indexInArray) => {
         if (formItem.type === FormType.GROUP) {
           return (
-            <div className={css.formSections}>
+            <div
+              key={"group_" + formItem.propertyName}
+              className={css.formSections}
+            >
               {renderPanel(
                 formItem.displayName,
                 formItem.optional,
@@ -219,7 +222,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
           );
         } else if (formItem.type === FormType.SWITCH_GROUP) {
           return (
-            <>
+            <div key={"switch_group_" + formItem.propertyName}>
               {findInputWithWrapper(
                 formItem.propertyName,
                 inputs,
@@ -230,7 +233,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
                 formItem.groups!,
                 values
               )}
-            </>
+            </div>
           );
         }
         return null;
@@ -340,7 +343,7 @@ const findInputWithWrapper = (
   duplicate = ""
 ): React.ReactElement | undefined => {
   return (
-    <div className={css.input}>
+    <div key={"input_with_wrapper_" + propertyName} className={css.input}>
       {findInput(propertyName, inputs, duplicate)}
     </div>
   );

@@ -1,4 +1,7 @@
-import { MediaItem, MediaType } from "../../../utils/assets/types";
+import {
+  MediaItem,
+  MediaType,
+} from "../../../webslider-sdk/src/common/i-media-types";
 
 let localMedia: {
   getMediaSrc: (type: MediaType, mediaItem: MediaItem) => MediaItem;

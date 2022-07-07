@@ -21,7 +21,10 @@ import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, noop, uniq } from "lodash-es";
-import { MediaType, VectorData } from "../../utils/assets/types";
+import {
+  MediaType,
+  VectorData,
+} from "../../webslider-sdk/src/common/i-media-types";
 import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";

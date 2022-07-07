@@ -591,14 +591,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const layerClassName = "layer-" + layer.id;
 
     let layerCss = "";
-    console.log(layerCss);
+    //console.log(layerCss);
     if (layerValues.layoutChildren.itemsGap.type === "common") {
       layerCss += `
       .${layerClassName} > * {
         margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
       }
     `;
-      console.log(layerCss);
+      //console.log(layerCss);
     } else {
       layerValues.layoutChildren.itemsGap.eachValues.forEach(
         (eachValue, idx) => {
@@ -608,19 +608,19 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         `;
         }
       );
-      console.log(layerCss);
+      //console.log(layerCss);
     }
 
-    console.log(layerCss);
+    //console.log(layerCss);
 
     layerCss += `.${layerClassName} {
      ${addCommonPropertiesToStyle("", layer)}
      z-index: 100;
     }`;
 
-    console.log(layerCss);
+    //console.log(layerCss);
     return (
-      <>
+      <div key={layer.id}>
         <style>{layerCss}</style>
         <div
           className={cx(layerClassName, "LAYER", {
@@ -636,7 +636,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             return renderObject(object, layoutChildren);
           })}
         </div>
-      </>
+      </div>
     );
   }
 
@@ -686,6 +686,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       return (
         <div
+          key={object.id}
           style={objectHolderStyle}
           className="NOT_isSelected_OR_NOT_isAbsolutePosition"
         >
@@ -1159,6 +1160,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     return (
       <div
+        key={layer.id}
         className={cx(
           css.layerMoveForResizerWTF,
           { [css.layerMoveForResizerWTFActive]: isLayerActive && hasLayout },

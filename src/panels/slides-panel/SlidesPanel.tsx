@@ -223,7 +223,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             const slide = slideById[slideId];
             const isLastSlide = idx === normalSlides.length - 1;
             return (
-              <>
+              <div key={slideId}>
                 {isDraggingSlides && selectedSlideIds.indexOf(slide.id) === -1 && (
                   <DropHandle
                     type={"slide"}
@@ -276,7 +276,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     }}
                   />
                 )}
-              </>
+              </div>
             );
           })}
         </div>

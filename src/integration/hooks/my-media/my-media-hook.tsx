@@ -7,7 +7,7 @@ import {
   VectorData,
   VideoData,
   ExtesnsionData,
-} from "../../../utils/assets/types";
+} from "../../../webslider-sdk/src/common/i-media-types";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { v4 as uuid } from "uuid";
 import { remove } from "lodash-es";
@@ -215,7 +215,7 @@ export const useMyMediaHook = () => {
 
     console.log(myImages.length);
     console.log(props);
-    const retArr = [...myImages].splice(from, from + perPage);
+    const retArr = [...myImages].splice(from, perPage);
 
     console.log(myImages.length);
     console.log(from + perPage);

@@ -21,7 +21,7 @@ import {
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { VideoItem } from "../../utils/assets/types";
+import { VideoItem } from "../../webslider-sdk/src/common/i-media-types";
 
 export const VIDEO = "video";
 

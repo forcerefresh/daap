@@ -50,7 +50,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   };
 
   useEventListener("keydown", (event: any) => {
-    console.log(event.keyCode);
     if (event.keyCode === 27) {
       setState({
         ...state,

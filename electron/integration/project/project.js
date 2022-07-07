@@ -105,7 +105,7 @@ ipcMain.handle("apiGetProjects", async (event, dataStr) => {
 
   projects.reverse();
 
-  const retArr = projects.splice(from, from + perPage);
+  const retArr = projects.splice(from, perPage);
 
   return { projects: retArr };
 });

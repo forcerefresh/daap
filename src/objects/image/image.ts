@@ -24,7 +24,7 @@ import {
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { ImageItem } from "../../utils/assets/types";
+import { ImageItem } from "../../webslider-sdk/src/common/i-media-types";
 
 export const IMAGE = "image";
 
@@ -102,7 +102,7 @@ export function createImageObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    image: initialValue?.image || {},
+    image: initialValue?.image || { image: {} },
     useForThumbnail: false,
     preload: true,
     ...getCommonPropertiesValues(),
@@ -173,8 +173,6 @@ export function getImageHtml(
     }
   });*/
   const imageItem = getMediaSrc("image", imageValues.image.image);
-
-  console.log(imageItem);
 
   style += `background-image:url('${imageItem.src}');`;
 

@@ -32,7 +32,7 @@ import {
   MediaType,
   VideoData,
   VideoItem,
-} from "../../utils/assets/types";
+} from "../../webslider-sdk/src/common/i-media-types";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 
@@ -115,7 +115,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           | ImageItem
           | undefined;
 
-        console.log(iItem);
         const iItemWithSrc = getMediaSrc(type, iItem!);
         (imageData.images as any)[sizeKeys[j]] = iItemWithSrc;
       }
@@ -129,6 +128,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
     console.log(images);
 
+    console.log(from);
     fetchImagesFunc({
       type: type,
       from,

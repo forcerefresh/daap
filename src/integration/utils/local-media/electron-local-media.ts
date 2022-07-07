@@ -1,10 +1,24 @@
-import { MediaItem, MediaType } from "../../../utils/assets/types";
+import {
+  MediaItem,
+  MediaType,
+} from "../../../webslider-sdk/src/common/i-media-types";
 
 export function getMediaSrc(type: MediaType, mediaItem: MediaItem): MediaItem {
   const { ipcRenderer } = window.require("electron");
 
-  return ipcRenderer.sendSync(
-    "getMediaSrc",
-    JSON.stringify({ type, mediaItem })
-  );
+  if (mediaItem.url) {
+    return {
+      ...mediaItem,
+      src: mediaItem.url,
+    };
+  }
+
+  if (mediaItem.sourceType === "local") {
+    return ipcRenderer.sendSync(
+      "getMediaSrc",
+      JSON.stringify({ type, mediaItem })
+    );
+  }
+
+  return mediaItem;
 }

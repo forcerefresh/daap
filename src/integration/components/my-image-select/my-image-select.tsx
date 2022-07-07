@@ -8,7 +8,10 @@ import {
   getMyUploadComponentProps,
   IntegrationContext,
 } from "../../../integration";
-import { MediaDataInfo, MediaType } from "../../../utils/assets/types";
+import {
+  MediaDataInfo,
+  MediaType,
+} from "../../../webslider-sdk/src/common/i-media-types";
 import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
 import { getImageTags } from "../../../utils/tags/tags";
 import { formatBytes, getCroppedFileName } from "../../../utils/utils";

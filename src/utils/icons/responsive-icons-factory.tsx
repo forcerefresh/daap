@@ -17,6 +17,7 @@ export function getResponsiveIcon(
     case "phone":
       return (
         <PhoneIcon
+          key={icon}
           style={{
             width: w ? w : "30px",
             height: h ? h : "30px",
@@ -29,6 +30,7 @@ export function getResponsiveIcon(
     case "tablet":
       return (
         <TabletIcon
+          key={icon}
           style={{
             width: w ? w : "36px",
             height: h ? h : "36px",
@@ -41,6 +43,7 @@ export function getResponsiveIcon(
     case "laptop":
       return (
         <LaptopIcon
+          key={icon}
           style={{
             width: w ? w : "56px",
             height: h ? h : "56px",
@@ -53,6 +56,7 @@ export function getResponsiveIcon(
     case "desktop":
       return (
         <MonitorIcon
+          key={icon}
           style={{
             width: w ? w : "56px",
             height: h ? h : "56px",

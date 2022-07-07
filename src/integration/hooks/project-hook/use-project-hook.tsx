@@ -49,7 +49,7 @@ export const useProjectHook = () => {
         console.log(item.name.indexOf(search) !== -1);
         return !search || item.name.indexOf(search) !== -1;
       })
-      .splice(from, from + perPage);
+      .splice(from, perPage);
 
     return new Promise((resolve) => {
       resolve({ projects: retArr });

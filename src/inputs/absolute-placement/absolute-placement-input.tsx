@@ -291,7 +291,7 @@ export const AbsolutePlacementForm: React.FC<
             </tr>
             {bcArr.map((bc) => {
               return (
-                <tr>
+                <tr key={bc.type}>
                   <td>
                     <Button
                       minimal

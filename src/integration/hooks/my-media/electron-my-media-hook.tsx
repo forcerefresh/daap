@@ -2,7 +2,7 @@ import {
   MediaDataInfo,
   ImageData,
   MediaType,
-} from "../../../utils/assets/types";
+} from "../../../webslider-sdk/src/common/i-media-types";
 import { file2Base64 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 

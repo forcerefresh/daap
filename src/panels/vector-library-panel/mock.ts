@@ -1,4 +1,4 @@
-import { VectorData } from "../../utils/assets/types";
+import { VectorData } from "../../webslider-sdk/src/common/i-media-types";
 
 const dataArr: VectorData[] = [
   {

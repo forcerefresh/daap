@@ -9,7 +9,10 @@ import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
 import { ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import { IntegrationContext } from "../../integration";
-import { ImageData, VectorData } from "../../utils/assets/types";
+import {
+  ImageData,
+  VectorData,
+} from "../../webslider-sdk/src/common/i-media-types";
 import { fetchMock } from "../vector-library-panel/mock";
 
 export enum Panels {

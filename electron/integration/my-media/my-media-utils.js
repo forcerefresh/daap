@@ -87,12 +87,14 @@ async function processImage(fileBase64, type, fileMetadata) {
     .resize({ width: 1500 })
     .toFile(myImagePath1500);
 
+  const id = uuid();
   const item = {
-    id: uuid(),
+    id,
     ...fileMetadata,
     images: {
       thumbnail: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_80"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_80"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "thumbnail",
@@ -103,7 +105,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       small: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_150"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_150"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "small",
@@ -114,7 +117,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       medium: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_300"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_300"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "medium",
@@ -126,7 +130,8 @@ async function processImage(fileBase64, type, fileMetadata) {
       },
 
       large: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_600"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_600"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "large",
@@ -137,7 +142,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       xlarge: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_900"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_900"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "xlarge",
@@ -148,7 +154,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       xxlarge: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_1200"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_1200"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "xxlarge",
@@ -159,7 +166,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       xxxlarge: {
-        filename: "file:" + appendToFileName(fileMetadata.filename, "_1500"),
+        id,
+        filename: appendToFileName(fileMetadata.filename, "_1500"),
         mediaType: "image",
         sourceType: "local",
         sizeType: "xxxlarge",
@@ -170,7 +178,8 @@ async function processImage(fileBase64, type, fileMetadata) {
         },
       },
       original: {
-        filename: "file:" + fileMetadata.filename,
+        id,
+        filename: fileMetadata.filename,
         mediaType: "image",
         sourceType: "local",
         sizeType: "original",

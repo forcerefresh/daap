@@ -38,7 +38,6 @@ export const useDevelopmentHook = () => {
     const itemIndex = items.findIndex((curr) => curr.id === item.id);
     items[itemIndex] = { ...items[itemIndex], ...item };
 
-    console.log(items);
     setDevelopmentItems(items);
 
     localStorage.setItem(`development`, JSON.stringify(items));

@@ -1,5 +1,8 @@
 // used for dev mode only
-import { MediaItem, MediaType } from "../../../utils/assets/types";
+import {
+  MediaItem,
+  MediaType,
+} from "../../../webslider-sdk/src/common/i-media-types";
 
 /**
  * used for dev mode only, returns image from local storage
@@ -15,13 +18,21 @@ export function getMediaSrc(type: MediaType, mediaItem: MediaItem): MediaItem {
 
   switch (type) {
     case "image": {
-      if (!mediaItem?.id) {
-        return {};
+      if (mediaItem.sourceType === "url") {
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
       }
-      return {
-        ...mediaItem,
-        src: myMediaStorage[mediaItem.id][mediaItem.sizeType!],
-      };
+
+      if (mediaItem.sourceType === "local") {
+        return {
+          ...mediaItem,
+          src: myMediaStorage[mediaItem.id!][mediaItem.sizeType!],
+        };
+      }
+
+      return mediaItem;
     }
     case "video": {
       // NOTE: for video we are storing video and  preview images as well

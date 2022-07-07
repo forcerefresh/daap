@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { isEqual } from "lodash-es";
 import React, { useContext, useEffect, useRef } from "react";
 import { connect } from "react-redux";
@@ -21,6 +22,9 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   const developmentItemsRef = useRef<DevelopmentItem[]>(developmentItems);
   developmentItemsRef.current = [...developmentItems];
 
+  const hashsRef = useRef<{ [key: string]: string }>({});
+  //hashsRef.current = {};
+
   useEffect(() => {
     if (globals.enableDeveloper) {
       getAll();
@@ -30,22 +34,24 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   }, [globals.enableDeveloper]);
 
   useEffect(() => {
-    console.log("DEVELOPMENT ITEMS CHANGE EFFECT");
+    //console.log("DEVELOPMENT ITEMS CHANGE EFFECT");
     //developmentItemsRef.current = [...developmentItems];
   }, [developmentItems]);
 
   const importAll = async () => {
     const devItems = developmentItemsRef.current;
-    console.log("importAll");
-    console.log(devItems);
+    //console.log("importAll");
+    //console.log(devItems);
 
     let hasUpdate = false;
     for (let i = 0; i < devItems.length; i++) {
       const devItem = devItems[i];
 
-      console.log(devItem);
+      //console.log(devItem);
+
       if (!devItem.monitoringEnabled) return;
-      console.log(devItem);
+
+      //console.log(devItem);
 
       /* if (
         isEqual(currentStateRef.current[devItem.id], devItem) &&
@@ -54,11 +60,35 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         console.log("EQUAL OR ERROR");
         return;
       }*/
-      console.log(devItem);
+      //console.log(devItem);
+
+      const urlPathArr = devItems[i].devUrl.split("/");
+      urlPathArr.pop();
+      const hashUrl = urlPathArr.join("/") + "/hash.json";
+      // console.log(hashUrl);
+
+      const hashJson = await (await fetch(hashUrl)).json();
+      ///console.log(hashJson);
+
+      if (hashsRef.current[devItem.type] === hashJson.hash) {
+        continue;
+      }
+
+      console.log(
+        `Development Component (${devItem.type}) has been changed. Reloading...`
+      );
+
+      hashsRef.current = {
+        ...hashsRef.current,
+        [devItem.type]: hashJson.hash,
+      };
+
+      //console.log(devItem);
 
       hasUpdate = true;
 
       try {
+        //console.log(devItems[i], "Load ");
         await import(
           /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].devUrl +
             "?" +
@@ -75,6 +105,10 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         global.registerExternalObject(
           { ...global.objects[devItems[i].type], development: true },
           true
+        );
+
+        console.log(
+          `Development Component (${devItems[i].type}) has been loaded.`
         );
       } catch (err: any) {
         console.error(err);
@@ -97,9 +131,17 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   const restartDevelopmentInterval = () => {
     stopDevelopmentInterval();
 
-    loadModulesInt.current = setInterval(async () => {
+    const importAllPromise = async () => {
       const hasUpdate = await importAll();
       if (hasUpdate) store.dispatch(forceRefresh());
+    };
+
+    importAllPromise().then(() => {
+      console.log("DONE!!!");
+    });
+
+    loadModulesInt.current = setInterval(async () => {
+      await importAllPromise();
     }, 2000);
   };
 

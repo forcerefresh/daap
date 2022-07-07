@@ -5,7 +5,10 @@ import { MyImageSelect } from "./integration/components/my-image-select/my-image
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import { IMarketItem } from "./webslider-sdk/src/objects/i-marketplace";
 import { IAppSettings } from "./store/reducers/globals";
-import { MediaDataInfo, MediaType } from "./utils/assets/types";
+import {
+  MediaDataInfo,
+  MediaType,
+} from "./webslider-sdk/src/common/i-media-types";
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
 
 export interface getMyUploadComponentProps {

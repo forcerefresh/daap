@@ -7,7 +7,10 @@ import {
   selectForPropertiesProps,
 } from "../../store/actions/actions";
 import { Button, Checkbox, Icon, Popover } from "@blueprintjs/core";
-import { Breakpoints } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import {
+  BreakpointConfiguration,
+  Breakpoints,
+} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
 import { cloneDeep, includes, remove } from "lodash-es";
 import { getIconByType } from "../../store/reducers/settings";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
@@ -129,7 +132,7 @@ export function LayerRow(props: ILayerRowProps) {
 
   const renderDeviceOptions = (layer: ILayer) => {
     return breakpointsConfiguration.breakpointsConfiguration.map(
-      (bpConfig: any) => {
+      (bpConfig: BreakpointConfiguration) => {
         const iconName = getIconByType(bpConfig.type);
         const size = getIconSize(iconName);
 
@@ -143,6 +146,7 @@ export function LayerRow(props: ILayerRowProps) {
 
         return (
           <Checkbox
+            key={bpConfig.type}
             disabled={layer.responsiveVisibility.showAll}
             checked={
               layer.responsiveVisibility.showAll ||

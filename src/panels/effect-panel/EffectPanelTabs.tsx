@@ -72,10 +72,6 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     slide: 0,
   });
 
-  console.log(id);
-
-  console.log(sections);
-
   let item: any | undefined;
   let transitions: ITransitions | undefined;
   if (id) {
@@ -167,6 +163,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
 
     return (
       <Tab
+        key={section}
         className={css.tab}
         defaultChecked={true}
         id={section}
@@ -193,9 +190,8 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                     {
                       label: `Add ${section.toLocaleUpperCase()} animation to object...`,
                       value: "",
-                      readonly: true,
+                      readOnly: true,
                     },
-
                     {
                       label: "Attribute effects",
                       value: "Disabled1",
