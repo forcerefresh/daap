@@ -19,6 +19,7 @@ import {
 import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
 import { ImageItem } from "../../webslider-sdk/src/common/i-media-types";
+import { getButtonGroupField, getTextArea, getTextField } from "../input-utils";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
@@ -48,6 +49,13 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
     onChange(newValue);
   };
 
+  const onUrlChange = (url: string) => {
+    console.log(url);
+    const newValue = cloneDeep(value);
+    newValue.image.url = url;
+    onChange(newValue);
+  };
+
   const filename =
     value.filename === undefined
       ? extractFileName(value.image.filename!)
@@ -55,7 +63,26 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
 
   return (
     <>
-      <FormGroup label={displayName} labelFor="text-input" inline>
+      <FormGroup
+        label={displayName}
+        labelFor="text-input"
+        inline
+        className={css.main}
+      >
+        {getButtonGroupField(
+          "",
+          value.image.sourceType || "local",
+          (sourceType: string) => {
+            const valueClone = cloneDeep(value);
+            valueClone.image.sourceType = sourceType;
+            onChange(valueClone);
+          },
+          [
+            { value: "local", label: "Local" },
+            { value: "library", label: "Library" },
+            { value: "url", label: "Url" },
+          ]
+        )}
         {previewSrc ? (
           <>
             <div
@@ -69,7 +96,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             )}
           </>
         ) : null}
-        {value.image?.url ? (
+        {value.image.sourceType === "library" ? (
           <div
             className="bp3-text-small"
             style={{ maxWidth: "250px", wordBreak: "break-all" }}
@@ -82,63 +109,97 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
           </div>
         ) : null}
 
-        <Popover
-          interactionKind={PopoverInteractionKind.CLICK}
-          position={Position.LEFT}
-          modifiers={{ preventOverflow: { enabled: true } }}
-          boundary={"window"}
-          usePortal={true}
-          minimal
-          popoverClassName={css.mediaLibraryPanelPopup}
-          isOpen={libraryOpen}
-        >
-          <Button
-            small
+        {value.image.sourceType === "url"
+          ? getTextArea(
+              "",
+              value.image.url,
+              (url) => {
+                onUrlChange(url || "");
+              },
+              "",
+              {
+                disabledDebounce: true,
+              }
+            )
+          : null}
+
+        {value.image.sourceType === "local" ||
+        value.image.sourceType === "library" ? (
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.LEFT}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            boundary={"window"}
+            usePortal={true}
             minimal
-            className={css.browseButton}
-            icon={"folder-open"}
-            onClick={() => {
-              setLibraryOpen(true);
-            }}
+            popoverClassName={css.mediaLibraryPanelPopup}
+            isOpen={libraryOpen}
           >
-            Browse
-          </Button>
-          <div ref={sharedRef}>
-            <MediaLibraryPanel
-              onRequestClose={() => {
-                setLibraryOpen(false);
+            <Button
+              small
+              minimal
+              className={css.browseButton}
+              icon={"folder-open"}
+              onClick={() => {
+                setLibraryOpen(true);
               }}
-              className={css.mediaLibraryPanel}
-              addObject={false}
-              onSelect={(imageItem: { image: ImageItem }) => {
-                const newValue = cloneDeep(value);
-                newValue.image = imageItem.image;
-                newValue.filename = extractFileName(imageItem.image.filename!);
-                onChange(newValue);
-                setLibraryOpen(false);
-              }}
-              panelsToShow={[Panels.MyImages, Panels.Images]}
-            />
-          </div>
-        </Popover>
+            >
+              Browse
+            </Button>
+            <div ref={sharedRef}>
+              <MediaLibraryPanel
+                onRequestClose={() => {
+                  setLibraryOpen(false);
+                }}
+                className={css.mediaLibraryPanel}
+                addObject={false}
+                onSelect={(imageItem: { image: ImageItem }) => {
+                  console.log(imageItem);
+
+                  const newValue = cloneDeep(value);
+                  newValue.image = imageItem.image;
+                  newValue.filename = extractFileName(
+                    imageItem.image.filename!
+                  );
+                  console.log(newValue);
+                  onChange(newValue);
+                  setLibraryOpen(false);
+                }}
+                panelsToShow={[
+                  ...(value.image.sourceType === "local"
+                    ? [Panels.MyImages]
+                    : []),
+                  ...(value.image.sourceType === "library"
+                    ? [Panels.Images]
+                    : []),
+                ]}
+              />
+            </div>
+          </Popover>
+        ) : null}
       </FormGroup>
-      <FormGroup label={"File name"} labelFor="filename" inline>
-        <InputGroup
-          id="filename"
-          placeholder=""
-          value={filename}
-          onChange={(event: any) => onFileNameChange(event.target.value)}
-          onInput={(event: any) => onFileNameChange(event.target.value)}
-        />
-      </FormGroup>
+
+      {value.image.sourceType === "local" ||
+      value.image.sourceType === "library" ? (
+        <div className={css.fileNameHolder}>
+          {getTextField("Filename", filename, onFileNameChange, "", {
+            disabled:
+              (value.image.sourceType === "local" && !value.image.id) ||
+              (value.image.sourceType === "library" && !value.image.url),
+          })}
+        </div>
+      ) : null}
     </>
   );
 };
 
-function extractFileName(url: string) {
+function extractFileName(filename: string) {
+  return filename;
+
   try {
-    const parts = url.split("/");
-    return parts[parts.length - 1].split(".")[0];
+    const idx = filename.lastIndexOf(".");
+    if (idx === -1) return filename;
+    return filename.substr(0, idx);
   } catch (ex: any) {
     return "";
   }

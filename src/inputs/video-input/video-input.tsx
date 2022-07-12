@@ -7,7 +7,8 @@ import {
   Position,
 } from "@blueprintjs/core";
 import { cloneDeep, noop } from "lodash-es";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { getMediaSrc } from "../../integration/utils/local-media";
 import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
@@ -16,12 +17,15 @@ import {
   IUpdateInput,
   IVideoInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
+import { getButtonGroupField } from "../input-utils";
 import css from "./video-input.module.scss";
 
 export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
 
   const [libraryOpen, setLibraryOpen] = useState(false);
+
+  const previewSrc = getMediaSrc("image", value.previewImage!)?.src;
 
   // logic for handling click outside
   const sharedRef = useRef(null);
@@ -36,12 +40,32 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
 
   return (
     <FormGroup label={displayName} labelFor="text-input" inline>
-      <InputGroup
-        readOnly={true}
-        id="text-input"
-        placeholder=""
-        value={value.filename || value.url}
-      />
+      {getButtonGroupField(
+        "",
+        value.video.sourceType || "local",
+        (sourceType: string) => {
+          const valueClone = cloneDeep(value);
+          valueClone.video.sourceType = sourceType;
+          onChange(valueClone);
+        },
+        [
+          { value: "local", label: "Local" },
+          { value: "url", label: "Url" },
+        ]
+      )}
+      {previewSrc ? (
+        <>
+          <div
+            className={css.previewHolder}
+            style={{ backgroundImage: `url(${previewSrc}` }}
+          ></div>
+          {value.video.size && (
+            <div>
+              {value.video.size?.width}px X {value.video.size?.height}px
+            </div>
+          )}
+        </>
+      ) : null}
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
         position={Position.LEFT}
@@ -70,12 +94,13 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
             }}
             className={css.mediaLibraryPanel}
             addObject={false}
-            onSelect={(item) => {
-              /* const newValue = cloneDeep(value);
-              newValue.url = (item.initialValues as any).url;
-              onChange(newValue);*/
+            onSelect={(videoItem) => {
+              const newValue = cloneDeep(value);
+              newValue.video = videoItem.video;
+              newValue.previewImage = videoItem.previewImage;
+              newValue.filename = videoItem.video.filename!; //extractFileName(videoItem.video.filename!);
 
-              onChange(item.initialValues as any);
+              onChange(newValue);
               setLibraryOpen(false);
             }}
             panelsToShow={[Panels.MyVideos]}

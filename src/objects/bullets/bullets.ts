@@ -625,13 +625,14 @@ export function createBulletsObject(initialValue?: {
   };
 }
 
-export function getBulletsHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean,
-  thumbnailHtmlArr: (string | undefined)[] = [],
-  slidesCounter: number = 3
-) {
+export function getBulletsHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+  thumbnailHtmlArr?: (string | undefined)[];
+  slidesCounter?: number;
+}) {
+  const { object, slidesCounter = 3, thumbnailHtmlArr = [] } = props;
   const buttonProperties = object.definition.values as BulletsValues;
 
   let style = "";

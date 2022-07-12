@@ -86,11 +86,13 @@ export function createHtmlObject(
   };
 }
 
-export function getHtmlHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getHtmlHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, isPlayer } = props;
+
   const htmlValues = object.definition.values as HtmlValues;
   const htmlValuesMetadata = object.definition.valuesMetadata;
 

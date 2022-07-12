@@ -1,4 +1,5 @@
 const fs = require("fs");
+const fsPromise = require("fs/promises");
 const { app } = require("electron");
 const path = require("path");
 const fetch = require("node-fetch");
@@ -15,6 +16,11 @@ function getPlayerPath() {
   return path.join(userDataPath, "player", "wsplayer", app.getVersion());
 }
 
+function getMyImagesPath() {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "my-media", "my-images");
+}
+
 function getBucketPreviewPath() {
   const userDataPath = app.getPath("userData");
   return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
@@ -22,6 +28,10 @@ function getBucketPreviewPath() {
 
 async function downloadToBuffer(url) {
   return fetch(url).then((res) => res.buffer());
+}
+
+async function fileToBuffer(filePath) {
+  return fsPromise.readFile(filePath);
 }
 
 function appendToFileName(filename, appendStr) {
@@ -36,4 +46,6 @@ module.exports = {
   getBucketPreviewPath,
   downloadToBuffer,
   appendToFileName,
+  getMyImagesPath,
+  fileToBuffer,
 };

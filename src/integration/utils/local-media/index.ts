@@ -4,9 +4,17 @@ import {
 } from "../../../webslider-sdk/src/common/i-media-types";
 
 let localMedia: {
-  getMediaSrc: (type: MediaType, mediaItem: MediaItem) => MediaItem;
+  getMediaSrc: (
+    type: MediaType,
+    mediaItem: MediaItem,
+    options?: { useId?: boolean; filename?: string }
+  ) => MediaItem;
 } = {
-  getMediaSrc: (type: MediaType, mediaItem: any) => ({}),
+  getMediaSrc: (
+    type: MediaType,
+    mediaItem: any,
+    options?: { useId?: boolean; filename?: string }
+  ) => ({}),
 };
 
 if (process.env.REACT_APP_INTEGRATION === "electron") {

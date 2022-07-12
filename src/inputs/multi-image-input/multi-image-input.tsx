@@ -8,6 +8,7 @@ import {
 } from "@blueprintjs/core";
 import { cloneDeep, noop } from "lodash-es";
 import React, { useRef, useState } from "react";
+import { getMediaSrc } from "../../integration/utils/local-media";
 import MediaLibraryPanel, {
   Panels,
   SelectionType,
@@ -18,6 +19,7 @@ import {
   IMultiImageInput,
   IUpdateInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
+import { getImageField, getTextField } from "../input-utils";
 import css from "./multi-image-input.module.scss";
 
 export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
@@ -26,7 +28,10 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
   const { displayName, value, onChange = noop } = props;
 
   const [libraryOpen, setLibraryOpen] = useState(false);
-  const [multiSelectLibraryOpen, setMultiSelectLibraryOpen] = useState(false);
+  const [multiSelectLibraryOpenLocal, setMultiSelectLibraryOpenLocal] =
+    useState(false);
+  const [multiSelectLibraryOpenLibrary, setMultiSelectLibraryOpenLibrary] =
+    useState(false);
 
   const [currentIndex, setCurrentIndex] = useState(-1);
 
@@ -34,7 +39,8 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
   const sharedRef = useRef(null);
   const handleClickOutside = () => {
     setLibraryOpen(false);
-    setMultiSelectLibraryOpen(false);
+    setMultiSelectLibraryOpenLocal(false);
+    setMultiSelectLibraryOpenLibrary(false);
   };
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
@@ -42,7 +48,7 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
     "bp3-overlay-scroll-container", // alert
   ]);
 
-  const renderAddBtn = () => {
+  const renderAddLocalBtn = () => {
     return (
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
@@ -52,7 +58,7 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
-        isOpen={multiSelectLibraryOpen}
+        isOpen={multiSelectLibraryOpenLocal}
       >
         <Button
           small
@@ -60,16 +66,16 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
           className={css.addImagesButton}
           icon={"folder-open"}
           onClick={() => {
-            setMultiSelectLibraryOpen(true);
+            setMultiSelectLibraryOpenLocal(true);
           }}
         >
-          Add images
+          Select Local Images
         </Button>
         <div ref={sharedRef}>
           <MediaLibraryPanel
             selectionType={SelectionType.Multiple}
             onRequestClose={() => {
-              setMultiSelectLibraryOpen(false);
+              setMultiSelectLibraryOpenLocal(false);
             }}
             className={css.mediaLibraryPanel}
             addObject={false}
@@ -78,84 +84,197 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
               onChange(newValue);
               setLibraryOpen(false);
             }}
-            panelsToShow={[Panels.MyImages, Panels.Images]}
+            panelsToShow={[Panels.MyImages]}
           />
         </div>
       </Popover>
     );
   };
 
-  // TODO: IMPORTANT
-  const renderRow = (oneValue: IImageInputValue, idx: number) => (
-    <div key={idx} className={css.row}>
-      <InputGroup
-        readOnly={true}
-        placeholder="Placeholder text"
-        value={oneValue.image.url}
-        title={oneValue.image.url}
-        //onClick={handleClick}
-        //onChange={(event: any) => onChange(event.target.value)}
-        //onInput={(event: any) => onInput(event.target.value)}
-      />
+  const renderAddLibraryBtn = () => {
+    return (
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
-        position={Position.RIGHT}
+        position={Position.LEFT}
         modifiers={{ preventOverflow: { enabled: true } }}
         boundary={"window"}
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
-        isOpen={libraryOpen}
+        isOpen={multiSelectLibraryOpenLibrary}
       >
         <Button
           small
           minimal
-          className={css.browseButton}
+          className={css.addImagesButton}
           icon={"folder-open"}
           onClick={() => {
-            console.log(idx);
-            setCurrentIndex(idx);
-            setLibraryOpen(true);
+            setMultiSelectLibraryOpenLibrary(true);
           }}
-        ></Button>
+        >
+          Select Library Images
+        </Button>
         <div ref={sharedRef}>
           <MediaLibraryPanel
+            selectionType={SelectionType.Multiple}
             onRequestClose={() => {
-              setLibraryOpen(false);
+              setMultiSelectLibraryOpenLibrary(false);
             }}
             className={css.mediaLibraryPanel}
             addObject={false}
-            onSelect={(item) => {
-              console.log(idx);
-              const newValue = cloneDeep(value);
-              newValue[currentIndex].image.url = (
-                item.initialValues as any
-              ).url; // TODO: IMPORTANT
+            onSelect={(items) => {
+              const newValue = [...value, ...items];
               onChange(newValue);
               setLibraryOpen(false);
             }}
-            panelsToShow={[Panels.MyImages, Panels.Images]}
+            panelsToShow={[Panels.Images]}
           />
         </div>
       </Popover>
+    );
+  };
 
+  const renderAddUrlBtn = () => {
+    return (
       <Button
-        className={css.deleteColorBtn}
+        small
         minimal
+        className={css.addImagesButton}
+        icon={"add"}
         onClick={() => {
-          value.splice(idx, 1);
-          onChange(value);
+          const newValue = [
+            ...value,
+            ...[{ image: { sourceType: "url", filename: "" } }],
+          ];
+          onChange(newValue);
+          setLibraryOpen(false);
         }}
-        small={true}
-        icon="delete"
-      ></Button>
-    </div>
-  );
+      >
+        Add Url Image
+      </Button>
+    );
+  };
+
+  // TODO: IMPORTANT
+  const renderRow = (oneImage: IImageInputValue, idx: number) => {
+    return (
+      <div className={css.row}>
+        <div className={css.imageName}>Image {idx + 1}</div>
+        {getImageField("", oneImage, (val) => {
+          const newValue = cloneDeep(value);
+          newValue[idx] = val;
+          onChange(newValue);
+        })}
+        <Button
+          className={css.deleteBtn}
+          minimal
+          onClick={() => {
+            value.splice(idx, 1);
+            onChange(value);
+          }}
+          small={true}
+          icon="delete"
+        ></Button>
+      </div>
+    );
+
+    const previewSrc = getMediaSrc("image", oneImage.image).src;
+
+    const filename =
+      oneImage.filename === undefined
+        ? oneImage.image.filename! /*extractFileName(value.image.filename!)*/
+        : oneImage.filename;
+
+    return (
+      <div key={idx} className={css.row}>
+        {previewSrc ? (
+          <>
+            <div
+              className={css.previewHolder}
+              style={{ backgroundImage: `url(${previewSrc}` }}
+            ></div>
+            {oneImage.image.size && (
+              <div>
+                {oneImage.image.size?.width}px X {oneImage.image.size?.height}px
+              </div>
+            )}
+          </>
+        ) : null}
+        {getTextField(
+          "Filename",
+          filename,
+          (filenameValue) => {
+            const newValue = cloneDeep(value);
+            newValue[idx].filename = filenameValue;
+            onChange(newValue);
+          },
+          ""
+        )}
+
+        <div className={css.actions}>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.RIGHT}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            boundary={"window"}
+            usePortal={true}
+            minimal
+            popoverClassName={css.mediaLibraryPanelPopup}
+            isOpen={libraryOpen}
+          >
+            <Button
+              small
+              minimal
+              className={css.browseButton}
+              icon={"folder-open"}
+              onClick={() => {
+                console.log(idx);
+                setCurrentIndex(idx);
+                setLibraryOpen(true);
+              }}
+            ></Button>
+            <div ref={sharedRef}>
+              <MediaLibraryPanel
+                onRequestClose={() => {
+                  setLibraryOpen(false);
+                }}
+                className={css.mediaLibraryPanel}
+                addObject={false}
+                onSelect={(item) => {
+                  console.log(idx);
+                  const newValue = cloneDeep(value);
+                  newValue[currentIndex].image.url = (
+                    item.initialValues as any
+                  ).url; // TODO: IMPORTANT
+                  onChange(newValue);
+                  setLibraryOpen(false);
+                }}
+                panelsToShow={[Panels.MyImages, Panels.Images]}
+              />
+            </div>
+          </Popover>
+
+          <Button
+            className={css.deleteColorBtn}
+            minimal
+            onClick={() => {
+              value.splice(idx, 1);
+              onChange(value);
+            }}
+            small={true}
+            icon="delete"
+          ></Button>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <FormGroup label={displayName} inline>
+    <FormGroup label={displayName} inline className={css.main}>
       {value.map(renderRow)}
-      {renderAddBtn()}
+      {renderAddLocalBtn()}
+      {renderAddLibraryBtn()}
+      {renderAddUrlBtn()}
     </FormGroup>
   );
 };

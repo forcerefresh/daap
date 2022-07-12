@@ -186,7 +186,7 @@ export function addBorderSide(
 }
 
 export function humanizeSting(str: string) {
-  let ret = str.replaceAll("_", " ");
+  let ret = str.replaceAll("_", " ").replaceAll("-", " ");
   ret = ret.charAt(0).toUpperCase() + ret.slice(1);
   return ret;
 }

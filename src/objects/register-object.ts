@@ -53,6 +53,7 @@ import {
   getAssetsUrls,
   getImageHtml,
   imageMeta,
+  imagePostProcess,
   imageSizeUpdate,
   preloadImage,
 } from "./image/image";
@@ -61,7 +62,8 @@ import {
   getMultiImageAssetsUrls,
   getMultiImageHtml,
   multiImageMeta,
-  multiimageSizeUpdate,
+  multiImagePostProcess,
+  multiImageSizeUpdate,
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
 import { registerObject } from "../webslider-sdk/src/objects/objects-register";
@@ -160,7 +162,7 @@ registerObject(
   preloadImage,
   undefined,
   undefined,
-  undefined,
+  imagePostProcess,
   getAssetsUrls
 );
 
@@ -250,13 +252,13 @@ registerObject(
   "media",
   multiImageMeta,
   createMultiImageObject,
-  multiimageSizeUpdate,
+  multiImageSizeUpdate,
   getMultiImageHtml,
   preloadMultiImage,
   undefined,
   undefined,
-  undefined
-  //getMultiImageAssetsUrls // TODO: IMPORTANT
+  multiImagePostProcess,
+  getMultiImageAssetsUrls
 );
 
 registerObject(

@@ -107,12 +107,14 @@ export function createJsonSource(
   };
 }
 
-export function getJsonSourceHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
-  const jsonSourceValues = object.definition.values as JsonSourceValues;
+export function getJsonSourceHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { isPlayer } = props;
+
+  //const jsonSourceValues = object.definition.values as JsonSourceValues;
 
   if (!isPlayer) {
     return `<div style="

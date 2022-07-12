@@ -140,7 +140,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       //stageSize,
       breakpointConfig!,
       breakpoints,
-      settings
+      settings,
+      undefined,
+      { isSave: false }
     );
 
     let totalDuration = 0;
@@ -697,6 +699,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 object,
                 calculatedObjectSize,
                 false,
+                false,
                 thumbnailHtmlArr,
                 slidesCounter
               ),
@@ -915,6 +918,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 __html: getObjectHtml(
                   { ...object, ...widthAndHeightObject },
                   { ...calculatedObjectSize },
+                  false,
                   false,
                   thumbnailHtmlArr,
                   slidesCounter

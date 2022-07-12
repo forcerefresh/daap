@@ -62,11 +62,12 @@ export function createFrameObject(
   };
 }
 
-export function getFrameHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getFrameHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, calculatedObjectSize, isPlayer } = props;
   /*if (!isPlayer) {
     return getObjectPlaceholder(`FRAME<br/>(placeholder)`);
   }*/

@@ -9,7 +9,7 @@ export function getFlipEffectDuration(object: IObject, config: ITransition) {
   const rotationTime = effValues.rotationTime;
   const pauseTime = effValues.pauseTime;
   const images = object.definition.values as MultiImageValues;
-  const cards = images.urls.length;
+  const cards = images.images.length;
   return cards * (rotationTime + pauseTime) - rotationTime / 2;
 }
 

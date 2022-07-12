@@ -216,7 +216,7 @@ export const IntegrationContext = React.createContext({
         id?: string;
         filename?: string;
         url?: string;
-        sourceType?: "url" | "local" | string;
+        sourceType?: "local" | "library" | "url" | string;
       }[];
     }): Promise<{
       id: number;
@@ -288,9 +288,12 @@ function useObjectStorageFactory() {
 
 function useMyMediaHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "electron") {
+    console.log("ELECTRON /electron-my-media-hook");
     return require("./integration/hooks/my-media/electron-my-media-hook")
       .useMyMediaHook;
   } else {
+    console.log("BROWSER /my-media-hook");
+
     return require("./integration/hooks/my-media/my-media-hook").useMyMediaHook;
   }
 }

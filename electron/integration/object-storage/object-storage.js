@@ -11,6 +11,8 @@ const {
   getPlayerPath,
   getBucketPreviewPath,
   downloadToBuffer,
+  getMyImagesPath,
+  fileToBuffer,
 } = require("../../utils/utils");
 const {
   loadProject,
@@ -282,6 +284,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
 
+  console.log(assetsUrlsChunks);
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: "Publish started" }])
@@ -290,29 +293,49 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   let error;
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
+    console.log(assetsUrlsChunk);
     const pArr = [];
-    for (const assetUrl of assetsUrlsChunk) {
-      var parsed = url.parse(assetUrl.url);
-      let filename = path.basename(parsed.pathname);
-      const extension = filename.substring(filename.indexOf("."));
-      if (assetUrl.filename) {
-        filename = assetUrl.filename + extension;
+    for (const assetItem of assetsUrlsChunk) {
+      if (assetItem.sourceType === "library") {
+        var parsed = url.parse(assetItem.url);
+        let filename = path.basename(parsed.pathname);
+        //const extension = filename.substring(filename.indexOf("."));
+        if (assetItem.filename) {
+          filename = assetItem.filename; // + extension;
+        }
+        pArr.push(
+          bucketManager.uploadUrlToBucket(
+            bucketWithKeys,
+            assetItem.url,
+            `${req.projectId}/assets/${filename}`
+          )
+        );
       }
-      pArr.push(
-        bucketManager.uploadUrlToBucket(
-          bucketWithKeys,
-          assetUrl.url,
-          `${req.projectId}/assets/${filename}`
-        )
-        /*uploadUrlToBucket(
-          req.bucketId,
-          assetUrl.url,
-          `${req.projectId}/assets/${filename}`
-        )*/
-      );
+      if (assetItem.sourceType === "local") {
+        /* let filename = assetItem.localFilename;
+        const extension = assetItem.localFilename.substring(
+          filename.indexOf(".")
+        );
+        if (assetItem.filename) {
+          filename = assetItem.filename + extension;
+        }*/
+
+        // console.log(path.join(getMyImagesPath(), assetItem.localFilename));
+        pArr.push(
+          bucketManager.uploadFileToBucket(
+            bucketWithKeys,
+            path.join(getMyImagesPath(), assetItem.localFilename),
+            `${req.projectId}/assets/${assetItem.filename}`
+          )
+        );
+      }
     }
+    console.log("aaa");
+
     try {
+      console.log("aaa 1");
       const result = await Promise.all(pArr);
+      console.log("aaa 2");
       BrowserWindow.getAllWindows()[0].webContents.send(
         `ObjectStorageRenderer::SubscribeToPublishDetails`,
         JSON.stringify(result)
@@ -322,6 +345,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       console.log("result");
       console.log(result);
     } catch (ex) {
+      console.log(ex);
+
       error = ex.toString();
       break;
     }
@@ -336,6 +361,9 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
   for (let i = 0; i < uploadResult.length; i++) {
+    expString = expString.replaceAll(`{MEDIA_ITEM_URL}`, `assets/`);
+    expString = expString.replaceAll(`{MEDIA_ITEM_LOCAL}`, `assets/`);
+
     expString = expString.replaceAll(
       `"${uploadResult[i].fromUrl}"`,
       `"${uploadResult[i].toUrl}"`
@@ -425,13 +453,19 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   const assetsResult = []; // from-to (for search/replace)
   let error;
   for (const assetsUrlsChunk of assetsUrlsChunks) {
-    const bArr = [];
-    for (const assetUrl of assetsUrlsChunk) {
-      console.log(assetUrl.url);
-      bArr.push(downloadToBuffer(assetUrl.url));
+    const pArr = [];
+    for (const assetItem of assetsUrlsChunk) {
+      if (assetItem.sourceType === "library") {
+        downloadToBuffer(assetUrl.url);
+      }
+      if (assetItem.sourceType === "local") {
+        pArr.push(
+          fileToBuffer(path.join(getMyImagesPath(), assetItem.localFilename))
+        );
+      }
     }
     try {
-      const bufferArr = await Promise.all(bArr);
+      const bufferArr = await Promise.all(pArr);
       /* BrowserWindow.getAllWindows()[0].webContents.send(
         `ObjectStorageRenderer::SubscribeToPublishDetails`,
         JSON.stringify(result)
@@ -439,20 +473,32 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
 
       console.log("process");
       bufferArr.forEach((buf, idx) => {
-        var parsed = url.parse(assetsUrlsChunk[idx].url);
-        let filename = path.basename(parsed.pathname);
-        const extension = filename.substring(filename.indexOf("."));
-        if (assetsUrlsChunk[idx].filename) {
-          filename = assetsUrlsChunk[idx].filename + extension;
+        const assetItem = assetsUrlsChunk[idx];
+        let filename;
+        if (assetItem.sourceType === "library") {
+          var parsed = url.parse(assetItem.url);
+          filename = path.basename(parsed.pathname);
+          //const extension = filename.substring(filename.indexOf("."));
+          if (assetsUrlsChunk[idx].filename) {
+            filename = assetsUrlsChunk[idx].filename; //+ extension;
+          }
+
+          assetsResult.push({
+            fromUrl: assetItem.url,
+            toUrl: `assets/${filename}`,
+          });
+        }
+        if (assetItem.sourceType === "local") {
+          filename = assetItem.filename;
+
+          assetsResult.push({
+            fromUrl: "file://" + assetItem.localFilename,
+            toUrl: `assets/${filename}`,
+          });
         }
 
         const zipFilePath = `${req.projectId}/assets/${filename}`;
         zip.file(zipFilePath, buf);
-
-        assetsResult.push({
-          fromUrl: assetsUrlsChunk[idx].url,
-          toUrl: `assets/${filename}`,
-        });
 
         BrowserWindow.getAllWindows()[0].webContents.send(
           `ObjectStorageRenderer::SubscribeToPublishDetails`,
@@ -478,6 +524,9 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
   for (let i = 0; i < assetsResult.length; i++) {
+    expString = expString.replaceAll(`{MEDIA_ITEM_URL}`, ``);
+    expString = expString.replaceAll(`{MEDIA_ITEM_LOCAL}`, `assets/`);
+
     expString = expString.replaceAll(
       `"${assetsResult[i].fromUrl}"`,
       `"${assetsResult[i].toUrl}"`
@@ -524,7 +573,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
 
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
-    JSON.stringify([{ log: `Add inted.html to package` }])
+    JSON.stringify([{ log: `Add index.html to package` }])
   );
   // upload preview html <<
 

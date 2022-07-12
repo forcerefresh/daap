@@ -21,7 +21,6 @@ import {
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { VideoItem } from "../../webslider-sdk/src/common/i-media-types";
 
 export const VIDEO = "video";
 
@@ -52,14 +51,14 @@ export function createVideoObject(
       displayName: "Video",
       propertyName: "video",
       inputType: InputType.VIDEO,
-      value: {},
-      defaultValue: {},
+      value: { video: {} },
+      defaultValue: { video: {} },
     },
     ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: VideoValues = {
-    video: initialValue?.video || {},
+    video: initialValue?.video || { video: {}, filename: "", previewImage: {} },
     ...getCommonPropertiesValues(),
   };
 
@@ -80,15 +79,17 @@ export function createVideoObject(
   };
 }
 
-export function getVideoHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getVideoHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, isPlayer } = props;
+
   const videoValues = object.definition.values as VideoValues;
 
   if (!isPlayer) {
-    if (!videoValues.video.url && !videoValues.video.filename) {
+    if (!videoValues.video.video.url && !videoValues.video.filename) {
       return getObjectPlaceholder(`VIDEO<br/>(placeholder)`);
     }
   }
@@ -103,7 +104,7 @@ export function getVideoHtml(
   attrs += ` height="100%"`;
 
   const videoHtml = `<video style="${style}" ${attrs}><source class="video-source-${object.id}" type="video/mp4"></video>`;
-
+  // TODO: IMPORTANT
   /*getMediaSrc("video", videoValues.video).then((videoItem: VideoItem) => {
     const el = document.getElementsByClassName(`video-source-${object.id}`)[0];
     if (el) {

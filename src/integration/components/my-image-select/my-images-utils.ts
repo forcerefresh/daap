@@ -1,12 +1,18 @@
 import Resizer from "react-image-file-resizer";
 
-export const resizeFile = (file: Blob, maxW = 300, maxH = 300, quality = 100) =>
+export const resizeFile = (
+  file: Blob,
+  maxW = 300,
+  maxH = 300,
+  quality = 100,
+  type = "JPEG"
+) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
       maxW,
       maxH,
-      "JPEG",
+      type,
       90,
       0,
       (uri) => {

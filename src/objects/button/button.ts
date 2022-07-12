@@ -690,10 +690,11 @@ export function createButtonObject(initialValue?: {
   };
 }
 
-export function getButtonHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
+export function getButtonHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+}) {
+  const { object, calculatedObjectSize } = props;
   const buttonProperties = object.definition.values as ButtonValues;
 
   let style = "";

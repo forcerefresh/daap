@@ -8,6 +8,7 @@ const sharp = require("sharp");
 
 const {
   processImage,
+  processVideo,
   type2Filename,
   type2MediaFolder,
 } = require("./my-media-utils");
@@ -23,22 +24,36 @@ ipcMain.on("getMediaSrc", async (event, dataStr) => {
     userDataPath,
     "my-media",
     type2MediaFolder(type),
-    mediaItem.filename.replace("file:", "")
+    mediaItem.filename
   );
+
+  console.log(myImagePath);
 
   const imageData = await fsPromise.readFile(myImagePath);
   const buff = Buffer.from(imageData);
   const base64 = buff.toString("base64");
-  event.returnValue = { ...mediaItem, src: "data:image/png;base64," + base64 };
+
+  const mime =
+    type === "image" ? "image/png" : type === "video" ? "video/mp4" : "";
+  event.returnValue = {
+    ...mediaItem,
+    src: "data:" + mime + ";base64," + base64,
+  };
 
   //return { ...mediaItem, src: "data:image/png;base64," + base64 };
 
   //console.log(mediaItem);
 });
 
-ipcMain.handle("myImagesUpload", async (event, dataStr) => {
+ipcMain.handle("myMediaUpload", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
-  const { fileBase64, fileMetadata, type } = data;
+  const {
+    fileBase64,
+    fileMetadata,
+    type,
+    previewImageBase64,
+    previewImageItem,
+  } = data;
 
   //const jsonFileName = `my-${type}s.json`;
   if (!fileMetadata.tags?.[0]) {
@@ -73,6 +88,15 @@ ipcMain.handle("myImagesUpload", async (event, dataStr) => {
   switch (type) {
     case "image": {
       item = await processImage(fileBase64, type, fileMetadata);
+    }
+    case "video": {
+      item = await processVideo(
+        fileBase64,
+        type,
+        fileMetadata,
+        previewImageBase64,
+        previewImageItem
+      );
     }
   }
 
@@ -186,26 +210,26 @@ ipcMain.handle("myImagesFetchImages", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { from, tag, search, perPage, type } = data;
 
-  let myImages = await loadMyMedia(type);
-  const totalItems = myImages.length;
+  let myMedia = await loadMyMedia(type);
+  const totalItems = myMedia.length;
 
   console.log(from);
   console.log(perPage);
   console.log(totalItems);
 
   if (tag) {
-    myImages = myImages.filter(
+    myMedia = myMedia.filter(
       (image) => image.tags && image.tags.indexOf(tag) !== -1
     );
   }
 
   if (search) {
-    myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
+    myMedia = myMedia.filter((image) => image.title.indexOf(search) !== -1);
   }
 
-  myImages = myImages.splice(from, perPage);
+  myMedia = myMedia.splice(from, perPage);
 
-  return { photos: myImages, hasMore: from + perPage < totalItems };
+  return { data: myMedia, hasMore: from + perPage < totalItems };
 });
 
 async function loadMyMedia(type) {

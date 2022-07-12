@@ -3,7 +3,11 @@ import {
   ImageData,
   MediaType,
 } from "../../../webslider-sdk/src/common/i-media-types";
-import { file2Base64 } from "../../../utils/doom-utils/video";
+import {
+  blobToBase64,
+  file2Base64,
+  getImageFromFile,
+} from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 
 export const useMyMediaHook = () => {
@@ -14,13 +18,26 @@ export const useMyMediaHook = () => {
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     const { ipcRenderer } = window.require("electron");
 
+    // NOTE: Get thumbnail, only for video
+    const { blob, videoItem: previewImageItem } = await getImageFromFile(file);
+    const previewImageBase64 = await resizeFile(blob!, 10000, 10000, 70, "jpg");
+
+    //const previewImageBase64 = await blobToBase64(blob!);
+
+    // base64
     const fileBase64 = await file2Base64(file);
 
     return new Promise((resolve, reject) => {
       ipcRenderer
         .invoke(
-          "myImagesUpload",
-          JSON.stringify({ fileBase64, fileMetadata, type })
+          "myMediaUpload",
+          JSON.stringify({
+            fileBase64,
+            fileMetadata,
+            type,
+            previewImageBase64: "data:image/jpg;base64," + previewImageBase64,
+            previewImageItem,
+          })
         )
         .then((result: any) => {
           console.log(result);

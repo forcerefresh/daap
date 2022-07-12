@@ -7,7 +7,11 @@ import {
 /**
  * used for dev mode only, returns image from local storage
  */
-export function getMediaSrc(type: MediaType, mediaItem: MediaItem): MediaItem {
+export function getMediaSrc(
+  type: MediaType,
+  mediaItem: MediaItem,
+  options?: { useId?: boolean; filename?: string }
+): MediaItem {
   const lsKey = `my-${type}s`;
   const myMedia: any[] = JSON.parse(localStorage.getItem(lsKey) || "[]");
 
@@ -25,7 +29,27 @@ export function getMediaSrc(type: MediaType, mediaItem: MediaItem): MediaItem {
         };
       }
 
+      if (mediaItem.sourceType === "library") {
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src: "{MEDIA_ITEM_URL}" + (options.filename || mediaItem.filename),
+          };
+        }
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
+      }
+
       if (mediaItem.sourceType === "local") {
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src:
+              "{MEDIA_ITEM_LOCAL}" + (options.filename || mediaItem.filename),
+          };
+        }
         return {
           ...mediaItem,
           src: myMediaStorage[mediaItem.id!][mediaItem.sizeType!],

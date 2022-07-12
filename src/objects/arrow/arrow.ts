@@ -193,10 +193,12 @@ export function createArrowObject(
   };
 }
 
-export function getArrowHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
+export function getArrowHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+}) {
+  const { object, calculatedObjectSize } = props;
+
   const svgValues = object.definition.values as ArrowValues;
   const svgValuesMetadata = object.definition.valuesMetadata;
 

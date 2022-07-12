@@ -236,11 +236,13 @@ export function createTextTarget(
   };
 }
 
-export function getTextTargetHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getTextTargetHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, calculatedObjectSize, isPlayer } = props;
+
   const textProperties = object.definition.values as TextTargetValues;
   const textPropertiesMeta = object.definition.valuesMetadata as {
     [key: string]: IInputMetadataValues;

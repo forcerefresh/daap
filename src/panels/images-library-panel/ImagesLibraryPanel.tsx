@@ -93,8 +93,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   >(undefined);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
-  const [previewVideoSrc, setPreviewVideoSrc] = useState<string>("");
-
   const reload = () => {
     setRequestReload(requestReload + 1);
   };
@@ -105,6 +103,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     setImages([]);
   };
 
+  /*
   // note: mutate existing data
   const postProcessData = async (data: ImageData[]) => {
     for (let i = 0; i < data.length; i++) {
@@ -115,11 +114,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           | ImageItem
           | undefined;
 
-        const iItemWithSrc = getMediaSrc(type, iItem!);
+        const iItemWithSrc = getMediaSrc(type, iItem || {});
         (imageData.images as any)[sizeKeys[j]] = iItemWithSrc;
       }
     }
-  };
+  };*/
 
   const fetchData = (from = -1) => {
     setLoading(true);
@@ -141,7 +140,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         console.log(images);
         const data = result.data || (result as any).photos;
 
-        await postProcessData(data);
+        //await postProcessData(data);
 
         setImages([...images, ...data]);
         setLoading(false);
@@ -199,7 +198,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
 
-  const qwe = (image: any, idx: number) => {
+  // TODO: remove this in the future
+  /*const qwe = (image: any, idx: number) => {
     if (image.images) {
       if (!image.images.small) {
         badImages.current.push(idx);
@@ -207,7 +207,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       }
     }
     return null;
-  };
+  };*/
 
   const [selection, setSelection] = useState<any[]>([]);
   const addToSelection = (data: any) => {
@@ -233,16 +233,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         <img
           className={css.selectionImage}
           key={image + idx}
-          src={`${getImageSrc(image)}`}
+          src={`${getMediaSrc("image", image).src}`}
           alt=""
           onClick={(e) => {}}
         />
       </div>
     );
-  };
-
-  const getImageSrc = (imageItem: ImageItem | undefined): string => {
-    return imageItem?.src || "";
   };
 
   return (
@@ -316,7 +312,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 intent={"success"}
                 disabled={selection.length === 0}
                 onClick={() => {
-                  onSelect(selection);
+                  const retImages = selection.map((image) => ({
+                    image: image,
+                    filename: image.filename,
+                  }));
+                  onSelect(retImages);
                   onRequestClose();
                 }}
               >
@@ -360,7 +360,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         >
           {images?.map((image, idx) => (
             <>
-              {qwe(image, idx)}
+              {/*qwe(image, idx)   // TODO: remove this in the future*/}
               {image?.images?.small || (image as any)?.videos ? (
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
@@ -370,13 +370,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   portalClassName={"image-preview-popover"}
                   minimal
                   isOpen={selectedImage === idx}
-                  onOpened={async () => {
-                    const videoItem: VideoItem = await getMediaSrc(
-                      "video",
-                      (image as any as VideoData).videos.original
-                    );
-                    setPreviewVideoSrc(videoItem?.src || "");
-                  }}
                 >
                   <div
                     className={classnames(css.imageListHolder, {
@@ -386,7 +379,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     <img
                       width="200px"
                       key={idx}
-                      src={getImageSrc(image?.images?.small)}
+                      src={getMediaSrc(type, image?.images?.small || {}).src}
                       alt=""
                       onClick={(e) => {
                         e.stopPropagation();
@@ -409,7 +402,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                         <img
                           style={{ maxHeight: "400px", maxWidth: "400px" }}
                           key={idx}
-                          src={getImageSrc(image.images?.medium)}
+                          src={
+                            getMediaSrc("image", image.images?.medium || {}).src
+                          }
                           alt=""
                         />
                       )}
@@ -419,7 +414,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           autoPlay
                           style={{ maxHeight: "400px", maxWidth: "400px" }}
                           key={idx}
-                          src={previewVideoSrc}
+                          src={
+                            getMediaSrc(
+                              "video",
+                              (image as any).videos.original || {}
+                            ).src
+                          }
                         />
                       )}
                     </div>
@@ -492,7 +492,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     "video", //cover
                                     {},
                                     {
-                                      video: (image as any).videos.original,
+                                      video: {
+                                        video: (image as any).videos.original,
+                                        previewImage: (image?.images as any)
+                                          .original,
+                                      },
                                     }
                                   );
                                 }
@@ -530,14 +534,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             intent="primary"
                             onClick={() => {
                               onSelect?.({
-                                type: "video",
-                                initialValues: {
-                                  url: (image as any as VideoData).videos
-                                    .original.url,
-                                  width: 960,
-                                  height: 540,
-                                  isPlaceholder: false,
-                                },
+                                video: (image as any).videos.original,
+                                previewImage: (image?.images as any).original,
                               });
                               onRequestClose();
                             }}
@@ -551,11 +549,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           <Button
                             intent="primary"
                             onClick={() => {
-                              addToSelection({
-                                url: getImageSrc(
-                                  (image?.images as any)[selectedResolution]
-                                ),
-                              });
+                              addToSelection(
+                                (image?.images as any)[selectedResolution]
+                              );
                               setSelectedImage(-1);
                             }}
                           >

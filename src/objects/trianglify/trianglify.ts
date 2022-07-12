@@ -241,28 +241,30 @@ export function createTrianglifyObject(
   };
 }
 
-export function getTrianglifyHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
-  const props = object.definition.values as TrianglifyValues;
+export function getTrianglifyHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, calculatedObjectSize, isPlayer } = props;
+
+  const trValues = object.definition.values as TrianglifyValues;
 
   const trConfig = {
     width: parseInt(`${calculatedObjectSize.width!}`),
     height: parseInt(`${calculatedObjectSize.height!}`),
-    cellSize: props.cellSize,
-    variance: props.variance / 100,
-    seed: props.seed,
-    xColors: props.colorsX.map(colorToString),
-    yColors: props.colorsY.map(colorToString),
-    fill: props.fill,
-    strokeWidth: props.strokeWidth,
+    cellSize: trValues.cellSize,
+    variance: trValues.variance / 100,
+    seed: trValues.seed,
+    xColors: trValues.colorsX.map(colorToString),
+    yColors: trValues.colorsY.map(colorToString),
+    fill: trValues.fill,
+    strokeWidth: trValues.strokeWidth,
     colorFunction: (trianglify as any).colorFunctions.interpolateLinear(0.5),
   };
 
-  if (props.colorsSG === "match") {
-    trConfig.xColors = props.colors.map(colorToString);
+  if (trValues.colorsSG === "match") {
+    trConfig.xColors = trValues.colors.map(colorToString);
     trConfig.yColors = "match" as any;
   }
 
@@ -272,10 +274,10 @@ export function getTrianglifyHtml(
 
   const objectClassname = "object-" + object.id;
   let css = "";
-  if (props.strokeColorSG === "color") {
+  if (trValues.strokeColorSG === "color") {
     css = `<style>
       .${objectClassname} svg > path {
-        stroke: ${colorToString(props.strokeColor)};
+        stroke: ${colorToString(trValues.strokeColor)};
       }</style>`;
   }
 

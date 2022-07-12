@@ -135,11 +135,13 @@ export function createSpinnerObject(
   };
 }
 
-export function getSpinnerHtml(
-  object: IObject,
-  calculatedObjectSize: any,
-  isPlayer: boolean
-) {
+export function getSpinnerHtml(props: {
+  object: IObject;
+  calculatedObjectSize: any;
+  isPlayer?: boolean;
+}) {
+  const { object, isPlayer } = props;
+
   const spinnerValues = object.definition.values as SpinnerValues;
   let css = `<style>
   .wsSpinnerFadeIn {

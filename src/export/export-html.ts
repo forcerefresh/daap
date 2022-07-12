@@ -62,7 +62,8 @@ export function generatePlayerData(
   breakpointConfig: BreakpointConfiguration,
   breakpoints: Breakpoints,
   settings: ISettings,
-  marketItems: IMarketItem[] = []
+  marketItems: IMarketItem[] = [],
+  options: { isSave: boolean }
 ): IPlayerData {
   const { slides, layers, objects } = sources;
   //const slideIds: string[] = [];
@@ -111,7 +112,8 @@ export function generatePlayerData(
       breakpoints,
       settings,
       thumbnailHtmlArr,
-      normalSlidesArr.length
+      normalSlidesArr.length,
+      { isSave: options.isSave }
     );
     slideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -127,7 +129,8 @@ export function generatePlayerData(
       breakpoints,
       settings,
       thumbnailHtmlArr,
-      normalSlidesArr.length
+      normalSlidesArr.length,
+      { isSave: options.isSave }
     );
     frontSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -186,7 +189,8 @@ function generateSlideData(
   breakpoints: Breakpoints,
   settings: ISettings,
   thumbnailHtmlArr: (string | undefined)[],
-  slidesLength: number
+  slidesLength: number,
+  options: { isSave: boolean }
 ): { slideData: ISlideData; html: string; marketItemTypes: string[] } {
   let html: string = "";
   const marketItemTypes: string[] = [];
@@ -362,6 +366,7 @@ function generateSlideData(
         object,
         calculatedObjectSize,
         true,
+        options.isSave,
         thumbnailHtmlArr, // for bullets
         slidesLength // for bullets
       );
@@ -454,8 +459,9 @@ export function getObjectHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
+  isSave: boolean,
   thumbnailHtmlArr: (string | undefined)[],
-  sliderCounter = 3
+  slidesCounter = 3
 ) {
   switch (object.type) {
     //case ObjectType.YOUTUBE_VIDEO:
@@ -468,13 +474,14 @@ export function getObjectHtml(
       const objDeff = getObjectDefinition(object.type);
       if (objDeff && objDeff.getHtml) {
         //try {
-        return objDeff.getHtml(
+        return objDeff.getHtml({
           object,
           calculatedObjectSize,
           isPlayer,
+          isSave,
           thumbnailHtmlArr,
-          sliderCounter
-        );
+          slidesCounter,
+        });
         //} catch (e: any) {
         // console.error(e.stack);
         // console.error(e);

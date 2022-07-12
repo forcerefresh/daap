@@ -66,11 +66,13 @@ export function createDelayObject(
   };
 }
 
-export function getDelayHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getDelayHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, isPlayer } = props;
+
   const delayValues = object.definition.values as DelayValues;
 
   if (!isPlayer) {

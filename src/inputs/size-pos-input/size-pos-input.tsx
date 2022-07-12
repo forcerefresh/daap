@@ -122,7 +122,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           intent={!valid.left ? Intent.WARNING : Intent.NONE}
           id="text-input-W"
-          placeholder="Placeholder text"
+          placeholder=""
           value={internalValue?.left?.toString()}
           onChange={(event: any) => updateValue("left", event.target.value)}
           onInput={(event: any) => updateValue("left", event.target.value)}
@@ -136,7 +136,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           intent={!valid.top ? Intent.WARNING : Intent.NONE}
           id="text-input-W"
-          placeholder="Placeholder text"
+          placeholder=""
           value={internalValue?.top?.toString()}
           onChange={(event: any) => updateValue("top", event.target.value)}
           onInput={(event: any) => updateValue("top", event.target.value)}
@@ -150,7 +150,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           intent={!valid.width ? Intent.WARNING : Intent.NONE}
           id="text-input-W"
-          placeholder="Placeholder text"
+          placeholder=""
           value={internalValue?.width?.toString()}
           onChange={(event: any) => updateValue("width", event.target.value)}
           onInput={(event: any) => updateValue("width", event.target.value)}
@@ -164,7 +164,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           }}
           intent={!valid.height ? Intent.WARNING : Intent.NONE}
           id="text-input-H"
-          placeholder="Placeholder text"
+          placeholder=""
           value={internalValue?.height?.toString()}
           onChange={(event: any) => updateValue("height", event.target.value)}
           onInput={(event: any) => updateValue("height", event.target.value)}

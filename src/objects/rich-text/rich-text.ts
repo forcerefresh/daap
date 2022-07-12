@@ -131,10 +131,12 @@ export function createRichTextObject(
   };
 }
 
-export function getRichTextHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
+export function getRichTextHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+}) {
+  const { object, calculatedObjectSize } = props;
+
   const textProperties = object.definition.values as RichTextValues;
 
   let style = "";

@@ -25,6 +25,7 @@ import {
 } from "../../webslider-sdk/src/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { ImageItem } from "../../webslider-sdk/src/common/i-media-types";
+import { cloneDeep } from "lodash-es";
 
 export const IMAGE = "image";
 
@@ -102,7 +103,7 @@ export function createImageObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    image: initialValue?.image || { image: {} },
+    image: initialValue?.image || { image: { sourceType: "local" } },
     useForThumbnail: false,
     preload: true,
     ...getCommonPropertiesValues(),
@@ -117,7 +118,7 @@ export function createImageObject(
       values,
       valuesMetadata: {
         ...{
-          /*dedine meta*/
+          /*define meta*/
         },
         ...getCommonPropertiesMetadataValues(),
       },
@@ -125,16 +126,26 @@ export function createImageObject(
   };
 }
 
-export function getImageHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getImageHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+  isSave?: boolean;
+}) {
+  const { object, isPlayer, isSave } = props;
   const imageValues = object.definition.values as ImageValues;
 
   //console.log(imageProperties);
   if (!isPlayer) {
-    if (!imageValues.image.image.sourceType) {
+    if (
+      !imageValues.image.image.sourceType ||
+      (imageValues.image.image.sourceType === "url" &&
+        !imageValues.image.image.url) ||
+      (imageValues.image.image.sourceType === "local" &&
+        !imageValues.image.image.id) ||
+      (imageValues.image.image.sourceType === "library" &&
+        !imageValues.image.image.url)
+    ) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
     }
   }
@@ -151,30 +162,19 @@ export function getImageHtml(
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 
-  //let style = "";
-  //style += addCommonPropertiesToStyle(style, object);
-  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
+  const imageItem = getMediaSrc("image", imageValues.image.image, {
+    useId: isSave,
+    filename: imageValues.image.filename,
+  });
 
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  // style += `background-image:url('${imageValues.image.url}');`;
+  style += `background-image:url('${imageItem.src}');`;
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
-
-  /*getMediaSrc("image", imageValues.image).then((imageItem: ImageItem) => {
-    const el = document.getElementsByClassName(
-      `object-content-${object.id}`
-    )[0];
-    if (el) {
-      (el as HTMLDivElement).style.backgroundImage = `url('${imageItem.src}')`;
-    }
-  });*/
-  const imageItem = getMediaSrc("image", imageValues.image.image);
-
-  style += `background-image:url('${imageItem.src}');`;
 
   return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
@@ -212,7 +212,7 @@ export async function preloadImage(props: {
   const { id, values } = props;
   const imageValues = values as ImageValues;
 
-  const imageSrc = { src: "" }; // await getMediaSrc("image", imageValues.image.image); // as ImageItem;
+  const imageSrc = getMediaSrc("image", imageValues.image.image) as ImageItem;
 
   // if there are no image to preload return instantly
   if (!imageSrc.src) {
@@ -239,6 +239,30 @@ export async function preloadImage(props: {
   return id;
 }
 
+export function imagePostProcess(
+  prevObject: IObject,
+  object: IObject
+): IObject {
+  const newObj = cloneDeep(object);
+
+  const prevValues = prevObject.definition.values as ImageValues;
+  const newValues = newObj.definition.values as ImageValues;
+
+  if (prevValues.image.image.sourceType !== newValues.image.image.sourceType) {
+    newValues.image = getDefaultValuesForSourceType(
+      newValues.image.image.sourceType
+    );
+  }
+
+  return newObj;
+}
+
+function getDefaultValuesForSourceType(
+  sourceType: "local" | "library" | "url" | string | undefined
+) {
+  return { image: { sourceType }, filename: "" };
+}
+
 export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
   const imageValues = props.values as ImageValues;
 
@@ -251,6 +275,7 @@ export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
       id: imageValues.image.image.id,
       url: imageValues.image.image.url,
       filename: imageValues.image.filename,
+      localFilename: imageValues.image.image.filename,
       sourceType: imageValues.image.image.sourceType,
     },
   ];

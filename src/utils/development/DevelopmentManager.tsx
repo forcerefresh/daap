@@ -40,36 +40,36 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
   const importAll = async () => {
     const devItems = developmentItemsRef.current;
-    //console.log("importAll");
-    //console.log(devItems);
 
     let hasUpdate = false;
     for (let i = 0; i < devItems.length; i++) {
       const devItem = devItems[i];
 
-      //console.log(devItem);
-
       if (!devItem.monitoringEnabled) return;
 
-      //console.log(devItem);
-
-      /* if (
-        isEqual(currentStateRef.current[devItem.id], devItem) &&
-        devItem.status !== "ERROR"
-      ) {
-        console.log("EQUAL OR ERROR");
-        return;
-      }*/
-      //console.log(devItem);
-
+      // create url for hash.json
       const urlPathArr = devItems[i].devUrl.split("/");
       urlPathArr.pop();
       const hashUrl = urlPathArr.join("/") + "/hash.json";
-      // console.log(hashUrl);
 
-      const hashJson = await (await fetch(hashUrl)).json();
-      ///console.log(hashJson);
+      // load hash
+      let hashJson = { hash: "" };
+      try {
+        hashJson = await (await fetch(hashUrl)).json();
+      } catch (err: any) {
+        console.error(err);
+        const devItem: Partial<DevelopmentItem> = {
+          id: devItems[i].id,
+          status: "ERROR",
+          statusMessage: `Something went wrong. Development item ${
+            devItems[i].devUrl
+          } cannot be loaded. Additional info: ${err?.toString?.()}`,
+        };
+        await updateDevelopmentItem(devItem);
 
+        return;
+      }
+      // compare hash
       if (hashsRef.current[devItem.type] === hashJson.hash) {
         continue;
       }
@@ -82,8 +82,6 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         ...hashsRef.current,
         [devItem.type]: hashJson.hash,
       };
-
-      //console.log(devItem);
 
       hasUpdate = true;
 
@@ -136,9 +134,9 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       if (hasUpdate) store.dispatch(forceRefresh());
     };
 
-    importAllPromise().then(() => {
-      console.log("DONE!!!");
-    });
+    setTimeout(async () => {
+      await importAllPromise();
+    }, 500);
 
     loadModulesInt.current = setInterval(async () => {
       await importAllPromise();

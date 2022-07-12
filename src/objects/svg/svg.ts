@@ -166,11 +166,13 @@ export function createSvgObject(
   };
 }
 
-export function getSvgHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getSvgHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, calculatedObjectSize, isPlayer } = props;
+
   const svgValues = object.definition.values as SvgValues;
   const svgValuesMetadata = object.definition.valuesMetadata;
 

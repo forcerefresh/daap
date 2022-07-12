@@ -1237,17 +1237,17 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
         resetPosition: false,
       }
     );
-    const html = getBulletsHtml(
+    const html = getBulletsHtml({
       object,
-      {
+      calculatedObjectSize: {
         ...calculatedObjectSize,
         width: undefined,
         height: undefined,
       },
-      false,
-      [],
-      getState().project.slides.normalSlides.length
-    );
+      isPlayer: false,
+      thumbnailHtmlArr: [],
+      slidesCounter: getState().project.slides.normalSlides.length,
+    });
     const holder = document.createElement("div");
     holder.style.overflow = "visible";
     holder.innerHTML = html;
@@ -1282,10 +1282,13 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
         resetPosition: false,
       }
     );
-    const html = getButtonHtml(object, {
-      ...calculatedObjectSize,
-      width: undefined,
-      height: undefined,
+    const html = getButtonHtml({
+      object,
+      calculatedObjectSize: {
+        ...calculatedObjectSize,
+        width: undefined,
+        height: undefined,
+      },
     });
     const holder = document.createElement("div");
     holder.style.overflow = "visible";
@@ -1335,9 +1338,9 @@ function handleTextUpdate(
     const objDeff = getObjectDefinition(object.type);
     let html = "";
     if (!!objDeff?.getHtml) {
-      html = objDeff?.getHtml(object, calculatedObjectSize, true);
+      html = objDeff?.getHtml({ object, calculatedObjectSize, isPlayer: true });
     } else if (object.type === RICH_TEXT) {
-      html = getRichTextHtml(object, calculatedObjectSize);
+      html = getRichTextHtml({ object, calculatedObjectSize });
     }
 
     const holder = document.createElement("div");

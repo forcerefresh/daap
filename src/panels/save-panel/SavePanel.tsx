@@ -62,7 +62,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   // spinner
   //const [showSpinner, setShowSpinner] = useState(false);
 
-  const [html, setHtml] = useState("");
+  const [thumbnailHtml, setThumbnailHtml] = useState("");
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
 
   // local state
@@ -92,14 +92,16 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const thumbHeight = scale * breakpointConfig!.normal.maxSliderSize.height!;
     setThumbSize({ width: THUMB_WIDTH, height: thumbHeight, scale: scale });
 
-    const exportData = generatePlayerData(
+    const thumbnailPlayerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "slide", entityId: slides.normalSlides[0] },
       breakpointConfig!,
       breakpoints,
-      settings
+      settings,
+      undefined,
+      { isSave: false }
     );
-    setHtml(exportData.html);
+    setThumbnailHtml(thumbnailPlayerData.html);
   }, []);
 
   const onClickSave = async (saveAs?: boolean) => {
@@ -113,7 +115,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpointConfig!,
       breakpoints,
       settings,
-      installedMarketItems.items
+      installedMarketItems.items,
+      { isSave: true }
     );
 
     console.log(playerData);
@@ -130,7 +133,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         width: thumbSize.width,
         height: thumbSize.height,
         scale: thumbSize.scale,
-        html: html,
+        html: thumbnailHtml,
       },
       playerData,
       assetsUrls,
@@ -199,7 +202,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         <div
           className={css.thumbHolderInner}
           dangerouslySetInnerHTML={{
-            __html: html,
+            __html: thumbnailHtml,
           }}
           style={{
             transform: `scale(${round(thumbSize.scale, 2)})`,

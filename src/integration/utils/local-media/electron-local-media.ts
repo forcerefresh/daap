@@ -3,22 +3,88 @@ import {
   MediaType,
 } from "../../../webslider-sdk/src/common/i-media-types";
 
-export function getMediaSrc(type: MediaType, mediaItem: MediaItem): MediaItem {
+export function getMediaSrc(
+  type: MediaType,
+  mediaItem: MediaItem,
+  options?: { useId?: boolean; filename?: string }
+): MediaItem {
   const { ipcRenderer } = window.require("electron");
 
-  if (mediaItem.url) {
-    return {
-      ...mediaItem,
-      src: mediaItem.url,
-    };
-  }
+  switch (type) {
+    case "image": {
+      if (mediaItem.sourceType === "url") {
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
+      }
 
-  if (mediaItem.sourceType === "local") {
-    return ipcRenderer.sendSync(
-      "getMediaSrc",
-      JSON.stringify({ type, mediaItem })
-    );
-  }
+      if (mediaItem.sourceType === "library") {
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src: "{MEDIA_ITEM_URL}" + (options.filename || mediaItem.filename),
+          };
+        }
 
-  return mediaItem;
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
+      }
+
+      if (mediaItem.sourceType === "local") {
+        if (!mediaItem.id) {
+          return mediaItem;
+        }
+
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src:
+              "{MEDIA_ITEM_LOCAL}" + (options.filename || mediaItem.filename),
+          };
+        }
+
+        return ipcRenderer.sendSync(
+          "getMediaSrc",
+          JSON.stringify({ type, mediaItem })
+        );
+      }
+
+      return mediaItem;
+    }
+    case "video": {
+      if (mediaItem.sourceType === "url") {
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
+      }
+
+      if (mediaItem.sourceType === "local") {
+        if (!mediaItem.id) {
+          return mediaItem;
+        }
+
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src:
+              "{MEDIA_ITEM_LOCAL}" + (options.filename || mediaItem.filename),
+          };
+        }
+
+        return ipcRenderer.sendSync(
+          "getMediaSrc",
+          JSON.stringify({ type, mediaItem })
+        );
+      }
+
+      return mediaItem;
+    }
+    default: {
+      return mediaItem;
+    }
+  }
 }

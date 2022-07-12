@@ -110,7 +110,7 @@ export const SizeInputForm: React.FC<ISizeInput & IUpdateInput> = (props) => {
             }}
             intent={!valid.width ? Intent.WARNING : Intent.NONE}
             id="text-input-W"
-            placeholder="Placeholder text"
+            placeholder=""
             value={internalValue?.width?.toString()}
             onChange={(event: any) => updateValue("width", event.target.value)}
             onInput={(event: any) => updateValue("width", event.target.value)}
@@ -124,7 +124,7 @@ export const SizeInputForm: React.FC<ISizeInput & IUpdateInput> = (props) => {
             }}
             intent={!valid.height ? Intent.WARNING : Intent.NONE}
             id="text-input-H"
-            placeholder="Placeholder text"
+            placeholder=""
             value={internalValue?.height?.toString()}
             onChange={(event: any) => updateValue("height", event.target.value)}
             onInput={(event: any) => updateValue("height", event.target.value)}

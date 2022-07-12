@@ -14,17 +14,19 @@ import { v4 as uuid } from "uuid";
 import svg from "./multiple-images-icon.svg";
 import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
+import { getMediaSrc } from "../../integration/utils/local-media";
+import { cloneDeep } from "lodash-es";
 
 const MULTI_IMAGE = "multi_image";
 
 export interface MultiImageValues {
   fit: ICoverPlacementValue;
-  urls: IImageInputValue[];
+  images: IImageInputValue[];
 }
 
 export type MultiImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IMultiImageInput<"urls">
+  IMultiImageInput<"images">
 ];
 
 export function createMultiImageObject(
@@ -58,9 +60,9 @@ export function createMultiImageObject(
     },
     {
       displayName: "Images",
-      propertyName: "urls",
+      propertyName: "images",
       inputType: InputType.MULTI_IMAGE,
-      value: initialValue?.urls ? initialValue?.urls : [],
+      value: initialValue?.images || [],
       defaultValue: [],
     },
   ];
@@ -71,7 +73,7 @@ export function createMultiImageObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    urls: initialValue?.urls ? initialValue?.urls : [],
+    images: initialValue?.images || [],
   };
 
   return {
@@ -86,15 +88,25 @@ export function createMultiImageObject(
   };
 }
 
-export function getMultiImageHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties,
-  isPlayer: boolean
-) {
+export function getMultiImageHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+  isPlayer?: boolean;
+}) {
+  const { object, isPlayer } = props;
+
   const multiImageProperties = object.definition.values as MultiImageValues;
-  //const url = multiImageProperties.urls[0];
   if (!isPlayer) {
-    if (multiImageProperties.urls.length === 0) {
+    if (
+      multiImageProperties.images.length === 0 ||
+      !multiImageProperties.images[0].image.sourceType ||
+      (multiImageProperties.images[0].image.sourceType === "url" &&
+        !multiImageProperties.images[0].image.url) ||
+      (multiImageProperties.images[0].image.sourceType === "local" &&
+        !multiImageProperties.images[0].image.id) ||
+      (multiImageProperties.images[0].image.sourceType === "library" &&
+        !multiImageProperties.images[0].image.url)
+    ) {
       return getObjectPlaceholder(`MULTI IMAGE<br/>(placeholder)`);
     }
   }
@@ -111,10 +123,6 @@ export function getMultiImageHtml(
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 
-  //let style = "";
-  //style += addCommonPropertiesToStyle(style, object);
-  //return `<img class="object-content" style="${style}" src="${imageProperties.url.value.url}" width="${object.width}" height="${object.height}"/>`;
-
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
@@ -125,45 +133,47 @@ export function getMultiImageHtml(
 
   let ret = "";
   ret += `<div class="object-content" style="width: 100%; height: 100%;">`;
-  multiImageProperties.urls.forEach((url: IImageInputValue, idx: number) => {
-    let styleOne = style;
-    styleOne += `background-image:url('${url.image.url}');`; // TODO: IMPORTANT
-    styleOne += `position: absolute;`;
-    if (isPlayer) {
-    } else {
-      styleOne += `top: -${idx * 20}px;`;
-      styleOne += `left: ${idx * 20}px;`;
-      styleOne += `z-index: ${100 - idx};`;
+  multiImageProperties.images.forEach(
+    (image: IImageInputValue, idx: number) => {
+      const imageitem = getMediaSrc("image", image.image);
+      let styleOne = style;
+      styleOne += `background-image:url('${imageitem.src}');`;
+      styleOne += `position: absolute;`;
+      if (isPlayer) {
+      } else {
+        // NOTE: For editor move images in order to see them all
+        styleOne += `top: -${idx * 20}px;`;
+        styleOne += `left: ${idx * 20}px;`;
+        styleOne += `z-index: ${100 - idx};`;
+      }
+      ret += `<div class="object-content-item" style="${styleOne}"></div>`;
     }
-    ret += `<div class="object-content-item" style="${styleOne}"></div>`;
-  });
+  );
   ret += `</div>`;
   return ret;
 }
 
-export async function multiimageSizeUpdate(props: {
+export async function multiImageSizeUpdate(props: {
   id: string;
   className: string;
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize } = props;
-  console.log("multiimageSizeUpdate: id> " + id);
-  console.log(calculatedObjectSize);
+  // TODO: implement this (probably similar to image)
 }
 
-function preloadImagePromise(imageItem: IImageInputValue): Promise<void> {
+function preloadImagePromise(image: IImageInputValue): Promise<void> {
   return new Promise<void>(function (resolve, reject) {
     let img = new Image();
     img.onload = function () {
-      // resolve the promise with our url so it is
-      // returned in the result of Promise.all
       resolve();
     };
     img.onerror = function (err) {
       reject(err);
     };
-    img.src = imageItem.image.url!; // TODO: IMPORTANT
+    const imageItem = getMediaSrc("image", image);
+    img.src = imageItem.src!;
   });
 }
 
@@ -176,9 +186,9 @@ export async function preloadMultiImage(props: {
   const { id, values } = props;
   const multiImageValues = values as MultiImageValues;
 
-  const loaders = multiImageValues.urls.map((oneVal) => {
-    return oneVal.filename || oneVal.image.url // TODO: IMPORTANT
-      ? preloadImagePromise(oneVal)
+  const loaders = multiImageValues.images.map((image) => {
+    return image.image.sourceType
+      ? preloadImagePromise(image)
       : Promise.resolve();
   });
 
@@ -187,30 +197,66 @@ export async function preloadMultiImage(props: {
   return id;
 }
 
+export function multiImagePostProcess(
+  prevObject: IObject,
+  object: IObject
+): IObject {
+  const newObj = cloneDeep(object);
+
+  const prevValues = prevObject.definition.values as MultiImageValues;
+  const newValues = newObj.definition.values as MultiImageValues;
+
+  if (prevValues.images.length === newValues.images.length) {
+    console.log(newValues.images);
+    newValues.images.forEach((newImage, idx) => {
+      const prevImages = prevValues.images[idx];
+      if (newImage.image.sourceType !== prevImages.image.sourceType) {
+        newValues.images[idx] = getDefaultValuesForSourceType(
+          newImage.image.sourceType
+        );
+      }
+    });
+  }
+
+  return newObj;
+}
+
+function getDefaultValuesForSourceType(
+  sourceType: "local" | "library" | "url" | string | undefined
+) {
+  return { image: { sourceType }, filename: "" };
+}
+
 export const getMultiImageAssetsUrls = (props: {
   values: { [key: string]: any };
 }) => {
   const imageValues = props.values as MultiImageValues;
 
   const ret: {
+    id?: string;
     url?: string;
     filename?: string;
-    type: "url" | "local" | string;
+    localFilename?: string;
+    sourceType?: "url" | "local" | "library" | string;
   }[] = [];
-  imageValues.urls.forEach((item) => {
-    if (item.image.url) {
-      ret.push({ url: item.image.url, type: "url" }); // TODO: rename to sourceType // TODO: IMPORTANT
-    }
-    if (item.filename) {
-      ret.push({ filename: item.filename, type: "local" }); // TODO: rename to sourceType // TODO: IMPORTANT
+  imageValues.images.forEach((image) => {
+    if (image.image.sourceType) {
+      ret.push({
+        id: image.image.id,
+        url: image.image.url,
+        filename: image.filename,
+        localFilename: image.image.filename,
+        sourceType: image.image.sourceType,
+      });
     }
   });
 
+  console.log(ret);
   return ret;
 };
 
 export const multiImageMeta = {
-  name: "MULTIPLE IMAGES",
-  description: "Add multi-image object",
+  name: "MULTI IMAGES",
+  description: "Add multi image object",
   icon: svg,
 };

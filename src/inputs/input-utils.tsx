@@ -370,6 +370,20 @@ export function getButtonGroupField<T>(
   return getInputForm(InputType.BUTTON_GROUP_INPUT, objectDef, onChange);
 }
 
+export function getImageField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.IMAGE,
+    value: value,
+  };
+
+  return getInputForm(InputType.IMAGE, objectDef, onChange);
+}
+
 export function getUnderFieldText(
   helperText?: string | React.ReactNode,
   externalError?: string | string[]

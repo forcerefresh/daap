@@ -217,10 +217,12 @@ export function createTextObject(
   };
 }
 
-export function getTextHtml(
-  object: IObject,
-  calculatedObjectSize: React.CSSProperties
-) {
+export function getTextHtml(props: {
+  object: IObject;
+  calculatedObjectSize: React.CSSProperties;
+}) {
+  const { object, calculatedObjectSize } = props;
+
   const textProperties = object.definition.values as TextValues;
   const textPropertiesMeta = object.definition.valuesMetadata as {
     [key: string]: IInputMetadataValues;
