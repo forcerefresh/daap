@@ -30,7 +30,6 @@ gsap.registerEffect({
     const innerElements: HTMLDivElement[] = [];
     // append title elements
     elements.forEach((element) => {
-      console.log(element.innerHTML);
       innerElements.push(element.firstElementChild as HTMLDivElement);
       targets[0].appendChild(element);
     });

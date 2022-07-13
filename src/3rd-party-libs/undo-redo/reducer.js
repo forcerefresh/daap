@@ -147,9 +147,6 @@ export default function diff(reducer, config = {}) {
         // otherwise it will generate a diff for each leaf in the entire state.
         changes = rawState || !ignoreInit ? accum.diff(lhs, rhs) : [];
 
-        //console.log(action.type);
-        //console.log(changes);
-
         if (!skipAction(action)) {
           history = addToHistory(history, {
             changes: changes,

@@ -1,12 +1,14 @@
+import { logger } from "./webslider-sdk/src/utils/logger/logger";
+
 function importBuildTarget() {
   if (process.env.REACT_APP_TYPE === "player") {
-    console.log("TARGET: PLAYER");
+    logger.debug("TARGET: PLAYER");
     return require("./player.tsx");
   } else if (process.env.REACT_APP_TYPE === "player-dev") {
-    console.log("TARGET: PLAYER-DEV");
+    logger.debug("TARGET: PLAYER-DEV");
     return require("./player-dev.tsx");
   } else {
-    console.log("TARGET: APPLICATION");
+    logger.debug("TARGET: APPLICATION");
     return require("./application.tsx");
   }
 }

@@ -5,7 +5,6 @@ import { ISlideEffect, slide } from "./slide.types";
 gsap.registerEffect({
   name: slide,
   effect: function (targets: any, config: ISlideEffect) {
-    console.log(config);
     // get element
     const { objectContentElement } = getObjectContentElementAndHtml(targets[0]);
 

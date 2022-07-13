@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import css from "./SlideSmallTimeline.module.scss";
 import { Button, HTMLSelect } from "@blueprintjs/core";
@@ -8,17 +8,20 @@ import { IPreviewState } from "../../store/reducers/stage";
 import { setStagePreview } from "../../store/actions/actions";
 import { connect } from "react-redux";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
+import { PreviewTimelineContext } from "../../utils/preview-timeline-provider/PreviewTimelineProvider";
+
 import cx from "classnames";
 
 type ISmallTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    slideProgress: { progress: number; time: number; slideIdx: number };
+    //slideProgress: { progress: number; time: number; slideIdx: number };
     onManualProgress: (progress: number) => void;
   };
 
 const SlideSmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
-  const { slideProgress, onManualProgress, previewState, _setStagePreview } =
-    props;
+  const { onManualProgress, previewState, _setStagePreview } = props;
+
+  const { previewTimelineState } = useContext(PreviewTimelineContext);
 
   //const [progress, setProgress] = useState<number>(0);
 
@@ -38,7 +41,8 @@ const SlideSmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
   //};
 
   const left =
-    ((lineRef?.current as any)?.offsetWidth || 0) * slideProgress.progress;
+    ((lineRef?.current as any)?.offsetWidth || 0) *
+    previewTimelineState.progress;
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 

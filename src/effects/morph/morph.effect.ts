@@ -7,7 +7,6 @@ gsap.registerPlugin(MorphSVGPlugin);
 gsap.registerEffect({
   name: morph,
   effect: function (targets: any, config: IFadeEffect) {
-    console.log(targets[0].innerHTML);
     const shape = document.querySelector("#thumb");
     const tl = gsap.timeline();
     tl.add(gsap.to(shape, { morphSVG: "#rocket", fill: "red", duration: 2 }));

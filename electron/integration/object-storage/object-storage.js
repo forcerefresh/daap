@@ -124,17 +124,12 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
     bucket.platform + "_" + bucket.bucketName
   );
 
-  console.log(bucket.platform + "_" + bucket.bucketName);
-  console.log("secretKey: " + secretKey);
-  //const s3 = createS3Instance({ ...bucket, secretKey });
-
   const ManagerClass = getBucketManagerClass(bucket.platform);
   const bucketManager = new ManagerClass({
     ...bucket,
     secretKey,
   });
 
-  console.log(files);
   let error = null;
   for (const file of files) {
     try {
@@ -162,9 +157,6 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
 
 ipcMain.handle("ObjectStorage::Get", async (event, reqJson) => {
   const req = JSON.parse(reqJson);
-
-  console.log("node: ObjectStorage::Get");
-  console.log(req);
 
   return {};
 });
@@ -284,7 +276,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
 
-  console.log(assetsUrlsChunks);
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: "Publish started" }])
@@ -293,7 +284,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   let error;
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
-    console.log(assetsUrlsChunk);
     const pArr = [];
     for (const assetItem of assetsUrlsChunk) {
       if (assetItem.sourceType === "library") {
@@ -320,7 +310,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
           filename = assetItem.filename + extension;
         }*/
 
-        // console.log(path.join(getMyImagesPath(), assetItem.localFilename));
         pArr.push(
           bucketManager.uploadFileToBucket(
             bucketWithKeys,
@@ -330,23 +319,17 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         );
       }
     }
-    console.log("aaa");
 
     try {
-      console.log("aaa 1");
       const result = await Promise.all(pArr);
-      console.log("aaa 2");
       BrowserWindow.getAllWindows()[0].webContents.send(
         `ObjectStorageRenderer::SubscribeToPublishDetails`,
         JSON.stringify(result)
       );
 
       uploadResult = [...uploadResult, ...result];
-      console.log("result");
-      console.log(result);
     } catch (ex) {
       console.log(ex);
-
       error = ex.toString();
       break;
     }
@@ -471,7 +454,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         JSON.stringify(result)
       );*/
 
-      console.log("process");
       bufferArr.forEach((buf, idx) => {
         const assetItem = assetsUrlsChunk[idx];
         let filename;
@@ -505,9 +487,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
           JSON.stringify([{ log: `Add asset file to package: ${zipFilePath}` }])
         );
       });
-
-      //filesBuffers = [...filesBuffers, ...result];
-      //console.log("filesBuffers.length: " + filesBuffers.length);
     } catch (ex) {
       console.log(ex);
       error = ex.toString();
@@ -687,7 +666,6 @@ async function getPlayerFiles() {
   const playerPath = getPlayerPath();
 
   const files = await fs.promises.readdir(playerPath);
-  console.log(files);
   return files;
 }
 /*

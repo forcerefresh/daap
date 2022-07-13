@@ -48,7 +48,6 @@ gsap.registerEffect({
       initializeTextEffect(pEl.innerText); //(config as any)["text" + idx] as string);
     };
     const initializeTextEffect = (text: string) => {
-      console.log("init typewriter");
       // - create characters
       pEl.innerText = text;
       pEl.innerHTML = space2nbsp(pEl.innerHTML);
@@ -105,7 +104,6 @@ gsap.registerEffect({
           config.initialDelay / 1000
         );
 
-        console.log(delay);
         delay += add;
       }
 
@@ -152,15 +150,12 @@ gsap.registerEffect({
           config.initialDelay / 1000
         );
 
-        console.log(delay);
         delay += add;
       }
 
-      console.log(rootTimeline.duration());
       // EFFECT SETUP ENDEND
 
       const repeat = (delay / (config.cursorBlinking / 1000)) * 2;
-      console.log(repeat);
 
       //cursor blinking
       cursorBlinkingTween = gsap.to(cursorEl, {

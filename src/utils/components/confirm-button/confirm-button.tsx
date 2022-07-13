@@ -69,14 +69,12 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
     onClose?.();
   }, []);
 
-  console.log(logs);
   const logString = logs.map((log, idx) => (
     <div className={css.logItem}>
       <div>{idx + 1}.</div>
       <div>{log.log}</div>
     </div>
   ));
-  console.log(logString);
 
   const preRef = useRef<HTMLPreElement>(null);
   useEffect(() => {

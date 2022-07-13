@@ -98,7 +98,6 @@ export function addCommonPropertiesToStyle(
     style = addBorderRadius(style, comonProperties.commonCornerRadius);
   }
 
-  console.log(comonPropertiesMeta);
   if (!comonPropertiesMeta.commonBorder.disabled) {
     style = addBorder(style, comonProperties.commonBorder);
   }
@@ -181,7 +180,6 @@ export function addBorderSide(
   style += "border-" + side + "-width: " + border.width + ";";
   style += "border-" + side + "-color: " + rgbColor2cssRgba(border.color) + ";";
   style += "border-" + side + "-style: " + border.style + ";";
-  console.log(style);
   return style;
 }
 

@@ -36,12 +36,9 @@ export async function getImageFromFile(
       // Set canvas dimensions same as video dimensions
       videoItem.size!.width = video.videoWidth;
       videoItem.size!.height = video.videoHeight;
-      console.log(video.videoWidth);
-      console.log(video.videoHeight);
     });
 
     video.addEventListener("seeked", function () {
-      console.log(videoItem);
       const canvas = createCanvas(
         videoItem.size!.width,
         videoItem.size!.height

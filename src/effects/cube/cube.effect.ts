@@ -9,10 +9,6 @@ let moveP2 = (areaW - areaH) / 2;
 let moveP2ForZet = (areaW - areaH) / 2;
 const moveP = ratio * areaH;
 
-//console.log(areaH / 2);
-//console.log(moveP);
-//console.log(moveP2);
-
 function createCube(target: HTMLDivElement) {
   target.innerHTML += `
     <div class="container">
@@ -45,8 +41,6 @@ gsap.registerEffect({
     perc = 0.5; //areaW
     perc = 0.75; // areaW*2
 
-    console.log(config);
-    console.log(config);
     const slideTransitionHolder = document.getElementsByClassName(
       "slideTransitionHolder"
     )[0];
@@ -132,8 +126,6 @@ gsap.registerEffect({
 
     tl.eventCallback("onComplete", () => {
       if (started) {
-        //console.log("onComplete SLIDE TRANSITION");
-
         if (config?.prevSlideEl) {
           (
             document.getElementsByClassName("slidesHolder")[0] as HTMLDivElement
@@ -152,15 +144,11 @@ gsap.registerEffect({
           "slideTransitionHolder"
         )[0];
         slideTransitionHolder2?.parentNode?.removeChild(slideTransitionHolder2);
-
-        //console.log("ATTACH 23");
       }
     });
 
     tl.eventCallback("onUpdate", () => {
       if (!started) {
-        //console.log("onUpdate SLIDE TRANSITION");
-
         const cube = target.getElementsByClassName("cube")[0];
         gsap.set(cube, {
           rotateY: 0,

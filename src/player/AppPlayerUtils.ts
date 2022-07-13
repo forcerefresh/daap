@@ -10,7 +10,6 @@ import { convertTimeUnitToMs } from "../utils/utils";
 export function createTimelineForObject(
   data: ITransitionsData
 ): gsap.core.Timeline[] {
-  console.log(data);
   const parallelTimelines: gsap.core.Timeline[] = [];
 
   data.transitions.in?.forEach((effIn) => {

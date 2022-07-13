@@ -48,12 +48,12 @@ export function createMultiImageObject(
       displayName: "Fit",
       propertyName: "fit",
       value: {
-        size: "fit",
+        size: "fill",
         positionHorizontal: "center",
         positionVertical: "center",
       },
       defaultValue: {
-        size: "fit",
+        size: "fill",
         positionHorizontal: "center",
         positionVertical: "center",
       },
@@ -69,7 +69,7 @@ export function createMultiImageObject(
 
   const values: MultiImageValues = {
     fit: {
-      size: "fit",
+      size: "fill",
       positionHorizontal: "center",
       positionVertical: "center",
     },
@@ -115,11 +115,12 @@ export function getMultiImageHtml(props: {
 
   let backgroundSize = coverPlacementValue.size as
     | "cover"
-    | "fit"
+    | "fill"
+    | "contain"
     | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  if (backgroundSize === "fill") backgroundSize = "100% 100%";
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 

@@ -53,7 +53,6 @@ export function tilesStartHandler(
   tilesElements: HTMLDivElement[]
 ) {
   objectContentElement.style.visibility = "hidden";
-  //console.log(objectContentElement);
   tilesElements.forEach((element) => {
     element.style.visibility = "visible";
   });
@@ -105,14 +104,10 @@ export function updateTilesSize(
   size: { w: number; h: number },
   grid: { r: number; c: number }
 ) {
-  console.log(tiles);
-  console.log(size);
-  console.log(grid);
-
   let counter = 0;
   const tilesWidth = size.w / grid.c;
   const tilesHeight = size.h / grid.r;
-  console.log(tilesWidth);
+
   for (let i = 0; i < grid.r; i++) {
     for (let j = 0; j < grid.c; j++) {
       const tile = tiles[counter];

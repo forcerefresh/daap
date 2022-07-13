@@ -13,7 +13,6 @@ import { pick } from "lodash-es";
 gsap.registerEffect({
   name: splitText,
   effect: function (targets: any, config: ISplitTextEffect) {
-    console.log("splitText");
     const objectEL = targets[0]! as HTMLElement;
     const pElOriginal = objectEL.firstChild as HTMLParagraphElement;
 
@@ -22,7 +21,6 @@ gsap.registerEffect({
     const numberOfChars = pElOriginal.innerHTML.length;
 
     let textChars: SplitText;
-    console.log(config);
 
     let pElClone: any = null;
     const initializeEffect = () => {
@@ -41,7 +39,7 @@ gsap.registerEffect({
       const chars = arrangeChars(config.startFrom, textChars.chars);
       gsap.set(chars, { opacity: 1, visibility: "visible" });
 
-      /* console.log(config.positionX);
+      /* 
 
       const newChars1 = [...chars].slice(0, 4).reverse();
       const newChars2 = [...chars].slice(5, 10);

@@ -9,7 +9,6 @@ import { calculateObjectSize } from "../panels/stage-panel/StagePanelUtils";
 export function createTimelineForObject(
   data: ITransitionsData
 ): gsap.core.Timeline[] {
-  console.log(data);
   const parallelTimelines: gsap.core.Timeline[] = [];
 
   data.transitions.in?.forEach((_, idx) => {
@@ -53,7 +52,6 @@ function populatesTimelinesForObject(
 
     let totalDuration = 0;
     if (effIn) {
-      console.log(effIn);
       totalDuration += effIn.delay;
 
       // ONE: delay for IN effect
@@ -62,7 +60,6 @@ function populatesTimelinesForObject(
       );
       totalDuration += getDuration(data, effIn);
 
-      //console.log(getDuration(effIn));
       // TWO: duration for IN effect
 
       const ineff = gsap.effects[effIn.effect.id]("." + data.objectClass, {
@@ -141,8 +138,6 @@ function populatesTimelinesForObject(
       );
     }
 
-    //console.log("total", totalDuration);
-    //console.log("slide dur", data.data.slideDuration.customValue);
   }
 
   if (effEffect) {

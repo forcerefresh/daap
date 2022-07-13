@@ -2,8 +2,6 @@ const path = require("path");
 const nodeExternals = require("webpack-node-externals");
 
 const envToMode = (env) => {
-  console.log("----------------");
-  console.log(env);
   if (env.production) {
     return "production";
   }

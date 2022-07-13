@@ -5,7 +5,7 @@ import { flip, IFlipEffect } from "./flip.types";
 
 export function getFlipEffectDuration(object: IObject, config: ITransition) {
   const effValues = config?.effect?.values as IFlipEffect;
-  console.log(config);
+
   const rotationTime = effValues.rotationTime;
   const pauseTime = effValues.pauseTime;
   const images = object.definition.values as MultiImageValues;

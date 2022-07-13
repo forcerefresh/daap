@@ -1,4 +1,4 @@
-import { cloneDeep, isEmpty, isEqual, mapValues, pick } from "lodash-es";
+import { cloneDeep, isEqual, mapValues, pick } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
@@ -20,7 +20,6 @@ import {
   getNormalSlideArr,
 } from "../../export/export-html";
 
-// from "gsap"; // TODO: remove player from here
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { ISlide } from "../../store/reducers/i-slides";
 import {
@@ -73,9 +72,8 @@ import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "../../webslider-sdk/src/inputs/i-inputs";
-import { selection } from "../../store/reducers/selection";
-import { relative } from "path";
 import ViewportSize from "../vieport-size/ViewportSize";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 interface ISize {
   width: number;
@@ -120,6 +118,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     breakpoints,
     forceRefreshRand: _forceRefreshRand,
   } = props;
+  logger.debug("StagePanel rendering");
+  
   const [error, resetError] = useErrorBoundary(
     // You can optionally log the error to an error reporting service
     (error, errorInfo) => console.log(error, errorInfo)
@@ -179,12 +179,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const { height: windowHeight, width: windowWidth } = useWindowSize();
 
-  // preview progress
-  const [progress, setProgress] = useState({
-    progress: 0,
-    time: 0,
-    slideIdx: 0,
-  });
+  // manual preview progress
   const [manualProgress, setManualProgress] = useState(0);
 
   const [resizeData, setResizeData] = useState<{
@@ -431,15 +426,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [rootRef, windowWidth, windowHeight]);
 
-  const renderSlideTimelineInfo = () => {
-    return (
-      <SlideSmallTimeline
-        slideProgress={progress}
-        onManualProgress={(progress) => setManualProgress(progress)}
-      />
-    );
-  };
-
   const renderVieportSize = () => {
     return (
       <ViewportSize
@@ -450,11 +436,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
   };
 
+  const renderSlideTimelineInfo = () => {
+    return (
+      <SlideSmallTimeline
+        onManualProgress={(progress) => setManualProgress(progress)}
+      />
+    );
+  };
+
   const renderProjectTimelineInfo = () => {
     return (
       <ProjectSmallTimeline
         projectTimelineData={projectTimelineData}
-        slideProgress={progress}
         onManualProgress={(progress) => setManualProgress(progress)}
       />
     );
@@ -1389,15 +1382,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   playerData={exportData}
                   previewState={previewState}
                   manualProgress={manualProgress}
-                  onProgress={(
-                    progress: number,
-                    time: number,
-                    slideIdx: number
-                  ) => {
-                    // TODO: PERFORMANCE ISSUE (cause render)
-                    // console.log({ progress, time, slideIdx });
-                    setProgress({ progress, time, slideIdx });
-                  }}
                   requestStop={() => {
                     _setStagePreview({ previewState: "stop", scope: null });
                   }}

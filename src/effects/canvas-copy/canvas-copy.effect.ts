@@ -29,7 +29,6 @@ gsap.registerEffect({
       //   ctx.filter = "contrast(1.2) sepia(0.7) drop-shadow(-3px 3px 1px #e81)";
       //ctx?.drawImage(sourceEl, 0, 0, sourceEl.width, sourceEl.height);
 
-      //console.log(sourceEl);
       /*  ctx?.drawImage(
         sourceEl,
         canvas.left,

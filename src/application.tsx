@@ -15,6 +15,8 @@ import {
 } from "./webslider-sdk/src/objects/objects-register";
 import DevelopmentManager from "./utils/development/DevelopmentManager";
 import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
+import { PreviewTimelineContextProvider } from "./utils/preview-timeline-provider/PreviewTimelineProvider";
+import { logger } from "./webslider-sdk/src/utils/logger/logger";
 
 function application(): {
   component: React.ReactElement;
@@ -27,7 +29,9 @@ function application(): {
           <IntegrationContextProvider>
             <Provider store={store}>
               <DevelopmentManager />
-              <App />
+              <PreviewTimelineContextProvider>
+                <App />
+              </PreviewTimelineContextProvider>
             </Provider>
           </IntegrationContextProvider>
         </DevelopmentContextProvider>

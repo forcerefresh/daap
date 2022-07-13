@@ -274,7 +274,6 @@ export const AbsolutePlacementForm: React.FC<
   };
 
   const renderPerDevice = () => {
-    console.log(breakpoints.breakpointsConfiguration);
     const { breakpointsConfiguration: bcArr } = breakpoints;
 
     return (

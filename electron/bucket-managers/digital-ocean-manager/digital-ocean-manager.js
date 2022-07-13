@@ -35,7 +35,6 @@ class DigitalOceanManager {
         ACL: "public-read",
       };
 
-      console.log(putParams);
       // upload file to s3
 
       this.s3.putObject(putParams, function (putErr, putData) {

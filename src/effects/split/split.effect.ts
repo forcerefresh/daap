@@ -23,15 +23,11 @@ function createCube(target: HTMLDivElement, peaces: number) {
 gsap.registerEffect({
   name: split,
   effect: function (targets: any, config: ISplitEffect) {
-    console.log(targets);
-    console.log(config);
     //const areaW = config.objectProperties?.width || 0;
     //const areaH = config.objectProperties?.height || 0;
     const areaW = config.breakpointData?.width || 0;
     const areaH = config.breakpointData?.height || 0;
     const pageAreaW = config.breakpointData?.pageWidth || 0;
-
-    console.log(config);
 
     const slideTransitionHolder = document.getElementsByClassName(
       "slideTransitionHolder"

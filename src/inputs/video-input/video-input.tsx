@@ -25,7 +25,7 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
 
   const [libraryOpen, setLibraryOpen] = useState(false);
 
-  const previewSrc = getMediaSrc("image", value.previewImage!)?.src;
+  const previewSrc = getMediaSrc("video", value.previewImage!)?.src;
 
   // logic for handling click outside
   const sharedRef = useRef(null);

@@ -1,22 +1,24 @@
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { isEmpty } from "lodash-es";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
 import { IPlayerData } from "../export/i-export-html";
 import { TimelineMax } from "gsap/all";
+import { PreviewTimelineContext } from "../utils/preview-timeline-provider/PreviewTimelineProvider";
 
 export interface AppPlayerProps {
   playerData: IPlayerData | null;
   previewState: IPreviewState;
   manualProgress: number;
-  onProgress: (progress: number, time: number, slideIdx: number) => void;
+  // deprecated : onProgress?: (progress: number, time: number, slideIdx: number) => void;
   requestStop: () => void;
 }
 
 export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
-  const { playerData, manualProgress, previewState, onProgress, requestStop } =
-    props;
+  const { playerData, manualProgress, previewState, requestStop } = props;
+
+  const { setPreviewTimelineState } = useContext(PreviewTimelineContext);
 
   const divRef = useRef(null);
 
@@ -30,7 +32,6 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   // manual rogress
   useEffect(() => {
     if (previewState.previewState === "pause") {
-      console.log(manualProgress);
       player.current?.getCurrentTimeline()?.progress(manualProgress, true);
     }
   }, [manualProgress]);
@@ -72,13 +73,10 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
   let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
-    console.log("AAAAAAAAAAAAAAAAAAAAAAAAA");
     if (!isEmpty(playerData?.slideDataArr)) {
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/
-      console.log(playerData);
-      console.log(JSON.stringify(playerData));
 
       const pl = new Player(playerData, playerHolderRef.current!, {
         isApp: true,
@@ -87,31 +85,24 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
       // TODO: DUPLICATE CODE 1
       pl.onUpdate(() => {
-        console.log(player.current?.getCurrentTimeline()?.progress());
-        //
-        onProgress(
-          player.current?.getCurrentTimeline()?.progress() || 0,
-          player.current?.getCurrentTimeline()?.time() || 0,
-          player.current?.getCurrentTimelineIdx() || 0
-        );
+        setPreviewTimelineState({
+          progress: player.current?.getCurrentTimeline()?.progress() || 0,
+          time: player.current?.getCurrentTimeline()?.time() || 0,
+          slideIdx: player.current?.getCurrentTimelineIdx() || 0,
+        });
       });
 
       pl.onCurrentTimelineChange(() => {
-        // console.log("onCurrentTimelineChange");
         // TODO: DUPLICATE CODE 2
 
         pl.onUpdate(() => {
           const tl = player.current?.getCurrentTimeline() as TimelineMax;
-          // console.log(player.current?.getCurrentTimeline()?.progress());
-          // console.log(tl.duration());
-          // console.log(tl.endTime());
-          // console.log(tl.totalTime());
-          // console.log(tl.time());
-          onProgress(
-            player.current?.getCurrentTimeline()?.progress() || 0,
-            player.current?.getCurrentTimeline()?.time() || 0,
-            player.current?.getCurrentTimelineIdx() || 0
-          );
+
+          setPreviewTimelineState({
+            progress: player.current?.getCurrentTimeline()?.progress() || 0,
+            time: player.current?.getCurrentTimeline()?.time() || 0,
+            slideIdx: player.current?.getCurrentTimelineIdx() || 0,
+          });
         });
       });
 

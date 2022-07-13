@@ -59,6 +59,7 @@ import {
 import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -264,8 +265,6 @@ export function duplicateSlides(slideIds: string[]) {
       });
     });
 
-    console.log(duplicateSlidesSchema);
-
     dispatch(_duplicateSlides(duplicateSlidesSchema));
   };
 }
@@ -457,8 +456,6 @@ export function duplicateLayers(layerIds: string[]) {
       });
     });
 
-    console.log(duplicateSlidesSchema);
-
     dispatch(_duplicateSlides(duplicateSlidesSchema));
   };
 }
@@ -552,7 +549,7 @@ function _activateLayer(layerId: string): ActivateLayerAction {
 export function activateLayer(layerId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().project.selection.activeLayerId === layerId) {
-      // console.log("layer is already active");
+      logger.debug(`Layer '${layerId}' is already active.`);
       return;
     }
     dispatch(_activateLayer(layerId));
@@ -589,7 +586,7 @@ export function selectForProperties(payload: selectForPropertiesProps): any {
         payload.type &&
       getState().project.selection.selectionForProperties?.id === payload.id
     ) {
-      // console.log("layer is already active");
+      logger.debug(`Layer '${payload.id}' is already selected for properties.`);
       return;
     }
     dispatch(_selectForProperties(payload));
@@ -622,7 +619,7 @@ export function activateObject(objectId: string | null): any {
       return;
     }
     if (getState().project.selection.activeObjectId === objectId) {
-      //console.log("object is already active ");
+      logger.debug(`Object '${objectId}' is already active.`);
       return;
     }
 
@@ -1109,8 +1106,6 @@ export function duplicateObjects(objectIds: string[]) {
       });
     });
 
-    console.log(duplicateSlidesSchema);
-
     dispatch(_duplicateSlides(duplicateSlidesSchema));
   };
 }
@@ -1134,9 +1129,6 @@ function handleObjectUpdate(
   object = !!objDeff?.postProcess
     ? objDeff.postProcess(prevObject, object)
     : object;
-
-  console.log(object);
-  console.log(objDeff?.postProcess);
 
   // TODO: REMOVE TO POSTPROCESS
   switch (object.type) {

@@ -12,7 +12,6 @@ gsap.registerEffect({
       width: 600,
       height: 400,
     }) as any;
-    console.log(pattern);
     objectEl.appendChild(pattern.toSVG());
 
     // ****

@@ -1079,9 +1079,9 @@
   resolved "https://registry.npmjs.org/@blueprintjs/colors/-/colors-4.0.0-alpha.3.tgz"
   integrity sha512-Zp7IPQIGYjG/2vxpWMVnpIfpCSBnUg/qFiRpxTxdG1vcG9ep6JW1jUBIs3IEp3hiXYt3uJPbzezkBYxiiLuUuw==
 
-"@blueprintjs/core@^3.45.0", "@blueprintjs/core@^3.46.0":
+"@blueprintjs/core@^3.45.0", "@blueprintjs/core@^3.54.0":
   version "3.54.0"
-  resolved "https://registry.npmjs.org/@blueprintjs/core/-/core-3.54.0.tgz"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-3.54.0.tgz#7269f34eccdf0d2874377c5ad973ca2a31562221"
   integrity sha512-u2c1s6MNn0ocxhnC6CuiG5g3KV6b4cKUvSobznepA9SC3/AL1s3XOvT7DLWoHRv2B/vBOHFYEDzLw2/vlcGGZg==
   dependencies:
     "@blueprintjs/colors" "^4.0.0-alpha.3"
@@ -1944,9 +1944,9 @@
   dependencies:
     "@types/node" "*"
 
-"@types/debug@^4.1.6":
+"@types/debug@^4.1.6", "@types/debug@^4.1.7":
   version "4.1.7"
-  resolved "https://registry.npmjs.org/@types/debug/-/debug-4.1.7.tgz"
+  resolved "https://registry.yarnpkg.com/@types/debug/-/debug-4.1.7.tgz#7cc0ea761509124709b8b2d1090d8f6c17aadb82"
   integrity sha512-9AonUzyTjXXhEOa0DnqpzZi6VHlqKMswga9EXjpXnnqxwLtdvPPtlO8evrI5D9S6asFRCQ6v+wpiUKbw+vKqyg==
   dependencies:
     "@types/ms" "*"
@@ -4736,9 +4736,9 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3, debug@^2.6.0, debug@^2.6.8, debug@^2.6.
   dependencies:
     ms "2.0.0"
 
-debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3:
+debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.2, debug@^4.3.3, debug@^4.3.4:
   version "4.3.4"
-  resolved "https://registry.npmjs.org/debug/-/debug-4.3.4.tgz"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
   integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
   dependencies:
     ms "2.1.2"

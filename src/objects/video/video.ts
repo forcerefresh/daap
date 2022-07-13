@@ -1,4 +1,6 @@
 import {
+  ICoverPlacementInput,
+  ICoverPlacementValue,
   InputType,
   IVideoInput,
   IVideoInputValue,
@@ -25,11 +27,13 @@ import { getMediaSrc } from "../../integration/utils/local-media";
 export const VIDEO = "video";
 
 export type VideoPropertiesTuple = [
+  ICoverPlacementInput<"videoFit">,
   IVideoInput<"video">,
   ...CommonPropertiesTuple
 ];
 
 export interface VideoValues extends CommonPropertiesValues {
+  videoFit: ICoverPlacementValue;
   video: IVideoInputValue;
 }
 
@@ -48,6 +52,22 @@ export function createVideoObject(
 
   const properties: VideoPropertiesTuple = [
     {
+      inputType: InputType.COVER_LAYOUT,
+      displayName: "Video fit",
+      propertyName: "videoFit",
+      value: {
+        size: "fill",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      defaultValue: {
+        size: "fill",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      inputProps: { hidePosition: true },
+    },
+    {
       displayName: "Video",
       propertyName: "video",
       inputType: InputType.VIDEO,
@@ -58,6 +78,11 @@ export function createVideoObject(
   ];
 
   const values: VideoValues = {
+    videoFit: {
+      size: "fill",
+      positionHorizontal: "center",
+      positionVertical: "center",
+    },
     video: initialValue?.video || { video: {}, filename: "", previewImage: {} },
     ...getCommonPropertiesValues(),
   };
@@ -89,13 +114,64 @@ export function getVideoHtml(props: {
   const videoValues = object.definition.values as VideoValues;
 
   if (!isPlayer) {
-    if (!videoValues.video.video.url && !videoValues.video.filename) {
+    if (
+      !videoValues.video.video.sourceType ||
+      (videoValues.video.video.sourceType === "url" &&
+        !videoValues.video.video.url) ||
+      (videoValues.video.video.sourceType === "local" &&
+        !videoValues.video.video.id) ||
+      (videoValues.video.video.sourceType === "library" &&
+        !videoValues.video.video.url)
+    ) {
       return getObjectPlaceholder(`VIDEO<br/>(placeholder)`);
+    } else {
+      // in the app show preview image
+      const videoFit = videoValues.videoFit as ICoverPlacementValue;
+
+      let backgroundSize = videoFit.size as
+        | "cover"
+        | "fill"
+        | "contain"
+        | "100% 100%";
+
+      if (backgroundSize === "cover") backgroundSize = "cover";
+      if (backgroundSize === "fill") backgroundSize = "100% 100%";
+      const aH = "center"; //videoFit.positionHorizontal;
+      const aV = "center"; //videoFit.positionVertical;
+
+      const imageItem = getMediaSrc(
+        "video",
+        videoValues.video.previewImage!
+        /*{
+          useId: isSave,
+          filename: imageValues.image.filename,
+        }*/
+      );
+
+      let style = "";
+      style += addCommonPropertiesToStyle(style, object);
+      style += "width: 100%;";
+      style += "height: 100%;";
+      style += `background-image:url('${imageItem.src}');`;
+      style += `background-repeat:no-repeat;`;
+      style += `background-size: ${backgroundSize};`;
+      style += `background-position: ${aH} ${aV};`;
+
+      return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
     }
   }
 
+  const videoFit = videoValues.videoFit as ICoverPlacementValue; /*
+  let backgroundSize = coverPlacementValue.size as
+    | "cover"
+    | "fill"
+    | "100% 100%";
+
+  if (backgroundSize === "cover") backgroundSize = "cover";
+  if (backgroundSize === "fill") backgroundSize = "100% 100%";*/
+
   let style = "";
-  style += "object-fit: fill;";
+  style += `object-fit: ${videoFit.size};`;
   style += addCommonPropertiesToStyle(style, object);
 
   let attrs = "";
@@ -103,7 +179,10 @@ export function getVideoHtml(props: {
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
-  const videoHtml = `<video style="${style}" ${attrs}><source class="video-source-${object.id}" type="video/mp4"></video>`;
+  const videoSrc = getMediaSrc("video", videoValues.video.video).src;
+  const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}"></video>`;
+
+  //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT
   /*getMediaSrc("video", videoValues.video).then((videoItem: VideoItem) => {
     const el = document.getElementsByClassName(`video-source-${object.id}`)[0];

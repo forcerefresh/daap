@@ -49,7 +49,6 @@ export const EventsInputForm: React.FC<IEventsInput & IUpdateInput> = (
           onValueChange={(value, valueAsString) => {
             //updateValue(valueAsString);
 
-            console.log(valueAsString);
             onChange({
               events: [
                 {

@@ -7,15 +7,11 @@ gsap.registerEffect({
   effect: function (targets: any, config: IDev2Effect) {
     const objectEl = targets[0] as HTMLElement;
 
-    // ****
     const pattern = trianglify({
       width: 600,
       height: 400,
     }) as any;
-    console.log(pattern);
     objectEl.appendChild(pattern.toSVG());
-
-    // ****
 
     return gsap.to([], {
       duration: config.duration!,

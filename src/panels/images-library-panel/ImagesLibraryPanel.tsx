@@ -465,6 +465,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                         image: (image?.images as any)[
                                           selectedResolution
                                         ],
+                                        filename: "",
                                       },
                                     }
                                   );
@@ -536,6 +537,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                               onSelect?.({
                                 video: (image as any).videos.original,
                                 previewImage: (image?.images as any).original,
+                                filename: "",
                               });
                               onRequestClose();
                             }}

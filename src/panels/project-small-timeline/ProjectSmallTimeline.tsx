@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import css from "./ProjectSmallTimeline.module.scss";
 import { Button, HTMLSelect } from "@blueprintjs/core";
@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
 import { convertTimeUnitToMs } from "../../utils/utils";
+import { PreviewTimelineContext } from "../../utils/preview-timeline-provider/PreviewTimelineProvider";
 
 export interface SlideTimelineData {
   duration: string;
@@ -24,20 +25,20 @@ export interface ProjectTimelineData {
 
 type IProjectTimelineProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    slideProgress: { progress: number; time: number; slideIdx: number };
+    //slideProgress: { progress: number; time: number; slideIdx: number };
     projectTimelineData: ProjectTimelineData | null;
     onManualProgress: (progress: number) => void;
   };
 
 const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   const {
-    slideProgress,
     projectTimelineData,
     onManualProgress,
     previewState,
     _setStagePreview,
   } = props;
 
+  const { previewTimelineState } = useContext(PreviewTimelineContext);
   //const [progress, setProgress] = useState<number>(0);
 
   //console.log(projectTimelineData);
@@ -125,9 +126,10 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   //};
   const currentSlideDuration =
     convertTimeUnitToMs(
-      projectTimelineData?.slides[slideProgress.slideIdx].duration || "10000ms"
+      projectTimelineData?.slides[previewTimelineState.slideIdx].duration ||
+        "10000ms"
     ) / 1000;
-  const progress = slideProgress.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
+  const progress = previewTimelineState.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
   // console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);
   // console.log(slideProgress.time);
@@ -138,9 +140,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   let left =
     lineWidth *
     /*slideProgress.progress*/ progress *
-    slidePosMultiplierArr[slideProgress.slideIdx];
+    slidePosMultiplierArr[previewTimelineState.slideIdx];
 
-  left = left + lineWidth * slideLeftArr[slideProgress.slideIdx];
+  left = left + lineWidth * slideLeftArr[previewTimelineState.slideIdx];
 
   //console.log(slideLeftArr, "LEFT PER");
   //console.log(left, "LEFT");
@@ -158,7 +160,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>
         <div className={css.pagination}>
-          Slide <strong>{slideProgress.slideIdx + 1}</strong>
+          Slide <strong>{previewTimelineState.slideIdx + 1}</strong>
           {" of "}
           {projectTimelineData?.slides.length}
         </div>

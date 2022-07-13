@@ -10,72 +10,68 @@ import {
 import css from "./cover-placement.module.scss";
 
 const HOR_POSITION_OPTIONS = [
-  { label: "left", value: "left" },
-  { label: "center", value: "center" },
-  { label: "right", value: "right" },
+  { label: "Left", value: "left" },
+  { label: "Center", value: "center" },
+  { label: "Right", value: "right" },
 ];
 
 const VER_POSITION_OPTIONS = [
-  { label: "top", value: "top" },
-  { label: "center", value: "center" },
-  { label: "bottom", value: "bottom" },
-];
-
-const RELATIVE_TO_OPTIONS = [
-  { label: "page", value: "page" },
-  { label: "stage", value: "stage" },
-  { label: "guidelines", value: "guidelines" },
+  { label: "Top", value: "top" },
+  { label: "Center", value: "center" },
+  { label: "Bottom", value: "bottom" },
 ];
 
 const SIZE_OPTIONS = [
-  { label: "cover", value: "cover" },
-  { label: "contain", value: "contain" },
-  { label: "fit", value: "fit" },
+  { label: "Cover", value: "cover" },
+  { label: "Contain", value: "contain" },
+  { label: "Fill", value: "fill" },
 ];
 
 export const CoverPlacementInputForm: React.FC<
   ICoverPlacementInput & IUpdateInput
 > = (props) => {
-  const { value, onChange } = props;
+  const { displayName, value, onChange, inputProps } = props;
 
   return (
     <>
       <div className="input60">
-        {getSelectField("Fit", value.size, SIZE_OPTIONS, (size: any) => {
+        {getSelectField(displayName, value.size, SIZE_OPTIONS, (size: any) => {
           const valueClone = cloneDeep(value);
           valueClone.size = size;
           onChange(valueClone);
         })}
       </div>
 
-      <div className={cx(css.alignHolder, "input60")}>
-        <div className="bp3-form-group bp3-inline">
-          <Label>Fit align</Label>
-          <div className={cx(css.alignHolderInner, "labelAuto")}>
-            {getSelectField(
-              "H",
-              value.positionHorizontal,
-              HOR_POSITION_OPTIONS,
-              (positionHorizontal: any) => {
-                const valueClone = cloneDeep(value);
-                valueClone.positionHorizontal = positionHorizontal;
-                onChange(valueClone);
-              }
-            )}
+      {!inputProps?.hidePosition && (
+        <div className={cx(css.alignHolder, "input60")}>
+          <div className="bp3-form-group bp3-inline">
+            <Label>Fit align</Label>
+            <div className={cx(css.alignHolderInner, "labelAuto")}>
+              {getSelectField(
+                "H",
+                value.positionHorizontal,
+                HOR_POSITION_OPTIONS,
+                (positionHorizontal: any) => {
+                  const valueClone = cloneDeep(value);
+                  valueClone.positionHorizontal = positionHorizontal;
+                  onChange(valueClone);
+                }
+              )}
 
-            {getSelectField(
-              "V",
-              value.positionVertical,
-              VER_POSITION_OPTIONS,
-              (positionVertical: any) => {
-                const valueClone = cloneDeep(value);
-                valueClone.positionVertical = positionVertical;
-                onChange(valueClone);
-              }
-            )}
+              {getSelectField(
+                "V",
+                value.positionVertical,
+                VER_POSITION_OPTIONS,
+                (positionVertical: any) => {
+                  const valueClone = cloneDeep(value);
+                  valueClone.positionVertical = positionVertical;
+                  onChange(valueClone);
+                }
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

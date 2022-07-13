@@ -38,7 +38,6 @@ export class BreakpointChecker {
   }
 
   getCurrentDeviceType() {
-    console.log(this.currentBreakpointConfiguration?.type);
     return this.currentBreakpointConfiguration?.type;
   }
 
@@ -86,7 +85,6 @@ export class BreakpointChecker {
     return { height, width };
   }
   private check() {
-    //console.log("-------------------------");
     this.breakpoints.breakpointsConfiguration.forEach((bp) => {
       const { from, to, toMax, fromMin } = bp.normal.breakpoint.width;
 

@@ -63,12 +63,12 @@ export function createImageObject(
       displayName: "Fit",
       propertyName: "fit",
       value: {
-        size: "fit",
+        size: "fill",
         positionHorizontal: "center",
         positionVertical: "center",
       },
       defaultValue: {
-        size: "fit",
+        size: "fill",
         positionHorizontal: "center",
         positionVertical: "center",
       },
@@ -99,7 +99,7 @@ export function createImageObject(
 
   const values: ImageValues = {
     fit: {
-      size: "fit",
+      size: "fill",
       positionHorizontal: "center",
       positionVertical: "center",
     },
@@ -154,11 +154,12 @@ export function getImageHtml(props: {
 
   let backgroundSize = coverPlacementValue.size as
     | "cover"
-    | "fit"
+    | "fill"
+    | "contain"
     | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  if (backgroundSize === "fill") backgroundSize = "100% 100%";
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 

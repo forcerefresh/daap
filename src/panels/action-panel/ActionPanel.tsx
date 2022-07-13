@@ -359,6 +359,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           large
           icon={previewState.isPreview ? "stop" : "play"}
           onClick={() => {
+            console.log("PLAY CLICK");
             const isPreview = !previewState.isPreview;
             _setStagePreview({
               isPreview: isPreview,

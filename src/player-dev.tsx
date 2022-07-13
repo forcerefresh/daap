@@ -55,9 +55,6 @@ selectEl?.addEventListener("change", (e: any) => {
   const exportsData = JSON.parse(localStorage.getItem("exports") || "{}");
   const selPlayerData = exportsData[e.target.value];
   latestPlayerData = selPlayerData;
-  console.log(selPlayerData);
-  console.log(exportsData);
-  console.log(e.target.value);
 
   renderBreakpointButtons();
 
@@ -96,7 +93,6 @@ function renderBreakpointButtons() {
   controlsEl.appendChild(breakpointsBtns);
 
   latestPlayerData.breakpoints.breakpointsConfiguration.forEach((bp: any) => {
-    console.log(bp);
     addBbButton(breakpointsBtns, bp);
   });
 }
@@ -120,13 +116,10 @@ function getExports() {
   const exports = JSON.parse(localStorage.getItem("exports") || "{}");
   const keys = Object.keys(exports);
 
-  console.log(keys);
-
   const options: { label: string; value: string }[] = [];
   keys.forEach((key) => {
     const data = exports[key];
     options.push({ label: data.name, value: key });
   });
-  console.log(options);
   return options;
 }

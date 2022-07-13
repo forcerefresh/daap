@@ -29,6 +29,7 @@ import {
   createTimelineForObject,
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 gsap.install(window);
 
@@ -106,17 +107,14 @@ export class Player {
     );
 
     this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
-    console.log(this.currentDeviceType);
+
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
       (bp) => bp.type === this.currentDeviceType
     )!;
 
     this.playerConfig = playerConfig;
 
-    console.log(playerData);
-    //console.log(playerData);
     this.oneSlide = playerData?.slideDataArr.length === 1;
-    //console.log(config);
     //this.config = config;
     this.rootDiv = rootDiv;
 
@@ -155,7 +153,7 @@ export class Player {
 
       Promise.all(this.extComponentPreloaders)
         .then(() => {
-          console.log("External components are loaded");
+          logger.info("All external components are loaded.");
         })
         .catch((err) => console.warn)
         .finally(() => {
@@ -182,11 +180,7 @@ export class Player {
 
     const bp = this.currentBp;
 
-    console.log(this.scaleParams);
     Array.from(slideEls).forEach((el) => {
-      console.log(bp?.normal.page);
-      console.log(this.breakpointChecker.currentViewportSize);
-
       (el as HTMLElement).style.top =
         (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
         "px"; //* this.scaleParams?.wScale!
@@ -238,11 +232,6 @@ export class Player {
     } else if (bp.normal.heightBehavior.type === "keepAspectRatio") {
       _pageH = bp.normal.page.height * wRatio;
       _maxSliderH = bp.normal.maxSliderSize.height * wRatio;
-      console.log(whRatio);
-      console.log(wRatio);
-
-      console.log(_pageH);
-      console.log(_maxSliderH);
     }
 
     bp.normal._page = {
@@ -291,7 +280,7 @@ export class Player {
         { resetPosition: false },
         this.scaleParams
       );
-      console.log(calObjSize);
+
       /*
       const calObjSize =
         transitionData.calculatedObjectSizePerDevice?.[
@@ -321,8 +310,7 @@ export class Player {
   /*private breakpointChangeHandler(bp: BreakpointConfiguration) {
     // if deviceAuto is true
     if (this.playerConfig.deviceAuto) {
-      console.log("+++++++++++++++++++++++++++++++");
-      console.log(bp);
+;
       this.setBp(bp);
     }
   }*/
@@ -331,13 +319,10 @@ export class Player {
     size: { width: number; height: number },
     bp: BreakpointConfiguration
   ) {
-    console.log(size);
-    console.log(bp);
     this.setBp(bp);
   }
 
   public setBp(bp: BreakpointConfiguration) {
-    console.log(bp);
     this.currentBp = bp;
     this.currentDeviceType = bp.type;
     // RESTART!!!! player!!
@@ -370,9 +355,7 @@ export class Player {
     const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
     bulletHolders.forEach((holderEL) => {
       holderEL.childNodes.forEach((el, index: number) => {
-        //console.log(el);
         el.addEventListener("click", () => {
-          //console.log(index);
           this.manualPlaySlide(index);
         });
       });
@@ -383,7 +366,6 @@ export class Player {
     const bulletHolders = rootDiv.querySelectorAll(".ws-bullets-navigation");
     bulletHolders.forEach((holderEL) => {
       holderEL.childNodes.forEach((el, index: number) => {
-        //console.log(el);
         (el as HTMLDivElement).classList.remove("active");
         if (index === idx) {
           (el as HTMLDivElement).classList.add("active");
@@ -397,7 +379,6 @@ export class Player {
     }
   }
   public onUpdate(onUpdateCallback: any) {
-    //console.log(onUpdateCallback);
     this.onUpdateCallback = onUpdateCallback;
   }
 
@@ -458,16 +439,13 @@ export class Player {
   }
 
   public async play() {
-    console.log("ssss");
     await Promise.all(this.extComponentPreloaders);
-    console.log("ssss 2");
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
     this.pagePreloaderEls.forEach((item) => {
       item.el.style.display = "block";
       addClass(item.el, "wsSpinnerFadeIn");
     });
-    console.log(this.preloaders[PreloadOrder.LAST]);
     const ctime = Date.now();
 
     await Promise.all(this.preloaders[PreloadOrder.FIRST]);
@@ -491,8 +469,6 @@ export class Player {
   }
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
-    console.log("Play slide: " + slideIdx);
-
     this.addClassToBullet(this.rootDiv, slideIdx);
 
     //this.rootDiv.style.display = "block";
@@ -522,8 +498,6 @@ export class Player {
         }
       : undefined;
 
-    //console.log(bettwenSlideEff);
-
     const prevSlideEl = this.currentSlideEl;
     if (prevSlideEl) prevSlideEl.style.pointerEvents = "none";
 
@@ -538,7 +512,6 @@ export class Player {
       bettwenSlideEff?.effect.id !== "none"
         ? "none"
         : "block";*/
-    //console.log(slideIdx);
     this.currentSlideTimeline = this.timelines[slideIdx];
     this.currentSlideTimelineIdx = slideIdx;
 
@@ -547,7 +520,6 @@ export class Player {
         bettwenSlideEff?.effect.id && bettwenSlideEff?.effect.id !== "none"
       );
     };
-    //console.log(bettwenSlideEff);
     if (hasEffect(bettwenSlideEff)) {
       this.slideTransitionTimeline = gsap.timeline({ paused: true });
 
@@ -582,20 +554,17 @@ export class Player {
     }
 
     // PLAY SLIDE :)
-    console.log("Play slide (prevTlTime): " + prevTlTime);
 
     this.currentSlideTimeline.play(prevTlTime);
     //slideEl.style.display = "block";
 
     let isUpdated = false;
     this.currentSlideTimeline.eventCallback("onUpdate", () => {
-      //console.log("onUpdate 123");
       this.onUpdateCallback?.();
 
       if (!isUpdated) {
         slideEl.style.display = "block";
         isUpdated = true;
-        //console.log("onUpdate 123 true");
       }
       if (!hasEffect(bettwenSlideEff)) {
         // ako nema effekat
@@ -614,7 +583,6 @@ export class Player {
     currSlideTl
       .getById("slideDurationTimeline")
       .eventCallback("onComplete", () => {
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: " + slideIdx);
         /*this.transitionEndBreakpointHandler(
           slideIdx,
           this.currentSlideTimeline!
@@ -629,7 +597,6 @@ export class Player {
 
     if (!this.oneSlide) {
       triggerTimeline?.eventCallback("onComplete", () => {
-        console.log(slideIdx, "END ");
         this.transitionEndBreakpointHandler(
           slideIdx,
           this.currentSlideTimeline!
@@ -656,7 +623,6 @@ export class Player {
     const triggerTimeline = last(this.currentSlideTimeline?.getChildren());
     triggerTimeline?.eventCallback("onComplete", () => {
       // NOTE:  empty callback to overwrite onComplete
-      // //console.log("canceled");
     });
 
     this.playSlide(slideIdx);
@@ -675,9 +641,7 @@ export class Player {
       return;
     } else if (objectEvent.navigationType === NavigationType.Link) {
       const el = document.getElementsByClassName(className)[0];
-      console.log(objectEvent?.slideEvent);
       el?.addEventListener(objectEvent?.linkEvent, () => {
-        console.log(objectEvent?.linkEvent);
         let a = document.createElement("a");
         // NOTE: when player runs in  app open in new window (_blank)
         a.target = this.playerConfig.isApp ? "_blank" : objectEvent.linkTarget;
@@ -767,8 +731,6 @@ export class Player {
 
   private getPrevSlideIdx(currIdx: number) {
     const total = this.normalSlideDataArr?.length || -1;
-    console.log(total);
-    console.log(currIdx);
 
     const nextSlideIdx = currIdx === 0 ? total - 1 : currIdx - 1;
     return nextSlideIdx;
@@ -811,7 +773,6 @@ export class Player {
     slideTimeline.add(slideDurationTimeline);
 
     // add objects effects timelines
-    console.log(data.transitionsData);
     data.transitionsData.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize =
@@ -825,19 +786,13 @@ export class Player {
       // Note: create effects tls
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
-        console.log(pTl);
-        console.log(pTl.getChildren());
         slideTimeline.add(pTl, 0);
       });
 
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getObjectDefinition(transitionData.itemType);
 
-      /*console.log(transitionData);
-      console.log(objDef);
-      console.log(objDef?.type);
-      console.log(objDef?.type);
-      console.log(objDef?.sizeUpdate);
+      /*
       objDef?.sizeUpdate(
         {
           id: transitionData.itemId,
@@ -848,10 +803,6 @@ export class Player {
         true
       );
 
-      console.log(
-        transitionData.calculatedObjectSizePerDevice?.[this.currentDeviceType]
-      );
-      console.log(transitionData.calculatedObjectSizePerDevice);
 */
 
       // execution code for objects
@@ -866,8 +817,6 @@ export class Player {
         slideTimeline.add(execTl, 0);
       }
 
-      console.log(objDef);
-
       // preload
       if (transitionData.itemValues.preload && !!objDef?.preload) {
         const preloadPromise = objDef.preload({
@@ -881,11 +830,6 @@ export class Player {
         );
       }
     });
-
-    console.log(this.preloaders.length, "Preloaders");
-    console.log(slideTimeline);
-    console.log(slideTimeline.getChildren());
-    console.log(slideTimeline.getById("slideDurationTimeline"));
 
     const nextSlideIdx = this.getNextSlideIdx(slideIdx);
 
@@ -907,8 +851,7 @@ export class Player {
       overlap = bettwenSlideEff?.duration || 0; // bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     }
     // 3. add breakpoint timeline
-    //console.log(data.slide.duration.customValue);
-    //console.log(overlap);
+
     // trigger
     const transitionTween = gsap.to(
       {},
@@ -925,14 +868,10 @@ export class Player {
     slideIdx: number,
     prevTl: gsap.core.Timeline
   ) {
-    console.log("transitionEndBreakpointHandler: " + slideIdx);
-
     const total = this.normalSlideDataArr?.length || -1;
 
-    //console.log(slideIdx, "WWW");
     if (total > 0) {
       const newSlideIdx = slideIdx >= total - 1 ? 0 : slideIdx + 1;
-      //console.log(newSlideIdx);
 
       // 0. get effect definition
       /*const bettwenSlideEff: ISlideTransition | undefined =
@@ -954,20 +893,11 @@ export class Player {
         overlap = bettwenSlideEff?.duration || 0; //bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
       }
 
-      console.log(overlap);
-      console.log(
-        this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
-      );
-
       const overlapPosition =
         convertTimeUnitToMs(
           this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
         ) - overlap;
 
-      console.log(overlapPosition);
-      console.log(prevTl.time());
-      console.log(prevTl.time() - overlapPosition / 1000);
-      //console.log(overlapPosition);
       this.playSlide(newSlideIdx, prevTl.time() - overlapPosition / 1000); //- overlap ? overlap / 1000 : 0
     }
   }
@@ -979,7 +909,6 @@ export class Player {
       tl.repeat(-1);
       tl.timeScale(previewState.previewSpeed);
 
-      ////console.log(transitionsDataArr);
 
       //if(previewState.scope)
       transitionsDataArr.forEach((data) => {
@@ -987,11 +916,10 @@ export class Player {
         let prevTime = 0;
         parallelTls.forEach((pTl, idx) => {
           const transitionTween = gsap.to({}, 2, {
-            onComplete: () => ////console.log("AAAAAAAAAAAaa"),
+            onComplete: () => {},
           });
           tl.add(transitionTween);
 
-          //////console.log(pTl);
           ///pTl.startTime(prevTime);
           tl.add(pTl, 0);
           prevTime = (data.data.slideDuration.customValue - 1000) / 1000;

@@ -5,7 +5,6 @@ import { IZoomInEffect, zoomIn } from "./zoom.types";
 gsap.registerEffect({
   name: zoomIn,
   effect: function (targets: any, config: IZoomInEffect) {
-    console.log(config);
     if (config.type === "in") {
       return gsap.fromTo(
         targets,

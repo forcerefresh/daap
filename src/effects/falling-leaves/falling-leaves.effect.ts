@@ -30,10 +30,8 @@ gsap.registerEffect({
           repeat: -1,
           delay: -15,
           onStart: () => {
-            console.log("start");
           },
           onComplete: () => {
-            console.log("complete");
           },
         });
       }*/
@@ -63,15 +61,9 @@ gsap.registerEffect({
 
     // return ROOT timeline
     const rootTimeline = gsap.timeline({
-      onComplete: () => {
-        console.log("onComplete");
-      },
-      onStart: () => {
-        console.log("onStart");
-      },
-      onInterrupt: () => {
-        console.log("onSTart");
-      },
+      onComplete: () => {},
+      onStart: () => {},
+      onInterrupt: () => {},
     });
     rootTimeline.to(targets[0], { display: "block", duration: 0.0000001 });
     rootTimeline.to(targets[0], {
@@ -98,12 +90,8 @@ function leafEffect(elm: Element, w: number, h: number): TweenMax {
     ease: "none",
     repeat: -1,
     delay: -15,
-    onStart: () => {
-      console.log("start");
-    },
-    onComplete: () => {
-      console.log("complete");
-    },
+    onStart: () => {},
+    onComplete: () => {},
   });
 
   gsap.to(elm, {

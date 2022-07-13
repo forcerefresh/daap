@@ -25,13 +25,14 @@
     "build:package:electron": "yarn run build:app:electron && yarn run build:main:electron && electron-builder"
   },
   "dependencies": {
-    "@blueprintjs/core": "^3.46.0",
+    "@blueprintjs/core": "^3.54.0",
     "@blueprintjs/popover2": "^0.10.1",
     "@reduxjs/toolkit": "^1.4.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "@types/classnames": "^2.2.10",
+    "@types/debug": "^4.1.7",
     "@types/jest": "^24.9.1",
     "@types/lodash-es": "^4.17.3",
     "@types/node": "^12.12.67",
@@ -44,6 +45,7 @@
     "aws-sdk": "^2.1073.0",
     "classnames": "^2.2.6",
     "clone-deep": "^4.0.1",
+    "debug": "^4.3.4",
     "deep-diff": "^1.0.2",
     "electron-reloader": "^1.2.1",
     "electron-window-state": "^5.0.3",

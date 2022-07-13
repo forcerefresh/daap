@@ -63,8 +63,8 @@ async function processVideo(
         sourceType: "local",
         sizeType: "original",
         size: {
-          width: 80, // TODO:???
-          height: 80, // await (await sharp(myImagePath80).metadata()).height,
+          width: previewImageItem.size.width,
+          height: previewImageItem.size.height,
           type: "mp4",
         },
       },

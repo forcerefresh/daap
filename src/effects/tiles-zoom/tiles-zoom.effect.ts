@@ -9,8 +9,8 @@ import {
   tilesStartHandler,
   updateTilesSize,
 } from "../common";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
-//console.log("REGISTER EFFECT");
 gsap.registerEffect({
   name: tilesZoom,
   effect: function (targets: any, config: ITilesZoomEffect) {
@@ -59,12 +59,17 @@ gsap.registerEffect({
         ease: config.childEase,
       },
       onComplete: function () {
+        logger.add("COMPLETE");
+        logger.flush();
+
         elObserver.disconnect();
 
         isStarted = false;
         tilesCompleteHandler(config.type, objectContentElement, elements);
       },
       onStart: function () {
+        logger.add("START");
+
         if (!isStarted) {
           elObserver.observe(targets[0]);
 
@@ -73,6 +78,8 @@ gsap.registerEffect({
         }
       },
       onUpdate: function () {
+        logger.add("UPDATE");
+
         if (!isStarted) {
           elObserver.observe(targets[0]);
 

@@ -29,6 +29,7 @@ import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 interface IMediaLibraryPanelProps {
   uploadComponent?: ReactNode;
@@ -91,12 +92,9 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   };
 
   const fetchData = (from = -1) => {
-    console.log(from);
     setLoading(true);
 
     from = from === -1 ? images?.length || 0 : from;
-
-    console.log(images);
 
     fetchImagesFunc({
       type: "vector",
@@ -106,26 +104,19 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
       perPage: 20,
     }).then(
       (result) => {
-        console.log(result);
-        console.log(images);
-
         setImages([...images, ...result.data]);
         setLoading(false);
         setHasMore(result.hasMore);
       },
 
       (error) => {
-        console.log(error);
+        logger.warn(error);
         /*this.setState({
             isLoaded: true,
             error,
           });*/
       }
     );
-
-    /*setTimeout(() => {
-      console.log(uniq(badImages.current));
-    }, 500);*/
   };
 
   useEffect(() => {
@@ -158,7 +149,6 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   const [selectedImage, setSelectedImage] = useState<number>(-1);
 
   useEffect(() => {
-    console.log({ ...selectedTags });
     debounceFetchData(0);
   }, [requestReload]);
 
@@ -343,11 +333,9 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
         onConfirm={() => {
           deleteImagesFunc?.("image", [imagesForDelete?.[0].id!]).then(
             (resp) => {
-              console.log(images);
               const newImages = filter(images, (image) => {
                 return resp.deletedIds.indexOf(image?.id!) === -1;
               });
-              console.log(newImages);
               setImages(newImages as any); // any is there as lodash has type bug for "filter"
               setIsDeleting(false);
               setSelectedImage(-1);

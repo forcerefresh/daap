@@ -43,16 +43,13 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
   /*const [visibleSectionIds, setVisibleSectionIds] = useState<IFormState>({});
 
   useEffect(() => {
-    console.log(uiFormSate[formId]);
     setVisibleSectionIds(uiFormSate[formId] ?? {});
     //return () => {
-     // console.log(visibleSectionIds);
      // _setFormState(formId, visibleSectionIds);
     //};
   }, []);
 
   useEffect(() => {
-    console.log(visibleSectionIds);
     _setFormState(formId, visibleSectionIds);
   }, [visibleSectionIds, formId, _setFormState]);
 */
@@ -263,7 +260,6 @@ export default FormWithLayoutConnected;
 export function flattenForm(form: IFormLayoutItem[]): IFormLayoutItem[] {
   const itemsArr: IFormLayoutItem[] = [];
   flattenFormRec(itemsArr, form);
-  //console.log(itemsArr);
   return itemsArr;
 }
 

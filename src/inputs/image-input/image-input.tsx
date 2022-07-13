@@ -50,7 +50,6 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   };
 
   const onUrlChange = (url: string) => {
-    console.log(url);
     const newValue = cloneDeep(value);
     newValue.image.url = url;
     onChange(newValue);
@@ -154,14 +153,11 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                 className={css.mediaLibraryPanel}
                 addObject={false}
                 onSelect={(imageItem: { image: ImageItem }) => {
-                  console.log(imageItem);
-
                   const newValue = cloneDeep(value);
                   newValue.image = imageItem.image;
                   newValue.filename = extractFileName(
                     imageItem.image.filename!
                   );
-                  console.log(newValue);
                   onChange(newValue);
                   setLibraryOpen(false);
                 }}

@@ -73,7 +73,6 @@ export const GridPlacementInputForm: React.FC<
     const size = getIconSize(icon);
     const selectedDevice = "";
 
-    console.log(conf.type);
     return (
       <Button
         active={selectedDevice === conf.type}
@@ -180,7 +179,6 @@ export const GridPlacementInputForm: React.FC<
   };
 
   const renderPerDevice = () => {
-    console.log(breakpoints.breakpointsConfiguration);
     const { breakpointsConfiguration: bcArr } = breakpoints;
 
     return (

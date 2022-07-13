@@ -6,6 +6,7 @@ import { IntegrationContext } from "../../integration";
 import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
 import { forceRefresh } from "../../store/actions/actions";
 import { IStore, store } from "../../store/store";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { DevelopmentContext } from "./DevelopmentProvider";
 
 export type IDevelopmentManagerProps = typeof mapDispatchToProps &
@@ -34,7 +35,6 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   }, [globals.enableDeveloper]);
 
   useEffect(() => {
-    //console.log("DEVELOPMENT ITEMS CHANGE EFFECT");
     //developmentItemsRef.current = [...developmentItems];
   }, [developmentItems]);
 
@@ -74,7 +74,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         continue;
       }
 
-      console.log(
+      logger.info(
         `Development Component (${devItem.type}) has been changed. Reloading...`
       );
 
@@ -86,7 +86,6 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       hasUpdate = true;
 
       try {
-        //console.log(devItems[i], "Load ");
         await import(
           /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].devUrl +
             "?" +
@@ -105,7 +104,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           true
         );
 
-        console.log(
+        logger.info(
           `Development Component (${devItems[i].type}) has been loaded.`
         );
       } catch (err: any) {

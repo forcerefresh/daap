@@ -27,22 +27,21 @@ ipcMain.on("getMediaSrc", async (event, dataStr) => {
     mediaItem.filename
   );
 
-  console.log(myImagePath);
-
   const imageData = await fsPromise.readFile(myImagePath);
   const buff = Buffer.from(imageData);
   const base64 = buff.toString("base64");
 
   const mime =
-    type === "image" ? "image/png" : type === "video" ? "video/mp4" : "";
+    mediaItem.mediaType === "image"
+      ? "image/jpg"
+      : mediaItem.mediaType === "video"
+      ? "video/mp4"
+      : "";
+
   event.returnValue = {
     ...mediaItem,
     src: "data:" + mime + ";base64," + base64,
   };
-
-  //return { ...mediaItem, src: "data:image/png;base64," + base64 };
-
-  //console.log(mediaItem);
 });
 
 ipcMain.handle("myMediaUpload", async (event, dataStr) => {
@@ -59,9 +58,6 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
   if (!fileMetadata.tags?.[0]) {
     fileMetadata.tags = [];
   }
-
-  console.log(fileMetadata);
-  console.log(type);
 
   let myMedia = await loadMyMedia(type);
 
@@ -100,108 +96,9 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
     }
   }
 
-  //*****
-
-  // add to json
   myMedia.unshift(item);
 
   saveMyMedia(type, myMedia);
-  /// const data2 = convertToBlob(fileBase64);
-  //console.log(fileBase64);
-
-  /// KOD IZ BROWSER ............
-  // ...............................
-
-  /*
-  let item; // ImageData | VectorData | VideoData | ExtesnsionData;
-
-  switch (type) {
-    case "image": {
-      const thumbFile = await resizeFile(file, 80, 80, 70);
-      const smallFile = await resizeFile(file, 120, 120, 70);
-      const mediumFile = await resizeFile(file, 300, 300, 70);
-
-      item = {
-        id: uuid(),
-        ...fileMetadata,
-        images: {
-          original: {
-            url: thumbFile as string,
-            size: { width: 80, height: 80, type: "jpg" },
-          },
-          small: {
-            url: smallFile as string,
-            size: { width: 120, height: 120, type: "jpg" },
-          },
-          medium: {
-            url: mediumFile as string,
-            size: { width: 300, height: 300, type: "jpg" },
-          },
-        },
-      };
-      break;
-    }
-    case "video": {
-      const { blob, videoItem } = await getImageFromFile(file);
-      console.log(blob);
-      const thumbFile = await resizeFile(blob!, 80, 80, 70);
-      const smallFile = await resizeFile(blob!, 120, 120, 70);
-      const mediumFile = await resizeFile(blob!, 300, 300, 70);
-      videoItem.url = await file2Base64(file);
-
-      item = {
-        id: uuid(),
-        ...fileMetadata,
-        videos: {
-          original: videoItem,
-        },
-        images: {
-          thumbnail: {
-            url: thumbFile as string,
-            size: { width: 80, height: 80, type: "jpg" },
-          },
-          small: {
-            url: smallFile as string,
-            size: { width: 120, height: 120, type: "jpg" },
-          },
-          medium: {
-            url: mediumFile as string,
-            size: { width: 300, height: 300, type: "jpg" },
-          },
-        },
-      };
-      break;
-    }
-    case "vector": {
-      item = {
-        id: uuid(),
-        ...fileMetadata,
-        svgString: await file.text(),
-      };
-      break;
-    }
-    case "extension": {
-      item = {
-        id: uuid(),
-        ...fileMetadata,
-        file: "file",
-        // no sense to save extension in local storafe. elestorn only impl.
-      };
-      break;
-    }
-  }
-
-  myImages.unshift(item);
-
-  localStorage.setItem(lsKey, JSON.stringify(myImages));
-
-  setTimeout(() => {
-    resolve({ status: "OK" });
-  }, 1);
-
-
-
-*/
 
   return { status: "OK" };
 });
@@ -212,10 +109,6 @@ ipcMain.handle("myImagesFetchImages", async (event, dataStr) => {
 
   let myMedia = await loadMyMedia(type);
   const totalItems = myMedia.length;
-
-  console.log(from);
-  console.log(perPage);
-  console.log(totalItems);
 
   if (tag) {
     myMedia = myMedia.filter(

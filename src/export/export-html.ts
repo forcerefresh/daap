@@ -300,7 +300,6 @@ function generateSlideData(
       html += `</style>`;
     }
 
-    console.log(layerStyle);
     html += `    <div class="layer ${layerClassName}" style="${layerStyle}">`; // layer open
 
     const objectArr = getObjectArr(objects, layer.objectIds);
@@ -361,7 +360,6 @@ function generateSlideData(
       html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
       html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
 
-      //console.log(object);
       const objectHtml = getObjectHtml(
         object,
         calculatedObjectSize,
@@ -370,8 +368,7 @@ function generateSlideData(
         thumbnailHtmlArr, // for bullets
         slidesLength // for bullets
       );
-      //console.log(getObjectDefinition(object.type)?.meta?.coreType);
-      // alert(getObjectDefinition(object.type)?.meta?.coreType);
+
       transitionsData.push({
         itemId: object.id,
         itemType: object.type,
@@ -525,7 +522,7 @@ export function getImageThumbnailHtml(object: IObject) {
     .size as "cover" | "fit" | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  if (backgroundSize === "fill") backgroundSize = "100% 100%";
   const aH = (imageProperties.placement.value as ICoverPlacementValue)
     .positionHorizontal;
   const aV = (imageProperties.placement.value as ICoverPlacementValue)
@@ -586,11 +583,11 @@ function getSourceImageHtml(
 
   let backgroundSize = (imageValues.placement as ICoverPlacementValue).size as
     | "cover"
-    | "fit"
+    | "fill"
     | "100% 100%";
 
   if (backgroundSize === "cover") backgroundSize = "cover";
-  if (backgroundSize === "fit") backgroundSize = "100% 100%";
+  if (backgroundSize === "fill") backgroundSize = "100% 100%";
   const aH = (imageValues.placement as ICoverPlacementValue).positionHorizontal;
   const aV = (imageValues.placement as ICoverPlacementValue).positionVertical;
 
@@ -639,7 +636,6 @@ function getCanvasHtml(
   const canvasProperties = object.definition.values as CanvasValues;
 
   let style = "";
-  //console.log(object);
   style += addCommonPropertiesToStyle(style, object);
   style += "position: absolute;";
   if (!isPlayer) {
@@ -691,7 +687,7 @@ export function getAllAssetsUrls(objects: IObjects) {
     objects.allObjects.map((objectId) => {
       const object = objects.objectById[objectId];
       const deff = getObjectDefinition(object.type);
-      console.log(object);
+
       return deff?.getAssetsUrls?.({ values: object.definition.values }) || [];
     })
   );
