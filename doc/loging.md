@@ -30,11 +30,11 @@ logger.error("Error message example");
 logger.fatal("Fatal message example");
 
 // print out objects in string format (JSON.stringify)
-logger.trace([{a: "a"}]);
-logger.trace({a: "a"});
+logger.trace("Array serialization", [{ a: "a" }]);
+logger.trace("Object serialization", { a: "a" });
 
 // same as console.log
-logger.log([{a: "a"}]);
+logger.log([{ a: "a" }]);
 
 // for intervals and loops
 for...{
