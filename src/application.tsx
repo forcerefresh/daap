@@ -24,21 +24,6 @@ function application(): {
 } {
   logger.debug("RENDER STAGE PANEL");
 
-  logger.trace("Trace message example");
-  logger.debug("Debug message example");
-  logger.info("Info message example");
-  logger.notice("Notice message example");
-  logger.warn("Warn message example");
-  logger.error("Error message example");
-  logger.fatal("Fatal message example");
-
-  // print out objects in string format (JSON.stringify)
-  logger.trace("Array serialization", [{ a: "a" }]);
-  logger.trace("Object serialization", { a: "a" });
-
-  // same as console.log
-  logger.log([{ a: "a" }]);
-
   return {
     component: (
       <React.StrictMode>

@@ -29,7 +29,7 @@ logger.warn("Warn message example");
 logger.error("Error message example");
 logger.fatal("Fatal message example");
 
-// print out objects in string format (JSON.stringify)
+// print out objects
 logger.trace("Array serialization", [{ a: "a" }]);
 logger.trace("Object serialization", { a: "a" });
 
