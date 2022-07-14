@@ -97,8 +97,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     setRequestReload(requestReload + 1);
   };
 
-  const badImages = React.useRef<number[]>([]);
-
   const resetImages = () => {
     setImages([]);
   };
@@ -125,9 +123,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
     from = from === -1 ? images?.length || 0 : from;
 
-    console.log(images);
-
-    console.log(from);
     fetchImagesFunc({
       type: type,
       from,
@@ -136,8 +131,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       perPage: 20,
     }).then(
       async (result) => {
-        console.log(result);
-        console.log(images);
         const data = result.data || (result as any).photos;
 
         //await postProcessData(data);
@@ -148,17 +141,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       },
 
       (error) => {
-        console.log(error);
         /*this.setState({
             isLoaded: true,
             error,
           });*/
       }
     );
-
-    /*setTimeout(() => {
-      console.log(uniq(badImages.current));
-    }, 500);*/
   };
 
   useEffect(() => {
@@ -192,22 +180,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    console.log({ ...selectedTags });
     debounceFetchData(0);
   }, [requestReload]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
-
-  // TODO: remove this in the future
-  /*const qwe = (image: any, idx: number) => {
-    if (image.images) {
-      if (!image.images.small) {
-        badImages.current.push(idx);
-        //console.log(image.title);
-      }
-    }
-    return null;
-  };*/
 
   const [selection, setSelection] = useState<any[]>([]);
   const addToSelection = (data: any) => {
@@ -592,11 +568,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         onCancel={() => setImagesForDelete(undefined)}
         onConfirm={() => {
           deleteImagesFunc?.(type, [imagesForDelete?.[0].id!]).then((resp) => {
-            console.log(images);
             const newImages = filter(images, (image) => {
               return resp.deletedIds.indexOf(image?.id!) === -1;
             });
-            console.log(newImages);
             setImages(newImages as any); // any is there as lodash has type bug for "filter"
             setIsDeleting(false);
             setSelectedImage(-1);

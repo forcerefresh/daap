@@ -126,7 +126,6 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
   };
 
   const renderPerDevice = () => {
-    console.log(breakpoints.breakpointsConfiguration);
     const { breakpointsConfiguration: bcArr } = breakpoints;
 
     return (

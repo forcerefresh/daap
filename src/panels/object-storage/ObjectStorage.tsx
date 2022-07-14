@@ -101,8 +101,6 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
                 onClick={() => {
                   const res = validateFunc(values);
                   setExternalErrors(res.errors);
-                  console.log(res.errors);
-                  //setOpenAdd(!openAdd);
                   setEnableValidation(true);
 
                   if (res.valid) {

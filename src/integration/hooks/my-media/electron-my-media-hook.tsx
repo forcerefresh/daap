@@ -40,13 +40,11 @@ export const useMyMediaHook = () => {
           })
         )
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });
 
     /*
-    console.log(fileMetadata);
     return new Promise(async (resolve) => {
       const thumbFile = await resizeFile(file, 80, 80, 70);
       const smallFile = await resizeFile(file, 120, 120, 70);
@@ -78,7 +76,6 @@ export const useMyMediaHook = () => {
 
       localStorage.setItem(`my-images`, JSON.stringify(myImages));
 
-      console.log(thumbFile);
       setTimeout(() => {
         resolve({ status: "OK" });
       }, 1);
@@ -98,7 +95,6 @@ export const useMyMediaHook = () => {
       ipcRenderer
         .invoke("myImagesFetchImages", JSON.stringify(props))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });

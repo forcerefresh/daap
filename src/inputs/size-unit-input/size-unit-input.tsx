@@ -56,13 +56,9 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
     internalValue[propertyName] = propertyValue;
     setInternalValue({ ...internalValue });
 
-    console.log(propertyValue);
     const currValid = { ...valid };
 
-    console.log(propertyValue);
     let propertyValueClean: string = propertyValue;
-
-    console.log(propertyValue);
 
     ALLOWED_UNITS.forEach((unit: Units) => {
       propertyValueClean = propertyValueClean.replaceAll(unit as string, "");
@@ -70,7 +66,6 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
 
     const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValueClean);
 
-    console.log(isNumber);
     //validate is number
     if (isNumber && !isNaN(parseFloat(propertyValue))) {
       //validate is positive for width and height

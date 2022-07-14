@@ -37,7 +37,6 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
   const [isCustomColor, setIsCustomColor] = useState(false);
   const [customColors, setCustomColors] = useState<RGBColor[]>([]);
 
-  console.log(customColors);
   return (
     <FormGroup label={displayName} labelFor="textarea-input">
       <div
@@ -93,19 +92,16 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
 function getColors(svgSource: string): RGBColor[] {
   let colors: string[] = [];
   svgSource.replace(/fill:(#[abcdef0-9]{6})/gi, function (v, c: string) {
-    console.log(c);
     colors.push(c);
     return v;
   });
   svgSource.replace(/fill="(#[abcdef0-9]{6})/gi, function (v, c: string) {
-    console.log(c);
     colors.push(c);
     return v;
   });
 
   colors = uniq(colors);
 
-  console.log(colors);
   return colors.map(hexToRGB);
 }
 

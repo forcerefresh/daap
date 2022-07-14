@@ -30,6 +30,7 @@ import css from "./ProjectsPanel.module.scss";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 interface ImageItem {
   url: string;
@@ -70,8 +71,6 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteLoading, setDeleteLoading] = useState(false);
 
-  const badImages = React.useRef<number[]>([]);
-
   const globalContext = useContext(IntegrationContext);
   const { getProject, getProjects, deleteProject } =
     globalContext.useProjectHook();
@@ -83,7 +82,6 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
     getProjects(from, searchValue).then(
       (result) => {
-        console.log(result);
         if (from === 0) {
           setProjects([...result.projects]);
         } else {
@@ -94,17 +92,9 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       },
 
       (error) => {
-        console.log(error);
-        /*this.setState({
-            isLoaded: true,
-            error,
-          });*/
+        logger.error(error);
       }
     );
-
-    setTimeout(() => {
-      console.log(uniq(badImages.current));
-    }, 500);
   };
 
   useEffect(() => {
@@ -122,7 +112,6 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const deleteConfirm = () => {
     setDeleteLoading(true);
 
-    console.log(deleteIdRef.current);
     deleteProject(deleteIdRef.current).then(({ id }: { id: number }) => {
       const newProjects = projects.concat();
       remove(newProjects, (p: any) => {

@@ -38,7 +38,6 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
       const { propertyName } = property;
 
       function onChange(value: any) {
-        console.log(value);
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {
@@ -51,7 +50,6 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
       }
 
       function onMetadataChange(metadata: IInputMetadataValues) {
-        console.log(metadata);
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {

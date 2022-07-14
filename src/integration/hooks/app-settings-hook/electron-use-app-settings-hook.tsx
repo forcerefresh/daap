@@ -6,7 +6,6 @@ export const useAppSettingsHook = () => {
       const { ipcRenderer } = window.require("electron");
 
       ipcRenderer.invoke("AppSettings::GetSettings").then((result: any) => {
-        console.log(result);
         resolve(result);
       });
     });
@@ -19,7 +18,6 @@ export const useAppSettingsHook = () => {
       ipcRenderer
         .invoke("AppSettings::SaveSettings", JSON.stringify(settings))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });

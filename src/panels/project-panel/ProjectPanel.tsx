@@ -91,8 +91,6 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
     );
   });
 
-  console.log(pixelMultiplier);
-
   return (
     <div className={css.projectPanel}>
       <section>
@@ -239,7 +237,6 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                         breakpointConfiguration.breakpointsConfiguration[idx] =
                           newBreakpointConfiguration;
                         _updateSlideBreakpoints(breakpointConfiguration);
-                        console.log(idx);
                       }}
                     />
                   </Card>

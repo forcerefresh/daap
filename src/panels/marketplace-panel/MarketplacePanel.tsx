@@ -10,6 +10,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./MarketplacePanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { IMarketItem } from "../../webslider-sdk/src/objects/i-marketplace";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 interface IMarketplacePanelProps {
   onRequestClose: () => void;
@@ -55,7 +56,6 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
 
     getMarketItems(from, searchValue).then(
       (result) => {
-        console.log(result);
         if (from === 0) {
           setMarketItems([...result.items]);
         } else {
@@ -66,11 +66,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
       },
 
       (error) => {
-        console.log(error);
-        /*this.setState({
-            isLoaded: true,
-            error,
-          });*/
+        logger.error(error);
       }
     );
   };

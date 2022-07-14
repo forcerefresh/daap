@@ -131,7 +131,6 @@ export const useObjectStorageHook = () => {
     ipcRenderer.on(
       `ObjectStorageRenderer::SubscribeToPublishDetails`,
       function (evt: any, message: any) {
-        console.log(message);
         callback(JSON.parse(message));
       }
     );

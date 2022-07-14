@@ -119,10 +119,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       { isSave: true }
     );
 
-    console.log(playerData);
     const assetsUrls = getAllAssetsUrls(objects);
-
-    console.log(assetsUrls);
 
     saveProject({
       id: saveAs ? undefined : localMeta.id,
@@ -150,7 +147,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           assetsUrls,
           //publishRevision,
         }) => {
-          console.log({ id, name, description });
           _updateProjectMeta({
             id,
             name,

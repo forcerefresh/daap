@@ -54,10 +54,6 @@ export const SplitInputForm: React.FC<ISplitInput & IUpdateInput> = (props) => {
       [...leftArr, ...bottomArr, ...rightArr.reverse(), ...topArr.reverse()],
       isEqual
     );
-    console.log(leftArr);
-    console.log(bottomArr);
-    console.log(rightArr.reverse());
-    console.log(topArr.reverse());
   };
 
   const onLeftClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -130,16 +126,13 @@ export const SplitInputForm: React.FC<ISplitInput & IUpdateInput> = (props) => {
             grid={[1, 1]}
             scale={1}
             bounds={{ left: 0, right: 200, top: 0, bottom: 200 }}
-            // onStart={console.log}
             onDrag={(evt: DraggableEvent, data: DraggableData) => {
-              console.log(data);
               value.center = {
                 x: data.x / 2,
                 y: data.y / 2,
               };
               onChange(value);
             }}
-            //onStop={console.log}
           >
             <div className={css.point}></div>
           </Draggable>

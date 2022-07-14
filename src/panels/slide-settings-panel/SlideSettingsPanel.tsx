@@ -88,7 +88,6 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   if (!slide) return null;
 
   const effDef = getEffectDefinition(get(slide, `slideTransition.effect.id`));
-  console.log(effDef);
 
   return (
     <div className={cx("bp3-dark", css.slideSettings)}>

@@ -57,7 +57,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       try {
         hashJson = await (await fetch(hashUrl)).json();
       } catch (err: any) {
-        console.error(err);
+        logger.error(err);
         const devItem: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",
@@ -108,7 +108,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           `Development Component (${devItems[i].type}) has been loaded.`
         );
       } catch (err: any) {
-        console.error(err);
+        logger.error(err);
         const devItem: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",

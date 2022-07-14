@@ -64,11 +64,9 @@ const SlideSmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
             grid={[1, 1]}
             scale={1}
             bounds={{ left: 0, right: (lineRef?.current as any)?.offsetWidth }}
-            // onStart={console.log}
             onDrag={(evt: DraggableEvent, data: DraggableData) => {
               calculateTimeFromThumb(data.x);
             }}
-            //onStop={console.log}
           >
             <div className={cx(css.thumb, "handle")}></div>
           </Draggable>

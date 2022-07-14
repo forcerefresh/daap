@@ -31,10 +31,7 @@ export class FontPreloader {
         families: [fontFamily],
       },
       classes: false,
-      fontloading: (familyName: string, fvd: string) => {
-        //console.log(familyName);
-        //console.log(fvd);
-      },
+      fontloading: (familyName: string, fvd: string) => {},
       fontactive: (familyName: string, fvd: string) => {
         this.onLoaded(fontFamily);
       },

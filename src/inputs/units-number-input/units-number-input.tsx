@@ -64,7 +64,6 @@ export const UnitsNumberInputForm: React.FC<
 
   const id = `${propertyName}_units_input_number`;
 
-  console.log(inputProps);
   const latestUnit = React.useRef<UnitType>(allowedUnits[0]);
   if (value2UnitValue(value, allowedUnits).unit !== null) {
     latestUnit.current = value2UnitValue(value, allowedUnits).unit;

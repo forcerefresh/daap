@@ -309,7 +309,6 @@ function getPSGSize(
   type: "page" | "stage" | "guidelines" | string,
   breakpointConfig: BreakpointConfiguration
 ) {
-  console.info(breakpointConfig.normal._maxSliderSize);
   const stageSize =
     breakpointConfig.normal._maxSliderSize ||
     breakpointConfig.normal.maxSliderSize;
@@ -422,31 +421,9 @@ export function unitValueToPx(
     };
   }
 
-  console.log(breakpointConfig?.normal?.guidelinesPadding);
-  console.log(
-    stageSize.height -
-      ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
-        (breakpointConfig?.normal?.guidelinesPadding.bottom || 0))
-  );
+
 
   if (relativeTo === "guidelines") {
-    console.log({
-      top: (breakpointConfig?.normal?.guidelinesPadding.top || 0) + "px",
-      left: (breakpointConfig?.normal?.guidelinesPadding.left || 0) + "px",
-
-      width:
-        stageSize.width -
-        ((breakpointConfig?.normal?.guidelinesPadding.left || 0) +
-          (breakpointConfig?.normal?.guidelinesPadding.right || 0)) +
-        "px",
-      height:
-        stageSize.height -
-        ((breakpointConfig?.normal?.guidelinesPadding.top || 0) +
-          (breakpointConfig?.normal?.guidelinesPadding.bottom || 0) +
-          100) +
-        "px",
-    });
-
     return {
       top: (breakpointConfig?.normal?.guidelinesPadding.top || 0) + "px",
       left: (breakpointConfig?.normal?.guidelinesPadding.left || 0) + "px",

@@ -120,10 +120,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } = props;
   logger.debug("StagePanel rendering");
 
-  const [error, resetError] = useErrorBoundary(
-    // You can optionally log the error to an error reporting service
-    (error, errorInfo) => console.log(error, errorInfo)
-  );
+  const [error, resetError] = useErrorBoundary((error, errorInfo) => {
+    logger.log(error, errorInfo);
+  });
 
   if (error) return null;
 
@@ -148,7 +147,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     let totalDuration = 0;
     const slideTimelineDataArr: SlideTimelineData[] =
       exportData.slideDataArr.map((slideData) => {
-        //console.log(slideData.slide);
         const transitionDuration =
           slideData.slide.transitions.slide?.[0]?.duration || "0ms";
 
@@ -426,14 +424,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [rootRef, windowWidth, windowHeight]);
 
+  // TODO: vieport size dev is in progress
   const renderVieportSize = () => {
-    return (
-      <ViewportSize
-        onChange={(size) => {
-          console.log(size);
-        }}
-      />
-    );
+    return <ViewportSize onChange={(size) => {}} />;
   };
 
   const renderSlideTimelineInfo = () => {
@@ -586,14 +579,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const layerClassName = "layer-" + layer.id;
 
     let layerCss = "";
-    //console.log(layerCss);
     if (layerValues.layoutChildren.itemsGap.type === "common") {
       layerCss += `
       .${layerClassName} > * {
         margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
       }
     `;
-      //console.log(layerCss);
     } else {
       layerValues.layoutChildren.itemsGap.eachValues.forEach(
         (eachValue, idx) => {
@@ -603,17 +594,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         `;
         }
       );
-      //console.log(layerCss);
     }
-
-    //console.log(layerCss);
 
     layerCss += `.${layerClassName} {
      ${addCommonPropertiesToStyle("", layer)}
      z-index: 100;
     }`;
 
-    //console.log(layerCss);
     return (
       <div key={layer.id}>
         <style>{layerCss}</style>
@@ -808,12 +795,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       widthAndHeightObject.height = resizeRect.h;
     }
 
-    // IMPORTANT: TODO: LEAKING rerender...
-    //console.log(resizeRect);
-    //console.log(resizeData?.objectId === object.id);
-
     const objDraggablePos: { x: number; y: number } = { x: 0, y: 0 };
-    //if (isAbsolutePosition) {
 
     // AKO RESUJZIJEMO OBJEKAT
     if (resizeRect && resizeData?.objectId === object.id) {
@@ -824,7 +806,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       objDraggablePos.y = parseInt(calculatedObjectSize.top!.toString(), 10);
     }
 
-    //}
     // object holder
     const objectHolderStyle: CSSProperties = {
       position: "relative",
@@ -959,7 +940,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         stageToolInternal === StageTools.DRAW
       ) {
         const rect = getRectFromPoints(selectionStartPosition, point);
-        // console.log(rect);
         //rect.x -= stageXOffset;
         //rect.y -= stageYOffset;
         applyRectValuesToElement(selectionBoxRef?.current, rect);
@@ -1243,7 +1223,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         [css.panCursor]: stageToolInternal === StageTools.PAN,
         [css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
-      //onWheel={console.log}
       onMouseDown={(e: React.MouseEvent) => {
         e.persist();
         const target = e.target as HTMLElement;
@@ -1296,8 +1275,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         }
 
         if (stageToolInternal === StageTools.PAN) {
-          //console.log({ ...panMoveStart });
-
           //setPanMoveStart(() => ({ ...panMove }));
           //setPanMove(() => ({ x: 0, y: 0 }));
           setSelectionStartPosition(null);

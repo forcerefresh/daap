@@ -208,7 +208,6 @@ export function multiImagePostProcess(
   const newValues = newObj.definition.values as MultiImageValues;
 
   if (prevValues.images.length === newValues.images.length) {
-    console.log(newValues.images);
     newValues.images.forEach((newImage, idx) => {
       const prevImages = prevValues.images[idx];
       if (newImage.image.sourceType !== prevImages.image.sourceType) {
@@ -252,7 +251,6 @@ export const getMultiImageAssetsUrls = (props: {
     }
   });
 
-  console.log(ret);
   return ret;
 };
 

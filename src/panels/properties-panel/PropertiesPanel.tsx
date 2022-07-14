@@ -329,7 +329,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       }
     };
 
-    //console.log(objectDef);
     return <>{getInputForm(InputType.CORNER_RADIUS, objectDef, onChange)}</>;
   };
 
@@ -353,7 +352,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       const { propertyName } = property;
 
       function onChange(value: any) {
-        console.log(value);
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {
@@ -379,7 +377,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       }
 
       function onMetadataChange(metadata: IInputMetadataValues) {
-        console.log(metadata);
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {

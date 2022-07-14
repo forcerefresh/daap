@@ -80,10 +80,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
           families: [_selectedFont?.fontFamily],
         },
         classes: false,
-        fontloading: (familyName: string, fvd: string) => {
-          //console.log(familyName);
-          //console.log(fvd);
-        },
+        fontloading: (familyName: string, fvd: string) => {},
         fontactive: (familyName: string, fvd: string) => {
           setPreviewFont(_selectedFont);
           _setExternalFontLoaded(_selectedFont.fontFamily);

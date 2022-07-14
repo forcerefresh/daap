@@ -105,7 +105,6 @@ if (!gotTheLock) {
       mainWindow.webContents.executeJavaScript(
         `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`
       );
-      // console.log(jsFile.length);
     });*/
   });
 }

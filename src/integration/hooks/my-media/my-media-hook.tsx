@@ -196,11 +196,7 @@ export const useMyMediaHook = () => {
 
     let myImages: ImageData[] = JSON.parse(localStorage.getItem(lsKey) || "[]");
 
-    console.log(tags);
-    console.log();
     if (tags && tags.length > 0) {
-      console.log(tags);
-
       const tagsUpper = tags?.map((tag) => tag.toUpperCase()) || [];
       myImages = myImages.filter(
         (image) =>
@@ -213,12 +209,7 @@ export const useMyMediaHook = () => {
       myImages = myImages.filter((image) => image.title.indexOf(search) !== -1);
     }
 
-    console.log(myImages.length);
-    console.log(props);
     const retArr = [...myImages].splice(from, perPage);
-
-    console.log(myImages.length);
-    console.log(from + perPage);
 
     const hasMore = myImages.length > from + perPage;
 
@@ -235,13 +226,11 @@ export const useMyMediaHook = () => {
       localStorage.getItem(lsKey) || "[]"
     );
 
-    console.log(myImages);
     ids.forEach((id) => {
       remove(myImages, (item) => {
         return item.id === id;
       });
     });
-    console.log(myImages);
 
     localStorage.setItem(lsKey, JSON.stringify(myImages));
 

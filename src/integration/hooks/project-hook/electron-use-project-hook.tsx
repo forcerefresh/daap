@@ -20,7 +20,6 @@ export const useProjectHook = () => {
       ipcRenderer
         .invoke("apiGetProject", JSON.stringify(json))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });
@@ -43,7 +42,6 @@ export const useProjectHook = () => {
       ipcRenderer
         .invoke("apiGetProjects", JSON.stringify(json))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });
@@ -95,7 +93,6 @@ export const useProjectHook = () => {
       ipcRenderer
         .invoke("apiSaveProject", JSON.stringify(json))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });
@@ -112,7 +109,6 @@ export const useProjectHook = () => {
       ipcRenderer
         .invoke("apiDeleteProject", JSON.stringify(json))
         .then((result: any) => {
-          console.log(result);
           resolve(result);
         });
     });

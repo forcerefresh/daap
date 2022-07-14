@@ -144,7 +144,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     layerId: string
   ) => {
-    console.log("SSSSSSSSSSSSSSSSSS");
     if (event.ctrlKey) {
       selectedLayerIds.indexOf(layerId) === -1
         ? _addLayersToSelection([layerId])
@@ -190,7 +189,6 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   const scrollToBottomDelayed = () => {
     delay(() => {
       layersHolderRef.current?.scrollTo({ top: 10000000 });
-      console.log("scrollTo");
     }, 1);
   };
 

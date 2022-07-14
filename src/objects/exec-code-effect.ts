@@ -29,7 +29,6 @@ gsap.registerEffect({
     let isStarted = false;
 
     const onStart = () => {
-      console.log("onstart exec code");
       execCodeFunc_Start?.({
         id,
         className,
@@ -39,7 +38,6 @@ gsap.registerEffect({
       });
     };
     const onStop = () => {
-      console.log("onstop exec code");
       execCodeFunc_Stop?.({
         id,
         className,

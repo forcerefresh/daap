@@ -274,8 +274,6 @@ export async function spinnerSizeUpdate(props: {
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize } = props;
-  console.log("spinnerSizeUpdate: id> " + id);
-  console.log(calculatedObjectSize);
 }
 
 export const spinnerMeta = {

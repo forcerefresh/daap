@@ -41,7 +41,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   const { previewTimelineState } = useContext(PreviewTimelineContext);
   //const [progress, setProgress] = useState<number>(0);
 
-  //console.log(projectTimelineData);
   // get total duration
   let totalTime = 0;
   projectTimelineData?.slides.forEach((slideData, idx) => {
@@ -51,8 +50,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     totalTime += convertTimeUnitToMs(slideData.duration); //-slideData.transitionDuration;
     /*}*/
   });
-
-  //console.log(totalTime);
 
   let currPos = 0;
   const slideLeftArr: number[] = [];
@@ -81,12 +78,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     //render timeline content
 
     if (lineRef.current) {
-      //console.log(totalTime, "TOTAL TIME");
-
       const lineDiv = lineRef.current! as HTMLDivElement;
       const lineWidth = lineDiv.offsetWidth;
-
-      //console.log(lineWidth);
 
       // NOTE: html is only for transitions
       let html = "";
@@ -131,11 +124,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     ) / 1000;
   const progress = previewTimelineState.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
-  // console.log(projectTimelineData?.slides[slideProgress.slideIdx].duration);
-  // console.log(slideProgress.time);
-  // console.log(progress);
-  // console.log(slideProgress.progress);
-  //console.log((lineRef?.current as any)?.offsetWidth);
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
   let left =
     lineWidth *
@@ -144,8 +132,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   left = left + lineWidth * slideLeftArr[previewTimelineState.slideIdx];
 
-  //console.log(slideLeftArr, "LEFT PER");
-  //console.log(left, "LEFT");
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 
@@ -155,7 +141,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     //tl.progress(multiplier, true);
   };
 
-  //console.log(left);
   return (
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>
@@ -174,11 +159,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
             grid={[1, 1]}
             scale={1}
             bounds={{ left: 0, right: (lineRef?.current as any)?.offsetWidth }}
-            // onStart={console.log}
             onDrag={(evt: DraggableEvent, data: DraggableData) => {
               calculateTimeFromThumb(data.x);
             }}
-            //onStop={console.log}
           >
             <div className={cx(css.thumb, "handle")}></div>
           </Draggable>

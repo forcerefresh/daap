@@ -89,8 +89,6 @@ export async function delaySizeUpdate(props: {
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize } = props;
-  console.log("delaySizeUpdate: id> " + id);
-  console.log(calculatedObjectSize);
 }
 
 export async function preloadDelay(props: {

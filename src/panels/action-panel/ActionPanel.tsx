@@ -114,7 +114,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const reloadAssignedStorageObjects = () => {
     if (supportStorageObjects) {
       listAssignedStorageObjects({ projectId: meta.id! }).then((res) => {
-        console.log(res);
         setAssignedBuckets(res);
       });
     }
@@ -150,9 +149,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {
     const icon = getIconByType(conf.type);
     const size = getIconSize(icon);
-    //console.log(selectedDevice);
 
-    //console.log(conf.type);
     return (
       <Button
         key={conf.type}
@@ -177,73 +174,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     );
   };
 
-  /*const onClickSave = () => {
-    // prepare preview thumbnail data >>>> START
-    const breakpointConfig = breakpointsConfiguration.find(
-      (p) => p.type === "large-1"
-    );
-
-    const previewExportData = generatePlayerData(
-      { slides, layers, objects },
-      { entityType: "slide", entityId: slides.normalSlides[0] },
-      breakpointConfig!,
-      settings
-    );
-
-    const scale = THUMB_WIDTH / breakpointConfig!.normal.slide.width!;
-    const thumbHeight = scale * breakpointConfig!.normal.slide.height!;
-    const thumbSize = { width: THUMB_WIDTH, height: thumbHeight, scale: scale };
-    // prepare preview thumbnail data <<<< END
-
-    const playerData = generatePlayerData(
-      { slides, layers, objects },
-      { entityType: "project", entityId: "current-project" },
-      breakpointConfig!,
-      settings
-    );
-
-    _updateProjectMeta({ inSaving: true });
-
-    saveProject({
-      id: meta.id,
-      name: meta.name!,
-      description: meta.description!,
-      project,
-      preview: {
-        width: thumbSize.width,
-        height: thumbSize.height,
-        scale: thumbSize.scale,
-        html: previewExportData.html,
-      },
-      playerData,
-    })
-      .then(({ id, name, description, slides, created, modified }) => {
-        console.log({ id, name, description });
-        _updateProjectMeta({
-          id,
-          name,
-          description,
-          slides,
-          created,
-          modified,
-          inSaving: false,
-        });
-        _updateEditor({ sliderChanged: false, isExistingProject: true });
-
-        AppToaster.show({
-          intent: "success",
-          message: "Slider is successfully saved.",
-        });
-      })
-      .catch((e) => {
-        _updateProjectMeta({ inSaving: false });
-        AppToaster.show({
-          intent: "danger",
-          message: "Something went wrong. Slider is not saved.",
-        });
-      });
-  };*/
-
   return (
     <div className={css.actionPanel}>
       <div className={css.panelHeader}>
@@ -252,7 +182,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           <span className={cx(css.sliderName)}>
             {!!meta.id ? " [ " + meta.name + " ] " : " [ Untitled ] "}
           </span>
-          {/*{isChanged && <span className={css.changed}>*</span>}*/}
         </div>
       </div>
 
@@ -265,7 +194,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             icon={"pause"}
             style={{ marginRight: "20px" }}
             onClick={() => {
-              const isPreview = !previewState.isPreview;
               _setStagePreview({
                 ...previewState,
                 paused: !previewState.paused,

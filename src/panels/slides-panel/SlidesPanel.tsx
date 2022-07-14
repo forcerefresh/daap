@@ -118,7 +118,6 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   const scrollToBottomDelayed = () => {
     delay(() => {
       slidesHolderRef.current?.scrollTo({ top: 10000000 });
-      console.log("scrollTo");
     }, 1);
   };
 

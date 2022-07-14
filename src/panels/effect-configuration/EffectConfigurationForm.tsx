@@ -213,7 +213,6 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               const newTransition = cloneDeep(transition);
               newTransition.effect.id = value;
 
-              console.log(transition.effect.values);
               const values = (transition.effect.values || {}) as {
                 [key: string]: any;
               };
@@ -221,7 +220,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               const flatEffDef = flattenForm(
                 effDef.definition.form as IFormLayoutItem[]
               );
-              console.log(flatEffDef);
+
               flatEffDef.forEach((item) => {
                 values[item.propertyName] = effDef.defaults[item.propertyName];
               });

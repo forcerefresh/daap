@@ -114,25 +114,21 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
 function getColors(svgSource: string): RGBColor[] {
   let colors: string[] = [];
   /*  svgSource.replace(/fill:(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
-    console.log(c);
     colors.push(c);
     return v;
   });
   svgSource.replace(/fill="(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
-    console.log(c);
     colors.push(c);
     return v;
   });
   */
   svgSource.replace(/(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
-    console.log(c);
     colors.push(c);
     return v;
   });
 
   //colors = uniq(colors);
 
-  console.log(colors);
   return colors.map((c) => hexToRGB(c, 1));
 }
 

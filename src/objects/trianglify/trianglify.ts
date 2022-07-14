@@ -291,8 +291,6 @@ export async function trianglifySizeUpdate(props: {
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize } = props;
-  console.log("trianglifySizeUpdate: id> " + id);
-  console.log(calculatedObjectSize);
 }
 
 export const trianglifyMeta = {

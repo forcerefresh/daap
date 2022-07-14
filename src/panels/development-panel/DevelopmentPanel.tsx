@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { v4 as uuid } from "uuid";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -8,7 +8,6 @@ import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./DevelopmentPanel.module.scss";
 import { forceRefresh } from "../../store/actions/actions";
-//import { registerDevObjectUrl } from "../../utils/development/development-utils";
 import { getSelectField, getTextField } from "../../inputs/input-utils";
 import { DevelopmentItem } from "./i-development-types";
 import { String } from "aws-sdk/clients/apigateway";
@@ -34,13 +33,8 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
 
   const { developmentItems: items } = useContext(DevelopmentContext);
 
-  console.log(items);
-  //const [items, setItems] = useState<DevelopmentItem[]>([]);
-
   useEffect(() => {
-    getAll().then((res) => {
-      //setItems(res);
-    });
+    getAll().then(() => {});
   }, []);
 
   const updateItem = async (
@@ -58,8 +52,6 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
         statusMessage: "",
       };
       await updateDevelopmentItem(itemToUpdate);
-      //const newItems = await getAll();
-      //setItems(newItems);
     }
   };
 

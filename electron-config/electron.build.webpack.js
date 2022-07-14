@@ -9,7 +9,6 @@ const envToMode = (env) => {
 };
 
 module.exports = (env) => {
-  console.log(env);
   return {
     entry: "./electron/main.js",
     devtool: "source-map",

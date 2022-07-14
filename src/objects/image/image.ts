@@ -135,7 +135,6 @@ export function getImageHtml(props: {
   const { object, isPlayer, isSave } = props;
   const imageValues = object.definition.values as ImageValues;
 
-  //console.log(imageProperties);
   if (!isPlayer) {
     if (
       !imageValues.image.image.sourceType ||
@@ -187,12 +186,8 @@ export async function imageSizeUpdate(props: {
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize, className } = props;
-  // console.log("imageSizeUpdate: id> " + id);
-  // console.log(calculatedObjectSize);
-  // console.log(className);ge
 
   const els = document.getElementsByClassName(className);
-  // console.log(els);
   const imageDiv = els[0] as HTMLDivElement;
   const parent = imageDiv.parentNode! as HTMLDivElement;
   parent.style.width = calculatedObjectSize.width;

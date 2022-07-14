@@ -28,7 +28,6 @@ export type IPublishPanelMergedProps = typeof mapDispatchToProps &
 const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   const { meta, onChange } = props;
 
-  console.log(process.env);
   const globalContext = useContext(IntegrationContext);
   const {
     publishToStorageObject,
@@ -71,7 +70,6 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
       (bucket) => assignedIds.indexOf(bucket.id!) !== -1
     );
     setVisibleBuckets(viz);
-    console.log(viz);
   }, [allBuckets, assignedIds]);
 
   const bucketListMenu = (
@@ -181,7 +179,6 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                 }}
                 onConfirm={(doneCallback) => {
                   const unsubscribe = subscribeToPublishDetails((details) => {
-                    console.log(details);
                     setPublishLogs((publishLogs) => [
                       ...publishLogs,
                       ...details,
@@ -279,7 +276,6 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
               }}
               onConfirm={async (doneCallback) => {
                 const unsubscribe = subscribeToPublishDetails((details) => {
-                  console.log(details);
                   setPublishLogs((publishLogs) => [...publishLogs, ...details]);
                 });
 
@@ -287,7 +283,6 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                   projectId: meta.id!,
                 });
 
-                console.log(base64Zip);
                 const blob = base64ToBlob(base64Zip, "application/zip");
                 downloadBlob(
                   blob,

@@ -39,7 +39,6 @@ export function DropHandle(props: IDropHandleProps) {
     drop: dropHandler,
   }));
 
-  console.log(item);
   return (
     <div
       className={cx(css.dropObjectHandle, {

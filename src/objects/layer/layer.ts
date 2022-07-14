@@ -6,7 +6,6 @@ export async function layerSizeUpdate(props: {
 }): Promise<void> {
   const { id, calculatedObjectSize, className } = props;
   const els = document.getElementsByClassName(className);
-  // console.log(els);
   const div = els[0] as HTMLDivElement;
   /*const parent = div.parentNode! as HTMLDivElement;
   parent.style.width = calculatedObjectSize.width;

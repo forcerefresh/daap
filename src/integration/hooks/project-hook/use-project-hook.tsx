@@ -42,11 +42,8 @@ export const useProjectHook = () => {
 
     projects.reverse();
 
-    console.log(search);
-
     const retArr = projects
       .filter((item) => {
-        console.log(item.name.indexOf(search) !== -1);
         return !search || item.name.indexOf(search) !== -1;
       })
       .splice(from, perPage);

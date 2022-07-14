@@ -479,10 +479,6 @@ export function getObjectHtml(
           thumbnailHtmlArr,
           slidesCounter,
         });
-        //} catch (e: any) {
-        // console.error(e.stack);
-        // console.error(e);
-        //}
       }
       return "";
   }
