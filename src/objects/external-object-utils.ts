@@ -1,12 +1,13 @@
 import { isEffectRegistered, registerEffect } from "../effects/effects";
-import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import {
   isObjectRegistered,
   registerExternalObject,
 } from "../webslider-sdk/src/objects/objects-register";
+import { logger } from "../webslider-sdk/src/utils/logger/logger";
 
 export async function loadAndRegisterExternalComponent(
-  marketItem: IMarketItem
+  marketItem: IExtensionItem
 ) {
   if (
     marketItem.componentType === "object" &&
@@ -24,11 +25,12 @@ export async function loadAndRegisterExternalComponent(
   }
 
   await import(
-    /* @ts-ignore */ /* webpackIgnore: true */ `${process.env.REACT_APP_MARKETPLACE_BASE_URL}/${marketItem.packageUrl}`
+    /* @ts-ignore */ /* webpackIgnore: true */ `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${marketItem.packageUrl}`
   );
 
   if (marketItem.componentType === "object") {
     const obj = (window as any).WebSlider_GlobalScope.objects[marketItem.type];
+    logger.info(`Object '${obj.type}' has been registered`);
     registerExternalObject(obj);
   } else if (marketItem.componentType === "effect") {
     const eff = (window as any).WebSlider_GlobalScope.effects[marketItem.type];

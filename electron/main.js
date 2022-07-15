@@ -99,7 +99,7 @@ if (!gotTheLock) {
     /*
     mainWindow.webContents.on("did-finish-load", function () {
       var jsFile = fs.readFileSync(
-        path.join(getMarketplacePath(), "sample-object.js")
+        path.join(getExtensionsPath(), "sample-object.js")
       );
       mainWindow.webContents.executeJavaScript(jsFile);
       mainWindow.webContents.executeJavaScript(

@@ -53,7 +53,7 @@ import {
   ISources,
   ITransitionsData,
 } from "./i-export-html";
-import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import { getEffectDefinition } from "../effects/effects";
 
 export function generatePlayerData(
@@ -62,7 +62,7 @@ export function generatePlayerData(
   breakpointConfig: BreakpointConfiguration,
   breakpoints: Breakpoints,
   settings: ISettings,
-  marketItems: IMarketItem[] = [],
+  marketItems: IExtensionItem[] = [],
   options: { isSave: boolean }
 ): IPlayerData {
   const { slides, layers, objects } = sources;

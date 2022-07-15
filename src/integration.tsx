@@ -3,7 +3,7 @@ import { IPlayerData } from "./export/i-export-html";
 import { Preset, PresetGroup } from "./webslider-sdk/src/inputs/i-inputs";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
-import { IMarketItem } from "./webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "./webslider-sdk/src/objects/i-extensions";
 import { IAppSettings } from "./store/reducers/globals";
 import {
   MediaDataInfo,
@@ -154,26 +154,26 @@ export const IntegrationContext = React.createContext({
       Promise.resolve({ url: "" }),
   }),
 
-  useMarketplaceHook: () => ({
+  useExtensionsHook: () => ({
     /* get installed market items */
-    getInstalledMarketItems: (): Promise<{ items: IMarketItem[] }> =>
-      Promise.resolve({ items: [] as IMarketItem[] }),
+    getInstalledMarketItems: (): Promise<{ items: IExtensionItem[] }> =>
+      Promise.resolve({ items: [] as IExtensionItem[] }),
 
     /* get market items from server */
     getMarketItems: (
       from: number,
       search?: string,
       tags?: string[]
-    ): Promise<{ items: IMarketItem[] }> =>
-      Promise.resolve({ items: [] as IMarketItem[] }),
+    ): Promise<{ items: IExtensionItem[] }> =>
+      Promise.resolve({ items: [] as IExtensionItem[] }),
 
     /* install market item */
-    installMarketItem: (marketItem: IMarketItem): Promise<any> =>
-      Promise.resolve({} as IMarketItem),
+    installMarketItem: (marketItem: IExtensionItem): Promise<any> =>
+      Promise.resolve({} as IExtensionItem),
 
     /* uninstall market item */
     uninstallMarketItem: (id: number): Promise<any> =>
-      Promise.resolve({} as IMarketItem),
+      Promise.resolve({} as IExtensionItem),
   }),
 
   useProjectHook: () => ({
@@ -350,20 +350,19 @@ function usePresetsHookFactory() {
     .usePresets;
 }
 
-function useMarketplaceHookFactory() {
+function useExtensionsHookFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/marketplace-hook/electron-use-marketplace-hook")
-      .useMarketplaceHook;
+    return require("./integration/hooks/extensions-hook/electron-use-extensions-hook")
+      .useExtensionsHook;
   } else {*/
-  return require("./integration/hooks/marketplace-hook/use-marketplace-hook")
-    .useMarketplaceHook;
+  return require("./integration/hooks/extensions-hook/use-extensions-hook")
+    .useExtensionsHook;
   /*}*/
 }
 
 function useDevelopmentHookFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/marketplace-hook/electron-use-marketplace-hook")
-      .useMarketplaceHook;
+
   } else {*/
   return require("./integration/hooks/development-hook/use-development-hook")
     .useDevelopmentHook;
@@ -383,7 +382,7 @@ export const IntegrationContextProvider = (
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
-        useMarketplaceHook: useMarketplaceHookFactory(),
+        useExtensionsHook: useExtensionsHookFactory(),
         useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),
       }}

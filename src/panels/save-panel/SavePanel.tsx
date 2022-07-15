@@ -57,7 +57,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { saveProject, getNextProjectId } = globalContext.useProjectHook();
 
-  const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
+  const { getInstalledMarketItems } = globalContext.useExtensionsHook();
 
   // spinner
   //const [showSpinner, setShowSpinner] = useState(false);

@@ -90,7 +90,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
   };
 
   return (
-    <div className={css.marketplacePanel}>
+    <div className={css.extensionsPanel}>
       <div className={css.headerSection}>
         <div>
           Register component you are working on to get instant preview directly

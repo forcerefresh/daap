@@ -22,8 +22,6 @@ function application(): {
   component: React.ReactElement;
   useAppRootSelector: any;
 } {
-  logger.debug("RENDER STAGE PANEL");
-
   return {
     component: (
       <React.StrictMode>

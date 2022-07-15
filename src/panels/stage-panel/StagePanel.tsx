@@ -118,7 +118,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     breakpoints,
     forceRefreshRand: _forceRefreshRand,
   } = props;
-  logger.debug("StagePanel rendering");
+  //logger.debug("StagePanel rendering");
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
     logger.log(error, errorInfo);

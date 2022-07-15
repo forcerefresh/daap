@@ -1,4 +1,4 @@
-.marketplacePanel {
+.extensionsPanel {
   height: calc(100vh - 110px);
   padding: 3px;
   padding-right: 30px;
@@ -9,7 +9,7 @@
   margin-right: 30px;
 
   :global {
-    .bp3-popover-target { 
+    .bp3-popover-target {
       display: block;
     }
   }
@@ -41,7 +41,7 @@
   }
 }
 
-.buttonsHolder{
+.buttonsHolder {
   margin-bottom: 15px;
 }
 

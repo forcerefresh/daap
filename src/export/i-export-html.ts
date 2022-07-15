@@ -1,5 +1,5 @@
 import React from "react";
-import { IMarketItem } from "../webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import { CoreObjectType } from "../webslider-sdk/src/objects/objects-register";
 import {
   ILayout,
@@ -57,7 +57,7 @@ export interface IPlayerData {
     pageHeight: number;
   };
   breakpoints: Breakpoints;
-  marketItems: IMarketItem[];
+  marketItems: IExtensionItem[];
 }
 
 export interface ISources {

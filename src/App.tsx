@@ -21,7 +21,7 @@ function App(props: IAppProps) {
 
   const globalContext = useContext(IntegrationContext);
 
-  const { getInstalledMarketItems } = globalContext.useMarketplaceHook();
+  const { getInstalledMarketItems } = globalContext.useExtensionsHook();
   const { getSettings, scaleUI } = globalContext.useAppSettingsHook();
 
   useEffect(() => {

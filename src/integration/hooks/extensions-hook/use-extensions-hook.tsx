@@ -1,12 +1,12 @@
 // *** this file contains implementation for development
 
 import { remove } from "jszip";
-import { IMarketItem } from "../../../webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
 
-export const useMarketplaceHook = () => {
+export const useExtensionsHook = () => {
   /* returns projects */
-  const getInstalledMarketItems = (): Promise<{ items: IMarketItem[] }> => {
-    const marketItems: IMarketItem[] = JSON.parse(
+  const getInstalledMarketItems = (): Promise<{ items: IExtensionItem[] }> => {
+    const marketItems: IExtensionItem[] = JSON.parse(
       localStorage.getItem("marketItems") || "[]"
     );
 
@@ -20,8 +20,8 @@ export const useMarketplaceHook = () => {
     from: number,
     search?: string,
     tags?: string[]
-  ): Promise<{ items: IMarketItem[] }> => {
-    const apiUrl = `${process.env.REACT_APP_MARKETPLACE_BASE_URL}/api/v1`;
+  ): Promise<{ items: IExtensionItem[] }> => {
+    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1`;
     let url = `${apiUrl}?from=${from}`;
 
     if (search) {
@@ -33,7 +33,9 @@ export const useMarketplaceHook = () => {
     return fetch(url).then((res) => res.json());
   };
 
-  const installMarketItem = (marketItem: IMarketItem): Promise<IMarketItem> => {
+  const installMarketItem = (
+    marketItem: IExtensionItem
+  ): Promise<IExtensionItem> => {
     const marketItems = JSON.parse(localStorage.getItem("marketItems") || "[]");
 
     marketItems.push(marketItem);
@@ -43,10 +45,10 @@ export const useMarketplaceHook = () => {
     return Promise.resolve(marketItem);
   };
 
-  const uninstallMarketItem = (id: number): Promise<IMarketItem> => {
+  const uninstallMarketItem = (id: number): Promise<IExtensionItem> => {
     const marketItems = JSON.parse(localStorage.getItem("marketItems") || "[]");
 
-    const foundItem: IMarketItem = marketItems.find((item: any) => {
+    const foundItem: IExtensionItem = marketItems.find((item: any) => {
       return item.id === id;
     });
 

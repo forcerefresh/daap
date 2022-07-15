@@ -7,30 +7,30 @@ import { IStore } from "../../store/store";
 import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
-import css from "./MarketplacePanel.module.scss";
+import css from "./ExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
-import { IMarketItem } from "../../webslider-sdk/src/objects/i-marketplace";
+import { IExtensionItem } from "../../webslider-sdk/src/objects/i-extensions";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
-interface IMarketplacePanelProps {
+interface IExtensionsPanelProps {
   onRequestClose: () => void;
 }
 
-export type IMarketplaceMergedProps = typeof mapDispatchToProps &
+export type IExtensionsPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
-  IMarketplacePanelProps;
+  IExtensionsPanelProps;
 
-const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
+const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const { onRequestClose, _registerObject, _unregisterObject } = props;
 
-  const [marketItems, setMarketItems] = useState<IMarketItem[]>([]);
+  const [marketItems, setMarketItems] = useState<IExtensionItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isUninstallOpen, setIsUninstallOpen] = useState(false);
   const [isUninstallLoading, setUninstallLoading] = useState(false);
   const [installedMarketItems, setInstalledMarketItems] =
-    useState<IMarketItem[]>();
+    useState<IExtensionItem[]>();
 
   const globalContext = useContext(IntegrationContext);
   const {
@@ -38,13 +38,13 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
     installMarketItem,
     uninstallMarketItem,
     getInstalledMarketItems,
-  } = globalContext.useMarketplaceHook();
+  } = globalContext.useExtensionsHook();
   const UploadComponent = globalContext?.getMyUploadComponent;
 
   useEffect(() => {
     (() => {
       return getInstalledMarketItems();
-    })().then((res: { items: IMarketItem[] }) => {
+    })().then((res: { items: IExtensionItem[] }) => {
       setInstalledMarketItems(res.items);
     });
   }, []);
@@ -77,8 +77,8 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const uninstallIdRef = useRef<IMarketItem | undefined>();
-  const onUninstall = (marketItem: IMarketItem) => {
+  const uninstallIdRef = useRef<IExtensionItem | undefined>();
+  const onUninstall = (marketItem: IExtensionItem) => {
     setIsUninstallOpen(true);
     uninstallIdRef.current = marketItem;
   };
@@ -109,7 +109,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
     setUninstallLoading(false);
   };
 
-  const onInstall = (item: IMarketItem) => {
+  const onInstall = (item: IExtensionItem) => {
     installMarketItem(item).then((mItem) => {
       loadAndRegisterExternalComponent(mItem).then(() => {});
 
@@ -128,7 +128,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
     return null;
   }
   return (
-    <div className={css.marketplacePanel}>
+    <div className={css.ExtensionsPanel}>
       <UploadComponent
         type="extension"
         onComplete={() => {
@@ -209,7 +209,7 @@ const MarketplacePanel: React.FC<IMarketplaceMergedProps> = (props) => {
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
                     <img
-                      src={`${process.env.REACT_APP_MARKETPLACE_BASE_URL}/${marketItem.logoUrl}`}
+                      src={`${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${marketItem.logoUrl}`}
                     ></img>
                   </div>
                 </div>
@@ -297,4 +297,4 @@ const mapDispatchToProps = {
   _unregisterObject: (extObjectDef: any) => undefined,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MarketplacePanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ExtensionsPanel);
