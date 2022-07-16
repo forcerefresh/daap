@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
-import { getConnectorBySourceId } from "./json-loader/connectors-manager";
+import { getConnectorBySourceId } from "../webslider-sdk/src/connectors/connector-manager";
 
 export interface ExecCodeConfig {
   execCodeFunc_Start: executionCodeFuncType;

@@ -13,8 +13,9 @@ import {
 } from "../../webslider-sdk/src/objects/i-object";
 import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
-import { getOrCreateConnectorById } from "./connectors-manager";
+import { getOrCreateConnectorById } from "../../webslider-sdk//src/connectors/connector-manager";
 import logo from "./json-source-logo.svg";
+import { JSONSourceConnector } from "./json-source-connector";
 
 export const JSON_SOURCE = "json_source";
 
@@ -143,7 +144,11 @@ export async function jsonSourceStart(props: {
   const { id, values } = props;
   const jsonSourceValues = values as JsonSourceValues;
 
-  const conn = getOrCreateConnectorById(id, jsonSourceValues.sourceId);
+  const conn = getOrCreateConnectorById(
+    JSONSourceConnector,
+    id,
+    jsonSourceValues.sourceId
+  );
 
   if (!jsonSourceValues.preload) {
     await conn.loadData(jsonSourceValues.url);
@@ -166,7 +171,11 @@ export async function jsonSourcePreload(props: {
   const { id, values } = props;
 
   const jsonSourceValues = values as JsonSourceValues;
-  const conn = getOrCreateConnectorById(id, jsonSourceValues.sourceId);
+  const conn = getOrCreateConnectorById(
+    JSONSourceConnector,
+    id,
+    jsonSourceValues.sourceId
+  );
 
   await conn.loadData(jsonSourceValues.url);
 
