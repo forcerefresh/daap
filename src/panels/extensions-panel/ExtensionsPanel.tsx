@@ -32,6 +32,9 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const [installedExtensions, setInstalledExtensions] =
     useState<IExtensionItem[]>();
 
+  const [currentlyInstallingExtensions, setCurrentlyInstallingExtensions] =
+    useState<{ [key: string]: boolean }>({});
+
   const globalContext = useContext(IntegrationContext);
   const {
     getExtensions,
@@ -42,10 +45,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const UploadComponent = globalContext?.getMyUploadComponent;
 
   useEffect(() => {
-    (() => {
-      return getInstalledExtensions();
-    })().then((res: { items: IExtensionItem[] }) => {
-      logger.log(res);
+    getInstalledExtensions().then((res: { items: IExtensionItem[] }) => {
       setInstalledExtensions(res.items);
     });
   }, []);
@@ -90,16 +90,17 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     if (!uninstallIdRef.current?.id) return;
 
     uninstallExtension(uninstallIdRef.current.id).then(
-      ({ id }: { id: number }) => {
+      (mItem?: Partial<IExtensionItem>) => {
         getInstalledExtensions().then((res) => {
           setInstalledExtensions(res.items);
         });
 
         setIsUninstallOpen(false);
         setUninstallLoading(false);
+
         AppToaster.show({
           intent: "success",
-          message: "Object is successfully uninstalled.",
+          message: `Extension "${mItem?.name}" is successfully uninstalled.`,
         });
       }
     );
@@ -111,12 +112,21 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   };
 
   const onInstall = (item: IExtensionItem) => {
+    setCurrentlyInstallingExtensions({
+      ...currentlyInstallingExtensions,
+      [item.type]: true,
+    });
     installExtension(item).then((mItem) => {
       loadAndRegisterExternalComponent(mItem).then(() => {});
 
       AppToaster.show({
         intent: "success",
         message: `Extension "${mItem.name}" is successfully installed.`,
+      });
+
+      setCurrentlyInstallingExtensions({
+        ...currentlyInstallingExtensions,
+        [mItem.type]: false,
       });
 
       getInstalledExtensions().then((res) => {
@@ -240,10 +250,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                       (item) => item.id === extension.id
                     ) && (
                       <Button
+                        disabled={currentlyInstallingExtensions[extension.type]}
                         intent="primary"
                         onClick={() => onInstall(extension)}
                       >
-                        Install
+                        {currentlyInstallingExtensions[extension.type]
+                          ? "Installing..."
+                          : "Install"}
                       </Button>
                     )}
 

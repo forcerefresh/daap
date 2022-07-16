@@ -5,9 +5,9 @@ let ext: {
 };
 
 if (process.env.REACT_APP_INTEGRATION === "electron") {
-  //ext = require("./electron-local-media");
+  ext = require("./electron-load-extension");
 } else {
-  ext = require("./load-extensison");
+  ext = require("./load-extension");
 }
 
 export const addExtensionCode = ext.addExtensionCode;

@@ -1,5 +1,4 @@
 import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
-import JSZip from "jszip";
 import { logger } from "../../../webslider-sdk/src/utils/logger/logger";
 
 export const useExtensionsHook = () => {
@@ -47,35 +46,23 @@ export const useExtensionsHook = () => {
 
       ipcRenderer
         .invoke("Extensions::InstallExtension", JSON.stringify(extension))
-        .then((result: any) => {
-          return Promise.resolve(extension);
+        .then((extension: IExtensionItem) => {
+          resolve(extension);
         });
     });
   };
 
   /*uninstall extension*/
   const uninstallExtension = (id: number): Promise<IExtensionItem> => {
-    // remove from db
-    const extensions = JSON.parse(localStorage.getItem("extensions") || "[]");
+    return new Promise((resolve, reject) => {
+      const { ipcRenderer } = window.require("electron");
 
-    const foundItem: IExtensionItem = extensions.find((item: any) => {
-      return item.id === id;
+      ipcRenderer
+        .invoke("Extensions::UninstallExtension", JSON.stringify({ id }))
+        .then((extension: IExtensionItem) => {
+          resolve(extension);
+        });
     });
-
-    const newExtensions = extensions.filter((item: any) => {
-      return item.id !== id;
-    });
-
-    localStorage.setItem("extensions", JSON.stringify(newExtensions));
-
-    // remove script
-    const extensionsStorage = JSON.parse(
-      localStorage.getItem("extensionStorage") || "{}"
-    );
-    delete extensionsStorage[foundItem.type];
-    localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));
-
-    return Promise.resolve(foundItem);
   };
 
   return {
