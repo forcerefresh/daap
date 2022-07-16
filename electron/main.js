@@ -9,6 +9,7 @@ require("./integration/project/project");
 require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
 require("./integration/my-media/my-media");
+require("./integration/extensions/extensions");
 
 // electron reloader
 if (process.env.ELECTRON_ENV === "development") {

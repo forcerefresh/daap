@@ -1,22 +1,12 @@
 // *** this file contains implementation for development
 
-import { remove } from "jszip";
 import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
+import JSZip from "jszip";
+import { logger } from "../../../webslider-sdk/src/utils/logger/logger";
 
 export const useExtensionsHook = () => {
-  /* returns projects */
-  const getInstalledMarketItems = (): Promise<{ items: IExtensionItem[] }> => {
-    const marketItems: IExtensionItem[] = JSON.parse(
-      localStorage.getItem("marketItems") || "[]"
-    );
-
-    return new Promise((resolve) => {
-      resolve({ items: marketItems });
-    });
-  };
-
-  /* returns projects */
-  const getMarketItems = (
+  /* returns available extensions from directory */
+  const getExtensions = (
     from: number,
     search?: string,
     tags?: string[]
@@ -33,38 +23,81 @@ export const useExtensionsHook = () => {
     return fetch(url).then((res) => res.json());
   };
 
-  const installMarketItem = (
-    marketItem: IExtensionItem
-  ): Promise<IExtensionItem> => {
-    const marketItems = JSON.parse(localStorage.getItem("marketItems") || "[]");
+  /* returns installed extensions */
+  const getInstalledExtensions = (): Promise<{ items: IExtensionItem[] }> => {
+    const extensions: IExtensionItem[] = JSON.parse(
+      localStorage.getItem("extensions") || "[]"
+    );
 
-    marketItems.push(marketItem);
-
-    localStorage.setItem("marketItems", JSON.stringify(marketItems));
-
-    return Promise.resolve(marketItem);
+    return new Promise((resolve) => {
+      resolve({ items: extensions });
+    });
   };
 
-  const uninstallMarketItem = (id: number): Promise<IExtensionItem> => {
-    const marketItems = JSON.parse(localStorage.getItem("marketItems") || "[]");
+  /*install extension from directory*/
+  const installExtension = async (
+    extension: IExtensionItem
+  ): Promise<IExtensionItem> => {
+    // 1. add script
+    const extensionsStorage = JSON.parse(
+      localStorage.getItem("extensionStorage") || "{}"
+    );
 
-    const foundItem: IExtensionItem = marketItems.find((item: any) => {
+    const zipPackage = await fetch(extension.packageUrl);
+    const zip = new JSZip();
+    await zip.loadAsync(await zipPackage.blob());
+
+    // NOTE: not needed as we load object app
+    /*const objectFileContent = await zip
+      .file(extension.packageFiles.object)
+      ?.async("string");*/
+    const objectAppFileContent = await zip
+      .file(extension.packageFiles.objectApp)
+      ?.async("string");
+
+    extensionsStorage[extension.type] = {
+      objectApp: objectAppFileContent,
+    };
+
+    localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));
+
+    // 2. add to DB
+    const extensions = JSON.parse(localStorage.getItem("extensions") || "[]");
+    extensions.push(extension);
+    localStorage.setItem("extensions", JSON.stringify(extensions));
+
+    return Promise.resolve(extension);
+  };
+
+  /*uninstall extension*/
+  const uninstallExtension = (id: number): Promise<IExtensionItem> => {
+    // remove from db
+    const extensions = JSON.parse(localStorage.getItem("extensions") || "[]");
+
+    const foundItem: IExtensionItem = extensions.find((item: any) => {
       return item.id === id;
     });
 
-    const newMarketItems = marketItems.filter((item: any) => {
+    const newExtensions = extensions.filter((item: any) => {
       return item.id !== id;
     });
 
-    localStorage.setItem("marketItems", JSON.stringify(newMarketItems));
+    localStorage.setItem("extensions", JSON.stringify(newExtensions));
+
+    // remove script
+    const extensionsStorage = JSON.parse(
+      localStorage.getItem("extensionStorage") || "{}"
+    );
+    delete extensionsStorage[foundItem.type];
+    localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));
 
     return Promise.resolve(foundItem);
   };
 
   return {
-    getInstalledMarketItems,
-    getMarketItems,
-    installMarketItem,
-    uninstallMarketItem,
+    getExtensions,
+    getInstalledExtensions,
+    installExtension,
+    uninstallExtension,
   };
 };

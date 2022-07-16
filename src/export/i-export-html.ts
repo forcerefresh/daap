@@ -57,7 +57,7 @@ export interface IPlayerData {
     pageHeight: number;
   };
   breakpoints: Breakpoints;
-  marketItems: IExtensionItem[];
+  extensions: IExtensionItem[];
 }
 
 export interface ISources {

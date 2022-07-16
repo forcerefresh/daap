@@ -62,13 +62,13 @@ export function generatePlayerData(
   breakpointConfig: BreakpointConfiguration,
   breakpoints: Breakpoints,
   settings: ISettings,
-  marketItems: IExtensionItem[] = [],
+  extensions: IExtensionItem[] = [],
   options: { isSave: boolean }
 ): IPlayerData {
   const { slides, layers, objects } = sources;
   //const slideIds: string[] = [];
 
-  let marketItemTypes: string[] = [];
+  let extensionTypes: string[] = [];
 
   let normalSlidesArr: ISlide[] = [];
   let frontSlidesArr: ISlide[] = [];
@@ -117,7 +117,7 @@ export function generatePlayerData(
     );
     slideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
-    marketItemTypes = [...marketItemTypes, ...slideDataRes.marketItemTypes];
+    extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
   });
 
   frontSlidesArr.forEach((slide) => {
@@ -134,7 +134,7 @@ export function generatePlayerData(
     );
     frontSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
-    marketItemTypes = [...marketItemTypes, ...slideDataRes.marketItemTypes];
+    extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
   });
   html += "</div>"; //slides holder close
 
@@ -149,8 +149,8 @@ export function generatePlayerData(
       pageHeight: breakpointConfig.normal.page.height,
     },
     breakpoints: cloneDeep(breakpoints),
-    marketItems: marketItems.filter(
-      (item) => marketItemTypes.indexOf(item.type) !== -1
+    extensions: extensions.filter(
+      (item) => extensionTypes.indexOf(item.type) !== -1
     ),
   };
 }
@@ -191,9 +191,9 @@ function generateSlideData(
   thumbnailHtmlArr: (string | undefined)[],
   slidesLength: number,
   options: { isSave: boolean }
-): { slideData: ISlideData; html: string; marketItemTypes: string[] } {
+): { slideData: ISlideData; html: string; extensionTypes: string[] } {
   let html: string = "";
-  const marketItemTypes: string[] = [];
+  const extensionTypes: string[] = [];
 
   const transitionsData: ITransitionsData[] = [];
   const someSlideData = pick(slide, [
@@ -307,14 +307,14 @@ function generateSlideData(
       //part for externals
       const objDeff = getObjectDefinition(object.type);
       if (objDeff?.external) {
-        marketItemTypes.push(object.type);
+        extensionTypes.push(object.type);
       }
 
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
         tArr.forEach((t: ITransition | any) => {
           const def = getEffectDefinition(t?.effect?.id);
           if (def?.isExternal) {
-            marketItemTypes.push(t.effect.id);
+            extensionTypes.push(t.effect.id);
           }
         });
       });
@@ -406,7 +406,7 @@ function generateSlideData(
 
   html += "  </div>"; // slide close
 
-  return { slideData, html, marketItemTypes };
+  return { slideData, html, extensionTypes: extensionTypes };
 }
 
 function getObjectEvents(object: IObject) {

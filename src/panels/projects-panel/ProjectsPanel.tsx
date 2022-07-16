@@ -208,9 +208,9 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <p style={{ textAlign: "center", margin: "20px" }}>
+            <div style={{ textAlign: "center", margin: "20px" }}>
               <Spinner size={50} />
-            </p>
+            </div>
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"
@@ -230,7 +230,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           }
         >
           {projects?.map((project, idx) => (
-            <>
+            <div key={project.id}>
               <div className={cx(css.headerSection, css.tableRow)}>
                 <div className={css.id}>{project.id}</div>
                 <div className={css.thumb}>
@@ -285,7 +285,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                   ></Button>
                 </div>
               </div>
-            </>
+            </div>
           ))}
         </InfiniteScroll>
       </div>

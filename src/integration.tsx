@@ -155,24 +155,24 @@ export const IntegrationContext = React.createContext({
   }),
 
   useExtensionsHook: () => ({
-    /* get installed market items */
-    getInstalledMarketItems: (): Promise<{ items: IExtensionItem[] }> =>
+    /* get installed extensions */
+    getInstalledExtensions: (): Promise<{ items: IExtensionItem[] }> =>
       Promise.resolve({ items: [] as IExtensionItem[] }),
 
-    /* get market items from server */
-    getMarketItems: (
+    /* get extensions  from server */
+    getExtensions: (
       from: number,
       search?: string,
       tags?: string[]
     ): Promise<{ items: IExtensionItem[] }> =>
       Promise.resolve({ items: [] as IExtensionItem[] }),
 
-    /* install market item */
-    installMarketItem: (marketItem: IExtensionItem): Promise<any> =>
+    /* install extension */
+    installExtension: (extension: IExtensionItem): Promise<any> =>
       Promise.resolve({} as IExtensionItem),
 
-    /* uninstall market item */
-    uninstallMarketItem: (id: number): Promise<any> =>
+    /* uninstall extension */
+    uninstallExtension: (id: number): Promise<any> =>
       Promise.resolve({} as IExtensionItem),
   }),
 
@@ -351,13 +351,13 @@ function usePresetsHookFactory() {
 }
 
 function useExtensionsHookFactory() {
-  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/extensions-hook/electron-use-extensions-hook")
       .useExtensionsHook;
-  } else {*/
-  return require("./integration/hooks/extensions-hook/use-extensions-hook")
-    .useExtensionsHook;
-  /*}*/
+  } else {
+    return require("./integration/hooks/extensions-hook/use-extensions-hook")
+      .useExtensionsHook;
+  }
 }
 
 function useDevelopmentHookFactory() {

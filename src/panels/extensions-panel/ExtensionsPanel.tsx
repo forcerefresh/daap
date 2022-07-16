@@ -23,43 +23,44 @@ export type IExtensionsPanelMergedProps = typeof mapDispatchToProps &
 const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const { onRequestClose, _registerObject, _unregisterObject } = props;
 
-  const [marketItems, setMarketItems] = useState<IExtensionItem[]>([]);
+  const [extensions, setExtensions] = useState<IExtensionItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isUninstallOpen, setIsUninstallOpen] = useState(false);
   const [isUninstallLoading, setUninstallLoading] = useState(false);
-  const [installedMarketItems, setInstalledMarketItems] =
+  const [installedExtensions, setInstalledExtensions] =
     useState<IExtensionItem[]>();
 
   const globalContext = useContext(IntegrationContext);
   const {
-    getMarketItems,
-    installMarketItem,
-    uninstallMarketItem,
-    getInstalledMarketItems,
+    getExtensions,
+    installExtension,
+    uninstallExtension,
+    getInstalledExtensions,
   } = globalContext.useExtensionsHook();
   const UploadComponent = globalContext?.getMyUploadComponent;
 
   useEffect(() => {
     (() => {
-      return getInstalledMarketItems();
+      return getInstalledExtensions();
     })().then((res: { items: IExtensionItem[] }) => {
-      setInstalledMarketItems(res.items);
+      logger.log(res);
+      setInstalledExtensions(res.items);
     });
   }, []);
 
   const fetchData = (from = -1) => {
     setLoading(true);
 
-    from = from === -1 ? marketItems?.length || 0 : from;
+    from = from === -1 ? extensions?.length || 0 : from;
 
-    getMarketItems(from, searchValue).then(
+    getExtensions(from, searchValue).then(
       (result) => {
         if (from === 0) {
-          setMarketItems([...result.items]);
+          setExtensions([...result.items]);
         } else {
-          setMarketItems([...marketItems, ...result.items]);
+          setExtensions([...extensions, ...result.items]);
         }
         setLoading(false);
         setHasMore(result.items.length > 0);
@@ -78,9 +79,9 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
   const uninstallIdRef = useRef<IExtensionItem | undefined>();
-  const onUninstall = (marketItem: IExtensionItem) => {
+  const onUninstall = (extension: IExtensionItem) => {
     setIsUninstallOpen(true);
-    uninstallIdRef.current = marketItem;
+    uninstallIdRef.current = extension;
   };
 
   const uninstallConfirm = () => {
@@ -88,10 +89,10 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     if (!uninstallIdRef.current?.id) return;
 
-    uninstallMarketItem(uninstallIdRef.current.id).then(
+    uninstallExtension(uninstallIdRef.current.id).then(
       ({ id }: { id: number }) => {
-        getInstalledMarketItems().then((res) => {
-          setInstalledMarketItems(res.items);
+        getInstalledExtensions().then((res) => {
+          setInstalledExtensions(res.items);
         });
 
         setIsUninstallOpen(false);
@@ -110,21 +111,22 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   };
 
   const onInstall = (item: IExtensionItem) => {
-    installMarketItem(item).then((mItem) => {
+    installExtension(item).then((mItem) => {
       loadAndRegisterExternalComponent(mItem).then(() => {});
 
       AppToaster.show({
         intent: "success",
-        message: `Market component "${mItem.name}" is successfully installed.`,
+        message: `Extension "${mItem.name}" is successfully installed.`,
       });
 
-      getInstalledMarketItems().then((res) => {
-        setInstalledMarketItems(res.items);
+      getInstalledExtensions().then((res) => {
+        setInstalledExtensions(res.items);
       });
     });
   };
 
-  if (!installedMarketItems) {
+  console.log(installedExtensions);
+  if (!installedExtensions) {
     return null;
   }
   return (
@@ -148,7 +150,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
               large
               icon="arrow-right"
               onClick={() => {
-                setMarketItems(() => []);
+                setExtensions(() => []);
                 debounceFetchData(0);
               }}
             />
@@ -159,7 +161,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
-              setMarketItems(() => []);
+              setExtensions(() => []);
               debounceFetchData(0);
             }
           }}
@@ -177,13 +179,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
       <div className={css.mainSection} id="mediaHolder">
         <InfiniteScroll
-          dataLength={marketItems?.length || -1} //This is important field to render the next data
+          dataLength={extensions?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <p style={{ textAlign: "center", margin: "20px" }}>
+            <div style={{ textAlign: "center", margin: "20px" }}>
               <Spinner size={50} />
-            </p>
+            </div>
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"
@@ -194,7 +196,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              {marketItems.length === 0 ? (
+              {extensions.length === 0 ? (
                 <b>There are no project for the selected criteria.</b>
               ) : (
                 <b>All projects are loaded for the selected criteria.</b>
@@ -202,54 +204,52 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
             </p>
           }
         >
-          {marketItems?.map((marketItem, idx) => (
-            <>
+          {extensions?.map((extension, idx) => (
+            <div key={extension.type}>
               <div className={cx(css.headerSection, css.tableRow)}>
-                <div className={css.id}>{marketItem.id}</div>
+                <div className={css.id}>{extension.id}</div>
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
-                    <img
-                      src={`${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${marketItem.logoUrl}`}
-                    ></img>
+                    <img src={`${extension.logoUrl}`}></img>
                   </div>
                 </div>
                 <div className={css.name}>
-                  <span className={css["type-" + marketItem.componentType]}>
-                    {marketItem.componentType.toUpperCase()}
+                  <span className={css["type-" + extension.componentType]}>
+                    {extension.componentType.toUpperCase()}
                   </span>
                   <br />
-                  {marketItem.name}
+                  {extension.name}
                   <br />
                   <span className={css.description}>
-                    {marketItem.description}
+                    {extension.description}
                   </span>
                 </div>
                 <div className={css.created}>
-                  {new Date(marketItem.created).toLocaleDateString()}
+                  {new Date(extension.created).toLocaleDateString()}
                   <br />
-                  {new Date(marketItem.created).toLocaleTimeString()}
+                  {new Date(extension.created).toLocaleTimeString()}
                 </div>
                 <div className={css.modified}>
-                  {new Date(marketItem.modified).toLocaleDateString()}
+                  {new Date(extension.modified).toLocaleDateString()}
                   <br />
-                  {new Date(marketItem.modified).toLocaleTimeString()}
+                  {new Date(extension.modified).toLocaleTimeString()}
                 </div>
                 <div className={css.action}>
-                  {installedMarketItems &&
-                    !installedMarketItems?.find(
-                      (item) => item.id === marketItem.id
+                  {installedExtensions &&
+                    !installedExtensions?.find(
+                      (item) => item.id === extension.id
                     ) && (
                       <Button
                         intent="primary"
-                        onClick={() => onInstall(marketItem)}
+                        onClick={() => onInstall(extension)}
                       >
                         Install
                       </Button>
                     )}
 
-                  {installedMarketItems &&
-                    !!installedMarketItems?.find(
-                      (item) => item.id === marketItem.id
+                  {installedExtensions &&
+                    !!installedExtensions?.find(
+                      (item) => item.id === extension.id
                     ) && (
                       <>
                         <p className={css.installedMessage}>
@@ -257,7 +257,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                         </p>
                         <Button
                           intent="none"
-                          onClick={() => onUninstall(marketItem)}
+                          onClick={() => onUninstall(extension)}
                         >
                           Uninstall
                         </Button>
@@ -265,7 +265,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                     )}
                 </div>
               </div>
-            </>
+            </div>
           ))}
         </InfiniteScroll>
       </div>

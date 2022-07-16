@@ -145,9 +145,9 @@ export class Player {
     if (playerConfig.isApp) {
       this.createAllSlides();
     } else {
-      this.playerData?.marketItems?.forEach((marketItem) => {
+      this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
-          loadAndRegisterExternalComponent(marketItem)
+          loadAndRegisterExternalComponent(extension)
         );
       });
 

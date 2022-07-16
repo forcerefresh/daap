@@ -21,7 +21,7 @@ function App(props: IAppProps) {
 
   const globalContext = useContext(IntegrationContext);
 
-  const { getInstalledMarketItems } = globalContext.useExtensionsHook();
+  const { getInstalledExtensions } = globalContext.useExtensionsHook();
   const { getSettings, scaleUI } = globalContext.useAppSettingsHook();
 
   useEffect(() => {
@@ -30,10 +30,10 @@ function App(props: IAppProps) {
 
     // **
     const loadExternalComponents = async () => {
-      const installedMarketItems = await getInstalledMarketItems();
+      const installedExtensions = await getInstalledExtensions();
 
-      for (let i = 0; i < installedMarketItems.items.length; i++) {
-        await loadAndRegisterExternalComponent(installedMarketItems.items[i]);
+      for (let i = 0; i < installedExtensions.items.length; i++) {
+        await loadAndRegisterExternalComponent(installedExtensions.items[i]);
       }
     };
     loadExternalComponents().then(() => {});

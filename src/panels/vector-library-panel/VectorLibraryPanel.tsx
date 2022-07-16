@@ -215,9 +215,9 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <p style={{ textAlign: "center", margin: "20px" }}>
+            <div style={{ textAlign: "center", margin: "20px" }}>
               <Spinner size={50} />
-            </p>
+            </div>
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"

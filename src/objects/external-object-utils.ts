@@ -1,4 +1,5 @@
 import { isEffectRegistered, registerEffect } from "../effects/effects";
+import { addExtensionCode } from "../integration/utils/load-extension";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import {
   isObjectRegistered,
@@ -7,37 +8,39 @@ import {
 import { logger } from "../webslider-sdk/src/utils/logger/logger";
 
 export async function loadAndRegisterExternalComponent(
-  marketItem: IExtensionItem
+  extension: IExtensionItem
 ) {
   if (
-    marketItem.componentType === "object" &&
-    isObjectRegistered(marketItem.type)
+    extension.componentType === "object" &&
+    isObjectRegistered(extension.type)
   ) {
-    console.warn(`Object ${marketItem.type} is already registered`);
+    console.warn(`Object ${extension.type} is already registered`);
     return;
   }
   if (
-    marketItem.componentType === "effect" &&
-    isEffectRegistered(marketItem.type)
+    extension.componentType === "effect" &&
+    isEffectRegistered(extension.type)
   ) {
-    console.warn(`Effect ${marketItem.type} is already registered`);
+    console.warn(`Effect ${extension.type} is already registered`);
     return;
   }
 
-  await import(
-    /* @ts-ignore */ /* webpackIgnore: true */ `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${marketItem.packageUrl}`
-  );
+  await addExtensionCode(extension.type);
 
-  if (marketItem.componentType === "object") {
-    const obj = (window as any).WebSlider_GlobalScope.objects[marketItem.type];
+  //await import(
+  //  /* @ts-ignore */ /* webpackIgnore: true */ `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${extension.packageUrl}`
+  //);
+
+  if (extension.componentType === "object") {
+    const obj = (window as any).WebSlider_GlobalScope.objects[extension.type];
     logger.info(`Object '${obj.type}' has been registered`);
     registerExternalObject(obj);
-  } else if (marketItem.componentType === "effect") {
-    const eff = (window as any).WebSlider_GlobalScope.effects[marketItem.type];
+  } else if (extension.componentType === "effect") {
+    const eff = (window as any).WebSlider_GlobalScope.effects[extension.type];
     registerEffect(eff.definition, eff.defaults, eff.getDuration, true);
   } else {
     console.warn(
-      `Unsuported external component type: ${marketItem.componentType}; name: ${marketItem.name}`
+      `Unsuported external component type: ${extension.componentType}; name: ${extension.name}`
     );
   }
 }
