@@ -16,6 +16,7 @@ export class VIDEOSourceConnector implements IVideoSourceConnector {
       this.video.src = "./bike.mp4";
       this.video.muted = true;
       this.video.autoplay = true;
+      this.video.play();
       // this.video.preload = "auto";
       // this.video.hidden = true;
       // this.video.style.display = "none";
