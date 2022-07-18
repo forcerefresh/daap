@@ -34,7 +34,10 @@ gsap.registerEffect({
         className,
         values,
         calculatedObjectSize,
-        getConnector,
+        getConnector: (sourceId) => {
+          // console.log(sourceId);
+          return getConnectorBySourceId(sourceId);
+        },
       });
     };
     const onStop = () => {
