@@ -4,17 +4,17 @@ import {
   videoSourceStart,
   PRELOAD_ORDER,
   videoSourceSizeUpdate,
+  getHtml,
 } from "./src/video-source";
 import { addObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
 import { IObjectDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
-import { getVideoSourceHtml } from "./src/video-source-form";
 
 export const VideSourceDefinition: IObjectDefinition = {
   type: VIDEO_SOURCE,
+  getHtml,
   preload: videoSourcePreload,
   executionCode_Start: videoSourceStart,
   sizeUpdate: videoSourceSizeUpdate,
-  getHtml: getVideoSourceHtml,
   PRELOAD_ORDER,
 };
 

@@ -2,6 +2,20 @@ import { PreloadOrder } from "../../../../src/webslider-sdk/src/objects/objects-
 import { VideoSourceValues } from "./types";
 import { VIDEOSourceConnector } from "./video-source-connector";
 import { getOrCreateConnectorById } from "../../../../src/webslider-sdk/src/connectors/connector-manager";
+import { IObject } from "../../../../src/webslider-sdk/src/objects/i-object";
+
+/**
+ * This function return html for object (for App only).
+ */
+export function getHtml(props: {
+  object: IObject;
+  calculatedObjectSize: any;
+  isPlayer?: boolean;
+}) {
+  const { object } = props;
+
+  return `<div class="video-source-sound-${object.id}">TURN ON SOUND</div>`;
+}
 
 /**
  * This function execute when timeline starts playing
@@ -26,6 +40,15 @@ export async function videoSourceStart(props: {
   if (!videoSourceValues.preload) {
     await conn.startVideo(videoSourceValues.url);
   }
+
+  const btn = document.getElementsByClassName(
+    `video-source-sound-${id}`
+  )[0] as HTMLDivElement;
+
+  btn.addEventListener("click", async () => {
+    const video = await conn.getVideo();
+    video.muted = !video.muted;
+  });
 }
 
 /**

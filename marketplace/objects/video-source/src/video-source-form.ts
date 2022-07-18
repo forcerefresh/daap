@@ -12,6 +12,7 @@ import { VideoSourceValues, VIDEO_SOURCE } from "./types";
 import logo from "./video-source-logo.svg";
 
 import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
+import { getHtml } from "./video-source";
 
 /**
  * This is a definition of Object properties form
@@ -81,7 +82,7 @@ export function createVideoSourceObject(
 /**
  * This function return html for object (for App only).
  */
-export function getVideoSourceHtml(props: {
+export function getHtmlForApp(props: {
   object: IObject;
   calculatedObjectSize: any;
   isPlayer?: boolean;
@@ -104,7 +105,7 @@ export function getVideoSourceHtml(props: {
     <p>VIDEO SOURCE</p>
     </div>`;
   } else {
-    return "";
+    return getHtml(props);
   }
 }
 
