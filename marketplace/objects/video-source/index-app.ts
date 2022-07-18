@@ -2,7 +2,7 @@ import { VIDEO_SOURCE } from "./src/types";
 import {
   videoSourceMeta,
   createVideoSourceObject,
-  getVideoSourceHtml,
+  getHtmlForApp,
 } from "./src/video-source-form";
 import {
   videoSourcePreload,
@@ -20,7 +20,7 @@ export const VideoSourceDefinition: IObjectAppDefinition = {
   sizeUpdate: videoSourceSizeUpdate,
   executionCode_Start: videoSourceStart,
   preload: videoSourcePreload,
-  getHtml: getVideoSourceHtml,
+  getHtml: getHtmlForApp,
 };
 
 addObjectToGlobalScope(VIDEO_SOURCE, VideoSourceDefinition);
