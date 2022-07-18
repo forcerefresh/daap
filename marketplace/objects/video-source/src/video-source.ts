@@ -19,7 +19,9 @@ export async function videoSourceStart(props: {
     VIDEOSourceConnector,
     id,
     videoSourceValues.sourceId
-  );
+  ) as VIDEOSourceConnector;
+
+  //conn.startVideo(url);
 
   if (!videoSourceValues.preload) {
     await conn.startVideo(videoSourceValues.url);
