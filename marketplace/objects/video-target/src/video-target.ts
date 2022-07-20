@@ -2,7 +2,8 @@ import { IObject } from "../../../../src/webslider-sdk/src/objects/i-object";
 import { PreloadOrder } from "../../../../src/webslider-sdk/src/objects/objects-register";
 import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
 
-import { ObjectValues } from "./types";
+import { VideoTargetValues } from "./types";
+import { calculateSize } from "./video-target-utils";
 
 let copyInterval: { [key: string]: any } = {};
 
@@ -14,10 +15,10 @@ export function getHtml(props: { object: IObject; calculatedObjectSize: any }) {
 
   const { object, calculatedObjectSize } = props;
 
-  // Note: object.definition.values contain values that are set from Properties Panel
-  const values = object.definition.values as ObjectValues;
+  const width = parseFloat(calculatedObjectSize.width);
+  const height = parseFloat(calculatedObjectSize.height);
 
-  return `<canvas width="1200" height="1200" class="canvas-${object.id}"></canvas>`;
+  return `<canvas width="${width}" height="${height}" class="canvas-${object.id}"></canvas>`;
 }
 
 /**
@@ -33,6 +34,17 @@ export async function sizeUpdate(props: {
   isInitial?: boolean;
 }): Promise<void> {
   logger.debug(`Video target: sizeUpdate()`);
+  const { id, calculatedObjectSize, className } = props;
+
+  // TO CHECK
+  const els = document.getElementsByClassName(className);
+  const canvas = els[0] as HTMLCanvasElement;
+  const parent = canvas.parentNode! as HTMLDivElement;
+  parent.style.width = calculatedObjectSize.width;
+  parent.style.height = calculatedObjectSize.height;
+
+  canvas.width = parseFloat(calculatedObjectSize.width);
+  canvas.height = parseFloat(calculatedObjectSize.height);
 }
 
 /**
@@ -60,16 +72,16 @@ export async function objectStart(props: {
   calculatedObjectSize: any;
   getConnector?: (sourceId: string) => {
     getVideo: () => Promise<HTMLVideoElement>;
+    getMetaData: () => any;
   };
 }) {
   logger.debug(`Video target: objectStart()`);
 
   const { getConnector, id, values } = props;
-  const videoTargetValues = values as ObjectValues;
+
+  const videoTargetValues = values as VideoTargetValues;
 
   const conn = getConnector?.(videoTargetValues.sourceId!);
-
-  logger.log(conn);
 
   const video = await conn?.getVideo();
   const canvas = document.getElementsByClassName(
@@ -79,7 +91,24 @@ export async function objectStart(props: {
   const ctx = canvas.getContext("2d");
 
   copyInterval[id] = setInterval(() => {
-    if (video) ctx?.drawImage(video, 0, 0, 1200, 1200);
+    const metaData = conn?.getMetaData();
+    if (!metaData) return;
+    if (video) {
+      const calculatedSize = calculateSize(
+        values.videoFit.size,
+        video.videoWidth,
+        video.videoHeight,
+        canvas.width,
+        canvas.height
+      );
+      ctx?.drawImage(
+        video,
+        calculatedSize!.x,
+        calculatedSize!.y,
+        calculatedSize!.width,
+        calculatedSize!.height
+      );
+    }
   }, 1000 / 60);
 
   // TODO

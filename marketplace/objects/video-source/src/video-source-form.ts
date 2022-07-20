@@ -13,15 +13,17 @@ import logo from "./video-source-logo.svg";
 
 import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
 import { getHtml } from "./video-source";
+import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
 
 /**
- * This is a definition of Object properties form
- * Note: Generic values needs to match with ObjectValues interface
+ * This is a definition of Video Source Object properties form
+ * Note: Generic values needs to match with Video Source Object Values interface
  */
 export type VideoSourceTuple = [
   ITextInput<"sourceId">,
   ITextInput<"url">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
+  ICheckboxInput<"loop">
 ];
 
 export function createVideoSourceObject(
@@ -32,6 +34,7 @@ export function createVideoSourceObject(
     hasOverflowProperty: boolean;
   }
 ): Omit<IObject<VideoSourceTuple>, keyof ICommonObjectProperties | "layerId"> {
+  logger.debug(`Video source: createVideoSourceObject()`);
   const object = createCommonObject(VIDEO_SOURCE);
 
   const propertiesFormDefinition: VideoSourceTuple = [
@@ -56,6 +59,13 @@ export function createVideoSourceObject(
       defaultValue: true,
       value: true,
     },
+    {
+      displayName: "Loop",
+      propertyName: "loop",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
   ];
 
   const values: VideoSourceValues = {
@@ -63,6 +73,7 @@ export function createVideoSourceObject(
     sourceId: "",
     url: "",
     preload: true,
+    loop: false,
   };
 
   return {
@@ -87,9 +98,8 @@ export function getHtmlForApp(props: {
   calculatedObjectSize: any;
   isPlayer?: boolean;
 }) {
+  logger.debug(`Video source: getHtmlForApp()`);
   const { isPlayer } = props;
-
-  //const jsonSourceValues = object.definition.values as JsonSourceValues;
 
   if (!isPlayer) {
     return `<div style="

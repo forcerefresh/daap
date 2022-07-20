@@ -1,27 +1,36 @@
 import { v4 as uuid } from "uuid";
 import {
-  ICheckboxInput,
-  IColorInput,
+  ICoverPlacementInput,
   InputType,
-  ISliderInput,
   ITextInput,
 } from "../../../../src/webslider-sdk/src/inputs/i-inputs";
 import {
   ICommonObjectProperties,
   IObject,
 } from "../../../../src/webslider-sdk/src/objects/i-object";
-import { ObjectValues, VIDEO_TARGET } from "./types";
+import { VideoTargetValues, VIDEO_TARGET } from "./types";
 import { getHtml } from "./video-target";
-import svg from "./logo.svg";
+import logo from "./video-target-logo.svg";
 
 import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
 import { getObjectPlaceholder } from "../../../../src/webslider-sdk/src/objects/object-helpers";
 import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
+import {
+  CommonPropertiesTuple,
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "../../../../src/webslider-sdk/src/objects/common-properties";
+
 /**
  * This is a definition of Object properties form
  * Note: Generic values needs to match with ObjectValues interface
  */
-export type ObjectTuple = [ITextInput<"sourceId">];
+export type VideoTargetTuple = [
+  ITextInput<"sourceId">,
+  ICoverPlacementInput<"videoFit">,
+  ...CommonPropertiesTuple
+];
 
 export function createObject(
   initialValue?: {
@@ -30,23 +39,46 @@ export function createObject(
   commonProperties?: {
     hasOverflowProperty: boolean;
   }
-): Omit<IObject<ObjectTuple>, keyof ICommonObjectProperties | "layerId"> {
+): Omit<IObject<VideoTargetTuple>, keyof ICommonObjectProperties | "layerId"> {
   logger.debug(`Video target: createObject()`);
 
   const object = createCommonObject(VIDEO_TARGET);
 
-  const propertiesFormDefinition: ObjectTuple = [
+  const propertiesFormDefinition: VideoTargetTuple = [
     {
-      displayName: "Text input",
+      displayName: "Source ID",
       propertyName: "sourceId",
       inputType: InputType.TEXT,
       value: "",
       defaultValue: "",
     },
+    {
+      inputType: InputType.COVER_LAYOUT,
+      displayName: "Video fit",
+      propertyName: "videoFit",
+      value: {
+        size: "fill",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      defaultValue: {
+        size: "fill",
+        positionHorizontal: "center",
+        positionVertical: "center",
+      },
+      inputProps: { hidePosition: true },
+    },
+    ...getCommonObjectPropertiesDefinition(),
   ];
 
-  const values: ObjectValues = {
+  const values: VideoTargetValues = {
     sourceId: "",
+    videoFit: {
+      size: "fill",
+      positionHorizontal: "center",
+      positionVertical: "center",
+    },
+    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -58,6 +90,7 @@ export function createObject(
       values,
       valuesMetadata: {
         sampleColor: { exportForWizard: false, disabled: true },
+        ...getCommonPropertiesMetadataValues(),
       },
     },
   };
@@ -73,16 +106,14 @@ export function getHtmlForApp(props: {
 }) {
   logger.debug(`Video target: getHtmlForApp()`);
 
-  const { object, calculatedObjectSize, isPlayer } = props;
+  const { object, isPlayer } = props;
 
   // Note: object.definition.values contain values that are set from Properties Panel
-  const values = object.definition.values as ObjectValues;
+  const values = object.definition.values as VideoTargetValues;
 
   if (!isPlayer) {
     if (!values.sourceId) {
-      return getObjectPlaceholder(
-        `VIDEO TARGET<br/>(Please add some text in Sample text field)`
-      );
+      return getObjectPlaceholder(`VIDEO TARGET<br/>(Please add Source ID)`);
     } else {
       return "Source ID: " + values.sourceId;
     }
@@ -97,5 +128,5 @@ export function getHtmlForApp(props: {
 export const objectMeta = {
   name: "VIDEO TARGET",
   description: "Video target object",
-  icon: svg,
+  icon: logo,
 };

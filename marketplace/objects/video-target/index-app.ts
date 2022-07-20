@@ -2,10 +2,8 @@ import { VIDEO_TARGET } from "./src/types";
 import {
   objectStart,
   objectStop,
-  postProcess,
   preload,
   sizeUpdate,
-  PRELOAD_ORDER,
 } from "./src/video-target";
 import {
   createObject,
@@ -22,11 +20,9 @@ export const ObjectDefinition: IObjectAppDefinition = {
   createObject,
   sizeUpdate,
   getHtml: getHtmlForApp,
-  preload,
-  PRELOAD_ORDER,
   executionCode_Start: objectStart,
   executionCode_Stop: objectStop,
-  postProcess,
+  preload,
 };
 
 addObjectToGlobalScope(VIDEO_TARGET, ObjectDefinition);
