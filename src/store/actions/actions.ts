@@ -1160,6 +1160,7 @@ function handleImageUpdate(
   dispatch: Dispatch,
   getState: () => IStore
 ): void {
+  logger.log(object.definition.values);
   // only one image object can have useForThumbnail
   const object2 = getObjectThatHaveThumbnailSet(object, getState);
   if (object2) {

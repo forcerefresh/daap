@@ -97,7 +97,9 @@ import {
   createVideoObject,
   getVideoHtml,
   videoMeta,
+  videoPostProcess,
   videoSizeUpdate,
+  getAssetsUrls as getVideoAssetsUrls,
 } from "./video/video";
 import {
   createJsonSource,
@@ -177,7 +179,7 @@ registerObject(
 
 registerObject(
   "svg",
-  "other",
+  "media",
   svgMeta,
   createSvgObject,
   svgSizeUpdate,
@@ -199,7 +201,12 @@ registerObject(
   videoMeta,
   createVideoObject,
   videoSizeUpdate,
-  getVideoHtml
+  getVideoHtml,
+  undefined,
+  undefined,
+  undefined,
+  videoPostProcess,
+  getVideoAssetsUrls
 );
 
 registerObject(

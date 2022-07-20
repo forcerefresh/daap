@@ -42,7 +42,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/trianglify": "^1.2.1",
     "@types/uuid": "^8.3.0",
-    "aws-sdk": "^2.1073.0",
+    "aws-sdk": "^2.1.0",
     "classnames": "^2.2.6",
     "clone-deep": "^4.0.1",
     "debug": "^4.3.4",

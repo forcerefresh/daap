@@ -97,223 +97,6 @@ async function processVideo(
     },
   };
   return item;
-
-  /*
-      const thumbFile = await resizeFile(blob, 80, 80, 70);
-      const smallFile = await resizeFile(blob, 120, 120, 70);
-      const mediumFile = await resizeFile(blob, 300, 300, 70);
-      videoItem.url = await file2Base64(file);
-
-      item = {
-        id: uuid(),
-        ...fileMetadata,
-        videos: {
-          original: videoItem,
-        },
-        images: {
-          thumbnail: {
-            url: thumbFile as string,
-            size: { width: 80, height: 80, type: "jpg" },
-          },
-          small: {
-            url: smallFile as string,
-            size: { width: 120, height: 120, type: "jpg" },
-          },
-          medium: {
-            url: mediumFile as string,
-            size: { width: 300, height: 300, type: "jpg" },
-          },
-        },
-      };
-
-
-      // **************
-  const userDataPath = app.getPath("userData");
-
-  const myImagePath = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    fileMetadata.filename
-  );
-  const myImagePath80 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_80")
-  );
-  const myImagePath150 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_150")
-  );
-  const myImagePath300 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_300")
-  );
-
-  const myImagePath600 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_600")
-  );
-
-  const myImagePath900 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_900")
-  );
-
-  const myImagePath1200 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_1200")
-  );
-
-  const myImagePath1500 = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type),
-    appendToFileName(fileMetadata.filename, "_1500")
-  );
-  // save image
-  let base64Image = fileBase64.split(";base64,").pop();
-  await fsPromise.writeFile(myImagePath, base64Image, { encoding: "base64" });
-
-  // ********
-  const thumbFile = await sharp(myImagePath)
-    .resize({ width: 80 })
-    .toFile(myImagePath80);
-  const smallFile = await sharp(myImagePath)
-    .resize({ width: 150 })
-    .toFile(myImagePath150);
-  const mediumFile = await sharp(myImagePath)
-    .resize({ width: 300 })
-    .toFile(myImagePath300);
-  const largeFile = await sharp(myImagePath)
-    .resize({ width: 600 })
-    .toFile(myImagePath600);
-  const xlargeFile = await sharp(myImagePath)
-    .resize({ width: 900 })
-    .toFile(myImagePath900);
-  const xxlargeFile = await sharp(myImagePath)
-    .resize({ width: 1200 })
-    .toFile(myImagePath1200);
-  const xxxlargeFile = await sharp(myImagePath)
-    .resize({ width: 1500 })
-    .toFile(myImagePath1500);
-
-  const id = uuid();
-  const item = {
-    id,
-    ...fileMetadata,
-    images: {
-      thumbnail: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_80"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "thumbnail",
-        size: {
-          width: 80,
-          height: await (await sharp(myImagePath80).metadata()).height,
-          type: "jpg",
-        },
-      },
-      small: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_150"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "small",
-        size: {
-          width: 150,
-          height: await (await sharp(myImagePath150).metadata()).height,
-          type: "jpg",
-        },
-      },
-      medium: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_300"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "medium",
-        size: {
-          width: 300,
-          height: await (await sharp(myImagePath300).metadata()).height,
-          type: "jpg",
-        },
-      },
-
-      large: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_600"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "large",
-        size: {
-          width: 600,
-          height: await (await sharp(myImagePath600).metadata()).height,
-          type: "jpg",
-        },
-      },
-      xlarge: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_900"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "xlarge",
-        size: {
-          width: 900,
-          height: await (await sharp(myImagePath900).metadata()).height,
-          type: "jpg",
-        },
-      },
-      xxlarge: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_1200"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "xxlarge",
-        size: {
-          width: 1200,
-          height: await (await sharp(myImagePath1200).metadata()).height,
-          type: "jpg",
-        },
-      },
-      xxxlarge: {
-        id,
-        filename: appendToFileName(fileMetadata.filename, "_1500"),
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "xxxlarge",
-        size: {
-          width: 1500,
-          height: await (await sharp(myImagePath1500).metadata()).height,
-          type: "jpg",
-        },
-      },
-      original: {
-        id,
-        filename: fileMetadata.filename,
-        mediaType: "image",
-        sourceType: "local",
-        sizeType: "original",
-        size: {
-          width: await (await sharp(myImagePath).metadata()).width,
-          height: await (await sharp(myImagePath).metadata()).height,
-          type: "jpg",
-        },
-      },
-    },
-  };
-*/
 }
 
 async function processImage(fileBase64, type, fileMetadata) {
@@ -506,6 +289,30 @@ async function processImage(fileBase64, type, fileMetadata) {
   return item;
 }
 
+async function processVector(fileBase64, type, fileMetadata) {
+  const userDataPath = app.getPath("userData");
+
+  const myImagePath = path.join(
+    userDataPath,
+    "my-media",
+    type2MediaFolder(type),
+    fileMetadata.filename
+  );
+
+  // save image
+  let base64Image = fileBase64.split(";base64,").pop();
+  await fsPromise.writeFile(myImagePath, base64Image, { encoding: "base64" });
+
+  const id = uuid();
+  const item = {
+    id,
+    ...fileMetadata,
+    svgString: await fsPromise.readFile(myImagePath, "utf-8"),
+  };
+
+  return item;
+}
+
 function type2Filename(type) {
   return `my-${type}s.json`;
 }
@@ -517,6 +324,7 @@ function type2MediaFolder(type) {
 module.exports = {
   processImage,
   processVideo,
+  processVector,
   type2Filename,
   type2MediaFolder,
 };

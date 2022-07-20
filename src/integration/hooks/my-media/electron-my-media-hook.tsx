@@ -2,6 +2,7 @@ import {
   MediaDataInfo,
   ImageData,
   MediaType,
+  VideoItem,
 } from "../../../webslider-sdk/src/common/i-media-types";
 import {
   blobToBase64,
@@ -9,6 +10,7 @@ import {
   getImageFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
+import { logger } from "../../../webslider-sdk/src/utils/logger/logger";
 
 export const useMyMediaHook = () => {
   const upload = async (
@@ -16,13 +18,23 @@ export const useMyMediaHook = () => {
     file: File,
     fileMetadata: MediaDataInfo
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
+    logger.log(type, fileMetadata);
+
     const { ipcRenderer } = window.require("electron");
 
-    // NOTE: Get thumbnail, only for video
-    const { blob, videoItem: previewImageItem } = await getImageFromFile(file);
-    const previewImageBase64 = await resizeFile(blob!, 10000, 10000, 70, "jpg");
+    let previewImageBase64: string | undefined;
+    let previewImageItem: VideoItem | undefined;
 
-    //const previewImageBase64 = await blobToBase64(blob!);
+    if (type === "image") {
+    }
+
+    if (type === "video") {
+      const { blob, videoItem } = await getImageFromFile(file);
+      previewImageItem = videoItem;
+      previewImageBase64 =
+        "data:image/jpg;base64," +
+        (await resizeFile(blob!, 10000, 10000, 70, "jpg"));
+    }
 
     // base64
     const fileBase64 = await file2Base64(file);
@@ -35,11 +47,12 @@ export const useMyMediaHook = () => {
             fileBase64,
             fileMetadata,
             type,
-            previewImageBase64: "data:image/jpg;base64," + previewImageBase64,
+            previewImageBase64,
             previewImageItem,
           })
         )
         .then((result: any) => {
+          logger.log("resolve!!!!");
           resolve(result);
         });
     });
