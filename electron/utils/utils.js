@@ -21,6 +21,11 @@ function getMyImagesPath() {
   return path.join(userDataPath, "my-media", "my-images");
 }
 
+function getMyVideosPath() {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "my-media", "my-videos");
+}
+
 function getBucketPreviewPath() {
   const userDataPath = app.getPath("userData");
   return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
@@ -47,5 +52,6 @@ module.exports = {
   downloadToBuffer,
   appendToFileName,
   getMyImagesPath,
+  getMyVideosPath,
   fileToBuffer,
 };

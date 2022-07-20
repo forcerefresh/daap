@@ -9,6 +9,7 @@ const sharp = require("sharp");
 const {
   processImage,
   processVideo,
+  processVector,
   type2Filename,
   type2MediaFolder,
 } = require("./my-media-utils");
@@ -54,6 +55,8 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
     previewImageItem,
   } = data;
 
+  console.log(fileMetadata);
+
   //const jsonFileName = `my-${type}s.json`;
   if (!fileMetadata.tags?.[0]) {
     fileMetadata.tags = [];
@@ -84,6 +87,7 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
   switch (type) {
     case "image": {
       item = await processImage(fileBase64, type, fileMetadata);
+      break;
     }
     case "video": {
       item = await processVideo(
@@ -93,6 +97,14 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
         previewImageBase64,
         previewImageItem
       );
+      break;
+    }
+    case "vector": {
+      item = await processVector(fileBase64, type, fileMetadata);
+      break;
+    }
+    default: {
+      console.log(`Unknown media type: ${type}`);
     }
   }
 

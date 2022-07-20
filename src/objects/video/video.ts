@@ -23,6 +23,7 @@ import {
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
+import { cloneDeep } from "lodash-es";
 
 export const VIDEO = "video";
 
@@ -83,7 +84,11 @@ export function createVideoObject(
       positionHorizontal: "center",
       positionVertical: "center",
     },
-    video: initialValue?.video || { video: {}, filename: "", previewImage: {} },
+    video: initialValue?.video || {
+      video: { sourceType: "local" },
+      filename: "",
+      previewImage: {},
+    },
     ...getCommonPropertiesValues(),
   };
 
@@ -108,8 +113,9 @@ export function getVideoHtml(props: {
   object: IObject;
   calculatedObjectSize: React.CSSProperties;
   isPlayer?: boolean;
+  isSave?: boolean;
 }) {
-  const { object, isPlayer } = props;
+  const { object, isPlayer, isSave } = props;
 
   const videoValues = object.definition.values as VideoValues;
 
@@ -125,6 +131,11 @@ export function getVideoHtml(props: {
     ) {
       return getObjectPlaceholder(`VIDEO<br/>(placeholder)`);
     } else {
+      if (videoValues.video.video.sourceType === "url") {
+        return getObjectPlaceholder(
+          `VIDEO URL<br/>${videoValues.video.video.url}`
+        );
+      }
       // in the app show preview image
       const videoFit = videoValues.videoFit as ICoverPlacementValue;
 
@@ -139,14 +150,10 @@ export function getVideoHtml(props: {
       const aH = "center"; //videoFit.positionHorizontal;
       const aV = "center"; //videoFit.positionVertical;
 
-      const imageItem = getMediaSrc(
-        "video",
-        videoValues.video.previewImage!
-        /*{
-          useId: isSave,
-          filename: imageValues.image.filename,
-        }*/
-      );
+      const imageItem = getMediaSrc("video", videoValues.video.previewImage!, {
+        useId: isSave,
+        filename: videoValues.video.filename,
+      });
 
       let style = "";
       style += addCommonPropertiesToStyle(style, object);
@@ -179,7 +186,10 @@ export function getVideoHtml(props: {
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
-  const videoSrc = getMediaSrc("video", videoValues.video.video).src;
+  const videoSrc = getMediaSrc("video", videoValues.video.video, {
+    useId: isSave,
+    filename: videoValues.video.filename,
+  }).src;
   const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}"></video>`;
 
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
@@ -212,6 +222,61 @@ export async function videoSizeUpdate(props: {
   div.style.width = calculatedObjectSize.width;
   div.style.height = calculatedObjectSize.height;
 }
+
+export function videoPostProcess(
+  prevObject: IObject,
+  object: IObject
+): IObject {
+  const newObj = cloneDeep(object);
+
+  const prevValues = prevObject.definition.values as VideoValues;
+  const newValues = newObj.definition.values as VideoValues;
+
+  if (prevValues.video.video.sourceType !== newValues.video.video.sourceType) {
+    newValues.video = getDefaultValuesForSourceType(
+      newValues.video.video.sourceType
+    );
+  }
+
+  return newObj;
+}
+
+function getDefaultValuesForSourceType(
+  sourceType: "local" | "url" | string | undefined
+) {
+  return {
+    video: { sourceType },
+    filename: "",
+    previewImage: {},
+  } as IVideoInputValue;
+}
+
+export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
+  const videoValues = props.values as VideoValues;
+
+  if (!videoValues.video.video.sourceType) {
+    return [];
+  }
+
+  console.log({
+    id: videoValues.video.video.id,
+    url: videoValues.video.video.url,
+    filename: videoValues.video.filename,
+    localFilename: videoValues.video.video.filename,
+    sourceType: videoValues.video.video.sourceType,
+    mediaType: "video",
+  });
+  return [
+    {
+      id: videoValues.video.video.id,
+      url: videoValues.video.video.url,
+      filename: videoValues.video.filename,
+      localFilename: videoValues.video.video.filename,
+      sourceType: videoValues.video.video.sourceType,
+      mediaType: "video",
+    },
+  ];
+};
 
 export const videoMeta = {
   name: "VIDEO",
