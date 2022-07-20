@@ -30,19 +30,19 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
   // 1. add script
 
   const fullPackageUrl = `${extension.packageUrl}`;
-  console.log(fullPackageUrl);
+  //console.log(fullPackageUrl);
   const zipPackage = await downloadToBuffer(fullPackageUrl);
-  console.log(zipPackage);
+  //console.log(zipPackage);
   let zip = new JSZip();
   zip = await zip.loadAsync(zipPackage);
 
-  console.log(Object.keys(zip.files));
+  //console.log(Object.keys(zip.files));
   const extensionDir = getExtensionPath(extension.type);
   const fileNames = Object.keys(zip.files);
   for (let i = 0; i < fileNames.length; i++) {
     const content = await zip.files[fileNames[i]].async("nodebuffer");
     var dest = path.join(extensionDir, fileNames[i]);
-    console.log(dest);
+    //console.log(dest);
     await fsPromise.writeFile(dest, content);
   }
 
@@ -81,7 +81,7 @@ ipcMain.handle("Extensions::UninstallExtension", async (event, reqJson) => {
 });
 
 ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
-  console.log(reqJson);
+  //console.log(reqJson);
   const { type } = JSON.parse(reqJson);
 
   const extensions = await loadExtensions();
@@ -96,9 +96,9 @@ ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
   const extFilePath = path.join(extensionDir, extension.packageFiles.objectApp);
 
   const fileContent = await fsPromise.readFile(extFilePath);
-  console.log(fileContent);
+  //console.log(fileContent);
   const mainWindow = BrowserWindow.getAllWindows()[0];
-  console.log(mainWindow);
+  //console.log(mainWindow);
   await mainWindow.webContents.executeJavaScript(fileContent);
   //mainWindow.webContents.executeJavaScript(
   //  `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`

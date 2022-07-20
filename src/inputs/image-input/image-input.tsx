@@ -20,17 +20,17 @@ import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
 import { ImageItem } from "../../webslider-sdk/src/common/i-media-types";
 import { getButtonGroupField, getTextArea, getTextField } from "../input-utils";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
+  const sourceType = value.image.sourceType || "local";
 
+  logger.log(value);
   const [libraryOpen, setLibraryOpen] = useState(false);
-  const [previewSrc, setPreviewSrc] = useState("");
+  // const [previewSrc, setPreviewSrc] = useState("");
 
-  useEffect(() => {
-    const imageItem = getMediaSrc("image", value.image);
-    setPreviewSrc(imageItem.src!);
-  }, [value]);
+  const previewSrc = getMediaSrc("image", value.image || {})?.src;
 
   // logic for handling click outside
   const sharedRef = useRef(null);
@@ -70,7 +70,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
       >
         {getButtonGroupField(
           "",
-          value.image.sourceType || "local",
+          sourceType,
           (sourceType: string) => {
             const valueClone = cloneDeep(value);
             valueClone.image.sourceType = sourceType;
@@ -95,7 +95,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             )}
           </>
         ) : null}
-        {value.image.sourceType === "library" ? (
+        {sourceType === "library" ? (
           <div
             className="bp3-text-small"
             style={{ maxWidth: "250px", wordBreak: "break-all" }}
@@ -108,7 +108,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
           </div>
         ) : null}
 
-        {value.image.sourceType === "url"
+        {sourceType === "url"
           ? getTextArea(
               "",
               value.image.url,
@@ -122,8 +122,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             )
           : null}
 
-        {value.image.sourceType === "local" ||
-        value.image.sourceType === "library" ? (
+        {sourceType === "local" || sourceType === "library" ? (
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.LEFT}
@@ -154,20 +153,17 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                 addObject={false}
                 onSelect={(imageItem: { image: ImageItem }) => {
                   const newValue = cloneDeep(value);
-                  newValue.image = imageItem.image;
+                  newValue.image = { ...imageItem.image };
                   newValue.filename = extractFileName(
                     imageItem.image.filename!
                   );
+                  console.log(newValue);
                   onChange(newValue);
                   setLibraryOpen(false);
                 }}
                 panelsToShow={[
-                  ...(value.image.sourceType === "local"
-                    ? [Panels.MyImages]
-                    : []),
-                  ...(value.image.sourceType === "library"
-                    ? [Panels.Images]
-                    : []),
+                  ...(sourceType === "local" ? [Panels.MyImages] : []),
+                  ...(sourceType === "library" ? [Panels.Images] : []),
                 ]}
               />
             </div>
@@ -175,13 +171,12 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
         ) : null}
       </FormGroup>
 
-      {value.image.sourceType === "local" ||
-      value.image.sourceType === "library" ? (
+      {sourceType === "local" || sourceType === "library" ? (
         <div className={css.fileNameHolder}>
           {getTextField("Filename", filename, onFileNameChange, "", {
             disabled:
-              (value.image.sourceType === "local" && !value.image.id) ||
-              (value.image.sourceType === "library" && !value.image.url),
+              (sourceType === "local" && !value.image.id) ||
+              (sourceType === "library" && !value.image.url),
           })}
         </div>
       ) : null}

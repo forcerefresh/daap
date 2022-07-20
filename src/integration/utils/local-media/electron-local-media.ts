@@ -23,7 +23,8 @@ export function getMediaSrc(
         if (options?.useId) {
           return {
             ...mediaItem,
-            src: "{MEDIA_ITEM_URL}" + (options.filename || mediaItem.filename),
+            src:
+              "{MEDIA_ITEM_LIBRARY}" + (options.filename || mediaItem.filename),
           };
         }
 

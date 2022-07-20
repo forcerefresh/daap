@@ -33,7 +33,8 @@ export function getMediaSrc(
         if (options?.useId) {
           return {
             ...mediaItem,
-            src: "{MEDIA_ITEM_URL}" + (options.filename || mediaItem.filename),
+            src:
+              "{MEDIA_ITEM_LIBRARY}" + (options.filename || mediaItem.filename),
           };
         }
         return {
@@ -52,21 +53,40 @@ export function getMediaSrc(
         }
         return {
           ...mediaItem,
-          src: myMediaStorage[mediaItem.id!][mediaItem.sizeType!],
+          src: myMediaStorage[mediaItem.id!]?.[mediaItem.sizeType!],
         };
       }
 
       return mediaItem;
     }
     case "video": {
-      // NOTE: for video we are storing video and  preview images as well
-      const key =
-        mediaItem.mediaType === "video" ? "video" : mediaItem.sizeType;
+      if (mediaItem.sourceType === "url") {
+        return {
+          ...mediaItem,
+          src: mediaItem.url,
+        };
+      }
 
-      return {
-        ...mediaItem,
-        src: myMediaStorage[mediaItem.id!][key!],
-      };
+      if (mediaItem.sourceType === "local") {
+        if (options?.useId) {
+          return {
+            ...mediaItem,
+            src:
+              "{MEDIA_ITEM_LOCAL}" + (options.filename || mediaItem.filename),
+          };
+        }
+
+        // NOTE: for video we are storing video and  preview images as well under mediaItem.id
+        const key =
+          mediaItem.mediaType === "video" ? "video" : mediaItem.sizeType;
+
+        return {
+          ...mediaItem,
+          src: myMediaStorage[mediaItem.id!][key!],
+        };
+      }
+
+      return mediaItem;
     }
     default: {
       return { ...mediaItem };

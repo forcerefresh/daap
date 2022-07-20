@@ -22,6 +22,7 @@ import {
   dzRejectStyle,
 } from "./common-styles";
 import css from "./my-image-select.module.scss";
+import { logger } from "../../../webslider-sdk/src/utils/logger/logger";
 
 export interface UploadFileInfo {
   tag: string;
@@ -243,11 +244,15 @@ function UploadDialog(props: UploadDialogProps) {
     const file = files[currentUploadIndex];
     const filesInfo = filesInfoArr[currentUploadIndex];
     //(file.name as any) = filesInfo.filename;
+    logger.log(type);
+    logger.log(filesInfo);
     upload(type, file, {
       tags: [filesInfo.tag],
       title: filesInfo.title,
       filename: filesInfo.filename,
     }).then((status) => {
+      logger.log("uploaded");
+
       if (isUnMounted.current) return;
 
       onFile(file);

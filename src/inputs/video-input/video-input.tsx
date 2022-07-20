@@ -17,11 +17,12 @@ import {
   IUpdateInput,
   IVideoInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
-import { getButtonGroupField } from "../input-utils";
+import { getButtonGroupField, getTextArea } from "../input-utils";
 import css from "./video-input.module.scss";
 
 export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
+  const sourceType = value.video.sourceType || "local";
 
   const [libraryOpen, setLibraryOpen] = useState(false);
 
@@ -37,6 +38,12 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
   ]);
+
+  const onUrlChange = (url: string) => {
+    const newValue = cloneDeep(value);
+    newValue.video.url = url;
+    onChange(newValue);
+  };
 
   return (
     <FormGroup label={displayName} labelFor="text-input" inline>
@@ -66,47 +73,64 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
           )}
         </>
       ) : null}
-      <Popover
-        interactionKind={PopoverInteractionKind.CLICK}
-        position={Position.LEFT}
-        modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
-        usePortal={true}
-        minimal
-        popoverClassName={css.mediaLibraryPanelPopup}
-        isOpen={libraryOpen}
-      >
-        <Button
-          small
-          minimal
-          className={css.browseButton}
-          icon={"folder-open"}
-          onClick={() => {
-            setLibraryOpen(true);
-          }}
-        >
-          Browse
-        </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            onRequestClose={() => {
-              setLibraryOpen(false);
-            }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(videoItem) => {
-              const newValue = cloneDeep(value);
-              newValue.video = videoItem.video;
-              newValue.previewImage = videoItem.previewImage;
-              newValue.filename = videoItem.video.filename!; //extractFileName(videoItem.video.filename!);
 
-              onChange(newValue);
-              setLibraryOpen(false);
+      {sourceType === "url"
+        ? getTextArea(
+            "",
+            value.video.url,
+            (url) => {
+              onUrlChange(url || "");
+            },
+            "",
+            {
+              disabledDebounce: true,
+            }
+          )
+        : null}
+
+      {sourceType === "local" ? (
+        <Popover
+          interactionKind={PopoverInteractionKind.CLICK}
+          position={Position.LEFT}
+          modifiers={{ preventOverflow: { enabled: true } }}
+          boundary={"window"}
+          usePortal={true}
+          minimal
+          popoverClassName={css.mediaLibraryPanelPopup}
+          isOpen={libraryOpen}
+        >
+          <Button
+            small
+            minimal
+            className={css.browseButton}
+            icon={"folder-open"}
+            onClick={() => {
+              setLibraryOpen(true);
             }}
-            panelsToShow={[Panels.MyVideos]}
-          />
-        </div>
-      </Popover>
+          >
+            Browse
+          </Button>
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              onRequestClose={() => {
+                setLibraryOpen(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(videoItem) => {
+                const newValue = cloneDeep(value);
+                newValue.video = videoItem.video;
+                newValue.previewImage = videoItem.previewImage;
+                newValue.filename = videoItem.video.filename!; //extractFileName(videoItem.video.filename!);
+
+                onChange(newValue);
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.MyVideos]}
+            />
+          </div>
+        </Popover>
+      ) : null}
     </FormGroup>
   );
 };

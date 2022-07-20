@@ -20,6 +20,7 @@ class LinodeManager {
   }
 
   async uploadFileToBucket(bucketConfig, filePath, key) {
+    console.log("12345r");
     const p = new Promise((resolve, reject) => {
       // create stream
       const fileStream = fs.createReadStream(filePath);
@@ -34,6 +35,8 @@ class LinodeManager {
       // upload file to s3
       this.s3.putObject(putParams, function (putErr, putData) {
         if (putErr) {
+          console.log(putErr);
+
           reject(putErr);
         } else {
           resolve();
@@ -69,6 +72,9 @@ class LinodeManager {
   }
 
   async uploadBufferToBucket(bucketConfig, bufferStream, key) {
+    console.log(key);
+    console.log(mime.lookup(key));
+
     const p = new Promise((resolve, reject) => {
       var putParams = {
         Bucket: bucketConfig.bucketName,
@@ -77,16 +83,22 @@ class LinodeManager {
         ContentType: mime.lookup(key),
         ACL: "public-read",
       };
+      console.log("2345tfdssfdbgdfsdafgfhfgfd");
       this.s3.putObject(putParams, function (putErr, putData) {
+        console.log(putData);
         if (putErr) {
+          console.log(putErr);
           reject(putErr);
         } else {
+          console.log("RESOLVE");
           resolve();
         }
       });
     });
 
+    console.log("Aaaa");
     await p;
+    console.log("Aaaa");
   }
 }
 

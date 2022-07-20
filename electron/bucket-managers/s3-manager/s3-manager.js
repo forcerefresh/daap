@@ -76,14 +76,19 @@ class S3Manager {
       };
       this.s3.putObject(putParams, function (putErr, putData) {
         if (putErr) {
+          console.log("putErr");
           reject(putErr);
         } else {
+          console.log("123");
+
           resolve();
         }
       });
     });
 
+    console.log("234321234323453");
     await p;
+    console.log("234321234323453");
   }
 }
 

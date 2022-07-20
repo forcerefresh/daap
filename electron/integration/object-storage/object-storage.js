@@ -12,6 +12,7 @@ const {
   getBucketPreviewPath,
   downloadToBuffer,
   getMyImagesPath,
+  getMyVideosPath,
   fileToBuffer,
 } = require("../../utils/utils");
 const {
@@ -268,6 +269,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // NODE: bucketWithKeys use only for upload
   const bucketWithKeys = await getBucketWithKeys(req.bucketId);
   const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
+  console.log(bucketWithKeys.platform);
   const bucketManager = new ManagerClass(bucketWithKeys);
 
   // TODO
@@ -281,6 +283,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     JSON.stringify([{ log: "Publish started" }])
   );
 
+  console.log("1");
   let error;
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
@@ -309,11 +312,18 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         if (assetItem.filename) {
           filename = assetItem.filename + extension;
         }*/
+        console.log(assetItem);
+        const mediaPath =
+          assetItem.mediaType === "video"
+            ? getMyVideosPath()
+            : getMyImagesPath();
 
+        console.log("Sssssssssskdjsdlfhjdshfkhdskjfhjdkshfkjshdfjhsdkhfkjs");
+        console.log(assetItem);
         pArr.push(
           bucketManager.uploadFileToBucket(
             bucketWithKeys,
-            path.join(getMyImagesPath(), assetItem.localFilename),
+            path.join(mediaPath, assetItem.localFilename),
             `${req.projectId}/assets/${assetItem.filename}`
           )
         );
@@ -335,6 +345,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     }
   }
 
+  console.log("2");
+
   if (error) {
     return { status: "ERROR", error };
   }
@@ -344,7 +356,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
   for (let i = 0; i < uploadResult.length; i++) {
-    expString = expString.replaceAll(`{MEDIA_ITEM_URL}`, `assets/`);
+    expString = expString.replaceAll(`{MEDIA_ITEM_LIBRARY}`, `assets/`);
     expString = expString.replaceAll(`{MEDIA_ITEM_LOCAL}`, `assets/`);
 
     expString = expString.replaceAll(
@@ -356,7 +368,12 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       `'${uploadResult[i].toUrl}'`
     );
   }
+
+  console.log("3");
+
   const expBuffer = Buffer.from(expString, "utf-8");
+  console.log("4");
+  console.log(expBuffer);
   await bucketManager.uploadBufferToBucket(
     bucketWithKeys,
     expBuffer,
@@ -372,18 +389,24 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   );*/
   // upload export/playerdata <<
 
+  console.log("4");
+
   // upload preview html >>
   const indexString = await fsPromise.readFile(
     path.join(getBucketPreviewPath(), "index.html"),
     "utf-8"
   );
+  console.log("SDADSADAS");
   const indexBuffer = Buffer.from(indexString, "utf-8");
+  console.log("SDADSADAS");
 
   await bucketManager.uploadBufferToBucket(
     bucketWithKeys,
     indexBuffer,
     `${req.projectId}/index.html`
   );
+  console.log("SDADSADAS");
+
   /*await uploadBufferToS3(
     s3,
     bucketWithKeys.bucketName,
@@ -396,10 +419,14 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 
   await saveObjectStorage(objectStorageList);
 
+  console.log("5");
+
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
   );
+
+  console.log("6");
 
   return { status: "OK" };
 });
@@ -439,7 +466,9 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     const pArr = [];
     for (const assetItem of assetsUrlsChunk) {
       if (assetItem.sourceType === "library") {
-        downloadToBuffer(assetUrl.url);
+        console.log("ISSSUE!!!!");
+        console.log(assetItem.url);
+        pArr.push(downloadToBuffer(assetItem.url));
       }
       if (assetItem.sourceType === "local") {
         pArr.push(
@@ -480,6 +509,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         }
 
         const zipFilePath = `${req.projectId}/assets/${filename}`;
+        console.log(zipFilePath);
         zip.file(zipFilePath, buf);
 
         BrowserWindow.getAllWindows()[0].webContents.send(
@@ -503,7 +533,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
   for (let i = 0; i < assetsResult.length; i++) {
-    expString = expString.replaceAll(`{MEDIA_ITEM_URL}`, ``);
+    expString = expString.replaceAll(`{MEDIA_ITEM_LIBRARY}`, `assets/`);
     expString = expString.replaceAll(`{MEDIA_ITEM_LOCAL}`, `assets/`);
 
     expString = expString.replaceAll(
