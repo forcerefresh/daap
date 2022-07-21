@@ -9,4 +9,5 @@ export interface VideoSourceValues {
   sourceId: string;
   url: string;
   preload: boolean;
+  loop: boolean;
 }

@@ -3,15 +3,17 @@ import { VideoSourceValues } from "./types";
 import { VIDEOSourceConnector } from "./video-source-connector";
 import { getOrCreateConnectorById } from "../../../../src/webslider-sdk/src/connectors/connector-manager";
 import { IObject } from "../../../../src/webslider-sdk/src/objects/i-object";
+import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
 
 /**
- * This function return html for object (for App only).
+ * This function return html for object (for Player only).
  */
 export function getHtml(props: {
   object: IObject;
   calculatedObjectSize: any;
   isPlayer?: boolean;
 }) {
+  logger.debug(`Video source: getHtml()`);
   const { object } = props;
 
   return `<div class="video-source-sound-${object.id}">TURN ON SOUND</div>`;
@@ -26,6 +28,7 @@ export async function videoSourceStart(props: {
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }) {
+  logger.debug(`Video source: videoSourceStart()`);
   const { id, values } = props;
   const videoSourceValues = values as VideoSourceValues;
 
@@ -38,7 +41,10 @@ export async function videoSourceStart(props: {
   //conn.startVideo(url);
 
   if (!videoSourceValues.preload) {
-    await conn.startVideo(videoSourceValues.url);
+    await conn.startVideo({
+      url: videoSourceValues.url,
+      loop: videoSourceValues.loop,
+    });
   }
 
   const btn = document.getElementsByClassName(
@@ -61,16 +67,22 @@ export async function videoSourcePreload(props: {
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<string> {
+  logger.debug(`Video source: videoSourcePreload()`);
+
   const { id, values } = props;
 
   const videoSourceValues = values as VideoSourceValues;
+
   const conn = getOrCreateConnectorById(
     VIDEOSourceConnector,
     id,
     videoSourceValues.sourceId
   );
 
-  await conn.startVideo(videoSourceValues.url);
+  await conn.startVideo({
+    url: videoSourceValues.url,
+    loop: videoSourceValues.loop,
+  });
 
   return id;
 }

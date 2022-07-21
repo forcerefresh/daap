@@ -1,25 +1,45 @@
+import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
+
 type LoadState = "notloaded" | "loading" | "loaded" | "error";
 
 export interface IVideoSourceConnector {
   getVideo: () => Promise<HTMLVideoElement>; // ovo je za target
-  startVideo: (url: string) => Promise<any>; // ova je za source
+  startVideo: (props: { url: string; loop: boolean }) => Promise<any>; // ova je za source
+  getMetaData: () => MetaData | undefined;
 }
-
+type MetaData = {
+  width: number;
+  height: number;
+  status: "notloaded" | "metadata";
+};
 export class VIDEOSourceConnector implements IVideoSourceConnector {
   protected state: LoadState = "notloaded";
   protected dataSubscribers: Function[] = [];
   video: HTMLVideoElement | undefined;
+  metaData: MetaData | undefined;
 
-  async startVideo(url: string): Promise<any> {
+  getMetaData() {
+    return this.metaData;
+  }
+
+  async startVideo(props: { url: string; loop: boolean }): Promise<any> {
     try {
+      const { url, loop } = props;
       this.video = document.createElement("video");
-      this.video.src = "./bike.mp4";
+      this.video.src = url;
       this.video.muted = true;
       this.video.autoplay = true;
+      this.video.loop = loop;
       this.video.play();
-      // this.video.preload = "auto";
-      // this.video.hidden = true;
-      // this.video.style.display = "none";
+      this.video.addEventListener("loadedmetadata", () => {
+        if (this.video) {
+          this.metaData = {
+            width: this.video.videoWidth,
+            height: this.video.videoHeight,
+            status: "metadata",
+          };
+        }
+      });
       this.dataSubscribers.forEach((f) => f());
       this.dataSubscribers = [];
       this.state = "loaded";
