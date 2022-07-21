@@ -58,6 +58,9 @@ class DigitalOceanManager {
   }
 
   async uploadUrlToBucket(bucketConfig, fromUrl, toKey) {
+    console.log("uploadUrlToBucket");
+    console.log(toKey);
+    console.log(mime.lookup(toKey));
     // download file
     const bufferStream = await downloadToBuffer(fromUrl);
 
@@ -74,6 +77,10 @@ class DigitalOceanManager {
   }
 
   async uploadBufferToBucket(bucketConfig, bufferStream, key) {
+    console.log("uploadBufferToBucket");
+
+    console.log(key);
+    console.log(mime.lookup(key));
     const p = new Promise((resolve, reject) => {
       var putParams = {
         Bucket: bucketConfig.bucketName,

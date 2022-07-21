@@ -305,26 +305,22 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         );
       }
       if (assetItem.sourceType === "local") {
-        /* let filename = assetItem.localFilename;
-        const extension = assetItem.localFilename.substring(
-          filename.indexOf(".")
-        );
+        let filename = assetItem.localFilename;
         if (assetItem.filename) {
-          filename = assetItem.filename + extension;
-        }*/
+          filename = assetItem.filename;
+        }
         console.log(assetItem);
         const mediaPath =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
             : getMyImagesPath();
 
-        console.log("Sssssssssskdjsdlfhjdshfkhdskjfhjdkshfkjshdfjhsdkhfkjs");
         console.log(assetItem);
         pArr.push(
           bucketManager.uploadFileToBucket(
             bucketWithKeys,
             path.join(mediaPath, assetItem.localFilename),
-            `${req.projectId}/assets/${assetItem.filename}`
+            `${req.projectId}/assets/${filename}`
           )
         );
       }
