@@ -15,8 +15,9 @@ export function getHtml(props: {
 }) {
   logger.debug(`Video source: getHtml()`);
   const { object } = props;
+  return "";
 
-  return `<div class="video-source-sound-${object.id}">TURN ON SOUND</div>`;
+  // return `<div class="video-source-sound-${object.id}">TURN ON SOUND</div>`;
 }
 
 /**
@@ -47,14 +48,15 @@ export async function videoSourceStart(props: {
     });
   }
 
-  const btn = document.getElementsByClassName(
-    `video-source-sound-${id}`
-  )[0] as HTMLDivElement;
+  // const btn = document.getElementsByClassName(
+  //   `video-source-sound-${id}`
+  // )[0] as HTMLDivElement;
 
-  btn.addEventListener("click", async () => {
-    const video = await conn.getVideo();
-    video.muted = !video.muted;
-  });
+  // btn.addEventListener("click", async () => {
+  //   const video = await conn.getVideo();
+  //   video.muted = !video.muted;
+  //   console.log(video.muted, "sta ovo stampa");
+  // });
 }
 
 /**
