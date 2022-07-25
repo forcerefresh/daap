@@ -141,6 +141,8 @@ export async function objectStop(props: {
 }) {
   logger.debug(`Video source unmute: objectStop()`);
 
+  /*
+  DELETE THIS
   const { getConnector, values } = props;
   const videoSourceUnmuteValues = values as VideoSourceUnmuteValues;
 
@@ -148,7 +150,7 @@ export async function objectStop(props: {
 
   const video = await conn?.getVideo();
   if (video) video.muted = true;
-
+*/
   // TODO
 }
 

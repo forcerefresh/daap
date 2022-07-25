@@ -56,7 +56,7 @@ export function createObject(
       defaultValue: "",
     },
     {
-      displayName: "MUTE",
+      displayName: "Muted (Unmute button)",
       propertyName: "svgMute",
       inputType: InputType.SVG_INPUT,
       value: {
@@ -67,7 +67,7 @@ export function createObject(
       },
     },
     {
-      displayName: "UNMUTE",
+      displayName: "Unmuted (Mute button)",
       propertyName: "svgUnmute",
       inputType: InputType.SVG_INPUT,
       value: {
