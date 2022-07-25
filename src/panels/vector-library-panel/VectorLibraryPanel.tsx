@@ -192,6 +192,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
       <div className={css.headerSection}>
         {tags.map((tag) => (
           <Tag
+            key={tag}
             large
             round
             minimal={!selectedTags[tag]}
@@ -233,7 +234,10 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           }
         >
           {images?.map((image, idx) => (
-            <>
+            <div
+              key={image.id + "_" + image.title + "_" + image.filename}
+              style={{ display: "inline-block" }}
+            >
               {image?.svgString ? (
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
@@ -317,7 +321,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                   </div>
                 </Popover>
               ) : null}
-            </>
+            </div>
           ))}
         </InfiniteScroll>
       </div>
