@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72" height="72" version="1.1" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(.94678 0 0 .94678 1.9158 3.085)" fill="#05cad4" stroke-width="1.0562">
+  <text style="shape-inside:url(#rect971);white-space:pre" xml:space="preserve"/>
+  <g transform="translate(-.20609 -.65235)">
+   <g transform="translate(-.074296)">
+    <rect x="18.822" y="28.033" width="20.653" height="40.127" stroke-width="1.1907"/>
+    <text x="20.450239" y="65.377701" font-family="sans-serif" font-size="13.333px" font-weight="bold" stroke-width="1.1156" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" xml:space="preserve"><tspan x="20.450239" y="65.377701" fill="#ffffff" font-family="sans-serif" font-size="13.333px" font-weight="bold" stroke-width="1.1783" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">x2</tspan></text>
+   </g>
+   <g transform="translate(-.94565)">
+    <rect x="4.4093" y="46.966" width="12.927" height="21.194" stroke-width="1.0938"/>
+    <text x="7.369441" y="65.377701" font-family="sans-serif" font-size="10.667px" font-weight="bold" stroke-width="1.1156" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" xml:space="preserve"><tspan x="7.369441" y="65.377701" fill="#ffffff" font-family="sans-serif" font-size="10.667px" font-weight="bold" stroke-width="1.1783" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">x</tspan></text>
+   </g>
+   <g transform="translate(.94565)">
+    <rect x="40.812" y="5.1442" width="27.191" height="63.016" stroke-width="1.3004"/>
+    <text x="42.281002" y="65.135513" font-family="sans-serif" font-size="18.667px" font-weight="bold" stroke-width="1.1156" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal" xml:space="preserve"><tspan x="42.281002" y="65.135513" fill="#ffffff" font-family="sans-serif" font-size="18.667px" font-weight="bold" stroke-width="1.1783" style="font-variant-caps:normal;font-variant-east-asian:normal;font-variant-ligatures:normal;font-variant-numeric:normal">x3</tspan></text>
+   </g>
+  </g>
+ </g>
+</svg>
