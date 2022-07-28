@@ -93,7 +93,8 @@ ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
   }
 
   const extensionDir = getExtensionPath(extension.type);
-  const extFilePath = path.join(extensionDir, extension.packageFiles.objectApp);
+  // TODO: IMPORTANT
+  const extFilePath = path.join(extensionDir, extension.packageFiles.objectApp); // <FIX THIS
 
   const fileContent = await fsPromise.readFile(extFilePath);
   //console.log(fileContent);

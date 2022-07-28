@@ -16,6 +16,10 @@ import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-hel
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
+import {
+  PostProcessFuncPropsType,
+  PostProcessFuncReturnType,
+} from "../../webslider-sdk/src/objects/objects-register";
 
 const MULTI_IMAGE = "multi_image";
 
@@ -199,9 +203,10 @@ export async function preloadMultiImage(props: {
 }
 
 export function multiImagePostProcess(
-  prevObject: IObject,
-  object: IObject
-): IObject {
+  props: PostProcessFuncPropsType
+): PostProcessFuncReturnType {
+  const { object, prevObject } = props;
+
   const newObj = cloneDeep(object);
 
   const prevValues = prevObject.definition.values as MultiImageValues;

@@ -32,9 +32,15 @@ export async function loadAndRegisterExternalComponent(
   //);
 
   if (extension.componentType === "object") {
-    const obj = (window as any).WebSlider_GlobalScope.objects[extension.type];
-    logger.info(`Object '${obj.type}' has been registered`);
-    registerExternalObject(obj);
+    const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
+      extension.type
+    ];
+    const appObj = (window as any).WebSlider_GlobalScope.appObjects[
+      extension.type
+    ];
+
+    registerExternalObject(appObj, playerObj);
+    logger.info(`Object '${appObj.type}' has been registered`);
   } else if (extension.componentType === "effect") {
     const eff = (window as any).WebSlider_GlobalScope.effects[extension.type];
     registerEffect(eff.definition, eff.defaults, eff.getDuration, true);

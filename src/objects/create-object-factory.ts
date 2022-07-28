@@ -9,7 +9,7 @@ import {
 } from "../webslider-sdk/src/inputs/i-inputs";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
 import { FormType } from "../webslider-sdk/src/form/i-form-layout";
-import { getObjectDefinition } from "../webslider-sdk/src/objects/objects-register";
+import { getAppObjectDefinition } from "../webslider-sdk/src/objects/objects-register";
 import { createSvgObject, SVG } from "./svg/svg";
 import {
   ICommonObjectProperties,
@@ -49,12 +49,15 @@ export function createObject(
       };
     }
     default: {
-      const objDeff = getObjectDefinition(type);
+      const objDeff = getAppObjectDefinition(type);
 
       return {
         ...objectProps,
-        ...objDeff!.createObject(initialValue, {
-          hasOverflowProperty: true,
+        ...objDeff!.createObject({
+          initialValue,
+          commonProperties: {
+            hasOverflowProperty: true,
+          },
         }),
       };
     }

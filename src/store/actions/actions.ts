@@ -48,7 +48,10 @@ import {
 } from "../../panels/stage-panel/StagePanelUtils";
 import { IEditor } from "../reducers/editor";
 import { IFormState } from "../reducers/i-uiforms";
-import { getObjectDefinition } from "../../webslider-sdk/src/objects/objects-register";
+import {
+  getAppObjectDefinition,
+  getPlayerObjectDefinition,
+} from "../../webslider-sdk/src/objects/objects-register";
 import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
@@ -1125,9 +1128,9 @@ function handleObjectUpdate(
   object.top = roundNumber(object.top!, 2);
   object.height = roundNumber(object.height!, 2);
 
-  const objDeff = getObjectDefinition(object.type);
+  const objDeff = getAppObjectDefinition(object.type);
   object = !!objDeff?.postProcess
-    ? objDeff.postProcess(prevObject, object)
+    ? objDeff.postProcess({ prevObject, object })
     : object;
 
   // TODO: REMOVE TO POSTPROCESS
@@ -1328,7 +1331,8 @@ function handleTextUpdate(
       }
     );
 
-    const objDeff = getObjectDefinition(object.type);
+    // Note: We are using getPlayerObjectDefinition in order to get html form player object
+    const objDeff = getPlayerObjectDefinition(object.type);
     let html = "";
     if (!!objDeff?.getHtml) {
       html = objDeff?.getHtml({ object, calculatedObjectSize, isPlayer: true });

@@ -60,7 +60,8 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
       id: uuid(),
       componentType,
       type: "",
-      devUrl: "",
+      playerDevUrl: "",
+      appDevUrl: "",
       monitoringEnabled: false,
       status: "",
       statusMessage: "",
@@ -119,10 +120,17 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
                 { disabled: item.monitoringEnabled }
               )}
               {getTextField(
-                "Dev URL",
-                item.devUrl,
-                (val: string) => updateItem(item.id, "devUrl", val),
-                "",
+                "Player URL",
+                item.playerDevUrl,
+                (val: string) => updateItem(item.id, "playerDevUrl", val),
+                "URL for Player component",
+                { disabled: item.monitoringEnabled }
+              )}
+              {getTextField(
+                "App URL",
+                item.appDevUrl,
+                (val: string) => updateItem(item.id, "appDevUrl", val),
+                "URL for App component",
                 { disabled: item.monitoringEnabled }
               )}
               {getTextField(
@@ -136,7 +144,11 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
                 <Button
                   disabled={item.monitoringEnabled}
                   onClick={async () => {
-                    if (!items?.[idx].devUrl || !items?.[idx].type) {
+                    if (
+                      !items?.[idx].appDevUrl ||
+                      !items?.[idx].playerDevUrl ||
+                      !items?.[idx].type
+                    ) {
                       AppToaster.show({
                         message: "All fields are mandatory.",
                         intent: "warning",

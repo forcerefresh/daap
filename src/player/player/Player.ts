@@ -10,7 +10,7 @@ import { loadAndRegisterExternalComponent } from "../../objects/external-object-
 import { layerSizeUpdate } from "../../objects/layer/layer";
 import {
   CoreObjectType,
-  getObjectDefinition,
+  getPlayerObjectDefinition,
   PreloadOrder,
 } from "../../webslider-sdk/src/objects/objects-register";
 import {
@@ -287,7 +287,7 @@ export class Player {
           this.currentDeviceType
         ] || transitionData.calculatedObjectSize;*/
 
-      let objDef = getObjectDefinition(transitionData.itemType);
+      let objDef = getPlayerObjectDefinition(transitionData.itemType);
 
       if (transitionData.itemType === "layer") {
         // NOTE: be cerful as we set only sizeUpdate
@@ -790,7 +790,7 @@ export class Player {
       });
 
       // Note: create logic for objects (start, stop, preloaders, ....)
-      const objDef = getObjectDefinition(transitionData.itemType);
+      const objDef = getPlayerObjectDefinition(transitionData.itemType);
 
       /*
       objDef?.sizeUpdate(
@@ -806,11 +806,11 @@ export class Player {
 */
 
       // execution code for objects
-      if (!!objDef?.executionCode_Start) {
+      if (!!objDef?.execStart) {
         const execTl = createTimelineForExecutionCode(
           transitionData,
-          objDef.executionCode_Start!,
-          objDef.executionCode_Stop!,
+          objDef.execStart!,
+          objDef.execStop!,
           transitionData.itemValues,
           calObjSize
         );
@@ -825,7 +825,7 @@ export class Player {
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
         });
-        this.preloaders[objDef.meta.preloadOrder || PreloadOrder.MIDDLE].push(
+        this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
           preloadPromise
         );
       }

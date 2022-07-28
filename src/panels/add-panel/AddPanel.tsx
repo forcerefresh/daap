@@ -6,7 +6,7 @@ import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
-import { getObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
+import { getAppObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
 import SVG from "react-inlinesvg";
 
 interface IAddPanelProps {
@@ -28,7 +28,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   } = props;
 
   const renderObjectsCards = (group: string) => {
-    const objDeffs = getObjectDefinitionsByGroup(group);
+    const objDeffs = getAppObjectDefinitionsByGroup(group);
 
     return (
       <>

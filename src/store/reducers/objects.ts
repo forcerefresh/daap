@@ -4,7 +4,6 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "../../webslider-sdk/src/objects/common-properties";
-import { getObjectDefinition } from "../../webslider-sdk/src/objects/objects-register";
 import {
   ActionTypes,
   ADD_OBJECT,

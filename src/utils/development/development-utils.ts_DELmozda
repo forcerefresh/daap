@@ -16,7 +16,7 @@ const importAll = async () => {
   for (let i = 0; i < devItems.length; i++) {
     try {
       await import(
-        /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].devUrl +
+        /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].appDevUrl +
           "?" +
           Math.random()
       );
@@ -25,7 +25,7 @@ const importAll = async () => {
         ...devItems[i],
         status: "ERROR",
         statusMessage: `Something went wrong. Development item ${
-          devItems[i].devUrl
+          devItems[i].appDevUrl
         } cannot be loaded or executed. Additional info: ${err?.toString?.()}`,
       };
       //update();

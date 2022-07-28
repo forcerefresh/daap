@@ -3,7 +3,8 @@ export interface DevelopmentItem {
   hash?: string;
   componentType: string;
   type: string; // TODO consider change name
-  devUrl: string;
+  appDevUrl: string;
+  playerDevUrl: string;
   monitoringEnabled?: boolean;
   status?: "" | "OK" | "ERROR";
   statusMessage?: string;

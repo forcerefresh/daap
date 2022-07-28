@@ -1,10 +1,10 @@
 import gsap from "gsap";
-import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
+import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 import { getConnectorBySourceId } from "../webslider-sdk/src/connectors/connector-manager";
 
 export interface ExecCodeConfig {
-  execCodeFunc_Start: executionCodeFuncType;
-  execCodeFunc_Stop: executionCodeFuncType;
+  execStart: ExecutionCodeFuncType;
+  execStop: ExecutionCodeFuncType;
   values: { [key: string]: any };
   id: string;
   className: string;
@@ -23,13 +23,13 @@ gsap.registerEffect({
       className,
       slideDuration,
       calculatedObjectSize,
-      execCodeFunc_Start,
-      execCodeFunc_Stop,
+      execStart,
+      execStop,
     } = config;
     let isStarted = false;
 
     const onStart = () => {
-      execCodeFunc_Start?.({
+      execStart?.({
         id,
         className,
         values,
@@ -41,7 +41,7 @@ gsap.registerEffect({
       });
     };
     const onStop = () => {
-      execCodeFunc_Stop?.({
+      execStop?.({
         id,
         className,
         values,
