@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><g fill="none"><path d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 1 1-2 0a1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72" height="72" version="1.1" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(3.4451 0 0 3.4451 175.78 -11.84)" stroke-width=".72567">
+  <circle cx="-47.562" cy="13.917" r="2" style="paint-order:stroke fill markers"/>
+  <circle cx="-40.573" cy="13.937" r="2" style="paint-order:stroke fill markers"/>
+  <circle cx="-33.583" cy="13.836" r="2" style="paint-order:stroke fill markers"/>
+ </g>
+</svg>
