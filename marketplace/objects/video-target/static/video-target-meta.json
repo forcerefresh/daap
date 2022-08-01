@@ -1,0 +1,32 @@
+{
+  "componentType": "object",
+  "type": "video-target",
+  "name": "Video target",
+  "version": "1.0.0",
+  "description": "Boilerplate for creating Object for Web Slider",
+  "tags": [],
+  "categories": [],
+  "author": "Force Refresh doo",
+  "licence": "",
+  "homepage": {
+    "title": "",
+    "url": ""
+  },
+  "doc": {
+    "title": "",
+    "url": ""
+  },
+  "support": {
+    "title": "",
+    "url": ""
+  },
+  "packageFiles": {
+    "appObjectFilename": "video-target-app.js",
+    "playerObjectFilename": "video-target-player.js",
+    "icon": "video-target-icon.svg"
+  },
+  "packageUrl": "",
+  "logoUrl": "",
+  "created": "2022-27-07",
+  "modified": "2022-27-07"
+}

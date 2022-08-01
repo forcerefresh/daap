@@ -1,23 +1,28 @@
-import { VIDEO_TARGET } from "./src/types";
+/**
+ * This is a entry point for Object used in Web Slider Player.
+ */
+
+import { VIDEO_TARGET } from "./src/video-target-types";
 import {
   objectStart,
   objectStop,
   getHtml,
-  postProcess,
   preload,
   sizeUpdate,
-} from "./src/video-target";
-import { addObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
+  PRELOAD_ORDER,
+} from "./src/video-target-player";
+import { addPlayerObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
 import { IObjectDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
 
 export const ObjectDefinition: IObjectDefinition = {
   type: VIDEO_TARGET,
-  sizeUpdate,
   getHtml,
+  sizeUpdate,
   preload,
-  executionCode_Start: objectStart,
-  executionCode_Stop: objectStop,
-  postProcess,
+  execStart: objectStart,
+  execStop: objectStop,
+  preloadOrder: PRELOAD_ORDER,
 };
 
-addObjectToGlobalScope(VIDEO_TARGET, ObjectDefinition);
+// Object adds itself to global scope in order to be used by Web Slider App or Player
+addPlayerObjectToGlobalScope(VIDEO_TARGET, ObjectDefinition);

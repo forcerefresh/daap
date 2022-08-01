@@ -4,17 +4,20 @@ import {
   InputType,
   ITextInput,
 } from "../../../../src/webslider-sdk/src/inputs/i-inputs";
-import {
-  ICommonObjectProperties,
-  IObject,
-} from "../../../../src/webslider-sdk/src/objects/i-object";
-import { VideoTargetValues, VIDEO_TARGET } from "./types";
-import { getHtml } from "./video-target";
-import logo from "./video-target-logo.svg";
-
 import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
 import { getObjectPlaceholder } from "../../../../src/webslider-sdk/src/objects/object-helpers";
+import {
+  CreateObjectFuncPropsType,
+  CreateObjectFuncReturnType,
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
+  GetHtmlFuncPropsType,
+  GetHtmlFuncReturnType,
+  ObjectMetaType,
+} from "../../../../src/webslider-sdk/src/objects/objects-register";
 import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
+import { VideoTargetValues, VIDEO_TARGET } from "./video-target-types";
+import svgIcon from "../static/video-target-icon.svg";
 import {
   CommonPropertiesTuple,
   getCommonObjectPropertiesDefinition,
@@ -23,7 +26,7 @@ import {
 } from "../../../../src/webslider-sdk/src/objects/common-properties";
 
 /**
- * This is a definition of Object properties form
+ * This is a type definition of Object properties form
  * Note: Generic values needs to match with ObjectValues interface
  */
 export type VideoTargetTuple = [
@@ -32,15 +35,14 @@ export type VideoTargetTuple = [
   ...CommonPropertiesTuple
 ];
 
+/**
+ * This functions generate and return new Object instance
+ * It is called from app every time when you add Object from Objects panel to stage
+ */
 export function createObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<IObject<VideoTargetTuple>, keyof ICommonObjectProperties | "layerId"> {
-  logger.debug(`Video target: createObject()`);
+  props: CreateObjectFuncPropsType
+): CreateObjectFuncReturnType<VideoTargetTuple> {
+  logger.debug(`video-target::createObject()`);
 
   const object = createCommonObject(VIDEO_TARGET);
 
@@ -97,36 +99,36 @@ export function createObject(
 }
 
 /**
- * This function return html for object (for App only).
+ * This function return html used in Web Slider App during editing
  */
-export function getHtmlForApp(props: {
-  object: IObject;
-  calculatedObjectSize: any;
-  isPlayer?: boolean;
-}) {
-  logger.debug(`Video target: getHtmlForApp()`);
+export function getHtmlForApp(
+  props: GetHtmlFuncPropsType
+): GetHtmlFuncReturnType {
+  logger.debug(`video-target::getHtmlForApp()`);
 
-  const { object, isPlayer } = props;
+  const { object } = props;
 
   // Note: object.definition.values contain values that are set from Properties Panel
   const values = object.definition.values as VideoTargetValues;
 
-  if (!isPlayer) {
-    if (!values.sourceId) {
-      return getObjectPlaceholder(`VIDEO TARGET<br/>(Please add Source ID)`);
-    } else {
-      return "Source ID: " + values.sourceId;
-    }
+  if (!values.sourceId) {
+    return getObjectPlaceholder(`VIDEO TARGET<br/>(Please add Source ID)`);
+  } else {
+    return "Source ID: " + values.sourceId;
   }
-
-  return getHtml(props);
 }
 
+export const getAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
+  return [];
+};
+
 /**
- * Properties that are shown in App Panel.
+ * Properties that are shown in "Web Slider App > Add Panel".
  */
-export const objectMeta = {
+export const objectMeta: ObjectMetaType = {
   name: "VIDEO TARGET",
-  description: "Video target object",
-  icon: logo,
+  description: "Add video target",
+  icon: svgIcon,
 };

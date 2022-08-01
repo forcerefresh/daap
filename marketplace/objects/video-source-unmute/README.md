@@ -1,7 +1,6 @@
 # Video source unmute
 
-This repository is a boilerplate for creating Object for Web Slider.
-This is a recommended way to build Objects.
+Use to mute/unmute video objects.
 
 ## Prerequest
 
@@ -13,15 +12,15 @@ Install following tools
 
 ## Install dependencies
 
-After you clone repo you need to install dependencies.
+After you clone repo you will need to install dependencies:
 
-Run `yarn`
+`yarn`
 
 ## Run
 
-To run development server.
+To run development server:
 
-Run `yarn start`
+`yarn start`
 
 ## Add object in app
 
@@ -29,23 +28,37 @@ During development, in order to test your object, you can add it to Web Slider a
 
 To connect follow these steps:
 
-- Run `yarn start`
-- Yarn start will output URL like this `http://localhost:3005`. This URL will be used later.
-- In Web Slider app go to `Settings > App Settings` and enable `Developer mode`
+- `yarn start`
+- It will open browser and show development configuration page.
+- In Web Slider App go to `Settings > App Settings` and enable `Developer mode`
 - Go to `Library > Development` and click `+ Add Object`.
-- In the `Object URL` enter URL you get from `yarn start` output.
+- Fill out form with data from development configuration page and click `Start monitoring`.
 
 ## Build
 
-To build object for production.
+To build Object for production:
 
-Run `yarn build` to build `video-source-unmute.zip` which contains following files
+`yarn build`
 
-- object-definition.json
--
--
--
+Bundle is located in `dist/bundle/video-source-unmute.zip` folder.  
+It contains following files:
+
+- object-meta.json
+- video-source-unmute-app.js
+- video-source-unmute-player.js
+- video-source-unmute.logo.svg
 
 ## Analyze
 
-To analyze build file run `npm run analyze`
+Use analyze to check what is inside your javascript build file and to optimize it.
+
+- Run `yarn build`
+- Run `yarn run analyze-app` and `yarn run analyze-player` to analyze app or player build.
+
+## License
+
+This repo is licensed under **EULA for Web Slider Objects** license
+
+In short, it's allowed to clone/fork, to edit/modify, create new Object and use in Web Slider App.
+
+Read License.txt file for details.

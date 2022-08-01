@@ -1,9 +1,14 @@
 const gulp = require("gulp");
 const zip = require("gulp-zip");
+const clean = require("gulp-clean");
 
 var webpack = require("webpack-stream");
 
-gulp.task("build-object", function () {
+gulp.task("clean", function () {
+  return gulp.src("./dist", { read: false, allowEmpty: true }).pipe(clean());
+});
+
+gulp.task("build-object-for-player", function () {
   return gulp
     .src("./index-player.ts")
     .pipe(webpack(require("./webpack.config.dist-player.js")))
@@ -17,19 +22,26 @@ gulp.task("build-object-for-app", function () {
     .pipe(gulp.dest("./dist"));
 });
 
-//var copy = require("gulp-copy");
 gulp.task("copy-static", function () {
-  return gulp.src("./static/**/*").pipe(gulp.dest("./dist"));
+  return gulp
+    .src(["./static/**/*", "!./static/hash.json", "!./static/index.html"])
+    .pipe(gulp.dest("./dist"));
 });
 
 gulp.task("bundle", function () {
   return gulp
-    .src("./dist/*")
+    .src(["./dist/*", "!./dist/**.LICENSE.txt", "!./dist/**.js.map"])
     .pipe(zip("video-target.zip"))
     .pipe(gulp.dest("./dist/bundle"));
 });
 
 gulp.task(
   "default",
-  gulp.series(["build-object", "build-object-for-app", "copy-static", "bundle"])
+  gulp.series([
+    "clean",
+    "build-object-for-player",
+    "build-object-for-app",
+    "copy-static",
+    "bundle",
+  ])
 );

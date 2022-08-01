@@ -1,6 +1,12 @@
+// This file contains configuration for production build
+const path = require("path");
+
+const MODULE_FILE_NAME_PLAYER = "video-source-unmute-player.js";
+
+// Configuration for Object build used in Web Slider Player
 module.exports = {
-  //entry: "./index-player.ts",
-  //devtool: "source-map",
+  entry: path.resolve(__dirname, "index-player.ts"),
+  devtool: "source-map",
   mode: "production",
   module: {
     rules: [
@@ -18,8 +24,8 @@ module.exports = {
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
+
   output: {
-    filename: "video-source-unmute.js",
-    //path: path.resolve(__dirname, "dist-player"),
+    filename: MODULE_FILE_NAME_PLAYER,
   },
 };

@@ -1,32 +1,27 @@
-import { VIDEO_SOURCE_UNMUTE } from "./src/types";
-import {
-  objectStart,
-  objectStop,
-  postProcess,
-  preload,
-  sizeUpdate,
-  PRELOAD_ORDER,
-} from "./src/video-source-unmute";
+/**
+ * This is a entry point for Object used in Web Slider App.
+ */
+
+import { VIDEO_SOURCE_UNMUTE } from "./src/video-source-unmute-types";
+import { postProcess } from "./src/video-source-unmute-player";
 import {
   createObject,
+  getAssetsUrls,
   getHtmlForApp,
   objectMeta,
-} from "./src/video-source-unmute-form";
+} from "./src/video-source-unmute-app";
 import { IObjectAppDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
-import { addObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
+import { addAppObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
 
 export const ObjectDefinition: IObjectAppDefinition = {
   type: VIDEO_SOURCE_UNMUTE,
   group: "media",
   meta: objectMeta,
   createObject,
-  sizeUpdate,
   getHtml: getHtmlForApp,
-  preload,
-  PRELOAD_ORDER,
-  executionCode_Start: objectStart,
-  executionCode_Stop: objectStop,
   postProcess,
+  getAssetsUrls,
 };
 
-addObjectToGlobalScope(VIDEO_SOURCE_UNMUTE, ObjectDefinition);
+// Object adds itself to global scope in order to be used by Web Slider App or Player
+addAppObjectToGlobalScope(VIDEO_SOURCE_UNMUTE, ObjectDefinition);

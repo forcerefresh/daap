@@ -4,20 +4,23 @@ import {
   InputType,
   ITextInput,
 } from "../../../../src/webslider-sdk/src/inputs/i-inputs";
-import {
-  ICommonObjectProperties,
-  IObject,
-} from "../../../../src/webslider-sdk/src/objects/i-object";
-import { VideoSourceValues, VIDEO_SOURCE } from "./types";
-import logo from "./video-source-logo.svg";
-
 import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
-import { getHtml } from "./video-source";
+import {
+  CreateObjectFuncPropsType,
+  CreateObjectFuncReturnType,
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
+  GetHtmlFuncPropsType,
+  GetHtmlFuncReturnType,
+  ObjectMetaType,
+} from "../../../../src/webslider-sdk/src/objects/objects-register";
 import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
+import { VideoSourceValues, VIDEO_SOURCE } from "./video-source-types";
+import svgIcon from "../static/video-source-icon.svg";
 
 /**
- * This is a definition of Video Source Object properties form
- * Note: Generic values needs to match with Video Source Object Values interface
+ * This is a type definition of Object properties form
+ * Note: Generic values needs to match with ObjectValues interface
  */
 export type VideoSourceTuple = [
   ITextInput<"sourceId">,
@@ -26,15 +29,15 @@ export type VideoSourceTuple = [
   ICheckboxInput<"loop">
 ];
 
-export function createVideoSourceObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<IObject<VideoSourceTuple>, keyof ICommonObjectProperties | "layerId"> {
-  logger.debug(`Video source: createVideoSourceObject()`);
+/**
+ * This functions generate and return new Object instance
+ * It is called from app every time when you add Object from Objects panel to stage
+ */
+export function createObject(
+  props: CreateObjectFuncPropsType
+): CreateObjectFuncReturnType<VideoSourceTuple> {
+  logger.debug(`video-source::createObject()`);
+
   const object = createCommonObject(VIDEO_SOURCE);
 
   const propertiesFormDefinition: VideoSourceTuple = [
@@ -91,18 +94,14 @@ export function createVideoSourceObject(
 }
 
 /**
- * This function return html for object (for App only).
+ * This function return html used in Web Slider App during editing
  */
-export function getHtmlForApp(props: {
-  object: IObject;
-  calculatedObjectSize: any;
-  isPlayer?: boolean;
-}) {
-  logger.debug(`Video source: getHtmlForApp()`);
-  const { isPlayer } = props;
+export function getHtmlForApp(
+  props: GetHtmlFuncPropsType
+): GetHtmlFuncReturnType {
+  logger.debug(`video-source::getHtmlForApp()`);
 
-  if (!isPlayer) {
-    return `<div style="
+  return `<div style="
     color: gray; 
     font-weight: bold; 
     display: flex; 
@@ -111,19 +110,22 @@ export function getHtmlForApp(props: {
     align-items: center; 
     text-align: center; 
     width: 100%; height: 100%;">
-     ${logo}
+     ${svgIcon}
     <p>VIDEO SOURCE</p>
     </div>`;
-  } else {
-    return getHtml(props);
-  }
 }
 
+export const getAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
+  return [];
+};
+
 /**
- * Properties that are shown in App Panel.
+ * Properties that are shown in "Web Slider App > Add Panel".
  */
-export const videoSourceMeta = {
+export const objectMeta: ObjectMetaType = {
   name: "VIDEO SOURCE",
   description: "Add video source",
-  icon: logo,
+  icon: svgIcon,
 };

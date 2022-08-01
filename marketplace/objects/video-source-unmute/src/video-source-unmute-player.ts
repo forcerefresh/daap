@@ -1,13 +1,22 @@
-import { addCommonPropertiesToStyle } from "../../../../src/webslider-sdk/src/objects/common-properties";
-import { IObject } from "../../../../src/webslider-sdk/src/objects/i-object";
-import { PreloadOrder } from "../../../../src/webslider-sdk/src/objects/objects-register";
+import {
+  ExecutionCodeFuncPropsType,
+  ExecutionCodeFuncReturnType,
+  GetHtmlFuncPropsType,
+  GetHtmlFuncReturnType,
+  PostProcessFuncPropsType,
+  PostProcessFuncReturnType,
+  PreloadFuncPropsType,
+  PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
+} from "../../../../src/webslider-sdk/src/objects/objects-register";
 import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
-import { VideoSourceUnmuteValues } from "./types";
+import { addCommonPropertiesToStyle } from "../../../../src/webslider-sdk/src/objects/common-properties";
+import { VideoSourceUnmuteValues } from "./video-source-unmute-types";
 
 /**
- * This function return html for object (for Player only).
+ * This function return html used in Web Slider Player
  */
-export function getHtml(props: { object: IObject; calculatedObjectSize: any }) {
+export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
   logger.debug(`Video source unmute: getHtml()`);
 
   const { object, calculatedObjectSize } = props;
@@ -37,23 +46,16 @@ export function getHtml(props: { object: IObject; calculatedObjectSize: any }) {
   ${css}<div class="mute" style="display: block">${object.definition.values.svgMute.source}</div>
   ${css}<div class="unmute" style="display: none">${object.definition.values.svgUnmute.source}</div>
   </div>`;
-
-  // Note: object.definition.values contain values that are set from Properties Panel
-  // const values = object.definition.values as VideoSourceUnmuteValues;
 }
 
 /**
- * This function is called on a browser viewport resize.
+ * This function is called on a browser viewport resize
  * It gets new size of the object through calculatedObjectSize
- * and updates size or a Object html element if needed.
+ * Common use case is to update Object's html element size
  */
-export async function sizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-  isInitial?: boolean;
-}): Promise<void> {
+export async function sizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> /*UpdateObjectSizeFuncReturnType*/ {
   logger.debug(`Video source unmute: sizeUpdate()`);
 
   const { calculatedObjectSize, className } = props;
@@ -70,33 +72,25 @@ export async function sizeUpdate(props: {
 }
 
 /**
- * This function preload asset required for Object to be shown and played.
+ * This function preload asset used by Object
  * e.g: Image, Video, Font, and other assets.
  */
-export async function preload(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<string> {
+export async function preload(
+  props: PreloadFuncPropsType
+): Promise<string> /*PreloadFuncReturnType*/ {
   logger.debug(`Video source unmute: preload()`);
 
-  return props.id;
+  const { id } = props;
+
+  return id;
 }
 
 /**
- * This function execute when timeline starts playing
+ * This function execute when timeline starts
  */
-export async function objectStart(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-  getConnector?: (sourceId: string) => {
-    getVideo: () => Promise<HTMLVideoElement>;
-    getMetaData: () => any;
-  };
-}) {
+export function objectStart(
+  props: ExecutionCodeFuncPropsType
+): ExecutionCodeFuncReturnType {
   logger.debug(`Video source unmute: objectStart()`);
 
   const { getConnector, id, values } = props;
@@ -122,51 +116,33 @@ export async function objectStart(props: {
       unmute.style.display = "block";
     }
   });
-
-  // TODO
 }
 
 /**
  * This function execute when timeline stop
  */
-export async function objectStop(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-  getConnector?: (sourceId: string) => {
-    getVideo: () => Promise<HTMLVideoElement>;
-    getMetaData: () => any;
-  };
-}) {
+export function objectStop(
+  props: ExecutionCodeFuncPropsType
+): ExecutionCodeFuncReturnType {
   logger.debug(`Video source unmute: objectStop()`);
-
-  /*
-  DELETE THIS
-  const { getConnector, values } = props;
-  const videoSourceUnmuteValues = values as VideoSourceUnmuteValues;
-
-  const conn = getConnector?.(videoSourceUnmuteValues.sourceId!);
-
-  const video = await conn?.getVideo();
-  if (video) video.muted = true;
-*/
-  // TODO
 }
 
 /**
  * This function is execute after every change in Properties Panel.
  * Good example of use is "autoHeight" for Text Object as we are calculating Object height to fit all text.
  */
-export function postProcess(prevObject: IObject, object: IObject): IObject {
+export function postProcess(
+  props: PostProcessFuncPropsType
+): PostProcessFuncReturnType {
   logger.debug(`Video source unmute: postProcess()`);
 
-  // TODO
-  return object;
+  const { object } = props;
+  return props.object;
 }
 
 /**
- * When object use "preload()" function to preload required assets, there are three preload groups.
+ * When object has preload implementation and use "preload()" function to preload required assets, its required to set preload order
+ * There are three preload groups
  * First we preload all Objects form FIRST, then MIDDLE, and at the end from LAST group in sequence.
  */
 export const PRELOAD_ORDER: PreloadOrder = PreloadOrder.FIRST;

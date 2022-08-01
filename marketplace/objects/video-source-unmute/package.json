@@ -5,17 +5,20 @@
   "scripts": {
     "start": "webpack serve --open",
     "build": "gulp",
-    "analyze": "source-map-explorer 'dist-player/*.js'",
-    "analyze-app": "source-map-explorer 'dist-app/*.js'"
+    "analyze-player": "source-map-explorer 'dist/video-source-unmute-player.js'",
+    "analyze-app": "source-map-explorer 'dist/video-source-unmute-app.js'"
   },
   "dependencies": {
-    "lodash-es": "^4.17.21",
+    "source-map-explorer": "^2.5.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "create-hash-file-webpack": "^1.0.4",
+    "gulp": "^4.0.2",
+    "gulp-clean": "^0.4.0",
     "gulp-zip": "^5.1.0",
     "html-webpack-plugin": "^5.5.0",
+    "strip-loader": "^0.1.2",
     "svg-inline-loader": "^0.8.2",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.4",
