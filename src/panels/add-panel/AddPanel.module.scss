@@ -31,6 +31,17 @@
   &.disabled {
     opacity: 0.3;
   }
+
+  .svgHolder {
+    width: 40px;
+    height: 40px;
+    margin: auto;
+
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
 }
 
 .sectionCard {
