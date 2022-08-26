@@ -35,8 +35,10 @@ import {
 } from "../../webslider-sdk/src/common/i-media-types";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
+import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 
 interface IMediaLibraryPanelProps {
+  hasApiKey: boolean;
   type: "image" | "video";
   uploadComponent?: ReactNode;
   fetchImagesFunc: (props: {
@@ -66,6 +68,7 @@ export type IImagesPanelMergedProps = typeof mapDispatchToProps &
 
 const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const {
+    hasApiKey,
     uploadComponent,
     fetchImagesFunc,
     deleteImagesFunc,
@@ -93,6 +96,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   >(undefined);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const reload = () => {
     setRequestReload(requestReload + 1);
   };
@@ -119,6 +124,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };*/
 
   const fetchData = (from = -1) => {
+    if (!hasApiKey) return;
+
     setLoading(true);
 
     from = from === -1 ? images?.length || 0 : from;
@@ -131,6 +138,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       perPage: 20,
     }).then(
       async (result) => {
+        const err = checkIfAssetsServiceHasError(result);
+        if (err) {
+          setErrorMessage(err);
+          return;
+        }
+
         const data = result.data || (result as any).photos;
 
         //await postProcessData(data);
@@ -311,15 +324,26 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           setSelectedImage(-1);
         }}
       >
+        {!hasApiKey && (
+          <div className="error">
+            {
+              "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
+            }
+          </div>
+        )}
+        {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           className={css.infScroll}
           dataLength={images?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <div style={{ textAlign: "center", margin: "20px" }}>
-              <Spinner size={50} />
-            </div>
+            hasApiKey &&
+            !errorMessage && (
+              <div style={{ textAlign: "center", margin: "20px" }}>
+                <Spinner size={50} />
+              </div>
+            )
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"

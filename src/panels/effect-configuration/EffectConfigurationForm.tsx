@@ -196,6 +196,23 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     </div>
   );
 
+  const overlapInput = () => (
+    <div className="">
+      {getUnitNumericFiled(
+        "Overlap",
+        transition.overlap,
+        (value: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.overlap = value;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "80px" } },
+        ["ms", "s"]
+      )}
+    </div>
+  );
+
   const selectedEffectName = getEffectsOptions(
     effectType,
     transition.canBeCombined
@@ -256,6 +273,13 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
             <>
               {effDef(effectType).defaults.hasDuration && durationInput()}
               {effDef(effectType).defaults.hasDelay && delayInput()}
+            </>
+          )}
+
+          {effectType === "slide" && (
+            <>
+              {overlapInput()}
+              {effDef(effectType).defaults.hasDuration && durationInput()}
             </>
           )}
         </div>

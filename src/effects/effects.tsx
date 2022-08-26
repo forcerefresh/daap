@@ -28,6 +28,7 @@ import {
   sliceSlideInnerDefaults,
   tilesSlideInnerDefinition,
 } from "./tiles-slide/tiles-slide.definition";
+
 import {
   fallingLeavesDefaults,
   fallingLeavesDefinition,
@@ -92,7 +93,7 @@ import "./tiles-fade/tiles-fade.effect";
 import "./slice-slide/slice-slide.effect";
 import "./tiles-slide/tiles-slide.effect";
 import "./tiles-slide/tiles-slide.effect";
-import "./falling-leaves/falling-leaves.effect";
+//import "./falling-leaves/falling-leaves.effect";
 import "./cube/cube.effect";
 import "./flip-slide/flip-slide.effect";
 import "./split/split.effect";

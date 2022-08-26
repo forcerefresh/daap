@@ -1,6 +1,7 @@
 import { Player } from "./player/player/Player";
 
 import "./objects/register-object";
+import "./effects/register-animation";
 import "./objects/font-preloader";
 
 import { BreakpointConfiguration } from "./webslider-sdk/src/common/i-breakpoint-configuration";

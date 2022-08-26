@@ -8,6 +8,8 @@ export interface IEffectDefinition<T> {
 
 export interface IEffectBase {
   id: string;
+  itemId?: string;
+  name?: string;
   type?: EffectType;
   objectProperties?: {
     width: number;

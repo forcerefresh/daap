@@ -1,5 +1,5 @@
 import { Button, Icon, Portal, Text } from "@blueprintjs/core";
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
@@ -27,6 +27,7 @@ import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
 import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
 import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel";
 import { getZoom } from "../../store/helpers/calculateZoom";
+import { IntegrationContext } from "../../integration";
 
 enum VisiblePanel {
   None = "none",
@@ -58,6 +59,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     _setStageTool,
     setZoomFit,
   } = props;
+  const globalContext = useContext(IntegrationContext);
+  const { getLicenseDetails } = globalContext.useLicenseHook();
+
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      if (data?.status === "OK" || data?.status === "EXPIRED") {
+      } else {
+        setShowPanel(VisiblePanel.Settings);
+      }
+    });
+  }, []);
+
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
 
   // logic for handling click outside

@@ -15,6 +15,7 @@ import { PreviewTimelineContext } from "../../utils/preview-timeline-provider/Pr
 export interface SlideTimelineData {
   duration: string;
   transitionDuration: string;
+  transitionOverlap: string;
   //transitionOverlap: number;
 }
 
@@ -38,6 +39,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     _setStagePreview,
   } = props;
 
+  //console.log(projectTimelineData);
   const { previewTimelineState } = useContext(PreviewTimelineContext);
   //const [progress, setProgress] = useState<number>(0);
 
@@ -47,10 +49,13 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     /*if (idx == 0) {
       totalTime += slideData.duration;
     } else {*/
-    totalTime += convertTimeUnitToMs(slideData.duration); //-slideData.transitionDuration;
+    totalTime +=
+      convertTimeUnitToMs(slideData.duration) -
+      convertTimeUnitToMs(slideData.transitionOverlap);
     /*}*/
   });
 
+  //console.log(totalTime);
   let currPos = 0;
   const slideLeftArr: number[] = [];
   const slidePosMultiplierArr: number[] = [];
@@ -61,18 +66,22 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     const slideLeft =
       currPos === 0
         ? 0
-        : (currPos - convertTimeUnitToMs(slideData.transitionDuration)) /
+        : (currPos - convertTimeUnitToMs(slideData.transitionOverlap)) / // TODO:UPDATE
           totalTime;
     slideLeftArr[idx] = slideLeft;
-    currPos += convertTimeUnitToMs(slideData.duration);
+    currPos +=
+      convertTimeUnitToMs(slideData.duration) -
+      convertTimeUnitToMs(slideData.transitionOverlap);
 
     //slide multiplier
     const slidePosMultiplier =
-      (convertTimeUnitToMs(slideData.duration) +
-        convertTimeUnitToMs(slideData.transitionDuration)) /
-      totalTime;
+      convertTimeUnitToMs(slideData.duration) / totalTime;
     slidePosMultiplierArr[idx] = slidePosMultiplier;
   });
+
+  //console.log(slideLeftArr);
+
+  //console.log(slidePosMultiplierArr);
 
   useDeepCompareEffect(() => {
     //render timeline content
@@ -87,7 +96,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       projectTimelineData?.slides.forEach((slideData, idx) => {
         const transitionLeft =
           (lineWidth / totalTime) *
-          (currentPosition - convertTimeUnitToMs(slideData.transitionDuration));
+          (currentPosition - convertTimeUnitToMs(slideData.transitionOverlap)); // TODO:UPDATE
         let transitionWidth =
           (convertTimeUnitToMs(slideData.transitionDuration) / totalTime) *
           lineWidth;
@@ -97,7 +106,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
         html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #744b08; left:${transitionLeft}px "></div>`;
         //html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
 
-        currentPosition += convertTimeUnitToMs(slideData.duration);
+        currentPosition +=
+          convertTimeUnitToMs(slideData.duration) -
+          convertTimeUnitToMs(slideData.transitionOverlap);
       });
       lineDiv.innerHTML = html;
     }
@@ -132,6 +143,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   left = left + lineWidth * slideLeftArr[previewTimelineState.slideIdx];
 
+  //console.log(progress);
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 

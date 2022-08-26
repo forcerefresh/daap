@@ -17,6 +17,14 @@ export interface getMyUploadComponentProps {
   onStop: () => void;
 }
 
+export interface getLicenseDetailsResponse {
+  serial?: string;
+  apiKey?: string;
+  status: "OK" | "EXPIRED" | "DOES_NOT_EXIST" | string;
+  expiredDate: "string";
+  subscriptionType: "monthly" | "yearly" | "nosubscription";
+  licenseType: "onedeveloper" | "team" | "largeteam";
+}
 /** IntegrationContext provides API for integration (wp, electron, etc...) */
 export const IntegrationContext = React.createContext({
   useObjectStorageHook: () => ({
@@ -121,6 +129,16 @@ export const IntegrationContext = React.createContext({
     scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
   }),
 
+  useLicenseHook: () => ({
+    saveSerial: (props: { serial: string }): Promise<void> => {
+      return Promise.resolve();
+    },
+
+    getLicenseDetails: (): Promise<getLicenseDetailsResponse> => {
+      return Promise.resolve({} as getLicenseDetailsResponse);
+    },
+  }),
+
   useDevelopmentHook: () => ({
     getAll: (): Promise<DevelopmentItem[]> => {
       return Promise.resolve([]);
@@ -163,7 +181,8 @@ export const IntegrationContext = React.createContext({
     getExtensions: (
       from: number,
       search?: string,
-      tags?: string[]
+      tags?: string[],
+      apiKey?: string
     ): Promise<{ items: IExtensionItem[] }> =>
       Promise.resolve({ items: [] as IExtensionItem[] }),
 
@@ -360,6 +379,15 @@ function useExtensionsHookFactory() {
   }
 }
 
+function useLicenseHookFactory() {
+  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
+
+  } else {*/
+  return require("./integration/hooks/license-hook/use-license-hook")
+    .useLicenseHook;
+  /*}*/
+}
+
 function useDevelopmentHookFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "electron") {
 
@@ -385,6 +413,7 @@ export const IntegrationContextProvider = (
         useExtensionsHook: useExtensionsHookFactory(),
         useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),
+        useLicenseHook: useLicenseHookFactory(),
       }}
     >
       {props.children}

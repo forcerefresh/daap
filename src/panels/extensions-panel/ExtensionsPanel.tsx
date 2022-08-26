@@ -11,6 +11,7 @@ import css from "./ExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { IExtensionItem } from "../../webslider-sdk/src/objects/i-extensions";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -22,6 +23,8 @@ export type IExtensionsPanelMergedProps = typeof mapDispatchToProps &
 
 const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const { onRequestClose, _registerObject, _unregisterObject } = props;
+
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [extensions, setExtensions] = useState<IExtensionItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,6 +46,18 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     getInstalledExtensions,
   } = globalContext.useExtensionsHook();
   const UploadComponent = globalContext?.getMyUploadComponent;
+  const { getLicenseDetails } = globalContext.useLicenseHook();
+
+  const [apiKey, setApiKey] = useState<string | undefined>();
+  const apiKeyRef = useRef<string | undefined>();
+
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      apiKeyRef.current = data.apiKey;
+      setApiKey(data.apiKey);
+      debounceFetchData();
+    });
+  }, []);
 
   useEffect(() => {
     getInstalledExtensions().then((res: { items: IExtensionItem[] }) => {
@@ -51,12 +66,20 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   }, []);
 
   const fetchData = (from = -1) => {
+    // if (!apiKey) return;
+
     setLoading(true);
 
     from = from === -1 ? extensions?.length || 0 : from;
 
-    getExtensions(from, searchValue).then(
+    getExtensions(from, searchValue, undefined, apiKeyRef.current).then(
       (result) => {
+        const err = checkIfAssetsServiceHasError(result);
+        if (err) {
+          setErrorMessage(err);
+          return;
+        }
+
         if (from === 0) {
           setExtensions([...result.items]);
         } else {
@@ -73,7 +96,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    debounceFetchData();
+    // debounceFetchData();
   }, []);
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
@@ -188,14 +211,25 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       </div>
 
       <div className={css.mainSection} id="mediaHolder">
+        {!apiKey && (
+          <div className="error">
+            {
+              "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
+            }
+          </div>
+        )}
+        {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           dataLength={extensions?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <div style={{ textAlign: "center", margin: "20px" }}>
-              <Spinner size={50} />
-            </div>
+            !apiKey &&
+            !errorMessage && (
+              <div style={{ textAlign: "center", margin: "20px" }}>
+                <Spinner size={50} />
+              </div>
+            )
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"

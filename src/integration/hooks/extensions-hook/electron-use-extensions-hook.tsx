@@ -6,12 +6,13 @@ export const useExtensionsHook = () => {
   const getExtensions = (
     from: number,
     search?: string,
-    tags?: string[]
+    tags?: string[],
+    apiKey?: string
   ): Promise<{ items: IExtensionItem[] }> => {
     logger.trace("Get extensions from directory (electron)");
 
-    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1`;
-    let url = `${apiUrl}?from=${from}`;
+    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?api-key=${apiKey}`;
+    let url = `${apiUrl}&from=${from}`;
 
     if (search) {
       url += `&search=${encodeURIComponent(search)}`;

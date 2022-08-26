@@ -67,6 +67,7 @@ export default function TimelineView(props: TimelineViewProps) {
     >
       {tls.map((tl, idx) => (
         <div
+          key={tl.name + idx + tl.no}
           className={css.timeline}
           style={{
             ...tl.timelineStyle,

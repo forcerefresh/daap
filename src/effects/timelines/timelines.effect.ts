@@ -58,7 +58,7 @@ gsap.registerEffect({
         const dur = config.duration! * (time / 100) - currentTime;
         currentTime = dur;
         tlTl.add(
-          gsap.to(objectEl, { duration: dur, css: cssValue, ease: easing }),
+          gsap.from(objectEl, { duration: dur, css: cssValue, ease: easing }),
           startFrom
         );
         startFrom += dur;

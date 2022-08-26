@@ -123,7 +123,11 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     const length = newItem.transitions[effectType].length;
     setSelectedNo({ ...selectedNo, [effectType]: length });
 
-    const transition = getDefaultEffectConfigForType(effectType, isStructural);
+    const transition = getDefaultEffectConfigForType(
+      effectType,
+      isStructural,
+      itemType
+    );
     transition.effect.id = effId;
 
     const values = {} as {
@@ -220,6 +224,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
               {effects.map((effect, effectIdx) => {
                 return (
                   <Tag
+                    key={effect.effect.id + "_" + effectIdx}
                     active={selectedNo[section] === effectIdx}
                     minimal
                     onClick={() => {

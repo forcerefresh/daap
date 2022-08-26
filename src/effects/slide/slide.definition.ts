@@ -13,7 +13,7 @@ export const slideDefinition: IEffectDefinition<ISlideTuple> = {
   name: "Slide",
   form: [
     {
-      displayName: "Slide from",
+      displayName: "Direction",
       propertyName: "from",
       inputType: InputType.SELECT,
       value: {} as any,

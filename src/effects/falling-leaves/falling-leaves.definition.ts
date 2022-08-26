@@ -60,11 +60,7 @@ export const fallingLeavesDefaults: IFallingLeaves = {
   canBeCombined: false,
   // effect properties
   number: 30,
-  image: {
-    url: "/images/leaf.png",
-    width: 40,
-    height: 40,
-  },
+  image: { image: { sourceType: "local" } },
   width: 40,
   height: 40,
 };

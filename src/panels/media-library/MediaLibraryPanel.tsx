@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -66,12 +66,20 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
 
   const globalContext = useContext(IntegrationContext);
   const UploadComponent = globalContext?.getMyUploadComponent;
-
+  const { getLicenseDetails } = globalContext.useLicenseHook();
   const { fetchImages, deleteImages } = globalContext.useMyMediaHook();
 
   const [forceUpdate, setForceUpdate] = useState(0);
+  const [apiKey, setApiKey] = useState<string | null>(null);
 
-  const apiUrl = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1`;
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      setApiKey(data.apiKey || null);
+    });
+  }, []);
+
+  const apiUrl = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1?api-key=${apiKey}`;
+
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
       <div>
@@ -82,6 +90,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="My Images"
               panel={
                 <ImagesLibraryPanel
+                  hasApiKey={true}
                   type="image"
                   key={forceUpdate}
                   deleteImagesFunc={deleteImages}
@@ -111,6 +120,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="My Videos"
               panel={
                 <ImagesLibraryPanel
+                  hasApiKey={true}
                   type="video"
                   key={forceUpdate}
                   deleteImagesFunc={deleteImages}
@@ -140,6 +150,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="My Vectors"
               panel={
                 <VectorsLibraryPanel
+                  hasApiKey={true}
                   key={forceUpdate}
                   deleteImagesFunc={deleteImages}
                   fetchImagesFunc={fetchImages}
@@ -167,6 +178,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="Image library"
               panel={
                 <ImagesLibraryPanel
+                  hasApiKey={!!apiKey}
                   type="image"
                   key={forceUpdate}
                   fetchImagesFunc={(props: {
@@ -175,7 +187,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     search?: string;
                   }): Promise<{ data: ImageData[]; hasMore: boolean }> => {
                     const { from, tags = [], search } = props;
-                    let url = `${apiUrl}?from=${from}`;
+                    let url = `${apiUrl}&from=${from}`;
                     if (search) {
                       url += `&search=${encodeURIComponent(search)}`;
                     }
@@ -200,13 +212,14 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               title="Vector library"
               panel={
                 <VectorsLibraryPanel
+                  hasApiKey={!!apiKey}
                   fetchImagesFunc={(props: {
                     from: number;
                     tags?: string[];
                     search?: string;
                   }): Promise<{ data: VectorData[]; hasMore: boolean }> => {
                     const { from, tags = [], search } = props;
-                    let url = `${apiUrl}?from=${from}&type=vectors`;
+                    let url = `${apiUrl}&from=${from}&type=vectors`;
                     if (search) {
                       url += `&search=${encodeURIComponent(search)}`;
                     }

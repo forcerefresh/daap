@@ -30,8 +30,11 @@ import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { is } from "immer/dist/internal";
+import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 
 interface IMediaLibraryPanelProps {
+  hasApiKey: boolean;
   uploadComponent?: ReactNode;
   fetchImagesFunc: (props: {
     type: MediaType;
@@ -60,6 +63,7 @@ export type IVectorPanelMergedProps = typeof mapDispatchToProps &
 
 const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   const {
+    hasApiKey,
     uploadComponent,
     fetchImagesFunc,
     deleteImagesFunc,
@@ -83,6 +87,8 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   >(undefined);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const reload = () => {
     setRequestReload(requestReload + 1);
   };
@@ -92,6 +98,8 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   };
 
   const fetchData = (from = -1) => {
+    if (!hasApiKey) return;
+
     setLoading(true);
 
     from = from === -1 ? images?.length || 0 : from;
@@ -104,6 +112,12 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
       perPage: 20,
     }).then(
       (result) => {
+        const err = checkIfAssetsServiceHasError(result);
+        if (err) {
+          setErrorMessage(err);
+          return;
+        }
+
         setImages([...images, ...result.data]);
         setLoading(false);
         setHasMore(result.hasMore);
@@ -210,14 +224,25 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           setSelectedImage(-1);
         }}
       >
+        {!hasApiKey && (
+          <div className="error">
+            {
+              "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
+            }
+          </div>
+        )}
+        {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           dataLength={images?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            <div style={{ textAlign: "center", margin: "20px" }}>
-              <Spinner size={50} />
-            </div>
+            hasApiKey &&
+            !errorMessage && (
+              <div style={{ textAlign: "center", margin: "20px" }}>
+                <Spinner size={50} />
+              </div>
+            )
           }
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"

@@ -144,18 +144,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       { isSave: false }
     );
 
-    let totalDuration = 0;
+    //let totalDuration = 0;
     const slideTimelineDataArr: SlideTimelineData[] =
       exportData.slideDataArr.map((slideData) => {
         const transitionDuration =
           slideData.slide.transitions.slide?.[0]?.duration || "0ms";
+
+        const transitionOverlap =
+          slideData.slide.transitions.slide?.[0]?.overlap || "0ms";
 
         //const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
         const slideDuration = convertTimeUnitToMs(
           slideData.slide.duration.customValue || "0ms"
         );
 
-        totalDuration += slideDuration;
+        //totalDuration += slideDuration;
         //slideData.slide.slideTransition.overlap
         return {
           duration: slideData.slide.duration.customValue || "0ms",
@@ -163,6 +166,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             slideData.slide.transitions.slide?.[0]?.effect.id === "none"
               ? "0ms"
               : transitionDuration,
+          transitionOverlap:
+            slideData.slide.transitions.slide?.[0]?.effect.id === "none"
+              ? "0ms"
+              : transitionOverlap,
           /*transitionOverlap:
             slideData.slide.slideTransition.effect.id === "none"
               ? 0

@@ -1,4 +1,5 @@
 import gsap, { TweenMax } from "gsap";
+import { getMediaSrc } from "../../integration/utils/local-media";
 import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
 
 gsap.registerEffect({
@@ -40,10 +41,12 @@ gsap.registerEffect({
     //const elObserver = new ResizeObserver(sizeChangeHandler);
     //elObserver.observe(targets[0]);
 
+    const imageItem = getMediaSrc("image", config.image.image);
+
     for (let i = 0; i < total; i++) {
       var leafEl = document.createElement("div");
       leafEl.style.position = "absolute";
-      leafEl.innerHTML = `<img src="${config.image.url}" width="${config.width}" height="${config.height}" />`;
+      leafEl.innerHTML = `<img src="${imageItem.src}" width="${config.width}" height="${config.height}" />`;
       leafEls.push(leafEl);
 
       gsap.set(leafEl, {

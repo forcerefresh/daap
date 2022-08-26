@@ -1,4 +1,3 @@
-import { Console } from "console";
 import gsap from "gsap";
 import { last } from "lodash-es";
 import {
@@ -30,6 +29,9 @@ import {
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import getTickerInstance from "./Ticker";
+import { Timeline } from "./Timeline";
+import { RootTimeline } from "./RootTimeline";
 
 gsap.install(window);
 
@@ -47,12 +49,12 @@ export class Player {
   protected rootDiv: HTMLDivElement;
   protected currentSlide: number = -1;
 
-  private timelines: gsap.core.Timeline[];
+  private timelines: RootTimeline[];
   private staticTimelines: gsap.core.Timeline[];
 
-  private currentSlideTimeline?: gsap.core.Timeline;
+  private currentSlideTimeline?: RootTimeline;
   private currentSlideTimelineIdx: number = 0;
-  private slideTransitionTimeline?: gsap.core.Timeline;
+  private slideTransitionTimeline?: RootTimeline;
 
   private nextZIndex = 1;
 
@@ -400,9 +402,10 @@ export class Player {
     }
   }
 
-  public getCurrentTimeline(): gsap.core.Timeline | undefined {
+  public getCurrentTimeline(): RootTimeline | undefined {
     return this.currentSlideTimeline;
   }
+
   public getCurrentTimelineIdx(): number {
     return this.currentSlideTimelineIdx;
   }
@@ -420,25 +423,38 @@ export class Player {
   }
 
   public clear(destroy = false) {
-    this.timelines.forEach((tl) => {
-      tl.getChildren(true).forEach((intl) => intl?.vars?.onComplete?.());
-      tl.clear();
-      if (destroy) tl.kill();
-    });
+    getTickerInstance().stop();
 
     this.staticTimelines.forEach((tl) => {
       tl.clear();
-      if (destroy) tl.kill();
+      tl.kill();
     });
+    this.staticTimelines = [];
 
-    this.slideTransitionTimeline?.clear();
-    if (destroy) this.slideTransitionTimeline?.kill();
+    this.timelines.forEach((tl) => {
+      tl.destroy();
+    });
+    this.timelines = [];
+
+    this.slideTransitionTimeline?.destroy();
+    this.slideTransitionTimeline = undefined;
 
     this.breakpointChecker.setBPChangeHandler(null);
     this.breakpointChecker.setSizeChangeHandler(null);
+
+    this.currentSlideTimelineIdx = 0;
+
+    this.currentSlideTimeline?.destroy();
+    this.currentSlideTimeline = undefined;
   }
 
   public async play() {
+    getTickerInstance().start();
+    //// TMP
+    //const myTimeline = new Timeline({});
+    //myTimeline.play();
+    //// TMP
+
     await Promise.all(this.extComponentPreloaders);
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
@@ -469,6 +485,8 @@ export class Player {
   }
 
   public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
+    logger.notice("Play slide:  " + slideIdx);
+
     this.addClassToBullet(this.rootDiv, slideIdx);
 
     //this.rootDiv.style.display = "block";
@@ -495,6 +513,7 @@ export class Player {
       ? {
           effect: firstSlideTransition?.effect!,
           duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
+          overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
         }
       : undefined;
 
@@ -515,15 +534,25 @@ export class Player {
     this.currentSlideTimeline = this.timelines[slideIdx];
     this.currentSlideTimelineIdx = slideIdx;
 
+    //console.log(this.currentSlideTimeline);
+
     const hasEffect = (bettwenSlideEff?: ISlideTransition) => {
       return (
         bettwenSlideEff?.effect.id && bettwenSlideEff?.effect.id !== "none"
       );
     };
     if (hasEffect(bettwenSlideEff)) {
-      this.slideTransitionTimeline = gsap.timeline({ paused: true });
+      logger.error("CREATE slideTransitionTimeline + " + slideIdx);
+      this.slideTransitionTimeline = new RootTimeline({
+        name: "SlideTransitionRootTimeline",
+        duration: bettwenSlideEff!.duration,
+      }); // gsap.timeline({ paused: true });
 
-      const tlEff = gsap.effects[bettwenSlideEff!.effect.id]([slideEl], {
+      //const tlEff = gsap.effects[bettwenSlideEff!.effect.id]([slideEl], {
+      const transitionTl = new Timeline({
+        name: "SlideTransitionTimeline",
+        //element: slideEl,
+        effectId: bettwenSlideEff!.effect.id,
         ...bettwenSlideEff!.effect.values,
         objectProperties: {
           width: 960,
@@ -535,7 +564,7 @@ export class Player {
           pageWidth: this.playerData?.breakpointData.pageWidth,
         },
         type: "effect",
-        duration: bettwenSlideEff!.duration / 1000,
+        duration: bettwenSlideEff!.duration,
         //ease: bettwenSlideEff.ease,
         //childEase: bettwenSlideEff.childEase,
         //timeDistribution: bettwenSlideEff.timeDistribution,
@@ -543,23 +572,29 @@ export class Player {
         nextSlideEl: slideEl,
         nextZIndex: this.nextZIndex,
       });
-      this.slideTransitionTimeline.add(tlEff);
+      console.log(transitionTl);
+      this.slideTransitionTimeline.add(transitionTl);
+      this.slideTransitionTimeline.init();
       this.slideTransitionTimeline.play();
     } else {
       slideEl.style.zIndex = `${this.nextZIndex++}`;
     }
 
     if (this.oneSlide) {
-      this.currentSlideTimeline.repeat(-1);
+      //this.currentSlideTimeline.repeat(-1);
     }
 
     // PLAY SLIDE :)
 
+    this.currentSlideTimeline.init();
     this.currentSlideTimeline.play(prevTlTime);
     //slideEl.style.display = "block";
 
     let isUpdated = false;
-    this.currentSlideTimeline.eventCallback("onUpdate", () => {
+
+    const currentSlideTimelineUpdateCallback = () => {
+      //console.log("asas");
+      // eventCallback("onUpdate", () => {
       this.onUpdateCallback?.();
 
       if (!isUpdated) {
@@ -571,37 +606,59 @@ export class Player {
         //
       }
       //
-    });
+    };
+    this.currentSlideTimeline.emitter.removeAllListeners("update");
+    this.currentSlideTimeline.emitter.addListener(
+      "update",
+      currentSlideTimelineUpdateCallback
+    );
 
-    this.currentSlideTimeline.eventCallback("onComplete", function () {
+    const currentSlideTimelineStopCallback = () => {
       slideEl.style.display = "none";
-    });
+    };
+    this.currentSlideTimeline.emitter.removeAllListeners("stop");
+    this.currentSlideTimeline.emitter.addListener(
+      "stop",
+      currentSlideTimelineStopCallback
+    );
 
     // trigger on slide end
 
-    const currSlideTl = this.currentSlideTimeline; //
+    /* TODO123 const currSlideTl = this.currentSlideTimeline; //
     currSlideTl
       .getById("slideDurationTimeline")
       .eventCallback("onComplete", () => {
-        /*this.transitionEndBreakpointHandler(
-          slideIdx,
-          this.currentSlideTimeline!
-        );*/
+        //this.transitionEndBreakpointHandler(
+        //  slideIdx,
+        //  this.currentSlideTimeline!
+        //);
         currSlideTl?.kill();
         slideEl.style.display = "none";
       });
+    */
 
     //if (hasEffect(bettwenSlideEff)) {
     // trigger when transition have to start
-    const triggerTimeline: any = last(this.currentSlideTimeline?.getChildren());
+    // TODO123 const triggerTimeline: any = last(this.currentSlideTimeline?.getChildren());
 
+    const triggerTimeline: Timeline | undefined =
+      this.currentSlideTimeline?.getChildById("triggerTimeline");
+
+    console.log(triggerTimeline);
     if (!this.oneSlide) {
-      triggerTimeline?.eventCallback("onComplete", () => {
+      console.log("ADD HANDLER: " + slideIdx);
+      const triggerTimelineCallback = () => {
+        triggerTimeline?.emitter.removeAllListeners("stop");
+
+        //debugger;
+        logger.warn("UPDATE!!!");
         this.transitionEndBreakpointHandler(
           slideIdx,
           this.currentSlideTimeline!
         );
-      });
+      };
+      triggerTimeline?.emitter.removeAllListeners("stop");
+      triggerTimeline?.emitter.addListener("stop", triggerTimelineCallback);
     }
     //}
     // OTHER
@@ -614,7 +671,7 @@ export class Player {
   }
 
   public manualPlaySlide(slideIdx: number) {
-    const currentSlideTime = this.currentSlideTimeline?.time();
+    /* TODO 123const currentSlideTime = this.currentSlideTimeline?.time();
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
@@ -625,7 +682,7 @@ export class Player {
       // NOTE:  empty callback to overwrite onComplete
     });
 
-    this.playSlide(slideIdx);
+    this.playSlide(slideIdx);*/
   }
 
   private createEvent(
@@ -704,7 +761,7 @@ export class Player {
       // Note: create timelines
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
-        tl.add(pTl, 0);
+        // TODO123 tl.add(pTl, 0);
       });
       /*
       // Note: create logic for objects (start, stop, preloaders, ....)
@@ -762,15 +819,19 @@ export class Player {
 
     this.createEvents(slideIdx, data);
 
-    const slideTimeline = gsap.timeline({ paused: true });
+    const slideTimeline = new RootTimeline({
+      name: "RootSlideTimeline-id:" + slideIdx,
+      duration: convertTimeUnitToMs(data.slide.duration.customValue),
+    }); // gsap.timeline({ paused: true });
     this.timelines[slideIdx] = slideTimeline;
 
     // add slide duration timeline (we ise it to kill if effects lats more than set time)
-    const slideDurationTimeline = gsap.timeline({
+    /*const slideDurationTimeline = gsap.timeline({
       id: "slideDurationTimeline",
       duration: convertTimeUnitToMs(data.slide.duration.customValue) / 1000,
     });
     slideTimeline.add(slideDurationTimeline);
+    */
 
     // add objects effects timelines
     data.transitionsData.forEach((transitionData) => {
@@ -786,9 +847,10 @@ export class Player {
       // Note: create effects tls
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
-        slideTimeline.add(pTl, 0);
+        slideTimeline.add(pTl);
       });
 
+      //console.log(slideTimeline);
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getObjectDefinition(transitionData.itemType);
 
@@ -803,10 +865,11 @@ export class Player {
         true
       );
 
-*/
+      */
 
       // execution code for objects
-      if (!!objDef?.executionCode_Start) {
+      /* 
+      TODO123 if (!!objDef?.executionCode_Start) {
         const execTl = createTimelineForExecutionCode(
           transitionData,
           objDef.executionCode_Start!,
@@ -815,7 +878,7 @@ export class Player {
           calObjSize
         );
         slideTimeline.add(execTl, 0);
-      }
+      }*/
 
       // preload
       if (transitionData.itemValues.preload && !!objDef?.preload) {
@@ -840,38 +903,41 @@ export class Player {
       ? {
           effect: firstSlideTransition?.effect!,
           duration: convertTimeUnitToMs(firstSlideTransition?.duration),
+          overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
         }
       : undefined;
 
+    //console.log(bettwenSlideEff);
     // create breakpoint for slide transition
     // 1. if no slide transition set to 0
     let overlap = 0;
     // 2. if effect exit use it
     if (bettwenSlideEff?.effect.id !== "none") {
-      overlap = bettwenSlideEff?.duration || 0; // bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+      //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
+      overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     }
     // 3. add breakpoint timeline
 
     // trigger
-    const transitionTween = gsap.to(
-      {},
-      {
-        duration:
-          (convertTimeUnitToMs(data.slide.duration.customValue) - overlap) /
-          1000,
-      }
-    );
-    slideTimeline.add(transitionTween, 0);
+    const triggerTimeline = new Timeline({
+      id: "triggerTimeline",
+      name: "TriggerTimeline-" + slideIdx,
+      duration: convertTimeUnitToMs(data.slide.duration.customValue) - overlap,
+    });
+    slideTimeline.add(triggerTimeline);
   }
 
   private transitionEndBreakpointHandler(
     slideIdx: number,
-    prevTl: gsap.core.Timeline
+    prevTl: RootTimeline
   ) {
     const total = this.normalSlideDataArr?.length || -1;
 
     if (total > 0) {
       const newSlideIdx = slideIdx >= total - 1 ? 0 : slideIdx + 1;
+
+      // NOTE: IMPORTANT: FOR TESTING:
+      //if (newSlideIdx === 0) return;
 
       // 0. get effect definition
       /*const bettwenSlideEff: ISlideTransition | undefined =
@@ -882,6 +948,7 @@ export class Player {
         ? {
             effect: firstSlideTransition?.effect!,
             duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
+            overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
           }
         : undefined;
 
@@ -898,7 +965,7 @@ export class Player {
           this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
         ) - overlap;
 
-      this.playSlide(newSlideIdx, prevTl.time() - overlapPosition / 1000); //- overlap ? overlap / 1000 : 0
+      this.playSlide(newSlideIdx, prevTl.time() - overlapPosition); //- overlap ? overlap / 1000 : 0
     }
   }
 }

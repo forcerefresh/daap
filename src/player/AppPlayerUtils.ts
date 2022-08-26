@@ -6,11 +6,10 @@ import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
+import { Timeline } from "./player/Timeline";
 
-export function createTimelineForObject(
-  data: ITransitionsData
-): gsap.core.Timeline[] {
-  const parallelTimelines: gsap.core.Timeline[] = [];
+export function createTimelineForObject(data: ITransitionsData): Timeline[] {
+  const parallelTimelines: Timeline[] = [];
 
   data.transitions.in?.forEach((effIn) => {
     populatesTimelinesForObject(data, parallelTimelines, effIn, "in");
@@ -45,22 +44,26 @@ function getDuration(data: ITransitionsData, eff: ITransition): number {
 
 function populatesTimelinesForObject(
   data: ITransitionsData,
-  parallelTimelines: gsap.core.Timeline[],
+  parallelTimelines: Timeline[],
   eff: ITransition,
   effType: EffectType
 ) {
   // only out effect is different
   const delay =
-    (effType === "out"
+    effType === "out"
       ? convertTimeUnitToMs(data.data.slideDuration.customValue) -
         (getDuration(data, eff) + convertTimeUnitToMs(eff.delay))
-      : convertTimeUnitToMs(eff.delay)) / 1000;
+      : convertTimeUnitToMs(eff.delay);
 
-  const tl = gsap.timeline();
-  parallelTimelines.push(tl);
+  //const tl = new Timeline({ name: "Effect " + effType + " Timelines holder" }); //gsap.timeline();
+  //parallelTimelines.push(tl);
 
-  const effTl = gsap.effects[eff.effect.id]("." + data.objectClass, {
+  const objectTimeline = new Timeline({
+    //timelineType: "object",
+    name: "ObjectTimeline",
     ...eff.effect.values,
+    effectId: eff.effect.id,
+    itemId: data.itemId,
     objectProperties: {
       width: data.data.objectWidth,
       height: data.data.objectHeight,
@@ -69,14 +72,17 @@ function populatesTimelinesForObject(
       objectHtml: data.data.objectHtml,
     },
     type: effType,
-    duration: getDuration(data, eff) / 1000,
+    duration: getDuration(data, eff),
     ease: eff.ease,
     childEase: eff.childEase,
     timeDistribution: eff.timeDistribution,
+    delay,
   });
 
-  tl.add(effTl, delay);
+  console.log(objectTimeline);
 
+  //tl.add(objectTimeline);
+  parallelTimelines.push(objectTimeline);
   return parallelTimelines;
 }
 

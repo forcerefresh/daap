@@ -1,0 +1,6 @@
+
+pm2 start [PATH]
+pm2 start ./src/index.js
+
+pm2 save
+pm2 startup

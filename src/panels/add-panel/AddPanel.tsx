@@ -1,5 +1,5 @@
 import { Card, Elevation } from "@blueprintjs/core";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -8,6 +8,7 @@ import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import { getObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
 import SVG from "react-inlinesvg";
+import { IntegrationContext } from "../../integration";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -27,6 +28,20 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     onRequestFontPreview,
   } = props;
 
+  const globalContext = useContext(IntegrationContext);
+  const { getLicenseDetails } = globalContext.useLicenseHook();
+
+  const [disabled, setDisabled] = useState<boolean>(false);
+
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      if (data?.status === "OK" || data?.status === "EXPIRED") {
+      } else {
+        setDisabled(true);
+      }
+    });
+  }, []);
+
   const renderObjectsCards = (group: string) => {
     const objDeffs = getObjectDefinitionsByGroup(group);
 
@@ -34,10 +49,14 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <>
         {objDeffs.map((deff) => (
           <Card
+            style={{ opacity: disabled ? "0.5" : "1" }}
             interactive={!!activeLayerId}
             elevation={Elevation.TWO}
-            className={cx(css.card, { [css.disabled]: !activeLayerId })}
+            className={cx(css.card, {
+              [css.disabled]: !activeLayerId || disabled,
+            })}
             onClick={() => {
+              if (disabled) return;
               if (activeLayerId) {
                 _addNewObject(activeLayerId, deff.type, {
                   left: (documentSize.width - 960) / 2,
@@ -71,6 +90,12 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
+      {disabled && (
+        <div className="warning">
+          Action panel is disabled. Goto "Settings &gt; License" and enter
+          Serial Number in order to enable it.
+        </div>
+      )}
       <div>
         <Card interactive={false} className={css.sectionCard}>
           <h1>Media</h1>

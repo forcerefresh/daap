@@ -30,7 +30,8 @@ export const effectType2Name = (effectType: EffectType) => {
 
 export const getDefaultEffectConfigForType = (
   effectType: EffectType,
-  isStructural: boolean
+  isStructural: boolean,
+  itemType?: ItemType
 ): any => {
   switch (effectType) {
     case "in":
@@ -85,6 +86,7 @@ export const getDefaultEffectConfigForType = (
       return {
         delay: "0ms",
         duration: "2000ms",
+        ...(itemType === "slide" ? { overlap: "1000ms" } : {}),
         canBeCombined: !isStructural,
         effect: {
           id: isStructural ? "none-structural" : "none",

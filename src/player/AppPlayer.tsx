@@ -87,7 +87,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       pl.onUpdate(() => {
         setPreviewTimelineState({
           progress: player.current?.getCurrentTimeline()?.progress() || 0,
-          time: player.current?.getCurrentTimeline()?.time() || 0,
+          time: player.current?.getCurrentTimeline()?.time()! / 1000 || 0,
           slideIdx: player.current?.getCurrentTimelineIdx() || 0,
         });
       });
@@ -96,11 +96,9 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         // TODO: DUPLICATE CODE 2
 
         pl.onUpdate(() => {
-          const tl = player.current?.getCurrentTimeline() as TimelineMax;
-
           setPreviewTimelineState({
             progress: player.current?.getCurrentTimeline()?.progress() || 0,
-            time: player.current?.getCurrentTimeline()?.time() || 0,
+            time: player.current?.getCurrentTimeline()?.time()! / 1000 || 0,
             slideIdx: player.current?.getCurrentTimelineIdx() || 0,
           });
         });
