@@ -12,7 +12,11 @@ import {
   IObject,
 } from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+import {
+  PostProcessFuncPropsType,
+  PostProcessFuncReturnType,
+  PreloadOrder,
+} from "../../webslider-sdk/src/objects/objects-register";
 import svg from "./image-icon.svg";
 import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
@@ -236,9 +240,10 @@ export async function preloadImage(props: {
 }
 
 export function imagePostProcess(
-  prevObject: IObject,
-  object: IObject
-): IObject {
+  props: PostProcessFuncPropsType
+): PostProcessFuncReturnType {
+  const { object, prevObject } = props;
+
   const newObj = cloneDeep(object);
 
   const prevValues = prevObject.definition.values as ImageValues;

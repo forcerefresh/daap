@@ -18,7 +18,10 @@ import {
 } from "../webslider-sdk/src/inputs/i-inputs";
 import { ImageValues } from "../objects/image/image";
 import { getObjectPlaceholder } from "../webslider-sdk/src/objects/object-helpers";
-import { getObjectDefinition } from "../webslider-sdk/src/objects/objects-register";
+import {
+  getAppObjectDefinition,
+  getPlayerObjectDefinition,
+} from "../webslider-sdk/src/objects/objects-register";
 import {
   ILayout,
   IObject,
@@ -55,6 +58,7 @@ import {
 } from "./i-export-html";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import { getEffectDefinition } from "../effects/effects";
+import { logger } from "../webslider-sdk/src/utils/logger/logger";
 
 export function generatePlayerData(
   sources: ISources,
@@ -305,7 +309,7 @@ function generateSlideData(
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
       //part for externals
-      const objDeff = getObjectDefinition(object.type);
+      const objDeff = getAppObjectDefinition(object.type);
       if (objDeff?.external) {
         extensionTypes.push(object.type);
       }
@@ -373,7 +377,7 @@ function generateSlideData(
         itemId: object.id,
         itemType: object.type,
         itemValues: object.definition.values,
-        itemSystemType: getObjectDefinition(object.type)?.meta?.coreType,
+        itemSystemType: getAppObjectDefinition(object.type)?.meta?.coreType,
         calculatedObjectSize,
         calculatedObjectSizePerDevice,
         objectClass: objectClass,
@@ -468,7 +472,12 @@ export function getObjectHtml(
     case ObjectType.SOURCE_IMAGE:
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
-      const objDeff = getObjectDefinition(object.type);
+      const objDeff = isPlayer
+        ? getPlayerObjectDefinition(object.type)
+        : getAppObjectDefinition(object.type);
+      logger.trace(isPlayer);
+      logger.trace(object.type);
+      logger.log(objDeff);
       if (objDeff && objDeff.getHtml) {
         //try {
         return objDeff.getHtml({
@@ -682,7 +691,7 @@ export function getAllAssetsUrls(objects: IObjects) {
   return flatten(
     objects.allObjects.map((objectId) => {
       const object = objects.objectById[objectId];
-      const deff = getObjectDefinition(object.type);
+      const deff = getAppObjectDefinition(object.type);
 
       return deff?.getAssetsUrls?.({ values: object.definition.values }) || [];
     })

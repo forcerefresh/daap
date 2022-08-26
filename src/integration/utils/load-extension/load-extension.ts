@@ -6,10 +6,14 @@ export function addExtensionCode(type: string): Promise<void> {
     localStorage.getItem("extensionStorage") || "{}"
   );
 
-  const code = extensionsStorage[type]?.objectApp;
+  const { appObjectSource, playerObjectSource } = extensionsStorage[type] || {};
 
   var script = document.createElement("script");
-  script.innerHTML = code || "";
+  script.innerHTML = appObjectSource || "";
+  document.getElementsByTagName("head")[0].appendChild(script);
+
+  var script = document.createElement("script");
+  script.innerHTML = playerObjectSource || "";
   document.getElementsByTagName("head")[0].appendChild(script);
 
   return Promise.resolve();

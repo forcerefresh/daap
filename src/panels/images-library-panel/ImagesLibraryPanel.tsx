@@ -205,7 +205,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   const renderSelectedImage = (image: any, idx: number) => {
     return (
-      <div className={css.selectionImageHolder}>
+      <div
+        className={css.selectionImageHolder}
+        key={idx + image + "_selected_image"}
+      >
         <div className={css.removeSelection}>
           <Button
             onClick={(event: any) => {
@@ -270,6 +273,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       <div className={css.headerSection}>
         {tags.map((tag) => (
           <Tag
+            key={tag}
             large
             round
             minimal={!selectedTags[tag]}
@@ -359,7 +363,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           }
         >
           {images?.map((image, idx) => (
-            <>
+            <div
+              key={image.id + "_" + image.title + "_" + image.filename}
+              style={{ display: "inline-block" }}
+            >
               {/*qwe(image, idx)   // TODO: remove this in the future*/}
               {image?.images?.small || (image as any)?.videos ? (
                 <Popover
@@ -432,7 +439,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           {Object.entries<any>(
                             ((image as any).videos as any) || image.images
                           ).map(([sizeAlias, oneimg]) => (
-                            <p>
+                            <p key={sizeAlias}>
                               <Checkbox
                                 checked={selectedResolution === sizeAlias}
                                 onChange={() => {
@@ -576,7 +583,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   </div>
                 </Popover>
               ) : null}
-            </>
+            </div>
           ))}
         </InfiniteScroll>
       </div>

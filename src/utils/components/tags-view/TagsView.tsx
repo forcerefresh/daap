@@ -34,6 +34,7 @@ export default function TagsView({ tags, show = 2 }: TagsViewProps) {
             <div style={{ margin: "10px" }}>
               {workingTags.map((tag) => (
                 <Tag
+                  key={tag}
                   round
                   minimal
                   style={{ display: "block", margin: "5px 0" }}

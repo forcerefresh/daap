@@ -1,26 +1,27 @@
-import { VIDEO_SOURCE } from "./src/types";
-import {
-  videoSourceMeta,
-  createVideoSourceObject,
-  getHtmlForApp,
-} from "./src/video-source-form";
-import {
-  videoSourcePreload,
-  videoSourceSizeUpdate,
-  videoSourceStart,
-} from "./src/video-source";
-import { IObjectAppDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
-import { addObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
+/**
+ * This is a entry point for Object used in Web Slider App.
+ */
 
-export const VideoSourceDefinition: IObjectAppDefinition = {
+import { VIDEO_SOURCE } from "./src/video-source-types";
+import { postProcess } from "./src/video-source-player";
+import {
+  createObject,
+  getAssetsUrls,
+  getHtmlForApp,
+  objectMeta,
+} from "./src/video-source-app";
+import { IObjectAppDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
+import { addAppObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
+
+export const ObjectDefinition: IObjectAppDefinition = {
   type: VIDEO_SOURCE,
   group: "media",
-  meta: videoSourceMeta,
-  createObject: createVideoSourceObject,
-  sizeUpdate: videoSourceSizeUpdate,
-  executionCode_Start: videoSourceStart,
-  preload: videoSourcePreload,
+  meta: objectMeta,
+  createObject,
   getHtml: getHtmlForApp,
+  postProcess,
+  getAssetsUrls,
 };
 
-addObjectToGlobalScope(VIDEO_SOURCE, VideoSourceDefinition);
+// Object adds itself to global scope in order to be used by Web Slider App or Player
+addAppObjectToGlobalScope(VIDEO_SOURCE, ObjectDefinition);

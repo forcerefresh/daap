@@ -45,10 +45,12 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
     for (let i = 0; i < devItems.length; i++) {
       const devItem = devItems[i];
 
+      logger.log(devItem);
+
       if (!devItem.monitoringEnabled) return;
 
       // create url for hash.json
-      const urlPathArr = devItems[i].devUrl.split("/");
+      const urlPathArr = devItems[i].appDevUrl.split("/");
       urlPathArr.pop();
       const hashUrl = urlPathArr.join("/") + "/hash.json";
 
@@ -62,7 +64,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           id: devItems[i].id,
           status: "ERROR",
           statusMessage: `Something went wrong. Development item ${
-            devItems[i].devUrl
+            devItems[i].appDevUrl
           } cannot be loaded. Additional info: ${err?.toString?.()}`,
         };
         await updateDevelopmentItem(devItem);
@@ -87,10 +89,16 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
       try {
         await import(
-          /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].devUrl +
+          /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].appDevUrl +
             "?" +
             Math.random()
         );
+        await import(
+          /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].playerDevUrl +
+            "?" +
+            Math.random()
+        );
+
         const devItem: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "OK",
@@ -100,7 +108,14 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
         const global = (window as any).WebSlider_GlobalScope;
         global.registerExternalObject(
-          { ...global.objects[devItems[i].type], development: true },
+          {
+            ...global.appObjects[devItems[i].type],
+            development: true,
+          },
+          {
+            ...global.playerObjects[devItems[i].type],
+            development: true,
+          },
           true
         );
 
@@ -113,7 +128,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           id: devItems[i].id,
           status: "ERROR",
           statusMessage: `Something went wrong. Development item ${
-            devItems[i].devUrl
+            devItems[i].appDevUrl
           } cannot be loaded. Additional info: ${err?.toString?.()}`,
         };
         await updateDevelopmentItem(devItem);

@@ -1,10 +1,8 @@
-import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
-
 type LoadState = "notloaded" | "loading" | "loaded" | "error";
 
 export interface IVideoSourceConnector {
-  getVideo: () => Promise<HTMLVideoElement>; // ovo je za target
-  startVideo: (props: { url: string; loop: boolean }) => Promise<any>; // ova je za source
+  getVideo: () => Promise<HTMLVideoElement>;
+  startVideo: (props: { url: string; loop: boolean }) => Promise<any>;
   getMetaData: () => MetaData | undefined;
 }
 type MetaData = {

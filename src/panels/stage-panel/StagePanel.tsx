@@ -433,7 +433,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   // TODO: vieport size dev is in progress
   const renderVieportSize = () => {
-    return <ViewportSize onChange={(size) => {}} />;
+    return null; // <ViewportSize onChange={(size) => {}} />;
   };
 
   const renderSlideTimelineInfo = () => {

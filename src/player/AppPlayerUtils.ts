@@ -3,7 +3,7 @@ import React from "react";
 import { EffectType } from "../effects/types";
 import { ITransitionsData } from "../export/i-export-html";
 import { ExecCodeConfig } from "../objects/exec-code-effect";
-import { executionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
+import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { Timeline } from "./player/Timeline";
@@ -88,8 +88,8 @@ function populatesTimelinesForObject(
 
 export function createTimelineForExecutionCode(
   data: ITransitionsData,
-  execCodeFunc_Start: executionCodeFuncType,
-  execCodeFunc_Stop: executionCodeFuncType,
+  execStart: ExecutionCodeFuncType,
+  execStop: ExecutionCodeFuncType,
 
   values: { [key: string]: any },
   calculatedObjectSize: any
@@ -97,8 +97,8 @@ export function createTimelineForExecutionCode(
   const tl = new gsap.core.Timeline();
 
   const conf: ExecCodeConfig = {
-    execCodeFunc_Start,
-    execCodeFunc_Stop,
+    execStart,
+    execStop,
     values: values,
     id: data.itemId,
     className: data.objectClass,

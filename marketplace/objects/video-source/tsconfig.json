@@ -16,5 +16,5 @@
     "noEmit": false,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["index-object.ts", "src"]
+  "include": ["index-app.ts", "index-player.ts", "src"]
 }

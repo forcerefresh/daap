@@ -6,7 +6,7 @@ import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
-import { getObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
+import { getAppObjectDefinitionsByGroup } from "../../webslider-sdk/src/objects/objects-register";
 import SVG from "react-inlinesvg";
 import { IntegrationContext } from "../../integration";
 
@@ -43,7 +43,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   }, []);
 
   const renderObjectsCards = (group: string) => {
-    const objDeffs = getObjectDefinitionsByGroup(group);
+    const objDeffs = getAppObjectDefinitionsByGroup(group);
 
     return (
       <>
@@ -68,13 +68,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               }
             }}
           >
-            <div
-              style={{
-                minHeight: "40px",
-                maxWidth: "36px",
-                margin: "auto",
-              }}
-            >
+            <div className={css.svgHolder}>
               <SVG src={deff.meta.icon || ""} />
             </div>
 

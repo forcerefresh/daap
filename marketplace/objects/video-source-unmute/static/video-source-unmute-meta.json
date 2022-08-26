@@ -1,0 +1,32 @@
+{
+  "componentType": "object",
+  "type": "video-source-unmute",
+  "name": "Video source unmute",
+  "version": "1.0.0",
+  "description": "Video source unmute for Web Slider",
+  "tags": [],
+  "categories": [],
+  "author": "Force Refresh doo",
+  "licence": "",
+  "homepage": {
+    "title": "",
+    "url": ""
+  },
+  "doc": {
+    "title": "",
+    "url": ""
+  },
+  "support": {
+    "title": "",
+    "url": ""
+  },
+  "packageFiles": {
+    "appObjectFilename": "video-source-unmute-app.js",
+    "playerObjectFilename": "video-source-unmute-player.js",
+    "icon": "video-source-unmute-icon.svg"
+  },
+  "packageUrl": "",
+  "logoUrl": "",
+  "created": "2022-27-07",
+  "modified": "2022-27-07"
+}

@@ -70,6 +70,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   );
 
   useEffect(() => {
+    console.log(acceptedFiles);
     const arr: UploadFileInfo[] = [];
     acceptedFiles.forEach((file) => {
       arr.push({ tag: "", title: "", filename: file.name });
@@ -115,6 +116,9 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   const uploadFiles = () => {
     setUploadInProgress(true);
   };
+
+  console.log("AAAAAAAAAAAAAAA");
+
   return (
     <>
       <section className="container">

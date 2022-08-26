@@ -1,1 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24"><g fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"></rect></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72" height="72" version="1.1" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">
+ <g transform="matrix(3.234 0 0 3.2489 -2.8078 -2.9865)" fill="none" stroke-width=".46276">
+  <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width=".92552"/>
+ </g>
+</svg>

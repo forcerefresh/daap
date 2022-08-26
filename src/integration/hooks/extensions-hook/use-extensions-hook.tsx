@@ -49,15 +49,16 @@ export const useExtensionsHook = () => {
     await zip.loadAsync(await zipPackage.blob());
 
     // NOTE: not needed as we load object app
-    /*const objectFileContent = await zip
-      .file(extension.packageFiles.object)
-      ?.async("string");*/
-    const objectAppFileContent = await zip
-      .file(extension.packageFiles.objectApp)
+    const playerObjectSource = await zip
+      .file(extension.packageFiles.appObjectFilename)
+      ?.async("string");
+    const appObjectSource = await zip
+      .file(extension.packageFiles.appObjectFilename)
       ?.async("string");
 
     extensionsStorage[extension.type] = {
-      objectApp: objectAppFileContent,
+      appObjectSource,
+      playerObjectSource,
     };
 
     localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));
