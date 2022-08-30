@@ -27,6 +27,7 @@ export interface IResponsiveVisibility {
 
 export interface ILayer extends ILayout {
   id: string;
+  customId: string;
   type: "layer";
   slideId: string;
   name: string;

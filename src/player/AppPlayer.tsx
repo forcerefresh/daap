@@ -4,7 +4,6 @@ import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
 import { IPlayerData } from "../export/i-export-html";
-import { TimelineMax } from "gsap/all";
 import { PreviewTimelineContext } from "../utils/preview-timeline-provider/PreviewTimelineProvider";
 
 export interface AppPlayerProps {
@@ -20,16 +19,10 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
   const { setPreviewTimelineState } = useContext(PreviewTimelineContext);
 
-  const divRef = useRef(null);
-
-  //const slideDataArr = playerData?.slideDataArr
-  //const [player, setPlayer] = useState<Player>();
-
   const player = useRef<Player>();
-
   const playerHolderRef = useRef<HTMLDivElement>(null);
 
-  // manual rogress
+  // manual progress
   useEffect(() => {
     if (previewState.previewState === "pause") {
       player.current?.getCurrentTimeline()?.progress(manualProgress, true);
@@ -46,15 +39,21 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         player.current?.paused(true);
         break;
       case "stop":
+        // TODO: this can be removed as its not reachable
         player.current?.clear();
+        setPreviewTimelineState({
+          progress: 0,
+          time: 0,
+          slideIdx: 0,
+        });
         break;
     }
   }, [previewState.previewState]);
 
   // change preview speed
-  useEffect(() => {
-    player.current?.getCurrentTimeline()?.timeScale(previewState.previewSpeed);
-  }, [previewState.previewSpeed]);
+  // useEffect(() => {
+  //   player.current?.getCurrentTimeline()?.timeScale(previewState.previewSpeed);
+  // }, [previewState.previewSpeed]);
 
   // when we turn off repeat it stops playing on end and reset position to start
   useEffect(() => {
@@ -107,11 +106,16 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       pl.play();
 
       currentPlayer.current = pl;
-
-      return () => {
-        pl.clear(true);
-      };
     }
+
+    return () => {
+      player.current?.clear();
+      setPreviewTimelineState({
+        progress: 0,
+        time: 0,
+        slideIdx: 0,
+      });
+    };
   }, [playerData]);
 
   useEffect(() => {

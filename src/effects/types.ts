@@ -1,4 +1,4 @@
-export type EffectType = "in" | "out" | "effect" | "slide" | "layer";
+export type EffectType = "in" | "out" | "effect" | "event" | "slide" | "layer";
 
 export interface IEffectDefinition<T> {
   id: string;

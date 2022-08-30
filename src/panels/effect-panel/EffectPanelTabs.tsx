@@ -70,6 +70,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     effect: 0,
     layer: 0,
     slide: 0,
+    event: 0,
   });
 
   let item: any | undefined;

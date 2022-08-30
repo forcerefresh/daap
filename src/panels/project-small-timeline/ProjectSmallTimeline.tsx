@@ -11,6 +11,8 @@ import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import cx from "classnames";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { PreviewTimelineContext } from "../../utils/preview-timeline-provider/PreviewTimelineProvider";
+import { last } from "lodash-es";
+import { useWindowSize } from "../../utils/hooks/window-size";
 
 export interface SlideTimelineData {
   duration: string;
@@ -39,6 +41,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     _setStagePreview,
   } = props;
 
+  const windowSize = useWindowSize();
+
   //console.log(projectTimelineData);
   const { previewTimelineState } = useContext(PreviewTimelineContext);
   //const [progress, setProgress] = useState<number>(0);
@@ -51,7 +55,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     } else {*/
     totalTime +=
       convertTimeUnitToMs(slideData.duration) -
-      convertTimeUnitToMs(slideData.transitionOverlap);
+      (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
     /*}*/
   });
 
@@ -63,15 +67,19 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   projectTimelineData?.slides.forEach((slideData, idx) => {
     // left position of slide
     // slide left is currPos - transitionDuration
+    // && convertTimeUnitToMs(slideData.transitionOverlap) === 0 // TODO
     const slideLeft =
       currPos === 0
         ? 0
-        : (currPos - convertTimeUnitToMs(slideData.transitionOverlap)) / // TODO:UPDATE
+        : (currPos -
+            (idx === 0
+              ? 0
+              : convertTimeUnitToMs(slideData.transitionOverlap))) /
           totalTime;
     slideLeftArr[idx] = slideLeft;
     currPos +=
       convertTimeUnitToMs(slideData.duration) -
-      convertTimeUnitToMs(slideData.transitionOverlap);
+      (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
 
     //slide multiplier
     const slidePosMultiplier =
@@ -96,7 +104,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       projectTimelineData?.slides.forEach((slideData, idx) => {
         const transitionLeft =
           (lineWidth / totalTime) *
-          (currentPosition - convertTimeUnitToMs(slideData.transitionOverlap)); // TODO:UPDATE
+          (currentPosition -
+            (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap))); // TODO:UPDATE
         let transitionWidth =
           (convertTimeUnitToMs(slideData.transitionDuration) / totalTime) *
           lineWidth;
@@ -108,11 +117,31 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
         currentPosition +=
           convertTimeUnitToMs(slideData.duration) -
-          convertTimeUnitToMs(slideData.transitionOverlap);
+          (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
       });
+
+      if (
+        projectTimelineData?.slides &&
+        projectTimelineData.slides.length > 1
+      ) {
+        const transitionLeft =
+          (lineWidth / totalTime) *
+          (currentPosition -
+            convertTimeUnitToMs(
+              last(projectTimelineData?.slides!)!.transitionOverlap
+            ));
+        let transitionWidth =
+          (convertTimeUnitToMs(
+            last(projectTimelineData?.slides!)!.transitionOverlap
+          ) /
+            totalTime) *
+          lineWidth;
+
+        html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #555; left:${transitionLeft}px "></div>`;
+      }
       lineDiv.innerHTML = html;
     }
-  }, [projectTimelineData]);
+  }, [projectTimelineData, windowSize]);
 
   const lineRef = React.useRef(null);
 
@@ -159,7 +188,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
         <div className={css.pagination}>
           Slide <strong>{previewTimelineState.slideIdx + 1}</strong>
           {" of "}
-          {projectTimelineData?.slides.length}
+          {projectTimelineData?.slides.length}(
+          {previewTimelineState.time.toFixed(2)})
         </div>
         <div className={css.line} ref={lineRef}></div>
         <div className={css.thumbHolder}>
@@ -179,7 +209,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
           </Draggable>
         </div>
         <div className={css.actionHolder}>
-          <HTMLSelect
+          {/*<HTMLSelect
             value={previewState.previewSpeed}
             onChange={(event: any) => {
               _setStagePreview({ previewSpeed: event.currentTarget.value });
@@ -210,7 +240,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
                 value: 2,
               },
             ]}
-          ></HTMLSelect>
+          ></HTMLSelect>*/}
           {/*<Button
             active={previewState.repeat}
             minimal

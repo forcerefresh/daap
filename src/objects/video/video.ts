@@ -186,7 +186,7 @@ export function getVideoHtml(props: {
   style += addCommonPropertiesToStyle(style, object);
 
   let attrs = "";
-  if (isPlayer) attrs += " autoplay controls";
+  if (isPlayer) attrs += "  autoplay muted";
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
@@ -194,7 +194,10 @@ export function getVideoHtml(props: {
     useId: isSave,
     filename: videoValues.video.filename,
   }).src;
+
   const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}"></video>`;
+
+  console.log(videoHtml);
 
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT

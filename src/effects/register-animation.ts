@@ -2,7 +2,7 @@ import cubeDef from "./cube/cube.animation";
 import fadeDef from "./fade/fade.animation";
 import fallingLeavesDef from "./falling-leaves/falling-leaves.animation";
 import slideDef from "./slide/slide.animation";
-import tilesZoomDef from "./tiles-zoom/tiles-animations";
+import tilesZoomDef from "./tiles-zoom/tiles-zoom.animations";
 
 const animations: any[] = [];
 

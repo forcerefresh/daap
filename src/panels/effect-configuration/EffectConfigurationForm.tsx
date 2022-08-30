@@ -9,6 +9,7 @@ import { getInputForm } from "../../inputs/input-factory";
 import {
   getNumericFiled,
   getSelectField,
+  getTextField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
@@ -196,6 +197,68 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     </div>
   );
 
+  const eventInput = () => (
+    <div className={css.inlineFlex}>
+      {getSelectField(
+        "Event",
+        transition.event,
+        [
+          { label: "none", value: "" },
+          { label: "Mouse click", value: "click" },
+          { label: "Mouse enter", value: "mouseenter" },
+          { label: "Mouse leave", value: "mouseleave" },
+        ],
+        (event: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.event = event;
+          onTransitionChange(newTransition);
+        }
+      )}
+      {getTextField(
+        "Target",
+        transition.eventTargetId,
+        (eventTargetId: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.eventTargetId = eventTargetId;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "100px" }, disabled: transition.event === "time" }
+      )}
+    </div>
+  );
+
+  const reverseEventInput = () => (
+    <div className={css.inlineFlex}>
+      {getSelectField(
+        "Reverse",
+        transition.reverseEvent,
+        [
+          { label: "none", value: "" },
+          { label: "Mouse click", value: "click" },
+          { label: "Mouse enter", value: "mouseenter" },
+          { label: "Mouse leave", value: "mouseleave" },
+        ],
+        (reverseEvent: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.reverseEvent = reverseEvent;
+          onTransitionChange(newTransition);
+        }
+      )}
+      {getTextField(
+        "Target",
+        transition.reverseEventTargetId,
+        (reverseEventTargetId: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.reverseEventTargetId = reverseEventTargetId;
+          onTransitionChange(newTransition);
+        },
+        "",
+        { style: { width: "100px" }, disabled: transition.event === "time" }
+      )}
+    </div>
+  );
+
   const overlapInput = () => (
     <div className="">
       {getUnitNumericFiled(
@@ -260,29 +323,43 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           </div>
         </div>
 
-        <div className={css.inlineFlex}>
+        <>
           {(effectType === "in" ||
             effectType === "effect" ||
             effectType === "layer") && (
             <>
-              {effDef(effectType).defaults.hasDelay && delayInput()}
-              {effDef(effectType).defaults.hasDuration && durationInput()}
-            </>
-          )}
-          {effectType === "out" && (
-            <>
-              {effDef(effectType).defaults.hasDuration && durationInput()}
-              {effDef(effectType).defaults.hasDelay && delayInput()}
+              <div className={css.inlineFlex}>
+                {effDef(effectType).defaults.hasDelay && delayInput()}
+                {effDef(effectType).defaults.hasDuration && durationInput()}
+              </div>
             </>
           )}
 
+          {effectType === "out" && (
+            <div className={css.inlineFlex}>
+              {effDef(effectType).defaults.hasDuration && durationInput()}
+              {effDef(effectType).defaults.hasDelay && delayInput()}
+            </div>
+          )}
+
           {effectType === "slide" && (
-            <>
+            <div className={css.inlineFlex}>
               {overlapInput()}
               {effDef(effectType).defaults.hasDuration && durationInput()}
+            </div>
+          )}
+
+          {effectType === "event" && (
+            <>
+              <div className={css.inlineFlex}>
+                {effDef(effectType).defaults.hasDelay && delayInput()}
+                {effDef(effectType).defaults.hasDuration && durationInput()}
+              </div>
+              {eventInput()}
+              {reverseEventInput()}
             </>
           )}
-        </div>
+        </>
 
         {effectType === "effect" && (
           <div className="bp3-form-helper-text"></div>

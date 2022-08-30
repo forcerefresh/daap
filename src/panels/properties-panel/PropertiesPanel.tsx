@@ -85,7 +85,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             retObj.name = name;
             _updateSlide(retObj);
           })}
-          {getTextField("Custom ID", slide.customId, (customId: string) => {
+          {getTextField("ID", slide.customId, (customId: string) => {
             const retObj = cloneDeep(slide);
             retObj.customId = customId;
             _updateSlide(retObj);
@@ -116,6 +116,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             undefined,
             { disabled: true }
           )}
+          {getTextField("ID", slide.customId, (customId: string) => {
+            const retObj = cloneDeep(slide);
+            retObj.customId = customId;
+            _updateSlide(retObj);
+          })}
           <InfoInputForm
             displayName=""
             helperText={`${slide.name} slide has no properties. It's place is above all other slider and has unlimited duration.`}
@@ -157,6 +162,11 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         {getTextField("Name", object.name, (name: string) => {
           const retObj = cloneDeep(object);
           retObj.name = name;
+          _updateObject(retObj);
+        })}
+        {getTextField("ID", object.customId, (customId: string) => {
+          const retObj = cloneDeep(object);
+          retObj.customId = customId;
           _updateObject(retObj);
         })}
         {renderLayoutOptions(

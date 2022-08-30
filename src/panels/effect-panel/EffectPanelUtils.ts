@@ -8,7 +8,7 @@ export function getEffectTypesForItem(itemType?: ItemType): EffectType[] {
 
   switch (itemType) {
     case "object":
-      return ["in", "out", "effect"];
+      return ["in", "out", "effect", "event"];
     case "layer":
       return ["in", "out", "layer"];
     case "slide":
@@ -23,6 +23,7 @@ export const effectType2Name = (effectType: EffectType) => {
     effect: "Effect",
     layer: "Layer",
     slide: "Slide",
+    event: "Event",
   };
 
   return def[effectType];
@@ -87,6 +88,23 @@ export const getDefaultEffectConfigForType = (
         delay: "0ms",
         duration: "2000ms",
         ...(itemType === "slide" ? { overlap: "1000ms" } : {}),
+        canBeCombined: !isStructural,
+        effect: {
+          id: isStructural ? "none-structural" : "none",
+          values: {},
+        },
+      };
+
+    case "event":
+      return {
+        delay: "0ms",
+        duration: "1000ms",
+        event: "",
+        eventTargetId: "",
+        reverseEvent: "",
+        reverseEventTargetId: "",
+        ease: "none",
+        timeDistribution: 50,
         canBeCombined: !isStructural,
         effect: {
           id: isStructural ? "none-structural" : "none",

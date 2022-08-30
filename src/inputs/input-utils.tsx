@@ -179,6 +179,7 @@ export function getTextField<T>(
     disabled?: boolean;
     readOnly?: boolean;
     placeholder?: string;
+    style?: React.CSSProperties;
   } = {}
 ) {
   const objectDef = {

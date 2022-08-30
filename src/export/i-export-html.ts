@@ -15,6 +15,7 @@ import { ISlides, SlideType } from "../store/reducers/i-slides";
 import { ISlideDuration } from "../webslider-sdk/src/common/i-slider-duration";
 
 export interface ITransitionsData {
+  customId: string;
   itemId: string;
   itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
   itemValues: { [key: string]: any };
@@ -50,6 +51,7 @@ export interface IPlayerData {
   html: string;
   slideDataArr: ISlideData[];
   frontSlideDataArr: ISlideData[];
+  backSlideDataArr: ISlideData[];
   breakpointData: {
     width: number;
     height: number;

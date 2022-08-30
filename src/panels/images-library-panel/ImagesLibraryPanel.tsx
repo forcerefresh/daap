@@ -463,6 +463,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             onClick={() => {
                               if (activeLayerId) {
                                 if (addObject) {
+                                  console.log({
+                                    image: (image?.images as any)[
+                                      selectedResolution
+                                    ],
+                                    filename: "",
+                                  });
                                   _addNewObject(
                                     activeLayerId,
                                     "image", //cover

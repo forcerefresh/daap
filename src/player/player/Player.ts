@@ -1,5 +1,3 @@
-import gsap from "gsap";
-import { last } from "lodash-es";
 import {
   IPlayerData,
   ISlideData,
@@ -24,8 +22,9 @@ import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import {
-  createTimelineForExecutionCode,
+  createEventTimelineForObject,
   createTimelineForObject,
+  IEventTimeline,
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
@@ -33,13 +32,6 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 
-gsap.install(window);
-
-//(window as any).YTPlayer = require("yt-player");
-
-/*export interface IPlayerConfig {
-  oneSlide: boolean;
-}*/
 export interface IPlayerConfig {
   isApp?: boolean;
   deviceAuto?: boolean;
@@ -50,7 +42,7 @@ export class Player {
   protected currentSlide: number = -1;
 
   private timelines: RootTimeline[];
-  private staticTimelines: gsap.core.Timeline[];
+  private staticTimelines: RootTimeline[];
 
   private currentSlideTimeline?: RootTimeline;
   private currentSlideTimelineIdx: number = 0;
@@ -60,6 +52,7 @@ export class Player {
 
   private normalSlideDataArr?: ISlideData[];
   private frontSlideDataArr?: ISlideData[];
+  private backSlideDataArr?: ISlideData[];
 
   //protected config: IPlayerConfig;
 
@@ -67,6 +60,7 @@ export class Player {
 
   private currentSlideEl?: HTMLDivElement;
 
+  // used for app
   private onUpdateCallback: any;
   private onCurrentTimelineChangeCallback: any;
 
@@ -80,11 +74,15 @@ export class Player {
   private preloaders: { [key: string]: Promise<string>[] };
   private extComponentPreloaders: Promise<any>[];
 
+  private slideTransitionInProgress = false;
+
   private pagePreloaderEls: {
     el: HTMLDivElement;
     inTime: number;
     outTime: number;
   }[];
+
+  private eventTimelines: IEventTimeline[] = [];
 
   constructor(
     playerData: IPlayerData | null,
@@ -93,7 +91,6 @@ export class Player {
       isApp: false,
       deviceAuto: true,
     }
-    //config: IPlayerConfig = { oneSlide: false }
   ) {
     this.playerData = playerData;
 
@@ -107,9 +104,9 @@ export class Player {
     this.breakpointChecker.setSizeChangeHandler(
       this.sizeChangeHandler.bind(this)
     );
-
     this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
 
+    // current breakpoint configuration
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
       (bp) => bp.type === this.currentDeviceType
     )!;
@@ -117,10 +114,9 @@ export class Player {
     this.playerConfig = playerConfig;
 
     this.oneSlide = playerData?.slideDataArr.length === 1;
-    //this.config = config;
+
     this.rootDiv = rootDiv;
 
-    //rootDiv.style.display = "none";
     rootDiv.innerHTML = playerData?.html || "";
 
     this.createNavigationEvents(rootDiv);
@@ -133,6 +129,7 @@ export class Player {
 
     this.normalSlideDataArr = this.playerData?.slideDataArr;
     this.frontSlideDataArr = this.playerData?.frontSlideDataArr;
+    this.backSlideDataArr = this.playerData?.backSlideDataArr;
 
     this.preloaders = {
       first: [],
@@ -146,6 +143,7 @@ export class Player {
     // if is app do not load external components
     if (playerConfig.isApp) {
       this.createAllSlides();
+      this.addListenersForEventsEffects();
     } else {
       this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
@@ -160,14 +158,64 @@ export class Player {
         .catch((err) => console.warn)
         .finally(() => {
           this.createAllSlides();
+          this.addListenersForEventsEffects();
         });
     }
 
-    initSliderElement(this.rootDiv);
+    //initSliderElement(this.rootDiv);
   }
 
+  private addListenersForEventsEffects() {
+    this.eventTimelines.forEach((tlObj) => {
+      const className = `custom-id-${tlObj.eventTargetId}`;
+
+      if (
+        tlObj.reverseEvent === tlObj.event &&
+        tlObj.reverseEventTargetId === tlObj.eventTargetId
+      ) {
+        // NOTE (case 1): if same event for forward and reverse
+        const el = this.rootDiv.getElementsByClassName(className)[0];
+        console.log(el);
+        el?.addEventListener(tlObj.event, (evt) => {
+          tlObj.rootTimeline.setDirection(
+            tlObj.rootTimeline.isPaused
+              ? 1
+              : tlObj.rootTimeline.direction === -1
+              ? 1
+              : -1
+          );
+          tlObj.rootTimeline.resume();
+        });
+      } else {
+        // NOTE: ( case 2)
+        // const className = this.targetId2Classname[tlObj.eventTargetId];
+        const el = this.rootDiv.getElementsByClassName(className)[0];
+        console.log(el);
+        el?.addEventListener(tlObj.event, () => {
+          tlObj.rootTimeline.resume();
+          tlObj.rootTimeline.setDirection(1);
+        });
+
+        // reverse
+        const classNameR = `custom-id-${tlObj.reverseEventTargetId}`; //this.targetId2Classname[tlObj.reverseEventTargetId];
+        const elR = this.rootDiv.getElementsByClassName(classNameR)[0];
+        console.log(elR);
+        elR?.addEventListener(tlObj.reverseEvent, () => {
+          tlObj.rootTimeline.resume();
+          tlObj.rootTimeline.setDirection(-1);
+        });
+      }
+
+      tlObj.rootTimeline.init();
+      tlObj.rootTimeline.play();
+      tlObj.rootTimeline.pause();
+    });
+  }
   // this we are calling after we load external components
   private createAllSlides() {
+    this.backSlideDataArr?.forEach((data, idx) => {
+      this.createStaticSlide(idx, data);
+    });
     this.frontSlideDataArr?.forEach((data, idx) => {
       this.createStaticSlide(idx, data);
     });
@@ -177,6 +225,7 @@ export class Player {
 
     this.resizeAll(true);
   }
+
   private bpUpdateSlide(isInitial = false) {
     const slideEls = this.rootDiv.getElementsByClassName("slide");
 
@@ -269,6 +318,9 @@ export class Player {
       this.bpUpdateObjectSize(idx, data, isInitial);
     });
     this.frontSlideDataArr?.forEach((data, idx) => {
+      this.bpUpdateObjectSize(idx, data, isInitial);
+    });
+    this.backSlideDataArr?.forEach((data, idx) => {
       this.bpUpdateObjectSize(idx, data, isInitial);
     });
   }
@@ -419,6 +471,7 @@ export class Player {
       tl.paused(p);
     });
 
+    this.currentSlideTimeline?.paused(p);
     this.slideTransitionTimeline?.paused(p);
   }
 
@@ -435,6 +488,11 @@ export class Player {
       tl.destroy();
     });
     this.timelines = [];
+
+    this.eventTimelines.forEach((tlObj) => {
+      tlObj.rootTimeline.destroy();
+    });
+    this.eventTimelines = [];
 
     this.slideTransitionTimeline?.destroy();
     this.slideTransitionTimeline = undefined;
@@ -484,7 +542,11 @@ export class Player {
     this.playSlide(0);
   }
 
-  public playSlide(slideIdx: number = 0, prevTlTime: number = 0) {
+  public playSlide(
+    slideIdx: number = 0,
+    prevTlTime: number = 0,
+    isManual = false
+  ) {
     logger.notice("Play slide:  " + slideIdx);
 
     this.addClassToBullet(this.rootDiv, slideIdx);
@@ -494,6 +556,7 @@ export class Player {
       //slide does not exist
       return;
     }
+
     // TODO: if we have two slide playing we should wait for transition to be done
     // 1. ...
     // TODO: check if all assets are loaded
@@ -542,11 +605,18 @@ export class Player {
       );
     };
     if (hasEffect(bettwenSlideEff)) {
+      this.slideTransitionInProgress = true;
+
       logger.error("CREATE slideTransitionTimeline + " + slideIdx);
       this.slideTransitionTimeline = new RootTimeline({
         name: "SlideTransitionRootTimeline",
         duration: bettwenSlideEff!.duration,
       }); // gsap.timeline({ paused: true });
+
+      this.slideTransitionTimeline.emitter.addListener("stop", () => {
+        this.slideTransitionInProgress = false;
+        this.slideTransitionTimeline?.emitter.removeAllListeners("stop");
+      });
 
       //const tlEff = gsap.effects[bettwenSlideEff!.effect.id]([slideEl], {
       const transitionTl = new Timeline({
@@ -576,31 +646,45 @@ export class Player {
       this.slideTransitionTimeline.add(transitionTl);
       this.slideTransitionTimeline.init();
       this.slideTransitionTimeline.play();
+
+      if (isManual) {
+        // TODO: or NOTE: this part is to turn of timeline when transition manually triggered
+        const turnOffPrevTL = new RootTimeline({
+          name: "TurnOffPrevTimeline",
+          duration: bettwenSlideEff!.overlap,
+        });
+        turnOffPrevTL.emitter.addListener("stop", () => {
+          if (isManual) prevSlideTimeline?.stop();
+          slideEl.style.zIndex = `${this.nextZIndex++}`;
+          turnOffPrevTL.destroy();
+        });
+        turnOffPrevTL.init();
+        turnOffPrevTL.start();
+      }
     } else {
+      if (isManual) prevSlideTimeline?.stop();
       slideEl.style.zIndex = `${this.nextZIndex++}`;
     }
 
     if (this.oneSlide) {
-      //this.currentSlideTimeline.repeat(-1);
+      this.currentSlideTimeline.repeat(-1);
     }
 
     // PLAY SLIDE :)
 
-    this.currentSlideTimeline.init();
-    this.currentSlideTimeline.play(prevTlTime);
     //slideEl.style.display = "block";
 
-    let isUpdated = false;
+    //let isUpdated = false;
 
     const currentSlideTimelineUpdateCallback = () => {
       //console.log("asas");
       // eventCallback("onUpdate", () => {
       this.onUpdateCallback?.();
 
-      if (!isUpdated) {
+      /*if (!isUpdated) {
         slideEl.style.display = "block";
         isUpdated = true;
-      }
+      }*/
       if (!hasEffect(bettwenSlideEff)) {
         // ako nema effekat
         //
@@ -622,6 +706,11 @@ export class Player {
       currentSlideTimelineStopCallback
     );
 
+    this.currentSlideTimeline.emitter.removeAllListeners("beforeStart");
+    this.currentSlideTimeline.emitter.addListener("start", () => {
+      slideEl.style.display = "block";
+    });
+
     // trigger on slide end
 
     /* TODO123 const currSlideTl = this.currentSlideTimeline; //
@@ -639,7 +728,6 @@ export class Player {
 
     //if (hasEffect(bettwenSlideEff)) {
     // trigger when transition have to start
-    // TODO123 const triggerTimeline: any = last(this.currentSlideTimeline?.getChildren());
 
     const triggerTimeline: Timeline | undefined =
       this.currentSlideTimeline?.getChildById("triggerTimeline");
@@ -650,7 +738,6 @@ export class Player {
       const triggerTimelineCallback = () => {
         triggerTimeline?.emitter.removeAllListeners("stop");
 
-        //debugger;
         logger.warn("UPDATE!!!");
         this.transitionEndBreakpointHandler(
           slideIdx,
@@ -667,22 +754,29 @@ export class Player {
     this.currentSlideEl = slideEl;
     this.currentSlide = slideIdx;
 
+    this.currentSlideTimeline.init();
+    this.currentSlideTimeline.play(prevTlTime);
+
     this.onCurrentTimelineChangeCallback?.();
   }
 
   public manualPlaySlide(slideIdx: number) {
-    /* TODO 123const currentSlideTime = this.currentSlideTimeline?.time();
+    //const currentSlideTime = this.currentSlideTimeline?.time();
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
     }
 
-    const triggerTimeline = last(this.currentSlideTimeline?.getChildren());
-    triggerTimeline?.eventCallback("onComplete", () => {
-      // NOTE:  empty callback to overwrite onComplete
-    });
+    if (this.slideTransitionInProgress) {
+      return;
+    }
 
-    this.playSlide(slideIdx);*/
+    const triggerTimeline =
+      this.currentSlideTimeline?.getChildById("triggerTimeline");
+    // NOTE:  remove stop event
+    triggerTimeline?.emitter.removeAllListeners("stop");
+
+    this.playSlide(slideIdx, undefined, true);
   }
 
   private createEvent(
@@ -745,8 +839,11 @@ export class Player {
   private createStaticSlide(no: number, data: ISlideData) {
     this.createEvents(no, data);
 
-    const tl = gsap.timeline({ paused: true });
-    this.staticTimelines[no] = tl;
+    const staticTl = new RootTimeline({
+      name: "StaticTimeline",
+      duration: -1,
+    });
+    this.staticTimelines[no] = staticTl;
 
     data.transitionsData.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
@@ -761,8 +858,14 @@ export class Player {
       // Note: create timelines
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.forEach((pTl, idx) => {
-        // TODO123 tl.add(pTl, 0);
+        staticTl.add(pTl);
       });
+
+      this.eventTimelines = [
+        ...this.eventTimelines,
+        ...createEventTimelineForObject(transitionData),
+      ];
+
       /*
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getObjectDefinition(transitionData.itemType);
@@ -816,6 +919,7 @@ export class Player {
   private createSlide(slideIdx: number, data: ISlideData) {
     const slideEl = getSlideById(data.slide.id);
     slideEl.style.display = "none";
+    slideEl.style.pointerEvents = "none";
 
     this.createEvents(slideIdx, data);
 
@@ -849,6 +953,11 @@ export class Player {
       slideParallelTls.forEach((pTl, idx) => {
         slideTimeline.add(pTl);
       });
+
+      this.eventTimelines = [
+        ...this.eventTimelines,
+        ...createEventTimelineForObject(transitionData),
+      ];
 
       //console.log(slideTimeline);
       // Note: create logic for objects (start, stop, preloaders, ....)
@@ -970,34 +1079,6 @@ export class Player {
   }
 }
 
-/*
-      tl.clear();
-
-      tl.repeat(-1);
-      tl.timeScale(previewState.previewSpeed);
-
-
-      //if(previewState.scope)
-      transitionsDataArr.forEach((data) => {
-        const parallelTls = createTimelineForObject(data);
-        let prevTime = 0;
-        parallelTls.forEach((pTl, idx) => {
-          const transitionTween = gsap.to({}, 2, {
-            onComplete: () => {},
-          });
-          tl.add(transitionTween);
-
-          ///pTl.startTime(prevTime);
-          tl.add(pTl, 0);
-          prevTime = (data.data.slideDuration.customValue - 1000) / 1000;
-        });
-      });
-
-      tl.repeatDelay(-1);
-      tl.restart();
-
-     */
-
 function getSlideById(id?: string) {
   if (!id) {
     throw new Error("Id is not provided");
@@ -1015,8 +1096,8 @@ function getAllSlider(rootDiv: HTMLDivElement): HTMLDivElement[] {
   ) as HTMLDivElement[];
 }
 
-function initSliderElement(rootDiv: HTMLDivElement) {
-  getAllSlider(rootDiv).forEach((slideEl) => {
-    slideEl.style.pointerEvents = "none";
-  });
-}
+// function initSliderElement(rootDiv: HTMLDivElement) {
+//   getAllSlider(rootDiv).forEach((slideEl) => {
+//     slideEl.style.pointerEvents = "none";
+//   });
+// }

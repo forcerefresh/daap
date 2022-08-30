@@ -13,6 +13,6 @@ export const fadeDefaults: IFadeEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedEffectTypes: ["in", "out", "event"],
   canBeCombined: true,
 };

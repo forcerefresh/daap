@@ -42,6 +42,7 @@ export class Timeline {
 
   currentTimelineTime: number = 0;
 
+  direction = 1;
   constructor(config: ITimelineConfig) {
     // configuration
     this.config = config;
@@ -98,6 +99,17 @@ export class Timeline {
       this.update(this.currentTimelineTime);
     }
   }*/
+
+  setDirection(direction: number) {
+    logger.debug(`Timeline reverse (${this.config.name})`);
+    this.direction = direction;
+
+    this.execSetDirection();
+
+    this.timelines.forEach((child) => {
+      child.timeline.setDirection(direction);
+    });
+  }
 
   init() {
     logger.debug(`Timeline init (${this.config.name})`);
@@ -373,5 +385,9 @@ export class Timeline {
   }
   execRootStop() {
     this.animIns?.rootStop?.(this.config);
+  }
+
+  execSetDirection() {
+    this.animIns?.direction?.(this.config, this.direction);
   }
 }

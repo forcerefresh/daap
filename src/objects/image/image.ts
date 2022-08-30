@@ -101,6 +101,7 @@ export function createImageObject(
     ...getCommonObjectPropertiesDefinition(),
   ];
 
+  console.log(initialValue);
   const values: ImageValues = {
     fit: {
       size: "fill",

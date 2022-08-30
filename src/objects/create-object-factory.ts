@@ -54,7 +54,7 @@ export function createObject(
       return {
         ...objectProps,
         ...objDeff!.createObject({
-          initialValue,
+          ...initialValue,
           commonProperties: {
             hasOverflowProperty: true,
           },

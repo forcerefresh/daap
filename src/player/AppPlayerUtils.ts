@@ -7,19 +7,56 @@ import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-regi
 import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { Timeline } from "./player/Timeline";
+import { RootTimeline } from "./player/RootTimeline";
+
+export interface IEventTimeline {
+  event: string;
+  eventTargetId: string;
+  reverseEvent: string;
+  reverseEventTargetId: string;
+  rootTimeline: RootTimeline;
+}
+export function createEventTimelineForObject(
+  data: ITransitionsData
+): IEventTimeline[] {
+  const eventTimelines: IEventTimeline[] = [];
+
+  data.transitions.event?.forEach((effEffect) => {
+    const timeline = createTimelineForEffect(data, effEffect, "event");
+    const rootTimeline = new RootTimeline({
+      name: "RootTimelineForEvent" + effEffect.event,
+      duration: timeline.duration,
+    });
+    rootTimeline.add(timeline);
+
+    eventTimelines.push({
+      event: effEffect.event,
+      eventTargetId: effEffect.eventTargetId,
+      reverseEvent: effEffect.reverseEvent,
+      reverseEventTargetId: effEffect.reverseEventTargetId,
+      rootTimeline: rootTimeline,
+    });
+  });
+
+  return eventTimelines;
+}
 
 export function createTimelineForObject(data: ITransitionsData): Timeline[] {
   const parallelTimelines: Timeline[] = [];
 
   data.transitions.in?.forEach((effIn) => {
-    populatesTimelinesForObject(data, parallelTimelines, effIn, "in");
+    const tl = createTimelineForEffect(data, effIn, "in");
+    parallelTimelines.push(tl);
   });
   data.transitions.out?.forEach((effOut) => {
-    populatesTimelinesForObject(data, parallelTimelines, effOut, "out");
+    const tl = createTimelineForEffect(data, effOut, "out");
+    parallelTimelines.push(tl);
   });
   data.transitions.effect?.forEach((effEffect) => {
-    populatesTimelinesForObject(data, parallelTimelines, effEffect, "effect");
+    const tl = createTimelineForEffect(data, effEffect, "effect");
+    parallelTimelines.push(tl);
   });
+
   /*data.transitions.in?.forEach((_, idx) => {
     const effIn = data.transitions.in?.[idx];
     const effOut = data.transitions.out?.[idx];
@@ -42,9 +79,8 @@ function getDuration(data: ITransitionsData, eff: ITransition): number {
     : convertTimeUnitToMs(eff.duration);
 }
 
-function populatesTimelinesForObject(
+function createTimelineForEffect(
   data: ITransitionsData,
-  parallelTimelines: Timeline[],
   eff: ITransition,
   effType: EffectType
 ) {
@@ -55,10 +91,7 @@ function populatesTimelinesForObject(
         (getDuration(data, eff) + convertTimeUnitToMs(eff.delay))
       : convertTimeUnitToMs(eff.delay);
 
-  //const tl = new Timeline({ name: "Effect " + effType + " Timelines holder" }); //gsap.timeline();
-  //parallelTimelines.push(tl);
-
-  const objectTimeline = new Timeline({
+  const tl = new Timeline({
     //timelineType: "object",
     name: "ObjectTimeline",
     ...eff.effect.values,
@@ -79,11 +112,7 @@ function populatesTimelinesForObject(
     delay,
   });
 
-  console.log(objectTimeline);
-
-  //tl.add(objectTimeline);
-  parallelTimelines.push(objectTimeline);
-  return parallelTimelines;
+  return tl;
 }
 
 export function createTimelineForExecutionCode(

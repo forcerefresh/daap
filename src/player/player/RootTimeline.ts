@@ -16,6 +16,8 @@ type IRootTimelineConfig = {
 export class RootTimeline {
   emitter: EventEmitter;
 
+  scale = 1;
+
   // dynamic properties
   playing = false;
   currentTime = 0;
@@ -45,6 +47,9 @@ export class RootTimeline {
   tick_Handler_Bind: (time: number) => void;
 
   config: IRootTimelineConfig;
+
+  direction = 1;
+
   constructor(config: IRootTimelineConfig) {
     this.config = config;
 
@@ -64,6 +69,9 @@ export class RootTimeline {
     this.tick_Handler_Bind = this.tick_Handler.bind(this);
   }
 
+  timeScale(scale: number) {
+    this.scale = scale;
+  }
   // todo: remove this
   eventCallback(type: string, callback: any) {}
 
@@ -98,9 +106,19 @@ export class RootTimeline {
     }
   }
 
+  setDirection(direction: number) {
+    logger.debug(`ROOT reverse (${this.config.name})`);
+    this.direction = direction;
+
+    this.timelines.forEach((child) => {
+      child.timeline.setDirection(direction);
+    });
+  }
+
   // init all timelines
   init() {
     logger.debug(`ROOT init (${this.config.name})`);
+
     this.timelines.forEach((child) => {
       child.timeline.init();
     });
@@ -200,6 +218,10 @@ export class RootTimeline {
   resume() {
     logger.debug(`ROOT resume (${this.config.name})`);
 
+    if (this.isPaused === false) {
+      return;
+    }
+
     this.isPaused = false;
     this.deltaTickerTime +=
       this.ticker.currentTickerTime - this.pauseTickerTime;
@@ -290,8 +312,6 @@ export class RootTimeline {
 
     this.update(this.currentTimelineTime, true);
   }
-
-  timeScale(scale: number) {}
 
   time() {
     return this.currentTimelineTime;

@@ -70,7 +70,6 @@ export function generatePlayerData(
   options: { isSave: boolean }
 ): IPlayerData {
   const { slides, layers, objects } = sources;
-  //const slideIds: string[] = [];
 
   let extensionTypes: string[] = [];
 
@@ -89,7 +88,7 @@ export function generatePlayerData(
     default: {
       normalSlidesArr = getNormalSlideArr(slides);
       frontSlidesArr = getFrontSlideArr(slides);
-      backSlidesArr = getFrontSlideArr(slides);
+      backSlidesArr = getBackSlideArr(slides);
       break;
     }
   }
@@ -140,12 +139,31 @@ export function generatePlayerData(
     html += slideDataRes.html;
     extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
   });
+
+  backSlidesArr.forEach((slide) => {
+    const slideDataRes = generateSlideData(
+      slide,
+      layers,
+      objects,
+      breakpointConfig,
+      breakpoints,
+      settings,
+      thumbnailHtmlArr,
+      normalSlidesArr.length,
+      { isSave: options.isSave }
+    );
+    backSlideDataArr.push(slideDataRes.slideData);
+    html += slideDataRes.html;
+    extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
+  });
+
   html += "</div>"; //slides holder close
 
   return {
     html,
     slideDataArr,
     frontSlideDataArr,
+    backSlideDataArr,
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
       height: breakpointConfig.normal.maxSliderSize.height,
@@ -216,13 +234,13 @@ function generateSlideData(
 
   let slideStyle = "";
   slideStyle += "position: absolute;";
-  slideStyle += `width: ${breakpointConfig.normal.maxSliderSize.width}px;`;
-  slideStyle += `height: ${breakpointConfig.normal.maxSliderSize.height}px;`;
+  //slideStyle += `width: ${breakpointConfig.normal.maxSliderSize.width}px;`;
+  //slideStyle += `height: ${breakpointConfig.normal.maxSliderSize.height}px;`;
   if (slide.slideType === SlideType.Front) slideStyle += `z-index:1000;`;
+  if (slide.slideType === SlideType.Back) slideStyle += `z-index:-1000;`;
 
-  html +=
-    "  <div style='" + slideStyle + "' class='slide slide-" + slide.id + "'>"; // slide open
-  //slideIds.push(slide.id);
+  // prettier-ignore
+  html += `  <div style='${slideStyle}' class='slide slide-${slide.id} ${getCustomIdClass(slide)}'>`; // slide open
 
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
   layerArr.forEach((layer) => {
@@ -231,6 +249,7 @@ function generateSlideData(
     const layerClassName = "layer-" + layer.id;
     transitionsData.push({
       itemId: layer.id,
+      customId: layer.customId,
       itemType: "layer",
       itemValues: layer.definition.values,
       objectClass: layerClassName,
@@ -304,7 +323,13 @@ function generateSlideData(
       html += `</style>`;
     }
 
-    html += `    <div class="layer ${layerClassName}" style="${layerStyle}">`; // layer open
+    const layerCustomIdClass = layer.customId
+      ? `custom-id-${layer.customId}`
+      : "";
+
+    html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
+      layer
+    )}" style="${layerStyle}">`; // layer open
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
@@ -362,7 +387,9 @@ function generateSlideData(
         "position: relative; left:initial; top: initial; overflow: visible";
 
       html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
-      html += `      <div class="object ${objectClass}" style='${style}'>`; // open object
+      html += `      <div class="object ${objectClass} ${getCustomIdClass(
+        object
+      )}" style='${style}'>`; // open object
 
       const objectHtml = getObjectHtml(
         object,
@@ -375,6 +402,7 @@ function generateSlideData(
 
       transitionsData.push({
         itemId: object.id,
+        customId: object.customId,
         itemType: object.type,
         itemValues: object.definition.values,
         itemSystemType: getAppObjectDefinition(object.type)?.meta?.coreType,
@@ -475,9 +503,9 @@ export function getObjectHtml(
       const objDeff = isPlayer
         ? getPlayerObjectDefinition(object.type)
         : getAppObjectDefinition(object.type);
-      logger.trace(isPlayer);
-      logger.trace(object.type);
-      logger.log(objDeff);
+      //logger.trace(isPlayer);
+      //logger.trace(object.type);
+      //logger.log(objDeff);
       if (objDeff && objDeff.getHtml) {
         //try {
         return objDeff.getHtml({
@@ -696,4 +724,8 @@ export function getAllAssetsUrls(objects: IObjects) {
       return deff?.getAssetsUrls?.({ values: object.definition.values }) || [];
     })
   );
+}
+
+function getCustomIdClass(props: { customId: string }) {
+  return props.customId ? `custom-id-${props.customId}` : "";
 }

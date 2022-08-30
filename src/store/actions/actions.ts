@@ -297,6 +297,7 @@ export function addNewLayer(slideId: string): any {
 
     const layer: ILayer = {
       id: uuid(),
+      customId: "",
       type: "layer",
       slideId,
       // isBackground: isBackground,
@@ -1006,6 +1007,10 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    console.log(objectProps);
+    console.log(values);
+    console.log(type);
+
     const object = {
       ...createObject(type, objectProps, {
         ...values,
@@ -1014,6 +1019,7 @@ export function addNewObject(
       layerId,
     };
 
+    console.log(object);
     const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
     object.name = humanizeSting(type) + " " + nextNameIdx;
 

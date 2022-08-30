@@ -19,6 +19,11 @@ function slideAnimation() {
 
     const xy = getXY(config.from, config.distance);
 
+    console.log(config.type);
+
+    console.log(getMethodByType(config.type));
+    console.log(xy);
+
     timeline = gsap.timeline({ paused: true });
     timeline[getMethodByType(config.type)](element, {
       ease: config.ease,
@@ -82,6 +87,17 @@ function slideAnimation() {
     timeline.resume();
   }
 
+  function direction(config: any, direction: number) {
+    logger.debug("fade reverse");
+
+    if (direction === -1 && !timeline.reversed()) {
+      timeline.reverse();
+    }
+    if (direction === 1) {
+      timeline.play();
+    }
+  }
+
   function getXY(
     from: "top" | "bottom" | "left" | "right",
     distance: number,
@@ -118,6 +134,7 @@ function slideAnimation() {
     resume,
     rootStart,
     rootStop,
+    direction,
   };
 }
 

@@ -40,21 +40,8 @@ function fadeAnimation() {
     }
   }
 
-  /*
-  function rootStart(config: any) {
-    logger.debug("fade rootStart");
-    if (config.type === "in") element.style.opacity = "0";
-  }
-
-  function rootStop(config: any) {
-    logger.debug("fade rootStop");
-    if (config.type === "out") element.style.opacity = "1";
-  }*/
-
   function start(config: any, isManual?: boolean) {
     logger.debug("fade start");
-
-    //element.style.opacity = config.type === "in" ? "0" : "1"; //initialState.opacity;
 
     timeline.play(0);
 
@@ -76,30 +63,43 @@ function fadeAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
     logger.debug("fade pause");
+
     timeline.pause();
   }
 
   function resume(config: any) {
     logger.debug("fade resume");
+
     timeline.resume();
   }
 
+  function direction(config: any, direction: number) {
+    logger.debug("fade reverse");
+
+    if (direction === -1 && !timeline.reversed()) {
+      timeline.reverse();
+    }
+    if (direction === 1) {
+      timeline.play();
+    }
+  }
+
   return {
-    start,
-    stop,
     init,
+    rootStart,
+    start,
     update,
+    stop,
+    rootStop,
     pause,
     resume,
-    rootStart,
-    rootStop,
+    direction,
   };
 }
 

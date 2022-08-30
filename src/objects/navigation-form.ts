@@ -10,6 +10,7 @@ import {
 } from "../webslider-sdk/src/form/i-form-layout";
 
 export type NavigationTuple = [
+  ITextInput<"targetId">,
   IFormSwitchGroupItem<
     "navigationType",
     [
@@ -40,6 +41,13 @@ export type NavigationTuple = [
 ];
 
 export const navigationDefinition: NavigationTuple = [
+  {
+    inputType: InputType.TEXT,
+    propertyName: "targetId",
+    defaultValue: "",
+    displayName: "Target ID",
+    value: "",
+  },
   {
     type: FormType.SWITCH_GROUP,
     displayName: "",

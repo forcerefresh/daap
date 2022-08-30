@@ -2,8 +2,6 @@ import {
   createTilesFromHtml,
   getMethodByType,
   getObjectContentElementAndHtml,
-  tilesCompleteHandler,
-  tilesStartHandler,
   updateTilesSize,
 } from "../common";
 import gsap from "gsap";
@@ -15,13 +13,12 @@ import { merge } from "lodash-es";
 function tilesZoomAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
-  const initialState = {
-    transform: "",
-  };
 
   let objectContentElement: HTMLDivElement;
   let objectContentHtml: string;
   let elements: HTMLDivElement[];
+
+  let elObserver: ResizeObserver;
 
   function init(config: ITilesZoomEffect) {
     logger.debug("tilesZoom init");
@@ -56,7 +53,7 @@ function tilesZoomAnimation() {
       target.appendChild(element);
     });
 
-    const elObserver = new ResizeObserver(sizeChangeHandler);
+    elObserver = new ResizeObserver(sizeChangeHandler);
 
     function sizeChangeHandler() {
       const tileEls = target.getElementsByClassName("tile") as unknown as any[];
@@ -66,8 +63,6 @@ function tilesZoomAnimation() {
         { r: config.rows, c: config.columns }
       );
     }
-
-    let isStarted = false;
 
     var baseConfig = {
       ease: config.ease,
@@ -79,35 +74,6 @@ function tilesZoomAnimation() {
           (config.duration! / 1000) * (1 - config.timeDistribution! / 100),
         grid: [config.rows, config.columns],
         ease: config.childEase,
-      },
-      onComplete: function () {
-        logger.add("COMPLETE");
-        logger.flush();
-
-        elObserver.disconnect();
-
-        isStarted = false;
-        // tilesCompleteHandler(config.type, objectContentElement, elements);
-      },
-      onStart: function () {
-        logger.add("START");
-
-        if (!isStarted) {
-          elObserver.observe(target);
-
-          isStarted = true;
-          //tilesStartHandler(config.type, objectContentElement, elements);
-        }
-      },
-      onUpdate: function () {
-        logger.add("UPDATE");
-
-        if (!isStarted) {
-          elObserver.observe(target);
-
-          isStarted = true;
-          //tilesStartHandler(config.type, objectContentElement, elements);
-        }
       },
     };
 
@@ -156,6 +122,8 @@ function tilesZoomAnimation() {
   function start(config: any, isManual?: boolean) {
     logger.debug("tilesZoom start");
 
+    elObserver.observe(element);
+
     //if (isManual) return;
 
     objectContentElement.style.visibility = "hidden";
@@ -171,6 +139,8 @@ function tilesZoomAnimation() {
     logger.debug("tilesZoom stop");
     logger.debug(isManual);
     logger.debug(isReverse);
+
+    elObserver.disconnect();
 
     if (isManual) {
       if (isReverse) {
@@ -212,33 +182,6 @@ function tilesZoomAnimation() {
   function resume(config: any) {
     logger.debug("tilesZoom resume");
     timeline.resume();
-  }
-
-  function getXY(
-    from: "top" | "bottom" | "left" | "right",
-    distance: number,
-    opposite = false
-  ) {
-    const xy = { x: "+=0", y: "+=0" };
-
-    const min = opposite ? "+=" : "-=";
-    const plus = opposite ? "-=" : "+=";
-
-    switch (from) {
-      case "top":
-        xy.y = min + distance;
-        break;
-      case "bottom":
-        xy.y = plus + distance;
-        break;
-      case "left":
-        xy.x = min + distance;
-        break;
-      case "right":
-        xy.x = plus + distance;
-        break;
-    }
-    return xy;
   }
 
   return {

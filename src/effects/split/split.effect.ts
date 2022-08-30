@@ -8,7 +8,7 @@ import { split, ISplitEffect } from "./split.types";
 gsap.registerPlugin(CustomEase);
 gsap.registerPlugin(CustomWiggle);
 
-function createCube(target: HTMLDivElement, peaces: number) {
+function createPeaces(target: HTMLDivElement, peaces: number) {
   let html = `<div class="container">`;
   for (let i = 0; i < peaces; i++) {
     html += `<div class="peace peace${i + 1}"></div>`;
@@ -46,7 +46,7 @@ gsap.registerEffect({
 
       addCSS(target, config, areaW, areaH, pageAreaW);
 
-      createCube(target, config.split.points.length);
+      createPeaces(target, config.split.points.length);
     } else {
       target = slideTransitionHolder as HTMLDivElement;
     }

@@ -173,6 +173,17 @@ function cubeAnimation() {
     )[0] as HTMLDivElement;
     bottomEl.appendChild(config?.nextSlideEl!);
 
+    const video = bottomEl.getElementsByTagName("video")[0];
+    if (video) {
+      console.log(video);
+      video!.muted = true;
+      video!.src = video.src;
+      video.autoplay = true;
+      video!.play();
+    }
+
+    //video?.play();
+
     config!.nextSlideEl!.style.display = "block";
 
     timeline.play(0);

@@ -5,6 +5,7 @@ import css from "./TimelineView.module.scss";
 import { getEffectDefinition } from "../../effects/effects";
 import { max } from "lodash-es";
 import { convertTimeUnitToMs } from "../../utils/utils";
+import { EffectType } from "../../effects/types";
 
 export interface TimelineViewProps {
   object: IObject;
@@ -13,18 +14,30 @@ export interface TimelineViewProps {
 export default function TimelineView(props: TimelineViewProps) {
   const { object, slideDuration } = props;
 
-  const tlsIn = createTimelines(object?.transitions?.in || [], slideDuration);
+  const tlsIn = createTimelines(
+    object?.transitions?.in || [],
+    slideDuration,
+    "in"
+  );
   const tlsOut = createTimelines(
     object?.transitions?.out || [],
     slideDuration,
+    "out",
     true
   );
   const tlsEff = createTimelines(
     object?.transitions?.effect || [],
-    slideDuration
+    slideDuration,
+    "effect"
   );
 
-  const tls = [...tlsIn, ...tlsOut, ...tlsEff];
+  const tlsEvent = createTimelines(
+    object?.transitions?.event || [],
+    slideDuration,
+    "event"
+  );
+
+  const tls = [...tlsIn, ...tlsOut, ...tlsEff, ...tlsEvent];
 
   /*const sizeOut = calculateTimelineRect(
     slideDuration,
@@ -68,7 +81,7 @@ export default function TimelineView(props: TimelineViewProps) {
       {tls.map((tl, idx) => (
         <div
           key={tl.name + idx + tl.no}
-          className={css.timeline}
+          className={cx(css.timeline, tl.className)}
           style={{
             ...tl.timelineStyle,
             height: tlHeight + "px",
@@ -101,11 +114,13 @@ interface TimelineViewData {
   timelineStyle: React.CSSProperties;
   name: string;
   no: number;
+  className: string;
 }
 
 function createTimelines(
   effs: ITransition[],
   slideDuration: number,
+  type: EffectType,
   isOut = false
 ): TimelineViewData[] {
   const arr: TimelineViewData[] = [];
@@ -123,7 +138,9 @@ function createTimelines(
       left: size.left + "px",
       width: size.width + "px",
     };
-    arr.push({ timelineStyle, name: eff.effect.id, no: idx + 1 });
+
+    const className = css[`timeline-${type}`];
+    arr.push({ className, timelineStyle, name: eff.effect.id, no: idx + 1 });
   });
 
   return arr;

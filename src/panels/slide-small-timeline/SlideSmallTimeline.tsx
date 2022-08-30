@@ -72,7 +72,7 @@ const SlideSmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
           </Draggable>
         </div>
         <div className={css.actionHolder}>
-          <HTMLSelect
+          {/*<HTMLSelect
             value={previewState.previewSpeed}
             onChange={(event: any) => {
               _setStagePreview({ previewSpeed: event.currentTarget.value });
@@ -103,7 +103,7 @@ const SlideSmallTimeline: React.FC<ISmallTimelineProps> = (props) => {
                 value: 2,
               },
             ]}
-          ></HTMLSelect>
+          ></HTMLSelect>*/}
           <Button
             active={previewState.repeat}
             minimal

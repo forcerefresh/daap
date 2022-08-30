@@ -46,7 +46,7 @@ function fallingLeavesAnimation() {
 
       element.appendChild(leafEl);
 
-      const oneLeafTween = leafEffect(leafEl, w, h);
+      leafEffect(leafEl, w, h);
       //leafTweens.push(oneLeafTween);
     }
 
@@ -148,10 +148,10 @@ function rangeRandom(min: number, max: number) {
   return min + Math.random() * (max - min);
 }
 
-function leafEffect(elm: Element, w: number, h: number): TweenMax {
+function leafEffect(elm: Element, w: number, h: number) {
   //const tl = gsap.timeline();
 
-  const tweenToRet = TweenMax.to(elm, {
+  gsap.to(elm, {
     duration: rangeRandom(6, 15),
     y: h + 100,
     ease: "none",
@@ -179,7 +179,4 @@ function leafEffect(elm: Element, w: number, h: number): TweenMax {
     ease: "Sine.easeInOut",
     delay: -5,
   });
-
-  return tweenToRet;
-  //return tl;
 }
