@@ -85,11 +85,14 @@ function createTimelineForEffect(
   effType: EffectType
 ) {
   // only out effect is different
-  const delay =
-    effType === "out"
-      ? convertTimeUnitToMs(data.data.slideDuration.customValue) -
-        (getDuration(data, eff) + convertTimeUnitToMs(eff.delay))
-      : convertTimeUnitToMs(eff.delay);
+  let delay = convertTimeUnitToMs(eff.delay);
+  if (effType === "out") {
+    if (eff.outStartTime.inheritFrom === "absolute") {
+      delay =
+        convertTimeUnitToMs(eff.outStartTime.customValue) +
+        convertTimeUnitToMs(eff.delay);
+    }
+  }
 
   const tl = new Timeline({
     //timelineType: "object",

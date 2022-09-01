@@ -67,6 +67,10 @@ function fallingLeavesAnimation() {
   function start(config: any, isManual?: boolean) {
     logger.debug("fallingLeaves start");
     element.style.display = "block";
+
+    timelineArr.forEach((tl) => {
+      tl.play();
+    });
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {

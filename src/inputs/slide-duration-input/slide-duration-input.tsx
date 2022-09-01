@@ -37,10 +37,14 @@ export const InheritableTimeInputForm: React.FC<
         onChange(obj);
       })}
 
-      {(value.inheritFrom === "custom" || parentTime !== null) &&
+      {(value.inheritFrom === "custom" ||
+        value.inheritFrom === "absolute" ||
+        parentTime !== null) &&
         getUnitNumericFiled(
           "",
-          value.inheritFrom === "custom" ? value.customValue : parentTime,
+          value.inheritFrom === "custom" || value.inheritFrom === "absolute"
+            ? value.customValue
+            : parentTime,
           (val: string) => {
             const obj = cloneDeep(value);
             obj.customValue = val;

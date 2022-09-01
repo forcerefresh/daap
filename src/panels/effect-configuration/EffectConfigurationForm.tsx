@@ -201,15 +201,12 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   const outEffectStartInput = () => (
     <div className={css.inlineFlex}>
       {getInheritTimeField(
-        "Start",
+        "Exit",
         transition.outStartTime,
         [
           { label: "Inherit from slide", value: "inheritFromSlide" },
-          {
-            label: "Inherit from default settings",
-            value: "inheritFromDefaults",
-          },
-          { label: "Custom", value: "custom" },
+          { label: "Custom exit duration", value: "custom" },
+          { label: "Absolute time from beginning", value: "absolute" },
         ],
         (outStartTime: any) => {
           const newTransition = cloneDeep(transition);
