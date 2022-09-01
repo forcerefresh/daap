@@ -1,3 +1,5 @@
+import { IOutEffectStartTime } from "../webslider-sdk/src/effects/i-effect-types";
+
 export type EffectType = "in" | "out" | "effect" | "event" | "slide" | "layer";
 
 export interface IEffectDefinition<T> {
@@ -38,6 +40,8 @@ export interface IEffectBase {
   childCustomEase?: string;
   duration?: number;
   delay?: number;
+  outStartTime?: IOutEffectStartTime;
+  // TODO: consider removing seek
   seek?: number;
 }
 

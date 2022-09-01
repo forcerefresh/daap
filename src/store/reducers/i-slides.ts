@@ -17,6 +17,7 @@ export interface ISlide {
   customId: string;
   name: string;
   duration: ISlideDuration;
+  exitDuration: ISlideDuration;
 }
 
 export interface ISlides {

@@ -7,6 +7,7 @@ import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { EasingOptions, EffectType } from "../../effects/types";
 import { getInputForm } from "../../inputs/input-factory";
 import {
+  getInheritTimeField,
   getNumericFiled,
   getSelectField,
   getTextField,
@@ -197,6 +198,29 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     </div>
   );
 
+  const outEffectStartInput = () => (
+    <div className={css.inlineFlex}>
+      {getInheritTimeField(
+        "Start",
+        transition.outStartTime,
+        [
+          { label: "Inherit from slide", value: "inheritFromSlide" },
+          {
+            label: "Inherit from default settings",
+            value: "inheritFromDefaults",
+          },
+          { label: "Custom", value: "custom" },
+        ],
+        (outStartTime: any) => {
+          const newTransition = cloneDeep(transition);
+          newTransition.outStartTime = outStartTime;
+          onTransitionChange(newTransition);
+        },
+        null
+      )}
+    </div>
+  );
+
   const eventInput = () => (
     <div className={css.inlineFlex}>
       {getSelectField(
@@ -336,10 +360,13 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           )}
 
           {effectType === "out" && (
-            <div className={css.inlineFlex}>
-              {effDef(effectType).defaults.hasDuration && durationInput()}
-              {effDef(effectType).defaults.hasDelay && delayInput()}
-            </div>
+            <>
+              {outEffectStartInput()}
+              <div className={css.inlineFlex}>
+                {effDef(effectType).defaults.hasDuration && durationInput()}
+                {effDef(effectType).defaults.hasDelay && delayInput()}
+              </div>
+            </>
           )}
 
           {effectType === "slide" && (

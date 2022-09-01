@@ -43,7 +43,7 @@ import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
 import { Breakpoints } from "../webslider-sdk/src/common/i-breakpoint-configuration";
-import { SlideDurationInputForm } from "./slide-duration-input/slide-duration-input";
+import { InheritableTimeInputForm } from "./slide-duration-input/slide-duration-input";
 import { InfoInputForm } from "./info-input/info-input";
 import { BorderInputForm } from "./border-input/border-input";
 import { SizePosInputForm } from "./size-pos-input/size-pos-input";
@@ -387,9 +387,13 @@ export function getInputForm<T>(
     case InputType.BOX: {
       return <BoxInputForm key={key} {...inputProps} onChange={onChange} />;
     }
-    case InputType.SLIDE_DURATION: {
+    case InputType.INHERIT_TIME: {
       return (
-        <SlideDurationInputForm key={key} {...inputProps} onChange={onChange} />
+        <InheritableTimeInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+        />
       );
     }
   }

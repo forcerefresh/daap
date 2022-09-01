@@ -58,6 +58,10 @@ export const getDefaultEffectConfigForType = (
           id: isStructural ? "none-structural" : "none",
           values: {},
         },
+        outStartTime: {
+          customValue: "6s",
+          inheritFrom: "inheritFromSlide",
+        },
       };
     case "effect":
       return {

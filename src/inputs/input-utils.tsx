@@ -194,20 +194,22 @@ export function getTextField<T>(
   return getInputForm(InputType.TEXT, objectDef, onChange);
 }
 
-export function getSlideDurationField<T>(
+export function getInheritTimeField<T>(
   label: string,
   value: T,
+  options: { label: string; value: "custom" | string }[],
   onChange: (value: T) => void,
-  commonDuration: string
+  parentTime: string | null
 ) {
   const objectDef = {
     displayName: label,
-    inputType: InputType.SLIDE_DURATION,
+    inputType: InputType.INHERIT_TIME,
     value: value,
-    commonDuration,
+    options,
+    parentTime,
   };
 
-  return getInputForm(InputType.SLIDE_DURATION, objectDef, onChange);
+  return getInputForm(InputType.INHERIT_TIME, objectDef, onChange);
 }
 
 export function getCoverLayoutField<T>(

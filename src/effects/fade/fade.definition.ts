@@ -15,4 +15,9 @@ export const fadeDefaults: IFadeEffect = {
   ease: "none",
   supportedEffectTypes: ["in", "out", "event"],
   canBeCombined: true,
+  outStartTime: {
+    customValue: "0ms",
+    inheritFrom: "inheritFromSlide",
+  },
+  // this effect has no configuration
 };

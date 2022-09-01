@@ -23,7 +23,7 @@ import {
   moveSlides,
   duplicateSlides,
 } from "../../store/actions/actions";
-import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
+//import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
 import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
@@ -100,19 +100,19 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   };
 
   // render panels in Portal
-  const renderPanels = () => {
-    return (
-      <>
-        <Portal className="bp3-dark">
-          {showSettingsPanelForSlideId !== EmptyID && (
-            <div ref={ref}>
-              <SlideSettingsPanel slideId={showSettingsPanelForSlideId} />
-            </div>
-          )}
-        </Portal>
-      </>
-    );
-  };
+  // const renderPanels = () => {
+  //   return (
+  //     <>
+  //       <Portal className="bp3-dark">
+  //         {showSettingsPanelForSlideId !== EmptyID && (
+  //           <div ref={ref}>
+  //             <SlideSettingsPanel slideId={showSettingsPanelForSlideId} />
+  //           </div>
+  //         )}
+  //       </Portal>
+  //     </>
+  //   );
+  // };
 
   const slidesHolderRef = useRef<HTMLDivElement | null>(null);
   const scrollToBottomDelayed = () => {
@@ -279,7 +279,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             );
           })}
         </div>
-        {renderPanels()}
+        {/* {renderPanels()} */}
       </div>
     </>
   );

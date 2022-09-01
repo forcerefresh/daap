@@ -12,7 +12,10 @@ import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { Breakpoints } from "../webslider-sdk/src/common/i-breakpoint-configuration";
 import { ISlides, SlideType } from "../store/reducers/i-slides";
-import { ISlideDuration } from "../webslider-sdk/src/common/i-slider-duration";
+import {
+  ISlideDuration,
+  ISlideExitTime,
+} from "../webslider-sdk/src/common/i-slider-duration";
 
 export interface ITransitionsData {
   customId: string;
@@ -75,6 +78,7 @@ export interface ISlideData {
     slideType: SlideType;
     transitions: ITransitions;
     duration: ISlideDuration;
+    exitDuration: ISlideExitTime;
   };
   transitionsData: ITransitionsData[];
 }

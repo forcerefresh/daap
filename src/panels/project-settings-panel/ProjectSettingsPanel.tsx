@@ -20,6 +20,7 @@ import { Breakpoint } from "./breakpoint-component/Breakpoint";
 import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
 import { ISettings } from "../../store/reducers/i-settings";
 import { Breakpoints } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { IGlobalSlideOverlapTime } from "../../webslider-sdk/src/common/i-slider-duration";
 
 enum ProjectPanelSections {
   Slider = "Slider",
@@ -108,6 +109,35 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                   ["ms", "s"]
                 )}
               </div>
+              <div className="">
+                {getUnitNumericFiled(
+                  "Exit slide duration",
+                  settings.exitSlideDuration,
+                  (value: string) => {
+                    _updateProjectSettings({ exitSlideDuration: value });
+                  },
+                  undefined,
+                  { style: { width: "100px" } },
+                  ["ms", "s"]
+                )}
+              </div>
+              {/* <div className="">
+                {getInheritTimeField(
+                  "Exit slide overlap duration",
+                  settings.exitOverlapSlideDuration,
+                  [
+                    { label: "Custom", value: "custom" },
+                    {
+                      label: "Inherit 'Overlap' duration from next slide",
+                      value: "inheritOverlapFromNextSlide",
+                    },
+                  ],
+                  (value: IGlobalSlideOverlapTime) => {
+                    _updateProjectSettings({ exitOverlapSlideDuration: value });
+                  },
+                  null
+                )}
+              </div> */}
               <div className="input60">
                 {getColorField(
                   "Slider background color",

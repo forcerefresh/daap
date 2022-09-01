@@ -48,6 +48,7 @@ import {
   getRealSlideDuration,
   addBorderRadius,
   addCommonPropertiesToStyle,
+  getRealExitSlideDuration,
 } from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
@@ -223,9 +224,15 @@ function generateSlideData(
     "slideType",
     "transitions",
     "duration",
+    "exitDuration",
     "customId",
   ]);
   someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
+  someSlideData.exitDuration.customValue = getRealExitSlideDuration(
+    slide,
+    settings
+  );
+
   // slide data
   const slideData: ISlideData = {
     slide: someSlideData,

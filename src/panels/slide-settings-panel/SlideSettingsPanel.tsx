@@ -16,8 +16,7 @@ import { IStore } from "../../store/store";
 import css from "./SlideSettingsPanel.module.scss";
 import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { getInputForm } from "../../inputs/input-factory";
-import { SlideDurationOptions, SlideTypeOptions } from "../../store/types";
-import { getRealSlideDuration } from "../../utils/utils";
+// import { getRealSlideDuration } from "../../utils/utils";
 import { EasingOptions } from "../../effects/types";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
@@ -111,7 +110,6 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               _updateSlide(obj);
             }
           )*/}
-
           {getTextField(
             "Id",
             slide.customId,
@@ -123,8 +121,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             "",
             { placeholder: "Enter slide ID" }
           )}
-
-          {getSelectField(
+          {/* {getSelectField(
             "Duration",
             slide.duration.inheritFrom,
             SlideDurationOptions,
@@ -133,8 +130,8 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               obj.duration.inheritFrom = value;
               _updateSlide(obj);
             }
-          )}
-          {getUnitNumericFiled(
+          )} */}
+          {/* {getUnitNumericFiled(
             " ",
             getRealSlideDuration(slide, settings),
             (value: string) => {
@@ -145,8 +142,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             undefined,
             { disabled: slide.duration.inheritFrom === "inherit" },
             ["ms", "s"]
-          )}
-
+          )} */}
           {getSelectField(
             "Transition",
             get(slide, `slideTransition.effect.id`),
@@ -165,12 +161,10 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               _updateSlide(obj as any as ISlide);
             }
           )}
-
           <div>
             {/*overlapInput()*/}
             {durationInput()}
           </div>
-
           {effDef.defaults.hasEase &&
             getSelectField(
               "Easing",

@@ -5,7 +5,7 @@ export const SlideTypeOptions = [
   { label: "Static", value: "static" },
 ];
 
-export const SlideDurationOptions = [
+/*export const SlideDurationOptions = [
   { label: "Inherit from project level", value: "inherit" },
   { label: "Custom", value: "custom" },
-];
+];*/

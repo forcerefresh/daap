@@ -335,6 +335,6 @@ export class RootTimeline {
   }
 
   getChildById(id: string) {
-    return this.timelines.find((tl) => tl.timeline.id)?.timeline;
+    return this.timelines.find((tl) => tl.timeline.id === id)?.timeline;
   }
 }

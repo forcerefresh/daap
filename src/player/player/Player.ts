@@ -706,7 +706,7 @@ export class Player {
       currentSlideTimelineStopCallback
     );
 
-    this.currentSlideTimeline.emitter.removeAllListeners("beforeStart");
+    this.currentSlideTimeline.emitter.removeAllListeners("start");
     this.currentSlideTimeline.emitter.addListener("start", () => {
       slideEl.style.display = "block";
     });
@@ -729,16 +729,39 @@ export class Player {
     //if (hasEffect(bettwenSlideEff)) {
     // trigger when transition have to start
 
+    // NOTE: Slide EXIT transition trigger
+    const exitTriggerTimeline: Timeline | undefined =
+      this.currentSlideTimeline?.getChildById("exitTriggerTimeline");
+
+    if (!this.oneSlide) {
+      // debugger;
+      const exitTriggerTimelineCallback = () => {
+        // start all exit transitions
+        // TODO: IMPLEMENT
+        logger.info("exitTriggerTimeline123");
+        // TODO: remove following
+        // this.transitionEndBreakpointHandler(
+        //   slideIdx,
+        //   this.currentSlideTimeline!
+        // );
+
+        exitTriggerTimeline?.emitter.removeAllListeners("beforeStop");
+      };
+      exitTriggerTimeline?.emitter.removeAllListeners("beforeStop");
+      exitTriggerTimeline?.emitter.addListener(
+        "beforeStop",
+        exitTriggerTimelineCallback
+      );
+    }
+
+    // NOTE: Slide transition trigger
     const triggerTimeline: Timeline | undefined =
       this.currentSlideTimeline?.getChildById("triggerTimeline");
 
-    console.log(triggerTimeline);
     if (!this.oneSlide) {
-      console.log("ADD HANDLER: " + slideIdx);
       const triggerTimelineCallback = () => {
         triggerTimeline?.emitter.removeAllListeners("stop");
 
-        logger.warn("UPDATE!!!");
         this.transitionEndBreakpointHandler(
           slideIdx,
           this.currentSlideTimeline!
@@ -747,6 +770,9 @@ export class Player {
       triggerTimeline?.emitter.removeAllListeners("stop");
       triggerTimeline?.emitter.addListener("stop", triggerTimelineCallback);
     }
+
+    console.log(exitTriggerTimeline?.emitter.listeners.length);
+
     //}
     // OTHER
     //
@@ -1018,16 +1044,31 @@ export class Player {
 
     //console.log(bettwenSlideEff);
     // create breakpoint for slide transition
+
     // 1. if no slide transition set to 0
+
     let overlap = 0;
     // 2. if effect exit use it
     if (bettwenSlideEff?.effect.id !== "none") {
       //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
       overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     }
-    // 3. add breakpoint timeline
 
-    // trigger
+    // 3. add slide exit transitions trigger timeline
+    const exitTriggerTimeline = new Timeline({
+      id: "exitTriggerTimeline",
+      name: "ExitTriggerTimeline-" + slideIdx,
+      duration:
+        convertTimeUnitToMs(data.slide.duration.customValue) -
+        (convertTimeUnitToMs(data.slide.exitDuration.customValue) + overlap),
+    });
+    slideTimeline.add(exitTriggerTimeline);
+
+    console.log(
+      convertTimeUnitToMs(data.slide.duration.customValue) -
+        (convertTimeUnitToMs(data.slide.exitDuration.customValue) + overlap)
+    );
+    // 3. add slide transitions trigger timeline
     const triggerTimeline = new Timeline({
       id: "triggerTimeline",
       name: "TriggerTimeline-" + slideIdx,

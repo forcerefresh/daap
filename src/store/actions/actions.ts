@@ -129,7 +129,11 @@ export function addNewSlide(
       name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "inherit",
-        customValue: "20s",
+        customValue: "10s",
+      },
+      exitDuration: {
+        inheritFrom: "inherit",
+        customValue: "1s",
       },
       layerIds: [],
       nextLayerIdCounter: 1,

@@ -211,6 +211,10 @@ export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
       inheritFrom: "inherit",
       customValue: "20s",
     },
+    exitDuration: {
+      inheritFrom: "inherit",
+      customValue: "1s",
+    },
     layerIds: [],
     nextLayerIdCounter: 1,
     slideType,

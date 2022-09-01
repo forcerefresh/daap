@@ -178,21 +178,26 @@ export class Timeline {
     logger.debug(`Timeline stop (${this.config.name})`);
     console.timeLog();
 
+    console.log("111111");
     this.emitter.emit("beforeStop");
+    console.log("22222");
 
     //this.playing = false;
 
     this.execStop(isManual, isReverse);
+    console.log("333");
 
     this.timelines.forEach((child) => {
       child.timeline.stop(isManual, isReverse);
     });
+    console.log("444");
 
     this.emitter.emit("stop");
+    console.log("5555");
   }
 
   update(time: number, isManual?: boolean) {
-    //logger.debug(`Timeline update (${this.config.name})`);
+    logger.debug(`Timeline update (${this.config.name}); time: ${time}`);
 
     this.emitter.emit("beforeUpdate", time);
 

@@ -14,7 +14,7 @@ import {
   getGridLayoutField,
   getSelectField,
   getTextField,
-  getSlideDurationField,
+  getInheritTimeField,
   getColorField,
 } from "../../inputs/input-utils";
 import {
@@ -67,6 +67,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     selectionForProperties,
     panelName,
     commonSlideDuration,
+    commonSlideExitDuration,
     _updateObject,
     _updateLayer,
     _updateSlide,
@@ -90,15 +91,33 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             retObj.customId = customId;
             _updateSlide(retObj);
           })}
-          {getSlideDurationField(
-            "",
+          {getInheritTimeField(
+            "Duration",
             slide.duration,
+            [
+              { label: "Inherit from default settings", value: "inherit" },
+              { label: "Custom", value: "custom" },
+            ],
             (duration: ISlideDuration) => {
               const retObj = cloneDeep(slide);
               retObj.duration = duration;
               _updateSlide(retObj);
             },
             commonSlideDuration
+          )}
+          {getInheritTimeField(
+            "Exit Duration",
+            slide.exitDuration,
+            [
+              { label: "Inherit from default settings", value: "inherit" },
+              { label: "Custom", value: "custom" },
+            ],
+            (exitDuration: ISlideDuration) => {
+              const retObj = cloneDeep(slide);
+              retObj.exitDuration = exitDuration;
+              _updateSlide(retObj);
+            },
+            commonSlideExitDuration
           )}
         </>
       );
@@ -481,7 +500,11 @@ const mapStateToProps = (state: IStore) => {
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
-  const { breakpoints, slideDuration: commonSlideDuration } = settings;
+  const {
+    breakpoints,
+    slideDuration: commonSlideDuration,
+    exitSlideDuration: commonSlideExitDuration,
+  } = settings;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
@@ -516,6 +539,7 @@ const mapStateToProps = (state: IStore) => {
     selectionForProperties: selection.selectionForProperties,
     panelName,
     commonSlideDuration,
+    commonSlideExitDuration,
   };
 };
 

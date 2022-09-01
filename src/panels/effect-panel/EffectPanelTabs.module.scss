@@ -86,6 +86,11 @@
       display: none !important;
     }
 
+    :global {
+      .bp3-form-group {
+        margin-bottom: 5px;
+      }
+    }
     /*> div:first-child {
       //noHolderEmpty
       display: flex;

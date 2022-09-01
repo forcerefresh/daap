@@ -19,6 +19,12 @@ export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
     : slide.duration.customValue;
 }
 
+export function getRealExitSlideDuration(slide: ISlide, settings: ISettings) {
+  return slide.exitDuration.inheritFrom === "inherit"
+    ? settings.exitSlideDuration
+    : slide.exitDuration.customValue;
+}
+
 export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {
   const dur = getRealSlideDuration(slide, settings);
   const durMs = convertTimeUnitToMs(dur);

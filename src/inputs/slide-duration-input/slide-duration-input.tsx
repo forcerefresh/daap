@@ -2,26 +2,26 @@ import { FormGroup } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep, noop } from "lodash-es";
 import React from "react";
-import { SlideDurationOptions } from "../../store/types";
 import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import {
-  ISlideDurationInput,
+  IInheritTimeInput,
   IUpdateInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./slide-duration-input.module.scss";
 
-export const SlideDurationInputForm: React.FC<
-  ISlideDurationInput & IUpdateInput
+export const InheritableTimeInputForm: React.FC<
+  IInheritTimeInput & IUpdateInput
 > = (props) => {
   const {
     displayName,
     propertyName,
     helperText,
     value,
+    options,
     onChange = noop,
-    commonDuration,
+    parentTime,
   } = props;
-  const id = `${propertyName}_slide_duration`;
+  const id = `${propertyName}_inheritable_time`;
 
   return (
     <FormGroup
@@ -31,32 +31,28 @@ export const SlideDurationInputForm: React.FC<
       helperText={!!helperText && helperText}
       inline
     >
-      {getSelectField(
-        "Duration",
-        value.inheritFrom,
-        SlideDurationOptions,
-        (val: "inherit" | "custom") => {
-          const obj = cloneDeep(value);
-          obj.inheritFrom = val;
-          onChange(obj);
-        }
-      )}
+      {getSelectField("", value.inheritFrom, options, (val: any) => {
+        const obj = cloneDeep(value);
+        obj.inheritFrom = val;
+        onChange(obj);
+      })}
 
-      {getUnitNumericFiled(
-        " ",
-        value.inheritFrom === "inherit" ? commonDuration : value.customValue,
-        (val: string) => {
-          const obj = cloneDeep(value);
-          obj.customValue = val;
-          onChange(obj);
-        },
-        undefined,
-        {
-          disabled: value.inheritFrom === "inherit",
-          style: { width: "100px" },
-        },
-        ["ms", "s"]
-      )}
+      {(value.inheritFrom === "custom" || parentTime !== null) &&
+        getUnitNumericFiled(
+          "",
+          value.inheritFrom === "custom" ? value.customValue : parentTime,
+          (val: string) => {
+            const obj = cloneDeep(value);
+            obj.customValue = val;
+            onChange(obj);
+          },
+          undefined,
+          {
+            disabled: value.inheritFrom === "inherit",
+            style: { width: "100px" },
+          },
+          ["ms", "s"]
+        )}
     </FormGroup>
   );
 };

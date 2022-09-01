@@ -39,6 +39,10 @@ export const zoomInDefaults: IZoomInEffect = {
   ease: "none",
   supportedEffectTypes: ["in", "out"],
   canBeCombined: true,
+  outStartTime: {
+    customValue: "0ms",
+    inheritFrom: "inheritFromSlide",
+  },
   // effect properties
   scaleX: 100,
   scaleY: 100,
