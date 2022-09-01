@@ -6,7 +6,7 @@ import {
 } from "../common";
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
+import { getObjectElementById, getParameters } from "../animation-utils";
 import { ITilesZoomEffect } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
 
@@ -184,6 +184,12 @@ function tilesZoomAnimation() {
     timeline.resume();
   }
 
+  function destroy(config: any) {
+    logger.debug("tilesZoom destroy");
+    timeline.clear();
+    timeline.kill();
+  }
+
   return {
     start,
     stop,
@@ -193,6 +199,7 @@ function tilesZoomAnimation() {
     resume,
     rootStart,
     rootStop,
+    destroy,
   };
 }
 
@@ -201,70 +208,3 @@ const tilesZoomDef = {
   effectFunc: tilesZoomAnimation,
 };
 export default tilesZoomDef;
-
-function getParameters(rows: number, columns: number, startFrom: string) {
-  switch (startFrom) {
-    case "random":
-      return { stagger: { from: "random" } };
-    case "center":
-      return {
-        stagger: {
-          from: "center",
-        },
-      };
-    case "horizontal-center":
-      return {
-        stagger: {
-          from: "center",
-          axis: "y",
-        },
-      };
-    case "vertical-center":
-      return {
-        stagger: {
-          from: "center",
-          axis: "x",
-        },
-      };
-    case "edges":
-      return { stagger: { from: "edges" } };
-    case "horizontal-edges":
-      return {
-        stagger: {
-          from: "edges",
-          axis: "y",
-        },
-      };
-    case "vertical-edges":
-      return {
-        stagger: {
-          from: "edges",
-          axis: "x",
-        },
-      };
-    case "top-left":
-      return {
-        stagger: {
-          from: "0",
-        },
-      };
-    case "top-right":
-      return {
-        stagger: {
-          from: `${columns - 1}`,
-        },
-      };
-    case "bottom-left":
-      return {
-        stagger: {
-          from: `${columns * (rows - 1)}`,
-        },
-      };
-    case "bottom-right":
-      return {
-        stagger: {
-          from: `${columns * rows - 1}`,
-        },
-      };
-  }
-}

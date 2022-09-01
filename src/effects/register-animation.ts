@@ -3,6 +3,8 @@ import fadeDef from "./fade/fade.animation";
 import fallingLeavesDef from "./falling-leaves/falling-leaves.animation";
 import slideDef from "./slide/slide.animation";
 import tilesZoomDef from "./tiles-zoom/tiles-zoom.animations";
+import tilesFadeDef from "./tiles-fade/tiles-fade.animation";
+import tilesSlideDef from "./tiles-slide/tiles-slide.animation";
 
 const animations: any[] = [];
 
@@ -19,3 +21,5 @@ registerAnimation({ ...slideDef });
 registerAnimation({ ...tilesZoomDef });
 registerAnimation({ ...fallingLeavesDef });
 registerAnimation({ ...cubeDef });
+registerAnimation({ ...tilesFadeDef });
+registerAnimation({ ...tilesSlideDef });

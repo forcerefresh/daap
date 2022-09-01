@@ -1,4 +1,3 @@
-import { getMethodByType } from "../common";
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
@@ -6,14 +5,13 @@ import { IFallingLeaves } from "./falling-leaves.types";
 import { getMediaSrc } from "../../integration/utils/local-media";
 
 function fallingLeavesAnimation() {
-  let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
+  let timelineArr: gsap.core.Timeline[] = [];
 
   function init(config: IFallingLeaves) {
     logger.debug("fallingLeaves init");
 
     element = getObjectElementById(config.itemId!);
-    // initialState.opacity = element.style.opacity;
 
     gsap.set(element, { perspective: 600, display: "none" });
     element.style.overflow = "hidden";
@@ -45,27 +43,16 @@ function fallingLeavesAnimation() {
       });
 
       element.appendChild(leafEl);
-
-      leafEffect(leafEl, w, h);
-      //leafTweens.push(oneLeafTween);
+      // CHECK IT
+      timelineArr.push(leafEffect(leafEl, w, h));
     }
-
-    // return ROOT timeline
-    timeline = gsap.timeline({ paused: true });
-
-    timeline.to(element, { display: "block", duration: 0.0000001 });
-    timeline.to(element, {
-      duration: config.duration! - 0.0000002,
-    });
-    timeline.to(element, { display: "none", duration: 0.0000001 });
   }
 
   function rootStart(config: any) {
     logger.debug("fallingLeaves rootStart");
 
     if (config.type === "in") {
-      timeline.pause();
-      timeline.progress(0);
+      element.style.display = "none";
     }
   }
 
@@ -73,57 +60,56 @@ function fallingLeavesAnimation() {
     logger.debug("fallingLeaves rootStop");
 
     if (config.type === "out") {
-      timeline.pause();
-      timeline.progress(0);
+      element.style.display = "none";
     }
   }
 
-  /*
-  function rootStart(config: any) {
-    logger.debug("fallingLeaves rootStart");
-    if (config.type === "in") element.style.opacity = "0";
-  }
-
-  function rootStop(config: any) {
-    logger.debug("fallingLeaves rootStop");
-    if (config.type === "out") element.style.opacity = "1";
-  }*/
-
   function start(config: any, isManual?: boolean) {
     logger.debug("fallingLeaves start");
-
-    //element.style.opacity = config.type === "in" ? "0" : "1"; //initialState.opacity;
-
-    timeline.play(0);
-    if (isManual) timeline.pause();
+    element.style.display = "block";
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.debug("fallingLeaves stop");
-
-    timeline.pause();
+    element.style.display = "none";
 
     if (isManual) {
       // goto end because we set display:none at te end of timeline
-      timeline.progress(config.duration / 1000);
+      // timeline.progress(config.duration / 1000);
     }
   }
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
       console.log("MANUAL UPDATE: " + time);
-      timeline.seek(time / 1000);
+      // timeline.seek(time / 1000);
+      // timelineArr.forEach((tl) => {
+      //   tl.seek(time / 1000);
+      // });
     }
   }
 
   function pause(config: any) {
     logger.debug("fallingLeaves pause");
-    timeline.pause();
+    timelineArr.forEach((tl) => {
+      tl.pause();
+    });
   }
 
   function resume(config: any) {
     logger.debug("fallingLeaves resume");
-    timeline.resume();
+    timelineArr.forEach((tl) => {
+      tl.resume();
+    });
+  }
+
+  function destroy(config: any) {
+    logger.debug("fallingLeaves destroy");
+
+    timelineArr.forEach((tl) => {
+      tl.clear();
+      tl.kill();
+    });
   }
 
   return {
@@ -135,6 +121,7 @@ function fallingLeavesAnimation() {
     resume,
     rootStart,
     rootStop,
+    destroy,
   };
 }
 
@@ -149,9 +136,9 @@ function rangeRandom(min: number, max: number) {
 }
 
 function leafEffect(elm: Element, w: number, h: number) {
-  //const tl = gsap.timeline();
+  const tl = gsap.timeline();
 
-  gsap.to(elm, {
+  tl.to(elm, {
     duration: rangeRandom(6, 15),
     y: h + 100,
     ease: "none",
@@ -161,7 +148,7 @@ function leafEffect(elm: Element, w: number, h: number) {
     onComplete: () => {},
   });
 
-  gsap.to(elm, {
+  tl.to(elm, {
     duration: rangeRandom(4, 8),
     x: "+=100",
     rotationZ: rangeRandom(0, 180),
@@ -170,7 +157,7 @@ function leafEffect(elm: Element, w: number, h: number) {
     ease: "Sine.easeInOut",
   });
 
-  gsap.to(elm, {
+  tl.to(elm, {
     duration: rangeRandom(2, 8),
     rotationX: rangeRandom(0, 360),
     rotationY: rangeRandom(0, 360),
@@ -179,4 +166,6 @@ function leafEffect(elm: Element, w: number, h: number) {
     ease: "Sine.easeInOut",
     delay: -5,
   });
+
+  return tl;
 }
