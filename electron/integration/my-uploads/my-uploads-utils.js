@@ -1,9 +1,11 @@
 const { app } = require("electron");
 const path = require("path");
 const fsPromise = require("fs/promises");
-const { appendToFileName } = require("../../utils/utils");
+const { appendToFileName, fileToBuffer } = require("../../utils/utils");
 const { v4: uuid } = require("uuid");
 const sharp = require("sharp");
+const JSZip = require("jszip");
+const fs = require("fs");
 
 async function processVideo(
   fileBase64,
@@ -16,7 +18,7 @@ async function processVideo(
 
   const myVideoPath = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     fileMetadata.filename
   );
@@ -28,7 +30,7 @@ async function processVideo(
   // save original preview image
   const myPreviewImagePath = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     fileMetadata.filename + ".jpg"
   );
@@ -40,7 +42,7 @@ async function processVideo(
   // genereate small for preview
   const myPreviewImagePath150 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename + ".jpg", "_150")
   );
@@ -99,58 +101,105 @@ async function processVideo(
   return item;
 }
 
+async function processExtension(fileBase64, type, fileMetadata) {
+  const userDataPath = app.getPath("userData");
+
+  const extensionZipPath = path.join(
+    userDataPath,
+    "my-uploads",
+    type2MediaFolder(type),
+    fileMetadata.filename
+  );
+
+  // save extension
+  let base64Zip = fileBase64.split(";base64,").pop();
+  await fsPromise.writeFile(extensionZipPath, base64Zip, {
+    encoding: "base64",
+  });
+
+  let zip = new JSZip();
+  const zipPackage = await fileToBuffer(extensionZipPath);
+  zip = await zip.loadAsync(zipPackage);
+
+  const content = await zip.files["object-meta.json"].async("nodebuffer");
+  console.log(content);
+  const objectMeta = JSON.parse(content);
+  console.log(objectMeta);
+
+  const extensionDir = path.join(
+    userDataPath,
+    "my-uploads",
+    type2MediaFolder(type),
+    objectMeta.type
+  );
+
+  if (!fs.existsSync(extensionDir)) {
+    fs.mkdirSync(extensionDir);
+  }
+
+  const fileNames = Object.keys(zip.files);
+  for (let i = 0; i < fileNames.length; i++) {
+    const content = await zip.files[fileNames[i]].async("nodebuffer");
+    var dest = path.join(extensionDir, fileNames[i]);
+    await fsPromise.writeFile(dest, content);
+  }
+  const id = uuid();
+
+  return { id, ...objectMeta };
+}
+
 async function processImage(fileBase64, type, fileMetadata) {
   const userDataPath = app.getPath("userData");
 
   const myImagePath = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     fileMetadata.filename
   );
   const myImagePath80 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_80")
   );
   const myImagePath150 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_150")
   );
   const myImagePath300 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_300")
   );
 
   const myImagePath600 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_600")
   );
 
   const myImagePath900 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_900")
   );
 
   const myImagePath1200 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_1200")
   );
 
   const myImagePath1500 = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     appendToFileName(fileMetadata.filename, "_1500")
   );
@@ -294,7 +343,7 @@ async function processVector(fileBase64, type, fileMetadata) {
 
   const myImagePath = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     fileMetadata.filename
   );
@@ -325,6 +374,7 @@ module.exports = {
   processImage,
   processVideo,
   processVector,
+  processExtension,
   type2Filename,
   type2MediaFolder,
 };

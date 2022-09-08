@@ -2,7 +2,11 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 var path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
-const { checkFileExists, downloadToBuffer } = require("../../utils/utils");
+const {
+  checkFileExists,
+  downloadToBuffer,
+  fileToBuffer,
+} = require("../../utils/utils");
 const JSZip = require("jszip");
 /*
 ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
@@ -28,11 +32,21 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
   const extension = JSON.parse(reqJson);
 
   // 1. add script
+  let zipPackage;
+  if (extension.source === "local") {
+    const userDataPath = app.getPath("userData");
+    const extensionZipPath = path.join(
+      userDataPath,
+      "my-uploads",
+      "my-extensions",
+      extension.type + ".zip"
+    );
+    zipPackage = await fileToBuffer(extensionZipPath);
+  } else {
+    const fullPackageUrl = `${extension.packageUrl}`;
+    zipPackage = await downloadToBuffer(fullPackageUrl);
+  }
 
-  const fullPackageUrl = `${extension.packageUrl}`;
-  //console.log(fullPackageUrl);
-  const zipPackage = await downloadToBuffer(fullPackageUrl);
-  //console.log(zipPackage);
   let zip = new JSZip();
   zip = await zip.loadAsync(zipPackage);
 
@@ -55,7 +69,7 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
 });
 
 ipcMain.handle("Extensions::UninstallExtension", async (event, reqJson) => {
-  const { id } = JSON.parse(reqJson);
+  const { id, source } = JSON.parse(reqJson);
 
   // remove from DB
   const extensions = await loadExtensions();
@@ -81,7 +95,7 @@ ipcMain.handle("Extensions::UninstallExtension", async (event, reqJson) => {
 });
 
 ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
-  //console.log(reqJson);
+  console.log(reqJson);
   const { type } = JSON.parse(reqJson);
 
   const extensions = await loadExtensions();
@@ -93,14 +107,22 @@ ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
   }
 
   const extensionDir = getExtensionPath(extension.type);
-  // TODO: IMPORTANT
-  const extFilePath = path.join(extensionDir, extension.packageFiles.objectApp); // <FIX THIS
-
-  const fileContent = await fsPromise.readFile(extFilePath);
-  //console.log(fileContent);
   const mainWindow = BrowserWindow.getAllWindows()[0];
-  //console.log(mainWindow);
-  await mainWindow.webContents.executeJavaScript(fileContent);
+
+  // app
+  const extFilePath_App = path.join(
+    extensionDir,
+    extension.packageFiles.appObjectFilename
+  );
+  const fileContent_App = await fsPromise.readFile(extFilePath_App);
+  await mainWindow.webContents.executeJavaScript(fileContent_App);
+  // player
+  const extFilePath_Player = path.join(
+    extensionDir,
+    extension.packageFiles.playerObjectFilename
+  );
+  const fileContent_Player = await fsPromise.readFile(extFilePath_Player);
+  await mainWindow.webContents.executeJavaScript(fileContent_Player);
   //mainWindow.webContents.executeJavaScript(
   //  `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`
   //);

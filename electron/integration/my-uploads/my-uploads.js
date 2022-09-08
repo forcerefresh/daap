@@ -10,12 +10,56 @@ const {
   processImage,
   processVideo,
   processVector,
+  processExtension,
   type2Filename,
   type2MediaFolder,
-} = require("./my-media-utils");
-const { Console } = require("console");
+} = require("./my-uploads-utils");
 
-ipcMain.on("getMediaSrc", async (event, dataStr) => {
+// API handlers
+
+ipcMain.on("MyUploads::Delete", async (event, dataStr) => {
+  const data = JSON.parse(dataStr);
+  const { type, ids } = data;
+
+  const deletedIds = [];
+
+  const myMedia = await loadMyMedia(type);
+
+  const newMyMedia = myMedia.filter((media) => idx.indexOf(media.id) === -1);
+  const delMyMedia = myMedia.find((media) => idx.indexOf(media.id) !== -1);
+
+  console.log(newMyMedia);
+  console.log(delMyMedia);
+
+  /*
+  switch (type) {
+    case "image": {
+      await deleteImages(ids);
+      break;
+    }
+    case "video": {
+      item = await deleteVideos(ids);
+      break;
+    }
+    case "vector": {
+      item = await deleteVector(ids);
+      break;
+    }
+    case "extension": {
+      item = await deleteEdtensions(ids);
+      break;
+    }
+    default: {
+      console.log(`Unknown media type to delete: ${type}`);
+    }
+  }*/
+
+  saveMyMedia(type, newMyMedia);
+
+  return { deletedIds: ids };
+});
+
+ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { type, mediaItem } = data;
 
@@ -23,7 +67,7 @@ ipcMain.on("getMediaSrc", async (event, dataStr) => {
 
   const myImagePath = path.join(
     userDataPath,
-    "my-media",
+    "my-uploads",
     type2MediaFolder(type),
     mediaItem.filename
   );
@@ -45,7 +89,7 @@ ipcMain.on("getMediaSrc", async (event, dataStr) => {
   };
 });
 
-ipcMain.handle("myMediaUpload", async (event, dataStr) => {
+ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const {
     fileBase64,
@@ -66,21 +110,8 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
 
   // const data2 = await fetch(fileBase64).then((res) => res.blob());
 
-  const userDataPath = app.getPath("userData");
-
   // create folders
-  const myMediaDir = path.join(userDataPath, "my-media");
-  if (!fs.existsSync(myMediaDir)) {
-    fs.mkdirSync(myMediaDir);
-  }
-  const myMediaMediaDir = path.join(
-    userDataPath,
-    "my-media",
-    type2MediaFolder(type)
-  );
-  if (!fs.existsSync(myMediaMediaDir)) {
-    fs.mkdirSync(myMediaMediaDir);
-  }
+  createMyMediaFolder(type);
 
   // full media path
   let item;
@@ -103,6 +134,10 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
       item = await processVector(fileBase64, type, fileMetadata);
       break;
     }
+    case "extension": {
+      item = await processExtension(fileBase64, type, fileMetadata);
+      break;
+    }
     default: {
       console.log(`Unknown media type: ${type}`);
     }
@@ -115,7 +150,7 @@ ipcMain.handle("myMediaUpload", async (event, dataStr) => {
   return { status: "OK" };
 });
 
-ipcMain.handle("myImagesFetchImages", async (event, dataStr) => {
+ipcMain.handle("MyUploads::Fetch", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { from, tag, search, perPage, type } = data;
 
@@ -129,13 +164,43 @@ ipcMain.handle("myImagesFetchImages", async (event, dataStr) => {
   }
 
   if (search) {
-    myMedia = myMedia.filter((image) => image.title.indexOf(search) !== -1);
+    if (type === "extension") {
+      myMedia = myMedia.filter(
+        (image) => image.name.toLoverCase().indexOf(search.toLowerCase()) !== -1
+      );
+    } else {
+      myMedia = myMedia.filter(
+        (image) =>
+          image.title.toLoverCase().indexOf(search.toLowerCase()) !== -1
+      );
+    }
   }
 
   myMedia = myMedia.splice(from, perPage);
 
+  if (type === "extension") {
+    for (let i = 0; i < myMedia.length; i++) {
+      const userDataPath = app.getPath("userData");
+      const iconPath = path.join(
+        userDataPath,
+        "my-uploads",
+        type2MediaFolder(type),
+        myMedia[i].type,
+        myMedia[i].packageFiles.icon
+      );
+
+      console.log(iconPath);
+      const svgData = await fsPromise.readFile(iconPath, { encoding: "utf8" });
+      // const buff = Buffer.from(svgData);
+      myMedia[i].logoUrl = svgData; //buff.toString("base64");
+    }
+
+    // add images
+  }
   return { data: myMedia, hasMore: from + perPage < totalItems };
 });
+
+// supporting functions
 
 async function loadMyMedia(type) {
   const myMediaPath = getMyMediaPath(type);
@@ -159,11 +224,11 @@ async function saveMyMedia(type, data) {
 
 function getMyMediaPath(type) {
   const userDataPath = app.getPath("userData");
-  const myImagesDir = path.join(userDataPath, "my-media");
+  const myImagesDir = path.join(userDataPath, "my-uploads");
   if (!fs.existsSync(myImagesDir)) {
     fs.mkdirSync(myImagesDir);
   }
-  return path.join(userDataPath, "my-media", type2Filename(type));
+  return path.join(userDataPath, "my-uploads", type2Filename(type));
 }
 
 function convertToBlob(base64image) {
@@ -182,5 +247,22 @@ function convertToBlob(base64image) {
     return new Blob([ab], {
       type: mimeString,
     });
+  }
+}
+
+function createMyMediaFolder(type) {
+  const userDataPath = app.getPath("userData");
+
+  const myMediaDir = path.join(userDataPath, "my-uploads");
+  if (!fs.existsSync(myMediaDir)) {
+    fs.mkdirSync(myMediaDir);
+  }
+  const myMediaMediaDir = path.join(
+    userDataPath,
+    "my-uploads",
+    type2MediaFolder(type)
+  );
+  if (!fs.existsSync(myMediaMediaDir)) {
+    fs.mkdirSync(myMediaMediaDir);
   }
 }

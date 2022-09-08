@@ -48,7 +48,7 @@ export function getMediaSrc(
         }
 
         return ipcRenderer.sendSync(
-          "getMediaSrc",
+          "MyUploads::GetMediaSrc",
           JSON.stringify({ type, mediaItem })
         );
       }
@@ -77,7 +77,7 @@ export function getMediaSrc(
         }
 
         return ipcRenderer.sendSync(
-          "getMediaSrc",
+          "MyUploads::GetMediaSrc",
           JSON.stringify({ type, mediaItem })
         );
       }

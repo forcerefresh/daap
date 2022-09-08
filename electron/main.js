@@ -8,7 +8,7 @@ require("./top-menu");
 require("./integration/project/project");
 require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
-require("./integration/my-media/my-media");
+require("./integration/my-uploads/my-uploads");
 require("./integration/extensions/extensions");
 
 // electron reloader
@@ -73,7 +73,7 @@ function createWindow() {
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) {
-  app.quit();
+  //app.quit();
 } else {
   app.on(
     "second-instance",

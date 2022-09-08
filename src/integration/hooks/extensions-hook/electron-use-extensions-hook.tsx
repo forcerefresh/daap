@@ -54,12 +54,15 @@ export const useExtensionsHook = () => {
   };
 
   /*uninstall extension*/
-  const uninstallExtension = (id: number): Promise<IExtensionItem> => {
+  const uninstallExtension = (props: {
+    id: number;
+    source?: "marketplace" | "local";
+  }): Promise<IExtensionItem> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
       ipcRenderer
-        .invoke("Extensions::UninstallExtension", JSON.stringify({ id }))
+        .invoke("Extensions::UninstallExtension", JSON.stringify(props))
         .then((extension: IExtensionItem) => {
           resolve(extension);
         });

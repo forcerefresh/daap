@@ -18,12 +18,12 @@ function getPlayerPath() {
 
 function getMyImagesPath() {
   const userDataPath = app.getPath("userData");
-  return path.join(userDataPath, "my-media", "my-images");
+  return path.join(userDataPath, "my-uploads", "my-images");
 }
 
 function getMyVideosPath() {
   const userDataPath = app.getPath("userData");
-  return path.join(userDataPath, "my-media", "my-videos");
+  return path.join(userDataPath, "my-uploads", "my-videos");
 }
 
 function getBucketPreviewPath() {

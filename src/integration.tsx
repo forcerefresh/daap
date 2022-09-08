@@ -191,8 +191,10 @@ export const IntegrationContext = React.createContext({
       Promise.resolve({} as IExtensionItem),
 
     /* uninstall extension */
-    uninstallExtension: (id: number): Promise<any> =>
-      Promise.resolve({} as IExtensionItem),
+    uninstallExtension: (props: {
+      id: number;
+      source?: "marketplace" | "local";
+    }): Promise<any> => Promise.resolve({} as IExtensionItem),
   }),
 
   useProjectHook: () => ({
@@ -307,10 +309,11 @@ function useObjectStorageFactory() {
 
 function useMyMediaHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/my-media/electron-my-media-hook")
+    return require("./integration/hooks/my-uploads/electron-my-uploads-hook")
       .useMyMediaHook;
   } else {
-    return require("./integration/hooks/my-media/my-media-hook").useMyMediaHook;
+    return require("./integration/hooks/my-uploads/my-uploads-hook")
+      .useMyMediaHook;
   }
 }
 

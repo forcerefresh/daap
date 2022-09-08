@@ -45,7 +45,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     uninstallExtension,
     getInstalledExtensions,
   } = globalContext.useExtensionsHook();
-  const UploadComponent = globalContext?.getMyUploadComponent;
+
   const { getLicenseDetails } = globalContext.useLicenseHook();
 
   const [apiKey, setApiKey] = useState<string | undefined>();
@@ -95,11 +95,11 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     );
   };
 
+  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
+
   useEffect(() => {
     // debounceFetchData();
   }, []);
-
-  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
   const uninstallIdRef = useRef<IExtensionItem | undefined>();
   const onUninstall = (extension: IExtensionItem) => {
@@ -112,21 +112,22 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     if (!uninstallIdRef.current?.id) return;
 
-    uninstallExtension(uninstallIdRef.current.id).then(
-      (mItem?: Partial<IExtensionItem>) => {
-        getInstalledExtensions().then((res) => {
-          setInstalledExtensions(res.items);
-        });
+    uninstallExtension({
+      id: uninstallIdRef.current.id,
+      source: "marketplace",
+    }).then((mItem?: Partial<IExtensionItem>) => {
+      getInstalledExtensions().then((res) => {
+        setInstalledExtensions(res.items);
+      });
 
-        setIsUninstallOpen(false);
-        setUninstallLoading(false);
+      setIsUninstallOpen(false);
+      setUninstallLoading(false);
 
-        AppToaster.show({
-          intent: "success",
-          message: `Extension "${mItem?.name}" is successfully uninstalled.`,
-        });
-      }
-    );
+      AppToaster.show({
+        intent: "success",
+        message: `Extension "${mItem?.name}" is successfully uninstalled.`,
+      });
+    });
   };
 
   const uninstallCancel = () => {
@@ -139,7 +140,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       ...currentlyInstallingExtensions,
       [item.type]: true,
     });
-    installExtension(item).then((mItem) => {
+    installExtension({ ...item, source: "marketplace" }).then((mItem) => {
       loadAndRegisterExternalComponent(mItem).then(() => {});
 
       AppToaster.show({
@@ -163,16 +164,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     return null;
   }
   return (
-    <div className={css.ExtensionsPanel}>
-      <UploadComponent
-        type="extension"
-        onComplete={() => {
-          //setForceUpdate(Math.random());
-        }}
-        onStop={() => {
-          //setForceUpdate(Math.random());
-        }}
-      />
+    <div className={css.extensionsPanel}>
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -202,7 +194,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       </div>
 
       <div className={cx(css.headerSection, css.tableHeader)}>
-        <div className={css.id}>ID</div>
+        {/*<div className={css.id}>ID</div>*/}
         <div className={css.thumb}></div>
         <div className={css.name}>Name &amp; Description</div>
         <div className={css.created}>Created</div>
@@ -251,7 +243,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           {extensions?.map((extension, idx) => (
             <div key={extension.type}>
               <div className={cx(css.headerSection, css.tableRow)}>
-                <div className={css.id}>{extension.id}</div>
+                {/*<div className={css.id}>{extension.id}</div>*/}
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
                     <img src={`${extension.logoUrl}`}></img>

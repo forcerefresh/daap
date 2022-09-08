@@ -42,7 +42,7 @@ export const useMyMediaHook = () => {
     return new Promise((resolve, reject) => {
       ipcRenderer
         .invoke(
-          "myMediaUpload",
+          "MyUploads::Upload",
           JSON.stringify({
             fileBase64,
             fileMetadata,
@@ -106,12 +106,27 @@ export const useMyMediaHook = () => {
 
     return new Promise((resolve, reject) => {
       ipcRenderer
-        .invoke("myImagesFetchImages", JSON.stringify(props))
+        .invoke("MyUploads::Fetch", JSON.stringify(props))
         .then((result: any) => {
           resolve(result);
         });
     });
   };
 
-  return { upload, fetchImages };
+  const deleteImages = async (
+    type: MediaType,
+    ids: string[]
+  ): Promise<{ deletedIds: string[] }> => {
+    const { ipcRenderer } = window.require("electron");
+
+    return new Promise((resolve, reject) => {
+      ipcRenderer
+        .invoke("MyUploads::Delete", JSON.stringify({ type, ids }))
+        .then((result: any) => {
+          resolve(result);
+        });
+    });
+  };
+
+  return { upload, fetchImages, deleteImages };
 };

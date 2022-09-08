@@ -236,5 +236,6 @@ export const useMyMediaHook = () => {
 
     return { deletedIds: ids };
   };
+
   return { upload, fetchImages, deleteImages };
 };

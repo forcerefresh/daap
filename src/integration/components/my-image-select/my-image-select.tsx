@@ -38,6 +38,22 @@ interface MyImageSelectProps {
 */
 export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   const { onStop, onComplete, type } = props;
+
+  logger.log(type);
+
+  const accept =
+    type === "image"
+      ? "image/jpeg, image/png, image/gif"
+      : type === "video"
+      ? "video/mp4"
+      : type === "vector"
+      ? "image/svg+xml"
+      : type === "extension"
+      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+      : undefined;
+
+  logger.log(accept);
+
   const {
     acceptedFiles,
     getRootProps,
@@ -46,16 +62,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
     isDragAccept,
     isDragReject,
   } = useDropzone({
-    accept:
-      type === "image"
-        ? "image/jpeg, image/png, image/gif"
-        : type === "video"
-        ? "video/mp4"
-        : type === "vector"
-        ? "image/svg+xml"
-        : type === "extension"
-        ? "application/zip"
-        : undefined,
+    accept,
   });
   const [formData, setFormData] = useState<UploadFileInfo[]>([]);
 
