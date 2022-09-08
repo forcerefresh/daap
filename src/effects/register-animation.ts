@@ -1,25 +1,17 @@
-import cubeDef from "./cube/cube.animation";
-import fadeDef from "./fade/fade.animation";
-import fallingLeavesDef from "./falling-leaves/falling-leaves.animation";
-import slideDef from "./slide/slide.animation";
-import tilesZoomDef from "./tiles-zoom/tiles-zoom.animations";
-import tilesFadeDef from "./tiles-fade/tiles-fade.animation";
-import tilesSlideDef from "./tiles-slide/tiles-slide.animation";
+import { registerEffect } from "../webslider-sdk/src/effects/effects-register";
+import { fadeDef, fadeAppDef } from "./fade/fade";
+import { slideDef, slideAppDef } from "./slide/slide";
+import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";
+import {
+  fallingLeavesDef,
+  fallingLeavesAppDef,
+} from "./falling-leaves/falling-leaves";
+import { tilesFadeDef, tilesFadeAppDef } from "./tiles-fade/tiles-fade";
+import { tilesSlideDef, tilesSlideAppDef } from "./tiles-slide/tiles-slide";
 
-const animations: any[] = [];
-
-export function registerAnimation(animation: any) {
-  animations.push(animation);
-}
-
-export function getAnimationDefinition(effectId: string): any {
-  return animations.find((item) => item.effectId === effectId);
-}
-
-registerAnimation({ ...fadeDef });
-registerAnimation({ ...slideDef });
-registerAnimation({ ...tilesZoomDef });
-registerAnimation({ ...fallingLeavesDef });
-registerAnimation({ ...cubeDef });
-registerAnimation({ ...tilesFadeDef });
-registerAnimation({ ...tilesSlideDef });
+registerEffect(fadeAppDef, fadeDef);
+registerEffect(slideAppDef, slideDef);
+registerEffect(tilesZoomAppDef, tilesZoomDef);
+registerEffect(fallingLeavesAppDef, fallingLeavesDef);
+registerEffect(tilesFadeAppDef, tilesFadeDef);
+registerEffect(tilesSlideAppDef, tilesSlideDef);

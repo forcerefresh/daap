@@ -1,9 +1,9 @@
 import gsap from "gsap";
 import { getObjectContentElementAndHtml } from "../common";
-import { ISlideEffect, slide } from "./slide.types";
+import { ISlideEffect, SLIDE_ANIMATION } from "./slide.types";
 
 gsap.registerEffect({
-  name: slide,
+  name: SLIDE_ANIMATION,
   effect: function (targets: any, config: ISlideEffect) {
     // get element
     const { objectContentElement } = getObjectContentElementAndHtml(targets[0]);

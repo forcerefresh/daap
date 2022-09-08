@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const tilesZoom = "tilesZoom";
+export const TILES_ZOOM_ANIMATION = "tilesZoom";
 
 export interface ITilesZoomEffect extends IEffectBase {
   rows: number;

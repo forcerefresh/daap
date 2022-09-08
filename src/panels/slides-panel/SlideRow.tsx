@@ -22,6 +22,7 @@ export interface ISlideRowProps {
   selectedSlideIds: string[];
   selectionForProperties: selectForPropertiesProps | null;
   realSlideDuration: string;
+  realSlideExitDuration: string;
   inPlay: boolean;
 }
 
@@ -32,6 +33,7 @@ export function SlideRow(props: ISlideRowProps) {
     activeSlideId,
     selectionForProperties,
     realSlideDuration,
+    realSlideExitDuration,
     inPlay,
     onSlideClick,
     setStagePreview,
@@ -123,7 +125,9 @@ export function SlideRow(props: ISlideRowProps) {
       </div>
       <div className={css.slideDescription}>
         <span className={css.slideName}>{slide.name}</span>
-        <span className={css.durationLabel}>{realSlideDuration}</span>
+        <span className={css.durationLabel}>
+          {realSlideDuration} [{realSlideExitDuration}]
+        </span>
       </div>
       <Button
         minimal

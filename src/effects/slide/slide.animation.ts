@@ -4,7 +4,7 @@ import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ISlideEffect } from "./slide.types";
 
-function slideAnimation() {
+export function slideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
   const initialState = {
@@ -137,9 +137,3 @@ function slideAnimation() {
     direction,
   };
 }
-
-const slideDef = {
-  effectId: "slide",
-  effectFunc: slideAnimation,
-};
-export default slideDef;

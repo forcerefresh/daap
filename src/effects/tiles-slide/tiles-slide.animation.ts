@@ -7,9 +7,9 @@ import {
   getObjectContentElementAndHtml,
   updateTilesSize,
 } from "../common";
-import { ITilesSlideInnerEffect, tilesSlideInner } from "./tiles-slide.types";
+import { ITilesSlideEffect } from "./tiles-slide.types";
 
-function tilesSlideAnimation() {
+export function tilesSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
@@ -20,7 +20,7 @@ function tilesSlideAnimation() {
 
   let elObserver: ResizeObserver;
 
-  function init(config: ITilesSlideInnerEffect) {
+  function init(config: ITilesSlideEffect) {
     logger.debug("tilesSlide init");
 
     element = getObjectElementById(config.itemId!);
@@ -205,9 +205,3 @@ function tilesSlideAnimation() {
     destroy,
   };
 }
-
-const tilesSlideDef = {
-  effectId: tilesSlideInner,
-  effectFunc: tilesSlideAnimation,
-};
-export default tilesSlideDef;

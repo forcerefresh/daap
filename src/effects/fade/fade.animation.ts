@@ -4,12 +4,16 @@ import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { IFadeEffect } from "./fade.types";
 
-function fadeAnimation() {
+export function fadeAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
+  let isInitialized = false;
+
   function init(config: IFadeEffect) {
     logger.debug("fade init");
+
+    if (isInitialized) return;
 
     element = getObjectElementById(config.itemId!);
     // initialState.opacity = element.style.opacity;
@@ -20,6 +24,8 @@ function fadeAnimation() {
       duration: config.duration! / 1000,
       opacity: 0,
     });
+
+    isInitialized = true;
   }
 
   function rootStart(config: any) {
@@ -28,6 +34,7 @@ function fadeAnimation() {
     if (config.type === "in") {
       timeline.pause();
       timeline.progress(0);
+      console.log("Aaaaaaaaaaaaaa123456");
     }
   }
 
@@ -37,6 +44,7 @@ function fadeAnimation() {
     if (config.type === "out") {
       timeline.pause();
       timeline.progress(0);
+      console.log("Aaaaaaaaaaaaaa123");
     }
   }
 
@@ -102,9 +110,3 @@ function fadeAnimation() {
     direction,
   };
 }
-
-const fadeDef = {
-  effectId: "fade",
-  effectFunc: fadeAnimation,
-};
-export default fadeDef;

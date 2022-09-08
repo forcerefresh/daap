@@ -1,3 +1,4 @@
+import { merge } from "lodash-es";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import {
@@ -6,10 +7,9 @@ import {
   getObjectContentElementAndHtml,
   updateTilesSize,
 } from "../common";
-import { ITilesFadeEffect, tilesFade } from "./tiles-fade.types";
-import { merge } from "lodash-es";
+import { ITilesFadeEffect } from "./tiles-fade.types";
 
-function tilesFadeAnimation() {
+export function tilesFadeAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
@@ -198,9 +198,3 @@ function tilesFadeAnimation() {
     destroy,
   };
 }
-
-const tilesFadeDef = {
-  effectId: tilesFade,
-  effectFunc: tilesFadeAnimation,
-};
-export default tilesFadeDef;

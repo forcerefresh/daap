@@ -11,7 +11,6 @@ import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { ChangeEvent, useState } from "react";
 import { connect } from "react-redux";
-import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { EffectType } from "../../effects/types";
 import {
   IObject,
@@ -38,6 +37,10 @@ import {
   getDefaultEffectConfigForType,
   getEffectTypesForItem,
 } from "./EffectPanelUtils";
+import {
+  getAppEffectDefinition,
+  getEffectsOptions,
+} from "../../webslider-sdk/src/effects/effects-register";
 
 type IEffectPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -117,8 +120,8 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
   };
 
   const addEffectToSection = (effId: string, effectType: EffectType) => {
-    const effDef = getEffectDefinition(effId);
-    const isStructural = !effDef.defaults.canBeCombined;
+    const effDef = getAppEffectDefinition(effId);
+    const isStructural = !effDef?.formDefaults.canBeCombined;
 
     const newItem = cloneDeep(item);
     const length = newItem.transitions[effectType].length;
@@ -135,9 +138,11 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
       [key: string]: any;
     };
 
-    const flatEffDef = flattenForm(effDef.definition.form as IFormLayoutItem[]);
+    const flatEffDef = flattenForm(
+      effDef?.formDefinition.form as IFormLayoutItem[]
+    );
     flatEffDef.forEach((item) => {
-      values[item.propertyName] = effDef.defaults[item.propertyName];
+      values[item.propertyName] = effDef?.formDefaults[item.propertyName];
     });
     transition.effect.values = values;
 

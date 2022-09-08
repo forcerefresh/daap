@@ -10,7 +10,7 @@ import { getObjectElementById, getParameters } from "../animation-utils";
 import { ITilesZoomEffect } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
 
-function tilesZoomAnimation() {
+export function tilesZoomAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
@@ -202,9 +202,3 @@ function tilesZoomAnimation() {
     destroy,
   };
 }
-
-const tilesZoomDef = {
-  effectId: "tilesZoom",
-  effectFunc: tilesZoomAnimation,
-};
-export default tilesZoomDef;

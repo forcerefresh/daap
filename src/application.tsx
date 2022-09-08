@@ -18,6 +18,12 @@ import DevelopmentManager from "./utils/development/DevelopmentManager";
 import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
 import { PreviewTimelineContextProvider } from "./utils/preview-timeline-provider/PreviewTimelineProvider";
 import { logger } from "./webslider-sdk/src/utils/logger/logger";
+import {
+  registerExternalEffect,
+  unregisterEffect,
+} from "./webslider-sdk/src/effects/effects-register";
+
+const global = window as any;
 
 function application(): {
   component: React.ReactElement;
@@ -53,10 +59,18 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-if (!(window as any).WebSlider_GlobalScope) {
-  (window as any).WebSlider_GlobalScope = {};
+if (!global.WebSlider_GlobalScope) {
+  global.WebSlider_GlobalScope = {};
 }
-(window as any).WebSlider_GlobalScope.registerExternalObject =
-  registerExternalObject;
 
-(window as any).WebSlider_GlobalScope.unregisterObject = unregisterObject;
+// EXTERNAL OBJECT REGISTER
+global.WebSlider_GlobalScope.registerExternalObject = registerExternalObject;
+
+// EXTERNAL OBJECT UNREGISTER
+global.WebSlider_GlobalScope.unregisterObject = unregisterObject;
+
+// EXTERNAL EFFECT REGISTER
+global.WebSlider_GlobalScope.registerExternalEffect = registerExternalEffect;
+
+// EXTERNAL EFFECT UNREGISTER
+global.WebSlider_GlobalScope.unregisterObject = unregisterEffect;

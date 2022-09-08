@@ -584,19 +584,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
 
     const layerClassName = "layer-" + layer.id;
-
+    const t = layerValues.layoutChildren.type;
     let layerCss = "";
     if (layerValues.layoutChildren.itemsGap.type === "common") {
       layerCss += `
       .${layerClassName} > * {
-        margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
+        ${t === "column" ? "margin-bottom" : "margin-right"}: ${
+        layerValues.layoutChildren.itemsGap.commonValue
+      };
       }
     `;
     } else {
       layerValues.layoutChildren.itemsGap.eachValues.forEach(
         (eachValue, idx) => {
           layerCss += `.${layerClassName} > *:nth-child(${idx + 1}) {
-          margin-bottom: ${eachValue};
+            ${t === "column" ? "margin-bottom" : "margin-right"}: ${eachValue};
         }
         `;
         }

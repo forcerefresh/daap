@@ -804,6 +804,10 @@ export function getButtonHtml(props: {
   const css = `<style>
     .object-content-${object.id}:hover {
       ${cssHoverStyle.replaceAll(";", " !important;")}
+      outline:0 !important;
+    }
+    .object-content-${object.id} {
+      outline:0 !important;
     }
     </style>`;
 

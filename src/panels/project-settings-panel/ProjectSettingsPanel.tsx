@@ -24,6 +24,7 @@ import { IGlobalSlideOverlapTime } from "../../webslider-sdk/src/common/i-slider
 
 enum ProjectPanelSections {
   Slider = "Slider",
+  Slide = "Slide",
   Preview = "Preview",
   Breakpoints = "Breakpoints",
 }
@@ -49,6 +50,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
     [key: string]: boolean;
   }>({
     [ProjectPanelSections.Slider]: true,
+    [ProjectPanelSections.Slide]: true,
     [ProjectPanelSections.Preview]: true,
     [ProjectPanelSections.Breakpoints]: true,
   });
@@ -97,6 +99,40 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
         {visibleSectionIds[ProjectPanelSections.Slider] && (
           <div className={settingsCss.panel}>
             <FormGroup>
+              <div className="input60">
+                {getColorField(
+                  "Slider background color",
+                  settings.sliderBackgroundColor,
+                  (sliderBackgroundColor: any) => {
+                    _updateProjectSettings({ sliderBackgroundColor });
+                  },
+                  ""
+                )}
+              </div>
+            </FormGroup>
+          </div>
+        )}
+      </section>
+
+      <section>
+        <div
+          className={settingsCss.sectionHeader}
+          onClick={() => toggleSection(ProjectPanelSections.Slide)}
+        >
+          <Button
+            minimal
+            small={true}
+            icon={
+              visibleSectionIds[ProjectPanelSections.Slide]
+                ? "caret-down"
+                : "caret-right"
+            }
+          ></Button>
+          Slider
+        </div>
+        {visibleSectionIds[ProjectPanelSections.Slide] && (
+          <div className={settingsCss.panel}>
+            <FormGroup>
               <div className="">
                 {getUnitNumericFiled(
                   "Slide duration",
@@ -111,41 +147,27 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
               </div>
               <div className="">
                 {getUnitNumericFiled(
-                  "Exit slide duration",
+                  "Exit",
                   settings.exitSlideDuration,
                   (value: string) => {
                     _updateProjectSettings({ exitSlideDuration: value });
                   },
-                  undefined,
+                  "Out Effects start point. It's present time from the end of slide. Example: Slide: 10s; Exit: 2s; 10s - 2s= 8s. Out effects start at 8th second.",
                   { style: { width: "100px" } },
                   ["ms", "s"]
                 )}
               </div>
-              {/* <div className="">
-                {getInheritTimeField(
-                  "Exit slide overlap duration",
-                  settings.exitOverlapSlideDuration,
-                  [
-                    { label: "Custom", value: "custom" },
-                    {
-                      label: "Inherit 'Overlap' duration from next slide",
-                      value: "inheritOverlapFromNextSlide",
-                    },
-                  ],
-                  (value: IGlobalSlideOverlapTime) => {
-                    _updateProjectSettings({ exitOverlapSlideDuration: value });
+              <div className="">
+                {getCheckboxField(
+                  "First slide effect skip",
+                  settings.skipFirstSlideEffect,
+                  (skipFirstSlideEffect: boolean) => {
+                    _updateProjectSettings({
+                      skipFirstSlideEffect: skipFirstSlideEffect,
+                    });
                   },
-                  null
-                )}
-              </div> */}
-              <div className="input60">
-                {getColorField(
-                  "Slider background color",
-                  settings.sliderBackgroundColor,
-                  (sliderBackgroundColor: any) => {
-                    _updateProjectSettings({ sliderBackgroundColor });
-                  },
-                  ""
+                  "When first slide start for the first time you can skip slide effect.",
+                  { style: { width: "100px" } }
                 )}
               </div>
             </FormGroup>

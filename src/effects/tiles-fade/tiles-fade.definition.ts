@@ -4,7 +4,7 @@ import {
   ISelectInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { tilesFade, ITilesFadeEffect } from "./tiles-fade.types";
+import { TILES_FADE_ANIMATION, ITilesFadeEffect } from "./tiles-fade.types";
 
 export type ITilesFadeTuple = [
   INumberInput<"columns">,
@@ -13,7 +13,7 @@ export type ITilesFadeTuple = [
 ];
 
 export const tilesFadeDefinition: IEffectDefinition<ITilesFadeTuple> = {
-  id: tilesFade,
+  id: TILES_FADE_ANIMATION,
   name: "Tiles Fade",
   form: [
     {
@@ -56,7 +56,7 @@ export const tilesFadeDefinition: IEffectDefinition<ITilesFadeTuple> = {
 };
 
 export const tilesFadeDefaults: ITilesFadeEffect = {
-  id: tilesFade,
+  id: TILES_FADE_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

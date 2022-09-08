@@ -1,9 +1,7 @@
 import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import classnames from "classnames";
-import { cloneDeep, get, set, without } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 import React, { useState } from "react";
-import { connect } from "react-redux";
-import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { EasingOptions, EffectType } from "../../effects/types";
 import { getInputForm } from "../../inputs/input-factory";
 import {
@@ -13,24 +11,17 @@ import {
   getTextField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
-import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
-import {
-  updateLayer,
-  updateObject,
-  updateSlide,
-} from "../../store/actions/actions";
-import { ILayer } from "../../store/reducers/i-layers";
-import { ISlide } from "../../store/reducers/i-slides";
-import { IStore } from "../../store/store";
+import { ITransition } from "../../webslider-sdk/src/objects/i-object";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
-import {
-  IFormItem,
-  IFormLayoutItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+import { IFormLayoutItem } from "../../webslider-sdk/src/form/i-form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
+import {
+  getAppEffectDefinition,
+  getEffectsOptions,
+} from "../../webslider-sdk/src/effects/effects-register";
 /*
 type IEffectConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -83,10 +74,10 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   }*/
 
   const renderEffectForm = () => {
-    const effectDefinition = getEffectDefinition(transition.effect.id);
+    const effectDefinition = getAppEffectDefinition(transition.effect.id);
 
     const flatForm = flattenForm(
-      effectDefinition.definition.form as IFormLayoutItem[]
+      effectDefinition?.formDefinition.form as IFormLayoutItem[]
     );
 
     const inputs = flatForm
@@ -112,7 +103,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         }
 
         const value = (transition.effect.values as any)[item.propertyName];
-        const defaultValue = effectDefinition.defaults[item.propertyName];
+        const defaultValue = effectDefinition?.formDefaults[item.propertyName];
         const inputProps = {
           ...item,
           value: typeof value !== "undefined" ? value : defaultValue,
@@ -133,8 +124,8 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
       <FormWithLayout
         values={transition.effect.values || {}}
         inputs={inputs}
-        form={effectDefinition.definition.form as IFormLayoutItem[]}
-        formId={`${effectType}_${effectDefinition.definition.id}`}
+        form={effectDefinition?.formDefinition.form as IFormLayoutItem[]}
+        formId={`${effectType}_${effectDefinition?.formDefinition.id}`}
       />
     );
 
@@ -154,7 +145,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   };
 
   const effDef = (type: string) => {
-    return getEffectDefinition(transition.effect.id);
+    return getAppEffectDefinition(transition.effect.id);
     /* return getEffectDefinition(
       get(objectOrLayer, "transitions." + type + "[0].effect.id")
     );*/
@@ -167,7 +158,8 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   const delayInput = () => (
     <div className="">
       {getUnitNumericFiled(
-        effectType === "out" ? "Gap" : "Delay",
+        // effectType === "out" ? "Gap" : "Delay",
+        "Delay",
         transition.delay,
         (value: string) => {
           const newTransition = cloneDeep(transition);
@@ -204,8 +196,10 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         "Exit",
         transition.outStartTime,
         [
-          { label: "Inherit from slide", value: "inheritFromSlide" },
-          { label: "Custom exit duration", value: "custom" },
+          {
+            label: "Use slides 'Exit' configuration",
+            value: "inheritFromSlide",
+          },
           { label: "Absolute time from beginning", value: "absolute" },
         ],
         (outStartTime: any) => {
@@ -317,13 +311,14 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               const values = (transition.effect.values || {}) as {
                 [key: string]: any;
               };
-              const effDef = getEffectDefinition(value);
+              const effDef = getAppEffectDefinition(value);
               const flatEffDef = flattenForm(
-                effDef.definition.form as IFormLayoutItem[]
+                effDef?.formDefinition.form as IFormLayoutItem[]
               );
 
               flatEffDef.forEach((item) => {
-                values[item.propertyName] = effDef.defaults[item.propertyName];
+                values[item.propertyName] =
+                  effDef?.formDefaults[item.propertyName];
               });
               newTransition.effect.values = values;
 
@@ -350,8 +345,9 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
             effectType === "layer") && (
             <>
               <div className={css.inlineFlex}>
-                {effDef(effectType).defaults.hasDelay && delayInput()}
-                {effDef(effectType).defaults.hasDuration && durationInput()}
+                {effDef(effectType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(effectType)?.formDefaults.hasDuration &&
+                  durationInput()}
               </div>
             </>
           )}
@@ -360,8 +356,9 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
             <>
               {outEffectStartInput()}
               <div className={css.inlineFlex}>
-                {effDef(effectType).defaults.hasDuration && durationInput()}
-                {effDef(effectType).defaults.hasDelay && delayInput()}
+                {effDef(effectType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(effectType)?.formDefaults.hasDuration &&
+                  durationInput()}
               </div>
             </>
           )}
@@ -369,15 +366,16 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           {effectType === "slide" && (
             <div className={css.inlineFlex}>
               {overlapInput()}
-              {effDef(effectType).defaults.hasDuration && durationInput()}
+              {effDef(effectType)?.formDefaults.hasDuration && durationInput()}
             </div>
           )}
 
           {effectType === "event" && (
             <>
               <div className={css.inlineFlex}>
-                {effDef(effectType).defaults.hasDelay && delayInput()}
-                {effDef(effectType).defaults.hasDuration && durationInput()}
+                {effDef(effectType)?.formDefaults.hasDelay && delayInput()}
+                {effDef(effectType)?.formDefaults.hasDuration &&
+                  durationInput()}
               </div>
               {eventInput()}
               {reverseEventInput()}
@@ -392,7 +390,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         <div className={css.dynamicFields}>{renderEffectForm()}</div>
 
         <div>
-          {effDef(effectType).defaults.hasEase &&
+          {effDef(effectType)?.formDefaults.hasEase &&
             getSelectField(
               "Easing",
               transition.ease,
@@ -403,7 +401,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
                 onTransitionChange(newTransition);
               }
             )}
-          {effDef(effectType).defaults.hasChildEase &&
+          {effDef(effectType)?.formDefaults.hasChildEase &&
             getSelectField(
               "Child easing",
               transition.childEase,
@@ -415,7 +413,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
               }
             )}
           <div className="input60">
-            {effDef(effectType).defaults.hasTimeDistribution &&
+            {effDef(effectType)?.formDefaults.hasTimeDistribution &&
               getNumericFiled(
                 "Time distribution",
                 transition.timeDistribution,

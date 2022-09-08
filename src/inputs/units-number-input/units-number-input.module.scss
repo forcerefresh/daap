@@ -1,0 +1,10 @@
+.main {
+  :global {
+    .bp3-input-group {
+      display: inline-block;
+    }
+    .bp3-form-content {
+      display: block !important;
+    }
+  }
+}

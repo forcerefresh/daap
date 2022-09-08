@@ -1,9 +1,9 @@
 import gsap from "gsap";
 import { getMethodByType } from "../common";
-import { fade, IFadeEffect } from "./fade.types";
+import { FADE_ANIMATION, IFadeEffect } from "./fade.types";
 
 gsap.registerEffect({
-  name: fade,
+  name: FADE_ANIMATION,
   effect: function (targets: any, config: IFadeEffect) {
     return gsap[getMethodByType(config.type)](targets, {
       ease: config.ease,

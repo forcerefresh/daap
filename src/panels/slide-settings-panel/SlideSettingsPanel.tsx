@@ -1,23 +1,24 @@
 import { cloneDeep, get, set } from "lodash-es";
 import cx from "classnames";
 import React from "react";
-import { Text } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import {
   getNumericFiled,
   getSelectField,
   getTextField,
-  getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
-import { ISlide, SlideType } from "../../store/reducers/i-slides";
+import { ISlide } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 
 import css from "./SlideSettingsPanel.module.scss";
-import { getEffectDefinition, getEffectsOptions } from "../../effects/effects";
 import { getInputForm } from "../../inputs/input-factory";
 // import { getRealSlideDuration } from "../../utils/utils";
 import { EasingOptions } from "../../effects/types";
+import {
+  getAppEffectDefinition,
+  getEffectsOptions,
+} from "../../webslider-sdk/src/effects/effects-register";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -60,9 +61,9 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
     object: ISlide,
     valuesPath: string
   ) => {
-    const effectDefinition = getEffectDefinition(effectId);
+    const effectDefinition = getAppEffectDefinition(effectId);
 
-    return effectDefinition.definition.form.map((item) => {
+    return effectDefinition?.formDefinition.form.map((item: any) => {
       function onChange(value: any) {
         const retObj = cloneDeep(object);
         if (retObj) {
@@ -75,7 +76,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
       }
 
       const value = get(object, valuesPath)[item.propertyName];
-      const defaultValue = effectDefinition.defaults[item.propertyName];
+      const defaultValue = effectDefinition.formDefaults[item.propertyName];
       const inputProps = {
         ...item,
         value: typeof value !== "undefined" ? value : defaultValue,
@@ -86,7 +87,9 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
 
   if (!slide) return null;
 
-  const effDef = getEffectDefinition(get(slide, `slideTransition.effect.id`));
+  const effDef = getAppEffectDefinition(
+    get(slide, `slideTransition.effect.id`)
+  );
 
   return (
     <div className={cx("bp3-dark", css.slideSettings)}>
@@ -152,9 +155,10 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               set(obj, `slideTransition.effect.id`, value);
 
               const values = get(obj, `slideTransition.effect.values`) || {};
-              const effDef = getEffectDefinition(value);
-              effDef.definition.form.forEach((item) => {
-                values[item.propertyName] = effDef.defaults[item.propertyName];
+              const effDef = getAppEffectDefinition(value);
+              effDef?.formDefinition.form.forEach((item: any) => {
+                values[item.propertyName] =
+                  effDef.formDefaults[item.propertyName];
               });
               set(obj, `slideTransition.effect.values`, values);
 
@@ -165,7 +169,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             {/*overlapInput()*/}
             {durationInput()}
           </div>
-          {effDef.defaults.hasEase &&
+          {effDef?.formDefaults.hasEase &&
             getSelectField(
               "Easing",
               get(slide, "slideTransition.effect.values.ease"),

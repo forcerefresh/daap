@@ -1,13 +1,13 @@
-import { fade, IFadeEffect } from "./fade.types";
+import { FADE_ANIMATION, IFadeEffect } from "./fade.types";
 
 export const fadeDefinition = {
-  id: fade,
+  id: FADE_ANIMATION,
   name: "Fade",
   form: [],
 };
 
 export const fadeDefaults: IFadeEffect = {
-  id: fade,
+  id: FADE_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

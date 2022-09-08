@@ -1,9 +1,12 @@
 import gsap, { TweenMax } from "gsap";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
+import {
+  FALLING_LEAVES_ANIMATION,
+  IFallingLeaves,
+} from "./falling-leaves.types";
 
 gsap.registerEffect({
-  name: fallingLeaves,
+  name: FALLING_LEAVES_ANIMATION,
   effect: function (targets: any, config: IFallingLeaves) {
     gsap.set(targets[0], { perspective: 600, display: "none" });
     targets[0].style.overflow = "hidden";

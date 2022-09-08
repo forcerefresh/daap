@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
+import { ITilesZoomEffect, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
@@ -12,7 +12,7 @@ import {
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 gsap.registerEffect({
-  name: tilesZoom,
+  name: TILES_ZOOM_ANIMATION,
   effect: function (targets: any, config: ITilesZoomEffect) {
     const target = targets[0];
 

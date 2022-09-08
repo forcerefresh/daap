@@ -8,11 +8,11 @@ import {
   tilesStartHandler,
   updateTilesSize,
 } from "../common";
-import { ITilesSlideInnerEffect, tilesSlideInner } from "./tiles-slide.types";
+import { ITilesSlideEffect, TILES_SLIDE_ANIMATION } from "./tiles-slide.types";
 
 gsap.registerEffect({
-  name: tilesSlideInner,
-  effect: function (targets: any, config: ITilesSlideInnerEffect) {
+  name: TILES_SLIDE_ANIMATION,
+  effect: function (targets: any, config: ITilesSlideEffect) {
     // get element and html
     const { objectContentElement, objectContentHtml } =
       getObjectContentElementAndHtml(targets[0]);

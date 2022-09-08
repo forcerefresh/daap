@@ -106,7 +106,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             commonSlideDuration
           )}
           {getInheritTimeField(
-            "Exit Duration",
+            "Exit",
             slide.exitDuration,
             [
               { label: "Inherit from default settings", value: "inherit" },

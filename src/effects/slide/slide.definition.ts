@@ -4,12 +4,12 @@ import {
   ISelectInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { ISlideEffect, slide } from "./slide.types";
+import { ISlideEffect, SLIDE_ANIMATION } from "./slide.types";
 
 export type ISlideTuple = [ISelectInput<"from">, INumberInput<"distance">];
 
 export const slideDefinition: IEffectDefinition<ISlideTuple> = {
-  id: slide,
+  id: SLIDE_ANIMATION,
   name: "Slide",
   form: [
     {
@@ -36,7 +36,7 @@ export const slideDefinition: IEffectDefinition<ISlideTuple> = {
 };
 
 export const slideDefaults: ISlideEffect = {
-  id: slide,
+  id: SLIDE_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

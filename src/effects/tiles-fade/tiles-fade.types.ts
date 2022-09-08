@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const tilesFade = "tilesFade";
+export const TILES_FADE_ANIMATION = "tiles-fade";
 
 export interface ITilesFadeEffect extends IEffectBase {
   rows: number;

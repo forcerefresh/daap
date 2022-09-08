@@ -30,7 +30,10 @@ import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
 import { SlideType } from "../../store/reducers/i-slides";
-import { getRealSlideDurationVisual } from "../../utils/utils";
+import {
+  getRealExitSlideDurationVis,
+  getRealSlideDurationVisual,
+} from "../../utils/utils";
 import { delay } from "lodash-es";
 import { SlideRow } from "./SlideRow";
 import { DndProvider } from "react-dnd";
@@ -247,6 +250,10 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   selectionForProperties={selectionForProperties}
                   inPlay={isSlideInPlay(slideId)}
                   realSlideDuration={getRealSlideDurationVisual(
+                    slide,
+                    settings
+                  )}
+                  realSlideExitDuration={getRealExitSlideDurationVis(
                     slide,
                     settings
                   )}

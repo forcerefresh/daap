@@ -19,6 +19,7 @@ export interface IObjectRowProps {
   selectedObjectIds: string[];
   selectionForProperties: selectForPropertiesProps | null;
   slideDuration: number;
+  slideExitDuration: number;
   updateObject: (object: IObject) => void;
   deleteObjects: (objectIds: string[]) => void;
   onDragingChange: (isDragging: boolean) => void;
@@ -31,6 +32,7 @@ export function ObjectRow(props: IObjectRowProps) {
     selectedObjectIds,
     selectionForProperties,
     slideDuration,
+    slideExitDuration,
     onObjectClick,
     updateObject,
     deleteObjects,
@@ -168,6 +170,7 @@ export function ObjectRow(props: IObjectRowProps) {
       <TimelineView
         object={object}
         slideDuration={slideDuration}
+        slideExitDuration={slideExitDuration}
       ></TimelineView>
     </div>
   );

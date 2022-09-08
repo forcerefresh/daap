@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const slide = "slide";
+export const SLIDE_ANIMATION = "slide";
 
 export interface ISlideEffect extends IEffectBase {
   distance: number;

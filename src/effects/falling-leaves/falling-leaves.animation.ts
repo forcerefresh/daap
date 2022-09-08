@@ -4,7 +4,7 @@ import { getObjectElementById } from "../animation-utils";
 import { IFallingLeaves } from "./falling-leaves.types";
 import { getMediaSrc } from "../../integration/utils/local-media";
 
-function fallingLeavesAnimation() {
+export function fallingLeavesAnimation() {
   let element: HTMLDivElement;
   let timelineArr: gsap.core.Timeline[] = [];
 
@@ -128,12 +128,6 @@ function fallingLeavesAnimation() {
     destroy,
   };
 }
-
-const fallingLeavesDef = {
-  effectId: "fallingLeaves",
-  effectFunc: fallingLeavesAnimation,
-};
-export default fallingLeavesDef;
 
 function rangeRandom(min: number, max: number) {
   return min + Math.random() * (max - min);

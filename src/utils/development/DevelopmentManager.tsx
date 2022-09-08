@@ -60,14 +60,14 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         hashJson = await (await fetch(hashUrl)).json();
       } catch (err: any) {
         logger.error(err);
-        const devItem: Partial<DevelopmentItem> = {
+        const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",
           statusMessage: `Something went wrong. Development item ${
             devItems[i].appDevUrl
           } cannot be loaded. Additional info: ${err?.toString?.()}`,
         };
-        await updateDevelopmentItem(devItem);
+        await updateDevelopmentItem(devItemUpdate);
 
         return;
       }
@@ -99,39 +99,56 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
             Math.random()
         );
 
-        const devItem: Partial<DevelopmentItem> = {
+        const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "OK",
           statusMessage: ``,
         };
-        await updateDevelopmentItem(devItem);
+        await updateDevelopmentItem(devItemUpdate);
 
         const global = (window as any).WebSlider_GlobalScope;
-        global.registerExternalObject(
-          {
-            ...global.appObjects[devItems[i].type],
-            development: true,
-          },
-          {
-            ...global.playerObjects[devItems[i].type],
-            development: true,
-          },
-          true
-        );
+
+        if (devItem.componentType === "object") {
+          global.registerExternalObject(
+            {
+              ...global.appObjects[devItems[i].type],
+              development: true,
+            },
+            {
+              ...global.playerObjects[devItems[i].type],
+              development: true,
+            },
+            true
+          );
+        }
+
+        if (devItem.componentType === "effect") {
+          global.registerExternalEffect(
+            {
+              ...global.appEffects[devItems[i].type],
+              development: true,
+            },
+            {
+              ...global.playerEffects[devItems[i].type],
+              development: true,
+            },
+            true
+          );
+        }
 
         logger.info(
-          `Development Component (${devItems[i].type}) has been loaded.`
+          `Development component (${devItem.componentType}:${devItems[i].type}) has been loaded.`
         );
       } catch (err: any) {
         logger.error(err);
-        const devItem: Partial<DevelopmentItem> = {
+        const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",
           statusMessage: `Something went wrong. Development item ${
             devItems[i].appDevUrl
           } cannot be loaded. Additional info: ${err?.toString?.()}`,
         };
-        await updateDevelopmentItem(devItem);
+        await updateDevelopmentItem(devItemUpdate);
       }
     }
 

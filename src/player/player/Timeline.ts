@@ -1,10 +1,9 @@
-import { Shield } from "aws-sdk";
 import { EventEmitter } from "events";
-import { getAnimationDefinition } from "../../effects/register-animation";
+import { getPlayerEffectDefinition } from "../../webslider-sdk/src/effects/effects-register";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { isTimelineInBounds } from "./timeline-utild";
 
-type ITimelineConfig = {
+export type ITimelineConfig = {
   duration?: number;
   delay?: number;
   name?: string;
@@ -13,6 +12,7 @@ type ITimelineConfig = {
 
 export class Timeline {
   id?: string;
+  group?: string;
   config: ITimelineConfig;
 
   emitter: EventEmitter;
@@ -43,10 +43,14 @@ export class Timeline {
   currentTimelineTime: number = 0;
 
   direction = 1;
+
+  disable = false;
+
   constructor(config: ITimelineConfig) {
     // configuration
     this.config = config;
     if (config.id) this.id = config.id;
+    if (config.group) this.group = config.group;
     if (config.duration) this.duration = config.duration;
     if (config.delay) this.delay = config.delay;
 
@@ -58,6 +62,21 @@ export class Timeline {
   }
 
   eventCallback(type: string, callback: any) {}
+
+  decreaseDelay(time: number) {
+    this.delay = this.config.delay! - time;
+  }
+
+  decreaseDuration(time: number, customDuration?: number) {
+    this.duration = (customDuration || this.config.duration!) - time;
+  }
+
+  resetDelayToOriginal() {
+    this.delay = this.config.delay!;
+  }
+  resetDurationToOriginal() {
+    this.duration = this.config.duration!;
+  }
 
   play(_pos?: number) {
     this.start();
@@ -115,7 +134,7 @@ export class Timeline {
     logger.debug(`Timeline init (${this.config.name})`);
 
     console.log(this.config.effectId);
-    const animationDef = getAnimationDefinition(this.config.effectId);
+    const animationDef = getPlayerEffectDefinition(this.config.effectId);
     console.log(animationDef);
 
     if (animationDef) {
@@ -143,10 +162,12 @@ export class Timeline {
   }
 
   start(isManual?: boolean) {
+    logger.debug(`(DISABLED) Timeline start (${this.config.name})`);
+
     logger.debug(`Timeline start (${this.config.name})`);
     console.timeLog();
 
-    this.emitter.emit("beforeStart");
+    this.emit("beforeStart");
 
     //this.playing = true;
     if (!isManual) this.isPaused = false;
@@ -160,7 +181,7 @@ export class Timeline {
         child.timeline.start(isManual);
       }
     });
-    this.emitter.emit("start");
+    this.emit("start");
   }
 
   rootStart() {
@@ -175,11 +196,12 @@ export class Timeline {
   }
 
   stop(isManual?: boolean, isReverse?: boolean) {
+    logger.debug(`(DISABLED) Timeline stop (${this.config.name})`);
     logger.debug(`Timeline stop (${this.config.name})`);
     console.timeLog();
 
     console.log("111111");
-    this.emitter.emit("beforeStop");
+    this.emit("beforeStop");
     console.log("22222");
 
     //this.playing = false;
@@ -192,14 +214,14 @@ export class Timeline {
     });
     console.log("444");
 
-    this.emitter.emit("stop");
+    this.emit("stop");
     console.log("5555");
   }
 
   update(time: number, isManual?: boolean) {
-    logger.debug(`Timeline update (${this.config.name}); time: ${time}`);
-
-    this.emitter.emit("beforeUpdate", time);
+    //logger.debug(`Timeline update (${this.config.name}); time: ${time}`);
+    this.currentTimelineTime = time;
+    this.emit("beforeUpdate", time);
 
     this.execUpdate(time, isManual);
 
@@ -229,7 +251,7 @@ export class Timeline {
       }*/
     });
 
-    this.emitter.emit("update", time);
+    this.emit("update", time);
   }
 
   clear() {
@@ -314,6 +336,8 @@ export class Timeline {
   }
 
   execStart(isManual?: boolean) {
+    if (this.disable) return;
+
     this.animIns?.start?.(this.config, isManual);
 
     // if (this.config.effectId) {
@@ -324,6 +348,8 @@ export class Timeline {
   }
 
   execStop(isManual?: boolean, isReverse?: boolean) {
+    if (this.disable) return;
+
     this.animIns?.stop?.(this.config, isManual, isReverse);
 
     // if (this.config.effectId) {
@@ -334,6 +360,8 @@ export class Timeline {
   }
 
   execUpdate(time: number, isManual?: boolean) {
+    if (this.disable) return;
+
     this.animIns?.update?.(this.config, time, isManual);
 
     // console.log("update1");
@@ -347,6 +375,8 @@ export class Timeline {
   }
 
   execPause() {
+    if (this.disable) return;
+
     this.animIns?.pause?.(this.config);
 
     // console.log(this.config.effectId);
@@ -359,6 +389,8 @@ export class Timeline {
   }
 
   execResume() {
+    if (this.disable) return;
+
     this.animIns?.resume?.(this.config);
 
     // if (this.config.effectId) {
@@ -369,6 +401,7 @@ export class Timeline {
   }
 
   execInit() {
+    if (this.disable) return;
     this.animIns?.init?.(this.config);
 
     // if (this.config.effectId) {
@@ -386,13 +419,28 @@ export class Timeline {
   }
 
   execRootStart() {
+    if (this.disable) return;
+
     this.animIns?.rootStart?.(this.config);
   }
   execRootStop() {
+    if (this.disable) return;
+
     this.animIns?.rootStop?.(this.config);
   }
 
   execSetDirection() {
+    if (this.disable) return;
     this.animIns?.direction?.(this.config, this.direction);
+  }
+
+  setDisable(d: boolean) {
+    this.disable = d;
+  }
+
+  emit<T>(ev: string, data?: T) {
+    if (!this.disable) {
+      this.emitter.emit(ev, data);
+    }
   }
 }

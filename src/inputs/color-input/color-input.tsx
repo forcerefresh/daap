@@ -8,6 +8,7 @@ import {
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
+import { ReactComponent as BackgroundSVG } from "./transparent-bg.svg";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const { value, defaultValue, displayName, helperText, onChange } = props;
@@ -84,6 +85,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
           onClick={handleClick}
           tabIndex={1}
         >
+          <BackgroundSVG />
           <div className={css.color} style={style} />
         </div>
 

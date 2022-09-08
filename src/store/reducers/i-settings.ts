@@ -3,16 +3,19 @@ import { Breakpoints } from "../../webslider-sdk/src/common/i-breakpoint-configu
 import { IGlobalSlideOverlapTime } from "../../webslider-sdk/src/common/i-slider-duration";
 
 export interface ISettings {
-  // slide
+  // slide config
   slideDuration: string;
   exitSlideDuration: string;
-  //exitOverlapSlideDuration: IGlobalSlideOverlapTime;
+  skipFirstSlideEffect: boolean;
 
+  // slider config
   sliderBackgroundColor: RGBColor;
+
   //preview
   pageBackgroundColor: RGBColor;
   layoutBoxBackgroundColor: RGBColor;
   transparentHeader: boolean;
+
   // breakpoint
   breakpoints: Breakpoints;
 }

@@ -2,38 +2,41 @@ import React from "react";
 import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
 import cx from "classnames";
 import css from "./TimelineView.module.scss";
-import { getEffectDefinition } from "../../effects/effects";
-import { max } from "lodash-es";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { EffectType } from "../../effects/types";
 
 export interface TimelineViewProps {
   object: IObject;
   slideDuration: number;
+  slideExitDuration: number;
 }
 export default function TimelineView(props: TimelineViewProps) {
-  const { object, slideDuration } = props;
+  const { object, slideDuration, slideExitDuration } = props;
 
   const tlsIn = createTimelines(
     object?.transitions?.in || [],
     slideDuration,
+    slideExitDuration,
     "in"
   );
   const tlsOut = createTimelines(
     object?.transitions?.out || [],
     slideDuration,
+    slideExitDuration,
     "out",
     true
   );
   const tlsEff = createTimelines(
     object?.transitions?.effect || [],
     slideDuration,
+    slideExitDuration,
     "effect"
   );
 
   const tlsEvent = createTimelines(
     object?.transitions?.event || [],
     slideDuration,
+    slideExitDuration,
     "event"
   );
 
@@ -120,6 +123,7 @@ interface TimelineViewData {
 function createTimelines(
   effs: ITransition[],
   slideDuration: number,
+  slideExitDuration: number,
   type: EffectType,
   isOut = false
 ): TimelineViewData[] {
@@ -128,6 +132,7 @@ function createTimelines(
   effs.map((eff, idx) => {
     const size = calculateTimelineRect(
       slideDuration,
+      slideExitDuration,
       convertTimeUnitToMs(eff.delay),
       convertTimeUnitToMs(eff.duration),
       340,
@@ -148,6 +153,7 @@ function createTimelines(
 
 function calculateTimelineRect(
   slideDuration: number,
+  slideExitDuration: number,
   effectDelay: number,
   effectDuration: number,
   holderWidth: number = 1,
@@ -159,7 +165,7 @@ function calculateTimelineRect(
   let left: number;
   if (isOut) {
     left =
-      ((slideDuration - effectDelay - realEffectDuration) / slideDuration) *
+      ((slideDuration - slideExitDuration + effectDelay) / slideDuration) *
       holderWidth;
   } else {
     left = effectDelay === 0 ? 0 : (effectDelay / slideDuration) * holderWidth;

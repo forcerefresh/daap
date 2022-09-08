@@ -1,16 +1,26 @@
 .color {
-  width: 50px;
+  width: 49px;
   height: 14px;
-  border-radius: 2px;
+  //border-radius: 2px;
 }
 
 .swatch {
-  padding: 2px;
-  border-radius: 2px;
+  //padding: 2px;
+  //border-radius: 2px;
   border: 2px solid #525252;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
   display: inline-block;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  > div {
+    position: relative;
+  }
+  svg {
+    top: 0px;
+    left: 0px;
+    position: absolute;
+  }
 }
 
 .popover {

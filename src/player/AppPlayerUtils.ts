@@ -6,8 +6,10 @@ import { ExecCodeConfig } from "../objects/exec-code-effect";
 import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
-import { Timeline } from "./player/Timeline";
+import { ITimelineConfig, Timeline } from "./player/Timeline";
 import { RootTimeline } from "./player/RootTimeline";
+
+export const DYNAMIC_OUT_EFF_TIMELINE_GROUP = "dynamic-out-eff-timeline-group";
 
 export interface IEventTimeline {
   event: string;
@@ -41,20 +43,38 @@ export function createEventTimelineForObject(
   return eventTimelines;
 }
 
-export function createTimelineForObject(data: ITransitionsData): Timeline[] {
-  const parallelTimelines: Timeline[] = [];
+export function createTimelineForObject(data: ITransitionsData): {
+  effTls: Timeline[];
+  outEffTlExist: boolean;
+} {
+  const effTls: Timeline[] = [];
+  let outEffTlExist = false;
+
+  // note only one per object
 
   data.transitions.in?.forEach((effIn) => {
     const tl = createTimelineForEffect(data, effIn, "in");
-    parallelTimelines.push(tl);
+    effTls.push(tl);
   });
+
   data.transitions.out?.forEach((effOut) => {
-    const tl = createTimelineForEffect(data, effOut, "out");
-    parallelTimelines.push(tl);
+    // NOTE: only NOT "absolute" will have id in order to remove them
+    const timelineGroup =
+      effOut.outStartTime.inheritFrom === "absolute"
+        ? undefined
+        : DYNAMIC_OUT_EFF_TIMELINE_GROUP;
+
+    const tl = createTimelineForEffect(data, effOut, "out", timelineGroup);
+    effTls.push(tl);
+
+    if (effOut.outStartTime.inheritFrom === "inheritFromSlide") {
+      outEffTlExist = true;
+    }
   });
+
   data.transitions.effect?.forEach((effEffect) => {
     const tl = createTimelineForEffect(data, effEffect, "effect");
-    parallelTimelines.push(tl);
+    effTls.push(tl);
   });
 
   /*data.transitions.in?.forEach((_, idx) => {
@@ -70,7 +90,10 @@ export function createTimelineForObject(data: ITransitionsData): Timeline[] {
     });
   });*/
 
-  return parallelTimelines;
+  return {
+    effTls,
+    outEffTlExist,
+  };
 }
 
 function getDuration(data: ITransitionsData, eff: ITransition): number {
@@ -82,7 +105,9 @@ function getDuration(data: ITransitionsData, eff: ITransition): number {
 function createTimelineForEffect(
   data: ITransitionsData,
   eff: ITransition,
-  effType: EffectType
+  effType: EffectType,
+  timelineGroup?: string,
+  overwriteConfig?: Partial<ITimelineConfig>
 ) {
   // only out effect is different
   let delay = convertTimeUnitToMs(eff.delay);
@@ -91,11 +116,16 @@ function createTimelineForEffect(
       delay =
         convertTimeUnitToMs(eff.outStartTime.customValue) +
         convertTimeUnitToMs(eff.delay);
+    } else if (eff.outStartTime.inheritFrom === "inheritFromSlide") {
+      delay =
+        convertTimeUnitToMs(data.data.slideDuration.customValue) -
+        convertTimeUnitToMs(data.data.exitSlideDuration.customValue);
     }
   }
 
   const tl = new Timeline({
     //timelineType: "object",
+    ...(timelineGroup ? { group: timelineGroup } : {}),
     name: "ObjectTimeline",
     ...eff.effect.values,
     effectId: eff.effect.id,
@@ -112,9 +142,10 @@ function createTimelineForEffect(
     ease: eff.ease,
     childEase: eff.childEase,
     timeDistribution: eff.timeDistribution,
-    delay,
+    delay:
+      overwriteConfig?.delay !== undefined ? overwriteConfig?.delay : delay,
+    // ...(overwriteConfig ? { overwriteConfig } : {}),
   });
-
   return tl;
 }
 

@@ -5,6 +5,7 @@ import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { isReverse, isTimelineInBounds } from "./timeline-utild";
 import { Timeline } from "./Timeline";
 import { Shield } from "aws-sdk";
+import remove from "lodash-es/remove";
 
 type IRootTimelineConfig = {
   duration?: number;
@@ -242,7 +243,7 @@ export class RootTimeline {
 
   // PRIVATE
   private update(time: number, isManual?: boolean) {
-    // logger.debug(`ROOT update (${this.config.name})`);
+    //logger.debug(`ROOT update (${this.config.name})`);
 
     this.emitter.emit("beforeUpdate", time);
 
@@ -263,6 +264,8 @@ export class RootTimeline {
         child.timeline.delay,
         child.timeline.duration
       );
+
+      //console.log(child.timeline.config.name + ", inB: " + inBounds);
       if (inBounds) {
         if (!child.playing) {
           child.playing = true;
@@ -275,6 +278,9 @@ export class RootTimeline {
         child.timeline.update(time - child.timeline.delay, isManual);
       } else {
         if (child.playing) {
+          if (child.timeline.config.name === "ExitTriggerTimeline-0") {
+            //debugger;
+          }
           child.playing = false;
           child.timeline.stop(
             isManual,
@@ -337,4 +343,18 @@ export class RootTimeline {
   getChildById(id: string) {
     return this.timelines.find((tl) => tl.timeline.id === id)?.timeline;
   }
+
+  getChildrenByGroup(groupName: string) {
+    return this.timelines
+      .filter((tl) => tl.timeline.group === groupName)
+      .map((tlObj) => tlObj.timeline);
+  }
+
+  // setChildrenDisable(d: boolean) {
+  //   return this.timelines.forEach((tl) => tl.timeline.setDisable(d));
+  // }
+
+  // removeTimeline(tl: Timeline) {
+  //   remove(this.timelines, (t) => t.timeline === tl);
+  // }
 }

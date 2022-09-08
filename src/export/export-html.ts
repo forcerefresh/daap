@@ -1,13 +1,4 @@
-import {
-  cloneDeep,
-  flatten,
-  forEach,
-  forOwn,
-  mapValues,
-  pick,
-  uniq,
-  uniqWith,
-} from "lodash-es";
+import { cloneDeep, flatten, forOwn, mapValues, pick } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -17,7 +8,6 @@ import {
   SourceImageValues,
 } from "../webslider-sdk/src/inputs/i-inputs";
 import { ImageValues } from "../objects/image/image";
-import { getObjectPlaceholder } from "../webslider-sdk/src/objects/object-helpers";
 import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
@@ -42,11 +32,9 @@ import {
   Breakpoints,
 } from "../webslider-sdk/src/common/i-breakpoint-configuration";
 import { IPreviewScope } from "../store/reducers/stage";
-import { nl2br } from "../utils/doom-utils/common";
 import {
   rgbColor2cssRgba,
   getRealSlideDuration,
-  addBorderRadius,
   addCommonPropertiesToStyle,
   getRealExitSlideDuration,
 } from "../utils/utils";
@@ -58,8 +46,7 @@ import {
   ITransitionsData,
 } from "./i-export-html";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
-import { getEffectDefinition } from "../effects/effects";
-import { logger } from "../webslider-sdk/src/utils/logger/logger";
+import { getAppEffectDefinition } from "../webslider-sdk/src/effects/effects-register";
 
 export function generatePlayerData(
   sources: ISources,
@@ -165,6 +152,7 @@ export function generatePlayerData(
     slideDataArr,
     frontSlideDataArr,
     backSlideDataArr,
+    skipFirstSlideEffect: settings.skipFirstSlideEffect,
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
       height: breakpointConfig.normal.maxSliderSize.height,
@@ -239,6 +227,15 @@ function generateSlideData(
     transitionsData,
   };
 
+  forOwn(someSlideData.transitions, (tArr: ITransition[] | any) => {
+    tArr.forEach((t: ITransition | any) => {
+      const def = getAppEffectDefinition(t?.effect?.id);
+      if (def?.external) {
+        extensionTypes.push(t.effect.id);
+      }
+    });
+  });
+
   let slideStyle = "";
   slideStyle += "position: absolute;";
   //slideStyle += `width: ${breakpointConfig.normal.maxSliderSize.width}px;`;
@@ -263,6 +260,7 @@ function generateSlideData(
       transitions: layer.transitions,
       data: {
         slideDuration: slide.duration,
+        exitSlideDuration: slide.exitDuration,
         objectWidth: 1000,
         objectHeight: 500,
         objectLeft: 0,
@@ -312,17 +310,21 @@ function generateSlideData(
     });
 
     if (layerValues.layoutChildren.itemsGap.type === "common") {
+      const t = layerValues.layoutChildren.type;
       html += `<style>
       .${layerClassName} > * {
-        margin-bottom: ${layerValues.layoutChildren.itemsGap.commonValue};
+        ${t === "column" ? "margin-bottom" : "margin-right"}: ${
+        layerValues.layoutChildren.itemsGap.commonValue
+      };
       }
     </style>`;
     } else {
+      const t = layerValues.layoutChildren.type;
       html += `<style>`;
       layerValues.layoutChildren.itemsGap.eachValues.forEach(
         (eachValue, idx) => {
           html += `.${layerClassName} > *:nth-child(${idx + 1}) {
-          margin-bottom: ${eachValue};
+            ${t === "column" ? "margin-bottom" : "margin-right"}: ${eachValue};
         }`;
         }
       );
@@ -338,6 +340,8 @@ function generateSlideData(
       layer
     )}" style="${layerStyle}">`; // layer open
 
+    console.log(html);
+
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
       //part for externals
@@ -348,8 +352,8 @@ function generateSlideData(
 
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
         tArr.forEach((t: ITransition | any) => {
-          const def = getEffectDefinition(t?.effect?.id);
-          if (def?.isExternal) {
+          const def = getAppEffectDefinition(t?.effect?.id);
+          if (def?.external) {
             extensionTypes.push(t.effect.id);
           }
         });
@@ -420,6 +424,7 @@ function generateSlideData(
         events: getObjectEvents(object),
         data: {
           slideDuration: slide.duration,
+          exitSlideDuration: slide.exitDuration,
           // TODO: IMPORTANT (size issue)
           objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
           objectHeight: parseInt(calculatedObjectSize!.height + "", 10),

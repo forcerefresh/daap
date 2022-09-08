@@ -28,7 +28,16 @@ export function getRealExitSlideDuration(slide: ISlide, settings: ISettings) {
 export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {
   const dur = getRealSlideDuration(slide, settings);
   const durMs = convertTimeUnitToMs(dur);
-  return (durMs / 1000).toString() + " sec";
+  return (durMs / 1000).toString() + "s";
+}
+
+export function getRealExitSlideDurationVis(
+  slide: ISlide,
+  settings: ISettings
+) {
+  const dur = getRealExitSlideDuration(slide, settings);
+  const durMs = convertTimeUnitToMs(dur);
+  return (durMs / 1000).toString() + "s exit";
 }
 
 export function convertTimeUnitToMs(timeUnit: string) {

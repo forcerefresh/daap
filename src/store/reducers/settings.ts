@@ -133,10 +133,8 @@ const getSettingsDefault = (): ISettings => ({
   // slide
   slideDuration: "10s",
   exitSlideDuration: "1s",
-  // exitOverlapSlideDuration: {
-  //   inheritFrom: "inheritOverlapFromNextSlide",
-  //   customValue: "1s",
-  // },
+  skipFirstSlideEffect: false,
+  // slider
   sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
   // preview
   pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },

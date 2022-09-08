@@ -1,15 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import cx from "classnames";
-import {
-  Button,
-  Checkbox,
-  Icon,
-  Menu,
-  MenuDivider,
-  MenuItem,
-  Popover,
-  Portal,
-} from "@blueprintjs/core";
+import { Button, Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
@@ -38,26 +29,11 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import {
-  cloneDeep,
-  delay,
-  drop,
-  get,
-  includes,
-  isEmpty,
-  remove,
-} from "lodash-es";
+import { cloneDeep, delay, isEmpty } from "lodash-es";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
-import { getEffectDefinition } from "../../effects/effects";
-import { getIconByType } from "../../store/reducers/settings";
-import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
-import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import TimelineView from "./TimelineView";
 import { ObjectRow } from "./ObjectRow";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { DropHandle, IDropItem } from "./DropHandle";
 import { LayerRow } from "./LayerRow";
 import { convertTimeUnitToMs } from "../../utils/utils";
@@ -380,6 +356,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             onObjectClick={onObjectClick}
                             slideDuration={convertTimeUnitToMs(
                               slide?.duration.customValue || "1ms"
+                            )}
+                            slideExitDuration={convertTimeUnitToMs(
+                              slide?.exitDuration.customValue || "1ms"
                             )}
                             onDragingChange={onDragingObjectsChange}
                           />

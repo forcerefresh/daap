@@ -5,6 +5,7 @@ import {
   IUnitsNumberInput,
   IUpdateInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
+import css from "./units-number-input.module.scss";
 
 export type UnitType = "px" | "em" | "%" | "ms" | "s" | null;
 interface UnitValue {
@@ -115,6 +116,7 @@ export const UnitsNumberInputForm: React.FC<
 
   return (
     <FormGroup
+      className={css.main}
       label={displayName}
       labelFor={id}
       helperText={!!helperText && helperText}

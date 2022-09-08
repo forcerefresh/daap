@@ -5,7 +5,7 @@ import {
   ITransformOriginInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { ITilesZoomEffect, tilesZoom } from "./tiles-zoom.types";
+import { ITilesZoomEffect, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 
 export type ITilesZoomTuple = [
   INumberInput<"columns">,
@@ -15,7 +15,7 @@ export type ITilesZoomTuple = [
 ];
 
 export const tilesZoomDefinition: IEffectDefinition<ITilesZoomTuple> = {
-  id: tilesZoom,
+  id: TILES_ZOOM_ANIMATION,
   name: "Tiles Zoom",
   form: [
     {
@@ -66,7 +66,7 @@ export const tilesZoomDefinition: IEffectDefinition<ITilesZoomTuple> = {
 };
 
 export const tilesZoomDefaults: ITilesZoomEffect = {
-  id: tilesZoom,
+  id: TILES_ZOOM_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

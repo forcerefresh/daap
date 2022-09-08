@@ -4,7 +4,10 @@ import {
   INumberInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { fallingLeaves, IFallingLeaves } from "./falling-leaves.types";
+import {
+  FALLING_LEAVES_ANIMATION,
+  IFallingLeaves,
+} from "./falling-leaves.types";
 
 export type IFallingLeavesTuple = [
   INumberInput<"number">,
@@ -14,7 +17,7 @@ export type IFallingLeavesTuple = [
 ];
 
 export const fallingLeavesDefinition: IEffectDefinition<IFallingLeavesTuple> = {
-  id: fallingLeaves,
+  id: FALLING_LEAVES_ANIMATION,
   name: "Falling Leaves",
   form: [
     {
@@ -50,7 +53,7 @@ export const fallingLeavesDefinition: IEffectDefinition<IFallingLeavesTuple> = {
 };
 
 export const fallingLeavesDefaults: IFallingLeaves = {
-  id: fallingLeaves,
+  id: FALLING_LEAVES_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

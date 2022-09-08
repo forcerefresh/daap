@@ -30,6 +30,7 @@ export interface ITransitionsData {
   events?: INavigationValues;
   data: {
     slideDuration: ISlideDuration;
+    exitSlideDuration: ISlideDuration;
     objectWidth?: number;
     objectHeight?: number;
     objectLeft?: number;
@@ -55,6 +56,7 @@ export interface IPlayerData {
   slideDataArr: ISlideData[];
   frontSlideDataArr: ISlideData[];
   backSlideDataArr: ISlideData[];
+  skipFirstSlideEffect: boolean;
   breakpointData: {
     width: number;
     height: number;
