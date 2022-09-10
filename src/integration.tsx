@@ -112,8 +112,8 @@ export const IntegrationContext = React.createContext({
     deleteImages: (
       type: MediaType,
       ids: string[]
-    ): Promise<{ deletedIds: string[] }> => {
-      return Promise.resolve({ deletedIds: [] });
+    ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
+      return Promise.resolve({ response: [] });
     },
   }),
 

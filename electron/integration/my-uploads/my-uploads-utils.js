@@ -101,6 +101,48 @@ async function processVideo(
   return item;
 }
 
+async function deleteExtensions(extensionsArr) {
+  const deleteExtensionsResponse = [];
+
+  const userDataPath = app.getPath("userData");
+
+  console.log(extensionsArr);
+  for (let i = 0; i < extensionsArr.length; i++) {
+    const ext = extensionsArr[i];
+
+    try {
+      const extensionZipPath = path.join(
+        userDataPath,
+        "my-uploads",
+        type2MediaFolder("extension"),
+        ext.packageFilename
+      );
+
+      //console.log(extensionZipPath);
+      fs.rmSync(extensionZipPath);
+
+      const extensionDir = path.join(
+        userDataPath,
+        "my-uploads",
+        type2MediaFolder("extension"),
+        ext.type
+      );
+
+      //console.log(extensionDir);
+      fs.rmSync(extensionDir, { recursive: true, force: true });
+
+      deleteExtensionsResponse.push({ status: "SUCCESS", id: ext.id });
+    } catch (ex) {
+      console.log(ex);
+      deleteExtensionsResponse.push({ status: "ERROR", id: ext.id });
+    }
+  }
+
+  console.log(deleteExtensionsResponse);
+
+  return deleteExtensionsResponse;
+}
+
 async function processExtension(fileBase64, type, fileMetadata) {
   const userDataPath = app.getPath("userData");
 
@@ -145,7 +187,55 @@ async function processExtension(fileBase64, type, fileMetadata) {
   }
   const id = uuid();
 
-  return { id, ...objectMeta };
+  return { id, ...objectMeta, packageFilename: fileMetadata.filename };
+}
+
+async function deleteMedia(imagesArr, type) {
+  const deleteImagesResponse = [];
+
+  const userDataPath = app.getPath("userData");
+
+  console.log(imagesArr);
+  for (let i = 0; i < imagesArr.length; i++) {
+    const img = imagesArr[i];
+
+    const filesToDel = [];
+
+    filesToDel.push(img.filename);
+
+    console.log(filesToDel);
+
+    if (img.images) {
+      Object.values(img.images).forEach((imgObj) => {
+        filesToDel.push(imgObj.filename);
+      });
+    }
+
+    try {
+      for (let j = 0; j < filesToDel.length; j++) {
+        if (filesToDel[j]) {
+          const imagePath = path.join(
+            userDataPath,
+            "my-uploads",
+            type2MediaFolder(type),
+            filesToDel[j]
+          );
+
+          if (fs.existsSync(imagePath)) {
+            try {
+              fs.rmSync(imagePath, { force: true });
+            } catch (ex) {}
+          }
+        }
+      }
+
+      deleteImagesResponse.push({ status: "SUCCESS", id: img.id });
+    } catch (ex) {
+      deleteImagesResponse.push({ status: "ERROR", id: img.id });
+    }
+  }
+
+  return deleteImagesResponse;
 }
 
 async function processImage(fileBase64, type, fileMetadata) {
@@ -372,9 +462,11 @@ function type2MediaFolder(type) {
 
 module.exports = {
   processImage,
+  deleteMedia,
   processVideo,
   processVector,
   processExtension,
+  deleteExtensions,
   type2Filename,
   type2MediaFolder,
 };

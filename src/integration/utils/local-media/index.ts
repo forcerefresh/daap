@@ -24,3 +24,10 @@ if (process.env.REACT_APP_INTEGRATION === "electron") {
 }
 
 export const getMediaSrc = localMedia.getMediaSrc;
+
+// NOTE has to be on global scope in order to be  available in external extensions
+const global = window as any;
+if (!global.WebSlider_GlobalScope) {
+  global.WebSlider_GlobalScope = {};
+}
+global.WebSlider_GlobalScope.getMediaSrc = getMediaSrc;

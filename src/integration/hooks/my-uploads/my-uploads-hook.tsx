@@ -219,7 +219,7 @@ export const useMyMediaHook = () => {
   const deleteImages = async (
     type: MediaType,
     ids: string[]
-  ): Promise<{ deletedIds: string[] }> => {
+  ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
     const lsKey = `my-${type}s`;
 
     const myImages: ImageData[] = JSON.parse(
@@ -234,7 +234,7 @@ export const useMyMediaHook = () => {
 
     localStorage.setItem(lsKey, JSON.stringify(myImages));
 
-    return { deletedIds: ids };
+    return { response: ids.map((id) => ({ status: "SUCCESS", id })) };
   };
 
   return { upload, fetchImages, deleteImages };

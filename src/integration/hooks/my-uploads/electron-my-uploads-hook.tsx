@@ -116,7 +116,7 @@ export const useMyMediaHook = () => {
   const deleteImages = async (
     type: MediaType,
     ids: string[]
-  ): Promise<{ deletedIds: string[] }> => {
+  ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
     const { ipcRenderer } = window.require("electron");
 
     return new Promise((resolve, reject) => {

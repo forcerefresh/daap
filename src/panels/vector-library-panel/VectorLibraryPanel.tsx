@@ -46,7 +46,7 @@ interface IMediaLibraryPanelProps {
   deleteImagesFunc?: (
     type: MediaType,
     ids: string[]
-  ) => Promise<{ deletedIds: string[] }>;
+  ) => Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }>;
   //
   //
   addObject?: boolean;
@@ -360,10 +360,16 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
         isOpen={!!imagesForDelete || isDeleting}
         onCancel={() => setImagesForDelete(undefined)}
         onConfirm={() => {
-          deleteImagesFunc?.("image", [imagesForDelete?.[0].id!]).then(
+          deleteImagesFunc?.("vector", [imagesForDelete?.[0].id!]).then(
             (resp) => {
+              console.log(resp);
               const newImages = filter(images, (image) => {
-                return resp.deletedIds.indexOf(image?.id!) === -1;
+                return (
+                  resp.response
+                    .filter((res) => res.status === "SUCCESS")
+                    .map((res) => res.id)
+                    .indexOf(image?.id!) === -1
+                );
               });
               setImages(newImages as any); // any is there as lodash has type bug for "filter"
               setIsDeleting(false);

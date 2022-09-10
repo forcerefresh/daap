@@ -80,6 +80,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
 
   const apiUrl = `${process.env.REACT_APP_ASSETS_BASE_URL}/api/v1?api-key=${apiKey}`;
 
+  if (apiKey === null) return null;
+
   return (
     <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
       <div>

@@ -8,55 +8,57 @@ const sharp = require("sharp");
 
 const {
   processImage,
+  deleteMedia,
   processVideo,
   processVector,
   processExtension,
+  deleteExtensions,
   type2Filename,
   type2MediaFolder,
 } = require("./my-uploads-utils");
 
 // API handlers
 
-ipcMain.on("MyUploads::Delete", async (event, dataStr) => {
+ipcMain.handle("MyUploads::Delete", async (event, dataStr) => {
+  console.log(dataStr);
   const data = JSON.parse(dataStr);
   const { type, ids } = data;
 
-  const deletedIds = [];
+  let response = []; /* { status: "SUCCESS" | "ERROR", id: string}[]*/
 
   const myMedia = await loadMyMedia(type);
 
-  const newMyMedia = myMedia.filter((media) => idx.indexOf(media.id) === -1);
-  const delMyMedia = myMedia.find((media) => idx.indexOf(media.id) !== -1);
+  const newMyMedia = myMedia.filter((media) => ids.indexOf(media.id) === -1);
+  const delMyMedia = myMedia.filter((media) => ids.indexOf(media.id) !== -1);
 
   console.log(newMyMedia);
   console.log(delMyMedia);
 
-  /*
   switch (type) {
     case "image": {
-      await deleteImages(ids);
+      response = await deleteMedia(delMyMedia);
       break;
     }
     case "video": {
-      item = await deleteVideos(ids);
+      response = await deleteMedia(delMyMedia, type);
       break;
     }
     case "vector": {
-      item = await deleteVector(ids);
+      response = await deleteMedia(delMyMedia, type);
       break;
     }
     case "extension": {
-      item = await deleteEdtensions(ids);
+      response = await deleteExtensions(delMyMedia);
       break;
     }
     default: {
       console.log(`Unknown media type to delete: ${type}`);
     }
-  }*/
+  }
 
   saveMyMedia(type, newMyMedia);
 
-  return { deletedIds: ids };
+  return { response };
 });
 
 ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
@@ -72,9 +74,14 @@ ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
     mediaItem.filename
   );
 
-  const imageData = await fsPromise.readFile(myImagePath);
-  const buff = Buffer.from(imageData);
-  const base64 = buff.toString("base64");
+  let base64 = "";
+  try {
+    const imageData = await fsPromise.readFile(myImagePath);
+    const buff = Buffer.from(imageData);
+    base64 = buff.toString("base64");
+  } catch {
+    console.log("File not found: " + myImagePath);
+  }
 
   const mime =
     mediaItem.mediaType === "image"

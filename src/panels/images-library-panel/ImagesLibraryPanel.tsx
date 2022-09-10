@@ -51,7 +51,7 @@ interface IMediaLibraryPanelProps {
   deleteImagesFunc?: (
     type: MediaType,
     ids: string[]
-  ) => Promise<{ deletedIds: string[] }>;
+  ) => Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }>;
   //
   selectionType?: SelectionType;
   addObject?: boolean;
@@ -605,9 +605,23 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         onCancel={() => setImagesForDelete(undefined)}
         onConfirm={() => {
           deleteImagesFunc?.(type, [imagesForDelete?.[0].id!]).then((resp) => {
+            console.log(resp);
+
             const newImages = filter(images, (image) => {
-              return resp.deletedIds.indexOf(image?.id!) === -1;
+              return (
+                resp.response
+                  .filter((res) => res.status === "SUCCESS")
+                  .map((res) => res.id)
+                  .indexOf(image?.id!) === -1
+              );
             });
+
+            const hasError = !!resp.response.find(
+              (res) => res.status === "ERROR"
+            );
+            if (hasError) {
+              alert("ERROR");
+            }
             setImages(newImages as any); // any is there as lodash has type bug for "filter"
             setIsDeleting(false);
             setSelectedImage(-1);
@@ -618,7 +632,15 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         className="bp3-dark"
         style={{ zIndex: 1001 }}
       >
-        <p>Delete "{imagesForDelete?.[0].title}" image?</p>
+        <p>
+          If media file is used in some projects it won't be available and
+          visible after deletion.
+        </p>
+
+        <p>
+          Are you sure you want to delete "
+          {imagesForDelete?.[0].title || imagesForDelete?.[0].filename}" image?
+        </p>
       </Alert>
     </div>
   );

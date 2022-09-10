@@ -28,7 +28,9 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
   const [isUninstallOpen, setIsUninstallOpen] = useState(false);
-  const [isUninstallLoading, setUninstallLoading] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isUninstallOrDeleteLoading, setUninstallOrDeleteLoading] =
+    useState(false);
   const [installedExtensions, setInstalledExtensions] =
     useState<IExtensionItem[]>();
 
@@ -84,43 +86,72 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     debounceFetchData();
   }, []);
 
-  const uninstallIdRef = useRef<IExtensionItem | undefined>();
+  const uninstallOrDelIdRef = useRef<IExtensionItem | undefined>();
   const onUninstall = (extension: IExtensionItem) => {
     setIsUninstallOpen(true);
-    uninstallIdRef.current = extension;
+    uninstallOrDelIdRef.current = extension;
   };
 
   const uninstallConfirm = () => {
-    setUninstallLoading(true);
+    setUninstallOrDeleteLoading(true);
 
-    if (!uninstallIdRef.current?.id) return;
+    if (!uninstallOrDelIdRef.current?.id) return;
 
-    uninstallExtension({ id: uninstallIdRef.current.id, source: "local" }).then(
-      (mItem?: Partial<IExtensionItem>) => {
+    uninstallExtension({
+      id: uninstallOrDelIdRef.current.id,
+      source: "local",
+    }).then((mItem?: Partial<IExtensionItem>) => {
+      getInstalledExtensions().then((res) => {
+        setInstalledExtensions(res.items);
+      });
+
+      setIsUninstallOpen(false);
+      setUninstallOrDeleteLoading(false);
+
+      AppToaster.show({
+        intent: "success",
+        message: `Extension "${mItem?.name}" is successfully uninstalled.`,
+      });
+    });
+  };
+
+  const uninstallCancel = () => {
+    setIsUninstallOpen(false);
+    setUninstallOrDeleteLoading(false);
+  };
+
+  const onDelete = (extension: IExtensionItem) => {
+    setIsDeleteOpen(true);
+    uninstallOrDelIdRef.current = extension;
+  };
+
+  const deleteConfirm = () => {
+    setUninstallOrDeleteLoading(true);
+
+    if (!uninstallOrDelIdRef.current?.id) return;
+
+    deleteImages("extension", [`${uninstallOrDelIdRef.current.id}`]).then(
+      (resp) => {
+        debounceFetchData(0);
+
         getInstalledExtensions().then((res) => {
           setInstalledExtensions(res.items);
         });
 
-        setIsUninstallOpen(false);
-        setUninstallLoading(false);
+        setIsDeleteOpen(false);
+        setUninstallOrDeleteLoading(false);
 
         AppToaster.show({
           intent: "success",
-          message: `Extension "${mItem?.name}" is successfully uninstalled.`,
+          message: `Extension is successfully deleted.`,
         });
       }
     );
   };
 
-  const uninstallCancel = () => {
-    setIsUninstallOpen(false);
-    setUninstallLoading(false);
-  };
-
-  const onDelete = (item: IExtensionItem) => {
-    deleteImages("extension", [`${item.id}`]).then((resp) => {
-      debounceFetchData();
-    });
+  const deleteCancel = () => {
+    setIsDeleteOpen(false);
+    setUninstallOrDeleteLoading(false);
   };
 
   const onInstall = (item: IExtensionItem) => {
@@ -156,9 +187,11 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       <UploadComponent
         type="extension"
         onComplete={() => {
+          debounceFetchData(0);
           //setForceUpdate(Math.random());
         }}
         onStop={() => {
+          debounceFetchData(0);
           //setForceUpdate(Math.random());
         }}
       />
@@ -314,7 +347,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         confirmButtonText="Uninstall"
         canOutsideClickCancel={false}
         icon="trash"
-        loading={isUninstallLoading}
+        loading={isUninstallOrDeleteLoading}
         intent={Intent.DANGER}
         isOpen={isUninstallOpen}
         onCancel={uninstallCancel}
@@ -322,8 +355,29 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         className="bp3-dark"
       >
         <p>
+          If component is used in some projects it won't be available and
+          visible after uninstallation.
+        </p>
+        <p>
           Are you sure you want to uninstall{" "}
-          <b>{uninstallIdRef?.current?.name}</b> object?
+          <b>{uninstallOrDelIdRef?.current?.name}</b> extension?
+        </p>
+      </Alert>
+      <Alert
+        cancelButtonText="Cancel"
+        confirmButtonText="Delete"
+        canOutsideClickCancel={false}
+        icon="trash"
+        loading={isUninstallOrDeleteLoading}
+        intent={Intent.DANGER}
+        isOpen={isDeleteOpen}
+        onCancel={deleteCancel}
+        onConfirm={deleteConfirm}
+        className="bp3-dark"
+      >
+        <p>
+          Are you sure you want to delete{" "}
+          <b>{uninstallOrDelIdRef?.current?.name}</b> extension?
         </p>
       </Alert>
     </div>
