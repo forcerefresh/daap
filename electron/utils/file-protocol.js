@@ -6,6 +6,10 @@ function fileHandler(req, callback) {
   console.log(req.url);
 
   let requestedPath = req.url;
+  requestedPath = requestedPath.replace("webslider-fp://", "/");
+  // IMPORTANT: prevent access to parent folder structure
+  requestedPath = path.normalize(requestedPath);
+
   // Write some code to resolve path, calculate absolute path etc
   let check = true; // Write some code here to check if you should return the file to renderer process
 
@@ -19,18 +23,14 @@ function fileHandler(req, callback) {
   }
   const userDataPath = app.getPath("userData");
 
-  const filePath = path.join(
-    userDataPath,
-    requestedPath.replace("webslider-fp://", "")
-  );
-  console.log(filePath);
+  const filePath = path.join(userDataPath, requestedPath);
+
   callback({
     path: filePath,
   });
 }
 
 function registerFileProtocol() {
-  // Create myWindow, load the rest of the app, etc...
   app.whenReady().then(() => {
     protocol.registerFileProtocol("webslider-fp", fileHandler);
   });
