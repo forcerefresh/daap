@@ -1,0 +1,39 @@
+const { app, protocol } = require("electron");
+const path = require("path");
+
+function fileHandler(req, callback) {
+  console.log(req);
+  console.log(req.url);
+
+  let requestedPath = req.url;
+  // Write some code to resolve path, calculate absolute path etc
+  let check = true; // Write some code here to check if you should return the file to renderer process
+
+  if (!check) {
+    callback({
+      // -6 is FILE_NOT_FOUND
+      // https://source.chromium.org/chromium/chromium/src/+/master:net/base/net_error_list.h
+      error: -6,
+    });
+    return;
+  }
+  const userDataPath = app.getPath("userData");
+
+  const filePath = path.join(
+    userDataPath,
+    requestedPath.replace("webslider-fp://", "")
+  );
+  console.log(filePath);
+  callback({
+    path: filePath,
+  });
+}
+
+function registerFileProtocol() {
+  // Create myWindow, load the rest of the app, etc...
+  app.whenReady().then(() => {
+    protocol.registerFileProtocol("webslider-fp", fileHandler);
+  });
+}
+
+module.exports = { registerFileProtocol };

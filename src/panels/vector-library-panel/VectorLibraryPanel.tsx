@@ -267,7 +267,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.RIGHT_TOP}
-                  modifiers={{ preventOverflow: { enabled: false } }}
+                  modifiers={{ preventOverflow: { enabled: true } }}
                   boundary={"window"}
                   portalClassName={"image-preview-popover"}
                   minimal

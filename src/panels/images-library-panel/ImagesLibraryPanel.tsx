@@ -372,7 +372,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.RIGHT}
-                  modifiers={{ preventOverflow: { enabled: false } }}
+                  modifiers={{ preventOverflow: { enabled: true } }}
                   boundary={"window"}
                   portalClassName={"image-preview-popover"}
                   minimal

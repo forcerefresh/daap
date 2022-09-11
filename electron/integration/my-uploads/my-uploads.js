@@ -65,6 +65,19 @@ ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { type, mediaItem } = data;
 
+  const relativePath = path.join(
+    "my-uploads",
+    type2MediaFolder(type),
+    mediaItem.filename
+  );
+
+  event.returnValue = {
+    ...mediaItem,
+    src: "webslider-fp://" + relativePath,
+  };
+
+  return;
+
   const userDataPath = app.getPath("userData");
 
   const myImagePath = path.join(

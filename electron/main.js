@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const windowStateKeeper = require("electron-window-state");
+const { registerFileProtocol } = require("./utils/file-protocol");
 
 // top-menu
 require("./top-menu");
@@ -10,6 +11,9 @@ require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
 require("./integration/extensions/extensions");
+
+// custom file protocol
+registerFileProtocol();
 
 // electron reloader
 if (process.env.ELECTRON_ENV === "development") {
@@ -97,16 +101,6 @@ if (!gotTheLock) {
         mainWindow = createWindow();
       }
     });
-    /*
-    mainWindow.webContents.on("did-finish-load", function () {
-      var jsFile = fs.readFileSync(
-        path.join(getExtensionsPath(), "sample-object.js")
-      );
-      mainWindow.webContents.executeJavaScript(jsFile);
-      mainWindow.webContents.executeJavaScript(
-        `window.WebSlider_GlobalScope.registerExternalObject(window.WebSlider_GlobalScope.objects["sample_object"])`
-      );
-    });*/
   });
 }
 
