@@ -23,6 +23,7 @@ import { addClass, removeClass } from "../../utils/doom-utils/common";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import {
   createEventTimelineForObject,
+  createTimelineForExecutionCode,
   createTimelineForObject,
   DYNAMIC_OUT_EFF_TIMELINE_GROUP,
   IEventTimeline,
@@ -1131,12 +1132,10 @@ export class Player {
         },
         true
       );
-
       */
 
       // execution code for objects
-      /* 
-      TODO123 if (!!objDef?.executionCode_Start) {
+      if (!!objDef?.execStart) {
         const execTl = createTimelineForExecutionCode(
           transitionData,
           objDef.execStart!,
@@ -1144,8 +1143,8 @@ export class Player {
           transitionData.itemValues,
           calObjSize
         );
-        slideTimeline.add(execTl, 0);
-      }*/
+        slideTimeline.add(execTl);
+      }
 
       // preload
       if (transitionData.itemValues.preload && !!objDef?.preload) {

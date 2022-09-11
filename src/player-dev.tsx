@@ -7,7 +7,6 @@ import "./objects/font-preloader";
 import { BreakpointConfiguration } from "./webslider-sdk/src/common/i-breakpoint-configuration";
 
 require("./effects/effects");
-require("./objects/exec-code-effect");
 
 (window as any).WebSliderPlayer = Player;
 

@@ -1,4 +1,3 @@
-import "./objects/exec-code-effect";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./application.css";

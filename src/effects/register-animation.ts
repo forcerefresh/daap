@@ -8,6 +8,10 @@ import {
 } from "./falling-leaves/falling-leaves";
 import { tilesFadeDef, tilesFadeAppDef } from "./tiles-fade/tiles-fade";
 import { tilesSlideDef, tilesSlideAppDef } from "./tiles-slide/tiles-slide";
+import {
+  execCodeAppDef,
+  execCodePlayerDef,
+} from "../objects/exec-code-animation";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(slideAppDef, slideDef);
@@ -15,3 +19,5 @@ registerEffect(tilesZoomAppDef, tilesZoomDef);
 registerEffect(fallingLeavesAppDef, fallingLeavesDef);
 registerEffect(tilesFadeAppDef, tilesFadeDef);
 registerEffect(tilesSlideAppDef, tilesSlideDef);
+
+registerEffect(null, execCodePlayerDef);

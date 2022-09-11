@@ -1,8 +1,6 @@
-import gsap from "gsap";
-import React from "react";
 import { EffectType } from "../effects/types";
 import { ITransitionsData } from "../export/i-export-html";
-import { ExecCodeConfig } from "../objects/exec-code-effect";
+import { IExecCodeConfig } from "../objects/exec-code-animation";
 import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
 import { ITransition } from "../webslider-sdk/src/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
@@ -156,20 +154,21 @@ export function createTimelineForExecutionCode(
 
   values: { [key: string]: any },
   calculatedObjectSize: any
-): gsap.core.Timeline {
-  const tl = new gsap.core.Timeline();
-
-  const conf: ExecCodeConfig = {
+): Timeline {
+  const conf: IExecCodeConfig & ITimelineConfig = {
+    effectId: "exec-code",
+    delay: 0,
+    duration: convertTimeUnitToMs(data.data.slideDuration.customValue),
+    //
     execStart,
     execStop,
     values: values,
     id: data.itemId,
     className: data.objectClass,
     calculatedObjectSize,
-    slideDuration:
-      convertTimeUnitToMs(data.data.slideDuration.customValue) / 1000,
   };
-  const execCodeTween = gsap.effects["execCode"]({}, conf);
-  tl.add(execCodeTween);
+
+  const tl = new Timeline(conf);
+
   return tl;
 }
