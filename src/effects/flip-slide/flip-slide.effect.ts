@@ -65,10 +65,10 @@ gsap.registerEffect({
 
         started = false;
 
-        const slideTransitionHolder2 = document.getElementsByClassName(
-          "slideTransitionHolder"
-        )[0];
-        slideTransitionHolder2?.parentNode?.removeChild(slideTransitionHolder2);
+        // const slideTransitionHolder2 = document.getElementsByClassName(
+        //   "slideTransitionHolder"
+        // )[0];
+        slideTransitionHolder?.parentNode?.removeChild(slideTransitionHolder);
       }
     });
 
