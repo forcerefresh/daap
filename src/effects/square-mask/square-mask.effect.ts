@@ -3,10 +3,10 @@ import { RGBColor } from "react-color";
 import { INumericTimelineValue } from "../../webslider-sdk/src/inputs/i-inputs";
 import { getMethodByType } from "../common";
 import { IEffectBase } from "../types";
-import { ISquareMaskEffect, squareMask } from "./square-mask.types";
+import { ISquareMaskEffect, SQUARE_MASK_ANIMATION } from "./square-mask.types";
 
 gsap.registerEffect({
-  name: squareMask,
+  name: SQUARE_MASK_ANIMATION,
   effect: function (targets: any, config: ISquareMaskEffect) {
     const objectEl = targets[0] as HTMLElement;
     const borderColor = colorToString(config.borderColor.borderColor);

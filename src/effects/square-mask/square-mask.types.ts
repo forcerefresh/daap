@@ -4,7 +4,7 @@ import {
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectBase } from "../types";
 
-export const squareMask = "squareMask";
+export const SQUARE_MASK_ANIMATION = "square-mask";
 
 export interface ISquareMaskEffect extends IEffectBase {
   borderTop: INumericTimelineValue;

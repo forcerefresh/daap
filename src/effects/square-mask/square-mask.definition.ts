@@ -5,7 +5,7 @@ import {
   INumericTimelineInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { ISquareMaskEffect, squareMask } from "./square-mask.types";
+import { ISquareMaskEffect, SQUARE_MASK_ANIMATION } from "./square-mask.types";
 
 export type ISquareMaskTuple = [
   IBorderColorInput<"borderColor">,
@@ -17,7 +17,7 @@ export type ISquareMaskTuple = [
 ];
 
 export const squareMaskDefinition: IEffectDefinition<ISquareMaskTuple> = {
-  id: squareMask,
+  id: SQUARE_MASK_ANIMATION,
   name: "Square Mask",
   form: [
     {
@@ -73,7 +73,7 @@ const delayAndDuration = {
 };
 
 export const squareMaskDefaults: ISquareMaskEffect = {
-  id: squareMask,
+  id: SQUARE_MASK_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

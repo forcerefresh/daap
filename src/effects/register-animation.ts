@@ -13,6 +13,9 @@ import {
   execCodePlayerDef,
 } from "../objects/exec-code-animation";
 
+import { kenBurnsDef, kenBurnsAppDef } from "./ken-burns/ken-burns";
+import { squareMaskAppDef, squareMaskDef } from "./square-mask/square-mask";
+
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(slideAppDef, slideDef);
 registerEffect(tilesZoomAppDef, tilesZoomDef);
@@ -21,3 +24,6 @@ registerEffect(tilesFadeAppDef, tilesFadeDef);
 registerEffect(tilesSlideAppDef, tilesSlideDef);
 
 registerEffect(null, execCodePlayerDef);
+
+registerEffect(kenBurnsAppDef, kenBurnsDef);
+registerEffect(squareMaskAppDef, squareMaskDef);

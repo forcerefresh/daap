@@ -3,7 +3,7 @@ import { getObjectElementById } from "../animation-utils";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
 import { IKenBurnsEffect, KEN_BURNS_EFFECT } from "./ken-burns.types";
 
-function kenBurnsAnimation() {
+export function kenBurnsAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
   let totalScaleFactor: number;
@@ -120,9 +120,3 @@ function kenBurnsAnimation() {
     direction,
   };
 }
-
-const kenBurnsDef = {
-  effectId: KEN_BURNS_EFFECT,
-  effectFunc: kenBurnsAnimation,
-};
-export default kenBurnsDef;

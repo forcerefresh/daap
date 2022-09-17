@@ -6,7 +6,7 @@ import { getMethodByType } from "../common";
 import { IEffectBase } from "../types";
 import { ISquareMaskEffect } from "./square-mask.types";
 
-function squareMaskAnimation() {
+export function squareMaskAnimation() {
   let timeline: gsap.core.Timeline;
   let objectEl: HTMLDivElement;
   let borderEl: HTMLElement;
@@ -27,11 +27,11 @@ function squareMaskAnimation() {
     leftBorderColor = colorToString(config.borderColor.leftBorderColor);
     rightBorderColor = colorToString(config.borderColor.rightBorderColor);
 
-    // teardownEffect = () => {
-    //   if (config.hideMaskOnComplete) {
-    //     borderEl.parentElement?.removeChild(borderEl);
-    //   }
-    // };
+    teardownEffect = () => {
+      if (config.hideMaskOnComplete) {
+        borderEl.parentElement?.removeChild(borderEl);
+      }
+    };
 
     timeline = gsap.timeline({
       duration: config.duration! / 1000,
@@ -120,10 +120,7 @@ function squareMaskAnimation() {
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.debug("squareMask stop");
 
-    // teardownEffect();
-
-    //timeline.pause();
-    //timeline.progress(config.duration / 1000);
+    teardownEffect();
   }
 
   function update(config: any, time: number, isManual?: boolean) {
@@ -163,12 +160,6 @@ function squareMaskAnimation() {
     destroy,
   };
 }
-
-const squareMaskDef = {
-  effectId: "squareMask",
-  effectFunc: squareMaskAnimation,
-};
-export default squareMaskDef;
 
 function colorToString(color: RGBColor) {
   const { r, g, b, a } = color;
