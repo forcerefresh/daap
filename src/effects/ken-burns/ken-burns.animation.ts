@@ -1,7 +1,7 @@
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
-import { IKenBurnsEffect } from "./ken-burns.types";
+import { IKenBurnsEffect, KEN_BURNS_EFFECT } from "./ken-burns.types";
 
 function kenBurnsAnimation() {
   let timeline: gsap.core.Timeline;
@@ -11,7 +11,7 @@ function kenBurnsAnimation() {
   let objectContentElement: HTMLDivElement;
 
   function init(config: IKenBurnsEffect) {
-    logger.debug("kenBurns init");
+    logger.debug(`${KEN_BURNS_EFFECT} init`);
 
     // get element and html
     element = getObjectElementById(config.itemId!);
@@ -22,11 +22,11 @@ function kenBurnsAnimation() {
     objectContentElement =
       objectContentElementAndObjectContentHtml.objectContentElement;
 
-    if (config.type === "in") {
-      gsap.set(element, {
-        scale: totalScaleFactor,
-      });
-    }
+    //if (config.type === "in") {
+    gsap.set(element, {
+      scale: totalScaleFactor,
+    });
+    //}
 
     timeline = gsap.timeline({ paused: true });
     timeline[getMethodByType(config.type)](element, {
@@ -37,7 +37,7 @@ function kenBurnsAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("kenBurns rootStart");
+    logger.debug(`${KEN_BURNS_EFFECT}  rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -46,7 +46,7 @@ function kenBurnsAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("kenBurns rootStop");
+    logger.debug(`${KEN_BURNS_EFFECT}  rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -55,7 +55,7 @@ function kenBurnsAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("kenBurns start");
+    logger.debug(`${KEN_BURNS_EFFECT} start`);
 
     gsap.set(element, {
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
@@ -67,7 +67,7 @@ function kenBurnsAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("kenBurns stop");
+    logger.debug(`${KEN_BURNS_EFFECT} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -86,19 +86,19 @@ function kenBurnsAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("kenBurns pause");
+    logger.debug(`${KEN_BURNS_EFFECT}  pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("kenBurns resume");
+    logger.debug(`${KEN_BURNS_EFFECT} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("kenBurns reverse");
+    logger.debug(`${KEN_BURNS_EFFECT} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();
@@ -122,7 +122,7 @@ function kenBurnsAnimation() {
 }
 
 const kenBurnsDef = {
-  effectId: "kenBurns",
+  effectId: KEN_BURNS_EFFECT,
   effectFunc: kenBurnsAnimation,
 };
 export default kenBurnsDef;

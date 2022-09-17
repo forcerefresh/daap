@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const kenBurns = "kenBurns";
+export const KEN_BURNS_EFFECT = "ken-burns";
 
 export interface IKenBurnsEffect extends IEffectBase {
   scaleFactor: number;

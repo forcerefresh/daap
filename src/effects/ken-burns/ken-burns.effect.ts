@@ -1,9 +1,9 @@
 import gsap from "gsap";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
-import { IKenBurnsEffect, kenBurns } from "./ken-burns.types";
+import { IKenBurnsEffect, KEN_BURNS_EFFECT } from "./ken-burns.types";
 
 gsap.registerEffect({
-  name: kenBurns,
+  name: KEN_BURNS_EFFECT,
   effect: function (targets: any, config: IKenBurnsEffect) {
     // get element
     const { objectContentElement } = getObjectContentElementAndHtml(targets[0]);
