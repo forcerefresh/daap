@@ -28,6 +28,7 @@ export async function loadAndRegisterExternalComponent(
     return;
   }
 
+  console.log(extension);
   await addExtensionCode(extension.type);
 
   //await import(

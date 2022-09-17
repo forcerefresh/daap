@@ -50,10 +50,16 @@ export const useExtensionsHook = () => {
 
     // NOTE: not needed as we load object app
     const playerObjectSource = await zip
-      .file(extension.packageFiles.appObjectFilename)
+      .file(
+        extension.packageFiles.appObjectFilename ||
+          extension.packageFiles.appEffectFilename!
+      )
       ?.async("string");
     const appObjectSource = await zip
-      .file(extension.packageFiles.appObjectFilename)
+      .file(
+        extension.packageFiles.appObjectFilename ||
+          extension.packageFiles.appEffectFilename!
+      )
       ?.async("string");
 
     extensionsStorage[extension.type] = {
