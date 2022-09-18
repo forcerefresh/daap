@@ -1,7 +1,8 @@
 import gsap from "gsap";
 import { MultiImageValues } from "../../objects/multiple-images/multiple-images";
 import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
-import { flip, IFlipEffect } from "./flip.types";
+import { FADE_ANIMATION } from "../fade/fade.types";
+import { IFlipEffect } from "./flip.types";
 
 export function getFlipEffectDuration(object: IObject, config: ITransition) {
   const effValues = config?.effect?.values as IFlipEffect;
@@ -14,7 +15,7 @@ export function getFlipEffectDuration(object: IObject, config: ITransition) {
 }
 
 gsap.registerEffect({
-  name: flip,
+  name: FADE_ANIMATION,
   effect: function (targets: any, config: IFlipEffect) {
     const main = targets[0] as HTMLElement;
     const cardCont = main.firstChild as HTMLDivElement;

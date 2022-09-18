@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const flip = "flip";
+export const FLIP_ANIMATION = "flip";
 
 export interface IFlipEffect extends IEffectBase {
   rotationTime: number;

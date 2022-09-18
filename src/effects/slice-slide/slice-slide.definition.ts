@@ -4,7 +4,7 @@ import {
   ISelectInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
+import { ISliceSlideEffect, SLICE_SLIDE_ANIMATION } from "./slice-slide.types";
 
 export type ISliceSlideTuple = [
   INumberInput<"slices">,
@@ -15,7 +15,7 @@ export type ISliceSlideTuple = [
 ];
 
 export const sliceSlideDefinition: IEffectDefinition<ISliceSlideTuple> = {
-  id: sliceSlide,
+  id: SLICE_SLIDE_ANIMATION,
   name: "Slice Slide",
   form: [
     {
@@ -73,7 +73,7 @@ export const sliceSlideDefinition: IEffectDefinition<ISliceSlideTuple> = {
 };
 
 export const sliceSlideDefaults: ISliceSlideEffect = {
-  id: sliceSlide,
+  id: SLICE_SLIDE_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

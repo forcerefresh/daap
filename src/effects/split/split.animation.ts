@@ -1,6 +1,6 @@
 import { RGBColor } from "react-color";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
-import { ISplitEffect } from "./split.types";
+import { ISplitEffect, SPLIT_ANIMATION } from "./split.types";
 
 function createPeaces(target: HTMLDivElement, peaces: number) {
   let html = `<div class="container">`;
@@ -11,12 +11,12 @@ function createPeaces(target: HTMLDivElement, peaces: number) {
   target.innerHTML += html;
 }
 
-function splitAnimation() {
+export function splitAnimation() {
   let timeline: gsap.core.Timeline;
   let slideTransitionHolder: HTMLDivElement | undefined;
 
   function init(config: ISplitEffect) {
-    logger.debug("split init");
+    logger.debug(`${SPLIT_ANIMATION} init`);
 
     const areaW = config.breakpointData?.width || 0;
     const areaH = config.breakpointData?.height || 0;
@@ -97,26 +97,22 @@ function splitAnimation() {
 
     if (config?.prevSlideEl) config.prevSlideEl.style.display = "none";
   }
-  function destroy(config: any) {
-    logger.debug("split destroy");
-
-    timeline.clear();
-    timeline.kill();
-  }
 
   function rootStart(config: any) {
-    logger.debug("split rootStart");
+    logger.debug(`${SPLIT_ANIMATION} rootStart`);
   }
 
   function rootStop(config: any) {
-    logger.debug("split rootStop");
+    logger.debug(`${SPLIT_ANIMATION} rootStop`);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("split start");
+    logger.debug(`${SPLIT_ANIMATION} start`);
+
+    if (config?.prevSlideEl) config.prevSlideEl.style.display = "none";
 
     const split = slideTransitionHolder!.getElementsByClassName("split")[0];
-    gsap.set(split, {
+    timeline.set(split, {
       rotateY: 0,
       rotateX: 0,
     });
@@ -153,7 +149,7 @@ function splitAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("split stop");
+    logger.debug(`${SPLIT_ANIMATION} stop`);
 
     const slidesHolder = document.getElementsByClassName(
       "slidesHolder"
@@ -174,6 +170,7 @@ function splitAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
+    logger.debug(`${SPLIT_ANIMATION} update`);
     if (isManual) {
       console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
@@ -181,33 +178,45 @@ function splitAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("split pause");
+    logger.debug(`${SPLIT_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("split resume");
+    logger.debug(`${SPLIT_ANIMATION} resume`);
     timeline.resume();
   }
 
+  function destroy(config: any) {
+    logger.debug(`${SPLIT_ANIMATION} destroy`);
+
+    timeline.clear();
+    timeline.kill();
+  }
+
+  function direction(config: any, direction: number) {
+    logger.debug(`${SPLIT_ANIMATION} reverse`);
+
+    if (direction === -1 && !timeline.reversed()) {
+      timeline.reverse();
+    }
+    if (direction === 1) {
+      timeline.play();
+    }
+  }
+
   return {
-    start,
-    stop,
     init,
-    destroy,
+    rootStart,
+    start,
     update,
+    stop,
+    rootStop,
     pause,
     resume,
-    rootStart,
-    rootStop,
+    destroy,
   };
 }
-
-const splitDef = {
-  effectId: "split",
-  effectFunc: splitAnimation,
-};
-export default splitDef;
 
 function colorToString(color: RGBColor) {
   const { r, g, b, a } = color;

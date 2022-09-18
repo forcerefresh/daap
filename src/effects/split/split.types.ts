@@ -1,7 +1,7 @@
 import { RGBColor } from "react-color";
 import { IEffectBase, INextZIndex } from "../types";
 
-export const split = "split";
+export const SPLIT_ANIMATION = "split";
 
 export interface ISplitEffect extends IEffectBase, INextZIndex {
   nextSlideEl?: HTMLDivElement;

@@ -1,8 +1,8 @@
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
-import { IFlipSlideEffect } from "./flip-slide.types";
+import { FLIP_SLIDE_ANIMATION, IFlipSlideEffect } from "./flip-slide.types";
 
-function flipSlideAnimation() {
+export function flipSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let durationBetweenItems: number;
   let slidesHolder: HTMLDivElement;
@@ -10,7 +10,7 @@ function flipSlideAnimation() {
   let slideTransitionHolder: HTMLDivElement;
 
   function init(config: IFlipSlideEffect) {
-    logger.debug("flipSlide init");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} init`);
 
     slidesHolder = document.getElementsByClassName(
       "slidesHolder"
@@ -51,7 +51,7 @@ function flipSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("flipSlide rootStart");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -60,7 +60,7 @@ function flipSlideAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("flipSlide rootStop");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -69,7 +69,7 @@ function flipSlideAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("flipSlide start");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} start`);
 
     if (config?.prevSlideEl) {
       //config.prevSlideEl.style.width = "1244px";
@@ -95,7 +95,7 @@ function flipSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("flipSlide stop");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} stop`);
 
     // gsap.set(slidesHolder, {
     //   perspective: "none",
@@ -114,7 +114,7 @@ function flipSlideAnimation() {
     // const slideTransitionHolder2 = document.getElementsByClassName(
     //   "slideTransitionHolder"
     // )[0];
-    // slideTransitionHolder?.parentNode?.removeChild(slideTransitionHolder);
+    slideTransitionHolder?.parentNode?.removeChild(slideTransitionHolder);
 
     if (isManual) {
       timeline.pause();
@@ -145,17 +145,17 @@ function flipSlideAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("flipSlide pause");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("flipSlide resume");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("flipSlide reverse");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();
@@ -166,7 +166,7 @@ function flipSlideAnimation() {
   }
 
   function destroy(config: any) {
-    logger.debug("flipSlide destroy");
+    logger.debug(`${FLIP_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }
@@ -184,9 +184,3 @@ function flipSlideAnimation() {
     destroy,
   };
 }
-
-const flipSlideDef = {
-  effectId: "flipSlide",
-  effectFunc: flipSlideAnimation,
-};
-export default flipSlideDef;

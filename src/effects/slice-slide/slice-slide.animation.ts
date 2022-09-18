@@ -9,9 +9,9 @@ import {
   tilesStartHandler,
   updateTilesSize,
 } from "../common";
-import { ISliceSlideEffect } from "./slice-slide.types";
+import { ISliceSlideEffect, SLICE_SLIDE_ANIMATION } from "./slice-slide.types";
 
-function sliceSlideAnimation() {
+export function sliceSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
   let elements: HTMLDivElement[] = [];
@@ -22,7 +22,7 @@ function sliceSlideAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ISliceSlideEffect) {
-    logger.debug("sliceSlide init");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -72,12 +72,13 @@ function sliceSlideAnimation() {
     const xy = getXY(config.from, config.distance);
     const baseConfig = {
       ease: config.ease,
-      duration: config.duration! * (config.timeDistribution! / 100),
+      duration: (config.duration! / 1000) * (config.timeDistribution! / 100),
       opacity: 0,
       x: xy.x,
       y: xy.y,
       stagger: {
-        amount: config.duration! * (1 - config.timeDistribution! / 100),
+        amount:
+          (config.duration! / 1000) * (1 - config.timeDistribution! / 100),
         ease: config.childEase,
       },
     };
@@ -97,35 +98,21 @@ function sliceSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("sliceSlide rootStart");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} rootStart`);
 
-    if (config.type === "in") {
-      objectContentElement.style.visibility = "hidden";
-      elements.forEach((element) => {
-        element.style.visibility = "visible";
-      });
-
-      timeline.pause();
-      timeline.progress(0);
-    }
+    timeline.pause();
+    timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug("sliceSlide rootStop");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} rootStop`);
 
-    if (config.type === "out") {
-      objectContentElement.style.visibility = "visible";
-      elements.forEach((element) => {
-        element.style.visibility = "hidden";
-      });
-
-      timeline.pause();
-      timeline.progress(0);
-    }
+    timeline.pause();
+    timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("sliceSlide start");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} start`);
 
     elObserver.observe(element);
     objectContentElement.style.visibility = "hidden";
@@ -141,7 +128,7 @@ function sliceSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("sliceSlide stop");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} stop`);
 
     elObserver.disconnect();
 
@@ -154,17 +141,17 @@ function sliceSlideAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("sliceSlide pause");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("sliceSlide resume");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("sliceSlide destroy");
+    logger.debug(`${SLICE_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }
@@ -181,12 +168,6 @@ function sliceSlideAnimation() {
     destroy,
   };
 }
-
-const sliceSlideDef = {
-  effectId: "sliceSlide",
-  effectFunc: sliceSlideAnimation,
-};
-export default sliceSlideDef;
 
 function getParameters(rows: number, columns: number, startFrom: string) {
   switch (startFrom) {

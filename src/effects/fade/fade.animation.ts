@@ -2,7 +2,7 @@ import { getMethodByType } from "../common";
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { IFadeEffect } from "./fade.types";
+import { FADE_ANIMATION, IFadeEffect } from "./fade.types";
 
 export function fadeAnimation() {
   let timeline: gsap.core.Timeline;
@@ -11,7 +11,7 @@ export function fadeAnimation() {
   let isInitialized = false;
 
   function init(config: IFadeEffect) {
-    logger.debug("fade init");
+    logger.debug(`${FADE_ANIMATION} init`);
 
     if (isInitialized) return;
 
@@ -29,7 +29,7 @@ export function fadeAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("fade rootStart");
+    logger.debug(`${FADE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -39,7 +39,7 @@ export function fadeAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("fade rootStop");
+    logger.debug(`${FADE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -49,7 +49,7 @@ export function fadeAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("fade start");
+    logger.debug(`${FADE_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -57,7 +57,7 @@ export function fadeAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("fade stop");
+    logger.debug(`${FADE_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -76,19 +76,19 @@ export function fadeAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("fade pause");
+    logger.debug(`${FADE_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("fade resume");
+    logger.debug(`${FADE_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("fade reverse");
+    logger.debug(`${FADE_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

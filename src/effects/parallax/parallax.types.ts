@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const parallax = "parallax";
+export const PARALLAX_ANIMATION = "parallax";
 
 export interface IParallaxEffect extends IEffectBase {
   parallax: {

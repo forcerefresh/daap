@@ -1,16 +1,16 @@
 import { RGBColor } from "react-color";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { ITrianglifyEffect } from "./trianglify.types";
+import { ITrianglifyEffect, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 import trianglify from "trianglify";
 
-function trianglifyAnimation() {
+export function trianglifyAnimation() {
   let timeline: gsap.core.Timeline;
   let objectEl: HTMLElement;
   let trianglifyEl: HTMLElement;
 
   function init(config: ITrianglifyEffect) {
-    logger.debug("trianglify init");
+    logger.debug(`${TRIANGLIFY_ANIMATION} init`);
 
     objectEl = getObjectElementById(config.itemId!);
 
@@ -18,21 +18,21 @@ function trianglifyAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("trianglify rootStart");
+    logger.debug(`${TRIANGLIFY_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug("trianglify rootStop");
+    logger.debug(`${TRIANGLIFY_ANIMATION} rootStop`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("trianglify start");
+    logger.debug(`${TRIANGLIFY_ANIMATION} start`);
 
     trianglifyEl = objectEl.getElementsByClassName(
       "trianglify"
@@ -88,7 +88,7 @@ function trianglifyAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("trianglify stop");
+    logger.debug(`${TRIANGLIFY_ANIMATION} stop`);
 
     trianglifyEl.parentElement?.removeChild(trianglifyEl);
     //timeline.pause();
@@ -96,7 +96,7 @@ function trianglifyAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug("trianglify update");
+    logger.debug(`${TRIANGLIFY_ANIMATION} update`);
 
     if (isManual) {
       console.log("MANUAL UPDATE: " + time);
@@ -105,17 +105,17 @@ function trianglifyAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("trianglify pause");
+    logger.debug(`${TRIANGLIFY_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("trianglify resume");
+    logger.debug(`${TRIANGLIFY_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("trianglify destroy");
+    logger.debug(`${TRIANGLIFY_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }
@@ -132,12 +132,6 @@ function trianglifyAnimation() {
     destroy,
   };
 }
-
-const trianglifyDef = {
-  effectId: "trianglifyPhoto",
-  effectFunc: trianglifyAnimation,
-};
-export default trianglifyDef;
 
 function colorToString(color: RGBColor) {
   const { r, g, b, a } = color;

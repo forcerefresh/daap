@@ -3,7 +3,7 @@ import {
   FormType,
   IFormItem,
 } from "../../webslider-sdk/src/form/i-form-layout";
-import { ITrianglifyEffect, trianglifyPhoto } from "./trianglify.types";
+import { ITrianglifyEffect, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 
 export interface IEffectDefinition {
   id: string;
@@ -12,7 +12,7 @@ export interface IEffectDefinition {
 }
 
 export const trianlifyDefinition: IEffectDefinition = {
-  id: trianglifyPhoto,
+  id: TRIANGLIFY_ANIMATION,
   name: "Trianglify",
   form: [
     {
@@ -119,7 +119,7 @@ export const trianlifyDefinition: IEffectDefinition = {
 };
 
 export const trianglifyDefaults: ITrianglifyEffect = {
-  id: trianglifyPhoto,
+  id: TRIANGLIFY_ANIMATION,
   hasDelay: false,
   hasDuration: true,
   hasEase: false,

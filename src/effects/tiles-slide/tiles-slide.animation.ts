@@ -7,7 +7,7 @@ import {
   getObjectContentElementAndHtml,
   updateTilesSize,
 } from "../common";
-import { ITilesSlideEffect } from "./tiles-slide.types";
+import { ITilesSlideEffect, TILES_SLIDE_ANIMATION } from "./tiles-slide.types";
 
 export function tilesSlideAnimation() {
   let timeline: gsap.core.Timeline;
@@ -21,7 +21,7 @@ export function tilesSlideAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesSlideEffect) {
-    logger.debug("tilesSlide init");
+    logger.debug(`${TILES_SLIDE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -95,7 +95,7 @@ export function tilesSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("tilesSlide rootStart");
+    logger.debug(`${TILES_SLIDE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -109,7 +109,7 @@ export function tilesSlideAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("tilesSlide rootStop");
+    logger.debug(`${TILES_SLIDE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -123,7 +123,7 @@ export function tilesSlideAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("tilesSlide start");
+    logger.debug(`${TILES_SLIDE_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -139,7 +139,7 @@ export function tilesSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("tilesSlide stop");
+    logger.debug(`${TILES_SLIDE_ANIMATION} stop`);
     logger.debug(isManual);
     logger.debug(isReverse);
 
@@ -178,17 +178,17 @@ export function tilesSlideAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("tilesSlide pause");
+    logger.debug(`${TILES_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("tilesSlide resume");
+    logger.debug(`${TILES_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("tilesSlide destroy");
+    logger.debug(`${TILES_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

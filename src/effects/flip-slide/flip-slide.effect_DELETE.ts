@@ -1,8 +1,8 @@
 import gsap from "gsap";
-import { flipSlide, IFlipSlideEffect } from "./flip-slide.types";
+import { FLIP_SLIDE_ANIMATION, IFlipSlideEffect } from "./flip-slide.types";
 
 gsap.registerEffect({
-  name: flipSlide,
+  name: FLIP_SLIDE_ANIMATION,
   effect: function (cards: any, config: IFlipSlideEffect) {
     const durationBetweenItems = config.durationBetweenItems / 1000;
 

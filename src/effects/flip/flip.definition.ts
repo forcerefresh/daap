@@ -4,7 +4,7 @@ import {
   ISelectInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { flip, IFlipEffect } from "./flip.types";
+import { FLIP_ANIMATION, IFlipEffect } from "./flip.types";
 
 export type IFlipTuple = [
   INumberInput<"rotationTime">,
@@ -13,7 +13,7 @@ export type IFlipTuple = [
 ];
 
 export const flipDefinition: IEffectDefinition<IFlipTuple> = {
-  id: flip,
+  id: FLIP_ANIMATION,
   name: "Flip",
   form: [
     {
@@ -45,7 +45,7 @@ export const flipDefinition: IEffectDefinition<IFlipTuple> = {
 };
 
 export const flipDefaults: IFlipEffect = {
-  id: flip,
+  id: FLIP_ANIMATION,
   hasDelay: true,
   hasDuration: false,
   hasOwnDuration: true,

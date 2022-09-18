@@ -3,12 +3,12 @@ import {
   INumberInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { flipSlide, IFlipSlideEffect } from "./flip-slide.types";
+import { FLIP_SLIDE_ANIMATION, IFlipSlideEffect } from "./flip-slide.types";
 
 export type IFlipSlideTuple = [INumberInput<"durationBetweenItems">];
 
 export const flipSlideDefinition: IEffectDefinition<IFlipSlideTuple> = {
-  id: flipSlide,
+  id: FLIP_SLIDE_ANIMATION,
   name: "Flip Slide",
   form: [
     {
@@ -23,7 +23,7 @@ export const flipSlideDefinition: IEffectDefinition<IFlipSlideTuple> = {
 };
 
 export const flipSlideDefaults: IFlipSlideEffect = {
-  id: flipSlide,
+  id: FLIP_SLIDE_ANIMATION,
   hasDelay: true,
   hasDuration: false,
   hasOwnDuration: true,
