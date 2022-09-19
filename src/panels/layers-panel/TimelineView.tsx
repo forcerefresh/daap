@@ -4,6 +4,7 @@ import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { EffectType } from "../../effects/types";
+import { getAppEffectDefinition } from "../../webslider-sdk/src/effects/effects-register";
 
 export interface TimelineViewProps {
   object: IObject;
@@ -14,12 +15,14 @@ export default function TimelineView(props: TimelineViewProps) {
   const { object, slideDuration, slideExitDuration } = props;
 
   const tlsIn = createTimelines(
+    object,
     object?.transitions?.in || [],
     slideDuration,
     slideExitDuration,
     "in"
   );
   const tlsOut = createTimelines(
+    object,
     object?.transitions?.out || [],
     slideDuration,
     slideExitDuration,
@@ -27,6 +30,7 @@ export default function TimelineView(props: TimelineViewProps) {
     true
   );
   const tlsEff = createTimelines(
+    object,
     object?.transitions?.effect || [],
     slideDuration,
     slideExitDuration,
@@ -34,6 +38,7 @@ export default function TimelineView(props: TimelineViewProps) {
   );
 
   const tlsEvent = createTimelines(
+    object,
     object?.transitions?.event || [],
     slideDuration,
     slideExitDuration,
@@ -121,6 +126,7 @@ interface TimelineViewData {
 }
 
 function createTimelines(
+  object: IObject,
   effs: ITransition[],
   slideDuration: number,
   slideExitDuration: number,
@@ -130,11 +136,16 @@ function createTimelines(
   const arr: TimelineViewData[] = [];
 
   effs.map((eff, idx) => {
+    const effDef = getAppEffectDefinition(eff.effect.id);
+    const customDuration = effDef?.getDuration
+      ? effDef.getDuration(object, eff)
+      : undefined;
+
     const size = calculateTimelineRect(
       slideDuration,
       slideExitDuration,
       convertTimeUnitToMs(eff.delay),
-      convertTimeUnitToMs(eff.duration),
+      customDuration || convertTimeUnitToMs(eff.duration),
       340,
       isOut
     );

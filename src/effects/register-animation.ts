@@ -15,6 +15,8 @@ import {
 
 import { kenBurnsDef, kenBurnsAppDef } from "./ken-burns/ken-burns";
 import { squareMaskAppDef, squareMaskDef } from "./square-mask/square-mask";
+import { typewriterAppDef, typewriterDef } from "./typewriter/typewriter";
+import { getTypewriterAnimationDuration } from "./typewriter/typewriter.animation";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(slideAppDef, slideDef);
@@ -27,3 +29,5 @@ registerEffect(null, execCodePlayerDef);
 
 registerEffect(kenBurnsAppDef, kenBurnsDef);
 registerEffect(squareMaskAppDef, squareMaskDef);
+
+registerEffect(typewriterAppDef, typewriterDef);
