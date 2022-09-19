@@ -457,40 +457,47 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       {/* Create new object*/}
                       {addObject &&
                         type === "image" &&
-                        selectionType === SelectionType.Single && (
-                          <Button
-                            intent="primary"
-                            onClick={() => {
-                              if (activeLayerId) {
-                                if (addObject) {
-                                  console.log({
-                                    image: (image?.images as any)[
-                                      selectedResolution
-                                    ],
-                                    filename: "",
-                                  });
-                                  _addNewObject(
-                                    activeLayerId,
-                                    "image", //cover
-                                    {},
-                                    {
-                                      image: {
-                                        image: (image?.images as any)[
-                                          selectedResolution
-                                        ],
-                                        filename: "",
-                                      },
-                                    }
-                                  );
-                                }
+                        selectionType === SelectionType.Single &&
+                        [{ close: true }, { close: false }].map((conf) => (
+                          <>
+                            <Button
+                              intent="primary"
+                              onClick={() => {
+                                if (activeLayerId) {
+                                  if (addObject) {
+                                    console.log({
+                                      image: (image?.images as any)[
+                                        selectedResolution
+                                      ],
+                                      filename: "",
+                                    });
+                                    _addNewObject(
+                                      activeLayerId,
+                                      "image", //cover
+                                      {},
+                                      {
+                                        image: {
+                                          image: (image?.images as any)[
+                                            selectedResolution
+                                          ],
+                                          filename: "",
+                                        },
+                                      }
+                                    );
+                                  }
 
-                                onRequestClose();
-                              }
-                            }}
-                          >
-                            Add Image to stage
-                          </Button>
-                        )}
+                                  if (conf.close) {
+                                    onRequestClose();
+                                  } else {
+                                    setSelectedImage(-1);
+                                  }
+                                }
+                              }}
+                            >
+                              {conf.close ? " Add Image & Close" : "Add Image"}
+                            </Button>{" "}
+                          </>
+                        ))}
 
                       {/* Create new object*/}
                       {addObject &&
