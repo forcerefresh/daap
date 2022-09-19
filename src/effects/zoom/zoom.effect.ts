@@ -17,7 +17,7 @@ gsap.registerEffect({
         }
       );
     } else {
-      return gsap[getMethodByType(config.type)](targets, {
+      return gsap.to(targets, {
         ease: config.ease,
         duration: config.duration!,
         scaleX: 0,

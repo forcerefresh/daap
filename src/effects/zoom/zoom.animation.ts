@@ -67,7 +67,7 @@ export function zoomAnimation() {
       if (isReverse) {
         timeline.progress(0);
       } else {
-        timeline.progress(config.duration / 1000);
+        timeline.progress(1);
       }
     }
   }

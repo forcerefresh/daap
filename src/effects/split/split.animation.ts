@@ -40,6 +40,8 @@ export function splitAnimation() {
       addCSS(target, config, areaW, areaH, pageAreaW);
 
       createPeaces(target, config.split.points.length);
+
+      slideTransitionHolder = target;
     } else {
       target = slideTransitionHolder as HTMLDivElement;
     }
@@ -49,7 +51,7 @@ export function splitAnimation() {
     });
 
     //CustomWiggle.create("myWiggle", { wiggles: 6 });
-    const move = 100;
+    const move = 900; // TODO
     const ease = config.ease;
 
     for (let i = 0; i < config.split.points.length; i++) {
@@ -88,7 +90,7 @@ export function splitAnimation() {
           x: hMoveSign + Math.abs(hMove / center) * move,
           rotation:
             config.rotation < 0 ? "-=" : "+=" + Math.abs(config.rotation),
-          duration: config.duration!,
+          duration: config.duration! / 1000,
           ease,
         }),
         0
@@ -109,40 +111,6 @@ export function splitAnimation() {
   function start(config: any, isManual?: boolean) {
     logger.debug(`${SPLIT_ANIMATION} start`);
 
-    if (config?.prevSlideEl) config.prevSlideEl.style.display = "none";
-
-    const split = slideTransitionHolder!.getElementsByClassName("split")[0];
-    timeline.set(split, {
-      rotateY: 0,
-      rotateX: 0,
-    });
-
-    // NOTE: reattach slide
-    if (config?.prevSlideEl) {
-      const frontEl = slideTransitionHolder!.getElementsByClassName(
-        "front"
-      )[0] as HTMLDivElement;
-      frontEl.appendChild(config?.prevSlideEl);
-    }
-
-    const bottomEl = slideTransitionHolder!.getElementsByClassName(
-      "bottom"
-    )[0] as HTMLDivElement;
-    bottomEl.appendChild(config?.nextSlideEl!);
-
-    const video = bottomEl.getElementsByTagName("video")[0];
-    if (video) {
-      console.log(video);
-      video!.muted = true;
-      video!.src = video.src;
-      video.autoplay = true;
-      video!.play();
-    }
-
-    //video?.play();
-
-    config!.nextSlideEl!.style.display = "block";
-
     timeline.play(0);
 
     if (isManual) timeline.pause();
@@ -151,18 +119,6 @@ export function splitAnimation() {
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.debug(`${SPLIT_ANIMATION} stop`);
 
-    const slidesHolder = document.getElementsByClassName(
-      "slidesHolder"
-    )[0] as HTMLDivElement;
-    if (config?.prevSlideEl) {
-      slidesHolder.appendChild(config?.prevSlideEl);
-    }
-
-    slidesHolder.appendChild(config?.nextSlideEl!);
-
-    if (config.prevSlideEl) config.prevSlideEl.style.display = "none";
-
-    // TODO: why not use slideTransitionHolder???
     const slideTransitionHolder2 = document.getElementsByClassName(
       "slideTransitionHolder"
     )[0];
