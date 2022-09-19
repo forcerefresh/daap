@@ -1,7 +1,7 @@
 import { RGBColor } from "react-color";
 import { IEffectBase } from "../types";
 
-export const trianglifyPhoto = "trianglifyPhoto";
+export const TRIANGLIFY_ANIMATION = "trianglifyPhoto";
 
 export interface ITrianglifyEffect extends IEffectBase {
   colorsSG: "match" | "both" | "random";

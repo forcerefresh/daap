@@ -1,10 +1,10 @@
 import gsap from "gsap/all";
 import { RGBColor } from "react-color";
 import trianglify from "trianglify";
-import { ITrianglifyEffect, trianglifyPhoto } from "./trianglify.types";
+import { ITrianglifyEffect, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 
 gsap.registerEffect({
-  name: trianglifyPhoto,
+  name: TRIANGLIFY_ANIMATION,
   effect: function (targets: any, config: ITrianglifyEffect) {
     const objectEl = targets[0] as HTMLElement;
     let trianglifyEl: HTMLElement;

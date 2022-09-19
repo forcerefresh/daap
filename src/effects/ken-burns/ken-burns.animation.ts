@@ -1,7 +1,7 @@
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
-import { IKenBurnsEffect, KEN_BURNS_EFFECT } from "./ken-burns.types";
+import { IKenBurnsEffect, KEN_BURNS_ANIMATION } from "./ken-burns.types";
 
 export function kenBurnsAnimation() {
   let timeline: gsap.core.Timeline;
@@ -11,7 +11,7 @@ export function kenBurnsAnimation() {
   let objectContentElement: HTMLDivElement;
 
   function init(config: IKenBurnsEffect) {
-    logger.debug(`${KEN_BURNS_EFFECT} init`);
+    logger.debug(`${KEN_BURNS_ANIMATION} init`);
 
     // get element and html
     element = getObjectElementById(config.itemId!);
@@ -37,7 +37,7 @@ export function kenBurnsAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${KEN_BURNS_EFFECT}  rootStart`);
+    logger.debug(`${KEN_BURNS_ANIMATION}  rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -46,7 +46,7 @@ export function kenBurnsAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${KEN_BURNS_EFFECT}  rootStop`);
+    logger.debug(`${KEN_BURNS_ANIMATION}  rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -55,7 +55,7 @@ export function kenBurnsAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${KEN_BURNS_EFFECT} start`);
+    logger.debug(`${KEN_BURNS_ANIMATION} start`);
 
     gsap.set(element, {
       transformOrigin: `${config.transformOrigin.x}% ${config.transformOrigin.y}%`,
@@ -67,7 +67,7 @@ export function kenBurnsAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${KEN_BURNS_EFFECT} stop`);
+    logger.debug(`${KEN_BURNS_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -86,19 +86,19 @@ export function kenBurnsAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${KEN_BURNS_EFFECT}  pause`);
+    logger.debug(`${KEN_BURNS_ANIMATION}  pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${KEN_BURNS_EFFECT} resume`);
+    logger.debug(`${KEN_BURNS_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${KEN_BURNS_EFFECT} reverse`);
+    logger.debug(`${KEN_BURNS_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

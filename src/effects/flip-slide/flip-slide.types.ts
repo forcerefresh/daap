@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const flipSlide = "flipSlide";
+export const FLIP_SLIDE_ANIMATION = "flipSlide";
 
 export interface IFlipSlideEffect extends IEffectBase {
   nextSlideEl?: HTMLDivElement;

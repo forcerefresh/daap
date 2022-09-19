@@ -1,8 +1,8 @@
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { IFlipEffect } from "./flip.types";
+import { FLIP_ANIMATION, IFlipEffect } from "./flip.types";
 
-function flipAnimation() {
+export function flipAnimation() {
   let timeline: gsap.core.Timeline;
   let mainElement: HTMLDivElement;
   let cardContainer: HTMLDivElement;
@@ -12,10 +12,9 @@ function flipAnimation() {
   let containers: HTMLDivElement[] = [];
 
   function init(config: IFlipEffect) {
-    logger.debug("flip init");
+    logger.debug(`${FLIP_ANIMATION} init`);
 
     mainElement = getObjectElementById(config.itemId!);
-    console.log(config, "pppp");
     cardContainer = mainElement.firstChild as HTMLDivElement;
     rotationTime = config.rotationTime / 1000;
     pauseTime = config.pauseTime / 1000;
@@ -57,7 +56,6 @@ function flipAnimation() {
 
     cardContainer.style.display = "none";
     timeline = gsap.timeline();
-    // timeline.add(initialSet);
     timeline.to(
       containers[0],
       {
@@ -121,25 +119,21 @@ function flipAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("flip rootStart");
+    logger.debug(`${FLIP_ANIMATION} rootStart`);
 
-    if (config.type === "in") {
-      timeline.pause();
-      timeline.progress(0);
-    }
+    timeline.pause();
+    timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug("flip rootStop");
+    logger.debug(`${FLIP_ANIMATION} rootStop`);
 
-    if (config.type === "out") {
-      timeline.pause();
-      timeline.progress(0);
-    }
+    timeline.pause();
+    timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("flip start");
+    logger.debug(`${FLIP_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -147,7 +141,7 @@ function flipAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("flip stop");
+    logger.debug(`${FLIP_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -166,19 +160,19 @@ function flipAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("flip pause");
+    logger.debug(`${FLIP_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("flip resume");
+    logger.debug(`${FLIP_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("flip reverse");
+    logger.debug(`${FLIP_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();
@@ -189,7 +183,7 @@ function flipAnimation() {
   }
 
   function destroy(config: any) {
-    logger.debug("flip destroy");
+    logger.debug(`${FLIP_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }
@@ -207,9 +201,3 @@ function flipAnimation() {
     destroy,
   };
 }
-
-const flipDef = {
-  effectId: "flip",
-  effectFunc: flipAnimation,
-};
-export default flipDef;

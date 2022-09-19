@@ -4,7 +4,7 @@ import {
   ITransformOriginInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { IKenBurnsEffect, KEN_BURNS_EFFECT } from "./ken-burns.types";
+import { IKenBurnsEffect, KEN_BURNS_ANIMATION } from "./ken-burns.types";
 
 export type IKenBurnsTuple = [
   INumberInput<"scaleFactor">,
@@ -12,7 +12,7 @@ export type IKenBurnsTuple = [
 ];
 
 export const kenBurnsDefinition: IEffectDefinition<IKenBurnsTuple> = {
-  id: KEN_BURNS_EFFECT,
+  id: KEN_BURNS_ANIMATION,
   name: "Ken burns",
   form: [
     {
@@ -35,7 +35,7 @@ export const kenBurnsDefinition: IEffectDefinition<IKenBurnsTuple> = {
 };
 
 export const kenBurnsDefaults: IKenBurnsEffect = {
-  id: KEN_BURNS_EFFECT,
+  id: KEN_BURNS_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

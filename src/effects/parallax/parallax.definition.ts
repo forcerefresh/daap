@@ -3,12 +3,12 @@ import {
   IParallaxInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { parallax, IParallaxEffect } from "./parallax.types";
+import { IParallaxEffect, PARALLAX_ANIMATION } from "./parallax.types";
 
 export type IParallaxTuple = [IParallaxInput<"parallax">];
 
 export const parallaxDefinition: IEffectDefinition<IParallaxTuple> = {
-  id: parallax,
+  id: PARALLAX_ANIMATION,
   name: "Parallax",
   form: [
     {
@@ -22,7 +22,7 @@ export const parallaxDefinition: IEffectDefinition<IParallaxTuple> = {
 };
 
 export const parallaxDefaults: IParallaxEffect = {
-  id: parallax,
+  id: PARALLAX_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

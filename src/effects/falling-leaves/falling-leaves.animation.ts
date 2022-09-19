@@ -1,7 +1,10 @@
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { IFallingLeaves } from "./falling-leaves.types";
+import {
+  FALLING_LEAVES_ANIMATION,
+  IFallingLeaves,
+} from "./falling-leaves.types";
 import { getMediaSrc } from "../../integration/utils/local-media";
 
 export function fallingLeavesAnimation() {
@@ -9,7 +12,7 @@ export function fallingLeavesAnimation() {
   let timelineArr: gsap.core.Timeline[] = [];
 
   function init(config: IFallingLeaves) {
-    logger.debug("fallingLeaves init");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -49,7 +52,7 @@ export function fallingLeavesAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("fallingLeaves rootStart");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       element.style.display = "none";
@@ -57,7 +60,7 @@ export function fallingLeavesAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("fallingLeaves rootStop");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       element.style.display = "none";
@@ -65,7 +68,7 @@ export function fallingLeavesAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("fallingLeaves start");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} start`);
     element.style.display = "block";
 
     timelineArr.forEach((tl) => {
@@ -74,7 +77,7 @@ export function fallingLeavesAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("fallingLeaves stop");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} stop`);
     element.style.display = "none";
 
     if (isManual) {
@@ -94,21 +97,21 @@ export function fallingLeavesAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("fallingLeaves pause");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} pause`);
     timelineArr.forEach((tl) => {
       tl.pause();
     });
   }
 
   function resume(config: any) {
-    logger.debug("fallingLeaves resume");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} resume`);
     timelineArr.forEach((tl) => {
       tl.resume();
     });
   }
 
   function destroy(config: any) {
-    logger.debug("fallingLeaves destroy");
+    logger.debug(`${FALLING_LEAVES_ANIMATION} destroy`);
 
     timelineArr.forEach((tl) => {
       tl.clear();

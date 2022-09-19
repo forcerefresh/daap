@@ -7,7 +7,7 @@ import {
 import gsap from "gsap";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
-import { ITilesZoomEffect } from "./tiles-zoom.types";
+import { ITilesZoomEffect, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
 
 export function tilesZoomAnimation() {
@@ -21,7 +21,7 @@ export function tilesZoomAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesZoomEffect) {
-    logger.debug("tilesZoom init");
+    logger.debug(`${TILES_ZOOM_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -92,7 +92,7 @@ export function tilesZoomAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("tilesZoom rootStart");
+    logger.debug(`${TILES_ZOOM_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -106,7 +106,7 @@ export function tilesZoomAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("tilesZoom rootStop");
+    logger.debug(`${TILES_ZOOM_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -120,7 +120,7 @@ export function tilesZoomAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("tilesZoom start");
+    logger.debug(`${TILES_ZOOM_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -136,7 +136,7 @@ export function tilesZoomAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("tilesZoom stop");
+    logger.debug(`${TILES_ZOOM_ANIMATION} stop`);
     logger.debug(isManual);
     logger.debug(isReverse);
 
@@ -175,17 +175,17 @@ export function tilesZoomAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("tilesZoom pause");
+    logger.debug(`${TILES_ZOOM_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("tilesZoom resume");
+    logger.debug(`${TILES_ZOOM_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("tilesZoom destroy");
+    logger.debug(`${TILES_ZOOM_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

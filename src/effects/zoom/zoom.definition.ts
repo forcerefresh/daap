@@ -3,12 +3,12 @@ import {
   INumberInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { IZoomInEffect, zoomIn } from "./zoom.types";
+import { IZoomInEffect, ZOOM_ANIMATION } from "./zoom.types";
 
 export type IZoomInTuple = [INumberInput<"scaleX">, INumberInput<"scaleY">];
 
-export const zoomInDefinition: IEffectDefinition<IZoomInTuple> = {
-  id: zoomIn,
+export const zoomDefinition: IEffectDefinition<IZoomInTuple> = {
+  id: ZOOM_ANIMATION,
   name: "Zoom",
   form: [
     {
@@ -30,8 +30,8 @@ export const zoomInDefinition: IEffectDefinition<IZoomInTuple> = {
   ],
 };
 
-export const zoomInDefaults: IZoomInEffect = {
-  id: zoomIn,
+export const zoomDefaults: IZoomInEffect = {
+  id: ZOOM_ANIMATION,
   hasDelay: true,
   hasDuration: true,
   hasEase: true,

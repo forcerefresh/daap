@@ -3,7 +3,7 @@ import { CustomEase } from "gsap/CustomEase";
 
 import { CustomWiggle } from "gsap/CustomWiggle";
 import { RGBColor } from "react-color";
-import { split, ISplitEffect } from "./split.types";
+import { ISplitEffect, SPLIT_ANIMATION } from "./split.types";
 
 gsap.registerPlugin(CustomEase);
 gsap.registerPlugin(CustomWiggle);
@@ -21,7 +21,7 @@ function createPeaces(target: HTMLDivElement, peaces: number) {
 //const areaH = 500;
 
 gsap.registerEffect({
-  name: split,
+  name: SPLIT_ANIMATION,
   effect: function (targets: any, config: ISplitEffect) {
     //const areaW = config.objectProperties?.width || 0;
     //const areaH = config.objectProperties?.height || 0;
