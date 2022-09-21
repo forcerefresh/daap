@@ -19,3 +19,6 @@
 [submodule "marketplace/effects/sample-effect"]
 	path = marketplace/effects/sample-effect
 	url = git@bitbucket.org:srdjanarsic/sample-effect.git
+[submodule "marketplace/effects/cube-effect"]
+	path = marketplace/effects/cube-effect
+	url = git@bitbucket.org:srdjanarsic/cube-effect.git
