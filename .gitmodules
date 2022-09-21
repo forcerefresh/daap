@@ -16,3 +16,6 @@
 [submodule "marketplace/objects/retina-image"]
 	path = marketplace/objects/retina-image
 	url = git@bitbucket.org:srdjanarsic/retina-image.git
+[submodule "marketplace/effects/sample-effect"]
+	path = marketplace/effects/sample-effect
+	url = git@bitbucket.org:srdjanarsic/sample-effect.git
