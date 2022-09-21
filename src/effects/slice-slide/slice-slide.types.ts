@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const sliceSlide = "sliceSlide";
+export const SLICE_SLIDE_ANIMATION = "sliceSlide";
 
 export interface ISliceSlideEffect extends IEffectBase {
   slices: number;

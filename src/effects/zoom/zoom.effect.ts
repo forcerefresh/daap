@@ -1,9 +1,9 @@
 import gsap from "gsap";
 import { getMethodByType } from "../common";
-import { IZoomInEffect, zoomIn } from "./zoom.types";
+import { IZoomInEffect, ZOOM_ANIMATION } from "./zoom.types";
 
 gsap.registerEffect({
-  name: zoomIn,
+  name: ZOOM_ANIMATION,
   effect: function (targets: any, config: IZoomInEffect) {
     if (config.type === "in") {
       return gsap.fromTo(
@@ -17,7 +17,7 @@ gsap.registerEffect({
         }
       );
     } else {
-      return gsap[getMethodByType(config.type)](targets, {
+      return gsap.to(targets, {
         ease: config.ease,
         duration: config.duration!,
         scaleX: 0,

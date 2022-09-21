@@ -1,11 +1,11 @@
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { IParallaxEffect } from "./parallax.types";
+import { IParallaxEffect, PARALLAX_ANIMATION } from "./parallax.types";
 
 const DEPTH_MULTIPLIER = 25; // from input we get 0-100, dividing with 25 we get 0-4 multiplier
 const STRENGTH_MULTIPLIER = 50; // from input we get 0-100, dividing with 50 we get 0-2 multiplier
 
-function parallaxAnimation() {
+export function parallaxAnimation() {
   let timeline: gsap.core.Timeline;
 
   let layer: HTMLDivElement;
@@ -14,7 +14,7 @@ function parallaxAnimation() {
   let applyParallaxToAll: any;
 
   function init(config: IParallaxEffect) {
-    logger.debug("parallax init");
+    logger.debug(`${PARALLAX_ANIMATION} init`);
 
     layer = document.getElementsByClassName("layer")[0] as HTMLDivElement;
     config.parallax.objects.forEach((object, idx) => {
@@ -82,22 +82,22 @@ function parallaxAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("parallax rootStart");
+    logger.debug(`${PARALLAX_ANIMATION} rootStart`);
   }
 
   function rootStop(config: any) {
-    logger.debug("parallax rootStop");
+    logger.debug(`${PARALLAX_ANIMATION} rootStop`);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("parallax start");
+    logger.debug(`${PARALLAX_ANIMATION} start`);
 
     layer.addEventListener("mousemove", layerMouseMoveHandler);
     timeline.play();
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("parallax stop");
+    logger.debug(`${PARALLAX_ANIMATION} stop`);
     layer.removeEventListener("mousemove", layerMouseMoveHandler);
 
     if (config.parallax.setToInitialPositionOnComplete) {
@@ -118,17 +118,17 @@ function parallaxAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("parallax pause");
+    logger.debug(`${PARALLAX_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("parallax resume");
+    logger.debug(`${PARALLAX_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("parallax destroy");
+    logger.debug(`${PARALLAX_ANIMATION} destroy`);
 
     timeline.clear();
     timeline.kill();
@@ -146,9 +146,3 @@ function parallaxAnimation() {
     destroy,
   };
 }
-
-const parallaxDef = {
-  effectId: "parallax",
-  effectFunc: parallaxAnimation,
-};
-export default parallaxDef;

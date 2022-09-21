@@ -7,7 +7,7 @@ import {
   getObjectContentElementAndHtml,
   updateTilesSize,
 } from "../common";
-import { ITilesFadeEffect } from "./tiles-fade.types";
+import { ITilesFadeEffect, TILES_FADE_ANIMATION } from "./tiles-fade.types";
 
 export function tilesFadeAnimation() {
   let timeline: gsap.core.Timeline;
@@ -20,7 +20,7 @@ export function tilesFadeAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesFadeEffect) {
-    logger.debug("tilesFade init");
+    logger.debug(`${TILES_FADE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -88,7 +88,7 @@ export function tilesFadeAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("tilesFade rootStart");
+    logger.debug(`${TILES_FADE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -102,7 +102,7 @@ export function tilesFadeAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("tilesFade rootStop");
+    logger.debug(`${TILES_FADE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -116,7 +116,7 @@ export function tilesFadeAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("tilesFade start");
+    logger.debug(`${TILES_FADE_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -132,7 +132,7 @@ export function tilesFadeAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("tilesFade stop");
+    logger.debug(`${TILES_FADE_ANIMATION} stop`);
     logger.debug(isManual);
     logger.debug(isReverse);
 
@@ -164,6 +164,7 @@ export function tilesFadeAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
+    logger.debug(`${TILES_FADE_ANIMATION} update`);
     if (isManual) {
       console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
@@ -171,17 +172,17 @@ export function tilesFadeAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("tilesFade pause");
+    logger.debug(`${TILES_FADE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("tilesFade resume");
+    logger.debug(`${TILES_FADE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("tilesFade destroy");
+    logger.debug(`${TILES_FADE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

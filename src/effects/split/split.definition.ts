@@ -4,7 +4,7 @@ import {
   ISplitInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { split, ISplitEffect } from "./split.types";
+import { ISplitEffect, SPLIT_ANIMATION } from "./split.types";
 
 export type ISplitTuple = [
   ISplitInput<"split">,
@@ -13,7 +13,7 @@ export type ISplitTuple = [
 ];
 
 export const splitDefinition: IEffectDefinition<ISplitTuple> = {
-  id: split,
+  id: SPLIT_ANIMATION,
   name: "Split",
   form: [
     {
@@ -44,7 +44,7 @@ export const splitDefinition: IEffectDefinition<ISplitTuple> = {
 };
 
 export const splitDefaults: ISplitEffect = {
-  id: split,
+  id: SPLIT_ANIMATION,
   hasDelay: false,
   hasDuration: true,
   hasEase: true,

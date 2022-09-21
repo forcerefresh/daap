@@ -15,8 +15,23 @@ import {
 
 import { kenBurnsDef, kenBurnsAppDef } from "./ken-burns/ken-burns";
 import { squareMaskAppDef, squareMaskDef } from "./square-mask/square-mask";
+import { typewriterAppDef, typewriterDef } from "./typewriter/typewriter";
+import { flipAppDef, flipDef } from "./flip/flip";
+import { flipSlideAppDef, flipSlideDef } from "./flip-slide/flip-slide";
+import { parallaxAppDef, parallaxDef } from "./parallax/parallax";
+import { sliceSlideAppDef, sliceSlideDef } from "./slice-slide/slice-slide";
+import { splitAppDef, splitDef } from "./split/split";
+import { trianglifyAppDef, trianglifyDef } from "./trianglify/trianglify";
+import { zoomAppDef, zoomDef } from "./zoom/zoom";
 
 registerEffect(fadeAppDef, fadeDef);
+registerEffect(flipAppDef, flipDef);
+registerEffect(flipSlideAppDef, flipSlideDef);
+registerEffect(parallaxAppDef, parallaxDef);
+registerEffect(sliceSlideAppDef, sliceSlideDef);
+registerEffect(splitAppDef, splitDef);
+registerEffect(trianglifyAppDef, trianglifyDef);
+registerEffect(zoomAppDef, zoomDef);
 registerEffect(slideAppDef, slideDef);
 registerEffect(tilesZoomAppDef, tilesZoomDef);
 registerEffect(fallingLeavesAppDef, fallingLeavesDef);
@@ -27,3 +42,5 @@ registerEffect(null, execCodePlayerDef);
 
 registerEffect(kenBurnsAppDef, kenBurnsDef);
 registerEffect(squareMaskAppDef, squareMaskDef);
+
+registerEffect(typewriterAppDef, typewriterDef);

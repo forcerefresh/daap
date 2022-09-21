@@ -1,11 +1,11 @@
 import gsap from "gsap";
-import { parallax, IParallaxEffect } from "./parallax.types";
+import { IParallaxEffect, PARALLAX_ANIMATION } from "./parallax.types";
 
 const DEPTH_MULTIPLIER = 25; // from input we get 0-100, dividing with 25 we get 0-4 multiplier
 const STRENGTH_MULTIPLIER = 50; // from input we get 0-100, dividing with 50 we get 0-2 multiplier
 
 gsap.registerEffect({
-  name: parallax,
+  name: PARALLAX_ANIMATION,
   effect: function (targets: any, config: IParallaxEffect) {
     const layer = targets[0] as HTMLDivElement;
 

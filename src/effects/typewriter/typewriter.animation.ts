@@ -1,111 +1,138 @@
 import { space2nbsp } from "../../utils/doom-utils/common";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
-import { createRootTimelineForTextEffect } from "../text.utils";
 import { ITypeWriterEffect } from "./typewriter.types";
+import gsap, { SteppedEase } from "gsap";
+import { SplitText } from "gsap/SplitText";
+import { IObject } from "../../webslider-sdk/src/objects/i-object";
+import { TextValues } from "../../objects/text/text";
 
-function typewriterAnimation() {
-  let timeline: gsap.core.Timeline;
-  let objectEl: HTMLElement;
+export function getTypewriterAnimationDuration(object?: IObject, config?: any) {
+  const effValues = config?.effect?.values!;
+  const values = object?.definition.values as TextValues;
+
+  const wordsArr = values.text.split(" ");
+  const charsStr = wordsArr?.join("");
+
+  const deleteTime = effValues.hasDelete
+    ? effValues.timeAfterWrite +
+      (wordsArr!.length - 1) * effValues.emptySpaceDeleteTime +
+      charsStr!.length * effValues.deleteCharacterSpeed
+    : 0;
+
+  return (
+    effValues.initialDelay +
+    (wordsArr!.length - 1) * effValues.emptySpaceTypeTime +
+    charsStr!.length * effValues.typeCharacterSpeed +
+    deleteTime
+  );
+}
+
+export function typewriterAnimation() {
+  let objectEl: HTMLDivElement;
   let pEl: HTMLParagraphElement;
-  let originalInnerHTML: string;
   let textChars: SplitText;
   let cursorEl: HTMLDivElement;
-
   let cursorBlinkingTween: gsap.core.Tween;
-  let currentId: number;
 
-  let initializeEffect: any;
-  let initializeTextEffect: any;
-  let teardownEffect: any;
+  let timeline: gsap.core.Timeline;
+
+  let originalInnerHTML: string;
 
   function init(config: ITypeWriterEffect) {
     logger.debug("typewriter init");
 
     objectEl = getObjectElementById(config.itemId!);
+
     pEl = objectEl.firstChild as HTMLParagraphElement;
     pEl.style.opacity = "0";
+    pEl.style.display = "block";
     originalInnerHTML = pEl.innerHTML;
 
-    let currentId: number;
-    initializeEffect = (idx = 1) => {
-      currentId = idx;
+    timeline = gsap.timeline({ paused: true });
+  }
 
-      initializeTextEffect(pEl.innerText); //(config as any)["text" + idx] as string);
-    };
+  function initializeEffect(config: ITypeWriterEffect) {
+    initializeTextEffect(pEl.innerText, config);
+  }
 
-    initializeTextEffect = (text: string) => {
-      // - create characters
-      pEl.innerText = text;
-      pEl.innerHTML = space2nbsp(pEl.innerHTML);
-      pEl.style.opacity = "1";
-      textChars = new SplitText(pEl, {
-        type: "chars",
-        position: "absolute",
-      });
-      const chars = textChars.chars;
-      gsap.set(chars, { opacity: 0, visibility: "visible" });
+  function teardownEffect() {
+    pEl.style.opacity = "0";
+    textChars.revert(); // cleanup SplitText outcome
+    pEl.innerHTML = originalInnerHTML; // revert text
+    cursorEl.parentElement?.removeChild(cursorEl); // remove cursor
+    cursorBlinkingTween.kill();
+  }
 
-      // - create cursor
-      cursorEl = document.createElement("div");
-      cursorEl.style.position = "absolute";
-      cursorEl.style.top = "0px";
-      cursorEl.style.left = "0px";
-      cursorEl.style.height = (chars[0] as HTMLElement).style.height;
-      cursorEl.style.width = "2px";
-      cursorEl.style.background = "white";
-      cursorEl.style.visibility = "visible";
-      objectEl.appendChild(cursorEl);
+  function initializeTextEffect(text: string, config: ITypeWriterEffect) {
+    // - create characters
+    pEl.innerText = text;
+    pEl.innerHTML = space2nbsp(pEl.innerHTML);
+    pEl.style.opacity = "1";
+    textChars = new SplitText(pEl, {
+      type: "chars",
+      position: "absolute",
+    });
+    const chars = textChars.chars;
+    gsap.set(chars, { opacity: 0, visibility: "visible" });
 
-      // - set animation
-      let delay = 0;
-      let cursorX;
-      let cursorY;
-      for (let i = 0; i < chars.length; i++) {
-        cursorX =
-          parseInt((chars[i] as HTMLElement).style.left) +
-          parseInt((chars[i] as HTMLElement).style.width) +
-          config.cursorPadding;
-        cursorY = parseInt((chars[i] as HTMLElement).style.top, 10);
+    // - create cursor
+    cursorEl = document.createElement("div");
+    cursorEl.style.position = "absolute";
+    cursorEl.style.top = "0px";
+    cursorEl.style.left = "0px";
+    cursorEl.style.height = (chars[0] as HTMLElement).style.height;
+    cursorEl.style.width = "2px";
+    cursorEl.style.background = "white";
+    cursorEl.style.visibility = "visible";
+    objectEl.appendChild(cursorEl);
 
-        const add =
-          chars[i].innerHTML === "&nbsp;"
-            ? config.emptySpaceTypeTime / 1000
-            : config.typeCharacterSpeed / 1000;
+    // - set animation
+    let delay = 0;
+    let cursorX;
+    let cursorY;
+    for (let i = 0; i < chars.length; i++) {
+      cursorX =
+        parseInt((chars[i] as HTMLElement).style.left) +
+        parseInt((chars[i] as HTMLElement).style.width) +
+        config.cursorPadding;
+      cursorY = parseInt((chars[i] as HTMLElement).style.top, 10);
 
-        // move cursor to right position
-        timeline.set(
-          cursorEl,
-          {
-            x: cursorX,
-            y: cursorY,
-            delay,
-          },
-          config.initialDelay / 1000
-        );
+      const add =
+        chars[i].innerHTML === "&nbsp;"
+          ? config.emptySpaceTypeTime / 1000
+          : config.typeCharacterSpeed / 1000;
 
-        // show char at right time
-        timeline.set(
-          chars[i],
-          { opacity: 1, delay },
-          config.initialDelay / 1000
-        );
-
-        delay += add;
-      }
-
-      // time after text is written
-      delay += !!config.timeAfterWrite ? config.timeAfterWrite / 1000 : 0;
+      // move cursor to right position
       timeline.set(
         cursorEl,
         {
           x: cursorX,
+          y: cursorY,
           delay,
         },
         config.initialDelay / 1000
       );
 
-      // delete text
+      // show char at right time
+      timeline.set(chars[i], { opacity: 1, delay }, config.initialDelay / 1000);
+
+      delay += add;
+    }
+
+    // time after text is written
+    delay += !!config.timeAfterWrite ? config.timeAfterWrite / 1000 : 0;
+    timeline.set(
+      cursorEl,
+      {
+        x: cursorX,
+        delay,
+      },
+      config.initialDelay / 1000
+    );
+
+    // delete text
+    if (config.hasDelete) {
       for (let i = chars.length - 1; i >= 0; i--) {
         // diff
         cursorX =
@@ -139,30 +166,19 @@ function typewriterAnimation() {
 
         delay += add;
       }
+    }
+    // EFFECT SETUP ENDEND
 
-      // EFFECT SETUP ENDEND
+    const repeat = (delay / (config.cursorBlinking / 1000)) * 2;
 
-      const repeat = (delay / (config.cursorBlinking / 1000)) * 2;
-
-      //cursor blinking
-      cursorBlinkingTween = gsap.to(cursorEl, {
-        duration: config.cursorBlinking / 1000,
-        autoAlpha: 0,
-        repeat: -1, //5, //-1, //repeat, //-1
-        yoyo: true,
-        ease: SteppedEase.config(1),
-      });
-
-      teardownEffect = () => {
-        pEl.style.opacity = "0";
-        textChars.revert(); // cleanup SplitText outcome
-        pEl.innerHTML = originalInnerHTML; // revert text
-        cursorEl.parentElement?.removeChild(cursorEl); // remove cursor
-        cursorBlinkingTween.kill();
-      };
-    };
-
-    timeline = gsap.timeline({ duration: 1 });
+    //cursor blinking
+    cursorBlinkingTween = gsap.to(cursorEl, {
+      duration: config.cursorBlinking / 1000,
+      autoAlpha: 0,
+      repeat: -1, //5, //-1, //repeat, //-1
+      yoyo: true,
+      ease: SteppedEase.config(1),
+    });
   }
 
   function rootStart(config: any) {
@@ -183,13 +199,23 @@ function typewriterAnimation() {
     logger.debug("typewriter start");
 
     if (objectEl.offsetWidth === 0) {
+      setTimeout(() => {
+        startInternal(config);
+      }, 1);
       return;
+    } else {
+      startInternal(config);
     }
 
-    initializeEffect();
+    if (isManual) timeline.pause();
+  }
+
+  function startInternal(config: ITypeWriterEffect) {
+    logger.debug("typewriter startInternal");
+
+    initializeEffect(config);
 
     timeline.play(0);
-    if (isManual) timeline.pause();
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
@@ -238,9 +264,3 @@ function typewriterAnimation() {
     destroy,
   };
 }
-
-const typewriterDef = {
-  effectId: "typewriter",
-  effectFunc: typewriterAnimation,
-};
-export default typewriterDef;

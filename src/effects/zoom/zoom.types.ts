@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const zoomIn = "zoomIn";
+export const ZOOM_ANIMATION = "zoomIn";
 
 export interface IZoomInEffect extends IEffectBase {
   scaleX: number;

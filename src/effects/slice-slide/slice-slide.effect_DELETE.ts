@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { ISliceSlideEffect, sliceSlide } from "./slice-slide.types";
+import { ISliceSlideEffect, SLICE_SLIDE_ANIMATION } from "./slice-slide.types";
 import { merge } from "lodash-es";
 import {
   createTilesFromHtml,
@@ -11,7 +11,7 @@ import {
 } from "../common";
 
 gsap.registerEffect({
-  name: sliceSlide,
+  name: SLICE_SLIDE_ANIMATION,
   effect: function (targets: any, config: ISliceSlideEffect) {
     // get element and html
     const { objectContentElement, objectContentHtml } =

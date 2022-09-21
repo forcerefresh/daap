@@ -1,6 +1,6 @@
 import { IEffectBase } from "../types";
 
-export const typewriter = "typewriter";
+export const TYPEWRITER_ANIMATION = "typewriter";
 
 export interface ITypeWriterEffect extends IEffectBase {
   typeCharacterSpeed: number;
@@ -11,8 +11,5 @@ export interface ITypeWriterEffect extends IEffectBase {
   initialDelay: number;
   timeAfterWrite: number;
   cursorPadding: number;
-  text1: string;
-  text2: string;
-  text3: string;
-  text4: string;
+  hasDelete?: boolean;
 }

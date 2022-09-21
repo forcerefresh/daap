@@ -1,5 +1,5 @@
 import gsap, { SteppedEase } from "gsap";
-import { typewriter, ITypeWriterEffect } from "./typewriter.types";
+import { TYPEWRITER_ANIMATION, ITypeWriterEffect } from "./typewriter.types";
 import { SplitText } from "gsap/SplitText";
 import { space2nbsp } from "../../utils/doom-utils/common";
 import { createRootTimelineForTextEffect } from "../text.utils";
@@ -24,7 +24,7 @@ export function getTypewriterEffectDuration(object?: IObject, config?: any) {
 }
 
 gsap.registerEffect({
-  name: typewriter,
+  name: TYPEWRITER_ANIMATION,
   effect: function (targets: any, config: ITypeWriterEffect) {
     const objectEl = targets[0]! as HTMLElement;
     const pEl = objectEl.firstChild as HTMLParagraphElement;
