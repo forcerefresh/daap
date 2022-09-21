@@ -30,10 +30,15 @@ import {
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { ImageItem } from "../../webslider-sdk/src/common/i-media-types";
 import { cloneDeep } from "lodash-es";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "../../webslider-sdk/src/objects/transform-properties";
 
 export const IMAGE = "image";
 
-export interface ImageValues extends CommonPropertiesValues {
+export interface ImageValues {
   fit: ICoverPlacementValue;
   image: IImageInputValue;
   useForThumbnail: boolean;
@@ -44,8 +49,7 @@ export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
   IImageInput<"image">,
   ICheckboxInput<"useForThumbnail">,
-  ICheckboxInput<"preload">,
-  ...CommonPropertiesTuple
+  ICheckboxInput<"preload">
 ];
 
 export function createImageObject(
@@ -98,7 +102,6 @@ export function createImageObject(
       defaultValue: true,
       value: true,
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   console.log(initialValue);
@@ -111,22 +114,26 @@ export function createImageObject(
     image: initialValue?.image || { image: { sourceType: "local" } },
     useForThumbnail: false,
     preload: true,
-    ...getCommonPropertiesValues(),
   };
 
   return {
     ...object,
     definition: {
-      id: uuid(),
-      type: IMAGE,
+      //id: uuid(),
+      //type: IMAGE,
       properties,
       values,
-      valuesMetadata: {
-        ...{
-          /*define meta*/
-        },
-        ...getCommonPropertiesMetadataValues(),
-      },
+      valuesMetadata: {},
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+    },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
     },
   };
 }
@@ -174,6 +181,7 @@ export function getImageHtml(props: {
 
   let style = "";
   style += addCommonPropertiesToStyle(style, object);
+  style += addTransformPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-image:url('${imageItem.src}');`;

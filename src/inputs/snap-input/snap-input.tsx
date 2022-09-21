@@ -130,7 +130,7 @@ export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
 
     return (
       <>
-        <table>
+        <table className={css.main}>
           <>
             <tr className={css.headerRow}>
               <td></td>

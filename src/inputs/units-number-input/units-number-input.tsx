@@ -7,7 +7,7 @@ import {
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./units-number-input.module.scss";
 
-export type UnitType = "px" | "em" | "%" | "ms" | "s" | null;
+export type UnitType = "px" | "em" | "%" | "ms" | "s" | "deg" | null;
 interface UnitValue {
   value: string;
   unit: UnitType;
@@ -39,6 +39,12 @@ function value2UnitValue(
   ) {
     unit = "ms";
     value = inputValueStr.split("ms").join("");
+  } else if (
+    allowedUnits.indexOf("deg") !== -1 &&
+    inputValueStr.includes("deg")
+  ) {
+    unit = "deg";
+    value = inputValueStr.split("deg").join("");
   } else if (allowedUnits.indexOf("s") !== -1 && inputValueStr.includes("s")) {
     unit = "s";
     value = inputValueStr.split("s").join("");

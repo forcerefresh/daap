@@ -40,11 +40,10 @@ export type SvgPropertiesTuple = [
   IFormGroupItem<
     [IColorInput<"fill">, IColorInput<"stroke">, IColorInput<"color">]
   >,
-  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
-  ...CommonPropertiesTuple
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
 ];
 
-export interface SvgValues extends CommonPropertiesValues {
+export interface SvgValues {
   svg: ISVGValue;
   hasCustomColors: boolean;
   hasFillAndStroke: boolean;
@@ -130,7 +129,6 @@ export function createSvgObject(
         },
       ],
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: SvgValues = {
@@ -144,14 +142,12 @@ export function createSvgObject(
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 1 },
     color: { r: 255, g: 255, b: 255, a: 1 },
-    ...getCommonPropertiesValues(),
   };
 
   const valuesMetadata: { [key: string]: IInputMetadataValues } = {
     fill: { exportForWizard: false, disabled: false },
     stroke: { exportForWizard: false, disabled: false },
     color: { exportForWizard: false, disabled: false },
-    ...getCommonPropertiesMetadataValues(),
   };
 
   return {
@@ -162,6 +158,11 @@ export function createSvgObject(
       properties,
       values,
       valuesMetadata,
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

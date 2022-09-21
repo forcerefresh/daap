@@ -27,7 +27,7 @@ export const FRAME = "frame";
 
 export type FramePropertiesTuple = [];
 
-export interface FrameValues extends CommonPropertiesValues {}
+export interface FrameValues {}
 
 export function createFrameObject(
   initialValue?: {
@@ -42,13 +42,9 @@ export function createFrameObject(
 > {
   const object = createCommonObject(FRAME);
 
-  const properties: CommonPropertiesTuple = [
-    ...getCommonObjectPropertiesDefinition(),
-  ];
+  const properties: FramePropertiesTuple = [];
 
-  const values: CommonPropertiesValues = {
-    ...getCommonPropertiesValues(),
-  };
+  const values = {};
 
   return {
     ...object,
@@ -57,6 +53,11 @@ export function createFrameObject(
       type: FRAME,
       properties,
       values,
+      valuesMetadata: {},
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };

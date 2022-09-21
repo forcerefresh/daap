@@ -13,6 +13,7 @@ import {
 import {
   ILayout,
   ITransitions,
+  IDefinition,
 } from "../../webslider-sdk/src/objects/i-object";
 import {
   FormType,
@@ -40,6 +41,7 @@ export interface ILayer extends ILayout {
     values: ILayerValues;
     valuesMetadata: { [key: string]: IInputMetadataValues };
   };
+  commonStyleDefinition?: IDefinition;
 }
 
 export interface ILayerValues {

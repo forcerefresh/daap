@@ -57,7 +57,21 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
     <div className={css.main}>
       {children}
       <div className={css.optionsHolder}>
-        <Popover2
+        <Button
+          className={css.button}
+          minimal
+          small
+          onClick={() => {
+            onMetadataChange({
+              ...metadataValues,
+              disabled: !metadataValues.disabled,
+            });
+          }}
+        >
+          {getIcon()}
+        </Button>
+
+        {/* <Popover2
           content={metaMenu}
           placement="left-end"
           shouldReturnFocusOnClose={false}
@@ -68,7 +82,7 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
           <Button className={css.button} minimal small>
             {getIcon()}
           </Button>
-        </Popover2>
+        </Popover2> */}
       </div>
     </div>
   );

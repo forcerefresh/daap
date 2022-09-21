@@ -31,7 +31,7 @@ import { JSONSourceConnector } from "../json-loader/json-source-connector";
 
 export const TEXT_TARGET = "text_target";
 
-export interface TextTargetValues extends CommonPropertiesValues {
+export interface TextTargetValues {
   sourceId: string;
   jsonPath: string;
   sampleText: string;
@@ -60,8 +60,7 @@ export type TextTargetTuple = [
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
-  ICheckboxInput<"preload">,
-  ...CommonPropertiesTuple
+  ICheckboxInput<"preload">
 ];
 
 export function createTextTarget(
@@ -198,7 +197,6 @@ export function createTextTarget(
       defaultValue: true,
       inputProps: { disabled: true },
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: TextTargetValues = {
@@ -218,7 +216,6 @@ export function createTextTarget(
     lineHeight: "20px",
     textAlign: "left",
     preload: true, // not visible,
-    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -230,8 +227,12 @@ export function createTextTarget(
       values,
       valuesMetadata: {
         ...{ lineHeight: { exportForWizard: false, disabled: true } },
-        ...getCommonPropertiesMetadataValues(),
       },
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

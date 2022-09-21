@@ -1,6 +1,6 @@
 import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import classnames from "classnames";
-import React from "react";
+import React, { useContext } from "react";
 import { connect } from "react-redux";
 
 import { IObject } from "../../webslider-sdk/src/objects/i-object";
@@ -12,12 +12,23 @@ import NavigationPanel from "../navigation-panel/NavigationPanel";
 import PropertiesPanel from "../properties-panel/PropertiesPanel";
 
 import css from "./PropertiesPanelAll.module.scss";
+import PropertiesSectionsPanel from "../properties-sections-panel/PropertiesSectionsPanel";
+import {
+  PropertiesPanelContext,
+  PropertiesPanelSection,
+} from "./PropertiesPanelProvider";
+import LayoutProperties from "../properties-panel/layout-properties/LayoutProperties";
+import BasicProperties from "../properties-panel/basic-properties/BasicProperties";
+import CommonStyleProperties from "../properties-panel/common-style/CommonStyleProperties";
+import TransformProperties from "../properties-panel/transform-properties/TransformProperties";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
   const { panelName, totalEffectCounter } = props;
+
+  const { activeSection } = useContext(PropertiesPanelContext);
 
   return (
     <div className={css.propertiesPanelAll} key={panelName?.id}>
@@ -33,8 +44,34 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           </span>
         )}
       </div>
+      <PropertiesSectionsPanel />
 
-      <Tabs className={css.tabs}>
+      {activeSection === PropertiesPanelSection.Layout && <LayoutProperties />}
+
+      {activeSection === PropertiesPanelSection.Basic && <BasicProperties />}
+
+      {activeSection === PropertiesPanelSection.CommonStyle && (
+        <CommonStyleProperties />
+      )}
+
+      {activeSection === PropertiesPanelSection.Transform && (
+        <TransformProperties />
+      )}
+
+      {activeSection === PropertiesPanelSection.Properties && (
+        <PropertiesPanel className={"propertiesPanel " + css.propertiesPanel} />
+      )}
+
+      {activeSection === PropertiesPanelSection.Animation && (
+        <StaticEffectPanel
+          hideHeader
+          className={"propertiesPanel " + css.propertiesPanel}
+        />
+      )}
+
+      {activeSection === PropertiesPanelSection.Linking && <NavigationPanel />}
+
+      {/*<Tabs className={css.tabs}>
         <Tab
           id="properties-panel"
           title="Properties"
@@ -74,10 +111,7 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
             panel={<NavigationPanel />}
           />
         )}
-
-        {/*<Tabs.Expander />
-        <Button minimal icon="cog" />*/}
-      </Tabs>
+      </Tabs>*/}
     </div>
   );
 };

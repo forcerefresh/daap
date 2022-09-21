@@ -192,6 +192,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     handle: string;
   } | null>(null);
 
+  console.log(resizeData);
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
@@ -515,12 +516,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     };
 
     return (
-      <React.Fragment key={`handles_${object.id}`}>
+      <div className={"RESIZE_HANDLES_HOLDER"} key={`handles_${object.id}`}>
         <div
           style={topLeftStyle}
           data-resize-handle-tl={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
           onMouseDown={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
             setResizeData({ objectId: object.id, handle: "tl" });
           }}
         ></div>
@@ -530,6 +533,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           data-resize-handle="tr"
           className={cx(css.resizeHandle, "resizeHandle")}
           onMouseDown={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            setResizeStartPosition({ ...getMousePosition(e), corner: "tr" });
             setResizeData({ objectId: object.id, handle: "tr" });
           }}
         ></div>
@@ -538,6 +543,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           data-resize-handle-bl={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
           onMouseDown={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            setResizeStartPosition({ ...getMousePosition(e), corner: "bl" });
             setResizeData({ objectId: object.id, handle: "bl" });
           }}
         ></div>
@@ -546,10 +553,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           data-resize-handle-br={object.id}
           className={cx(css.resizeHandle, "resizeHandle")}
           onMouseDown={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            setResizeStartPosition({ ...getMousePosition(e), corner: "br" });
             setResizeData({ objectId: object.id, handle: "br" });
           }}
         ></div>
-      </React.Fragment>
+      </div>
     );
   }
   function renderLayer(layer: ILayer) {
@@ -661,8 +670,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       );
 
       const objectStyle = { ...calculatedObjectSize, left: "0px", top: "0px" };
-
       objectStyle.position = cssPosition;
+      if (object.transformDefinition?.values?.hasPerspective) {
+        objectStyle.perspective = `${object.transformDefinition?.values?.transformPerspective}`;
+      }
 
       // object holder
       const objectHolderStyle: CSSProperties = {
@@ -763,6 +774,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const objectStyle2 = { ...calculatedObjectSize };
     objectStyle2.position = cssPosition;
     objectStyle2.borderWidth = 1 + "px";
+
+    if (object.transformDefinition?.values?.hasPerspective) {
+      objectStyle2.perspective = `${object.transformDefinition?.values?.transformPerspective}`;
+    }
 
     let widthAndHeightStyle = {
       width: calculatedObjectSize.width,
@@ -941,8 +956,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }
 
   const handleStageMouseMove = (e: any) => {
+    console.log(e);
     e.persist();
     if (selectionStartPosition !== null) {
+      console.log("SELECTION START");
       const point = getMousePosition(e);
       if (
         stageToolInternal === StageTools.SELECT ||
@@ -960,6 +977,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         setPanMove({ ...panMove, ...panMoveNew });
       }
     } else if (resizeStartPosition !== null && resizeData) {
+      console.log("RESIZER");
+
       const point = getMousePosition(e);
       const movePoint = getPointsDiff(resizeStartPosition, point);
 
@@ -1215,7 +1234,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   selectedObjectIds.indexOf(object.id) !== -1,
                 [css.selected]: isSelected,
               })}
-              style={{ ...objectStyle2, pointerEvents: "none" }}
+              style={{ ...objectStyle2, pointerEvents: "none" }} // TODO 123,
             />
           )}
           {renderObjectHandles(object, layoutChildren)}
@@ -1240,6 +1259,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           target?.className?.indexOf("resizeHandle") !== -1
         ) {
           e.stopPropagation();
+          //debugger;
           setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
           return;
         }
@@ -1320,14 +1340,24 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
             }
           } else {
+            console.log("----");
+
+            console.log(e.target);
             try {
               const t1 = e.target as any;
               const t2 = t1.parentElement! as any;
               const t3 = t2.parentElement! as any;
+              const t4 = t3.parentElement! as any;
+              console.log(t2);
+              console.log(t3);
+              console.log(t4);
+
               if (
-                t1.className.indexOf("StagePanel_stagePanel_") !== -1 ||
-                t2.className.indexOf("StagePanel_stagePanel_") !== -1 ||
-                t3.className.indexOf("StagePanel_stagePanel_") !== -1
+                t1.className.indexOf("StagePanel_stage_") !== -1 ||
+                t2.className.indexOf("StagePanel_stage_") !== -1 ||
+                t3.className.indexOf("StagePanel_stage_") !== -1 ||
+                t4.className.indexOf("StagePanel_stage_") !== -1 ||
+                t1.className.indexOf("StagePanel_stagePanel_") !== -1 // <<< t1 === stagePanel
               ) {
                 // deselect objects
                 _selectObjects([]);
@@ -1375,9 +1405,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               )}
               {!isPreview && layerArr?.map(renderLayer)}
             </div>
-            <div className="resizeHolder">
-              {!isPreview && layerArr?.map(renderResizerWithLayer)}
-            </div>
+
             {!isPreview && (
               <>
                 {horizontalGridLines.map((item, hlIdx) => (
@@ -1414,6 +1442,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 ></div>
               </>
             )}
+            <div className="resizeHolder">
+              {!isPreview && layerArr?.map(renderResizerWithLayer)}
+            </div>
           </div>
           {isPreview && previewLayout.body.component}
         </div>

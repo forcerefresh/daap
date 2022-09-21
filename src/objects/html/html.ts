@@ -24,12 +24,9 @@ import {
 
 export const HTML = "html";
 
-export type HtmlPropertiesTuple = [
-  IHTMLInput<"html">,
-  ...CommonPropertiesTuple
-];
+export type HtmlPropertiesTuple = [IHTMLInput<"html">];
 
-export interface HtmlValues extends CommonPropertiesValues {
+export interface HtmlValues {
   html: IHTMLValue;
 }
 
@@ -58,7 +55,6 @@ export function createHtmlObject(
         source: ``,
       },
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: HtmlValues = {
@@ -67,12 +63,9 @@ export function createHtmlObject(
       : {
           source: ``,
         },
-    ...getCommonPropertiesValues(),
   };
 
-  const valuesMetadata: { [key: string]: IInputMetadataValues } = {
-    ...getCommonPropertiesMetadataValues(),
-  };
+  const valuesMetadata: { [key: string]: IInputMetadataValues } = {};
 
   return {
     ...object,
@@ -82,6 +75,11 @@ export function createHtmlObject(
       properties,
       values,
       valuesMetadata,
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

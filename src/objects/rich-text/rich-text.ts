@@ -43,8 +43,7 @@ export type RichTextPropertiesTuple = [
   ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
-  IUnitsNumberInput<"fontSize">,
-  ...CommonPropertiesTuple
+  IUnitsNumberInput<"fontSize">
 ];
 
 export function createRichTextObject(
@@ -104,7 +103,6 @@ export function createRichTextObject(
       value: initialValue?.fontSize || "1em",
       defaultValue: "1em",
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: RichTextValues = {
@@ -116,7 +114,6 @@ export function createRichTextObject(
     },
     color: { r: 255, g: 255, b: 255, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
-    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -126,7 +123,12 @@ export function createRichTextObject(
       type: RICH_TEXT,
       properties,
       values,
-      valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
+      valuesMetadata: {},
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

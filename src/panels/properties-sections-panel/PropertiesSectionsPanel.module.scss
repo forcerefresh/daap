@@ -1,0 +1,57 @@
+.propertiesSections {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  padding: 8px 0px 4px 0px;
+  color: gray;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+
+    .bp3-button {
+      text-align: center;
+      position: relative;
+    }
+
+    .bp3-button:not(.bp3-small) {
+      width: 82px;
+      height: 68px;
+      margin-left: 2px;
+      margin-right: 2px;
+    }
+    .bp3-button.bp3-small {
+      width: 34px;
+      height: 34px;
+      // padding: 7px 14px;
+    }
+  }
+
+  .buttonGroupsHolder {
+    display: block;
+    text-align: left;
+    //flex-direction: row;
+    > * {
+      display: inline-block;
+    }
+  }
+  .buttonGroupsHolder > div:last-of-type {
+    margin-top: auto;
+  }
+  .buttonGroupsHolder > * + * {
+    margin-top: 0px;
+  }
+}
+
+.delimiter {
+  height: 20px;
+}
+
+.tag {
+  position: absolute;
+  top: 1px;
+  background: #3a80b5 !important;
+  right: 1px;
+}

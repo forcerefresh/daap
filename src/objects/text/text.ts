@@ -29,7 +29,7 @@ import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 export const TEXT = "text";
 
-export interface TextValues extends CommonPropertiesValues {
+export interface TextValues {
   text: string;
   autoHeight: boolean;
   font: IFontSelectInputValue;
@@ -54,8 +54,7 @@ export type TextPropertiesTuple = [
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
-  ICheckboxInput<"preload">,
-  ...CommonPropertiesTuple
+  ICheckboxInput<"preload">
 ];
 
 export function createTextObject(
@@ -181,7 +180,6 @@ export function createTextObject(
       defaultValue: true,
       inputProps: { disabled: true },
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: TextValues = {
@@ -199,7 +197,6 @@ export function createTextObject(
     lineHeight: "20px",
     textAlign: "left",
     preload: true, // not visible,
-    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -211,8 +208,12 @@ export function createTextObject(
       values,
       valuesMetadata: {
         ...{ lineHeight: { exportForWizard: false, disabled: true } },
-        ...getCommonPropertiesMetadataValues(),
       },
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

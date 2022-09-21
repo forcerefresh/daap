@@ -20,8 +20,6 @@ import video from "./video-icon.svg";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
@@ -33,11 +31,10 @@ export const VIDEO = "video";
 
 export type VideoPropertiesTuple = [
   ICoverPlacementInput<"videoFit">,
-  IVideoInput<"video">,
-  ...CommonPropertiesTuple
+  IVideoInput<"video">
 ];
 
-export interface VideoValues extends CommonPropertiesValues {
+export interface VideoValues {
   videoFit: ICoverPlacementValue;
   video: IVideoInputValue;
 }
@@ -79,7 +76,6 @@ export function createVideoObject(
       value: { video: {} },
       defaultValue: { video: {} },
     },
-    ...getCommonObjectPropertiesDefinition(),
   ];
 
   const values: VideoValues = {
@@ -93,7 +89,6 @@ export function createVideoObject(
       filename: "",
       previewImage: {},
     },
-    ...getCommonPropertiesValues(),
   };
 
   return {
@@ -104,11 +99,13 @@ export function createVideoObject(
       properties,
       values,
       valuesMetadata: {
-        ...{
-          /* dodati meta ovde*/
-        },
-        ...getCommonPropertiesMetadataValues(),
+        ...{},
       },
+    },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
   };
 }

@@ -24,8 +24,8 @@ export interface ISize {
 
 export function getMousePosition(e: React.MouseEvent) {
   var rect = e.currentTarget.getBoundingClientRect();
-  var x = e.clientX - rect.left;
-  var y = e.clientY - rect.top;
+  var x = e.clientX; //- rect.left;
+  var y = e.clientY; //- rect.top;
   return { x, y };
 }
 

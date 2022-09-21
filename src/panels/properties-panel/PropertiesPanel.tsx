@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { cloneDeep, pick, set } from "lodash-es";
+import { cloneDeep, pick, property, set } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import { connect } from "react-redux";
@@ -47,19 +47,17 @@ import {
   IFormLayoutItem,
 } from "../../webslider-sdk/src/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
+import { getAppObjectDefinition } from "../../webslider-sdk/src/objects/objects-register";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
 type IPropertiesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    hideHeader?: boolean;
     className?: string;
   };
 
 export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const {
-    selectedDevice,
-    breakpoints,
     object,
     objectLayer,
     layer,
@@ -71,8 +69,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     _updateObject,
     _updateLayer,
     _updateSlide,
-    _setDevice,
-    hideHeader,
     className,
     objects,
   } = props;
@@ -81,16 +77,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     if (slide.slideType === SlideType.Normal) {
       return (
         <>
-          {getTextField("Name", slide.name, (name: string) => {
-            const retObj = cloneDeep(slide);
-            retObj.name = name;
-            _updateSlide(retObj);
-          })}
-          {getTextField("ID", slide.customId, (customId: string) => {
-            const retObj = cloneDeep(slide);
-            retObj.customId = customId;
-            _updateSlide(retObj);
-          })}
           {getInheritTimeField(
             "Duration",
             slide.duration,
@@ -124,22 +110,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     } else {
       return (
         <>
-          {getTextField(
-            "Name",
-            slide.name,
-            (name: string) => {
-              const retObj = cloneDeep(slide);
-              retObj.name = name;
-              _updateSlide(retObj);
-            },
-            undefined,
-            { disabled: true }
-          )}
-          {getTextField("ID", slide.customId, (customId: string) => {
-            const retObj = cloneDeep(slide);
-            retObj.customId = customId;
-            _updateSlide(retObj);
-          })}
           <InfoInputForm
             displayName=""
             helperText={`${slide.name} slide has no properties. It's place is above all other slider and has unlimited duration.`}
@@ -153,14 +123,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const renderLayerProperties = (layer: ILayer) => {
     return (
       <>
-        {getTextField("Name", layer.name, (name: string) => {
-          const retObj = cloneDeep(layer);
-          retObj.name = name;
-          _updateLayer(retObj);
-        })}
-        {renderLayoutOptions(layer, _updateLayer)}
-        {renderLayoutOptionProperties(layer, _updateLayer)}
-
         {renderProperties(
           layerDefinition,
           layer.definition.values,
@@ -173,192 +135,23 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
-    const parentHasLayout = objectLayer.layout !== "none";
+    // TODO const objDef = getAppObjectDefinition(object.type)
+
+    if (object.definition.properties?.length === 0) {
+      return <div>Object '{object.type}' has no properties.</div>;
+    }
 
     return (
       <>
-        {getTextField("Name", object.name, (name: string) => {
-          const retObj = cloneDeep(object);
-          retObj.name = name;
-          _updateObject(retObj);
-        })}
-        {getTextField("ID", object.customId, (customId: string) => {
-          const retObj = cloneDeep(object);
-          retObj.customId = customId;
-          _updateObject(retObj);
-        })}
-        {renderLayoutOptions(
-          object,
-          _updateObject,
-          layoutedByParent,
-          parentHasLayout
-        )}
-        {renderLayoutOptionProperties(object, _updateObject, layoutedByParent)}
-
         {renderProperties(
-          object.definition.properties,
+          object.definition.properties!,
           object.definition.values,
           object.definition.valuesMetadata,
           object,
           _updateObject
         )}
-        {/*renderCommonObjectProperties(object)*/}
       </>
     );
-  };
-
-  const renderLayoutOptionProperties = (
-    objectOrLayer: ILayout,
-    updateFunction: any,
-    layoutedByParent = false
-  ) => {
-    return (
-      <>
-        {objectOrLayer.layout === "grid" &&
-          getGridLayoutField(
-            "",
-            objectOrLayer.gridLayouts,
-            (gridLayouts?: IGridLayouts) => {
-              const retObj = cloneDeep(objectOrLayer);
-              retObj.gridLayouts = gridLayouts;
-              updateFunction(retObj);
-            },
-            { disablePosition: layoutedByParent },
-            breakpoints,
-            selectedDevice,
-            (device: string) => {
-              _setDevice(device);
-            }
-          )}
-        {objectOrLayer.layout === "absolute" &&
-          getAbsoluteLayoutField(
-            "",
-            objectOrLayer.absoluteLayout,
-            (absoluteLayout?: IAbsoluteLayouts) => {
-              const retObj = cloneDeep(objectOrLayer);
-              retObj.absoluteLayout = absoluteLayout;
-              updateFunction(retObj);
-            },
-            {
-              selfSize: objectOrLayer.selfSize,
-              disablePosition: layoutedByParent,
-              disableSize: objectOrLayer.selfSize,
-            },
-            breakpoints,
-            selectedDevice,
-            (device: string) => {
-              _setDevice(device);
-            }
-          )}
-        {objectOrLayer.layout === "snap" &&
-          getSnapLayoutField(
-            "",
-            objectOrLayer.snapLayout,
-            (edgeLayout?: ISnapLayouts) => {
-              const retObj = cloneDeep(objectOrLayer);
-              retObj.snapLayout = edgeLayout;
-              updateFunction(retObj);
-            },
-            {
-              selfSize: objectOrLayer.selfSize,
-              disablePosition: layoutedByParent,
-            },
-            breakpoints,
-            selectedDevice,
-            (device: string) => {
-              _setDevice(device);
-            }
-          )}
-      </>
-    );
-  };
-  const renderLayoutOptions = (
-    object: ILayout,
-    updateFunction: any,
-    layoutedByParent = false,
-    parentHasLayout = false
-  ) => {
-    const options = [];
-    object.supportedLayout.none &&
-      options.push({ label: "No layout", value: "none" });
-    object.supportedLayout.absolute &&
-      options.push({ label: "Absolute", value: "absolute" });
-    object.supportedLayout.grid &&
-      options.push({ label: "Grid", value: "grid" });
-    options.push({ label: "Snap", value: "snap" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Page", value: "fit_page" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Stage", value: "fit_stage" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Guidebox", value: "fit_guidelines" });
-
-    const onChange = (layout: any) => {
-      const retObj = cloneDeep(object);
-      retObj.layout = layout;
-      updateFunction(retObj);
-    };
-
-    let helperText: any;
-    if (layoutedByParent || parentHasLayout) {
-      helperText = (
-        <>
-          {parentHasLayout && (
-            <div>Note: Object position is relative to layer.</div>
-          )}
-          {layoutedByParent && (
-            <div>
-              Note: Object is layouted by parent layer. Some configuration might
-              be disabled (Width and Height are used, Left and Top are ignored).
-            </div>
-          )}
-        </>
-      );
-    }
-
-    return getSelectField(
-      "Layout",
-      object.layout,
-      options,
-      onChange,
-      {},
-      helperText
-    );
-  };
-
-  /*const renderEvents = (object: IObject) => {
-    const objectDef = {
-      inputType: InputType.EVENTS,
-      value: pick(object, "events"),
-    };
-
-    const onChange = (value: any) => {
-      const retObj = cloneDeep(object);
-      if (retObj) {
-        _updateObject({ ...retObj, ...value });
-      }
-    };
-
-    return getInputForm(InputType.EVENTS, objectDef, onChange);
-  };*/
-
-  const renderCommonObjectProperties = (object: IObject) => {
-    const objectDef = {
-      displayName: "Corner radius",
-      inputType: InputType.CORNER_RADIUS,
-      value: object?.commonProperties?.borderRadius || { common: "0px" },
-    };
-
-    const onChange = (value: any) => {
-      const retObj = cloneDeep(object);
-      set(retObj, "commonProperties.borderRadius", value);
-      if (retObj) {
-        _updateObject(retObj);
-      }
-    };
-
-    return <>{getInputForm(InputType.CORNER_RADIUS, objectDef, onChange)}</>;
   };
 
   const renderProperties = (
@@ -446,10 +239,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         formId={objectOrLayer?.type as string}
       />
     );
-    //
-    //
-    //
-    //
   };
 
   const renderObjectOrLayerOrSlide = () => {
@@ -475,20 +264,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       className={classnames("propertiesPanel", css.propertiesPanel, className)}
       key={object?.id}
     >
-      {!hideHeader && (
-        <div className={css.panelHeader}>
-          {panelName?.type.toUpperCase()}
-          {panelName && (
-            <span
-              className={classnames(css.panelName, {
-                //[css.panelNameLayer]: panelName.type === "layer",
-              })}
-            >
-              {" [ " + panelName.name + " ] "}
-            </span>
-          )}
-        </div>
-      )}
       <div className={css.propertiesHolder}>{renderObjectOrLayerOrSlide()}</div>
     </div>
   );
@@ -530,8 +305,6 @@ const mapStateToProps = (state: IStore) => {
   return {
     // activeObjectId,
     objects,
-    selectedDevice,
-    breakpoints,
     object,
     objectLayer,
     layer,
@@ -547,7 +320,6 @@ const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
   _updateSlide: (slide: ISlide) => updateSlide(slide),
-  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);

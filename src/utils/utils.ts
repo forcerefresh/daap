@@ -99,15 +99,16 @@ export function addCommonPropertiesToStyle(
   style: string,
   object: IObject | ILayer
 ) {
-  const comonProperties = object.definition.values as CommonPropertiesValues;
+  if (!object.commonStyleDefinition) {
+    return style;
+  }
 
-  const comonPropertiesMeta = object.definition.valuesMetadata as {
+  const comonProperties = object.commonStyleDefinition
+    .values as CommonPropertiesValues;
+
+  const comonPropertiesMeta = object.commonStyleDefinition.valuesMetadata as {
     [key: string]: IInputMetadataValues;
   };
-
-  if (!comonProperties.hasCommonProperties) {
-    return "";
-  }
 
   if (!comonPropertiesMeta.commonCornerRadius.disabled) {
     style = addBorderRadius(style, comonProperties.commonCornerRadius);
