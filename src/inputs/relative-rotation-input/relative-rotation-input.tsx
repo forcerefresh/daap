@@ -12,7 +12,6 @@ import {
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { Label } from "@blueprintjs/core";
 import css from "./relative-rotation-input.module.scss";
-import { EasingOptions } from "../../effects/types";
 
 const RELATIVE_POSITION_OPTIONS = [
   { label: "rel", value: "rel" },

@@ -12,7 +12,6 @@ import {
 import { cloneDeep } from "lodash";
 import css from "./relative-position-input.module.scss";
 import { Label } from "@blueprintjs/core";
-import { EasingOptions } from "../../effects/types";
 
 const RELATIVE_POSTITION_OPTIONS = [
   { label: "rel", value: "rel" },

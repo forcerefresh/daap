@@ -2,7 +2,11 @@ import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { useState } from "react";
-import { EasingOptions, EffectType } from "../../effects/types";
+import {
+  AnimeJSEasingOptions,
+  EasingOptions,
+  EffectType,
+} from "../../effects/types";
 import { getInputForm } from "../../inputs/input-factory";
 import {
   getInheritTimeField,
@@ -296,6 +300,8 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     transition.canBeCombined
   ).find((item) => item.value === transition.effect.id)?.label;
 
+  const useAnimeJs = effDef(effectType)?.formDefaults.library === "animejs";
+
   return (
     <>
       <div className={css.effectConfigurationForm}>
@@ -394,7 +400,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
             getSelectField(
               "Easing",
               transition.ease,
-              EasingOptions,
+              useAnimeJs ? AnimeJSEasingOptions : EasingOptions,
               (value: any) => {
                 const newTransition = cloneDeep(transition);
                 newTransition.ease = value;
@@ -405,7 +411,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
             getSelectField(
               "Child easing",
               transition.childEase,
-              EasingOptions,
+              useAnimeJs ? AnimeJSEasingOptions : EasingOptions,
               (value: any) => {
                 const newTransition = cloneDeep(transition);
                 newTransition.childEase = value;

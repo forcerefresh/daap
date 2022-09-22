@@ -22,3 +22,6 @@
 [submodule "marketplace/effects/cube-effect"]
 	path = marketplace/effects/cube-effect
 	url = git@bitbucket.org:srdjanarsic/cube-effect.git
+[submodule "marketplace/effects/svg-draw-effect"]
+	path = marketplace/effects/svg-draw-effect
+	url = git@bitbucket.org:srdjanarsic/svg-draw-effect.git

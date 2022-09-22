@@ -956,7 +956,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }
 
   const handleStageMouseMove = (e: any) => {
-    console.log(e);
     e.persist();
     if (selectionStartPosition !== null) {
       console.log("SELECTION START");
