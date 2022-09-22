@@ -155,7 +155,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "layer" && layer) {
-      return null;
+      return <div>Layer has no transform properties.</div>;
     }
 
     if (selectionForProperties?.type === "object" && object) {
@@ -163,7 +163,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return null;
+      return <div>Slider has no transform properties.</div>;
     }
   };
 

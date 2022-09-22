@@ -49,7 +49,7 @@ export async function loadAndRegisterExternalComponent(
     const playerObj = (window as any).WebSlider_GlobalScope.playerEffects[
       extension.type
     ];
-    const appObj = (window as any).WebSlider_GlobalScope.playerEffects[
+    const appObj = (window as any).WebSlider_GlobalScope.appEffects[
       extension.type
     ];
 

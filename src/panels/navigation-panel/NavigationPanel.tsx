@@ -23,7 +23,7 @@ type IPropertiesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
-  const { object, _updateObject } = props;
+  const { object, layer, slide, _updateObject, selectionForProperties } = props;
 
   const renderProperties = (
     properties: any[],
@@ -113,6 +113,24 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
     return renderObjectProperties(object);
   };
 
+  const renderObjectOrLayerOrSlide = () => {
+    if (!selectionForProperties) {
+      return <div>No object selected</div>;
+    }
+
+    if (selectionForProperties?.type === "layer" && layer) {
+      return <div>Layer has no layout options.</div>;
+    }
+
+    if (selectionForProperties?.type === "object" && object) {
+      return renderObjectProperties(object);
+    }
+
+    if (selectionForProperties?.type === "slide" && slide) {
+      return <div>Slide has no layout options.</div>;
+    }
+  };
+
   return (
     <div
       className={classnames("propertiesPanel", css.propertiesPanel)}
@@ -124,13 +142,18 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, selection } = state.project;
-  const { activeObjectId } = selection;
+  const { objects, layers, slides, selection } = state.project;
+  const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
+  const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
+  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   return {
     object,
+    layer,
+    slide,
+    selectionForProperties: selection.selectionForProperties,
   };
 };
 

@@ -206,13 +206,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return (
-        <InfoInputForm
-          displayName=""
-          helperText={`Slide has no layout options.`}
-          inputType={InputType.INFO}
-        />
-      );
+      return <div>Slide has no layout options.</div>;
     }
   };
 
