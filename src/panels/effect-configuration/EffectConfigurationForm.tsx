@@ -36,6 +36,7 @@ type IEffectConfigurationForm = typeof mapDispatchToProps &
 
 export interface IEffectConfigurationForm {
   effectType: EffectType;
+  objectType?: string;
   transition: ITransition;
   onTransitionChange: (transition: ITransition) => void;
   onRemove: () => void;
@@ -47,6 +48,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   const {
     transition,
     effectType,
+    objectType,
     onTransitionChange,
     onRemove,
     /*objectOrLayerId: objectId,
@@ -309,7 +311,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           {getSelectField(
             transition.canBeCombined ? "Attribute Effect" : "Structural Effect",
             transition.effect.id,
-            getEffectsOptions(effectType, transition.canBeCombined),
+            getEffectsOptions(effectType, transition.canBeCombined, objectType),
             (value: any) => {
               const newTransition = cloneDeep(transition);
               newTransition.effect.id = value;

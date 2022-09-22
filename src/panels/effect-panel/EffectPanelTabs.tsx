@@ -63,6 +63,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
     _updateLayer,
     _updateObject,
     _updateSlide,
+    objectType,
   } = props;
 
   const sections = getEffectTypesForItem(itemType);
@@ -207,13 +208,13 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                       value: "Disabled1",
                       disabled: true,
                     },
-                    ...getEffectsOptions(section, true),
+                    ...getEffectsOptions(section, true, objectType),
                     {
                       label: "Structural effect",
                       value: "Disabled2",
                       disabled: true,
                     },
-                    ...getEffectsOptions(section, false),
+                    ...getEffectsOptions(section, false, objectType),
                   ] as any
                 }
                 value={""}
@@ -324,6 +325,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
               {transitions?.[section]?.[selectedNo[section]] !== undefined && (
                 <EffectConfigurationForm
                   effectType={section}
+                  objectType={objectType}
                   transition={transitions?.[section]?.[selectedNo[section]]!}
                   onTransitionChange={(value) => {
                     transitionChangeHandler(
@@ -361,8 +363,19 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, slides } = state.project;
+  const { objects, layers, slides, selection } = state.project;
+
+  const { activeObjectId, activeLayerId, activeSlideId } = selection;
+
+  const object = activeObjectId ? objects.objectById[activeObjectId] : null;
+
+  let objectType;
+  if (selection.selectionForProperties?.type === "object" && object) {
+    objectType = object.type;
+  }
+
   return {
+    objectType,
     objectById: objects.objectById,
     layerById: layers.layerById,
     slideById: slides.slideById,
