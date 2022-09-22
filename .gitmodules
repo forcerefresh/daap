@@ -25,3 +25,6 @@
 [submodule "marketplace/effects/svg-draw-effect"]
 	path = marketplace/effects/svg-draw-effect
 	url = git@bitbucket.org:srdjanarsic/svg-draw-effect.git
+[submodule "marketplace/effects/mask-slide-effect"]
+	path = marketplace/effects/mask-slide-effect
+	url = git@bitbucket.org:srdjanarsic/mask-slide-effect.git
