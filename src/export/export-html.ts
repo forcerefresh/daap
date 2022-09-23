@@ -407,6 +407,7 @@ function generateSlideData(
         object
       )}" style='${style}'>`; // open object
 
+      console.log(object);
       const objectHtml = getObjectHtml(
         object,
         calculatedObjectSize,
@@ -523,6 +524,7 @@ export function getObjectHtml(
       //logger.trace(isPlayer);
       //logger.trace(object.type);
       //logger.log(objDeff);
+      console.log(objDeff);
       if (objDeff && objDeff.getHtml) {
         //try {
         return objDeff.getHtml({

@@ -28,18 +28,13 @@ export async function loadAndRegisterExternalComponent(
     return;
   }
 
-  console.log(extension);
-  console.log(addExtensionCode);
   await addExtensionCode(extension.type);
 
-  //await import(
-  //  /* @ts-ignore */ /* webpackIgnore: true */ `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/${extension.packageUrl}`
-  //);
+  registerExternalExtension(extension);
+}
 
+function registerExternalExtension(extension: IExtensionItem) {
   if (extension.componentType === "object") {
-    console.log((window as any).WebSlider_GlobalScope.playerObjects);
-    console.log((window as any).WebSlider_GlobalScope.appObjects);
-
     const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
       extension.type
     ];

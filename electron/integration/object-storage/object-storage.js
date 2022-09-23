@@ -352,8 +352,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   console.log("UPLOAD EXTENSIONS");
   const userDataPath = app.getPath("userData");
 
+  const pArr = [];
   for (const extension of project.extensions) {
-    const pArr = [];
     const extensionFileName =
       extension.packageFiles.playerObjectFilename ||
       extension.packageFiles.playerEffectFilename;
@@ -370,24 +370,26 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       bucketManager.uploadFileToBucket(
         bucketWithKeys,
         playerExtensionPath,
-        `${req.projectId}/assets/${extensionFileName}`
+        `wsplayer/extensions/${extensionFileName}`
       )
     );
   }
 
-  try {
-    const result = await Promise.all(pArr);
-    BrowserWindow.getAllWindows()[0].webContents.send(
-      `ObjectStorageRenderer::SubscribeToPublishDetails`,
-      JSON.stringify(result)
-    );
-  } catch (ex) {
-    console.log(ex);
-    error = ex.toString();
-  }
+  if (pArr.length > 0) {
+    try {
+      const result = await Promise.all(pArr);
+      BrowserWindow.getAllWindows()[0].webContents.send(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`,
+        JSON.stringify(result)
+      );
+    } catch (ex) {
+      console.log(ex);
+      error = ex.toString();
+    }
 
-  if (error) {
-    return { status: "ERROR", error };
+    if (error) {
+      return { status: "ERROR", error };
+    }
   }
   // upload extensions <<
 

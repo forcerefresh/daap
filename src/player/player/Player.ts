@@ -3,7 +3,7 @@ import {
   ISlideData,
   ITransitionsData,
 } from "../../export/i-export-html";
-import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
+import { loadAndRegisterExternalComponentForPlayer } from "../../objects/external-object-player-utils";
 import { layerSizeUpdate } from "../../objects/layer/layer";
 import {
   CoreObjectType,
@@ -166,7 +166,7 @@ export class Player {
     } else {
       this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
-          loadAndRegisterExternalComponent(extension)
+          loadAndRegisterExternalComponentForPlayer(extension)
         );
       });
 
