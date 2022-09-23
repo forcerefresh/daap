@@ -256,20 +256,21 @@ export class Player {
 
     const bp = this.currentBp;
 
+    // NOTE: this is for debug
     Array.from(slideEls).forEach((el) => {
-      (el as HTMLElement).style.top =
+      const debugSlideFrame = createOrSelect(el, "slide-debug-frame");
+      debugSlideFrame.style.pointerEvents = "none";
+      debugSlideFrame.style.position = "absolute";
+      debugSlideFrame.style.top =
         (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
         "px"; //* this.scaleParams?.wScale!
-
-      (el as HTMLElement).style.left =
+      debugSlideFrame.style.left =
         (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
-
-      (el as HTMLElement).style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
-      (el as HTMLElement).style.height =
-        bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
-      (el as HTMLElement).style.background = "rgba(0,0,0,0.05)";
-      (el as HTMLElement).style.border = "1px dotted red";
-      (el as HTMLElement).style.boxSizing = "border-box";
+      debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
+      debugSlideFrame.style.height = bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
+      debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
+      debugSlideFrame.style.border = "1px dotted red";
+      debugSlideFrame.style.boxSizing = "border-box";
     });
   }
 
@@ -1318,3 +1319,13 @@ function hasSlideEffect(betweenSlideEff?: ISlideTransition) {
 //     slideEl.style.pointerEvents = "none";
 //   });
 // }
+
+function createOrSelect(holder: Element, className: string): HTMLDivElement {
+  const els = holder.getElementsByClassName(className);
+  if (els[0]) return els[0] as HTMLDivElement;
+
+  const el = document.createElement("div");
+  el.setAttribute("class", className);
+  holder.appendChild(el);
+  return el;
+}

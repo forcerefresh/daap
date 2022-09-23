@@ -172,6 +172,20 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
       ((item as ISlide).slideType === SlideType.Back ||
         (item as ISlide).slideType === SlideType.Front);
 
+    /*const objectOrLayerOrSlide =
+      objectType === "object"
+        ? objectById[id!]
+        : objectType === "layer"
+        ? layerById[id!]
+        : slideById[id!];*/
+
+    //let layer: ILayer | undefined;
+    // let layerObjects: IObject[] | undefined;
+    // if (objectType === "layer") {
+    //   const layer = layerById[id!];
+    //   layerObjects = layer?.objectIds.map((id) => objectById[id]);
+    // }
+
     return (
       <Tab
         key={section}
@@ -327,6 +341,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                   effectType={section}
                   objectType={objectType}
                   transition={transitions?.[section]?.[selectedNo[section]]!}
+                  //layerObjects={layerObjects}
                   onTransitionChange={(value) => {
                     transitionChangeHandler(
                       selectedNo[section],

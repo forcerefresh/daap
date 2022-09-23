@@ -75,6 +75,11 @@ export function createTimelineForObject(data: ITransitionsData): {
     effTls.push(tl);
   });
 
+  data.transitions.layer?.forEach((effLayer) => {
+    const tl = createTimelineForEffect(data, effLayer, "in");
+    effTls.push(tl);
+  });
+
   /*data.transitions.in?.forEach((_, idx) => {
     const effIn = data.transitions.in?.[idx];
     const effOut = data.transitions.out?.[idx];
@@ -142,6 +147,7 @@ function createTimelineForEffect(
     timeDistribution: eff.timeDistribution,
     delay:
       overwriteConfig?.delay !== undefined ? overwriteConfig?.delay : delay,
+    ///objects: data.data.ob......
     // ...(overwriteConfig ? { overwriteConfig } : {}),
   });
   return tl;
