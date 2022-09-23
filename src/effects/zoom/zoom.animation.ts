@@ -2,6 +2,7 @@ import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IZoomInEffect, ZOOM_ANIMATION } from "./zoom.types";
+import gsap from "gsap";
 
 export function zoomAnimation() {
   let timeline: gsap.core.Timeline;

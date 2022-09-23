@@ -348,6 +348,49 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   }
   // upload assets <<
 
+  // upload extensions >>
+  console.log("UPLOAD EXTENSIONS");
+  const userDataPath = app.getPath("userData");
+
+  for (const extension of project.extensions) {
+    const pArr = [];
+    const extensionFileName =
+      extension.packageFiles.playerObjectFilename ||
+      extension.packageFiles.playerEffectFilename;
+
+    const playerExtensionPath = path.join(
+      userDataPath,
+      "my-uploads",
+      "my-extensions",
+      extension.type,
+      extensionFileName
+    );
+
+    pArr.push(
+      bucketManager.uploadFileToBucket(
+        bucketWithKeys,
+        playerExtensionPath,
+        `${req.projectId}/assets/${extensionFileName}`
+      )
+    );
+  }
+
+  try {
+    const result = await Promise.all(pArr);
+    BrowserWindow.getAllWindows()[0].webContents.send(
+      `ObjectStorageRenderer::SubscribeToPublishDetails`,
+      JSON.stringify(result)
+    );
+  } catch (ex) {
+    console.log(ex);
+    error = ex.toString();
+  }
+
+  if (error) {
+    return { status: "ERROR", error };
+  }
+  // upload extensions <<
+
   // upload export/playerdata >>
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
@@ -375,14 +418,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     expBuffer,
     `${req.projectId}/slider.json`
   );
-  /*
-  const s3 = createS3Instance(bucketWithKeys);
-  await uploadBufferToS3(
-    s3,
-    bucketWithKeys.bucketName,
-    expBuffer,
-    `${req.projectId}/slider.json`
-  );*/
   // upload export/playerdata <<
 
   console.log("4");
@@ -402,13 +437,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     `${req.projectId}/index.html`
   );
   console.log("SDADSADAS");
-
-  /*await uploadBufferToS3(
-    s3,
-    bucketWithKeys.bucketName,
-    indexBuffer,
-    `${req.projectId}/index.html`
-  );*/
   // upload preview htlm <<
 
   assignedProject.revision = req.revision;

@@ -56,6 +56,7 @@ export const useProjectHook = () => {
     preview,
     playerData,
     assetsUrls,
+    extensions,
   }: {
     id?: number;
     name: string;
@@ -67,6 +68,7 @@ export const useProjectHook = () => {
     preview: any;
     playerData: any;
     assetsUrls: { url: string; type: "url" | string }[];
+    extensions: any[];
   }): Promise<{
     id: number;
     name: string;
@@ -88,6 +90,7 @@ export const useProjectHook = () => {
         preview,
         playerData,
         assetsUrls,
+        extensions,
       };
 
       ipcRenderer

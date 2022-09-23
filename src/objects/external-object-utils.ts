@@ -29,6 +29,7 @@ export async function loadAndRegisterExternalComponent(
   }
 
   console.log(extension);
+  console.log(addExtensionCode);
   await addExtensionCode(extension.type);
 
   //await import(
@@ -36,6 +37,9 @@ export async function loadAndRegisterExternalComponent(
   //);
 
   if (extension.componentType === "object") {
+    console.log((window as any).WebSlider_GlobalScope.playerObjects);
+    console.log((window as any).WebSlider_GlobalScope.appObjects);
+
     const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
       extension.type
     ];

@@ -134,6 +134,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       },
       playerData,
       assetsUrls,
+      extensions: playerData.extensions,
     })
       .then(
         ({

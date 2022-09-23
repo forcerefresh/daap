@@ -239,6 +239,7 @@ export const IntegrationContext = React.createContext({
         url?: string;
         sourceType?: "local" | "library" | "url" | string;
       }[];
+      extensions: any[];
     }): Promise<{
       id: number;
       name: string;

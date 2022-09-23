@@ -33,6 +33,9 @@ import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
+import gsap from "gsap";
+
+gsap.defaults(); // in order to bundle gsap
 
 export enum InTransitionEnum {
   NO = 0,
@@ -167,12 +170,18 @@ export class Player {
         );
       });
 
+      console.log("Preoad ext: ");
+
       Promise.all(this.extComponentPreloaders)
         .then(() => {
           logger.info("All external components are loaded.");
         })
-        .catch((err) => console.warn)
+        .catch((err) => {
+          console.log("ERROR");
+          console.warn(err);
+        })
         .finally(() => {
+          console.log("finaly");
           this.createAllSlides();
           this.addListenersForEventsEffects();
         });

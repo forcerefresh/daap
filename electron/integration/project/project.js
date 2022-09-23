@@ -18,6 +18,7 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
     preview,
     playerData,
     assetsUrls,
+    extensions,
   } = data;
 
   let { id, created } = data;
@@ -55,6 +56,7 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       saveRevision,
       //publishRevision,
       assetsUrls,
+      extensions,
     });
   } else {
     saveRevision = projectItem.saveRevision + 1;
@@ -72,6 +74,7 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
       saveRevision,
       //publishRevision,
       assetsUrls,
+      extensions,
     };
   }
 
