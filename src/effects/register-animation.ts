@@ -23,6 +23,7 @@ import { sliceSlideAppDef, sliceSlideDef } from "./slice-slide/slice-slide";
 import { splitAppDef, splitDef } from "./split/split";
 import { trianglifyAppDef, trianglifyDef } from "./trianglify/trianglify";
 import { zoomAppDef, zoomDef } from "./zoom/zoom";
+import { timelinesDef, timelinesAppDef } from "./timelines/timelines";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(flipAppDef, flipDef);
@@ -44,3 +45,5 @@ registerEffect(kenBurnsAppDef, kenBurnsDef);
 registerEffect(squareMaskAppDef, squareMaskDef);
 
 registerEffect(typewriterAppDef, typewriterDef);
+
+registerEffect(timelinesAppDef, timelinesDef);

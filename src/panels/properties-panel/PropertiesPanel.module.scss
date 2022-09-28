@@ -3,6 +3,8 @@
   flex-direction: column;
   //height: 100%;
 
+  overflow: auto;
+
   :global {
     .bp3-control input:focus ~ .bp3-control-indicator,
     #color-input:focus {

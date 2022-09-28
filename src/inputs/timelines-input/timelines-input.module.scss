@@ -15,7 +15,11 @@
 
     height: 15px;
     margin: 5px 0px 15px 0px;
-    cursor: pointer;
+    cursor: default;
+  }
+
+  .lineSelected {
+    border-color: #509dd9;
   }
 
   .thumb {
@@ -28,7 +32,7 @@
   }
 
   .selectedThumb {
-    background: #5c7cff;
+    background: #5bb2f5;
     z-index: 100;
   }
 
@@ -36,11 +40,35 @@
     position: relative;
     display: flex;
 
+    height: 24px;
+
     > *:first-child {
       flex-grow: 1;
       margin-right: 10px;
     }
   }
+}
+
+.fromToTitle {
+  text-align: center;
+  background: #3c3c3c;
+}
+
+.maxHolder {
+  :global {
+    .bp3-label {
+      min-width: auto !important;
+      width: auto !important;
+    }
+  }
+}
+
+.fromToBackground {
+  position: absolute;
+  height: 10px;
+  background: #545454;
+  top: 8px;
+  pointer-events: none;
 }
 
 .addNewTimeline {

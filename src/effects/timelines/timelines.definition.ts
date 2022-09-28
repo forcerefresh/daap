@@ -5,12 +5,12 @@ import {
   ITimelineValue,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { timelinesEffect, ITimelinesEffect } from "./timelines.types";
+import { TIMELINES_EFFECT, ITimelinesEffect } from "./timelines.types";
 
 export type ITimelinesEffectTuple = [ITimelinesInput<"timelines">];
 
-export const cssPluginDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
-  id: timelinesEffect,
+export const timelinesDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
+  id: TIMELINES_EFFECT,
   name: "Timelines",
   form: [
     {
@@ -25,35 +25,37 @@ export const cssPluginDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
 
 export const getDefaultTimeline = (): ITimelineValue => {
   return {
-    points: [getDefaultPoint()],
+    name: "Timeline 1",
+    ease: "linear",
+    first: getDefaultPoint("0ms"),
+    last: getDefaultPoint("1000ms"),
   };
 };
 
-export const getDefaultPoint = (time = 100): ITimelinePoint => {
+export const getDefaultPoint = (time: string): ITimelinePoint => {
   return {
     time,
-    easing: "none",
     pointValue: {
-      x: { enabled: false, value: 0, position: "rel", easing: "none" },
-      y: { enabled: false, value: 0, position: "rel", easing: "none" },
-      width: { enabled: false, value: 0, position: "rel", easing: "none" },
-      height: { enabled: false, value: 0, position: "rel", easing: "none" },
+      x: { enabled: false, value: 0, position: "rel" },
+      y: { enabled: false, value: 0, position: "rel" },
+      width: { enabled: false, value: 0, position: "rel" },
+      height: { enabled: false, value: 0, position: "rel" },
       rotation: {
         enabled: false,
         value: 0,
         position: "rel" as "abs" | "rel",
         direction: "_ccw" as "_ccw" | "_cw" | "_short",
       },
-      opacity: { enabled: false, value: 100, position: "rel", easing: "none" },
-      zoom: { enabled: false, value: 100, position: "rel", easing: "none" },
+      opacity: { enabled: false, value: 100, position: "rel" },
+      zoom: { enabled: false, value: 100, position: "rel" },
     },
   };
 };
 
-export const cssPluginDefaults: ITimelinesEffect = {
-  id: timelinesEffect,
+export const timelinesDefaults: ITimelinesEffect = {
+  id: TIMELINES_EFFECT,
   hasDelay: true,
-  hasDuration: true,
+  hasDuration: false,
   hasEase: false,
   hasChildEase: false,
   ease: "none",
@@ -61,6 +63,7 @@ export const cssPluginDefaults: ITimelinesEffect = {
   canBeCombined: true,
   // effect properties
   timelines: {
+    maxDuration: "1000ms",
     timelines: [getDefaultTimeline()],
   },
 };

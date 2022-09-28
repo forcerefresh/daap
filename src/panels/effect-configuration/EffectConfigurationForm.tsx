@@ -173,7 +173,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           onTransitionChange(newTransition);
         },
         "",
-        { style: { width: "80px" } },
+        { style: { width: "90px" } },
         ["ms", "s"]
       )}
     </div>
@@ -190,7 +190,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           onTransitionChange(newTransition);
         },
         "",
-        { style: { width: "80px" } },
+        { style: { width: "90px" } },
         ["ms", "s"]
       )}
     </div>
