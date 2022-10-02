@@ -24,6 +24,8 @@ import { splitAppDef, splitDef } from "./split/split";
 import { trianglifyAppDef, trianglifyDef } from "./trianglify/trianglify";
 import { zoomAppDef, zoomDef } from "./zoom/zoom";
 import { timelinesDef, timelinesAppDef } from "./timelines/timelines";
+import { fadeSlideAppDef, fadeSlideDef } from "./fade-slide/fade-slide";
+import { overlapAppDef, overlapDef } from "./overlap/overlap";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(flipAppDef, flipDef);
@@ -47,3 +49,7 @@ registerEffect(squareMaskAppDef, squareMaskDef);
 registerEffect(typewriterAppDef, typewriterDef);
 
 registerEffect(timelinesAppDef, timelinesDef);
+
+registerEffect(fadeSlideAppDef, fadeSlideDef);
+
+registerEffect(overlapAppDef, overlapDef);
