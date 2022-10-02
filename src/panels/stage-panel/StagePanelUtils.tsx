@@ -19,6 +19,7 @@ import css from "./StagePanel.module.scss";
 import { Header1 } from "./preview/Header1/Header1";
 import { RGBColor } from "react-color";
 import { Body1 } from "./preview/Body1/Body1";
+import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 export function calculateObjectSizePerDevice(
   object: IObject,
@@ -107,7 +108,9 @@ export function calculateObjectSize(
 
   if (object.layout === "fit_page") {
     const sizeObj = getPSGSize("page", breakpointConfig);
-
+    logger.log(breakpointConfig);
+    logger.log(sizeObj);
+    logger.log(scaleParams);
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 

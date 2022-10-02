@@ -9,57 +9,58 @@ import { ITimelinesEffect } from "./timelines.types";
 import anime from "animejs";
 import { ITimelinePoint } from "../../webslider-sdk/src/inputs/i-inputs";
 
-function getTranslateX(fromPoint: ITimelinePoint, toPoint: ITimelinePoint) {
-  const { time: fromTime, pointValue: fromPointValue } = fromPoint;
-  const { time: toTime, pointValue: toPointValue } = toPoint;
+// function getTranslateX(fromPoint: ITimelinePoint, toPoint: ITimelinePoint) {
+//   const { time: fromTime, pointValue: fromPointValue } = fromPoint;
+//   const { time: toTime, pointValue: toPointValue } = toPoint;
 
-  let timelineDuration =
-    convertTimeUnitToMs(toTime) - convertTimeUnitToMs(fromTime);
-  let translateX: any;
-  if (fromPointValue.x.enabled && toPointValue.x.enabled) {
-    translateX = [
-      relativePosition2Gsap(fromPointValue.x),
-      relativePosition2Gsap(toPointValue.x),
-    ];
-  }
+//   let timelineDuration =
+//     convertTimeUnitToMs(toTime) - convertTimeUnitToMs(fromTime);
+//   let translateX: any;
+//   if (fromPointValue.x.enabled && toPointValue.x.enabled) {
+//     translateX = [
+//       relativePosition2Gsap(fromPointValue.x),
+//       relativePosition2Gsap(toPointValue.x),
+//     ];
+//   }
 
-  if (!fromPointValue.x.enabled && toPointValue.x.enabled) {
-    translateX = relativePosition2Gsap(toPointValue.x);
-  }
+//   if (!fromPointValue.x.enabled && toPointValue.x.enabled) {
+//     translateX = relativePosition2Gsap(toPointValue.x);
+//   }
 
-  if (fromPointValue.x.enabled && !toPointValue.x.enabled) {
-    translateX = relativePosition2Gsap(fromPointValue.x);
-    timelineDuration = 1;
-  }
+//   if (fromPointValue.x.enabled && !toPointValue.x.enabled) {
+//     translateX = relativePosition2Gsap(fromPointValue.x);
+//     timelineDuration = 1;
+//   }
 
-  return { timelineDuration, translateX };
-}
+//   return { timelineDuration, translateX };
+// }
 
-function getTranslateY(fromPoint: ITimelinePoint, toPoint: ITimelinePoint) {
-  const { time: fromTime, pointValue: fromPointValue } = fromPoint;
-  const { time: toTime, pointValue: toPointValue } = toPoint;
+// function getTranslateY(fromPoint: ITimelinePoint, toPoint: ITimelinePoint) {
+//   const { time: fromTime, pointValue: fromPointValue } = fromPoint;
+//   const { time: toTime, pointValue: toPointValue } = toPoint;
 
-  let timelineDuration =
-    convertTimeUnitToMs(toTime) - convertTimeUnitToMs(fromTime);
-  let translateY: any;
-  if (fromPointValue.y.enabled && toPointValue.y.enabled) {
-    translateY = [
-      relativePosition2Gsap(fromPointValue.y),
-      relativePosition2Gsap(toPointValue.y),
-    ];
-  }
+//   let timelineDuration =
+//     convertTimeUnitToMs(toTime) - convertTimeUnitToMs(fromTime);
+//   let translateY: any;
+//   if (fromPointValue.y.enabled && toPointValue.y.enabled) {
+//     translateY = [
+//       relativePosition2Gsap(fromPointValue.y),
+//       relativePosition2Gsap(toPointValue.y),
+//     ];
+//   }
 
-  if (!fromPointValue.y.enabled && toPointValue.y.enabled) {
-    translateY = relativePosition2Gsap(toPointValue.y);
-  }
+//   if (!fromPointValue.y.enabled && toPointValue.y.enabled) {
+//     translateY = relativePosition2Gsap(toPointValue.y);
+//   }
 
-  if (fromPointValue.y.enabled && !toPointValue.y.enabled) {
-    translateY = relativePosition2Gsap(fromPointValue.y);
-    timelineDuration = 1;
-  }
+//   if (fromPointValue.y.enabled && !toPointValue.y.enabled) {
+//     translateY = relativePosition2Gsap(fromPointValue.y);
+//     timelineDuration = 1;
+//   }
 
-  return { timelineDuration, translateY };
-}
+//   return { timelineDuration, translateY };
+// }
+
 export function timelinesAnimation() {
   let timeline: anime.AnimeTimelineInstance;
   let objectEl: HTMLElement;
@@ -75,22 +76,18 @@ export function timelinesAnimation() {
 
     const cssProps: any = {};
     for (let j = 0; j < config.timelines.timelines.length; j++) {
-      const fromPoint = config.timelines.timelines[j].first;
-      const toPoint = config.timelines.timelines[j].last;
-
-      const { time: fromTime, pointValue: fromPointValue } = fromPoint;
-      const { time: toTime, pointValue: toPointValue } = toPoint;
-
-      const { timelineDuration: timelineDuration1, translateX } = getTranslateX(
-        fromPoint,
-        toPoint
-      );
-
-      const { timelineDuration: timelineDuration2, translateY } = getTranslateY(
-        fromPoint,
-        toPoint
-      );
-
+      // const fromPoint = config.timelines.timelines[j].first;
+      // const toPoint = config.timelines.timelines[j].last;
+      // const { time: fromTime, pointValue: fromPointValue } = fromPoint;
+      // const { time: toTime, pointValue: toPointValue } = toPoint;
+      // const { timelineDuration: timelineDuration1, translateX } = getTranslateX(
+      //   fromPoint,
+      //   toPoint
+      // );
+      // const { timelineDuration: timelineDuration2, translateY } = getTranslateY(
+      //   fromPoint,
+      //   toPoint
+      // );
       //const cssValue = {
       // ...(pointValue.y.enabled
       //   ? { y: relativePosition2Gsap(pointValue.y) }
@@ -121,45 +118,42 @@ export function timelinesAnimation() {
       //     }
       //   : {}),
       //};
-
-      console.log(translateX);
-      console.log(translateY);
-
-      if (translateX) {
-        // cssProps.translateX = {
-        //   value: translateX,
-        //   duration: timelineDuration1,
-        //   delay: fromTime,
-        // };
-        console.log("ADD TL");
-        console.log(translateX);
-        timeline.add(
-          {
-            targets: objectEl,
-            duration: timelineDuration1,
-            translateX: translateX,
-          },
-          convertTimeUnitToMs(fromTime)
-        );
-      }
-      if (translateY) {
-        // cssProps.translateY = {
-        //   value: translateY,
-        //   duration: timelineDuration2,
-        //   delay: fromTime,
-        // };
-        console.log("ADD TL");
-        console.log(translateY);
-
-        timeline.add(
-          {
-            targets: objectEl,
-            duration: timelineDuration2,
-            translateY: translateY,
-          },
-          convertTimeUnitToMs(fromTime)
-        );
-      }
+      // console.log(translateX);
+      // console.log(translateY);
+      // if (translateX) {
+      //   // cssProps.translateX = {
+      //   //   value: translateX,
+      //   //   duration: timelineDuration1,
+      //   //   delay: fromTime,
+      //   // };
+      //   console.log("ADD TL");
+      //   console.log(translateX);
+      //   timeline.add(
+      //     {
+      //       targets: objectEl,
+      //       duration: timelineDuration1,
+      //       translateX: translateX,
+      //     },
+      //     convertTimeUnitToMs(fromTime)
+      //   );
+      // }
+      // if (translateY) {
+      //   // cssProps.translateY = {
+      //   //   value: translateY,
+      //   //   duration: timelineDuration2,
+      //   //   delay: fromTime,
+      //   // };
+      //   console.log("ADD TL");
+      //   console.log(translateY);
+      //   timeline.add(
+      //     {
+      //       targets: objectEl,
+      //       duration: timelineDuration2,
+      //       translateY: translateY,
+      //     },
+      //     convertTimeUnitToMs(fromTime)
+      //   );
+      // }
     }
 
     // timeline.add({

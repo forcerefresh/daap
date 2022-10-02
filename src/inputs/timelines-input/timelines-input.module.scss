@@ -12,31 +12,52 @@
   .line {
     background: #1f2123;
     border: 1px solid #484848;
-
     height: 15px;
     margin: 5px 0px 15px 0px;
     cursor: default;
   }
 
   .lineSelected {
-    border-color: #509dd9;
+    // border-bottom: 1px solid #a9a9a9;
   }
 
   .thumb {
     width: 10px;
     height: 13px;
     position: absolute;
-    background: #aeaeae;
+    background: #666666;
     left: -5px;
     top: 6px;
   }
 
   .selectedThumb {
-    background: #5bb2f5;
     z-index: 100;
+    color: lightblue;
+    width: 10px;
+    height: 18px;
+    position: absolute;
+    border-top: 8px solid #49b9ff;
+    border-radius: 3px;
+    left: -5px;
+    top: 1px;
+  }
+
+  .timelineTitle {
+    margin-bottom: 5px;
+  }
+
+  .selectedTimelineTitle {
+    color: #43a8e7;
+  }
+
+  .enabledThumb {
+    background: #aaaaaa;
   }
 
   .timelineHolder {
+    margin-top: 8px;
+  }
+  .timeline {
     position: relative;
     display: flex;
 
@@ -47,6 +68,11 @@
       margin-right: 10px;
     }
   }
+}
+
+.deleteTimeline {
+  float: right;
+  margin: 2px;
 }
 
 .fromToTitle {
@@ -65,14 +91,21 @@
 
 .fromToBackground {
   position: absolute;
-  height: 10px;
+  height: 12px;
   background: #545454;
-  top: 8px;
+  top: 6px;
   pointer-events: none;
 }
 
 .addNewTimeline {
   margin-bottom: 10px;
+}
+
+.configurationTitle {
+  color: #7f7f7f;
+  padding-top: 10px;
+  padding-bottom: 8px;
+  font-weight: bold;
 }
 
 .helperText {

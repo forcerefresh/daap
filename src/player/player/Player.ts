@@ -251,21 +251,37 @@ export class Player {
     this.resizeAll(true);
   }
 
+  private bpUpdateSlideEffects(isInitial = false) {
+    if (!this.slideTransitionTimeline) return;
+
+    console.log("asdasd", "srki");
+    const bp = this.currentBp;
+
+    this.slideTransitionTimeline.updateSize({
+      slideWidth: bp?.normal._maxSliderSize!.width,
+      slideHeight: bp?.normal._maxSliderSize!.height,
+    });
+  }
+
   private bpUpdateSlide(isInitial = false) {
     const slideEls = this.rootDiv.getElementsByClassName("slide");
 
     const bp = this.currentBp;
 
     // NOTE: this is for debug
-    Array.from(slideEls).forEach((el) => {
+    Array.from(slideEls).forEach((el: any) => {
+      // SLIDE
+      el.style.left =
+        (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px";
+      // DEBUG SLIDER FRAME
       const debugSlideFrame = createOrSelect(el, "slide-debug-frame");
       debugSlideFrame.style.pointerEvents = "none";
       debugSlideFrame.style.position = "absolute";
       debugSlideFrame.style.top =
         (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
         "px"; //* this.scaleParams?.wScale!
-      debugSlideFrame.style.left =
-        (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
+      //debugSlideFrame.style.left =
+      //  (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
       debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
       debugSlideFrame.style.height = bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
       debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
@@ -428,6 +444,7 @@ export class Player {
     );
 
     this.bpUpdateSlide(isInitial);
+    this.bpUpdateSlideEffects(isInitial);
     this.bpUpdateObjectsSize(isInitial);
   }
 
@@ -657,6 +674,7 @@ export class Player {
 
         this.slideTransitionInProgress = false;
         this.slideTransitionTimeline?.emitter.removeAllListeners("stop");
+        delete this.slideTransitionTimeline;
       });
 
       const transitionTl = new Timeline({
@@ -685,6 +703,8 @@ export class Player {
       this.slideTransitionTimeline.add(transitionTl);
       this.slideTransitionTimeline.init();
       this.slideTransitionTimeline.play();
+      // this will call sizeUpdate for slideTransitionTimeline
+      this.bpUpdateSlideEffects();
 
       if (isManual) {
         // TODO: or NOTE: this part is to turn of timeline when transition manually triggered

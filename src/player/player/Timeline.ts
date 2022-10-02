@@ -254,6 +254,10 @@ export class Timeline {
     this.emit("update", time);
   }
 
+  updateSize = (props: { slideWidth: number; slideHeight: number }) => {
+    this.execUpdateSize(props);
+  };
+
   clear() {
     this.stop();
   }
@@ -433,6 +437,11 @@ export class Timeline {
     if (this.disable) return;
     this.animIns?.direction?.(this.config, this.direction);
   }
+
+  execUpdateSize = (props: { slideWidth: number; slideHeight: number }) => {
+    if (this.disable) return;
+    this.animIns?.updateSize?.(this.config, props);
+  };
 
   setDisable(d: boolean) {
     this.disable = d;

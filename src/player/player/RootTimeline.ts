@@ -293,6 +293,10 @@ export class RootTimeline {
     this.emitter.emit("update", time);
   }
 
+  updateSize = (props: { slideWidth: number; slideHeight: number }) => {
+    this.timelines.forEach((child) => child.timeline.updateSize(props));
+  };
+
   clear() {
     this.stop();
   }
