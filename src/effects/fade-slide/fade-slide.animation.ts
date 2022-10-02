@@ -8,37 +8,48 @@ export function fadeSlideAnimation() {
   function init(config: IFadeSlideEffect) {
     logger.debug(`${FADE_SLIDE_ANIMATION} init`);
 
-    timeline = anime.timeline({
+    const easing =
+      !config.ease || config.ease === "none" ? "linear" : config.ease; //TODO
+
+    timeline = anime.timeline({});
+
+    timeline.add({
+      duration: config.duration!,
+      easing,
       targets: config.nextSlideEl,
-      duration: config.duration! / 1000,
-      opacity: 0,
+      opacity: [0, 1],
     });
   }
 
-  function rootStart(config: any) {
+  function rootStart(config: IFadeSlideEffect) {
     logger.debug(`${FADE_SLIDE_ANIMATION} rootStart`);
 
     timeline.seek(0);
     timeline.pause();
   }
 
-  function rootStop(config: any) {
+  function rootStop(config: IFadeSlideEffect) {
     logger.debug(`${FADE_SLIDE_ANIMATION} rootStop`);
   }
 
-  function start(config: any, isManual?: boolean) {
+  function start(config: IFadeSlideEffect, isManual?: boolean) {
     logger.debug(`${FADE_SLIDE_ANIMATION} start`);
 
+    config.nextSlideEl!.style.zIndex = `${config.nextZIndex}`;
     timeline.play();
   }
 
-  function stop(config: any, isManual?: boolean, isReverse?: boolean) {
+  function stop(
+    config: IFadeSlideEffect,
+    isManual?: boolean,
+    isReverse?: boolean
+  ) {
     logger.debug(`${FADE_SLIDE_ANIMATION} stop`);
 
     timeline.pause();
   }
 
-  function update(config: any, time: number, isManual?: boolean) {
+  function update(config: IFadeSlideEffect, time: number, isManual?: boolean) {
     logger.debug(`${FADE_SLIDE_ANIMATION} update`);
     if (isManual) {
       timeline.seek(time);
@@ -46,19 +57,19 @@ export function fadeSlideAnimation() {
     }
   }
 
-  function pause(config: any) {
+  function pause(config: IFadeSlideEffect) {
     logger.debug(`${FADE_SLIDE_ANIMATION} pause`);
 
     timeline.pause();
   }
 
-  function resume(config: any) {
+  function resume(config: IFadeSlideEffect) {
     logger.debug(`${FADE_SLIDE_ANIMATION} resume`);
 
     timeline.play();
   }
 
-  function direction(config: any, direction: number) {
+  function direction(config: IFadeSlideEffect, direction: number) {
     logger.debug(`${FADE_SLIDE_ANIMATION} reverse`);
   }
 

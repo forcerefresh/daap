@@ -257,10 +257,12 @@ export class Player {
     console.log("asdasd", "srki");
     const bp = this.currentBp;
 
-    this.slideTransitionTimeline.updateSize({
-      slideWidth: bp?.normal._maxSliderSize!.width,
-      slideHeight: bp?.normal._maxSliderSize!.height,
-    });
+    if (bp?.normal._maxSliderSize) {
+      this.slideTransitionTimeline.updateSize({
+        slideWidth: bp?.normal._maxSliderSize.width,
+        slideHeight: bp?.normal._maxSliderSize.height,
+      });
+    }
   }
 
   private bpUpdateSlide(isInitial = false) {
@@ -646,6 +648,7 @@ export class Player {
         effect: slideTransition?.effect!,
         duration: convertTimeUnitToMs(slideTransition?.duration!),
         overlap: convertTimeUnitToMs(slideTransition?.overlap!),
+        ease: slideTransition?.ease,
       };
     }
 
@@ -692,12 +695,12 @@ export class Player {
         },
         type: "effect",
         duration: betweenSlideEff!.duration,
-        //ease: bettwenSlideEff.ease,
+        ease: betweenSlideEff!.ease,
         //childEase: bettwenSlideEff.childEase,
         //timeDistribution: bettwenSlideEff.timeDistribution,
         prevSlideEl: this.currentSlideEl,
         nextSlideEl: slideEl,
-        nextZIndex: this.nextZIndex,
+        nextZIndex: this.nextZIndex++,
       });
 
       this.slideTransitionTimeline.add(transitionTl);
@@ -719,6 +722,8 @@ export class Player {
         });
         turnOffPrevTL.init();
         turnOffPrevTL.start();
+      } else {
+        //slideEl.style.zIndex = `${this.nextZIndex++}`; // TODO: COnsider zindex engine
       }
     } else {
       if (isManual) prevSlideTimeline?.stop();

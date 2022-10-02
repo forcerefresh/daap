@@ -10,10 +10,11 @@ export const fadeSlideDefaults: IFadeSlideEffect = {
   id: FADE_SLIDE_ANIMATION,
   hasDelay: true,
   hasDuration: true,
-  hasEase: false,
+  hasEase: true,
   hasChildEase: false,
   ease: "none",
   supportedEffectTypes: ["slide"],
   canBeCombined: true,
+  library: "animejs",
   // this effect has no configuration
 };

@@ -31,6 +31,7 @@ export interface IEffectBase {
   hasChildEase: boolean;
   hasTimeDistribution?: boolean;
   canBeCombined: boolean;
+  library?: string; // "animejs" | "gsap" (gsap is default)
   // << flags end
   supportedEffectTypes: EffectType[];
   timeDistribution?: number;
