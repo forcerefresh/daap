@@ -26,6 +26,7 @@ import { zoomAppDef, zoomDef } from "./zoom/zoom";
 import { timelinesDef, timelinesAppDef } from "./timelines/timelines";
 import { fadeSlideAppDef, fadeSlideDef } from "./fade-slide/fade-slide";
 import { overlapAppDef, overlapDef } from "./overlap/overlap";
+import { slideSlideAppDef, slideSlideDef } from "./slide-slide/slide-slide";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(flipAppDef, flipDef);
@@ -53,3 +54,5 @@ registerEffect(timelinesAppDef, timelinesDef);
 registerEffect(fadeSlideAppDef, fadeSlideDef);
 
 registerEffect(overlapAppDef, overlapDef);
+
+registerEffect(slideSlideAppDef, slideSlideDef);

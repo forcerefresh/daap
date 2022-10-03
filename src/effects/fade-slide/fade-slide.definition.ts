@@ -2,7 +2,7 @@ import { FADE_SLIDE_ANIMATION, IFadeSlideEffect } from "./fade-slide.types";
 
 export const fadeSlideDefinition = {
   id: FADE_SLIDE_ANIMATION,
-  name: "Fade Slide",
+  name: "Fade",
   form: [],
 };
 

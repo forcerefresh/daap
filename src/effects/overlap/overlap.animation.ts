@@ -8,35 +8,37 @@ export function overlapAnimation() {
   function init(config: IOverlapEffect) {
     logger.debug(`${OVERLAP_ANIMATION} init`);
 
-    timeline = anime.timeline({
-      duration: config.duration! / 1000,
-    });
+    timeline = anime.timeline({});
   }
 
-  function rootStart(config: any) {
+  function rootStart(config: IOverlapEffect) {
     logger.debug(`${OVERLAP_ANIMATION} rootStart`);
 
     timeline.seek(0);
     timeline.pause();
   }
 
-  function rootStop(config: any) {
+  function rootStop(config: IOverlapEffect) {
     logger.debug(`${OVERLAP_ANIMATION} rootStop`);
   }
 
-  function start(config: any, isManual?: boolean) {
+  function start(config: IOverlapEffect, isManual?: boolean) {
     logger.debug(`${OVERLAP_ANIMATION} start`);
 
     timeline.play();
   }
 
-  function stop(config: any, isManual?: boolean, isReverse?: boolean) {
+  function stop(
+    config: IOverlapEffect,
+    isManual?: boolean,
+    isReverse?: boolean
+  ) {
     logger.debug(`${OVERLAP_ANIMATION} stop`);
 
     timeline.pause();
   }
 
-  function update(config: any, time: number, isManual?: boolean) {
+  function update(config: IOverlapEffect, time: number, isManual?: boolean) {
     logger.debug(`${OVERLAP_ANIMATION} update`);
     if (isManual) {
       timeline.seek(time);
@@ -44,19 +46,19 @@ export function overlapAnimation() {
     }
   }
 
-  function pause(config: any) {
+  function pause(config: IOverlapEffect) {
     logger.debug(`${OVERLAP_ANIMATION} pause`);
 
     timeline.pause();
   }
 
-  function resume(config: any) {
+  function resume(config: IOverlapEffect) {
     logger.debug(`${OVERLAP_ANIMATION} resume`);
 
     timeline.play();
   }
 
-  function direction(config: any, direction: number) {
+  function direction(config: IOverlapEffect, direction: number) {
     logger.debug(`${OVERLAP_ANIMATION} reverse`);
   }
 
