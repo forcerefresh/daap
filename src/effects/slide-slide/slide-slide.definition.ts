@@ -1,12 +1,15 @@
 import {
   InputType,
-  INumberInput,
   ISelectInput,
+  IUnitsNumberInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
 import { ISlideSlideEffect, SLIDE_SLIDE_ANIMATION } from "./slide-slide.types";
 
-export type ISlideSlideTuple = [ISelectInput<"from">, INumberInput<"distance">];
+export type ISlideSlideTuple = [
+  ISelectInput<"from">,
+  IUnitsNumberInput<"distance">
+];
 
 export const slideSlideDefinition: IEffectDefinition<ISlideSlideTuple> = {
   id: SLIDE_SLIDE_ANIMATION,
@@ -28,7 +31,7 @@ export const slideSlideDefinition: IEffectDefinition<ISlideSlideTuple> = {
     {
       displayName: "Distance",
       propertyName: "distance",
-      inputType: InputType.NUMBER,
+      inputType: InputType.UNITS_NUMBER,
       value: {} as any,
       defaultValue: {} as any,
     },
@@ -46,6 +49,6 @@ export const slideSlideDefaults: ISlideSlideEffect = {
   canBeCombined: true,
   library: "animejs",
   // this effect has no configuration
-  distance: 100,
+  distance: "100%",
   from: "right",
 };

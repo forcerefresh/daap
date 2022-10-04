@@ -4,6 +4,8 @@ import { ISlideSlideEffect, SLIDE_SLIDE_ANIMATION } from "./slide-slide.types";
 
 export function slideSlideAnimation() {
   let timeline: anime.AnimeTimelineInstance;
+  let stageW = 1000; // TODO change with slide W
+  let stageH = 500; // TODO change with slide H
 
   function init(config: ISlideSlideEffect) {
     logger.debug(`${SLIDE_SLIDE_ANIMATION} init`);
@@ -19,8 +21,8 @@ export function slideSlideAnimation() {
       duration: config.duration!,
       easing,
       targets: config.nextSlideEl,
-      translateX: [xy.x, 0],
-      translateY: [xy.y, 0],
+      translateX: [unitValueToPx(xy.x, stageW), 0],
+      translateY: [unitValueToPx(xy.y, stageH), 0],
     });
   }
 
@@ -76,7 +78,7 @@ export function slideSlideAnimation() {
     logger.debug(`${SLIDE_SLIDE_ANIMATION} reverse`);
   }
 
-  function getXY(from: "top" | "bottom" | "left" | "right", distance: number) {
+  function getXY(from: "top" | "bottom" | "left" | "right", distance: string) {
     const xy = { x: "0", y: "0" };
 
     switch (from) {
@@ -94,6 +96,17 @@ export function slideSlideAnimation() {
         break;
     }
     return xy;
+  }
+
+  function unitValueToPx(value: string, hundredPercentValue: number) {
+    if (value.indexOf("px") !== -1) {
+      return parseFloat(value);
+    } else if (value.indexOf("%") !== -1) {
+      return (hundredPercentValue * parseFloat(value)) / 100;
+    }
+
+    // this is not needed
+    parseFloat(value);
   }
 
   return {
