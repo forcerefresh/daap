@@ -5,17 +5,17 @@ import {
   ITimelineValue,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { TIMELINES_EFFECT, ITimelinesEffect } from "./timelines.types";
+import { TRANSFORM_EFFECT, ITransformEffect } from "./transform.types";
 
-export type ITimelinesEffectTuple = [ITimelinesInput<"timelines">];
+export type ITimelinesEffectTuple = [ITimelinesInput<"transform">];
 
 export const timelinesDefinition: IEffectDefinition<ITimelinesEffectTuple> = {
-  id: TIMELINES_EFFECT,
-  name: "Timelines",
+  id: TRANSFORM_EFFECT,
+  name: "Transform",
   form: [
     {
-      displayName: "Timelines",
-      propertyName: "timelines",
+      displayName: "Transform",
+      propertyName: "transform",
       inputType: InputType.TIMELINES,
       value: {} as any,
       defaultValue: {} as any,
@@ -46,20 +46,7 @@ export const getDefaultPoint = (
   return {
     time,
     enabled,
-    pointValue: getTimelinePointDefaultValueByProperty(property), //{
-    // x: { enabled: false, value: 0, position: "rel" },
-    // y: { enabled: false, value: 0, position: "rel" },
-    // width: { enabled: false, value: 0, position: "rel" },
-    // height: { enabled: false, value: 0, position: "rel" },
-    // rotation: {
-    //   enabled: false,
-    //   value: 0,
-    //   position: "rel" as "abs" | "rel",
-    //   direction: "_ccw" as "_ccw" | "_cw" | "_short",
-    // },
-    // opacity: { enabled: false, value: 100, position: "rel" },
-    // zoom: { enabled: false, value: 100, position: "rel" },
-    // },
+    pointValue: getTimelinePointDefaultValueByProperty(property),
   };
 };
 
@@ -74,8 +61,29 @@ const getTimelinePointDefaultValueByProperty = (property: string) => {
     case "translateZ": {
       return { value: "0px" };
     }
+    case "scaleX": {
+      return "100%";
+    }
+    case "scaleY": {
+      return "100%";
+    }
+    case "scaleZ": {
+      return "100%";
+    }
+    case "rotateX": {
+      return "0deg";
+    }
+    case "rotateY": {
+      return "0deg";
+    }
+    case "rotateZ": {
+      return "0deg";
+    }
     case "opacity": {
-      return { value: 0 };
+      return 100;
+    }
+    case "blur": {
+      return 1;
     }
     default: {
       throw new Error(
@@ -84,8 +92,8 @@ const getTimelinePointDefaultValueByProperty = (property: string) => {
     }
   }
 };
-export const timelinesDefaults: ITimelinesEffect = {
-  id: TIMELINES_EFFECT,
+export const timelinesDefaults: ITransformEffect = {
+  id: TRANSFORM_EFFECT,
   hasDelay: true,
   hasDuration: false,
   hasEase: false,
@@ -94,7 +102,7 @@ export const timelinesDefaults: ITimelinesEffect = {
   supportedEffectTypes: ["in", "out"],
   canBeCombined: true,
   // effect properties
-  timelines: {
+  transform: {
     maxDuration: "1000ms",
     timelines: [
       /*getDefaultTimeline()*/

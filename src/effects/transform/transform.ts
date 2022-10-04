@@ -1,19 +1,19 @@
-import { timelinesAnimation } from "./timelines.animation";
+import { transformAnimation } from "./transform.animation";
 import {} from "../../webslider-sdk/src/effects/i-effect-types";
 import {
   IEffectExtensionDefinition,
   IEffectExtensionAppDefinition,
 } from "../../webslider-sdk/src/effects/effects-register";
-import { timelinesDefaults, timelinesDefinition } from "./timelines.definition";
-import { TIMELINES_EFFECT } from "./timelines.types";
+import { timelinesDefaults, timelinesDefinition } from "./transform.definition";
+import { TRANSFORM_EFFECT } from "./transform.types";
 
 export const timelinesDef: IEffectExtensionDefinition = {
-  effectId: TIMELINES_EFFECT,
-  effectFunc: timelinesAnimation,
+  effectId: TRANSFORM_EFFECT,
+  effectFunc: transformAnimation,
 };
 
 export const timelinesAppDef: IEffectExtensionAppDefinition = {
-  effectId: TIMELINES_EFFECT,
+  effectId: TRANSFORM_EFFECT,
   formDefaults: timelinesDefaults,
   formDefinition: timelinesDefinition,
 };

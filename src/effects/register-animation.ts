@@ -23,7 +23,7 @@ import { sliceSlideAppDef, sliceSlideDef } from "./slice-slide/slice-slide";
 import { splitAppDef, splitDef } from "./split/split";
 import { trianglifyAppDef, trianglifyDef } from "./trianglify/trianglify";
 import { zoomAppDef, zoomDef } from "./zoom/zoom";
-import { timelinesDef, timelinesAppDef } from "./timelines/timelines";
+import { timelinesDef, timelinesAppDef } from "./transform/transform";
 import { fadeSlideAppDef, fadeSlideDef } from "./fade-slide/fade-slide";
 import { overlapAppDef, overlapDef } from "./overlap/overlap";
 

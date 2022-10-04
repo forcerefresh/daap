@@ -393,13 +393,14 @@ function generateSlideData(
       style += `overflow: ${overflow};`;
       // << "left", "top", "width", "height"
 
-      const wrapperStyle = style;
+      let wrapperStyle = style;
       style +=
         "position: relative; left:initial; top: initial; overflow: visible;";
 
       // NOTE excepton for perspective
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+        wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
       }
 
       html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper

@@ -27,7 +27,7 @@ import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
 import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
-import { TimelinesInputForm } from "./timelines-input/timelines-input";
+import { TimelinesInputForm } from "./transform-input/transform-input";
 import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
 import { SliderInputForm } from "./slider-input/slider-input";

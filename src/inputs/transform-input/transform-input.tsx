@@ -4,6 +4,9 @@ import Draggable, {
   DraggableData,
   DraggableEvent,
 } from "react-draggable";
+import cx from "classnames";
+import { Button, HTMLSelect } from "@blueprintjs/core";
+import { cloneDeep, debounce } from "lodash";
 import {
   ITimelinesInput,
   InputType,
@@ -12,29 +15,15 @@ import {
   ITimelineValue,
   ITimelinePoint,
 } from "../../webslider-sdk/src/inputs/i-inputs";
-import css from "./timelines-input.module.scss";
-import cx from "classnames";
-import { cloneDeep, debounce } from "lodash";
-import {
-  getCheckboxField,
-  getNumericFiled,
-  getSelectField,
-  getTextField,
-  getUnitNumericFiled,
-} from "../input-utils";
-import { roundNumber } from "../../utils/doom-utils/common";
+import { convertTimeUnitToMs } from "../../webslider-sdk/src/objects/object-utils";
+import { AnimeJSEasingOptions } from "../../webslider-sdk/src/effects/i-effect-types";
+import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import { getInputForm } from "../input-factory";
-import { Button, HTMLSelect } from "@blueprintjs/core";
-import classnames from "classnames";
-import { EasingOptions } from "../../effects/types";
 import {
   getDefaultPoint,
   getDefaultTimeline,
-  // getDefaultTimeline,
-} from "../../effects/timelines/timelines.definition";
-import { convertTimeUnitToMs } from "../../webslider-sdk/src/objects/object-utils";
-import { time } from "console";
-import { first, last } from "lodash-es";
+} from "../../effects/transform/transform.definition";
+import css from "./transform-input.module.scss";
 
 const formDefinition = [
   {
@@ -52,41 +41,51 @@ const formDefinition = [
     propertyName: "translateZ",
     inputType: InputType.RELATIVE_POSITION_INPUT,
   },
-
   {
     displayName: "Scale X",
     propertyName: "scaleX",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["%"],
   },
   {
     displayName: "Scale Y",
     propertyName: "scaleY",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["%"],
   },
   {
-    displayName: "Width",
-    propertyName: "width",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    displayName: "Scale Z",
+    propertyName: "scaleZ",
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["%"],
   },
   {
-    displayName: "Height",
-    propertyName: "height",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    displayName: "Rotation X",
+    propertyName: "rotateX",
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["deg"],
   },
   {
-    displayName: "Rotation",
-    propertyName: "rotation",
-    inputType: InputType.RELATIVE_ROTATION_INPUT,
+    displayName: "Rotation Y",
+    propertyName: "rotateY",
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["deg"],
+  },
+  {
+    displayName: "Rotation Z",
+    propertyName: "rotateZ",
+    inputType: InputType.UNITS_NUMBER,
+    allowedUnits: ["deg"],
   },
   {
     displayName: "Opacity",
     propertyName: "opacity",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    inputType: InputType.NUMBER,
   },
   {
-    displayName: "Zoom",
-    propertyName: "zoom",
-    inputType: InputType.RELATIVE_POSITION_INPUT,
+    displayName: "Blur",
+    propertyName: "blur",
+    inputType: InputType.NUMBER,
   },
 ];
 
@@ -105,10 +104,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
   }>({ pointIdx: 0, timelineIdx: 0 });
 
   const maxDuration = convertTimeUnitToMs(localValue.maxDuration);
-  // let maxTime = config.;
-  // localValue.timelines.forEach((tl) => {
-  //   maxTime = Math.max(maxTime, convertTimeUnitToMs(tl.last.time));
-  // });
 
   const deletePoint = (timelineIdx: number, index: number) => {
     if (localValue.timelines[timelineIdx].points.length <= 2) return;
@@ -147,14 +142,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
   };
 
   const setLocalValueSorted = (val: ITimelinesValue) => {
-    /*val.timelines.map((timeline) => {
-      timeline.points.sort((a, b) => {
-        return a.time > b.time ? 1 : -1;
-      });
-
-      return timeline;
-    });*/
-
     setLocalValue(val);
   };
 
@@ -174,11 +161,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
       debounceOnChange.flush();
     };
   }, []);
-
-  /*
-  const debounceOnChange = debounce((newValue: ICSSTimelinesValue) => {
-    onChange(newValue);
-  }, 10000);*/
 
   const deleteTimeline = (timelineIdx: number) => {
     const newValue = cloneDeep(localValue);
@@ -208,7 +190,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
   const [lineWidth, setLineWidth] = useState(0);
   useEffect(() => {
-    setLineWidth((lineRef?.current as any)?.offsetWidth - 33 || 0);
+    setLineWidth((lineRef?.current as any)?.offsetWidth || 0);
   }, [lineRef?.current]);
 
   // NOTE: WORKAROUND TO SET LINE WIDTH
@@ -242,9 +224,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           {timeline.propertyName}
         </div>
         <div className={css.timeline}>
-          {/* <div>
-          <strong>From:</strong> X, Width <strong>To:</strong> X, Width, Height
-        </div> */}
           <div
             className={cx(css.line, {
               [css.lineSelected]: selectedIndex.timelineIdx === timelineIdx,
@@ -281,30 +260,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
                 pointIdx: newValue.timelines[timelineIdx].points.length - 1,
                 timelineIdx,
               });
-
-              // const adjustment = 0;
-              // --------------------
-              // setSelectedIndex({
-              //   pointIdx: 0,
-              //   timelineIdx,
-              // });
-
-              //-------------------
-              // const rect = event.currentTarget.getBoundingClientRect();
-              // const time = (event.clientX - rect.left) / lineWidth + adjustment;
-              // const newValue = cloneDeep(localValue);
-
-              // let newTime = roundNumber(time * 100, 2);
-              // newTime = Math.min(Math.max(newTime, 0), 100);
-
-              // newValue.timelines[timelineIdx].points.push(
-              //   getDefaultPoint(`${newTime}ms`)
-              // );
-              // setLocalValueSorted(newValue);
-              // setSelectedIndex({
-              //   pointIdx: newValue.timelines[timelineIdx].points.length - 1,
-              //   timelineIdx,
-              // });
             }}
           ></div>
           <div
@@ -323,16 +278,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
               let boundRight = lineWidth - 6;
               let boundLeft = 6;
-              // if (point.propertyName === "first") {
-              //   boundRight =
-              //     (convertTimeUnitToMs(timeline.last.time) / maxDuration) *
-              //     lineWidth;
-              // }
-              // if (point.propertyName === "last") {
-              //   boundLeft =
-              //     (convertTimeUnitToMs(timeline.first.time) / maxDuration) *
-              //     lineWidth;
-              // }
 
               return (
                 <Draggable
@@ -358,28 +303,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
                     newValue.timelines[timelineIdx].points[idx].time =
                       Math.round(newTime) + "ms";
                     setLocalValueSorted(newValue);
-                    // const percMultiplier = //data.x === 0 ? 0 : data.x / lineWidth;
-                    //   data.x === 0 ? 0 : (data.x - 6) / (lineWidth - 12);
-                    // console.log(percMultiplier);
-                    // console.log(maxDuration);
-                    // let newTime = percMultiplier * maxDuration;
-                    // if (point.propertyName === "first") {
-                    //   newTime = Math.min(
-                    //     newTime,
-                    //     convertTimeUnitToMs(timeline.last.time) - 1
-                    //   );
-                    // }
-                    // if (point.propertyName === "last") {
-                    //   newTime = Math.max(
-                    //     newTime,
-                    //     convertTimeUnitToMs(timeline.first.time) + 1
-                    //   );
-                    // }
-                    // const newValue = cloneDeep(localValue);
-                    // newValue.timelines[timelineIdx][
-                    //   point.propertyName as "first" | "last"
-                    // ].time = `${Math.round(newTime)}ms`;
-                    // setLocalValueSorted(newValue);
                   }}
                   onMouseDown={() => {
                     setSelectedIndex({ pointIdx: idx, timelineIdx });
@@ -422,16 +345,36 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
         value: "translateZ",
       },
       {
-        label: "Opacity",
-        value: "opacity",
-      },
-      {
         label: "Scale X",
         value: "scaleX",
       },
       {
         label: "Scale Y",
         value: "scaleY",
+      },
+      {
+        label: "Scale Z",
+        value: "scaleZ",
+      },
+      {
+        label: "Rotate X",
+        value: "rotateX",
+      },
+      {
+        label: "Rotate Y",
+        value: "rotateY",
+      },
+      {
+        label: "Rotate Z",
+        value: "rotateZ",
+      },
+      {
+        label: "Opacity",
+        value: "opacity",
+      },
+      {
+        label: "Blur",
+        value: "blur",
       },
     ];
 
@@ -446,12 +389,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
     return timelineOptionsWithDisabled;
   };
-
-  // const formForTimeline = formDefinition.find((item) => {
-  //   return (
-  //     item.propertyName === value.timelines[selectedIndex.timelineIdx]?.property
-  //   );
-  // });
 
   const renderPointInput = (
     timeline: ITimelineValue,
@@ -481,23 +418,16 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
     return getInputForm(
       pointFromDefinition!.inputType,
       { ...pointFromDefinition, value: val },
+      onChange,
       onChange
     );
   };
 
   const renderSelectedTimelineForm = () => {
-    // return (
-    //   value.timelines[selectedIndex.timelineIdx]?.points?.[
-    //     selectedIndex.pointIdx
-    //   ]?.time || ""
-    // );
+    const selectedTimeline = localValue.timelines[selectedIndex.timelineIdx];
+    const selectedPoint = selectedTimeline?.points?.[selectedIndex.pointIdx];
 
-    const point =
-      localValue.timelines[selectedIndex.timelineIdx]?.points?.[
-        selectedIndex.pointIdx
-      ];
-
-    if (!point) {
+    if (!selectedPoint) {
       return null;
     }
 
@@ -508,7 +438,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
         </div>
         {getUnitNumericFiled(
           "Point Time",
-          point.time,
+          selectedPoint.time,
           (value: string) => {
             const newLocalValue = cloneDeep(localValue);
             newLocalValue.timelines[selectedIndex.timelineIdx].points[
@@ -520,24 +450,31 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           { style: { width: "110px" } },
           ["ms", "s"]
         )}
-        {/* {getCheckboxField("Enable", point.enabled, (value: boolean) => {
-          const newLocalValue = cloneDeep(localValue);
-          newLocalValue.timelines[selectedIndex.timelineIdx].points[
-            selectedIndex.pointIdx
-          ].enabled = value;
-          setLocalValueSorted(newLocalValue);
-        })} */}
 
-        {point.enabled &&
+        {selectedPoint.enabled &&
           renderPointInput(
             localValue.timelines[selectedIndex.timelineIdx],
-            point
+            selectedPoint
           )}
+
+        <div className={css.configurationTitle}>
+          Configuration for selected timeline
+        </div>
+
+        {getSelectField(
+          "Easing",
+          selectedTimeline.ease,
+          AnimeJSEasingOptions,
+          (value: any) => {
+            const newLocalValue = cloneDeep(localValue);
+            newLocalValue.timelines[selectedIndex.timelineIdx].ease = value;
+            setLocalValueSorted(newLocalValue);
+          }
+        )}
       </>
     );
   };
 
-  //debugger;
   return (
     <div>
       <div className={css.maxHolder}>
@@ -558,7 +495,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           {
             style: {
               width: "90px",
-              //...(errorMaxDuration ? { background: "red" } : {}),
             },
             ...(errorMaxDuration ? { intent: "warning" } : {}),
           },
@@ -593,15 +529,6 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           }}
         />
 
-        {/* <Button
-          minimal
-          onClick={() => addNewTimeline()}
-          className={css.addNewTimeline}
-          small={true}
-          icon="add"
-        >
-          Add timeline
-        </Button> */}
         <Button
           minimal
           disabled={localValue.timelines.length === 0}
@@ -616,110 +543,12 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
       <div className={css.cssPlugin}>
         {localValue.timelines.map((timeline, timelineIdx) => {
-          return (
-            <>
-              {renderTimeline(timeline, timelineIdx)}
-
-              {/* {[formForTimeline].map((formDefinition) => {
-                function onChange(value: any) {
-                  // const newLocalValue = cloneDeep(localValue);
-                  // (
-                  //   newLocalValue.timelines[selectedIndex.timelineIdx][
-                  //     selectedIndex.pointIdx === 0 ? "first" : "last"
-                  //   ].pointValue as any
-                  // )[formDefinition.propertyName] = value;
-                  // setLocalValueSorted(newLocalValue);
-                }
-
-                console.log(localValue.timelines);
-                console.log(selectedIndex.timelineIdx);
-                console.log(selectedIndex.pointIdx);
-                const val =
-                  localValue.timelines[selectedIndex.timelineIdx]?.points[
-                    selectedIndex.pointIdx
-                  ].pointValue;
-
-                if (!formDefinition) {
-                  return null;
-                }
-
-                return getInputForm(
-                  formDefinition!.inputType,
-                  { ...formDefinition, value: val },
-                  onChange
-                );
-              })} */}
-            </>
-          );
+          return <>{renderTimeline(timeline, timelineIdx)}</>;
         })}
       </div>
 
       {typeof selectedIndex.timelineIdx !== "undefined" &&
         renderSelectedTimelineForm()}
-
-      {selectedIndex !== undefined && (
-        <>
-          {/* <div>
-            {getSelectField(
-              "",
-              localValue.timelines[selectedIndex.timelineIdx].points[
-                selectedIndex.pointIdx!
-              ].easing,
-              EasingOptions,
-              (value: any) => {
-                const newLocalValue = cloneDeep(localValue);
-                newLocalValue.timelines[selectedIndex.timelineIdx].points[
-                  selectedIndex.pointIdx!
-                ].easing = value;
-                setLocalValueSorted(newLocalValue);
-              }
-            )}
-          </div> */}
-
-          {/* <div>
-            {getTextField(
-              "Name",
-              localValue.timelines[selectedIndex.timelineIdx].name,
-              (value: string) => {
-                const newLocalValue = cloneDeep(localValue);
-                newLocalValue.timelines[selectedIndex.timelineIdx].name = value;
-                setLocalValueSorted(newLocalValue);
-              }
-            )}
-          </div> */}
-          <div>
-            {/* {getUnitNumericFiled(
-              "From",
-              localValue.timelines[selectedIndex.timelineIdx].first.time,
-              (value: string) => {
-                const newLocalValue = cloneDeep(localValue);
-                newLocalValue.timelines[selectedIndex.timelineIdx].first.time =
-                  value;
-                setLocalValueSorted(newLocalValue);
-              },
-              "",
-              { style: { width: "110px" } },
-              ["ms", "s"]
-            )} */}
-            {/* {getUnitNumericFiled(
-              "To",
-              localValue.timelines[selectedIndex.timelineIdx].last.time,
-              (value: string) => {
-                const newLocalValue = cloneDeep(localValue);
-                newLocalValue.timelines[selectedIndex.timelineIdx].last.time =
-                  value;
-                setLocalValueSorted(newLocalValue);
-              },
-              "",
-              { style: { width: "110px" } },
-              ["ms", "s"]
-            )} */}
-          </div>
-          {/* <div className={css.fromToTitle}>
-            <strong>{selectedIndex.pointIdx === 0 ? "FROM" : "TO"}</strong>{" "}
-          </div> */}
-        </>
-      )}
     </div>
   );
 };
