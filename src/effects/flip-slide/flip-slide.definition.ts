@@ -9,7 +9,7 @@ export type IFlipSlideTuple = [INumberInput<"durationBetweenItems">];
 
 export const flipSlideDefinition: IEffectDefinition<IFlipSlideTuple> = {
   id: FLIP_SLIDE_ANIMATION,
-  name: "Flip Slide",
+  name: "Flip",
   form: [
     {
       displayName: "Flip",
