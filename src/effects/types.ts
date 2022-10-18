@@ -32,6 +32,10 @@ export interface IEffectBase {
   hasTimeDistribution?: boolean;
   canBeCombined: boolean;
   library?: string; // "animejs" | "gsap" (gsap is default)
+  slideWidth?: number;
+  slideHeight?: number;
+  pageWidth?: number;
+  pageHeight?: number;
   // << flags end
   supportedEffectTypes: EffectType[];
   timeDistribution?: number;

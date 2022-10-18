@@ -1,3 +1,4 @@
+import { Console } from "console";
 import { noop } from "lodash-es";
 import {
   BreakpointConfiguration,
@@ -6,6 +7,8 @@ import {
 
 export class BreakpointChecker {
   private breakpoints: Breakpoints;
+  private refDiv: HTMLDivElement | undefined;
+
   private changeHandlerFn:
     | ((breakpoitConfiguration: BreakpointConfiguration) => void)
     | null = null;
@@ -23,18 +26,29 @@ export class BreakpointChecker {
   // current vieport size
   public currentViewportSize: { width: number; height: number } | undefined;
 
-  constructor(breakpoints: Breakpoints) {
+  constructor(breakpoints: Breakpoints, refDiv?: HTMLDivElement) {
     this.breakpoints = breakpoints;
+    this.refDiv = refDiv;
   }
 
+  private int: any;
   init() {
-    setInterval(() => {
+    console.log(this.refDiv, "break-srki");
+    this.int = setInterval(() => {
       this.check();
       this.checkVieport();
     }, 10);
 
     this.check();
     this.checkVieport();
+  }
+
+  stop() {
+    clearInterval(this.int);
+  }
+
+  setReferenceDiv(refDiv: HTMLDivElement | undefined) {
+    this.refDiv = refDiv;
   }
 
   getCurrentDeviceType() {
@@ -45,11 +59,11 @@ export class BreakpointChecker {
     this.breakpoints = breakpoints;
   }
 
-  setBPChangeHandler(
-    fn: ((breakpoitconfiguration: BreakpointConfiguration) => void) | null
-  ) {
-    this.changeHandlerFn = fn;
-  }
+  // setBPChangeHandler(
+  //   fn: ((breakpoitconfiguration: BreakpointConfiguration) => void) | null
+  // ) {
+  //   this.changeHandlerFn = fn;
+  // }
 
   setSizeChangeHandler(
     fn:
@@ -63,41 +77,65 @@ export class BreakpointChecker {
   }
 
   private checkVieport() {
-    const vSize = this.getVieportSize();
+    const vSize = this.refDiv ? this.getRefDivSize() : this.getViewportSize();
+
     if (
       !this.currentViewportSize ||
       this.currentViewportSize.width !== vSize.width ||
       this.currentViewportSize?.height !== vSize.height
     ) {
+      console.log(vSize, "srki");
       this.currentViewportSize = vSize;
       this.sizeChangeHandlerFn?.(vSize, this.currentBreakpointConfiguration!);
     }
   }
 
-  private getVieportSize() {
-    var elem =
+  private getRefDivSize() {
+    let elem = this.refDiv!;
+
+    let height = elem.clientHeight;
+    let width = elem.clientWidth;
+    return { height, width };
+  }
+
+  private getViewportSize() {
+    let elem =
       document.compatMode === "CSS1Compat"
         ? document.documentElement
         : document.body;
 
-    var height = elem.clientHeight;
-    var width = elem.clientWidth;
+    let height = elem.clientHeight;
+    let width = elem.clientWidth;
     return { height, width };
   }
+
   private check() {
     this.breakpoints.breakpointsConfiguration.forEach((bp) => {
       const { from, to, toMax, fromMin } = bp.normal.breakpoint.width;
 
-      const mediaQuery = window.matchMedia(
-        `(min-width: ${fromMin ? 0 : from}px) and (max-width: ${
-          toMax ? 100000 : to
-        }px)`
-      );
+      // TODO: IMPORTANT CHECK FRO PARENT !!!!!!
+      if (this.refDiv) {
+        const w = this.refDiv.clientWidth;
+        const fromW = fromMin ? 0 : from;
+        const toW = toMax ? 100000 : to;
+        if (w > fromW && w < toW) {
+          if (this.currentBreakpointConfiguration !== bp) {
+            this.currentBreakpointConfiguration = bp;
+            this.changeHandlerFn?.(bp);
+          }
+        }
+      } else {
+        const mediaQuery = window.matchMedia(
+          `(min-width: ${fromMin ? 0 : from}px) and (max-width: ${
+            toMax ? 100000 : to
+          }px)`
+        );
 
-      if (mediaQuery.matches === true) {
-        if (this.currentBreakpointConfiguration !== bp) {
-          this.currentBreakpointConfiguration = bp;
-          this.changeHandlerFn?.(bp);
+        if (mediaQuery.matches === true) {
+          if (this.currentBreakpointConfiguration !== bp) {
+            this.currentBreakpointConfiguration = bp;
+            this.changeHandlerFn?.(bp);
+          }
         }
       }
     });

@@ -218,6 +218,9 @@ export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
     layerIds: [],
     nextLayerIdCounter: 1,
     slideType,
+    transitionEnabled: false,
+    transitionOverlapTime: "1000ms",
+    transitionDurationTime: "1000ms",
     transitions: getDefaultTransitionsForSlide(),
   };
 }

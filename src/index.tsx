@@ -6,7 +6,7 @@ function importBuildTarget() {
     return require("./player.tsx");
   } else if (process.env.REACT_APP_TYPE === "player-dev") {
     logger.debug("TARGET: PLAYER-DEV");
-    return require("./player-dev.tsx");
+    return require("./player-dev-react.tsx");
   } else {
     logger.debug("TARGET: APPLICATION");
     return require("./application.tsx");

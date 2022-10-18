@@ -49,6 +49,7 @@ import { BorderInputForm } from "./border-input/border-input";
 import { SizePosInputForm } from "./size-pos-input/size-pos-input";
 import { SizeUnitInputForm } from "./size-unit-input/size-unit-input";
 import { HTMLInputForm } from "./html-input/html-input";
+import { RangeSliderInputForm } from "./range-slider-input/range-slider-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -197,6 +198,16 @@ export function getInputForm<T>(
     case InputType.SLIDER_INPUT: {
       return (
         <SliderInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+        />
+      );
+    }
+    case InputType.RANGE_SLIDER_INPUT: {
+      return (
+        <RangeSliderInputForm
           key={key}
           {...inputProps}
           onChange={onChange}

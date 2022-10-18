@@ -20,9 +20,9 @@ export const effectType2Name = (effectType: EffectType) => {
   const def = {
     in: "In",
     out: "Out",
-    effect: "Effect",
-    layer: "Layer",
-    slide: "Slide",
+    effect: "Other",
+    layer: "Layer animation",
+    slide: "Slide transition",
     event: "Event",
   };
 
@@ -90,7 +90,7 @@ export const getDefaultEffectConfigForType = (
     case "slide":
       return {
         delay: "0ms",
-        duration: "2000ms",
+        duration: "1000ms",
         ...(itemType === "slide" ? { overlap: "1000ms" } : {}),
         canBeCombined: !isStructural,
         effect: {

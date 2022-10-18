@@ -4,7 +4,7 @@ import { FLIP_SLIDE_ANIMATION, IFlipSlideEffect } from "./flip-slide.types";
 gsap.registerEffect({
   name: FLIP_SLIDE_ANIMATION,
   effect: function (cards: any, config: IFlipSlideEffect) {
-    const durationBetweenItems = config.durationBetweenItems / 1000;
+    const durationBetweenItems = 1; // TODOTODOconfig.durationBetweenItems / 1000;
 
     const slidesHolder = document.getElementsByClassName(
       "slidesHolder"

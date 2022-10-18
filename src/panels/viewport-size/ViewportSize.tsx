@@ -118,10 +118,11 @@ const ViewportSize: React.FC<IViewportSizeProps> = (props) => {
           <Slider
             className={classnames(css.slider)}
             min={breakpointConfig?.normal.breakpoint.width.from}
-            max={breakpointConfig?.normal.breakpoint.width.to}
+            max={breakpointConfig?.normal.page.width}
             labelStepSize={range}
             onChange={(value) => {
               setSliderValue(value);
+              onChange({ width: value });
             }}
             labelRenderer={renderLabel}
             showTrackFill={false}

@@ -34,6 +34,7 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
+import { number } from "yup";
 
 gsap.defaults(); // in order to bundle gsap
 
@@ -102,6 +103,7 @@ export class Player {
 
   private eventTimelines: IEventTimeline[] = [];
 
+  //private timeOffsetCorrection = 0;
   constructor(
     playerData: IPlayerData | null,
     rootDiv: HTMLDivElement,
@@ -112,8 +114,14 @@ export class Player {
   ) {
     this.playerData = playerData;
 
+    let breakpointReferenceDiv: HTMLDivElement | undefined;
+    if (playerData?.breakpointReference === "parent") {
+      breakpointReferenceDiv = rootDiv.parentElement as HTMLDivElement;
+    }
+
     this.breakpointChecker = new BreakpointChecker(
-      playerData?.breakpoints || { breakpointsConfiguration: [] }
+      playerData?.breakpoints || { breakpointsConfiguration: [] },
+      breakpointReferenceDiv
     );
     this.breakpointChecker.init();
     /* this.breakpointChecker.setBPChangeHandler(
@@ -124,10 +132,13 @@ export class Player {
     );
     this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
 
+    console.log(this.currentDeviceType, "srki");
     // current breakpoint configuration
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
       (bp) => bp.type === this.currentDeviceType
     )!;
+
+    console.log(this.currentBp, "srki");
 
     this.playerConfig = playerConfig;
 
@@ -232,7 +243,7 @@ export class Player {
       }
 
       tlObj.rootTimeline.init();
-      tlObj.rootTimeline.play();
+      tlObj.rootTimeline.start();
       tlObj.rootTimeline.pause();
     });
   }
@@ -261,6 +272,8 @@ export class Player {
       this.slideTransitionTimeline.updateSize({
         slideWidth: bp?.normal._maxSliderSize.width,
         slideHeight: bp?.normal._maxSliderSize.height,
+        pageWidth: bp?.normal._page?.width!,
+        pageHeight: bp?.normal._page?.height!,
       });
     }
   }
@@ -302,6 +315,8 @@ export class Player {
     let _pageH = bp.normal.page.height;
     let _pageW = bp.normal.page.width;
 
+    //let _maxPageH = bp.normal.page.height;
+
     let _maxSliderH = bp.normal.maxSliderSize.height;
     let _maxSliderW = bp.normal.maxSliderSize.width;
 
@@ -312,13 +327,25 @@ export class Player {
       _pageW = Math.min(_pageW, bounds.width);
     }
 
+    //override
+    if (bp.normal.widthBehavior.type === "useMaxWidth") {
+      _pageW = Math.min(bp.normal.maxSliderSize.width, bounds.width);
+    }
+
     _maxSliderW = Math.min(_maxSliderW, bounds.width);
+
+    // if (bp.normal.widthBehavior.type === "useMaxWidth") {
+    //   _maxPageW = Math.min(_maxSliderW, bounds.width);
+    // } else if (bp.normal.widthBehavior.type === "fullwidth") {
+    //   _maxPageW = Math.max(_maxSliderW, bounds.width);
+    // }
 
     const whRatio = bp.normal.page.width / bp.normal.page.height;
     const wRatio = _pageW / bp.normal.page.width;
+    const wRatioSlide = bounds.width / bp.normal.maxSliderSize.width;
 
     // HEIGHT  behaviour
-    if (bp.normal.heightBehavior.type === "viewport") {
+    if (bp.normal.heightBehavior.type === "fullheight") {
       _pageH = bounds.height;
       _maxSliderH = bounds.height; //Math.min(bp.normal.maxSliderSize.height, bounds.height);
     } else if (bp.normal.heightBehavior.type === "fixed") {
@@ -327,6 +354,15 @@ export class Player {
     } else if (bp.normal.heightBehavior.type === "keepAspectRatio") {
       _pageH = bp.normal.page.height * wRatio;
       _maxSliderH = bp.normal.maxSliderSize.height * wRatio;
+    } else if (
+      bp.normal.heightBehavior.type === "keepAspectRatioBelowMaxSliderSize"
+    ) {
+      _pageH = bp.normal.page.height;
+      _maxSliderH = bp.normal.maxSliderSize.height;
+      if (bounds.width < bp.normal.maxSliderSize.width) {
+        _pageH = bp.normal.page.height * wRatioSlide;
+        _maxSliderH = bp.normal.maxSliderSize.height * wRatioSlide;
+      }
     }
 
     bp.normal._page = {
@@ -427,6 +463,22 @@ export class Player {
     this.resizeAll();
   }
 
+  public setBreakpointReference(bpRef: "viewport" | "parent") {
+    if (this.playerData) {
+      this.playerData.breakpointReference = bpRef;
+
+      let breakpointReferenceDiv: HTMLDivElement | undefined;
+      if (this.playerData?.breakpointReference === "parent") {
+        breakpointReferenceDiv = this.rootDiv.parentElement as HTMLDivElement;
+      }
+
+      this.breakpointChecker.setReferenceDiv(
+        bpRef === "viewport" ? undefined : breakpointReferenceDiv
+      );
+      this.resizeAll();
+    }
+  }
+
   public setDevice(device: DeviceType) {
     this.currentDeviceType = device;
 
@@ -435,6 +487,23 @@ export class Player {
         (bp) => bp.type === this.currentDeviceType
       )!
     );
+  }
+
+  public customResize(customViewPortSize: { width?: number; height?: number }) {
+    this.breakpointChecker.stop();
+    this.breakpointChecker.currentViewportSize = {
+      ...this.breakpointChecker.currentViewportSize,
+      ...customViewPortSize,
+    } as any;
+
+    this.scaleParams = this.calculateSizeParameters(
+      this.currentBp!,
+      this.breakpointChecker.currentViewportSize!
+    );
+
+    this.bpUpdateSlide();
+    this.bpUpdateSlideEffects();
+    this.bpUpdateObjectsSize();
   }
 
   private resizeAll(isInitial = false) {
@@ -555,7 +624,7 @@ export class Player {
     this.slideTransitionTimeline?.destroy();
     this.slideTransitionTimeline = undefined;
 
-    this.breakpointChecker.setBPChangeHandler(null);
+    //this.breakpointChecker.setBPChangeHandler(null);
     this.breakpointChecker.setSizeChangeHandler(null);
 
     this.currentSlideTimelineIdx = 0;
@@ -610,6 +679,7 @@ export class Player {
     }
     return true;
   }
+
   public playSlide(
     slideIdx: number = 0,
     prevTlTime: number = 0,
@@ -640,31 +710,31 @@ export class Player {
     slideEl.style.pointerEvents = "auto";
 
     // NOTE: Transition between slides start when slide starts
-    const slideTransition =
-      this.normalSlideDataArr?.[slideIdx]?.slide?.transitions.slide?.[0];
-    let betweenSlideEff: ISlideTransition | undefined;
-    if (slideTransition) {
-      betweenSlideEff = {
-        effect: slideTransition?.effect!,
-        duration: convertTimeUnitToMs(slideTransition?.duration!),
-        overlap: convertTimeUnitToMs(slideTransition?.overlap!),
-        ease: slideTransition?.ease,
-      };
+    // TODO: SLIDE TRANSITION >>>
+    const slideTransitions = slide?.transitions.slide;
+    let betweenSlideEffArr: ISlideTransition[] = [];
+    if (slideTransitions) {
+      betweenSlideEffArr = slideTransitions.map((slideTransition) => {
+        return {
+          effect: slideTransition?.effect!,
+          duration: convertTimeUnitToMs(slideTransition?.duration!),
+          delay: convertTimeUnitToMs(slideTransition?.delay!),
+          ease: slideTransition?.ease,
+        };
+      });
     }
+    // TODO: <<< SLIDE TRANSITION
 
     // set next as current
     this.currentSlideTimeline = this.timelines[slideIdx];
     this.currentSlideTimelineIdx = slideIdx;
 
-    if (
-      hasSlideEffect(betweenSlideEff) &&
-      this.shouldPlaySlideTransition(slideIdx)
-    ) {
+    if (slide.transitionEnabled && this.shouldPlaySlideTransition(slideIdx)) {
       this.slideTransitionInProgress = true;
 
       this.slideTransitionTimeline = new RootTimeline({
         name: "SlideTransitionRootTimeline",
-        duration: betweenSlideEff!.duration,
+        duration: slide.transitionDurationTime,
       });
 
       this.slideTransitionTimeline.emitter.addListener("stop", () => {
@@ -680,32 +750,45 @@ export class Player {
         delete this.slideTransitionTimeline;
       });
 
-      const transitionTl = new Timeline({
-        name: "SlideTransitionTimeline",
-        effectId: betweenSlideEff!.effect.id,
-        ...betweenSlideEff!.effect.values,
-        objectProperties: {
-          width: 960,
-          height: 485,
-        },
-        breakpointData: {
-          width: this.playerData?.breakpointData.width,
-          height: this.playerData?.breakpointData.height,
-          pageWidth: this.playerData?.breakpointData.pageWidth,
-        },
-        type: "effect",
-        duration: betweenSlideEff!.duration,
-        ease: betweenSlideEff!.ease,
-        //childEase: bettwenSlideEff.childEase,
-        //timeDistribution: bettwenSlideEff.timeDistribution,
-        prevSlideEl: this.currentSlideEl,
-        nextSlideEl: slideEl,
-        nextZIndex: this.nextZIndex++,
-      });
+      // TODO ovo je samo za prvi, dodati za sve
+      if (betweenSlideEffArr) {
+        betweenSlideEffArr.forEach((betweenSlideEff) => {
+          const transitionTl = new Timeline({
+            name: "SlideTransitionTimeline",
+            effectId: betweenSlideEff!.effect.id,
+            ...betweenSlideEff!.effect.values,
+            objectProperties: {
+              width: 960,
+              height: 485,
+            },
+            breakpointData: {
+              width: this.playerData?.breakpointData.width,
+              height: this.playerData?.breakpointData.height,
+              pageWidth: this.playerData?.breakpointData.pageWidth,
+            },
+            type: "effect",
+            duration: betweenSlideEff!.duration,
+            delay: betweenSlideEff!.delay!,
+            ease: betweenSlideEff!.ease,
+            //childEase: bettwenSlideEff.childEase,
+            //timeDistribution: bettwenSlideEff.timeDistribution,
+            prevSlideEl: this.currentSlideEl,
+            nextSlideEl: slideEl,
+            nextZIndex: this.nextZIndex++,
+            slideWidth: this.currentBp?.normal._maxSliderSize?.width,
+            slideHeight: this.currentBp?.normal._maxSliderSize?.height,
+            pageWidth: this.currentBp?.normal._page?.width,
+            pageHeight: this.currentBp?.normal._page?.height,
+          });
 
-      this.slideTransitionTimeline.add(transitionTl);
+          this.slideTransitionTimeline!.add(transitionTl);
+        });
+      }
+
       this.slideTransitionTimeline.init();
-      this.slideTransitionTimeline.play();
+      //const diff = Date.now() - this.timeOffsetCorrection;
+      //  debugger;
+      this.slideTransitionTimeline.start(); //(prevTlTime + 30);
       // this will call sizeUpdate for slideTransitionTimeline
       this.bpUpdateSlideEffects();
 
@@ -713,7 +796,7 @@ export class Player {
         // TODO: or NOTE: this part is to turn of timeline when transition manually triggered
         const turnOffPrevTL = new RootTimeline({
           name: "TurnOffPrevTimeline",
-          duration: betweenSlideEff!.overlap,
+          duration: slide.transitionOverlapTime,
         });
         turnOffPrevTL.emitter.addListener("stop", () => {
           if (isManual) prevSlideTimeline?.stop();
@@ -749,10 +832,11 @@ export class Player {
         slideEl.style.display = "block";
         isUpdated = true;
       }*/
-      if (!hasSlideEffect(betweenSlideEff)) {
-        // ako nema effekat
-        //
-      }
+
+      //if (!hasSlideEffect(betweenSlideEff)) {
+      // ako nema effekat
+      //
+      //}
       //
     };
     this.currentSlideTimeline.emitter.removeAllListeners("update");
@@ -845,7 +929,7 @@ export class Player {
 
     //this.currentSlideTimeline.setChildrenDisable(false);
     this.currentSlideTimeline.init();
-    this.currentSlideTimeline.play(prevTlTime);
+    this.currentSlideTimeline.start(); // (prevTlTime); <<this was before TODO IMPORTANT
 
     this.onCurrentTimelineChangeCallback?.();
   }
@@ -876,10 +960,10 @@ export class Player {
     // TODO: ako se vec izvrsavaju neizvrsaval ovo
 
     const exitTransTl = this.outEffTimelines[this.currentSlideTimelineIdx];
-    const nextSlideOverlap = convertTimeUnitToMs(
-      this.playerData?.slideDataArr?.[slideIdx]?.slide?.transitions?.slide?.[0]
-        ?.overlap || "0ms"
-    );
+    const nextSlide = this.playerData?.slideDataArr?.[slideIdx]?.slide;
+    const nextSlideOverlap = nextSlide?.transitionEnabled
+      ? nextSlide?.transitionOverlapTime
+      : undefined;
 
     let maxExitTime = 0;
     if (!nextSlideOverlap && exitTransTl) {
@@ -955,7 +1039,7 @@ export class Player {
       });
 
       exitTransTl?.init(); //TODO: Check do we need to init() every time???
-      exitTransTl?.play(0);
+      exitTransTl?.start(0);
     } else {
       //this.playSlide(slideIdx, undefined, true);
     }
@@ -1198,15 +1282,16 @@ export class Player {
     const nextSlideIdx = this.getNextSlideIdx(slideIdx);
 
     // 0. get effect definition
-    const slideTransition =
-      this.normalSlideDataArr?.[nextSlideIdx]?.slide?.transitions.slide?.[0];
-    const bettwenSlideEff: ISlideTransition | undefined = slideTransition
-      ? {
-          effect: slideTransition?.effect!,
-          duration: convertTimeUnitToMs(slideTransition?.duration),
-          overlap: convertTimeUnitToMs(slideTransition?.overlap!),
-        }
-      : undefined;
+    const slide = this.normalSlideDataArr?.[nextSlideIdx]?.slide;
+    // const slideTransition =
+    //   this.normalSlideDataArr?.[nextSlideIdx]?.slide?.transitions.slide?.[0];
+    // const bettwenSlideEff: ISlideTransition | undefined = slideTransition
+    //   ? {
+    //       effect: slideTransition?.effect!,
+    //       duration: convertTimeUnitToMs(slideTransition?.duration),
+    //       overlap: convertTimeUnitToMs(slideTransition?.overlap!),
+    //     }
+    //   : undefined;
 
     //console.log(bettwenSlideEff);
     // create breakpoint for slide transition
@@ -1215,10 +1300,13 @@ export class Player {
 
     let overlap = 0;
     // 2. if effect exit use it
-    if (bettwenSlideEff?.effect.id !== "none") {
-      //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
-      overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+    if (slide?.transitionEnabled) {
+      overlap = slide.transitionOverlapTime;
     }
+    //if (bettwenSlideEff?.effect.id !== "none") {
+    //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
+    //overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+    //}
 
     // 3. add slide exit transitions trigger timeline
     const exitTriggerTimeline = new Timeline({
@@ -1263,58 +1351,74 @@ export class Player {
       // 0. get effect definition
       /*const bettwenSlideEff: ISlideTransition | undefined =
         this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];*/
-      const firstSlideTransition =
-        this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];
-      const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
-        ? {
-            effect: firstSlideTransition?.effect!,
-            duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
-            overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
-          }
-        : undefined;
+      // const firstSlideTransition =
+      //   this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];
+      // const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
+      //   ? {
+      //       effect: firstSlideTransition?.effect!,
+      //       duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
+      //       overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
+      //     }
+      //   : undefined;
 
       // create breakpoint for slide transition
       // 1. if no slide transition set to 0
       let overlap = 0;
-      // 2. if effect exit use it
-      if (bettwenSlideEff?.effect.id !== "none") {
-        overlap = bettwenSlideEff?.duration || 0; //bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+      const slide = this.normalSlideDataArr?.[newSlideIdx]?.slide;
+      if (slide?.transitionEnabled) {
+        overlap = slide.transitionOverlapTime;
       }
+      // 2. if effect exit use it
+      // if (bettwenSlideEff?.effect.id !== "none") {
+      //   overlap = bettwenSlideEff?.duration || 0; //bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+      // }
 
       const overlapPosition =
         convertTimeUnitToMs(
           this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
         ) - overlap;
 
-      this.playSlide(newSlideIdx, prevTl.time() - overlapPosition); //- overlap ? overlap / 1000 : 0
+      console.log(prevTl.time());
+      console.log(overlapPosition);
+      console.log(prevTl.time() - overlapPosition);
+
+      //this.timeOffsetCorrection = Date.now();
+      this.playSlide(newSlideIdx, prevTl.time() - overlapPosition); // ); // TODO TODO//- overlap ? overlap / 1000 : 0
     }
   }
 
   getSlideOverlap(slideId: number) {
-    // 0. get effect definition
-    const slideTransition =
-      this.normalSlideDataArr?.[slideId]?.slide?.transitions.slide?.[0];
-    const bettwenSlideEff: ISlideTransition | undefined = slideTransition
-      ? {
-          effect: slideTransition?.effect!,
-          duration: convertTimeUnitToMs(slideTransition?.duration),
-          overlap: convertTimeUnitToMs(slideTransition?.overlap!),
-        }
-      : undefined;
-
-    //console.log(bettwenSlideEff);
-    // create breakpoint for slide transition
-
-    // 1. if no slide transition set to 0
-
+    const slide = this.normalSlideDataArr?.[slideId]?.slide;
     let overlap = 0;
-    // 2. if effect exit use it
-    if (bettwenSlideEff?.effect.id !== "none") {
-      //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
-      overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+    if (slide?.transitionEnabled) {
+      overlap = slide.transitionOverlapTime;
     }
-
     return overlap;
+
+    // TODO: delete commented code
+
+    // 0. get effect definition
+    // const slideTransition =
+    //   slide?.transitions.slide?.[0];
+    // const bettwenSlideEff: ISlideTransition | undefined = slideTransition
+    //   ? {
+    //       effect: slideTransition?.effect!,
+    //       duration: convertTimeUnitToMs(slideTransition?.duration),
+    //       overlap: convertTimeUnitToMs(slideTransition?.overlap!),
+    //     }
+    //   : undefined;
+
+    // //console.log(bettwenSlideEff);
+    // // create breakpoint for slide transition
+
+    // // 1. if no slide transition set to 0
+
+    // let overlap = 0;
+    // // 2. if effect exit use it
+    // if (bettwenSlideEff?.effect.id !== "none") {
+    //   //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
+    //   overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
+    // }
   }
 }
 

@@ -41,6 +41,7 @@ import {
   getAppEffectDefinition,
   getEffectsOptions,
 } from "../../webslider-sdk/src/effects/effects-register";
+import { getCheckboxField } from "../../inputs/input-utils";
 
 type IEffectPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

@@ -51,6 +51,8 @@ export class RootTimeline {
 
   direction = 1;
 
+  timeCorrection = 0;
+
   constructor(config: IRootTimelineConfig) {
     this.config = config;
 
@@ -83,7 +85,7 @@ export class RootTimeline {
   private tick_Handler(tickerTime: number) {
     //console.log(tickerTime);
     if (!this.isPaused && this.playing) {
-      this.currentTimelineTime = tickerTime - this.deltaTickerTime;
+      this.currentTimelineTime = tickerTime - this.deltaTickerTime; // + this.timeCorrection;
       // check duration to call "stop"
 
       // start all timelines that needs to be started that
@@ -140,10 +142,12 @@ export class RootTimeline {
   }
 
   // NOTE: only child that has delay===0 will be started (related to child timelines)
-  start(_pos?: number) {
+  start(timeCorrection = 0) {
     logger.debug(`ROOT start (${this.config.name})`);
     console.time();
     console.timeLog();
+
+    this.timeCorrection = timeCorrection;
 
     if (this.playing) {
       console.log("cannot start multiple times");
@@ -170,7 +174,7 @@ export class RootTimeline {
       // NOTE: START only timeline that have delay===0
       if (!child.playing && child.timeline.delay === 0) {
         child.playing = true;
-        child.timeline.start();
+        child.timeline.start(false, this.timeCorrection);
       }
     });
 
@@ -269,7 +273,7 @@ export class RootTimeline {
       if (inBounds) {
         if (!child.playing) {
           child.playing = true;
-          child.timeline.start(isManual);
+          child.timeline.start(isManual, this.timeCorrection);
         }
 
         // log time
@@ -293,7 +297,12 @@ export class RootTimeline {
     this.emitter.emit("update", time);
   }
 
-  updateSize = (props: { slideWidth: number; slideHeight: number }) => {
+  updateSize = (props: {
+    slideWidth: number;
+    slideHeight: number;
+    pageWidth: number;
+    pageHeight: number;
+  }) => {
     this.timelines.forEach((child) => child.timeline.updateSize(props));
   };
 

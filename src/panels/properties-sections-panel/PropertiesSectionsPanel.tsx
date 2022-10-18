@@ -1,5 +1,5 @@
-import { Button, Icon, Portal, Tag, Text } from "@blueprintjs/core";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, Tag } from "@blueprintjs/core";
+import React, { useContext } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
@@ -11,35 +11,12 @@ import { ReactComponent as LinkIcon } from "./icons/link.svg";
 import { ReactComponent as LayoutIcon } from "./icons/layout.svg";
 import { ReactComponent as TransformIcon } from "./icons/transform.svg";
 import { ReactComponent as CommonStyleIcon } from "./icons/common-style.svg";
-
-import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
-import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-tool.svg";
-import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
-
-import AddPanel from "../add-panel/AddPanel";
-import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import SettingsPanel from "../settings-panel/SettingsPanel";
-
-import css from "./PropertiesSectionsPanel.module.scss";
-import {
-  decreaseStageZoom,
-  increaseStageZoom,
-  doUndo,
-  doRedo,
-  setStageTool,
-  setZoomFit,
-} from "../../store/actions/actions";
-import HistoryPanel from "../history-panel/HistoryPanel";
-import { StageTools } from "../../store/reducers/stage";
-import FontPreviewPanel from "../font-preview-panel/FontPreviewPanel";
-import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
-import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel";
-import { getZoom } from "../../store/helpers/calculateZoom";
-import { IntegrationContext } from "../../integration";
 import {
   PropertiesPanelContext,
   PropertiesPanelSection,
 } from "../properties-panel-all/PropertiesPanelProvider";
+
+import css from "./PropertiesSectionsPanel.module.scss";
 
 const ICON_SIZE = 28;
 
@@ -47,7 +24,7 @@ type IPropertiesSectionsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
-  const { totalEffectCounter } = props;
+  const { totalEffectCounter, elementType } = props;
 
   const { activeSection, setActiveSection } = useContext(
     PropertiesPanelContext
@@ -139,7 +116,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             <AnimationIcon
               style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
             />
-            <div>Animations</div>
+            <div>{elementType === "slide" ? "Transitions" : "Animations"}</div>
             {totalEffectCounter > 0 && (
               <Tag round intent="none" minimal className={css.tag}>
                 {totalEffectCounter}
@@ -196,6 +173,7 @@ const mapStateToProps = (state: IStore) => {
   }
 
   return {
+    elementType: selection.selectionForProperties?.type,
     totalEffectCounter,
   };
 };

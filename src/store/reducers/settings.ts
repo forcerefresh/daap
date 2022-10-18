@@ -1,5 +1,4 @@
 import { cloneDeep } from "lodash-es";
-import { RGBColor } from "react-color";
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,
@@ -54,6 +53,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
           page: { width: 480, height: 850 },
           maxSliderSize: { width: 480, height: 850 },
           heightBehavior: { type: "keepAspectRatio" },
+          widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
           grid: {
             vertical: 24,
@@ -74,6 +74,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
           page: { width: 768, height: 1366 },
           maxSliderSize: { width: 768, height: 1366 },
           heightBehavior: { type: "keepAspectRatio" },
+          widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
           grid: {
             vertical: 24,
@@ -94,6 +95,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
           page: { width: 1024, height: 576 },
           maxSliderSize: { width: 1024, height: 576 },
           heightBehavior: { type: "keepAspectRatio" },
+          widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
           grid: {
             vertical: 24,
@@ -114,6 +116,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
           page: { width: 1240, height: 720 },
           maxSliderSize: { width: 1100, height: 720 },
           heightBehavior: { type: "keepAspectRatio" },
+          widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
           grid: {
             vertical: 24,
@@ -134,6 +137,7 @@ const getSettingsDefault = (): ISettings => ({
   slideDuration: "10s",
   exitSlideDuration: "1s",
   skipFirstSlideEffect: false,
+  breakpointReference: "viewport",
   // slider
   sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
   // preview

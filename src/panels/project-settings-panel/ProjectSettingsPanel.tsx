@@ -12,6 +12,7 @@ import {
 import {
   getCheckboxField,
   getColorField,
+  getSelectField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 
@@ -168,6 +169,19 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                   },
                   "When first slide start for the first time you can skip slide effect.",
                   { style: { width: "100px" } }
+                )}
+              </div>
+              <div className="">
+                {getSelectField(
+                  "Breakpoints reference",
+                  settings.breakpointReference,
+                  [
+                    { label: "Viewport", value: "viewport" },
+                    { label: "Parent element", value: "parent" },
+                  ],
+                  (breakpointReference) => {
+                    _updateProjectSettings({ breakpointReference });
+                  }
                 )}
               </div>
             </FormGroup>

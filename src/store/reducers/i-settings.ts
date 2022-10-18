@@ -7,6 +7,7 @@ export interface ISettings {
   slideDuration: string;
   exitSlideDuration: string;
   skipFirstSlideEffect: boolean;
+  breakpointReference: "viewport" | "parent";
 
   // slider config
   sliderBackgroundColor: RGBColor;

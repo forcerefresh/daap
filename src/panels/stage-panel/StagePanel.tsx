@@ -72,7 +72,7 @@ import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "../../webslider-sdk/src/inputs/i-inputs";
-import ViewportSize from "../vieport-size/ViewportSize";
+import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 
 interface ISize {
@@ -117,8 +117,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     selectedDevice,
     breakpoints,
     forceRefreshRand: _forceRefreshRand,
+    enableDeveloper,
   } = props;
   //logger.debug("StagePanel rendering");
+
+  const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
     logger.log(error, errorInfo);
@@ -147,33 +150,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     //let totalDuration = 0;
     const slideTimelineDataArr: SlideTimelineData[] =
       exportData.slideDataArr.map((slideData) => {
-        const transitionDuration =
-          slideData.slide.transitions.slide?.[0]?.duration || "0ms";
-
-        const transitionOverlap =
-          slideData.slide.transitions.slide?.[0]?.overlap || "0ms";
-
-        //const transitionOverlap = slideData.slide.slideTransition.overlap || 0;
-        const slideDuration = convertTimeUnitToMs(
-          slideData.slide.duration.customValue || "0ms"
-        );
-
-        //totalDuration += slideDuration;
-        //slideData.slide.slideTransition.overlap
         return {
-          duration: slideData.slide.duration.customValue || "0ms",
-          transitionDuration:
-            slideData.slide.transitions.slide?.[0]?.effect.id === "none"
-              ? "0ms"
-              : transitionDuration,
-          transitionOverlap:
-            slideData.slide.transitions.slide?.[0]?.effect.id === "none"
-              ? "0ms"
-              : transitionOverlap,
-          /*transitionOverlap:
-            slideData.slide.slideTransition.effect.id === "none"
-              ? 0
-              : transitionOverlap,*/
+          duration: convertTimeUnitToMs(
+            slideData.slide.duration.customValue || "0ms"
+          ),
+          transitionDuration: slideData.slide.transitionEnabled
+            ? slideData.slide.transitionDurationTime
+            : 0,
+          transitionOverlap: slideData.slide.transitionEnabled
+            ? slideData.slide.transitionOverlapTime
+            : 0,
         };
       });
 
@@ -433,8 +419,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }, [rootRef, windowWidth, windowHeight]);
 
   // TODO: vieport size dev is in progress
-  const renderVieportSize = () => {
-    return null; // <ViewportSize onChange={(size) => {}} />;
+  const renderViewportSize = () => {
+    return (
+      <ViewportSize
+        onChange={(size) => {
+          // _setCustomBPSize({
+          //   w: size.width,
+          // });
+          console.log(size.width, "srki");
+          setCustomBPWidth(size.width);
+        }}
+      />
+    );
   };
 
   const renderSlideTimelineInfo = () => {
@@ -1378,7 +1374,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       {isPreview &&
         previewState.scope?.entityType === "slide" &&
         renderSlideTimelineInfo()}
-      {isPreview && renderVieportSize()}
+      {isPreview && enableDeveloper && renderViewportSize()}
       {isPreview &&
         previewState.scope?.entityType === "project" &&
         renderProjectTimelineInfo()}
@@ -1394,6 +1390,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             <div style={canvasStyle} className={css.canvas}>
               {isPreview && (
                 <AppPlayer
+                  selectedDevice={selectedDevice}
+                  customBPWidth={customBPWidth}
                   playerData={exportData}
                   previewState={previewState}
                   manualProgress={manualProgress}
@@ -1501,6 +1499,7 @@ const mapStateToProps = (state: IStore) => {
     selectedDevice: state.stage.selectedDevice,
     breakpoints: state.project.settings.breakpoints,
     forceRefreshRand: stage.forceRefreshRand,
+    enableDeveloper: state.globals.enableDeveloper,
   };
 };
 
@@ -1525,6 +1524,7 @@ const mapDispatchToProps = {
   _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
+  //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 
 export default withErrorBoundary(

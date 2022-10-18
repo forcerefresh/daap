@@ -1,4 +1,4 @@
-import { Button, Icon, Menu, MenuItem } from "@blueprintjs/core";
+import { Button, Icon, Menu, MenuItem, Switch } from "@blueprintjs/core";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import React from "react";
 import { IInputMetadataValues } from "../../webslider-sdk/src/inputs/i-inputs";
@@ -57,7 +57,18 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
     <div className={css.main}>
       {children}
       <div className={css.optionsHolder}>
-        <Button
+        <Switch
+          checked={!metadataValues.disabled}
+          onChange={() => {
+            onMetadataChange({
+              ...metadataValues,
+              disabled: !metadataValues.disabled,
+            });
+          }}
+          innerLabelChecked="on"
+          innerLabel="off"
+        />
+        {/* <Button
           className={css.button}
           minimal
           small
@@ -69,7 +80,7 @@ export const OptionalInput: React.FC<IOptionalInput> = (props) => {
           }}
         >
           {getIcon()}
-        </Button>
+        </Button> */}
 
         {/* <Popover2
           content={metaMenu}

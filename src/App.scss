@@ -6,6 +6,33 @@ html {
   overflow: hidden;
   color: var(--font-color);
 
+  //switch
+  .bp3-dark .bp3-control.bp3-switch .bp3-control-indicator::before {
+    background: #828282;
+  }
+  .bp3-dark .bp3-control.bp3-switch input:checked ~ .bp3-control-indicator {
+    background: #dbdbdb;
+    color: #333;
+  }
+  body .bp3-dark label.bp3-control,
+  html .bp3-dark label.bp3-control {
+    color: #c3c3c3;
+  }
+  .bp3-dark
+    .bp3-control.bp3-switch:hover
+    input:checked
+    ~ .bp3-control-indicator {
+    background: #dbdbdb;
+  }
+  .bp3-dark .bp3-control.bp3-switch .bp3-control-indicator::before,
+  html .bp3-dark .bp3-control.bp3-switch .bp3-control-indicator::before {
+    background: #2f2f2f;
+  }
+  .bp3-control.bp3-switch:focus {
+    outline: none !important;
+    border: none !important;
+  }
+
   // button group >>
   .bp3-dark
     .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]) {

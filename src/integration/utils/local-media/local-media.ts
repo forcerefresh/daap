@@ -30,13 +30,13 @@ export function getMediaSrc(
       }
 
       if (mediaItem.sourceType === "library") {
-        if (options?.useId) {
-          return {
-            ...mediaItem,
-            src:
-              "{MEDIA_ITEM_LIBRARY}" + (options.filename || mediaItem.filename),
-          };
-        }
+        // if (options?.useId) {
+        //   return {
+        //     ...mediaItem,
+        //     src:
+        //       "{MEDIA_ITEM_LIBRARY}" + (options.filename || mediaItem.filename),
+        //   };
+        // }
         return {
           ...mediaItem,
           src: mediaItem.url,

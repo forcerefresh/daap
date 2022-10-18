@@ -46,6 +46,8 @@ export class Timeline {
 
   disable = false;
 
+  timeCorrection = 0;
+
   constructor(config: ITimelineConfig) {
     // configuration
     this.config = config;
@@ -78,9 +80,9 @@ export class Timeline {
     this.duration = this.config.duration!;
   }
 
-  play(_pos?: number) {
-    this.start();
-  }
+  // play(_pos?: number) {
+  //   this.start();
+  // }
 
   /*tick_Handler(tickerTime: number) {
     //console.log(tickerTime);
@@ -161,7 +163,7 @@ export class Timeline {
     });
   }
 
-  start(isManual?: boolean) {
+  start(isManual?: boolean, timeCorrection = 0) {
     logger.debug(`(DISABLED) Timeline start (${this.config.name})`);
 
     logger.debug(`Timeline start (${this.config.name})`);
@@ -169,16 +171,17 @@ export class Timeline {
 
     this.emit("beforeStart");
 
+    this.timeCorrection = timeCorrection;
     //this.playing = true;
     if (!isManual) this.isPaused = false;
 
-    this.execStart(isManual);
+    this.execStart(isManual, timeCorrection);
 
     this.timelines.forEach((child) => {
       // START only timeline that have delay===0
       if (!child.playing && child.timeline.delay === 0) {
         child.playing = true;
-        child.timeline.start(isManual);
+        child.timeline.start(isManual, timeCorrection);
       }
     });
     this.emit("start");
@@ -237,7 +240,7 @@ export class Timeline {
         // NOTE: if manual position do not exec start
         if (!child.playing) {
           child.playing = true;
-          child.timeline.start(isManual);
+          child.timeline.start(isManual, this.timeCorrection);
           //if (this.isPaused) child.timeline.pause();
         }
 
@@ -339,10 +342,10 @@ export class Timeline {
     this.timelines.push({ playing: false, timeline: tl });
   }
 
-  execStart(isManual?: boolean) {
+  execStart(isManual?: boolean, timeCorrection = 0) {
     if (this.disable) return;
 
-    this.animIns?.start?.(this.config, isManual);
+    this.animIns?.start?.(this.config, isManual, timeCorrection);
 
     // if (this.config.effectId) {
     //   const animationDef = getAnimationDefinition(this.config.effectId);

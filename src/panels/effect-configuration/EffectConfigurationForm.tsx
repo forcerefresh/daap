@@ -373,7 +373,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
 
           {effectType === "slide" && (
             <div className={css.inlineFlex}>
-              {overlapInput()}
+              {delayInput()}
               {effDef(effectType)?.formDefaults.hasDuration && durationInput()}
             </div>
           )}

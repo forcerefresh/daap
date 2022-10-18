@@ -27,6 +27,7 @@ import { timelinesDef, timelinesAppDef } from "./transform/transform";
 import { fadeSlideAppDef, fadeSlideDef } from "./fade-slide/fade-slide";
 import { overlapAppDef, overlapDef } from "./overlap/overlap";
 import { slideSlideAppDef, slideSlideDef } from "./slide-slide/slide-slide";
+import { textAppDef, textDef } from "./text/text";
 
 registerEffect(fadeAppDef, fadeDef);
 registerEffect(flipAppDef, flipDef);
@@ -41,6 +42,7 @@ registerEffect(tilesZoomAppDef, tilesZoomDef);
 registerEffect(fallingLeavesAppDef, fallingLeavesDef);
 registerEffect(tilesFadeAppDef, tilesFadeDef);
 registerEffect(tilesSlideAppDef, tilesSlideDef);
+registerEffect(textAppDef, textDef);
 
 registerEffect(null, execCodePlayerDef);
 

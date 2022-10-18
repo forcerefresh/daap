@@ -5,9 +5,9 @@ import {
   ITextStartPositionInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectDefinition } from "../types";
-import { ISplitTextEffect, splitText } from "./split-text.types";
+import { ITextEffect, TEXT_ANIMATION } from "./text.types";
 
-export type ISplitTextTuple = [
+export type ITextTuple = [
   INumberInput<"durationPerChar">,
   INumberInput<"delayBetweenChar">,
   INumericTimelineInput<"opacity">,
@@ -20,9 +20,9 @@ export type ISplitTextTuple = [
   ITextStartPositionInput<"startFrom">
 ];
 
-export const splitTextDefinition: IEffectDefinition<ISplitTextTuple> = {
-  id: splitText,
-  name: "Split Text",
+export const textDefinition: IEffectDefinition<ITextTuple> = {
+  id: TEXT_ANIMATION,
+  name: "Text",
   form: [
     {
       displayName: "Duration per char",
@@ -112,8 +112,8 @@ const delayAndDuration = {
   duration: 1000,
 };
 
-export const splitTextDefaults: ISplitTextEffect = {
-  id: splitText,
+export const textDefaults: ITextEffect = {
+  id: TEXT_ANIMATION,
   hasDelay: true,
   hasDuration: false,
   hasEase: true,

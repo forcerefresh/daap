@@ -62,7 +62,7 @@ selectEl?.addEventListener("change", (e: any) => {
     player.clear(true);
   }
 
-  player = new Player(selPlayerData as any, divEl);
+  player = new Player(selPlayerData as any, playerRootEl);
   player.play();
 });
 
@@ -72,7 +72,7 @@ refreshButtonEl?.addEventListener("click", (e: any) => {
     player.clear(true);
   }
 
-  player = new Player(latestPlayerData, divEl);
+  player = new Player(latestPlayerData, playerRootEl);
   player.play();
 });
 
@@ -107,10 +107,15 @@ function addBbButton(holder: HTMLDivElement, bp: BreakpointConfiguration) {
 }
 
 //**** */
-const divEl = document.createElement("div");
-divEl.style.overflow = "visible";
+const playerHolderEl = document.createElement("div");
+playerHolderEl.style.overflow = "visible";
 
-document.body.appendChild(divEl);
+document.body.appendChild(playerHolderEl);
+
+const playerRootEl = document.createElement("div");
+playerRootEl.style.overflow = "visible";
+
+playerHolderEl.appendChild(playerRootEl);
 
 function getExports() {
   const exports = JSON.parse(localStorage.getItem("exports") || "{}");

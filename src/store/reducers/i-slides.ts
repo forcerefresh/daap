@@ -12,6 +12,9 @@ export interface ISlide {
   layerIds: string[];
   nextLayerIdCounter: number;
   slideType: SlideType;
+  transitionEnabled: boolean;
+  transitionOverlapTime: string;
+  transitionDurationTime: string;
   transitions: ITransitions;
   //props
   customId: string;

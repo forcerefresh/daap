@@ -1,12 +1,15 @@
 import React, { useContext, useEffect, useRef } from "react";
-import { isEmpty } from "lodash-es";
+import { isEmpty, omit } from "lodash-es";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
 import { IPlayerData } from "../export/i-export-html";
 import { PreviewTimelineContext } from "../utils/preview-timeline-provider/PreviewTimelineProvider";
+import { DeviceType } from "../webslider-sdk/src/common/i-device-type";
 
 export interface AppPlayerProps {
+  selectedDevice: string;
+  customBPWidth?: number;
   playerData: IPlayerData | null;
   previewState: IPreviewState;
   manualProgress: number;
@@ -15,7 +18,20 @@ export interface AppPlayerProps {
 }
 
 export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
-  const { playerData, manualProgress, previewState, requestStop } = props;
+  const {
+    playerData,
+    manualProgress,
+    previewState,
+    requestStop,
+    customBPWidth,
+    selectedDevice,
+  } = props;
+
+  const playerDataForComparation = omit(
+    playerData,
+    "breakpointData",
+    "breakpoints"
+  );
 
   const { setPreviewTimelineState } = useContext(PreviewTimelineContext);
 
@@ -28,6 +44,20 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
       player.current?.getCurrentTimeline()?.progress(manualProgress, true);
     }
   }, [manualProgress]);
+
+  // manual progress
+  useEffect(() => {
+    if (customBPWidth) {
+      //debugger;
+      console.log(player.current);
+      player.current?.setDevice(selectedDevice as DeviceType);
+      console.log(customBPWidth, "srki2");
+      player.current?.customResize({
+        width: customBPWidth,
+        height: playerData?.breakpointData.pageHeight,
+      });
+    }
+  }, [customBPWidth]);
 
   // play/pause switch
   useEffect(() => {
@@ -73,6 +103,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
     if (!isEmpty(playerData?.slideDataArr)) {
+      console.log("REINITIALIZE");
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/
@@ -116,7 +147,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         slideIdx: 0,
       });
     };
-  }, [playerData]);
+  }, [playerDataForComparation]);
 
   useEffect(() => {
     currentPlayer.current?.setRootPaused(!!previewState.paused);

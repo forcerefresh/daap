@@ -35,11 +35,22 @@ export function slideSlideAnimation() {
     logger.debug(`${SLIDE_SLIDE_ANIMATION} rootStop`);
   }
 
-  function start(config: ISlideSlideEffect, isManual?: boolean) {
+  function start(
+    config: ISlideSlideEffect,
+    isManual?: boolean,
+    timeCorrection = 0
+  ) {
     logger.debug(`${SLIDE_SLIDE_ANIMATION} start`);
-
+    console.log(Date.now(), "srki");
     config.nextSlideEl!.style.zIndex = `${config.nextZIndex}`;
+
+    //debugger;
+    if (timeCorrection > 0) {
+      timeline.seek(timeCorrection);
+    }
     timeline.play();
+    console.log(Date.now(), "srki");
+    console.log(timeline.currentTime, "srki");
   }
 
   function stop(
@@ -48,8 +59,11 @@ export function slideSlideAnimation() {
     isReverse?: boolean
   ) {
     logger.debug(`${SLIDE_SLIDE_ANIMATION} stop`);
+    console.log(timeline.currentTime, "srki");
+    console.log(Date.now(), "srki");
 
-    timeline.pause();
+    // NOTE: we are not pausing as Timeline call stop before timeline ends
+    // timeline.pause();
   }
 
   function update(config: ISlideSlideEffect, time: number, isManual?: boolean) {

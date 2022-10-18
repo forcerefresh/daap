@@ -1,10 +1,10 @@
 import gsap from "gsap";
+import { convertTimeUnitToMs } from "../../utils/utils";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideEffect } from "./flip-slide.types";
 
 export function flipSlideAnimation() {
   let timeline: gsap.core.Timeline;
-  let durationBetweenItems: number;
   let slidesHolder: HTMLDivElement;
   let card: HTMLDivElement;
   let slideTransitionHolder: HTMLDivElement;
@@ -19,7 +19,6 @@ export function flipSlideAnimation() {
     slideTransitionHolder = document.getElementsByClassName(
       "slideTransitionHolder"
     )[0] as HTMLDivElement;
-    durationBetweenItems = config.durationBetweenItems / 1000;
 
     gsap.set(slidesHolder, {
       perspective: "600px",
@@ -35,6 +34,7 @@ export function flipSlideAnimation() {
       card.className = "slideTransitionHolder";
       console.log(card, "pppp");
       slidesHolder.append(card);
+      slideTransitionHolder = card;
     } else {
       card = slideTransitionHolder as HTMLDivElement;
     }
@@ -43,7 +43,7 @@ export function flipSlideAnimation() {
 
     timeline = gsap.timeline({ paused: true });
     timeline.to(card, {
-      duration: durationBetweenItems,
+      duration: config.duration! / 1000,
       rotateY: -180,
       translateX: "-100%",
       ease: config.ease,
@@ -101,19 +101,20 @@ export function flipSlideAnimation() {
     //   perspective: "none",
     // });
 
-    // if (config?.prevSlideEl) {
-    //   slidesHolder.appendChild(config?.prevSlideEl);
-    //   config.prevSlideEl.style.display = "none";
-    // }
+    if (config?.prevSlideEl) {
+      slidesHolder.appendChild(config?.prevSlideEl);
+      config.prevSlideEl.style.display = "none";
+    }
 
-    // if (config?.nextSlideEl) {
-    //   config.nextSlideEl.style.transform = "rotateY(0deg)";
-    //   slidesHolder.appendChild(config?.nextSlideEl!);
-    // }
+    if (config?.nextSlideEl) {
+      config.nextSlideEl.style.transform = "rotateY(0deg)";
+      slidesHolder.appendChild(config?.nextSlideEl!);
+    }
 
     // const slideTransitionHolder2 = document.getElementsByClassName(
     //   "slideTransitionHolder"
     // )[0];
+
     slideTransitionHolder?.parentNode?.removeChild(slideTransitionHolder);
 
     if (isManual) {

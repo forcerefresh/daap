@@ -4,9 +4,9 @@ import {
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { IEffectBase } from "../types";
 
-export const splitText = "splitText";
+export const TEXT_ANIMATION = "text-animation";
 
-export interface SplitTextEffectValues {
+export interface TextEffectValues {
   durationPerChar: number;
   delayBetweenChar: number;
   opacity: INumericTimelineValue;
@@ -19,4 +19,4 @@ export interface SplitTextEffectValues {
   startFrom: ITextStartPositionValue;
 }
 
-export interface ISplitTextEffect extends IEffectBase, SplitTextEffectValues {}
+export interface ITextEffect extends IEffectBase, TextEffectValues {}

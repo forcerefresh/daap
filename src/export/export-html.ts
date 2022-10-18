@@ -37,6 +37,7 @@ import {
   getRealSlideDuration,
   addCommonPropertiesToStyle,
   getRealExitSlideDuration,
+  convertTimeUnitToMs,
 } from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
@@ -153,6 +154,7 @@ export function generatePlayerData(
     frontSlideDataArr,
     backSlideDataArr,
     skipFirstSlideEffect: settings.skipFirstSlideEffect,
+    breakpointReference: settings.breakpointReference,
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
       height: breakpointConfig.normal.maxSliderSize.height,
@@ -207,23 +209,31 @@ function generateSlideData(
   const extensionTypes: string[] = [];
 
   const transitionsData: ITransitionsData[] = [];
-  const someSlideData = pick(slide, [
+  const someSlideData: Partial<ISlideData["slide"]> = pick(slide, [
     "id",
     "slideType",
+    "transitionEnabled",
     "transitions",
     "duration",
     "exitDuration",
     "customId",
   ]);
-  someSlideData.duration.customValue = getRealSlideDuration(slide, settings);
-  someSlideData.exitDuration.customValue = getRealExitSlideDuration(
+
+  someSlideData.transitionOverlapTime = convertTimeUnitToMs(
+    slide.transitionOverlapTime
+  );
+  someSlideData.transitionDurationTime = convertTimeUnitToMs(
+    slide.transitionDurationTime
+  );
+  someSlideData.duration!.customValue = getRealSlideDuration(slide, settings);
+  someSlideData.exitDuration!.customValue = getRealExitSlideDuration(
     slide,
     settings
   );
 
   // slide data
   const slideData: ISlideData = {
-    slide: someSlideData,
+    slide: someSlideData as ISlideData["slide"],
     transitionsData,
   };
 

@@ -35,6 +35,7 @@ function cubeAnimation() {
 
   function init(config: ICubeEffect) {
     logger.debug("cube init");
+    debugger;
 
     areaW = config.breakpointData?.width || 0;
     areaH = config.breakpointData?.height || 0;

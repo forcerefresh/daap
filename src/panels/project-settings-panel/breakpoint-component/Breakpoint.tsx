@@ -188,7 +188,7 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
           </div>
           <div className={css.inlineRow}>
             <Text className={css.inlineRowLabel}>Max slider size</Text>
-            <div className="input60 labelOneLetter">
+            <div className="input60">
               {getNumericFiled(
                 "W",
                 breakpointConfiguration.normal.maxSliderSize.width,
@@ -202,7 +202,7 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
                 }
               )}
             </div>
-            <div className="input60 labelOneLetter">
+            <div className="input60">
               {getNumericFiled(
                 "H",
                 breakpointConfiguration.normal.maxSliderSize.height,
@@ -219,15 +219,47 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
           </div>
 
           <div className={css.inlineRow}>
-            <Text className={css.inlineRowLabel}>Slider height</Text>
+            <Text className={css.inlineRowLabel}>Slider Width</Text>
+            <div className="input60">
+              {getSelectField(
+                "",
+                breakpointConfiguration.normal.widthBehavior?.type as any,
+                [
+                  {
+                    value: "useMaxWidth",
+                    label: `Default (Max width: ${breakpointConfiguration.normal.maxSliderSize.width}px)`,
+                  },
+                  { value: "fullwidth", label: "Full width (100%)" },
+                ],
+                (value: any) => {
+                  set(
+                    breakpointConfiguration,
+                    "normal.widthBehavior.type",
+                    value
+                  );
+                  onChange({ ...breakpointConfiguration });
+                }
+              )}
+            </div>
+          </div>
+
+          <div className={css.inlineRow}>
+            <Text className={css.inlineRowLabel}>Slider Height</Text>
             <div className="input60">
               {getSelectField(
                 "",
                 breakpointConfiguration.normal.heightBehavior?.type as any,
                 [
-                  { value: "viewport", label: "Viewport" },
-                  { value: "fixed", label: "Fixed" },
                   { value: "keepAspectRatio", label: "Keep aspect ratio" },
+                  {
+                    value: "keepAspectRatioBelowMaxSliderSize",
+                    label: "Keep aspect ratio (below Max slider width)",
+                  },
+                  {
+                    value: "fixed",
+                    label: `Fixed (${breakpointConfiguration.normal.maxSliderSize.height})`,
+                  },
+                  { value: "fullheight", label: "Full height (100%)" },
                 ],
                 (value: any) => {
                   set(

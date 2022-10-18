@@ -57,6 +57,7 @@ export interface IPlayerData {
   frontSlideDataArr: ISlideData[];
   backSlideDataArr: ISlideData[];
   skipFirstSlideEffect: boolean;
+  breakpointReference: "viewport" | "parent";
   breakpointData: {
     width: number;
     height: number;
@@ -78,6 +79,9 @@ export interface ISlideData {
     id: string;
     customId: string;
     slideType: SlideType;
+    transitionEnabled: boolean;
+    transitionOverlapTime: number;
+    transitionDurationTime: number;
     transitions: ITransitions;
     duration: ISlideDuration;
     exitDuration: ISlideExitTime;

@@ -15,9 +15,9 @@ import { last } from "lodash-es";
 import { useWindowSize } from "../../utils/hooks/window-size";
 
 export interface SlideTimelineData {
-  duration: string;
-  transitionDuration: string;
-  transitionOverlap: string;
+  duration: number;
+  transitionDuration: number;
+  transitionOverlap: number;
   //transitionOverlap: number;
 }
 
@@ -54,8 +54,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       totalTime += slideData.duration;
     } else {*/
     totalTime +=
-      convertTimeUnitToMs(slideData.duration) -
-      (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
+      slideData.duration - (idx === 0 ? 0 : slideData.transitionOverlap);
     /*}*/
   });
 
@@ -71,19 +70,13 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     const slideLeft =
       currPos === 0
         ? 0
-        : (currPos -
-            (idx === 0
-              ? 0
-              : convertTimeUnitToMs(slideData.transitionOverlap))) /
-          totalTime;
+        : (currPos - (idx === 0 ? 0 : slideData.transitionOverlap)) / totalTime;
     slideLeftArr[idx] = slideLeft;
     currPos +=
-      convertTimeUnitToMs(slideData.duration) -
-      (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
+      slideData.duration - (idx === 0 ? 0 : slideData.transitionOverlap);
 
     //slide multiplier
-    const slidePosMultiplier =
-      convertTimeUnitToMs(slideData.duration) / totalTime;
+    const slidePosMultiplier = slideData.duration / totalTime;
     slidePosMultiplierArr[idx] = slidePosMultiplier;
   });
 
@@ -104,11 +97,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
       projectTimelineData?.slides.forEach((slideData, idx) => {
         const transitionLeft =
           (lineWidth / totalTime) *
-          (currentPosition -
-            (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap))); // TODO:UPDATE
+          (currentPosition - (idx === 0 ? 0 : slideData.transitionOverlap)); // TODO:UPDATE
         let transitionWidth =
-          (convertTimeUnitToMs(slideData.transitionDuration) / totalTime) *
-          lineWidth;
+          (slideData.transitionDuration / totalTime) * lineWidth;
         if (transitionWidth === 0) transitionWidth = 2;
         /*const overlapWidth =
           (slideData.transitionOverlap / totalTime) * lineWidth;*/
@@ -116,8 +107,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
         //html += `<div style="position: absolute; width: ${overlapWidth}px; height: 4px; background: red; left:${left}px "></div>`;
 
         currentPosition +=
-          convertTimeUnitToMs(slideData.duration) -
-          (idx === 0 ? 0 : convertTimeUnitToMs(slideData.transitionOverlap));
+          slideData.duration - (idx === 0 ? 0 : slideData.transitionOverlap);
       });
 
       if (
@@ -127,14 +117,9 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
         const transitionLeft =
           (lineWidth / totalTime) *
           (currentPosition -
-            convertTimeUnitToMs(
-              last(projectTimelineData?.slides!)!.transitionOverlap
-            ));
+            last(projectTimelineData?.slides!)!.transitionOverlap);
         let transitionWidth =
-          (convertTimeUnitToMs(
-            last(projectTimelineData?.slides!)!.transitionOverlap
-          ) /
-            totalTime) *
+          (last(projectTimelineData?.slides!)!.transitionOverlap / totalTime) *
           lineWidth;
 
         html += `<div style="position: absolute; width: ${transitionWidth}px; height: 4px; background: #555; left:${transitionLeft}px "></div>`;
@@ -158,10 +143,8 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
   //  left: ((lineRef?.current as any)?.offsetWidth || 0) * progress + "px",
   //};
   const currentSlideDuration =
-    convertTimeUnitToMs(
-      projectTimelineData?.slides[previewTimelineState.slideIdx].duration ||
-        "10000ms"
-    ) / 1000;
+    (projectTimelineData?.slides[previewTimelineState.slideIdx].duration ||
+      10000) / 1000;
   const progress = previewTimelineState.time / currentSlideDuration; //slideProgress.progress; //slideProgress.time / currentSlideDuration;
 
   const lineWidth = (lineRef?.current as any)?.offsetWidth || 0;
