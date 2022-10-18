@@ -5,6 +5,6 @@ export const SLIDE_SLIDE_ANIMATION = "slideSlide";
 export interface ISlideSlideEffect extends IEffectBase, INextZIndex {
   nextSlideEl?: HTMLDivElement;
   prevSlideEl?: HTMLDivElement;
-  distance: number;
+  distance: string;
   from: "top" | "bottom" | "left" | "right";
 }
