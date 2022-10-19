@@ -56,7 +56,7 @@ export const Presets: React.FC<IPresets<any>> = (props) => {
   }, [currentValue]);
 
   const presetOptions = presets.map((preset) => ({
-    label: preset.name,
+    label: preset.name || "(empty name)",
     value: preset.uid,
   }));
 
