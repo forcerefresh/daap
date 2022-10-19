@@ -1,8 +1,0 @@
-.colorRow {
-  display: flex;
-  align-items: flex-start;
-
-  > * + * {
-    margin-left: 10px;
-  }
-}

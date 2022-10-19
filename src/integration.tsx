@@ -1,6 +1,5 @@
 import React from "react";
 import { IPlayerData } from "./export/i-export-html";
-import { Preset, PresetGroup } from "./webslider-sdk/src/inputs/i-inputs";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import { IExtensionItem } from "./webslider-sdk/src/objects/i-extensions";
@@ -10,6 +9,7 @@ import {
   MediaType,
 } from "./webslider-sdk/src/common/i-media-types";
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
+import { Preset, PresetGroup } from "./utils/presets/i-presets";
 
 export interface getMyUploadComponentProps {
   type: MediaType;

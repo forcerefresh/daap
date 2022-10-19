@@ -1,6 +1,6 @@
 import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import classnames from "classnames";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, merge } from "lodash-es";
 import React, { useState } from "react";
 import {
   AnimeJSEasingOptions,
@@ -26,6 +26,7 @@ import {
   getAppEffectDefinition,
   getEffectsOptions,
 } from "../../webslider-sdk/src/effects/effects-register";
+import { Presets } from "../../utils/presets/Presets";
 /*
 type IEffectConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -394,6 +395,19 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         {effectType === "effect" && (
           <div className="bp3-form-helper-text"></div>
         )}
+
+        <Presets
+          presetGroup={`effect-${transition.effect.id}`}
+          currentValue={transition.effect.values}
+          onChange={(presetValues) => {
+            const newTransition = cloneDeep(transition);
+            newTransition.effect.values = merge(
+              newTransition.effect.values,
+              presetValues
+            );
+            onTransitionChange(newTransition);
+          }}
+        />
 
         <div className={css.dynamicFields}>{renderEffectForm()}</div>
 

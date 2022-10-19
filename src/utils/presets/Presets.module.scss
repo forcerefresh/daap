@@ -1,0 +1,22 @@
+.colorRow {
+  display: flex;
+  align-items: flex-start;
+
+  > * + * {
+    margin-left: 10px;
+  }
+}
+
+.emptySelect {
+  select {
+    color: #4d4d4d !important;
+  }
+}
+
+.addNewPreset:hover {
+  :global {
+    .bp3-icon {
+      color: #53e456 !important;
+    }
+  }
+}

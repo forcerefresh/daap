@@ -8,7 +8,7 @@ export const dev2Definition = {
     {
       displayName: "Colors",
       propertyName: "colors1",
-      inputType: InputType.COLOR_ARRAY_PRESETS,
+      inputType: InputType.COLOR_ARRAY,
     },
     {
       displayName: "Number 1",

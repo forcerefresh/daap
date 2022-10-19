@@ -26,7 +26,7 @@ import {
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
-import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
+//import { ColorArrayInputPresetForm } from "./color-array-input-preset/color-array-input-preset";
 import { TimelinesInputForm } from "./transform-input/transform-input";
 import { RelativeRotationInputForm } from "./relative-rotation-input/relative-rotation-input";
 import { RelativePositionInputForm } from "./relative-position-input/relative-position-input";
@@ -225,16 +225,16 @@ export function getInputForm<T>(
         />
       );
     }
-    case InputType.COLOR_ARRAY_PRESETS: {
-      return (
-        <ColorArrayInputPresetForm
-          key={key}
-          {...inputProps}
-          onChange={onChange}
-          onInput={onInput}
-        />
-      );
-    }
+    // case InputType.COLOR_ARRAY_PRESETS: {
+    //   return (
+    //     <ColorArrayInputPresetForm
+    //       key={key}
+    //       {...inputProps}
+    //       onChange={onChange}
+    //       onInput={onInput}
+    //     />
+    //   );
+    // }
     case InputType.TEXT: {
       return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
     }

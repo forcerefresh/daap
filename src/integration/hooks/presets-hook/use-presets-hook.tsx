@@ -1,8 +1,5 @@
 import { remove } from "lodash-es";
-import {
-  Preset,
-  PresetGroup,
-} from "../../../webslider-sdk/src/inputs/i-inputs";
+import { Preset, PresetGroup } from "../../../utils/presets/i-presets";
 
 export const usePresets = () => {
   const getPresets = (type: PresetGroup): Promise<Preset<any>[]> => {
@@ -33,14 +30,14 @@ export const usePresets = () => {
 
   const deletePreset = (
     type: PresetGroup,
-    name: string
+    uid: string
   ): Promise<Preset<any>[]> => {
     const presets: any[] = JSON.parse(
       localStorage.getItem(`presets-${type}`) || "[]"
     );
 
     remove(presets, (presets: any) => {
-      return presets.name === name;
+      return presets.uid === uid;
     });
 
     localStorage.setItem(`presets-${type}`, JSON.stringify(presets));
@@ -58,7 +55,7 @@ export const usePresets = () => {
       localStorage.getItem(`presets-${type}`) || "[]"
     );
 
-    let presetItem = presets.find((p) => p.name === preset.name);
+    let presetItem = presets.find((p) => p.uid === preset.uid);
     let presetItemIndex = presets.indexOf(presetItem);
     presets[presetItemIndex].value = preset.value;
 
