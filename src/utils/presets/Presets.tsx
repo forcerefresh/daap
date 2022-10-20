@@ -160,7 +160,7 @@ export const Presets: React.FC<IPresets<any>> = (props) => {
               );
 
               setSelectedPresetValues(cloneDeep(selectedPreset?.value!));
-              onChange(selectedPreset?.value!);
+              onChange(cloneDeep(selectedPreset?.value!));
             }}
           />
         </FormGroup>
