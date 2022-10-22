@@ -4,19 +4,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, remove, round, uniq } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import {
-  Alert,
-  Button,
-  Checkbox,
-  InputGroup,
-  Intent,
-  Popover,
-  PopoverInteractionKind,
-  Position,
-  Spinner,
-  Tag,
-  Text,
-} from "@blueprintjs/core";
+import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
 import {
   addNewObject,
   doClearHistory,
@@ -25,27 +13,11 @@ import {
   updateProjectMeta,
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
-
-import css from "./ProjectsPanel.module.scss";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
-
-interface ImageItem {
-  url: string;
-  size: {
-    height: number;
-    width: number;
-    type: string;
-  };
-}
-
-interface ImageData {
-  id: string;
-  name: string;
-  description: string;
-}
+import css from "./ProjectsPanel.module.scss";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;

@@ -197,6 +197,61 @@ export const IntegrationContext = React.createContext({
     }): Promise<any> => Promise.resolve({} as IExtensionItem),
   }),
 
+  useTemplateHook: () => ({
+    /* return template */
+    getTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    /* returns templates */
+    getTemplates: (from: number, search: string): Promise<any> =>
+      Promise.resolve({}), // todo: add interface for api response
+
+    /* delete template */
+    deleteTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    /* save template */
+    saveTemplate: ({
+      name,
+      description,
+      project,
+      preview,
+    }: {
+      name: string;
+      description?: string;
+      slides?: number;
+      created?: string;
+      project: any;
+      preview: {
+        width: number;
+        height: number;
+        scale: number;
+        html: string;
+      };
+      playerData: IPlayerData;
+      assetsUrls: {
+        id?: string;
+        filename?: string;
+        url?: string;
+        sourceType?: "local" | "library" | "url" | string;
+      }[];
+      extensions: any[];
+    }): Promise<{
+      id: number;
+      name: string;
+      description: string;
+      slides: number;
+      created: string;
+      assetsUrls: { url: string; type: "url" | string }[];
+    }> =>
+      Promise.resolve({
+        id: 1,
+        name: "",
+        description: "",
+        slides: 0,
+        created: "",
+        assetsUrls: [],
+      }), // todo: add interface for api response
+  }),
+
   useProjectHook: () => ({
     /* returns project */
     getProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
@@ -342,6 +397,16 @@ function useProjectHookFactory() {
   }
 }
 
+function useTemplateHookFactory() {
+  //if (process.env.REACT_APP_INTEGRATION === "electron") {
+  // return require("./integration/hooks/project-hook/electron-use-project-hook")
+  //   .useProjectHook;
+  // } else {
+  return require("./integration/hooks/template-hook/use-template-hook")
+    .useTemplateHook;
+  //}
+}
+
 function getMyUploadComponentFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "wp") {
     return WPMyImageSelect;
@@ -410,6 +475,7 @@ export const IntegrationContextProvider = (
         useMyMediaHook: useMyMediaHookFactory(),
         useMediaHook: useMediaHookFactory(),
         useProjectHook: useProjectHookFactory(),
+        useTemplateHook: useTemplateHookFactory(),
         useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),

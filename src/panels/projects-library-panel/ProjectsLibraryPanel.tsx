@@ -8,6 +8,7 @@ import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import DevelopmentPanel from "../development-panel/DevelopmentPanel";
 import MyExtensionsPanel from "../my-extensions-panel/MyExtensionsPanel";
+import TemplatesPanel from "../templates-panel/TemplatesPanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;
@@ -32,6 +33,11 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             panel={<ProjectsPanel onRequestClose={props.onRequestClose} />}
           />
           <Tab id="templates" title="Templates" panel={<div />} />
+          <Tab
+            id="myTemplates"
+            title="Local Templates"
+            panel={<TemplatesPanel onRequestClose={props.onRequestClose} />}
+          />
           <Tab
             id="extensions"
             title="Extensions"

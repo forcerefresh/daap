@@ -56,6 +56,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   // api
   const globalContext = useContext(IntegrationContext);
   const { saveProject, getNextProjectId } = globalContext.useProjectHook();
+  const { saveTemplate } = globalContext.useTemplateHook();
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
 
@@ -125,6 +126,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       id: saveAs ? undefined : localMeta.id,
       name: localMeta.name!,
       description: localMeta.description!,
+      slides: project.slides.normalSlides.length,
       project,
       preview: {
         width: thumbSize.width,
@@ -174,6 +176,56 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         AppToaster.show({
           intent: "danger",
           message: "Something went wrong. Slider is not saved.",
+        });
+      });
+  };
+
+  const onClickSaveTemplate = async (saveAs?: boolean) => {
+    _updateProjectMeta({ inSaving: true });
+
+    const installedExtensions = await getInstalledExtensions();
+
+    const playerData = generatePlayerData(
+      { slides, layers, objects },
+      { entityType: "project", entityId: "current-project" },
+      breakpointConfig!,
+      breakpoints,
+      settings,
+      installedExtensions.items,
+      { isSave: true }
+    );
+
+    const assetsUrls = getAllAssetsUrls(objects);
+
+    saveTemplate({
+      name: localMeta.name!,
+      description: localMeta.description!,
+      project,
+      slides: project.slides.normalSlides.length,
+      preview: {
+        width: thumbSize.width,
+        height: thumbSize.height,
+        scale: thumbSize.scale,
+        html: thumbnailHtml,
+      },
+      playerData,
+      assetsUrls,
+      extensions: playerData.extensions,
+    })
+      .then(({ id, name, description, slides, created, assetsUrls }) => {
+        onRequestClose();
+        _updateProjectMeta({ inSaving: false });
+        AppToaster.show({
+          intent: "success",
+          message: "Template is successfully saved.",
+        });
+      })
+      .catch((e) => {
+        _updateProjectMeta({ inSaving: false });
+        onRequestClose();
+        AppToaster.show({
+          intent: "danger",
+          message: "Something went wrong. Template is not saved.",
         });
       });
   };
@@ -268,6 +320,34 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           >
             {"Save"}
           </Button>
+          <Button
+            className={css.saveAsTemplateBtn}
+            disabled={meta.inSaving}
+            intent="none"
+            onClick={() => onClickSaveTemplate(isSaveAs)}
+          >
+            {"Save as Template"}
+          </Button>
+          <Button
+            disabled={meta.inSaving}
+            intent="none"
+            onClick={() => {
+              onRequestClose();
+            }}
+          >
+            {"Cancel"}
+          </Button>
+
+          {/* <div className={css.saveAsTemplateBtnHolder}>
+            <Button
+              className={css.saveAsTemplateBtn}
+              disabled={meta.inSaving}
+              intent="none"
+              onClick={() => onClickSaveTemplate(isSaveAs)}
+            >
+              {"Save as Template"}
+            </Button>
+          </div> */}
           {/*<Button
             disabled={meta.inSaving}
             intent="primary"

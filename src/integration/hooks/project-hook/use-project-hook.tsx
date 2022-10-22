@@ -165,6 +165,7 @@ export const useProjectHook = () => {
       }, 500); // use timeout to simulate real network network
     });
   };
+
   return {
     getProject,
     getProjects,
