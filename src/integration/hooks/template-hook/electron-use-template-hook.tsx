@@ -1,15 +1,10 @@
-export const useProjectHook = () => {
-  const getNextProjectId = (): Promise<number> => {
-    return new Promise((resolve, reject) => {
-      const { ipcRenderer } = window.require("electron");
+import { IPlayerData } from "../../../export/i-export-html";
+import { IStore } from "../../../store/store";
+import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "../../../webslider-sdk/src/objects/objects-register";
 
-      ipcRenderer.invoke("apiGetNextProjectId").then((result: any) => {
-        resolve(result);
-      });
-    });
-  };
-
-  const getProject = (id: number): Promise<any> => {
+export const useTemplateHook = () => {
+  const getTemplate = (id: string): Promise<any> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
@@ -18,14 +13,14 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiGetProject", JSON.stringify(json))
+        .invoke("Templates::GetTemplate", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
     });
   };
 
-  const getProjects = (
+  const getTemplates = (
     from: number,
     search: string,
     perPage = 10
@@ -40,15 +35,14 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiGetProjects", JSON.stringify(json))
+        .invoke("Templates::GetTemplates", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
     });
   };
 
-  const saveProject = ({
-    id,
+  const saveTemplate = ({
     name,
     description,
     slides,
@@ -58,31 +52,31 @@ export const useProjectHook = () => {
     assetsUrls,
     extensions,
   }: {
-    id?: number;
     name: string;
     description?: string;
     slides?: number;
     created?: string;
-    modified?: string;
-    project: any;
-    preview: any;
-    playerData: any;
-    assetsUrls: { url: string; type: "url" | string }[];
-    extensions: any[];
+    project: Omit<IStore["project"], "diff">;
+    preview: {
+      width: number;
+      height: number;
+      scale: number;
+      html: string;
+    };
+    playerData: IPlayerData;
+    assetsUrls: GetAssetsUrlFuncReturnType;
+    extensions: IExtensionItem[];
   }): Promise<{
-    id: number;
+    id: string;
     name: string;
     description: string;
     slides: number;
     created: string;
-    modified: string;
-    saveRevision: number;
   }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
       const json = {
-        id,
         name,
         description,
         slides,
@@ -94,14 +88,14 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiSaveProject", JSON.stringify(json))
+        .invoke("Templates::SaveTemplate", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
     });
   };
 
-  const deleteProject = (id: number): Promise<{ id: number }> => {
+  const deleteTemplate = (id: string): Promise<{ id: string }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
@@ -110,7 +104,7 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiDeleteProject", JSON.stringify(json))
+        .invoke("Templates::DeleteTemplate", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
@@ -118,10 +112,9 @@ export const useProjectHook = () => {
   };
 
   return {
-    getProject,
-    getProjects,
-    saveProject,
-    deleteProject,
-    getNextProjectId,
+    getTemplate,
+    getTemplates,
+    saveTemplate,
+    deleteTemplate,
   };
 };

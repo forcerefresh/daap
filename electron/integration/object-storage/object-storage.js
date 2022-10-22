@@ -492,8 +492,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     const pArr = [];
     for (const assetItem of assetsUrlsChunk) {
       if (assetItem.sourceType === "library") {
-        console.log("ISSSUE!!!!");
-        console.log(assetItem.url);
         pArr.push(downloadToBuffer(assetItem.url));
       }
       if (assetItem.sourceType === "local") {
@@ -502,22 +500,19 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         );
       }
     }
+
     try {
       const bufferArr = await Promise.all(pArr);
-      /* BrowserWindow.getAllWindows()[0].webContents.send(
-        `ObjectStorageRenderer::SubscribeToPublishDetails`,
-        JSON.stringify(result)
-      );*/
 
       bufferArr.forEach((buf, idx) => {
         const assetItem = assetsUrlsChunk[idx];
         let filename;
+
         if (assetItem.sourceType === "library") {
           var parsed = url.parse(assetItem.url);
           filename = path.basename(parsed.pathname);
-          //const extension = filename.substring(filename.indexOf("."));
           if (assetsUrlsChunk[idx].filename) {
-            filename = assetsUrlsChunk[idx].filename; //+ extension;
+            filename = assetsUrlsChunk[idx].filename;
           }
 
           assetsResult.push({
@@ -525,6 +520,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
             toUrl: `assets/${filename}`,
           });
         }
+
         if (assetItem.sourceType === "local") {
           filename = assetItem.filename;
 
@@ -534,13 +530,14 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
           });
         }
 
-        const zipFilePath = `${req.projectId}/assets/${filename}`;
-        console.log(zipFilePath);
-        zip.file(zipFilePath, buf);
+        const assetZipFilePath = `${req.projectId}/assets/${filename}`;
+        zip.file(assetZipFilePath, buf);
 
         BrowserWindow.getAllWindows()[0].webContents.send(
           `ObjectStorageRenderer::SubscribeToPublishDetails`,
-          JSON.stringify([{ log: `Add asset file to package: ${zipFilePath}` }])
+          JSON.stringify([
+            { log: `Add asset file to package: ${assetZipFilePath}` },
+          ])
         );
       });
     } catch (ex) {
@@ -554,6 +551,79 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     return { status: "ERROR", error };
   }
   // add assets <<
+
+  // ***************
+  // ***************
+  // ***************
+
+  // add extensions >>
+  console.log("UPLOAD EXTENSIONS");
+  const userDataPath = app.getPath("userData");
+
+  const pArr = [];
+  for (const extension of project.extensions) {
+    const extensionFileName =
+      extension.packageFiles.playerObjectFilename ||
+      extension.packageFiles.playerEffectFilename;
+
+    const playerExtensionPath = path.join(
+      userDataPath,
+      "my-uploads",
+      "my-extensions",
+      extension.type,
+      extensionFileName
+    );
+
+    pArr.push(fileToBuffer(playerExtensionPath));
+  }
+
+  console.log(pArr.length);
+
+  try {
+    const bufferArr = await Promise.all(pArr);
+
+    bufferArr.forEach((buf, idx) => {
+      const extension = project.extensions[idx];
+      const filename =
+        extension.packageFiles.playerObjectFilename ||
+        extension.packageFiles.playerEffectFilename;
+
+      const extensionZipFilePath = `${req.projectId}/extensions/${filename}`;
+      zip.file(extensionZipFilePath, buf);
+
+      BrowserWindow.getAllWindows()[0].webContents.send(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`,
+        JSON.stringify([
+          { log: `Add extension file to package: ${extensionZipFilePath}` },
+        ])
+      );
+    });
+  } catch (ex) {
+    console.log(ex);
+    error = ex.toString();
+  }
+
+  // if (pArr.length > 0) {
+  //   try {
+  //     const result = await Promise.all(pArr);
+  //     BrowserWindow.getAllWindows()[0].webContents.send(
+  //       `ObjectStorageRenderer::SubscribeToPublishDetails`,
+  //       JSON.stringify(result)
+  //     );
+  //   } catch (ex) {
+  //     console.log(ex);
+  //     error = ex.toString();
+  //   }
+
+  //   if (error) {
+  //     return { status: "ERROR", error };
+  //   }
+  // }
+  // add extensions <<
+
+  // ***************
+  // ***************
+  // ***************
 
   // add export/playerdata >>
   const exp = await loadExport(req.projectId);
@@ -576,15 +646,16 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   zip.file(`${req.projectId}/slider.json`, expBuffer);
   // add export/playerdata <<
 
-  // upload preview html >>
+  // add preview html >>
   const indexString = await fsPromise.readFile(
     path.join(getBucketPreviewPath(), "index.html"),
     "utf-8"
   );
   const indexBuffer = Buffer.from(indexString, "utf-8");
   zip.file(`${req.projectId}/index.html`, indexBuffer);
+  // add preview html <<
 
-  // preview with json
+  // add preview html with json >>
   let previewString = await fsPromise.readFile(
     path.join(getBucketPreviewPath(), "preview-with-json.html"),
     "utf-8"
@@ -610,7 +681,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: `Add index.html to package` }])
   );
-  // upload preview html <<
+  // add preview html with json <<
 
   // add player >>
   const files = await getPlayerFiles();
@@ -636,56 +707,9 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   const base64Zip = zip.generateAsync({ type: "base64" });
 
   return base64Zip;
-
-  /*
-  // upload assets <<
-
-  // upload export/playerdata >>
-  const exp = await loadExport(req.projectId);
-  let expString = JSON.stringify(exp);
-  for (let i = 0; i < uploadResult.length; i++) {
-    expString = expString.replaceAll(
-      `"${uploadResult[i].fromUrl}"`,
-      `"${uploadResult[i].toUrl}"`
-    );
-    expString = expString.replaceAll(
-      `'${uploadResult[i].fromUrl}'`,
-      `'${uploadResult[i].toUrl}'`
-    );
-  }
-  const expBuffer = Buffer.from(expString, "utf-8");
-  await bucketManager.uploadBufferToBucket(
-    bucketWithKeys,
-    expBuffer,
-    `${req.projectId}/slider.json`
-  );
-  // upload export/playerdata <<
-
-  // upload preview html >>
-  const indexString = await fsPromise.readFile(
-    path.join(getBucketPreviewPath(), "index.html"),
-    "utf-8"
-  );
-  const indexBuffer = Buffer.from(indexString, "utf-8");
-
-  await bucketManager.uploadBufferToBucket(
-    bucketWithKeys,
-    indexBuffer,
-    `${req.projectId}/index.html`
-  );
-
-  assignedProject.revision = req.revision;
-
-  await saveObjectStorage(objectStorageList);
-
-  BrowserWindow.getAllWindows()[0].webContents.send(
-    `ObjectStorageRenderer::SubscribeToPublishDetails`,
-    JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
-  );
-*/
-  // return { status: "OK" };
 });
-//============================================
+
+// HANDLERS END ============================================
 
 async function loadObjectStorage() {
   const objectStoragePath = getObjectStoragePath();

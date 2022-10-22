@@ -3,6 +3,9 @@
 import { remove } from "lodash-es";
 import { IPlayerData } from "../../../export/i-export-html";
 import { v4 as uuid } from "uuid";
+import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "../../../webslider-sdk/src/objects/objects-register";
+import { IStore } from "../../../store/store";
 
 export const useTemplateHook = () => {
   const getTemplate = (id: string): Promise<any> => {
@@ -70,16 +73,16 @@ export const useTemplateHook = () => {
     description?: string;
     slides?: number;
     created?: string;
-    project: any;
-    preview: any;
+    project: Omit<IStore["project"], "diff">;
+    preview: {
+      width: number;
+      height: number;
+      scale: number;
+      html: string;
+    };
     playerData: IPlayerData;
-    assetsUrls: {
-      id?: string;
-      filename?: string;
-      url?: string;
-      sourceType?: "local" | "library" | "url" | string;
-    }[];
-    extensions: any[];
+    assetsUrls: GetAssetsUrlFuncReturnType;
+    extensions: IExtensionItem[];
   }): Promise<{
     id: string;
     name: string;

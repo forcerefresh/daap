@@ -10,6 +10,8 @@ import {
 } from "./webslider-sdk/src/common/i-media-types";
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
 import { Preset, PresetGroup } from "./utils/presets/i-presets";
+import { IStore } from "./store/store";
+import { GetAssetsUrlFuncReturnType } from "./webslider-sdk/src/objects/objects-register";
 
 export interface getMyUploadComponentProps {
   type: MediaType;
@@ -280,7 +282,7 @@ export const IntegrationContext = React.createContext({
       slides?: number;
       created?: string;
       modified?: string;
-      project: any;
+      project: Omit<IStore["project"], "diff">;
       preview: {
         width: number;
         height: number;
@@ -288,13 +290,8 @@ export const IntegrationContext = React.createContext({
         html: string;
       };
       playerData: IPlayerData;
-      assetsUrls: {
-        id?: string;
-        filename?: string;
-        url?: string;
-        sourceType?: "local" | "library" | "url" | string;
-      }[];
-      extensions: any[];
+      assetsUrls: GetAssetsUrlFuncReturnType;
+      extensions: IExtensionItem[];
     }): Promise<{
       id: number;
       name: string;
@@ -398,13 +395,13 @@ function useProjectHookFactory() {
 }
 
 function useTemplateHookFactory() {
-  //if (process.env.REACT_APP_INTEGRATION === "electron") {
-  // return require("./integration/hooks/project-hook/electron-use-project-hook")
-  //   .useProjectHook;
-  // } else {
-  return require("./integration/hooks/template-hook/use-template-hook")
-    .useTemplateHook;
-  //}
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/template-hook/electron-use-template-hook")
+      .useTemplateHook;
+  } else {
+    return require("./integration/hooks/template-hook/use-template-hook")
+      .useTemplateHook;
+  }
 }
 
 function getMyUploadComponentFactory() {

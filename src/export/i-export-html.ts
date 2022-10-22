@@ -53,6 +53,7 @@ export interface ISlideTransitionData {
 
 export interface IPlayerData {
   html: string;
+  name?: string;
   slideDataArr: ISlideData[];
   frontSlideDataArr: ISlideData[];
   backSlideDataArr: ISlideData[];

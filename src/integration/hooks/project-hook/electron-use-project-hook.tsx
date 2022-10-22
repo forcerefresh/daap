@@ -1,9 +1,14 @@
+import { IPlayerData } from "../../../export/i-export-html";
+import { IStore } from "../../../store/store";
+import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "../../../webslider-sdk/src/objects/objects-register";
+
 export const useProjectHook = () => {
   const getNextProjectId = (): Promise<number> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
-      ipcRenderer.invoke("apiGetNextProjectId").then((result: any) => {
+      ipcRenderer.invoke("Projects::GetNextProjectId").then((result: any) => {
         resolve(result);
       });
     });
@@ -18,7 +23,7 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiGetProject", JSON.stringify(json))
+        .invoke("Projects::GetProject", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
@@ -40,7 +45,7 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiGetProjects", JSON.stringify(json))
+        .invoke("Projects::GetProjects", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
@@ -64,11 +69,16 @@ export const useProjectHook = () => {
     slides?: number;
     created?: string;
     modified?: string;
-    project: any;
-    preview: any;
-    playerData: any;
-    assetsUrls: { url: string; type: "url" | string }[];
-    extensions: any[];
+    project: Omit<IStore["project"], "diff">;
+    preview: {
+      width: number;
+      height: number;
+      scale: number;
+      html: string;
+    };
+    playerData: IPlayerData;
+    assetsUrls: GetAssetsUrlFuncReturnType;
+    extensions: IExtensionItem[];
   }): Promise<{
     id: number;
     name: string;
@@ -94,7 +104,7 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiSaveProject", JSON.stringify(json))
+        .invoke("Projects::SaveProject", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });
@@ -110,7 +120,7 @@ export const useProjectHook = () => {
       };
 
       ipcRenderer
-        .invoke("apiDeleteProject", JSON.stringify(json))
+        .invoke("Projects::DeleteProject", JSON.stringify(json))
         .then((result: any) => {
           resolve(result);
         });

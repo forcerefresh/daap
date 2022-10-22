@@ -8,7 +8,7 @@ const {
   loadExports,
 } = require("./project-utils");
 
-ipcMain.handle("apiSaveProject", async (event, dataStr) => {
+ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const {
     name,
@@ -100,7 +100,7 @@ ipcMain.handle("apiSaveProject", async (event, dataStr) => {
   };
 });
 
-ipcMain.handle("apiGetProjects", async (event, dataStr) => {
+ipcMain.handle("Projects::GetProjects", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { from, search, perPage } = data;
 
@@ -113,7 +113,7 @@ ipcMain.handle("apiGetProjects", async (event, dataStr) => {
   return { projects: retArr };
 });
 
-ipcMain.handle("apiDeleteProject", async (event, dataStr) => {
+ipcMain.handle("Projects::DeleteProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { id } = data;
 
@@ -128,7 +128,7 @@ ipcMain.handle("apiDeleteProject", async (event, dataStr) => {
   return { id };
 });
 
-ipcMain.handle("apiGetProject", async (event, dataStr) => {
+ipcMain.handle("Projects::GetProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { id } = data;
 
@@ -137,7 +137,7 @@ ipcMain.handle("apiGetProject", async (event, dataStr) => {
   return { project };
 });
 
-ipcMain.handle("apiGetNextProjectId", async (event) => {
+ipcMain.handle("Projects::GetNextProjectId", async (event) => {
   const projects = await loadProjects();
 
   let maxId = 1;

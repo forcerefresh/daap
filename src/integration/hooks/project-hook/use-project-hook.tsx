@@ -1,6 +1,10 @@
 // *** this file contains implementation for development
 
 import { forEach, remove } from "lodash-es";
+import { IPlayerData } from "../../../export/i-export-html";
+import { IStore } from "../../../store/store";
+import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "../../../webslider-sdk/src/objects/objects-register";
 
 export const useProjectHook = () => {
   const getNextProjectId = (): Promise<number> => {
@@ -90,9 +94,16 @@ export const useProjectHook = () => {
     slides?: number;
     created?: string;
     modified?: string;
-    project: any;
-    preview: any;
-    playerData: any;
+    project: Omit<IStore["project"], "diff">;
+    preview: {
+      width: number;
+      height: number;
+      scale: number;
+      html: string;
+    };
+    playerData: IPlayerData;
+    assetsUrls: GetAssetsUrlFuncReturnType;
+    extensions: IExtensionItem[];
   }): Promise<{
     id: number;
     name: string;

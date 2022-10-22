@@ -7,6 +7,7 @@ require("./top-menu");
 
 // integrations
 require("./integration/project/project");
+require("./integration/template/template");
 require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
