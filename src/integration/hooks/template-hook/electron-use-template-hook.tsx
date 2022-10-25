@@ -111,10 +111,17 @@ export const useTemplateHook = () => {
     });
   };
 
+  const downloadTemplate = async (req: { id: string }): Promise<string> => {
+    const { ipcRenderer } = window.require("electron");
+
+    return ipcRenderer.invoke("Templates::Download", JSON.stringify(req));
+  };
+
   return {
     getTemplate,
     getTemplates,
     saveTemplate,
     deleteTemplate,
+    downloadTemplate,
   };
 };

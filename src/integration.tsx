@@ -210,6 +210,9 @@ export const IntegrationContext = React.createContext({
     /* delete template */
     deleteTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
+    downloadTemplate: (req: { id: string }): Promise<string> =>
+      Promise.resolve(""),
+
     /* save template */
     saveTemplate: ({
       name,

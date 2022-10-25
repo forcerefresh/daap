@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import cx from "classnames";
+import { base64ToBlob, downloadBlob } from "../../utils/file/file-utils";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, remove, round } from "lodash-es";
 import { connect } from "react-redux";
@@ -51,7 +52,7 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
   const [isDeleteLoading, setDeleteLoading] = useState(false);
 
   const globalContext = useContext(IntegrationContext);
-  const { getTemplate, getTemplates, deleteTemplate } =
+  const { getTemplate, getTemplates, deleteTemplate, downloadTemplate } =
     globalContext.useTemplateHook();
 
   const fetchData = (from = -1) => {
@@ -266,6 +267,20 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   >
                     Load template
                   </Button>
+                  <Button
+                    intent="none"
+                    onClick={async () => {
+                      const base64Zip = await downloadTemplate({
+                        id: template.id,
+                      });
+
+                      const blob = base64ToBlob(base64Zip, "application/zip");
+                      downloadBlob(blob, `${template.id}.zip`);
+                    }}
+                  >
+                    Download template
+                  </Button>
+
                   {/*<Button intent="primary">Integration</Button>*/}
                   <Button
                     intent="danger"

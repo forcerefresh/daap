@@ -4,6 +4,13 @@ const { app } = require("electron");
 const path = require("path");
 const fetch = require("node-fetch");
 
+function checkDirExists(dir) {
+  return fs.promises
+    .access(dir)
+    .then(() => true)
+    .catch(() => false);
+}
+
 function checkFileExists(file) {
   return fs.promises
     .access(file, fs.constants.F_OK)
@@ -47,6 +54,7 @@ function appendToFileName(filename, appendStr) {
 
 module.exports = {
   checkFileExists,
+  checkDirExists,
   getPlayerPath,
   getBucketPreviewPath,
   downloadToBuffer,

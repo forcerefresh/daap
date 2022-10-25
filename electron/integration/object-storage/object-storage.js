@@ -552,10 +552,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   }
   // add assets <<
 
-  // ***************
-  // ***************
-  // ***************
-
   // add extensions >>
   console.log("UPLOAD EXTENSIONS");
   const userDataPath = app.getPath("userData");
@@ -577,8 +573,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     pArr.push(fileToBuffer(playerExtensionPath));
   }
 
-  console.log(pArr.length);
-
   try {
     const bufferArr = await Promise.all(pArr);
 
@@ -588,7 +582,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         extension.packageFiles.playerObjectFilename ||
         extension.packageFiles.playerEffectFilename;
 
-      const extensionZipFilePath = `${req.projectId}/extensions/${filename}`;
+      const extensionZipFilePath = `wsplayer/extensions/${filename}`;
       zip.file(extensionZipFilePath, buf);
 
       BrowserWindow.getAllWindows()[0].webContents.send(
@@ -602,28 +596,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
     console.log(ex);
     error = ex.toString();
   }
-
-  // if (pArr.length > 0) {
-  //   try {
-  //     const result = await Promise.all(pArr);
-  //     BrowserWindow.getAllWindows()[0].webContents.send(
-  //       `ObjectStorageRenderer::SubscribeToPublishDetails`,
-  //       JSON.stringify(result)
-  //     );
-  //   } catch (ex) {
-  //     console.log(ex);
-  //     error = ex.toString();
-  //   }
-
-  //   if (error) {
-  //     return { status: "ERROR", error };
-  //   }
-  // }
   // add extensions <<
-
-  // ***************
-  // ***************
-  // ***************
 
   // add export/playerdata >>
   const exp = await loadExport(req.projectId);
@@ -656,31 +629,31 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   // add preview html <<
 
   // add preview html with json >>
-  let previewString = await fsPromise.readFile(
-    path.join(getBucketPreviewPath(), "preview-with-json.html"),
-    "utf-8"
-  );
-  previewString = previewString.replace(
-    "{$DATA}",
-    expString
-      .replace(/[\\]/g, "\\\\")
-      .replace(/[\"]/g, '\\"')
-      .replace(/[\/]/g, "\\/")
-      .replace(/[\b]/g, "\\b")
-      .replace(/[\f]/g, "\\f")
-      .replace(/[\n]/g, "\\n")
-      .replace(/[\r]/g, "\\r")
-      .replace(/[\t]/g, "\\t")
-    //expString.replace(/\\n/g, "").replaceAll(`\"`, `\\\"`)
-  );
+  // let previewString = await fsPromise.readFile(
+  //   path.join(getBucketPreviewPath(), "preview-with-json.html"),
+  //   "utf-8"
+  // );
+  // previewString = previewString.replace(
+  //   "{$DATA}",
+  //   expString
+  //     .replace(/[\\]/g, "\\\\")
+  //     .replace(/[\"]/g, '\\"')
+  //     .replace(/[\/]/g, "\\/")
+  //     .replace(/[\b]/g, "\\b")
+  //     .replace(/[\f]/g, "\\f")
+  //     .replace(/[\n]/g, "\\n")
+  //     .replace(/[\r]/g, "\\r")
+  //     .replace(/[\t]/g, "\\t")
+  //   //expString.replace(/\\n/g, "").replaceAll(`\"`, `\\\"`)
+  // );
 
-  const previewBuffer = Buffer.from(previewString, "utf-8");
-  zip.file(`${req.projectId}/preview-with-json.html`, previewBuffer);
+  // const previewBuffer = Buffer.from(previewString, "utf-8");
+  // zip.file(`${req.projectId}/preview-with-json.html`, previewBuffer);
 
-  BrowserWindow.getAllWindows()[0].webContents.send(
-    `ObjectStorageRenderer::SubscribeToPublishDetails`,
-    JSON.stringify([{ log: `Add index.html to package` }])
-  );
+  // BrowserWindow.getAllWindows()[0].webContents.send(
+  //   `ObjectStorageRenderer::SubscribeToPublishDetails`,
+  //   JSON.stringify([{ log: `Add index.html to package` }])
+  // );
   // add preview html with json <<
 
   // add player >>
