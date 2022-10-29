@@ -125,6 +125,10 @@ ipcMain.handle("Projects::DeleteProject", async (event, dataStr) => {
 
   await saveProjects(projects);
 
+  const exports = await loadExports();
+  delete exports[id];
+  await saveExports(exports);
+
   return { id };
 });
 

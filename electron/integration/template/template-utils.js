@@ -43,17 +43,13 @@ async function saveTemplates(templates) {
 function getTemplatePath() {
   const userDataPath = app.getPath("userData");
 
-  const templatesDirPath = path.join(
+  const myTemplatesDirPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates"
+    "my-templates.json"
   );
 
-  if (!fs.existsSync(templatesDirPath)) {
-    fs.mkdirSync(templatesDirPath);
-  }
-
-  return path.join(templatesDirPath, "templates.json");
+  return path.join(myTemplatesDirPath);
 }
 
 // function getTemplateExportsPath() {

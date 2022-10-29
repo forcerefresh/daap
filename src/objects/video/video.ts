@@ -12,6 +12,8 @@ import {
 } from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
 import {
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
   PreloadOrder,
@@ -256,7 +258,9 @@ function getDefaultValuesForSourceType(
   } as IVideoInputValue;
 }
 
-export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
+export const getAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
   const videoValues = props.values as VideoValues;
 
   if (!videoValues.video.video.sourceType) {

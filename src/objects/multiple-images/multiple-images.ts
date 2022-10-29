@@ -17,6 +17,8 @@ import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
 import {
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
 } from "../../webslider-sdk/src/objects/objects-register";
@@ -232,18 +234,12 @@ function getDefaultValuesForSourceType(
   return { image: { sourceType }, filename: "" };
 }
 
-export const getMultiImageAssetsUrls = (props: {
-  values: { [key: string]: any };
-}) => {
+export const getMultiImageAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
   const imageValues = props.values as MultiImageValues;
 
-  const ret: {
-    id?: string;
-    url?: string;
-    filename?: string;
-    localFilename?: string;
-    sourceType?: "url" | "local" | "library" | string;
-  }[] = [];
+  const ret: GetAssetsUrlFuncReturnType = [];
   imageValues.images.forEach((image) => {
     if (image.image.sourceType) {
       ret.push({
@@ -252,6 +248,7 @@ export const getMultiImageAssetsUrls = (props: {
         filename: image.filename,
         localFilename: image.image.filename,
         sourceType: image.image.sourceType,
+        mediaType: "image",
       });
     }
   });

@@ -12,9 +12,13 @@ const {
   processVideo,
   processVector,
   processExtension,
+  processTemplate,
   deleteExtensions,
   type2Filename,
   type2MediaFolder,
+  loadMyMedia,
+  saveMyMedia,
+  createMyMediaFolder,
 } = require("./my-uploads-utils");
 
 // API handlers
@@ -78,35 +82,35 @@ ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
 
   return;
 
-  const userDataPath = app.getPath("userData");
+  // const userDataPath = app.getPath("userData");
 
-  const myImagePath = path.join(
-    userDataPath,
-    "my-uploads",
-    type2MediaFolder(type),
-    mediaItem.filename
-  );
+  // const myImagePath = path.join(
+  //   userDataPath,
+  //   "my-uploads",
+  //   type2MediaFolder(type),
+  //   mediaItem.filename
+  // );
 
-  let base64 = "";
-  try {
-    const imageData = await fsPromise.readFile(myImagePath);
-    const buff = Buffer.from(imageData);
-    base64 = buff.toString("base64");
-  } catch {
-    console.log("File not found: " + myImagePath);
-  }
+  // let base64 = "";
+  // try {
+  //   const imageData = await fsPromise.readFile(myImagePath);
+  //   const buff = Buffer.from(imageData);
+  //   base64 = buff.toString("base64");
+  // } catch {
+  //   console.log("File not found: " + myImagePath);
+  // }
 
-  const mime =
-    mediaItem.mediaType === "image"
-      ? "image/jpg"
-      : mediaItem.mediaType === "video"
-      ? "video/mp4"
-      : "";
+  // const mime =
+  //   mediaItem.mediaType === "image"
+  //     ? "image/jpg"
+  //     : mediaItem.mediaType === "video"
+  //     ? "video/mp4"
+  //     : "";
 
-  event.returnValue = {
-    ...mediaItem,
-    src: "data:" + mime + ";base64," + base64,
-  };
+  // event.returnValue = {
+  //   ...mediaItem,
+  //   src: "data:" + mime + ";base64," + base64,
+  // };
 });
 
 ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
@@ -121,14 +125,11 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
 
   console.log(fileMetadata);
 
-  //const jsonFileName = `my-${type}s.json`;
   if (!fileMetadata.tags?.[0]) {
     fileMetadata.tags = [];
   }
 
   let myMedia = await loadMyMedia(type);
-
-  // const data2 = await fetch(fileBase64).then((res) => res.blob());
 
   // create folders
   createMyMediaFolder(type);
@@ -158,9 +159,20 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
       item = await processExtension(fileBase64, type, fileMetadata);
       break;
     }
+    case "template": {
+      item = await processTemplate(fileBase64, type, fileMetadata);
+      break;
+    }
     default: {
       console.log(`Unknown media type: ${type}`);
     }
+  }
+
+  if (!item) {
+    return {
+      status: "ERROR",
+      errorMessage: "Template with same id already exist",
+    };
   }
 
   myMedia.unshift(item);
@@ -222,35 +234,6 @@ ipcMain.handle("MyUploads::Fetch", async (event, dataStr) => {
 
 // supporting functions
 
-async function loadMyMedia(type) {
-  const myMediaPath = getMyMediaPath(type);
-
-  const exist = await checkFileExists(myMediaPath);
-  let myMedia = [];
-  if (exist) {
-    const myMediaStr = await fsPromise.readFile(myMediaPath, "utf-8");
-    myMedia = JSON.parse(myMediaStr);
-  }
-
-  return myMedia;
-}
-
-async function saveMyMedia(type, data) {
-  await fsPromise.writeFile(
-    getMyMediaPath(type),
-    JSON.stringify(data, undefined, 2)
-  );
-}
-
-function getMyMediaPath(type) {
-  const userDataPath = app.getPath("userData");
-  const myImagesDir = path.join(userDataPath, "my-uploads");
-  if (!fs.existsSync(myImagesDir)) {
-    fs.mkdirSync(myImagesDir);
-  }
-  return path.join(userDataPath, "my-uploads", type2Filename(type));
-}
-
 function convertToBlob(base64image) {
   // convert base64 to raw binary data held in a string
   var byteString = atob(base64image.split(",")[1]);
@@ -267,22 +250,5 @@ function convertToBlob(base64image) {
     return new Blob([ab], {
       type: mimeString,
     });
-  }
-}
-
-function createMyMediaFolder(type) {
-  const userDataPath = app.getPath("userData");
-
-  const myMediaDir = path.join(userDataPath, "my-uploads");
-  if (!fs.existsSync(myMediaDir)) {
-    fs.mkdirSync(myMediaDir);
-  }
-  const myMediaMediaDir = path.join(
-    userDataPath,
-    "my-uploads",
-    type2MediaFolder(type)
-  );
-  if (!fs.existsSync(myMediaMediaDir)) {
-    fs.mkdirSync(myMediaMediaDir);
   }
 }

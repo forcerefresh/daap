@@ -167,7 +167,16 @@ export const useMyMediaHook = () => {
             id: uuid(),
             ...fileMetadata,
             file: "file",
-            // no sense to save extension in local storafe. elestorn only impl.
+            // no sense to save extension in local storage. Electron only impl.
+          };
+          break;
+        }
+        case "template": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            file: "file",
+            // no sense to save extension in local storage. Electron only impl.
           };
           break;
         }

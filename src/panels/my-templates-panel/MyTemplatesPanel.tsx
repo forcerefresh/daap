@@ -22,7 +22,7 @@ import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
-import css from "./TemplatesPanel.module.scss";
+import css from "./MyTemplatesPanel.module.scss";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -32,7 +32,7 @@ export type ITemplatesMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   ITemplatesPanelProps;
 
-const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
+const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
   const {
     onRequestClose,
     _updateProjectMeta,
@@ -52,6 +52,7 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
   const [isDeleteLoading, setDeleteLoading] = useState(false);
 
   const globalContext = useContext(IntegrationContext);
+  const UploadComponent = globalContext?.getMyUploadComponent;
   const { getTemplate, getTemplates, deleteTemplate, downloadTemplate } =
     globalContext.useTemplateHook();
 
@@ -160,8 +161,34 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
       // }
     });
   };
+
+  // NOTE: replace urls to point assets to template asset directory
+  const getTemplatePreviewHtml = (template: any) => {
+    const htmlStr = template.preview.html;
+    return htmlStr
+      .replace(
+        "webslider-fp://my-uploads/my-images/",
+        `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
+      )
+      .replace(
+        "webslider-fp://my-uploads/my-videos/",
+        `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
+      );
+  };
+
   return (
     <div className={css.projectsPanel}>
+      <UploadComponent
+        type="template"
+        onComplete={() => {
+          debounceFetchData(0);
+          //setForceUpdate(Math.random());
+        }}
+        onStop={() => {
+          debounceFetchData(0);
+          //setForceUpdate(Math.random());
+        }}
+      />
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -192,7 +219,7 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       <div className={cx(css.headerSection, css.tableHeader)}>
         <div className={css.thumb}>Thumbnail</div>
-        <div className={css.name}>Name &amp; Description</div>
+        <div className={css.name}>Name, Id &amp; Description</div>
         <div className={css.slides}>Slides</div>
         <div className={css.created}>Created</div>
         <div className={css.action}>Action</div>
@@ -239,7 +266,7 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
                     <div
                       className={css.thumbHolderInner}
                       dangerouslySetInnerHTML={{
-                        __html: template.preview.html,
+                        __html: getTemplatePreviewHtml(template),
                       }}
                       style={{
                         transform: `scale(${round(template.preview.scale, 2)})`,
@@ -248,7 +275,7 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   </div>
                 </div>
                 <div className={css.name}>
-                  {template.name}
+                  <strong>{template.name}</strong> [{template.id}]
                   <br />
                   <span className={css.description}>
                     {template.description}
@@ -267,19 +294,23 @@ const ProjectsPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   >
                     Load template
                   </Button>
-                  <Button
-                    intent="none"
-                    onClick={async () => {
-                      const base64Zip = await downloadTemplate({
-                        id: template.id,
-                      });
-
-                      const blob = base64ToBlob(base64Zip, "application/zip");
-                      downloadBlob(blob, `${template.id}.zip`);
-                    }}
+                  <a
+                    href={`webslider-fp://my-uploads/my-templates/${template.id}.zip`}
                   >
-                    Download template
-                  </Button>
+                    <Button
+                      intent="none"
+                      // onClick={async () => {
+                      //   const base64Zip = await downloadTemplate({
+                      //     id: template.id,
+                      //   });
+
+                      //   const blob = base64ToBlob(base64Zip, "application/zip");
+                      //   downloadBlob(blob, `${template.id}.zip`);
+                      // }}
+                    >
+                      Download template
+                    </Button>
+                  </a>
 
                   {/*<Button intent="primary">Integration</Button>*/}
                   <Button
@@ -338,4 +369,4 @@ const mapDispatchToProps = {
     selectForProperties(payload),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(MyTemplatesPanel);

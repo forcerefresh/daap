@@ -13,6 +13,8 @@ import {
 } from "../../webslider-sdk/src/objects/i-object";
 import { v4 as uuid } from "uuid";
 import {
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
   PreloadOrder,
@@ -273,7 +275,9 @@ function getDefaultValuesForSourceType(
   return { image: { sourceType }, filename: "" };
 }
 
-export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
+export const getAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
   const imageValues = props.values as ImageValues;
 
   if (!imageValues.image.image.sourceType) {
@@ -287,6 +291,7 @@ export const getAssetsUrls = (props: { values: { [key: string]: any } }) => {
       filename: imageValues.image.filename,
       localFilename: imageValues.image.image.filename,
       sourceType: imageValues.image.image.sourceType,
+      mediaType: "image",
     },
   ];
 };

@@ -50,6 +50,8 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
       ? "image/svg+xml"
       : type === "extension"
       ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+      : type === "template"
+      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
       : undefined;
 
   logger.log(accept);
@@ -148,6 +150,11 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
               Drag 'n' drop Extension ZIP file here, or click to open select
               dialog.
             </p>
+          ) : type === "template" ? (
+            <p>
+              Drag 'n' drop Template ZIP file here, or click to open select
+              dialog.
+            </p>
           ) : null}
         </div>
         {acceptedFiles.length > 0 && (
@@ -208,14 +215,26 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
             });
             onStop();
           }}
-          onAll={() => {
+          onAll={(statusArr) => {
             acceptedFiles.splice(0, 1000);
             setFormData([]);
             setUploadInProgress(false);
-            AppToaster.show({
-              intent: "success",
-              message: "File upload is done",
-            });
+
+            const errorMessage = statusArr.find(
+              (s) => (s.status = "ERROR")
+            )?.errorMessage;
+
+            if (errorMessage) {
+              AppToaster.show({
+                intent: "warning",
+                message: "Some items are not processed. Error: " + errorMessage,
+              });
+            } else {
+              AppToaster.show({
+                intent: "success",
+                message: "File upload is done",
+              });
+            }
             onComplete();
           }}
         />
@@ -230,7 +249,9 @@ interface UploadDialogProps {
   files: File[];
   filesInfoArr: UploadFileInfo[];
   onFile: (file: File) => void;
-  onAll: () => void;
+  onAll: (
+    statusArr: { status: "OK" | "ERROR"; errorMessage?: string }[]
+  ) => void;
   onCancel: () => void;
 }
 function UploadDialog(props: UploadDialogProps) {
@@ -242,6 +263,10 @@ function UploadDialog(props: UploadDialogProps) {
   const { upload } = globalContext.useMyMediaHook();
 
   const [currentUploadIndex, setCurrentUploadIndex] = useState(0);
+
+  const statusesArrRef = useRef<
+    { status: "OK" | "ERROR"; errorMessage?: string }[]
+  >([]);
 
   // UNMOUNTED WORKAROUND
   const isUnMounted = useRef(false);
@@ -262,6 +287,7 @@ function UploadDialog(props: UploadDialogProps) {
       title: filesInfo.title,
       filename: filesInfo.filename,
     }).then((status) => {
+      statusesArrRef.current.push(status);
       logger.log("uploaded");
 
       if (isUnMounted.current) return;
@@ -269,7 +295,8 @@ function UploadDialog(props: UploadDialogProps) {
       onFile(file);
 
       if (currentUploadIndex + 1 === totalFiles) {
-        onAll();
+        onAll(statusesArrRef.current);
+        statusesArrRef.current = [];
       } else {
         // THIS WILL START NEXT FILE UPLOAD
         setCurrentUploadIndex(currentUploadIndex + 1);

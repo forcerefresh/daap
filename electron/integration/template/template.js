@@ -10,6 +10,7 @@ const {
   downloadToBuffer,
   fileToBuffer,
   getMyImagesPath,
+  getMyVideosPath,
 } = require("../../utils/utils");
 const {
   loadTemplate,
@@ -58,13 +59,22 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
     extensions,
   };
 
+  // replace assets paths >>
+  let templateStr = JSON.stringify(template, undefined, 2);
+  templateStr = templateStr.replace(
+    "webslider-fp://my-uploads/my-images/",
+    `webslider-fp://my-uploads/my-templates/${uniqueTemplateName}/assets/`
+  );
+  templateStr = templateStr.replace(
+    "webslider-fp://my-uploads/my-videos/",
+    `webslider-fp://my-uploads/my-templates/${uniqueTemplateName}/assets/`
+  );
+  // replace assets paths <<
+
   // save template >>
   const zip = new JSZip();
   saveTemplateProject(uniqueTemplateName, template);
-  zip.file(
-    "project.json",
-    Buffer.from(JSON.stringify(template, undefined, 2), "utf-8")
-  );
+  zip.file("project.json", Buffer.from(templateStr, "utf-8"));
   // save template <<
 
   // save export >>
@@ -86,14 +96,29 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
   let error;
   for (const assetsUrlsChunk of assetsUrlsChunks) {
     const pArr = [];
+    const processedAssetItems = [];
     for (const assetItem of assetsUrlsChunk) {
-      if (assetItem.sourceType === "library") {
-        pArr.push(downloadToBuffer(assetItem.url));
-      }
+      // NOTE: consider implementations
+      // if (assetItem.sourceType === "library") {
+      //   pArr.push(downloadToBuffer(assetItem.url));
+      // }
       if (assetItem.sourceType === "local") {
-        pArr.push(
-          fileToBuffer(path.join(getMyImagesPath(), assetItem.localFilename))
-        );
+        console.log(assetItem);
+        const assetRoot =
+          assetItem.mediaType === "video"
+            ? getMyVideosPath()
+            : assetItem.mediaType === "image"
+            ? getMyImagesPath()
+            : undefined;
+
+        console.log("assetRoot:" + assetRoot);
+
+        if (assetRoot) {
+          pArr.push(
+            fileToBuffer(path.join(assetRoot, assetItem.localFilename))
+          );
+          processedAssetItems.push(assetItem);
+        }
       }
     }
 
@@ -101,21 +126,22 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
       const bufferArr = await Promise.all(pArr);
 
       bufferArr.forEach((buf, idx) => {
-        const assetItem = assetsUrlsChunk[idx];
+        const assetItem = processedAssetItems[idx];
         let filename;
 
-        if (assetItem.sourceType === "library") {
-          var parsed = url.parse(assetItem.url);
-          filename = path.basename(parsed.pathname);
-          if (assetsUrlsChunk[idx].filename) {
-            filename = assetsUrlsChunk[idx].filename;
-          }
+        // NOTE: consider implementations
+        // if (assetItem.sourceType === "library") {
+        //   var parsed = url.parse(assetItem.url);
+        //   filename = path.basename(parsed.pathname);
+        //   if (assetsUrlsChunk[idx].filename) {
+        //     filename = assetsUrlsChunk[idx].filename;
+        //   }
 
-          assetsResult.push({
-            fromUrl: assetItem.url,
-            toUrl: `assets/${filename}`,
-          });
-        }
+        //   assetsResult.push({
+        //     fromUrl: assetItem.url,
+        //     toUrl: `assets/${filename}`,
+        //   });
+        // }
 
         if (assetItem.sourceType === "local") {
           filename = assetItem.filename || assetItem.localFilename;
@@ -199,6 +225,23 @@ ipcMain.handle("Templates::GetTemplates", async (event, dataStr) => {
 ipcMain.handle("Templates::DeleteTemplate", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { id } = data;
+
+  const userDataPath = app.getPath("userData");
+  const myTemplateZipPath = path.join(
+    userDataPath,
+    "my-uploads",
+    "my-templates",
+    id + ".zip"
+  );
+  fsPromise.rm(myTemplateZipPath, { force: true });
+
+  const myTemplateDirPath = path.join(
+    userDataPath,
+    "my-uploads",
+    "my-templates",
+    id
+  );
+  fsPromise.rm(myTemplateDirPath, { recursive: true, force: true });
 
   const templates = await loadTemplates();
 
