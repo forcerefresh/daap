@@ -3,7 +3,13 @@ import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import cx from "classnames";
 import { omit } from "lodash-es";
 import { connect } from "react-redux";
-import { Button, Menu, MenuItem } from "@blueprintjs/core";
+import {
+  Button,
+  FormGroup,
+  InputGroup,
+  Menu,
+  MenuItem,
+} from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./PublishPanel.module.scss";
 import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
@@ -15,6 +21,7 @@ import { IEditor } from "../../store/reducers/editor";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import { base64ToBlob, downloadBlob } from "../../utils/file/file-utils";
+import copyToClipboard from "copy-to-clipboard";
 
 interface IPublishPanelProps {
   onRequestClose: () => void;
@@ -37,6 +44,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     getAssignedBucketIds = (p: any) => Promise.resolve([]),
     subscribeToPublishDetails,
     openPublishUrl,
+    getPublishDetails,
     downloadPackage,
   } = globalContext.useObjectStorageHook();
 
@@ -48,6 +56,14 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
   );
 
   const [publishLogs, setPublishLogs] = useState<string[]>([]);
+
+  const [integrationDetailsOpen, setIntegrationDetailsOpen] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const [integrationDetails, setIntegrationDetails] = useState<{
+    [key: string]: { indexUrl: string; jsonUrl: string; playerUrl: string };
+  }>({});
 
   useEffect(() => {
     reloadStorageObjects();
@@ -235,6 +251,89 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                 Integration instructions for {bucket.platform}
               </Button>
             </p>
+
+            <p>
+              <Button
+                minimal
+                intent="none"
+                icon={
+                  integrationDetailsOpen[`${bucket.id}`]
+                    ? "caret-up"
+                    : "caret-down"
+                }
+                onClick={() => {
+                  setIntegrationDetailsOpen({
+                    ...integrationDetailsOpen,
+                    [`${bucket.id}`]: !integrationDetailsOpen[`${bucket.id}`],
+                  });
+
+                  getPublishDetails({
+                    bucketId: bucket.id!,
+                    projectId: meta.id!,
+                  }).then((response) => {
+                    console.log(response);
+                    setIntegrationDetails({
+                      ...integrationDetails,
+                      [`${bucket.id}`]: response,
+                    });
+                  });
+                }}
+              >
+                {integrationDetailsOpen[`${bucket.id}`] ? "Hide" : "Show"}{" "}
+                integration details
+              </Button>
+            </p>
+
+            {integrationDetailsOpen[`${bucket.id}`] && (
+              <>
+                <div>
+                  <FormGroup label={"Player URL"}>
+                    <InputGroup
+                      fill
+                      readOnly
+                      value={integrationDetails[`${bucket.id}`]?.playerUrl}
+                      rightElement={
+                        <Button
+                          icon={"clipboard"}
+                          minimal={true}
+                          onClick={() => {
+                            copyToClipboard(
+                              integrationDetails[`${bucket.id}`]?.playerUrl
+                            );
+                            AppToaster.show({
+                              intent: "success",
+                              message: "Value has been copied to clipboard",
+                            });
+                          }}
+                        />
+                      }
+                    ></InputGroup>
+                  </FormGroup>
+                  <FormGroup label={"Slider URL"}>
+                    <InputGroup
+                      fill
+                      readOnly
+                      value={integrationDetails[`${bucket.id}`]?.jsonUrl}
+                      rightElement={
+                        <Button
+                          icon={"clipboard"}
+                          minimal={true}
+                          onClick={() => {
+                            copyToClipboard(
+                              integrationDetails[`${bucket.id}`]?.jsonUrl
+                            );
+                            AppToaster.show({
+                              intent: "success",
+                              message: "Value has been copied to clipboard",
+                            });
+                          }}
+                        />
+                      }
+                    ></InputGroup>
+                  </FormGroup>
+                </div>
+              </>
+            )}
 
             <ConfirmButton
               onConfirm={() => {

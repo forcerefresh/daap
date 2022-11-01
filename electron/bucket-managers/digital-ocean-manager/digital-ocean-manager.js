@@ -19,8 +19,14 @@ class DigitalOceanManager {
     });
   }
 
-  async getPublishUrl(bucketConfig, projectId) {
-    return `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/index.html`;
+  async getPublishDetails(bucketConfig, projectId) {
+    return {
+      bucketUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/`,
+      baseUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/`,
+      indexUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/index.html`,
+      jsonUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/slider.json`,
+      playerUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/wsplayer/0.1.1/wsplayer.js`,
+    };
   }
 
   async uploadFileToBucket(bucketConfig, filePath, key) {

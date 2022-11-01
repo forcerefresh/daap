@@ -142,19 +142,32 @@ export const useObjectStorageHook = () => {
     };
   };
 
+  const getPublishDetails = async (req: {
+    bucketId: string;
+    projectId: number;
+  }): Promise<{ indexUrl: string; jsonUrl: string; playerUrl: string }> => {
+    const { shell, ipcRenderer } = window.require("electron");
+
+    const res = await ipcRenderer.invoke(
+      "ObjectStorage::GetPublishDetails",
+      JSON.stringify(req)
+    );
+
+    return res;
+  };
+
   const openPublishUrl = async (req: {
     bucketId: string;
     projectId: number;
   }): Promise<void> => {
     const { shell, ipcRenderer } = window.require("electron");
-    const {} = window.require("electron");
 
     const res = await ipcRenderer.invoke(
-      "ObjectStorage::GetPublishUrl",
+      "ObjectStorage::GetPublishDetails",
       JSON.stringify(req)
     );
 
-    shell.openExternal(res.publishUrl);
+    shell.openExternal(res.indexUrl);
   };
 
   const downloadPackage = async (req: {
@@ -178,6 +191,7 @@ export const useObjectStorageHook = () => {
     publishToStorageObject,
     subscribeToPublishDetails,
     openPublishUrl,
+    getPublishDetails,
     downloadPackage,
   };
 };

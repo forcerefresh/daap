@@ -80,6 +80,13 @@ export const IntegrationContext = React.createContext({
     openPublishUrl: (req: { bucketId: string; projectId: number }): void =>
       undefined,
 
+    getPublishDetails: (req: {
+      bucketId: string;
+      projectId: number;
+    }): Promise<{ indexUrl: string; jsonUrl: string; playerUrl: string }> => {
+      return Promise.resolve({ indexUrl: "", jsonUrl: "", playerUrl: "" });
+    },
+
     downloadPackage: (req: { projectId: number }): Promise<string> =>
       Promise.resolve(""),
   }),

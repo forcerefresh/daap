@@ -14,8 +14,14 @@ class S3Manager {
     });
   }
 
-  async getPublishUrl(bucketConfig, projectId) {
-    return `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/index.html`;
+  async getPublishDetails(bucketConfig, projectId) {
+    return {
+      bucketUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/`,
+      baseUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/`,
+      indexUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/index.html`,
+      jsonUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/slider.json`,
+      playerUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/wsplayer/0.1.1/wsplayer.js`,
+    };
   }
 
   async uploadFileToBucket(bucketConfig, filePath, key) {

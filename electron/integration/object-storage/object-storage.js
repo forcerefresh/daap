@@ -272,6 +272,15 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   console.log(bucketWithKeys.platform);
   const bucketManager = new ManagerClass(bucketWithKeys);
 
+  // get publish urls >>
+  const publishDetails = await bucketManager.getPublishDetails(
+    bucket,
+    req.projectId
+  );
+
+  console.log(publishDetails);
+  // get publish urls <<
+
   // TODO
   const project = await loadProject(req.projectId);
 
@@ -397,8 +406,14 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const exp = await loadExport(req.projectId);
   let expString = JSON.stringify(exp);
   for (let i = 0; i < uploadResult.length; i++) {
-    expString = expString.replaceAll(`{MEDIA_ITEM_LIBRARY}`, `assets/`);
-    expString = expString.replaceAll(`{MEDIA_ITEM_LOCAL}`, `assets/`);
+    expString = expString.replaceAll(
+      `{MEDIA_ITEM_LIBRARY}`,
+      `${publishDetails.baseUrl}assets/`
+    );
+    expString = expString.replaceAll(
+      `{MEDIA_ITEM_LOCAL}`,
+      `${publishDetails.baseUrl}assets/`
+    );
 
     expString = expString.replaceAll(
       `"${uploadResult[i].fromUrl}"`,
@@ -457,18 +472,18 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   return { status: "OK" };
 });
 
-ipcMain.handle("ObjectStorage::GetPublishUrl", async (event, reqJson) => {
+ipcMain.handle("ObjectStorage::GetPublishDetails", async (event, reqJson) => {
   const req = JSON.parse(reqJson);
 
   const bucketWithKeys = await getBucketWithKeys(req.bucketId);
   const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
   const bucketManager = new ManagerClass(bucketWithKeys);
-  const publishUrl = await bucketManager.getPublishUrl(
+  const publishDetails = await bucketManager.getPublishDetails(
     bucketWithKeys,
     req.projectId
   );
 
-  return { publishUrl };
+  return { ...publishDetails };
 });
 
 ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
@@ -797,6 +812,15 @@ async function getBucketWithKeys(bucketId) {
 
   return { ...item, secretKey };
 }
+
+async function getBucketWithoutKeys(bucketId) {
+  const objectStorageList = await loadObjectStorage();
+
+  const item = objectStorageList.find((item) => item.id === bucketId);
+
+  return item;
+}
+
 /*
 function createS3Instance(bucketWithKeys) {
   switch (bucketWithKeys.platform) {
