@@ -383,7 +383,7 @@ async function processExtension(fileBase64, type, fileMetadata) {
   zip = await zip.loadAsync(zipPackage);
 
   const zipMetaFile =
-    zip.files["object-meta.json"] || zip.files["effect-meta.json"];
+    zip.files["object-meta.json"] || zip.files["animation-meta.json"];
   const content = await zipMetaFile.async("nodebuffer");
   console.log(content);
   const objectMeta = JSON.parse(content);
