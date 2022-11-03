@@ -5,7 +5,7 @@ import MainLayout from "../../layouts/main-layout/MainLayout";
 import ToolbarPanel from "../../panels/toolbar-panel/ToolbarPanel";
 import ActionPanel from "../../panels/action-panel/ActionPanel";
 import StagePanel from "../../panels/stage-panel/StagePanel";
-import StaticEffectPanel from "../../panels/effect-panel/StaticEffectPanel";
+import StaticAnimationPanel from "../../panels/animation-panel/StaticAnimationPanel";
 import PropertiesPanelAll from "../../panels/properties-panel-all/PropertiesPanelAll";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -25,7 +25,7 @@ function Editor() {
         action={<ActionPanel />}
         toolbar={<ToolbarPanel />}
         content={<StagePanel />}
-        effects={<StaticEffectPanel />}
+        animations={<StaticAnimationPanel />}
       />
     </DndProvider>
   );

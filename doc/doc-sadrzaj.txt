@@ -2,7 +2,7 @@ Dokumentacija - documentation.webslider.io
 
 
 - koncept aplikacije (intoduction)
-  Elementi: project, slide, layer, object, effect, navigation, layout, responsinve cofiguration.
+  Elementi: project, slide, layer, object, animation, navigation, layout, responsinve cofiguration.
 
 - layout aplikacije
   * tool  bar
@@ -23,7 +23,7 @@ Dokumentacija - documentation.webslider.io
     * front and back
   - layer
   - object
-  - effect
+  - animation
   - navigation
   - layout
   
@@ -66,7 +66,7 @@ Dokumentacija - documentation.webslider.io
     koliko: struct(1) vs attrubute(n)
     napomena: za odredjene tipove ili tipove objekte imamo odredjene efekte  
   
-- core effects
+- core animations
   - fade
   - zoom
   - ...

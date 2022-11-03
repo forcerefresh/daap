@@ -153,7 +153,7 @@ export function generatePlayerData(
     slideDataArr,
     frontSlideDataArr,
     backSlideDataArr,
-    skipFirstSlideEffect: settings.skipFirstSlideEffect,
+    skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
     breakpointReference: settings.breakpointReference,
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
@@ -239,9 +239,9 @@ function generateSlideData(
 
   forOwn(someSlideData.transitions, (tArr: ITransition[] | any) => {
     tArr.forEach((t: ITransition | any) => {
-      const def = getAppAnimationDefinition(t?.effect?.id);
+      const def = getAppAnimationDefinition(t?.animation?.id);
       if (def?.external) {
-        extensionTypes.push(t.effect.id);
+        extensionTypes.push(t.animation.id);
       }
     });
   });
@@ -362,9 +362,9 @@ function generateSlideData(
 
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
         tArr.forEach((t: ITransition | any) => {
-          const def = getAppAnimationDefinition(t?.effect?.id);
+          const def = getAppAnimationDefinition(t?.animation?.id);
           if (def?.external) {
-            extensionTypes.push(t.effect.id);
+            extensionTypes.push(t.animation.id);
           }
         });
       });

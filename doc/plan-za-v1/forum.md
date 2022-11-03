@@ -27,5 +27,5 @@
 
 ## Development
 
-- Effect development
+- Animation development
 - Object development

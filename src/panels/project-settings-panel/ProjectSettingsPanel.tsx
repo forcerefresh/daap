@@ -153,21 +153,21 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                   (value: string) => {
                     _updateProjectSettings({ exitSlideDuration: value });
                   },
-                  "Out Effects start point. It's present time from the end of slide. Example: Slide: 10s; Exit: 2s; 10s - 2s= 8s. Out effects start at 8th second.",
+                  "Duration before end of slide when Out Animation starts. Example: Slide: 10s; Exit: 2s; 10s - 2s= 8s. Out Animation starts at 8th second.",
                   { style: { width: "100px" } },
                   ["ms", "s"]
                 )}
               </div>
               <div className="">
                 {getCheckboxField(
-                  "First slide effect skip",
-                  settings.skipFirstSlideEffect,
-                  (skipFirstSlideEffect: boolean) => {
+                  "First slide animation skip",
+                  settings.skipFirstSlideAnimation,
+                  (skipFirstSlideAnimation: boolean) => {
                     _updateProjectSettings({
-                      skipFirstSlideEffect: skipFirstSlideEffect,
+                      skipFirstSlideAnimation: skipFirstSlideAnimation,
                     });
                   },
-                  "When first slide start for the first time you can skip slide effect.",
+                  "Skip slide animation when first slide start for the first time.",
                   { style: { width: "100px" } }
                 )}
               </div>

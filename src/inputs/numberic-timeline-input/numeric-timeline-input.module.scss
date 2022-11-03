@@ -6,8 +6,8 @@
   // Label (displayName) style
   :global {
     .bp3-label {
-      width: var(--effects-panel-label-width);
-      min-width: var(--effects-panel-label-width);
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
       margin-right: 10px;
     }
   }

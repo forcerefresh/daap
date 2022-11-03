@@ -114,7 +114,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
                 item.componentType,
                 [
                   { label: "Object", value: "object" },
-                  { label: "Effect", value: "effect" },
+                  { label: "Animation", value: "animation" },
                 ],
                 (val) => updateItem(item.id, "componentType", val),
                 { disabled: item.monitoringEnabled }

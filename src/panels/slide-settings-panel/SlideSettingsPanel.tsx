@@ -14,7 +14,7 @@ import { IStore } from "../../store/store";
 import css from "./SlideSettingsPanel.module.scss";
 import { getInputForm } from "../../inputs/input-factory";
 // import { getRealSlideDuration } from "../../utils/utils";
-import { EasingOptions } from "../../effects/types";
+import { EasingOptions } from "../../animations/types";
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
@@ -56,14 +56,14 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
     </div>
   );
 
-  const renderEffectForm = (
-    effectId: string,
+  const renderAnimationForm = (
+    animationId: string,
     object: ISlide,
     valuesPath: string
   ) => {
-    const effectDefinition = getAppAnimationDefinition(effectId);
+    const animationDefinition = getAppAnimationDefinition(animationId);
 
-    return effectDefinition?.formDefinition.form.map((item: any) => {
+    return animationDefinition?.formDefinition.form.map((item: any) => {
       function onChange(value: any) {
         const retObj = cloneDeep(object);
         if (retObj) {
@@ -76,7 +76,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
       }
 
       const value = get(object, valuesPath)[item.propertyName];
-      const defaultValue = effectDefinition.formDefaults[item.propertyName];
+      const defaultValue = animationDefinition.formDefaults[item.propertyName];
       const inputProps = {
         ...item,
         value: typeof value !== "undefined" ? value : defaultValue,
@@ -88,7 +88,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   if (!slide) return null;
 
   const effDef = getAppAnimationDefinition(
-    get(slide, `slideTransition.effect.id`)
+    get(slide, `slideTransition.animation.id`)
   );
 
   return (
@@ -148,19 +148,19 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           )} */}
           {getSelectField(
             "Transition",
-            get(slide, `slideTransition.effect.id`),
+            get(slide, `slideTransition.animation.id`),
             getAnimationsOptions("slide"),
             (value: any) => {
               const obj = cloneDeep(slide);
-              set(obj, `slideTransition.effect.id`, value);
+              set(obj, `slideTransition.animation.id`, value);
 
-              const values = get(obj, `slideTransition.effect.values`) || {};
+              const values = get(obj, `slideTransition.animation.values`) || {};
               const effDef = getAppAnimationDefinition(value);
               effDef?.formDefinition.form.forEach((item: any) => {
                 values[item.propertyName] =
                   effDef.formDefaults[item.propertyName];
               });
-              set(obj, `slideTransition.effect.values`, values);
+              set(obj, `slideTransition.animation.values`, values);
 
               _updateSlide(obj as any as ISlide);
             }
@@ -172,19 +172,19 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           {effDef?.formDefaults.hasEase &&
             getSelectField(
               "Easing",
-              get(slide, "slideTransition.effect.values.ease"),
+              get(slide, "slideTransition.animation.values.ease"),
               EasingOptions,
               (value: any) => {
                 const newSlide = cloneDeep(slide);
-                set(newSlide, `slideTransition.effect.values.ease`, value);
+                set(newSlide, `slideTransition.animation.values.ease`, value);
                 _updateSlide(newSlide);
               }
             )}
           <div className={css.dynamicFields}>
-            {renderEffectForm(
-              get(slide, `slideTransition.effect.id`),
+            {renderAnimationForm(
+              get(slide, `slideTransition.animation.id`),
               slide,
-              `slideTransition.effect.values`
+              `slideTransition.animation.values`
             )}
           </div>
         </div>

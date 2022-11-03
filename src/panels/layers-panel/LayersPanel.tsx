@@ -54,7 +54,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     activeObjectId,
     selectedLayerIds,
     selectedObjectIds,
-    //layoutStaticEffectsPanel,
+    //layoutStaticAnimationsPanel,
     breakpointsConfiguration,
     selectionForProperties,
     _addNewLayer,
@@ -98,7 +98,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   }, [layerArr]);
 
-  const [showEffectPanelForId, setShowEffectPanelForId] = useState<{
+  const [showAnimationPanelForId, setShowAnimationPanelForId] = useState<{
     id: string;
     type?: "object" | "layer";
   }>({ id: EmptyID });
@@ -149,11 +149,11 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
   // logic for handling click outside
-  const effectPanelRef = useRef(null);
+  const animationPanelRef = useRef(null);
   const handleClickOutside = () => {
-    setShowEffectPanelForId({ id: EmptyID });
+    setShowAnimationPanelForId({ id: EmptyID });
   };
-  useOnClickOutside(effectPanelRef, handleClickOutside, [
+  useOnClickOutside(animationPanelRef, handleClickOutside, [
     "color-picker-holder",
   ]);
 
@@ -449,7 +449,7 @@ const mapStateToProps = (state: IStore) => {
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
     selectionForProperties: selection.selectionForProperties,
-    //layoutStaticEffectsPanel: layoutType === "default-layers",
+    //layoutStaticAnimationsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpoints,
   };
 };

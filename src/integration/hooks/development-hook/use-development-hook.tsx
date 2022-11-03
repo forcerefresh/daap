@@ -4,7 +4,7 @@ import { DevelopmentContext } from "../../../utils/development/DevelopmentProvid
 
 export const useDevelopmentHook = () => {
   // NOTE: update state on all action to keep state up to date
-  // NOTE: this is used to trigger object/effect re-register
+  // NOTE: this is used to trigger object/animation re-register
   const { developmentItems: _developmentItems, setDevelopmentItems } =
     useContext(DevelopmentContext);
 

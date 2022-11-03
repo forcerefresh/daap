@@ -135,8 +135,8 @@ export class Timeline {
   init() {
     logger.debug(`Timeline init (${this.config.name})`);
 
-    console.log(this.config.effectId);
-    const animationDef = getPlayerAnimationDefinition(this.config.effectId);
+    console.log(this.config.animationId);
+    const animationDef = getPlayerAnimationDefinition(this.config.animationId);
     console.log(animationDef);
 
     if (animationDef) {
@@ -347,8 +347,8 @@ export class Timeline {
 
     this.animIns?.start?.(this.config, isManual, timeCorrection);
 
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   console.log(animationDef);
     //   animationDef?.start?.(this.config, isManual);
     // }
@@ -359,8 +359,8 @@ export class Timeline {
 
     this.animIns?.stop?.(this.config, isManual, isReverse);
 
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   console.log(animationDef);
     //   animationDef?.stop?.(this.config);
     // }
@@ -373,9 +373,9 @@ export class Timeline {
 
     // console.log("update1");
 
-    // if (this.config.effectId) {
+    // if (this.config.animationId) {
     //   console.log(time);
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.update?.(this.config, time, isManual);
     //   console.log("update2");
     // }
@@ -386,9 +386,9 @@ export class Timeline {
 
     this.animIns?.pause?.(this.config);
 
-    // console.log(this.config.effectId);
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // console.log(this.config.animationId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   console.log("PAUSE 1");
     //   animationDef?.pause?.(this.config);
     //   //console.log("update");
@@ -400,8 +400,8 @@ export class Timeline {
 
     this.animIns?.resume?.(this.config);
 
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.resume?.(this.config);
     //   //console.log("update");
     // }
@@ -411,16 +411,16 @@ export class Timeline {
     if (this.disable) return;
     this.animIns?.init?.(this.config);
 
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.init?.(this.config);
     // }
   }
 
   execDestroy() {
     this.animIns?.destroy?.(this.config);
-    // if (this.config.effectId) {
-    //   const animationDef = getAnimationDefinition(this.config.effectId);
+    // if (this.config.animationId) {
+    //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.destroy?.(this.config);
     // }
   }

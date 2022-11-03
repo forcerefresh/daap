@@ -4,7 +4,7 @@
  * e.g:
  * input-color  // cor colors
  * input-colors  // for multiple colors
- * effect-text
+ * animation-text
  * object-image
  */
 export type PresetGroup = string;

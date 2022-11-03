@@ -1,4 +1,4 @@
-import { EffectType } from "../effects/types";
+import { AnimationType } from "../animations/types";
 import { ITransitionsData } from "../export/i-export-html";
 import { IExecCodeConfig } from "../objects/exec-code-animation";
 import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
@@ -21,19 +21,19 @@ export function createEventTimelineForObject(
 ): IEventTimeline[] {
   const eventTimelines: IEventTimeline[] = [];
 
-  data.transitions.event?.forEach((effEffect) => {
-    const timeline = createTimelineForEffect(data, effEffect, "event");
+  data.transitions.event?.forEach((animTransition) => {
+    const timeline = createTimelineForAnimation(data, animTransition, "event");
     const rootTimeline = new RootTimeline({
-      name: "RootTimelineForEvent" + effEffect.event,
+      name: "RootTimelineForEvent" + animTransition.event,
       duration: timeline.duration,
     });
     rootTimeline.add(timeline);
 
     eventTimelines.push({
-      event: effEffect.event,
-      eventTargetId: effEffect.eventTargetId,
-      reverseEvent: effEffect.reverseEvent,
-      reverseEventTargetId: effEffect.reverseEventTargetId,
+      event: animTransition.event,
+      eventTargetId: animTransition.eventTargetId,
+      reverseEvent: animTransition.reverseEvent,
+      reverseEventTargetId: animTransition.reverseEventTargetId,
       rootTimeline: rootTimeline,
     });
   });
@@ -51,7 +51,7 @@ export function createTimelineForObject(data: ITransitionsData): {
   // note only one per object
 
   data.transitions.in?.forEach((effIn) => {
-    const tl = createTimelineForEffect(data, effIn, "in");
+    const tl = createTimelineForAnimation(data, effIn, "in");
     effTls.push(tl);
   });
 
@@ -62,7 +62,7 @@ export function createTimelineForObject(data: ITransitionsData): {
         ? undefined
         : DYNAMIC_OUT_EFF_TIMELINE_GROUP;
 
-    const tl = createTimelineForEffect(data, effOut, "out", timelineGroup);
+    const tl = createTimelineForAnimation(data, effOut, "out", timelineGroup);
     effTls.push(tl);
 
     if (effOut.outStartTime.inheritFrom === "inheritFromSlide") {
@@ -70,26 +70,26 @@ export function createTimelineForObject(data: ITransitionsData): {
     }
   });
 
-  data.transitions.animation?.forEach((effEffect) => {
-    const tl = createTimelineForEffect(data, effEffect, "effect");
+  data.transitions.animation?.forEach((animTransition) => {
+    const tl = createTimelineForAnimation(data, animTransition, "animation");
     effTls.push(tl);
   });
 
-  data.transitions.layer?.forEach((effLayer) => {
-    const tl = createTimelineForEffect(data, effLayer, "in");
+  data.transitions.layer?.forEach((animTransition) => {
+    const tl = createTimelineForAnimation(data, animTransition, "in");
     effTls.push(tl);
   });
 
   /*data.transitions.in?.forEach((_, idx) => {
-    const effIn = data.transitions.in?.[idx];
-    const effOut = data.transitions.out?.[idx];
-    const effEffect =
-      data.transitions.effect?.[idx] || data.transitions.layer?.[idx]; // TODO: layer is added adhock
+    const transIn = data.transitions.in?.[idx];
+    const transOut = data.transitions.out?.[idx];
+    const transAnimation =
+      data.transitions.animation?.[idx] || data.transitions.layer?.[idx]; // TODO: layer is added adhock
 
     populatesTimelinesForObject(data, parallelTimelines, {
-      effIn,
-      effOut,
-      effEffect,
+      transIn,
+      transOut,
+      transAnimation,
     });
   });*/
 
@@ -105,14 +105,14 @@ function getDuration(data: ITransitionsData, eff: ITransition): number {
     : convertTimeUnitToMs(eff.duration);
 }
 
-function createTimelineForEffect(
+function createTimelineForAnimation(
   data: ITransitionsData,
   eff: ITransition,
-  effType: EffectType,
+  effType: AnimationType,
   timelineGroup?: string,
   overwriteConfig?: Partial<ITimelineConfig>
 ) {
-  // only out effect is different
+  // only out animation is different
   let delay = convertTimeUnitToMs(eff.delay);
   if (effType === "out") {
     if (eff.outStartTime.inheritFrom === "absolute") {
@@ -131,7 +131,7 @@ function createTimelineForEffect(
     ...(timelineGroup ? { group: timelineGroup } : {}),
     name: "ObjectTimeline",
     ...eff.animation.values,
-    effectId: eff.animation.id,
+    animationId: eff.animation.id,
     itemId: data.itemId,
     objectProperties: {
       width: data.data.objectWidth,
@@ -162,7 +162,7 @@ export function createTimelineForExecutionCode(
   calculatedObjectSize: any
 ): Timeline {
   const conf: IExecCodeConfig & ITimelineConfig = {
-    effectId: "exec-code",
+    animationId: "exec-code",
     delay: 0,
     duration: convertTimeUnitToMs(data.data.slideDuration.customValue),
     //

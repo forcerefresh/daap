@@ -2,14 +2,11 @@ import React from "react";
 import { Player } from "./player/player/Player";
 
 import "./objects/register-object";
-import "./effects/register-animation";
+import "./animations/register-animation";
 import "./objects/font-preloader";
 
-import { BreakpointConfiguration } from "./webslider-sdk/src/common/i-breakpoint-configuration";
 import ReactDOM from "react-dom";
 import PlayerDev from "./player-dev/PlayerDev";
-
-require("./effects/effects");
 
 (window as any).WebSliderPlayer = Player;
 

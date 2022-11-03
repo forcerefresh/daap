@@ -57,7 +57,7 @@ export interface IPlayerData {
   slideDataArr: ISlideData[];
   frontSlideDataArr: ISlideData[];
   backSlideDataArr: ISlideData[];
-  skipFirstSlideEffect: boolean;
+  skipFirstSlideAnimation: boolean;
   breakpointReference: "viewport" | "parent";
   breakpointData: {
     width: number;

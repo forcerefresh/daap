@@ -1,7 +1,7 @@
 export interface DevelopmentItem {
   id: string;
   hash?: string;
-  componentType: "object" | "effect" | string;
+  componentType: "object" | "animation" | string;
   type: string; // TODO consider change name
   appDevUrl: string;
   playerDevUrl: string;

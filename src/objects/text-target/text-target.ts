@@ -321,7 +321,7 @@ export async function textTargetStart(props: {
   const els = document.getElementsByClassName(`object-content-${id}`);
   const el = document.getElementsByClassName(`object-content-${id}`)[0];
   el.innerHTML = text;
-  // TODO: check if effect can run after object exec
+  // TODO: check if animation can run after object exec
   Array.from(els).forEach((el) => {
     el.innerHTML = text;
   });

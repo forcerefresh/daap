@@ -21,10 +21,10 @@ export async function loadAndRegisterExternalComponent(
     return;
   }
   if (
-    extension.componentType === "effect" &&
+    extension.componentType === "animation" &&
     isAnimationRegistered(extension.type)
   ) {
-    console.warn(`Effect ${extension.type} is already registered`);
+    console.warn(`Animation ${extension.type} is already registered`);
     return;
   }
 
@@ -44,7 +44,7 @@ function registerExternalExtension(extension: IExtensionItem) {
 
     registerExternalObject(appObj, playerObj);
     logger.info(`Object '${appObj.type}' has been registered`);
-  } else if (extension.componentType === "effect") {
+  } else if (extension.componentType === "animation") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];

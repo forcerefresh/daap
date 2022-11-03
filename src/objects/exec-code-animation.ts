@@ -102,7 +102,7 @@ export function execCodeAnimation() {
 }
 
 export const execCodeAppDef = {
-  effectId: "exec-code",
+  animationId: "exec-code",
   formDefaults: {},
   formDefinition: {
     id: "exec-code",

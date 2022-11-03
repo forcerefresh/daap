@@ -6,7 +6,7 @@ export interface ISettings {
   // slide config
   slideDuration: string;
   exitSlideDuration: string;
-  skipFirstSlideEffect: boolean;
+  skipFirstSlideAnimation: boolean;
   breakpointReference: "viewport" | "parent";
 
   // slider config

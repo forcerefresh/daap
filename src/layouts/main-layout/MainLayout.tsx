@@ -11,7 +11,7 @@ export interface IMainLayout {
   slides?: React.ReactElement;
   layers?: React.ReactElement;
   properties?: React.ReactElement;
-  effects?: React.ReactElement;
+  animations?: React.ReactElement;
   action?: React.ReactElement;
 }
 
@@ -27,7 +27,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
     slides,
     layers,
     action,
-    effects,
+    animations,
     layoutType,
   } = props;
 

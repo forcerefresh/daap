@@ -136,7 +136,7 @@ const getSettingsDefault = (): ISettings => ({
   // slide
   slideDuration: "10s",
   exitSlideDuration: "1s",
-  skipFirstSlideEffect: false,
+  skipFirstSlideAnimation: false,
   breakpointReference: "viewport",
   // slider
   sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },

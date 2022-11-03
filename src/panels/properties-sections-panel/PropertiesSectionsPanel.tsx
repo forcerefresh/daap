@@ -24,7 +24,7 @@ type IPropertiesSectionsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
-  const { totalEffectCounter, elementType } = props;
+  const { totalAnimationCounter, elementType } = props;
 
   const { activeSection, setActiveSection } = useContext(
     PropertiesPanelContext
@@ -117,9 +117,9 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
               style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
             />
             <div>{elementType === "slide" ? "Transitions" : "Animations"}</div>
-            {totalEffectCounter > 0 && (
+            {totalAnimationCounter > 0 && (
               <Tag round intent="none" minimal className={css.tag}>
-                {totalEffectCounter}
+                {totalAnimationCounter}
               </Tag>
             )}
           </Button>
@@ -151,21 +151,21 @@ const mapStateToProps = (state: IStore) => {
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
-  let totalEffectCounter = 0;
+  let totalAnimationCounter = 0;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
-    totalEffectCounter =
+    totalAnimationCounter =
       (layer?.transitions?.in?.length || 0) +
       (layer?.transitions?.out?.length || 0) +
       (layer?.transitions?.layer?.length || 0);
   }
 
   if (selection.selectionForProperties?.type === "slide" && slide) {
-    totalEffectCounter = slide?.transitions?.slide?.length || 0;
+    totalAnimationCounter = slide?.transitions?.slide?.length || 0;
   }
 
   if (selection.selectionForProperties?.type === "object" && object) {
-    totalEffectCounter =
+    totalAnimationCounter =
       (object?.transitions?.in?.length || 0) +
       (object?.transitions?.out?.length || 0) +
       (object?.transitions?.animation?.length || 0) +
@@ -174,7 +174,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     elementType: selection.selectionForProperties?.type,
-    totalEffectCounter,
+    totalAnimationCounter,
   };
 };
 

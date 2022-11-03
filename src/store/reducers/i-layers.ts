@@ -35,7 +35,7 @@ export interface ILayer extends ILayout {
   isVisible: boolean;
   hasTimeline: boolean;
   objectIds: string[];
-  transitions: ITransitions; // effects on layer
+  transitions: ITransitions;
   responsiveVisibility: IResponsiveVisibility;
   definition: {
     values: ILayerValues;

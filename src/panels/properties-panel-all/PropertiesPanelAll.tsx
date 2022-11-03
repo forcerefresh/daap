@@ -7,7 +7,7 @@ import { IObject } from "../../webslider-sdk/src/objects/i-object";
 import { updateLayer, updateObject } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
-import StaticEffectPanel from "../effect-panel/StaticEffectPanel";
+import StaticAnimationPanel from "../animation-panel/StaticAnimationPanel";
 import NavigationPanel from "../navigation-panel/NavigationPanel";
 import PropertiesPanel from "../properties-panel/PropertiesPanel";
 
@@ -26,7 +26,7 @@ type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
-  const { panelName, totalEffectCounter } = props;
+  const { panelName, totalAnimationCounter } = props;
 
   const { activeSection } = useContext(PropertiesPanelContext);
 
@@ -63,7 +63,7 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
       )}
 
       {activeSection === PropertiesPanelSection.Animation && (
-        <StaticEffectPanel
+        <StaticAnimationPanel
           hideHeader
           className={"propertiesPanel " + css.propertiesPanel}
         />
@@ -83,17 +83,17 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           }
         />
         <Tab
-          id="effects-panel"
+          id="animation-panel"
           title={
             <>
-              <span>Effect</span> &nbsp;
+              <span>Animation</span> &nbsp;
               <Tag round intent="none" minimal className={css.tag}>
-                {totalEffectCounter}
+                {totalAnimationCounter}
               </Tag>
             </>
           }
           panel={
-            <StaticEffectPanel
+            <StaticAnimationPanel
               hideHeader
               className={"propertiesPanel " + css.propertiesPanel}
             />
@@ -124,7 +124,7 @@ const mapStateToProps = (state: IStore) => {
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
-  let totalEffectCounter = 0;
+  let totalAnimationCounter = 0;
 
   let panelName:
     | { name: string; type: "object" | "layer" | "slide"; id: string }
@@ -132,7 +132,7 @@ const mapStateToProps = (state: IStore) => {
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer", id: layer.id };
-    totalEffectCounter =
+    totalAnimationCounter =
       (layer?.transitions?.in?.length || 0) +
       (layer?.transitions?.out?.length || 0) +
       (layer?.transitions?.layer?.length || 0);
@@ -140,12 +140,12 @@ const mapStateToProps = (state: IStore) => {
 
   if (selection.selectionForProperties?.type === "slide" && slide) {
     panelName = { name: slide.name, type: "slide", id: slide.id };
-    totalEffectCounter = slide?.transitions?.slide?.length || 0;
+    totalAnimationCounter = slide?.transitions?.slide?.length || 0;
   }
 
   if (selection.selectionForProperties?.type === "object" && object) {
     panelName = { name: object.name, type: "object", id: object.id };
-    totalEffectCounter =
+    totalAnimationCounter =
       (object?.transitions?.in?.length || 0) +
       (object?.transitions?.out?.length || 0) +
       (object?.transitions?.animation?.length || 0) +
@@ -154,7 +154,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     panelName,
-    totalEffectCounter,
+    totalAnimationCounter,
   };
 };
 

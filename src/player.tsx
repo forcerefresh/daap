@@ -1,6 +1,5 @@
 import { Player } from "./player/player/Player";
 import "./objects/register-object";
-import "./effects/register-animation";
-require("./effects/effects");
+import "./animations/register-animation";
 
 (window as any).WebSliderPlayer = Player;

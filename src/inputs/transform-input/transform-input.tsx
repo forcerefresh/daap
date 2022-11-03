@@ -22,7 +22,7 @@ import { getInputForm } from "../input-factory";
 import {
   getDefaultPoint,
   getDefaultTimeline,
-} from "../../effects/transform/transform.definition";
+} from "../../animations/transform/transform.definition";
 import css from "./transform-input.module.scss";
 
 const formDefinition = [

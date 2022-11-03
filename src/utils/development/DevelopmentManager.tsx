@@ -122,7 +122,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           );
         }
 
-        if (devItem.componentType === "effect") {
+        if (devItem.componentType === "animation") {
           global.registerExternalEffect(
             {
               ...global.appAnimations[devItems[i].type],

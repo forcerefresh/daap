@@ -3,7 +3,7 @@ import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
 import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { convertTimeUnitToMs } from "../../utils/utils";
-import { EffectType } from "../../effects/types";
+import { AnimationType } from "../../animations/types";
 import { getAppAnimationDefinition } from "../../webslider-sdk/src/animations/animations-register";
 
 export interface TimelineViewProps {
@@ -34,7 +34,7 @@ export default function TimelineView(props: TimelineViewProps) {
     object?.transitions?.animation || [],
     slideDuration,
     slideExitDuration,
-    "effect"
+    "animation"
   );
 
   const tlsEvent = createTimelines(
@@ -58,23 +58,23 @@ export default function TimelineView(props: TimelineViewProps) {
     left: sizeOut.left + "px",
     width: sizeOut.width + "px",
   };
-  const effDef = getEffectDefinition(
-    object?.transitions?.effect?.[0]?.effect?.id || "none"
+  const effDef = getAnimationtDefinition(
+    object?.transitions?.animation?.[0]?.animation?.id || "none"
   );
 
   let effDur = effDef.defaults.hasOwnDuration
-    ? effDef.getDuration?.(object, object?.transitions?.effect?.[0]) || 0
-    : object?.transitions?.effect?.[0]?.duration;
+    ? effDef.getDuration?.(object, object?.transitions?.animation?.[0]) || 0
+    : object?.transitions?.animation?.[0]?.duration;
 
-  const sizeEffect = calculateTimelineRect(
+  const sizeAnimation = calculateTimelineRect(
     slideDuration,
-    object?.transitions?.effect?.[0]?.delay || 0,
+    object?.transitions?.animation?.[0]?.delay || 0,
     effDur || 0,
     340
   );
-  const timelineEffectStyle = {
-    left: sizeEffect.left + "px",
-    width: sizeEffect.width + "px",
+  const timelineAnimationStyle = {
+    left: sizeAnimation.left + "px",
+    width: sizeAnimation.width + "px",
   };*/
   const tlHeight = 12;
   const totalHeight = (tlHeight + 1) * tls.length;
@@ -104,16 +104,16 @@ export default function TimelineView(props: TimelineViewProps) {
   );
 }
 
-/*  {object.transitions.in?.[0]?.effect.id !== "none" && (
+/*  {object.transitions.in?.[0]?.animation.id !== "none" && (
         <div className={css.timeline} style={timelineInStyle}>
-          {object.transitions.in?.[0]?.effect.id}
+          {object.transitions.in?.[0]?.animation.id}
         </div>
       )}
-      {object.transitions.out?.[0]?.effect.id !== "none" && (
+      {object.transitions.out?.[0]?.animation.id !== "none" && (
         <div className={css.timeline} style={timelineOutStyle} />
       )}
-      {object.transitions.effect?.[0]?.effect.id !== "none" && (
-        <div className={css.timeline} style={timelineEffectStyle} />
+      {object.transitions.animation?.[0]?.animation.id !== "none" && (
+        <div className={css.timeline} style={timelineAnimationStyle} />
       )} */
 
 interface TimelineViewData {
@@ -130,7 +130,7 @@ function createTimelines(
   effs: ITransition[],
   slideDuration: number,
   slideExitDuration: number,
-  type: EffectType,
+  type: AnimationType,
   isOut = false
 ): TimelineViewData[] {
   const arr: TimelineViewData[] = [];
@@ -165,24 +165,25 @@ function createTimelines(
 function calculateTimelineRect(
   slideDuration: number,
   slideExitDuration: number,
-  effectDelay: number,
-  effectDuration: number,
+  animationDelay: number,
+  animationDuration: number,
   holderWidth: number = 1,
   isOut = false
 ) {
-  const realEffectDuration =
-    effectDuration === -1 ? slideDuration : effectDuration;
+  const realanimationDuration =
+    animationDuration === -1 ? slideDuration : animationDuration;
 
   let left: number;
   if (isOut) {
     left =
-      ((slideDuration - slideExitDuration + effectDelay) / slideDuration) *
+      ((slideDuration - slideExitDuration + animationDelay) / slideDuration) *
       holderWidth;
   } else {
-    left = effectDelay === 0 ? 0 : (effectDelay / slideDuration) * holderWidth;
+    left =
+      animationDelay === 0 ? 0 : (animationDelay / slideDuration) * holderWidth;
   }
 
-  let width = (realEffectDuration / slideDuration) * holderWidth;
+  let width = (realanimationDuration / slideDuration) * holderWidth;
 
   //keep it in a range 0-340
   width = Math.min(Math.max(0, width), holderWidth);

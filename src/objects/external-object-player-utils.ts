@@ -36,14 +36,14 @@ function registerExternalExtensionForPlayer(extension: IExtensionItem) {
     registerExternalObject(undefined, playerObj);
 
     logger.info(`Object '${extension.type}' has been registered`);
-  } else if (extension.componentType === "effect") {
+  } else if (extension.componentType === "animation") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];
 
     registerExternalAnimation(undefined, playerObj, true);
 
-    logger.info(`Effect '${extension.type}' has been registered`);
+    logger.info(`Animation '${extension.type}' has been registered`);
   } else {
     console.warn(
       `Unsuported external component type: ${extension.componentType}; name: ${extension.name}`

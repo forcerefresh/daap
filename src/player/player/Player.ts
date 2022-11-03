@@ -173,7 +173,7 @@ export class Player {
     // if is app do not load external components
     if (playerConfig.isApp) {
       this.createAllSlides();
-      this.addListenersForEventsEffects();
+      this.addListenersForEventsAnimations();
     } else {
       this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
@@ -194,14 +194,14 @@ export class Player {
         .finally(() => {
           console.log("finaly");
           this.createAllSlides();
-          this.addListenersForEventsEffects();
+          this.addListenersForEventsAnimations();
         });
     }
 
     //initSliderElement(this.rootDiv);
   }
 
-  private addListenersForEventsEffects() {
+  private addListenersForEventsAnimations() {
     this.eventTimelines.forEach((tlObj) => {
       const className = `custom-id-${tlObj.eventTargetId}`;
 
@@ -262,7 +262,7 @@ export class Player {
     this.resizeAll(true);
   }
 
-  private bpUpdateSlideEffects(isInitial = false) {
+  private bpUpdateSlideAnimations(isInitial = false) {
     if (!this.slideTransitionTimeline) return;
 
     console.log("asdasd", "srki");
@@ -502,7 +502,7 @@ export class Player {
     );
 
     this.bpUpdateSlide();
-    this.bpUpdateSlideEffects();
+    this.bpUpdateSlideAnimations();
     this.bpUpdateObjectsSize();
   }
 
@@ -515,7 +515,7 @@ export class Player {
     );
 
     this.bpUpdateSlide(isInitial);
-    this.bpUpdateSlideEffects(isInitial);
+    this.bpUpdateSlideAnimations(isInitial);
     this.bpUpdateObjectsSize(isInitial);
   }
 
@@ -672,7 +672,7 @@ export class Player {
   private skippedFirstSlide = false;
   private shouldPlaySlideTransition(slideIdx: number) {
     if (slideIdx !== 0) return true;
-    if (!this.playerData?.skipFirstSlideEffect) return true;
+    if (!this.playerData?.skipFirstSlideAnimation) return true;
     if (!this.skippedFirstSlide) {
       this.skippedFirstSlide = true;
       return false;
@@ -716,7 +716,7 @@ export class Player {
     if (slideTransitions) {
       betweenSlideEffArr = slideTransitions.map((slideTransition) => {
         return {
-          effect: slideTransition?.animation!,
+          animation: slideTransition?.animation!,
           duration: convertTimeUnitToMs(slideTransition?.duration!),
           delay: convertTimeUnitToMs(slideTransition?.delay!),
           ease: slideTransition?.ease,
@@ -755,7 +755,7 @@ export class Player {
         betweenSlideEffArr.forEach((betweenSlideEff) => {
           const transitionTl = new Timeline({
             name: "SlideTransitionTimeline",
-            effectId: betweenSlideEff!.animation.id,
+            animationId: betweenSlideEff!.animation.id,
             ...betweenSlideEff!.animation.values,
             objectProperties: {
               width: 960,
@@ -766,7 +766,7 @@ export class Player {
               height: this.playerData?.breakpointData.height,
               pageWidth: this.playerData?.breakpointData.pageWidth,
             },
-            type: "effect",
+            type: "animation",
             duration: betweenSlideEff!.duration,
             delay: betweenSlideEff!.delay!,
             ease: betweenSlideEff!.ease,
@@ -790,7 +790,7 @@ export class Player {
       //  debugger;
       this.slideTransitionTimeline.start(); //(prevTlTime + 30);
       // this will call sizeUpdate for slideTransitionTimeline
-      this.bpUpdateSlideEffects();
+      this.bpUpdateSlideAnimations();
 
       if (isManual) {
         // TODO: or NOTE: this part is to turn of timeline when transition manually triggered
@@ -833,7 +833,7 @@ export class Player {
         isUpdated = true;
       }*/
 
-      //if (!hasSlideEffect(betweenSlideEff)) {
+      //if (!hasSlideAnimation(betweenSlideEff)) {
       // ako nema effekat
       //
       //}
@@ -874,7 +874,7 @@ export class Player {
       });
     */
 
-    //if (hasEffect(bettwenSlideEff)) {
+    //if (hasAnimation(bettwenSlideEff)) {
     // trigger when transition have to start
 
     // NOTE: Slide EXIT transition trigger
@@ -975,21 +975,21 @@ export class Player {
     }
 
     logger.notice(maxExitTime);
-    // NOTE: if zero means we don't have any out effect to play and there is no slide transition
+    // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {
       // case 1
       //this.inSlideTransition = 1;
 
-      // 1. decreaseDelay for out effect timelines
-      const timelinesForOutEffect =
+      // 1. decreaseDelay for out animation timelines
+      const timelinesForOutAnimation =
         this.currentSlideTimeline!.getChildrenByGroup(
           DYNAMIC_OUT_EFF_TIMELINE_GROUP
         );
 
-      logger.notice(timelinesForOutEffect.length + " <<<");
+      logger.notice(timelinesForOutAnimation.length + " <<<");
 
-      if (timelinesForOutEffect.length > 0) {
-        timelinesForOutEffect.forEach((tl) => {
+      if (timelinesForOutAnimation.length > 0) {
+        timelinesForOutAnimation.forEach((tl) => {
           //const timeDiff =
           //  tl.delay - this.currentSlideTimeline!.currentTimelineTime!;
           const timeDiff =
@@ -1025,8 +1025,8 @@ export class Player {
       // 3. revert all times on exitTransTl "stop"
       exitTransTl?.emitter.addListener("stop", () => {
         // reset to original delays
-        if (timelinesForOutEffect.length > 0) {
-          timelinesForOutEffect.forEach((tl) => {
+        if (timelinesForOutAnimation.length > 0) {
+          timelinesForOutAnimation.forEach((tl) => {
             tl.resetDelayToOriginal();
           });
         }
@@ -1195,7 +1195,7 @@ export class Player {
     }); // gsap.timeline({ paused: true });
     this.timelines[slideIdx] = slideTimeline;
 
-    // add slide duration timeline (we ise it to kill if effects lats more than set time)
+    // add slide duration timeline (we ise it to kill if animations lats more than set time)
     /*const slideDurationTimeline = gsap.timeline({
       id: "slideDurationTimeline",
       duration: convertTimeUnitToMs(data.slide.duration.customValue) / 1000,
@@ -1203,7 +1203,7 @@ export class Player {
     slideTimeline.add(slideDurationTimeline);
     */
 
-    // add objects effects timelines
+    // add objects animations timelines
     data.transitionsData.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize =
@@ -1214,22 +1214,22 @@ export class Player {
       // Note: prepare page loader/s
       this.populatePageSpinners(transitionData);
 
-      // NOTE: create effects tls
+      // NOTE: create animations tls
       const slideParallelTls = createTimelineForObject(transitionData);
       slideParallelTls.effTls.forEach((pTl, idx) => {
         slideTimeline.add(pTl);
       });
-      // NOTE: create root timeline for out effects
+      // NOTE: create root timeline for out animation
       if (slideParallelTls.outEffTlExist) {
         const manTlDur = convertTimeUnitToMs(
           transitionData.data.exitSlideDuration.customValue
         );
-        const outEffectManualRootTimeline = new RootTimeline({
-          name: "RootTimelineForManualOutEffect-" + slideIdx,
+        const outAnimationManualRootTimeline = new RootTimeline({
+          name: "RootTimelineForManualOutAnimation-" + slideIdx,
           duration: manTlDur,
         });
 
-        this.outEffTimelines[slideIdx] = outEffectManualRootTimeline;
+        this.outEffTimelines[slideIdx] = outAnimationManualRootTimeline;
       }
 
       this.eventTimelines = [
@@ -1281,13 +1281,13 @@ export class Player {
 
     const nextSlideIdx = this.getNextSlideIdx(slideIdx);
 
-    // 0. get effect definition
+    // 0. get animation definition
     const slide = this.normalSlideDataArr?.[nextSlideIdx]?.slide;
     // const slideTransition =
     //   this.normalSlideDataArr?.[nextSlideIdx]?.slide?.transitions.slide?.[0];
     // const bettwenSlideEff: ISlideTransition | undefined = slideTransition
     //   ? {
-    //       effect: slideTransition?.effect!,
+    //       animation: slideTransition?.animation!,
     //       duration: convertTimeUnitToMs(slideTransition?.duration),
     //       overlap: convertTimeUnitToMs(slideTransition?.overlap!),
     //     }
@@ -1299,11 +1299,11 @@ export class Player {
     // 1. if no slide transition set to 0
 
     let overlap = 0;
-    // 2. if effect exit use it
+    // 2. if animation exit use it
     if (slide?.transitionEnabled) {
       overlap = slide.transitionOverlapTime;
     }
-    //if (bettwenSlideEff?.effect.id !== "none") {
+    //if (bettwenSlideEff?.animation.id !== "none") {
     //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
     //overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     //}
@@ -1348,14 +1348,14 @@ export class Player {
       // NOTE: IMPORTANT: FOR TESTING:
       //if (newSlideIdx === 0) return;
 
-      // 0. get effect definition
+      // 0. get animation definition
       /*const bettwenSlideEff: ISlideTransition | undefined =
         this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];*/
       // const firstSlideTransition =
       //   this.normalSlideDataArr?.[newSlideIdx]?.slide?.transitions.slide?.[0];
       // const bettwenSlideEff: ISlideTransition | undefined = firstSlideTransition
       //   ? {
-      //       effect: firstSlideTransition?.effect!,
+      //       animation: firstSlideTransition?.animation!,
       //       duration: convertTimeUnitToMs(firstSlideTransition?.duration!),
       //       overlap: convertTimeUnitToMs(firstSlideTransition?.overlap!),
       //     }
@@ -1368,8 +1368,8 @@ export class Player {
       if (slide?.transitionEnabled) {
         overlap = slide.transitionOverlapTime;
       }
-      // 2. if effect exit use it
-      // if (bettwenSlideEff?.effect.id !== "none") {
+      // 2. if animation exit use it
+      // if (bettwenSlideEff?.animation.id !== "none") {
       //   overlap = bettwenSlideEff?.duration || 0; //bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
       // }
 
@@ -1397,12 +1397,12 @@ export class Player {
 
     // TODO: delete commented code
 
-    // 0. get effect definition
+    // 0. get animation definition
     // const slideTransition =
     //   slide?.transitions.slide?.[0];
     // const bettwenSlideEff: ISlideTransition | undefined = slideTransition
     //   ? {
-    //       effect: slideTransition?.effect!,
+    //       animation: slideTransition?.animation!,
     //       duration: convertTimeUnitToMs(slideTransition?.duration),
     //       overlap: convertTimeUnitToMs(slideTransition?.overlap!),
     //     }
@@ -1414,8 +1414,8 @@ export class Player {
     // // 1. if no slide transition set to 0
 
     // let overlap = 0;
-    // // 2. if effect exit use it
-    // if (bettwenSlideEff?.effect.id !== "none") {
+    // // 2. if animation exit use it
+    // if (bettwenSlideEff?.animation.id !== "none") {
     //   //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
     //   overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     // }
@@ -1439,7 +1439,7 @@ function getAllSlider(rootDiv: HTMLDivElement): HTMLDivElement[] {
   ) as HTMLDivElement[];
 }
 
-function hasSlideEffect(betweenSlideEff?: ISlideTransition) {
+function hasSlideAnimation(betweenSlideEff?: ISlideTransition) {
   return (
     betweenSlideEff?.animation.id && betweenSlideEff?.animation.id !== "none"
   );

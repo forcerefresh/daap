@@ -93,7 +93,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
         player.current?.getCurrentTimeline()?.pause();
         requestStop();
       } else {
-        document.querySelectorAll(".effect-main-element").forEach((el) => {
+        document.querySelectorAll(".animation-main-element").forEach((el) => {
           (el as HTMLDivElement).style.visibility = "hidden";
         });
       }

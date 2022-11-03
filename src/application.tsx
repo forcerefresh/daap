@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { IntegrationContextProvider, useAppRootSelector } from "./integration";
 import "./objects/register-object";
-import "./effects/register-animation";
+import "./animations/register-animation";
 import "./objects/font-preloader";
 import {
   registerExternalObject,

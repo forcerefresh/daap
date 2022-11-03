@@ -193,7 +193,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
               helperText={
                 <>
                   By enabling this you will get option to test your Object or
-                  Effect directly in app.
+                  Animation directly in app.
                   <br />
                   <span style={{ color: "yellow" }}>
                     It's recommended to restart app if you change Development

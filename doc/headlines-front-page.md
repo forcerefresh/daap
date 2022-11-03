@@ -15,6 +15,6 @@ Import export
 
 ## Open source
 
-Build your ovn effect
+Build your own animation
 
 ## Left right banners

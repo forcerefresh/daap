@@ -84,13 +84,13 @@ export function ObjectRow(props: IObjectRowProps) {
     >
       <div className={css.objectHolderInner}>
         <div className={css.actionButtons}>
-          {/*!layoutStaticEffectsPanel && (
+          {/*!layoutStaticAnimationsPanel && (
           <Button
-            active={object.id === showEffectPanelForId.id}
+            active={object.id === showAnimationPanelForId.id}
             minimal
             onClick={(event: any) => {
               event.stopPropagation();
-              setShowEffectPanelForId({
+              setShowAnimationPanelForId({
                 id: objectId,
                 type: "object",
               });
