@@ -1,4 +1,4 @@
-import { registerEffect } from "../webslider-sdk/src/effects/effects-register";
+import { registerAnimation } from "../webslider-sdk/src/animations/animations-register";
 import { fadeDef, fadeAppDef } from "./fade/fade";
 import { slideDef, slideAppDef } from "./slide/slide";
 import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";
@@ -29,32 +29,32 @@ import { overlapAppDef, overlapDef } from "./overlap/overlap";
 import { slideSlideAppDef, slideSlideDef } from "./slide-slide/slide-slide";
 import { textAppDef, textDef } from "./text/text";
 
-registerEffect(fadeAppDef, fadeDef);
-registerEffect(flipAppDef, flipDef);
-registerEffect(flipSlideAppDef, flipSlideDef);
-registerEffect(parallaxAppDef, parallaxDef);
-registerEffect(sliceSlideAppDef, sliceSlideDef);
-registerEffect(splitAppDef, splitDef);
-registerEffect(trianglifyAppDef, trianglifyDef);
-registerEffect(zoomAppDef, zoomDef);
-registerEffect(slideAppDef, slideDef);
-registerEffect(tilesZoomAppDef, tilesZoomDef);
-registerEffect(fallingLeavesAppDef, fallingLeavesDef);
-registerEffect(tilesFadeAppDef, tilesFadeDef);
-registerEffect(tilesSlideAppDef, tilesSlideDef);
-registerEffect(textAppDef, textDef);
+registerAnimation(fadeAppDef, fadeDef);
+registerAnimation(flipAppDef, flipDef);
+registerAnimation(flipSlideAppDef, flipSlideDef);
+registerAnimation(parallaxAppDef, parallaxDef);
+registerAnimation(sliceSlideAppDef, sliceSlideDef);
+registerAnimation(splitAppDef, splitDef);
+registerAnimation(trianglifyAppDef, trianglifyDef);
+registerAnimation(zoomAppDef, zoomDef);
+registerAnimation(slideAppDef, slideDef);
+registerAnimation(tilesZoomAppDef, tilesZoomDef);
+registerAnimation(fallingLeavesAppDef, fallingLeavesDef);
+registerAnimation(tilesFadeAppDef, tilesFadeDef);
+registerAnimation(tilesSlideAppDef, tilesSlideDef);
+registerAnimation(textAppDef, textDef);
 
-registerEffect(null, execCodePlayerDef);
+registerAnimation(null, execCodePlayerDef);
 
-registerEffect(kenBurnsAppDef, kenBurnsDef);
-registerEffect(squareMaskAppDef, squareMaskDef);
+registerAnimation(kenBurnsAppDef, kenBurnsDef);
+registerAnimation(squareMaskAppDef, squareMaskDef);
 
-registerEffect(typewriterAppDef, typewriterDef);
+registerAnimation(typewriterAppDef, typewriterDef);
 
-registerEffect(timelinesAppDef, timelinesDef);
+registerAnimation(timelinesAppDef, timelinesDef);
 
-registerEffect(fadeSlideAppDef, fadeSlideDef);
+registerAnimation(fadeSlideAppDef, fadeSlideDef);
 
-registerEffect(overlapAppDef, overlapDef);
+registerAnimation(overlapAppDef, overlapDef);
 
-registerEffect(slideSlideAppDef, slideSlideDef);
+registerAnimation(slideSlideAppDef, slideSlideDef);

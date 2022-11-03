@@ -59,7 +59,7 @@ export const fallingLeavesDefaults: IFallingLeaves = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["effect"],
+  supportedAnimationTypes: ["effect"],
   canBeCombined: false,
   // effect properties
   number: 30,

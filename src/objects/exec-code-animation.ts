@@ -112,6 +112,6 @@ export const execCodeAppDef = {
 };
 
 export const execCodePlayerDef = {
-  effectId: "exec-code",
-  effectFunc: execCodeAnimation,
+  animationId: "exec-code",
+  animationFunc: execCodeAnimation,
 };

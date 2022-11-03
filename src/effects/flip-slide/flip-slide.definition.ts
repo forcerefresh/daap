@@ -20,7 +20,7 @@ export const flipSlideDefaults: IFlipSlideEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["slide"],
+  supportedAnimationTypes: ["slide"],
   canBeCombined: false,
   // effect properties
 };

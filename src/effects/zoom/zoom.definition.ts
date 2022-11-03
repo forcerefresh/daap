@@ -37,7 +37,7 @@ export const zoomDefaults: IZoomInEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: true,
   outStartTime: {
     customValue: "0ms",

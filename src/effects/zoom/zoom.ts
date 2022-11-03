@@ -1,18 +1,18 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { zoomAnimation } from "./zoom.animation";
 import { zoomDefaults, zoomDefinition } from "./zoom.definition";
 import { ZOOM_ANIMATION } from "./zoom.types";
 
-export const zoomDef: IEffectExtensionDefinition = {
-  effectId: ZOOM_ANIMATION,
-  effectFunc: zoomAnimation,
+export const zoomDef: IAnimationExtensionDefinition = {
+  animationId: ZOOM_ANIMATION,
+  animationFunc: zoomAnimation,
 };
 
-export const zoomAppDef: IEffectExtensionAppDefinition = {
-  effectId: ZOOM_ANIMATION,
+export const zoomAppDef: IAnimationExtensionAppDefinition = {
+  animationId: ZOOM_ANIMATION,
   formDefaults: zoomDefaults,
   formDefinition: zoomDefinition,
 };

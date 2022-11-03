@@ -41,7 +41,7 @@ export const kenBurnsDefaults: IKenBurnsEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: false,
   // specific to this effect
   scaleFactor: 10,

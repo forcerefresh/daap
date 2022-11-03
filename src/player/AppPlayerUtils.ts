@@ -70,7 +70,7 @@ export function createTimelineForObject(data: ITransitionsData): {
     }
   });
 
-  data.transitions.effect?.forEach((effEffect) => {
+  data.transitions.animation?.forEach((effEffect) => {
     const tl = createTimelineForEffect(data, effEffect, "effect");
     effTls.push(tl);
   });
@@ -130,8 +130,8 @@ function createTimelineForEffect(
     //timelineType: "object",
     ...(timelineGroup ? { group: timelineGroup } : {}),
     name: "ObjectTimeline",
-    ...eff.effect.values,
-    effectId: eff.effect.id,
+    ...eff.animation.values,
+    effectId: eff.animation.id,
     itemId: data.itemId,
     objectProperties: {
       width: data.data.objectWidth,

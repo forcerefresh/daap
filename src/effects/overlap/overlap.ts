@@ -1,19 +1,19 @@
-import {} from "../../webslider-sdk/src/effects/i-effect-types";
+import {} from "../../webslider-sdk/src/animations/i-animation-types";
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { OVERLAP_ANIMATION } from "./overlap.types";
 import { overlapAnimation } from "./overlap.animation";
 import { overlapDefaults, overlapDefinition } from "./overlap.definition";
 
-export const overlapDef: IEffectExtensionDefinition = {
-  effectId: OVERLAP_ANIMATION,
-  effectFunc: overlapAnimation,
+export const overlapDef: IAnimationExtensionDefinition = {
+  animationId: OVERLAP_ANIMATION,
+  animationFunc: overlapAnimation,
 };
 
-export const overlapAppDef: IEffectExtensionAppDefinition = {
-  effectId: OVERLAP_ANIMATION,
+export const overlapAppDef: IAnimationExtensionAppDefinition = {
+  animationId: OVERLAP_ANIMATION,
   formDefaults: overlapDefaults,
   formDefinition: overlapDefinition,
 };

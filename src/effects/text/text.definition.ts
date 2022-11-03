@@ -119,7 +119,7 @@ export const textDefaults: ITextEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: false,
   // effect properties
   durationPerChar: 1000,

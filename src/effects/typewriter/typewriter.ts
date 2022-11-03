@@ -2,24 +2,24 @@ import {
   getTypewriterAnimationDuration,
   typewriterAnimation,
 } from "./typewriter.animation";
-import {} from "../../webslider-sdk/src/effects/i-effect-types";
+import {} from "../../webslider-sdk/src/animations/i-animation-types";
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import {
   typewriterDefaults,
   typewriterDefinition,
 } from "./typewriter.definition";
 import { TYPEWRITER_ANIMATION } from "./typewriter.types";
 
-export const typewriterDef: IEffectExtensionDefinition = {
-  effectId: TYPEWRITER_ANIMATION,
-  effectFunc: typewriterAnimation,
+export const typewriterDef: IAnimationExtensionDefinition = {
+  animationId: TYPEWRITER_ANIMATION,
+  animationFunc: typewriterAnimation,
 };
 
-export const typewriterAppDef: IEffectExtensionAppDefinition = {
-  effectId: TYPEWRITER_ANIMATION,
+export const typewriterAppDef: IAnimationExtensionAppDefinition = {
+  animationId: TYPEWRITER_ANIMATION,
   formDefaults: typewriterDefaults,
   formDefinition: typewriterDefinition,
   getDuration: getTypewriterAnimationDuration,

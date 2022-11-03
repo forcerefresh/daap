@@ -16,9 +16,9 @@ import { getInputForm } from "../../inputs/input-factory";
 // import { getRealSlideDuration } from "../../utils/utils";
 import { EasingOptions } from "../../effects/types";
 import {
-  getAppEffectDefinition,
-  getEffectsOptions,
-} from "../../webslider-sdk/src/effects/effects-register";
+  getAppAnimationDefinition,
+  getAnimationsOptions,
+} from "../../webslider-sdk/src/animations/animations-register";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -61,7 +61,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
     object: ISlide,
     valuesPath: string
   ) => {
-    const effectDefinition = getAppEffectDefinition(effectId);
+    const effectDefinition = getAppAnimationDefinition(effectId);
 
     return effectDefinition?.formDefinition.form.map((item: any) => {
       function onChange(value: any) {
@@ -87,7 +87,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
 
   if (!slide) return null;
 
-  const effDef = getAppEffectDefinition(
+  const effDef = getAppAnimationDefinition(
     get(slide, `slideTransition.effect.id`)
   );
 
@@ -149,13 +149,13 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           {getSelectField(
             "Transition",
             get(slide, `slideTransition.effect.id`),
-            getEffectsOptions("slide"),
+            getAnimationsOptions("slide"),
             (value: any) => {
               const obj = cloneDeep(slide);
               set(obj, `slideTransition.effect.id`, value);
 
               const values = get(obj, `slideTransition.effect.values`) || {};
-              const effDef = getAppEffectDefinition(value);
+              const effDef = getAppAnimationDefinition(value);
               effDef?.formDefinition.form.forEach((item: any) => {
                 values[item.propertyName] =
                   effDef.formDefaults[item.propertyName];

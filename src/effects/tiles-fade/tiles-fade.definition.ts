@@ -64,7 +64,7 @@ export const tilesFadeDefaults: ITilesFadeEffect = {
   hasTimeDistribution: true,
   ease: "none",
   childEase: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: false,
   // effect properties
   rows: 10,

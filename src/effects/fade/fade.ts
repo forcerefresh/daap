@@ -1,19 +1,19 @@
 import { fadeAnimation } from "./fade.animation";
-import {} from "../../webslider-sdk/src/effects/i-effect-types";
+import {} from "../../webslider-sdk/src/animations/i-animation-types";
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { fadeDefaults, fadeDefinition } from "./fade.definition";
 import { FADE_ANIMATION } from "./fade.types";
 
-export const fadeDef: IEffectExtensionDefinition = {
-  effectId: FADE_ANIMATION,
-  effectFunc: fadeAnimation,
+export const fadeDef: IAnimationExtensionDefinition = {
+  animationId: FADE_ANIMATION,
+  animationFunc: fadeAnimation,
 };
 
-export const fadeAppDef: IEffectExtensionAppDefinition = {
-  effectId: FADE_ANIMATION,
+export const fadeAppDef: IAnimationExtensionAppDefinition = {
+  animationId: FADE_ANIMATION,
   formDefaults: fadeDefaults,
   formDefinition: fadeDefinition,
 };

@@ -6,7 +6,7 @@ import {
   MediaType,
   VectorData,
   VideoData,
-  ExtesnsionData,
+  ExtensionData,
 } from "../../../webslider-sdk/src/common/i-media-types";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { v4 as uuid } from "uuid";
@@ -33,7 +33,7 @@ export const useMyMediaHook = () => {
         localStorage.getItem(lsMediaKey) || "{}"
       );
 
-      let item: ImageData | VectorData | VideoData | ExtesnsionData;
+      let item: ImageData | VectorData | VideoData | ExtensionData;
 
       switch (type) {
         case "image": {

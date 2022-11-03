@@ -365,7 +365,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   for (const extension of project.extensions) {
     const extensionFileName =
       extension.packageFiles.playerObjectFilename ||
-      extension.packageFiles.playerEffectFilename;
+      extension.packageFiles.playerAnimationFilename;
 
     const playerExtensionPath = path.join(
       userDataPath,
@@ -575,7 +575,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   for (const extension of project.extensions) {
     const extensionFileName =
       extension.packageFiles.playerObjectFilename ||
-      extension.packageFiles.playerEffectFilename;
+      extension.packageFiles.playerAnimationFilename;
 
     const playerExtensionPath = path.join(
       userDataPath,
@@ -595,7 +595,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       const extension = project.extensions[idx];
       const filename =
         extension.packageFiles.playerObjectFilename ||
-        extension.packageFiles.playerEffectFilename;
+        extension.packageFiles.playerAnimationFilename;
 
       const extensionZipFilePath = `wsplayer/extensions/${filename}`;
       zip.file(extensionZipFilePath, buf);

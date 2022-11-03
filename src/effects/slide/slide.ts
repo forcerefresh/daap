@@ -1,18 +1,18 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { slideAnimation } from "./slide.animation";
 import { slideDefaults, slideDefinition } from "./slide.definition";
 import { SLIDE_ANIMATION } from "./slide.types";
 
-export const slideDef: IEffectExtensionDefinition = {
-  effectId: SLIDE_ANIMATION,
-  effectFunc: slideAnimation,
+export const slideDef: IAnimationExtensionDefinition = {
+  animationId: SLIDE_ANIMATION,
+  animationFunc: slideAnimation,
 };
 
-export const slideAppDef: IEffectExtensionAppDefinition = {
-  effectId: SLIDE_ANIMATION,
+export const slideAppDef: IAnimationExtensionAppDefinition = {
+  animationId: SLIDE_ANIMATION,
   formDefaults: slideDefaults,
   formDefinition: slideDefinition,
 };

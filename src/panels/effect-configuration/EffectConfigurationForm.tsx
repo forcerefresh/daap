@@ -23,9 +23,9 @@ import { IFormLayoutItem } from "../../webslider-sdk/src/form/i-form-layout";
 
 import css from "./EffectConfigurationForm.module.scss";
 import {
-  getAppEffectDefinition,
-  getEffectsOptions,
-} from "../../webslider-sdk/src/effects/effects-register";
+  getAppAnimationDefinition,
+  getAnimationsOptions,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { Presets } from "../../utils/presets/Presets";
 /*
 type IEffectConfigurationForm = typeof mapDispatchToProps &
@@ -81,7 +81,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   }*/
 
   const renderEffectForm = () => {
-    const effectDefinition = getAppEffectDefinition(transition.effect.id);
+    const effectDefinition = getAppAnimationDefinition(transition.animation.id);
 
     const flatForm = flattenForm(
       effectDefinition?.formDefinition.form as IFormLayoutItem[]
@@ -92,7 +92,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
       .map((item) => {
         function onChange(value: any) {
           const newTransition = cloneDeep(transition);
-          (newTransition.effect.values as any)[item.propertyName] = value;
+          (newTransition.animation.values as any)[item.propertyName] = value;
           onTransitionChange(newTransition);
           /*
           const retObj = cloneDeep(object);
@@ -109,7 +109,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
           }*/
         }
 
-        const value = (transition.effect.values as any)[item.propertyName];
+        const value = (transition.animation.values as any)[item.propertyName];
         const defaultValue = effectDefinition?.formDefaults[item.propertyName];
         const inputProps = {
           ...item,
@@ -129,7 +129,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
 
     return (
       <FormWithLayout
-        values={transition.effect.values || {}}
+        values={transition.animation.values || {}}
         inputs={inputs}
         form={effectDefinition?.formDefinition.form as IFormLayoutItem[]}
         formId={`${effectType}_${effectDefinition?.formDefinition.id}`}
@@ -152,7 +152,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
   };
 
   const effDef = (type: string) => {
-    return getAppEffectDefinition(transition.effect.id);
+    return getAppAnimationDefinition(transition.animation.id);
     /* return getEffectDefinition(
       get(objectOrLayer, "transitions." + type + "[0].effect.id")
     );*/
@@ -298,10 +298,10 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
     </div>
   );
 
-  const selectedEffectName = getEffectsOptions(
+  const selectedEffectName = getAnimationsOptions(
     effectType,
     transition.canBeCombined
-  ).find((item) => item.value === transition.effect.id)?.label;
+  ).find((item) => item.value === transition.animation.id)?.label;
 
   const useAnimeJs = effDef(effectType)?.formDefaults.library === "animejs";
 
@@ -311,16 +311,20 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         <div className={classnames(css.inlineFlex, css.selectEffectRow)}>
           {getSelectField(
             transition.canBeCombined ? "Attribute Effect" : "Structural Effect",
-            transition.effect.id,
-            getEffectsOptions(effectType, transition.canBeCombined, objectType),
+            transition.animation.id,
+            getAnimationsOptions(
+              effectType,
+              transition.canBeCombined,
+              objectType
+            ),
             (value: any) => {
               const newTransition = cloneDeep(transition);
-              newTransition.effect.id = value;
+              newTransition.animation.id = value;
 
-              const values = (transition.effect.values || {}) as {
+              const values = (transition.animation.values || {}) as {
                 [key: string]: any;
               };
-              const effDef = getAppEffectDefinition(value);
+              const effDef = getAppAnimationDefinition(value);
               const flatEffDef = flattenForm(
                 effDef?.formDefinition.form as IFormLayoutItem[]
               );
@@ -329,7 +333,7 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
                 values[item.propertyName] =
                   effDef?.formDefaults[item.propertyName];
               });
-              newTransition.effect.values = values;
+              newTransition.animation.values = values;
 
               onTransitionChange(newTransition);
             },
@@ -397,12 +401,12 @@ export const EffectConfigurationForm: React.FC<IEffectConfigurationForm> = (
         )}
 
         <Presets
-          presetGroup={`effect-${transition.effect.id}`}
-          currentValue={transition.effect.values}
+          presetGroup={`effect-${transition.animation.id}`}
+          currentValue={transition.animation.values}
           onChange={(presetValues) => {
             const newTransition = cloneDeep(transition);
-            newTransition.effect.values = merge(
-              newTransition.effect.values,
+            newTransition.animation.values = merge(
+              newTransition.animation.values,
               presetValues
             );
             onTransitionChange(newTransition);

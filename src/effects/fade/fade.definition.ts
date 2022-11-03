@@ -13,7 +13,7 @@ export const fadeDefaults: IFadeEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out", "event"],
+  supportedAnimationTypes: ["in", "out", "event"],
   canBeCombined: true,
   outStartTime: {
     customValue: "0ms",

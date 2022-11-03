@@ -1,4 +1,4 @@
-import { registerExternalEffect } from "../webslider-sdk/src/effects/effects-register";
+import { registerExternalAnimation } from "../webslider-sdk/src/animations/animations-register";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import { registerExternalObject } from "../webslider-sdk/src/objects/objects-register";
 import { logger } from "../webslider-sdk/src/utils/logger/logger";
@@ -9,7 +9,7 @@ export async function loadAndRegisterExternalComponentForPlayer(
   console.log(extension);
   const extensionFileName =
     extension.packageFiles.playerObjectFilename ||
-    extension.packageFiles.playerEffectFilename;
+    extension.packageFiles.playerAnimationFilename;
 
   try {
     await import(
@@ -37,11 +37,11 @@ function registerExternalExtensionForPlayer(extension: IExtensionItem) {
 
     logger.info(`Object '${extension.type}' has been registered`);
   } else if (extension.componentType === "effect") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerEffects[
+    const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];
 
-    registerExternalEffect(undefined, playerObj, true);
+    registerExternalAnimation(undefined, playerObj, true);
 
     logger.info(`Effect '${extension.type}' has been registered`);
   } else {

@@ -1,18 +1,18 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { KEN_BURNS_ANIMATION } from "./ken-burns.types";
 import { kenBurnsAnimation } from "./ken-burns.animation";
 import { kenBurnsDefaults, kenBurnsDefinition } from "./ken-burns.definition";
 
-export const kenBurnsDef: IEffectExtensionDefinition = {
-  effectId: KEN_BURNS_ANIMATION,
-  effectFunc: kenBurnsAnimation,
+export const kenBurnsDef: IAnimationExtensionDefinition = {
+  animationId: KEN_BURNS_ANIMATION,
+  animationFunc: kenBurnsAnimation,
 };
 
-export const kenBurnsAppDef: IEffectExtensionAppDefinition = {
-  effectId: KEN_BURNS_ANIMATION,
+export const kenBurnsAppDef: IAnimationExtensionAppDefinition = {
+  animationId: KEN_BURNS_ANIMATION,
   formDefaults: kenBurnsDefaults,
   formDefinition: kenBurnsDefinition,
 };

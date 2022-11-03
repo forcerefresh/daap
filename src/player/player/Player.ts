@@ -716,7 +716,7 @@ export class Player {
     if (slideTransitions) {
       betweenSlideEffArr = slideTransitions.map((slideTransition) => {
         return {
-          effect: slideTransition?.effect!,
+          effect: slideTransition?.animation!,
           duration: convertTimeUnitToMs(slideTransition?.duration!),
           delay: convertTimeUnitToMs(slideTransition?.delay!),
           ease: slideTransition?.ease,
@@ -755,8 +755,8 @@ export class Player {
         betweenSlideEffArr.forEach((betweenSlideEff) => {
           const transitionTl = new Timeline({
             name: "SlideTransitionTimeline",
-            effectId: betweenSlideEff!.effect.id,
-            ...betweenSlideEff!.effect.values,
+            effectId: betweenSlideEff!.animation.id,
+            ...betweenSlideEff!.animation.values,
             objectProperties: {
               width: 960,
               height: 485,
@@ -1440,7 +1440,9 @@ function getAllSlider(rootDiv: HTMLDivElement): HTMLDivElement[] {
 }
 
 function hasSlideEffect(betweenSlideEff?: ISlideTransition) {
-  return betweenSlideEff?.effect.id && betweenSlideEff?.effect.id !== "none";
+  return (
+    betweenSlideEff?.animation.id && betweenSlideEff?.animation.id !== "none"
+  );
 }
 
 // function initSliderElement(rootDiv: HTMLDivElement) {

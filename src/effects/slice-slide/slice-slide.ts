@@ -1,7 +1,7 @@
 import {
-  IEffectExtensionAppDefinition,
-  IEffectExtensionDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionAppDefinition,
+  IAnimationExtensionDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { sliceSlideAnimation } from "./slice-slide.animation";
 import {
   sliceSlideDefaults,
@@ -9,13 +9,13 @@ import {
 } from "./slice-slide.definition";
 import { SLICE_SLIDE_ANIMATION } from "./slice-slide.types";
 
-export const sliceSlideDef: IEffectExtensionDefinition = {
-  effectId: SLICE_SLIDE_ANIMATION,
-  effectFunc: sliceSlideAnimation,
+export const sliceSlideDef: IAnimationExtensionDefinition = {
+  animationId: SLICE_SLIDE_ANIMATION,
+  animationFunc: sliceSlideAnimation,
 };
 
-export const sliceSlideAppDef: IEffectExtensionAppDefinition = {
-  effectId: SLICE_SLIDE_ANIMATION,
+export const sliceSlideAppDef: IAnimationExtensionAppDefinition = {
+  animationId: SLICE_SLIDE_ANIMATION,
   formDefaults: sliceSlideDefaults,
   formDefinition: sliceSlideDefinition,
 };

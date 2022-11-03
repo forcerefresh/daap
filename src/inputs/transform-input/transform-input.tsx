@@ -16,7 +16,7 @@ import {
   ITimelinePoint,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import { convertTimeUnitToMs } from "../../webslider-sdk/src/objects/object-utils";
-import { AnimeJSEasingOptions } from "../../webslider-sdk/src/effects/i-effect-types";
+import { AnimeJSEasingOptions } from "../../webslider-sdk/src/animations/i-animation-types";
 import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import { getInputForm } from "../input-factory";
 import {

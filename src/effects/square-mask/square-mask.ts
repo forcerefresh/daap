@@ -1,8 +1,8 @@
-import {} from "../../webslider-sdk/src/effects/i-effect-types";
+import {} from "../../webslider-sdk/src/animations/i-animation-types";
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { SQUARE_MASK_ANIMATION } from "./square-mask.types";
 import {
   squareMaskDefaults,
@@ -10,13 +10,13 @@ import {
 } from "./square-mask.definition";
 import { squareMaskAnimation } from "./square-mask.animation";
 
-export const squareMaskDef: IEffectExtensionDefinition = {
-  effectId: SQUARE_MASK_ANIMATION,
-  effectFunc: squareMaskAnimation,
+export const squareMaskDef: IAnimationExtensionDefinition = {
+  animationId: SQUARE_MASK_ANIMATION,
+  animationFunc: squareMaskAnimation,
 };
 
-export const squareMaskAppDef: IEffectExtensionAppDefinition = {
-  effectId: SQUARE_MASK_ANIMATION,
+export const squareMaskAppDef: IAnimationExtensionAppDefinition = {
+  animationId: SQUARE_MASK_ANIMATION,
   formDefaults: squareMaskDefaults,
   formDefinition: squareMaskDefinition,
 };

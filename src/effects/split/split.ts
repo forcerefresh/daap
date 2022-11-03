@@ -1,18 +1,18 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { splitAnimation } from "./split.animation";
 import { splitDefaults, splitDefinition } from "./split.definition";
 import { SPLIT_ANIMATION } from "./split.types";
 
-export const splitDef: IEffectExtensionDefinition = {
-  effectId: SPLIT_ANIMATION,
-  effectFunc: splitAnimation,
+export const splitDef: IAnimationExtensionDefinition = {
+  animationId: SPLIT_ANIMATION,
+  animationFunc: splitAnimation,
 };
 
-export const splitAppDef: IEffectExtensionAppDefinition = {
-  effectId: SPLIT_ANIMATION,
+export const splitAppDef: IAnimationExtensionAppDefinition = {
+  animationId: SPLIT_ANIMATION,
   formDefaults: splitDefaults,
   formDefinition: splitDefinition,
 };

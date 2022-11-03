@@ -243,8 +243,8 @@ function cubeAnimation() {
 }
 
 const cubeDef = {
-  effectId: "cube",
-  effectFunc: cubeAnimation,
+  animationId: "cube",
+  animationFunc: cubeAnimation,
 };
 export default cubeDef;
 

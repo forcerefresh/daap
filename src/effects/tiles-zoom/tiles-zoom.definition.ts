@@ -74,7 +74,7 @@ export const tilesZoomDefaults: ITilesZoomEffect = {
   hasTimeDistribution: true,
   ease: "none",
   childEase: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: false,
   // effect properties
   rows: 10,

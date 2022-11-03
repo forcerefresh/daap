@@ -50,7 +50,7 @@ export const splitDefaults: ISplitEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["slide"],
+  supportedAnimationTypes: ["slide"],
   canBeCombined: false,
   // effect properties
   split: {

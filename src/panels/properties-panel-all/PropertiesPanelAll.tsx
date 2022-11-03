@@ -148,7 +148,7 @@ const mapStateToProps = (state: IStore) => {
     totalEffectCounter =
       (object?.transitions?.in?.length || 0) +
       (object?.transitions?.out?.length || 0) +
-      (object?.transitions?.effect?.length || 0) +
+      (object?.transitions?.animation?.length || 0) +
       (object?.transitions?.event?.length || 0);
   }
 

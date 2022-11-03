@@ -13,6 +13,6 @@ export const noneStructuralDefaults: INoneStructuralEffect = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  supportedAnimationTypes: ["in", "out", "effect", "slide", "layer"],
   canBeCombined: false,
 };

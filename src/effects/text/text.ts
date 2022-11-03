@@ -1,18 +1,18 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { textAnimation } from "./text.animation";
 import { textDefaults, textDefinition } from "./text.definition";
 import { TEXT_ANIMATION } from "./text.types";
 
-export const textDef: IEffectExtensionDefinition = {
-  effectId: TEXT_ANIMATION,
-  effectFunc: textAnimation,
+export const textDef: IAnimationExtensionDefinition = {
+  animationId: TEXT_ANIMATION,
+  animationFunc: textAnimation,
 };
 
-export const textAppDef: IEffectExtensionAppDefinition = {
-  effectId: TEXT_ANIMATION,
+export const textAppDef: IAnimationExtensionAppDefinition = {
+  animationId: TEXT_ANIMATION,
   formDefaults: textDefaults,
   formDefinition: textDefinition,
 };

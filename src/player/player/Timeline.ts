@@ -1,5 +1,5 @@
 import { EventEmitter } from "events";
-import { getPlayerEffectDefinition } from "../../webslider-sdk/src/effects/effects-register";
+import { getPlayerAnimationDefinition } from "../../webslider-sdk/src/animations/animations-register";
 import { logger } from "../../webslider-sdk/src/utils/logger/logger";
 import { isTimelineInBounds } from "./timeline-utild";
 
@@ -136,11 +136,11 @@ export class Timeline {
     logger.debug(`Timeline init (${this.config.name})`);
 
     console.log(this.config.effectId);
-    const animationDef = getPlayerEffectDefinition(this.config.effectId);
+    const animationDef = getPlayerAnimationDefinition(this.config.effectId);
     console.log(animationDef);
 
     if (animationDef) {
-      this.animIns = animationDef.effectFunc();
+      this.animIns = animationDef.animationFunc();
     }
 
     this.execInit();

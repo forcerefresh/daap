@@ -1,4 +1,4 @@
-import { IOutEffectStartTime } from "../webslider-sdk/src/effects/i-effect-types";
+import { IOutAnimationStartTime } from "../webslider-sdk/src/animations/i-animation-types";
 
 export type EffectType = "in" | "out" | "effect" | "event" | "slide" | "layer";
 
@@ -37,7 +37,7 @@ export interface IEffectBase {
   pageWidth?: number;
   pageHeight?: number;
   // << flags end
-  supportedEffectTypes: EffectType[];
+  supportedAnimationTypes: EffectType[];
   timeDistribution?: number;
   ease?: string;
   customEase?: string;
@@ -45,7 +45,7 @@ export interface IEffectBase {
   childCustomEase?: string;
   duration?: number;
   delay?: number;
-  outStartTime?: IOutEffectStartTime;
+  outStartTime?: IOutAnimationStartTime;
   // TODO: consider removing seek
   seek?: number;
 }

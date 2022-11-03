@@ -42,7 +42,7 @@ export const slideDefaults: ISlideEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out", "event"],
+  supportedAnimationTypes: ["in", "out", "event"],
   canBeCombined: true,
   // specific this effect
   distance: 100,

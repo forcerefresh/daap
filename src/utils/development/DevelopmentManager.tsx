@@ -125,11 +125,11 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         if (devItem.componentType === "effect") {
           global.registerExternalEffect(
             {
-              ...global.appEffects[devItems[i].type],
+              ...global.appAnimations[devItems[i].type],
               development: true,
             },
             {
-              ...global.playerEffects[devItems[i].type],
+              ...global.playerAnimations[devItems[i].type],
               development: true,
             },
             true

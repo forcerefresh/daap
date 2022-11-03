@@ -4,7 +4,7 @@ import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { EffectType } from "../../effects/types";
-import { getAppEffectDefinition } from "../../webslider-sdk/src/effects/effects-register";
+import { getAppAnimationDefinition } from "../../webslider-sdk/src/animations/animations-register";
 
 export interface TimelineViewProps {
   object: IObject;
@@ -31,7 +31,7 @@ export default function TimelineView(props: TimelineViewProps) {
   );
   const tlsEff = createTimelines(
     object,
-    object?.transitions?.effect || [],
+    object?.transitions?.animation || [],
     slideDuration,
     slideExitDuration,
     "effect"
@@ -136,7 +136,7 @@ function createTimelines(
   const arr: TimelineViewData[] = [];
 
   effs.map((eff, idx) => {
-    const effDef = getAppEffectDefinition(eff.effect.id);
+    const effDef = getAppAnimationDefinition(eff.animation.id);
     const customDuration = effDef?.getDuration
       ? effDef.getDuration(object, eff)
       : undefined;
@@ -156,7 +156,7 @@ function createTimelines(
     };
 
     const className = css[`timeline-${type}`];
-    arr.push({ className, timelineStyle, name: eff.effect.id, no: idx + 1 });
+    arr.push({ className, timelineStyle, name: eff.animation.id, no: idx + 1 });
   });
 
   return arr;

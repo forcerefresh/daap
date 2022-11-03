@@ -52,13 +52,13 @@ export const useExtensionsHook = () => {
     const playerObjectSource = await zip
       .file(
         extension.packageFiles.appObjectFilename ||
-          extension.packageFiles.appEffectFilename!
+          extension.packageFiles.appAnimationFilename!
       )
       ?.async("string");
     const appObjectSource = await zip
       .file(
         extension.packageFiles.appObjectFilename ||
-          extension.packageFiles.appEffectFilename!
+          extension.packageFiles.appAnimationFilename!
       )
       ?.async("string");
 

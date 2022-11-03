@@ -1,7 +1,7 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import {
   tilesSlideDefaults,
   tilesSlideDefinition,
@@ -9,13 +9,13 @@ import {
 import { tilesSlideAnimation } from "./tiles-slide.animation";
 import { TILES_SLIDE_ANIMATION } from "./tiles-slide.types";
 
-export const tilesSlideDef: IEffectExtensionDefinition = {
-  effectId: TILES_SLIDE_ANIMATION,
-  effectFunc: tilesSlideAnimation,
+export const tilesSlideDef: IAnimationExtensionDefinition = {
+  animationId: TILES_SLIDE_ANIMATION,
+  animationFunc: tilesSlideAnimation,
 };
 
-export const tilesSlideAppDef: IEffectExtensionAppDefinition = {
-  effectId: TILES_SLIDE_ANIMATION,
+export const tilesSlideAppDef: IAnimationExtensionAppDefinition = {
+  animationId: TILES_SLIDE_ANIMATION,
   formDefaults: tilesSlideDefaults,
   formDefinition: tilesSlideDefinition,
 };

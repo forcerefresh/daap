@@ -28,7 +28,7 @@ export const parallaxDefaults: IParallaxEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["layer"],
+  supportedAnimationTypes: ["layer"],
   canBeCombined: false,
   // effect properties
   parallax: {

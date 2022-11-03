@@ -105,7 +105,7 @@ export const devDefinition: IEffectDefinition = {
       inputProps: {
         min: 0,
         max: 1000,
-        sufix: "%",
+        suffix: "%",
         stepSize: 1,
         labelStepSize: 1,
         trackFill: false,
@@ -213,7 +213,7 @@ export const devDefaults: IDevEffect = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out", "effect", "slide", "layer"],
+  supportedAnimationTypes: ["in", "out", "effect", "slide", "layer"],
   canBeCombined: true,
   //effect properties
   color1: { r: 256, g: 256, b: 256, a: 1 },

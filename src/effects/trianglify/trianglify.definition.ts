@@ -125,7 +125,7 @@ export const trianglifyDefaults: ITrianglifyEffect = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: false,
   // effect properties
   colorsSG: "match",

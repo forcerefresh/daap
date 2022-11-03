@@ -13,7 +13,7 @@ export const fadeSlideDefaults: IFadeSlideEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["slide"],
+  supportedAnimationTypes: ["slide"],
   canBeCombined: true,
   library: "animejs",
   // this effect has no configuration

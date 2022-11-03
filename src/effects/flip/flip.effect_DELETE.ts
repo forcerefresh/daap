@@ -5,7 +5,7 @@ import { FADE_ANIMATION } from "../fade/fade.types";
 import { IFlipEffect } from "./flip.types";
 
 export function getFlipEffectDuration(object: IObject, config: ITransition) {
-  const effValues = config?.effect?.values as IFlipEffect;
+  const effValues = config?.animation?.values as IFlipEffect;
 
   const rotationTime = effValues.rotationTime;
   const pauseTime = effValues.pauseTime;

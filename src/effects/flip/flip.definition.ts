@@ -52,7 +52,7 @@ export const flipDefaults: IFlipEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["effect"],
+  supportedAnimationTypes: ["effect"],
   canBeCombined: false,
   // effect properties
   rotationTime: 1000,

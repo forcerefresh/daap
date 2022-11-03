@@ -15,7 +15,7 @@ export const RangeSliderInputForm: React.FC<
   const {
     trackFill = false,
     thumbPosition = "bottom",
-    sufix = "",
+    suffix = "",
     stepSize = 1,
     min = 0,
     max = 100,
@@ -37,7 +37,7 @@ export const RangeSliderInputForm: React.FC<
   }, []);
 
   const labelValue = (val: number) => {
-    return `${Math.round(val)}${sufix}`;
+    return `${Math.round(val)}${suffix}`;
   };
 
   return (

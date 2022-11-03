@@ -38,9 +38,9 @@ import {
   getEffectTypesForItem,
 } from "./EffectPanelUtils";
 import {
-  getAppEffectDefinition,
-  getEffectsOptions,
-} from "../../webslider-sdk/src/effects/effects-register";
+  getAppAnimationDefinition,
+  getAnimationsOptions,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { getCheckboxField } from "../../inputs/input-utils";
 
 type IEffectPanel = typeof mapDispatchToProps &
@@ -122,7 +122,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
   };
 
   const addEffectToSection = (effId: string, effectType: EffectType) => {
-    const effDef = getAppEffectDefinition(effId);
+    const effDef = getAppAnimationDefinition(effId);
     const isStructural = !effDef?.formDefaults.canBeCombined;
 
     const newItem = cloneDeep(item);
@@ -155,7 +155,7 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
   };
 
   const getEffectName = (effectType: EffectType, effectId: string) =>
-    getEffectsOptions(effectType).find((item) => item.value === effectId)
+    getAnimationsOptions(effectType).find((item) => item.value === effectId)
       ?.label;
 
   const renderSection = (section: EffectType) => {
@@ -223,13 +223,13 @@ const EffectPanelTabs: React.FC<IEffectPanel> = (props) => {
                       value: "Disabled1",
                       disabled: true,
                     },
-                    ...getEffectsOptions(section, true, objectType),
+                    ...getAnimationsOptions(section, true, objectType),
                     {
                       label: "Structural effect",
                       value: "Disabled2",
                       disabled: true,
                     },
-                    ...getEffectsOptions(section, false, objectType),
+                    ...getAnimationsOptions(section, false, objectType),
                   ] as any
                 }
                 value={""}

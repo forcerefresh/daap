@@ -15,7 +15,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   const {
     trackFill = false,
     thumbPosition = "bottom",
-    sufix = "",
+    suffix = "",
     stepSize = 1,
     min = 0,
     max = 100,
@@ -37,7 +37,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   }, []);
 
   const labelValue = (val: number) => {
-    return `${Math.round(val)}${sufix}`;
+    return `${Math.round(val)}${suffix}`;
   };
 
   return (

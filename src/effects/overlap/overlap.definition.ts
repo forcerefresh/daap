@@ -13,7 +13,7 @@ export const overlapDefaults: IOverlapEffect = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["slide"],
+  supportedAnimationTypes: ["slide"],
   canBeCombined: true,
   // this effect has no configuration
 };

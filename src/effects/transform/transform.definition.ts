@@ -99,7 +99,7 @@ export const timelinesDefaults: ITransformEffect = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out"],
   canBeCombined: true,
   // effect properties
   transform: {

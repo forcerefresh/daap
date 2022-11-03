@@ -18,9 +18,9 @@ import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvi
 import { PreviewTimelineContextProvider } from "./utils/preview-timeline-provider/PreviewTimelineProvider";
 import { logger } from "./webslider-sdk/src/utils/logger/logger";
 import {
-  registerExternalEffect,
-  unregisterEffect,
-} from "./webslider-sdk/src/effects/effects-register";
+  registerExternalAnimation,
+  unregisterAnimation,
+} from "./webslider-sdk/src/animations/animations-register";
 
 const global = window as any;
 
@@ -69,7 +69,8 @@ global.WebSlider_GlobalScope.registerExternalObject = registerExternalObject;
 global.WebSlider_GlobalScope.unregisterObject = unregisterObject;
 
 // EXTERNAL EFFECT REGISTER
-global.WebSlider_GlobalScope.registerExternalEffect = registerExternalEffect;
+global.WebSlider_GlobalScope.registerExternalAnimation =
+  registerExternalAnimation;
 
 // EXTERNAL EFFECT UNREGISTER
-global.WebSlider_GlobalScope.unregisterObject = unregisterEffect;
+global.WebSlider_GlobalScope.unregisterAnimation = unregisterAnimation;

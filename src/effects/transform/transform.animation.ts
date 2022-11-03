@@ -131,8 +131,8 @@ export function transformAnimation() {
 }
 
 const transformDef = {
-  effectId: "transform-effect",
-  effectFunc: transformAnimation,
+  animationId: "transform-effect",
+  animationFunc: transformAnimation,
 };
 export default transformDef;
 

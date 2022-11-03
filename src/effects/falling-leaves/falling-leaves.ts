@@ -1,7 +1,7 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { fallingLeavesAnimation } from "./falling-leaves.animation";
 import {
   fallingLeavesDefaults,
@@ -9,13 +9,13 @@ import {
 } from "./falling-leaves.definition";
 import { FALLING_LEAVES_ANIMATION } from "./falling-leaves.types";
 
-export const fallingLeavesDef: IEffectExtensionDefinition = {
-  effectId: FALLING_LEAVES_ANIMATION,
-  effectFunc: fallingLeavesAnimation,
+export const fallingLeavesDef: IAnimationExtensionDefinition = {
+  animationId: FALLING_LEAVES_ANIMATION,
+  animationFunc: fallingLeavesAnimation,
 };
 
-export const fallingLeavesAppDef: IEffectExtensionAppDefinition = {
-  effectId: FALLING_LEAVES_ANIMATION,
+export const fallingLeavesAppDef: IAnimationExtensionAppDefinition = {
+  animationId: FALLING_LEAVES_ANIMATION,
   formDefaults: fallingLeavesDefaults,
   formDefinition: fallingLeavesDefinition,
 };

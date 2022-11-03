@@ -115,7 +115,7 @@ export const typewriterDefaults: ITypeWriterEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["effect"],
+  supportedAnimationTypes: ["effect"],
   canBeCombined: false,
   // effect properties
   typeCharacterSpeed: 150,

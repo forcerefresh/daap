@@ -1,7 +1,7 @@
 import {
-  IEffectExtensionDefinition,
-  IEffectExtensionAppDefinition,
-} from "../../webslider-sdk/src/effects/effects-register";
+  IAnimationExtensionDefinition,
+  IAnimationExtensionAppDefinition,
+} from "../../webslider-sdk/src/animations/animations-register";
 import { tilesZoomAnimation } from "./tiles-zoom.animation";
 import {
   tilesZoomDefaults,
@@ -9,13 +9,13 @@ import {
 } from "./tiles-zoom.definition";
 import { TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 
-export const tilesZoomDef: IEffectExtensionDefinition = {
-  effectId: TILES_ZOOM_ANIMATION,
-  effectFunc: tilesZoomAnimation,
+export const tilesZoomDef: IAnimationExtensionDefinition = {
+  animationId: TILES_ZOOM_ANIMATION,
+  animationFunc: tilesZoomAnimation,
 };
 
-export const tilesZoomAppDef: IEffectExtensionAppDefinition = {
-  effectId: TILES_ZOOM_ANIMATION,
+export const tilesZoomAppDef: IAnimationExtensionAppDefinition = {
+  animationId: TILES_ZOOM_ANIMATION,
   formDefaults: tilesZoomDefaults,
   formDefinition: tilesZoomDefinition,
 };

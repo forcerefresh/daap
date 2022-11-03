@@ -14,7 +14,7 @@ import {
   getSizePosLayoutField,
 } from "../input-utils";
 import {
-  IAbsolutePlacamentInput,
+  IAbsolutePlacementInput,
   IUpdateInput,
 } from "../../webslider-sdk/src/inputs/i-inputs";
 import css from "./absolute-placement-input.module.scss";
@@ -22,7 +22,7 @@ import css from "./absolute-placement-input.module.scss";
 const SMALL_ICON_SIZE = 18;
 
 export const AbsolutePlacementForm: React.FC<
-  IAbsolutePlacamentInput & IUpdateInput
+  IAbsolutePlacementInput & IUpdateInput
 > = (props) => {
   const {
     value,

@@ -47,7 +47,7 @@ import {
   ITransitionsData,
 } from "./i-export-html";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
-import { getAppEffectDefinition } from "../webslider-sdk/src/effects/effects-register";
+import { getAppAnimationDefinition } from "../webslider-sdk/src/animations/animations-register";
 
 export function generatePlayerData(
   sources: ISources,
@@ -239,7 +239,7 @@ function generateSlideData(
 
   forOwn(someSlideData.transitions, (tArr: ITransition[] | any) => {
     tArr.forEach((t: ITransition | any) => {
-      const def = getAppEffectDefinition(t?.effect?.id);
+      const def = getAppAnimationDefinition(t?.effect?.id);
       if (def?.external) {
         extensionTypes.push(t.effect.id);
       }
@@ -362,7 +362,7 @@ function generateSlideData(
 
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
         tArr.forEach((t: ITransition | any) => {
-          const def = getAppEffectDefinition(t?.effect?.id);
+          const def = getAppAnimationDefinition(t?.effect?.id);
           if (def?.external) {
             extensionTypes.push(t.effect.id);
           }

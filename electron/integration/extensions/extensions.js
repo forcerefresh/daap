@@ -113,7 +113,7 @@ ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
   const extFilePath_App = path.join(
     extensionDir,
     extension.packageFiles.appObjectFilename ||
-      extension.packageFiles.appEffectFilename
+      extension.packageFiles.appAnimationFilename
   );
   const fileContent_App = await fsPromise.readFile(extFilePath_App);
   await mainWindow.webContents.executeJavaScript(fileContent_App);
@@ -121,7 +121,7 @@ ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
   const extFilePath_Player = path.join(
     extensionDir,
     extension.packageFiles.playerObjectFilename ||
-      extension.packageFiles.playerEffectFilename
+      extension.packageFiles.playerAnimationFilename
   );
   const fileContent_Player = await fsPromise.readFile(extFilePath_Player);
   await mainWindow.webContents.executeJavaScript(fileContent_Player);

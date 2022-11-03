@@ -27,6 +27,6 @@ export const devDefaults: IDevEffect = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedEffectTypes: ["in", "out", "effect", "layer", "slide"],
+  supportedAnimationTypes: ["in", "out", "effect", "layer", "slide"],
   propert1:
 };

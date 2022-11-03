@@ -1,8 +1,8 @@
 import { addExtensionCode } from "../integration/utils/load-extension";
 import {
-  isEffectRegistered,
-  registerExternalEffect,
-} from "../webslider-sdk/src/effects/effects-register";
+  isAnimationRegistered,
+  registerExternalAnimation,
+} from "../webslider-sdk/src/animations/animations-register";
 import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
 import {
   isObjectRegistered,
@@ -22,7 +22,7 @@ export async function loadAndRegisterExternalComponent(
   }
   if (
     extension.componentType === "effect" &&
-    isEffectRegistered(extension.type)
+    isAnimationRegistered(extension.type)
   ) {
     console.warn(`Effect ${extension.type} is already registered`);
     return;
@@ -45,14 +45,14 @@ function registerExternalExtension(extension: IExtensionItem) {
     registerExternalObject(appObj, playerObj);
     logger.info(`Object '${appObj.type}' has been registered`);
   } else if (extension.componentType === "effect") {
-    const playerObj = (window as any).WebSlider_GlobalScope.playerEffects[
+    const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];
-    const appObj = (window as any).WebSlider_GlobalScope.appEffects[
+    const appObj = (window as any).WebSlider_GlobalScope.appAnimations[
       extension.type
     ];
 
-    registerExternalEffect(appObj, playerObj, true);
+    registerExternalAnimation(appObj, playerObj, true);
   } else {
     console.warn(
       `Unsuported external component type: ${extension.componentType}; name: ${extension.name}`

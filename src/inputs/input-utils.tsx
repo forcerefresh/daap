@@ -114,7 +114,7 @@ export function getSelectSlider<T>(
   inputProperties: {
     min: number;
     max: number;
-    sufix: string;
+    suffix: string;
     stepSize: number;
     labelStepSize: number;
     trackFill: boolean;
