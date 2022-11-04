@@ -13,7 +13,7 @@ import {
 } from "webslider-sdk2/lib/objects/i-object";
 import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
 import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
-import { getOrCreateConnectorById } from "../../webslider-sdk//src/connectors/connector-manager";
+import { getOrCreateConnectorById } from "webslider-sdk2/lib/connectors/connector-manager";
 import logo from "./json-source-logo.svg";
 import { JSONSourceConnector } from "./json-source-connector";
 
