@@ -1,7 +1,7 @@
 import { IPlayerData } from "../../../export/i-export-html";
 import { IStore } from "../../../store/store";
-import { IExtensionItem } from "../../../webslider-sdk/src/objects/i-extensions";
-import { GetAssetsUrlFuncReturnType } from "../../../webslider-sdk/src/objects/objects-register";
+import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "webslider-sdk2/lib/objects/objects-register";
 
 export const useTemplateHook = () => {
   const getTemplate = (id: string): Promise<any> => {

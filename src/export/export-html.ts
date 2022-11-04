@@ -6,19 +6,19 @@ import {
   IBoxValue,
   ICoverPlacementValue,
   SourceImageValues,
-} from "../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { ImageValues } from "../objects/image/image";
 import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
-} from "../webslider-sdk/src/objects/objects-register";
+} from "webslider-sdk2/lib/objects/objects-register";
 import {
   ILayout,
   IObject,
   ITransition,
   LayoutTypes,
   ObjectType,
-} from "../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import {
   calculateObjectSize,
   calculateObjectSizePerDevice,
@@ -30,7 +30,7 @@ import { ISettings } from "../store/reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
-} from "../webslider-sdk/src/common/i-breakpoint-configuration";
+} from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 import { IPreviewScope } from "../store/reducers/stage";
 import {
   rgbColor2cssRgba,
@@ -46,8 +46,8 @@ import {
   ISources,
   ITransitionsData,
 } from "./i-export-html";
-import { IExtensionItem } from "../webslider-sdk/src/objects/i-extensions";
-import { getAppAnimationDefinition } from "../webslider-sdk/src/animations/animations-register";
+import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
+import { getAppAnimationDefinition } from "webslider-sdk2/lib/animations/animations-register";
 
 export function generatePlayerData(
   sources: ISources,

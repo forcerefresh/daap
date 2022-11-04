@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import {
   IUnitsNumberInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./units-number-input.module.scss";
 
 export type UnitType = "px" | "em" | "%" | "ms" | "s" | "deg" | null;

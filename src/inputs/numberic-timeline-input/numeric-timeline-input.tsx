@@ -12,7 +12,7 @@ import {
   INumericTimelineInput,
   INumericTimelineValue,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./numeric-timeline-input.module.scss";
 
 export const NumericTimelineInputForm: React.FC<

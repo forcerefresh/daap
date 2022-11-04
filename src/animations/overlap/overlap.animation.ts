@@ -1,4 +1,4 @@
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import anime from "animejs";
 import { IOverlapAnimation, OVERLAP_ANIMATION } from "./overlap.types";
 

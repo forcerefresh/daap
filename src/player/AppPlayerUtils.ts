@@ -1,8 +1,8 @@
 import { AnimationType } from "../animations/types";
 import { ITransitionsData } from "../export/i-export-html";
 import { IExecCodeConfig } from "../objects/exec-code-animation";
-import { ExecutionCodeFuncType } from "../webslider-sdk/src/objects/objects-register";
-import { ITransition } from "../webslider-sdk/src/objects/i-object";
+import { ExecutionCodeFuncType } from "webslider-sdk2/lib/objects/objects-register";
+import { ITransition } from "webslider-sdk2/lib/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { ITimelineConfig, Timeline } from "./player/Timeline";
 import { RootTimeline } from "./player/RootTimeline";

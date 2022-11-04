@@ -6,7 +6,7 @@ import { IntegrationContext } from "../../integration";
 import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
 import { forceRefresh } from "../../store/actions/actions";
 import { IStore, store } from "../../store/store";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { DevelopmentContext } from "./DevelopmentProvider";
 
 export type IDevelopmentManagerProps = typeof mapDispatchToProps &
@@ -123,7 +123,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         }
 
         if (devItem.componentType === "animation") {
-          global.registerExternalEffect(
+          global.registerExternalAnimation(
             {
               ...global.appAnimations[devItems[i].type],
               development: true,

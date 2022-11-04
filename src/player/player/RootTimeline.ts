@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { Ticker } from "./Ticker";
 import getTickerInstance from "./Ticker";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { isReverse, isTimelineInBounds } from "./timeline-utild";
 import { Timeline } from "./Timeline";
 import { Shield } from "aws-sdk";

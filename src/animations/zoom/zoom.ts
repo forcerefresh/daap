@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { zoomAnimation } from "./zoom.animation";
 import { zoomDefaults, zoomDefinition } from "./zoom.definition";
 import { ZOOM_ANIMATION } from "./zoom.types";

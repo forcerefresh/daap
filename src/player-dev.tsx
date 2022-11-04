@@ -4,7 +4,7 @@ import "./objects/register-object";
 import "./animations/register-animation";
 import "./objects/font-preloader";
 
-import { BreakpointConfiguration } from "./webslider-sdk/src/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 
 (window as any).WebSliderPlayer = Player;
 

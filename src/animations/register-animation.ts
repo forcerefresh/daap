@@ -1,4 +1,4 @@
-import { registerAnimation } from "../webslider-sdk/src/animations/animations-register";
+import { registerAnimation } from "webslider-sdk2/lib/animations/animations-register";
 import { fadeDef, fadeAppDef } from "./fade/fade";
 import { slideDef, slideAppDef } from "./slide/slide";
 import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";

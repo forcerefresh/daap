@@ -18,18 +18,15 @@ import {
   Text,
 } from "@blueprintjs/core";
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
+import { IObject, ObjectType } from "webslider-sdk2/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, noop, uniq } from "lodash-es";
-import {
-  MediaType,
-  VectorData,
-} from "../../webslider-sdk/src/common/i-media-types";
+import { MediaType, VectorData } from "webslider-sdk2/lib/common/i-media-types";
 import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { is } from "immer/dist/internal";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 

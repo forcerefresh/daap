@@ -30,7 +30,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
 import { cloneDeep, delay, isEmpty } from "lodash-es";
-import { IObject, ObjectType } from "../../webslider-sdk/src/objects/i-object";
+import { IObject, ObjectType } from "webslider-sdk2/lib/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import { ObjectRow } from "./ObjectRow";

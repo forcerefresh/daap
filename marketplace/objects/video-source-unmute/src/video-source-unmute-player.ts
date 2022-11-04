@@ -8,9 +8,9 @@ import {
   PreloadFuncPropsType,
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
-} from "../../../../src/webslider-sdk/src/objects/objects-register";
-import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
-import { addCommonPropertiesToStyle } from "../../../../src/webslider-sdk/src/objects/common-properties";
+} from "webslider-sdk2/lib/objects/objects-register";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { addCommonPropertiesToStyle } from "webslider-sdk2/lib/objects/common-properties";
 import { VideoSourceUnmuteValues } from "./video-source-unmute-types";
 
 /**

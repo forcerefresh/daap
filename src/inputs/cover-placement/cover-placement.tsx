@@ -6,7 +6,7 @@ import { getSelectField } from "../input-utils";
 import {
   ICoverPlacementInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./cover-placement.module.scss";
 
 const HOR_POSITION_OPTIONS = [

@@ -1,5 +1,5 @@
-import { convertTimeUnitToMs } from "../../webslider-sdk/src/objects/object-utils";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { convertTimeUnitToMs } from "webslider-sdk2/lib/objects/object-utils";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITransformAnimation } from "./transform.types";
 import anime from "animejs";

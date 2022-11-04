@@ -3,24 +3,24 @@ import {
   IHTMLValue,
   IInputMetadataValues,
   InputType,
-} from "../../webslider-sdk/src/inputs/i-inputs";
-import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "../../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
 import htmlIcon from "./html-icon.svg";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
-import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
+import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
 import {
   CommonPropertiesTuple,
   CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../webslider-sdk/src/objects/common-properties";
+} from "webslider-sdk2/lib/objects/common-properties";
 
 export const HTML = "html";
 

@@ -18,7 +18,7 @@ import { EasingOptions } from "../../animations/types";
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

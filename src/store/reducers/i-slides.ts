@@ -1,5 +1,5 @@
-import { ITransitions } from "../../webslider-sdk/src/objects/i-object";
-import { ISlideDuration } from "../../webslider-sdk/src/common/i-slider-duration";
+import { ITransitions } from "webslider-sdk2/lib/objects/i-object";
+import { ISlideDuration } from "webslider-sdk2/lib/common/i-slider-duration";
 
 export enum SlideType {
   Normal = "normal",

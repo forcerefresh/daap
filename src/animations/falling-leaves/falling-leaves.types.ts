@@ -1,4 +1,4 @@
-import { IImageInputValue } from "../../webslider-sdk/src/inputs/i-inputs";
+import { IImageInputValue } from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationBase } from "../types";
 
 export const FALLING_LEAVES_ANIMATION = "falling-leaves";

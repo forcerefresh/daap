@@ -11,7 +11,7 @@ import { forceRefresh } from "../../store/actions/actions";
 import { getSelectField, getTextField } from "../../inputs/input-utils";
 import { DevelopmentItem } from "./i-development-types";
 import { String } from "aws-sdk/clients/apigateway";
-import { unregisterObject } from "../../webslider-sdk/src/objects/objects-register";
+import { unregisterObject } from "webslider-sdk2/lib/objects/objects-register";
 import { DevelopmentContext } from "../../utils/development/DevelopmentProvider";
 
 interface IDevelopmentPanelProps {

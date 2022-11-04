@@ -10,14 +10,14 @@ import {
   ITextAreaInput,
   ITextInput,
   IUnitsNumberInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { nl2br } from "../../utils/doom-utils/common";
 import {
   ICommonObjectProperties,
   IObject,
-} from "../../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
 import svg from "./text-target.svg";
 import {
   CommonPropertiesTuple,
@@ -25,7 +25,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../webslider-sdk/src/objects/common-properties";
+} from "webslider-sdk2/lib/objects/common-properties";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { JSONSourceConnector } from "../json-loader/json-source-connector";
 

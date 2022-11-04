@@ -15,17 +15,17 @@ import {
   getTextField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
-import { ITransition } from "../../webslider-sdk/src/objects/i-object";
+import { ITransition } from "webslider-sdk2/lib/objects/i-object";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
-import { IFormLayoutItem } from "../../webslider-sdk/src/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
 
 import css from "./AnimationConfigurationForm.module.scss";
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { Presets } from "../../utils/presets/Presets";
 /*
 type IAnimationConfigurationForm = typeof mapDispatchToProps &

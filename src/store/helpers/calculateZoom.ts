@@ -1,5 +1,5 @@
 import { ISettings } from "../reducers/i-settings";
-import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 import { IStage } from "../reducers/stage";
 
 export function getZoom(stage: IStage, settings: ISettings): number {

@@ -10,8 +10,8 @@ import {
   getHtmlForApp,
   objectMeta,
 } from "./src/video-target-app";
-import { IObjectAppDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
-import { addAppObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
+import { IObjectAppDefinition } from "webslider-sdk2/lib/objects/objects-register";
+import { addAppObjectToGlobalScope } from "webslider-sdk2/lib/objects/object-utils";
 
 export const ObjectDefinition: IObjectAppDefinition = {
   type: VIDEO_TARGET,

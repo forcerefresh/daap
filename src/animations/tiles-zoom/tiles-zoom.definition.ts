@@ -3,7 +3,7 @@ import {
   INumberInput,
   ISelectInput,
   ITransformOriginInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { ITilesZoomAnimation, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 

@@ -1,10 +1,10 @@
 import React from "react";
-import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
+import { IObject, ITransition } from "webslider-sdk2/lib/objects/i-object";
 import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { AnimationType } from "../../animations/types";
-import { getAppAnimationDefinition } from "../../webslider-sdk/src/animations/animations-register";
+import { getAppAnimationDefinition } from "webslider-sdk2/lib/animations/animations-register";
 
 export interface TimelineViewProps {
   object: IObject;

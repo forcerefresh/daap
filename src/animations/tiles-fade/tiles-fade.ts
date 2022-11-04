@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import {
   tilesFadeDefaults,
   tilesFadeDefinition,

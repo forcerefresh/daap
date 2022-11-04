@@ -11,8 +11,8 @@ import {
   sizeUpdate,
   PRELOAD_ORDER,
 } from "./src/video-source-player";
-import { addPlayerObjectToGlobalScope } from "../../../src/webslider-sdk/src/objects/object-utils";
-import { IObjectDefinition } from "../../../src/webslider-sdk/src/objects/objects-register";
+import { addPlayerObjectToGlobalScope } from "webslider-sdk2/lib/objects/object-utils";
+import { IObjectDefinition } from "webslider-sdk2/lib/objects/objects-register";
 
 export const ObjectDefinition: IObjectDefinition = {
   type: VIDEO_SOURCE,

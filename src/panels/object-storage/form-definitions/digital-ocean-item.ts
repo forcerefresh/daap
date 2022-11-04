@@ -2,7 +2,7 @@ import {
   InputType,
   ISelectInput,
   ITextInput,
-} from "../../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { object, string, ValidationError } from "yup";
 
 export type DigitalOceanOSFormDefinitionTuple = [

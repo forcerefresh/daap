@@ -6,7 +6,7 @@ import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import {
   IInheritTimeInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./slide-duration-input.module.scss";
 
 export const InheritableTimeInputForm: React.FC<

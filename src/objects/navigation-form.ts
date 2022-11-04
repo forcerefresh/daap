@@ -2,12 +2,12 @@ import {
   InputType,
   ISelectInput,
   ITextInput,
-} from "../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import {
   FormType,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "../webslider-sdk/src/form/i-form-layout";
+} from "webslider-sdk2/lib/form/i-form-layout";
 
 export type NavigationTuple = [
   ITextInput<"targetId">,

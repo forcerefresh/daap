@@ -10,14 +10,14 @@ import {
   INumberInput,
   ISelectInput,
   IUnitsNumberInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
-import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "../../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
 import bulletsIcon from "./bullets-icon.svg";
 import { addBorderRadius } from "../../utils/utils";
 import {
@@ -25,7 +25,7 @@ import {
   IFormGroupItem,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+} from "webslider-sdk2/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { addBorderBox } from "../../export/export-html";
 

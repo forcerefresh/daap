@@ -1,4 +1,4 @@
-import { ISVGValue } from "../../../../src/webslider-sdk/src/inputs/i-inputs";
+import { ISVGValue } from "webslider-sdk2/lib/inputs/i-inputs";
 
 /**
  * This is object unique id. This have to be unique string.

@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import {
   createTilesFromHtml,

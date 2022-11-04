@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 
 import { getTextField } from "../../../inputs/input-utils";
-import { IObject } from "../../../webslider-sdk/src/objects/i-object";
+import { IObject } from "webslider-sdk2/lib/objects/i-object";
 import {
   setDevice,
   updateLayer,

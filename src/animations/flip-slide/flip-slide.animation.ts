@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { convertTimeUnitToMs } from "../../utils/utils";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideAnimation } from "./flip-slide.types";
 
 export function flipSlideAnimation() {

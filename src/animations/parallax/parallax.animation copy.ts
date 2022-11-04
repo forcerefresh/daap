@@ -1,4 +1,4 @@
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { IParallaxAnimation, PARALLAX_ANIMATION } from "./parallax.types";
 

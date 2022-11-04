@@ -1,5 +1,5 @@
-import { ICoverPlacementValue } from "../../../../src/webslider-sdk/src/inputs/i-inputs";
-import { CommonPropertiesValues } from "../../../../src/webslider-sdk/src/objects/common-properties";
+import { ICoverPlacementValue } from "webslider-sdk2/lib/inputs/i-inputs";
+import { CommonPropertiesValues } from "webslider-sdk2/lib/objects/common-properties";
 
 /**
  * This is object unique id. This have to be unique string.

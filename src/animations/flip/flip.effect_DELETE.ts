@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { MultiImageValues } from "../../objects/multiple-images/multiple-images";
-import { IObject, ITransition } from "../../webslider-sdk/src/objects/i-object";
+import { IObject, ITransition } from "webslider-sdk2/lib/objects/i-object";
 import { FADE_ANIMATION } from "../fade/fade.types";
 import { IFlipAnimation } from "./flip.types";
 

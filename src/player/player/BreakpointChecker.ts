@@ -3,7 +3,7 @@ import { noop } from "lodash-es";
 import {
   BreakpointConfiguration,
   Breakpoints,
-} from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+} from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 
 export class BreakpointChecker {
   private breakpoints: Breakpoints;

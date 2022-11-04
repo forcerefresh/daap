@@ -1,7 +1,7 @@
 import {
   IBorderColorValue,
   INumericTimelineValue,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationBase } from "../types";
 
 export const SQUARE_MASK_ANIMATION = "square-mask";

@@ -1,7 +1,4 @@
-import {
-  InputType,
-  IParallaxInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+import { InputType, IParallaxInput } from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { IParallaxAnimation, PARALLAX_ANIMATION } from "./parallax.types";
 

@@ -12,7 +12,7 @@ import cx from "classnames";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 import { getIconSize, getIconStyle } from "../action-panel/ActionPanel";
 import { getIconByType } from "../../store/reducers/settings";
-import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 import classnames from "classnames";
 import useDeepCompareEffect from "use-deep-compare-effect";
 

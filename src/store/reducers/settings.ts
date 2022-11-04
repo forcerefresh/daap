@@ -8,8 +8,8 @@ import {
   UPDATE_SLIDE_DURATION,
 } from "../actions/actions";
 import { ISettings } from "./i-settings";
-import { Breakpoints } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
-import { DeviceType } from "../../webslider-sdk/src/common/i-device-type";
+import { Breakpoints } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "webslider-sdk2/lib/common/i-device-type";
 
 export function isAllowedPortrait(type: DeviceType) {
   return (

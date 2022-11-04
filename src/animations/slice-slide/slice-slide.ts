@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionAppDefinition,
   IAnimationExtensionDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { sliceSlideAnimation } from "./slice-slide.animation";
 import {
   sliceSlideDefaults,

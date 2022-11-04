@@ -14,7 +14,7 @@ import {
   IGridLayouts,
   IAbsoluteLayouts,
   ISnapLayouts,
-} from "../../../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import {
   setDevice,
   updateLayer,
@@ -24,7 +24,7 @@ import { ILayer } from "../../../store/reducers/i-layers";
 import { IStore } from "../../../store/store";
 import css from "./LayoutProperties.module.scss";
 import { InfoInputForm } from "../../../inputs/info-input/info-input";
-import { InputType } from "../../../webslider-sdk/src/inputs/i-inputs";
+import { InputType } from "webslider-sdk2/lib/inputs/i-inputs";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

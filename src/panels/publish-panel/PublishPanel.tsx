@@ -15,7 +15,7 @@ import css from "./PublishPanel.module.scss";
 import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import { IMeta } from "../../store/reducers/meta";
-import { BreakpointConfiguration } from "../../webslider-sdk/src/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";

@@ -3,7 +3,7 @@ import React from "react";
 import {
   ITransformOriginInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./transform-origin.module.scss";
 
 const roundTo10 = (n: number) => {

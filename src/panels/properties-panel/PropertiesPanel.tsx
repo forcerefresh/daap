@@ -1,53 +1,29 @@
 import classnames from "classnames";
-import { cloneDeep, pick, property, set } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 import React from "react";
-import { RGBColor } from "react-color";
 import { connect } from "react-redux";
 import { InfoInputForm } from "../../inputs/info-input/info-input";
-import {
-  getInputForm,
-  getInputFormWithOptions,
-} from "../../inputs/input-factory";
-import {
-  getAbsoluteLayoutField,
-  getSnapLayoutField,
-  getGridLayoutField,
-  getSelectField,
-  getTextField,
-  getInheritTimeField,
-  getColorField,
-} from "../../inputs/input-utils";
+import { getInputFormWithOptions } from "../../inputs/input-factory";
+import { getInheritTimeField } from "../../inputs/input-utils";
 import {
   IInputMetadataValues,
   InputType,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { IObject } from "webslider-sdk2/lib/objects/i-object";
 import {
-  ISnapLayout,
-  ILayout,
-  IObject,
-  IGridLayouts,
-  IAbsoluteLayouts,
-  ISnapLayouts,
-} from "../../webslider-sdk/src/objects/i-object";
-import {
-  setDevice,
   updateLayer,
   updateObject,
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
-import { ISlideDuration } from "../../webslider-sdk/src/common/i-slider-duration";
+import { ISlideDuration } from "webslider-sdk2/lib/common/i-slider-duration";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
-import {
-  IFormItem,
-  IFormLayoutItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
-import { getAppObjectDefinition } from "../../webslider-sdk/src/objects/objects-register";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 

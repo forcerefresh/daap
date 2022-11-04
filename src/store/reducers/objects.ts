@@ -3,7 +3,7 @@ import { object } from "yup";
 import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../webslider-sdk/src/objects/common-properties";
+} from "webslider-sdk2/lib/objects/common-properties";
 import {
   ActionTypes,
   ADD_OBJECT,

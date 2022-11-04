@@ -2,16 +2,16 @@ import React from "react";
 import { IPlayerData } from "./export/i-export-html";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
-import { IExtensionItem } from "./webslider-sdk/src/objects/i-extensions";
+import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
 import { IAppSettings } from "./store/reducers/globals";
 import {
   MediaDataInfo,
   MediaType,
-} from "./webslider-sdk/src/common/i-media-types";
+} from "webslider-sdk2/lib/common/i-media-types";
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
 import { Preset, PresetGroup } from "./utils/presets/i-presets";
 import { IStore } from "./store/store";
-import { GetAssetsUrlFuncReturnType } from "./webslider-sdk/src/objects/objects-register";
+import { GetAssetsUrlFuncReturnType } from "webslider-sdk2/lib/objects/objects-register";
 
 export interface getMyUploadComponentProps {
   type: MediaType;

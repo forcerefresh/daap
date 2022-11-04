@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import { getPlayerAnimationDefinition } from "../../webslider-sdk/src/animations/animations-register";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { getPlayerAnimationDefinition } from "webslider-sdk2/lib/animations/animations-register";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { isTimelineInBounds } from "./timeline-utild";
 
 export type ITimelineConfig = {

@@ -12,15 +12,14 @@ import "./objects/font-preloader";
 import {
   registerExternalObject,
   unregisterObject,
-} from "./webslider-sdk/src/objects/objects-register";
+} from "webslider-sdk2/lib/objects/objects-register";
 import DevelopmentManager from "./utils/development/DevelopmentManager";
 import { DevelopmentContextProvider } from "./utils/development/DevelopmentProvider";
 import { PreviewTimelineContextProvider } from "./utils/preview-timeline-provider/PreviewTimelineProvider";
-import { logger } from "./webslider-sdk/src/utils/logger/logger";
 import {
   registerExternalAnimation,
   unregisterAnimation,
-} from "./webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 
 const global = window as any;
 

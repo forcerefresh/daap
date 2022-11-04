@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import {
   ISizePosInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./size-pos-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;

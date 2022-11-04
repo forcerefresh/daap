@@ -5,7 +5,7 @@ import {
   updateTilesSize,
 } from "../common";
 import gsap from "gsap";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import { ITilesZoomAnimation, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 import { merge } from "lodash-es";

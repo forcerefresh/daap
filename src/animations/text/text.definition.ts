@@ -3,7 +3,7 @@ import {
   INumberInput,
   INumericTimelineInput,
   ITextStartPositionInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { ITextAnimation, TEXT_ANIMATION } from "./text.types";
 

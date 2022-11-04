@@ -5,14 +5,14 @@ import {
   ICheckboxInput,
   InputType,
   ITextInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
-import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "../../webslider-sdk/src/objects/i-object";
-import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
-import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+} from "webslider-sdk2/lib/objects/i-object";
+import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
+import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
 import { getOrCreateConnectorById } from "../../webslider-sdk//src/connectors/connector-manager";
 import logo from "./json-source-logo.svg";
 import { JSONSourceConnector } from "./json-source-connector";

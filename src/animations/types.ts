@@ -1,4 +1,4 @@
-import { IOutAnimationStartTime } from "../webslider-sdk/src/animations/i-animation-types";
+import { IOutAnimationStartTime } from "webslider-sdk2/lib/animations/i-animation-types";
 
 export type AnimationType =
   | "in"

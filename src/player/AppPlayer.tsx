@@ -5,7 +5,7 @@ import { IPreviewState } from "../store/reducers/stage";
 import { Player } from "./player/Player";
 import { IPlayerData } from "../export/i-export-html";
 import { PreviewTimelineContext } from "../utils/preview-timeline-provider/PreviewTimelineProvider";
-import { DeviceType } from "../webslider-sdk/src/common/i-device-type";
+import { DeviceType } from "webslider-sdk2/lib/common/i-device-type";
 
 export interface AppPlayerProps {
   selectedDevice: string;

@@ -6,7 +6,7 @@ import { getNumericFiled, getSelectField, getTextArea } from "../input-utils";
 import {
   ITextStartPositionInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./text-start-position-input.module.scss";
 
 const START_POSITION_OPTIONS = [

@@ -1,8 +1,5 @@
-import { InputType } from "../../webslider-sdk/src/inputs/i-inputs";
-import {
-  FormType,
-  IFormItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+import { InputType } from "webslider-sdk2/lib/inputs/i-inputs";
+import { FormType, IFormItem } from "webslider-sdk2/lib/form/i-form-layout";
 import { ITrianglifyAnimation, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 
 export interface IAnimationDefinition {

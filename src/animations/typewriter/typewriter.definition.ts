@@ -1,12 +1,12 @@
 import {
   FormType,
   IFormGroupItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+} from "webslider-sdk2/lib/form/i-form-layout";
 import {
   InputType,
   INumberInput,
   ITextAreaInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { TYPEWRITER_ANIMATION, ITypeWriterAnimation } from "./typewriter.types";
 

@@ -18,7 +18,7 @@ import {
   IImageInputValue,
   IMultiImageInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import { getImageField, getTextField } from "../input-utils";
 import css from "./multi-image-input.module.scss";
 

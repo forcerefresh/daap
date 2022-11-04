@@ -3,14 +3,14 @@ import {
   ImageData,
   MediaType,
   VideoItem,
-} from "../../../webslider-sdk/src/common/i-media-types";
+} from "webslider-sdk2/lib/common/i-media-types";
 import {
   blobToBase64,
   file2Base64,
   getImageFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
-import { logger } from "../../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 
 export const useMyMediaHook = () => {
   const upload = async (

@@ -9,8 +9,8 @@ import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./ExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
-import { IExtensionItem } from "../../webslider-sdk/src/objects/i-extensions";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 
 interface IExtensionsPanelProps {

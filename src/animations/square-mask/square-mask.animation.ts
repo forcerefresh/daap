@@ -1,6 +1,6 @@
 import { RGBColor } from "react-color";
-import { INumericTimelineValue } from "../../webslider-sdk/src/inputs/i-inputs";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { INumericTimelineValue } from "webslider-sdk2/lib/inputs/i-inputs";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IAnimationBase } from "../types";

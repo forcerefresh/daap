@@ -1,7 +1,7 @@
 import { Button, Icon, Menu, MenuItem, Switch } from "@blueprintjs/core";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import React from "react";
-import { IInputMetadataValues } from "../../webslider-sdk/src/inputs/i-inputs";
+import { IInputMetadataValues } from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./optional-input.module.scss";
 
 export interface IOptionalInput {

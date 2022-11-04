@@ -13,10 +13,7 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import {
-  IUpdateInput,
-  IVideoInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+import { IUpdateInput, IVideoInput } from "webslider-sdk2/lib/inputs/i-inputs";
 import { getButtonGroupField, getTextArea } from "../input-utils";
 import css from "./video-input.module.scss";
 

@@ -3,9 +3,9 @@ import {
   ICoverPlacementInput,
   InputType,
   ITextInput,
-} from "../../../../src/webslider-sdk/src/inputs/i-inputs";
-import { createCommonObject } from "../../../../src/webslider-sdk/src/objects/create-common-object";
-import { getObjectPlaceholder } from "../../../../src/webslider-sdk/src/objects/object-helpers";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
 import {
   CreateObjectFuncPropsType,
   CreateObjectFuncReturnType,
@@ -14,8 +14,8 @@ import {
   GetHtmlFuncPropsType,
   GetHtmlFuncReturnType,
   ObjectMetaType,
-} from "../../../../src/webslider-sdk/src/objects/objects-register";
-import { logger } from "../../../../src/webslider-sdk/src/utils/logger/logger";
+} from "webslider-sdk2/lib/objects/objects-register";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { VideoTargetValues, VIDEO_TARGET } from "./video-target-types";
 import svgIcon from "../static/video-target-icon.svg";
 import {
@@ -23,7 +23,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "../../../../src/webslider-sdk/src/objects/common-properties";
+} from "webslider-sdk2/lib/objects/common-properties";
 
 /**
  * This is a type definition of Object properties form

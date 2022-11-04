@@ -8,7 +8,7 @@ import {
 import {
   IBorderColorInput,
   IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 
 export const BorderColorInputForm: React.FC<
   IBorderColorInput & IUpdateInput

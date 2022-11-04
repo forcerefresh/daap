@@ -4,10 +4,7 @@ import { RGBColor } from "react-color";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { rgbColor2cssRgba } from "../../utils/utils";
 import { getButtonGroupField, getColorField } from "../input-utils";
-import {
-  ISVGInput,
-  IUpdateInput,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+import { ISVGInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./svg-input.module.scss";
 
 const MAX_COLORS = 50;

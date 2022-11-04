@@ -1,5 +1,5 @@
 import { omit } from "lodash";
-import { ObjectType } from "../../webslider-sdk/src/objects/i-object";
+import { ObjectType } from "webslider-sdk2/lib/objects/i-object";
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,

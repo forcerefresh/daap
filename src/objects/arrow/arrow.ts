@@ -7,21 +7,21 @@ import {
   ISVGCustomColorsInput,
   ISVGInput,
   ISVGValue,
-} from "../../webslider-sdk/src/inputs/i-inputs";
-import { createCommonObject } from "../../webslider-sdk/src/objects/create-common-object";
+} from "webslider-sdk2/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "../../webslider-sdk/src/objects/i-object";
+} from "webslider-sdk2/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "../../webslider-sdk/src/objects/objects-register";
+import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
 import arrowIcon from "./arrow-icon.svg";
 import { convertTimeUnitToMs, rgbColor2cssRgba } from "../../utils/utils";
-import { getObjectPlaceholder } from "../../webslider-sdk/src/objects/object-helpers";
+import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
 import {
   FormType,
   IFormGroupItem,
-} from "../../webslider-sdk/src/form/i-form-layout";
+} from "webslider-sdk2/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { DelayPropertiesTuple } from "../delay/delay";
 import { replaceColors } from "../../export/export-html";

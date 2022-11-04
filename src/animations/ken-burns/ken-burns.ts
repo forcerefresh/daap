@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { KEN_BURNS_ANIMATION } from "./ken-burns.types";
 import { kenBurnsAnimation } from "./ken-burns.animation";
 import { kenBurnsDefaults, kenBurnsDefinition } from "./ken-burns.definition";

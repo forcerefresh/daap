@@ -1,5 +1,5 @@
-import { InputType } from "../../webslider-sdk/src/inputs/i-inputs";
-import { FormType } from "../../webslider-sdk/src/form/i-form-layout";
+import { InputType } from "webslider-sdk2/lib/inputs/i-inputs";
+import { FormType } from "webslider-sdk2/lib/form/i-form-layout";
 import { IAnimationDefinition } from "../trianglify/trianglify.definition";
 import { dev, IDevAnimation } from "./dev.types";
 

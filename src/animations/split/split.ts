@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { splitAnimation } from "./split.animation";
 import { splitDefaults, splitDefinition } from "./split.definition";
 import { SPLIT_ANIMATION } from "./split.types";

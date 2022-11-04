@@ -6,7 +6,7 @@ import {
   ISizeInput,
   IUpdateInput,
   Units,
-} from "../../webslider-sdk/src/inputs/i-inputs";
+} from "webslider-sdk2/lib/inputs/i-inputs";
 import css from "./size-unit-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;

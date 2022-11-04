@@ -1,8 +1,8 @@
-import {} from "../../webslider-sdk/src/animations/i-animation-types";
+import {} from "webslider-sdk2/lib/animations/i-animation-types";
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "../../webslider-sdk/src/animations/animations-register";
+} from "webslider-sdk2/lib/animations/animations-register";
 import { OVERLAP_ANIMATION } from "./overlap.types";
 import { overlapAnimation } from "./overlap.animation";
 import { overlapDefaults, overlapDefinition } from "./overlap.definition";

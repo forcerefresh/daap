@@ -1,10 +1,10 @@
 import { space2nbsp } from "../../utils/doom-utils/common";
-import { logger } from "../../webslider-sdk/src/utils/logger/logger";
+import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITypeWriterAnimation } from "./typewriter.types";
 import gsap, { SteppedEase } from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { IObject } from "../../webslider-sdk/src/objects/i-object";
+import { IObject } from "webslider-sdk2/lib/objects/i-object";
 import { TextValues } from "../../objects/text/text";
 
 export function getTypewriterAnimationDuration(object?: IObject, config?: any) {
