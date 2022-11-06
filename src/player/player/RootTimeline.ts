@@ -4,8 +4,6 @@ import getTickerInstance from "./Ticker";
 import { logger } from "webslider-sdk2/lib/utils/logger/logger";
 import { isReverse, isTimelineInBounds } from "./timeline-utild";
 import { Timeline } from "./Timeline";
-import { Shield } from "aws-sdk";
-import remove from "lodash-es/remove";
 
 type IRootTimelineConfig = {
   duration?: number;
@@ -133,7 +131,7 @@ export class RootTimeline {
 
     this.emitter.removeAllListeners();
 
-    logger.info("REMOVE LISTENER (destroy)");
+    //logger.info("REMOVE LISTENER (destroy)");
     this.ticker.emitter.removeListener("tick", this.tick_Handler_Bind);
 
     this.timelines.forEach((child) => {
@@ -144,13 +142,11 @@ export class RootTimeline {
   // NOTE: only child that has delay===0 will be started (related to child timelines)
   start(timeCorrection = 0) {
     logger.debug(`ROOT start (${this.config.name})`);
-    console.time();
-    console.timeLog();
 
     this.timeCorrection = timeCorrection;
 
     if (this.playing) {
-      console.log("cannot start multiple times");
+      logger.notice("cannot start multiple times");
       return;
     }
     this.emitter.emit("beforeStart");
@@ -163,11 +159,7 @@ export class RootTimeline {
     this.deltaTickerTime = this.ticker.currentTickerTime;
     this.currentTimelineTime = 0;
 
-    logger.info("ADD LISTENER");
-
     this.ticker.emitter.addListener("tick", this.tick_Handler_Bind);
-
-    logger.info(this.ticker.emitter.listenerCount("tick"));
 
     this.timelines.forEach((child) => {
       child.timeline.rootStart();
@@ -184,10 +176,9 @@ export class RootTimeline {
   // NOTE: stop will stop timeline and all child timelines
   stop() {
     logger.debug(`ROOT stop (${this.config.name})`);
-    console.timeLog();
 
     if (!this.playing) {
-      console.log("cannot stop multiple times");
+      logger.notice("cannot stop multiple times");
       return;
     }
 

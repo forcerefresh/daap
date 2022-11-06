@@ -1,5 +1,3 @@
-import { Console } from "console";
-import { noop } from "lodash-es";
 import {
   BreakpointConfiguration,
   Breakpoints,
@@ -33,7 +31,6 @@ export class BreakpointChecker {
 
   private int: any;
   init() {
-    console.log(this.refDiv, "break-srki");
     this.int = setInterval(() => {
       this.check();
       this.checkVieport();
@@ -84,7 +81,6 @@ export class BreakpointChecker {
       this.currentViewportSize.width !== vSize.width ||
       this.currentViewportSize?.height !== vSize.height
     ) {
-      console.log(vSize, "srki");
       this.currentViewportSize = vSize;
       this.sizeChangeHandlerFn?.(vSize, this.currentBreakpointConfiguration!);
     }

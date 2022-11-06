@@ -34,7 +34,6 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
-import { number } from "yup";
 
 gsap.defaults(); // in order to bundle gsap
 
@@ -132,13 +131,10 @@ export class Player {
     );
     this.currentDeviceType = this.breakpointChecker.getCurrentDeviceType()!;
 
-    console.log(this.currentDeviceType, "srki");
     // current breakpoint configuration
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
       (bp) => bp.type === this.currentDeviceType
     )!;
-
-    console.log(this.currentBp, "srki");
 
     this.playerConfig = playerConfig;
 
@@ -181,18 +177,15 @@ export class Player {
         );
       });
 
-      console.log("Preoad ext: ");
-
       Promise.all(this.extComponentPreloaders)
         .then(() => {
           logger.info("All external components are loaded.");
         })
         .catch((err) => {
-          console.log("ERROR");
+          logger.warn("External component loading has failed.");
           console.warn(err);
         })
         .finally(() => {
-          console.log("finaly");
           this.createAllSlides();
           this.addListenersForEventsAnimations();
         });
@@ -211,7 +204,6 @@ export class Player {
       ) {
         // NOTE (case 1): if same event for forward and reverse
         const el = this.rootDiv.getElementsByClassName(className)[0];
-        console.log(el);
         el?.addEventListener(tlObj.event, (evt) => {
           tlObj.rootTimeline.setDirection(
             tlObj.rootTimeline.isPaused
@@ -226,7 +218,6 @@ export class Player {
         // NOTE: ( case 2)
         // const className = this.targetId2Classname[tlObj.eventTargetId];
         const el = this.rootDiv.getElementsByClassName(className)[0];
-        console.log(el);
         el?.addEventListener(tlObj.event, () => {
           tlObj.rootTimeline.resume();
           tlObj.rootTimeline.setDirection(1);
@@ -235,7 +226,6 @@ export class Player {
         // reverse
         const classNameR = `custom-id-${tlObj.reverseEventTargetId}`; //this.targetId2Classname[tlObj.reverseEventTargetId];
         const elR = this.rootDiv.getElementsByClassName(classNameR)[0];
-        console.log(elR);
         elR?.addEventListener(tlObj.reverseEvent, () => {
           tlObj.rootTimeline.resume();
           tlObj.rootTimeline.setDirection(-1);
@@ -265,7 +255,6 @@ export class Player {
   private bpUpdateSlideAnimations(isInitial = false) {
     if (!this.slideTransitionTimeline) return;
 
-    console.log("asdasd", "srki");
     const bp = this.currentBp;
 
     if (bp?.normal._maxSliderSize) {
@@ -824,7 +813,6 @@ export class Player {
     //let isUpdated = false;
 
     const currentSlideTimelineUpdateCallback = () => {
-      //console.log("asas");
       // eventCallback("onUpdate", () => {
       this.onUpdateCallback?.();
 
@@ -918,8 +906,6 @@ export class Player {
       triggerTimeline?.emitter.addListener("stop", triggerTimelineCallback);
     }
 
-    //console.log(exitTriggerTimeline?.emitter.listeners.length);
-
     //}
     // OTHER
     //
@@ -974,7 +960,6 @@ export class Player {
       maxExitTime = Math.max(exitTransTl.duration, nextSlideOverlap);
     }
 
-    logger.notice(maxExitTime);
     // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {
       // case 1
@@ -985,8 +970,6 @@ export class Player {
         this.currentSlideTimeline!.getChildrenByGroup(
           DYNAMIC_OUT_EFF_TIMELINE_GROUP
         );
-
-      logger.notice(timelinesForOutAnimation.length + " <<<");
 
       if (timelinesForOutAnimation.length > 0) {
         timelinesForOutAnimation.forEach((tl) => {
@@ -1006,7 +989,6 @@ export class Player {
         this.currentSlideTimeline?.getChildById("triggerTimeline");
 
       if (triggerTimeline) {
-        console.log(triggerTimeline);
         //debugger;
 
         // NOTE: ! When manually play slide we can chose any; we need to update duration first
@@ -1237,7 +1219,6 @@ export class Player {
         ...createEventTimelineForObject(transitionData),
       ];
 
-      //console.log(slideTimeline);
       // Note: create logic for objects (start, stop, preloaders, ....)
       const objDef = getPlayerObjectDefinition(transitionData.itemType);
 
@@ -1293,7 +1274,6 @@ export class Player {
     //     }
     //   : undefined;
 
-    //console.log(bettwenSlideEff);
     // create breakpoint for slide transition
 
     // 1. if no slide transition set to 0
@@ -1304,7 +1284,6 @@ export class Player {
       overlap = slide.transitionOverlapTime;
     }
     //if (bettwenSlideEff?.animation.id !== "none") {
-    //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
     //overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     //}
 
@@ -1318,10 +1297,6 @@ export class Player {
     });
     slideTimeline.add(exitTriggerTimeline);
 
-    console.log(
-      convertTimeUnitToMs(data.slide.duration.customValue) -
-        (convertTimeUnitToMs(data.slide.exitDuration.customValue) + overlap)
-    );
     // 3. add slide transitions trigger timeline
     const triggerTimeline = new Timeline({
       id: "triggerTimeline",
@@ -1378,10 +1353,6 @@ export class Player {
           this.normalSlideDataArr?.[slideIdx]?.slide?.duration?.customValue!
         ) - overlap;
 
-      console.log(prevTl.time());
-      console.log(overlapPosition);
-      console.log(prevTl.time() - overlapPosition);
-
       //this.timeOffsetCorrection = Date.now();
       this.playSlide(newSlideIdx, prevTl.time() - overlapPosition); // ); // TODO TODO//- overlap ? overlap / 1000 : 0
     }
@@ -1408,7 +1379,6 @@ export class Player {
     //     }
     //   : undefined;
 
-    // //console.log(bettwenSlideEff);
     // // create breakpoint for slide transition
 
     // // 1. if no slide transition set to 0
@@ -1416,7 +1386,6 @@ export class Player {
     // let overlap = 0;
     // // 2. if animation exit use it
     // if (bettwenSlideEff?.animation.id !== "none") {
-    //   //console.log("!!!!+++!!! OVERLAP: " + bettwenSlideEff?.overlap);
     //   overlap = bettwenSlideEff?.overlap ? bettwenSlideEff?.overlap : 0;
     // }
   }

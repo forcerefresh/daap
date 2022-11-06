@@ -135,9 +135,7 @@ export class Timeline {
   init() {
     logger.debug(`Timeline init (${this.config.name})`);
 
-    console.log(this.config.animationId);
     const animationDef = getPlayerAnimationDefinition(this.config.animationId);
-    console.log(animationDef);
 
     if (animationDef) {
       this.animIns = animationDef.animationFunc();
@@ -164,10 +162,7 @@ export class Timeline {
   }
 
   start(isManual?: boolean, timeCorrection = 0) {
-    logger.debug(`(DISABLED) Timeline start (${this.config.name})`);
-
     logger.debug(`Timeline start (${this.config.name})`);
-    console.timeLog();
 
     this.emit("beforeStart");
 
@@ -199,26 +194,19 @@ export class Timeline {
   }
 
   stop(isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`(DISABLED) Timeline stop (${this.config.name})`);
     logger.debug(`Timeline stop (${this.config.name})`);
-    console.timeLog();
 
-    console.log("111111");
     this.emit("beforeStop");
-    console.log("22222");
 
     //this.playing = false;
 
     this.execStop(isManual, isReverse);
-    console.log("333");
 
     this.timelines.forEach((child) => {
       child.timeline.stop(isManual, isReverse);
     });
-    console.log("444");
 
     this.emit("stop");
-    console.log("5555");
   }
 
   update(time: number, isManual?: boolean) {
