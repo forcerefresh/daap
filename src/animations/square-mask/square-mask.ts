@@ -1,8 +1,8 @@
-import {} from "webslider-sdk2/lib/animations/i-animation-types";
+import {} from "webslider-sdk/lib/animations/i-animation-types";
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { SQUARE_MASK_ANIMATION } from "./square-mask.types";
 import {
   squareMaskDefaults,

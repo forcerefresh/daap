@@ -1,4 +1,4 @@
-import { InputType } from "webslider-sdk2/lib/inputs/i-inputs";
+import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
 import { dev2, IDev2Animation } from "./dev2.types";
 
 export const dev2Definition = {

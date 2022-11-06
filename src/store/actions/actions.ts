@@ -17,7 +17,7 @@ import {
   IObject,
   ItemType,
   ObjectType,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import {
   createObject,
   getDefaultSlide,
@@ -32,13 +32,13 @@ import {
   isIntersectingRect,
   roundNumber,
 } from "../../utils/doom-utils/common";
-import { LayoutChildrenType } from "webslider-sdk2/lib/inputs/i-inputs";
+import { LayoutChildrenType } from "webslider-sdk/lib/inputs/i-inputs";
 import { load } from "webfontloader";
 import { ISettings } from "../reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
-} from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+} from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
 import { ISelection } from "../reducers/selection";
@@ -51,18 +51,18 @@ import { IFormState } from "../reducers/i-uiforms";
 import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
-} from "webslider-sdk2/lib/objects/objects-register";
+} from "webslider-sdk/lib/objects/objects-register";
 import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
 import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "webslider-sdk2/lib/objects/common-properties";
+} from "webslider-sdk/lib/objects/common-properties";
 import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;

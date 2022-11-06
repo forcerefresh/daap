@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { slideAnimation } from "./slide.animation";
 import { slideDefaults, slideDefinition } from "./slide.definition";
 import { SLIDE_ANIMATION } from "./slide.types";

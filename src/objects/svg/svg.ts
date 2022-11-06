@@ -5,33 +5,30 @@ import {
   ISVGCustomColorsInput,
   ISVGInput,
   ISVGValue,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "webslider-sdk2/lib/objects/objects-register";
+import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./svg-icon.svg";
 import {
   addCommonPropertiesToStyle,
   convertTimeUnitToMs,
   rgbColor2cssRgba,
 } from "../../utils/utils";
-import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
+import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   CommonPropertiesTuple,
   CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "webslider-sdk2/lib/objects/common-properties";
+} from "webslider-sdk/lib/objects/common-properties";
 import { RGBColor } from "react-color";
-import {
-  FormType,
-  IFormGroupItem,
-} from "webslider-sdk2/lib/form/i-form-layout";
+import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 
 export const SVG = "svg";
 

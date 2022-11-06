@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { textAnimation } from "./text.animation";
 import { textDefaults, textDefinition } from "./text.definition";
 import { TEXT_ANIMATION } from "./text.types";

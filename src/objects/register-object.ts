@@ -66,7 +66,7 @@ import {
   multiImageSizeUpdate,
   preloadMultiImage,
 } from "./multiple-images/multiple-images";
-import { registerObject } from "webslider-sdk2/lib/objects/objects-register";
+import { registerObject } from "webslider-sdk/lib/objects/objects-register";
 import {
   createRichTextObject,
   richMeta,

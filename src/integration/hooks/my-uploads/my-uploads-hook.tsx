@@ -7,7 +7,7 @@ import {
   VectorData,
   VideoData,
   ExtensionData,
-} from "webslider-sdk2/lib/common/i-media-types";
+} from "webslider-sdk/lib/common/i-media-types";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { v4 as uuid } from "uuid";
 import { remove } from "lodash-es";

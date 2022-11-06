@@ -1,7 +1,7 @@
 import {
   INumericTimelineValue,
   ITextStartPositionValue,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationBase } from "../types";
 
 export const TEXT_ANIMATION = "text-animation";

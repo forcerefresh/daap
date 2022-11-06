@@ -9,7 +9,7 @@ import {
 import {
   IRelativeRotationInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { Label } from "@blueprintjs/core";
 import css from "./relative-rotation-input.module.scss";
 

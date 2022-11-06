@@ -1,21 +1,21 @@
 import React from "react";
-import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
-import { CoreObjectType } from "webslider-sdk2/lib/objects/objects-register";
+import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
+import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
 import {
   ILayout,
   ISlideTransition,
   ITransitions,
   ObjectType,
-} from "webslider-sdk2/lib/objects/i-object";
-import { INavigationValues } from "webslider-sdk2/lib/objects/i-navigation-types";
+} from "webslider-sdk/lib/objects/i-object";
+import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
-import { Breakpoints } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ISlides, SlideType } from "../store/reducers/i-slides";
 import {
   ISlideDuration,
   ISlideExitTime,
-} from "webslider-sdk2/lib/common/i-slider-duration";
+} from "webslider-sdk/lib/common/i-slider-duration";
 
 export interface ITransitionsData {
   customId: string;

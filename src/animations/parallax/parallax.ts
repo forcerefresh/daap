@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionAppDefinition,
   IAnimationExtensionDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { parallaxAnimation } from "./parallax.animation";
 import { parallaxDefaults, parallaxDefinition } from "./parallax.definition";
 import { PARALLAX_ANIMATION } from "./parallax.types";

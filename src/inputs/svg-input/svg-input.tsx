@@ -12,7 +12,7 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { ISVGInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { ISVGInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./svg-input.module.scss";
 
 export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {

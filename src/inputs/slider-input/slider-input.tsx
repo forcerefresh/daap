@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ISliderInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { ISliderInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { FormGroup, Slider } from "@blueprintjs/core";
 import css from "./slider-input.module.scss";
 import classnames from "classnames";

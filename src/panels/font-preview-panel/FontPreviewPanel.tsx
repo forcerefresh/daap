@@ -8,7 +8,7 @@ import {
   addNewObject,
   setExternalFontLoaded,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk2/lib/objects/i-object";
+import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 
 import { load } from "webfontloader";
 import { getGlobals } from "../../globals";

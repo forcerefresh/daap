@@ -5,19 +5,19 @@ import {
   InputType,
   INumberInput,
   ISelectInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import {
   FormType,
   IFormSwitchGroup,
   IFormSwitchGroupItem,
-} from "webslider-sdk2/lib/form/i-form-layout";
+} from "webslider-sdk/lib/form/i-form-layout";
 import { rgbColor2cssRgba } from "../../utils/utils";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
-import { CoreObjectType } from "webslider-sdk2/lib/objects/objects-register";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
+import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
 import {
   ICommonObjectProperties,
   IObject,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import svg from "./spinner-icon.svg";
 
 const SPINNER = "spinner";

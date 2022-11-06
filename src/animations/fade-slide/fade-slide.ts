@@ -1,8 +1,8 @@
-import {} from "webslider-sdk2/lib/animations/i-animation-types";
+import {} from "webslider-sdk/lib/animations/i-animation-types";
 import {
   IAnimationExtensionDefinition,
   IAnimationExtensionAppDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { FADE_SLIDE_ANIMATION } from "./fade-slide.types";
 import { fadeSlideAnimation } from "./fade-slide.animation";
 import {

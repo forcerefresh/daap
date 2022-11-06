@@ -2,7 +2,7 @@ import {
   InputType,
   INumberInput,
   ISplitInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { ISplitAnimation, SPLIT_ANIMATION } from "./split.types";
 

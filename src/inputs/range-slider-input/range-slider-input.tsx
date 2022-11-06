@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   IRangeSliderInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { FormGroup, RangeSlider } from "@blueprintjs/core";
 import css from "./range-slider-input.module.scss";
 import classnames from "classnames";

@@ -1,4 +1,4 @@
-import { MediaItem, MediaType } from "webslider-sdk2/lib/common/i-media-types";
+import { MediaItem, MediaType } from "webslider-sdk/lib/common/i-media-types";
 
 export function getMediaSrc(
   type: MediaType,

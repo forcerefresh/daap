@@ -9,7 +9,7 @@ import {
   tilesStartHandler,
   updateTilesSize,
 } from "../common";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 gsap.registerEffect({
   name: TILES_ZOOM_ANIMATION,

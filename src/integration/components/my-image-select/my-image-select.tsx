@@ -11,7 +11,7 @@ import {
 import {
   MediaDataInfo,
   MediaType,
-} from "webslider-sdk2/lib/common/i-media-types";
+} from "webslider-sdk/lib/common/i-media-types";
 import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
 import { getImageTags } from "../../../utils/tags/tags";
 import { formatBytes, getCroppedFileName } from "../../../utils/utils";
@@ -22,7 +22,7 @@ import {
   dzRejectStyle,
 } from "./common-styles";
 import css from "./my-image-select.module.scss";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface UploadFileInfo {
   tag: string;

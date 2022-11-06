@@ -8,8 +8,8 @@ import { getInheritTimeField } from "../../inputs/input-utils";
 import {
   IInputMetadataValues,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   updateLayer,
   updateObject,
@@ -17,12 +17,12 @@ import {
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
-import { ISlideDuration } from "webslider-sdk2/lib/common/i-slider-duration";
+import { ISlideDuration } from "webslider-sdk/lib/common/i-slider-duration";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
-import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
 
 type IObjectOrLayer = any; // IObject | ILayer;

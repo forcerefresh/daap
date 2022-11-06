@@ -2,13 +2,13 @@ import { addExtensionCode } from "../integration/utils/load-extension";
 import {
   isAnimationRegistered,
   registerExternalAnimation,
-} from "webslider-sdk2/lib/animations/animations-register";
-import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
+} from "webslider-sdk/lib/animations/animations-register";
+import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import {
   isObjectRegistered,
   registerExternalObject,
-} from "webslider-sdk2/lib/objects/objects-register";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+} from "webslider-sdk/lib/objects/objects-register";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export async function loadAndRegisterExternalComponent(
   extension: IExtensionItem

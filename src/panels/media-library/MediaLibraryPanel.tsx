@@ -7,9 +7,9 @@ import { Tab, Tabs } from "@blueprintjs/core";
 import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
-import { ObjectType } from "webslider-sdk2/lib/objects/i-object";
+import { ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { IntegrationContext } from "../../integration";
-import { ImageData, VectorData } from "webslider-sdk2/lib/common/i-media-types";
+import { ImageData, VectorData } from "webslider-sdk/lib/common/i-media-types";
 import { fetchMock } from "../vector-library-panel/mock";
 
 export enum Panels {

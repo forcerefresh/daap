@@ -17,7 +17,7 @@ import {
   ItemType,
   ITransition,
   ITransitions,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import {
   updateLayer,
   updateObject,
@@ -28,7 +28,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";
 import { IStore } from "../../store/store";
 import { flattenForm } from "../../utils/form-layout/form-layout";
-import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import { AnimationConfigurationForm } from "../animation-configuration/AnimationConfigurationForm";
 
 import css from "./AnimationPanelTabs.module.scss";
@@ -40,7 +40,7 @@ import {
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { getCheckboxField } from "../../inputs/input-utils";
 
 type IAnimationPanel = typeof mapDispatchToProps &

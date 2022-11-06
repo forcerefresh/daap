@@ -12,12 +12,12 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { IImageInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { IImageInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
-import { ImageItem } from "webslider-sdk2/lib/common/i-media-types";
+import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
 import { getButtonGroupField, getTextArea, getTextField } from "../input-utils";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;

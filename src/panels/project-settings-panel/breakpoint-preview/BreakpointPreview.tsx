@@ -1,7 +1,7 @@
 import React from "react";
 import cx from "classnames";
 import css from "./BreakpointPreview.module.scss";
-import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 /* width and height of preview box*/
 export const PREVIEW_SIZE = 220;

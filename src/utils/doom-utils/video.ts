@@ -1,4 +1,4 @@
-import { VideoItem } from "webslider-sdk2/lib/common/i-media-types";
+import { VideoItem } from "webslider-sdk/lib/common/i-media-types";
 
 function createCanvas(w: number, h: number) {
   const canvas = document.createElement("canvas");

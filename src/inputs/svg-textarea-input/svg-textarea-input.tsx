@@ -18,7 +18,7 @@ import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import {
   ISVGTextAreaInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./svg-textarea-input.module.scss";
 
 export const SVGTextAreaInputForm: React.FC<

@@ -1,6 +1,6 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { FADE_ANIMATION, IFadeAnimation } from "./fade.types";
 

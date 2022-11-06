@@ -6,8 +6,8 @@ import { getInputFormWithOptions } from "../../../inputs/input-factory";
 import {
   IInputMetadataValues,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   updateLayer,
   updateObject,
@@ -19,7 +19,7 @@ import { IStore } from "../../../store/store";
 import FormWithLayout, {
   flattenForm,
 } from "../../../utils/form-layout/form-layout";
-import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./CommonStyleProperties.module.scss";
 
 type IObjectOrLayer = any; // IObject | ILayer;

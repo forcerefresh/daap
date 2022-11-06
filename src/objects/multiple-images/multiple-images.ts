@@ -4,15 +4,15 @@ import {
   IImageInputValue,
   IMultiImageInput,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import svg from "./multiple-images-icon.svg";
-import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
+import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
@@ -21,7 +21,7 @@ import {
   GetAssetsUrlFuncReturnType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
-} from "webslider-sdk2/lib/objects/objects-register";
+} from "webslider-sdk/lib/objects/objects-register";
 
 const MULTI_IMAGE = "multi_image";
 

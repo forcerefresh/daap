@@ -1,7 +1,7 @@
 import {
   IAnimationExtensionAppDefinition,
   IAnimationExtensionDefinition,
-} from "webslider-sdk2/lib/animations/animations-register";
+} from "webslider-sdk/lib/animations/animations-register";
 import { FLIP_SLIDE_ANIMATION } from "./flip-slide.types";
 import { flipSlideAnimation } from "./flip-slide.animation";
 import {

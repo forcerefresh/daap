@@ -3,7 +3,7 @@ import cx from "classnames";
 import { isEqual, uniqWith } from "lodash-es";
 import React from "react";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { ISplitInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { ISplitInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./split-input.module.scss";
 
 /*export const LocalToaster = Toaster.create({

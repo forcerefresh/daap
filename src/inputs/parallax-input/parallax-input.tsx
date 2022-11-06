@@ -1,13 +1,13 @@
 import { Label } from "@blueprintjs/core";
 import { cloneDeep } from "lodash-es";
 import React, { useEffect } from "react";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { ILayer } from "../../store/reducers/i-layers";
 import { getCheckboxField, getNumericFiled } from "../input-utils";
 import {
   IParallaxInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./parallax-input.module.scss";
 
 const DEFAULT_DEPTH = 5;

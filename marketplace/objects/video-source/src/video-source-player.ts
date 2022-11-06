@@ -8,11 +8,11 @@ import {
   PreloadFuncPropsType,
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
-} from "webslider-sdk2/lib/objects/objects-register";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+} from "webslider-sdk/lib/objects/objects-register";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoSourceValues } from "./video-source-types";
 import { VIDEOSourceConnector } from "./video-source-connector";
-import { getOrCreateConnectorById } from "webslider-sdk2/lib/connectors/connector-manager";
+import { getOrCreateConnectorById } from "webslider-sdk/lib/connectors/connector-manager";
 
 /**
  * This function return html used in Web Slider Player

@@ -3,8 +3,8 @@
 import { remove } from "lodash-es";
 import { IPlayerData } from "../../../export/i-export-html";
 import { v4 as uuid } from "uuid";
-import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
-import { GetAssetsUrlFuncReturnType } from "webslider-sdk2/lib/objects/objects-register";
+import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
+import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
 import { IStore } from "../../../store/store";
 
 export const useTemplateHook = () => {

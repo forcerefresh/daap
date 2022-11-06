@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Button, Label, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./SavePanel.module.scss";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   updateObject,
   updateProjectMeta,
@@ -20,7 +20,7 @@ import {
 } from "../../inputs/input-utils";
 import { IMeta } from "../../store/reducers/meta";
 import { generatePlayerData, getAllAssetsUrls } from "../../export/export-html";
-import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 

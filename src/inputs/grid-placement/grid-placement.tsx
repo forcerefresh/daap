@@ -4,7 +4,7 @@ import { getButtonGroupField, getNumericFiled } from "../input-utils";
 import {
   IGridPlacementInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./grid-placement.module.scss";
 import classnames from "classnames";
 import { Button, Label } from "@blueprintjs/core";
@@ -14,8 +14,8 @@ import {
   getIconStyle,
 } from "../../panels/action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
-import { DeviceType } from "webslider-sdk2/lib/common/i-device-type";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 
 export const GridPlacementInputForm: React.FC<
   IGridPlacementInput & IUpdateInput

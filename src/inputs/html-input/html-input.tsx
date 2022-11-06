@@ -17,7 +17,7 @@ import {
   IHTMLInput,
   ISVGInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./svg-input.module.scss";
 
 export const HTMLInputForm: React.FC<IHTMLInput & IUpdateInput> = (props) => {

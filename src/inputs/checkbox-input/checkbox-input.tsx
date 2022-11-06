@@ -9,7 +9,7 @@ import React from "react";
 import {
   ICheckboxInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 
 export const CheckboxInputForm: React.FC<
   ICheckboxInput & IUpdateInput & { inputProps: ICheckboxProps }

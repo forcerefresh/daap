@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ITextAreaInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props

@@ -3,8 +3,8 @@ import {
   ICheckboxInput,
   InputType,
   ITextInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   CreateObjectFuncPropsType,
   CreateObjectFuncReturnType,
@@ -13,8 +13,8 @@ import {
   GetHtmlFuncPropsType,
   GetHtmlFuncReturnType,
   ObjectMetaType,
-} from "webslider-sdk2/lib/objects/objects-register";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+} from "webslider-sdk/lib/objects/objects-register";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoSourceValues, VIDEO_SOURCE } from "./video-source-types";
 import svgIcon from "../static/video-source-icon.svg";
 

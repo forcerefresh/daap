@@ -1,5 +1,5 @@
 import { ImageValues } from "../objects/image/image";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { ISlide } from "../store/reducers/i-slides";

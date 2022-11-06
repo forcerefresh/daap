@@ -10,8 +10,8 @@ import {
   getHtmlForApp,
   objectMeta,
 } from "./src/video-source-unmute-app";
-import { IObjectAppDefinition } from "webslider-sdk2/lib/objects/objects-register";
-import { addAppObjectToGlobalScope } from "webslider-sdk2/lib/objects/object-utils";
+import { IObjectAppDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { addAppObjectToGlobalScope } from "webslider-sdk/lib/objects/object-utils";
 
 export const ObjectDefinition: IObjectAppDefinition = {
   type: VIDEO_SOURCE_UNMUTE,

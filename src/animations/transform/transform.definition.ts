@@ -3,7 +3,7 @@ import {
   ITimelinePoint,
   ITimelinesInput,
   ITimelineValue,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { TRANSFORM_ANIMATION, ITransformAnimation } from "./transform.types";
 

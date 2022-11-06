@@ -6,7 +6,7 @@ import { getUnitNumericFiled } from "../input-utils";
 import {
   ICornerRadiusInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./corner-radius-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;

@@ -8,8 +8,8 @@ import {
   PreloadFuncPropsType,
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
-} from "webslider-sdk2/lib/objects/objects-register";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+} from "webslider-sdk/lib/objects/objects-register";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoTargetValues } from "./video-target-types";
 import { calculateSize } from "./video-target-utils";
 

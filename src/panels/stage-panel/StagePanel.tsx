@@ -39,7 +39,7 @@ import {
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { IObject, ObjectType } from "webslider-sdk2/lib/objects/i-object";
+import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import {
   applyRectValuesToElement,
   getMousePosition,
@@ -51,7 +51,7 @@ import {
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
-import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import {
   calculateObjectSize,
   getAbsoluteLayoutSize,
@@ -71,9 +71,9 @@ import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
-import { ILayoutChildrenValue } from "webslider-sdk2/lib/inputs/i-inputs";
+import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 interface ISize {
   width: number;

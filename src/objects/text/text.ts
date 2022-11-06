@@ -9,14 +9,14 @@ import {
   ISelectInput,
   ITextAreaInput,
   IUnitsNumberInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { nl2br } from "../../utils/doom-utils/common";
 import {
   ICommonObjectProperties,
   IObject,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import svg from "./text-icon.svg";
 import {
   CommonPropertiesTuple,
@@ -24,7 +24,7 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "webslider-sdk2/lib/objects/common-properties";
+} from "webslider-sdk/lib/objects/common-properties";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 
 export const TEXT = "text";

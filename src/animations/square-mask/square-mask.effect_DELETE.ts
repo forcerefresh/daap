@@ -1,6 +1,6 @@
 import gsap from "gsap";
 import { RGBColor } from "react-color";
-import { INumericTimelineValue } from "webslider-sdk2/lib/inputs/i-inputs";
+import { INumericTimelineValue } from "webslider-sdk/lib/inputs/i-inputs";
 import { getMethodByType } from "../common";
 import { IAnimationBase } from "../types";
 import {

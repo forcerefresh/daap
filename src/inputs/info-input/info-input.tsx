@@ -1,6 +1,6 @@
 import { FormGroup } from "@blueprintjs/core";
 import React, { useMemo } from "react";
-import { IInfoInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { IInfoInput } from "webslider-sdk/lib/inputs/i-inputs";
 
 export const InfoInputForm: React.FC<IInfoInput> = (props) => {
   const { displayName, helperText } = props;

@@ -20,8 +20,8 @@ import settingsCss from "../settings-panel/SettingsPanel.module.scss";
 import { Breakpoint } from "./breakpoint-component/Breakpoint";
 import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
 import { ISettings } from "../../store/reducers/i-settings";
-import { Breakpoints } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
-import { IGlobalSlideOverlapTime } from "webslider-sdk2/lib/common/i-slider-duration";
+import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 
 enum ProjectPanelSections {
   Slider = "Slider",

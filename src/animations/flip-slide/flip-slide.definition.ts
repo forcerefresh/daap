@@ -1,4 +1,4 @@
-import { InputType, INumberInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { InputType, INumberInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideAnimation } from "./flip-slide.types";
 

@@ -2,7 +2,7 @@ import {
   InputType,
   INumberInput,
   ISelectInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { FLIP_ANIMATION, IFlipAnimation } from "./flip.types";
 

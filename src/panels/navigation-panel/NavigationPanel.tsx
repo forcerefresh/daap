@@ -11,13 +11,13 @@ import FormWithLayout, {
 import {
   IInputMetadataValues,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { navigationDefinition } from "../../objects/navigation-form";
 import { updateObject } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
 import css from "./NavigationPanel.module.scss";
-import { IFormLayoutItem } from "webslider-sdk2/lib/form/i-form-layout";
+import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 
 type IPropertiesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;

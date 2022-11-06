@@ -3,7 +3,7 @@ import { Button, ButtonGroup, FormGroup } from "@blueprintjs/core";
 import {
   IButtonGroupInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./button-group-input.module.scss";
 
 export const ButtonGroupInputForm: React.FC<

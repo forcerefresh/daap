@@ -3,7 +3,7 @@ import classnames from "classnames";
 import { isEqual, noop } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import { getCheckboxField } from "../input-utils";
-import { INumberInput, IUpdateInput } from "webslider-sdk2/lib/inputs/i-inputs";
+import { INumberInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./number-input.module.scss";
 
 export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (

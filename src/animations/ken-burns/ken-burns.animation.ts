@@ -1,4 +1,4 @@
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
 import { IKenBurnsAnimation, KEN_BURNS_ANIMATION } from "./ken-burns.types";

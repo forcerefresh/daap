@@ -9,16 +9,16 @@ import {
   CoreObjectType,
   getPlayerObjectDefinition,
   PreloadOrder,
-} from "webslider-sdk2/lib/objects/objects-register";
+} from "webslider-sdk/lib/objects/objects-register";
 import {
   ILayout,
   ISlideTransition,
   NavigationType,
-} from "webslider-sdk2/lib/objects/i-object";
-import { INavigationValues } from "webslider-sdk2/lib/objects/i-navigation-types";
+} from "webslider-sdk/lib/objects/i-object";
+import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types";
 import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
-import { BreakpointConfiguration } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
-import { DeviceType } from "webslider-sdk2/lib/common/i-device-type";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import {
@@ -29,7 +29,7 @@ import {
   IEventTimeline,
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";

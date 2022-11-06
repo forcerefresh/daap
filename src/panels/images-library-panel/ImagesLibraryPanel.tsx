@@ -20,7 +20,7 @@ import {
   Text,
 } from "@blueprintjs/core";
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk2/lib/objects/i-object";
+import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, noop, startsWith } from "lodash-es";
 import classnames from "classnames";
@@ -32,7 +32,7 @@ import {
   MediaType,
   VideoData,
   VideoItem,
-} from "webslider-sdk2/lib/common/i-media-types";
+} from "webslider-sdk/lib/common/i-media-types";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";

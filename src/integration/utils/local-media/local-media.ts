@@ -1,5 +1,5 @@
 // used for dev mode only
-import { MediaItem, MediaType } from "webslider-sdk2/lib/common/i-media-types";
+import { MediaItem, MediaType } from "webslider-sdk/lib/common/i-media-types";
 
 /**
  * used for dev mode only, returns image from local storage

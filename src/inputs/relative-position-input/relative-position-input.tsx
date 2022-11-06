@@ -3,7 +3,7 @@ import cx from "classnames";
 import {
   IRelativePositionInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import {
   getCheckboxField,
   getNumericFiled,

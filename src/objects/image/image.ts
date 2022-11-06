@@ -5,12 +5,12 @@ import {
   IImageInput,
   IImageInputValue,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
   IObject,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import {
   GetAssetsUrlFuncPropsType,
@@ -18,9 +18,9 @@ import {
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
   PreloadOrder,
-} from "webslider-sdk2/lib/objects/objects-register";
+} from "webslider-sdk/lib/objects/objects-register";
 import svg from "./image-icon.svg";
-import { getObjectPlaceholder } from "webslider-sdk2/lib/objects/object-helpers";
+import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { addCommonPropertiesToStyle } from "../../utils/utils";
 import {
   CommonPropertiesTuple,
@@ -28,15 +28,15 @@ import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
-} from "webslider-sdk2/lib/objects/common-properties";
+} from "webslider-sdk/lib/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { ImageItem } from "webslider-sdk2/lib/common/i-media-types";
+import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
 import { cloneDeep } from "lodash-es";
 import {
   addTransformPropertiesToStyle,
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
-} from "webslider-sdk2/lib/objects/transform-properties";
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const IMAGE = "image";
 

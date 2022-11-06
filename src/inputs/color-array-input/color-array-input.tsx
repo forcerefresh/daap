@@ -4,7 +4,7 @@ import { getColorField } from "../input-utils";
 import {
   IColorArrayInput,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { cloneDeep } from "lodash";
 import css from "./color-array-input.module.scss";
 

@@ -1,8 +1,8 @@
 // *** this file contains implementation for development
 
-import { IExtensionItem } from "webslider-sdk2/lib/objects/i-extensions";
+import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import JSZip from "jszip";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */

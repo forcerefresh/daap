@@ -2,7 +2,7 @@ import {
   InputType,
   INumberInput,
   ITransformOriginInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "../types";
 import { IKenBurnsAnimation, KEN_BURNS_ANIMATION } from "./ken-burns.types";
 

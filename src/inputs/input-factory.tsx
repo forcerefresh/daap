@@ -1,5 +1,5 @@
 import React from "react";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BorderColorInputForm } from "./border-color-input/border-color-input";
 import { ILayer } from "../store/reducers/i-layers";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
@@ -22,7 +22,7 @@ import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import {
   IInputMetadataValues,
   InputType,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { UnitsNumberInputForm } from "./units-number-input/units-number-input";
 import { VideoInputForm } from "./video-input/video-input";
 import { ColorArrayInputForm } from "./color-array-input/color-array-input";
@@ -42,7 +42,7 @@ import { OptionalInput } from "./optional-input/optional-input";
 import { SizeInputForm } from "./size-input/size-input";
 import { SnapInputForm } from "./snap-input/snap-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
-import { Breakpoints } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
+import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { InheritableTimeInputForm } from "./slide-duration-input/slide-duration-input";
 import { InfoInputForm } from "./info-input/info-input";
 import { BorderInputForm } from "./border-input/border-input";

@@ -6,12 +6,12 @@ import {
   IObject,
   ISnapLayouts,
   ObjectType,
-} from "webslider-sdk2/lib/objects/i-object";
+} from "webslider-sdk/lib/objects/i-object";
 import {
   BreakpointConfiguration,
   Breakpoints,
-} from "webslider-sdk2/lib/common/i-breakpoint-configuration";
-import { DeviceType } from "webslider-sdk2/lib/common/i-device-type";
+} from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
 import cx from "classnames";
 
@@ -19,7 +19,7 @@ import css from "./StagePanel.module.scss";
 import { Header1 } from "./preview/Header1/Header1";
 import { RGBColor } from "react-color";
 import { Body1 } from "./preview/Body1/Body1";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export function calculateObjectSizePerDevice(
   object: IObject,

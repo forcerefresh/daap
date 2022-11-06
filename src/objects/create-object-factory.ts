@@ -6,18 +6,18 @@ import {
   InputType,
   SourceImagePropertiesTuple,
   SourceImageValues,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { ISlide, SlideType } from "../store/reducers/i-slides";
-import { FormType } from "webslider-sdk2/lib/form/i-form-layout";
-import { getAppObjectDefinition } from "webslider-sdk2/lib/objects/objects-register";
+import { FormType } from "webslider-sdk/lib/form/i-form-layout";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 import { createSvgObject, SVG } from "./svg/svg";
 import {
   ICommonObjectProperties,
   IObject,
   ITransitions,
   ObjectType,
-} from "webslider-sdk2/lib/objects/i-object";
-import { createCommonObject } from "webslider-sdk2/lib/objects/create-common-object";
+} from "webslider-sdk/lib/objects/i-object";
+import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 
 /**
  * Exclude from T those types that are assignable to U

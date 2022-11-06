@@ -1,5 +1,5 @@
 import { RGBColor } from "react-color";
-import { logger } from "webslider-sdk2/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITrianglifyAnimation, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 import trianglify from "trianglify";

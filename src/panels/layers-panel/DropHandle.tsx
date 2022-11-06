@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useDrop } from "react-dnd";
-import { IObject } from "webslider-sdk2/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import css from "./LayersPanel.module.scss";
 import cx from "classnames";
 

@@ -1,6 +1,6 @@
 import { RGBColor } from "react-color";
-import { Breakpoints } from "webslider-sdk2/lib/common/i-breakpoint-configuration";
-import { IGlobalSlideOverlapTime } from "webslider-sdk2/lib/common/i-slider-duration";
+import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 
 export interface ISettings {
   // slide config

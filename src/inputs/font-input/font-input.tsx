@@ -6,7 +6,7 @@ import {
   IFontSelectInput,
   IFontSelectInputValue,
   IUpdateInput,
-} from "webslider-sdk2/lib/inputs/i-inputs";
+} from "webslider-sdk/lib/inputs/i-inputs";
 
 const DELIMITER = "[DELIMITER]";
 

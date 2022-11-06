@@ -14,9 +14,9 @@ import {
   ITimelinesValue,
   ITimelineValue,
   ITimelinePoint,
-} from "webslider-sdk2/lib/inputs/i-inputs";
-import { convertTimeUnitToMs } from "webslider-sdk2/lib/objects/object-utils";
-import { AnimeJSEasingOptions } from "webslider-sdk2/lib/animations/i-animation-types";
+} from "webslider-sdk/lib/inputs/i-inputs";
+import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
+import { AnimeJSEasingOptions } from "webslider-sdk/lib/animations/i-animation-types";
 import { getSelectField, getUnitNumericFiled } from "../input-utils";
 import { getInputForm } from "../input-factory";
 import {
