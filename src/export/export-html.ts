@@ -148,6 +148,12 @@ export function generatePlayerData(
 
   html += "</div>"; //slides holder close
 
+  const playerExtensions = extensions
+    .filter((item) => extensionTypes.indexOf(item.type) !== -1)
+    .map((extension) =>
+      pick(extension, "name", "type", "componentType", "packageFiles")
+    );
+
   return {
     html,
     slideDataArr,
@@ -162,9 +168,7 @@ export function generatePlayerData(
       pageHeight: breakpointConfig.normal.page.height,
     },
     breakpoints: cloneDeep(breakpoints),
-    extensions: extensions.filter(
-      (item) => extensionTypes.indexOf(item.type) !== -1
-    ),
+    extensions: playerExtensions as any, //IExtensionItemForPlayer
   };
 }
 

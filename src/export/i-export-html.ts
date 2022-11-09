@@ -3,7 +3,6 @@ import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
 import {
   ILayout,
-  ISlideTransition,
   ITransitions,
   ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
