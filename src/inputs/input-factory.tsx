@@ -67,6 +67,9 @@ export function getInputFormWithOptions<T>(
     onChangeDevice?: (device: string) => void;
   }
 ): React.ReactElement | undefined {
+  console.log("OPTIONS");
+  console.log(data);
+
   // force DISABLED if metadata.disabled===true
   if (inputProps?.metadata?.disabled) {
     if (!inputProps.inputProps) inputProps.inputProps = {};
@@ -94,14 +97,16 @@ export function getInputForm<T>(
   onInput?: (config: any) => void,
   data?: {
     layerData?: {
-      layer?: ILayer;
-      objects?: IObject[];
+      layer?: ILayer | null;
+      objects?: IObject[] | null;
     };
     breakpoints?: Breakpoints;
     selectedDevice?: string;
     onChangeDevice?: (device: string) => void;
   }
 ): React.ReactElement | undefined {
+  console.log("GET");
+  console.log(data);
   const key = inputProps.propertyName || inputProps.id;
 
   switch (inputType) {

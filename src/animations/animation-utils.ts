@@ -5,6 +5,13 @@ export function getObjectElementById(id: string): HTMLDivElement {
   return el;
 }
 
+export function getLayerElementById(id: string): HTMLDivElement {
+  const el = document.getElementsByClassName(
+    `layer-${id}`
+  )[0] as HTMLDivElement;
+  return el;
+}
+
 // used for all tiles animations
 export function getParameters(
   rows: number,

@@ -15,7 +15,11 @@ import {
   getTextField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
-import { ITransition } from "webslider-sdk/lib/objects/i-object";
+import {
+  ILayer,
+  IObject,
+  ITransition,
+} from "webslider-sdk/lib/objects/i-object";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
@@ -41,6 +45,8 @@ export interface IAnimationConfigurationForm {
   transition: ITransition;
   onTransitionChange: (transition: ITransition) => void;
   onRemove: () => void;
+  layer: ILayer | null;
+  layerObjects: IObject[] | null;
 }
 
 export const AnimationConfigurationForm: React.FC<
@@ -52,6 +58,8 @@ export const AnimationConfigurationForm: React.FC<
     objectType,
     onTransitionChange,
     onRemove,
+    layer,
+    layerObjects,
     /*objectOrLayerId: objectId,
     objectType,
     objectById,
@@ -122,10 +130,10 @@ export const AnimationConfigurationForm: React.FC<
         };
         return {
           input: getInputForm(item.inputType, inputProps, onChange, onChange, {
-            /*layerData: {
-              layer: objectOrLayer as ILayer,
+            layerData: {
+              layer: layer,
               objects: layerObjects,
-            },*/
+            },
           }),
           propertyName: item.propertyName,
           duplicate: "",

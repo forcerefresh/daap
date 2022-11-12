@@ -1,12 +1,4 @@
-import {
-  Button,
-  HTMLSelect,
-  Icon,
-  Tab,
-  Tabs,
-  Tag,
-  Tooltip,
-} from "@blueprintjs/core";
+import { HTMLSelect, Icon, Tab, Tabs, Tag } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { ChangeEvent, useState } from "react";
@@ -41,7 +33,6 @@ import {
   getAppAnimationDefinition,
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
-import { getCheckboxField } from "../../inputs/input-utils";
 
 type IAnimationPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -65,6 +56,8 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     _updateObject,
     _updateSlide,
     objectType,
+    layer,
+    layerObjects,
   } = props;
 
   const sections = getAnimationTypesForItem(itemType);
@@ -349,7 +342,8 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
                   animationType={section}
                   objectType={objectType}
                   transition={transitions?.[section]?.[selectedNo[section]]!}
-                  //layerObjects={layerObjects}
+                  layer={layer}
+                  layerObjects={layerObjects}
                   onTransitionChange={(value) => {
                     transitionChangeHandler(
                       selectedNo[section],
@@ -392,6 +386,12 @@ const mapStateToProps = (state: IStore) => {
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
 
+  const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
+  let layerObjects: IObject[] | null = null;
+  if (layer) {
+    layerObjects = layer?.objectIds.map((id: any) => objects.objectById[id]);
+  }
+
   let objectType;
   if (selection.selectionForProperties?.type === "object" && object) {
     objectType = object.type;
@@ -402,6 +402,8 @@ const mapStateToProps = (state: IStore) => {
     objectById: objects.objectById,
     layerById: layers.layerById,
     slideById: slides.slideById,
+    layer,
+    layerObjects,
   };
 };
 

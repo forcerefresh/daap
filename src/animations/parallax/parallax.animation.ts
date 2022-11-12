@@ -1,5 +1,5 @@
 import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
+import { getLayerElementById, getObjectElementById } from "../animation-utils";
 import { IParallaxAnimation, PARALLAX_ANIMATION } from "./parallax.types";
 
 const logger = createLogger();
@@ -18,7 +18,17 @@ export function parallaxAnimation() {
   function init(config: IParallaxAnimation) {
     logger.debug(`${PARALLAX_ANIMATION} init`);
 
-    layer = document.getElementsByClassName("layer")[0] as HTMLDivElement;
+    layer = getLayerElementById(config.itemId!);
+
+    const scrollElement = layer?.closest(".preview-scrollable-holder");
+    console.log(scrollElement);
+
+    scrollElement?.addEventListener("scroll", () => {
+      console.log(scrollElement.scrollTop);
+      applyParallaxToAll(0, -scrollElement.scrollTop);
+    });
+
+    // layer = document.getElementsByClassName("layer")[0] as HTMLDivElement;
     config.parallax.objects.forEach((object, idx) => {
       const objEl = getObjectElementById(object.id);
 

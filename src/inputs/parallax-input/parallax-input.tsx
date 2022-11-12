@@ -16,12 +16,15 @@ export const ParallaxInputForm: React.FC<
   IParallaxInput &
     IUpdateInput & {
       layerData?: {
-        layer?: ILayer;
-        objects?: IObject[];
+        layer?: ILayer | null;
+        objects?: IObject[] | null;
       };
     }
 > = (props) => {
   const { displayName, value, onChange, layerData } = props;
+
+  console.log(layerData);
+  console.log(value);
 
   const objects = layerData?.objects || [];
 
