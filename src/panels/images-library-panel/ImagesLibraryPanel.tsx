@@ -458,7 +458,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                     setSelectedResolution(sizeAlias);
                                   }}
                                 >
-                                  {oneimg?.size.width}px x {oneimg?.size.height}
+                                  {oneimg?.size?.width}px x{" "}
+                                  {oneimg?.size?.height}
                                   px {sizeAlias === "original" && "(original)"}
                                 </Checkbox>
                               </p>

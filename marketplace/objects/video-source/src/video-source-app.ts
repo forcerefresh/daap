@@ -14,10 +14,11 @@ import {
   GetHtmlFuncReturnType,
   ObjectMetaType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoSourceValues, VIDEO_SOURCE } from "./video-source-types";
 import svgIcon from "../static/video-source-icon.svg";
 
+const logger = createLogger();
 /**
  * This is a type definition of Object properties form
  * Note: Generic values needs to match with ObjectValues interface

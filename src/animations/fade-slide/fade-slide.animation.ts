@@ -1,6 +1,8 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import anime from "animejs";
 import { FADE_SLIDE_ANIMATION, IFadeSlideAnimation } from "./fade-slide.types";
+
+const logger = createLogger();
 
 export function fadeSlideAnimation() {
   let timeline: anime.AnimeTimelineInstance;

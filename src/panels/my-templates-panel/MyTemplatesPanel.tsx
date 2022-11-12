@@ -21,8 +21,10 @@ import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./MyTemplatesPanel.module.scss";
+
+const logger = createLogger();
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;

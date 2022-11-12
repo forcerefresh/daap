@@ -12,15 +12,13 @@ import {
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import htmlIcon from "./html-icon.svg";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const HTML = "html";
 

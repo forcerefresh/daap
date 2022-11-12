@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import {
   createTilesFromHtml,
@@ -8,6 +8,8 @@ import {
   updateTilesSize,
 } from "../common";
 import { ITilesFadeAnimation, TILES_FADE_ANIMATION } from "./tiles-fade.types";
+
+const logger = createLogger();
 
 export function tilesFadeAnimation() {
   let timeline: gsap.core.Timeline;

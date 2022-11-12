@@ -16,12 +16,10 @@ import {
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import arrowIcon from "./arrow-icon.svg";
-import { convertTimeUnitToMs, rgbColor2cssRgba } from "../../utils/utils";
-import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
-import { DelayPropertiesTuple } from "../delay/delay";
 import { replaceColors } from "../../export/export-html";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 
 const ARROW = "arrow";
 
@@ -216,24 +214,24 @@ export function getArrowHtml(props: {
 
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasStrokeFill
-      ? `fill: ${rgbColor2cssRgba(svgValues.fill)};
+      ? `fill: ${convertRGBColor2RGBAString(svgValues.fill)};
       `
       : "";
   const stroke =
     !svgValuesMetadata["stroke"].disabled && svgValues.hasStrokeFill
-      ? `stroke: ${rgbColor2cssRgba(svgValues.stroke)};
+      ? `stroke: ${convertRGBColor2RGBAString(svgValues.stroke)};
       `
       : "";
 
   // hover START>>
   const hoverFill =
     !svgValuesMetadata["hoverFill"].disabled && svgValues.hasHover
-      ? `fill: ${rgbColor2cssRgba(svgValues.hoverFill)};
+      ? `fill: ${convertRGBColor2RGBAString(svgValues.hoverFill)};
      `
       : "";
   const hoverStroke =
     !svgValuesMetadata["hoverStroke"].disabled && svgValues.hasHover
-      ? `stroke: ${rgbColor2cssRgba(svgValues.hoverStroke)};
+      ? `stroke: ${convertRGBColor2RGBAString(svgValues.hoverStroke)};
      `
       : "";
   // hover END <<

@@ -8,7 +8,8 @@ import {
   isObjectRegistered,
   registerExternalObject,
 } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export async function loadAndRegisterExternalComponent(
   extension: IExtensionItem

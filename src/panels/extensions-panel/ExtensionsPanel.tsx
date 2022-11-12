@@ -10,8 +10,10 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./ExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
+
+const logger = createLogger();
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;

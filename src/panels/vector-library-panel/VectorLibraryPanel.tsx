@@ -6,7 +6,6 @@ import css from "./VectorLibraryPanel.module.scss";
 import {
   Alert,
   Button,
-  Checkbox,
   Icon,
   InputGroup,
   Intent,
@@ -20,15 +19,16 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, noop, uniq } from "lodash-es";
+import { debounce, filter, noop } from "lodash-es";
 import { MediaType, VectorData } from "webslider-sdk/lib/common/i-media-types";
 import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { is } from "immer/dist/internal";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
+
+const logger = createLogger();
 
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;

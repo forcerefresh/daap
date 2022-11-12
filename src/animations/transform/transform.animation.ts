@@ -1,8 +1,10 @@
 import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITransformAnimation } from "./transform.types";
 import anime from "animejs";
+
+const logger = createLogger();
 
 function getPointValue(property: string, value: string | number | any) {
   switch (property) {

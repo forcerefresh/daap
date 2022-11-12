@@ -1,10 +1,10 @@
-import { isArray, isEmpty, noop, uniq, uniqWith } from "lodash-es";
+import { isArray, isEmpty, noop, uniqWith } from "lodash-es";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { RGBColor } from "react-color";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { rgbColor2cssRgba } from "../../utils/utils";
 import { getButtonGroupField, getColorField } from "../input-utils";
 import { ISVGInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import css from "./svg-input.module.scss";
 
 const MAX_COLORS = 50;
@@ -38,7 +38,9 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
 
   const getColorsMemo = useMemo(() => {
     return uniqWith(getColors(value.source), (col1: any, col2: any) => {
-      return rgbColor2cssRgba(col1) === rgbColor2cssRgba(col2);
+      return (
+        convertRGBColor2RGBAString(col1) === convertRGBColor2RGBAString(col2)
+      );
     });
   }, [value.source]);
 
@@ -46,7 +48,9 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
     return <div>SVG does not contain colors for editing.</div>;
 
   const uniqueColors = uniqWith(value.colors, (col1: any, col2: any) => {
-    return rgbColor2cssRgba(col1) === rgbColor2cssRgba(col2);
+    return (
+      convertRGBColor2RGBAString(col1) === convertRGBColor2RGBAString(col2)
+    );
   });
 
   const arrayToShow =
@@ -93,7 +97,10 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
             } else {
               const oldColor = uniqueColors[idx];
               newColors = newColors.map((col) => {
-                if (rgbColor2cssRgba(col) === rgbColor2cssRgba(oldColor)) {
+                if (
+                  convertRGBColor2RGBAString(col) ===
+                  convertRGBColor2RGBAString(oldColor)
+                ) {
                   return { ...newCol };
                 }
                 return col;

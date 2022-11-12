@@ -1,7 +1,8 @@
 import { registerExternalAnimation } from "webslider-sdk/lib/animations/animations-register";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { registerExternalObject } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export async function loadAndRegisterExternalComponentForPlayer(
   extension: IExtensionItem

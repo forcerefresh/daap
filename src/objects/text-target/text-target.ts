@@ -20,14 +20,12 @@ import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import svg from "./text-target.svg";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { JSONSourceConnector } from "../json-loader/json-source-connector";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const TEXT_TARGET = "text_target";
 

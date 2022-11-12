@@ -1,6 +1,6 @@
 import React from "react";
 import { RGBColor } from "react-color";
-import { getBgColor } from "../../../../utils/utils";
+import { convertRGBColor2CSSProperties } from "../../../../utils/utils";
 import css from "./Header1.module.scss";
 
 export interface Header1Props {
@@ -15,7 +15,7 @@ export const Header1: React.FC<Header1Props> = (props) => {
   } = props;
 
   const itemStyle: React.CSSProperties = {
-    ...getBgColor(itemsColor),
+    ...convertRGBColor2CSSProperties(itemsColor),
   };
 
   return (

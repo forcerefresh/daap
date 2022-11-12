@@ -10,7 +10,8 @@ import {
   getImageFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export const useMyMediaHook = () => {
   const upload = async (

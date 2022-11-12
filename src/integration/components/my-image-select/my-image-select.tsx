@@ -22,7 +22,8 @@ import {
   dzRejectStyle,
 } from "./common-styles";
 import css from "./my-image-select.module.scss";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export interface UploadFileInfo {
   tag: string;

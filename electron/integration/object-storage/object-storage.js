@@ -425,6 +425,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     );
   }
 
+  // TODO: ADD ABSOLUTE URLS FOR OBJECTS
+
   console.log("3");
 
   const expBuffer = Buffer.from(expString, "utf-8");

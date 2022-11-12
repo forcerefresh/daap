@@ -1,7 +1,3 @@
-import {
-  InputType,
-  IUnitsNumberInput,
-} from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
@@ -11,17 +7,11 @@ import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./frame-icon.svg";
 import {
-  addCommonPropertiesToStyle,
-  convertTimeUnitToMs,
-} from "../../utils/utils";
-import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
-import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const FRAME = "frame";
 

@@ -59,9 +59,8 @@ import {
   getPreviewLayout,
 } from "./StagePanelUtils";
 import {
-  addCommonPropertiesToStyle,
   convertTimeUnitToMs,
-  getBgColor,
+  convertRGBColor2CSSProperties,
 } from "../../utils/utils";
 import ProjectSmallTimeline, {
   ProjectTimelineData,
@@ -73,7 +72,9 @@ import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+const logger = createLogger();
 
 interface ISize {
   width: number;
@@ -1119,7 +1120,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     overflowX: isPreview ? "hidden" : "visible",
     overflowY: isPreview ? "scroll" : "visible",
     border: isPreview ? "1px solid #545454" : "1px solid transparent",
-    ...(isPreview ? getBgColor(settings.pageBackgroundColor) : {}),
+    ...(isPreview
+      ? convertRGBColor2CSSProperties(settings.pageBackgroundColor)
+      : {}),
   };
 
   const scrollableDivInnerStyle: React.CSSProperties = {
@@ -1135,7 +1138,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     left: -pageColumnWidth * stageZoom + "px",
     height: breakpointConfig?.normal?.page.height! * stageZoom + "px",
     width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
-    ...getBgColor(settings.sliderBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
   };
 
   const renderResizerWithLayer = (layer: ILayer) => {

@@ -19,7 +19,6 @@ import {
   PreloadOrder,
 } from "webslider-sdk/lib/objects/objects-register";
 import video from "./video-icon.svg";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   getCommonObjectPropertiesDefinition,
@@ -28,6 +27,7 @@ import {
 } from "webslider-sdk/lib/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const VIDEO = "video";
 

@@ -14,21 +14,16 @@ import {
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./svg-icon.svg";
-import {
-  addCommonPropertiesToStyle,
-  convertTimeUnitToMs,
-  rgbColor2cssRgba,
-} from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 import { RGBColor } from "react-color";
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const SVG = "svg";
 
@@ -187,13 +182,13 @@ export function getSvgHtml(props: {
 
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
-      ? `fill: ${rgbColor2cssRgba(svgValues.fill)}; color: ${rgbColor2cssRgba(
+      ? `fill: ${convertRGBColor2RGBAString(
           svgValues.fill
-        )};`
+        )}; color: ${convertRGBColor2RGBAString(svgValues.fill)};`
       : "";
   const stroke =
     !svgValuesMetadata["stroke"].disabled && svgValues.hasFillAndStroke
-      ? `stroke: ${rgbColor2cssRgba(svgValues.stroke)};`
+      ? `stroke: ${convertRGBColor2RGBAString(svgValues.stroke)};`
       : "";
 
   const w = parseInt(calculatedObjectSize.width as string);
@@ -258,12 +253,12 @@ function replaceColors(svgSource: string, colors: RGBColor[]) {
     s = svgSource.replace(/fill:(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
       const retColor = colors[idx];
       idx++;
-      return "fill:" + rgbColor2cssRgba(retColor);
+      return "fill:" + convertRGBColor2RGBAString(retColor);
     });
     s = s.replace(/fill="(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
       const retColor = colors[idx];
       idx++;
-      return `fill="` + rgbColor2cssRgba(retColor);
+      return `fill="` + convertRGBColor2RGBAString(retColor);
     });
   
     return s;*/
@@ -271,7 +266,7 @@ function replaceColors(svgSource: string, colors: RGBColor[]) {
   return svgSource.replace(/(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return rgbColor2cssRgba(retColor);
+    return convertRGBColor2RGBAString(retColor);
   });
 }
 

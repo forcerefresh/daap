@@ -1,8 +1,10 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IZoomInAnimation, ZOOM_ANIMATION } from "./zoom.types";
 import gsap from "gsap";
+
+const logger = createLogger();
 
 export function zoomAnimation() {
   let timeline: gsap.core.Timeline;

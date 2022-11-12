@@ -13,7 +13,6 @@ import {
 import { v4 as uuid } from "uuid";
 import svg from "./multiple-images-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
 import {
@@ -22,6 +21,7 @@ import {
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
 } from "webslider-sdk/lib/objects/objects-register";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 const MULTI_IMAGE = "multi_image";
 

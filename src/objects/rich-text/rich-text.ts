@@ -15,10 +15,6 @@ import {
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./rich-text-icon.svg";
-import {
-  addCommonPropertiesToStyle,
-  convertTimeUnitToMs,
-} from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   CommonPropertiesTuple,
@@ -27,6 +23,7 @@ import {
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 import { RGBColor } from "react-color";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const RICH_TEXT = "rich_text";
 

@@ -1,7 +1,9 @@
 import gsap from "gsap";
 import { convertTimeUnitToMs } from "../../utils/utils";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideAnimation } from "./flip-slide.types";
+
+const logger = createLogger();
 
 export function flipSlideAnimation() {
   let timeline: gsap.core.Timeline;

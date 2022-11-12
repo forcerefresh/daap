@@ -1,6 +1,6 @@
 import { RGBColor } from "react-color";
 import { INumericTimelineValue } from "webslider-sdk/lib/inputs/i-inputs";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IAnimationBase } from "../types";
@@ -8,6 +8,8 @@ import {
   ISquareMaskAnimation,
   SQUARE_MASK_ANIMATION,
 } from "./square-mask.types";
+
+const logger = createLogger();
 
 export function squareMaskAnimation() {
   let timeline: gsap.core.Timeline;

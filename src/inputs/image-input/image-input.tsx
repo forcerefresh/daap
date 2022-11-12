@@ -17,7 +17,8 @@ import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
 import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
 import { getButtonGroupField, getTextArea, getTextField } from "../input-utils";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;

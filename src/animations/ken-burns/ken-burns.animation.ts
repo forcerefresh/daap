@@ -1,7 +1,9 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType, getObjectContentElementAndHtml } from "../common";
 import { IKenBurnsAnimation, KEN_BURNS_ANIMATION } from "./ken-burns.types";
+
+const logger = createLogger();
 
 export function kenBurnsAnimation() {
   let timeline: gsap.core.Timeline;

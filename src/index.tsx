@@ -1,4 +1,5 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 function importBuildTarget() {
   if (process.env.REACT_APP_TYPE === "player") {

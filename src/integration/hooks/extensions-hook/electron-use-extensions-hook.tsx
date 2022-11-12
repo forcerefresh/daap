@@ -1,5 +1,6 @@
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */

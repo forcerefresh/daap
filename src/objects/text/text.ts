@@ -19,13 +19,11 @@ import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import svg from "./text-icon.svg";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const TEXT = "text";
 

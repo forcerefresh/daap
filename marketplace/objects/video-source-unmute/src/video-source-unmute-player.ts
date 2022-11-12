@@ -9,9 +9,11 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { VideoSourceUnmuteValues } from "./video-source-unmute-types";
+
+const logger = createLogger();
 
 /**
  * This function return html used in Web Slider Player

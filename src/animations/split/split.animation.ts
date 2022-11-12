@@ -1,6 +1,8 @@
 import { RGBColor } from "react-color";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { ISplitAnimation, SPLIT_ANIMATION } from "./split.types";
+
+const logger = createLogger();
 
 function createPeaces(target: HTMLDivElement, peaces: number) {
   let html = `<div class="container">`;

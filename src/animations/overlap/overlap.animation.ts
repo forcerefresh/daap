@@ -1,6 +1,8 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import anime from "animejs";
 import { IOverlapAnimation, OVERLAP_ANIMATION } from "./overlap.types";
+
+const logger = createLogger();
 
 export function overlapAnimation() {
   let timeline: anime.AnimeTimelineInstance;

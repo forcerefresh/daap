@@ -6,8 +6,10 @@ import { IntegrationContext } from "../../integration";
 import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
 import { forceRefresh } from "../../store/actions/actions";
 import { IStore, store } from "../../store/store";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { DevelopmentContext } from "./DevelopmentProvider";
+
+const logger = createLogger();
 
 export type IDevelopmentManagerProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;

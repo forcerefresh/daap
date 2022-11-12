@@ -9,9 +9,11 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoTargetValues } from "./video-target-types";
 import { calculateSize } from "./video-target-utils";
+
+const logger = createLogger();
 
 let copyInterval: { [key: string]: any } = {};
 

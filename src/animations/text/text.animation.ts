@@ -1,9 +1,11 @@
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { TEXT_ANIMATION, ITextAnimation } from "./text.types";
 import { addTextAnimationPartToTimeline, arrangeChars } from "../text.utils";
+
+const logger = createLogger();
 
 export function textAnimation() {
   let timeline: gsap.core.Timeline;

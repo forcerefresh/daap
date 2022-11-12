@@ -11,7 +11,6 @@ import {
   ICommonObjectProperties,
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
-import { v4 as uuid } from "uuid";
 import {
   GetAssetsUrlFuncPropsType,
   GetAssetsUrlFuncReturnType,
@@ -21,10 +20,7 @@ import {
 } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./image-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
-import { addCommonPropertiesToStyle } from "../../utils/utils";
 import {
-  CommonPropertiesTuple,
-  CommonPropertiesValues,
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
@@ -37,6 +33,7 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const IMAGE = "image";
 

@@ -4,14 +4,10 @@ import {
   IBorderSideValue,
   IBorderValue,
   ICornerRadiusValue,
-  IInputMetadataValues,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { CommonPropertiesValues } from "webslider-sdk/lib/objects/common-properties";
-import { IObject } from "webslider-sdk/lib/objects/i-object";
-import { ILayer } from "../store/reducers/i-layers";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
-import { nlRemove } from "./doom-utils/common";
 
 export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
   return slide.duration.inheritFrom === "inherit"
@@ -62,7 +58,9 @@ export function removeFalsy(obj: { [key: string]: any }) {
   return newObj;
 }
 
-export function getBgColor(c?: RGBColor): React.CSSProperties {
+export function convertRGBColor2CSSProperties(
+  c?: RGBColor
+): React.CSSProperties {
   if (!c) {
     return {};
   }
@@ -91,53 +89,6 @@ export function getCroppedFileName(str: string, firstPart = 16, lastPart = 8) {
   return str;
 }
 
-export function rgbColor2cssRgba(c: RGBColor): string {
-  return `rgba(${c?.r},${c?.g},${c?.b},${c?.a})`;
-}
-
-export function addCommonPropertiesToStyle(
-  style: string,
-  object: IObject | ILayer
-) {
-  if (!object.commonStyleDefinition) {
-    return style;
-  }
-
-  const comonProperties = object.commonStyleDefinition
-    .values as CommonPropertiesValues;
-
-  const comonPropertiesMeta = object.commonStyleDefinition.valuesMetadata as {
-    [key: string]: IInputMetadataValues;
-  };
-
-  if (!comonPropertiesMeta.commonCornerRadius.disabled) {
-    style = addBorderRadius(style, comonProperties.commonCornerRadius);
-  }
-
-  if (!comonPropertiesMeta.commonBorder.disabled) {
-    style = addBorder(style, comonProperties.commonBorder);
-  }
-
-  if (!comonPropertiesMeta.commonOverflow.disabled) {
-    style += `overflow: ${comonProperties.commonOverflow};`;
-  }
-
-  if (!comonPropertiesMeta.commonInlineStyle.disabled) {
-    const inlineStyle = nlRemove(comonProperties.commonInlineStyle);
-    style += inlineStyle;
-  }
-
-  if (!comonPropertiesMeta.commonBackgroundColor.disabled) {
-    style = addBackgroundColor(style, comonProperties.commonBackgroundColor);
-  }
-
-  if (!comonPropertiesMeta.commonPadding.disabled) {
-    style = addPaddingColor(style, comonProperties.commonPadding);
-  }
-
-  return style;
-}
-
 export function addBorderRadius(
   style: string,
   borderRadius: ICornerRadiusValue
@@ -161,7 +112,10 @@ export function addBorderRadius(
 
 export function addBackgroundColor(style: string, background: RGBColor) {
   if (background) {
-    style += "background: " + getBgColor(background).backgroundColor + ";";
+    style +=
+      "background: " +
+      convertRGBColor2CSSProperties(background).backgroundColor +
+      ";";
   }
   return style;
 }
@@ -177,7 +131,9 @@ export function addBorder(style: string, border: IBorderValue) {
   if (border.useCommonValue) {
     style += "border-width: " + border.commonBorder.width + ";";
     style +=
-      "border-color: " + rgbColor2cssRgba(border.commonBorder.color) + ";";
+      "border-color: " +
+      convertRGBColor2RGBAString(border.commonBorder.color) +
+      ";";
     style += "border-style: " + border.commonBorder.style + ";";
   } else {
     style = addBorderSide(style, "top", border.top);
@@ -194,7 +150,12 @@ export function addBorderSide(
   border: IBorderSideValue
 ) {
   style += "border-" + side + "-width: " + border.width + ";";
-  style += "border-" + side + "-color: " + rgbColor2cssRgba(border.color) + ";";
+  style +=
+    "border-" +
+    side +
+    "-color: " +
+    convertRGBColor2RGBAString(border.color) +
+    ";";
   style += "border-" + side + "-style: " + border.style + ";";
   return style;
 }

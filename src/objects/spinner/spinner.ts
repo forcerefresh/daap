@@ -11,13 +11,13 @@ import {
   IFormSwitchGroup,
   IFormSwitchGroupItem,
 } from "webslider-sdk/lib/form/i-form-layout";
-import { rgbColor2cssRgba } from "../../utils/utils";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
 import {
   ICommonObjectProperties,
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import svg from "./spinner-icon.svg";
 
 const SPINNER = "spinner";
@@ -166,7 +166,7 @@ export function getSpinnerHtml(props: {
   .sk-plane {
     width: 100%;
     height: 100%;
-    background-color: ${rgbColor2cssRgba(spinnerValues.color)};
+    background-color: ${convertRGBColor2RGBAString(spinnerValues.color)};
     animation: sk-plane 1.5s infinite ease-in-out; 
   }
   `;
@@ -206,7 +206,7 @@ export function getSpinnerHtml(props: {
         display: block;
         width: 25%;
         height: 25%;
-        background-color: ${rgbColor2cssRgba(spinnerValues.color)};
+        background-color: ${convertRGBColor2RGBAString(spinnerValues.color)};
         border-radius: 100%;
         animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
       }

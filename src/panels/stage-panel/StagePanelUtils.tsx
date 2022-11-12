@@ -19,7 +19,8 @@ import css from "./StagePanel.module.scss";
 import { Header1 } from "./preview/Header1/Header1";
 import { RGBColor } from "react-color";
 import { Body1 } from "./preview/Body1/Body1";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export function calculateObjectSizePerDevice(
   object: IObject,

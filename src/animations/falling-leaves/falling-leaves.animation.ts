@@ -1,11 +1,13 @@
 import gsap from "gsap";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import {
   FALLING_LEAVES_ANIMATION,
   IFallingLeaves,
 } from "./falling-leaves.types";
 import { getMediaSrc } from "../../integration/utils/local-media";
+
+const logger = createLogger();
 
 export function fallingLeavesAnimation() {
   let element: HTMLDivElement;

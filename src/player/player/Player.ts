@@ -29,11 +29,13 @@ import {
   IEventTimeline,
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
+
+const logger = createLogger();
 
 gsap.defaults(); // in order to bundle gsap
 
@@ -101,6 +103,8 @@ export class Player {
   }[];
 
   private eventTimelines: IEventTimeline[] = [];
+
+  private debug: { showBoundaries?: boolean } = {};
 
   //private timeOffsetCorrection = 0;
   constructor(
@@ -194,6 +198,10 @@ export class Player {
     //initSliderElement(this.rootDiv);
   }
 
+  public setDebug(debug: { showBoundaries?: boolean }) {
+    this.debug = debug;
+  }
+
   private addListenersForEventsAnimations() {
     this.eventTimelines.forEach((tlObj) => {
       const className = `custom-id-${tlObj.eventTargetId}`;
@@ -273,25 +281,28 @@ export class Player {
     const bp = this.currentBp;
 
     // NOTE: this is for debug
-    Array.from(slideEls).forEach((el: any) => {
-      // SLIDE
-      el.style.left =
-        (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px";
-      // DEBUG SLIDER FRAME
-      const debugSlideFrame = createOrSelect(el, "slide-debug-frame");
-      debugSlideFrame.style.pointerEvents = "none";
-      debugSlideFrame.style.position = "absolute";
-      debugSlideFrame.style.top =
-        (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
-        "px"; //* this.scaleParams?.wScale!
-      //debugSlideFrame.style.left =
-      //  (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
-      debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
-      debugSlideFrame.style.height = bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
-      debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
-      debugSlideFrame.style.border = "1px dotted red";
-      debugSlideFrame.style.boxSizing = "border-box";
-    });
+    if (this.debug.showBoundaries) {
+      Array.from(slideEls).forEach((el: any) => {
+        // SLIDE
+        el.style.left =
+          (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 +
+          "px";
+        // DEBUG SLIDER FRAME
+        const debugSlideFrame = createOrSelect(el, "slide-debug-frame");
+        debugSlideFrame.style.pointerEvents = "none";
+        debugSlideFrame.style.position = "absolute";
+        debugSlideFrame.style.top =
+          (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
+          "px"; //* this.scaleParams?.wScale!
+        //debugSlideFrame.style.left =
+        //  (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
+        debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
+        debugSlideFrame.style.height = bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
+        debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
+        debugSlideFrame.style.border = "1px dotted red";
+        debugSlideFrame.style.boxSizing = "border-box";
+      });
+    }
   }
 
   private calculateSizeParameters(

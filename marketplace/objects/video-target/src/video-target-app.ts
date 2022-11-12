@@ -15,7 +15,7 @@ import {
   GetHtmlFuncReturnType,
   ObjectMetaType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoTargetValues, VIDEO_TARGET } from "./video-target-types";
 import svgIcon from "../static/video-target-icon.svg";
 import {
@@ -24,6 +24,8 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
+
+const logger = createLogger();
 
 /**
  * This is a type definition of Object properties form

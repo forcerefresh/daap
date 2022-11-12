@@ -5,10 +5,12 @@ import {
   updateTilesSize,
 } from "../common";
 import gsap from "gsap";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import { ITilesZoomAnimation, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
+
+const logger = createLogger();
 
 export function tilesZoomAnimation() {
   let timeline: gsap.core.Timeline;

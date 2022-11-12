@@ -1,8 +1,10 @@
 import { RGBColor } from "react-color";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITrianglifyAnimation, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 import trianglify from "trianglify";
+
+const logger = createLogger();
 
 export function trianglifyAnimation() {
   let timeline: gsap.core.Timeline;

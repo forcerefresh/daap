@@ -1,6 +1,7 @@
 import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-register";
 import { getConnectorBySourceId } from "webslider-sdk/lib/connectors/connector-manager";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export interface IExecCodeConfig {
   execStart: ExecutionCodeFuncType;

@@ -33,9 +33,7 @@ import {
 } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IPreviewScope } from "../store/reducers/stage";
 import {
-  rgbColor2cssRgba,
   getRealSlideDuration,
-  addCommonPropertiesToStyle,
   getRealExitSlideDuration,
   convertTimeUnitToMs,
 } from "../utils/utils";
@@ -48,6 +46,8 @@ import {
 } from "./i-export-html";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 
 export function generatePlayerData(
   sources: ISources,
@@ -678,12 +678,12 @@ export function replaceColors(svgSource: string, colors: RGBColor[]) {
   s = svgSource.replace(/fill:(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return "fill:" + rgbColor2cssRgba(retColor);
+    return "fill:" + convertRGBColor2RGBAString(retColor);
   });
   s = s.replace(/fill="(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return `fill="` + rgbColor2cssRgba(retColor);
+    return `fill="` + convertRGBColor2RGBAString(retColor);
   });
 
   return s;*/
@@ -691,7 +691,7 @@ export function replaceColors(svgSource: string, colors: RGBColor[]) {
   return svgSource.replace(/(#[abcdef0-9]{3,6})/gi, function (v, c: string) {
     const retColor = colors[idx];
     idx++;
-    return rgbColor2cssRgba(retColor);
+    return convertRGBColor2RGBAString(retColor);
   });
 }
 

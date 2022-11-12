@@ -1,9 +1,11 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import anime from "animejs";
 import {
   ISlideSlideAnimation,
   SLIDE_SLIDE_ANIMATION,
 } from "./slide-slide.types";
+
+const logger = createLogger();
 
 export function slideSlideAnimation() {
   let timeline: anime.AnimeTimelineInstance;

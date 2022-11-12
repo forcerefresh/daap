@@ -1,8 +1,10 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ISlideAnimation } from "./slide.types";
+
+const logger = createLogger();
 
 export function slideAnimation() {
   let timeline: gsap.core.Timeline;

@@ -1,9 +1,11 @@
 import { EventEmitter } from "events";
 import { Ticker } from "./Ticker";
 import getTickerInstance from "./Ticker";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { isReverse, isTimelineInBounds } from "./timeline-utild";
 import { Timeline } from "./Timeline";
+
+const logger = createLogger();
 
 type IRootTimelineConfig = {
   duration?: number;

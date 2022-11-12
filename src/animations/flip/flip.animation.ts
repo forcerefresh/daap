@@ -1,6 +1,8 @@
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { FLIP_ANIMATION, IFlipAnimation } from "./flip.types";
+
+const logger = createLogger();
 
 export function flipAnimation() {
   let timeline: gsap.core.Timeline;

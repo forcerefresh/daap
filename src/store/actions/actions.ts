@@ -62,7 +62,8 @@ import {
 import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+const logger = createLogger();
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
