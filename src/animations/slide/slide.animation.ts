@@ -1,10 +1,8 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ISlideAnimation } from "./slide.types";
-
-const logger = createLogger();
 
 export function slideAnimation() {
   let timeline: gsap.core.Timeline;
@@ -14,17 +12,12 @@ export function slideAnimation() {
   };
 
   function init(config: ISlideAnimation) {
-    logger.debug("slide init");
+    logger.animation.debug("slide init");
 
     element = getObjectElementById(config.itemId!);
     initialState.transform = element.style.transform;
 
     const xy = getXY(config.from, config.distance);
-
-    console.log(config.type);
-
-    console.log(getMethodByType(config.type));
-    console.log(xy);
 
     timeline = gsap.timeline({ paused: true });
     timeline[getMethodByType(config.type)](element, {
@@ -36,7 +29,7 @@ export function slideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("slide rootStart");
+    logger.animation.debug("slide rootStart");
 
     if (config.type === "in") {
       timeline.pause();
@@ -45,7 +38,7 @@ export function slideAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug("slide rootStop");
+    logger.animation.debug("slide rootStop");
 
     if (config.type === "out") {
       timeline.pause();
@@ -54,13 +47,13 @@ export function slideAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("slide start");
+    logger.animation.debug("slide start");
     timeline.play(0);
     if (isManual) timeline.pause();
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("slide stop");
+    logger.animation.debug("slide stop");
 
     if (isManual) {
       timeline.pause();
@@ -74,23 +67,22 @@ export function slideAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug("slide pause");
+    logger.animation.debug("slide pause");
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("slide resume");
+    logger.animation.debug("slide resume");
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("fade reverse");
+    logger.animation.debug("fade reverse");
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

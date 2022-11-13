@@ -15,7 +15,7 @@ import {
   GetHtmlFuncReturnType,
   ObjectMetaType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoTargetValues, VIDEO_TARGET } from "./video-target-types";
 import svgIcon from "../static/video-target-icon.svg";
 import {
@@ -24,8 +24,6 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
-
-const logger = createLogger();
 
 /**
  * This is a type definition of Object properties form
@@ -44,7 +42,7 @@ export type VideoTargetTuple = [
 export function createObject(
   props: CreateObjectFuncPropsType
 ): CreateObjectFuncReturnType<VideoTargetTuple> {
-  logger.debug(`video-target::createObject()`);
+  logger.object.debug(`video-target::createObject()`);
 
   const object = createCommonObject(VIDEO_TARGET);
 
@@ -106,7 +104,7 @@ export function createObject(
 export function getHtmlForApp(
   props: GetHtmlFuncPropsType
 ): GetHtmlFuncReturnType {
-  logger.debug(`video-target::getHtmlForApp()`);
+  logger.object.debug(`video-target::getHtmlForApp()`);
 
   const { object } = props;
 

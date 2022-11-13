@@ -1,10 +1,8 @@
 import { RGBColor } from "react-color";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITrianglifyAnimation, TRIANGLIFY_ANIMATION } from "./trianglify.types";
 import trianglify from "trianglify";
-
-const logger = createLogger();
 
 export function trianglifyAnimation() {
   let timeline: gsap.core.Timeline;
@@ -12,7 +10,7 @@ export function trianglifyAnimation() {
   let trianglifyEl: HTMLElement;
 
   function init(config: ITrianglifyAnimation) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} init`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} init`);
 
     objectEl = getObjectElementById(config.itemId!);
 
@@ -20,21 +18,21 @@ export function trianglifyAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} rootStart`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} rootStop`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} rootStop`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} start`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} start`);
 
     trianglifyEl = objectEl.getElementsByClassName(
       "trianglify"
@@ -90,7 +88,7 @@ export function trianglifyAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} stop`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} stop`);
 
     trianglifyEl.parentElement?.removeChild(trianglifyEl);
     //timeline.pause();
@@ -98,26 +96,25 @@ export function trianglifyAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} update`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} update`);
 
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} pause`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} resume`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${TRIANGLIFY_ANIMATION} destroy`);
+    logger.animation.debug(`${TRIANGLIFY_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

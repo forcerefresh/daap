@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import {
   createTilesFromHtml,
@@ -11,8 +11,6 @@ import {
   ITilesSlideAnimation,
   TILES_SLIDE_ANIMATION,
 } from "./tiles-slide.types";
-
-const logger = createLogger();
 
 export function tilesSlideAnimation() {
   let timeline: gsap.core.Timeline;
@@ -26,7 +24,7 @@ export function tilesSlideAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesSlideAnimation) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} init`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -100,7 +98,7 @@ export function tilesSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} rootStart`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -114,7 +112,7 @@ export function tilesSlideAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} rootStop`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -128,7 +126,7 @@ export function tilesSlideAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} start`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -144,9 +142,9 @@ export function tilesSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} stop`);
-    logger.debug(isManual);
-    logger.debug(isReverse);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} stop`);
+    logger.animation.debug(isManual);
+    logger.animation.debug(isReverse);
 
     elObserver.disconnect();
 
@@ -177,23 +175,22 @@ export function tilesSlideAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} pause`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} resume`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${TILES_SLIDE_ANIMATION} destroy`);
+    logger.animation.debug(`${TILES_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

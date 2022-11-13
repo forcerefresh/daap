@@ -29,13 +29,11 @@ import {
   IEventTimeline,
 } from "../AppPlayerUtils";
 import { BreakpointChecker } from "./BreakpointChecker";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
-
-const logger = createLogger();
 
 gsap.defaults(); // in order to bundle gsap
 
@@ -183,10 +181,10 @@ export class Player {
 
       Promise.all(this.extComponentPreloaders)
         .then(() => {
-          logger.info("All external components are loaded.");
+          logger.player.info("All external components are loaded.");
         })
         .catch((err) => {
-          logger.warn("External component loading has failed.");
+          logger.player.warn("External component loading has failed.");
           console.warn(err);
         })
         .finally(() => {
@@ -685,13 +683,13 @@ export class Player {
     prevTlTime: number = 0,
     isManual = false
   ) {
-    logger.notice("Play slide:  " + slideIdx);
+    logger.player.notice("Play slide:  " + slideIdx);
 
     this.addClassToBullet(this.rootDiv, slideIdx);
 
     if (!this.normalSlideDataArr?.[slideIdx]) {
       // slide does not exist
-      logger.error(`Slide with index [${slideIdx}] does not exists`);
+      logger.player.error(`Slide with index [${slideIdx}] does not exists`);
       return;
     }
 
@@ -884,7 +882,7 @@ export class Player {
     //   const exitTriggerTimelineCallback = () => {
     //     // start all exit transitions
     //     // TODO: IMPLEMENT
-    //     logger.info("exitTriggerTimeline123");
+    //     logger.player.info("exitTriggerTimeline123");
     //     // TODO: remove following
     //     // this.transitionEndBreakpointHandler(
     //     //   slideIdx,

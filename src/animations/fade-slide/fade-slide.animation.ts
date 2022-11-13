@@ -1,14 +1,12 @@
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import anime from "animejs";
 import { FADE_SLIDE_ANIMATION, IFadeSlideAnimation } from "./fade-slide.types";
-
-const logger = createLogger();
 
 export function fadeSlideAnimation() {
   let timeline: anime.AnimeTimelineInstance;
 
   function init(config: IFadeSlideAnimation) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} init`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} init`);
 
     const easing =
       !config.ease || config.ease === "none" ? "linear" : config.ease; //TODO
@@ -24,18 +22,18 @@ export function fadeSlideAnimation() {
   }
 
   function rootStart(config: IFadeSlideAnimation) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} rootStart`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} rootStart`);
 
     timeline.seek(0);
     timeline.pause();
   }
 
   function rootStop(config: IFadeSlideAnimation) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} rootStop`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} rootStop`);
   }
 
   function start(config: IFadeSlideAnimation, isManual?: boolean) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} start`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} start`);
 
     config.nextSlideEl!.style.zIndex = `${config.nextZIndex}`;
     timeline.play();
@@ -46,7 +44,7 @@ export function fadeSlideAnimation() {
     isManual?: boolean,
     isReverse?: boolean
   ) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} stop`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} stop`);
 
     timeline.pause();
   }
@@ -56,7 +54,7 @@ export function fadeSlideAnimation() {
     time: number,
     isManual?: boolean
   ) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} update`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} update`);
     if (isManual) {
       timeline.seek(time);
       timeline.pause();
@@ -64,19 +62,19 @@ export function fadeSlideAnimation() {
   }
 
   function pause(config: IFadeSlideAnimation) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} pause`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: IFadeSlideAnimation) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} resume`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} resume`);
 
     timeline.play();
   }
 
   function direction(config: IFadeSlideAnimation, direction: number) {
-    logger.debug(`${FADE_SLIDE_ANIMATION} reverse`);
+    logger.animation.debug(`${FADE_SLIDE_ANIMATION} reverse`);
   }
 
   return {

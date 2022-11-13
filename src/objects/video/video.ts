@@ -196,8 +196,6 @@ export function getVideoHtml(props: {
 
   const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}"></video>`;
 
-  console.log(videoHtml);
-
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT
   /*getMediaSrc("video", videoValues.video).then((videoItem: VideoItem) => {
@@ -267,14 +265,6 @@ export const getAssetsUrls = (
     return [];
   }
 
-  console.log({
-    id: videoValues.video.video.id,
-    url: videoValues.video.video.url,
-    filename: videoValues.video.filename,
-    localFilename: videoValues.video.video.filename,
-    sourceType: videoValues.video.video.sourceType,
-    mediaType: "video",
-  });
   return [
     {
       id: videoValues.video.video.id,

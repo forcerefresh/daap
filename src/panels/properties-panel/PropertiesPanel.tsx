@@ -193,9 +193,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         metadata: valuesMetadata[propertyName],
       };
 
-      console.log(property.inputType);
-      console.log({ layerData: { layer: layer!, objects: layerObjects } });
-
       return {
         input: getInputFormWithOptions(
           property.inputType,

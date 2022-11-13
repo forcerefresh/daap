@@ -1,8 +1,6 @@
 import { RGBColor } from "react-color";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { ISplitAnimation, SPLIT_ANIMATION } from "./split.types";
-
-const logger = createLogger();
 
 function createPeaces(target: HTMLDivElement, peaces: number) {
   let html = `<div class="container">`;
@@ -18,7 +16,7 @@ export function splitAnimation() {
   let slideTransitionHolder: HTMLDivElement | undefined;
 
   function init(config: ISplitAnimation) {
-    logger.debug(`${SPLIT_ANIMATION} init`);
+    logger.animation.debug(`${SPLIT_ANIMATION} init`);
 
     const areaW = config.breakpointData?.width || 0;
     const areaH = config.breakpointData?.height || 0;
@@ -103,15 +101,15 @@ export function splitAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${SPLIT_ANIMATION} rootStart`);
+    logger.animation.debug(`${SPLIT_ANIMATION} rootStart`);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${SPLIT_ANIMATION} rootStop`);
+    logger.animation.debug(`${SPLIT_ANIMATION} rootStop`);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${SPLIT_ANIMATION} start`);
+    logger.animation.debug(`${SPLIT_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -119,7 +117,7 @@ export function splitAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${SPLIT_ANIMATION} stop`);
+    logger.animation.debug(`${SPLIT_ANIMATION} stop`);
 
     const slideTransitionHolder2 = document.getElementsByClassName(
       "slideTransitionHolder"
@@ -128,32 +126,31 @@ export function splitAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug(`${SPLIT_ANIMATION} update`);
+    logger.animation.debug(`${SPLIT_ANIMATION} update`);
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${SPLIT_ANIMATION} pause`);
+    logger.animation.debug(`${SPLIT_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${SPLIT_ANIMATION} resume`);
+    logger.animation.debug(`${SPLIT_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${SPLIT_ANIMATION} destroy`);
+    logger.animation.debug(`${SPLIT_ANIMATION} destroy`);
 
     timeline.clear();
     timeline.kill();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${SPLIT_ANIMATION} reverse`);
+    logger.animation.debug(`${SPLIT_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

@@ -4618,6 +4618,11 @@ webpack@^5.73.0:
     watchpack "^2.3.1"
     webpack-sources "^3.2.3"
 
+webslider-sdk@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.8.tgz#ab35c0784da86a88bab39b92759911f07a6de0de"
+  integrity sha512-kXu2YiXy4JUh7lF+UGt7Oj6RMmNfZ2EeOPntzqfvSvUI8fY15BDUI+qhSx3QhvWonUVaq+6q94E79T8QVPa9tw==
+
 websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
   version "0.7.4"
   resolved "https://registry.npmjs.org/websocket-driver/-/websocket-driver-0.7.4.tgz"

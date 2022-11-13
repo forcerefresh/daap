@@ -1,9 +1,6 @@
 import { EventEmitter } from "events";
 import { getPlayerAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
-import {
-  createLogger,
-  ErrorLevel,
-} from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { isTimelineInBounds } from "./timeline-utild";
 
 export type ITimelineConfig = {
@@ -51,9 +48,6 @@ export class Timeline {
 
   timeCorrection = 0;
 
-  logger = createLogger(ErrorLevel.All);
-  logger2 = createLogger(ErrorLevel.All);
-
   constructor(config: ITimelineConfig) {
     // configuration
     this.config = config;
@@ -67,21 +61,6 @@ export class Timeline {
 
     // holder for child timelines
     this.timelines = [];
-    this.logger.trace("Trace ...");
-    this.logger.debug("Debug ...");
-    this.logger.notice("Notice ...");
-    this.logger.info("Info ...");
-    this.logger.warn("Warn ...");
-    this.logger.error("Error ...");
-    this.logger.fatal("Fatal ...");
-    this.logger.log("Log ...");
-
-    this.logger.add("Add1  ...");
-    this.logger.add("Add2  ...");
-    this.logger.add("Add3 ...");
-    this.logger.flush();
-
-    this.logger2.trace("sadasd");
   }
 
   eventCallback(type: string, callback: any) {}
@@ -106,7 +85,6 @@ export class Timeline {
   // }
 
   /*tick_Handler(tickerTime: number) {
-    //console.log(tickerTime);
     if (!this.isPaused && this.playing) {
       this.currentTimelineTime = tickerTime - this.deltaTickerTime;
       // check duration to call "stop"
@@ -143,7 +121,7 @@ export class Timeline {
   }*/
 
   setDirection(direction: number) {
-    this.logger.debug(`Timeline reverse (${this.config.name})`);
+    logger.player.debug(`Timeline reverse (${this.config.name})`);
     this.direction = direction;
 
     this.execSetDirection();
@@ -154,7 +132,7 @@ export class Timeline {
   }
 
   init() {
-    this.logger.debug(`Timeline init (${this.config.name})`);
+    logger.player.debug(`Timeline init (${this.config.name})`);
 
     const animationDef = getPlayerAnimationDefinition(this.config.animationId);
 
@@ -170,7 +148,7 @@ export class Timeline {
   }
 
   destroy() {
-    this.logger.debug(`Timeline destroy (${this.config.name})`);
+    logger.player.debug(`Timeline destroy (${this.config.name})`);
 
     this.execDestroy();
 
@@ -183,7 +161,7 @@ export class Timeline {
   }
 
   start(isManual?: boolean, timeCorrection = 0) {
-    this.logger.debug(`Timeline start (${this.config.name})`);
+    logger.player.debug(`Timeline start (${this.config.name})`);
 
     this.emit("beforeStart");
 
@@ -204,18 +182,18 @@ export class Timeline {
   }
 
   rootStart() {
-    this.logger.debug(`Timeline rootStart (${this.config.name})`);
+    logger.player.debug(`Timeline rootStart (${this.config.name})`);
 
     this.execRootStart();
   }
   rootStop() {
-    this.logger.debug(`Timeline rootStop (${this.config.name})`);
+    logger.player.debug(`Timeline rootStop (${this.config.name})`);
 
     this.execRootStop();
   }
 
   stop(isManual?: boolean, isReverse?: boolean) {
-    this.logger.debug(`Timeline stop (${this.config.name})`);
+    logger.player.debug(`Timeline stop (${this.config.name})`);
 
     this.emit("beforeStop");
 
@@ -231,7 +209,7 @@ export class Timeline {
   }
 
   update(time: number, isManual?: boolean) {
-    //this.logger.debug(`Timeline update (${this.config.name}); time: ${time}`);
+    //logger.player.debug(`Timeline update (${this.config.name}); time: ${time}`);
     this.currentTimelineTime = time;
     this.emit("beforeUpdate", time);
 
@@ -302,7 +280,7 @@ export class Timeline {
   }
 
   pause() {
-    this.logger.debug(`Timeline pause (${this.config.name})`);
+    logger.player.debug(`Timeline pause (${this.config.name})`);
 
     this.isPaused = true;
 
@@ -314,7 +292,7 @@ export class Timeline {
   }
 
   resume() {
-    this.logger.debug(`Timeline resume (${this.config.name})`);
+    logger.player.debug(`Timeline resume (${this.config.name})`);
 
     this.isPaused = false;
 

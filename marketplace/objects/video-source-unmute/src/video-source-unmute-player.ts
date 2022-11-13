@@ -9,17 +9,15 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { VideoSourceUnmuteValues } from "./video-source-unmute-types";
-
-const logger = createLogger();
 
 /**
  * This function return html used in Web Slider Player
  */
 export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
-  logger.debug(`Video source unmute: getHtml()`);
+  logger.object.debug(`Video source unmute: getHtml()`);
 
   const { object, calculatedObjectSize } = props;
 
@@ -58,7 +56,7 @@ export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
 export async function sizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> /*UpdateObjectSizeFuncReturnType*/ {
-  logger.debug(`Video source unmute: sizeUpdate()`);
+  logger.object.debug(`Video source unmute: sizeUpdate()`);
 
   const { calculatedObjectSize, className } = props;
   const els = document.getElementsByClassName(className);
@@ -80,7 +78,7 @@ export async function sizeUpdate(
 export async function preload(
   props: PreloadFuncPropsType
 ): Promise<string> /*PreloadFuncReturnType*/ {
-  logger.debug(`Video source unmute: preload()`);
+  logger.object.debug(`Video source unmute: preload()`);
 
   const { id } = props;
 
@@ -93,7 +91,7 @@ export async function preload(
 export function objectStart(
   props: ExecutionCodeFuncPropsType
 ): ExecutionCodeFuncReturnType {
-  logger.debug(`Video source unmute: objectStart()`);
+  logger.object.debug(`Video source unmute: objectStart()`);
 
   const { getConnector, id, values } = props;
   const videoSourceUnmuteValues = values as VideoSourceUnmuteValues;
@@ -126,7 +124,7 @@ export function objectStart(
 export function objectStop(
   props: ExecutionCodeFuncPropsType
 ): ExecutionCodeFuncReturnType {
-  logger.debug(`Video source unmute: objectStop()`);
+  logger.object.debug(`Video source unmute: objectStop()`);
 }
 
 /**
@@ -136,7 +134,7 @@ export function objectStop(
 export function postProcess(
   props: PostProcessFuncPropsType
 ): PostProcessFuncReturnType {
-  logger.debug(`Video source unmute: postProcess()`);
+  logger.object.debug(`Video source unmute: postProcess()`);
 
   const { object } = props;
   return props.object;

@@ -68,7 +68,6 @@ function PlayerDev() {
   const sliderOptions = getSliderOptionsFromLocalStorage();
 
   const renderBreakpointButtons = () => {
-    console.log(latestPlayerData);
     return latestPlayerData?.breakpoints.breakpointsConfiguration.map(
       (bp: any) => {
         return (

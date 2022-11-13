@@ -1,10 +1,8 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { FADE_ANIMATION, IFadeAnimation } from "./fade.types";
-
-const logger = createLogger();
 
 export function fadeAnimation() {
   let timeline: gsap.core.Timeline;
@@ -13,7 +11,7 @@ export function fadeAnimation() {
   let isInitialized = false;
 
   function init(config: IFadeAnimation) {
-    logger.debug(`${FADE_ANIMATION} init`);
+    logger.animation.debug(`${FADE_ANIMATION} init`);
 
     if (isInitialized) return;
 
@@ -31,27 +29,25 @@ export function fadeAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${FADE_ANIMATION} rootStart`);
+    logger.animation.debug(`${FADE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
       timeline.progress(0);
-      console.log("Aaaaaaaaaaaaaa123456");
     }
   }
 
   function rootStop(config: any) {
-    logger.debug(`${FADE_ANIMATION} rootStop`);
+    logger.animation.debug(`${FADE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
       timeline.progress(0);
-      console.log("Aaaaaaaaaaaaaa123");
     }
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${FADE_ANIMATION} start`);
+    logger.animation.debug(`${FADE_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -59,7 +55,7 @@ export function fadeAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${FADE_ANIMATION} stop`);
+    logger.animation.debug(`${FADE_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -78,19 +74,19 @@ export function fadeAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${FADE_ANIMATION} pause`);
+    logger.animation.debug(`${FADE_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${FADE_ANIMATION} resume`);
+    logger.animation.debug(`${FADE_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${FADE_ANIMATION} reverse`);
+    logger.animation.debug(`${FADE_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

@@ -271,7 +271,6 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                     bucketId: bucket.id!,
                     projectId: meta.id!,
                   }).then((response) => {
-                    console.log(response);
                     setIntegrationDetails({
                       ...integrationDetails,
                       [`${bucket.id}`]: response,

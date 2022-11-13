@@ -98,7 +98,6 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
                   await saveSerial({ serial: currentSerial });
                   const licenceDetails = await getLicenseDetails();
                   setLicenseDetails(licenceDetails);
-                  console.log(licenceDetails);
                   setLoading(false);
                 }}
               >

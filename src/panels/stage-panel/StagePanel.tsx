@@ -72,9 +72,8 @@ import { getZoom } from "../../store/helpers/calculateZoom";
 import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
-const logger = createLogger();
 
 interface ISize {
   width: number;
@@ -120,12 +119,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     forceRefreshRand: _forceRefreshRand,
     enableDeveloper,
   } = props;
-  //logger.debug("StagePanel rendering");
+  //logger.app.debug("StagePanel render");
 
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
-    logger.log(error, errorInfo);
+    logger.app.warn(error, errorInfo);
   });
 
   if (error) return null;
@@ -179,7 +178,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     handle: string;
   } | null>(null);
 
-  console.log(resizeData);
   // in order to recognize click on draggable element we are capturing position on start (mouseDown)
   // and on end (mouseup) we are checking if position is the same
   // this means we have "click" event
@@ -221,6 +219,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   // ref for resizing object
   const resizingObjectRef = useRef<HTMLDivElement | null>(null);
   const resizingSelectionRef = useRef<HTMLDivElement | null>(null);
+
+  // ref for dragable (solve errors findNode)
+  const draggableNodeRef = useRef<HTMLDivElement | null>(null);
 
   // use form PAN tool
   const [panMove, setPanMove] = useState({
@@ -427,7 +428,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           // _setCustomBPSize({
           //   w: size.width,
           // });
-          console.log(size.width, "srki");
           setCustomBPWidth(size.width);
         }}
       />
@@ -617,7 +617,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }`;
 
     return (
-      <div key={layer.id}>
+      <div key={`layer-${layer.id}`}>
         <style>{layerCss}</style>
         <div
           className={cx(layerClassName, "LAYER", {
@@ -685,7 +685,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       return (
         <div
-          key={object.id}
+          key={`object-${object.id}`}
           style={objectHolderStyle}
           className="NOT_isSelected_OR_NOT_isAbsolutePosition"
         >
@@ -833,8 +833,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     };
 
     return (
-      <div style={objectHolderStyle} className="HOLDER123">
+      <div
+        key={`draggable-object-holder${object.id}`}
+        style={objectHolderStyle}
+        className="draggable-object-holder"
+      >
         <Draggable
+          nodeRef={draggableNodeRef}
           disabled={
             stageToolInternal !== StageTools.SELECT || !isAbsolutePosition
           }
@@ -899,6 +904,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           }}
         >
           <div
+            ref={draggableNodeRef}
             data-draggable-object-id={object.id}
             //onMouseUp={(e) => e.stopPropagation()}
             style={{ zIndex: 100, position: "absolute" }}
@@ -955,7 +961,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const handleStageMouseMove = (e: any) => {
     e.persist();
     if (selectionStartPosition !== null) {
-      console.log("SELECTION START");
       const point = getMousePosition(e);
       if (
         stageToolInternal === StageTools.SELECT ||
@@ -973,8 +978,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         setPanMove({ ...panMove, ...panMoveNew });
       }
     } else if (resizeStartPosition !== null && resizeData) {
-      console.log("RESIZER");
-
       const point = getMousePosition(e);
       const movePoint = getPointsDiff(resizeStartPosition, point);
 
@@ -1163,7 +1166,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     return (
       <div
-        key={layer.id}
+        key={`layer-resizer-${layer.id}`}
         className={cx(
           css.layerMoveForResizerWTF,
           { [css.layerMoveForResizerWTFActive]: isLayerActive && hasLayout },
@@ -1221,7 +1224,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       }
 
       return (
-        <>
+        <React.Fragment key={`object-resizer-${objectId}`}>
           {!layoutChildren && (
             <div
               ref={resizingSelectionRef}
@@ -1236,7 +1239,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             />
           )}
           {renderObjectHandles(object, layoutChildren)}
-        </>
+        </React.Fragment>
       );
     });
   };
@@ -1338,17 +1341,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
             }
           } else {
-            console.log("----");
-
-            console.log(e.target);
             try {
               const t1 = e.target as any;
               const t2 = t1.parentElement! as any;
               const t3 = t2.parentElement! as any;
               const t4 = t3.parentElement! as any;
-              console.log(t2);
-              console.log(t3);
-              console.log(t4);
 
               if (
                 t1.className.indexOf("StagePanel_stage_") !== -1 ||
@@ -1410,14 +1407,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               <>
                 {horizontalGridLines.map((item, hlIdx) => (
                   <div
-                    key={hlIdx}
+                    key={`hor-lines-${hlIdx}`}
                     style={{ top: item.top + "px", width: item.width + "px" }}
                     className={cx(css.gridHorizontalLine)}
                   ></div>
                 ))}
                 {verticalGridLines.map((item, hlIdx) => (
                   <div
-                    key={hlIdx}
+                    key={`ver-lines-${hlIdx}`}
                     style={{
                       left: item.left + "px",
                       height: item.height + "px",

@@ -103,7 +103,6 @@ export function createImageObject(
     },
   ];
 
-  console.log(initialValue);
   const values: ImageValues = {
     fit: {
       size: "fill",

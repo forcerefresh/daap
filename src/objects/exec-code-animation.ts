@@ -1,7 +1,6 @@
 import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-register";
 import { getConnectorBySourceId } from "webslider-sdk/lib/connectors/connector-manager";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface IExecCodeConfig {
   execStart: ExecutionCodeFuncType;
@@ -16,21 +15,21 @@ export function execCodeAnimation() {
   let getConnector: unknown;
 
   function init(config: IExecCodeConfig) {
-    logger.debug("execCode init");
+    logger.object.debug("execCode init");
 
     getConnector = (sourceId: string) => getConnectorBySourceId(sourceId);
   }
 
   function rootStart(config: any) {
-    logger.debug("execCode rootStart");
+    logger.object.debug("execCode rootStart");
   }
 
   function rootStop(config: any) {
-    logger.debug("execCode rootStop");
+    logger.object.debug("execCode rootStop");
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("execCode start");
+    logger.object.debug("execCode start");
 
     const { id, values, className, calculatedObjectSize, execStart } = config;
 
@@ -40,14 +39,13 @@ export function execCodeAnimation() {
       values,
       calculatedObjectSize,
       getConnector: (sourceId: any) => {
-        // console.log(sourceId);
         return getConnectorBySourceId(sourceId);
       },
     });
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("execCode stop");
+    logger.object.debug("execCode stop");
 
     const { id, values, className, calculatedObjectSize, execStop } = config;
 
@@ -63,19 +61,19 @@ export function execCodeAnimation() {
   function update(config: any, time: number, isManual?: boolean) {}
 
   function pause(config: any) {
-    logger.debug("execCode pause");
+    logger.object.debug("execCode pause");
   }
 
   function resume(config: any) {
-    logger.debug("execCode resume");
+    logger.object.debug("execCode resume");
   }
 
   function direction(config: any, direction: number) {
-    logger.debug("execCode reverse");
+    logger.object.debug("execCode reverse");
   }
 
   function destroy(config: any) {
-    logger.debug("execCode destroy");
+    logger.object.debug("execCode destroy");
 
     const { id, values, className, calculatedObjectSize, execStop } = config;
 

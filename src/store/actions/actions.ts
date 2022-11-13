@@ -62,8 +62,7 @@ import {
 import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -561,7 +560,7 @@ function _activateLayer(layerId: string): ActivateLayerAction {
 export function activateLayer(layerId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (getState().project.selection.activeLayerId === layerId) {
-      logger.debug(`Layer '${layerId}' is already active.`);
+      logger.app.debug(`Layer '${layerId}' is already active.`);
       return;
     }
     dispatch(_activateLayer(layerId));
@@ -598,7 +597,9 @@ export function selectForProperties(payload: selectForPropertiesProps): any {
         payload.type &&
       getState().project.selection.selectionForProperties?.id === payload.id
     ) {
-      logger.debug(`Layer '${payload.id}' is already selected for properties.`);
+      logger.app.debug(
+        `Layer '${payload.id}' is already selected for properties.`
+      );
       return;
     }
     dispatch(_selectForProperties(payload));
@@ -631,7 +632,7 @@ export function activateObject(objectId: string | null): any {
       return;
     }
     if (getState().project.selection.activeObjectId === objectId) {
-      logger.debug(`Object '${objectId}' is already active.`);
+      logger.app.debug(`Object '${objectId}' is already active.`);
       return;
     }
 
@@ -1015,10 +1016,6 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    console.log(objectProps);
-    console.log(values);
-    console.log(type);
-
     const object = {
       ...createObject(type, objectProps, {
         ...values,
@@ -1027,7 +1024,6 @@ export function addNewObject(
       layerId,
     };
 
-    console.log(object);
     const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
     object.name = humanizeSting(type) + " " + nextNameIdx;
 
@@ -1177,7 +1173,6 @@ function handleImageUpdate(
   dispatch: Dispatch,
   getState: () => IStore
 ): void {
-  logger.log(object.definition.values);
   // only one image object can have useForThumbnail
   const object2 = getObjectThatHaveThumbnailSet(object, getState);
   if (object2) {

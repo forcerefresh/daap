@@ -9,11 +9,9 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoTargetValues } from "./video-target-types";
 import { calculateSize } from "./video-target-utils";
-
-const logger = createLogger();
 
 let copyInterval: { [key: string]: any } = {};
 
@@ -21,7 +19,7 @@ let copyInterval: { [key: string]: any } = {};
  * This function return html used in Web Slider Player
  */
 export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
-  logger.debug(`Video target: getHtml()`);
+  logger.object.debug(`Video target: getHtml()`);
 
   const { object, calculatedObjectSize } = props;
 
@@ -39,7 +37,7 @@ export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
 export async function sizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> /*UpdateObjectSizeFuncReturnType*/ {
-  logger.debug(`Video target: sizeUpdate()`);
+  logger.object.debug(`Video target: sizeUpdate()`);
 
   const { calculatedObjectSize, className } = props;
 
@@ -61,7 +59,7 @@ export async function sizeUpdate(
 export async function preload(
   props: PreloadFuncPropsType
 ): Promise<string> /*PreloadFuncReturnType*/ {
-  logger.debug(`Video target: preload()`);
+  logger.object.debug(`Video target: preload()`);
 
   const { id } = props;
 
@@ -74,7 +72,7 @@ export async function preload(
 export async function objectStart(
   props: ExecutionCodeFuncPropsType
 ): Promise<ExecutionCodeFuncReturnType> {
-  logger.debug(`Video target: objectStart()`);
+  logger.object.debug(`Video target: objectStart()`);
 
   const { getConnector, id, values } = props;
 
@@ -117,7 +115,7 @@ export async function objectStart(
 export function objectStop(
   props: ExecutionCodeFuncPropsType
 ): ExecutionCodeFuncReturnType {
-  logger.debug(`Video target: objectStop()`);
+  logger.object.debug(`Video target: objectStop()`);
 
   const { id } = props;
   clearInterval(copyInterval[id]);
@@ -130,7 +128,7 @@ export function objectStop(
 export function postProcess(
   props: PostProcessFuncPropsType
 ): PostProcessFuncReturnType {
-  logger.debug(`Video target: postProcess()`);
+  logger.object.debug(`Video target: postProcess()`);
 
   const { object } = props;
   return props.object;

@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import {
   createTilesFromHtml,
@@ -14,8 +14,6 @@ import {
   SLICE_SLIDE_ANIMATION,
 } from "./slice-slide.types";
 
-const logger = createLogger();
-
 export function sliceSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
@@ -27,7 +25,7 @@ export function sliceSlideAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ISliceSlideAnimation) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} init`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -103,21 +101,21 @@ export function sliceSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} rootStart`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} rootStop`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} rootStop`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} start`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} start`);
 
     elObserver.observe(element);
     objectContentElement.style.visibility = "hidden";
@@ -133,7 +131,7 @@ export function sliceSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} stop`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} stop`);
 
     elObserver.disconnect();
 
@@ -146,17 +144,17 @@ export function sliceSlideAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} pause`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} resume`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${SLICE_SLIDE_ANIMATION} destroy`);
+    logger.animation.debug(`${SLICE_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

@@ -1,11 +1,9 @@
 import { EventEmitter } from "events";
 import { Ticker } from "./Ticker";
 import getTickerInstance from "./Ticker";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { isReverse, isTimelineInBounds } from "./timeline-utild";
 import { Timeline } from "./Timeline";
-
-const logger = createLogger();
 
 type IRootTimelineConfig = {
   duration?: number;
@@ -83,7 +81,6 @@ export class RootTimeline {
   }
 
   private tick_Handler(tickerTime: number) {
-    //console.log(tickerTime);
     if (!this.isPaused && this.playing) {
       this.currentTimelineTime = tickerTime - this.deltaTickerTime; // + this.timeCorrection;
       // check duration to call "stop"
@@ -110,7 +107,7 @@ export class RootTimeline {
   }
 
   setDirection(direction: number) {
-    logger.debug(`ROOT reverse (${this.config.name})`);
+    logger.player.debug(`RootTimeline setDirection (${this.config.name})`);
     this.direction = direction;
 
     this.timelines.forEach((child) => {
@@ -120,7 +117,7 @@ export class RootTimeline {
 
   // init all timelines
   init() {
-    logger.debug(`ROOT init (${this.config.name})`);
+    logger.player.debug(`RootTimeline init (${this.config.name})`);
 
     this.timelines.forEach((child) => {
       child.timeline.init();
@@ -129,11 +126,11 @@ export class RootTimeline {
 
   // destroy all timelines
   destroy() {
-    logger.debug(`ROOT destroy (${this.config.name})`);
+    logger.player.debug(`RootTimeline destroy (${this.config.name})`);
 
     this.emitter.removeAllListeners();
 
-    //logger.info("REMOVE LISTENER (destroy)");
+    //logger.player.info("REMOVE LISTENER (destroy)");
     this.ticker.emitter.removeListener("tick", this.tick_Handler_Bind);
 
     this.timelines.forEach((child) => {
@@ -143,12 +140,12 @@ export class RootTimeline {
 
   // NOTE: only child that has delay===0 will be started (related to child timelines)
   start(timeCorrection = 0) {
-    logger.debug(`ROOT start (${this.config.name})`);
+    logger.player.debug(`RootTimeline start (${this.config.name})`);
 
     this.timeCorrection = timeCorrection;
 
     if (this.playing) {
-      logger.notice("cannot start multiple times");
+      logger.player.notice("cannot start multiple times");
       return;
     }
     this.emitter.emit("beforeStart");
@@ -177,10 +174,10 @@ export class RootTimeline {
 
   // NOTE: stop will stop timeline and all child timelines
   stop() {
-    logger.debug(`ROOT stop (${this.config.name})`);
+    logger.player.debug(`RootTimeline stop (${this.config.name})`);
 
     if (!this.playing) {
-      logger.notice("cannot stop multiple times");
+      logger.player.notice("cannot stop multiple times");
       return;
     }
 
@@ -188,7 +185,7 @@ export class RootTimeline {
 
     this.playing = false;
 
-    logger.info("REMOVE LISTENER (stop)");
+    logger.player.info("REMOVE LISTENER (stop)");
     this.ticker.emitter.removeListener("tick", this.tick_Handler_Bind);
 
     this.timelines.forEach((child) => {
@@ -203,7 +200,7 @@ export class RootTimeline {
   }
 
   pause() {
-    logger.debug(`ROOT pause (${this.config.name})`);
+    logger.player.debug(`RootTimeline pause (${this.config.name})`);
 
     this.isPaused = true;
     this.pauseTickerTime = this.ticker.currentTickerTime;
@@ -214,7 +211,7 @@ export class RootTimeline {
   }
 
   resume() {
-    logger.debug(`ROOT resume (${this.config.name})`);
+    logger.player.debug(`RootTimeline resume (${this.config.name})`);
 
     if (this.isPaused === false) {
       return;
@@ -240,7 +237,7 @@ export class RootTimeline {
 
   // PRIVATE
   private update(time: number, isManual?: boolean) {
-    //logger.debug(`ROOT update (${this.config.name})`);
+    //logger.player.debug(`RootTimeline update (${this.config.name})`);
 
     this.emitter.emit("beforeUpdate", time);
 
@@ -262,7 +259,6 @@ export class RootTimeline {
         child.timeline.duration
       );
 
-      //console.log(child.timeline.config.name + ", inB: " + inBounds);
       if (inBounds) {
         if (!child.playing) {
           child.playing = true;
@@ -270,7 +266,6 @@ export class RootTimeline {
         }
 
         // log time
-        //console.log(idx + ": " + (time - child.timeline.delay));
 
         child.timeline.update(time - child.timeline.delay, isManual);
       } else {

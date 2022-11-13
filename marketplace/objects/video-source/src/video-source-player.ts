@@ -9,18 +9,16 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoSourceValues } from "./video-source-types";
 import { VIDEOSourceConnector } from "./video-source-connector";
 import { getOrCreateConnectorById } from "webslider-sdk/lib/connectors/connector-manager";
-
-const logger = createLogger();
 
 /**
  * This function return html used in Web Slider Player
  */
 export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
-  logger.debug(`Video source: getHtml()`);
+  logger.object.debug(`Video source: getHtml()`);
   return "";
 }
 
@@ -32,7 +30,7 @@ export function getHtml(props: GetHtmlFuncPropsType): GetHtmlFuncReturnType {
 export async function sizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> /*UpdateObjectSizeFuncReturnType*/ {
-  logger.debug(`Video source: sizeUpdate()`);
+  logger.object.debug(`Video source: sizeUpdate()`);
   return;
 }
 
@@ -43,7 +41,7 @@ export async function sizeUpdate(
 export async function preload(
   props: PreloadFuncPropsType
 ): Promise<string> /*PreloadFuncReturnType*/ {
-  logger.debug(`Video source: preload()`);
+  logger.object.debug(`Video source: preload()`);
 
   const { id, values } = props;
 
@@ -69,7 +67,7 @@ export async function preload(
 export async function objectStart(
   props: ExecutionCodeFuncPropsType
 ): Promise<ExecutionCodeFuncReturnType> {
-  logger.debug(`Video source: objectStart()`);
+  logger.object.debug(`Video source: objectStart()`);
 
   const { id, values } = props;
   const videoSourceValues = values as VideoSourceValues;
@@ -94,7 +92,7 @@ export async function objectStart(
 export function objectStop(
   props: ExecutionCodeFuncPropsType
 ): ExecutionCodeFuncReturnType {
-  logger.debug(`Video source: objectStop()`);
+  logger.object.debug(`Video source: objectStop()`);
 }
 
 /**
@@ -104,7 +102,7 @@ export function objectStop(
 export function postProcess(
   props: PostProcessFuncPropsType
 ): PostProcessFuncReturnType {
-  logger.debug(`Video source: postProcess()`);
+  logger.object.debug(`Video source: postProcess()`);
 
   const { object } = props;
   return props.object;

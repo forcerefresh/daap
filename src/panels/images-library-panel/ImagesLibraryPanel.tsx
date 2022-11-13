@@ -472,18 +472,15 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           type === "image" &&
                           selectionType === SelectionType.Single &&
                           [{ close: true }, { close: false }].map((conf) => (
-                            <>
+                            <div
+                              key={"add_button_" + conf.close}
+                              className={css.addButtonHolder}
+                            >
                               <Button
                                 intent="primary"
                                 onClick={() => {
                                   if (activeLayerId) {
                                     if (addObject) {
-                                      console.log({
-                                        image: (image?.images as any)[
-                                          selectedResolution
-                                        ],
-                                        filename: "",
-                                      });
                                       _addNewObject(
                                         activeLayerId,
                                         "image", //cover
@@ -511,7 +508,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                   ? " Add Image & Close"
                                   : "Add Image"}
                               </Button>{" "}
-                            </>
+                            </div>
                           ))}
 
                         {/* Create new object*/}
@@ -628,8 +625,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         onCancel={() => setImagesForDelete(undefined)}
         onConfirm={() => {
           deleteImagesFunc?.(type, [imagesForDelete?.[0].id!]).then((resp) => {
-            console.log(resp);
-
             const newImages = filter(images, (image) => {
               return (
                 resp.response

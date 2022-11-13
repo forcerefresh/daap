@@ -1,13 +1,11 @@
 import { space2nbsp } from "../../utils/doom-utils/common";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITypeWriterAnimation } from "./typewriter.types";
 import gsap, { SteppedEase } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { TextValues } from "../../objects/text/text";
-
-const logger = createLogger();
 
 export function getTypewriterAnimationDuration(object?: IObject, config?: any) {
   const effValues = config?.animation?.values!;
@@ -42,7 +40,7 @@ export function typewriterAnimation() {
   let originalInnerHTML: string;
 
   function init(config: ITypeWriterAnimation) {
-    logger.debug("typewriter init");
+    logger.animation.debug("typewriter init");
 
     objectEl = getObjectElementById(config.itemId!);
 
@@ -184,21 +182,21 @@ export function typewriterAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("typewriter rootStart");
+    logger.animation.debug("typewriter rootStart");
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug("typewriter rootStop");
+    logger.animation.debug("typewriter rootStop");
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("typewriter start");
+    logger.animation.debug("typewriter start");
 
     if (objectEl.offsetWidth === 0) {
       setTimeout(() => {
@@ -213,7 +211,7 @@ export function typewriterAnimation() {
   }
 
   function startInternal(config: ITypeWriterAnimation) {
-    logger.debug("typewriter startInternal");
+    logger.animation.debug("typewriter startInternal");
 
     initializeAnimation(config);
 
@@ -221,7 +219,7 @@ export function typewriterAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("typewriter stop");
+    logger.animation.debug("typewriter stop");
 
     teardownAnimation();
 
@@ -230,26 +228,25 @@ export function typewriterAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug("typewriter update");
+    logger.animation.debug("typewriter update");
 
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug("typewriter pause");
+    logger.animation.debug("typewriter pause");
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("typewriter resume");
+    logger.animation.debug("typewriter resume");
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug("typewriter destroy");
+    logger.animation.debug("typewriter destroy");
     timeline.clear();
     timeline.kill();
   }

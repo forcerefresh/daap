@@ -88,7 +88,6 @@ export class Ticker {
       this.time -= this.fps;
       n -= 1;
       this.emitter.emit("tick", diff);
-      //console.log(this.currentTickerTime);
     }
 
     this.time = (this.time + this.fps * 1000) % this.fps;

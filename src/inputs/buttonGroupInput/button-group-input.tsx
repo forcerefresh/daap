@@ -21,6 +21,7 @@ export const ButtonGroupInputForm: React.FC<
       <ButtonGroup>
         {options.map((el, idx) => (
           <Button
+            key={`option-${el.value}`}
             active={options[idx].value === value}
             onClick={() => onChange(options[idx].value)}
           >

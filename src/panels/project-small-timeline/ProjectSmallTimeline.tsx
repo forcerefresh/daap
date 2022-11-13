@@ -43,7 +43,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   const windowSize = useWindowSize();
 
-  //console.log(projectTimelineData);
   const { previewTimelineState } = useContext(PreviewTimelineContext);
   //const [progress, setProgress] = useState<number>(0);
 
@@ -58,7 +57,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     /*}*/
   });
 
-  //console.log(totalTime);
   let currPos = 0;
   const slideLeftArr: number[] = [];
   const slidePosMultiplierArr: number[] = [];
@@ -79,10 +77,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     const slidePosMultiplier = slideData.duration / totalTime;
     slidePosMultiplierArr[idx] = slidePosMultiplier;
   });
-
-  //console.log(slideLeftArr);
-
-  //console.log(slidePosMultiplierArr);
 
   useDeepCompareEffect(() => {
     //render timeline content
@@ -155,7 +149,6 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
 
   left = left + lineWidth * slideLeftArr[previewTimelineState.slideIdx];
 
-  //console.log(progress);
   const position =
     previewState.previewState === "play" ? { x: left, y: 0 } : undefined;
 

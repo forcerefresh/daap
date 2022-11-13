@@ -10,8 +10,7 @@ import {
   getImageFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const useMyMediaHook = () => {
   const upload = async (
@@ -19,7 +18,7 @@ export const useMyMediaHook = () => {
     file: File,
     fileMetadata: MediaDataInfo
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
-    logger.log(type, fileMetadata);
+    logger.app.log(type, fileMetadata);
 
     const { ipcRenderer } = window.require("electron");
 
@@ -53,7 +52,7 @@ export const useMyMediaHook = () => {
           })
         )
         .then((result: any) => {
-          logger.log("resolve!!!!");
+          logger.app.log("resolve!!!!");
           resolve(result);
         });
     });

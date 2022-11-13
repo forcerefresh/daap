@@ -1,10 +1,8 @@
 import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { ITransformAnimation } from "./transform.types";
 import anime from "animejs";
-
-const logger = createLogger();
 
 function getPointValue(property: string, value: string | number | any) {
   switch (property) {
@@ -36,7 +34,7 @@ export function transformAnimation() {
   let objectEl: HTMLElement;
 
   function init(config: ITransformAnimation) {
-    logger.debug("timelines init");
+    logger.animation.debug("timelines init");
 
     objectEl = getObjectElementById(config.itemId!);
 
@@ -76,30 +74,30 @@ export function transformAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug("timelines rootStart");
+    logger.animation.debug("timelines rootStart");
 
     timeline.pause();
   }
 
   function rootStop(config: any) {
-    logger.debug("timelines rootStop");
+    logger.animation.debug("timelines rootStop");
 
     timeline.pause();
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug("timelines start");
+    logger.animation.debug("timelines start");
 
     timeline.play();
     if (isManual) timeline.pause();
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug("timelines stop");
+    logger.animation.debug("timelines stop");
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    //logger.debug("timelines update");
+    //logger.animation.debug("timelines update");
 
     if (isManual) {
       timeline.seek(time / 1000);
@@ -107,16 +105,16 @@ export function transformAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug("timelines pause");
+    logger.animation.debug("timelines pause");
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug("timelines resume");
+    logger.animation.debug("timelines resume");
   }
 
   function destroy(config: any) {
-    logger.debug("timelines destroy");
+    logger.animation.debug("timelines destroy");
   }
 
   return {

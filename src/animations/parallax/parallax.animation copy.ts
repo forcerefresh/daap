@@ -1,8 +1,6 @@
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { IParallaxAnimation, PARALLAX_ANIMATION } from "./parallax.types";
-
-const logger = createLogger();
 
 const DEPTH_MULTIPLIER = 25; // from input we get 0-100, dividing with 25 we get 0-4 multiplier
 const STRENGTH_MULTIPLIER = 50; // from input we get 0-100, dividing with 50 we get 0-2 multiplier
@@ -18,7 +16,7 @@ export function parallaxAnimation() {
   let objectEls: HTMLDivElement[] = [];
 
   function init(config: IParallaxAnimation) {
-    logger.debug(`${PARALLAX_ANIMATION} init`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} init`);
 
     layer = document.getElementsByClassName(
       `layer-${config.itemId}`
@@ -94,22 +92,22 @@ export function parallaxAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${PARALLAX_ANIMATION} rootStart`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} rootStart`);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${PARALLAX_ANIMATION} rootStop`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} rootStop`);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${PARALLAX_ANIMATION} start`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} start`);
 
     layer.addEventListener("mousemove", layerMouseMoveHandler);
     timeline.play();
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${PARALLAX_ANIMATION} stop`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} stop`);
     layer.removeEventListener("mousemove", layerMouseMoveHandler);
 
     if (config.parallax.setToInitialPositionOnComplete) {
@@ -130,17 +128,17 @@ export function parallaxAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${PARALLAX_ANIMATION} pause`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${PARALLAX_ANIMATION} resume`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${PARALLAX_ANIMATION} destroy`);
+    logger.animation.debug(`${PARALLAX_ANIMATION} destroy`);
 
     timeline.clear();
     timeline.kill();

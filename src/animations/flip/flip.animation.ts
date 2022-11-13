@@ -1,8 +1,6 @@
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { FLIP_ANIMATION, IFlipAnimation } from "./flip.types";
-
-const logger = createLogger();
 
 export function flipAnimation() {
   let timeline: gsap.core.Timeline;
@@ -14,7 +12,7 @@ export function flipAnimation() {
   let containers: HTMLDivElement[] = [];
 
   function init(config: IFlipAnimation) {
-    logger.debug(`${FLIP_ANIMATION} init`);
+    logger.animation.debug(`${FLIP_ANIMATION} init`);
 
     mainElement = getObjectElementById(config.itemId!);
     cardContainer = mainElement.firstChild as HTMLDivElement;
@@ -121,21 +119,21 @@ export function flipAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${FLIP_ANIMATION} rootStart`);
+    logger.animation.debug(`${FLIP_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${FLIP_ANIMATION} rootStop`);
+    logger.animation.debug(`${FLIP_ANIMATION} rootStop`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${FLIP_ANIMATION} start`);
+    logger.animation.debug(`${FLIP_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -143,7 +141,7 @@ export function flipAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${FLIP_ANIMATION} stop`);
+    logger.animation.debug(`${FLIP_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -162,19 +160,19 @@ export function flipAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${FLIP_ANIMATION} pause`);
+    logger.animation.debug(`${FLIP_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${FLIP_ANIMATION} resume`);
+    logger.animation.debug(`${FLIP_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${FLIP_ANIMATION} reverse`);
+    logger.animation.debug(`${FLIP_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();
@@ -185,7 +183,7 @@ export function flipAnimation() {
   }
 
   function destroy(config: any) {
-    logger.debug(`${FLIP_ANIMATION} destroy`);
+    logger.animation.debug(`${FLIP_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

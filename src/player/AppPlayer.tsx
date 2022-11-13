@@ -49,9 +49,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   useEffect(() => {
     if (customBPWidth) {
       //debugger;
-      console.log(player.current);
       player.current?.setDevice(selectedDevice as DeviceType);
-      console.log(customBPWidth, "srki2");
       player.current?.customResize({
         width: customBPWidth,
         height: playerData?.breakpointData.pageHeight,
@@ -103,7 +101,6 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
   let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
     if (!isEmpty(playerData?.slideDataArr)) {
-      console.log("REINITIALIZE");
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/

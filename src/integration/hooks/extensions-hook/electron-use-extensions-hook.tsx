@@ -1,6 +1,5 @@
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */
@@ -10,7 +9,7 @@ export const useExtensionsHook = () => {
     tags?: string[],
     apiKey?: string
   ): Promise<{ items: IExtensionItem[] }> => {
-    logger.trace("Get extensions from directory (electron)");
+    logger.app.trace("Get extensions from directory (electron)");
 
     const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?api-key=${apiKey}`;
     let url = `${apiUrl}&from=${from}`;
@@ -21,7 +20,7 @@ export const useExtensionsHook = () => {
     if (tags && tags.length > 0) {
       url += `&tags=${tags.map((tag) => encodeURIComponent(tag)).join(",")}`;
     }
-    logger.log(url);
+    logger.app.log(url);
 
     return fetch(url).then((res) => res.json());
   };

@@ -1,15 +1,11 @@
-import { Console } from "console";
-import { isEqual } from "lodash-es";
 import React, { useContext, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import { IntegrationContext } from "../../integration";
 import { DevelopmentItem } from "../../panels/development-panel/i-development-types";
 import { forceRefresh } from "../../store/actions/actions";
 import { IStore, store } from "../../store/store";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { DevelopmentContext } from "./DevelopmentProvider";
-
-const logger = createLogger();
 
 export type IDevelopmentManagerProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -47,8 +43,6 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
     for (let i = 0; i < devItems.length; i++) {
       const devItem = devItems[i];
 
-      logger.log(devItem);
-
       if (!devItem.monitoringEnabled) return;
 
       // create url for hash.json
@@ -61,7 +55,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       try {
         hashJson = await (await fetch(hashUrl)).json();
       } catch (err: any) {
-        logger.error(err);
+        logger.app.error(err);
         const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",
@@ -78,7 +72,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         continue;
       }
 
-      logger.info(
+      logger.app.info(
         `Development Component (${devItem.type}) has been changed. Reloading...`
       );
 
@@ -138,11 +132,11 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
           );
         }
 
-        logger.info(
+        logger.app.info(
           `Development component (${devItem.componentType}:${devItems[i].type}) has been loaded.`
         );
       } catch (err: any) {
-        logger.error(err);
+        logger.app.error(err);
         const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItems[i].id,
           status: "ERROR",

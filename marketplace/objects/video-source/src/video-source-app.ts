@@ -14,11 +14,10 @@ import {
   GetHtmlFuncReturnType,
   ObjectMetaType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { VideoSourceValues, VIDEO_SOURCE } from "./video-source-types";
 import svgIcon from "../static/video-source-icon.svg";
 
-const logger = createLogger();
 /**
  * This is a type definition of Object properties form
  * Note: Generic values needs to match with ObjectValues interface
@@ -37,7 +36,7 @@ export type VideoSourceTuple = [
 export function createObject(
   props: CreateObjectFuncPropsType
 ): CreateObjectFuncReturnType<VideoSourceTuple> {
-  logger.debug(`video-source::createObject()`);
+  logger.object.debug(`video-source::createObject()`);
 
   const object = createCommonObject(VIDEO_SOURCE);
 
@@ -100,7 +99,7 @@ export function createObject(
 export function getHtmlForApp(
   props: GetHtmlFuncPropsType
 ): GetHtmlFuncReturnType {
-  logger.debug(`video-source::getHtmlForApp()`);
+  logger.object.debug(`video-source::getHtmlForApp()`);
 
   return `<div style="
     color: gray; 

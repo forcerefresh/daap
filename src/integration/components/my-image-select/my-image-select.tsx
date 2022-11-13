@@ -22,8 +22,7 @@ import {
   dzRejectStyle,
 } from "./common-styles";
 import css from "./my-image-select.module.scss";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface UploadFileInfo {
   tag: string;
@@ -40,8 +39,6 @@ interface MyImageSelectProps {
 export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   const { onStop, onComplete, type } = props;
 
-  logger.log(type);
-
   const accept =
     type === "image"
       ? "image/jpeg, image/png, image/gif"
@@ -54,8 +51,6 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
       : type === "template"
       ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
       : undefined;
-
-  logger.log(accept);
 
   const {
     acceptedFiles,
@@ -80,7 +75,6 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   );
 
   useEffect(() => {
-    console.log(acceptedFiles);
     const arr: UploadFileInfo[] = [];
     acceptedFiles.forEach((file) => {
       arr.push({ tag: "", title: "", filename: file.name });
@@ -126,8 +120,6 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   const uploadFiles = () => {
     setUploadInProgress(true);
   };
-
-  console.log("AAAAAAAAAAAAAAA");
 
   return (
     <>
@@ -281,15 +273,15 @@ function UploadDialog(props: UploadDialogProps) {
     const file = files[currentUploadIndex];
     const filesInfo = filesInfoArr[currentUploadIndex];
     //(file.name as any) = filesInfo.filename;
-    logger.log(type);
-    logger.log(filesInfo);
     upload(type, file, {
       tags: [filesInfo.tag],
       title: filesInfo.title,
       filename: filesInfo.filename,
     }).then((status) => {
       statusesArrRef.current.push(status);
-      logger.log("uploaded");
+      logger.app.debug(
+        `File has been uploaded (${filesInfo.filename} > ${filesInfo.filename})`
+      );
 
       if (isUnMounted.current) return;
 

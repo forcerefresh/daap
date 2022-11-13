@@ -1,6 +1,6 @@
 import { RGBColor } from "react-color";
 import { INumericTimelineValue } from "webslider-sdk/lib/inputs/i-inputs";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IAnimationBase } from "../types";
@@ -8,8 +8,6 @@ import {
   ISquareMaskAnimation,
   SQUARE_MASK_ANIMATION,
 } from "./square-mask.types";
-
-const logger = createLogger();
 
 export function squareMaskAnimation() {
   let timeline: gsap.core.Timeline;
@@ -23,7 +21,7 @@ export function squareMaskAnimation() {
   let rightBorderColor: string;
 
   function init(config: ISquareMaskAnimation) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} init`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} init`);
 
     objectEl = getObjectElementById(config.itemId!);
     borderColor = colorToString(config.borderColor.borderColor);
@@ -45,21 +43,21 @@ export function squareMaskAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} rootStart`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} rootStop`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} rootStop`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} start`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} start`);
 
     borderEl = objectEl.getElementsByClassName("square-mask")[0] as HTMLElement;
 
@@ -123,32 +121,31 @@ export function squareMaskAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} stop`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} stop`);
 
     teardownAnimation();
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} update`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} update`);
 
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} pause`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} resume`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${SQUARE_MASK_ANIMATION} destroy`);
+    logger.animation.debug(`${SQUARE_MASK_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

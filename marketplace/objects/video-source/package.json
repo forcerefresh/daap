@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "source-map-explorer": "^2.5.2",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "webslider-sdk": "^1.1.8"
   },
   "devDependencies": {
     "create-hash-file-webpack": "^1.0.4",

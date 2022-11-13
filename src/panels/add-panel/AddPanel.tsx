@@ -49,6 +49,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
       <>
         {objDeffs.map((deff) => (
           <Card
+            key={"object_card_" + deff.type}
             style={{ opacity: disabled ? "0.5" : "1" }}
             interactive={!!activeLayerId}
             elevation={Elevation.TWO}

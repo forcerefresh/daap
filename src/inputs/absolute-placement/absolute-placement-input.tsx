@@ -289,6 +289,7 @@ export const AbsolutePlacementForm: React.FC<
               <td style={{ width: "25px" }}></td>
             </tr>
             {bcArr.map((bc) => {
+              console.log(bc);
               return (
                 <tr key={bc.type}>
                   <td>

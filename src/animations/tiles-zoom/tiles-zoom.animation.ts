@@ -5,12 +5,10 @@ import {
   updateTilesSize,
 } from "../common";
 import gsap from "gsap";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import { ITilesZoomAnimation, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 import { merge } from "lodash-es";
-
-const logger = createLogger();
 
 export function tilesZoomAnimation() {
   let timeline: gsap.core.Timeline;
@@ -23,7 +21,7 @@ export function tilesZoomAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesZoomAnimation) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} init`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -94,7 +92,7 @@ export function tilesZoomAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} rootStart`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -108,7 +106,7 @@ export function tilesZoomAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} rootStop`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -122,7 +120,7 @@ export function tilesZoomAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} start`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -138,9 +136,9 @@ export function tilesZoomAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} stop`);
-    logger.debug(isManual);
-    logger.debug(isReverse);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} stop`);
+    logger.animation.debug(isManual);
+    logger.animation.debug(isReverse);
 
     elObserver.disconnect();
 
@@ -171,23 +169,22 @@ export function tilesZoomAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} pause`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} resume`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${TILES_ZOOM_ANIMATION} destroy`);
+    logger.animation.debug(`${TILES_ZOOM_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

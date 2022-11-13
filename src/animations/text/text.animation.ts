@@ -1,11 +1,9 @@
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { TEXT_ANIMATION, ITextAnimation } from "./text.types";
 import { addTextAnimationPartToTimeline, arrangeChars } from "../text.utils";
-
-const logger = createLogger();
 
 export function textAnimation() {
   let timeline: gsap.core.Timeline;
@@ -19,7 +17,7 @@ export function textAnimation() {
   let isInitialized = false;
 
   function init(config: ITextAnimation) {
-    logger.debug(`${TEXT_ANIMATION} init`);
+    logger.animation.debug(`${TEXT_ANIMATION} init`);
 
     if (isInitialized) return;
 
@@ -159,7 +157,7 @@ export function textAnimation() {
   }
 
   function rootStart(config: ITextAnimation) {
-    logger.debug(`${TEXT_ANIMATION} rootStart`);
+    logger.animation.debug(`${TEXT_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -168,7 +166,7 @@ export function textAnimation() {
   }
 
   function rootStop(config: ITextAnimation) {
-    logger.debug(`${TEXT_ANIMATION} rootStop`);
+    logger.animation.debug(`${TEXT_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -177,7 +175,7 @@ export function textAnimation() {
   }
 
   function start(config: ITextAnimation, isManual?: boolean) {
-    logger.debug(`${TEXT_ANIMATION} start`);
+    logger.animation.debug(`${TEXT_ANIMATION} start`);
 
     initializeAnimation(config);
 
@@ -191,7 +189,7 @@ export function textAnimation() {
     isManual?: boolean,
     isReverse?: boolean
   ) {
-    logger.debug(`${TEXT_ANIMATION} stop`);
+    logger.animation.debug(`${TEXT_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -210,19 +208,19 @@ export function textAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${TEXT_ANIMATION} pause`);
+    logger.animation.debug(`${TEXT_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${TEXT_ANIMATION} resume`);
+    logger.animation.debug(`${TEXT_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${TEXT_ANIMATION} reverse`);
+    logger.animation.debug(`${TEXT_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

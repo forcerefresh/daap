@@ -15,7 +15,7 @@ import {
   GetHtmlFuncReturnType,
   ObjectMetaType,
 } from "webslider-sdk/lib/objects/objects-register";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import {
   VideoSourceUnmuteValues,
   VIDEO_SOURCE_UNMUTE,
@@ -27,8 +27,6 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
-
-const logger = createLogger();
 
 /**
  * This is a type definition of Object properties form
@@ -48,7 +46,7 @@ export type VideoSourceUnmuteTuple = [
 export function createObject(
   props: CreateObjectFuncPropsType
 ): CreateObjectFuncReturnType<VideoSourceUnmuteTuple> {
-  logger.debug(`video-source-unmute::createObject()`);
+  logger.object.debug(`video-source-unmute::createObject()`);
 
   const object = createCommonObject(VIDEO_SOURCE_UNMUTE);
 
@@ -120,7 +118,7 @@ export function createObject(
 export function getHtmlForApp(
   props: GetHtmlFuncPropsType
 ): GetHtmlFuncReturnType {
-  logger.debug(`video-source-unmute::getHtmlForApp()`);
+  logger.object.debug(`video-source-unmute::getHtmlForApp()`);
 
   const { object } = props;
 

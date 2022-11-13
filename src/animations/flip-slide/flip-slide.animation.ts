@@ -1,9 +1,7 @@
 import gsap from "gsap";
 import { convertTimeUnitToMs } from "../../utils/utils";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideAnimation } from "./flip-slide.types";
-
-const logger = createLogger();
 
 export function flipSlideAnimation() {
   let timeline: gsap.core.Timeline;
@@ -12,7 +10,7 @@ export function flipSlideAnimation() {
   let slideTransitionHolder: HTMLDivElement;
 
   function init(config: IFlipSlideAnimation) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} init`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} init`);
 
     slidesHolder = document.getElementsByClassName(
       "slidesHolder"
@@ -34,7 +32,6 @@ export function flipSlideAnimation() {
       card.style.transformStyle = "preserve-3d";
       card.style.transformOrigin = "center center";
       card.className = "slideTransitionHolder";
-      console.log(card, "pppp");
       slidesHolder.append(card);
       slideTransitionHolder = card;
     } else {
@@ -53,7 +50,7 @@ export function flipSlideAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} rootStart`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       timeline.pause();
@@ -62,7 +59,7 @@ export function flipSlideAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} rootStop`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -71,7 +68,7 @@ export function flipSlideAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} start`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} start`);
 
     if (config?.prevSlideEl) {
       //config.prevSlideEl.style.width = "1244px";
@@ -97,7 +94,7 @@ export function flipSlideAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} stop`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} stop`);
 
     // gsap.set(slidesHolder, {
     //   perspective: "none",
@@ -142,23 +139,22 @@ export function flipSlideAnimation() {
         card.appendChild(config?.nextSlideEl);
       }
       config!.nextSlideEl!.style.display = "block";
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} pause`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} resume`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} reverse`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();
@@ -169,7 +165,7 @@ export function flipSlideAnimation() {
   }
 
   function destroy(config: any) {
-    logger.debug(`${FLIP_SLIDE_ANIMATION} destroy`);
+    logger.animation.debug(`${FLIP_SLIDE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

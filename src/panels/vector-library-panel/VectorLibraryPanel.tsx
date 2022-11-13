@@ -25,10 +25,8 @@ import classnames from "classnames";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
-
-const logger = createLogger();
 
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
@@ -121,7 +119,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
       },
 
       (error) => {
-        logger.warn(error);
+        logger.app.warn(error);
         /*this.setState({
             isLoaded: true,
             error,
@@ -359,7 +357,6 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
         onConfirm={() => {
           deleteImagesFunc?.("vector", [imagesForDelete?.[0].id!]).then(
             (resp) => {
-              console.log(resp);
               const newImages = filter(images, (image) => {
                 return (
                   resp.response

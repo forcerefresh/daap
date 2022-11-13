@@ -1,5 +1,5 @@
 import gsap from "gsap";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import {
   FALLING_LEAVES_ANIMATION,
@@ -7,14 +7,12 @@ import {
 } from "./falling-leaves.types";
 import { getMediaSrc } from "../../integration/utils/local-media";
 
-const logger = createLogger();
-
 export function fallingLeavesAnimation() {
   let element: HTMLDivElement;
   let timelineArr: gsap.core.Timeline[] = [];
 
   function init(config: IFallingLeaves) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} init`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -54,7 +52,7 @@ export function fallingLeavesAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} rootStart`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       element.style.display = "none";
@@ -62,7 +60,7 @@ export function fallingLeavesAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} rootStop`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       element.style.display = "none";
@@ -70,7 +68,7 @@ export function fallingLeavesAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} start`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} start`);
     element.style.display = "block";
 
     timelineArr.forEach((tl) => {
@@ -79,7 +77,7 @@ export function fallingLeavesAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} stop`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} stop`);
     element.style.display = "none";
 
     if (isManual) {
@@ -90,7 +88,6 @@ export function fallingLeavesAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       // timeline.seek(time / 1000);
       // timelineArr.forEach((tl) => {
       //   tl.seek(time / 1000);
@@ -99,21 +96,21 @@ export function fallingLeavesAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} pause`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} pause`);
     timelineArr.forEach((tl) => {
       tl.pause();
     });
   }
 
   function resume(config: any) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} resume`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} resume`);
     timelineArr.forEach((tl) => {
       tl.resume();
     });
   }
 
   function destroy(config: any) {
-    logger.debug(`${FALLING_LEAVES_ANIMATION} destroy`);
+    logger.animation.debug(`${FALLING_LEAVES_ANIMATION} destroy`);
 
     timelineArr.forEach((tl) => {
       tl.clear();

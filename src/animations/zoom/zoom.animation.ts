@@ -1,17 +1,15 @@
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IZoomInAnimation, ZOOM_ANIMATION } from "./zoom.types";
 import gsap from "gsap";
-
-const logger = createLogger();
 
 export function zoomAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
   function init(config: IZoomInAnimation) {
-    logger.debug(`${ZOOM_ANIMATION} init`);
+    logger.animation.debug(`${ZOOM_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -39,14 +37,14 @@ export function zoomAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${ZOOM_ANIMATION} rootStart`);
+    logger.animation.debug(`${ZOOM_ANIMATION} rootStart`);
 
     timeline.pause();
     timeline.progress(0);
   }
 
   function rootStop(config: any) {
-    logger.debug(`${ZOOM_ANIMATION} rootStop`);
+    logger.animation.debug(`${ZOOM_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       timeline.pause();
@@ -55,7 +53,7 @@ export function zoomAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${ZOOM_ANIMATION} start`);
+    logger.animation.debug(`${ZOOM_ANIMATION} start`);
 
     timeline.play(0);
 
@@ -63,7 +61,7 @@ export function zoomAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${ZOOM_ANIMATION} stop`);
+    logger.animation.debug(`${ZOOM_ANIMATION} stop`);
 
     if (isManual) {
       timeline.pause();
@@ -82,19 +80,19 @@ export function zoomAnimation() {
   }
 
   function pause(config: any) {
-    logger.debug(`${ZOOM_ANIMATION} pause`);
+    logger.animation.debug(`${ZOOM_ANIMATION} pause`);
 
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${ZOOM_ANIMATION} resume`);
+    logger.animation.debug(`${ZOOM_ANIMATION} resume`);
 
     timeline.resume();
   }
 
   function direction(config: any, direction: number) {
-    logger.debug(`${ZOOM_ANIMATION} reverse`);
+    logger.animation.debug(`${ZOOM_ANIMATION} reverse`);
 
     if (direction === -1 && !timeline.reversed()) {
       timeline.reverse();

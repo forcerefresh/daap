@@ -319,7 +319,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       const isLast = idx === layer.objectIds.length - 1;
 
                       return (
-                        <>
+                        <React.Fragment key={`object-${objectId}`}>
                           {isDraggingObjects &&
                             selectedObjectIds.indexOf(object.id) === -1 && (
                               <DropHandle
@@ -362,7 +362,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             )}
                             onDragingChange={onDragingObjectsChange}
                           />
-                        </>
+                        </React.Fragment>
                       );
                     })}
                     {isDraggingObjects && (

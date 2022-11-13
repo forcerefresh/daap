@@ -354,8 +354,6 @@ function generateSlideData(
       layer
     )}" style="${layerStyle}">`; // layer open
 
-    console.log(html);
-
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
       //part for externals
@@ -422,7 +420,6 @@ function generateSlideData(
         object
       )}" style='${style}'>`; // open object
 
-      console.log(object);
       const objectHtml = getObjectHtml(
         object,
         calculatedObjectSize,
@@ -536,10 +533,9 @@ export function getObjectHtml(
       const objDeff = isPlayer
         ? getPlayerObjectDefinition(object.type)
         : getAppObjectDefinition(object.type);
-      //logger.trace(isPlayer);
-      //logger.trace(object.type);
-      //logger.log(objDeff);
-      console.log(objDeff);
+      //logger.app.trace(isPlayer);
+      //logger.app.trace(object.type);
+      //logger.app.log(objDeff);
       if (objDeff && objDeff.getHtml) {
         //try {
         return objDeff.getHtml({

@@ -1,5 +1,5 @@
 import { merge } from "lodash-es";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById, getParameters } from "../animation-utils";
 import {
   createTilesFromHtml,
@@ -8,8 +8,6 @@ import {
   updateTilesSize,
 } from "../common";
 import { ITilesFadeAnimation, TILES_FADE_ANIMATION } from "./tiles-fade.types";
-
-const logger = createLogger();
 
 export function tilesFadeAnimation() {
   let timeline: gsap.core.Timeline;
@@ -22,7 +20,7 @@ export function tilesFadeAnimation() {
   let elObserver: ResizeObserver;
 
   function init(config: ITilesFadeAnimation) {
-    logger.debug(`${TILES_FADE_ANIMATION} init`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} init`);
 
     element = getObjectElementById(config.itemId!);
 
@@ -90,7 +88,7 @@ export function tilesFadeAnimation() {
   }
 
   function rootStart(config: any) {
-    logger.debug(`${TILES_FADE_ANIMATION} rootStart`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} rootStart`);
 
     if (config.type === "in") {
       objectContentElement.style.visibility = "hidden";
@@ -104,7 +102,7 @@ export function tilesFadeAnimation() {
   }
 
   function rootStop(config: any) {
-    logger.debug(`${TILES_FADE_ANIMATION} rootStop`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} rootStop`);
 
     if (config.type === "out") {
       objectContentElement.style.visibility = "visible";
@@ -118,7 +116,7 @@ export function tilesFadeAnimation() {
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.debug(`${TILES_FADE_ANIMATION} start`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} start`);
 
     elObserver.observe(element);
 
@@ -134,9 +132,9 @@ export function tilesFadeAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.debug(`${TILES_FADE_ANIMATION} stop`);
-    logger.debug(isManual);
-    logger.debug(isReverse);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} stop`);
+    logger.animation.debug(isManual);
+    logger.animation.debug(isReverse);
 
     elObserver.disconnect();
 
@@ -166,25 +164,24 @@ export function tilesFadeAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.debug(`${TILES_FADE_ANIMATION} update`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} update`);
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
       timeline.seek(time / 1000);
     }
   }
 
   function pause(config: any) {
-    logger.debug(`${TILES_FADE_ANIMATION} pause`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} pause`);
     timeline.pause();
   }
 
   function resume(config: any) {
-    logger.debug(`${TILES_FADE_ANIMATION} resume`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} resume`);
     timeline.resume();
   }
 
   function destroy(config: any) {
-    logger.debug(`${TILES_FADE_ANIMATION} destroy`);
+    logger.animation.debug(`${TILES_FADE_ANIMATION} destroy`);
     timeline.clear();
     timeline.kill();
   }

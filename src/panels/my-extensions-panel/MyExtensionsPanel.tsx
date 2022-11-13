@@ -10,8 +10,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./MyExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
-const logger = createLogger();
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -76,7 +75,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       },
 
       (error) => {
-        logger.error(error);
+        logger.app.error(error);
       }
     );
   };
@@ -179,7 +178,6 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     });
   };
 
-  console.log(installedExtensions);
   if (!installedExtensions) {
     return null;
   }

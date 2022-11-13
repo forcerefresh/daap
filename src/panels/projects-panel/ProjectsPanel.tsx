@@ -16,10 +16,8 @@ import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
-import { createLogger } from "webslider-sdk/lib/utils/logger/logger";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./ProjectsPanel.module.scss";
-
-const logger = createLogger();
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -66,7 +64,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       },
 
       (error) => {
-        logger.error(error);
+        logger.app.error(error);
       }
     );
   };
