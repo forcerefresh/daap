@@ -159,6 +159,7 @@ export const useObjectStorageHook = () => {
   const openPublishUrl = async (req: {
     bucketId: string;
     projectId: number;
+    debug?: boolean;
   }): Promise<void> => {
     const { shell, ipcRenderer } = window.require("electron");
 
@@ -167,7 +168,7 @@ export const useObjectStorageHook = () => {
       JSON.stringify(req)
     );
 
-    shell.openExternal(res.indexUrl);
+    shell.openExternal(req.debug ? res.debugUrl : res.indexUrl);
   };
 
   const downloadPackage = async (req: {

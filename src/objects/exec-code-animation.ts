@@ -2,6 +2,8 @@ import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-registe
 import { getConnectorBySourceId } from "webslider-sdk/lib/connectors/connector-manager";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
+export const EXEC_CODE_ANIMATION = "exec-code";
+
 export interface IExecCodeConfig {
   execStart: ExecutionCodeFuncType;
   execStop: ExecutionCodeFuncType;
@@ -15,21 +17,21 @@ export function execCodeAnimation() {
   let getConnector: unknown;
 
   function init(config: IExecCodeConfig) {
-    logger.object.debug("execCode init");
+    logger.player.debug("exec-code:init");
 
     getConnector = (sourceId: string) => getConnectorBySourceId(sourceId);
   }
 
   function rootStart(config: any) {
-    logger.object.debug("execCode rootStart");
+    logger.player.debug("exec-code:rootStart");
   }
 
   function rootStop(config: any) {
-    logger.object.debug("execCode rootStop");
+    logger.player.debug("exec-code:rootStop");
   }
 
   function start(config: any, isManual?: boolean) {
-    logger.object.debug("execCode start");
+    logger.player.debug("exec-code: start");
 
     const { id, values, className, calculatedObjectSize, execStart } = config;
 
@@ -45,7 +47,7 @@ export function execCodeAnimation() {
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
-    logger.object.debug("execCode stop");
+    logger.player.debug("exec-code: stop");
 
     const { id, values, className, calculatedObjectSize, execStop } = config;
 
@@ -61,19 +63,19 @@ export function execCodeAnimation() {
   function update(config: any, time: number, isManual?: boolean) {}
 
   function pause(config: any) {
-    logger.object.debug("execCode pause");
+    logger.player.debug("exec-code:pause");
   }
 
   function resume(config: any) {
-    logger.object.debug("execCode resume");
+    logger.player.debug("exec-code:resume");
   }
 
   function direction(config: any, direction: number) {
-    logger.object.debug("execCode reverse");
+    logger.player.debug("exec-code:reverse");
   }
 
   function destroy(config: any) {
-    logger.object.debug("execCode destroy");
+    logger.player.debug("exec-code:destroy");
 
     const { id, values, className, calculatedObjectSize, execStop } = config;
 
@@ -101,16 +103,16 @@ export function execCodeAnimation() {
 }
 
 export const execCodeAppDef = {
-  animationId: "exec-code",
+  animationId: EXEC_CODE_ANIMATION,
   formDefaults: {},
   formDefinition: {
-    id: "exec-code",
+    id: EXEC_CODE_ANIMATION,
     name: "",
     form: [],
   },
 };
 
 export const execCodePlayerDef = {
-  animationId: "exec-code",
+  animationId: EXEC_CODE_ANIMATION,
   animationFunc: execCodeAnimation,
 };

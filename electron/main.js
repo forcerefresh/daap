@@ -1,7 +1,11 @@
+// logger config has to be at the top of file
+require("./utils/logger-config");
 const { app, BrowserWindow } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const { registerFileProtocol } = require("./utils/file-protocol");
-
+const {
+  getAppSettingsConfiguration,
+} = require("./integration/api-settings/app-settings");
 // top-menu
 require("./top-menu");
 
@@ -29,7 +33,7 @@ if (process.env.ELECTRON_ENV === "development") {
 // other main functionality
 
 let mainWindow;
-function createWindow() {
+async function createWindow() {
   const mainWindowState = windowStateKeeper({
     defaultWidth: 1000,
     defaultHeight: 600,
@@ -63,12 +67,17 @@ function createWindow() {
 
   // and load the index.html of the app.
 
-  if (process.env.ELECTRON_ENV === "development") {
+  const enableDeveloper = await getAppSettingsConfiguration("enableDeveloper");
+  const devTools = await getAppSettingsConfiguration("devTools");
+  if (enableDeveloper && devTools) {
     mainWindow.webContents.openDevTools();
+  }
+
+  if (process.env.ELECTRON_ENV === "development") {
+    //mainWindow.webContents.openDevTools();
     mainWindow.loadURL("http://localhost:3000/");
   } else {
     mainWindow.removeMenu();
-    mainWindow.webContents.openDevTools();
     mainWindow.loadFile("./build/index.html");
   }
   // Open the DevTools.
@@ -92,16 +101,16 @@ if (!gotTheLock) {
   );
 
   // Create myWindow, load the rest of the app, etc...
-  app.whenReady().then(() => {
-    mainWindow = createWindow();
-
-    app.on("activate", function () {
+  app.whenReady().then(async () => {
+    app.on("activate", async function () {
       // On macOS it's common to re-create a window in the app when the
       // dock icon is clicked and there are no other windows open.
       if (BrowserWindow.getAllWindows().length === 0) {
-        mainWindow = createWindow();
+        mainWindow = await createWindow();
       }
     });
+
+    mainWindow = await createWindow();
   });
 }
 

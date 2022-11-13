@@ -1,12 +1,14 @@
 import { AnimationType } from "../animations/types";
 import { ITransitionsData } from "../export/i-export-html";
-import { IExecCodeConfig } from "../objects/exec-code-animation";
+import {
+  IExecCodeConfig,
+  EXEC_CODE_ANIMATION,
+} from "../objects/exec-code-animation";
 import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-register";
 import { ITransition } from "webslider-sdk/lib/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { ITimelineConfig, Timeline } from "./player/Timeline";
 import { RootTimeline } from "./player/RootTimeline";
-
 export const DYNAMIC_OUT_EFF_TIMELINE_GROUP = "dynamic-out-eff-timeline-group";
 
 export interface IEventTimeline {
@@ -162,7 +164,7 @@ export function createTimelineForExecutionCode(
   calculatedObjectSize: any
 ): Timeline {
   const conf: IExecCodeConfig & ITimelineConfig = {
-    animationId: "exec-code",
+    animationId: EXEC_CODE_ANIMATION,
     delay: 0,
     duration: convertTimeUnitToMs(data.data.slideDuration.customValue),
     //

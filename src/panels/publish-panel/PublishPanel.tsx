@@ -245,11 +245,25 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
                   openPublishUrl({ bucketId: bucket.id!, projectId: meta.id! });
                 }}
               >
-                Open in browser
+                Open
               </Button>
-              <Button minimal style={{ float: "right" }}>
+              {bucket.environment === "development" && (
+                <Button
+                  rightIcon="share"
+                  onClick={(event: React.MouseEvent) => {
+                    openPublishUrl({
+                      bucketId: bucket.id!,
+                      projectId: meta.id!,
+                      debug: true,
+                    });
+                  }}
+                >
+                  Open debug
+                </Button>
+              )}
+              {/* <Button minimal style={{ float: "right" }}>
                 Integration instructions for {bucket.platform}
-              </Button>
+              </Button> */}
             </p>
 
             <p>

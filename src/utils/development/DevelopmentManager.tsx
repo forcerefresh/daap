@@ -46,7 +46,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       if (!devItem.monitoringEnabled) return;
 
       // create url for hash.json
-      const urlPathArr = devItems[i].appDevUrl.split("/");
+      const urlPathArr = devItem.appDevUrl.split("/");
       urlPathArr.pop();
       const hashUrl = urlPathArr.join("/") + "/hash.json";
 
@@ -57,7 +57,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       } catch (err: any) {
         logger.app.error(err);
         const devItemUpdate: Partial<DevelopmentItem> = {
-          id: devItems[i].id,
+          id: devItem.id,
           status: "ERROR",
           statusMessage: `Something went wrong. Development item ${
             devItems[i].appDevUrl
@@ -85,18 +85,18 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
       try {
         await import(
-          /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].appDevUrl +
+          /* @ts-ignore */ /* webpackIgnore: true */ devItem.appDevUrl +
             "?" +
             Math.random()
         );
         await import(
-          /* @ts-ignore */ /* webpackIgnore: true */ devItems[i].playerDevUrl +
+          /* @ts-ignore */ /* webpackIgnore: true */ devItem.playerDevUrl +
             "?" +
             Math.random()
         );
 
         const devItemUpdate: Partial<DevelopmentItem> = {
-          id: devItems[i].id,
+          id: devItem.id,
           status: "OK",
           statusMessage: ``,
         };
@@ -105,9 +105,10 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         const global = (window as any).WebSlider_GlobalScope;
 
         if (devItem.componentType === "object") {
+          logger.app.debug(`Register external object (${devItem.type})`);
           global.registerExternalObject(
             {
-              ...global.appObjects[devItems[i].type],
+              ...global.appObjects[devItem.type],
               development: true,
             },
             {
@@ -119,6 +120,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         }
 
         if (devItem.componentType === "animation") {
+          logger.app.debug(`Register external animation (${devItem.type})`);
           global.registerExternalAnimation(
             {
               ...global.appAnimations[devItems[i].type],

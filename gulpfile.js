@@ -1,32 +1,29 @@
-var gulp = require("gulp");
-var concat = require("gulp-concat");
-var count = require("gulp-count");
-var replace = require("gulp-replace");
-
-var package = require("./package.json");
+const gulp = require("gulp");
+const concat = require("gulp-concat");
+const replace = require("gulp-replace");
+const pkg = require("./package.json");
 
 gulp.task("bundle-player", function () {
   return gulp
     .src("./build/static/js/*.js")
     .pipe(concat("wsplayer.js"))
-    .pipe(gulp.dest(`./dist/wsplayer/${package.version}/`));
+    .pipe(gulp.dest(`./dist/wsplayer/${pkg.version}/`));
 });
 
 gulp.task("bucket-preview-html", function () {
   return gulp
     .src("./player-static/bucket-preview/index.html")
-    .pipe(replace("{$VERSION}", package.version))
-    .pipe(gulp.dest(`./dist/bucket-preview/${package.version}`));
+    .pipe(replace("{$VERSION}", pkg.version))
+    .pipe(gulp.dest(`./dist/bucket-preview/${pkg.version}`));
 });
-
-gulp.task("preview-with-json", function () {
+gulp.task("bucket-debug-html", function () {
   return gulp
-    .src("./player-static/bucket-preview/preview-with-json.html")
-    .pipe(replace("{$VERSION}", package.version))
-    .pipe(gulp.dest(`./dist/bucket-preview/${package.version}`));
+    .src("./player-static/bucket-preview/debug.html")
+    .pipe(replace("{$VERSION}", pkg.version))
+    .pipe(gulp.dest(`./dist/bucket-preview/${pkg.version}`));
 });
 
 gulp.task(
   "default",
-  gulp.series("bundle-player", "bucket-preview-html", "preview-with-json")
+  gulp.series("bundle-player", "bucket-preview-html", "bucket-debug-html")
 );

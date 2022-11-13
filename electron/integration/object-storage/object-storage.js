@@ -28,11 +28,14 @@ var JSZip = require("jszip");
 const {
   getBucketManagerClass,
 } = require("../../bucket-managers/bucket-manager-factory");
+const { info, debug } = require("../../utils/logger");
 
 const PARALLEL_UPLOAD = 5; // for publish (download and upload)
 const PARALLEL_DOWNLOAD = 5; // for download
 
 ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
+  debug("Handle ObjectStorage::List");
+
   const req = JSON.parse(reqJson);
 
   let objectStorageList = await loadObjectStorage();
@@ -52,6 +55,8 @@ ipcMain.handle("ObjectStorage::List", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::ListAssigned", async (event, reqJson) => {
+  debug("Handle ObjectStorage::ListAssigned");
+
   const req = JSON.parse(reqJson);
 
   let objectStorageList = await loadObjectStorage();
@@ -77,6 +82,8 @@ ipcMain.handle("ObjectStorage::ListAssigned", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::Add", async (event, reqJson) => {
+  debug("Handle ObjectStorage::Add");
+
   const item = JSON.parse(reqJson);
   item.id = uuid();
 
@@ -100,6 +107,8 @@ ipcMain.handle("ObjectStorage::Add", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::Delete", async (event, reqJson) => {
+  debug("Handle ObjectStorage::Delete");
+
   const req = JSON.parse(reqJson);
 
   const objectStorageList = await loadObjectStorage();
@@ -112,6 +121,8 @@ ipcMain.handle("ObjectStorage::Delete", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
+  debug("Handle ObjectStorage::UploadPlayer");
+
   const req = JSON.parse(reqJson);
 
   const objectStorageList = await loadObjectStorage();
@@ -157,6 +168,8 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::Get", async (event, reqJson) => {
+  debug("Handle ObjectStorage::Get");
+
   const req = JSON.parse(reqJson);
 
   return {};
@@ -165,6 +178,8 @@ ipcMain.handle("ObjectStorage::Get", async (event, reqJson) => {
 ipcMain.handle(
   "ObjectStorage::RemoveBucketFromProject",
   async (event, reqJson) => {
+    debug("Handle ObjectStorage::RemoveBucketFromProject");
+
     const req = JSON.parse(reqJson);
 
     const objectStorageList = await loadObjectStorage();
@@ -200,6 +215,8 @@ ipcMain.handle(
 ipcMain.handle(
   "ObjectStorage::AssignBucketToProject",
   async (event, reqJson) => {
+    debug("Handle ObjectStorage::AssignBucketToProject");
+
     const req = JSON.parse(reqJson);
 
     const objectStorageList = await loadObjectStorage();
@@ -230,6 +247,8 @@ ipcMain.handle(
 );
 
 ipcMain.handle("ObjectStorage::GetAssignedBuckets", async (event, reqJson) => {
+  debug("Handle ObjectStorage::GetAssignedBuckets");
+
   const req = JSON.parse(reqJson);
 
   const objectStorageList = await loadObjectStorage();
@@ -246,10 +265,14 @@ ipcMain.handle("ObjectStorage::GetAssignedBuckets", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
+  debug("Handle ObjectStorage::Publish");
+
   const req = JSON.parse(reqJson);
 
   const objectStorageList = await loadObjectStorage();
   const bucket = objectStorageList.find((item) => item.id === req.bucketId);
+
+  debug(bucket);
 
   if (!bucket.assignedProjects) {
     return { status: "ERROR", error: "Bucket is not assigned to this project" };
@@ -446,17 +469,30 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     path.join(getBucketPreviewPath(), "index.html"),
     "utf-8"
   );
-  console.log("SDADSADAS");
   const indexBuffer = Buffer.from(indexString, "utf-8");
-  console.log("SDADSADAS");
 
   await bucketManager.uploadBufferToBucket(
     bucketWithKeys,
     indexBuffer,
     `${req.projectId}/index.html`
   );
-  console.log("SDADSADAS");
-  // upload preview htlm <<
+  // upload preview html <<
+
+  // upload debug html >>
+  if (bucket.environment === "development") {
+    const debugString = await fsPromise.readFile(
+      path.join(getBucketPreviewPath(), "debug.html"),
+      "utf-8"
+    );
+    const debugBuffer = Buffer.from(debugString, "utf-8");
+
+    await bucketManager.uploadBufferToBucket(
+      bucketWithKeys,
+      debugBuffer,
+      `${req.projectId}/debug.html`
+    );
+  }
+  // upload debug html <<
 
   assignedProject.revision = req.revision;
 
@@ -475,6 +511,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::GetPublishDetails", async (event, reqJson) => {
+  debug("Handle ObjectStorage::GetPublishDetails");
+
   const req = JSON.parse(reqJson);
 
   const bucketWithKeys = await getBucketWithKeys(req.bucketId);
@@ -489,6 +527,8 @@ ipcMain.handle("ObjectStorage::GetPublishDetails", async (event, reqJson) => {
 });
 
 ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
+  debug("Handle ObjectStorage::Download");
+
   const req = JSON.parse(reqJson);
 
   const project = await loadProject(req.projectId);

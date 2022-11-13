@@ -1,9 +1,10 @@
 const { app, protocol } = require("electron");
 const path = require("path");
+const { debug, info } = require("./logger");
 
 function fileHandler(req, callback) {
-  console.log(req);
-  console.log(req.url);
+  debug(req);
+  debug(req.url);
 
   let requestedPath = req.url;
   requestedPath = requestedPath.replace("webslider-fp://", "/");
@@ -33,6 +34,7 @@ function fileHandler(req, callback) {
 function registerFileProtocol() {
   app.whenReady().then(() => {
     protocol.registerFileProtocol("webslider-fp", fileHandler);
+    info("Register 'webslider-fp' file protocol.");
   });
 }
 

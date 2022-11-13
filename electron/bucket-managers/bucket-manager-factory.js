@@ -3,28 +3,25 @@ const { LinodeManager } = require("./linode-manager/linode-manager");
 const {
   DigitalOceanManager,
 } = require("./digital-ocean-manager/digital-ocean-manager");
+const { info } = require("../utils/logger");
 
 function getBucketManagerClass(platform) {
   switch (platform) {
     case "s3": {
+      info("Using S3 bucket manager");
       return S3Manager;
     }
     case "linode": {
+      info("Using Linode bucket manager");
       return LinodeManager;
     }
     case "digital-ocean": {
+      info("Using DigitalOcean bucket manager");
       return DigitalOceanManager;
     }
     default: {
       return S3Manager;
     }
-    /*case "linode": {
-        return new AWS.S3({
-          accessKeyId: bucketWithKeys.key,
-          secretAccessKey: bucketWithKeys.secretKey,
-          endpoint: `http://eu-central-1.linodeobjects.com`,
-        });
-      }*/
   }
 }
 

@@ -4,6 +4,7 @@ export interface IAppSettings {
   layoutType: "default" | "default-layers";
   appZoom: number;
   enableDeveloper: boolean;
+  devTools: boolean;
 }
 
 export function globals(
@@ -11,6 +12,7 @@ export function globals(
     layoutType: "default-layers",
     appZoom: 1,
     enableDeveloper: false,
+    devTools: false,
   },
   action: ActionTypes
 ) {

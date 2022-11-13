@@ -221,6 +221,27 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   }
                 )}
               </div>
+
+              {globals.enableDeveloper && (
+                <div className="input60d">
+                  {getCheckboxField(
+                    "Developer Tools",
+                    globals.devTools,
+                    (devTools: any) => {
+                      // save settings
+                      saveSettings({
+                        ...globals,
+                        devTools,
+                      });
+
+                      //update store
+                      _updateGlobalConfiguration({
+                        devTools,
+                      });
+                    }
+                  )}
+                </div>
+              )}
             </FormGroup>
           </div>
         )}

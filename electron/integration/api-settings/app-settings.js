@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 var path = require("path");
 const fs = require("fs");
 const fsPromise = require("fs/promises");
-const { checkFileExists } = require("../../utils/utils");
+const { checkFileExists, openOrCloseDevTool } = require("../../utils/utils");
 
 ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
   const req = JSON.parse(reqJson);
@@ -17,26 +17,37 @@ ipcMain.handle("AppSettings::GetSettings", async (event, reqJson) => {
 });
 
 ipcMain.handle("AppSettings::SaveSettings", async (event, reqJson) => {
+  const existingSettings = loadAppSettings();
   const settings = JSON.parse(reqJson);
+  if (
+    existingSettings.enableDeveloper !== settings.enableDeveloper ||
+    existingSettings.devTools !== settings.devTools
+  ) {
+    openOrCloseDevTool(settings.enableDeveloper && settings.devTools);
+  }
   await saveAppSettings(settings);
   return settings;
 });
 
 // ======
+async function getAppSettingsConfiguration(propertyName) {
+  const appSettings = await loadAppSettings();
+  return appSettings[propertyName];
+}
 
 async function loadAppSettings() {
   const settingsPath = getAppSettingsPath();
 
   const exist = await checkFileExists(settingsPath);
-  let os = {};
+  let appSettings = {};
   if (exist) {
     const str = await fsPromise.readFile(settingsPath, "utf-8");
-    os = JSON.parse(str);
+    appSettings = JSON.parse(str);
   } else {
     await fsPromise.writeFile(settingsPath, "{}", "utf-8");
   }
 
-  return os;
+  return appSettings;
 }
 
 function getAppSettingsPath() {
@@ -54,3 +65,7 @@ async function saveAppSettings(settings) {
     JSON.stringify(settings, undefined, 2)
   );
 }
+
+module.exports = {
+  getAppSettingsConfiguration,
+};

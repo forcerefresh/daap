@@ -77,8 +77,11 @@ export const IntegrationContext = React.createContext({
     subscribeToPublishDetails: (callback: (details: any) => void) => () =>
       undefined,
 
-    openPublishUrl: (req: { bucketId: string; projectId: number }): void =>
-      undefined,
+    openPublishUrl: (req: {
+      bucketId: string;
+      projectId: number;
+      debug?: boolean;
+    }): void => undefined,
 
     getPublishDetails: (req: {
       bucketId: string;

@@ -1,6 +1,6 @@
 const fs = require("fs");
 const fsPromise = require("fs/promises");
-const { app } = require("electron");
+const { app, BrowserWindow } = require("electron");
 const path = require("path");
 const fetch = require("node-fetch");
 
@@ -75,6 +75,15 @@ async function writeFileWithPath(filePath, data, encoding) {
   }
 }
 
+function openOrCloseDevTool(open) {
+  const mainWindow = BrowserWindow.getAllWindows()[0];
+  if (open) {
+    mainWindow.webContents.openDevTools();
+  } else {
+    mainWindow.webContents.closeDevTools();
+  }
+}
+
 module.exports = {
   checkFileExists,
   checkDirExists,
@@ -86,4 +95,5 @@ module.exports = {
   getMyVideosPath,
   fileToBuffer,
   writeFileWithPath,
+  openOrCloseDevTool,
 };
