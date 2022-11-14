@@ -128,10 +128,10 @@ export const ParallaxInputForm: React.FC<
       <div>
         {getButtonGroupField(
           "Depth",
-          value.depthType ? "auto" : "custom",
-          (depthTypeStr: string) => {
+          value.depthType,
+          (depthTypeStr: "auto" | "custom") => {
             const valueClone = cloneDeep(value);
-            valueClone.depthType = depthTypeStr === "auto";
+            valueClone.depthType = depthTypeStr;
             onChange(valueClone);
           },
           [
@@ -158,7 +158,7 @@ export const ParallaxInputForm: React.FC<
     <div className={css.container}>
       <div>
         <Label>{displayName}</Label>
-        {value.depthType ? (
+        {value.depthType === "auto" ? (
           <div>
             {renderDepth()} {autoDepthIncInput()}
           </div>

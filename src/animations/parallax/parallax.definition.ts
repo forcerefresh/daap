@@ -31,7 +31,7 @@ export const parallaxDefaults: IParallaxAnimation = {
   parallax: {
     objects: [],
     smooth: true,
-    depthType: true,
+    depthType: "auto",
     autoDepthInc: 5,
     strength: 50,
     setToInitialPositionOnComplete: false,

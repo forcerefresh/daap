@@ -1,15 +1,8 @@
+import { IParallaxInputValue } from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationBase } from "../types";
 
 export const PARALLAX_ANIMATION = "parallax-animation";
 
 export interface IParallaxAnimation extends IAnimationBase {
-  parallax: {
-    objects: { id: string; depth: number }[];
-    smooth: boolean;
-    depthType: boolean;
-    autoDepthInc: number;
-    strength: number;
-    setToInitialPositionOnComplete: boolean;
-    followTime: number;
-  };
+  parallax: IParallaxInputValue;
 }
