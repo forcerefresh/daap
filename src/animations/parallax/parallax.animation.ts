@@ -72,12 +72,8 @@ export function parallaxAnimation() {
       gsap.to(el.parentElement!, {
         ease: config.ease,
         duration: config.parallax.followTime / 1000,
-        x:
-          (moveX * depth * config.parallax.strengthX) /
-          STRENGTH_MULTIPLIER /
-          DEPTH_MULTIPLIER,
         y:
-          (moveY * depth * config.parallax.strengthY) /
+          (moveY * depth * config.parallax.strength) /
           STRENGTH_MULTIPLIER /
           DEPTH_MULTIPLIER,
       });

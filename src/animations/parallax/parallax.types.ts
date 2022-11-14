@@ -6,10 +6,9 @@ export interface IParallaxAnimation extends IAnimationBase {
   parallax: {
     objects: { id: string; depth: number }[];
     smooth: boolean;
-    autoDepth: boolean;
+    depthType: boolean;
     autoDepthInc: number;
-    strengthX: number;
-    strengthY: number;
+    strength: number;
     setToInitialPositionOnComplete: boolean;
     followTime: number;
   };

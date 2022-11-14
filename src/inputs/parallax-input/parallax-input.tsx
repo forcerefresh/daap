@@ -3,7 +3,11 @@ import { cloneDeep } from "lodash-es";
 import React, { useEffect } from "react";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { ILayer } from "../../store/reducers/i-layers";
-import { getCheckboxField, getNumericFiled } from "../input-utils";
+import {
+  getButtonGroupField,
+  getCheckboxField,
+  getNumericFiled,
+} from "../input-utils";
 import {
   IParallaxInput,
   IUpdateInput,
@@ -24,7 +28,7 @@ export const ParallaxInputForm: React.FC<
   const { displayName, value, onChange, layerData } = props;
 
   console.log(layerData);
-  console.log(value);
+  console.log(value, "petar");
 
   const objects = layerData?.objects || [];
 
@@ -45,7 +49,7 @@ export const ParallaxInputForm: React.FC<
   }, [value]);
 
   const numericInput = (
-    propertyName: "strengthX" | "strengthY" | "followTime",
+    propertyName: "strength" | "followTime",
     label: string,
     helperText: string
   ) => (
@@ -64,7 +68,7 @@ export const ParallaxInputForm: React.FC<
   );
 
   const booleanInput = (
-    propertyName: "autoDepth" | "setToInitialPositionOnComplete",
+    propertyName: "setToInitialPositionOnComplete",
     label: string,
     helperText: string
   ) => (
@@ -119,27 +123,54 @@ export const ParallaxInputForm: React.FC<
     return ret ? ret.depth : DEFAULT_DEPTH;
   };
 
+  const renderDepth = () => {
+    return (
+      <div>
+        {getButtonGroupField(
+          "Depth",
+          value.depthType ? "auto" : "custom",
+          (depthTypeStr: string) => {
+            const valueClone = cloneDeep(value);
+            valueClone.depthType = depthTypeStr === "auto";
+            onChange(valueClone);
+          },
+          [
+            { value: "auto", label: "Auto" },
+            { value: "custom", label: "Custom" },
+          ]
+        )}
+      </div>
+    );
+  };
+
+  const renderCustom = () => {
+    return (
+      <div>
+        <Label style={{ width: "100%" }}>Object depths</Label>
+        {objects.map((object: IObject) =>
+          renderObject(object, getValueForId(object.id))
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={css.container}>
       <div>
         <Label>{displayName}</Label>
-
-        {booleanInput(
-          "autoDepth",
-          "Auto depth",
-          "If set to true, dept will be applied by default by using  'Increment' value."
-        )}
-        {value.autoDepth && autoDepthIncInput()}
-
-        {numericInput(
-          "strengthX",
-          "Strength X",
-          "Set strength for horizontal movement"
+        {value.depthType ? (
+          <div>
+            {renderDepth()} {autoDepthIncInput()}
+          </div>
+        ) : (
+          <div>
+            {renderDepth()} {renderCustom()}
+          </div>
         )}
 
         {numericInput(
-          "strengthY",
-          "Strength Y",
+          "strength",
+          "Strength",
           "Set strength for vertical movement"
         )}
 
@@ -153,11 +184,6 @@ export const ParallaxInputForm: React.FC<
           "setToInitialPositionOnComplete",
           "Reset on complete",
           "Position object to initial position on complete"
-        )}
-
-        <Label style={{ width: "100%" }}>Object depths</Label>
-        {objects.map((object: IObject) =>
-          renderObject(object, getValueForId(object.id))
         )}
       </div>
     </div>
