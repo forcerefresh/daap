@@ -278,29 +278,79 @@ export class Player {
 
     const bp = this.currentBp;
 
-    // NOTE: this is for debug
-    if (this.debug.showBoundaries) {
-      Array.from(slideEls).forEach((el: any) => {
-        // SLIDE
-        el.style.left =
-          (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 +
-          "px";
-        // DEBUG SLIDER FRAME
-        const debugSlideFrame = createOrSelect(el, "slide-debug-frame");
-        debugSlideFrame.style.pointerEvents = "none";
-        debugSlideFrame.style.position = "absolute";
-        debugSlideFrame.style.top =
-          (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
-          "px"; //* this.scaleParams?.wScale!
-        //debugSlideFrame.style.left =
-        //  (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
-        debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width + "px"; //* this.scaleParams?.wScale!
-        debugSlideFrame.style.height = bp?.normal._maxSliderSize!.height + "px"; //* this.scaleParams?.hScale!
-        debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
-        debugSlideFrame.style.border = "1px dotted red";
-        debugSlideFrame.style.boxSizing = "border-box";
-      });
-    }
+    // NOTE: if debug.showBoundaries is true show border
+    const pageBorder = this.debug.showBoundaries
+      ? "1px dotted #ff2121"
+      : "1px dotted rgba(255,255,255,0)";
+    const slideBorder = this.debug.showBoundaries
+      ? "1px dotted #45c750"
+      : "1px dotted rgba(255,255,255,0)";
+    const guidelinesBorder = this.debug.showBoundaries
+      ? "1px dotted #00d6ff"
+      : "1px dotted rgba(255,255,255,0)";
+
+    Array.from(slideEls).forEach((el: any) => {
+      // SLIDE
+      el.style.left =
+        (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px";
+      // DEBUG SLIDER FRAME - SLIDER
+      const debugSlideFrame = createOrSelect(el, "slide-debug-frame-slide");
+      debugSlideFrame.style.pointerEvents = "none";
+      debugSlideFrame.style.position = "absolute";
+      debugSlideFrame.style.top = "1px";
+      debugSlideFrame.style.left = "1px";
+      // debugSlideFrame.style.top =
+      //   (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
+      //   "px";
+      //* this.scaleParams?.wScale!
+      //debugSlideFrame.style.left =
+      //  (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px"; //* this.scaleParams?.wScale!
+      debugSlideFrame.style.width = bp?.normal._maxSliderSize!.width - 2 + "px"; //* this.scaleParams?.wScale!
+      debugSlideFrame.style.height =
+        bp?.normal._maxSliderSize!.height - 2 + "px"; //* this.scaleParams?.hScale!
+      // debugSlideFrame.style.background = "rgba(0,0,0,0.05)";
+      debugSlideFrame.style.border = slideBorder;
+      debugSlideFrame.style.boxSizing = "border-box";
+
+      // DEBUG SLIDER FRAME - PAGE
+      const debugSlideFramePage = createOrSelect(el, "slide-debug-frame-page");
+      debugSlideFramePage.style.pointerEvents = "none";
+      debugSlideFramePage.style.position = "absolute";
+      // debugSlideFramePage.style.top =
+      //   (bp?.normal._page!.height - bp?.normal._maxSliderSize!.height) / 2 +
+      //   "px";
+      //* this.scaleParams?.wScale!
+      debugSlideFramePage.style.left =
+        -(bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 +
+        "px";
+      //* this.scaleParams?.wScale!
+      debugSlideFramePage.style.width = bp?.normal._page!.width + "px"; //* this.scaleParams?.wScale!
+      debugSlideFramePage.style.height = bp?.normal._page!.height + "px"; //* this.scaleParams?.hScale!
+      //debugSlideFramePage.style.background = "rgba(0,0,0,0.05)";
+      debugSlideFramePage.style.border = pageBorder;
+      debugSlideFramePage.style.boxSizing = "border-box";
+
+      // DEBUG SLIDER FRAME - GUIDEBOX
+      const debugSlideFrameGuide = createOrSelect(
+        el,
+        "slide-debug-frame-guidelines"
+      );
+      debugSlideFrameGuide.style.pointerEvents = "none";
+      debugSlideFrameGuide.style.position = "absolute";
+      debugSlideFrameGuide.style.top = bp.normal.guidelinesPadding.top + "px";
+      debugSlideFrameGuide.style.left = bp.normal.guidelinesPadding.left + "px";
+      debugSlideFrameGuide.style.width =
+        bp?.normal._maxSliderSize!.width -
+        (bp.normal.guidelinesPadding.left + bp.normal.guidelinesPadding.right) +
+        "px"; //* this.scaleParams?.wScale!
+      debugSlideFrameGuide.style.height =
+        bp?.normal._maxSliderSize!.height -
+        (bp.normal.guidelinesPadding.top + bp.normal.guidelinesPadding.bottom) +
+        "px"; //* this.scaleParams?.hScale!
+      //debugSlideFrameGuide.style.background = "rgba(0,0,0,0.05)";
+      debugSlideFrameGuide.style.border = guidelinesBorder;
+      debugSlideFrameGuide.style.boxSizing = "border-box";
+    });
   }
 
   private calculateSizeParameters(
