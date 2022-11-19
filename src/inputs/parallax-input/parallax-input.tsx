@@ -7,6 +7,8 @@ import {
   getButtonGroupField,
   getCheckboxField,
   getNumericFiled,
+  getSelectField,
+  getTextField,
 } from "../input-utils";
 import {
   IParallaxInput,
@@ -15,6 +17,12 @@ import {
 import css from "./parallax-input.module.scss";
 
 const DEFAULT_DEPTH = 5;
+
+const TRIGGER_OPTIONS = [
+  { label: "Window", value: "window" },
+  { label: "Parent", value: "parent" },
+  { label: "Custom", value: "custom" },
+];
 
 export const ParallaxInputForm: React.FC<
   IParallaxInput &
@@ -26,9 +34,6 @@ export const ParallaxInputForm: React.FC<
     }
 > = (props) => {
   const { displayName, value, onChange, layerData } = props;
-
-  console.log(layerData);
-  console.log(value, "petar");
 
   const objects = layerData?.objects || [];
 
@@ -154,6 +159,39 @@ export const ParallaxInputForm: React.FC<
     );
   };
 
+  const renderTrigger = () => {
+    return (
+      <div>
+        {getSelectField(
+          "Trigger",
+          value.trigger,
+          TRIGGER_OPTIONS,
+          (trigger: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.trigger = trigger;
+            onChange(valueClone);
+          }
+        )}
+      </div>
+    );
+  };
+
+  const renderCustomScrollInput = () => {
+    return (
+      <div>
+        {getTextField(
+          "Custom selector",
+          value.customScrollbarSelector,
+          (val: any) => {
+            const valueClone = cloneDeep(value);
+            valueClone.customScrollbarSelector = val;
+            onChange(valueClone);
+          }
+        )}
+      </div>
+    );
+  };
+
   return (
     <div className={css.container}>
       <div>
@@ -184,6 +222,14 @@ export const ParallaxInputForm: React.FC<
           "setToInitialPositionOnComplete",
           "Reset on complete",
           "Position object to initial position on complete"
+        )}
+
+        {value.trigger === "custom" ? (
+          <div>
+            {renderTrigger()} {renderCustomScrollInput()}
+          </div>
+        ) : (
+          <div>{renderTrigger()}</div>
         )}
       </div>
     </div>

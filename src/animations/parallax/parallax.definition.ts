@@ -27,6 +27,7 @@ export const parallaxDefaults: IParallaxAnimation = {
   ease: "none",
   supportedAnimationTypes: ["layer"],
   canBeCombined: false,
+  library: "animejs",
   // animation properties
   parallax: {
     objects: [],
@@ -36,5 +37,7 @@ export const parallaxDefaults: IParallaxAnimation = {
     strength: 50,
     setToInitialPositionOnComplete: false,
     followTime: 500,
+    trigger: "window",
+    customScrollbarSelector: "",
   },
 };
