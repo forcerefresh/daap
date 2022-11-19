@@ -6,9 +6,11 @@ const { checkFileExists, openOrCloseDevTool } = require("../../utils/utils");
 
 ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
   const req = JSON.parse(reqJson);
-  BrowserWindow.getAllWindows().forEach((win) => {
-    win.webContents.setZoomFactor(req.zoom);
-  });
+  if (req.zoom) {
+    BrowserWindow.getAllWindows().forEach((win) => {
+      win.webContents.setZoomFactor(req.zoom);
+    });
+  }
 });
 
 ipcMain.handle("AppSettings::GetSettings", async (event, reqJson) => {
