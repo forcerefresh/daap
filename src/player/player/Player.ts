@@ -754,6 +754,9 @@ export class Player {
     const slide = this.normalSlideDataArr?.[slideIdx]?.slide;
     const slideEl = getSlideById(slide?.id);
 
+    // move slide to top if moveToTop is true
+    if (slide?.moveToTop) slideEl.style.zIndex = `${this.nextZIndex++}`;
+
     // Turn on events on next slide
     slideEl.style.pointerEvents = "auto";
 
@@ -983,14 +986,19 @@ export class Player {
     //const currentSlideTime = this.currentSlideTimeline?.time();
     const prevSlideTl = this.currentSlideTimeline;
 
+    logger.player.log("slideIdx");
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
     }
 
     if (this.slideTransitionInProgress) {
+      logger.player.log("slideTransitionInProgress");
+
       return;
     }
+
+    logger.player.log("qqqqq");
 
     this.slideTransitionInProgress = true;
     this.manuallyRequestedSlideIdx = slideIdx;
@@ -1018,6 +1026,9 @@ export class Player {
     } else if (exitTransTl && nextSlideOverlap) {
       maxExitTime = Math.max(exitTransTl.duration, nextSlideOverlap);
     }
+
+    console.log("maxExitTime");
+    console.log(maxExitTime);
 
     // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {
@@ -1082,7 +1093,7 @@ export class Player {
       exitTransTl?.init(); //TODO: Check do we need to init() every time???
       exitTransTl?.start(0);
     } else {
-      //this.playSlide(slideIdx, undefined, true);
+      this.playSlide(slideIdx, undefined, true);
     }
   }
 
@@ -1091,9 +1102,14 @@ export class Player {
     className: string,
     objectEvent?: INavigationValues
   ) {
+    logger.player.log(no);
+    logger.player.log(className);
+
     if (!objectEvent) {
       return;
     }
+
+    logger.player.log(objectEvent);
 
     if (objectEvent.navigationType === NavigationType.None) {
       return;
@@ -1108,20 +1124,23 @@ export class Player {
       });
     } else if (objectEvent.navigationType === NavigationType.Slide) {
       const el = document.getElementsByClassName(className)[0];
-      el?.addEventListener(objectEvent?.slideEvent, () => {
+
+      const clickHandler = () => {
         if (objectEvent.slideReferenceType === "slideNo") {
           this.manualPlaySlide(parseInt(objectEvent?.slideNo, 10) - 1);
         } else if (objectEvent.slideReferenceType === "slideId") {
           const slideIdx = this.getSlideIdxByID(objectEvent.slideId);
           if (slideIdx) this.manualPlaySlide(slideIdx);
         } else if (objectEvent.slideReferenceType === "next") {
+          //debugger;
           const slideIdx = this.getNextSlideIdx(this.currentSlide);
           this.manualPlaySlide(slideIdx);
         } else if (objectEvent.slideReferenceType === "prev") {
           const slideIdx = this.getPrevSlideIdx(this.currentSlide);
           this.manualPlaySlide(slideIdx);
         }
-      });
+      };
+      el?.addEventListener(objectEvent?.slideEvent, clickHandler.bind(this));
     }
   }
 

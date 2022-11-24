@@ -19,8 +19,11 @@ export interface ISlide {
   //props
   customId: string;
   name: string;
+  title?: string;
+  description?: string;
   duration: ISlideDuration;
   exitDuration: ISlideDuration;
+  moveToTop: boolean;
 }
 
 export interface ISlides {

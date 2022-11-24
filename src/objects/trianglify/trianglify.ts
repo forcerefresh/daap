@@ -272,7 +272,7 @@ export function getTrianglifyHtml(props: {
 
   const svg = pattern.toSVG() as SVGElement;
 
-  const objectClassname = "object-" + object.id;
+  const objectClassname = "object-content-" + object.id;
   let css = "";
   if (trValues.strokeColorSG === "color") {
     css = `<style>
@@ -281,7 +281,12 @@ export function getTrianglifyHtml(props: {
       }</style>`;
   }
 
-  return css + `<div class='${objectClassname}'>` + svg.outerHTML + "<div>";
+  return (
+    css +
+    `<div class='object-content ${objectClassname}'>` +
+    svg.outerHTML +
+    "<div>"
+  );
 }
 
 export async function trianglifySizeUpdate(props: {

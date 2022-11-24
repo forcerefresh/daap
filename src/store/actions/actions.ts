@@ -135,6 +135,7 @@ export function addNewSlide(
         inheritFrom: "inherit",
         customValue: "1s",
       },
+      moveToTop: true,
       layerIds: [],
       nextLayerIdCounter: 1,
       slideType,
@@ -340,27 +341,36 @@ export function addNewLayer(slideId: string): any {
         snap: true,
         fit: true,
         grid: true,
+        inset: true,
+        // anchor: true,
       },
       selfSize: false,
+      fitLayout: {
+        type: "common",
+        common: { deviceType: "common", relativeTo: "page" },
+        perDevice: [],
+      },
       absoluteLayout: {
         type: "common",
         perDevice: [],
+        relativeTo: "stage",
         common: {
           deviceType: "common",
-          left: 0,
-          top: 0,
-          ...absoluteSize!,
+          left: "0px",
+          top: "0px",
+          width: `${absoluteSize?.width}px`,
+          height: `${absoluteSize?.height}px`,
         },
       },
-      gridLayouts: {
+      gridLayout: {
         type: "common",
         perDevice: [],
         common: {
           deviceType: "common",
           left: 0,
-          right: gridSize?.horizontal!,
+          width: gridSize?.horizontal!,
           top: 0,
-          bottom: gridSize?.vertical!,
+          height: gridSize?.vertical!,
         },
       },
       snapLayout: {
@@ -1259,8 +1269,8 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
     const el = holder.querySelector("div")! as HTMLDivElement;
     //el.style.position = "relative";
     document.body.appendChild(holder);
-    object.absoluteLayout!.common.width = el.offsetWidth!;
-    object.absoluteLayout!.common.height = el.offsetHeight!;
+    object.absoluteLayout!.common.width = `${el.offsetWidth!}px`;
+    object.absoluteLayout!.common.height = `${el.offsetHeight!}px`;
     const snapSizeObj = getSnapLayoutSize(
       object.snapLayout!,
       getState().stage.selectedDevice
@@ -1300,10 +1310,10 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
     holder.innerHTML = html;
     holder.querySelector("button")!.style.position = "relative";
     document.body.appendChild(holder);
-    object.absoluteLayout!.common.width =
-      holder.querySelector("button")?.offsetWidth!;
-    object.absoluteLayout!.common.height =
-      holder.querySelector("button")?.offsetHeight!;
+    object.absoluteLayout!.common.width = `${holder.querySelector("button")
+      ?.offsetWidth!}px`;
+    object.absoluteLayout!.common.height = `${holder.querySelector("button")
+      ?.offsetHeight!}px`;
     document.body.removeChild(holder);
   }
 }
@@ -1358,7 +1368,7 @@ function handleTextUpdate(
     document.body.appendChild(holder);
     object.height = pEl.offsetHeight;
     if (object.absoluteLayout) {
-      object.absoluteLayout.common.height = pEl.offsetHeight;
+      object.absoluteLayout.common.height = `${pEl.offsetHeight}px`;
     }
     document.body.removeChild(holder);
   }

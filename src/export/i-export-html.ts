@@ -41,7 +41,7 @@ export interface ITransitionsData {
     Partial<
       Pick<
         ILayout,
-        "absoluteLayout" | "fitLayout" | "gridLayouts" | "snapLayout"
+        "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout"
       >
     >;
 }
@@ -85,6 +85,9 @@ export interface ISlideData {
     transitions: ITransitions;
     duration: ISlideDuration;
     exitDuration: ISlideExitTime;
+    moveToTop: boolean;
+    title?: string;
+    description?: string;
   };
   transitionsData: ITransitionsData[];
 }

@@ -1,4 +1,5 @@
 import { omit } from "lodash";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { ObjectType } from "webslider-sdk/lib/objects/i-object";
 import {
   ActionTypes,
@@ -39,7 +40,7 @@ export interface IStage {
   zoom: number;
   previewState: IPreviewState;
   stageTool: { tool: StageTools; objectType?: ObjectType };
-  selectedDevice: string;
+  selectedDevice: DeviceType;
   forceRefreshRand: number;
 }
 

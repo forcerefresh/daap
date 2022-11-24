@@ -14,8 +14,11 @@ import {
   getSizeLayoutField,
   getSizeUnitLayoutField,
 } from "../input-utils";
-import { ISnapInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
-import css from "./snap-input.module.scss";
+import {
+  ISnapLayoutInput,
+  IUpdateInput,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import css from "./snap-layout-input.module.scss";
 
 const RELATIVE_TO_OPTIONS = [
   { label: "Page", value: "page" },
@@ -35,7 +38,9 @@ const EDGE_OPTIONS = [
   { label: "Center", value: "center" },
 ];
 
-export const SnapInputForm: React.FC<ISnapInput & IUpdateInput> = (props) => {
+export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
+  props
+) => {
   const {
     value,
     onChange = noop,

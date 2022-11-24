@@ -48,7 +48,7 @@ export function DropHandle(props: IDropHandleProps) {
     >
       <div className={css.dropObjectHandleLine}></div>
       <div className={css.dropObjectHandleDropZone}>
-        {isOver && <>Drop {item.ids.length} items here</>}
+        {isOver && <>Drop {item.ids.length} items</>}
       </div>
     </div>
   );

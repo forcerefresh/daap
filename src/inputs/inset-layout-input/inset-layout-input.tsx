@@ -1,24 +1,32 @@
 import React, { useEffect } from "react";
 import { cloneDeep } from "lodash-es";
-import { getButtonGroupField, getNumericFiled } from "../input-utils";
 import {
-  IGridPlacementInput,
+  getButtonGroupField,
+  getNumericFiled,
+  getSelectField,
+  getUnitNumericFiled,
+} from "../input-utils";
+import {
+  IInsetLayoutInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import css from "./grid-placement.module.scss";
 import classnames from "classnames";
 import { Button, Label } from "@blueprintjs/core";
 import { getIconByType } from "../../store/reducers/settings";
-import {
-  getIconSize,
-  getIconStyle,
-} from "../../panels/action-panel/ActionPanel";
+import { getIconSize } from "../../panels/action-panel/ActionPanel";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import css from "./inset-layout-input.module.scss";
 
-export const GridPlacementInputForm: React.FC<
-  IGridPlacementInput & IUpdateInput
+const RELATIVE_TO_OPTIONS = [
+  { label: "Page", value: "page" },
+  { label: "Stage", value: "stage" },
+  { label: "Guidelines", value: "guidelines" },
+];
+
+export const InsetLayoutInputForm: React.FC<
+  IInsetLayoutInput & IUpdateInput
 > = (props) => {
   const {
     value,
@@ -99,8 +107,8 @@ export const GridPlacementInputForm: React.FC<
   const renderCommon = () => {
     return (
       <>
-        <div className={classnames(css.row)}>
-          {getNumericFiled(
+        <div className={classnames(css.row, css.commonRow)}>
+          {getUnitNumericFiled(
             "Left",
             common.left,
             (left: any) => {
@@ -113,16 +121,16 @@ export const GridPlacementInputForm: React.FC<
           )}
         </div>
 
-        <div className={classnames(css.row)}>
-          {getNumericFiled("Width", common.right, (right: any) => {
+        <div className={classnames(css.row, css.commonRow)}>
+          {getUnitNumericFiled("Right", common.right, (right: any) => {
             const commonClone = cloneDeep(common);
             commonClone.right = right;
             onChange({ ...value, common: commonClone });
           })}
         </div>
 
-        <div className={classnames(css.row)}>
-          {getNumericFiled(
+        <div className={classnames(css.row, css.commonRow)}>
+          {getUnitNumericFiled(
             "Top",
             common.top,
             (top: any) => {
@@ -135,8 +143,8 @@ export const GridPlacementInputForm: React.FC<
           )}
         </div>
 
-        <div className={classnames(css.row)}>
-          {getNumericFiled("Height", common.bottom, (bottom: any) => {
+        <div className={classnames(css.row, css.commonRow)}>
+          {getUnitNumericFiled("Bottom", common.bottom, (bottom: any) => {
             const commonClone = cloneDeep(common);
             commonClone.bottom = bottom;
             onChange({ ...value, common: commonClone });
@@ -148,7 +156,8 @@ export const GridPlacementInputForm: React.FC<
 
   const renderOneInput = (
     t: DeviceType,
-    propertyName: "left" | "right" | "top" | "bottom"
+    propertyName: "left" | "right" | "top" | "bottom",
+    label: string
   ) => {
     let oneValue = perDevice.find((item) => item.deviceType === t);
     if (!oneValue) {
@@ -156,11 +165,11 @@ export const GridPlacementInputForm: React.FC<
     }
 
     return (
-      <td>
-        {getNumericFiled(
-          "",
+      <>
+        {getUnitNumericFiled(
+          label,
           oneValue?.[propertyName],
-          (v: any) => {
+          (v: string) => {
             const newValue = cloneDeep(value);
             const oneV = newValue.perDevice.find(
               (item) => item.deviceType === t
@@ -174,7 +183,7 @@ export const GridPlacementInputForm: React.FC<
             className: css.perDeviceInput,
           }
         )}
-      </td>
+      </>
     );
   };
 
@@ -183,14 +192,16 @@ export const GridPlacementInputForm: React.FC<
 
     return (
       <>
-        <table>
-          <tr>
-            <td>
-              <Label></Label>
-            </td>
-            <>
-              {bcArr.map((bc) => {
-                return (
+        <table className={css.main}>
+          <>
+            <tr className={css.headerRow}>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            {bcArr.map((bc) => {
+              return (
+                <tr>
                   <td>
                     <Button
                       minimal
@@ -202,51 +213,102 @@ export const GridPlacementInputForm: React.FC<
                       {getIcon(bc)}
                     </Button>
                   </td>
-                );
-              })}
-            </>
-          </tr>
-
-          <tr>
-            <td>
-              <Label>Left</Label>
-            </td>
-            {bcArr.map((bc) => {
-              return renderOneInput(bc.type, "left");
+                  <td>
+                    {renderOneInput(bc.type, "left", "L")}
+                    {renderOneInput(bc.type, "top", "T")}
+                  </td>
+                  <td>
+                    {renderOneInput(bc.type, "right", "R")}
+                    {renderOneInput(bc.type, "bottom", "B")}
+                  </td>
+                  <td></td>
+                </tr>
+              );
             })}
-          </tr>
-
-          <tr>
-            <td>
-              <Label>Width</Label>
-            </td>
-            {bcArr.map((bc) => {
-              return renderOneInput(bc.type, "right");
-            })}
-          </tr>
-          <tr>
-            <td>
-              <Label>Top</Label>
-            </td>
-            {bcArr.map((bc) => {
-              return renderOneInput(bc.type, "top");
-            })}
-          </tr>
-          <tr>
-            <td>
-              <Label>Height</Label>
-            </td>
-            {bcArr.map((bc) => {
-              return renderOneInput(bc.type, "bottom");
-            })}
-          </tr>
+          </>
         </table>
       </>
     );
   };
 
+  // const renderPerDevice_DELETE = () => {
+  //   const { breakpointsConfiguration: bcArr } = breakpoints;
+
+  //   return (
+  //     <>
+  //       <table>
+  //         <tr>
+  //           <td>
+  //             <Label></Label>
+  //           </td>
+  //           <>
+  //             {bcArr.map((bc) => {
+  //               return (
+  //                 <td>
+  //                   <Button
+  //                     minimal
+  //                     active={bc.type === selectedDevice}
+  //                     onClick={() => {
+  //                       onChangeDevice(bc.type);
+  //                     }}
+  //                   >
+  //                     {getIcon(bc)}
+  //                   </Button>
+  //                 </td>
+  //               );
+  //             })}
+  //           </>
+  //         </tr>
+
+  //         <tr>
+  //           <td>
+  //             <Label>Left</Label>
+  //           </td>
+  //           {bcArr.map((bc) => {
+  //             return renderOneInput(bc.type, "left");
+  //           })}
+  //         </tr>
+
+  //         <tr>
+  //           <td>
+  //             <Label>Right</Label>
+  //           </td>
+  //           {bcArr.map((bc) => {
+  //             return renderOneInput(bc.type, "right");
+  //           })}
+  //         </tr>
+  //         <tr>
+  //           <td>
+  //             <Label>Top</Label>
+  //           </td>
+  //           {bcArr.map((bc) => {
+  //             return renderOneInput(bc.type, "top");
+  //           })}
+  //         </tr>
+  //         <tr>
+  //           <td>
+  //             <Label>Bottom</Label>
+  //           </td>
+  //           {bcArr.map((bc) => {
+  //             return renderOneInput(bc.type, "bottom");
+  //           })}
+  //         </tr>
+  //       </table>
+  //     </>
+  //   );
+  // };
+
   return (
-    <>
+    <div className={css.main}>
+      {getSelectField(
+        "Relative to",
+        value.relativeTo,
+        RELATIVE_TO_OPTIONS,
+        (newRelativeTo) => {
+          onChange({ ...value, relativeTo: newRelativeTo });
+        },
+        { disabled: inputProps.disablePosition }
+      )}
       {getButtonGroupField(
         "",
         switchValue,
@@ -263,6 +325,6 @@ export const GridPlacementInputForm: React.FC<
       )}
       {type === "common" && renderCommon()}
       {type === "perDevice" && renderPerDevice()}
-    </>
+    </div>
   );
 };

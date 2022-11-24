@@ -85,6 +85,18 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
           { style: { width: "90px" } },
           ["ms", "s"]
         )}
+
+        {getCheckboxField(
+          "Move to top",
+          slide.moveToTop,
+          (value) => {
+            const newItem = cloneDeep(slide);
+            newItem.moveToTop = value;
+            _updateSlide(newItem);
+          },
+          "Move slide to top when slide starts",
+          { alignIndicator: "left" }
+        )}
       </div>
     );
     if (!slide.transitionEnabled) {

@@ -2,7 +2,7 @@ import { cloneDeep } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 
-import { getTextField } from "../../../inputs/input-utils";
+import { getTextArea, getTextField } from "../../../inputs/input-utils";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   setDevice,
@@ -52,6 +52,20 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           retObj.customId = customId;
           _updateSlide(retObj);
         })}
+        {getTextArea("Title", slide.title ?? "", (title: string) => {
+          const retObj = cloneDeep(slide);
+          retObj.title = title;
+          _updateSlide(retObj);
+        })}
+        {getTextArea(
+          "Description",
+          slide.description ?? "",
+          (description: string) => {
+            const retObj = cloneDeep(slide);
+            retObj.description = description;
+            _updateSlide(retObj);
+          }
+        )}
       </>
     );
   };
@@ -69,6 +83,20 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           retObj.customId = customId;
           _updateLayer(retObj);
         })}
+        {getTextArea("Title", layer.title ?? "", (title: string) => {
+          const retObj = cloneDeep(layer);
+          retObj.title = title;
+          _updateLayer(retObj);
+        })}
+        {getTextArea(
+          "Description",
+          layer.description ?? "",
+          (description: string) => {
+            const retObj = cloneDeep(layer);
+            retObj.description = description;
+            _updateLayer(retObj);
+          }
+        )}
       </>
     );
   };
@@ -89,6 +117,20 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           retObj.customId = customId;
           _updateObject(retObj);
         })}
+        {getTextArea("Title", object.title ?? "", (title: string) => {
+          const retObj = cloneDeep(object);
+          retObj.title = title;
+          _updateObject(retObj);
+        })}
+        {getTextArea(
+          "Description",
+          object.description ?? "",
+          (description: string) => {
+            const retObj = cloneDeep(object);
+            retObj.description = description;
+            _updateObject(retObj);
+          }
+        )}
       </>
     );
   };

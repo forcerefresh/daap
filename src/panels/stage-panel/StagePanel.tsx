@@ -55,6 +55,7 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import {
   calculateObjectSize,
   getAbsoluteLayoutSize,
+  getAbsoluteLayoutSizeInPx,
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
@@ -255,7 +256,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   selectedObjectIds.forEach((objectId) => {
     if (!objectByIdLocal[objectId].isLocked) {
       const absoluteLayout = objectByIdLocal[objectId].absoluteLayout!;
-      const absSizeObj = getAbsoluteLayoutSize(absoluteLayout, selectedDevice);
+      const absSizeObj = getAbsoluteLayoutSizeInPx(
+        absoluteLayout,
+        selectedDevice,
+        breakpointConfig!
+      );
       absSizeObj.left! += selRectDelta.x;
       absSizeObj.top! += selRectDelta.y;
     }
@@ -455,7 +460,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
   ) => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       selectedObjectIds.indexOf(objectId) === -1
         ? _addObjectsToSelection([objectId])
         : _removeObjectsFromSelection([objectId]);
@@ -484,31 +489,30 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
     if (!isSelected) return null;
 
-    const sizeObj = pick(
-      getAbsoluteLayoutSize(object.absoluteLayout!, selectedDevice),
-      "left",
-      "top",
-      "width",
-      "height"
+    const sizeObj = getAbsoluteLayoutSizeInPx(
+      object.absoluteLayout!,
+      selectedDevice,
+      breakpointConfig!
     );
+
     const topLeftStyle: any = {
-      left: sizeObj.left! * stageZoom - 4 + "px",
-      top: sizeObj.top! * stageZoom - 4 + "px",
+      left: sizeObj.left * stageZoom - 4 + "px",
+      top: sizeObj.top * stageZoom - 4 + "px",
       cursor: "nwse-resize",
     };
     const topRightStyle: any = {
-      left: sizeObj.left! * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
-      top: sizeObj.top! * stageZoom - 4 + "px",
+      left: sizeObj.left * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
+      top: sizeObj.top * stageZoom - 4 + "px",
       cursor: "nesw-resize",
     };
     const bottomLeftStyle: any = {
-      left: sizeObj.left! * stageZoom - 4 + "px",
-      top: sizeObj.top! * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
+      left: sizeObj.left * stageZoom - 4 + "px",
+      top: sizeObj.top * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nesw-resize",
     };
     const bottomRightStyle: any = {
-      left: sizeObj.left! * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
-      top: sizeObj.top! * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
+      left: sizeObj.left * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
+      top: sizeObj.top * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nwse-resize",
     };
 
@@ -748,7 +752,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   </div>
                 ) : null}
                 <div className={css.currentPosition}>
-                  {getPositionInfo(object)}
+                  {getPositionInfo(object, selectedDevice)}
                 </div>
               </div>
             </>
@@ -888,9 +892,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               // update objects
               selectedObjectIds.forEach((objectId) => {
                 if (!objectByIdLocal[objectId].isLocked) {
-                  const absSizeObj = getAbsoluteLayoutSize(
+                  const absSizeObj = getAbsoluteLayoutSizeInPx(
                     objectByIdLocal[objectId].absoluteLayout!,
-                    selectedDevice
+                    selectedDevice,
+                    breakpointConfig!
                   );
                   absSizeObj.left = roundNumber(absSizeObj.left!, 1);
                   absSizeObj.top = roundNumber(absSizeObj.top!, 1);
@@ -949,7 +954,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 </div>
               ) : null}
               <div className={css.currentPosition}>
-                {getPositionInfo(object)}
+                {getPositionInfo(object, selectedDevice)}
               </div>
             </div>
           </div>
@@ -982,9 +987,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       const movePoint = getPointsDiff(resizeStartPosition, point);
 
       const obj = objectById[resizeData.objectId];
-      const absSizeObj = getAbsoluteLayoutSize(
+      const absSizeObj = getAbsoluteLayoutSizeInPx(
         obj.absoluteLayout!,
-        selectedDevice
+        selectedDevice,
+        breakpointConfig!
       );
       const objectRect = {
         x: absSizeObj.left!,
@@ -1290,10 +1296,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             obj.absoluteLayout!,
             selectedDevice
           );
-          absSizeObj.left = roundNumber(resizeRect!.x!, 1);
-          absSizeObj.top = roundNumber(resizeRect!.y!, 1);
-          absSizeObj.width = roundNumber(resizeRect!.w!, 1);
-          absSizeObj.height = roundNumber(resizeRect!.h!, 1);
+          absSizeObj.left = roundNumber(resizeRect!.x!, 1) + "px";
+          absSizeObj.top = roundNumber(resizeRect!.y!, 1) + "px";
+          absSizeObj.width = roundNumber(resizeRect!.w!, 1) + "px";
+          absSizeObj.height = roundNumber(resizeRect!.h!, 1) + "px";
 
           _updateObject(obj);
 
@@ -1326,12 +1332,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   absoluteLayout: {
                     type: "common",
                     perDevice: [],
+                    relativeTo: "stage",
                     common: {
                       deviceType: "common",
-                      left: rect2.x,
-                      top: rect2.y,
-                      width: rect2.w,
-                      height: rect2.h,
+                      left: rect2.x + "px",
+                      top: rect2.y + "px",
+                      width: rect2.w + "px",
+                      height: rect2.h + "px",
                     },
                   },
                 });

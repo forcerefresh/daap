@@ -1,6 +1,7 @@
 import {
   InputType,
   ISelectInput,
+  ISliderInput,
   ITextInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import {
@@ -19,7 +20,8 @@ export type NavigationTuple = [
         [
           ISelectInput<"linkEvent">,
           ITextInput<"linkTarget">,
-          ITextInput<"linkHref">
+          ITextInput<"linkHref">,
+          ISelectInput<"cursor">
         ]
       >,
       IFormSwitchGroup<
@@ -33,7 +35,8 @@ export type NavigationTuple = [
               IFormSwitchGroup<[]>,
               IFormSwitchGroup<[]>
             ]
-          >
+          >,
+          ISelectInput<"cursor">
         ]
       >
     ]
@@ -94,6 +97,17 @@ export const navigationDefinition: NavigationTuple = [
             inputType: InputType.TEXT,
             value: "",
             defaultValue: "",
+          },
+          {
+            displayName: "Event",
+            propertyName: "cursor",
+            inputType: InputType.SELECT,
+            value: "pointer",
+            defaultValue: "pointer",
+            options: [
+              { label: "default", value: "default" },
+              { label: "pointer", value: "pointer" },
+            ],
           },
         ],
       },
@@ -161,6 +175,17 @@ export const navigationDefinition: NavigationTuple = [
                 groupValue: "prev",
                 elements: [],
               },
+            ],
+          },
+          {
+            displayName: "Event",
+            propertyName: "cursor",
+            inputType: InputType.SELECT,
+            value: "pointer",
+            defaultValue: "pointer",
+            options: [
+              { label: "default", value: "default" },
+              { label: "pointer", value: "pointer" },
             ],
           },
         ],

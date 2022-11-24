@@ -173,3 +173,34 @@
   width: 340px;
   height: 80vh;
 }
+
+.dropHereHint {
+  display: none;
+  z-index: 100;
+  top: 0px;
+  right: 0px;
+  height: 17px;
+  padding: 1px 5px;
+  width: 130px;
+  position: absolute;
+  background: #3980b6;
+  color: white;
+  font-size: 11px;
+}
+
+.layerOver {
+  border: 1px solid #3980b6 !important;
+}
+
+.dropHereHintVisible {
+  display: block !important;
+}
+
+.frontBackHolder {
+  display: inline-flex;
+  border: 1px solid rgba(0, 0, 0, 0);
+}
+
+.frontBackHolderDropOver {
+  border: 1px solid #3980b6 !important;
+}

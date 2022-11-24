@@ -176,23 +176,30 @@ function pickLayoutFromLayouts(
   layout: LayoutTypes,
   layer: ILayout
 ): Partial<
-  Pick<ILayout, "absoluteLayout" | "fitLayout" | "gridLayouts" | "snapLayout">
+  Pick<
+    ILayout,
+    "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout" | "insetLayout"
+  >
 > {
   switch (layout) {
     case "absolute": {
       return { absoluteLayout: layer.absoluteLayout };
     }
     case "grid": {
-      return { gridLayouts: layer.gridLayouts };
+      return { gridLayout: layer.gridLayout };
     }
-    case "fit_guidelines":
-    case "fit_page":
-    case "fit_stage": {
+    case "fit": {
       return { fitLayout: layer.fitLayout };
     }
     case "snap": {
       return { snapLayout: layer.snapLayout };
     }
+    case "inset": {
+      return { insetLayout: layer.insetLayout };
+    }
+    // case "anchor": {
+    //   return { snapLayout: layer.snapLayout };
+    // }
     case "none": {
       return {};
     }
@@ -220,7 +227,10 @@ function generateSlideData(
     "transitions",
     "duration",
     "exitDuration",
+    "moveToTop",
     "customId",
+    "title",
+    "description",
   ]);
 
   someSlideData.transitionOverlapTime = convertTimeUnitToMs(
@@ -234,6 +244,7 @@ function generateSlideData(
     slide,
     settings
   );
+  someSlideData.moveToTop = slide.moveToTop;
 
   // slide data
   const slideData: ISlideData = {

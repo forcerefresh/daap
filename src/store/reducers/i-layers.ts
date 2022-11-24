@@ -29,6 +29,8 @@ export interface ILayer extends ILayout {
   type: "layer";
   slideId: string;
   name: string;
+  title?: string;
+  description?: string;
   isVisible: boolean;
   hasTimeline: boolean;
   objectIds: string[];

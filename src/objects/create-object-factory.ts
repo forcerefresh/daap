@@ -222,5 +222,6 @@ export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
     transitionOverlapTime: "1000ms",
     transitionDurationTime: "1000ms",
     transitions: getDefaultTransitionsForSlide(),
+    moveToTop: true,
   };
 }

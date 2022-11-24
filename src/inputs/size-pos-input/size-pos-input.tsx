@@ -2,6 +2,7 @@ import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
 import { ISizePosInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import { getUnitNumericFiled } from "../input-utils";
 import css from "./size-pos-input.module.scss";
 
 const SMALL_ICON_SIZE = 18;
@@ -36,12 +37,12 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
     }
   }, [value]);
 
-  const [valid, setValid] = useState<{
-    left: boolean;
-    top: boolean;
-    width: boolean;
-    height: boolean;
-  }>({ left: true, top: true, width: true, height: true });
+  // const [valid, setValid] = useState<{
+  //   left: boolean;
+  //   top: boolean;
+  //   width: boolean;
+  //   height: boolean;
+  // }>({ left: true, top: true, width: true, height: true });
 
   const [keepAspectRatio, setKeepAspectRatio] = useState(false);
   const [aspectRatioMultiplier, setAspectRatioMultiplier] = useState<{
@@ -56,62 +57,117 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
     internalValue[propertyName] = propertyValue;
     setInternalValue({ ...internalValue });
 
-    const currValid = { ...valid };
+    // const currValid = { ...valid };
 
-    const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValue);
+    //const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValue);
 
     //validate is number
-    if (isNumber && !isNaN(parseFloat(propertyValue))) {
-      //validate is positive for width and height
-      const isValidValue =
-        propertyName === "left" ||
-        propertyName === "top" ||
-        propertyName === "width" ||
-        propertyName === "height"
-          ? parseFloat(propertyValue) >= 0
-          : true;
+    // if (isNumber && !isNaN(parseFloat(propertyValue))) {
+    //   //validate is positive for width and height
+    //   const isValidValue =
+    //     propertyName === "left" ||
+    //     propertyName === "top" ||
+    //     propertyName === "width" ||
+    //     propertyName === "height"
+    //       ? parseFloat(propertyValue) >= 0
+    //       : true;
 
-      currValid[propertyName] = isValidValue;
+    //   currValid[propertyName] = isValidValue;
 
-      if (isValidValue) {
-        const value2 = { ...value } as any;
-        value2[propertyName] = propertyValue;
-        setLatestValidValue({ ...value2 });
-        if (keepAspectRatio) {
-          if (propertyName === "width") {
-            const _height =
-              aspectRatioMultiplier.hMultiplier * parseFloat(propertyValue);
-            internalValue.height = _height.toString();
-            setInternalValue({ ...internalValue });
-            currValid.height = true;
-          }
-          if (propertyName === "height") {
-            const _width =
-              aspectRatioMultiplier.vMultiplier * parseFloat(propertyValue);
-            internalValue.width = _width.toString();
-            setInternalValue({ ...internalValue });
-            currValid.width = true;
-          }
-        }
+    // if (isValidValue) {
+    const value2 = { ...value } as any;
+    value2[propertyName] = propertyValue;
+    setLatestValidValue({ ...value2 });
+    if (keepAspectRatio) {
+      if (propertyName === "width") {
+        const heightUnit =
+          internalValue.height.indexOf("px") !== -1 ? "px" : "%";
+        const _height =
+          aspectRatioMultiplier.hMultiplier * parseFloat(propertyValue);
+        internalValue.height = _height.toString() + heightUnit;
+        setInternalValue({ ...internalValue });
+        //currValid.height = true;
       }
-    } else {
-      currValid[propertyName] = false;
+      if (propertyName === "height") {
+        const widthUnit = internalValue.width.indexOf("px") !== -1 ? "px" : "%";
+        const _width =
+          aspectRatioMultiplier.vMultiplier * parseFloat(propertyValue);
+        internalValue.width = _width.toString() + widthUnit;
+        setInternalValue({ ...internalValue });
+        //currValid.width = true;
+      }
     }
+    //   }
+    // } else {
+    //   currValid[propertyName] = false;
+    // }
 
-    setValid({ ...currValid });
+    // setValid({ ...currValid });
 
     onChange({
       ...value,
-      ...(currValid.width && { width: parseFloat(internalValue.width) }),
-      ...(currValid.height && { height: parseFloat(internalValue.height) }),
-      ...(currValid.left && { left: parseFloat(internalValue.left) }),
-      ...(currValid.top && { top: parseFloat(internalValue.top) }),
+      ...{ width: internalValue.width },
+      ...{ height: internalValue.height },
+      ...{ left: internalValue.left },
+      ...{ top: internalValue.top },
     });
   };
 
   return (
     <div className={css.main}>
-      <FormGroup>
+      <div>
+        {getUnitNumericFiled(
+          "X",
+          internalValue?.left,
+          (v: string) => {
+            updateValue("left", v);
+          },
+          "",
+          {
+            disabled: inputProps.disabled,
+            // className: css.perDeviceInput,
+          }
+        )}
+        {getUnitNumericFiled(
+          "Y",
+          internalValue?.top,
+          (v: string) => {
+            updateValue("top", v);
+          },
+          "",
+          {
+            disabled: inputProps.disabled,
+            // className: css.perDeviceInput,
+          }
+        )}
+      </div>
+      <div>
+        {getUnitNumericFiled(
+          "W",
+          internalValue?.width,
+          (v: string) => {
+            updateValue("width", v);
+          },
+          "",
+          {
+            disabled: inputProps.disabled,
+            // className: css.perDeviceInput,
+          }
+        )}
+        {getUnitNumericFiled(
+          "H",
+          internalValue?.height,
+          (v: string) => {
+            updateValue("height", v);
+          },
+          "",
+          {
+            disabled: inputProps.disabled,
+            // className: css.perDeviceInput,
+          }
+        )}
+      </div>
+      {/* <FormGroup>
         <InputGroup
           disabled={inputProps.disabled}
           inputRef={(el) => {
@@ -124,8 +180,8 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           onChange={(event: any) => updateValue("left", event.target.value)}
           onInput={(event: any) => updateValue("left", event.target.value)}
         />
-      </FormGroup>
-      <FormGroup>
+      </FormGroup> */}
+      {/* <FormGroup>
         <InputGroup
           disabled={inputProps.disabled}
           inputRef={(el) => {
@@ -166,8 +222,32 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           onChange={(event: any) => updateValue("height", event.target.value)}
           onInput={(event: any) => updateValue("height", event.target.value)}
         />
-      </FormGroup>
-      <div style={{ paddingTop: "2px" }}>
+      </FormGroup> */}
+      <div>
+        <div className={css.linkTop} />
+        <Button
+          small
+          minimal
+          onClick={() => {
+            setKeepAspectRatio(!keepAspectRatio);
+            if (!keepAspectRatio)
+              setAspectRatioMultiplier({
+                hMultiplier:
+                  parseFloat(latestValidValue.height) /
+                  parseFloat(latestValidValue.width),
+                vMultiplier:
+                  parseFloat(latestValidValue.width) /
+                  parseFloat(latestValidValue.height),
+              });
+          }}
+          active={keepAspectRatio}
+        >
+          <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+        </Button>
+        <div className={css.linkBottom} />
+      </div>
+
+      {/* <div style={{ paddingTop: "2px" }}>
         <Button
           small
           minimal
@@ -189,7 +269,7 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
         >
           <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
         </Button>
-      </div>
+      </div> */}
     </div>
   );
 };

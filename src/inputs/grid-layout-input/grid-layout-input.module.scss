@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  place-items: unset;
+  // Label (displayName) style
+  :global {
+    .bp3-label {
+      width: var(--animations-panel-label-width);
+      min-width: var(--animations-panel-label-width);
+      margin-right: 10px;
+    }
+  }
+}
+.alignHolder {
+  display: flex;
+  .alignHolderInner {
+    display: flex;
+
+    > * + * {
+      margin-left: 5px;
+    }
+  }
+}
+
+.row {
+  display: flex;
+
+  :global {
+    input {
+      width: 40px !important;
+      margin-right: 5px;
+    }
+  }
+}
+
+.perDeviceInput {
+  input {
+    width: 42px !important;
+  }
+}
+
+.commonRow {
+  :global {
+    .bp3-label {
+      width: 50px !important;
+    }
+  }
+}

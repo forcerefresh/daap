@@ -7,13 +7,17 @@ import {
   getSnapLayoutField,
   getGridLayoutField,
   getSelectField,
+  getFitLayoutField,
+  getInsetLayoutField,
 } from "../../../inputs/input-utils";
 import {
   ILayout,
   IObject,
-  IGridLayouts,
-  IAbsoluteLayouts,
-  ISnapLayouts,
+  IGridLayout,
+  IAbsoluteLayout,
+  ISnapLayout,
+  IFitLayout,
+  IInsetLayout,
 } from "webslider-sdk/lib/objects/i-object";
 import {
   setDevice,
@@ -82,10 +86,10 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
         {objectOrLayer.layout === "grid" &&
           getGridLayoutField(
             "",
-            objectOrLayer.gridLayouts,
-            (gridLayouts?: IGridLayouts) => {
+            objectOrLayer.gridLayout,
+            (gridLayout?: IGridLayout) => {
               const retObj = cloneDeep(objectOrLayer);
-              retObj.gridLayouts = gridLayouts;
+              retObj.gridLayout = gridLayout;
               updateFunction(retObj);
             },
             { disablePosition: layoutedByParent },
@@ -99,7 +103,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           getAbsoluteLayoutField(
             "",
             objectOrLayer.absoluteLayout,
-            (absoluteLayout?: IAbsoluteLayouts) => {
+            (absoluteLayout?: IAbsoluteLayout) => {
               const retObj = cloneDeep(objectOrLayer);
               retObj.absoluteLayout = absoluteLayout;
               updateFunction(retObj);
@@ -119,9 +123,49 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           getSnapLayoutField(
             "",
             objectOrLayer.snapLayout,
-            (edgeLayout?: ISnapLayouts) => {
+            (edgeLayout?: ISnapLayout) => {
               const retObj = cloneDeep(objectOrLayer);
               retObj.snapLayout = edgeLayout;
+              updateFunction(retObj);
+            },
+            {
+              selfSize: objectOrLayer.selfSize,
+              disablePosition: layoutedByParent,
+            },
+            breakpoints,
+            selectedDevice,
+            (device: string) => {
+              _setDevice(device);
+            }
+          )}
+
+        {objectOrLayer.layout === "fit" &&
+          getFitLayoutField(
+            "",
+            objectOrLayer.fitLayout,
+            (fitLayout?: IFitLayout) => {
+              const retObj = cloneDeep(objectOrLayer);
+              retObj.fitLayout = fitLayout;
+              updateFunction(retObj);
+            },
+            {
+              selfSize: objectOrLayer.selfSize,
+              disablePosition: layoutedByParent,
+            },
+            breakpoints,
+            selectedDevice,
+            (device: string) => {
+              _setDevice(device);
+            }
+          )}
+
+        {objectOrLayer.layout === "inset" &&
+          getInsetLayoutField(
+            "",
+            objectOrLayer.insetLayout,
+            (insetLayout?: IInsetLayout) => {
+              const retObj = cloneDeep(objectOrLayer);
+              retObj.insetLayout = insetLayout;
               updateFunction(retObj);
             },
             {
@@ -152,12 +196,9 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     object.supportedLayout.grid &&
       options.push({ label: "Grid", value: "grid" });
     options.push({ label: "Snap", value: "snap" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Page", value: "fit_page" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Stage", value: "fit_stage" });
-    object.supportedLayout.fit &&
-      options.push({ label: "Fit Guidebox", value: "fit_guidelines" });
+    object.supportedLayout.fit && options.push({ label: "Fit", value: "fit" });
+    object.supportedLayout.inset &&
+      options.push({ label: "Inset", value: "inset" });
 
     const onChange = (layout: any) => {
       const retObj = cloneDeep(object);

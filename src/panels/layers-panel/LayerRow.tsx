@@ -90,7 +90,7 @@ export function LayerRow(props: ILayerRowProps) {
     moveObjects(layer.id, "layer", item.ids);
   };
 
-  const [{ isOver, item }, drop] = useDrop<any, any, any>(() => ({
+  const [{ isOver: isObjectOver, item }, drop] = useDrop<any, any, any>(() => ({
     accept: "object",
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -185,6 +185,7 @@ export function LayerRow(props: ILayerRowProps) {
   return (
     <div
       ref={drop}
+      style={{ position: "relative" }}
       key={layer?.id}
       onClick={(event) => onLayerClick(event, layer.id)}
       className={cx(css.layerInner, {
@@ -195,9 +196,10 @@ export function LayerRow(props: ILayerRowProps) {
         [css.selected]:
           selectedLayerIds.length > 0 /*1*/ &&
           selectedLayerIds.indexOf(layer.id) !== -1,
+        [css.layerOver]: isObjectOver,
       })}
     >
-      <div ref={drag}>
+      <div ref={drag} className={css.layerInnerInner}>
         <Button
           minimal
           onClick={(event: any) => {
@@ -258,6 +260,13 @@ export function LayerRow(props: ILayerRowProps) {
             </div>
           </Popover>
         </div>
+      </div>
+      <div
+        className={cx(css.dropHereHint, {
+          [css.dropHereHintVisible]: isObjectOver,
+        })}
+      >
+        Drop {item?.ids?.length} layers
       </div>
       <div>
         <Button

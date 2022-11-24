@@ -7,7 +7,7 @@ import { ColorInputForm } from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { FontSelectInputForm } from "./font-input/font-input";
-import { GridPlacementInputForm } from "./grid-placement/grid-placement";
+import { GridPlacementInputForm } from "./grid-layout-input/grid-layout-input";
 import { ImageInputForm } from "./image-input/image-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
@@ -17,7 +17,7 @@ import { SplitInputForm } from "./split-input/split-input";
 import { TextInputForm } from "./text-input/text-input";
 import { TextStartPositionInputForm } from "./text-start-position-input/text-start-position-input";
 import { TextAreaInputForm } from "./textarea-input/textarea-input";
-import { AbsolutePlacementForm } from "./absolute-placement/absolute-placement-input";
+import { AbsolutePlacementForm } from "./absolute-layout-input/absolute-layout-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import {
   IInputMetadataValues,
@@ -40,7 +40,7 @@ import { SVGInputForm } from "./svg-input/svg-input";
 import { SVGCustomColorsForm } from "./svg-custom-colors-input/svg-custom-colors-input";
 import { OptionalInput } from "./optional-input/optional-input";
 import { SizeInputForm } from "./size-input/size-input";
-import { SnapInputForm } from "./snap-input/snap-input";
+import { SnapInputForm } from "./snap-layout-input/snap-layout-input";
 import { LayoutChildrenInputForm } from "./layout-children-input/layout-children-input";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { InheritableTimeInputForm } from "./slide-duration-input/slide-duration-input";
@@ -50,6 +50,8 @@ import { SizePosInputForm } from "./size-pos-input/size-pos-input";
 import { SizeUnitInputForm } from "./size-unit-input/size-unit-input";
 import { HTMLInputForm } from "./html-input/html-input";
 import { RangeSliderInputForm } from "./range-slider-input/range-slider-input";
+import { FitInputForm } from "./fit-input/fit-input";
+import { InsetLayoutInputForm } from "./inset-layout-input/inset-layout-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -333,6 +335,30 @@ export function getInputForm<T>(
     case InputType.SNAP: {
       return (
         <SnapInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          breakpoints={data?.breakpoints}
+          selectedDevice={data?.selectedDevice}
+          onChangeDevice={data?.onChangeDevice}
+        />
+      );
+    }
+    case InputType.FIT: {
+      return (
+        <FitInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          breakpoints={data?.breakpoints}
+          selectedDevice={data?.selectedDevice}
+          onChangeDevice={data?.onChangeDevice}
+        />
+      );
+    }
+    case InputType.INSET: {
+      return (
+        <InsetLayoutInputForm
           key={key}
           {...inputProps}
           onChange={onChange}

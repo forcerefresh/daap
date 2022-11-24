@@ -22,6 +22,7 @@ import {
   selectForPropertiesProps,
   moveSlides,
   duplicateSlides,
+  moveLayers,
 } from "../../store/actions/actions";
 //import SlideSettingsPanel from "../slide-settings-panel/SlideSettingsPanel";
 
@@ -36,7 +37,7 @@ import {
 } from "../../utils/utils";
 import { delay } from "lodash-es";
 import { SlideRow } from "./SlideRow";
-import { DndProvider } from "react-dnd";
+import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
@@ -66,7 +67,52 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _setStagePreview,
     _moveSlides,
     _duplicatSlides,
+    _moveLayers,
   } = props;
+
+  const dropLayersOnFrontHandler = (item: any, monitor: any) => {
+    _moveLayers(frontSlideId, "slide", item.ids);
+    _activateSlide(frontSlideId);
+    _selectSlides([frontSlideId]);
+    _selectForProperties({ id: frontSlideId, type: "slide" });
+  };
+
+  const [{ isOver: isLayerOverFront }, frontDropRef] = useDrop<any, any, any>(
+    () => ({
+      accept: "layer",
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        item: monitor.getItem(),
+      }),
+      drop: dropLayersOnFrontHandler,
+      // canDrop: (monitor: DropTargetMonitor): boolean => {
+      //   return slide.layerIds.indexOf(item[0]) !== -1;
+      // },
+    }),
+    [frontSlideId]
+  );
+
+  const dropLayersOnBackHandler = (item: any, monitor: any) => {
+    _moveLayers(backSlideId, "slide", item.ids);
+    _activateSlide(frontSlideId);
+    _selectSlides([frontSlideId]);
+    _selectForProperties({ id: frontSlideId, type: "slide" });
+  };
+
+  const [{ isOver: isLayerOverBack }, backDropRef] = useDrop<any, any, any>(
+    () => ({
+      accept: "layer",
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        item: monitor.getItem(),
+      }),
+      drop: dropLayersOnBackHandler,
+      // canDrop: (monitor: DropTargetMonitor): boolean => {
+      //   return slide.layerIds.indexOf(item[0]) !== -1;
+      // },
+    }),
+    [backSlideId]
+  );
 
   const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
     useState<string>(EmptyID);
@@ -75,7 +121,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     slideId: string
   ) => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       selectedSlideIds.indexOf(slideId) === -1
         ? _addSlidesToSelection([slideId])
         : _removeSlidesFromSelection([slideId]);
@@ -167,30 +213,44 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         <div className={css.panelHeader}>
           <div>SLIDES</div>
           <div>
-            <Button
-              small
-              minimal
-              active={activeSlideId === frontSlideId}
-              onClick={() => {
-                _activateSlide(frontSlideId);
-                _selectSlides([frontSlideId]);
-                _selectForProperties({ id: frontSlideId, type: "slide" });
-              }}
+            <div
+              ref={frontDropRef}
+              className={cx(css.frontBackHolder, {
+                [css.frontBackHolderDropOver]: isLayerOverFront,
+              })}
             >
-              Front
-            </Button>
-            <Button
-              small
-              minimal
-              active={activeSlideId === backSlideId}
-              onClick={() => {
-                _activateSlide(backSlideId);
-                _selectSlides([backSlideId]);
-                _selectForProperties({ id: backSlideId, type: "slide" });
-              }}
+              <Button
+                small
+                minimal
+                active={activeSlideId === frontSlideId}
+                onClick={() => {
+                  _activateSlide(frontSlideId);
+                  _selectSlides([frontSlideId]);
+                  _selectForProperties({ id: frontSlideId, type: "slide" });
+                }}
+              >
+                Front
+              </Button>
+            </div>
+            <div
+              ref={backDropRef}
+              className={cx(css.frontBackHolder, {
+                [css.frontBackHolderDropOver]: isLayerOverBack,
+              })}
             >
-              Back
-            </Button>
+              <Button
+                small
+                minimal
+                active={activeSlideId === backSlideId}
+                onClick={() => {
+                  _activateSlide(backSlideId);
+                  _selectSlides([backSlideId]);
+                  _selectForProperties({ id: backSlideId, type: "slide" });
+                }}
+              >
+                Back
+              </Button>
+            </div>
           </div>
           <div>
             <Button
@@ -266,6 +326,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     });
                   }}
                   onDragingChange={onDragingSlideChange}
+                  _moveLayers={_moveLayers}
                 />
                 {isDraggingSlides && isLastSlide && (
                   <DropHandle
@@ -325,12 +386,16 @@ const mapDispatchToProps = {
     setStagePreview(preview),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
-
   _moveSlides: (
     refId: string,
     where: "above" | "bottom" | string,
     moveIds: string[]
   ) => moveSlides(refId, where, moveIds),
+  _moveLayers: (
+    refId: string,
+    where: "above" | "below" | "layer" | "slide" | "bottom",
+    moveIds: string[]
+  ) => moveLayers(refId, where, moveIds),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

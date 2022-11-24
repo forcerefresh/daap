@@ -1,7 +1,7 @@
 import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
 import { cloneDeep, isEqual, noop, pick } from "lodash-es";
 import React, { useEffect, useRef, useState } from "react";
-import { IAbsoluteLayout } from "webslider-sdk/lib/objects/i-object";
+import { IAbsoluteLayoutItem } from "webslider-sdk/lib/objects/i-object";
 import { getIconSize } from "../../panels/action-panel/ActionPanel";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
@@ -11,18 +11,26 @@ import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 import {
   getButtonGroupField,
   getNumericFiled,
+  getSelectField,
   getSizePosLayoutField,
+  getUnitNumericFiled,
 } from "../input-utils";
 import {
-  IAbsolutePlacementInput,
+  IAbsoluteLayoutInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import css from "./absolute-placement-input.module.scss";
+import css from "./absolute-layout-input.module.scss";
+
+const RELATIVE_TO_OPTIONS = [
+  { label: "Page", value: "page" },
+  { label: "Stage", value: "stage" },
+  { label: "Guidelines", value: "guidelines" },
+];
 
 const SMALL_ICON_SIZE = 18;
 
 export const AbsolutePlacementForm: React.FC<
-  IAbsolutePlacementInput & IUpdateInput
+  IAbsoluteLayoutInput & IUpdateInput
 > = (props) => {
   const {
     value,
@@ -107,42 +115,53 @@ export const AbsolutePlacementForm: React.FC<
 
     const currValid = { ...valid };
 
-    const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValue);
+    //const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValue);
 
     //validate is number
-    if (isNumber && !isNaN(parseFloat(propertyValue))) {
-      //validate is positive for width and height
-      const isValidValue =
-        propertyName === "width" || propertyName === "height"
-          ? parseFloat(propertyValue) >= 0
-          : true;
+    // if (isNumber && !isNaN(parseFloat(propertyValue))) {
+    //   //validate is positive for width and height
+    //   const isValidValue =
+    //     propertyName === "width" || propertyName === "height"
+    //       ? parseFloat(propertyValue) >= 0
+    //       : true;
 
-      currValid[propertyName] = isValidValue;
+    //   currValid[propertyName] = isValidValue;
 
-      if (isValidValue) {
-        const value2 = { ...value } as any;
-        value2[propertyName] = propertyValue;
-        setLatestValidValue({ ...value2 });
-        if (keepAspectRatio) {
-          if (propertyName === "width") {
-            const _height =
-              aspectRatioMultiplier.hMultiplier * parseFloat(propertyValue);
-            internalValue.height = _height.toString();
-            setInternalValue({ ...internalValue });
-            currValid.height = true;
-          }
-          if (propertyName === "height") {
-            const _width =
-              aspectRatioMultiplier.vMultiplier * parseFloat(propertyValue);
-            internalValue.width = _width.toString();
-            setInternalValue({ ...internalValue });
-            currValid.width = true;
-          }
-        }
+    //   if (isValidValue) {
+
+    // TODO: we don't need this, we are getting proper value
+    currValid[propertyName] = true;
+
+    const value2 = { ...value } as any;
+    value2[propertyName] = propertyValue;
+    setLatestValidValue({ ...value2 });
+    if (keepAspectRatio) {
+      if (propertyName === "width") {
+        const heightUnit =
+          internalValue.height.indexOf("px") !== -1 ? "px" : "%";
+        const _height = roundNumber(
+          aspectRatioMultiplier.hMultiplier * parseFloat(propertyValue),
+          1
+        );
+        internalValue.height = _height.toString() + heightUnit;
+        setInternalValue({ ...internalValue });
+        currValid.height = true;
       }
-    } else {
-      currValid[propertyName] = false;
+      if (propertyName === "height") {
+        const widthUnit = internalValue.width.indexOf("px") !== -1 ? "px" : "%";
+        const _width = roundNumber(
+          aspectRatioMultiplier.vMultiplier * parseFloat(propertyValue),
+          1
+        );
+        internalValue.width = _width.toString() + widthUnit;
+        setInternalValue({ ...internalValue });
+        currValid.width = true;
+      }
     }
+    //   }
+    // } else {
+    //   currValid[propertyName] = false;
+    // }
 
     setValid({ ...currValid });
 
@@ -151,10 +170,10 @@ export const AbsolutePlacementForm: React.FC<
       ...{
         common: {
           ...value.common,
-          ...(currValid.left && { left: parseFloat(internalValue.left) }),
-          ...(currValid.top && { top: parseFloat(internalValue.top) }),
-          ...(currValid.width && { width: parseFloat(internalValue.width) }),
-          ...(currValid.height && { height: parseFloat(internalValue.height) }),
+          ...(currValid.left && { left: internalValue.left }),
+          ...(currValid.top && { top: internalValue.top }),
+          ...(currValid.width && { width: internalValue.width }),
+          ...(currValid.height && { height: internalValue.height }),
         },
       },
     });
@@ -162,9 +181,31 @@ export const AbsolutePlacementForm: React.FC<
 
   const renderCommon = () => {
     return (
-      <div className={css.main}>
+      <div className={css.common}>
         <div>
-          <FormGroup label={"X"} labelFor="text-input-X" inline>
+          {getUnitNumericFiled(
+            "X",
+            internalValue?.left,
+            (v: string) => {
+              updateValue("left", v);
+            },
+            "",
+            {
+              // className: css.perDeviceInput,
+            }
+          )}
+          {getUnitNumericFiled(
+            "Y",
+            internalValue?.top,
+            (v: string) => {
+              updateValue("top", v);
+            },
+            "",
+            {
+              // className: css.perDeviceInput,
+            }
+          )}
+          {/* <FormGroup label={"X"} labelFor="text-input-X" inline>
             <InputGroup
               disabled={inputProps.disablePosition}
               inputRef={(el) => {
@@ -191,10 +232,32 @@ export const AbsolutePlacementForm: React.FC<
               onChange={(event: any) => updateValue("top", event.target.value)}
               onInput={(event: any) => updateValue("top", event.target.value)}
             />
-          </FormGroup>
+          </FormGroup> */}
         </div>
         <div>
-          <FormGroup label={"W"} labelFor="text-input-W" inline>
+          {getUnitNumericFiled(
+            "W",
+            internalValue?.width,
+            (v: string) => {
+              updateValue("width", v);
+            },
+            "",
+            {
+              // className: css.perDeviceInput,
+            }
+          )}
+          {getUnitNumericFiled(
+            "H",
+            internalValue?.height,
+            (v: string) => {
+              updateValue("height", v);
+            },
+            "",
+            {
+              // className: css.perDeviceInput,
+            }
+          )}
+          {/* <FormGroup label={"W"} labelFor="text-input-W" inline>
             <InputGroup
               disabled={inputProps.selfSize || inputProps.disableSize}
               inputRef={(el) => {
@@ -227,7 +290,7 @@ export const AbsolutePlacementForm: React.FC<
                 updateValue("height", event.target.value)
               }
             />
-          </FormGroup>
+          </FormGroup> */}
         </div>
         <div>
           <div className={css.linkTop} />
@@ -282,10 +345,8 @@ export const AbsolutePlacementForm: React.FC<
           <>
             <tr className={css.headerRow}>
               <td></td>
-              <td style={{ width: "55px" }}>X</td>
-              <td style={{ width: "55px" }}>Y</td>
-              <td style={{ width: "55px" }}>Width</td>
-              <td style={{ width: "55px" }}>Height</td>
+              <td style={{ width: "55px" }}></td>
+              <td style={{ width: "55px" }}></td>
               <td style={{ width: "25px" }}></td>
             </tr>
             {bcArr.map((bc) => {
@@ -348,7 +409,16 @@ export const AbsolutePlacementForm: React.FC<
   };
 
   return (
-    <>
+    <div className={css.main}>
+      {getSelectField(
+        "Relative to",
+        value.relativeTo,
+        RELATIVE_TO_OPTIONS,
+        (newRelativeTo) => {
+          onChange({ ...value, relativeTo: newRelativeTo });
+        },
+        { disabled: inputProps.disablePosition }
+      )}
       {getButtonGroupField(
         "",
         switchValue,
@@ -365,11 +435,11 @@ export const AbsolutePlacementForm: React.FC<
       )}
       {type === "common" && renderCommon()}
       {type === "perDevice" && renderPerDevice()}
-    </>
+    </div>
   );
 };
 
-function getMultiplier(sizeObj: IAbsoluteLayout) {
+function getMultiplier(sizeObj: IAbsoluteLayoutItem) {
   return {
     hMultiplier:
       parseFloat(sizeObj.height as any) / parseFloat(sizeObj.width as any),

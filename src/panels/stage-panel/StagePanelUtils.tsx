@@ -1,25 +1,27 @@
-import { cloneDeep, mapValues, pick } from "lodash-es";
+import { mapValues, pick } from "lodash-es";
 import React from "react";
+import cx from "classnames";
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import {
-  IAbsoluteLayouts,
+  IAbsoluteLayout,
+  IFitLayout,
+  IInsetLayout,
   ILayout,
   IObject,
-  ISnapLayouts,
-  ObjectType,
+  ISnapLayout,
 } from "webslider-sdk/lib/objects/i-object";
 import {
   BreakpointConfiguration,
   Breakpoints,
 } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { ISize, roundNumber } from "../../utils/doom-utils/common";
-import cx from "classnames";
+import { Header1 } from "./preview/Header1/Header1";
+import { Body1 } from "./preview/Body1/Body1";
+import { humanizeSting } from "../../utils/utils";
 
 import css from "./StagePanel.module.scss";
-import { Header1 } from "./preview/Header1/Header1";
-import { RGBColor } from "react-color";
-import { Body1 } from "./preview/Body1/Body1";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export function calculateObjectSizePerDevice(
   object: IObject,
@@ -50,22 +52,57 @@ export function calculateObjectSize(
     return { left: 0, top: 0, width: 0, height: 0 };
   }
 
-  // 1. if object has position
+  // ABSOLUTE LAYOUT
   if (object.layout === "absolute") {
     const { absoluteLayout } = object;
 
-    let absoluteValue =
-      absoluteLayout?.type === "common"
-        ? absoluteLayout!.common
-        : absoluteLayout?.perDevice.find(
-            (item) => item.deviceType === breakpointConfig.type
-          );
+    const absoluteValue = getAbsoluteLayoutSize(
+      absoluteLayout!,
+      breakpointConfig.type
+    );
 
-    if (!absoluteValue) {
-      absoluteValue = absoluteLayout!.common;
-    }
+    const left = unitValueToPx(
+      absoluteValue.left,
+      "width",
+      object?.absoluteLayout?.relativeTo!,
+      breakpointConfig
+    );
 
-    const sizeObj = pick(absoluteValue, "left", "top", "width", "height")!;
+    const top = unitValueToPx(
+      absoluteValue.top,
+      "height",
+      object.absoluteLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const width = unitValueToPx(
+      absoluteValue.width,
+      "width",
+      object.absoluteLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const height = unitValueToPx(
+      absoluteValue.height,
+      "height",
+      object.absoluteLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const relativeToSize = getPSGSize(
+      object.absoluteLayout?.relativeTo!,
+      breakpointConfig
+    )!;
+
+    //const width = relativeToSize.width - (left + right);
+    //const height = relativeToSize.height - (top + bottom);
+
+    const sizeObj = {
+      left: relativeToSize.left + left,
+      top: relativeToSize.top + top,
+      width,
+      height,
+    };
 
     if (resetPosition) {
       sizeObj.left = 0;
@@ -75,29 +112,89 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  // 2. if we use GRID
+  // INSET LAYOUT
+  if (object.layout === "inset") {
+    const { insetLayout } = object;
+
+    const insetValue = getInsetLayoutSize(insetLayout!, breakpointConfig.type);
+
+    //const sizeObj = pick(insetValue, "left", "top", "width", "height")!;
+    const relativeToSize = getPSGSize(
+      object.insetLayout?.relativeTo!,
+      breakpointConfig
+    )!;
+
+    const left = unitValueToPx(
+      insetValue!.left,
+      "width",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const top = unitValueToPx(
+      insetValue!.top,
+      "height",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const right = unitValueToPx(
+      insetValue!.right,
+      "width",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const bottom = unitValueToPx(
+      insetValue!.bottom,
+      "height",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig
+    );
+
+    const width = relativeToSize.width - (left + right);
+    const height = relativeToSize.height - (top + bottom);
+
+    console.log(relativeToSize);
+
+    const sizeObj = {
+      left: relativeToSize.left + left,
+      top: relativeToSize.top + top,
+      width,
+      height,
+    };
+
+    if (resetPosition) {
+      sizeObj.left = 0;
+      sizeObj.top = 0;
+    }
+
+    return mapValues(sizeObj, (size) => `${size}px`);
+  }
+
+  // GRID LAYOUT
   if (object.layout === "grid") {
-    const { gridLayouts } = object;
+    const { gridLayout } = object;
 
     const wPerCell = stageSize.width / breakpointConfig.normal.grid.horizontal;
     const hPerCell = stageSize.height / breakpointConfig.normal.grid.vertical;
 
     let gridValue =
-      gridLayouts?.type === "common"
-        ? gridLayouts!.common
-        : gridLayouts?.perDevice.find(
+      gridLayout?.type === "common"
+        ? gridLayout!.common
+        : gridLayout?.perDevice.find(
             (item) => item.deviceType === breakpointConfig.type
           );
 
     if (!gridValue) {
-      gridValue = gridLayouts!.common;
+      gridValue = gridLayout!.common;
     }
 
     const sizeObj = {
       left: wPerCell * gridValue!.left,
       top: hPerCell * gridValue!.top,
-      width: wPerCell * gridValue!.right,
-      height: hPerCell * gridValue!.bottom,
+      width: wPerCell * gridValue!.width,
+      height: hPerCell * gridValue!.height,
     };
     if (resetPosition) {
       sizeObj.left = 0;
@@ -106,26 +203,27 @@ export function calculateObjectSize(
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  if (object.layout === "fit_page") {
+  // FIT LAYOUT
+  if (object.layout === "fit") {
+    const layoutItem = getFitLayoutSize(
+      object.fitLayout!,
+      breakpointConfig.type
+    );
+
+    if (layoutItem.relativeTo === "stage") {
+      const sizeObj = getPSGSize("stage", breakpointConfig);
+      return mapValues(sizeObj, (size) => `${size}px`);
+    } else if (layoutItem.relativeTo === "guidelines") {
+      const sizeObj = getPSGSize("guidelines", breakpointConfig);
+      return mapValues(sizeObj, (size) => `${size}px`);
+    }
+
     const sizeObj = getPSGSize("page", breakpointConfig);
-    logger.app.log(breakpointConfig);
-    logger.app.log(sizeObj);
-    logger.app.log(scaleParams);
+
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
-  if (object.layout === "fit_stage") {
-    const sizeObj = getPSGSize("stage", breakpointConfig);
-    return mapValues(sizeObj, (size) => `${size}px`);
-  }
-
-  if (object.layout === "fit_guidelines") {
-    const sizeObj = getPSGSize("guidelines", breakpointConfig);
-    return mapValues(sizeObj, (size) => `${size}px`);
-  }
-
-  // const gap = object.snapLayout!.gap;
-
+  // SNAP LAYOUT
   if (object.layout === "snap") {
     const snapSizeObjStr = getSnapLayoutSize(
       object.snapLayout!,
@@ -272,8 +370,89 @@ export function calculateObjectSize(
   return {};
 }
 
+export function getFitLayoutSize(
+  fitLayout: IFitLayout,
+  selectedDevice: DeviceType | "common" | string | any
+) {
+  let fitValue =
+    fitLayout?.type === "common"
+      ? fitLayout!.common
+      : fitLayout?.perDevice.find((item) => item.deviceType === selectedDevice);
+
+  if (!fitValue) {
+    fitValue = fitLayout!.common;
+  }
+
+  return fitValue;
+}
+
+export function getInsetLayoutSize(
+  insetLayout: IInsetLayout,
+  selectedDevice: DeviceType | "common" | string | any
+) {
+  let insetValue =
+    insetLayout?.type === "common"
+      ? insetLayout!.common
+      : insetLayout?.perDevice.find(
+          (item) => item.deviceType === selectedDevice
+        );
+
+  if (!insetValue) {
+    insetValue = insetLayout!.common;
+  }
+
+  return insetValue;
+}
+
+export function getAbsoluteLayoutSizeInPx(
+  absoluteLayout: IAbsoluteLayout,
+  selectedDevice: DeviceType | "common" | string | any,
+  breakpointConfig: BreakpointConfiguration
+) {
+  const absoluteValue = getAbsoluteLayoutSize(absoluteLayout, selectedDevice);
+
+  const left = unitValueToPx(
+    absoluteValue.left,
+    "width",
+    absoluteLayout?.relativeTo!,
+    breakpointConfig
+  );
+  const top = unitValueToPx(
+    absoluteValue.top,
+    "height",
+    absoluteLayout?.relativeTo!,
+    breakpointConfig
+  );
+
+  const width = unitValueToPx(
+    absoluteValue.width,
+    "width",
+    absoluteLayout?.relativeTo!,
+    breakpointConfig
+  );
+  const height = unitValueToPx(
+    absoluteValue.height,
+    "height",
+    absoluteLayout?.relativeTo!,
+    breakpointConfig
+  );
+
+  const relativeToSize = getPSGSize(
+    absoluteLayout?.relativeTo!,
+    breakpointConfig
+  )!;
+
+  const sizeObj = {
+    left: relativeToSize.left + left,
+    top: relativeToSize.top + top,
+    width,
+    height,
+  };
+
+  return sizeObj;
+}
 export function getAbsoluteLayoutSize(
-  absoluteLayout: IAbsoluteLayouts,
+  absoluteLayout: IAbsoluteLayout,
   selectedDevice: DeviceType | "common" | string | any
 ) {
   let absoluteValue =
@@ -291,7 +470,7 @@ export function getAbsoluteLayoutSize(
 }
 
 export function getSnapLayoutSize(
-  snapLayout: ISnapLayouts,
+  snapLayout: ISnapLayout,
   selectedDevice: DeviceType | "common" | string | any
 ) {
   let snapValue =
@@ -376,12 +555,12 @@ export function unitValueToPx(
         breakpointConfig.normal._maxSliderSize?.[propertyName] ||
         breakpointConfig.normal.maxSliderSize?.[propertyName];
 
-      if ((propertyName = "width")) {
+      if (propertyName === "width") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.left || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.right || 0);
       }
-      if ((propertyName = "height")) {
+      if (propertyName === "height") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.top || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.bottom || 0);
@@ -445,18 +624,19 @@ export function unitValueToPx(
   }
 */
 
-export function getPositionInfo(object: IObject) {
+export function getPositionInfo(object: IObject, device: DeviceType) {
   if (object.layout === "absolute") {
+    const objectAbsoluteLayout =
+      object.absoluteLayout?.type === "common"
+        ? object.absoluteLayout.common
+        : object.absoluteLayout?.perDevice.find((d) => d.deviceType === device);
     return (
       <>
         <span> Absolute | </span>
-        <span>
-          {"X:" + roundNumber(object.absoluteLayout!.common.left!, 2)}
-        </span>
-        <span>
-          {" "}
-          {"Y:" + roundNumber(object.absoluteLayout!.common.top!, 2)}
-        </span>
+        <span> {"X:" + objectAbsoluteLayout?.left}</span>
+        <span> {"Y:" + objectAbsoluteLayout?.top}</span>
+        <span> {"W:" + objectAbsoluteLayout?.width}</span>
+        <span> {"H:" + objectAbsoluteLayout?.height}</span>
         {/*<span> {"W:" + roundNumber(object.width!, 2)}</span>
       <span> {"H:" + roundNumber(object.height!, 2)}</span>*/}
       </>
@@ -464,43 +644,43 @@ export function getPositionInfo(object: IObject) {
   }
 
   if (object.layout === "grid") {
+    const objectGridLayout =
+      object.gridLayout?.type === "common"
+        ? object.gridLayout.common
+        : object.gridLayout?.perDevice.find((d) => d.deviceType === device);
+
     return (
       <>
-        <span> Grid | TODO!!!</span>
-        {/*  <span> {"left:" + object.gridLayout!.left!}</span>
-        <span> {"right:" + object.gridLayout!.right!}</span>*/}
+        <span> Grid | </span>
+        <span> {"L:" + objectGridLayout?.left ?? ""}</span>
+        <span> {"T:" + objectGridLayout?.top ?? ""}</span>
+        <span> {"W:" + objectGridLayout?.width ?? ""}</span>
+        <span> {"H:" + objectGridLayout?.height ?? ""}</span>
       </>
     );
   }
 
-  if (object.layout === "fit_page") {
+  if (object.layout === "fit") {
     return (
       <>
-        <span> Fit Page </span>
-      </>
-    );
-  }
-
-  if (object.layout === "fit_stage") {
-    return (
-      <>
-        <span> Fit Stage</span>
-      </>
-    );
-  }
-
-  if (object.layout === "fit_guidelines") {
-    return (
-      <>
-        <span> Fit Guidebox</span>
+        <span> Fit | Page </span>
       </>
     );
   }
 
   if (object.layout === "snap") {
+    const objectSnapLayout =
+      object.snapLayout?.type === "common"
+        ? object.snapLayout.common
+        : object.snapLayout?.perDevice?.find((d) => d.deviceType === device);
+
     return (
       <>
-        <span> Snap</span>
+        <span> Snap | </span>
+        <span> {"" + humanizeSting(object?.snapLayout?.edge ?? "")}</span>
+        <span> {"W:" + objectSnapLayout?.width ?? ""}</span>
+        <span> {"H:" + objectSnapLayout?.height ?? ""}</span>
+        <span> {"Gap:" + objectSnapLayout?.gap ?? ""}</span>
       </>
     );
   }

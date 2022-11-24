@@ -9,7 +9,11 @@ export function getUnitNumericFiled<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
+  inputProps: {
+    disabled?: boolean;
+    style?: React.CSSProperties;
+    className?: string;
+  } = {},
   allowedUnits?: Units[]
 ) {
   const objectDef = {
@@ -349,6 +353,52 @@ export function getSnapLayoutField<T>(
   };
 
   return getInputForm(InputType.SNAP, objectDef, onChange, onChange, {
+    breakpoints,
+    selectedDevice,
+    onChangeDevice,
+  });
+}
+
+export function getFitLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean },
+  breakpoints: Breakpoints = { breakpointsConfiguration: [] },
+  selectedDevice: string = "",
+  onChangeDevice: (device: string) => void = (device: string) => undefined
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.FIT,
+    value: value,
+    inputProps,
+  };
+
+  return getInputForm(InputType.FIT, objectDef, onChange, onChange, {
+    breakpoints,
+    selectedDevice,
+    onChangeDevice,
+  });
+}
+
+export function getInsetLayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  inputProps?: { selfSize?: boolean; disablePosition?: boolean },
+  breakpoints: Breakpoints = { breakpointsConfiguration: [] },
+  selectedDevice: string = "",
+  onChangeDevice: (device: string) => void = (device: string) => undefined
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.INSET,
+    value: value,
+    inputProps,
+  };
+
+  return getInputForm(InputType.INSET, objectDef, onChange, onChange, {
     breakpoints,
     selectedDevice,
     onChangeDevice,

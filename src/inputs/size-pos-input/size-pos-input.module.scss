@@ -2,6 +2,12 @@
   display: flex;
 
   :global {
+    .bp3-form-group {
+      margin-bottom: 5px;
+    }
+  }
+
+  :global {
     *,
     *:hover,
     *:active {
@@ -10,10 +16,32 @@
 
     .bp3-label {
       width: 10px !important;
+      padding-left: 10px;
     }
     .bp3-input {
-      width: 60px !important;
+      width: 90px !important;
       margin-right: 5px;
+    }
+  }
+
+  > div:last-child {
+    margin-left: 10px;
+    align-self: center;
+
+    > .linkTop {
+      border-top: 1px solid #4e4e4e;
+      border-right: 1px solid #4e4e4e;
+      width: 16px;
+      height: 10px;
+      margin-bottom: 5px;
+    }
+
+    > .linkBottom {
+      border-bottom: 1px solid #4e4e4e;
+      border-right: 1px solid #4e4e4e;
+      width: 16px;
+      height: 10px;
+      margin-top: 5px;
     }
   }
 }

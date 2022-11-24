@@ -1,4 +1,5 @@
 import { FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
+import classnames from "classnames";
 import { isEqual } from "lodash-es";
 import React, { useEffect, useState } from "react";
 import {
@@ -122,7 +123,7 @@ export const UnitsNumberInputForm: React.FC<
 
   return (
     <FormGroup
-      className={css.main}
+      className={classnames(css.main, props.inputProps?.className)}
       label={displayName}
       labelFor={id}
       helperText={!!helperText && helperText}

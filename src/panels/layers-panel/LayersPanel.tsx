@@ -120,7 +120,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     layerId: string
   ) => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       selectedLayerIds.indexOf(layerId) === -1
         ? _addLayersToSelection([layerId])
         : _removeLayersFromSelection([layerId]);
@@ -135,7 +135,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
   ) => {
-    if (event.ctrlKey) {
+    if (event.ctrlKey || event.metaKey) {
       selectedObjectIds.indexOf(objectId) === -1
         ? _addObjectsToSelection([objectId])
         : _removeObjectsFromSelection([objectId]);

@@ -32,6 +32,8 @@ const JUSTIFY_OPTIONS = [
   { label: "start", value: "start" },
   { label: "center", value: "center" },
   { label: "end", value: "end" },
+  { label: "space-between", value: "space-between" },
+  { label: "space-around", value: "space-around" },
 ];
 
 export const LayoutChildrenInputForm: React.FC<

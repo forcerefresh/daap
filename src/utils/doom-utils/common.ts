@@ -125,6 +125,9 @@ export function nlRemove(str: string | undefined): string {
 }
 
 export function roundNumber(num: number, places: number): number {
+  if (places === 0) {
+    return Math.floor(num);
+  }
   return Math.round(num * 10 * places) / (10 * places);
 }
 
