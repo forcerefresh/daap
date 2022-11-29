@@ -15,8 +15,9 @@ import {
   ISlideDuration,
   ISlideExitTime,
 } from "webslider-sdk/lib/common/i-slider-duration";
+import { RGBColor } from "react-color";
 
-export interface ITransitionsData {
+export interface IItemsData {
   customId: string;
   itemId: string;
   itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
@@ -53,11 +54,14 @@ export interface ISlideTransitionData {
 export interface IPlayerData {
   html: string;
   name?: string;
-  slideDataArr: ISlideData[];
-  frontSlideDataArr: ISlideData[];
-  backSlideDataArr: ISlideData[];
-  skipFirstSlideAnimation: boolean;
-  breakpointReference: "viewport" | "parent";
+  slides: ISlideData[];
+  frontSlides: ISlideData[];
+  backSlides: ISlideData[];
+  config: {
+    sliderBackgroundColor: RGBColor;
+    skipFirstSlideAnimation: boolean;
+    breakpointReference: "viewport" | "parent";
+  };
   breakpointData: {
     width: number;
     height: number;
@@ -89,5 +93,5 @@ export interface ISlideData {
     title?: string;
     description?: string;
   };
-  transitionsData: ITransitionsData[];
+  items: IItemsData[];
 }

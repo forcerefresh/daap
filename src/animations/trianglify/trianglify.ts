@@ -5,7 +5,7 @@ import {
 import { trianglifyAnimation } from "./trianglify.animation";
 import {
   trianglifyDefaults,
-  trianlifyDefinition,
+  trianglifyDefinition,
 } from "./trianglify.definition";
 import { TRIANGLIFY_ANIMATION } from "./trianglify.types";
 
@@ -17,5 +17,5 @@ export const trianglifyDef: IAnimationExtensionDefinition = {
 export const trianglifyAppDef: IAnimationExtensionAppDefinition = {
   animationId: TRIANGLIFY_ANIMATION,
   formDefaults: trianglifyDefaults,
-  formDefinition: trianlifyDefinition,
+  formDefinition: trianglifyDefinition,
 };

@@ -14,11 +14,11 @@ import { IStore } from "../../store/store";
 import css from "./SlideSettingsPanel.module.scss";
 import { getInputForm } from "../../inputs/input-factory";
 // import { getRealSlideDuration } from "../../utils/utils";
-import { EasingOptions } from "../../animations/types";
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
+import { EasingOptions } from "webslider-sdk/lib/animations/i-animation-types";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

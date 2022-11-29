@@ -34,6 +34,10 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
 
 export const IMAGE = "image";
 
@@ -196,18 +200,20 @@ export async function imageSizeUpdate(props: {
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
+  const { id, calculatedObjectSize } = props;
 
-  const els = document.getElementsByClassName(className);
-  const imageDiv = els[0] as HTMLDivElement;
-  const parent = imageDiv.parentNode! as HTMLDivElement;
-  parent.style.width = calculatedObjectSize.width;
-  parent.style.height = calculatedObjectSize.height;
-  parent.style.left = calculatedObjectSize.left;
-  parent.style.top = calculatedObjectSize.top;
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  //const els = document.getElementsByClassName(className);
+  //const imageDiv = els[0] as HTMLDivElement;
+  //const parent = imageDiv.parentNode! as HTMLDivElement;
+  objectWrapperEl.style.width = calculatedObjectSize.width;
+  objectWrapperEl.style.height = calculatedObjectSize.height;
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
 
-  imageDiv.style.width = calculatedObjectSize.width;
-  imageDiv.style.height = calculatedObjectSize.height;
+  objectEl.style.width = calculatedObjectSize.width;
+  objectEl.style.height = calculatedObjectSize.height;
 }
 
 export async function preloadImage(props: {

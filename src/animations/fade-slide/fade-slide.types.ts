@@ -1,4 +1,7 @@
-import { IAnimationBase, INextZIndex } from "../types";
+import {
+  IAnimationBase,
+  INextZIndex,
+} from "webslider-sdk/lib/animations/i-animation-types";
 
 export const FADE_SLIDE_ANIMATION = "fadeSlide";
 

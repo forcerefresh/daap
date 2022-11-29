@@ -3,7 +3,6 @@ import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { ChangeEvent, useState } from "react";
 import { connect } from "react-redux";
-import { AnimationType } from "../../animations/types";
 import {
   IObject,
   ItemType,
@@ -33,6 +32,7 @@ import {
   getAppAnimationDefinition,
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
+import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 
 type IAnimationPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

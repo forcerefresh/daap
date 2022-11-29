@@ -3,8 +3,8 @@ import { IObject, ITransition } from "webslider-sdk/lib/objects/i-object";
 import cx from "classnames";
 import css from "./TimelineView.module.scss";
 import { convertTimeUnitToMs } from "../../utils/utils";
-import { AnimationType } from "../../animations/types";
 import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
+import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 
 export interface TimelineViewProps {
   object: IObject;

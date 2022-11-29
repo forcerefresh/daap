@@ -38,16 +38,12 @@ import {
   convertTimeUnitToMs,
 } from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
-import {
-  IPlayerData,
-  ISlideData,
-  ISources,
-  ITransitionsData,
-} from "./i-export-html";
+import { IPlayerData, ISlideData, ISources, IItemsData } from "./i-export-html";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 
 export function generatePlayerData(
   sources: ISources,
@@ -93,7 +89,9 @@ export function generatePlayerData(
   const frontSlideDataArr: ISlideData[] = [];
   const backSlideDataArr: ISlideData[] = [];
 
-  let html = "<div class='slidesHolder'>"; // slides holder open
+  let html = "<div class='sliderRoot'>"; // sliderRoot
+  html += "<div class='sliderBackground'></div>";
+  html += "<div class='slidesHolder'>"; // slides holder open
 
   normalSlidesArr.forEach((slide) => {
     const slideDataRes = generateSlideData(
@@ -147,6 +145,7 @@ export function generatePlayerData(
   });
 
   html += "</div>"; //slides holder close
+  html += "</div>"; //slider root close
 
   const playerExtensions = extensions
     .filter((item) => extensionTypes.indexOf(item.type) !== -1)
@@ -156,11 +155,14 @@ export function generatePlayerData(
 
   return {
     html,
-    slideDataArr,
-    frontSlideDataArr,
-    backSlideDataArr,
-    skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
-    breakpointReference: settings.breakpointReference,
+    slides: slideDataArr,
+    frontSlides: frontSlideDataArr,
+    backSlides: backSlideDataArr,
+    config: {
+      skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
+      breakpointReference: settings.breakpointReference,
+      sliderBackgroundColor: settings.sliderBackgroundColor,
+    },
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
       height: breakpointConfig.normal.maxSliderSize.height,
@@ -219,7 +221,7 @@ function generateSlideData(
   let html: string = "";
   const extensionTypes: string[] = [];
 
-  const transitionsData: ITransitionsData[] = [];
+  const itemsData: IItemsData[] = [];
   const someSlideData: Partial<ISlideData["slide"]> = pick(slide, [
     "id",
     "slideType",
@@ -249,7 +251,7 @@ function generateSlideData(
   // slide data
   const slideData: ISlideData = {
     slide: someSlideData as ISlideData["slide"],
-    transitionsData,
+    items: itemsData,
   };
 
   forOwn(someSlideData.transitions, (tArr: ITransition[] | any) => {
@@ -276,7 +278,7 @@ function generateSlideData(
     const layerValues = layer.definition.values as ILayerValues;
 
     const layerClassName = "layer-" + layer.id;
-    transitionsData.push({
+    itemsData.push({
       itemId: layer.id,
       customId: layer.customId,
       itemType: "layer",
@@ -373,11 +375,20 @@ function generateSlideData(
         extensionTypes.push(object.type);
       }
 
+      const effectWrappers: string[] = [];
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
-        tArr.forEach((t: ITransition | any) => {
+        tArr.forEach((t: ITransition) => {
           const def = getAppAnimationDefinition(t?.animation?.id);
-          if (def?.external) {
-            extensionTypes.push(t.animation.id);
+          if (def) {
+            const requireWrapperElement = (def.formDefaults as IAnimationBase)
+              .requireWrapperElement;
+            if (requireWrapperElement) {
+              const animationWrapperClassName = `animation-wrapper-${def?.animationId}-${object.id}`;
+              effectWrappers.push(animationWrapperClassName);
+            }
+            if (def?.external) {
+              extensionTypes.push(t.animation.id);
+            }
           }
         });
       });
@@ -426,7 +437,11 @@ function generateSlideData(
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
       }
 
-      html += `      <div class="object" style='${wrapperStyle}'>`; // open object wrapper
+      html += `      <div class="object-wrapper object-wrapper-${object.id}" style='${wrapperStyle}'>`; // open object wrapper
+      html += effectWrappers.map(
+        (cn) =>
+          `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>`
+      );
       html += `      <div class="object ${objectClass} ${getCustomIdClass(
         object
       )}" style='${style}'>`; // open object
@@ -440,7 +455,7 @@ function generateSlideData(
         slidesLength // for bullets
       );
 
-      transitionsData.push({
+      itemsData.push({
         itemId: object.id,
         customId: object.customId,
         itemType: object.type,
@@ -471,6 +486,7 @@ function generateSlideData(
       html += objectHtml;
 
       html += "      </div>"; // object close
+      html += effectWrappers.map((cn) => `</div>`); // object-effect close
       html += "      </div>"; // object close wrapper
     });
 

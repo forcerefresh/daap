@@ -72,24 +72,24 @@ export const ParallaxInputForm: React.FC<
     </div>
   );
 
-  const booleanInput = (
-    propertyName: "setToInitialPositionOnComplete",
-    label: string,
-    helperText: string
-  ) => (
-    <div className="input60">
-      {getCheckboxField(
-        label,
-        value[propertyName],
-        (val: any) => {
-          const valueClone = cloneDeep(value);
-          valueClone[propertyName] = val;
-          onChange(valueClone);
-        },
-        helperText
-      )}
-    </div>
-  );
+  // const booleanInput = (
+  //   propertyName: "setToInitialPositionOnComplete",
+  //   label: string,
+  //   helperText: string
+  // ) => (
+  //   <div className="input60">
+  //     {getCheckboxField(
+  //       label,
+  //       value[propertyName],
+  //       (val: any) => {
+  //         const valueClone = cloneDeep(value);
+  //         valueClone[propertyName] = val;
+  //         onChange(valueClone);
+  //       },
+  //       helperText
+  //     )}
+  //   </div>
+  // );
 
   const autoDepthIncInput = () => (
     <div className="input60">
@@ -218,11 +218,11 @@ export const ParallaxInputForm: React.FC<
           "Time after objects stops move"
         )}
 
-        {booleanInput(
+        {/* {booleanInput(
           "setToInitialPositionOnComplete",
           "Reset on complete",
           "Position object to initial position on complete"
-        )}
+        )} */}
 
         {value.trigger === "custom" ? (
           <div>

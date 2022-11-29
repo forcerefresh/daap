@@ -7,13 +7,12 @@ const DEPTH_MULTIPLIER = 25; // from input we get 0-100, dividing with 25 we get
 const STRENGTH_MULTIPLIER = 50; // from input we get 0-100, dividing with 50 we get 0-2 multiplier
 
 export function parallaxAnimation() {
-  let timeline: anime.AnimeInstance;
   let layer: HTMLDivElement;
-  let initialPosition: { x: number; y: number }[] = [];
   let scrollElement: Element | null;
   let scrollWindow: Window | null;
   let scrollMoveHandler: any;
   let applyParallaxToAll: any;
+  let animeInstances: { anime: anime.AnimeInstance; el: any }[] = [];
 
   function init(config: IParallaxAnimation) {
     logger.animation.debug(`${PARALLAX_ANIMATION} init`);
@@ -36,27 +35,17 @@ export function parallaxAnimation() {
 
     scrollMoveHandler = () => {
       const scrollTop = scrollElement?.scrollTop ?? scrollWindow?.scrollY ?? 0;
-      const rangeFrom = 0;
-      const rangeTo = 100000;
-      if (scrollTop > rangeFrom && scrollTop < rangeTo) {
-        applyParallaxToAll(0, -scrollTop);
-      }
+      applyParallaxToAll(0, -scrollTop);
     };
 
     const objects = config.parallax.objects;
     const easing =
       !config.ease || config.ease === "none" ? "linear" : config.ease; //TODO
 
-    objects.forEach((object, idx) => {
-      const objEl = getObjectElementById(object.id);
-
-      initialPosition.push({
-        x: parseInt(objEl.parentElement!.style.left),
-        y: parseInt(objEl.parentElement!.style.top),
-      });
-    });
-
     applyParallaxToAll = (moveX: number, moveY: number) => {
+      // const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+      // const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+
       objects.forEach((object, idx) => {
         if (config.parallax.depthType === "auto") {
           object.depth = (idx + 1) * config.parallax.autoDepthInc;
@@ -79,8 +68,9 @@ export function parallaxAnimation() {
       moveX: number,
       moveY: number
     ) {
-      timeline = anime({
-        targets: el.parentElement,
+      animeInstances = [];
+      const ins = anime({
+        targets: el,
         duration: config.parallax.followTime,
         easing,
         translateY:
@@ -88,6 +78,11 @@ export function parallaxAnimation() {
           STRENGTH_MULTIPLIER /
           DEPTH_MULTIPLIER,
       });
+      console.log(config.parallax.followTime);
+      if (config.parallax.followTime < 33) {
+        ins.seek(Math.min(config.parallax.followTime, 33));
+      }
+      animeInstances.push({ anime: ins, el: el });
     }
   }
 
@@ -101,20 +96,31 @@ export function parallaxAnimation() {
 
   function start(config: any, isManual?: boolean) {
     logger.animation.debug(`${PARALLAX_ANIMATION} start`);
-    scrollElement?.addEventListener("scroll", scrollMoveHandler);
+    console.log(scrollMoveHandler);
+    (scrollElement ?? document).addEventListener("scroll", scrollMoveHandler);
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.animation.debug(`${PARALLAX_ANIMATION} stop`);
+    console.log(scrollMoveHandler);
+    (scrollElement ?? document).removeEventListener(
+      "scroll",
+      scrollMoveHandler
+    );
 
-    if (config.parallax.setToInitialPositionOnComplete) {
-      applyParallaxToAll(0, 0);
-    }
+    animeInstances.forEach((ai) => {
+      //ai.anime.pause();
+      anime.remove(ai.el);
+    });
+    animeInstances = [];
+
+    // if (config.parallax.setToInitialPositionOnComplete) {
+    //   applyParallaxToAll(0, 0);
+    // }
 
     if (isManual) {
       // goto end because we set display:none at te end of timeline
     }
-    scrollElement?.removeEventListener("scroll", scrollMoveHandler);
   }
 
   function update(config: any, time: number, isManual?: boolean) {
@@ -133,6 +139,15 @@ export function parallaxAnimation() {
 
   function destroy(config: any) {
     logger.animation.debug(`${PARALLAX_ANIMATION} destroy`);
+    (scrollElement ?? document).removeEventListener(
+      "scroll",
+      scrollMoveHandler
+    );
+
+    animeInstances.forEach((ai) => {
+      anime.remove(ai.el);
+    });
+    animeInstances = [];
   }
 
   return {

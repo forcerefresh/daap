@@ -4,7 +4,7 @@ import {
   InputType,
   INumericTimelineInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import {
   ISquareMaskAnimation,
   SQUARE_MASK_ANIMATION,

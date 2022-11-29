@@ -4,7 +4,7 @@ import {
   ITimelinesInput,
   ITimelineValue,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { TRANSFORM_ANIMATION, ITransformAnimation } from "./transform.types";
 
 export type ITimelinesAnimationTuple = [ITimelinesInput<"transform">];
@@ -102,6 +102,7 @@ export const timelinesDefaults: ITransformAnimation = {
   ease: "none",
   supportedAnimationTypes: ["in", "out"],
   canBeCombined: true,
+  requireWrapperElement: true,
   // animation properties
   transform: {
     maxDuration: "1000ms",

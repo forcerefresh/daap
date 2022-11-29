@@ -1,9 +1,9 @@
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import {
   IImageInput,
   InputType,
   INumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
 import {
   FALLING_LEAVES_ANIMATION,
   IFallingLeaves,

@@ -4,7 +4,7 @@ import {
   ISelectInput,
   ITransformOriginInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { ITilesZoomAnimation, TILES_ZOOM_ANIMATION } from "./tiles-zoom.types";
 
 export type ITilesZoomTuple = [

@@ -1,7 +1,7 @@
 import {
   IPlayerData,
   ISlideData,
-  ITransitionsData,
+  IItemsData,
 } from "../../export/i-export-html";
 import { loadAndRegisterExternalComponentForPlayer } from "../../objects/external-object-player-utils";
 import { layerSizeUpdate } from "../../objects/layer/layer";
@@ -20,7 +20,10 @@ import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
-import { convertTimeUnitToMs } from "../../utils/utils";
+import {
+  convertRGBColor2CSSProperties,
+  convertTimeUnitToMs,
+} from "../../utils/utils";
 import {
   createEventTimelineForObject,
   createTimelineForExecutionCode,
@@ -116,7 +119,7 @@ export class Player {
     this.playerData = playerData;
 
     let breakpointReferenceDiv: HTMLDivElement | undefined;
-    if (playerData?.breakpointReference === "parent") {
+    if (playerData?.config?.breakpointReference === "parent") {
       breakpointReferenceDiv = rootDiv.parentElement as HTMLDivElement;
     }
 
@@ -140,11 +143,21 @@ export class Player {
 
     this.playerConfig = playerConfig;
 
-    this.oneSlide = playerData?.slideDataArr.length === 1;
+    this.oneSlide = playerData?.slides.length === 1;
 
     this.rootDiv = rootDiv;
 
     rootDiv.innerHTML = playerData?.html || "";
+
+    const bgEl = rootDiv.getElementsByClassName(
+      ".sliderBackground"
+    )[0] as HTMLDivElement;
+
+    if (bgEl) {
+      bgEl.style.background = convertRGBColor2CSSProperties(
+        this.playerData?.config.sliderBackgroundColor
+      ).backgroundColor as string;
+    }
 
     this.createNavigationEvents(rootDiv);
 
@@ -155,9 +168,9 @@ export class Player {
     // NOTE: this implementation initialize all slides
     // TODO: lazy loading for requested slide should be implemented
 
-    this.normalSlideDataArr = this.playerData?.slideDataArr;
-    this.frontSlideDataArr = this.playerData?.frontSlideDataArr;
-    this.backSlideDataArr = this.playerData?.backSlideDataArr;
+    this.normalSlideDataArr = this.playerData?.slides;
+    this.frontSlideDataArr = this.playerData?.frontSlides;
+    this.backSlideDataArr = this.playerData?.backSlides;
 
     this.preloaders = {
       first: [],
@@ -277,6 +290,18 @@ export class Player {
     const slideEls = this.rootDiv.getElementsByClassName("slide");
 
     const bp = this.currentBp;
+
+    const bgEl = this.rootDiv.getElementsByClassName(".sliderBackground")[0] as
+      | HTMLDivElement
+      | undefined;
+    if (bgEl) {
+      bgEl.style.left =
+        -(bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 +
+        "px";
+      //* this.scaleParams?.wScale!
+      bgEl.style.width = bp?.normal._page!.width + "px"; //* this.scaleParams?.wScale!
+      bgEl.style.height = bp?.normal._page!.height + "px"; //* this.scaleParams?.hScale!
+    }
 
     // NOTE: if debug.showBoundaries is true show border
     const pageBorder = this.debug.showBoundaries
@@ -454,7 +479,7 @@ export class Player {
   }
 
   private bpUpdateObjectSize(idx: number, data: ISlideData, isInitial = false) {
-    data.transitionsData.forEach((transitionData) => {
+    data.items.forEach((transitionData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize = calculateObjectSize(
         transitionData.layout as ILayout,
@@ -513,10 +538,10 @@ export class Player {
 
   public setBreakpointReference(bpRef: "viewport" | "parent") {
     if (this.playerData) {
-      this.playerData.breakpointReference = bpRef;
+      this.playerData.config.breakpointReference = bpRef;
 
       let breakpointReferenceDiv: HTMLDivElement | undefined;
-      if (this.playerData?.breakpointReference === "parent") {
+      if (this.playerData.config.breakpointReference === "parent") {
         breakpointReferenceDiv = this.rootDiv.parentElement as HTMLDivElement;
       }
 
@@ -720,7 +745,7 @@ export class Player {
   private skippedFirstSlide = false;
   private shouldPlaySlideTransition(slideIdx: number) {
     if (slideIdx !== 0) return true;
-    if (!this.playerData?.skipFirstSlideAnimation) return true;
+    if (!this.playerData?.config?.skipFirstSlideAnimation) return true;
     if (!this.skippedFirstSlide) {
       this.skippedFirstSlide = true;
       return false;
@@ -1013,7 +1038,7 @@ export class Player {
     // TODO: ako se vec izvrsavaju neizvrsaval ovo
 
     const exitTransTl = this.outEffTimelines[this.currentSlideTimelineIdx];
-    const nextSlide = this.playerData?.slideDataArr?.[slideIdx]?.slide;
+    const nextSlide = this.playerData?.slides?.[slideIdx]?.slide;
     const nextSlideOverlap = nextSlide?.transitionEnabled
       ? nextSlide?.transitionOverlapTime
       : undefined;
@@ -1153,12 +1178,8 @@ export class Player {
   }
 
   private createEvents(slideIdx: number, data: ISlideData) {
-    data.transitionsData.forEach((transitionData) => {
-      this.createEvent(
-        slideIdx,
-        transitionData.objectClass,
-        transitionData.events
-      );
+    data.items.forEach((itemData) => {
+      this.createEvent(slideIdx, itemData.objectClass, itemData.events);
     });
   }
 
@@ -1171,25 +1192,24 @@ export class Player {
     });
     this.staticTimelines[no] = staticTl;
 
-    data.transitionsData.forEach((transitionData) => {
+    data.items.forEach((itemData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize =
-        transitionData.calculatedObjectSizePerDevice?.[
-          this.currentDeviceType
-        ] || transitionData.calculatedObjectSize;
+        itemData.calculatedObjectSizePerDevice?.[this.currentDeviceType] ||
+        itemData.calculatedObjectSize;
 
       // Note: prepare page loader/s
-      this.populatePageSpinners(transitionData);
+      this.populatePageSpinners(itemData);
 
       // Note: create timelines
-      const slideParallelTls = createTimelineForObject(transitionData);
+      const slideParallelTls = createTimelineForObject(itemData);
       slideParallelTls.effTls.forEach((pTl, idx) => {
         staticTl.add(pTl);
       });
 
       this.eventTimelines = [
         ...this.eventTimelines,
-        ...createEventTimelineForObject(transitionData),
+        ...createEventTimelineForObject(itemData),
       ];
 
       /*
@@ -1222,7 +1242,7 @@ export class Player {
     return nextSlideIdx;
   }
 
-  private populatePageSpinners(transitionData: ITransitionsData) {
+  private populatePageSpinners(transitionData: IItemsData) {
     if (
       transitionData.itemSystemType === CoreObjectType.SPINNER &&
       transitionData.itemValues.applyTo === "page"
@@ -1264,25 +1284,24 @@ export class Player {
     */
 
     // add objects animations timelines
-    data.transitionsData.forEach((transitionData) => {
+    data.items.forEach((itemData) => {
       // TODO: use only per device (add per device for layer)
       const calObjSize =
-        transitionData.calculatedObjectSizePerDevice?.[
-          this.currentDeviceType
-        ] || transitionData.calculatedObjectSize;
+        itemData.calculatedObjectSizePerDevice?.[this.currentDeviceType] ||
+        itemData.calculatedObjectSize;
 
       // Note: prepare page loader/s
-      this.populatePageSpinners(transitionData);
+      this.populatePageSpinners(itemData);
 
       // NOTE: create animations tls
-      const slideParallelTls = createTimelineForObject(transitionData);
+      const slideParallelTls = createTimelineForObject(itemData);
       slideParallelTls.effTls.forEach((pTl, idx) => {
         slideTimeline.add(pTl);
       });
       // NOTE: create root timeline for out animation
       if (slideParallelTls.outEffTlExist) {
         const manTlDur = convertTimeUnitToMs(
-          transitionData.data.exitSlideDuration.customValue
+          itemData.data.exitSlideDuration.customValue
         );
         const outAnimationManualRootTimeline = new RootTimeline({
           name: "RootTimelineForManualOutAnimation-" + slideIdx,
@@ -1294,11 +1313,11 @@ export class Player {
 
       this.eventTimelines = [
         ...this.eventTimelines,
-        ...createEventTimelineForObject(transitionData),
+        ...createEventTimelineForObject(itemData),
       ];
 
       // Note: create logic for objects (start, stop, preloaders, ....)
-      const objDef = getPlayerObjectDefinition(transitionData.itemType);
+      const objDef = getPlayerObjectDefinition(itemData.itemType);
 
       /*
       objDef?.sizeUpdate(
@@ -1315,21 +1334,21 @@ export class Player {
       // execution code for objects
       if (!!objDef?.execStart) {
         const execTl = createTimelineForExecutionCode(
-          transitionData,
+          itemData,
           objDef.execStart!,
           objDef.execStop!,
-          transitionData.itemValues,
+          itemData.itemValues,
           calObjSize
         );
         slideTimeline.add(execTl);
       }
 
       // preload
-      if (transitionData.itemValues.preload && !!objDef?.preload) {
+      if (itemData.itemValues.preload && !!objDef?.preload) {
         const preloadPromise = objDef.preload({
-          id: transitionData.itemId,
-          values: transitionData.itemValues,
-          className: transitionData.objectClass,
+          id: itemData.itemId,
+          values: itemData.itemValues,
+          className: itemData.objectClass,
           calculatedObjectSize: calObjSize,
         });
         this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(

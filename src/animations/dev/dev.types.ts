@@ -1,5 +1,5 @@
 import { RGBColor } from "react-color";
-import { IAnimationBase } from "../types";
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 
 export const dev = "dev";
 

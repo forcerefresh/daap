@@ -3,7 +3,7 @@ import {
   INumberInput,
   ISplitInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { ISplitAnimation, SPLIT_ANIMATION } from "./split.types";
 
 export type ISplitTuple = [

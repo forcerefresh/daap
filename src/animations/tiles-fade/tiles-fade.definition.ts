@@ -3,7 +3,7 @@ import {
   INumberInput,
   ISelectInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { TILES_FADE_ANIMATION, ITilesFadeAnimation } from "./tiles-fade.types";
 
 export type ITilesFadeTuple = [

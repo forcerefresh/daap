@@ -1,4 +1,4 @@
-import { IAnimationBase } from "../types";
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 
 export const SLICE_SLIDE_ANIMATION = "sliceSlide";
 

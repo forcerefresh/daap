@@ -53,11 +53,13 @@ function PlayerDev() {
       playerRef.current.clear(true);
     }
 
-    setSliderReference(selectedPlayerData.breakpointReference || "viewport");
+    setSliderReference(
+      selectedPlayerData.config.breakpointReference || "viewport"
+    );
 
     setPlayerHolderStyle(
       getPlayerHolderStyle(
-        selectedPlayerData.breakpointReference === "parent" ? 100 : 0
+        selectedPlayerData.config.breakpointReference === "parent" ? 100 : 0
       )
     );
 

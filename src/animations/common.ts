@@ -1,4 +1,4 @@
-import { AnimationType } from "./types";
+import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 
 export function getMethodByType(
   type: AnimationType | undefined,

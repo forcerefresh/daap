@@ -1,5 +1,5 @@
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import { IParallaxInputValue } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationBase } from "../types";
 
 export const PARALLAX_ANIMATION = "parallax-animation";
 

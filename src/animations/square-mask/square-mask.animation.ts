@@ -3,7 +3,7 @@ import { INumericTimelineValue } from "webslider-sdk/lib/inputs/i-inputs";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { getObjectElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
-import { IAnimationBase } from "../types";
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import {
   ISquareMaskAnimation,
   SQUARE_MASK_ANIMATION,

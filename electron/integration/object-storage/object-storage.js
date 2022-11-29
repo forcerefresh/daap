@@ -144,6 +144,10 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
 
   let error = null;
   for (const file of files) {
+    console.log(path.join(getPlayerPath(), file));
+
+    if (file === ".DS_Store") continue;
+
     try {
       await bucketManager.uploadFileToBucket(
         bucket,

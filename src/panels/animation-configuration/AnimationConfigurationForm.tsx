@@ -2,11 +2,6 @@ import { Alert, Button, Icon, Intent } from "@blueprintjs/core";
 import classnames from "classnames";
 import { cloneDeep, merge } from "lodash-es";
 import React, { useState } from "react";
-import {
-  AnimeJSEasingOptions,
-  EasingOptions,
-  AnimationType,
-} from "../../animations/types";
 import { getInputForm } from "../../inputs/input-factory";
 import {
   getInheritTimeField,
@@ -31,6 +26,11 @@ import {
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
 import { Presets } from "../../utils/presets/Presets";
+import {
+  AnimeJSEasingOptions,
+  EasingOptions,
+  AnimationType,
+} from "webslider-sdk/lib/animations/i-animation-types";
 /*
 type IAnimationConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

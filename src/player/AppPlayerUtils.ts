@@ -1,5 +1,4 @@
-import { AnimationType } from "../animations/types";
-import { ITransitionsData } from "../export/i-export-html";
+import { IItemsData } from "../export/i-export-html";
 import {
   IExecCodeConfig,
   EXEC_CODE_ANIMATION,
@@ -9,6 +8,7 @@ import { ITransition } from "webslider-sdk/lib/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { ITimelineConfig, Timeline } from "./player/Timeline";
 import { RootTimeline } from "./player/RootTimeline";
+import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 export const DYNAMIC_OUT_EFF_TIMELINE_GROUP = "dynamic-out-eff-timeline-group";
 
 export interface IEventTimeline {
@@ -19,7 +19,7 @@ export interface IEventTimeline {
   rootTimeline: RootTimeline;
 }
 export function createEventTimelineForObject(
-  data: ITransitionsData
+  data: IItemsData
 ): IEventTimeline[] {
   const eventTimelines: IEventTimeline[] = [];
 
@@ -43,7 +43,7 @@ export function createEventTimelineForObject(
   return eventTimelines;
 }
 
-export function createTimelineForObject(data: ITransitionsData): {
+export function createTimelineForObject(data: IItemsData): {
   effTls: Timeline[];
   outEffTlExist: boolean;
 } {
@@ -101,14 +101,14 @@ export function createTimelineForObject(data: ITransitionsData): {
   };
 }
 
-function getDuration(data: ITransitionsData, eff: ITransition): number {
+function getDuration(data: IItemsData, eff: ITransition): number {
   return eff.duration === "-1"
     ? convertTimeUnitToMs(data.data.slideDuration.customValue)
     : convertTimeUnitToMs(eff.duration);
 }
 
 function createTimelineForAnimation(
-  data: ITransitionsData,
+  data: IItemsData,
   eff: ITransition,
   effType: AnimationType,
   timelineGroup?: string,
@@ -156,7 +156,7 @@ function createTimelineForAnimation(
 }
 
 export function createTimelineForExecutionCode(
-  data: ITransitionsData,
+  data: IItemsData,
   execStart: ExecutionCodeFuncType,
   execStop: ExecutionCodeFuncType,
 

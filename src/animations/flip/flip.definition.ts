@@ -1,9 +1,9 @@
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import {
   InputType,
   INumberInput,
   ISelectInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
 import { FLIP_ANIMATION, IFlipAnimation } from "./flip.types";
 
 export type IFlipTuple = [

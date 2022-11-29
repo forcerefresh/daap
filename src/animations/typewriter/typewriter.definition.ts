@@ -4,7 +4,7 @@ import {
   INumberInput,
   ITextAreaInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { TYPEWRITER_ANIMATION, ITypeWriterAnimation } from "./typewriter.types";
 
 export type ITypewriterTuple = [

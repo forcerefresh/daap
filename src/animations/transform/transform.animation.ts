@@ -1,7 +1,7 @@
 import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
-import { ITransformAnimation } from "./transform.types";
+import { getAnimationElementById } from "../animation-utils";
+import { ITransformAnimation, TRANSFORM_ANIMATION } from "./transform.types";
 import anime from "animejs";
 
 function getPointValue(property: string, value: string | number | any) {
@@ -36,7 +36,7 @@ export function transformAnimation() {
   function init(config: ITransformAnimation) {
     logger.animation.debug("timelines init");
 
-    objectEl = getObjectElementById(config.itemId!);
+    objectEl = getAnimationElementById(config.itemId!, TRANSFORM_ANIMATION);
 
     timeline = anime.timeline({
       easing: "linear", // TODO

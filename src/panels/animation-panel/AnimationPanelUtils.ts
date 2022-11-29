@@ -1,4 +1,4 @@
-import { AnimationType } from "../../animations/types";
+import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 import { ItemType } from "webslider-sdk/lib/objects/i-object";
 
 export function getAnimationTypesForItem(itemType?: ItemType): AnimationType[] {

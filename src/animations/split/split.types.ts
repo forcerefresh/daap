@@ -1,5 +1,8 @@
 import { RGBColor } from "react-color";
-import { IAnimationBase, INextZIndex } from "../types";
+import {
+  IAnimationBase,
+  INextZIndex,
+} from "webslider-sdk/lib/animations/i-animation-types";
 
 export const SPLIT_ANIMATION = "split";
 

@@ -1,5 +1,5 @@
 import { InputType, INumberInput } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { FLIP_SLIDE_ANIMATION, IFlipSlideAnimation } from "./flip-slide.types";
 
 export type IFlipSlideTuple = [];

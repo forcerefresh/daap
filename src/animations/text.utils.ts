@@ -1,10 +1,10 @@
 import gsap from "gsap";
+import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import {
   INumericTimelineValue,
   ITextStartPositionValue,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { getMethodByType } from "./common";
-import { IAnimationBase } from "./types";
 
 export function createRootTimelineForTextAnimation({
   timelineConfig,

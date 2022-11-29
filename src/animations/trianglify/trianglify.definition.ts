@@ -1,14 +1,10 @@
 import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
-import { FormType, IFormItem } from "webslider-sdk/lib/form/i-form-layout";
+import { FormType } from "webslider-sdk/lib/form/i-form-layout";
 import { ITrianglifyAnimation, TRIANGLIFY_ANIMATION } from "./trianglify.types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 
-export interface IAnimationDefinition {
-  id: string;
-  name: string;
-  form: IFormItem[];
-}
-
-export const trianlifyDefinition: IAnimationDefinition = {
+// TODO: Add form tuple definition
+export const trianglifyDefinition: IAnimationDefinition<any> = {
   id: TRIANGLIFY_ANIMATION,
   name: "Trianglify",
   form: [

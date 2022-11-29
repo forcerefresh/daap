@@ -4,7 +4,7 @@ import {
   INumericTimelineInput,
   ITextStartPositionInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { IAnimationDefinition } from "../types";
+import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { ITextAnimation, TEXT_ANIMATION } from "./text.types";
 
 export type ITextTuple = [

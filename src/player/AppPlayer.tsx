@@ -100,7 +100,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
   let currentPlayer = React.useRef<Player | undefined>();
   useDeepCompareEffect(() => {
-    if (!isEmpty(playerData?.slideDataArr)) {
+    if (!isEmpty(playerData?.slides)) {
       /*const playerConfig: IPlayerConfig = {
         oneSlide: previewState?.scope?.entityType === "slide",
       };*/

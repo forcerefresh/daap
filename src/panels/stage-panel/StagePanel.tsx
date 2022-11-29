@@ -149,8 +149,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
 
     //let totalDuration = 0;
-    const slideTimelineDataArr: SlideTimelineData[] =
-      exportData.slideDataArr.map((slideData) => {
+    const slideTimelineDataArr: SlideTimelineData[] = exportData.slides.map(
+      (slideData) => {
         return {
           duration: convertTimeUnitToMs(
             slideData.slide.duration.customValue || "0ms"
@@ -162,7 +162,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             ? slideData.slide.transitionOverlapTime
             : 0,
         };
-      });
+      }
+    );
 
     projectTimelineData = { slides: slideTimelineDataArr };
   }
