@@ -38,7 +38,13 @@ import {
   convertTimeUnitToMs,
 } from "../utils/utils";
 import { getThumbnailHtmlArr } from "./export-html-utils";
-import { IPlayerData, ISlideData, ISources, IItemsData } from "./i-export-html";
+import {
+  IPlayerData,
+  ISlideData,
+  ISources,
+  IItemsData,
+  ItemVisibility,
+} from "./i-export-html";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
@@ -57,6 +63,8 @@ export function generatePlayerData(
   const { slides, layers, objects } = sources;
 
   let extensionTypes: string[] = [];
+
+  let itemsVisibility: ItemVisibility[] = [];
 
   let normalSlidesArr: ISlide[] = [];
   let frontSlidesArr: ISlide[] = [];
@@ -108,6 +116,7 @@ export function generatePlayerData(
     slideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
     extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
+    itemsVisibility = [...itemsVisibility, ...slideDataRes.itemsVisibility];
   });
 
   frontSlidesArr.forEach((slide) => {
@@ -125,6 +134,7 @@ export function generatePlayerData(
     frontSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
     extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
+    itemsVisibility = [...itemsVisibility, ...slideDataRes.itemsVisibility];
   });
 
   backSlidesArr.forEach((slide) => {
@@ -142,6 +152,7 @@ export function generatePlayerData(
     backSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
     extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
+    itemsVisibility = [...itemsVisibility, ...slideDataRes.itemsVisibility];
   });
 
   html += "</div>"; //slides holder close
@@ -158,6 +169,7 @@ export function generatePlayerData(
     slides: slideDataArr,
     frontSlides: frontSlideDataArr,
     backSlides: backSlideDataArr,
+    itemsVisibility,
     config: {
       skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
       breakpointReference: settings.breakpointReference,
@@ -169,7 +181,11 @@ export function generatePlayerData(
       pageWidth: breakpointConfig.normal.page.width,
       pageHeight: breakpointConfig.normal.page.height,
     },
-    breakpoints: cloneDeep(breakpoints),
+    breakpoints: {
+      breakpointsConfiguration: cloneDeep(
+        breakpoints
+      ).breakpointsConfiguration.filter((bc) => bc.enabled),
+    },
     extensions: playerExtensions as any, //IExtensionItemForPlayer
   };
 }
@@ -217,9 +233,15 @@ function generateSlideData(
   thumbnailHtmlArr: (string | undefined)[],
   slidesLength: number,
   options: { isSave: boolean }
-): { slideData: ISlideData; html: string; extensionTypes: string[] } {
+): {
+  slideData: ISlideData;
+  html: string;
+  extensionTypes: string[];
+  itemsVisibility: ItemVisibility[];
+} {
   let html: string = "";
   const extensionTypes: string[] = [];
+  const itemsVisibility: ItemVisibility[] = [];
 
   const itemsData: IItemsData[] = [];
   const someSlideData: Partial<ISlideData["slide"]> = pick(slide, [
@@ -275,6 +297,15 @@ function generateSlideData(
 
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
   layerArr.forEach((layer) => {
+    const visibleForAllDevices = layer.responsiveVisibility.showAll;
+    if (!visibleForAllDevices) {
+      itemsVisibility.push({
+        itemType: "layer",
+        id: layer.id,
+        displayOn: layer.responsiveVisibility.displayOn,
+      });
+    }
+
     const layerValues = layer.definition.values as ILayerValues;
 
     const layerClassName = "layer-" + layer.id;
@@ -369,6 +400,14 @@ function generateSlideData(
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
+      if (!visibleForAllDevices) {
+        itemsVisibility.push({
+          itemType: "object",
+          id: object.id,
+          displayOn: layer.responsiveVisibility.displayOn,
+        });
+      }
+
       //part for externals
       const objDeff = getAppObjectDefinition(object.type);
       if (objDeff?.external) {
@@ -495,7 +534,12 @@ function generateSlideData(
 
   html += "  </div>"; // slide close
 
-  return { slideData, html, extensionTypes: extensionTypes };
+  return {
+    slideData,
+    html,
+    extensionTypes,
+    itemsVisibility,
+  };
 }
 
 function getObjectEvents(object: IObject) {

@@ -200,6 +200,8 @@ export const InsetLayoutInputForm: React.FC<
               <td></td>
             </tr>
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+
               return (
                 <tr>
                   <td>

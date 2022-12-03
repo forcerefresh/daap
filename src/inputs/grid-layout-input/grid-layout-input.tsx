@@ -187,6 +187,8 @@ export const GridPlacementInputForm: React.FC<
             </td>
             <>
               {bcArr.map((bc) => {
+                if (!bc.enabled) return null;
+
                 return (
                   <td>
                     <Button
@@ -209,6 +211,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Left</Label>
             </td>
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
               return renderOneInput(bc.type, "left");
             })}
           </tr>
@@ -218,6 +221,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Width</Label>
             </td>
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
               return renderOneInput(bc.type, "width");
             })}
           </tr>
@@ -226,6 +230,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Top</Label>
             </td>
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
               return renderOneInput(bc.type, "top");
             })}
           </tr>
@@ -234,6 +239,7 @@ export const GridPlacementInputForm: React.FC<
               <Label>Height</Label>
             </td>
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
               return renderOneInput(bc.type, "height");
             })}
           </tr>

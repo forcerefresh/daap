@@ -27,7 +27,7 @@ export interface ILayerRowProps {
 
   isOpen: boolean;
   breakpointsConfiguration: Breakpoints;
-
+  disableVisibility: boolean;
   updateLayer: (layer: ILayer) => void;
 
   onLayerClick: (
@@ -52,6 +52,7 @@ export function LayerRow(props: ILayerRowProps) {
     selectionForProperties,
     isOpen,
     breakpointsConfiguration,
+    disableVisibility,
     toggleLayer,
     onLayerClick,
     updateLayer,
@@ -107,13 +108,15 @@ export function LayerRow(props: ILayerRowProps) {
       return <span className={css.layerResponseVisibilityNone}>NONE</span>;
     } else {
       return breakpointsConfiguration.breakpointsConfiguration.map(
-        (bpConfig: any) => {
+        (bpConfig) => {
           if (!includes(resVis.displayOn, bpConfig.type)) {
             return null;
           }
           const iconName = getIconByType(bpConfig.type);
           const size = getIconSize(iconName);
           const iconStyle = getIconStyle(iconName);
+
+          if (disableVisibility) iconStyle.fill = "#ff5f6d";
 
           const icon = getResponsiveIcon(
             iconName,
@@ -133,6 +136,8 @@ export function LayerRow(props: ILayerRowProps) {
   const renderDeviceOptions = (layer: ILayer) => {
     return breakpointsConfiguration.breakpointsConfiguration.map(
       (bpConfig: BreakpointConfiguration) => {
+        if (!bpConfig.enabled) return null;
+
         const iconName = getIconByType(bpConfig.type);
         const size = getIconSize(iconName);
 

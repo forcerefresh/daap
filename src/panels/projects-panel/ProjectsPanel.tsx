@@ -9,6 +9,7 @@ import {
   addNewObject,
   doClearHistory,
   openProject,
+  setDevice,
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
@@ -18,6 +19,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./ProjectsPanel.module.scss";
+import { ISettings } from "../../store/reducers/i-settings";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -34,6 +36,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     _openProject,
     _doClearHistory,
     _resetChangedState,
+    _setDevice,
   } = props;
 
   const [projects, setProjects] = useState<any[]>([]);
@@ -122,8 +125,19 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       };
       _updateProjectMeta(meta);
 
-      const project = response.project.project;
+      const project: {
+        // NOTE: there are other props. We need only settings from project
+        settings: ISettings;
+        diff: any;
+      } = response.project.project;
+
       delete project.diff;
+
+      _setDevice(
+        [...project.settings.breakpoints.breakpointsConfiguration]
+          .reverse()
+          .find((bc) => bc.enabled)?.type || "large-1"
+      );
 
       _openProject(project);
 
@@ -297,6 +311,7 @@ const mapDispatchToProps = {
   _doClearHistory: () => doClearHistory(),
   _resetChangedState: () =>
     updateEditor({ sliderChanged: false, isExistingProject: true }),
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

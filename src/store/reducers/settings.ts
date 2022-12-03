@@ -47,6 +47,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
       {
         type: "small-1",
         name: "Small devices",
+        enabled: true,
         layout: "normal",
         normal: {
           breakpoint: { width: { from: 320, fromMin: true, to: 480 } },
@@ -68,6 +69,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
       {
         type: "medium-1",
         name: "Medium devices",
+        enabled: true,
         layout: "normal",
         normal: {
           breakpoint: { width: { from: 481, to: 768 } },
@@ -89,6 +91,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
       {
         type: "large-1",
         name: "Large devices",
+        enabled: true,
         layout: "normal",
         normal: {
           breakpoint: { width: { from: 769, to: 1024 } },
@@ -110,6 +113,7 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
       {
         type: "xlarge-1",
         name: "Extra large devices",
+        enabled: true,
         layout: "normal",
         normal: {
           breakpoint: { width: { from: 1025, to: 1240, toMax: true } },

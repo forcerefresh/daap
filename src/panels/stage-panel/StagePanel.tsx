@@ -1,4 +1,4 @@
-import { cloneDeep, isEqual, mapValues, pick } from "lodash-es";
+import { cloneDeep, includes, isEqual, mapValues, pick } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
@@ -564,6 +564,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
   }
   function renderLayer(layer: ILayer) {
+    const disableVisibility =
+      !layer.responsiveVisibility.showAll &&
+      !includes(layer.responsiveVisibility.displayOn, selectedDevice);
+
+    if (disableVisibility) {
+      return null;
+    }
+
     const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
     const hasLayout = layer.layout !== "none";
 
@@ -1187,6 +1195,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   const renderResizer = (layer: ILayer) => {
+    const disableVisibility =
+      !layer.responsiveVisibility.showAll &&
+      !includes(layer.responsiveVisibility.displayOn, selectedDevice);
+
+    if (disableVisibility) {
+      return null;
+    }
+
     return layer.objectIds.map((objectId) => {
       const layoutChildren = layer.definition.values.hasLayoutChildren
         ? layer.definition.values.layoutChildren

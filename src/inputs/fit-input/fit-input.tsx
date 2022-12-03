@@ -100,6 +100,8 @@ export const FitInputForm: React.FC<IFitInput & IUpdateInput> = (props) => {
               <td className={css.gapTD}>Gap</td>
             </tr> */}
             {bcArr.map((bc) => {
+              if (!bc.enabled) return null;
+
               return (
                 <tr>
                   <td>

@@ -8,7 +8,7 @@ import { PreviewTimelineContext } from "../utils/preview-timeline-provider/Previ
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 
 export interface AppPlayerProps {
-  selectedDevice: string;
+  selectedDevice: DeviceType;
   customBPWidth?: number;
   playerData: IPlayerData | null;
   previewState: IPreviewState;
@@ -107,6 +107,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
 
       const pl = new Player(playerData, playerHolderRef.current!, {
         isApp: true,
+        forceDevice: selectedDevice,
       });
       player.current = pl;
 

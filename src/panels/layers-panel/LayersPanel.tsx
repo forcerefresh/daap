@@ -29,7 +29,7 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import { cloneDeep, delay, isEmpty } from "lodash-es";
+import { cloneDeep, delay, isEmpty, includes } from "lodash-es";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
@@ -57,6 +57,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     //layoutStaticAnimationsPanel,
     breakpointsConfiguration,
     selectionForProperties,
+    selectedDevice,
     _addNewLayer,
     _addLayersToSelection,
     _removeLayersFromSelection,
@@ -272,26 +273,33 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         <div className={css.layersHolder} ref={layersHolderRef}>
           {layerArr?.map((layer, idx) => {
             const isLastLayer = idx === layerArr.length - 1;
+
+            const disableVisibility =
+              !layer.responsiveVisibility.showAll &&
+              !includes(layer.responsiveVisibility.displayOn, selectedDevice);
+
             return (
               <div key={layer.id} className={cx(css.layer, {})}>
-                {isDraggingLayers && selectedLayerIds.indexOf(layer.id) === -1 && (
-                  <DropHandle
-                    type={"layer"}
-                    key={layer.id + "_drophandle"}
-                    refId={layer.id}
-                    where="above"
-                    onDrop={(dropItem: IDropItem) => {
-                      _moveLayers(
-                        dropItem.id,
-                        dropItem.where,
-                        dropItem.idsToMove
-                      );
-                    }}
-                  />
-                )}
+                {isDraggingLayers &&
+                  selectedLayerIds.indexOf(layer.id) === -1 && (
+                    <DropHandle
+                      type={"layer"}
+                      key={layer.id + "_drophandle"}
+                      refId={layer.id}
+                      where="above"
+                      onDrop={(dropItem: IDropItem) => {
+                        _moveLayers(
+                          dropItem.id,
+                          dropItem.where,
+                          dropItem.idsToMove
+                        );
+                      }}
+                    />
+                  )}
                 <LayerRow
                   layer={layer}
                   isOpen={openLayerById[layer.id]}
+                  disableVisibility={disableVisibility}
                   breakpointsConfiguration={breakpointsConfiguration}
                   activeLayerId={activeLayerId}
                   selectedLayerIds={selectedLayerIds}
@@ -339,6 +347,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                           <ObjectRow
                             key={object.id}
                             object={object}
+                            disableVisibility={disableVisibility}
                             activeObjectId={activeObjectId}
                             selectedObjectIds={selectedObjectIds}
                             selectionForProperties={selectionForProperties}
@@ -449,6 +458,7 @@ const mapStateToProps = (state: IStore) => {
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
     selectionForProperties: selection.selectionForProperties,
+    selectedDevice: state.stage.selectedDevice,
     //layoutStaticAnimationsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpoints,
   };

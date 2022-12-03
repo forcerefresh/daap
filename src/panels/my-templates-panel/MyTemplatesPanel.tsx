@@ -14,6 +14,7 @@ import {
   selectForProperties,
   selectForPropertiesProps,
   selectSlides,
+  setDevice,
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
@@ -23,6 +24,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./MyTemplatesPanel.module.scss";
+import { ISettings } from "../../store/reducers/i-settings";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -42,6 +44,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
     _activateSlide,
     _selectSlides,
     _selectForProperties,
+    _setDevice,
   } = props;
 
   const [templates, setTemplates] = useState<any[]>([]);
@@ -135,9 +138,18 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       };
       _updateProjectMeta(meta);
 
-      const project = response.template.project;
+      const project: {
+        // NOTE: there are other props. We need only settings from project
+        settings: ISettings;
+      } = response.template.project;
 
       _openProject(project);
+
+      _setDevice(
+        [...project.settings.breakpoints.breakpointsConfiguration]
+          .reverse()
+          .find((bc) => bc.enabled)?.type || "large-1"
+      );
 
       _doClearHistory();
 
@@ -367,6 +379,7 @@ const mapDispatchToProps = {
   _selectSlides: (ids: string[]): any => selectSlides(ids),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyTemplatesPanel);

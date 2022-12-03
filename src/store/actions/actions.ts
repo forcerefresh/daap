@@ -385,6 +385,18 @@ export function addNewLayer(slideId: string): any {
           gap: 0,
         },
       },
+      insetLayout: {
+        type: "common",
+        perDevice: [],
+        relativeTo: "stage",
+        common: {
+          deviceType: "common",
+          top: "0px",
+          left: "0px",
+          bottom: "0px",
+          right: "0px",
+        },
+      },
     };
 
     dispatch(addLayer(layer));

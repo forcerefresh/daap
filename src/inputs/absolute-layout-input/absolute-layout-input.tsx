@@ -351,6 +351,8 @@ export const AbsolutePlacementForm: React.FC<
             </tr>
             {bcArr.map((bc) => {
               console.log(bc);
+              if (!bc.enabled) return null;
+
               return (
                 <tr key={bc.type}>
                   <td>

@@ -16,6 +16,8 @@ import {
   ISlideExitTime,
 } from "webslider-sdk/lib/common/i-slider-duration";
 import { RGBColor } from "react-color";
+import { string } from "yup";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 
 export interface IItemsData {
   customId: string;
@@ -57,6 +59,7 @@ export interface IPlayerData {
   slides: ISlideData[];
   frontSlides: ISlideData[];
   backSlides: ISlideData[];
+  itemsVisibility: ItemVisibility[];
   config: {
     sliderBackgroundColor: RGBColor;
     skipFirstSlideAnimation: boolean;
@@ -94,4 +97,10 @@ export interface ISlideData {
     description?: string;
   };
   items: IItemsData[];
+}
+
+export interface ItemVisibility {
+  id: string;
+  displayOn: DeviceType[];
+  itemType: "layer" | "object";
 }

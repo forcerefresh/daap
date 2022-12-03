@@ -146,12 +146,15 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   };
 
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {
+    if (!conf.enabled) return null;
+
     const icon = getIconByType(conf.type);
     const size = getIconSize(icon);
 
     return (
       <Button
         key={conf.type}
+        // disabled={!conf.enabled}
         active={selectedDevice === conf.type}
         minimal
         outlined
@@ -163,7 +166,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           "lightgray",
           conf.portrait
         )}
-        className={css.responsiveButton}
+        className={cx(css.responsiveButton, {
+          // [css.disabledButton]: !conf.enabled,
+        })}
         onClick={() => {
           _setDevice(conf.type);
         }}

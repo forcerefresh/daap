@@ -48,6 +48,7 @@ export enum InTransitionEnum {
 export interface IPlayerConfig {
   isApp?: boolean;
   deviceAuto?: boolean;
+  forceDevice?: DeviceType;
 }
 export class Player {
   protected playerData: IPlayerData | null;
@@ -107,6 +108,12 @@ export class Player {
 
   private debug: { showBoundaries?: boolean } = {};
 
+  private bgEl: HTMLDivElement;
+
+  private visibilityDisplayState: { [key: string]: string } = {};
+
+  private forceDevice: DeviceType | undefined;
+
   //private timeOffsetCorrection = 0;
   constructor(
     playerData: IPlayerData | null,
@@ -117,6 +124,8 @@ export class Player {
     }
   ) {
     this.playerData = playerData;
+
+    this.forceDevice = playerConfig.forceDevice;
 
     let breakpointReferenceDiv: HTMLDivElement | undefined;
     if (playerData?.config?.breakpointReference === "parent") {
@@ -138,8 +147,14 @@ export class Player {
 
     // current breakpoint configuration
     this.currentBp = this.playerData?.breakpoints.breakpointsConfiguration.find(
-      (bp) => bp.type === this.currentDeviceType
+      (bp) => bp.type === (this.forceDevice || this.currentDeviceType)
     )!;
+
+    console.log(this.playerData?.breakpoints.breakpointsConfiguration);
+
+    console.log(this.currentBp);
+    console.log(this.forceDevice);
+    console.log(this.currentDeviceType);
 
     this.playerConfig = playerConfig;
 
@@ -149,15 +164,14 @@ export class Player {
 
     rootDiv.innerHTML = playerData?.html || "";
 
-    const bgEl = rootDiv.getElementsByClassName(
-      ".sliderBackground"
+    this.bgEl = rootDiv.getElementsByClassName(
+      "sliderBackground"
     )[0] as HTMLDivElement;
 
-    if (bgEl) {
-      bgEl.style.background = convertRGBColor2CSSProperties(
-        this.playerData?.config.sliderBackgroundColor
-      ).backgroundColor as string;
-    }
+    this.bgEl.style.position = "absolute";
+    this.bgEl.style.background = convertRGBColor2CSSProperties(
+      this.playerData?.config.sliderBackgroundColor
+    ).backgroundColor as string;
 
     this.createNavigationEvents(rootDiv);
 
@@ -259,16 +273,41 @@ export class Player {
   // this we are calling after we load external components
   private createAllSlides() {
     this.backSlideDataArr?.forEach((data, idx) => {
-      this.createStaticSlide(idx, data);
+      const visibleItems = this.excludeNonVisibleItems(data);
+      this.createStaticSlide(idx, { ...data, items: visibleItems });
     });
     this.frontSlideDataArr?.forEach((data, idx) => {
-      this.createStaticSlide(idx, data);
+      const visibleItems = this.excludeNonVisibleItems(data);
+      this.createStaticSlide(idx, { ...data, items: visibleItems });
     });
     this.normalSlideDataArr?.forEach((data, idx) => {
-      this.createSlide(idx, data);
+      const visibleItems = this.excludeNonVisibleItems(data);
+      this.createSlide(idx, { ...data, items: visibleItems });
     });
 
     this.resizeAll(true);
+  }
+
+  private excludeNonVisibleItems(data: ISlideData) {
+    console.log("BEFORE: " + data.items.length);
+    const newItems = data.items.filter((item) => {
+      const itemVisibility = this.playerData?.itemsVisibility.find(
+        (itemVis) => itemVis.id === item.itemId
+      );
+      if (!itemVisibility) {
+        return true;
+      }
+      if (itemVisibility.displayOn.includes(this.currentBp.type)) {
+        return true;
+      }
+      console.log(
+        "Exclude " + item.itemId + " for device " + this.currentBp.type
+      );
+      return false;
+    });
+    console.log("AFTER: " + newItems.length);
+
+    return newItems;
   }
 
   private bpUpdateSlideAnimations(isInitial = false) {
@@ -579,7 +618,38 @@ export class Player {
     this.bpUpdateObjectsSize();
   }
 
+  private updateVisibility() {
+    const type = this.currentBp.type;
+    this.playerData?.itemsVisibility.forEach((itemVisibility) => {
+      const itemEl = this.rootDiv.getElementsByClassName(
+        itemVisibility.itemType + "-" + itemVisibility.id
+      )[0] as HTMLDivElement | undefined;
+
+      console.log("type:" + type);
+      console.log("displayOn:" + itemVisibility.displayOn);
+
+      if (itemEl) {
+        if (!this.visibilityDisplayState[itemVisibility.id]) {
+          console.log("itemEl.style.display: " + itemEl.style.display);
+          this.visibilityDisplayState[itemVisibility.id] =
+            itemEl.style.display || "block";
+        }
+
+        const newDisplay = itemVisibility.displayOn.includes(type)
+          ? this.visibilityDisplayState[itemVisibility.id]
+          : "none";
+        console.log("a:" + this.visibilityDisplayState[itemVisibility.id]);
+
+        console.log(newDisplay);
+
+        itemEl.style.display = newDisplay;
+      }
+    });
+  }
+
   private resizeAll(isInitial = false) {
+    this.updateVisibility();
+
     if (this.playerConfig.isApp) return;
 
     this.scaleParams = this.calculateSizeParameters(
@@ -590,6 +660,14 @@ export class Player {
     this.bpUpdateSlide(isInitial);
     this.bpUpdateSlideAnimations(isInitial);
     this.bpUpdateObjectsSize(isInitial);
+
+    // update background
+    const bp = this.currentBp;
+    this.bgEl.style.left =
+      -(bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px";
+    //* this.scaleParams?.wScale!
+    this.bgEl.style.width = bp?.normal._page!.width + "px"; //* this.scaleParams?.wScale!
+    this.bgEl.style.height = bp?.normal._page!.height + "px"; //* this.scaleParams?.hScale!
   }
 
   private createNavigationEvents(rootDiv: HTMLDivElement) {

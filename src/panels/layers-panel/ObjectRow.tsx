@@ -20,6 +20,7 @@ export interface IObjectRowProps {
   selectionForProperties: selectForPropertiesProps | null;
   slideDuration: number;
   slideExitDuration: number;
+  disableVisibility: boolean;
   updateObject: (object: IObject) => void;
   deleteObjects: (objectIds: string[]) => void;
   onDragingChange: (isDragging: boolean) => void;
@@ -33,6 +34,7 @@ export function ObjectRow(props: IObjectRowProps) {
     selectionForProperties,
     slideDuration,
     slideExitDuration,
+    disableVisibility,
     onObjectClick,
     updateObject,
     deleteObjects,
@@ -80,6 +82,7 @@ export function ObjectRow(props: IObjectRowProps) {
         [css.selected]:
           selectedObjectIds.length > 0 /*1*/ &&
           selectedObjectIds.indexOf(object.id) !== -1,
+        [css.disableObjectVisibility]: disableVisibility,
       })}
     >
       <div className={css.objectHolderInner}>
@@ -100,6 +103,7 @@ export function ObjectRow(props: IObjectRowProps) {
           ></Button>
           )*/}
           <Button
+            intent={disableVisibility ? "danger" : "none"}
             active={!object.isVisible}
             minimal
             onClick={(event: any) => {
@@ -110,7 +114,9 @@ export function ObjectRow(props: IObjectRowProps) {
               });
             }}
             small={true}
-            icon={object.isVisible ? "eye-open" : "eye-off"}
+            icon={
+              object.isVisible && !disableVisibility ? "eye-open" : "eye-off"
+            }
           ></Button>
           <Button
             minimal
