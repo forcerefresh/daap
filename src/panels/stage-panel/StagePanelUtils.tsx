@@ -155,8 +155,6 @@ export function calculateObjectSize(
     const width = relativeToSize.width - (left + right);
     const height = relativeToSize.height - (top + bottom);
 
-    console.log(relativeToSize);
-
     const sizeObj = {
       left: relativeToSize.left + left,
       top: relativeToSize.top + top,

@@ -144,8 +144,6 @@ ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
 
   let error = null;
   for (const file of files) {
-    console.log(path.join(getPlayerPath(), file));
-
     if (file === ".DS_Store") continue;
 
     try {
@@ -296,7 +294,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // NODE: bucketWithKeys use only for upload
   const bucketWithKeys = await getBucketWithKeys(req.bucketId);
   const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
-  console.log(bucketWithKeys.platform);
   const bucketManager = new ManagerClass(bucketWithKeys);
 
   // get publish urls >>
@@ -304,8 +301,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     bucket,
     req.projectId
   );
-
-  console.log(publishDetails);
   // get publish urls <<
 
   // TODO
@@ -319,7 +314,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     JSON.stringify([{ log: "Publish started" }])
   );
 
-  console.log("1");
   let error;
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
@@ -345,13 +339,11 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         if (assetItem.filename) {
           filename = assetItem.filename;
         }
-        console.log(assetItem);
         const mediaPath =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
             : getMyImagesPath();
 
-        console.log(assetItem);
         pArr.push(
           bucketManager.uploadFileToBucket(
             bucketWithKeys,
@@ -377,15 +369,12 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     }
   }
 
-  console.log("2");
-
   if (error) {
     return { status: "ERROR", error };
   }
   // upload assets <<
 
   // upload extensions >>
-  console.log("UPLOAD EXTENSIONS");
   const userDataPath = app.getPath("userData");
 
   const pArr = [];
@@ -454,19 +443,14 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 
   // TODO: ADD ABSOLUTE URLS FOR OBJECTS
 
-  console.log("3");
-
   const expBuffer = Buffer.from(expString, "utf-8");
-  console.log("4");
-  console.log(expBuffer);
+
   await bucketManager.uploadBufferToBucket(
     bucketWithKeys,
     expBuffer,
     `${req.projectId}/slider.json`
   );
   // upload export/playerdata <<
-
-  console.log("4");
 
   // upload preview html >>
   const indexString = await fsPromise.readFile(
@@ -502,14 +486,10 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 
   await saveObjectStorage(objectStorageList);
 
-  console.log("5");
-
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
     JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
   );
-
-  console.log("6");
 
   return { status: "OK" };
 });
@@ -614,7 +594,6 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
   // add assets <<
 
   // add extensions >>
-  console.log("UPLOAD EXTENSIONS");
   const userDataPath = app.getPath("userData");
 
   const pArr = [];

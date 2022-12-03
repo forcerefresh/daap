@@ -114,7 +114,6 @@ async function deleteExtensions(extensionsArr) {
 
   const userDataPath = app.getPath("userData");
 
-  console.log(extensionsArr);
   for (let i = 0; i < extensionsArr.length; i++) {
     const ext = extensionsArr[i];
 
@@ -126,7 +125,6 @@ async function deleteExtensions(extensionsArr) {
         ext.packageFilename
       );
 
-      //console.log(extensionZipPath);
       fs.rmSync(extensionZipPath);
 
       const extensionDir = path.join(
@@ -136,7 +134,6 @@ async function deleteExtensions(extensionsArr) {
         ext.type
       );
 
-      //console.log(extensionDir);
       fs.rmSync(extensionDir, { recursive: true, force: true });
 
       deleteExtensionsResponse.push({ status: "SUCCESS", id: ext.id });
@@ -145,8 +142,6 @@ async function deleteExtensions(extensionsArr) {
       deleteExtensionsResponse.push({ status: "ERROR", id: ext.id });
     }
   }
-
-  console.log(deleteExtensionsResponse);
 
   return deleteExtensionsResponse;
 }
@@ -189,7 +184,6 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   zip = await zip.loadAsync(zipPackage);
 
   const fileNames = Object.keys(zip.files);
-  console.log(fileNames);
   for (let i = 0; i < fileNames.length; i++) {
     const zipFilePath = fileNames[i];
     if (!zip.file(zipFilePath)) {
@@ -197,7 +191,6 @@ async function processTemplate(fileBase64, type, fileMetadata) {
     }
     const content = await zip.files[zipFilePath].async("nodebuffer");
     var dest = path.join(myTmpTemplateDirPath, fileNames[i]);
-    console.log(dest);
     await writeFileWithPath(dest, content);
   }
   // unzip <<
@@ -225,8 +218,6 @@ async function processTemplate(fileBase64, type, fileMetadata) {
     templateId + ".zip"
   );
   const templateExist = await checkFileExists(myTemplateZipPath);
-  console.log(templateExist);
-  console.log(templateId);
 
   if (templateExist) {
     return false;
@@ -252,7 +243,6 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   const assetFileNames = assetFiles
     .filter((item) => !item.isDirectory())
     .map((item) => item.name);
-  console.log(assetFileNames);
 
   const imageItems = [];
   const videoItems = [];
@@ -296,8 +286,6 @@ async function processTemplate(fileBase64, type, fileMetadata) {
       );
       imageItems.push(videoItem);
     }
-
-    console.log(imageItems);
 
     // console.log(mediaType);
     // console.log(path.join(assetsPath, assetFileName));
@@ -385,9 +373,7 @@ async function processExtension(fileBase64, type, fileMetadata) {
   const zipMetaFile =
     zip.files["object-meta.json"] || zip.files["animation-meta.json"];
   const content = await zipMetaFile.async("nodebuffer");
-  console.log(content);
   const objectMeta = JSON.parse(content);
-  console.log(objectMeta);
 
   const extensionDir = path.join(
     userDataPath,
@@ -416,15 +402,12 @@ async function deleteMedia(imagesArr, type = "image") {
 
   const userDataPath = app.getPath("userData");
 
-  console.log(imagesArr);
   for (let i = 0; i < imagesArr.length; i++) {
     const img = imagesArr[i];
 
     const filesToDel = [];
 
     filesToDel.push(img.filename);
-
-    console.log(filesToDel);
 
     if (img.images) {
       Object.values(img.images).forEach((imgObj) => {

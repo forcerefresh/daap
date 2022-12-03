@@ -350,7 +350,6 @@ export const AbsolutePlacementForm: React.FC<
               <td style={{ width: "25px" }}></td>
             </tr>
             {bcArr.map((bc) => {
-              console.log(bc);
               if (!bc.enabled) return null;
 
               return (

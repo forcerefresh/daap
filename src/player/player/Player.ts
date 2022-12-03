@@ -150,12 +150,6 @@ export class Player {
       (bp) => bp.type === (this.forceDevice || this.currentDeviceType)
     )!;
 
-    console.log(this.playerData?.breakpoints.breakpointsConfiguration);
-
-    console.log(this.currentBp);
-    console.log(this.forceDevice);
-    console.log(this.currentDeviceType);
-
     this.playerConfig = playerConfig;
 
     this.oneSlide = playerData?.slides.length === 1;
@@ -289,7 +283,6 @@ export class Player {
   }
 
   private excludeNonVisibleItems(data: ISlideData) {
-    console.log("BEFORE: " + data.items.length);
     const newItems = data.items.filter((item) => {
       const itemVisibility = this.playerData?.itemsVisibility.find(
         (itemVis) => itemVis.id === item.itemId
@@ -300,12 +293,8 @@ export class Player {
       if (itemVisibility.displayOn.includes(this.currentBp.type)) {
         return true;
       }
-      console.log(
-        "Exclude " + item.itemId + " for device " + this.currentBp.type
-      );
       return false;
     });
-    console.log("AFTER: " + newItems.length);
 
     return newItems;
   }
@@ -625,12 +614,8 @@ export class Player {
         itemVisibility.itemType + "-" + itemVisibility.id
       )[0] as HTMLDivElement | undefined;
 
-      console.log("type:" + type);
-      console.log("displayOn:" + itemVisibility.displayOn);
-
       if (itemEl) {
         if (!this.visibilityDisplayState[itemVisibility.id]) {
-          console.log("itemEl.style.display: " + itemEl.style.display);
           this.visibilityDisplayState[itemVisibility.id] =
             itemEl.style.display || "block";
         }
@@ -638,9 +623,6 @@ export class Player {
         const newDisplay = itemVisibility.displayOn.includes(type)
           ? this.visibilityDisplayState[itemVisibility.id]
           : "none";
-        console.log("a:" + this.visibilityDisplayState[itemVisibility.id]);
-
-        console.log(newDisplay);
 
         itemEl.style.display = newDisplay;
       }
@@ -1129,9 +1111,6 @@ export class Player {
     } else if (exitTransTl && nextSlideOverlap) {
       maxExitTime = Math.max(exitTransTl.duration, nextSlideOverlap);
     }
-
-    console.log("maxExitTime");
-    console.log(maxExitTime);
 
     // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {

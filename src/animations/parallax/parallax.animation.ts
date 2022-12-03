@@ -78,7 +78,6 @@ export function parallaxAnimation() {
           STRENGTH_MULTIPLIER /
           DEPTH_MULTIPLIER,
       });
-      console.log(config.parallax.followTime);
       if (config.parallax.followTime < 33) {
         ins.seek(Math.min(config.parallax.followTime, 33));
       }
@@ -96,13 +95,11 @@ export function parallaxAnimation() {
 
   function start(config: any, isManual?: boolean) {
     logger.animation.debug(`${PARALLAX_ANIMATION} start`);
-    console.log(scrollMoveHandler);
     (scrollElement ?? document).addEventListener("scroll", scrollMoveHandler);
   }
 
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.animation.debug(`${PARALLAX_ANIMATION} stop`);
-    console.log(scrollMoveHandler);
     (scrollElement ?? document).removeEventListener(
       "scroll",
       scrollMoveHandler
@@ -125,7 +122,6 @@ export function parallaxAnimation() {
 
   function update(config: any, time: number, isManual?: boolean) {
     if (isManual) {
-      console.log("MANUAL UPDATE: " + time);
     }
   }
 

@@ -94,15 +94,12 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
       //   pArr.push(downloadToBuffer(assetItem.url));
       // }
       if (assetItem.sourceType === "local") {
-        console.log(assetItem);
         const assetRoot =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
             : assetItem.mediaType === "image"
             ? getMyImagesPath()
             : undefined;
-
-        console.log("assetRoot:" + assetRoot);
 
         if (assetRoot) {
           pArr.push(

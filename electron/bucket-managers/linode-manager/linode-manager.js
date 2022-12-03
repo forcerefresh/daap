@@ -42,7 +42,6 @@ class LinodeManager {
       this.s3.putObject(putParams, function (putErr, putData) {
         if (putErr) {
           console.log(putErr);
-
           reject(putErr);
         } else {
           resolve();

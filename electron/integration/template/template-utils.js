@@ -153,7 +153,6 @@ async function getTemplateDir(name) {
 async function doesTemplateDirExist(dirName) {
   const templateDirPath = await getTemplateDir(dirName);
 
-  console.log(templateDirPath);
   return await checkDirExists(templateDirPath);
 }
 

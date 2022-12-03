@@ -24,7 +24,6 @@ const {
 // API handlers
 
 ipcMain.handle("MyUploads::Delete", async (event, dataStr) => {
-  console.log(dataStr);
   const data = JSON.parse(dataStr);
   const { type, ids } = data;
 
@@ -34,9 +33,6 @@ ipcMain.handle("MyUploads::Delete", async (event, dataStr) => {
 
   const newMyMedia = myMedia.filter((media) => ids.indexOf(media.id) === -1);
   const delMyMedia = myMedia.filter((media) => ids.indexOf(media.id) !== -1);
-
-  console.log(newMyMedia);
-  console.log(delMyMedia);
 
   switch (type) {
     case "image": {
@@ -122,8 +118,6 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
     previewImageBase64,
     previewImageItem,
   } = data;
-
-  console.log(fileMetadata);
 
   if (!fileMetadata.tags?.[0]) {
     fileMetadata.tags = [];
@@ -221,7 +215,6 @@ ipcMain.handle("MyUploads::Fetch", async (event, dataStr) => {
         myMedia[i].packageFiles.icon
       );
 
-      console.log(iconPath);
       const svgData = await fsPromise.readFile(iconPath, { encoding: "utf8" });
       // const buff = Buffer.from(svgData);
       myMedia[i].logoUrl = svgData; //buff.toString("base64");

@@ -50,13 +50,11 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
   let zip = new JSZip();
   zip = await zip.loadAsync(zipPackage);
 
-  //console.log(Object.keys(zip.files));
   const extensionDir = getExtensionPath(extension.type);
   const fileNames = Object.keys(zip.files);
   for (let i = 0; i < fileNames.length; i++) {
     const content = await zip.files[fileNames[i]].async("nodebuffer");
     var dest = path.join(extensionDir, fileNames[i]);
-    //console.log(dest);
     await fsPromise.writeFile(dest, content);
   }
 
@@ -95,7 +93,6 @@ ipcMain.handle("Extensions::UninstallExtension", async (event, reqJson) => {
 });
 
 ipcMain.handle("Extensions::LoadExtension", async (event, reqJson) => {
-  console.log(reqJson);
   const { type } = JSON.parse(reqJson);
 
   const extensions = await loadExtensions();
