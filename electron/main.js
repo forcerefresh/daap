@@ -16,6 +16,7 @@ require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
 require("./integration/extensions/extensions");
+require("./integration/development/development");
 
 // custom file protocol
 registerFileProtocol();

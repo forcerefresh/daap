@@ -468,12 +468,13 @@ function useLicenseHookFactory() {
 }
 
 function useDevelopmentHookFactory() {
-  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
-
-  } else {*/
-  return require("./integration/hooks/development-hook/use-development-hook")
-    .useDevelopmentHook;
-  /*}*/
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/development-hook/electron-use-development-hook")
+      .useDevelopmentHook;
+  } else {
+    return require("./integration/hooks/development-hook/use-development-hook")
+      .useDevelopmentHook;
+  }
 }
 
 export const IntegrationContextProvider = (

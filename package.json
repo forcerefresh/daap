@@ -8,7 +8,7 @@
     "start": "npm run start:app",
     "start:app": "env-cmd -f env/.env react-scripts start",
     "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
-    "start:app:electron": "env-cmd -f env/electron.env react-scripts start",
+    "start:app:electron": "cross-env BROWSER=none env-cmd -f env/electron.env react-scripts start",
     "start:main:electron": "cross-env ELECTRON_ENV=development electron .",
     "start:player": "env-cmd -f env/player-dev.env react-scripts start",
     "build:app": "react-scripts build",
@@ -90,6 +90,7 @@
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
     "webslider-sdk": "^1.1.36",
+    "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
     "yup": "^0.32.11"
   },
