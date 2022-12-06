@@ -1,4 +1,4 @@
-import { cloneDeep, includes, isEqual, mapValues, pick } from "lodash-es";
+import { includes, isEqual, mapValues, pick } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
@@ -47,7 +47,6 @@ import {
   getRectFromPoints,
   IRect,
   multiplyRect,
-  roundNumber,
 } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
@@ -56,6 +55,7 @@ import {
   calculateObjectSize,
   getAbsoluteLayoutSize,
   getAbsoluteLayoutSizeInPx,
+  getAbsoluteLayoutSizeInSameUnit,
   getPositionInfo,
   getPreviewLayout,
 } from "./StagePanelUtils";
@@ -246,20 +246,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } | null>(null);
 
   // 1. keep local copy in order to apply delta from draggable object
-  const objectByIdLocal = cloneDeep(objectById);
+  const objectByIdLocal = useRef<typeof objectById>({});
+  objectByIdLocal.current = objectById; // cloneDeep(objectById);
+
   // 2. apply only delta to selected objects only
-  selectedObjectIds.forEach((objectId) => {
-    if (!objectByIdLocal[objectId].isLocked) {
-      const absoluteLayout = objectByIdLocal[objectId].absoluteLayout!;
-      const absSizeObj = getAbsoluteLayoutSizeInPx(
-        absoluteLayout,
-        selectedDevice,
-        breakpointConfig!
-      );
-      absSizeObj.left! += selRectDelta.x;
-      absSizeObj.top! += selRectDelta.y;
-    }
-  });
+  // selectedObjectIds.forEach((objectId) => {
+  //   if (!objectByIdLocal.current[objectId].isLocked) {
+  //     const absoluteLayout = objectByIdLocal.current[objectId].absoluteLayout!;
+  //     const absSizeObj = getAbsoluteLayoutSizeInPx(
+  //       absoluteLayout,
+  //       selectedDevice,
+  //       breakpointConfig!
+  //     );
+  //     absSizeObj.left! += selRectDelta.x;
+  //     absSizeObj.top! += selRectDelta.y;
+  //   }
+  // });
 
   const isPreview = previewState.isPreview;
 
@@ -272,7 +274,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
   }, [isPreview]);
 
-  const rootRef = useRef(null);
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   const stageXOffset = Math.round(
     (viewPortSize.w - stageSize.width * stageZoom) / 2 +
@@ -633,7 +635,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           style={layerStyle}
         >
           {layer.objectIds.map((objectId) => {
-            const object = objectByIdLocal[objectId];
+            const object = objectByIdLocal.current[objectId];
             const layoutChildren = layer.definition.values.hasLayoutChildren
               ? layer.definition.values.layoutChildren
               : undefined;
@@ -890,22 +892,45 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             if (isEqual(dragStartPosition, { x: data.x, y: data.y })) {
               onObjectClick(evt as any, objectId);
             } else {
+              const diff = {
+                x: data.x - dragStartPosition.x,
+                y: data.y - dragStartPosition.y,
+              };
+
               // reset delta
               setSelRectDelta({ x: 0, y: 0 });
               // update objects
               selectedObjectIds.forEach((objectId) => {
-                if (!objectByIdLocal[objectId].isLocked) {
-                  const absSizeObj = getAbsoluteLayoutSizeInPx(
-                    objectByIdLocal[objectId].absoluteLayout!,
+                if (!objectByIdLocal.current[objectId].isLocked) {
+                  const absSizeObjInPx = getAbsoluteLayoutSizeInPx(
+                    objectByIdLocal.current[objectId].absoluteLayout!,
                     selectedDevice,
                     breakpointConfig!
                   );
-                  absSizeObj.left = roundNumber(absSizeObj.left!, 1);
-                  absSizeObj.top = roundNumber(absSizeObj.top!, 1);
-                  absSizeObj.width = roundNumber(absSizeObj.width!, 1);
-                  absSizeObj.height = roundNumber(absSizeObj.height!, 1);
 
-                  _updateObject(objectByIdLocal[objectId]);
+                  const absSizeObj = getAbsoluteLayoutSize(
+                    objectByIdLocal.current[objectId].absoluteLayout!,
+                    selectedDevice
+                  );
+
+                  const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
+                    absSizeObj,
+                    {
+                      x: absSizeObjInPx.left + diff.x,
+                      y: absSizeObjInPx.top + diff.y,
+                      w: 1,
+                      h: 1,
+                    }, // NOTE: we are not using w and h
+                    objectByIdLocal.current[objectId].absoluteLayout!
+                      .relativeTo,
+                    breakpointConfig!
+                  );
+
+                  absSizeObj.left = newAbsSizeObj.left!;
+                  absSizeObj.top = newAbsSizeObj.top!;
+                  //absSizeObj.width = roundNumber(absSizeObj.width!, 1);
+                  //absSizeObj.height = roundNumber(absSizeObj.height!, 1);
+                  _updateObject(objectByIdLocal.current[objectId]);
                 }
               });
             }
@@ -971,11 +996,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (selectionStartPosition !== null) {
       const point = getMousePosition(e);
       if (
-        stageToolInternal === StageTools.SELECT ||
-        stageToolInternal === StageTools.DRAW
+        stageToolInternal === StageTools.SELECT // || stageToolInternal === StageTools.DRAW
       ) {
         const rect = getRectFromPoints(selectionStartPosition, point);
-        //rect.x -= stageXOffset;
+        rect.x -= rootRef?.current?.offsetLeft || 0;
         //rect.y -= stageYOffset;
         applyRectValuesToElement(selectionBoxRef?.current, rect);
         if (selectionBoxRef?.current?.style) {
@@ -1201,12 +1225,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       const layoutChildren = layer.definition.values.hasLayoutChildren
         ? layer.definition.values.layoutChildren
         : undefined;
-      const object = objectByIdLocal[objectId];
-      const isAbsolutePosition = object.layout === "absolute";
-
-      /*if (!isAbsolutePosition) {
-          return null;
-        }*/
+      const object = objectByIdLocal.current[objectId];
 
       const calculatedObjectSize = calculateObjectSize(
         object,
@@ -1267,7 +1286,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       ref={rootRef}
       className={cx(css.stagePanel, {
         [css.panCursor]: stageToolInternal === StageTools.PAN,
-        [css.drawCursor]: stageToolInternal === StageTools.DRAW,
+        //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
       onMouseDown={(e: React.MouseEvent) => {
         e.persist();
@@ -1307,10 +1326,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             obj.absoluteLayout!,
             selectedDevice
           );
-          absSizeObj.left = roundNumber(resizeRect!.x!, 1) + "px";
-          absSizeObj.top = roundNumber(resizeRect!.y!, 1) + "px";
-          absSizeObj.width = roundNumber(resizeRect!.w!, 1) + "px";
-          absSizeObj.height = roundNumber(resizeRect!.h!, 1) + "px";
+
+          const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
+            absSizeObj,
+            resizeRect!,
+            obj.absoluteLayout!.relativeTo,
+            breakpointConfig!
+          );
+          Object.assign(absSizeObj, newAbsSizeObj);
+          // absSizeObj.left = roundNumber(resizeRect!.x!, 1) + "px";
+          // absSizeObj.top = roundNumber(resizeRect!.y!, 1) + "px";
+          // absSizeObj.width = roundNumber(resizeRect!.w!, 1) + "px";
+          // absSizeObj.height = roundNumber(resizeRect!.h!, 1) + "px";
 
           _updateObject(obj);
 
@@ -1331,33 +1358,33 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         if (selectionStartPosition != null) {
           const point = getMousePosition(e);
           let rect = getRectFromPoints(selectionStartPosition, point);
-          rect.x -= stageXOffset;
+          rect.x -= stageXOffset + (rootRef?.current?.offsetLeft || 0);
           rect.y -= stageYOffset;
 
           if (rect.w > 1 && rect.h > 1) {
-            if (stageToolInternal === StageTools.DRAW && stageToolObjectType) {
-              if (activeLayerId) {
-                const rect2 = multiplyRect(rect, 1 / stageZoom);
-                _addNewObject(activeLayerId, stageToolObjectType, {
-                  layout: "absolute",
-                  absoluteLayout: {
-                    type: "common",
-                    perDevice: [],
-                    relativeTo: "stage",
-                    common: {
-                      deviceType: "common",
-                      left: rect2.x + "px",
-                      top: rect2.y + "px",
-                      width: rect2.w + "px",
-                      height: rect2.h + "px",
-                    },
-                  },
-                });
-                _resetStageTool();
-              }
-            } else {
-              _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
-            }
+            // if (stageToolInternal === StageTools.DRAW && stageToolObjectType) {
+            //   if (activeLayerId) {
+            //     const rect2 = multiplyRect(rect, 1 / stageZoom);
+            //     _addNewObject(activeLayerId, stageToolObjectType, {
+            //       layout: "absolute",
+            //       absoluteLayout: {
+            //         type: "common",
+            //         perDevice: [],
+            //         relativeTo: "stage",
+            //         common: {
+            //           deviceType: "common",
+            //           left: rect2.x + "px",
+            //           top: rect2.y + "px",
+            //           width: rect2.w + "px",
+            //           height: rect2.h + "px",
+            //         },
+            //       },
+            //     });
+            //     _resetStageTool();
+            //   }
+            // } else {
+            _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
+            //}
           } else {
             try {
               const t1 = e.target as any;

@@ -4,6 +4,7 @@ import cx from "classnames";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import {
   IAbsoluteLayout,
+  IAbsoluteLayoutItem,
   IFitLayout,
   IInsetLayout,
   ILayout,
@@ -402,6 +403,49 @@ export function getInsetLayoutSize(
   return insetValue;
 }
 
+/**
+ * Convert pixels to unit size ("px" or "%") for Absolute position.
+ */
+export function getAbsoluteLayoutSizeInSameUnit(
+  prevValue: IAbsoluteLayoutItem,
+  rect: {
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+  },
+  relativeTo: "stage" | "page" | "guidelines" | string,
+  breakpointConfig: BreakpointConfiguration
+) {
+  const relativeToSize = getPSGSize(relativeTo, breakpointConfig)!;
+
+  const retSize: Partial<IAbsoluteLayoutItem> = {
+    left: isPercentage(prevValue.left)
+      ? `${getPercent(relativeToSize.width, rect.x - relativeToSize.left)}%`
+      : `${roundNumber(rect.x, 1)}px`,
+    top: isPercentage(prevValue.top)
+      ? `${getPercent(relativeToSize.height, rect.y - relativeToSize.top)}%`
+      : `${roundNumber(rect!.y!, 1)}px`,
+    width: isPercentage(prevValue.width)
+      ? `${getPercent(relativeToSize.width, rect.w)}%`
+      : `${roundNumber(rect.w, 1)}px`,
+    height: isPercentage(prevValue.height)
+      ? `${getPercent(relativeToSize.height, rect.h)}%`
+      : `${roundNumber(rect.h, 1)}px`,
+  };
+  return retSize;
+}
+
+function getPercent(refVal: number, value: number, roundDec = 1) {
+  return roundNumber((value / refVal) * 100, roundDec);
+}
+
+function isPercentage(value: string) {
+  return value.indexOf("%") !== -1;
+}
+/**
+ * Convert Absolute position ("px" or "%") to pixels.
+ */
 export function getAbsoluteLayoutSizeInPx(
   absoluteLayout: IAbsoluteLayout,
   selectedDevice: DeviceType | "common" | string | any,

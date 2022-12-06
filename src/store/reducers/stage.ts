@@ -31,7 +31,7 @@ export interface IPreviewState {
 export enum StageTools {
   SELECT = "SELECT",
   PAN = "PAN",
-  DRAW = "DRAW",
+  //DRAW = "DRAW",
 }
 
 export interface IStage {
