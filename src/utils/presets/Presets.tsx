@@ -46,7 +46,7 @@ export const Presets: React.FC<IPresets<any>> = (props) => {
     getPresets(presetGroup).then((response) => {
       setPresets(response);
     });
-  }, []);
+  }, [presetGroup]);
 
   useEffect(() => {
     const contain = isMatch(currentValue, selectedPresetValues);

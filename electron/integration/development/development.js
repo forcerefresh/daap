@@ -49,7 +49,7 @@ ipcMain.handle("Development::DeleteDevelopmentItem", async (event, reqJson) => {
 // ======
 
 async function loadDevelopmentItems() {
-  const devItemsPath = getAppDevelopmentItemsPath();
+  const devItemsPath = getDevelopmentItemsPath();
 
   const exist = await checkFileExists(devItemsPath);
   let items = [];
@@ -63,7 +63,7 @@ async function loadDevelopmentItems() {
   return items;
 }
 
-function getAppDevelopmentItemsPath() {
+function getDevelopmentItemsPath() {
   const userDataPath = app.getPath("userData");
   const developmentDir = path.join(userDataPath, "development");
   if (!fs.existsSync(developmentDir)) {
@@ -74,7 +74,7 @@ function getAppDevelopmentItemsPath() {
 
 async function saveDevelopmentItems(items) {
   await fsPromise.writeFile(
-    getAppDevelopmentItemsPath(),
+    getDevelopmentItemsPath(),
     JSON.stringify(items, undefined, 2)
   );
 }

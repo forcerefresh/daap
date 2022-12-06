@@ -169,20 +169,20 @@ export const IntegrationContext = React.createContext({
     },
   }),
 
-  useAssetsHook: () => ({
-    addMedia: (): Promise<{ url: string }> =>
-      Promise.resolve({
-        source: "", //"external-assets-library"
-        url: "",
-        originalUrl: "",
-        mediaName: "",
-      }),
-  }),
+  // useAssetsHook: () => ({
+  //   addMedia: (): Promise<{ url: string }> =>
+  //     Promise.resolve({
+  //       source: "", //"external-assets-library"
+  //       url: "",
+  //       originalUrl: "",
+  //       mediaName: "",
+  //     }),
+  // }),
 
-  useMediaHook: () => ({
-    requestMedia: (type: "image" | "video"): Promise<{ url: string }> =>
-      Promise.resolve({ url: "" }),
-  }),
+  // useMediaHook: () => ({
+  //   requestMedia: (type: "image" | "video"): Promise<{ url: string }> =>
+  //     Promise.resolve({ url: "" }),
+  // }),
 
   useExtensionsHook: () => ({
     /* get installed extensions */
@@ -383,15 +383,15 @@ function useMyMediaHookFactory() {
   }
 }
 
-function useMediaHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "wp") {
-    return require("./integration/hooks/media-hook/wp-use-media-hook")
-      .useMediaHook;
-  } else {
-    return require("./integration/hooks/media-hook/use-media-hook")
-      .useMediaHook;
-  }
-}
+// function useMediaHookFactory() {
+//   if (process.env.REACT_APP_INTEGRATION === "wp") {
+//     return require("./integration/hooks/media-hook/wp-use-media-hook")
+//       .useMediaHook;
+//   } else {
+//     return require("./integration/hooks/media-hook/use-media-hook")
+//       .useMediaHook;
+//   }
+// }
 
 function useProjectHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "wp") {
@@ -438,14 +438,19 @@ function useAppSettingsHookFactory() {
   }
 }
 
-function useAssetsHookFactory() {
-  return require("./integration/hooks/assets-hook/use-assets-hook")
-    .useAssetsHook;
-}
+// function useAssetsHookFactory() {
+//   return require("./integration/hooks/assets-hook/use-assets-hook")
+//     .useAssetsHook;
+// }
 
 function usePresetsHookFactory() {
-  return require("./integration/hooks/presets-hook/use-presets-hook")
-    .usePresets;
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/presets-hook/electron-use-presets-hook")
+      .usePresets;
+  } else {
+    return require("./integration/hooks/presets-hook/use-presets-hook")
+      .usePresets;
+  }
 }
 
 function useExtensionsHookFactory() {
@@ -459,12 +464,13 @@ function useExtensionsHookFactory() {
 }
 
 function useLicenseHookFactory() {
-  /*if (process.env.REACT_APP_INTEGRATION === "electron") {
-
-  } else {*/
-  return require("./integration/hooks/license-hook/use-license-hook")
-    .useLicenseHook;
-  /*}*/
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/hooks/license-hook/electron-use-license-hook")
+      .useLicenseHook;
+  } else {
+    return require("./integration/hooks/license-hook/use-license-hook")
+      .useLicenseHook;
+  }
 }
 
 function useDevelopmentHookFactory() {
@@ -484,10 +490,10 @@ export const IntegrationContextProvider = (
     <IntegrationContext.Provider
       value={{
         useMyMediaHook: useMyMediaHookFactory(),
-        useMediaHook: useMediaHookFactory(),
+        //useMediaHook: useMediaHookFactory(),
         useProjectHook: useProjectHookFactory(),
         useTemplateHook: useTemplateHookFactory(),
-        useAssetsHook: useAssetsHookFactory(),
+        //useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         getMyUploadComponent: getMyUploadComponentFactory(),
         useObjectStorageHook: useObjectStorageFactory(),

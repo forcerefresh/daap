@@ -76,11 +76,6 @@ import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
-interface ISize {
-  width: number;
-  height: number;
-}
-
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
@@ -91,7 +86,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     objects,
     stageZoom,
     previewState,
-    //exportData,
     layerArr,
     objectById,
     activeObjectId,
@@ -109,15 +103,15 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     _addNewObject,
     _setViewPortSize,
     _selectForProperties,
+    _resetStageTool,
     stageTool,
     stageToolObjectType,
-    _resetStageTool,
     breakpointConfig,
     settings,
     forceShowLayerId,
     selectedDevice,
     breakpoints,
-    forceRefreshRand: _forceRefreshRand,
+    forceRefreshRand: _forceRefreshRand, // NOTE: check this
     enableDeveloper,
   } = props;
   //logger.app.debug("StagePanel render");

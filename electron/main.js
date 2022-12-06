@@ -17,6 +17,8 @@ require("./integration/api-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
 require("./integration/extensions/extensions");
 require("./integration/development/development");
+require("./integration/license/license");
+require("./integration/presets/presets");
 
 // custom file protocol
 registerFileProtocol();
