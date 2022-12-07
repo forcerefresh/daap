@@ -65,11 +65,11 @@ ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
   const { type, mediaItem } = data;
 
-  const relativePath = path.join(
+  const relativePath = [
     "my-uploads",
     type2MediaFolder(type),
-    mediaItem.filename
-  );
+    mediaItem.filename,
+  ].join("/");
 
   event.returnValue = {
     ...mediaItem,
