@@ -13,7 +13,6 @@ import {
   updateLayer,
   updateObject,
   updateSlide,
-  _updateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import { ISlide, SlideType } from "../../store/reducers/i-slides";

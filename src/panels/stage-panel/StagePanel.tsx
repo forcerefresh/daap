@@ -1,4 +1,4 @@
-import { includes, isEqual, mapValues, pick } from "lodash-es";
+import { cloneDeep, includes, isEqual, mapValues, pick } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
@@ -182,7 +182,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     x: number;
     y: number;
   } | null>(null);
-  const [selRectDelta, setSelRectDelta] = useState({ x: 0, y: 0 });
+  const [selRectDelta, setSelRectDelta] = useState<{
+    x: number;
+    y: number;
+  } | null>({ x: 0, y: 0 });
 
   // clear all on escape
   useEffect(() => {
@@ -245,24 +248,74 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     h: number;
   } | null>(null);
 
+  const [objectByIdForDrag, setObjectByIdForDrag] = useState<{
+    [id: string]: IObject<{}>;
+  } | null>(null);
+
+  const updateObjectPositionOnDrag = (
+    objectId: string,
+    diff: { x: number; y: number },
+    update = false
+  ) => {
+    if (!objectByIdForDrag) return;
+
+    console.log(update);
+    if (!objectByIdForDrag[objectId].isLocked) {
+      const absSizeObjInPx = getAbsoluteLayoutSizeInPx(
+        objectByIdForDrag[objectId].absoluteLayout!,
+        selectedDevice,
+        breakpointConfig!
+      );
+
+      const absSizeObj = getAbsoluteLayoutSize(
+        objectByIdLocal.current[objectId].absoluteLayout!,
+        selectedDevice
+      );
+
+      const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
+        absSizeObj,
+        {
+          x: absSizeObjInPx.left + diff.x,
+          y: absSizeObjInPx.top + diff.y,
+          w: 1,
+          h: 1,
+        }, // NOTE: we are not using w and h
+        objectByIdLocal.current[objectId].absoluteLayout!.relativeTo,
+        breakpointConfig!
+      );
+
+      absSizeObj.left = newAbsSizeObj.left!;
+      absSizeObj.top = newAbsSizeObj.top!;
+      //absSizeObj.width = roundNumber(absSizeObj.width!, 1);
+      //absSizeObj.height = roundNumber(absSizeObj.height!, 1);
+      if (update) _updateObject(cloneDeep(objectByIdLocal.current[objectId]));
+    }
+  };
+
   // 1. keep local copy in order to apply delta from draggable object
   const objectByIdLocal = useRef<typeof objectById>({});
-  objectByIdLocal.current = objectById; // cloneDeep(objectById);
+  objectByIdLocal.current = cloneDeep(objectById);
 
-  // 2. apply only delta to selected objects only
-  // selectedObjectIds.forEach((objectId) => {
-  //   if (!objectByIdLocal.current[objectId].isLocked) {
-  //     const absoluteLayout = objectByIdLocal.current[objectId].absoluteLayout!;
-  //     const absSizeObj = getAbsoluteLayoutSizeInPx(
-  //       absoluteLayout,
-  //       selectedDevice,
-  //       breakpointConfig!
-  //     );
-  //     absSizeObj.left! += selRectDelta.x;
-  //     absSizeObj.top! += selRectDelta.y;
-  //   }
-  // });
-
+  //2. apply only delta to selected objects only
+  if (selRectDelta) {
+    selectedObjectIds.forEach((objectId) => {
+      if (!objectByIdLocal.current[objectId].isLocked) {
+        updateObjectPositionOnDrag(
+          objectId,
+          { x: selRectDelta.x, y: selRectDelta.y },
+          false
+        );
+        // const absoluteLayout = objectByIdLocal.current[objectId].absoluteLayout!;
+        // const absSizeObj = getAbsoluteLayoutSizeInPx(
+        //   absoluteLayout,
+        //   selectedDevice,
+        //   breakpointConfig!
+        // );
+        // absSizeObj.left! += selRectDelta.x;
+        // absSizeObj.top! += selRectDelta.y;
+      }
+    });
+  }
   const isPreview = previewState.isPreview;
 
   useEffect(() => {
@@ -866,6 +919,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
             setDragStartPosition({ x: data.x, y: data.y });
             setSelectionStartPosition(null);
+
+            setObjectByIdForDrag(cloneDeep(objectById));
           }}
           onDrag={(evt: DraggableEvent, data: DraggableData) => {
             if (stageToolInternal !== StageTools.SELECT) {
@@ -874,10 +929,22 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             }
 
             setSelectionStartPosition(null);
-            setSelRectDelta((_delta) => ({
-              x: _delta.x + data.deltaX, // Math.round(_delta.x + data.deltaX),
-              y: _delta.y + data.deltaY, // Math.round(_delta.y + data.deltaY),
-            }));
+            // setSelRectDelta((_delta) => ({
+            //   x: _delta.x + data.deltaX, // Math.round(_delta.x + data.deltaX),
+            //   y: _delta.y + data.deltaY, // Math.round(_delta.y + data.deltaY),
+            // }));
+
+            const diff = {
+              x: data.x - dragStartPosition.x,
+              y: data.y - dragStartPosition.y,
+            };
+
+            setSelRectDelta(diff);
+
+            // selectedObjectIds.forEach((objectId) => {
+            //   updateObjectPositionOnDrag(objectId, diff, false);
+            // });
+
             //object.left! = object.left! + data.deltaX;
             //object.top! = object.top! + data.deltaY;
           }}
@@ -898,42 +965,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               };
 
               // reset delta
-              setSelRectDelta({ x: 0, y: 0 });
+              setSelRectDelta(null);
               // update objects
               selectedObjectIds.forEach((objectId) => {
-                if (!objectByIdLocal.current[objectId].isLocked) {
-                  const absSizeObjInPx = getAbsoluteLayoutSizeInPx(
-                    objectByIdLocal.current[objectId].absoluteLayout!,
-                    selectedDevice,
-                    breakpointConfig!
-                  );
-
-                  const absSizeObj = getAbsoluteLayoutSize(
-                    objectByIdLocal.current[objectId].absoluteLayout!,
-                    selectedDevice
-                  );
-
-                  const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
-                    absSizeObj,
-                    {
-                      x: absSizeObjInPx.left + diff.x,
-                      y: absSizeObjInPx.top + diff.y,
-                      w: 1,
-                      h: 1,
-                    }, // NOTE: we are not using w and h
-                    objectByIdLocal.current[objectId].absoluteLayout!
-                      .relativeTo,
-                    breakpointConfig!
-                  );
-
-                  absSizeObj.left = newAbsSizeObj.left!;
-                  absSizeObj.top = newAbsSizeObj.top!;
-                  //absSizeObj.width = roundNumber(absSizeObj.width!, 1);
-                  //absSizeObj.height = roundNumber(absSizeObj.height!, 1);
-                  _updateObject(objectByIdLocal.current[objectId]);
-                }
+                updateObjectPositionOnDrag(objectId, diff, true);
               });
             }
+
+            setObjectByIdForDrag(null);
           }}
         >
           <div
@@ -1320,7 +1359,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       onMouseUp={(e) => {
         e.stopPropagation();
         if (resizeStartPosition !== null && resizeData !== null) {
-          const obj = { ...objectById[resizeData?.objectId!] };
+          const obj = cloneDeep(objectById[resizeData?.objectId!]);
 
           const absSizeObj = getAbsoluteLayoutSize(
             obj.absoluteLayout!,
