@@ -143,6 +143,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     if (isDiscartConfirmOpen) {
       setIsDiscartConfirmOpen(false);
     }
+    _doClearHistory();
   };
 
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {

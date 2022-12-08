@@ -5,6 +5,7 @@ import { IntegrationContext } from "./integration";
 import { loadAndRegisterExternalComponent } from "./objects/external-object-utils";
 import Editor from "./pages/editor/Editor";
 import {
+  doClearHistory,
   initializeSlideAndLayer,
   updateGlobalConfiguration,
 } from "./store/actions/actions";
@@ -17,7 +18,11 @@ gsap.install(window);
 type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 
 function App(props: IAppProps) {
-  const { _initializeSlideAndLayer, _updateGlobalConfiguration } = props;
+  const {
+    _initializeSlideAndLayer,
+    _updateGlobalConfiguration,
+    _doClearHistory,
+  } = props;
 
   const globalContext = useContext(IntegrationContext);
 
@@ -27,6 +32,7 @@ function App(props: IAppProps) {
   useEffect(() => {
     // **
     _initializeSlideAndLayer();
+    _doClearHistory();
 
     // **
     const loadExternalComponents = async () => {
@@ -67,6 +73,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _initializeSlideAndLayer: initializeSlideAndLayer,
   _updateGlobalConfiguration: updateGlobalConfiguration,
+  _doClearHistory: () => doClearHistory(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
