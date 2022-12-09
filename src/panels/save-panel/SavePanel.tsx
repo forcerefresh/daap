@@ -320,14 +320,16 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           >
             {"Save"}
           </Button>
-          <Button
-            className={css.saveAsTemplateBtn}
-            disabled={meta.inSaving}
-            intent="none"
-            onClick={() => onClickSaveTemplate(isSaveAs)}
-          >
-            {"Save as Template"}
-          </Button>
+          {!isSaveAs && (
+            <Button
+              className={css.saveAsTemplateBtn}
+              disabled={meta.inSaving}
+              intent="none"
+              onClick={() => onClickSaveTemplate(isSaveAs)}
+            >
+              {"Save as Template"}
+            </Button>
+          )}
           <Button
             disabled={meta.inSaving}
             intent="none"
