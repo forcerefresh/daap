@@ -176,6 +176,8 @@ async function processTemplate(fileBase64, type, fileMetadata) {
     tempId
   );
   await fsPromise.mkdir(myTmpTemplateDirPath);
+  await fsPromise.mkdir(path.join(myTmpTemplateDirPath, "assets"));
+
   // create temp folder <<
 
   // unzip >>
