@@ -151,7 +151,7 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
 
         saveTemplateAsset(uniqueTemplateName, filename, buf);
 
-        const assetZipFilePath = path.join("assets", filename);
+        const assetZipFilePath = ["assets", filename].join("/");
         zip.file(assetZipFilePath, buf);
 
         BrowserWindow.getAllWindows()[0].webContents.send(
