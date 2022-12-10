@@ -169,7 +169,12 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
     };
   }
 
-  myMedia.unshift(item);
+  // NOTE: order - exception for template
+  if (type === "template") {
+    myMedia.push(item);
+  } else {
+    myMedia.unshift(item);
+  }
 
   saveMyMedia(type, myMedia);
 

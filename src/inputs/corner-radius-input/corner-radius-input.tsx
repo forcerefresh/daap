@@ -64,7 +64,7 @@ export const CornerRadiusInputForm: React.FC<
     <>
       <div className={cx(css.alignHolder, "input60")}>
         <div className="bp3-form-group bp3-inline">
-          <Label>{displayName}</Label>
+          <Label style={{ width: "45px" }}>{displayName}</Label>
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {!isLinked ? (
               <>

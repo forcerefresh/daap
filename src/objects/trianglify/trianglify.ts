@@ -251,8 +251,8 @@ export function getTrianglifyHtml(props: {
   const trValues = object.definition.values as TrianglifyValues;
 
   const trConfig = {
-    width: parseInt(`${calculatedObjectSize.width!}`),
-    height: parseInt(`${calculatedObjectSize.height!}`),
+    width: parseInt(`${calculatedObjectSize.width!}`) || 1,
+    height: parseInt(`${calculatedObjectSize.height!}`) || 1,
     cellSize: trValues.cellSize,
     variance: trValues.variance / 100,
     seed: trValues.seed,

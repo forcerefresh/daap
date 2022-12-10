@@ -35,7 +35,7 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
     <div className={css.main}>
       <div>
         {value.map((color, index) => (
-          <>
+          <React.Fragment key={index}>
             <div className={css.colorRow}>
               <div className="input60">
                 <Label> {index === 0 ? displayName : null}</Label>
@@ -64,7 +64,7 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
                 ></Button>
               )}
             </div>
-          </>
+          </React.Fragment>
         ))}
       </div>
       {renderAddBtn()}
