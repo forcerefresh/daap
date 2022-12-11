@@ -3,6 +3,8 @@ require("./utils/logger-config");
 const { app, BrowserWindow } = require("electron");
 const windowStateKeeper = require("electron-window-state");
 const { registerFileProtocol } = require("./utils/file-protocol");
+const { copyPlayerFromAppToUserDataDelayed } = require("./utils/copy-player");
+
 const {
   getAppSettingsConfiguration,
 } = require("./integration/api-settings/app-settings");
@@ -22,6 +24,9 @@ require("./integration/presets/presets");
 
 // custom file protocol
 registerFileProtocol();
+
+// copy player to userData dir
+copyPlayerFromAppToUserDataDelayed();
 
 // electron reloader
 if (process.env.ELECTRON_ENV === "development") {

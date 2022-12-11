@@ -7,20 +7,20 @@ gulp.task("bundle-player", function () {
   return gulp
     .src("./build/static/js/*.js")
     .pipe(concat("wsplayer.js"))
-    .pipe(gulp.dest(`./dist/wsplayer/${pkg.version}/`));
+    .pipe(gulp.dest(`./player-dist/player/wsplayer/${pkg.version}/`));
 });
 
 gulp.task("bucket-preview-html", function () {
   return gulp
     .src("./player-static/bucket-preview/index.html")
     .pipe(replace("{$VERSION}", pkg.version))
-    .pipe(gulp.dest(`./dist/bucket-preview/${pkg.version}`));
+    .pipe(gulp.dest(`./player-dist/player/bucket-preview/${pkg.version}`));
 });
 gulp.task("bucket-debug-html", function () {
   return gulp
     .src("./player-static/bucket-preview/debug.html")
     .pipe(replace("{$VERSION}", pkg.version))
-    .pipe(gulp.dest(`./dist/bucket-preview/${pkg.version}`));
+    .pipe(gulp.dest(`./player-dist/player/bucket-preview/${pkg.version}`));
 });
 
 gulp.task(

@@ -11,6 +11,7 @@
 # production
 /build
 /dist
+/player-dist
 
 # misc
 .DS_Store

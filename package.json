@@ -22,7 +22,7 @@
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "pack": "electron-builder --dir",
-    "build:package:electron": "yarn run build:app:electron && yarn run build:main:electron && electron-builder"
+    "build:package:electron": "yarn run bb:player && yarn run build:app:electron && yarn run build:main:electron && electron-builder"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.54.0",
@@ -54,6 +54,7 @@
     "electron-window-state": "^5.0.3",
     "env-cmd": "^10.1.0",
     "events": "^3.3.0",
+    "fs-extra": "^11.1.0",
     "gsap": "file:gsap-bonus.tgz",
     "gulp-replace": "^1.1.3",
     "immutability-helper": "^3.1.1",
@@ -137,6 +138,9 @@
     "files": [
       "build/**/*",
       "package.json"
+    ],
+    "extraFiles": [
+      "player-dist"
     ],
     "directories": {
       "buildResources": "public"
