@@ -285,7 +285,7 @@ export function getTrianglifyHtml(props: {
     css +
     `<div class='object-content ${objectClassname}'>` +
     svg.outerHTML +
-    "<div>"
+    "</div>"
   );
 }
 
