@@ -33,7 +33,7 @@ export interface TextTargetValues {
   sourceId: string;
   jsonPath: string;
   sampleText: string;
-  autoHeight: boolean;
+  // autoHeight: boolean;
   font: IFontSelectInputValue;
   color: RGBColor;
   fontSize: string;
@@ -49,7 +49,7 @@ export type TextTargetTuple = [
   ITextInput<"sourceId">,
   ITextInput<"jsonPath">,
   ITextAreaInput<"sampleText">,
-  ICheckboxInput<"autoHeight">,
+  // ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">,
@@ -94,13 +94,13 @@ export function createTextTarget(
       defaultValue: "",
       helperText: "Sample text is used only during edit.", // TODO: fix this to work
     },
-    {
-      displayName: "Auto height",
-      propertyName: "autoHeight",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-    },
+    // {
+    //   displayName: "Auto height",
+    //   propertyName: "autoHeight",
+    //   inputType: InputType.CHECKBOX,
+    //   value: false,
+    //   defaultValue: false,
+    // },
     {
       displayName: "Font",
       propertyName: "font",
@@ -201,7 +201,7 @@ export function createTextTarget(
     sourceId: "",
     jsonPath: "",
     sampleText: "Sample text for edit mode only",
-    autoHeight: false,
+    // autoHeight: false,
     font: (initialValue?.font as IFontSelectInputValue) || {
       fontFamily: "Arial",
       source: "system-fonts",

@@ -4,8 +4,11 @@ Major things
 Bugs
 - (DONE) style when is on ne moze da se vrati na jedno polje i default coner radius px
 - (DONE) object kad se resize na nulu puca
+- (DONE) color picker change behavior
+- (DONE) Spinner se vrti kad se klikne na save
+- (DONE)TEXT object - auto-height (za sve text objekte)
+  IMP DETAILS: kada se resizuje vraca resize handles na pocetnu poziciju. Kod Rich i target objekta su uklonjene autoHeight.
 
-- TEXT object - auto-height (za sve text objekte)
 - SVG object - staviti default strelicu umesto kruga
 - SPINNER object - dodati jos dva i ukliniti ostale iz liste
 - JSON text target and image and source - check icons and make them external
@@ -29,3 +32,6 @@ Release V2:
   Selection and resize functionality use only stage area. 
   They should use whole viewport.
 - Download Images from Image Library directory when user use it in project.
+- create more specific action for settings, object, layers, etc.
+- Rich text input text font is different 
+- Bullets cant resize using cursor.(this is expected). We should disable resize for non resizable objects.

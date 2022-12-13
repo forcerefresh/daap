@@ -6,6 +6,7 @@ import { IColorInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
 import { ReactComponent as BackgroundSVG } from "./transparent-bg.svg";
+import useOnClickOutside from "../../utils/hooks/on-click-outside";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const { value, defaultValue, displayName, helperText, onChange } = props;
@@ -22,24 +23,42 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     initialColor: colorFromProp,
   });
 
+  const handleClickOutside = () => handleClose();
+
+  const colorPickerHolderRef = useRef(null);
+  useOnClickOutside(colorPickerHolderRef, handleClickOutside);
+
   // update state when props.value is changed
   useEffect(() => {
     if (!isEqual(colorFromProp, state.color)) {
       setState({ ...state, color: colorFromProp, initialColor: colorFromProp });
     }
-  }, [colorFromProp, state]);
+  }, []); //colorFromProp, state
 
   const handleClick = () => {
-    setState({ ...state, displayColorPicker: !state.displayColorPicker });
+    setState({
+      color: colorFromProp,
+      initialColor: colorFromProp,
+      displayColorPicker: !state.displayColorPicker,
+    });
   };
 
   const handleClose = () => {
+    setState({
+      color: colorFromProp,
+      initialColor: colorFromProp,
+      displayColorPicker: false,
+    });
+  };
+
+  const handleApply = () => {
     setState({ ...state, displayColorPicker: false });
+    onChange(state.color);
   };
 
   const handleChange = (color: any) => {
     setState({ ...state, color: color.rgb });
-    onChange(color.rgb);
+    //onChange(color.rgb);
   };
 
   const { color } = state;
@@ -86,9 +105,12 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
           <div className={css.color} style={style} />
         </div>
 
-        <div className={cx("color-picker-holder", css.popover)}>
+        <div
+          className={cx("color-picker-holder", css.popover)}
+          ref={colorPickerHolderRef}
+        >
           <div className={css.buttonHolder}>
-            <Button icon="tick" small onClick={handleClose} intent="success">
+            <Button icon="tick" small onClick={handleApply} intent="success">
               Apply
             </Button>
             <Button icon="cross" small onClick={handleClose} intent="none">

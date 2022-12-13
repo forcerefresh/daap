@@ -116,6 +116,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } = props;
   //logger.app.debug("StagePanel render");
 
+  console.log(_forceRefreshRand);
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
@@ -530,6 +531,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     object: IObject,
     layoutChildren?: ILayoutChildrenValue
   ) {
+    //object = objectById[object.id];
     const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
     if (!isAbsolutePosition) {
       return null;
@@ -560,14 +562,25 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       top: sizeObj.top * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nesw-resize",
     };
+
     const bottomRightStyle: any = {
       left: sizeObj.left * stageZoom - 4 + sizeObj.width! * stageZoom + "px",
       top: sizeObj.top * stageZoom - 4 + sizeObj.height! * stageZoom + "px",
       cursor: "nwse-resize",
     };
 
+    // console.log(topLeftStyle);
+
+    // console.log(topRightStyle);
+
+    // console.log(bottomRightStyle);
+
+    // console.log(bottomLeftStyle);
     return (
-      <div className={"RESIZE_HANDLES_HOLDER"} key={`handles_${object.id}`}>
+      <div
+        className={"RESIZE_HANDLES_HOLDER"}
+        key={`handles_${object.id}${_forceRefreshRand}`}
+      >
         <div
           style={topLeftStyle}
           data-resize-handle-tl={object.id}
@@ -1009,7 +1022,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             />
             <div
               ref={resizingSelectionRef}
-              key={object.id}
+              key={`${object.id}${_forceRefreshRand}`}
               className={cx(css.selection, css[object.type])}
               style={{ ...objectStyle2, left: "0px", top: "0px" }}
             />
@@ -1049,10 +1062,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         setPanMove({ ...panMove, ...panMoveNew });
       }
     } else if (resizeStartPosition !== null && resizeData) {
+      console.log("mouse move");
       const point = getMousePosition(e);
       const movePoint = getPointsDiff(resizeStartPosition, point);
 
-      const obj = objectById[resizeData.objectId];
+      const obj = objectByIdLocal.current[resizeData.objectId];
       const absSizeObj = getAbsoluteLayoutSizeInPx(
         obj.absoluteLayout!,
         selectedDevice,
@@ -1359,7 +1373,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       onMouseUp={(e) => {
         e.stopPropagation();
         if (resizeStartPosition !== null && resizeData !== null) {
-          const obj = cloneDeep(objectById[resizeData?.objectId!]);
+          const obj = cloneDeep(objectByIdLocal.current[resizeData?.objectId!]);
 
           const absSizeObj = getAbsoluteLayoutSize(
             obj.absoluteLayout!,

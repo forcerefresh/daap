@@ -29,7 +29,7 @@ export const RICH_TEXT = "rich_text";
 
 export interface RichTextValues {
   text: string;
-  autoHeight: boolean;
+  // autoHeight: boolean;
   font: IFontSelectInputValue;
   color: RGBColor;
   fontSize: string;
@@ -37,7 +37,7 @@ export interface RichTextValues {
 
 export type RichTextPropertiesTuple = [
   IRichTextAreaInput<"text">,
-  ICheckboxInput<"autoHeight">,
+  // ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">
@@ -64,13 +64,13 @@ export function createRichTextObject(
       value: (initialValue?.text as string) || "",
       defaultValue: "",
     },
-    {
-      displayName: "Auto height",
-      propertyName: "autoHeight",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-    },
+    // {
+    //   displayName: "Auto height",
+    //   propertyName: "autoHeight",
+    //   inputType: InputType.CHECKBOX,
+    //   value: false,
+    //   defaultValue: false,
+    // },
     {
       displayName: "Font",
       propertyName: "font",
@@ -104,7 +104,7 @@ export function createRichTextObject(
 
   const values: RichTextValues = {
     text: (initialValue?.text as string) || "",
-    autoHeight: false,
+    // autoHeight: false,
     font: (initialValue?.font as IFontSelectInputValue) || {
       fontFamily: "Arial",
       source: "system-fonts",

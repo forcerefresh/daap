@@ -1398,6 +1398,7 @@ function handleTextUpdate(
   // NOTE: update object once. update either after font is loaded or after 500ms
   const updateObjectOnce = once(() => {
     dispatch(_updateObject(object));
+    dispatch(forceRefresh());
   });
 
   // NOTE: check if we need to load fonts

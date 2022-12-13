@@ -76,15 +76,15 @@ export function createSpinnerObject(
       options: [
         "plane",
         "chase",
-        "bounce",
-        "wave",
-        "pulse",
-        "flow",
-        "swing",
-        "circle",
-        "circle-fade",
-        "grid",
-        "wander",
+        // "bounce",
+        // "wave",
+        // "pulse",
+        // "flow",
+        // "swing",
+        // "circle",
+        // "circle-fade",
+        // "grid",
+        // "wander",
       ].map((item) => ({ label: item, value: item })),
       value: "" as any,
       defaultValue: "" as any,
@@ -142,20 +142,22 @@ export function getSpinnerHtml(props: {
 }) {
   const { object, isPlayer } = props;
 
+  const randId = uuid();
+
   const spinnerValues = object.definition.values as SpinnerValues;
   let css = `<style>
   .wsSpinnerFadeIn {
-    animation: wsSpinnerFadeInKF ${spinnerValues.fadeInTime}ms;
+    animation: wsSpinnerFadeInKF_${randId} ${spinnerValues.fadeInTime}ms;
   }
   .wsSpinnerFadeOut{
-    animation: wsSpinnerFadeOutKF ${spinnerValues.fadeOutTime}ms;
+    animation: wsSpinnerFadeOutKF_${randId} ${spinnerValues.fadeOutTime}ms;
 
   }
-  @keyframes wsSpinnerFadeInKF{
+  @keyframes wsSpinnerFadeInKF_${randId} {
     0% {opacity:0;}
     100% {opacity:1;}
   }
-  @keyframes wsSpinnerFadeOutKF{
+  @keyframes wsSpinnerFadeOutKF_${randId} {
     0% {opacity:1;}
     100% {opacity:0;}
   }
@@ -163,15 +165,15 @@ export function getSpinnerHtml(props: {
 
   if (spinnerValues.type === "plane") {
     css += `
-  .sk-plane {
+  .sk-plane_${randId} {
     width: 100%;
     height: 100%;
     background-color: ${convertRGBColor2RGBAString(spinnerValues.color)};
-    animation: sk-plane 1.5s infinite ease-in-out; 
+    animation: sk-plane_${randId} 1.5s infinite ease-in-out; 
   }
   `;
     if (isPlayer) {
-      css += `@keyframes sk-plane {
+      css += `@keyframes sk-plane_${randId} {
       0% {
         transform: perspective(120px) rotateX(0deg) rotateY(0deg); 
       } 50% {
@@ -185,56 +187,56 @@ export function getSpinnerHtml(props: {
 
   if (spinnerValues.type === "chase") {
     css += `
-      .sk-chase {
+      .sk-chase_${randId} {
         width: 100%;
         height: 100%;
         position: relative;
-        animation: sk-chase 2.5s infinite linear both;
+        animation: sk-chase_${randId} 2.5s infinite linear both;
       }
 
-      .sk-chase-dot {
+      .sk-chase-dot_${randId} {
         width: 100%;
         height: 100%;
         position: absolute;
         left: 0;
         top: 0; 
-        animation: sk-chase-dot 2.0s infinite ease-in-out both; 
+        animation: sk-chase-dot_${randId} 2.0s infinite ease-in-out both; 
       }
 
-      .sk-chase-dot:before {
+      .sk-chase-dot_${randId}:before {
         content: '';
         display: block;
         width: 25%;
         height: 25%;
         background-color: ${convertRGBColor2RGBAString(spinnerValues.color)};
         border-radius: 100%;
-        animation: sk-chase-dot-before 2.0s infinite ease-in-out both; 
+        animation: sk-chase-dot-before_${randId} 2.0s infinite ease-in-out both; 
       }
 
-      .sk-chase-dot:nth-child(1) { animation-delay: -1.1s; }
-      .sk-chase-dot:nth-child(2) { animation-delay: -1.0s; }
-      .sk-chase-dot:nth-child(3) { animation-delay: -0.9s; }
-      .sk-chase-dot:nth-child(4) { animation-delay: -0.8s; }
-      .sk-chase-dot:nth-child(5) { animation-delay: -0.7s; }
-      .sk-chase-dot:nth-child(6) { animation-delay: -0.6s; }
-      .sk-chase-dot:nth-child(1):before { animation-delay: -1.1s; }
-      .sk-chase-dot:nth-child(2):before { animation-delay: -1.0s; }
-      .sk-chase-dot:nth-child(3):before { animation-delay: -0.9s; }
-      .sk-chase-dot:nth-child(4):before { animation-delay: -0.8s; }
-      .sk-chase-dot:nth-child(5):before { animation-delay: -0.7s; }
-      .sk-chase-dot:nth-child(6):before { animation-delay: -0.6s; }
+      .sk-chase-dot_${randId}:nth-child(1) { animation-delay: -1.1s; }
+      .sk-chase-dot_${randId}:nth-child(2) { animation-delay: -1.0s; }
+      .sk-chase-dot_${randId}:nth-child(3) { animation-delay: -0.9s; }
+      .sk-chase-dot_${randId}:nth-child(4) { animation-delay: -0.8s; }
+      .sk-chase-dot_${randId}:nth-child(5) { animation-delay: -0.7s; }
+      .sk-chase-dot_${randId}:nth-child(6) { animation-delay: -0.6s; }
+      .sk-chase-dot_${randId}:nth-child(1):before { animation-delay: -1.1s; }
+      .sk-chase-dot_${randId}:nth-child(2):before { animation-delay: -1.0s; }
+      .sk-chase-dot_${randId}:nth-child(3):before { animation-delay: -0.9s; }
+      .sk-chase-dot_${randId}:nth-child(4):before { animation-delay: -0.8s; }
+      .sk-chase-dot_${randId}:nth-child(5):before { animation-delay: -0.7s; }
+      .sk-chase-dot_${randId}:nth-child(6):before { animation-delay: -0.6s; }
 
       
       `;
 
     if (isPlayer) {
-      css += `@keyframes sk-chase {
+      css += `@keyframes sk-chase_${randId} {
           100% { transform: rotate(360deg); } 
         }
-        @keyframes sk-chase-dot {
+        @keyframes sk-chase-dot_${randId} {
           80%, 100% { transform: rotate(360deg); } 
         }
-        @keyframes sk-chase-dot-before {
+        @keyframes sk-chase-dot-before_${randId} {
           50% {
             transform: scale(0.4); 
           } 100%, 0% {
@@ -252,16 +254,16 @@ export function getSpinnerHtml(props: {
 
   let html = "";
   if (spinnerValues.type === "plane") {
-    html = `<div class="sk-plane"></div>`;
+    html = `<div class="sk-plane_${randId}"></div>`;
   }
   if (spinnerValues.type === "chase") {
-    html = `<div class="sk-chase">
-    <div class="sk-chase-dot"></div>
-    <div class="sk-chase-dot"></div>
-    <div class="sk-chase-dot"></div>
-    <div class="sk-chase-dot"></div>
-    <div class="sk-chase-dot"></div>
-    <div class="sk-chase-dot"></div>
+    html = `<div class="sk-chase_${randId}">
+    <div class="sk-chase-dot_${randId}"></div>
+    <div class="sk-chase-dot_${randId}"></div>
+    <div class="sk-chase-dot_${randId}"></div>
+    <div class="sk-chase-dot_${randId}"></div>
+    <div class="sk-chase-dot_${randId}"></div>
+    <div class="sk-chase-dot_${randId}"></div>
   </div>`;
   }
   return `<div class="object-content object-content-${object.id}" style="${style}">${html}</div>${css}`;

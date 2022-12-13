@@ -79,6 +79,7 @@ export const RichTextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
       className={css.main}
     >
       <RichTextEditor
+        className={css.rte}
         value={localValue}
         onChange={(value: any) => {
           if (value !== value.toString("html")) {

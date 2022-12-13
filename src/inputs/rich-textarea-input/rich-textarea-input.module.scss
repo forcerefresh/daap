@@ -44,3 +44,12 @@
     }
   }
 }
+
+.rte {
+  font-family: inherit !important;
+  :global {
+    .DraftEditor-editorContainer {
+      font-size: 14px !important;
+    }
+  }
+}
