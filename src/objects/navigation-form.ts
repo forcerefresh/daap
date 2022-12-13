@@ -11,7 +11,7 @@ import {
 } from "webslider-sdk/lib/form/i-form-layout";
 
 export type NavigationTuple = [
-  ITextInput<"targetId">,
+  // ITextInput<"targetId">,
   IFormSwitchGroupItem<
     "navigationType",
     [
@@ -44,13 +44,13 @@ export type NavigationTuple = [
 ];
 
 export const navigationDefinition: NavigationTuple = [
-  {
-    inputType: InputType.TEXT,
-    propertyName: "targetId",
-    defaultValue: "",
-    displayName: "Target ID",
-    value: "",
-  },
+  // {
+  //   inputType: InputType.TEXT,
+  //   propertyName: "targetId",
+  //   defaultValue: "",
+  //   displayName: "Target ID",
+  //   value: "",
+  // },
   {
     type: FormType.SWITCH_GROUP,
     displayName: "",
@@ -99,7 +99,7 @@ export const navigationDefinition: NavigationTuple = [
             defaultValue: "",
           },
           {
-            displayName: "Event",
+            displayName: "Cursor",
             propertyName: "cursor",
             inputType: InputType.SELECT,
             value: "pointer",

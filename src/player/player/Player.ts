@@ -1193,10 +1193,11 @@ export class Player {
 
     logger.player.log(objectEvent);
 
+    let el: HTMLDivElement | undefined;
     if (objectEvent.navigationType === NavigationType.None) {
       return;
     } else if (objectEvent.navigationType === NavigationType.Link) {
-      const el = document.getElementsByClassName(className)[0];
+      el = document.getElementsByClassName(className)[0] as HTMLDivElement;
       el?.addEventListener(objectEvent?.linkEvent, () => {
         let a = document.createElement("a");
         // NOTE: when player runs in  app open in new window (_blank)
@@ -1205,7 +1206,7 @@ export class Player {
         a.click();
       });
     } else if (objectEvent.navigationType === NavigationType.Slide) {
-      const el = document.getElementsByClassName(className)[0];
+      el = document.getElementsByClassName(className)[0] as HTMLDivElement;
 
       const clickHandler = () => {
         if (objectEvent.slideReferenceType === "slideNo") {
@@ -1224,6 +1225,7 @@ export class Player {
       };
       el?.addEventListener(objectEvent?.slideEvent, clickHandler.bind(this));
     }
+    if (el) el.style.cursor = objectEvent.cursor;
   }
 
   private getSlideIdxByID(customId: string): number | undefined {

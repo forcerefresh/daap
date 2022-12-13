@@ -249,7 +249,7 @@
       display: none;
     }
     &:hover .deleteObject {
-      display: block;
+      display: flex;
     }
     .deleteObject {
       svg {

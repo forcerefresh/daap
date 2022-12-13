@@ -129,7 +129,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                 : "caret-right"
             }
           ></Button>
-          Slider
+          Slide
         </div>
         {visibleSectionIds[ProjectPanelSections.Slide] && (
           <div className={settingsCss.panel}>

@@ -8,20 +8,21 @@ Bugs
 - (DONE) Spinner se vrti kad se klikne na save
 - (DONE)TEXT object - auto-height (za sve text objekte)
   IMP DETAILS: kada se resizuje vraca resize handles na pocetnu poziciju. Kod Rich i target objekta su uklonjene autoHeight.
+- (IN PROGRESS - Petar ) SPINNER object - dodati jos dva i ukliniti ostale iz liste
+- (DONE)SVG object - staviti default strelicu umesto kruga
+- (DONE) Navigation - Event treba da bude coursor-linking
+- (DONE) PADDING animation - form za animacije and  delete button x za layers and objects
+- (DONE) Navigation - TAGET ID - LINKING birsanje proveriti?
+- (DONE) Settings projet SLIDER-SLIDER - labele iste Slider Slider
+- (DONE) IMAGE LIBRARY - poruka search local image
 
-- SVG object - staviti default strelicu umesto kruga
-- SPINNER object - dodati jos dva i ukliniti ostale iz liste
-- JSON text target and image and source - check icons and make them external
-- PADDING animation - form za animacije and  delete button x za layers and objects
-- IMAGE LIBRARY - poruka search local image
-- Settings projet SLIDER-SLIDER - labele iste Slider Slider
 - Snimanje na razlicitim device prikazuje na Thumbnaill sve 
-- Navigation - TAGET ID - LINKING birsanje proveriti?
-- Navigation - Event treba da bude coursor-linking
 - style and transform gde treba da se vidi
+- JSON text target and image and source - check icons and make them external
 
 V1 or V2:
 - disable html selection. when user click and mouse move 
+- Add button for manual load more (Library). Instead of auto infinitive scroll.
 
 Release V2:
 - Behavior for animations for objects that are visible on some devices.
@@ -35,3 +36,4 @@ Release V2:
 - create more specific action for settings, object, layers, etc.
 - Rich text input text font is different 
 - Bullets cant resize using cursor.(this is expected). We should disable resize for non resizable objects.
+- For electron we are 

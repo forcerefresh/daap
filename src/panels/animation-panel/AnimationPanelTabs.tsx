@@ -364,7 +364,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 
   return (
     <div className={classnames(css.animation, className)}>
-      {!hideHeader && <div className={css.panelHeader}>EFFECT PANEL</div>}
+      {!hideHeader && <div className={css.panelHeader}>ANIMATION PANEL</div>}
       {id ? (
         <Tabs className={css.tabs}>
           {sections.map((section) => {

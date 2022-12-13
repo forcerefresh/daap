@@ -1,17 +1,12 @@
 import classnames from "classnames";
-import { cloneDeep, pick } from "lodash-es";
+import { cloneDeep } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { getInputFormWithOptions } from "../../inputs/input-factory";
-
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
-
-import {
-  IInputMetadataValues,
-  InputType,
-} from "webslider-sdk/lib/inputs/i-inputs";
+import { IInputMetadataValues } from "webslider-sdk/lib/inputs/i-inputs";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { navigationDefinition } from "../../objects/navigation-form";
 import { updateObject } from "../../store/actions/actions";

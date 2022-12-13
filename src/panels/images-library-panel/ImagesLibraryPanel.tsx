@@ -22,7 +22,7 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, noop, startsWith } from "lodash-es";
+import { debounce, filter, forOwn, noop, startsWith } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
@@ -130,11 +130,17 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
     from = from === -1 ? images?.length || 0 : from;
 
+    const tags: string[] = [];
+    forOwn(selectedTags, (val, key) => {
+      if (val) tags.push(key);
+    });
+
+    console.log(tags);
     fetchImagesFunc({
       type: type,
       from,
       search: searchValue,
-      tags: Object.keys(selectedTags),
+      tags,
       perPage: 20,
     }).then(
       async (result) => {
@@ -146,6 +152,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
         const data = result.data || (result as any).photos;
 
+        console.log(data);
         //await postProcessData(data);
 
         setImages([...images, ...data]);

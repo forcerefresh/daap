@@ -183,30 +183,35 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
 
 ipcMain.handle("MyUploads::Fetch", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
-  const { from, tag, search, perPage, type } = data;
+  const { from, tags, search, perPage, type } = data;
 
   let myMedia = await loadMyMedia(type);
   const totalItems = myMedia.length;
 
-  if (tag) {
+  if (tags[0]) {
     myMedia = myMedia.filter(
-      (image) => image.tags && image.tags.indexOf(tag) !== -1
+      (image) => image.tags && image.tags.indexOf(tags[0]) !== -1
     );
   }
 
   if (search) {
     if (type === "extension") {
       myMedia = myMedia.filter(
-        (image) => image.name.toLoverCase().indexOf(search.toLowerCase()) !== -1
+        (image) =>
+          (image.name || "").toLowerCase().indexOf(search.toLowerCase()) !== -1
       );
     } else {
       myMedia = myMedia.filter(
         (image) =>
-          image.title.toLoverCase().indexOf(search.toLowerCase()) !== -1
+          (image.title &&
+            image.title.toLowerCase().indexOf(search.toLowerCase()) !== -1) ||
+          (image.filename &&
+            image.filename.toLowerCase().indexOf(search.toLowerCase()) !== -1)
       );
     }
   }
 
+  console.log(myMedia);
   myMedia = myMedia.splice(from, perPage);
 
   if (type === "extension") {

@@ -26,8 +26,16 @@ const ARROW = "arrow";
 export type ArrowPropertiesTuple = [
   ISVGInput<"svg">,
   ICheckboxInput<"keepAspectRatio">,
-  IFormGroupItem<[IColorInput<"fill">, IColorInput<"stroke">]>,
-  IFormGroupItem<[IColorInput<"hoverFill">, IColorInput<"hoverStroke">]>,
+  IFormGroupItem<
+    [IColorInput<"fill">, IColorInput<"stroke">, IColorInput<"color">]
+  >,
+  IFormGroupItem<
+    [
+      IColorInput<"hoverFill">,
+      IColorInput<"hoverStroke">,
+      IColorInput<"hoverColor">
+    ]
+  >,
   INumberInput<"hoverTransitionDuration">,
   IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
 ];
@@ -39,9 +47,11 @@ export interface ArrowValues {
   hasStrokeFill: boolean;
   fill: RGBColor;
   stroke: RGBColor;
+  color: RGBColor;
   hasHover: boolean;
   hoverFill: RGBColor;
   hoverStroke: RGBColor;
+  hoverColor: RGBColor;
   hoverTransitionDuration: number;
 }
 
@@ -95,6 +105,14 @@ export function createArrowObject(
           defaultValue: { r: 0, g: 0, b: 0, a: 1 },
           optional: true,
         },
+        {
+          displayName: "Color",
+          propertyName: "color",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
+          optional: true,
+        },
       ],
     },
 
@@ -118,6 +136,14 @@ export function createArrowObject(
           inputType: InputType.COLOR,
           value: { r: 0, g: 0, b: 0, a: 1 },
           defaultValue: { r: 0, g: 0, b: 0, a: 1 },
+          optional: true,
+        },
+        {
+          displayName: "Color",
+          propertyName: "hoverColor",
+          inputType: InputType.COLOR,
+          value: { r: 255, g: 255, b: 255, a: 1 },
+          defaultValue: { r: 255, g: 255, b: 255, a: 1 },
           optional: true,
         },
       ],
@@ -152,9 +178,7 @@ export function createArrowObject(
     svg: initialValue?.svg
       ? initialValue.svg
       : {
-          source: `<svg height="100" width="100" viewBox="0 0 100 100">
-      <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-      </svg>`,
+          source: `<svg width="72" height="72" version="1.1" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg"><path d="m21.975 66.924 0.41337-0.35432 30.806-26.771c1.0433-0.90548 1.6929-2.2637 1.6929-3.7794 0-1.5157-0.66927-2.8739-1.6929-3.7794l-30.747-26.751-0.51179-0.45274c-0.49211-0.33463-1.0826-0.53148-1.7125-0.53148-1.7125 0-3.1101 1.4566-3.1101 3.2676v56.455c0 1.811 1.3976 3.2676 3.1101 3.2676 0.64958 0 1.2598-0.21652 1.7519-0.57084z" fill="currentColor" stroke-width=".070312"></path></svg>`,
           colors: [],
           colorsType: "unique",
           disableCustomColors: false,
@@ -164,7 +188,9 @@ export function createArrowObject(
     hasStrokeFill: true,
     fill: { r: 255, g: 255, b: 255, a: 1 },
     stroke: { r: 0, g: 0, b: 0, a: 0 },
+    color: { r: 255, g: 255, b: 255, a: 1 },
     hoverFill: { r: 255, g: 255, b: 255, a: 1 },
+    hoverColor: { r: 255, g: 255, b: 255, a: 1 },
     hoverStroke: { r: 0, g: 0, b: 0, a: 0 },
     hoverTransitionDuration: 500,
   };
@@ -172,8 +198,10 @@ export function createArrowObject(
   const valuesMetadata: { [key: string]: IInputMetadataValues } = {
     fill: { exportForWizard: false, disabled: false },
     stroke: { exportForWizard: false, disabled: false },
+    color: { exportForWizard: false, disabled: false },
     hoverFill: { exportForWizard: false, disabled: false },
     hoverStroke: { exportForWizard: false, disabled: false },
+    hoverColor: { exportForWizard: false, disabled: false },
   };
 
   return {
@@ -222,6 +250,11 @@ export function getArrowHtml(props: {
       ? `stroke: ${convertRGBColor2RGBAString(svgValues.stroke)};
       `
       : "";
+  const color =
+    !svgValuesMetadata["color"].disabled && svgValues.hasStrokeFill
+      ? `color: ${convertRGBColor2RGBAString(svgValues.color)};
+      `
+      : "";
 
   // hover START>>
   const hoverFill =
@@ -233,6 +266,11 @@ export function getArrowHtml(props: {
     !svgValuesMetadata["hoverStroke"].disabled && svgValues.hasHover
       ? `stroke: ${convertRGBColor2RGBAString(svgValues.hoverStroke)};
      `
+      : "";
+  const hoverColor =
+    !svgValuesMetadata["hoverColor"].disabled && svgValues.hasHover
+      ? `color: ${convertRGBColor2RGBAString(svgValues.hoverColor)};
+       `
       : "";
   // hover END <<
   const css = `
@@ -246,6 +284,7 @@ export function getArrowHtml(props: {
     .object-content-${object.id} svg {
       ${fill}
       ${stroke}
+      ${color}
       width: 100%; 
       height: 100%;
       transition-duration: ${svgValues.hoverTransitionDuration}ms;
@@ -253,6 +292,7 @@ export function getArrowHtml(props: {
     .object-content-${object.id}:hover svg {
       ${hoverFill}
       ${hoverStroke}
+      ${hoverColor}
     }
     </style>`;
 
