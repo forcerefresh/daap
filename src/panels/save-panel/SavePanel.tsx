@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
-import { cloneDeep, noop, omit, round } from "lodash-es";
+import { cloneDeep, last, noop, omit, round } from "lodash-es";
 import { connect } from "react-redux";
 import { Button, Label, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
@@ -100,7 +100,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpoints,
       settings,
       undefined,
-      { isSave: false }
+      { isSave: false, isForThumbnail: true }
     );
     setThumbnailHtml(thumbnailPlayerData.html);
   }, []);
@@ -367,11 +367,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  // TODO: IMPORTANT hardcoded
-  const breakpointConfig: BreakpointConfiguration | undefined =
-    state.project.settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig: any) => breakpointConfig.type === "large-1"
-    );
+  // NOTE: get largest enabled
+  const breakpointConfig: BreakpointConfiguration | undefined = last(
+    state.project.settings.breakpoints.breakpointsConfiguration.filter(
+      (bc) => bc.enabled
+    )
+  );
 
   return {
     project: omit({ ...state.project }, "diff"),

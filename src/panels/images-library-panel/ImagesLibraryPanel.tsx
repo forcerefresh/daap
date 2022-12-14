@@ -135,7 +135,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       if (val) tags.push(key);
     });
 
-    console.log(tags);
     fetchImagesFunc({
       type: type,
       from,
@@ -152,7 +151,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
         const data = result.data || (result as any).photos;
 
-        console.log(data);
         //await postProcessData(data);
 
         setImages([...images, ...data]);

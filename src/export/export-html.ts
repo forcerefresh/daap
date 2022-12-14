@@ -58,7 +58,7 @@ export function generatePlayerData(
   breakpoints: Breakpoints,
   settings: ISettings,
   extensions: IExtensionItem[] = [],
-  options: { isSave: boolean }
+  options: { isSave: boolean; isForThumbnail?: boolean }
 ): IPlayerData {
   const { slides, layers, objects } = sources;
 
@@ -111,7 +111,7 @@ export function generatePlayerData(
       settings,
       thumbnailHtmlArr,
       normalSlidesArr.length,
-      { isSave: options.isSave }
+      { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     slideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -232,7 +232,7 @@ function generateSlideData(
   settings: ISettings,
   thumbnailHtmlArr: (string | undefined)[],
   slidesLength: number,
-  options: { isSave: boolean }
+  options: { isSave: boolean; isForThumbnail?: boolean }
 ): {
   slideData: ISlideData;
   html: string;
@@ -297,6 +297,7 @@ function generateSlideData(
 
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
   layerArr.forEach((layer) => {
+    let hideForThumbnail = false;
     const visibleForAllDevices = layer.responsiveVisibility.showAll;
     if (!visibleForAllDevices) {
       itemsVisibility.push({
@@ -304,6 +305,10 @@ function generateSlideData(
         id: layer.id,
         displayOn: layer.responsiveVisibility.displayOn,
       });
+
+      hideForThumbnail =
+        layer.responsiveVisibility.displayOn.indexOf(breakpointConfig.type) ===
+        -1;
     }
 
     const layerValues = layer.definition.values as ILayerValues;
@@ -393,6 +398,10 @@ function generateSlideData(
     const layerCustomIdClass = layer.customId
       ? `custom-id-${layer.customId}`
       : "";
+
+    // NOTE: hide for other devices if exporting for thumbnail
+    layerStyle +=
+      options.isForThumbnail && hideForThumbnail ? "display:none;" : "";
 
     html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
       layer

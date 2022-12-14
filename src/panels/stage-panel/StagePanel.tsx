@@ -116,7 +116,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } = props;
   //logger.app.debug("StagePanel render");
 
-  console.log(_forceRefreshRand);
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
@@ -260,7 +259,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   ) => {
     if (!objectByIdForDrag) return;
 
-    console.log(update);
     if (!objectByIdForDrag[objectId].isLocked) {
       const absSizeObjInPx = getAbsoluteLayoutSizeInPx(
         objectByIdForDrag[objectId].absoluteLayout!,
@@ -1062,7 +1060,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         setPanMove({ ...panMove, ...panMoveNew });
       }
     } else if (resizeStartPosition !== null && resizeData) {
-      console.log("mouse move");
       const point = getMousePosition(e);
       const movePoint = getPointsDiff(resizeStartPosition, point);
 

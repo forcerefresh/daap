@@ -251,7 +251,7 @@ export function getArrowHtml(props: {
       `
       : "";
   const color =
-    !svgValuesMetadata["color"].disabled && svgValues.hasStrokeFill
+    !svgValuesMetadata["color"]?.disabled && svgValues.hasStrokeFill
       ? `color: ${convertRGBColor2RGBAString(svgValues.color)};
       `
       : "";
@@ -268,7 +268,7 @@ export function getArrowHtml(props: {
      `
       : "";
   const hoverColor =
-    !svgValuesMetadata["hoverColor"].disabled && svgValues.hasHover
+    !svgValuesMetadata["hoverColor"]?.disabled && svgValues.hasHover
       ? `color: ${convertRGBColor2RGBAString(svgValues.hoverColor)};
        `
       : "";

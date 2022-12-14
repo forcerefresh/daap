@@ -211,7 +211,6 @@ ipcMain.handle("MyUploads::Fetch", async (event, dataStr) => {
     }
   }
 
-  console.log(myMedia);
   myMedia = myMedia.splice(from, perPage);
 
   if (type === "extension") {

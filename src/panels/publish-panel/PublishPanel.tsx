@@ -432,26 +432,27 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  // TODO: IMPORTANT hardcoded
-  const breakpointConfig: BreakpointConfiguration | undefined =
-    state.project.settings.breakpoints.breakpointsConfiguration.find(
-      (breakpointConfig: any) => breakpointConfig.type === "large-1"
-    );
+  // // NOTE: get largest enabled
+  // const breakpointConfig: BreakpointConfiguration | undefined = last(
+  //   state.project.settings.breakpoints.breakpointsConfiguration.filter(
+  //     (bc) => bc.enabled
+  //   )
+  // );
 
   return {
-    project: omit({ ...state.project }, "diff"),
+    //project: omit({ ...state.project }, "diff"),
     meta: state.meta,
-    slides: state.project.slides,
-    layers: state.project.layers,
-    objects: state.project.objects,
-    breakpointConfig,
-    settings: state.project.settings,
+    //slides: state.project.slides,
+    //layers: state.project.layers,
+    //objects: state.project.objects,
+    //breakpointConfig,
+    //settings: state.project.settings,
   };
 };
 
 const mapDispatchToProps = {
-  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
-  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
+  //_updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  //_updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PublishPanel);
