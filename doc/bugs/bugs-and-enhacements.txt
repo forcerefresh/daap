@@ -1,6 +1,10 @@
 Major things
 - Bundle player with package
 
+Other updates
+- Flip animation fixed
+- Bullets/thumbnails updated (decoupled from player)
+
 Bugs
 - (DONE) style when is on ne moze da se vrati na jedno polje i default coner radius px
 - (DONE) object kad se resize na nulu puca
@@ -8,16 +12,20 @@ Bugs
 - (DONE) Spinner se vrti kad se klikne na save
 - (DONE)TEXT object - auto-height (za sve text objekte)
   IMP DETAILS: kada se resizuje vraca resize handles na pocetnu poziciju. Kod Rich i target objekta su uklonjene autoHeight.
-- (IN PROGRESS - Petar ) SPINNER object - dodati jos dva i ukliniti ostale iz liste
+- (DONE) SPINNER object - dodati jos dva i ukliniti ostale iz liste
 - (DONE)SVG object - staviti default strelicu umesto kruga
 - (DONE) Navigation - Event treba da bude coursor-linking
 - (DONE) PADDING animation - form za animacije and  delete button x za layers and objects
 - (DONE) Navigation - TAGET ID - LINKING birsanje proveriti?
 - (DONE) Settings projet SLIDER-SLIDER - labele iste Slider Slider
 - (DONE) IMAGE LIBRARY - poruka search local image
+- (DONE) Snimanje na razlicitim device prikazuje na Thumbnaill sve 
+- (DONE) style and transform gde treba da se vidi
 
-- Snimanje na razlicitim device prikazuje na Thumbnaill sve 
-- style and transform gde treba da se vidi
+- GSAP srediti kod playare
+- Transform animacije nerade na layeru
+- Blokira prelazak na bilo koji slajd nakon prvog manuelnog prelacka na slajd
+- ZA style treba default pixeli da se stage
 - JSON text target and image and source - check icons and make them external
 
 V1 or V2:

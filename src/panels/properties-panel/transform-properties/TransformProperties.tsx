@@ -45,7 +45,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
     if (!object.transformDefinition)
-      return "Element does not have common style properties";
+      return "Element does not have common transform properties";
 
     return (
       <>

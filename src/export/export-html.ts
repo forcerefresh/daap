@@ -37,7 +37,6 @@ import {
   getRealExitSlideDuration,
   convertTimeUnitToMs,
 } from "../utils/utils";
-import { getThumbnailHtmlArr } from "./export-html-utils";
 import {
   IPlayerData,
   ISlideData,
@@ -87,11 +86,11 @@ export function generatePlayerData(
   }
 
   // generate thumbnails
-  const thumbnailHtmlArr = getThumbnailHtmlArr(
-    normalSlidesArr,
-    layers,
-    objects
-  );
+  // const thumbnailHtmlArr = getThumbnailHtmlArr(
+  //   normalSlidesArr,
+  //   layers,
+  //   objects
+  // );
 
   const slideDataArr: ISlideData[] = [];
   const frontSlideDataArr: ISlideData[] = [];
@@ -109,8 +108,8 @@ export function generatePlayerData(
       breakpointConfig,
       breakpoints,
       settings,
-      thumbnailHtmlArr,
-      normalSlidesArr.length,
+      // thumbnailHtmlArr,
+      // normalSlidesArr.length,
       { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     slideDataArr.push(slideDataRes.slideData);
@@ -127,8 +126,8 @@ export function generatePlayerData(
       breakpointConfig,
       breakpoints,
       settings,
-      thumbnailHtmlArr,
-      normalSlidesArr.length,
+      // thumbnailHtmlArr,
+      // normalSlidesArr.length,
       { isSave: options.isSave }
     );
     frontSlideDataArr.push(slideDataRes.slideData);
@@ -145,8 +144,8 @@ export function generatePlayerData(
       breakpointConfig,
       breakpoints,
       settings,
-      thumbnailHtmlArr,
-      normalSlidesArr.length,
+      // thumbnailHtmlArr,
+      // normalSlidesArr.length,
       { isSave: options.isSave }
     );
     backSlideDataArr.push(slideDataRes.slideData);
@@ -230,8 +229,8 @@ function generateSlideData(
   breakpointConfig: BreakpointConfiguration,
   breakpoints: Breakpoints,
   settings: ISettings,
-  thumbnailHtmlArr: (string | undefined)[],
-  slidesLength: number,
+  // thumbnailHtmlArr: (string | undefined)[],
+  // slidesLength: number,
   options: { isSave: boolean; isForThumbnail?: boolean }
 ): {
   slideData: ISlideData;
@@ -346,7 +345,7 @@ function generateSlideData(
     layerStyle += `overflow: ${layerValues.overflow};`;
     layerStyle += `box-sizing: border-box;`;
 
-    layerStyle += addCommonPropertiesToStyle(layerStyle, layer);
+    layerStyle = addCommonPropertiesToStyle(layerStyle, layer);
 
     if (layerValues.hasLayoutChildren) {
       const t = layerValues.layoutChildren.type;
@@ -498,9 +497,9 @@ function generateSlideData(
         object,
         calculatedObjectSize,
         true,
-        options.isSave,
-        thumbnailHtmlArr, // for bullets
-        slidesLength // for bullets
+        options.isSave
+        // thumbnailHtmlArr, // for bullets
+        // slidesLength // for bullets
       );
 
       itemsData.push({
@@ -598,9 +597,9 @@ export function getObjectHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
-  isSave: boolean,
-  thumbnailHtmlArr: (string | undefined)[],
-  slidesCounter = 3
+  isSave: boolean
+  // thumbnailHtmlArr: (string | undefined)[],
+  // slidesCounter = 3
 ) {
   switch (object.type) {
     //case ObjectType.YOUTUBE_VIDEO:
@@ -623,8 +622,8 @@ export function getObjectHtml(
           calculatedObjectSize,
           isPlayer,
           isSave,
-          thumbnailHtmlArr,
-          slidesCounter,
+          // thumbnailHtmlArr,
+          // slidesCounter,
         });
       }
       return "";
@@ -633,22 +632,22 @@ export function getObjectHtml(
 
 // OBJECT HTML CREATOR FUNCTIONS **********************
 
-export function getImageThumbnailHtml(object: IObject) {
-  const imageValues = object.definition.values as ImageValues;
+// export function getImageThumbnailHtml(object: IObject) {
+//   const imageValues = object.definition.values as ImageValues;
 
-  if (!imageValues.image.image.sourceType) {
-    return `<div></div>`;
-  }
+//   if (!imageValues.image.image.sourceType) {
+//     return `<div></div>`;
+//   }
 
-  let style = "width: 100%;";
-  style += "height: 100%;";
-  style += `background-image:url('${imageValues.image.image.src}');`; // TODO: IMPORTANT!!! Add promise
-  style += `background-repeat:no-repeat;`;
-  //style += `background-size: cover;`;
-  style += `background-position: center center;`;
+//   let style = "width: 100%;";
+//   style += "height: 100%;";
+//   style += `background-image:url('${imageValues.image.image.src}');`; // TODO: IMPORTANT!!! Add promise
+//   style += `background-repeat:no-repeat;`;
+//   //style += `background-size: cover;`;
+//   style += `background-position: center center;`;
 
-  return `<div class="object-content" style="${style}"></div>`;
-}
+//   return `<div class="object-content" style="${style}"></div>`;
+// }
 
 /*function getCoverImageHtml(
   object: IObject,
@@ -672,7 +671,7 @@ export function getImageThumbnailHtml(object: IObject) {
     .positionVertical;
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-image:url('${imageProperties.url.value.url}');`;
@@ -701,7 +700,7 @@ function getGridImageHtml(
   const aV = "center";
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-image:url('${imageProperties.url.value.url}');`;
@@ -735,7 +734,7 @@ function getSourceImageHtml(
   const aV = (imageValues.placement as ICoverPlacementValue).positionVertical;
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-image:url('${imageValues.url.image.src}');`; //TODO: Important
@@ -779,7 +778,7 @@ function getCanvasHtml(
   const canvasProperties = object.definition.values as CanvasValues;
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
   style += "position: absolute;";
   if (!isPlayer) {
     style += "background-color: rgba(255,255,255,0.2);";

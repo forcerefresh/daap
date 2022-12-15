@@ -7,6 +7,7 @@ const {
   saveExports,
   loadExports,
 } = require("./project-utils");
+const { v4: uuid } = require("uuid");
 
 ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
   const data = JSON.parse(dataStr);
@@ -28,11 +29,7 @@ ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
   let projectItem;
   let projectItemIndex = -1;
   if (!id) {
-    id = 0;
-    forEach(projects, (project) => {
-      id = Math.max(parseInt(project.id), id);
-    });
-    id++;
+    id = uuid();
   } else {
     projectItem = projects.find((p) => p.id === id);
     projectItemIndex = projects.indexOf(projectItem);
@@ -141,14 +138,14 @@ ipcMain.handle("Projects::GetProject", async (event, dataStr) => {
   return { project };
 });
 
-ipcMain.handle("Projects::GetNextProjectId", async (event) => {
-  const projects = await loadProjects();
+// ipcMain.handle("Projects::GetNextProjectId", async (event) => {
+//   const projects = await loadProjects();
 
-  let maxId = 1;
+//   let maxId = 1;
 
-  projects.forEach((p) => {
-    maxId = Math.max(maxId, p.id);
-  });
+//   projects.forEach((p) => {
+//     maxId = Math.max(maxId, p.id);
+//   });
 
-  return maxId + 1;
-});
+//   return maxId + 1;
+// });

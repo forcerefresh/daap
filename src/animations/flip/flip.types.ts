@@ -6,4 +6,5 @@ export interface IFlipAnimation extends IAnimationBase {
   rotationTime: number;
   pauseTime: number;
   spinDirection: "cc" | "ccw";
+  rotateFirstElement: boolean;
 }

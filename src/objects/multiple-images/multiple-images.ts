@@ -22,6 +22,11 @@ import {
   PostProcessFuncReturnType,
 } from "webslider-sdk/lib/objects/objects-register";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
 
 const MULTI_IMAGE = "multi_image";
 
@@ -91,6 +96,11 @@ export function createMultiImageObject(
       values,
       valuesMetadata: {},
     },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+    },
   };
 }
 
@@ -130,8 +140,14 @@ export function getMultiImageHtml(props: {
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 
+  let objectContentStyle = "";
+  objectContentStyle += "position: absolute;";
+
+  objectContentStyle += "width: 100%;";
+  objectContentStyle += "height: 100%;";
+  objectContentStyle = addCommonPropertiesToStyle(objectContentStyle, object);
+
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-repeat:no-repeat;`;
@@ -139,7 +155,7 @@ export function getMultiImageHtml(props: {
   style += `background-position: ${aH} ${aV};`;
 
   let ret = "";
-  ret += `<div class="object-content" style="width: 100%; height: 100%;">`;
+  ret += `<div class="object-content" style="${objectContentStyle}">`;
   multiImageProperties.images.forEach(
     (image: IImageInputValue, idx: number) => {
       const imageitem = getMediaSrc("image", image.image);

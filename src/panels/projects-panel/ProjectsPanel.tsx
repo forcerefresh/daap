@@ -78,8 +78,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const deleteIdRef = useRef(-1);
-  const onDeleteProject = (id: number) => {
+  const deleteIdRef = useRef("-1");
+  const onDeleteProject = (id: string) => {
     setIsOpen(true);
     deleteIdRef.current = id;
   };
@@ -112,7 +112,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     setDeleteLoading(false);
   };
 
-  const onOpenProject = (id: number) => {
+  const onOpenProject = (id: string) => {
     getProject(id).then((response: any) => {
       const meta: IMeta = {
         id: response.project.id,

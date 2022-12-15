@@ -22,6 +22,17 @@ import {
 } from "webslider-sdk/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 const TRIANGLIFY = "trianglify";
 
@@ -238,6 +249,16 @@ export function createTrianglifyObject(
       values,
       valuesMetadata: {},
     },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+    },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -272,18 +293,21 @@ export function getTrianglifyHtml(props: {
 
   const svg = pattern.toSVG() as SVGElement;
 
-  const objectClassname = "object-content-" + object.id;
   let css = "";
   if (trValues.strokeColorSG === "color") {
-    css = `<style>
-      .${objectClassname} svg > path {
+    css = `
+      .object-content-${object.id} svg > path {
         stroke: ${colorToString(trValues.strokeColor)};
-      }</style>`;
+      }
+    `;
   }
 
+  css += `.object-content-${object.id} {
+    ${addCommonPropertiesToStyle("", object)}
+    ${addTransformPropertiesToStyle("", object)}   
+  }`;
   return (
-    css +
-    `<div class='object-content ${objectClassname}'>` +
+    `<style>${css}</style><div class='object-content object-content-${object.id}'>` +
     svg.outerHTML +
     "</div>"
   );

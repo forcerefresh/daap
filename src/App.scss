@@ -42,7 +42,9 @@ html {
   .bp3-dark
     .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]):active,
   .bp3-dark
-    .bp3-button:not([class*="bp3-intent-"]):not([class*="bp3-minimal"]).bp3-active {
+    .bp3-button:not([class*="bp3-intent-"]):not(
+      [class*="bp3-minimal"]
+    ).bp3-active {
     background-color: #2e3032;
   }
 
@@ -146,6 +148,11 @@ html {
   .input260 input,
   .input260 textarea {
     width: 260px !important;
+  }
+
+  .input330 input,
+  .input330 textarea {
+    width: 330px !important;
   }
 
   .input400 input,

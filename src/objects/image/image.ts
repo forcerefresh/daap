@@ -44,14 +44,14 @@ export const IMAGE = "image";
 export interface ImageValues {
   fit: ICoverPlacementValue;
   image: IImageInputValue;
-  useForThumbnail: boolean;
+  // useForThumbnail: boolean;
   preload: boolean;
 }
 
 export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
   IImageInput<"image">,
-  ICheckboxInput<"useForThumbnail">,
+  // ICheckboxInput<"useForThumbnail">,
   ICheckboxInput<"preload">
 ];
 
@@ -91,13 +91,13 @@ export function createImageObject(
       value: initialValue?.image || {},
       defaultValue: { image: {} },
     },
-    {
-      displayName: "Use for thumbnail",
-      propertyName: "useForThumbnail",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-    },
+    // {
+    //   displayName: "Use for thumbnail",
+    //   propertyName: "useForThumbnail",
+    //   inputType: InputType.CHECKBOX,
+    //   value: false,
+    //   defaultValue: false,
+    // },
     {
       displayName: "Preload",
       propertyName: "preload",
@@ -114,7 +114,7 @@ export function createImageObject(
       positionVertical: "center",
     },
     image: initialValue?.image || { image: { sourceType: "local" } },
-    useForThumbnail: false,
+    // useForThumbnail: false,
     preload: true,
   };
 
@@ -182,8 +182,8 @@ export function getImageHtml(props: {
   });
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
-  style += addTransformPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
   style += `background-image:url('${imageItem.src}');`;

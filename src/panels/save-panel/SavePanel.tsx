@@ -55,7 +55,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
-  const { saveProject, getNextProjectId } = globalContext.useProjectHook();
+  const { saveProject } = globalContext.useProjectHook();
   const { saveTemplate } = globalContext.useTemplateHook();
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
@@ -80,11 +80,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       // todo: loader
       metaClone.id = undefined;
       metaClone.name = "";
-      getNextProjectId().then((nextId) => {
-        metaClone.name = `Slider ${nextId}`;
-        metaClone.description = "";
-        setLocalMeta(metaClone);
-      });
+      //getNextProjectId().then((nextId) => {
+      metaClone.name = `Slider`; // ${nextId}`;
+      metaClone.description = "";
+      setLocalMeta(metaClone);
+      //});
     }
   }, []);
 
@@ -271,7 +271,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
       <div className={css.saveHolder}>
         {/*<Label>Align</Label>*/}
-        <div className={cx("input260", css.inputHolder)}>
+        <div className={cx("input330", css.inputHolder)}>
           {getTextField(
             "ID" +
               (isSaveAs ? " [From project ID: " + meta.id + "]" : "") +
@@ -288,7 +288,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           )}
         </div>
 
-        <div className={cx("input260", css.inputHolder)}>
+        <div className={cx("input330", css.inputHolder)}>
           {getTextField(
             "Name" +
               (isSaveAs ? " [From project name: " + meta.name + "]" : ""),
@@ -300,7 +300,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           )}
         </div>
 
-        <div className={cx("input260", css.inputHolder)}>
+        <div className={cx("input330", css.inputHolder)}>
           {getTextArea(
             "Description",
             localMeta.description,

@@ -8,9 +8,9 @@ export function getAnimationTypesForItem(itemType?: ItemType): AnimationType[] {
 
   switch (itemType) {
     case "object":
-      return ["in", "out", "animation", "event"];
+      return ["animation", "in", "out", "event"];
     case "layer":
-      return ["in", "out", "layer"];
+      return ["layer", "in", "out"];
     case "slide":
       return ["slide"];
   }
@@ -20,7 +20,7 @@ export const animationType2Name = (animationType: AnimationType): string => {
   const def: any = {
     in: "In",
     out: "Out",
-    animation: "Other",
+    animation: "Animation",
     layer: "Layer animation",
     slide: "Slide transition",
     event: "Event",

@@ -4,17 +4,17 @@ import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
 
 export const useProjectHook = () => {
-  const getNextProjectId = (): Promise<number> => {
-    return new Promise((resolve, reject) => {
-      const { ipcRenderer } = window.require("electron");
+  // const getNextProjectId = (): Promise<number> => {
+  //   return new Promise((resolve, reject) => {
+  //     const { ipcRenderer } = window.require("electron");
 
-      ipcRenderer.invoke("Projects::GetNextProjectId").then((result: any) => {
-        resolve(result);
-      });
-    });
-  };
+  //     ipcRenderer.invoke("Projects::GetNextProjectId").then((result: any) => {
+  //       resolve(result);
+  //     });
+  //   });
+  // };
 
-  const getProject = (id: number): Promise<any> => {
+  const getProject = (id: string): Promise<any> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
@@ -63,7 +63,7 @@ export const useProjectHook = () => {
     assetsUrls,
     extensions,
   }: {
-    id?: number;
+    id?: string;
     name: string;
     description?: string;
     slides?: number;
@@ -80,7 +80,7 @@ export const useProjectHook = () => {
     assetsUrls: GetAssetsUrlFuncReturnType;
     extensions: IExtensionItem[];
   }): Promise<{
-    id: number;
+    id: string;
     name: string;
     description: string;
     slides: number;
@@ -111,7 +111,7 @@ export const useProjectHook = () => {
     });
   };
 
-  const deleteProject = (id: number): Promise<{ id: number }> => {
+  const deleteProject = (id: string): Promise<{ id: number }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
@@ -132,6 +132,6 @@ export const useProjectHook = () => {
     getProjects,
     saveProject,
     deleteProject,
-    getNextProjectId,
+    //getNextProjectId,
   };
 };

@@ -1180,64 +1180,64 @@ function handleObjectUpdate(
       handleBulletsUpdate(object, dispatch, getState);
       break;
     }
-    case IMAGE: {
-      handleImageUpdate(object, dispatch, getState);
-      break;
-    }
+    // case IMAGE: {
+    //   handleImageUpdate(object, dispatch, getState);
+    //   break;
+    // }
     default: {
       dispatch(_updateObject(object));
     }
   }
 }
 
-function handleImageUpdate(
-  object: IObject,
-  dispatch: Dispatch,
-  getState: () => IStore
-): void {
-  // only one image object can have useForThumbnail
-  const object2 = getObjectThatHaveThumbnailSet(object, getState);
-  if (object2) {
-    const object2Clone = cloneDeep(object2);
-    (object2Clone.definition.values as ImageValues).useForThumbnail = false;
-    dispatch(_updateObject(object2Clone));
-  }
+// function handleImageUpdate(
+//   object: IObject,
+//   dispatch: Dispatch,
+//   getState: () => IStore
+// ): void {
+//   // only one image object can have useForThumbnail
+//   const object2 = getObjectThatHaveThumbnailSet(object, getState);
+//   if (object2) {
+//     const object2Clone = cloneDeep(object2);
+//     (object2Clone.definition.values as ImageValues).useForThumbnail = false;
+//     dispatch(_updateObject(object2Clone));
+//   }
 
-  dispatch(_updateObject(object));
-}
+//   dispatch(_updateObject(object));
+// }
 
 /* This method mutate object*/
-function getObjectThatHaveThumbnailSet(
-  object: IObject,
-  getState: () => IStore
-): IObject | undefined {
-  if (!(object.definition.values as ImageValues).useForThumbnail) {
-    return undefined;
-  }
+// function getObjectThatHaveThumbnailSet(
+//   object: IObject,
+//   getState: () => IStore
+// ): IObject | undefined {
+//   if (!(object.definition.values as ImageValues).useForThumbnail) {
+//     return undefined;
+//   }
 
-  const layer = getState().project.layers.layerById[object.layerId];
-  const slideId = layer.slideId;
-  const slide = getState().project.slides.slideById[slideId];
-  const layerById = getState().project.layers.layerById;
+//   const layer = getState().project.layers.layerById[object.layerId];
+//   const slideId = layer.slideId;
+//   const slide = getState().project.slides.slideById[slideId];
+//   const layerById = getState().project.layers.layerById;
 
-  let objectIdsInSlide: any[] = [];
-  slide.layerIds.forEach((layerId) => {
-    objectIdsInSlide = [...objectIdsInSlide, ...layerById[layerId].objectIds];
-  });
+//   let objectIdsInSlide: any[] = [];
+//   slide.layerIds.forEach((layerId) => {
+//     objectIdsInSlide = [...objectIdsInSlide, ...layerById[layerId].objectIds];
+//   });
 
-  let retObj: IObject | undefined;
-  const objectById = getState().project.objects.objectById;
-  objectIdsInSlide.forEach((objectId) => {
-    if (
-      objectId !== object.id &&
-      (objectById[objectId].definition.values as ImageValues).useForThumbnail
-    ) {
-      retObj = objectById[objectId];
-    }
-  });
+//   let retObj: IObject | undefined;
+//   const objectById = getState().project.objects.objectById;
+//   objectIdsInSlide.forEach((objectId) => {
+//     if (
+//       objectId !== object.id &&
+//       (objectById[objectId].definition.values as ImageValues).useForThumbnail
+//     ) {
+//       retObj = objectById[objectId];
+//     }
+//   });
 
-  return retObj;
-}
+//   return retObj;
+// }
 
 function handleBulletsUpdate(
   object: IObject,
@@ -1246,6 +1246,7 @@ function handleBulletsUpdate(
 ): void {
   postProcessBullet(object, getState);
   dispatch(_updateObject(object));
+  dispatch(forceRefresh());
 }
 
 /* This method mutate object*/
@@ -1272,8 +1273,6 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
         height: undefined,
       },
       isPlayer: false,
-      thumbnailHtmlArr: [],
-      slidesCounter: getState().project.slides.normalSlides.length,
     });
     const holder = document.createElement("div");
     holder.style.overflow = "visible";
@@ -1336,6 +1335,7 @@ function handleButtonUpdate(
 ): void {
   postProcessButton(object, getState);
   dispatch(_updateObject(object));
+  dispatch(forceRefresh());
 }
 
 function handleTextUpdate(

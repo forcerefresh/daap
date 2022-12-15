@@ -1,29 +1,30 @@
 // *** this file contains implementation for development
 
-import { forEach, remove } from "lodash-es";
+import { remove } from "lodash-es";
+import { v4 as uuid } from "uuid";
 import { IPlayerData } from "../../../export/i-export-html";
 import { IStore } from "../../../store/store";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
 
 export const useProjectHook = () => {
-  const getNextProjectId = (): Promise<number> => {
-    const projects: any[] = JSON.parse(
-      localStorage.getItem("projects") || "[]"
-    );
+  // const getNextProjectId = (): Promise<number> => {
+  //   const projects: any[] = JSON.parse(
+  //     localStorage.getItem("projects") || "[]"
+  //   );
 
-    let maxId = 1;
+  //   let maxId = 1;
 
-    projects.forEach((p) => {
-      maxId = Math.max(maxId, p.id);
-    });
+  //   projects.forEach((p) => {
+  //     maxId = Math.max(maxId, p.id);
+  //   });
 
-    return new Promise((resolve) => {
-      resolve(maxId + 1);
-    });
-  };
+  //   return new Promise((resolve) => {
+  //     resolve(maxId + 1);
+  //   });
+  // };
 
-  const getProject = (id: number): Promise<any> => {
+  const getProject = (id: string): Promise<any> => {
     const projects: any[] = JSON.parse(
       localStorage.getItem("projects") || "[]"
     );
@@ -57,7 +58,7 @@ export const useProjectHook = () => {
     });
   };
 
-  const deleteProject = (id: number): Promise<{ id: number }> => {
+  const deleteProject = (id: string): Promise<{ id: string }> => {
     let projects: any[] = JSON.parse(localStorage.getItem("projects") || "[]");
 
     remove(projects, (project: any) => {
@@ -88,7 +89,7 @@ export const useProjectHook = () => {
     preview,
     playerData,
   }: {
-    id?: number;
+    id?: string;
     name: string;
     description?: string;
     slides?: number;
@@ -105,7 +106,7 @@ export const useProjectHook = () => {
     assetsUrls: GetAssetsUrlFuncReturnType;
     extensions: IExtensionItem[];
   }): Promise<{
-    id: number;
+    id: string;
     name: string;
     description: string;
     slides: number;
@@ -117,11 +118,12 @@ export const useProjectHook = () => {
     let projectItem;
     let projectItemIndex = -1;
     if (!id) {
-      id = 0;
-      forEach(projects, (project) => {
-        id = Math.max(parseInt(project.id), id!);
-      });
-      id++;
+      id = uuid();
+      // id = 0;
+      // forEach(projects, (project) => {
+      //   id = Math.max(parseInt(project.id), id!);
+      // });
+      // id++;
     } else {
       projectItem = projects.find((p: any) => p.id === id);
       projectItemIndex = projects.indexOf(projectItem);
@@ -182,6 +184,6 @@ export const useProjectHook = () => {
     getProjects,
     saveProject,
     deleteProject,
-    getNextProjectId,
+    //getNextProjectId,
   };
 };

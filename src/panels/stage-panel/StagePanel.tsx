@@ -70,7 +70,6 @@ import ProjectSmallTimeline, {
 import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { getThumbnailHtmlArr } from "../../export/export-html-utils";
 import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
@@ -719,9 +718,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
 
     // thumbnail arr
-    const slidesArr = getNormalSlideArr(slides);
-    const slidesCounter = slidesArr.length;
-    const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
+    // const slidesArr = getNormalSlideArr(slides);
+    // const slidesCounter = slidesArr.length;
+    // const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
 
     const cssPosition = !layoutChildren ? "absolute" : "static";
 
@@ -769,9 +768,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 object,
                 calculatedObjectSize,
                 false,
-                false,
-                thumbnailHtmlArr,
-                slidesCounter
+                false
+                // thumbnailHtmlArr,
+                // slidesCounter
               ),
             }}
             style={objectStyle}
@@ -1003,9 +1002,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   { ...object, ...widthAndHeightObject },
                   { ...calculatedObjectSize },
                   false,
-                  false,
-                  thumbnailHtmlArr,
-                  slidesCounter
+                  false
+                  // thumbnailHtmlArr,
+                  // slidesCounter
                 ),
               }}
               style={{

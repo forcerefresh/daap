@@ -24,6 +24,11 @@ import {
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const TEXT = "text";
 
@@ -166,7 +171,7 @@ export function createTextObject(
       defaultValue: "left",
       options: [
         { value: "left", label: "Left" },
-        { value: "center", label: "Cente" },
+        { value: "center", label: "Center" },
         { value: "right", label: "Right" },
       ],
     },
@@ -213,6 +218,11 @@ export function createTextObject(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -228,7 +238,8 @@ export function getTextHtml(props: {
   };
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
   style += "font-family: " + textProperties.font.fontFamily + ";";
   style += "font-size: " + textProperties.fontSize + ";";
   const c = textProperties.color;

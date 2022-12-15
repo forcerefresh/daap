@@ -24,6 +24,11 @@ import {
 } from "webslider-sdk/lib/objects/common-properties";
 import { RGBColor } from "react-color";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const RICH_TEXT = "rich_text";
 
@@ -127,6 +132,11 @@ export function createRichTextObject(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -148,7 +158,8 @@ export function getRichTextHtml(props: {
   style += "height:" + calculatedObjectSize.height + ";";
   style += "position: absolute;";
 
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
 
   const css = `
     <style>

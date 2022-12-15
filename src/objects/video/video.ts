@@ -28,6 +28,11 @@ import {
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const VIDEO = "video";
 
@@ -109,6 +114,11 @@ export function createVideoObject(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -159,7 +169,8 @@ export function getVideoHtml(props: {
       });
 
       let style = "";
-      style += addCommonPropertiesToStyle(style, object);
+      style = addCommonPropertiesToStyle(style, object);
+      style = addTransformPropertiesToStyle(style, object);
       style += "width: 100%;";
       style += "height: 100%;";
       style += `background-image:url('${imageItem.src}');`;
@@ -182,7 +193,8 @@ export function getVideoHtml(props: {
 
   let style = "";
   style += `object-fit: ${videoFit.size};`;
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
 
   let attrs = "";
   if (isPlayer) attrs += "  autoplay muted";

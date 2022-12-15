@@ -32,11 +32,11 @@ export const IntegrationContext = React.createContext({
   useObjectStorageHook: () => ({
     supportStorageObjects: false,
     listStorageObjects: (req: {
-      projectId?: number;
+      projectId?: string;
     }): Promise<ObjectStorageItem[]> => Promise.resolve([]),
 
     listAssignedStorageObjects: (req: {
-      projectId: number;
+      projectId: string;
     }): Promise<ObjectStorageItem[]> => Promise.resolve([]),
 
     addStorageObject: (
@@ -54,22 +54,22 @@ export const IntegrationContext = React.createContext({
 
     assignBucketToProject: (req: {
       bucketId: string;
-      projectId: number;
+      projectId: string;
     }): Promise<{ status: string; error?: string }> =>
       Promise.resolve({ status: "" }),
 
     removeBucketFromProject: (req: {
       bucketId: string;
-      projectId: number;
+      projectId: string;
     }): Promise<{ status: string; error?: string }> =>
       Promise.resolve({ status: "" }),
 
-    getAssignedBucketIds: (req: { projectId: number }): Promise<string[]> =>
+    getAssignedBucketIds: (req: { projectId: string }): Promise<string[]> =>
       Promise.resolve([]),
 
     publishToStorageObject: (req: {
       bucketId: string;
-      projectId: number;
+      projectId: string;
       revision: number;
     }): Promise<{ status: string; error?: string }> =>
       Promise.resolve({ status: "" }),
@@ -79,18 +79,18 @@ export const IntegrationContext = React.createContext({
 
     openPublishUrl: (req: {
       bucketId: string;
-      projectId: number;
+      projectId: string;
       debug?: boolean;
     }): void => undefined,
 
     getPublishDetails: (req: {
       bucketId: string;
-      projectId: number;
+      projectId: string;
     }): Promise<{ indexUrl: string; jsonUrl: string; playerUrl: string }> => {
       return Promise.resolve({ indexUrl: "", jsonUrl: "", playerUrl: "" });
     },
 
-    downloadPackage: (req: { projectId: number }): Promise<string> =>
+    downloadPackage: (req: { projectId: string }): Promise<string> =>
       Promise.resolve(""),
   }),
 
@@ -250,7 +250,7 @@ export const IntegrationContext = React.createContext({
       }[];
       extensions: any[];
     }): Promise<{
-      id: number;
+      id: string;
       name: string;
       description: string;
       slides: number;
@@ -258,7 +258,7 @@ export const IntegrationContext = React.createContext({
       assetsUrls: { url: string; type: "url" | string }[];
     }> =>
       Promise.resolve({
-        id: 1,
+        id: "",
         name: "",
         description: "",
         slides: 0,
@@ -269,17 +269,17 @@ export const IntegrationContext = React.createContext({
 
   useProjectHook: () => ({
     /* returns project */
-    getProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+    getProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
     /* returns projects */
     getProjects: (from: number, search: string): Promise<any> =>
       Promise.resolve({}), // todo: add interface for api response
 
     /* delete project */
-    deleteProject: (id: number): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+    deleteProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
     /* get next id for project (NOTE: use only for slider name) */
-    getNextProjectId: (): Promise<number> => Promise.resolve(1),
+    //getNextProjectId: (): Promise<number> => Promise.resolve(1),
 
     /* save project */
     saveProject: ({
@@ -289,7 +289,7 @@ export const IntegrationContext = React.createContext({
       project,
       preview,
     }: {
-      id?: number;
+      id?: string;
       name: string;
       description?: string;
       slides?: number;
@@ -306,7 +306,7 @@ export const IntegrationContext = React.createContext({
       assetsUrls: GetAssetsUrlFuncReturnType;
       extensions: IExtensionItem[];
     }): Promise<{
-      id: number;
+      id: string;
       name: string;
       description: string;
       slides: number;
@@ -316,7 +316,7 @@ export const IntegrationContext = React.createContext({
       assetsUrls: { url: string; type: "url" | string }[];
     }> =>
       Promise.resolve({
-        id: 1,
+        id: "",
         name: "",
         description: "",
         slides: 0,

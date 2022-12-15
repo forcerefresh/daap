@@ -6,6 +6,8 @@ import {
   IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
+  IImageInputValue,
+  IMultiImageInput,
   InputType,
   INumberInput,
   ISelectInput,
@@ -17,7 +19,11 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
+  PreloadOrder,
+} from "webslider-sdk/lib/objects/objects-register";
 import bulletsIcon from "./bullets-icon.svg";
 import { addBorderRadius } from "../../utils/utils";
 import {
@@ -28,10 +34,15 @@ import {
 } from "webslider-sdk/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { addBorderBox } from "../../export/export-html";
+import { getMediaSrc } from "../../integration/utils/local-media";
+import { getImageThumbnailHtml } from "./bullets.utils";
 
 export const BULLETS = "bullets";
 
 export interface BulletsValues extends CommonObjectValues {
+  bulletsType: "bullets" | "thumbnails";
+  bulletsNumber: number;
+  thumbnails: IImageInputValue[];
   //basic
   type: "circle" | "rectangle";
   circleWidth: string;
@@ -81,6 +92,13 @@ export interface BulletsValues extends CommonObjectValues {
 }
 
 export type BulletsPropertiesTuple = [
+  IFormSwitchGroupItem<
+    "bulletsType",
+    [
+      IFormSwitchGroup<[INumberInput<"bulletsNumber">]>,
+      IFormSwitchGroup<[IMultiImageInput<"thumbnails">]>
+    ]
+  >,
   IFormGroupItem<
     [
       IFormSwitchGroupItem<
@@ -186,6 +204,40 @@ export function createBulletsObject(initialValue?: {
   object.supportedLayout.grid = false;
 
   const properties: BulletsPropertiesTuple = [
+    {
+      type: FormType.SWITCH_GROUP,
+      displayName: "",
+      propertyName: "bulletsType",
+      groups: [
+        {
+          groupName: "Bullets",
+          groupValue: "bullets",
+          elements: [
+            {
+              displayName: "Bullets",
+              propertyName: "bulletsNumber",
+              inputType: InputType.NUMBER,
+              value: 3,
+              defaultValue: 3,
+            },
+          ],
+        },
+        {
+          groupName: "Thumbnails",
+          groupValue: "thumbnails",
+          elements: [
+            {
+              displayName: "Images",
+              propertyName: "thumbnails",
+              inputType: InputType.MULTI_IMAGE,
+              value: initialValue?.images || [],
+              defaultValue: [],
+            },
+          ],
+        },
+      ],
+    },
+
     {
       displayName: "Basic",
       type: FormType.GROUP,
@@ -565,6 +617,9 @@ export function createBulletsObject(initialValue?: {
   ];
 
   const values: BulletsValues = {
+    bulletsType: "bullets",
+    bulletsNumber: 3,
+    thumbnails: [],
     //basic
     type: "circle",
     circleWidth: "15px",
@@ -629,35 +684,38 @@ export function getBulletsHtml(props: {
   object: IObject;
   calculatedObjectSize: React.CSSProperties;
   isPlayer?: boolean;
-  thumbnailHtmlArr?: (string | undefined)[];
-  slidesCounter?: number;
+  isSave?: boolean;
 }) {
-  const { object, slidesCounter = 3, thumbnailHtmlArr = [] } = props;
-  const buttonProperties = object.definition.values as BulletsValues;
+  const { object, isSave } = props;
+  const bulletsValues = object.definition.values as BulletsValues;
 
+  const bulletsNumber =
+    bulletsValues.bulletsType === "bullets"
+      ? bulletsValues.bulletsNumber
+      : bulletsValues.thumbnails.length;
   let style = "";
 
   // text properties
-  if (buttonProperties.type === "circle") {
-    style += "width: " + buttonProperties.circleWidth + ";";
-    style += "height: " + buttonProperties.circleWidth + ";";
+  if (bulletsValues.type === "circle") {
+    style += "width: " + bulletsValues.circleWidth + ";";
+    style += "height: " + bulletsValues.circleWidth + ";";
   } else {
-    style += "width: " + buttonProperties.rectWidth + ";";
-    style += "height: " + buttonProperties.rectHeight + ";";
+    style += "width: " + bulletsValues.rectWidth + ";";
+    style += "height: " + bulletsValues.rectHeight + ";";
   }
 
   //
 
-  if (buttonProperties.hasBackground) {
-    switch (buttonProperties.backgroundType) {
+  if (bulletsValues.hasBackground) {
+    switch (bulletsValues.backgroundType) {
       case "solid": {
-        const bgc = buttonProperties.backgroundColor;
+        const bgc = bulletsValues.backgroundColor;
         style += `background-color: rgba(${bgc?.r},${bgc?.g},${bgc?.b},${bgc?.a});`;
         break;
       }
       case "gradient": {
-        const bgc1 = buttonProperties.backgroundGradientColor1;
-        const bgc2 = buttonProperties.backgroundGradientColor2;
+        const bgc1 = bulletsValues.backgroundGradientColor1;
+        const bgc2 = bulletsValues.backgroundGradientColor2;
         style += `background-image: linear-gradient(rgba(${bgc1?.r},${bgc1?.g},${bgc1?.b},${bgc1?.a}), rgba(${bgc2?.r},${bgc2?.g},${bgc2?.b},${bgc2?.a}));`;
         break;
       }
@@ -666,57 +724,54 @@ export function getBulletsHtml(props: {
     style += `background: none;`;
   }
 
-  if (buttonProperties.hasBorder) {
-    style = addBorderBox(style, buttonProperties.borderSize);
+  if (bulletsValues.hasBorder) {
+    style = addBorderBox(style, bulletsValues.borderSize);
 
-    style += `border-style: ${buttonProperties.borderStyle};`;
-    const bc = buttonProperties.borderColor;
+    style += `border-style: ${bulletsValues.borderStyle};`;
+    const bc = bulletsValues.borderColor;
     style += `border-color: rgba(${bc?.r},${bc?.g},${bc?.b},${bc?.a});`;
-    style = addBorderRadius(style, buttonProperties.borderRadius);
+    style = addBorderRadius(style, bulletsValues.borderRadius);
   } else {
     style += "border-style: none;";
   }
 
-  if (buttonProperties.type === "circle") {
+  if (bulletsValues.type === "circle") {
     style += "border-radius: 50%;";
   }
 
-  style += `transition-duration: ${buttonProperties.hoverTransitionDuration}ms;`;
+  style += `transition-duration: ${bulletsValues.hoverTransitionDuration}ms;`;
 
   // HOVER START >>>>
   let cssHoverStyle = "";
 
-  if (buttonProperties.hasHoverBorder) {
-    cssHoverStyle = addBorderBox(
-      cssHoverStyle,
-      buttonProperties.hoverBorderSize
-    );
+  if (bulletsValues.hasHoverBorder) {
+    cssHoverStyle = addBorderBox(cssHoverStyle, bulletsValues.hoverBorderSize);
 
-    cssHoverStyle += `border-style: ${buttonProperties.hoverBorderStyle};`;
-    const bhc = buttonProperties.hoverBorderColor;
+    cssHoverStyle += `border-style: ${bulletsValues.hoverBorderStyle};`;
+    const bhc = bulletsValues.hoverBorderColor;
     cssHoverStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
     cssHoverStyle = addBorderRadius(
       cssHoverStyle,
-      buttonProperties.hoverBorderRadius
+      bulletsValues.hoverBorderRadius
     );
   } else {
     //cssHoverStyle += "border-style: none;";
   }
 
-  if (buttonProperties.type === "circle") {
+  if (bulletsValues.type === "circle") {
     cssHoverStyle += "border-radius: 50%;";
   }
 
-  if (buttonProperties.hasHoverBackground) {
-    switch (buttonProperties.hoverBackgroundType) {
+  if (bulletsValues.hasHoverBackground) {
+    switch (bulletsValues.hoverBackgroundType) {
       case "solid": {
-        const hbgc = buttonProperties.hoverBackgroundColor;
+        const hbgc = bulletsValues.hoverBackgroundColor;
         cssHoverStyle += `background-color: rgba(${hbgc?.r},${hbgc?.g},${hbgc?.b},${hbgc?.a});`;
         break;
       }
       case "gradient": {
-        const hbgc1 = buttonProperties.hoverBackgroundGradientColor1;
-        const hbgc2 = buttonProperties.hoverBackgroundGradientColor2;
+        const hbgc1 = bulletsValues.hoverBackgroundGradientColor1;
+        const hbgc2 = bulletsValues.hoverBackgroundGradientColor2;
         cssHoverStyle += `background-image: linear-gradient(rgba(${hbgc1?.r},${hbgc1?.g},${hbgc1?.b},${hbgc1?.a}), rgba(${hbgc2?.r},${hbgc2?.g},${hbgc2?.b},${hbgc2?.a}));`;
         break;
       }
@@ -729,37 +784,37 @@ export function getBulletsHtml(props: {
   // ACTIVE START >>>>
   let cssActiveStyle = "";
 
-  if (buttonProperties.hasActiveBorder) {
+  if (bulletsValues.hasActiveBorder) {
     cssActiveStyle = addBorderBox(
       cssActiveStyle,
-      buttonProperties.activeBorderSize
+      bulletsValues.activeBorderSize
     );
 
-    cssActiveStyle += `border-style: ${buttonProperties.activeBorderStyle};`;
-    const bhc = buttonProperties.activeBorderColor;
+    cssActiveStyle += `border-style: ${bulletsValues.activeBorderStyle};`;
+    const bhc = bulletsValues.activeBorderColor;
     cssActiveStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
     cssActiveStyle = addBorderRadius(
       cssActiveStyle,
-      buttonProperties.activeBorderRadius
+      bulletsValues.activeBorderRadius
     );
   } else {
     //cssActiveStyle += "border-style: none;";
   }
 
-  if (buttonProperties.type === "circle") {
+  if (bulletsValues.type === "circle") {
     cssActiveStyle += "border-radius: 50%;";
   }
 
-  if (buttonProperties.hasActiveBackground) {
-    switch (buttonProperties.activeBackgroundType) {
+  if (bulletsValues.hasActiveBackground) {
+    switch (bulletsValues.activeBackgroundType) {
       case "solid": {
-        const hbgc = buttonProperties.activeBackgroundColor;
+        const hbgc = bulletsValues.activeBackgroundColor;
         cssActiveStyle += `background-color: rgba(${hbgc?.r},${hbgc?.g},${hbgc?.b},${hbgc?.a});`;
         break;
       }
       case "gradient": {
-        const hbgc1 = buttonProperties.activeBackgroundGradientColor1;
-        const hbgc2 = buttonProperties.activeBackgroundGradientColor2;
+        const hbgc1 = bulletsValues.activeBackgroundGradientColor1;
+        const hbgc2 = bulletsValues.activeBackgroundGradientColor2;
         cssActiveStyle += `background-image: linear-gradient(rgba(${hbgc1?.r},${hbgc1?.g},${hbgc1?.b},${hbgc1?.a}), rgba(${hbgc2?.r},${hbgc2?.g},${hbgc2?.b},${hbgc2?.a}));`;
         break;
       }
@@ -777,11 +832,11 @@ export function getBulletsHtml(props: {
       overflow: hidden;
     }
     .object-content-item-${object.id}:not(:first-child) {
-      margin-left: ${buttonProperties.gap};
+      margin-left: ${bulletsValues.gap};
     }
   
     .object-content-item-${object.id} > div {
-      background-size: ${buttonProperties.thumbnailSize};
+      background-size: ${bulletsValues.thumbnailSize};
     }
   
     .object-content-item-${object.id}:hover {
@@ -795,15 +850,27 @@ export function getBulletsHtml(props: {
     </style>`;
 
   let bulletsHtml = "";
-  for (let i = 0; i < slidesCounter; i++) {
-    bulletsHtml += `<div class="object-content-item-${object.id}">
-          ${
-            buttonProperties.useThumbnails && thumbnailHtmlArr?.[i]
-              ? thumbnailHtmlArr?.[i]
-              : ""
-          }
-        </div>`;
+  if (bulletsValues.bulletsType === "bullets") {
+    for (let i = 0; i < bulletsNumber; i++) {
+      bulletsHtml += `<div class="object-content-item-${object.id}"></div>`;
+    }
+  } else if (bulletsValues.bulletsType === "thumbnails") {
+    for (let i = 0; i < bulletsNumber; i++) {
+      const imageItem = getMediaSrc(
+        "image",
+        bulletsValues.thumbnails[i].image,
+        {
+          useId: isSave,
+          filename: bulletsValues.thumbnails[i].filename,
+        }
+      );
+
+      bulletsHtml += `<div class="object-content-item-${object.id}">
+        ${getImageThumbnailHtml(imageItem.src)}
+      </div>`;
+    }
   }
+
   // HOVER END <<<
   return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="position:absolute; display: flex;">${bulletsHtml}</div>
     `;
@@ -827,6 +894,30 @@ export async function bulletsSizeUpdate(props: {
   //div.style.width = calculatedObjectSize.width;
   //div.style.height = calculatedObjectSize.height;
 }
+
+export const getBulletsAssetsUrls = (
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType => {
+  const bulletsValues = props.values as BulletsValues;
+
+  if (bulletsValues.bulletsType === "bullets") return [];
+
+  const ret: GetAssetsUrlFuncReturnType = [];
+  bulletsValues.thumbnails.forEach((image) => {
+    if (image.image.sourceType) {
+      ret.push({
+        id: image.image.id,
+        url: image.image.url,
+        filename: image.filename,
+        localFilename: image.image.filename,
+        sourceType: image.image.sourceType,
+        mediaType: "image",
+      });
+    }
+  });
+
+  return ret;
+};
 
 export const bulletsMeta = {
   name: "BULLETS",

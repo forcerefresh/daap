@@ -26,6 +26,11 @@ import {
 } from "webslider-sdk/lib/objects/common-properties";
 import { JSONSourceConnector } from "../json-loader/json-source-connector";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const TEXT_TARGET = "text_target";
 
@@ -87,7 +92,7 @@ export function createTextTarget(
       defaultValue: "",
     },
     {
-      displayName: "Text",
+      displayName: "Sample text",
       propertyName: "sampleText",
       inputType: InputType.TEXTAREA,
       value: (initialValue?.text as string) || "",
@@ -183,7 +188,7 @@ export function createTextTarget(
       defaultValue: "left",
       options: [
         { value: "left", label: "Left" },
-        { value: "center", label: "Cente" },
+        { value: "center", label: "Center" },
         { value: "right", label: "Right" },
       ],
     },
@@ -232,6 +237,11 @@ export function createTextTarget(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -248,7 +258,8 @@ export function getTextTargetHtml(props: {
   };
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
   style += "font-family: " + textProperties.font.fontFamily + ";";
   style += "font-size: " + textProperties.fontSize + ";";
   const c = textProperties.color;

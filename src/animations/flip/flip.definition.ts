@@ -1,5 +1,6 @@
 import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import {
+  ICheckboxInput,
   InputType,
   INumberInput,
   ISelectInput,
@@ -9,7 +10,8 @@ import { FLIP_ANIMATION, IFlipAnimation } from "./flip.types";
 export type IFlipTuple = [
   INumberInput<"rotationTime">,
   INumberInput<"pauseTime">,
-  ISelectInput<"spinDirection">
+  ISelectInput<"spinDirection">,
+  ICheckboxInput<"rotateFirstElement">
 ];
 
 export const flipDefinition: IAnimationDefinition<IFlipTuple> = {
@@ -41,6 +43,13 @@ export const flipDefinition: IAnimationDefinition<IFlipTuple> = {
         { label: "Counterclockwise", value: "ccw" },
       ],
     },
+    {
+      displayName: "Rotate first element",
+      propertyName: "rotateFirstElement",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+    },
   ],
 };
 
@@ -58,4 +67,5 @@ export const flipDefaults: IFlipAnimation = {
   rotationTime: 1000,
   pauseTime: 500,
   spinDirection: "cc",
+  rotateFirstElement: false,
 };

@@ -12,6 +12,11 @@ import {
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const FRAME = "frame";
 
@@ -50,6 +55,11 @@ export function createFrameObject(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -64,7 +74,8 @@ export function getFrameHtml(props: {
   }*/
 
   let style = "";
-  style += addCommonPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
 

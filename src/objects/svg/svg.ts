@@ -24,6 +24,11 @@ import {
 import { RGBColor } from "react-color";
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export const SVG = "svg";
 
@@ -156,6 +161,11 @@ export function createSvgObject(
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -204,6 +214,7 @@ export function getSvgHtml(props: {
       transform: scaleX(${scaleX}) scaleY(${scaleY});
       transform-origin: top left;
       ${addCommonPropertiesToStyle("", object)}
+      ${addTransformPropertiesToStyle("", object)}   
     }
     .object-content-${object.id} svg {
       width: 100%;

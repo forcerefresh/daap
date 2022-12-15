@@ -5,7 +5,7 @@ import {
 } from "../actions/actions";
 
 export interface IMeta {
-  id?: number;
+  id?: string;
   name?: string;
   description?: string;
   slides?: number;

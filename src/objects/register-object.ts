@@ -8,6 +8,7 @@ import {
   bulletsMeta,
   bulletsSizeUpdate,
   createBulletsObject,
+  getBulletsAssetsUrls,
   getBulletsHtml,
 } from "./bullets/bullets";
 import {
@@ -142,7 +143,12 @@ registerObject(
   bulletsMeta,
   createBulletsObject,
   bulletsSizeUpdate,
-  getBulletsHtml
+  getBulletsHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  getBulletsAssetsUrls
 );
 
 registerObject(
