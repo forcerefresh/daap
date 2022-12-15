@@ -19,6 +19,17 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import svg from "./spinner-icon.svg";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 const SPINNER = "spinner";
 
@@ -134,6 +145,16 @@ export function createSpinnerObject(
       values,
       valuesMetadata: {},
     },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+    },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -161,8 +182,12 @@ export function getSpinnerHtml(props: {
       content = getBars(spinnerValues, isPlayer);
       break;
   }
+  let style = "";
+  style += `width: 100%; height: 100%;`;
+  style = addCommonPropertiesToStyle(style, object);
+  style = addTransformPropertiesToStyle(style, object);
 
-  return `<div class="object-content object-content-${object.id}" style="width: 100%; height: 100%;">${content?.html}</div><style>${content?.css}</style>`;
+  return `<div class="object-content object-content-${object.id}" style="${style}">${content?.html}</div><style>${content?.css}</style>`;
 }
 
 export async function spinnerSizeUpdate(props: {
