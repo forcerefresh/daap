@@ -39,6 +39,7 @@ import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
 
 gsap.defaults(); // in order to bundle gsap
+gsap.install(window);
 
 export enum InTransitionEnum {
   NO = 0,
