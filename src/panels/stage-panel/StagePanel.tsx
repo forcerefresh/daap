@@ -74,6 +74,7 @@ import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -685,11 +686,21 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     layerCss += `.${layerClassName} {
      ${addCommonPropertiesToStyle("", layer)}
+     ${addTransformPropertiesToStyle("", layer)}
      z-index: 100;
     }`;
 
+    const layerHolderStyle: React.CSSProperties = {};
+    console.log(layer.transformDefinition?.values?.hasPerspective);
+    if (layer.transformDefinition?.values?.hasPerspective) {
+      layerHolderStyle.perspective = `${layer.transformDefinition?.values?.transformPerspective}`;
+    }
+
+    // NOTE: when layer has layout
+    layerHolderStyle.pointerEvents = "none";
+
     return (
-      <div key={`layer-${layer.id}`}>
+      <div key={`layer-${layer.id}`} style={layerHolderStyle}>
         <style>{layerCss}</style>
         <div
           className={cx(layerClassName, "LAYER", {
@@ -754,6 +765,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       if (layoutChildren?.type === "inline") {
         objectHolderStyle.display = "inline-block";
       }
+
+      objectHolderStyle.pointerEvents = "all";
 
       return (
         <div
@@ -902,6 +915,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     // object holder
     const objectHolderStyle: CSSProperties = {
       position: "relative",
+      pointerEvents: "all",
     };
 
     return (
@@ -1242,10 +1256,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     };
     layerStyle.position = "absolute";
 
-    layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
-    layerStyle.height =
-      parseInt(layerStyle.height as string) * stageZoom + "px";
+    //layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
+    //layerStyle.height = parseInt(layerStyle.height as string) * stageZoom + "px";
 
+    layerStyle.width = "auto";
+    layerStyle.height = "auto";
+
+    //layerStyle.pointerEvents = "none";
     return (
       <div
         key={`layer-resizer-${layer.id}`}

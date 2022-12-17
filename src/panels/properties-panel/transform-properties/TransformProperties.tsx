@@ -60,6 +60,23 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     );
   };
 
+  const renderLayerProperties = (layer: ILayer) => {
+    if (!layer.transformDefinition)
+      return "Element does not have common transform properties";
+
+    return (
+      <>
+        {renderProperties(
+          layer.transformDefinition.properties!, // TODO
+          layer.transformDefinition.values,
+          layer.transformDefinition.valuesMetadata,
+          layer,
+          _updateLayer
+        )}
+      </>
+    );
+  };
+
   const renderProperties = (
     properties: any[],
     values: any,
@@ -155,7 +172,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "layer" && layer) {
-      return <div>Layer has no transform properties.</div>;
+      return renderLayerProperties(layer);
     }
 
     if (selectionForProperties?.type === "object" && object) {

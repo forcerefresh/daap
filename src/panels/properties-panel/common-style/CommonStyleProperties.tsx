@@ -60,6 +60,23 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
     );
   };
 
+  const renderLayerProperties = (layer: ILayer) => {
+    if (!layer.commonStyleDefinition)
+      return "Element does not have common style properties";
+
+    return (
+      <>
+        {renderProperties(
+          layer.commonStyleDefinition.properties!, // TODO
+          layer.commonStyleDefinition.values,
+          layer.commonStyleDefinition.valuesMetadata,
+          layer,
+          _updateLayer
+        )}
+      </>
+    );
+  };
+
   const renderProperties = (
     properties: any[],
     values: any,
@@ -156,7 +173,7 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "layer" && layer) {
-      return null;
+      return renderLayerProperties(layer);
     }
 
     if (selectionForProperties?.type === "object" && object) {

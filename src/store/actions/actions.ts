@@ -56,6 +56,7 @@ import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
 import {
+  getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
@@ -63,6 +64,10 @@ import { BUTTON, getButtonHtml } from "../../objects/button/button";
 import { getRichTextHtml, RICH_TEXT } from "../../objects/rich-text/rich-text";
 import { BULLETS, getBulletsHtml } from "../../objects/bullets/bullets";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import {
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -330,9 +335,18 @@ export function addNewLayer(slideId: string): any {
               type: "common",
             },
           },
-          ...getCommonPropertiesValues(),
         },
-        valuesMetadata: { ...{}, ...getCommonPropertiesMetadataValues() },
+        valuesMetadata: {},
+      },
+      commonStyleDefinition: {
+        properties: [...getCommonObjectPropertiesDefinition()],
+        values: { ...getCommonPropertiesValues() },
+        valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+      },
+      transformDefinition: {
+        properties: [...getTransformObjectPropertiesDefinition()],
+        values: { ...getTransformPropertiesValues() },
+        valuesMetadata: {},
       },
       layout: "none",
       supportedLayout: {

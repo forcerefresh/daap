@@ -21,12 +21,15 @@ Bugs
 - (DONE) IMAGE LIBRARY - poruka search local image
 - (DONE) Snimanje na razlicitim device prikazuje na Thumbnaill sve 
 - (DONE) style and transform gde treba da se vidi
+- (DONE) GSAP srediti kod playare
+- (DONE) Transform animacije nerade na layeru
 
-- GSAP srediti kod playare
-- Transform animacije nerade na layeru
+- Podesiti animacije gde treba da se vide
 - Blokira prelazak na bilo koji slajd nakon prvog manuelnog prelacka na slajd
-- ZA style treba default pixeli da se stage
+- Za style treba default pixeli da se stage
+
 - JSON text target and image and source - check icons and make them external
+
 
 V1 or V2:
 - disable html selection. when user click and mouse move 
@@ -45,3 +48,5 @@ Release V2:
 - Rich text input text font is different 
 - Bullets cant resize using cursor.(this is expected). We should disable resize for non resizable objects.
 - For electron we are 
+- ENH. POC slides (allow user to expiriment in real project)
+- ENH. Dodati da animation/transition moze da se disejlbluje

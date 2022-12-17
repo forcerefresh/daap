@@ -1,5 +1,5 @@
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
+import { getObjectOrLayerElementById } from "../animation-utils";
 import { getMethodByType } from "../common";
 import { IZoomInAnimation, ZOOM_ANIMATION } from "./zoom.types";
 import gsap from "gsap";
@@ -11,7 +11,7 @@ export function zoomAnimation() {
   function init(config: IZoomInAnimation) {
     logger.animation.debug(`${ZOOM_ANIMATION} init`);
 
-    element = getObjectElementById(config.itemId!);
+    element = getObjectOrLayerElementById(config.itemId!);
 
     timeline = gsap.timeline({ paused: true });
     if (config.type === "in") {

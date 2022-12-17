@@ -41,6 +41,7 @@ export interface ILayer extends ILayout {
     valuesMetadata: { [key: string]: IInputMetadataValues };
   };
   commonStyleDefinition?: IDefinition;
+  transformDefinition?: IDefinition;
 }
 
 export interface ILayerValues {
@@ -56,8 +57,8 @@ export interface ILayers {
 
 export type LayerTuple = [
   ISelectInput<"overflow">,
-  IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>,
-  ...CommonPropertiesTuple
+  IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>
+  //...CommonPropertiesTuple
 ];
 
 export const layerDefinition: LayerTuple = [
@@ -107,5 +108,5 @@ export const layerDefinition: LayerTuple = [
       },
     ],
   },
-  ...getCommonObjectPropertiesDefinition(),
+  //...getCommonObjectPropertiesDefinition(),
 ];

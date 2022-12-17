@@ -1,7 +1,7 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
+import { getObjectOrLayerElementById } from "../animation-utils";
 import { FADE_ANIMATION, IFadeAnimation } from "./fade.types";
 
 export function fadeAnimation() {
@@ -10,12 +10,14 @@ export function fadeAnimation() {
 
   let isInitialized = false;
 
+  console.log("FADE");
   function init(config: IFadeAnimation) {
     logger.animation.debug(`${FADE_ANIMATION} init`);
 
     if (isInitialized) return;
 
-    element = getObjectElementById(config.itemId!);
+    element = getObjectOrLayerElementById(config.itemId!);
+    console.log(element);
     // initialState.opacity = element.style.opacity;
 
     timeline = gsap.timeline({ paused: true });

@@ -1,7 +1,7 @@
 import { getMethodByType } from "../common";
 import gsap from "gsap";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { getObjectElementById } from "../animation-utils";
+import { getObjectOrLayerElementById } from "../animation-utils";
 import { ISlideAnimation } from "./slide.types";
 
 export function slideAnimation() {
@@ -14,7 +14,7 @@ export function slideAnimation() {
   function init(config: ISlideAnimation) {
     logger.animation.debug("slide init");
 
-    element = getObjectElementById(config.itemId!);
+    element = getObjectOrLayerElementById(config.itemId!);
     initialState.transform = element.style.transform;
 
     const xy = getXY(config.from, config.distance);

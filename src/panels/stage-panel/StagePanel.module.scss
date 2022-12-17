@@ -92,14 +92,15 @@
 }
 
 .layer {
-  &::after {
-    content: "";
-    position: absolute;
-    width: inherit;
-    height: inherit;
-    z-index: 10000;
-    box-shadow: 10px 10px 0px 10000px rgba(86, 86, 86, 0.2);
-  }
+  // TODO: IMPORTANT: this is for layer selection background
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   width: inherit;
+  //   height: inherit;
+  //   z-index: 10000;
+  //   box-shadow: 10px 10px 0px 10000px rgba(86, 86, 86, 0.2);
+  // }
 }
 
 .layerMoveForResizerWTF {

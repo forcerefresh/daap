@@ -49,6 +49,7 @@ import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animatio
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 
 export function generatePlayerData(
   sources: ISources,
@@ -310,6 +311,25 @@ function generateSlideData(
         -1;
     }
 
+    // TODO; we have similar code for layer
+    const layerEffectWrappers: string[] = [];
+    forOwn(layer.transitions, (tArr: ITransition[] | any) => {
+      tArr.forEach((t: ITransition) => {
+        const def = getAppAnimationDefinition(t?.animation?.id);
+        if (def) {
+          const requireWrapperElement = (def.formDefaults as IAnimationBase)
+            .requireWrapperElement;
+          if (requireWrapperElement) {
+            const animationWrapperClassName = `animation-wrapper-${def?.animationId}-${layer.id}`;
+            layerEffectWrappers.push(animationWrapperClassName);
+          }
+          if (def?.external) {
+            extensionTypes.push(t.animation.id);
+          }
+        }
+      });
+    });
+
     const layerValues = layer.definition.values as ILayerValues;
 
     const layerClassName = "layer-" + layer.id;
@@ -345,8 +365,6 @@ function generateSlideData(
     layerStyle += `overflow: ${layerValues.overflow};`;
     layerStyle += `box-sizing: border-box;`;
 
-    layerStyle = addCommonPropertiesToStyle(layerStyle, layer);
-
     if (layerValues.hasLayoutChildren) {
       const t = layerValues.layoutChildren.type;
       if (t === "row" || t === "column") {
@@ -362,6 +380,11 @@ function generateSlideData(
           layerStyle += `flex-direction: column;`;
         }
       }
+    }
+
+    // NOTE exception for perspective
+    if (layer.transformDefinition?.values?.hasPerspective) {
+      layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
     }
 
     const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
@@ -402,6 +425,21 @@ function generateSlideData(
     layerStyle +=
       options.isForThumbnail && hideForThumbnail ? "display:none;" : "";
 
+    let layerWrapperStyle = layerStyle;
+    layerStyle +=
+      "position: relative; left:initial; top: initial; overflow: visible;";
+
+    // layerStyle += "perspective: 150px";
+    layerStyle = addCommonPropertiesToStyle(layerStyle, layer);
+    layerStyle = addTransformPropertiesToStyle(layerStyle, layer);
+
+    html += `    <div class="layer-wrapper layer-wrapper-${layer.id}" style='${layerWrapperStyle}'>`; // open layer wrapper
+
+    html += layerEffectWrappers.map(
+      (cn) =>
+        `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
+    );
+
     html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
       layer
     )}" style="${layerStyle}">`; // layer open
@@ -422,6 +460,7 @@ function generateSlideData(
         extensionTypes.push(object.type);
       }
 
+      // TODO; we have similar code for layer
       const effectWrappers: string[] = [];
       forOwn(object.transitions, (tArr: ITransition[] | any) => {
         tArr.forEach((t: ITransition) => {
@@ -478,7 +517,7 @@ function generateSlideData(
       style +=
         "position: relative; left:initial; top: initial; overflow: visible;";
 
-      // NOTE excepton for perspective
+      // NOTE exception for perspective
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
@@ -537,7 +576,9 @@ function generateSlideData(
       html += "      </div>"; // object close wrapper
     });
 
+    html += layerEffectWrappers.map((cn) => `</div>`); // animation-wrapper close
     html += "    </div>"; // layer close
+    html += "    </div>"; // layer wrapper close
   });
 
   html += "  </div>"; // slide close

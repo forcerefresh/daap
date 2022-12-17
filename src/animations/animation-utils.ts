@@ -5,6 +5,11 @@ export function getObjectElementById(id: string): HTMLDivElement {
   return el;
 }
 
+export function getObjectOrLayerElementById(id: string): HTMLDivElement {
+  return (document.getElementsByClassName(`object-${id}`)[0] ||
+    document.getElementsByClassName(`layer-${id}`)[0]) as HTMLDivElement;
+}
+
 export function getObjectWrapperElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
     `object-wrapper-${id}`
