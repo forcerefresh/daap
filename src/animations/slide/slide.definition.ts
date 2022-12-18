@@ -42,7 +42,8 @@ export const slideDefaults: ISlideAnimation = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedAnimationTypes: ["in", "out", "event"],
+  supportedAnimationTypes: ["in", "out", "event", "animation", "layer"],
+  supportLayers: true,
   canBeCombined: true,
   // specific this animation
   distance: 100,

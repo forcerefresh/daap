@@ -23,19 +23,24 @@ Bugs
 - (DONE) style and transform gde treba da se vidi
 - (DONE) GSAP srediti kod playare
 - (DONE) Transform animacije nerade na layeru
+- (DONE) Podesiti animacije gde treba da se vide
 
-- Podesiti animacije gde treba da se vide
+- Magnetic effect - Add mouse area offset (add offset to animation properties)
+- Youtube player - Remove minimal and use only standard player
+- Prikazati kada nema instaliran animation ili object
+- Srediti externe objekte i efekte
 - Blokira prelazak na bilo koji slajd nakon prvog manuelnog prelacka na slajd
 - Za style treba default pixeli da se stage
 
 - JSON text target and image and source - check icons and make them external
-
 
 V1 or V2:
 - disable html selection. when user click and mouse move 
 - Add button for manual load more (Library). Instead of auto infinitive scroll.
 
 Release V2:
+- Prilikom otvaranja templejta prikazati missing extensions
+- falling leaves - trenutno uklanja sadrzaj. Ili omoguciti samo na Frame objecktu ili da sadrzaj ostane vidljiv.
 - Behavior for animations for objects that are visible on some devices.
   What is happening when user resize or rotate phone and breakpoint is changed.
   Currently we are showing object without animation.

@@ -11,6 +11,8 @@ import css from "./MyExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { unregisterObject } from "webslider-sdk/lib/objects/objects-register";
+import { unregisterAnimation } from "webslider-sdk/lib/animations/animations-register";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -60,6 +62,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     fetchImages({
       type: "extension",
+      tags: [],
       from: 0,
       search: searchValue,
       perPage: 100000,
@@ -104,6 +107,13 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       getInstalledExtensions().then((res) => {
         setInstalledExtensions(res.items);
       });
+
+      if (mItem?.componentType === "object") {
+        unregisterObject(mItem.type!);
+      }
+      if (mItem?.componentType === "animation") {
+        unregisterAnimation(mItem.type!);
+      }
 
       setIsUninstallOpen(false);
       setUninstallOrDeleteLoading(false);

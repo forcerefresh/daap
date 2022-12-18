@@ -10,14 +10,12 @@ export function fadeAnimation() {
 
   let isInitialized = false;
 
-  console.log("FADE");
   function init(config: IFadeAnimation) {
     logger.animation.debug(`${FADE_ANIMATION} init`);
 
     if (isInitialized) return;
 
     element = getObjectOrLayerElementById(config.itemId!);
-    console.log(element);
     // initialState.opacity = element.style.opacity;
 
     timeline = gsap.timeline({ paused: true });

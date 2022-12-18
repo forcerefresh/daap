@@ -90,7 +90,7 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^1.1.38",
+    "webslider-sdk": "^1.1.42",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
     "yup": "^0.32.11"

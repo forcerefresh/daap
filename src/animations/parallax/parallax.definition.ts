@@ -26,6 +26,7 @@ export const parallaxDefaults: IParallaxAnimation = {
   hasChildEase: false,
   ease: "none",
   supportedAnimationTypes: ["layer"],
+  supportLayers: true,
   canBeCombined: false,
   library: "animejs",
   // animation properties

@@ -120,6 +120,7 @@ export const textDefaults: ITextAnimation = {
   hasChildEase: false,
   ease: "none",
   supportedAnimationTypes: ["in", "out"],
+  supportedObjectTypes: ["text"],
   canBeCombined: false,
   // animation properties
   durationPerChar: 1000,

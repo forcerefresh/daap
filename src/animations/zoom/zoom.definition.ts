@@ -34,7 +34,8 @@ export const zoomDefaults: IZoomInAnimation = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedAnimationTypes: ["in", "out"],
+  supportedAnimationTypes: ["in", "out", "animation", "layer"],
+  supportLayers: true,
   canBeCombined: true,
   outStartTime: {
     customValue: "0ms",

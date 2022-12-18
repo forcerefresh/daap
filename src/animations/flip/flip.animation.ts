@@ -61,7 +61,7 @@ export function flipAnimation() {
 
     console.log(rotationTime);
     objectContentEl.style.display = "none";
-    timeline = gsap.timeline({ repeat: -1 });
+    timeline = gsap.timeline();
     // timeline.to(
     //   containers[0],
     //   {

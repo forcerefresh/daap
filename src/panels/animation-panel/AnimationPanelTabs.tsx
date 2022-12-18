@@ -70,7 +70,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     event: 0,
   });
 
-  let item: any | undefined;
+  let item: IObject | ILayer | ISlide | any | undefined;
   let transitions: ITransitions | undefined;
   if (id) {
     switch (itemType) {
@@ -162,15 +162,16 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     const animations = transitions?.[section] || [];
 
     const hasStructuredEff = !!animations.find((eff) => !eff.canBeCombined);
-    const isAddDisabled = hasStructuredEff ? true : false;
-    const disabledMessage = hasStructuredEff
-      ? "Only one Structure Animation is allowed"
-      : "";
+    let isAddStructuralDisabled = hasStructuredEff ? true : false;
+    // const disabledMessage = hasStructuredEff
+    //   ? "Only one Structure Animation is allowed"
+    //   : "";
 
-    const hideAddStructuralAnimation =
-      itemType === "slide" &&
-      ((item as ISlide).slideType === SlideType.Back ||
-        (item as ISlide).slideType === SlideType.Front);
+    isAddStructuralDisabled =
+      isAddStructuralDisabled ||
+      (itemType === "slide" &&
+        ((item as ISlide).slideType === SlideType.Back ||
+          (item as ISlide).slideType === SlideType.Front));
 
     /*const objectOrLayerOrSlide =
       objectType === "object"
@@ -222,13 +223,27 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
                       value: "Disabled1",
                       disabled: true,
                     },
-                    ...getAnimationsOptions(section, true, objectType),
+                    ...getAnimationsOptions(
+                      section,
+                      true,
+                      objectType,
+                      itemType === "layer"
+                    ),
                     {
                       label: "Structural animation",
                       value: "Disabled2",
                       disabled: true,
                     },
-                    ...getAnimationsOptions(section, false, objectType),
+                    ...getAnimationsOptions(
+                      section,
+                      false,
+                      objectType,
+                      itemType === "layer"
+                    ).map((item) => {
+                      const retItem = { ...item } as any;
+                      retItem.disabled = isAddStructuralDisabled;
+                      return retItem;
+                    }),
                   ] as any
                 }
                 value={""}

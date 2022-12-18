@@ -93,9 +93,9 @@ export const squareMaskDefaults: ISquareMaskAnimation = {
     leftBorderColor: { r: 255, g: 255, b: 255, a: 1 },
     rightBorderColor: { r: 255, g: 255, b: 255, a: 1 },
   },
-  borderBottom: { value: 0, ...delayAndDuration },
-  borderLeft: { value: 0, ...delayAndDuration },
-  borderRight: { value: 0, ...delayAndDuration },
-  borderTop: { value: 0, ...delayAndDuration },
+  borderBottom: { value: 10, ...delayAndDuration },
+  borderLeft: { value: 10, ...delayAndDuration },
+  borderRight: { value: 10, ...delayAndDuration },
+  borderTop: { value: 10, ...delayAndDuration },
   hideMaskOnComplete: false,
 };

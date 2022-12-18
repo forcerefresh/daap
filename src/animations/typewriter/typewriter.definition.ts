@@ -113,6 +113,7 @@ export const typewriterDefaults: ITypeWriterAnimation = {
   hasChildEase: false,
   ease: "none",
   supportedAnimationTypes: ["animation"],
+  supportedObjectTypes: ["text"],
   canBeCombined: false,
   // animation properties
   typeCharacterSpeed: 150,

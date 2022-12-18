@@ -251,14 +251,14 @@ registerObject(
   countdownObject_Stop
 );*/
 
-registerObject(
-  "trianglify",
-  "media",
-  trianglifyMeta,
-  createTrianglifyObject,
-  trianglifySizeUpdate,
-  getTrianglifyHtml
-);
+// registerObject(
+//   "trianglify",
+//   "media",
+//   trianglifyMeta,
+//   createTrianglifyObject,
+//   trianglifySizeUpdate,
+//   getTrianglifyHtml
+// );
 
 registerObject(
   "multi_image",

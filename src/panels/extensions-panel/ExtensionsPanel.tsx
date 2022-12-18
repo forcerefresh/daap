@@ -9,9 +9,11 @@ import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./ExtensionsPanel.module.scss";
 import { loadAndRegisterExternalComponent } from "../../objects/external-object-utils";
+import { unregisterObject } from "webslider-sdk/lib/objects/objects-register";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
+import { unregisterAnimation } from "webslider-sdk/lib/animations/animations-register";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -79,7 +81,6 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           setErrorMessage(err);
           return;
         }
-
         if (from === 0) {
           setExtensions([...result.items]);
         } else {
@@ -112,6 +113,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     if (!uninstallIdRef.current?.id) return;
 
+    console.log("Uninstall: " + uninstallIdRef.current.id);
     uninstallExtension({
       id: uninstallIdRef.current.id,
       source: "marketplace",
@@ -119,6 +121,15 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       getInstalledExtensions().then((res) => {
         setInstalledExtensions(res.items);
       });
+
+      if (mItem?.componentType === "object") {
+        unregisterObject(mItem.type!);
+      }
+      if (mItem?.componentType === "animation") {
+        unregisterAnimation(mItem.type!);
+      }
+
+      console.log("Uninstalled");
 
       setIsUninstallOpen(false);
       setUninstallLoading(false);
@@ -162,6 +173,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   if (!installedExtensions) {
     return null;
   }
+
   return (
     <div className={css.extensionsPanel}>
       <div className={css.headerSection}>
@@ -215,7 +227,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            !apiKey &&
+            apiKey &&
             !errorMessage && (
               <div style={{ textAlign: "center", margin: "20px" }}>
                 <Spinner size={50} />
