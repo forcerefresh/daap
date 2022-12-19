@@ -13,7 +13,7 @@ export const fadeDefaults: IFadeAnimation = {
   hasEase: true,
   hasChildEase: false,
   ease: "none",
-  supportedAnimationTypes: ["in", "out", "event", "animation", "layer"],
+  supportedAnimationTypes: ["in", "out", "event"],
   supportLayers: true,
   canBeCombined: true,
   outStartTime: {

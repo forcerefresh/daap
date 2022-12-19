@@ -227,16 +227,16 @@ registerObject(
   delayObject_Stop
 );
 
-registerObject(
-  "json_source",
-  "other",
-  jsonSourceMeta,
-  createJsonSource,
-  jsonSourceSizeUpdate,
-  getJsonSourceHtml,
-  jsonSourcePreload,
-  jsonSourceStart
-);
+// registerObject(
+//   "json_source",
+//   "other",
+//   jsonSourceMeta,
+//   createJsonSource,
+//   jsonSourceSizeUpdate,
+//   getJsonSourceHtml,
+//   jsonSourcePreload,
+//   jsonSourceStart
+// );
 
 /*
 registerObject(
@@ -284,16 +284,16 @@ registerObject(
   preloadText
 );
 
-registerObject(
-  "text_target",
-  "text",
-  textTargetMeta,
-  createTextTarget,
-  textTargetSizeUpdate,
-  getTextTargetHtml,
-  preloadTextTarget,
-  textTargetStart
-);
+// registerObject(
+//   "text_target",
+//   "text",
+//   textTargetMeta,
+//   createTextTarget,
+//   textTargetSizeUpdate,
+//   getTextTargetHtml,
+//   preloadTextTarget,
+//   textTargetStart
+// );
 
 registerObject(
   "rich_text",

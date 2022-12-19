@@ -25,6 +25,8 @@ Bugs
 - (DONE) Transform animacije nerade na layeru
 - (DONE) Podesiti animacije gde treba da se vide
 
+- Komentovati Trianglify animation
+- Deinstall extenzije i zatim install neinstalira extenziju
 - Magnetic effect - Add mouse area offset (add offset to animation properties)
 - Youtube player - Remove minimal and use only standard player
 - Prikazati kada nema instaliran animation ili object
