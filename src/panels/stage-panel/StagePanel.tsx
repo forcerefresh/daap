@@ -14,11 +14,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 
 import css from "./StagePanel.module.scss";
-import {
-  generatePlayerData,
-  getObjectHtml,
-  getNormalSlideArr,
-} from "../../export/export-html";
+import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { ISlide } from "../../store/reducers/i-slides";
@@ -75,6 +71,7 @@ import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
+import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -777,14 +774,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           <div
             key={object.id + "_1"}
             dangerouslySetInnerHTML={{
-              __html: getObjectHtml(
-                object,
-                calculatedObjectSize,
-                false,
-                false
-                // thumbnailHtmlArr,
-                // slidesCounter
-              ),
+              __html:
+                getObjectHtml(
+                  object,
+                  calculatedObjectSize,
+                  false,
+                  false
+                  // thumbnailHtmlArr,
+                  // slidesCounter
+                ) ||
+                getObjectPlaceholder(
+                  `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
+                ),
             }}
             style={objectStyle}
             className={cx({
@@ -1012,14 +1013,18 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               ref={resizingObjectRef}
               key={object.id + "_1"}
               dangerouslySetInnerHTML={{
-                __html: getObjectHtml(
-                  { ...object, ...widthAndHeightObject },
-                  { ...calculatedObjectSize },
-                  false,
-                  false
-                  // thumbnailHtmlArr,
-                  // slidesCounter
-                ),
+                __html:
+                  getObjectHtml(
+                    { ...object, ...widthAndHeightObject },
+                    { ...calculatedObjectSize },
+                    false,
+                    false
+                    // thumbnailHtmlArr,
+                    // slidesCounter
+                  ) ||
+                  getObjectPlaceholder(
+                    `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
+                  ),
               }}
               style={{
                 ...objectStyle2,

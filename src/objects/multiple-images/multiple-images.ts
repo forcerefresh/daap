@@ -108,8 +108,9 @@ export function getMultiImageHtml(props: {
   object: IObject;
   calculatedObjectSize: React.CSSProperties;
   isPlayer?: boolean;
+  isSave?: boolean;
 }) {
-  const { object, isPlayer } = props;
+  const { object, isPlayer, isSave } = props;
 
   const multiImageProperties = object.definition.values as MultiImageValues;
   if (!isPlayer) {
@@ -158,9 +159,15 @@ export function getMultiImageHtml(props: {
   ret += `<div class="object-content" style="${objectContentStyle}">`;
   multiImageProperties.images.forEach(
     (image: IImageInputValue, idx: number) => {
-      const imageitem = getMediaSrc("image", image.image);
+      //const imageitem = getMediaSrc("image", image.image);
+      // TODO: Check useId
+      const imageItem = getMediaSrc("image", image.image, {
+        useId: isSave,
+        filename: image.image.filename,
+      });
+
       let styleOne = style;
-      styleOne += `background-image:url('${imageitem.src}');`;
+      styleOne += `background-image:url('${imageItem.src}');`;
       styleOne += `position: absolute;`;
       if (isPlayer) {
       } else {

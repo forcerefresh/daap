@@ -383,13 +383,23 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       extension.packageFiles.playerObjectFilename ||
       extension.packageFiles.playerAnimationFilename;
 
-    const playerExtensionPath = path.join(
+    // TODO: check if file exist start >>>
+    let playerExtensionPath = path.join(
       userDataPath,
       "my-uploads",
       "my-extensions",
       extension.type,
       extensionFileName
     );
+    if (!(await checkFileExists(playerExtensionPath))) {
+      playerExtensionPath = path.join(
+        userDataPath,
+        "extensions",
+        extension.type,
+        extensionFileName
+      );
+    }
+    // TODO: end <<<
 
     pArr.push(
       bucketManager.uploadFileToBucket(
