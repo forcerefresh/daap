@@ -179,7 +179,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       </div>
 
       <div className={cx(css.headerSection, css.tableHeader)}>
-        <div className={css.id}>ID</div>
+        {/* <div className={css.id}>ID</div> */}
         <div className={css.thumb}>Thumbnail</div>
         <div className={css.name}>Name &amp; Description</div>
         <div className={css.slides}>Slides</div>
@@ -218,7 +218,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           {projects?.map((project, idx) => (
             <div key={project.id}>
               <div className={cx(css.headerSection, css.tableRow)}>
-                <div className={css.id}>{project.id}</div>
+                {/* <div className={css.id}>{project.id}</div> */}
                 <div className={css.thumb}>
                   <div
                     className={css.thumbHolder}
@@ -269,6 +269,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                     minimal
                     onClick={() => onDeleteProject(project.id)}
                   ></Button>
+                  <div className={css.idHolder}>{project.id}</div>
                 </div>
               </div>
             </div>

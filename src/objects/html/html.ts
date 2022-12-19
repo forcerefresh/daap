@@ -94,7 +94,7 @@ export function getHtmlHtml(props: {
 
   if (!isPlayer) {
     if (!htmlValues.html.source) {
-      return getObjectPlaceholder(`HTMLG<br/>(HTML is not set)`);
+      return getObjectPlaceholder(`HTML<br/>(HTML is not set)`);
     }
   }
 

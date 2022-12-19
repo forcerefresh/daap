@@ -1176,6 +1176,7 @@ export class Player {
       exitTransTl?.init(); //TODO: Check do we need to init() every time???
       exitTransTl?.start(0);
     } else {
+      this.slideTransitionInProgress = false;
       this.playSlide(slideIdx, undefined, true);
     }
   }

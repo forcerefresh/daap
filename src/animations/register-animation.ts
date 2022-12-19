@@ -35,7 +35,7 @@ registerAnimation(flipSlideAppDef, flipSlideDef);
 registerAnimation(parallaxAppDef, parallaxDef);
 registerAnimation(sliceSlideAppDef, sliceSlideDef);
 registerAnimation(splitAppDef, splitDef);
-registerAnimation(trianglifyAppDef, trianglifyDef);
+//registerAnimation(trianglifyAppDef, trianglifyDef);
 registerAnimation(zoomAppDef, zoomDef);
 registerAnimation(slideAppDef, slideDef);
 registerAnimation(tilesZoomAppDef, tilesZoomDef);

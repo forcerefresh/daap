@@ -50,7 +50,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         {objDeffs.map((deff) => (
           <Card
             key={"object_card_" + deff.type}
-            style={{ opacity: disabled ? "0.5" : "1" }}
+            style={{ opacity: !activeLayerId || disabled ? "0.5" : "1" }}
             interactive={!!activeLayerId}
             elevation={Elevation.TWO}
             className={cx(css.card, {
@@ -89,6 +89,11 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         <div className="warning">
           Action panel is disabled. Goto "Settings &gt; License" and enter
           Serial Number in order to enable it.
+        </div>
+      )}
+      {!activeLayerId && (
+        <div className="info">
+          No active layer found. Please select layer before adding objects.
         </div>
       )}
       <div>
