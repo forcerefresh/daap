@@ -800,6 +800,10 @@ export class Player {
       }
     });
 
+    this.staticTimelines.forEach((tl) => {
+      tl.init();
+      tl.start();
+    });
     this.playSlide(0);
   }
 
@@ -1273,20 +1277,45 @@ export class Player {
         ...createEventTimelineForObject(itemData),
       ];
 
-      /*
       // Note: create logic for objects (start, stop, preloaders, ....)
-      const objDef = getObjectDefinition(transitionData.itemType);
+      const objDef = getPlayerObjectDefinition(itemData.itemType);
 
-      if (!!objDef?.executionCode_Start) {
+      /*
+      objDef?.sizeUpdate(
+        {
+          id: transitionData.itemId,
+          values: transitionData.itemValues,
+          className: transitionData.objectClass,
+          calculatedObjectSize: calObjSize,
+        },
+        true
+      );
+      */
+
+      // execution code for objects
+      if (!!objDef?.execStart) {
         const execTl = createTimelineForExecutionCode(
-          transitionData,
-          objDef.executionCode_Start!,
-          objDef.executionCode_Stop!,
-          transitionData.itemValues,
+          itemData,
+          objDef.execStart!,
+          objDef.execStop!,
+          itemData.itemValues,
           calObjSize
         );
-        tl.add(execTl, 0);
-      }*/
+        staticTl.add(execTl);
+      }
+
+      // preload
+      if (itemData.itemValues.preload && !!objDef?.preload) {
+        const preloadPromise = objDef.preload({
+          id: itemData.itemId,
+          values: itemData.itemValues,
+          className: itemData.objectClass,
+          calculatedObjectSize: calObjSize,
+        });
+        this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
+          preloadPromise
+        );
+      }
     });
   }
 

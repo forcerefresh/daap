@@ -159,11 +159,11 @@ export function createTimelineForExecutionCode(
   data: IItemsData,
   execStart: ExecutionCodeFuncType,
   execStop: ExecutionCodeFuncType,
-
   values: { [key: string]: any },
   calculatedObjectSize: any
 ): Timeline {
   const conf: IExecCodeConfig & ITimelineConfig = {
+    name: "ExecCode",
     animationId: EXEC_CODE_ANIMATION,
     delay: 0,
     duration: convertTimeUnitToMs(data.data.slideDuration.customValue),
