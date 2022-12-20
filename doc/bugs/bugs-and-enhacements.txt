@@ -31,6 +31,10 @@ Bugs
 - (DONE) Library neradi kada se otvara is property, e.g.retina(Local radi ali remote ne)
 - (DONE) Prikazati kada nema instaliran animation
 
+- youtube neradi sa nekim podesavanjima na baketu
+- Retina move common style to right place
+- Countdown neradi u front slajdu
+
 V1 or V2:
 - (IMPORTANT) Kada je isto vreme animacije kao i slajda desava se da se animacija nepisti u sledecem ili 3-cem pistanju
 - disable html selection. when user click and mouse move 
@@ -38,6 +42,8 @@ V1 or V2:
 - Deinstall extenzije i zatim install neinstalira extenziju
 - JSON text target and image and source - check icons and make them external
 - Srediti externe objekte i efekte
+- Pauzirati player kada se pusti youtube. Ili neko drugo resenje.
+- 
 
 Release V2:
 - Prilikom otvaranja templejta prikazati missing extensions
