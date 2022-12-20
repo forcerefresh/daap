@@ -318,6 +318,19 @@ export const AnimationConfigurationForm: React.FC<
 
   const useAnimeJs = effDef(animationType)?.formDefaults.library === "animejs";
 
+  const animationExists = !!getAppAnimationDefinition(transition.animation.id);
+
+  if (!animationExists) {
+    return (
+      <div>
+        Animation '{transition.animation.id}' is not installed.
+        <br />
+        Go to Library &gt; Extensions (or My Extensions) to install missing
+        extension.
+      </div>
+    );
+  }
+
   return (
     <>
       <div className={css.animationConfigurationForm}>

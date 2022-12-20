@@ -25,11 +25,11 @@ Bugs
 - (DONE) Blokira prelazak na bilo koji slajd nakon prvog manuelnog prelacka na slajd
 - (DONE - partialy)Srediti externe objekte i efekte
 - (DONE) Za style treba default pixeli da se stage
-
-- BUG: Extenzije externe extenzije ucitava sa my-extensions
-- Library neradi kada se otvara is property, e.g.retina
-- Prikazati kada nema instaliran animation ili object
-- tooltip za unite
+- (DONE - WORKAROUND) BUG: Extenzije externe extenzije ucitava sa my-extensions
+- (DONE) Prikazati kada nema instaliran object
+- (DONE) tooltip za unite
+- (DONE) Library neradi kada se otvara is property, e.g.retina(Local radi ali remote ne)
+- (DONE) Prikazati kada nema instaliran animation
 
 V1 or V2:
 - (IMPORTANT) Kada je isto vreme animacije kao i slajda desava se da se animacija nepisti u sledecem ili 3-cem pistanju

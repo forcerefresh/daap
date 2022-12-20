@@ -277,7 +277,8 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
                         verticalAlign: "baseline",
                       }}
                     ></Icon>
-                    {getAnimationName(section, animation.animation.id!)}
+                    {getAnimationName(section, animation.animation.id!) ||
+                      animation.animation.id}
                   </Tag>
                 );
               })}

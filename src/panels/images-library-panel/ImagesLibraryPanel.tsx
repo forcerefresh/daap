@@ -168,13 +168,10 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    debounceFetchData();
-  }, []);
+    if (hasApiKey) debounceFetchData();
+  }, [hasApiKey]);
 
-  const debounceFetchData = useMemo(
-    () => debounce((from = -1) => fetchData(from), 100),
-    [images]
-  );
+  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
   const tags = getImageTags();
 
@@ -198,7 +195,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    debounceFetchData(0);
+    if (hasApiKey) debounceFetchData(0);
   }, [requestReload]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);

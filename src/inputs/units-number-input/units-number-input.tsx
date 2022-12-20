@@ -1,4 +1,5 @@
 import { FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
+import { Tooltip2 } from "@blueprintjs/popover2";
 import classnames from "classnames";
 import { isEqual } from "lodash-es";
 import React, { useEffect, useState } from "react";
@@ -136,7 +137,28 @@ export const UnitsNumberInputForm: React.FC<
         intent={!valid ? Intent.WARNING : Intent.NONE}
         id={id}
         rightElement={
-          <Tag minimal={true}>{value2UnitValue(value, allowedUnits).unit}</Tag>
+          <Tooltip2
+            disabled={inputProps?.disabled}
+            hoverOpenDelay={500}
+            position="top"
+            content={
+              <div
+                style={{
+                  background: "#4e5356",
+                  padding: "5px 10px",
+                }}
+              >
+                To change unit enter number followed by unit.
+                <br />
+                Available units: {allowedUnits.join(",")}
+              </div>
+            }
+            intent="primary"
+          >
+            <Tag style={{ cursor: "default" }} minimal={true}>
+              {value2UnitValue(value, allowedUnits).unit}
+            </Tag>
+          </Tooltip2>
         }
         value={internalValue.value}
         onChange={(event: any) => updateValue(event.target.value)}
