@@ -18,8 +18,6 @@ export function flipAnimation() {
     objectEL = getObjectElementById(config.itemId!);
     objectContentEl = objectEL.firstChild as HTMLDivElement;
 
-    console.log(objectContentEl.outerHTML);
-
     rotationTime = config.rotationTime / 1000;
     pauseTime = config.pauseTime / 1000;
 
@@ -59,7 +57,6 @@ export function flipAnimation() {
       container.appendChild(back);
     });
 
-    console.log(rotationTime);
     objectContentEl.style.display = "none";
     timeline = gsap.timeline();
     // timeline.to(

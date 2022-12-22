@@ -100,7 +100,7 @@ export const timelinesDefaults: ITransformAnimation = {
   hasEase: false,
   hasChildEase: false,
   ease: "none",
-  supportedAnimationTypes: ["animation", "in", "out", "layer"],
+  supportedAnimationTypes: ["animation", "layer"],
   supportLayers: true,
   canBeCombined: true,
   requireWrapperElement: true,

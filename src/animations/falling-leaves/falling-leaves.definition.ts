@@ -5,6 +5,10 @@ import {
   INumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import {
+  GetAssetsUrlFuncPropsType,
+  GetAssetsUrlFuncReturnType,
+} from "webslider-sdk/lib/objects/objects-register";
+import {
   FALLING_LEAVES_ANIMATION,
   IFallingLeaves,
 } from "./falling-leaves.types";
@@ -68,3 +72,24 @@ export const fallingLeavesDefaults: IFallingLeaves = {
   width: 40,
   height: 40,
 };
+
+export function fallingLeavesGetAssetsUrls(
+  props: GetAssetsUrlFuncPropsType
+): GetAssetsUrlFuncReturnType {
+  const values = props.values as IFallingLeaves;
+
+  if (!values.image.image.sourceType) {
+    return [];
+  }
+
+  return [
+    {
+      id: values.image.image.id,
+      url: values.image.image.url,
+      filename: values.image.filename,
+      localFilename: values.image.image.filename,
+      sourceType: values.image.image.sourceType,
+      mediaType: "image",
+    },
+  ];
+}

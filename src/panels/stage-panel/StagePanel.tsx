@@ -688,7 +688,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }`;
 
     const layerHolderStyle: React.CSSProperties = {};
-    console.log(layer.transformDefinition?.values?.hasPerspective);
     if (layer.transformDefinition?.values?.hasPerspective) {
       layerHolderStyle.perspective = `${layer.transformDefinition?.values?.transformPerspective}`;
     }
@@ -1360,6 +1359,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
       })}
       onMouseDown={(e: React.MouseEvent) => {
+        if (previewState.isPreview) return;
         e.persist();
         const target = e.target as HTMLElement;
         if (
@@ -1386,9 +1386,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         setSelectionStartPosition(getMousePosition(e));
       }}
       onMouseMove={(e) => {
+        if (previewState.isPreview) return;
         handleStageMouseMove(e);
       }}
       onMouseUp={(e) => {
+        if (previewState.isPreview) return;
         e.stopPropagation();
         if (resizeStartPosition !== null && resizeData !== null) {
           const obj = cloneDeep(objectByIdLocal.current[resizeData?.objectId!]);

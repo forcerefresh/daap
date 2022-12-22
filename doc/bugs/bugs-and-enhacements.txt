@@ -31,9 +31,25 @@ Bugs
 - (DONE) Library neradi kada se otvara is property, e.g.retina(Local radi ali remote ne)
 - (DONE) Prikazati kada nema instaliran animation
 
-- youtube neradi sa nekim podesavanjima na baketu
-- Retina move common style to right place
-- Countdown neradi u front slajdu
+- (DONE) youtube neradi sa nekim podesavanjima na baketu
+
+// Ovih 5 stavki je ready za test
+
+- (DONE) Retina move common style to right place
+- (DONE) Countdown neradi u front slajdu
+- (DONE)Transform animation ukloniti sa In i Out
+- (DONE - dve vasne stvari uradjene. anim assets urls and localMedia for player)Falling leaves na bucketu 
+- (DONE) - Click na Next slide vraca na isti. Prvi Slajd u templetu koji je radio Petar.
+
+
+IMPORTANT:
+- Timeline problem
+- Engine za click, nemoze da se klikne kada je iza slika
+- Izbaciti overlap
+- Proveriti da li imamo hendlere gde treba staviti:    if (previewState.isPreview) return;
+bugs: 
+- Cube neradi boja za edge
+- Proveriti kada ista extenzija se instalira preko lib, MyExt i development
 
 V1 or V2:
 - (IMPORTANT) Kada je isto vreme animacije kao i slajda desava se da se animacija nepisti u sledecem ili 3-cem pistanju
@@ -63,3 +79,4 @@ Release V2:
 - ENH. POC slides (allow user to expiriment in real project)
 - ENH. Dodati da animation/transition moze da se disejlbluje
 - Magnetic effect - Add mouse area offset (add offset to animation properties)
+- Bg za pojedinacni slajd

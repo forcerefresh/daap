@@ -6,6 +6,7 @@ import { fallingLeavesAnimation } from "./falling-leaves.animation";
 import {
   fallingLeavesDefaults,
   fallingLeavesDefinition,
+  fallingLeavesGetAssetsUrls,
 } from "./falling-leaves.definition";
 import { FALLING_LEAVES_ANIMATION } from "./falling-leaves.types";
 
@@ -18,4 +19,5 @@ export const fallingLeavesAppDef: IAnimationExtensionAppDefinition = {
   animationId: FALLING_LEAVES_ANIMATION,
   formDefaults: fallingLeavesDefaults,
   formDefinition: fallingLeavesDefinition,
+  getAssetsUrls: fallingLeavesGetAssetsUrls,
 };

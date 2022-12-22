@@ -113,7 +113,6 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     if (!uninstallIdRef.current?.id) return;
 
-    console.log("Uninstall: " + uninstallIdRef.current.id);
     uninstallExtension({
       id: uninstallIdRef.current.id,
       source: "marketplace",
@@ -128,8 +127,6 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       if (mItem?.componentType === "animation") {
         unregisterAnimation(mItem.type!);
       }
-
-      console.log("Uninstalled");
 
       setIsUninstallOpen(false);
       setUninstallLoading(false);

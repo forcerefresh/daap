@@ -1,4 +1,11 @@
-import { cloneDeep, flatten, forOwn, mapValues, pick } from "lodash-es";
+import {
+  cloneDeep,
+  flatten,
+  forEach,
+  forOwn,
+  mapValues,
+  pick,
+} from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -13,6 +20,7 @@ import {
   getPlayerObjectDefinition,
 } from "webslider-sdk/lib/objects/objects-register";
 import {
+  IAnimation,
   ILayout,
   IObject,
   ITransition,
@@ -865,13 +873,32 @@ export function addPaddingBox(style: string, boxValue: IBoxValue) {
   return style;
 }
 
-export function getAllAssetsUrls(objects: IObjects) {
+// TODO: fix type
+export function getAllAssetsUrls(objects: IObjects): any {
   return flatten(
     objects.allObjects.map((objectId) => {
       const object = objects.objectById[objectId];
       const deff = getAppObjectDefinition(object.type);
 
-      return deff?.getAssetsUrls?.({ values: object.definition.values }) || [];
+      const transitionTypes = Object.keys(object.transitions);
+      const arr = flatten(
+        transitionTypes.map((transType: string) => {
+          return flatten(
+            (object.transitions as any)[transType].map((anim: ITransition) => {
+              const def = getAppAnimationDefinition(anim.animation.id);
+              return def?.getAssetsUrls?.({
+                values: anim.animation.values as { [key: string]: any },
+              });
+            })
+          );
+        })
+      );
+
+      // const animationsAssets = forEach() object.transitions.animation[0].animation.id
+      return [
+        ...arr,
+        ...(deff?.getAssetsUrls?.({ values: object.definition.values }) || []),
+      ];
     })
   );
 }

@@ -16,6 +16,8 @@ let localMedia: {
 
 if (process.env.REACT_APP_INTEGRATION === "electron") {
   localMedia = require("./electron-local-media");
+} else if (process.env.REACT_APP_TYPE === "player") {
+  localMedia = require("./player-local-media");
 } else {
   localMedia = require("./local-media");
 }
