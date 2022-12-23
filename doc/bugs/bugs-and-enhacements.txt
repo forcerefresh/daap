@@ -37,10 +37,11 @@ Bugs
 
 - (DONE) Retina move common style to right place
 - (DONE) Countdown neradi u front slajdu
-- (DONE)Transform animation ukloniti sa In i Out
+- (DONE) Transform animation ukloniti sa In i Out
 - (DONE - dve vasne stvari uradjene. anim assets urls and localMedia for player)Falling leaves na bucketu 
 - (DONE) - Click na Next slide vraca na isti. Prvi Slajd u templetu koji je radio Petar.
 
+// Dobde je za prvu verziju
 
 IMPORTANT:
 - Timeline problem
