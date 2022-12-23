@@ -894,9 +894,8 @@ export function getAllAssetsUrls(objects: IObjects): any {
         })
       );
 
-      // const animationsAssets = forEach() object.transitions.animation[0].animation.id
       return [
-        ...arr,
+        ...arr.filter((item) => !!item), //TODO: check why we are getting undefined
         ...(deff?.getAssetsUrls?.({ values: object.definition.values }) || []),
       ];
     })

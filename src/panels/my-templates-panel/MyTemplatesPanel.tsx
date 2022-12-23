@@ -40,11 +40,11 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
     _updateProjectMeta,
     _openProject,
     _doClearHistory,
-    _resetChangedState,
     _activateSlide,
     _selectSlides,
     _selectForProperties,
     _setDevice,
+    _updateEditor,
   } = props;
 
   const [templates, setTemplates] = useState<any[]>([]);
@@ -153,14 +153,16 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      _resetChangedState();
-
       const slideIdToSelect = response.template.project.slides.normalSlides[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);
         _selectForProperties({ id: slideIdToSelect, type: "slide" });
       }
+
+      _updateEditor({ sliderChanged: true, isExistingProject: false });
+
+      _doClearHistory();
 
       onRequestClose();
 
@@ -373,13 +375,12 @@ const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),
-  _resetChangedState: () =>
-    updateEditor({ sliderChanged: false, isExistingProject: true }),
   _activateSlide: (id: string): any => activateSlide(id),
   _selectSlides: (ids: string[]): any => selectSlides(ids),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
   _setDevice: setDevice,
+  _updateEditor: updateEditor,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyTemplatesPanel);
