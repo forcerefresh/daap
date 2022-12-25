@@ -279,6 +279,11 @@ export async function textSizeUpdate(props: {
   const els = document.getElementsByClassName(className);
   const div = els[0] as HTMLDivElement;
   const parent = div.parentNode! as HTMLDivElement;
+  const child = div.firstChild! as HTMLDivElement;
+
+  child.style.width = calculatedObjectSize.width;
+  child.style.height = calculatedObjectSize.height;
+
   parent.style.width = calculatedObjectSize.width;
   parent.style.height = calculatedObjectSize.height;
   parent.style.left = calculatedObjectSize.left;
