@@ -37,6 +37,7 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
+import { Console } from "console";
 
 gsap.defaults(); // in order to bundle gsap
 gsap.install(window);
@@ -138,9 +139,9 @@ export class Player {
       breakpointReferenceDiv
     );
     this.breakpointChecker.init();
-    /* this.breakpointChecker.setBPChangeHandler(
+    this.breakpointChecker.setBPChangeHandler(
       this.breakpointChangeHandler.bind(this)
-    );*/
+    );
     this.breakpointChecker.setSizeChangeHandler(
       this.sizeChangeHandler.bind(this)
     );
@@ -543,13 +544,12 @@ export class Player {
     });
   }
 
-  /*private breakpointChangeHandler(bp: BreakpointConfiguration) {
+  private breakpointChangeHandler(bp: BreakpointConfiguration) {
     // if deviceAuto is true
     if (this.playerConfig.deviceAuto) {
-;
       this.setBp(bp);
     }
-  }*/
+  }
 
   private sizeChangeHandler(
     size: { width: number; height: number },

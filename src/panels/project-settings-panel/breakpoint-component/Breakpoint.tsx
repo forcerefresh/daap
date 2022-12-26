@@ -143,6 +143,8 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
                       "normal.breakpoint.width.to",
                       value
                     );
+                    // NOTE: because page.width is read only field we set it here
+                    set(breakpointConfiguration, "normal.page.width", value);
                     onChange({ ...breakpointConfiguration });
                   }
                 )}

@@ -32,12 +32,11 @@ export class BreakpointChecker {
   private int: any;
   init() {
     this.int = setInterval(() => {
-      this.check();
       this.checkVieport();
+      this.check();
     }, 10);
-
-    this.check();
     this.checkVieport();
+    this.check();
   }
 
   stop() {
@@ -56,11 +55,12 @@ export class BreakpointChecker {
     this.breakpoints = breakpoints;
   }
 
-  // setBPChangeHandler(
-  //   fn: ((breakpoitconfiguration: BreakpointConfiguration) => void) | null
-  // ) {
-  //   this.changeHandlerFn = fn;
-  // }
+  // TODO: check if setBPChangeHandler and setSizeChangeHandler causing more rerender than needed
+  setBPChangeHandler(
+    fn: ((breakpointConfiguration: BreakpointConfiguration) => void) | null
+  ) {
+    this.changeHandlerFn = fn;
+  }
 
   setSizeChangeHandler(
     fn:
@@ -79,7 +79,7 @@ export class BreakpointChecker {
     if (
       !this.currentViewportSize ||
       this.currentViewportSize.width !== vSize.width ||
-      this.currentViewportSize?.height !== vSize.height
+      this.currentViewportSize.height !== vSize.height
     ) {
       this.currentViewportSize = vSize;
       this.sizeChangeHandlerFn?.(vSize, this.currentBreakpointConfiguration!);
@@ -110,8 +110,8 @@ export class BreakpointChecker {
       const { from, to, toMax, fromMin } = bp.normal.breakpoint.width;
 
       // TODO: IMPORTANT CHECK FRO PARENT !!!!!!
-      if (this.refDiv) {
-        const w = this.refDiv.clientWidth;
+      if (this.currentViewportSize) {
+        const w = this.currentViewportSize.width;
         const fromW = fromMin ? 0 : from;
         const toW = toMax ? 100000 : to;
         if (w > fromW && w < toW) {
