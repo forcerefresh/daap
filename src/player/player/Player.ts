@@ -1293,11 +1293,12 @@ export class Player {
       */
 
       // execution code for objects
-      if (!!objDef?.execStart) {
+      if (!!objDef?.execStart || !!objDef?.execStop || !!objDef?.updateTime) {
         const execTl = createTimelineForExecutionCode(
           itemData,
-          objDef.execStart!,
-          objDef.execStop!,
+          objDef.execStart,
+          objDef.execStop,
+          objDef.updateTime,
           itemData.itemValues,
           calObjSize
         );
@@ -1422,11 +1423,12 @@ export class Player {
       */
 
       // execution code for objects
-      if (!!objDef?.execStart) {
+      if (!!objDef?.execStart || !!objDef?.execStop || !!objDef?.updateTime) {
         const execTl = createTimelineForExecutionCode(
           itemData,
-          objDef.execStart!,
-          objDef.execStop!,
+          objDef.execStart,
+          objDef.execStop,
+          objDef.updateTime,
           itemData.itemValues,
           calObjSize
         );

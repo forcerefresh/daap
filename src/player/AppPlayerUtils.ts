@@ -3,7 +3,10 @@ import {
   IExecCodeConfig,
   EXEC_CODE_ANIMATION,
 } from "../objects/exec-code-animation";
-import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  ExecutionCodeFuncType,
+  UpdateTimeFuncType,
+} from "webslider-sdk/lib/objects/objects-register";
 import { ITransition } from "webslider-sdk/lib/objects/i-object";
 import { convertTimeUnitToMs } from "../utils/utils";
 import { ITimelineConfig, Timeline } from "./player/Timeline";
@@ -157,8 +160,9 @@ function createTimelineForAnimation(
 
 export function createTimelineForExecutionCode(
   data: IItemsData,
-  execStart: ExecutionCodeFuncType,
-  execStop: ExecutionCodeFuncType,
+  execStart: ExecutionCodeFuncType | undefined,
+  execStop: ExecutionCodeFuncType | undefined,
+  updateTime: UpdateTimeFuncType | undefined,
   values: { [key: string]: any },
   calculatedObjectSize: any
 ): Timeline {
@@ -170,6 +174,7 @@ export function createTimelineForExecutionCode(
     //
     execStart,
     execStop,
+    updateTime,
     values: values,
     id: data.itemId,
     className: data.objectClass,

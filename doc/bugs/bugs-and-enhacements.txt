@@ -45,6 +45,7 @@ Bugs
 
 IMPORTANT:
 - Timeline problem
+- absolutna putanja za assete kreirana u animaciji i efektu
 - Engine za click, nemoze da se klikne kada je iza slika
 - Izbaciti overlap
 - Proveriti da li imamo hendlere gde treba staviti:    if (previewState.isPreview) return;

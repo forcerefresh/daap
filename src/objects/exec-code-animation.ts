@@ -1,12 +1,16 @@
-import { ExecutionCodeFuncType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  ExecutionCodeFuncType,
+  UpdateTimeFuncType,
+} from "webslider-sdk/lib/objects/objects-register";
 import { getConnectorBySourceId } from "webslider-sdk/lib/connectors/connector-manager";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const EXEC_CODE_ANIMATION = "exec-code";
 
 export interface IExecCodeConfig {
-  execStart: ExecutionCodeFuncType;
-  execStop: ExecutionCodeFuncType;
+  execStart?: ExecutionCodeFuncType;
+  execStop?: ExecutionCodeFuncType;
+  updateTime?: UpdateTimeFuncType;
   values: { [key: string]: any };
   id: string;
   className: string;
@@ -60,7 +64,28 @@ export function execCodeAnimation() {
     });
   }
 
-  function update(config: any, time: number, isManual?: boolean) {}
+  function update(config: any, time: number, isManual?: boolean) {
+    logger.player.debug("exec-code: update");
+
+    const {
+      id,
+      values,
+      className,
+      calculatedObjectSize,
+      duration,
+      updateTime,
+    } = config;
+
+    updateTime?.({
+      id,
+      className,
+      values,
+      calculatedObjectSize,
+      getConnector,
+      duration,
+      currentTime: time,
+    });
+  }
 
   function pause(config: any) {
     logger.player.debug("exec-code:pause");
