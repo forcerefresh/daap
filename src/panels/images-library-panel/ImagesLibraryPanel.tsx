@@ -1,5 +1,4 @@
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
-import cx from "classnames";
+import React, { ReactNode, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ImagesLibraryPanel.module.scss";
@@ -10,8 +9,6 @@ import {
   Icon,
   InputGroup,
   Intent,
-  Menu,
-  MenuItem,
   Popover,
   PopoverInteractionKind,
   Position,
@@ -22,20 +19,15 @@ import {
 import { addNewObject } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, forOwn, noop, startsWith } from "lodash-es";
+import { debounce, filter, forOwn, noop } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
-import {
-  ImageData,
-  ImageItem,
-  MediaType,
-  VideoData,
-  VideoItem,
-} from "webslider-sdk/lib/common/i-media-types";
+import { ImageData, MediaType } from "webslider-sdk/lib/common/i-media-types";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
+import { forceDownload } from "../../utils/utils";
 
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
@@ -595,17 +587,31 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                             </Button>
                           )}
 
-                        {!!deleteImagesFunc && (
+                        <div className={css.subActionHolder}>
                           <Button
-                            className={css.deleteImageButton}
+                            small={true}
                             onClick={() => {
-                              setSelectedImage(-1);
-                              setImagesForDelete([image]);
+                              const url = getMediaSrc(
+                                "image",
+                                (image?.images as any).original
+                              ).src;
+                              forceDownload(url!);
                             }}
-                            icon="trash"
-                            minimal
-                          ></Button>
-                        )}
+                          >
+                            Download
+                          </Button>
+
+                          {!!deleteImagesFunc && (
+                            <Button
+                              onClick={() => {
+                                setSelectedImage(-1);
+                                setImagesForDelete([image]);
+                              }}
+                              icon="trash"
+                              minimal
+                            ></Button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </Popover>

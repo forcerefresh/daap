@@ -1,3 +1,4 @@
+import { last } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
 import {
@@ -164,4 +165,21 @@ export function humanizeSting(str: string) {
   let ret = str.replaceAll("_", " ").replaceAll("-", " ");
   ret = ret.charAt(0).toUpperCase() + ret.slice(1);
   return ret;
+}
+
+export function forceDownload(url: string) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", url, true);
+  xhr.responseType = "blob";
+  xhr.onload = function () {
+    var urlCreator = window.URL || window.webkitURL;
+    var imageUrl = urlCreator.createObjectURL(this.response);
+    var tag = document.createElement("a");
+    tag.href = imageUrl;
+    tag.download = last(url.split("/")) || "image.png";
+    document.body.appendChild(tag);
+    tag.click();
+    document.body.removeChild(tag);
+  };
+  xhr.send();
 }
