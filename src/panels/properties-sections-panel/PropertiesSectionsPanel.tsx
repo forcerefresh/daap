@@ -102,7 +102,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             <LinkIcon
               style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
             />
-            Linking
+            Navigation
           </Button>
         </div>
         <div>

@@ -11,6 +11,7 @@ export interface ISettings {
 
   // slider config
   sliderBackgroundColor: RGBColor;
+  autoPlay: boolean;
 
   //preview
   pageBackgroundColor: RGBColor;

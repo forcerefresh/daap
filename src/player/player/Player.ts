@@ -731,40 +731,45 @@ export class Player {
     this.slideTransitionTimeline?.paused(p);
   }
 
-  public clear(destroy = false) {
+  public clear(destroy = true) {
     getTickerInstance().stop();
 
     this.staticTimelines.forEach((tl) => {
-      tl.clear();
-      tl.kill();
+      tl.stop();
+      if (destroy) tl.kill();
     });
-    this.staticTimelines = [];
+    if (destroy) this.staticTimelines = [];
 
     this.timelines.forEach((tl) => {
+      tl.stop();
       tl.destroy();
     });
-    this.timelines = [];
+    if (destroy) this.timelines = [];
 
     this.outEffTimelines.forEach((tl) => {
+      tl.stop();
       tl?.destroy();
     });
-    this.outEffTimelines = [];
+    if (destroy) this.outEffTimelines = [];
 
     this.eventTimelines.forEach((tlObj) => {
+      tlObj.rootTimeline.stop();
       tlObj.rootTimeline.destroy();
     });
-    this.eventTimelines = [];
+    if (destroy) this.eventTimelines = [];
 
+    this.slideTransitionTimeline?.stop();
     this.slideTransitionTimeline?.destroy();
-    this.slideTransitionTimeline = undefined;
+    if (destroy) this.slideTransitionTimeline = undefined;
 
     //this.breakpointChecker.setBPChangeHandler(null);
-    this.breakpointChecker.setSizeChangeHandler(null);
+    if (destroy) this.breakpointChecker.setSizeChangeHandler(null);
 
     this.currentSlideTimelineIdx = 0;
 
+    this.currentSlideTimeline?.stop();
     this.currentSlideTimeline?.destroy();
-    this.currentSlideTimeline = undefined;
+    if (destroy) this.currentSlideTimeline = undefined;
   }
 
   public async play() {
@@ -804,7 +809,10 @@ export class Player {
       tl.init();
       tl.start();
     });
-    this.playSlide(0);
+
+    if (this.playerData?.config.autoPlay === true) {
+      this.playSlide(0);
+    }
   }
 
   private skippedFirstSlide = false;
@@ -1227,6 +1235,22 @@ export class Player {
         } else if (objectEvent.slideReferenceType === "prev") {
           const slideIdx = this.getPrevSlideIdx(this.currentSlide);
           this.manualPlaySlide(slideIdx);
+        } else if (objectEvent.slideReferenceType === "slider") {
+          if (objectEvent.hideOnEvent) {
+            el?.parentNode?.removeChild(el);
+          }
+          if (objectEvent.sliderActionOnEvent === "start") {
+            getTickerInstance().start();
+
+            this.staticTimelines.forEach((tl) => {
+              tl.init();
+              tl.start();
+            });
+
+            this.playSlide(0);
+          } else if (objectEvent.sliderActionOnEvent === "stop") {
+            this.clear(false);
+          }
         }
       };
       el?.addEventListener(objectEvent?.slideEvent, clickHandler.bind(this));

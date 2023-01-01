@@ -182,6 +182,7 @@ export function generatePlayerData(
       skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
       breakpointReference: settings.breakpointReference,
       sliderBackgroundColor: settings.sliderBackgroundColor,
+      autoPlay: settings.autoPlay,
     },
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
@@ -522,8 +523,10 @@ function generateSlideData(
       // << "left", "top", "width", "height"
 
       let wrapperStyle = style;
+      wrapperStyle += "pointer-events: none;";
+
       style +=
-        "position: relative; left:initial; top: initial; overflow: visible;";
+        "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
 
       // NOTE exception for perspective
       if (object.transformDefinition?.values?.hasPerspective) {

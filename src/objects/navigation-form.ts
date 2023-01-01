@@ -1,7 +1,7 @@
 import {
+  ICheckboxInput,
   InputType,
   ISelectInput,
-  ISliderInput,
   ITextInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import {
@@ -33,7 +33,13 @@ export type NavigationTuple = [
               IFormSwitchGroup<[ITextInput<"slideNo">]>,
               IFormSwitchGroup<[ITextInput<"slideId">]>,
               IFormSwitchGroup<[]>,
-              IFormSwitchGroup<[]>
+              IFormSwitchGroup<[]>,
+              IFormSwitchGroup<
+                [
+                  ISelectInput<"sliderActionOnEvent">,
+                  ICheckboxInput<"hideOnEvent">
+                ]
+              >
             ]
           >,
           ISelectInput<"cursor">
@@ -174,6 +180,32 @@ export const navigationDefinition: NavigationTuple = [
                 groupName: "Prev",
                 groupValue: "prev",
                 elements: [],
+              },
+              {
+                groupName: "Slider",
+                groupValue: "slider",
+                elements: [
+                  {
+                    displayName: "Action on event",
+                    propertyName: "sliderActionOnEvent",
+                    inputType: InputType.SELECT,
+                    options: [
+                      { label: "None", value: "none" },
+                      { label: "Stop slider on event", value: "stop" },
+                      { label: "Start slider on event", value: "start" },
+                    ],
+                    value: "none",
+                    defaultValue: "none",
+                  },
+                  {
+                    displayName: "Hide on action",
+                    helperText: "Hide object on event",
+                    propertyName: "hideOnEvent",
+                    inputType: InputType.CHECKBOX,
+                    value: {} as any,
+                    defaultValue: {} as any,
+                  },
+                ],
               },
             ],
           },
