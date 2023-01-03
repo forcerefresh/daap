@@ -27,6 +27,16 @@ import css from "./transform-input.module.scss";
 
 const formDefinition = [
   {
+    displayName: "Width (relative)",
+    propertyName: "width",
+    inputType: InputType.RELATIVE_POSITION_INPUT,
+  },
+  {
+    displayName: "Height (relative)",
+    propertyName: "height",
+    inputType: InputType.RELATIVE_POSITION_INPUT,
+  },
+  {
     displayName: "Translate X",
     propertyName: "translateX",
     inputType: InputType.RELATIVE_POSITION_INPUT,
@@ -332,6 +342,14 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
   const getTimelineOptions = () => {
     const timelineOptions = [
+      {
+        label: "Width",
+        value: "width",
+      },
+      {
+        label: "Height",
+        value: "height",
+      },
       {
         label: "Translate X",
         value: "translateX",

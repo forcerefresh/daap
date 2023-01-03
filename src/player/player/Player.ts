@@ -37,7 +37,6 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
-import { Console } from "console";
 
 gsap.defaults(); // in order to bundle gsap
 gsap.install(window);
@@ -731,45 +730,40 @@ export class Player {
     this.slideTransitionTimeline?.paused(p);
   }
 
-  public clear(destroy = true) {
+  public clear(destroy = false) {
     getTickerInstance().stop();
 
     this.staticTimelines.forEach((tl) => {
-      tl.stop();
-      if (destroy) tl.kill();
+      tl.clear();
+      tl.kill();
     });
-    if (destroy) this.staticTimelines = [];
+    this.staticTimelines = [];
 
     this.timelines.forEach((tl) => {
-      tl.stop();
       tl.destroy();
     });
-    if (destroy) this.timelines = [];
+    this.timelines = [];
 
     this.outEffTimelines.forEach((tl) => {
-      tl.stop();
       tl?.destroy();
     });
-    if (destroy) this.outEffTimelines = [];
+    this.outEffTimelines = [];
 
     this.eventTimelines.forEach((tlObj) => {
-      tlObj.rootTimeline.stop();
       tlObj.rootTimeline.destroy();
     });
-    if (destroy) this.eventTimelines = [];
+    this.eventTimelines = [];
 
-    this.slideTransitionTimeline?.stop();
     this.slideTransitionTimeline?.destroy();
-    if (destroy) this.slideTransitionTimeline = undefined;
+    this.slideTransitionTimeline = undefined;
 
     //this.breakpointChecker.setBPChangeHandler(null);
-    if (destroy) this.breakpointChecker.setSizeChangeHandler(null);
+    this.breakpointChecker.setSizeChangeHandler(null);
 
     this.currentSlideTimelineIdx = 0;
 
-    this.currentSlideTimeline?.stop();
     this.currentSlideTimeline?.destroy();
-    if (destroy) this.currentSlideTimeline = undefined;
+    this.currentSlideTimeline = undefined;
   }
 
   public async play() {
@@ -994,6 +988,7 @@ export class Player {
     );
 
     const currentSlideTimelineStopCallback = () => {
+      // FOR DEBUG: comment this to see all slides // IMPORTANT  S
       slideEl.style.display = "none";
     };
     this.currentSlideTimeline.emitter.removeAllListeners("stop");
@@ -1055,6 +1050,7 @@ export class Player {
 
     if (!this.oneSlide) {
       const triggerTimelineCallback = () => {
+        //console.log("TRIGGER !!!!! +++++++");
         triggerTimeline?.emitter.removeAllListeners("stop");
 
         this.triggerTransitionNextSlideHandler(
@@ -1084,7 +1080,7 @@ export class Player {
     //const currentSlideTime = this.currentSlideTimeline?.time();
     const prevSlideTl = this.currentSlideTimeline;
 
-    logger.player.log("slideIdx");
+    logger.player.log("slideIdx: " + slideIdx);
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
@@ -1124,6 +1120,9 @@ export class Player {
     } else if (exitTransTl && nextSlideOverlap) {
       maxExitTime = Math.max(exitTransTl.duration, nextSlideOverlap);
     }
+
+    // console.log("-----");
+    // console.log(maxExitTime);
 
     // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {
@@ -1240,6 +1239,7 @@ export class Player {
             el?.parentNode?.removeChild(el);
           }
           if (objectEvent.sliderActionOnEvent === "start") {
+            // TODO: IMPORTANT:!!!!
             getTickerInstance().start();
 
             this.staticTimelines.forEach((tl) => {
@@ -1248,6 +1248,7 @@ export class Player {
             });
 
             this.playSlide(0);
+            // TODO
           } else if (objectEvent.sliderActionOnEvent === "stop") {
             this.clear(false);
           }

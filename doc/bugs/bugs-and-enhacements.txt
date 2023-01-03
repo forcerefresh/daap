@@ -44,6 +44,8 @@ Bugs
 // Dobde je za prvu verziju
 
 IMPORTANT:
+- bug u manuelnj translaciji
+- Preload does not work because it loads from wrong image path (vezano za absolutna putanja za assete )
 - Timeline problem
 - absolutna putanja za assete kreirana u animaciji i efektu
 - Engine za click, nemoze da se klikne kada je iza slika
