@@ -11,6 +11,7 @@ import {
   MOVE_OBJECTS,
   OPEN_PROJECT,
   UPDATE_LAYER,
+  MOVE_LAYERS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
@@ -71,6 +72,7 @@ export function layers(
             toLayer.id = layerItem.toId!;
             toLayer.name += " (copy)";
             toLayer.objectIds = layerItem.childs.map((item) => item.toId!);
+            toLayer.slideId = slideItem.toId!;
             newState.allLayers.push(toLayer.id);
             newState.layerById[toLayer.id] = toLayer;
           } else {
@@ -83,6 +85,7 @@ export function layers(
               ...toLayer.objectIds,
               ...compact(objectIdToAdd),
             ];
+            toLayer.slideId = slideItem.toId!;
             newState.layerById[toLayer.id] = toLayer;
           }
         });
@@ -176,6 +179,22 @@ export function layers(
           0,
           ...payload.moveIds
         );
+      }
+
+      return { ...state, layerById };
+    }
+
+    case MOVE_LAYERS: {
+      const payload = action.payload;
+      const layerById = cloneDeep(state.layerById);
+
+      // If layer are moved to "slide" update slideId on each layer
+      if (payload.where === "slide") {
+        forIn(layerById, function (layer, _layerId) {
+          if (payload.moveIds.indexOf(layer.id) !== -1) {
+            layer.slideId = payload.refId;
+          }
+        });
       }
 
       return { ...state, layerById };

@@ -883,7 +883,6 @@ export class Player {
       this.slideTransitionTimeline.emitter.addListener("stop", () => {
         const prevTriggerTimeline: Timeline | undefined =
           prevSlideTimeline?.getChildById("triggerTimeline");
-
         prevTriggerTimeline?.resetDurationToOriginal();
 
         prevSlideTimeline?.stop();
@@ -952,8 +951,18 @@ export class Player {
         //slideEl.style.zIndex = `${this.nextZIndex++}`; // TODO: COnsider zindex engine
       }
     } else {
-      if (isManual) prevSlideTimeline?.stop();
+      if (isManual) {
+        const prevTriggerTimeline: Timeline | undefined =
+          prevSlideTimeline?.getChildById("triggerTimeline");
+        //prevTriggerTimeline?.resetDurationToOriginal();
+        prevTriggerTimeline?.emitter.removeAllListeners("stop");
+
+        prevSlideTimeline?.stop();
+      }
       slideEl.style.zIndex = `${this.nextZIndex++}`;
+
+      // proveriti ovo: current imp: ako je procesuirano setujemo na -1
+      this.manuallyRequestedSlideIdx = -1;
     }
 
     if (this.oneSlide) {
@@ -1050,7 +1059,6 @@ export class Player {
 
     if (!this.oneSlide) {
       const triggerTimelineCallback = () => {
-        //console.log("TRIGGER !!!!! +++++++");
         triggerTimeline?.emitter.removeAllListeners("stop");
 
         this.triggerTransitionNextSlideHandler(
@@ -1120,9 +1128,6 @@ export class Player {
     } else if (exitTransTl && nextSlideOverlap) {
       maxExitTime = Math.max(exitTransTl.duration, nextSlideOverlap);
     }
-
-    // console.log("-----");
-    // console.log(maxExitTime);
 
     // NOTE: if zero means we don't have any out animation to play and there is no slide transition
     if (maxExitTime !== 0) {

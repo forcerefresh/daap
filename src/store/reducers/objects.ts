@@ -1,4 +1,4 @@
-import { cloneDeep, omit, without } from "lodash-es";
+import { cloneDeep, forIn, omit, without } from "lodash-es";
 import { object } from "yup";
 import {
   getCommonPropertiesMetadataValues,
@@ -12,6 +12,7 @@ import {
   DUPLICATE,
   OPEN_PROJECT,
   UPDATE_OBJECT,
+  MOVE_OBJECTS,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 
@@ -77,6 +78,22 @@ export function objects(
       });
       return newState;
     }
+    case MOVE_OBJECTS: {
+      const payload = action.payload;
+      const objectById = cloneDeep(state.objectById);
+
+      // If layer are moved to "slide" update slideId on each layer
+      if (payload.where === "layer") {
+        forIn(objectById, function (object, _objectId) {
+          if (payload.moveIds.indexOf(object.id) !== -1) {
+            object.layerId = payload.refId;
+          }
+        });
+      }
+
+      return { ...state, objectById };
+    }
+
     case OPEN_PROJECT: {
       action.payload.objects.allObjects.map((id: string) => {
         const object = action.payload.objects.objectById[id];

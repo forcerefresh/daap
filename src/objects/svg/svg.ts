@@ -222,6 +222,7 @@ export function getSvgHtml(props: {
   let css = `
     <style>
     .object-content-${object.id}{
+      box-sizing: border-box;
       transform: scaleX(${scaleX}) scaleY(${scaleY});
       transform-origin: top left;
       ${addCommonPropertiesToStyle("", object)}

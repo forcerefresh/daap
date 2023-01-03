@@ -145,7 +145,7 @@ export function slides(
       if (payload.where === "above") {
         forIn(slideById, function (slide, _slideId) {
           const idx = slide.layerIds.indexOf(payload.refId);
-          if (idx != -1) {
+          if (idx !== -1) {
             slide.layerIds.splice(idx, 0, ...payload.moveIds);
           }
         });

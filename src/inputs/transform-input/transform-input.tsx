@@ -30,11 +30,13 @@ const formDefinition = [
     displayName: "Width (relative)",
     propertyName: "width",
     inputType: InputType.RELATIVE_POSITION_INPUT,
+    units: ["px"],
   },
   {
     displayName: "Height (relative)",
     propertyName: "height",
     inputType: InputType.RELATIVE_POSITION_INPUT,
+    units: ["px"],
   },
   {
     displayName: "Translate X",

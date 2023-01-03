@@ -11,7 +11,6 @@ function getPointValue(property: string, value: string | number | any) {
   switch (property) {
     case "width":
     case "height":
-      console.log(value);
       return "+=" + parseInt(value.value); /// + "px";
     case "translateX":
     case "translateY":
