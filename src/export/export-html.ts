@@ -532,7 +532,14 @@ function generateSlideData(
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+
+        // TODO: this should be configurable? maybe?
+        style += `transform-origin: center center;`;
+        wrapperStyle += `transform-origin: center center;`;
       }
+
+      // TODO: check this
+      //wrapperStyle += `overflow: hidden;`;
 
       html += `      <div class="object-wrapper object-wrapper-${object.id}" style='${wrapperStyle}'>`; // open object wrapper
       html += effectWrappers.map(

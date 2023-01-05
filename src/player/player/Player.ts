@@ -316,9 +316,15 @@ export class Player {
   }
 
   private bpUpdateSlide(isInitial = false) {
-    const slideEls = this.rootDiv.getElementsByClassName("slide");
-
     const bp = this.currentBp;
+
+    //TODO: set sliderRoot height
+    const sliderRoot = this.rootDiv.getElementsByClassName(
+      "sliderRoot"
+    )[0] as HTMLDivElement;
+    if (sliderRoot) sliderRoot.style.height = bp?.normal._page!.height + "px";
+
+    const slideEls = this.rootDiv.getElementsByClassName("slide");
 
     const bgEl = this.rootDiv.getElementsByClassName(".sliderBackground")[0] as
       | HTMLDivElement

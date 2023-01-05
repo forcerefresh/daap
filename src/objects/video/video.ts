@@ -33,6 +33,10 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import {
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
 
 export const VIDEO = "video";
 
@@ -226,17 +230,17 @@ export async function videoSizeUpdate(props: {
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
-  const els = document.getElementsByClassName(className);
-  const div = els[0] as HTMLDivElement;
-  const parent = div.parentNode! as HTMLDivElement;
-  parent.style.width = calculatedObjectSize.width;
-  parent.style.height = calculatedObjectSize.height;
-  parent.style.left = calculatedObjectSize.left;
-  parent.style.top = calculatedObjectSize.top;
+  const { id, calculatedObjectSize } = props;
 
-  div.style.width = calculatedObjectSize.width;
-  div.style.height = calculatedObjectSize.height;
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  objectWrapperEl.style.width = calculatedObjectSize.width;
+  objectWrapperEl.style.height = calculatedObjectSize.height;
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
+
+  objectEl.style.width = calculatedObjectSize.width;
+  objectEl.style.height = calculatedObjectSize.height;
 }
 
 export function videoPostProcess(

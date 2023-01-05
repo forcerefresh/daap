@@ -10,11 +10,14 @@ export async function loadAndRegisterExternalComponentForPlayer(
     extension.packageFiles.playerObjectFilename ||
     extension.packageFiles.playerAnimationFilename;
 
+  const extensionUrl =
+    extensionFileName?.startsWith("http:") ||
+    extensionFileName?.startsWith("https:")
+      ? extensionFileName
+      : "../extensions/" + extensionFileName;
+
   try {
-    await import(
-      /* @ts-ignore */ /* webpackIgnore: true */ "../extensions/" +
-        extensionFileName
-    );
+    await import(/* @ts-ignore */ /* webpackIgnore: true */ extensionUrl);
   } catch (ex) {
     console.error(
       `Cannot load external component type: ${extension.componentType}; name: ${extension.name}. Exception: ${ex}`

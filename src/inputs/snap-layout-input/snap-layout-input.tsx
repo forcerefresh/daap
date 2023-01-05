@@ -92,7 +92,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           { disabled: inputProps.selfSize }
         )}
         {getNumericFiled(
-          "Gap",
+          "Offset",
           value.common.gap,
           (newGap) => {
             onChange({
