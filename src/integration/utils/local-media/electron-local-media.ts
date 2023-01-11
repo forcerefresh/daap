@@ -52,7 +52,8 @@ export function getMediaSrc(
 
       return mediaItem;
     }
-    case "video": {
+    case "video":
+    case "audio": {
       if (mediaItem.sourceType === "url") {
         return {
           ...mediaItem,

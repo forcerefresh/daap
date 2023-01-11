@@ -33,6 +33,11 @@ function getMyVideosPath() {
   return path.join(userDataPath, "my-uploads", "my-videos");
 }
 
+function getMyAudiosPath() {
+  const userDataPath = app.getPath("userData");
+  return path.join(userDataPath, "my-uploads", "my-audios");
+}
+
 function getBucketPreviewPath() {
   const userDataPath = app.getPath("userData");
   return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
@@ -93,6 +98,7 @@ module.exports = {
   appendToFileName,
   getMyImagesPath,
   getMyVideosPath,
+  getMyAudiosPath,
   fileToBuffer,
   writeFileWithPath,
   openOrCloseDevTool,

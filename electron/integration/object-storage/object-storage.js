@@ -13,6 +13,7 @@ const {
   downloadToBuffer,
   getMyImagesPath,
   getMyVideosPath,
+  getMyAudiosPath,
   fileToBuffer,
 } = require("../../utils/utils");
 const {
@@ -342,6 +343,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         const mediaPath =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
+            : assetItem.mediaType === "audio"
+            ? getMyAudiosPath()
             : getMyImagesPath();
 
         pArr.push(

@@ -28,10 +28,10 @@ import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 import { forceDownload } from "../../utils/utils";
-
+import { ReactComponent as MP3Icon } from "./assets/mp3.svg";
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
-  type: "image" | "video";
+  type: "image" | "video" | "audio";
   uploadComponent?: ReactNode;
   fetchImagesFunc: (props: {
     type: MediaType;
@@ -364,6 +364,81 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           }
         >
           {images?.map((image, idx) => {
+            const isAudio = !!(image as any)?.audio;
+            if (isAudio) {
+              return (
+                <div
+                  className={classnames(css.imageListHolder, {
+                    [css.selectedImage]: selectedImage === idx,
+                  })}
+                  style={{ display: "inline-block" }}
+                >
+                  <div style={{ display: "inline-block" }}>
+                    <MP3Icon style={{ width: "100px", height: "100px" }} />
+                  </div>
+                  <div className={css.imageListTitle222}>
+                    {prepareText((image as any)?.audio.filename || "")}
+                  </div>
+                  <div>
+                    {addObject && type === "audio" && (
+                      <Button
+                        intent="primary"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (activeLayerId) {
+                            _addNewObject(
+                              activeLayerId,
+                              "audio", //cover
+                              {},
+                              {
+                                audio: {
+                                  audio: (image as any)?.audio,
+                                  filename: "",
+                                },
+                              }
+                            );
+                          }
+                        }}
+                      >
+                        Add audio
+                      </Button>
+                    )}
+
+                    {!addObject && type === "audio" && (
+                      <Button
+                        intent="primary"
+                        onClick={() => {
+                          onSelect?.({
+                            audio: (image as any)?.audio,
+                          });
+                          onRequestClose();
+                        }}
+                      >
+                        Select audio
+                      </Button>
+                    )}
+
+                    {!!deleteImagesFunc && (
+                      <Button
+                        onClick={() => {
+                          setSelectedImage(-1);
+                          setImagesForDelete([image]);
+                        }}
+                        icon="trash"
+                        minimal
+                        style={{ marginLeft: "20px" }}
+                      ></Button>
+                    )}
+                  </div>
+
+                  <div className={css.imageListTitle}>{image.title}</div>
+                  <div className={css.imageListTabs}>
+                    <TagsView tags={image?.tags || []} />
+                  </div>
+                </div>
+              );
+            }
+
             const imageOneSize = getOneImageSize(image?.images);
             return (
               <div
@@ -687,3 +762,20 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ImagesLibraryPanel);
+
+function prepareText(text: string, textLimit = 20) {
+  var returnString = text;
+  var textLimit = 20;
+  if (text.length > textLimit) {
+    var lastWord = text.slice(
+      Math.max(text.lastIndexOf(" "), text.length - Math.round(textLimit / 2)) +
+        1
+    );
+    var indexFromEnd = lastWord.length;
+    var ellipsis = "...";
+
+    returnString = text.slice(0, textLimit - indexFromEnd - ellipsis.length);
+    returnString = returnString + ellipsis + lastWord;
+  }
+  return returnString;
+}

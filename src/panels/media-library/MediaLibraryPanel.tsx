@@ -15,6 +15,7 @@ import { fetchMock } from "../vector-library-panel/mock";
 export enum Panels {
   MyImages = "myImages",
   MyVideos = "myVideos",
+  MyAudios = "myAudios",
   MyVectors = "myVectors",
   Images = "images",
   Vectors = "vectors",
@@ -55,6 +56,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     panelsToShow = [
       Panels.MyImages,
       Panels.MyVideos,
+      Panels.MyAudios,
       Panels.MyVectors,
       Panels.Images,
       Panels.Vectors,
@@ -127,6 +129,36 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   uploadComponent={
                     <UploadComponent
                       type="video"
+                      onComplete={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                      onStop={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                    />
+                  }
+                  selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  addObject={addObject}
+                  onSelect={onSelect}
+                />
+              }
+            />
+          )}
+          {includes(panelsToShow, Panels.MyAudios) && (
+            <Tab
+              id="myAudios"
+              title="My Audios"
+              panel={
+                <ImagesLibraryPanel
+                  hasApiKey={true}
+                  type="audio"
+                  key={forceUpdate}
+                  deleteImagesFunc={deleteImages}
+                  fetchImagesFunc={fetchImages}
+                  uploadComponent={
+                    <UploadComponent
+                      type="audio"
                       onComplete={() => {
                         setForceUpdate(Math.random());
                       }}
