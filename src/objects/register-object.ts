@@ -101,6 +101,8 @@ import {
   videoPostProcess,
   videoSizeUpdate,
   getAssetsUrls as getVideoAssetsUrls,
+  video_objectStart,
+  video_objectStop,
 } from "./video/video";
 import {
   createJsonSource,
@@ -209,8 +211,8 @@ registerObject(
   videoSizeUpdate,
   getVideoHtml,
   undefined,
-  undefined,
-  undefined,
+  video_objectStart,
+  video_objectStop,
   videoPostProcess,
   getVideoAssetsUrls
 );
