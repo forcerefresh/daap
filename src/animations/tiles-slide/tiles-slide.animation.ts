@@ -16,6 +16,8 @@ export function tilesSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
+  let initialized = false;
+
   let objectContentElement: HTMLDivElement;
   let objectContentHtml: string;
   let elements: HTMLDivElement[];
@@ -25,6 +27,9 @@ export function tilesSlideAnimation() {
 
   function init(config: ITilesSlideAnimation) {
     logger.animation.debug(`${TILES_SLIDE_ANIMATION} init`);
+
+    //if (initialized) return;
+    //initialized = true;
 
     element = getObjectElementById(config.itemId!);
 
@@ -123,6 +128,11 @@ export function tilesSlideAnimation() {
       timeline.pause();
       timeline.progress(0);
     }
+
+    elements.forEach((el) => {
+      element.removeChild(el);
+    });
+    elements = [];
   }
 
   function start(config: any, isManual?: boolean) {
