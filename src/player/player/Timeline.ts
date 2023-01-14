@@ -336,7 +336,6 @@ export class Timeline {
 
     // if (this.config.animationId) {
     //   const animationDef = getAnimationDefinition(this.config.animationId);
-    //   console.log(animationDef);
     //   animationDef?.start?.(this.config, isManual);
     // }
   }
@@ -348,7 +347,6 @@ export class Timeline {
 
     // if (this.config.animationId) {
     //   const animationDef = getAnimationDefinition(this.config.animationId);
-    //   console.log(animationDef);
     //   animationDef?.stop?.(this.config);
     // }
   }
@@ -358,13 +356,9 @@ export class Timeline {
 
     this.animIns?.update?.(this.config, time, isManual);
 
-    // console.log("update1");
-
     // if (this.config.animationId) {
-    //   console.log(time);
     //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.update?.(this.config, time, isManual);
-    //   console.log("update2");
     // }
   }
 
@@ -373,12 +367,9 @@ export class Timeline {
 
     this.animIns?.pause?.(this.config);
 
-    // console.log(this.config.animationId);
     // if (this.config.animationId) {
     //   const animationDef = getAnimationDefinition(this.config.animationId);
-    //   console.log("PAUSE 1");
     //   animationDef?.pause?.(this.config);
-    //   //console.log("update");
     // }
   }
 
@@ -390,7 +381,6 @@ export class Timeline {
     // if (this.config.animationId) {
     //   const animationDef = getAnimationDefinition(this.config.animationId);
     //   animationDef?.resume?.(this.config);
-    //   //console.log("update");
     // }
   }
 

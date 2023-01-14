@@ -204,9 +204,6 @@ export async function imageSizeUpdate(props: {
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
-  //const els = document.getElementsByClassName(className);
-  //const imageDiv = els[0] as HTMLDivElement;
-  //const parent = imageDiv.parentNode! as HTMLDivElement;
   objectWrapperEl.style.width = calculatedObjectSize.width;
   objectWrapperEl.style.height = calculatedObjectSize.height;
   objectWrapperEl.style.left = calculatedObjectSize.left;

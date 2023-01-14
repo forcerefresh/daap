@@ -144,6 +144,7 @@ const getSettingsDefault = (): ISettings => ({
   breakpointReference: "viewport",
   // slider
   sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
+  autoPlay: true,
   // preview
   pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },
   layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },

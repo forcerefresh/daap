@@ -21,9 +21,9 @@ export function getZoom(stage: IStage, settings: ISettings): number {
     );
     const adjustment =
       stage.stageViewportSize.w / pageSize.width >
-      stage.stageViewportSize.h / pageSize.height
-        ? 0.8
-        : 0.95;
+      stage.stageViewportSize.h / (pageSize.height + 100) // +100 added to record video
+        ? 0.8 // 0.8
+        : 0.95; //0.95
 
     zoom = mult * adjustment;
   }

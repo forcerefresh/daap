@@ -15,4 +15,5 @@ export const textAppDef: IAnimationExtensionAppDefinition = {
   animationId: TEXT_ANIMATION,
   formDefaults: textDefaults,
   formDefinition: textDefinition,
+  //getDuration: () => 5000,
 };

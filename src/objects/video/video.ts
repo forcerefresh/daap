@@ -4,6 +4,7 @@ import {
   InputType,
   IVideoInput,
   IVideoInputValue,
+  IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
@@ -12,6 +13,8 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import {
+  ExecutionCodeFuncPropsType,
+  ExecutionCodeFuncReturnType,
   GetAssetsUrlFuncPropsType,
   GetAssetsUrlFuncReturnType,
   PostProcessFuncPropsType,
@@ -33,17 +36,29 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import {
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
+
+const timeoutMap = new Map<string, NodeJS.Timeout | any>();
 
 export const VIDEO = "video";
 
 export type VideoPropertiesTuple = [
   ICoverPlacementInput<"videoFit">,
-  IVideoInput<"video">
+  IVideoInput<"video">,
+  IUnitsNumberInput<"delayTime">,
+  IUnitsNumberInput<"initialTime">
 ];
 
 export interface VideoValues {
   videoFit: ICoverPlacementValue;
   video: IVideoInputValue;
+  initialTime: string;
+  delayTime: string;
 }
 
 export function createVideoObject(
@@ -83,6 +98,22 @@ export function createVideoObject(
       value: { video: {} },
       defaultValue: { video: {} },
     },
+    {
+      displayName: "Delay",
+      propertyName: "delayTime",
+      inputType: InputType.UNITS_NUMBER,
+      value: "0ms",
+      defaultValue: "0ms",
+      allowedUnits: ["ms", "s"],
+    },
+    {
+      displayName: "Initial time",
+      propertyName: "initialTime",
+      inputType: InputType.UNITS_NUMBER,
+      value: "0ms",
+      defaultValue: "0ms",
+      allowedUnits: ["ms", "s"],
+    },
   ];
 
   const values: VideoValues = {
@@ -96,6 +127,8 @@ export function createVideoObject(
       filename: "",
       previewImage: {},
     },
+    delayTime: "0s",
+    initialTime: "0s",
   };
 
   return {
@@ -197,7 +230,7 @@ export function getVideoHtml(props: {
   style = addTransformPropertiesToStyle(style, object);
 
   let attrs = "";
-  if (isPlayer) attrs += "  autoplay muted";
+  if (isPlayer) attrs += " muted";
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
 
@@ -206,7 +239,7 @@ export function getVideoHtml(props: {
     filename: videoValues.video.filename,
   }).src;
 
-  const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}"></video>`;
+  const videoHtml = `<video style="${style}" ${attrs} src="${videoSrc}" class="video-content-${object.id}"></video>`;
 
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT
@@ -220,23 +253,75 @@ export function getVideoHtml(props: {
   return videoHtml;
 }
 
+/**
+ * This function execute when timeline starts
+ */
+export function video_objectStart(
+  props: ExecutionCodeFuncPropsType
+): ExecutionCodeFuncReturnType {
+  logger.object.debug(`video:objectStart()`);
+
+  const { id } = props;
+  const values = props.values as VideoValues;
+
+  const videoElm = document.getElementsByClassName(
+    `video-content-${id}`
+  )[0] as HTMLVideoElement;
+
+  const waitingTime = setTimeout(() => {
+    const initialTime = convertTimeUnitToMs(values.initialTime);
+    videoElm.currentTime = initialTime ? initialTime / 1000 : 0;
+    videoElm.play();
+  }, convertTimeUnitToMs(values.delayTime));
+
+  timeoutMap.set(id, waitingTime);
+
+  // const waitingTime = setTimeout(() => {
+  //   audioElm.volume = values.volume ? values.volume / 100 : 0;
+  //   audioElm.play();
+  // }, convertTimeUnitToMs(values.delayTime));
+
+  // timeoutMap.set(id, waitingTime);
+}
+
+/**
+ * This function execute when timeline stop
+ */
+export function video_objectStop(
+  props: ExecutionCodeFuncPropsType
+): ExecutionCodeFuncReturnType {
+  logger.object.debug(`video:objectStop()`);
+
+  const { id } = props;
+
+  const timeout = timeoutMap.get(id);
+  if (timeout) clearTimeout(timeout);
+
+  const videoElm = document.getElementsByClassName(
+    `video-content-${id}`
+  )[0] as HTMLAudioElement;
+
+  videoElm.currentTime = 0;
+  videoElm.pause();
+}
+
 export async function videoSizeUpdate(props: {
   id: string;
   className: string;
   values: { [key: string]: any };
   calculatedObjectSize: any;
 }): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
-  const els = document.getElementsByClassName(className);
-  const div = els[0] as HTMLDivElement;
-  const parent = div.parentNode! as HTMLDivElement;
-  parent.style.width = calculatedObjectSize.width;
-  parent.style.height = calculatedObjectSize.height;
-  parent.style.left = calculatedObjectSize.left;
-  parent.style.top = calculatedObjectSize.top;
+  const { id, calculatedObjectSize } = props;
 
-  div.style.width = calculatedObjectSize.width;
-  div.style.height = calculatedObjectSize.height;
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  objectWrapperEl.style.width = calculatedObjectSize.width;
+  objectWrapperEl.style.height = calculatedObjectSize.height;
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
+
+  objectEl.style.width = calculatedObjectSize.width;
+  objectEl.style.height = calculatedObjectSize.height;
 }
 
 export function videoPostProcess(

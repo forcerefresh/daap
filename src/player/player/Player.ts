@@ -37,7 +37,6 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
-import { Console } from "console";
 
 gsap.defaults(); // in order to bundle gsap
 gsap.install(window);
@@ -319,9 +318,15 @@ export class Player {
   }
 
   private bpUpdateSlide(isInitial = false) {
-    const slideEls = this.rootDiv.getElementsByClassName("slide");
-
     const bp = this.currentBp;
+
+    //TODO: set sliderRoot height
+    const sliderRoot = this.rootDiv.getElementsByClassName(
+      "sliderRoot"
+    )[0] as HTMLDivElement;
+    if (sliderRoot) sliderRoot.style.height = bp?.normal._page!.height + "px";
+
+    const slideEls = this.rootDiv.getElementsByClassName("slide");
 
     const bgEl = this.rootDiv.getElementsByClassName(".sliderBackground")[0] as
       | HTMLDivElement
@@ -806,7 +811,10 @@ export class Player {
       tl.init();
       tl.start();
     });
-    this.playSlide(0);
+
+    if (this.playerData?.config.autoPlay === true) {
+      this.playSlide(0);
+    }
   }
 
   private skippedFirstSlide = false;
@@ -883,7 +891,6 @@ export class Player {
       this.slideTransitionTimeline.emitter.addListener("stop", () => {
         const prevTriggerTimeline: Timeline | undefined =
           prevSlideTimeline?.getChildById("triggerTimeline");
-
         prevTriggerTimeline?.resetDurationToOriginal();
 
         prevSlideTimeline?.stop();
@@ -952,8 +959,18 @@ export class Player {
         //slideEl.style.zIndex = `${this.nextZIndex++}`; // TODO: COnsider zindex engine
       }
     } else {
-      if (isManual) prevSlideTimeline?.stop();
+      if (isManual) {
+        const prevTriggerTimeline: Timeline | undefined =
+          prevSlideTimeline?.getChildById("triggerTimeline");
+        //prevTriggerTimeline?.resetDurationToOriginal();
+        prevTriggerTimeline?.emitter.removeAllListeners("stop");
+
+        prevSlideTimeline?.stop();
+      }
       slideEl.style.zIndex = `${this.nextZIndex++}`;
+
+      // proveriti ovo: current imp: ako je procesuirano setujemo na -1
+      this.manuallyRequestedSlideIdx = -1;
     }
 
     if (this.oneSlide) {
@@ -988,6 +1005,7 @@ export class Player {
     );
 
     const currentSlideTimelineStopCallback = () => {
+      // FOR DEBUG: comment this to see all slides // IMPORTANT  S
       slideEl.style.display = "none";
     };
     this.currentSlideTimeline.emitter.removeAllListeners("stop");
@@ -1078,7 +1096,7 @@ export class Player {
     //const currentSlideTime = this.currentSlideTimeline?.time();
     const prevSlideTl = this.currentSlideTimeline;
 
-    logger.player.log("slideIdx");
+    logger.player.log("slideIdx: " + slideIdx);
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
@@ -1229,6 +1247,24 @@ export class Player {
         } else if (objectEvent.slideReferenceType === "prev") {
           const slideIdx = this.getPrevSlideIdx(this.currentSlide);
           this.manualPlaySlide(slideIdx);
+        } else if (objectEvent.slideReferenceType === "slider") {
+          if (objectEvent.hideOnEvent) {
+            el?.parentNode?.removeChild(el);
+          }
+          if (objectEvent.sliderActionOnEvent === "start") {
+            // TODO: IMPORTANT:!!!!
+            getTickerInstance().start();
+
+            this.staticTimelines.forEach((tl) => {
+              tl.init();
+              tl.start();
+            });
+
+            this.playSlide(0);
+            // TODO
+          } else if (objectEvent.sliderActionOnEvent === "stop") {
+            this.clear(false);
+          }
         }
       };
       el?.addEventListener(objectEvent?.slideEvent, clickHandler.bind(this));

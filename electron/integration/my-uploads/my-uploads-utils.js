@@ -15,6 +15,35 @@ const JSZip = require("jszip");
 const fs = require("fs");
 const { omit } = require("lodash");
 
+async function processAudio(fileBase64, type, fileMetadata) {
+  const userDataPath = app.getPath("userData");
+
+  const myAudioPath = path.join(
+    userDataPath,
+    "my-uploads",
+    type2MediaFolder(type),
+    fileMetadata.filename
+  );
+
+  // save image
+  let base64Audio = fileBase64.split(";base64,").pop();
+  await fsPromise.writeFile(myAudioPath, base64Audio, { encoding: "base64" });
+
+  const id = uuid();
+
+  const item = {
+    id,
+    ...fileMetadata,
+    audio: {
+      id,
+      filename: fileMetadata.filename,
+      mediaType: "audio",
+      sourceType: "local",
+    },
+  };
+  return item;
+}
+
 async function processVideo(
   fileBase64,
   type,
@@ -725,4 +754,5 @@ module.exports = {
   loadMyMedia,
   saveMyMedia,
   createMyMediaFolder,
+  processAudio,
 };

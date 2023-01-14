@@ -12,6 +12,10 @@ import { convertTimeUnitToMs } from "../utils/utils";
 import { ITimelineConfig, Timeline } from "./player/Timeline";
 import { RootTimeline } from "./player/RootTimeline";
 import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
+import {
+  getAppAnimationDefinition,
+  getPlayerAnimationDefinition,
+} from "webslider-sdk/lib/animations/animations-register";
 export const DYNAMIC_OUT_EFF_TIMELINE_GROUP = "dynamic-out-eff-timeline-group";
 
 export interface IEventTimeline {
@@ -105,7 +109,12 @@ export function createTimelineForObject(data: IItemsData): {
 }
 
 function getDuration(data: IItemsData, eff: ITransition): number {
-  return eff.duration === "-1"
+  // TODO: return duration from effect deff.
+
+  const hasDuration = getAppAnimationDefinition(eff.animation.id)?.formDefaults
+    .hasDuration;
+
+  return eff.duration === "-1" || hasDuration === false
     ? convertTimeUnitToMs(data.data.slideDuration.customValue)
     : convertTimeUnitToMs(eff.duration);
 }

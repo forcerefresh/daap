@@ -70,7 +70,6 @@ export const UnitsNumberInputForm: React.FC<
     value,
     onChange,
   } = props;
-
   const id = `${propertyName}_units_input_number`;
 
   const latestUnit = React.useRef<UnitType>(allowedUnits[0]);

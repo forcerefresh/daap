@@ -1,4 +1,5 @@
 import {
+  ICheckboxInput,
   IColorInput,
   IInputMetadataValues,
   InputType,
@@ -34,6 +35,7 @@ export const SVG = "svg";
 
 export type SvgPropertiesTuple = [
   ISVGInput<"svg">,
+  ICheckboxInput<"keepAspectRatio">,
   IFormGroupItem<
     [IColorInput<"fill">, IColorInput<"stroke">, IColorInput<"color">]
   >,
@@ -42,6 +44,7 @@ export type SvgPropertiesTuple = [
 
 export interface SvgValues {
   svg: ISVGValue;
+  keepAspectRatio: boolean;
   hasCustomColors: boolean;
   hasFillAndStroke: boolean;
   fill: RGBColor;
@@ -77,6 +80,13 @@ export function createSvgObject(
         <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
         </svg>`,
       },
+    },
+    {
+      displayName: "Keep aspect ratio",
+      propertyName: "keepAspectRatio",
+      inputType: InputType.CHECKBOX,
+      value: true,
+      defaultValue: true,
     },
     {
       displayName: "Fill & Stroke",
@@ -134,6 +144,7 @@ export function createSvgObject(
       : {
           source: ``,
         },
+    keepAspectRatio: true,
     hasCustomColors: false,
     hasFillAndStroke: false,
     fill: { r: 255, g: 255, b: 255, a: 1 },
@@ -206,15 +217,17 @@ export function getSvgHtml(props: {
 
   let scaleX = 1;
   let scaleY = 1;
-  scaleY = h / w;
+  scaleY = svgValues.keepAspectRatio ? 1 : h / w;
 
   let css = `
     <style>
     .object-content-${object.id}{
+      box-sizing: border-box;
       transform: scaleX(${scaleX}) scaleY(${scaleY});
       transform-origin: top left;
       ${addCommonPropertiesToStyle("", object)}
       ${addTransformPropertiesToStyle("", object)}   
+      ${svgValues.keepAspectRatio ? "width:100%;height:100%;" : ""}
     }
     .object-content-${object.id} svg {
       width: 100%;

@@ -9,6 +9,7 @@ const sharp = require("sharp");
 const {
   processImage,
   deleteMedia,
+  processAudio,
   processVideo,
   processVector,
   processExtension,
@@ -43,6 +44,10 @@ ipcMain.handle("MyUploads::Delete", async (event, dataStr) => {
       response = await deleteMedia(delMyMedia, type);
       break;
     }
+    case "audio": {
+      response = await deleteMedia(delMyMedia, type);
+      break;
+    }
     case "vector": {
       response = await deleteMedia(delMyMedia, type);
       break;
@@ -71,6 +76,12 @@ ipcMain.on("MyUploads::GetMediaSrc", async (event, dataStr) => {
     mediaItem.filename,
   ].join("/");
 
+  // console.log(relativePath);
+
+  console.log({
+    ...mediaItem,
+    src: "webslider-fp://" + relativePath,
+  });
   event.returnValue = {
     ...mediaItem,
     src: "webslider-fp://" + relativePath,
@@ -143,6 +154,10 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
         previewImageBase64,
         previewImageItem
       );
+      break;
+    }
+    case "audio": {
+      item = await processAudio(fileBase64, type, fileMetadata);
       break;
     }
     case "vector": {

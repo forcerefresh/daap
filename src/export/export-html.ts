@@ -182,6 +182,7 @@ export function generatePlayerData(
       skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
       breakpointReference: settings.breakpointReference,
       sliderBackgroundColor: settings.sliderBackgroundColor,
+      autoPlay: settings.autoPlay,
     },
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
@@ -522,14 +523,23 @@ function generateSlideData(
       // << "left", "top", "width", "height"
 
       let wrapperStyle = style;
+      wrapperStyle += "pointer-events: none;";
+
       style +=
-        "position: relative; left:initial; top: initial; overflow: visible;";
+        "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
 
       // NOTE exception for perspective
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+
+        // TODO: this should be configurable? maybe?
+        style += `transform-origin: center center;`;
+        wrapperStyle += `transform-origin: center center;`;
       }
+
+      // TODO: check this
+      //wrapperStyle += `overflow: hidden;`;
 
       html += `      <div class="object-wrapper object-wrapper-${object.id}" style='${wrapperStyle}'>`; // open object wrapper
       html += effectWrappers.map(

@@ -564,13 +564,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       cursor: "nwse-resize",
     };
 
-    // console.log(topLeftStyle);
-
-    // console.log(topRightStyle);
-
-    // console.log(bottomRightStyle);
-
-    // console.log(bottomLeftStyle);
     return (
       <div
         className={"RESIZE_HANDLES_HOLDER"}

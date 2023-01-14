@@ -52,6 +52,7 @@ import { HTMLInputForm } from "./html-input/html-input";
 import { RangeSliderInputForm } from "./range-slider-input/range-slider-input";
 import { FitInputForm } from "./fit-input/fit-input";
 import { InsetLayoutInputForm } from "./inset-layout-input/inset-layout-input";
+import { AudioInputForm } from "./audio-input/audio-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -277,6 +278,9 @@ export function getInputForm<T>(
     }
     case InputType.VIDEO: {
       return <VideoInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.AUDIO: {
+      return <AudioInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.TRANSFORM_ORIGIN: {
       return (

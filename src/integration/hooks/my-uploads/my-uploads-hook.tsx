@@ -14,6 +14,17 @@ import { remove } from "lodash-es";
 import { file2Base64, getImageFromFile } from "../../../utils/doom-utils/video";
 import { appendToFileName } from "../../../utils/file/file-utils";
 
+type AudioItem = {
+  id?: string;
+  url?: string;
+  filename?: string;
+  mediaType?: MediaType;
+  sourceType?: "local" | string;
+  src?: string;
+};
+
+type AudioData = MediaDataInfo & { audio: AudioItem };
+
 export const useMyMediaHook = () => {
   const upload = (
     type: MediaType,
@@ -33,7 +44,7 @@ export const useMyMediaHook = () => {
         localStorage.getItem(lsMediaKey) || "{}"
       );
 
-      let item: ImageData | VectorData | VideoData | ExtensionData;
+      let item: ImageData | VectorData | VideoData | ExtensionData | AudioData;
 
       switch (type) {
         case "image": {
@@ -151,6 +162,14 @@ export const useMyMediaHook = () => {
                 size: { width: 300, height: 300, type: "jpg" },
               },
             },
+          };
+          break;
+        }
+        case "audio": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            audio: {},
           };
           break;
         }

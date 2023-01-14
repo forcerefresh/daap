@@ -110,6 +110,17 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                   ""
                 )}
               </div>
+              {getCheckboxField(
+                "Auto play",
+                settings.autoPlay,
+                (autoPlay: boolean) => {
+                  _updateProjectSettings({
+                    autoPlay: autoPlay,
+                  });
+                },
+                `If disabled start slide manually using "Object > Navigation > Slide > Slider "`,
+                { style: { width: "100px" } }
+              )}
             </FormGroup>
           </div>
         )}

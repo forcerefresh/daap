@@ -30,6 +30,10 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import {
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
 
 const SPINNER = "spinner";
 
@@ -168,18 +172,20 @@ export function getSpinnerHtml(props: {
   const spinnerValues = object.definition.values as SpinnerValues;
   let content: { html: string; css: string } | undefined = {} as any;
 
+  const randId = object.id + "-spinner";
+
   switch (spinnerValues.type) {
     case "plane":
-      content = getPlane(spinnerValues, isPlayer);
+      content = getPlane(spinnerValues, randId, isPlayer);
       break;
     case "chase":
-      content = getChase(spinnerValues, isPlayer);
+      content = getChase(spinnerValues, randId, isPlayer);
       break;
     case "dot":
-      content = getDot(spinnerValues, isPlayer);
+      content = getDot(spinnerValues, randId, isPlayer);
       break;
     case "bars":
-      content = getBars(spinnerValues, isPlayer);
+      content = getBars(spinnerValues, randId, isPlayer);
       break;
   }
   let style = "";
@@ -197,6 +203,16 @@ export async function spinnerSizeUpdate(props: {
   calculatedObjectSize: any;
 }): Promise<void> {
   const { id, calculatedObjectSize } = props;
+
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  objectWrapperEl.style.width = calculatedObjectSize.width;
+  objectWrapperEl.style.height = calculatedObjectSize.height;
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
+
+  objectEl.style.width = calculatedObjectSize.width;
+  objectEl.style.height = calculatedObjectSize.height;
 }
 
 export const spinnerMeta = {
@@ -226,9 +242,11 @@ function getFade(randId: string, spinnerValues: SpinnerValues) {
   return css;
 }
 
-function getPlane(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
-  const randId = uuid();
-
+function getPlane(
+  spinnerValues: SpinnerValues,
+  randId: string,
+  isPlayer: boolean | undefined
+) {
   let css = `
     ${getFade(randId, spinnerValues)}
     .sk-plane_${randId} {
@@ -251,8 +269,11 @@ function getPlane(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
   return { css, html };
 }
 
-function getChase(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
-  const randId = uuid();
+function getChase(
+  spinnerValues: SpinnerValues,
+  randId: string,
+  isPlayer: boolean | undefined
+) {
   let css = `
     ${getFade(randId, spinnerValues)}
     .sk-chase-dot_${randId} {
@@ -312,8 +333,11 @@ function getChase(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
     </div>`;
   return { css, html };
 }
-function getDot(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
-  const randId = uuid();
+function getDot(
+  spinnerValues: SpinnerValues,
+  randId: string,
+  isPlayer: boolean | undefined
+) {
   let css = `
     ${getFade(randId, spinnerValues)}
     .sk-dot_${randId} {
@@ -353,25 +377,27 @@ function getDot(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
   return { css, html };
 }
 
-function getBars(spinnerValues: SpinnerValues, isPlayer: boolean | undefined) {
-  const randId = uuid();
+function getBars(
+  spinnerValues: SpinnerValues,
+  randId: string,
+  isPlayer: boolean | undefined
+) {
   let css = `
     ${getFade(randId, spinnerValues)}
     .sk-bars_${randId} {
       width: 100%;
       height: 100%;
-      text-align: center;
+      display: flex;
+      justify-content: space-between;
     }
     .sk-bars_${randId} > div {
       background-color: ${convertRGBColor2RGBAString(spinnerValues.color)};
       height: 100%;
-      width: 10%;
+      width: 12%;
       display: inline-block;
       animation: sk-stretchdelay_${randId} 1.2s infinite ease-in-out;
     }
-    .sk-bars_${randId} > * + * {
-      margin-left: 5%;
-    }
+    
     .sk-bars_${randId} .sk-rect2_${randId} {
       animation-delay: -1.1s;
     }

@@ -64,6 +64,7 @@ export interface IPlayerData {
     sliderBackgroundColor: RGBColor;
     skipFirstSlideAnimation: boolean;
     breakpointReference: "viewport" | "parent";
+    autoPlay?: boolean;
   };
   breakpointData: {
     width: number;

@@ -1,5 +1,6 @@
 import { registerAnimation } from "webslider-sdk/lib/animations/animations-register";
 import { fadeDef, fadeAppDef } from "./fade/fade";
+import { fadeRangeDef, fadeRangeAppDef } from "./fade-range/fade-range";
 import { slideDef, slideAppDef } from "./slide/slide";
 import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";
 import {
@@ -30,6 +31,7 @@ import { slideSlideAppDef, slideSlideDef } from "./slide-slide/slide-slide";
 import { textAppDef, textDef } from "./text/text";
 
 registerAnimation(fadeAppDef, fadeDef);
+registerAnimation(fadeRangeAppDef, fadeRangeDef);
 registerAnimation(flipAppDef, flipDef);
 registerAnimation(flipSlideAppDef, flipSlideDef);
 registerAnimation(parallaxAppDef, parallaxDef);

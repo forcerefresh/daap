@@ -13,6 +13,7 @@ const {
   downloadToBuffer,
   getMyImagesPath,
   getMyVideosPath,
+  getMyAudiosPath,
   fileToBuffer,
 } = require("../../utils/utils");
 const {
@@ -342,6 +343,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
         const mediaPath =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
+            : assetItem.mediaType === "audio"
+            ? getMyAudiosPath()
             : getMyImagesPath();
 
         pArr.push(
@@ -452,7 +455,31 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   }
 
   // TODO: ADD ABSOLUTE URLS FOR OBJECTS
+  // ...
 
+  // update to absolute urls
+  const exportObj = JSON.parse(expString);
+  exportObj.extensions.forEach((extension) => {
+    // only files for player
+    if (extension.packageFiles?.playerAnimationFilename) {
+      extension.packageFiles.playerAnimationFilename =
+        publishDetails.bucketUrl +
+        "wsplayer/extensions/" +
+        extension.packageFiles?.playerAnimationFilename;
+    }
+    if (extension.packageFiles?.playerObjectFilename) {
+      extension.packageFiles.playerObjectFilename =
+        publishDetails.bucketUrl +
+        "wsplayer/extensions/" +
+        extension.packageFiles?.playerObjectFilename;
+    }
+
+    delete extension.packageFiles.appObjectFilename;
+    delete extension.packageFiles.appAnimationFilename;
+    delete extension.packageFiles.icon;
+  });
+
+  expString = JSON.stringify(exportObj);
   const expBuffer = Buffer.from(expString, "utf-8");
 
   await bucketManager.uploadBufferToBucket(
@@ -498,7 +525,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 
   BrowserWindow.getAllWindows()[0].webContents.send(
     `ObjectStorageRenderer::SubscribeToPublishDetails`,
-    JSON.stringify([{ log: "Publish has finished sucessfuly!" }])
+    JSON.stringify([{ log: "Publish has finished successfully!" }])
   );
 
   return { status: "OK" };

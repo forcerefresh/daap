@@ -1,0 +1,124 @@
+import { getMethodByType } from "../common";
+import gsap from "gsap";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { getObjectOrLayerElementById } from "../animation-utils";
+import { FADE_RANGE_ANIMATION, IFadeRangeAnimation } from "./fade-range.types";
+
+export function fadeRangeAnimation() {
+  let timeline: gsap.core.Timeline;
+  let element: HTMLDivElement;
+
+  let isInitialized = false;
+
+  function init(config: IFadeRangeAnimation) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} init`);
+
+    if (isInitialized) return;
+
+    element = getObjectOrLayerElementById(config.itemId!);
+    // initialState.opacity = element.style.opacity;
+    isInitialized = true;
+
+    gsap.set(element, { opacity: config.from });
+
+    timeline = gsap.timeline({
+      paused: true,
+    });
+    timeline.fromTo(
+      element,
+      { opacity: config.from ? config.from / 100 : 0 },
+      {
+        opacity: config.to ? config.to / 100 : 0,
+        ease: config.ease,
+        duration: config.duration! / 1000,
+      }
+    );
+
+    // timeline = gsap.timeline({ paused: true });
+    // timeline[getMethodByType(config.type)](element, {
+    //   ease: config.ease,
+    //   duration: config.duration! / 1000,
+    //   opacity: 0,
+    // });
+  }
+
+  function rootStart(config: any) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} rootStart`);
+
+    if (config.type === "in") {
+      timeline.pause();
+      timeline.progress(0);
+    }
+  }
+
+  function rootStop(config: any) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} rootStop`);
+
+    if (config.type === "out") {
+      timeline.pause();
+      timeline.progress(0);
+    }
+  }
+
+  function start(config: any, isManual?: boolean) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} start`);
+
+    timeline.play(0);
+
+    if (isManual) timeline.pause();
+  }
+
+  function stop(config: any, isManual?: boolean, isReverse?: boolean) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} stop`);
+
+    if (isManual) {
+      timeline.pause();
+      if (isReverse) {
+        timeline.progress(0);
+      } else {
+        timeline.progress(config.duration / 1000);
+      }
+    }
+  }
+
+  function update(config: any, time: number, isManual?: boolean) {
+    if (isManual) {
+      timeline.seek(time / 1000);
+    }
+  }
+
+  function pause(config: any) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} pause`);
+
+    timeline.pause();
+  }
+
+  function resume(config: any) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} resume`);
+
+    timeline.resume();
+  }
+
+  function direction(config: any, direction: number) {
+    logger.animation.debug(`${FADE_RANGE_ANIMATION} reverse`);
+
+    if (direction === -1 && !timeline.reversed()) {
+      timeline.reverse();
+    }
+    if (direction === 1) {
+      timeline.play();
+    }
+  }
+
+  return {
+    init,
+    rootStart,
+    start,
+    update,
+    stop,
+    rootStop,
+    pause,
+    resume,
+    direction,
+  };
+}

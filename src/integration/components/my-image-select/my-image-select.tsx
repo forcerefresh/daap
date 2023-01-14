@@ -44,6 +44,8 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
       ? "image/jpeg, image/png, image/gif"
       : type === "video"
       ? "video/mp4"
+      : type === "audio"
+      ? "audio/mp3, audio/mpeg"
       : type === "vector"
       ? "image/svg+xml"
       : type === "extension"
@@ -133,6 +135,10 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
           ) : type === "video" ? (
             <p>
               Drag 'n' drop some Videos here, or click to open select dialog.
+            </p>
+          ) : type === "audio" ? (
+            <p>
+              Drag 'n' drop some Audios here, or click to open select dialog.
             </p>
           ) : type === "vector" ? (
             <p>

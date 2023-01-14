@@ -15,6 +15,7 @@ export function textAnimation() {
   let numberOfChars: number = 0;
 
   let isInitialized = false;
+  let isAnimationInitialized = false;
 
   function init(config: ITextAnimation) {
     logger.animation.debug(`${TEXT_ANIMATION} init`);
@@ -44,6 +45,9 @@ export function textAnimation() {
   }
 
   function initializeAnimation(config: ITextAnimation) {
+    if (isAnimationInitialized) return;
+    isAnimationInitialized = true;
+
     pElClone = pElOriginal.cloneNode(true) as HTMLParagraphElement;
     objectEL.appendChild(pElClone);
     pElClone.style.opacity = config.type === "in" ? "0" : "1";
@@ -154,10 +158,14 @@ export function textAnimation() {
     }
     pElOriginal.style.opacity = config.type === "in" ? "1" : "0";
     pElClone = null;
+
+    isAnimationInitialized = false;
   }
 
   function rootStart(config: ITextAnimation) {
     logger.animation.debug(`${TEXT_ANIMATION} rootStart`);
+
+    pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
 
     if (config.type === "in") {
       timeline.pause();
@@ -198,6 +206,8 @@ export function textAnimation() {
       } else {
         timeline.progress(config.duration!); /// 1000
       }
+    } else {
+      teardownAnimation(config);
     }
   }
 

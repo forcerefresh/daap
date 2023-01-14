@@ -53,6 +53,12 @@ export const getDefaultPoint = (
 
 const getTimelinePointDefaultValueByProperty = (property: string) => {
   switch (property) {
+    case "width": {
+      return { value: "0px" };
+    }
+    case "height": {
+      return { value: "0px" };
+    }
     case "translateX": {
       return { value: "0px" };
     }

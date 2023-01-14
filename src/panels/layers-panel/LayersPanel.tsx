@@ -88,6 +88,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     let updateState = false;
     const openLayerByIdClone = cloneDeep(openLayerById);
     layerArr?.forEach((layer) => {
+      if (!layer) return; // TODO IMPORTANT clone slide
       if (typeof openLayerById[layer.id] === "undefined") {
         openLayerByIdClone[layer.id] = true;
         updateState = true;
@@ -272,6 +273,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         </div>
         <div className={css.layersHolder} ref={layersHolderRef}>
           {layerArr?.map((layer, idx) => {
+            if (!layer) return null; // TODO: IMPORTANT ko kopiranja slajda
+
             const isLastLayer = idx === layerArr.length - 1;
 
             const disableVisibility =
