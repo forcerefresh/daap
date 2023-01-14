@@ -160,6 +160,12 @@ export class Player {
 
     rootDiv.innerHTML = playerData?.html || "";
 
+    this.normalSlideDataArr = this.playerData?.slides;
+    this.frontSlideDataArr = this.playerData?.frontSlides;
+    this.backSlideDataArr = this.playerData?.backSlides;
+
+    this.hideAllSlides();
+
     this.bgEl = rootDiv.getElementsByClassName(
       "sliderBackground"
     )[0] as HTMLDivElement;
@@ -177,10 +183,6 @@ export class Player {
 
     // NOTE: this implementation initialize all slides
     // TODO: lazy loading for requested slide should be implemented
-
-    this.normalSlideDataArr = this.playerData?.slides;
-    this.frontSlideDataArr = this.playerData?.frontSlides;
-    this.backSlideDataArr = this.playerData?.backSlides;
 
     this.preloaders = {
       first: [],
@@ -1351,6 +1353,24 @@ export class Player {
         });
       }
     }
+  }
+
+  private hideAllSlides() {
+    this.backSlideDataArr?.forEach((data) => {
+      //this.hideSlide(data);
+    });
+    this.frontSlideDataArr?.forEach((data) => {
+      //this.hideSlide(data);
+    });
+    this.normalSlideDataArr?.forEach((data) => {
+      this.hideSlide(data);
+    });
+  }
+
+  private hideSlide(data: ISlideData) {
+    const slideEl = getSlideById(data.slide.id);
+    slideEl.style.display = "none";
+    slideEl.style.pointerEvents = "none";
   }
 
   private createSlide(slideIdx: number, data: ISlideData) {
