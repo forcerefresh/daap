@@ -117,6 +117,11 @@ export function tilesZoomAnimation() {
       timeline.pause();
       timeline.progress(0);
     }
+
+    elements.forEach((el) => {
+      element.removeChild(el);
+    });
+    elements = [];
   }
 
   function start(config: any, isManual?: boolean) {

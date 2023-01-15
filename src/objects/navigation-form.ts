@@ -46,7 +46,8 @@ export type NavigationTuple = [
         ]
       >
     ]
-  >
+  >,
+  ICheckboxInput<"enableAudioPlay">
 ];
 
 export const navigationDefinition: NavigationTuple = [
@@ -223,5 +224,13 @@ export const navigationDefinition: NavigationTuple = [
         ],
       },
     ],
+  },
+  {
+    displayName: "Enable audio",
+    helperText: "Audio requires user interaction to be played",
+    propertyName: "enableAudioPlay",
+    inputType: InputType.CHECKBOX,
+    value: {} as any,
+    defaultValue: {} as any,
   },
 ];

@@ -16,7 +16,7 @@ export function tilesSlideAnimation() {
   let timeline: gsap.core.Timeline;
   let element: HTMLDivElement;
 
-  let initialized = false;
+  //let initialized = false;
 
   let objectContentElement: HTMLDivElement;
   let objectContentHtml: string;

@@ -1225,6 +1225,8 @@ export class Player {
     } else if (objectEvent.navigationType === NavigationType.Link) {
       el = document.getElementsByClassName(className)[0] as HTMLDivElement;
       el?.addEventListener(objectEvent?.linkEvent, () => {
+        if (objectEvent.enableAudioPlay) this.enableAudio();
+
         let a = document.createElement("a");
         // NOTE: when player runs in  app open in new window (_blank)
         a.target = this.playerConfig.isApp ? "_blank" : objectEvent.linkTarget;
@@ -1235,6 +1237,8 @@ export class Player {
       el = document.getElementsByClassName(className)[0] as HTMLDivElement;
 
       const clickHandler = () => {
+        if (objectEvent.enableAudioPlay) this.enableAudio();
+
         if (objectEvent.slideReferenceType === "slideNo") {
           this.manualPlaySlide(parseInt(objectEvent?.slideNo, 10) - 1);
         } else if (objectEvent.slideReferenceType === "slideId") {
@@ -1270,6 +1274,17 @@ export class Player {
       el?.addEventListener(objectEvent?.slideEvent, clickHandler.bind(this));
     }
     if (el) el.style.cursor = objectEvent.cursor;
+  }
+
+  private enableAudio() {
+    const audioEls = this.rootDiv.getElementsByTagName("audio");
+    Array.from(audioEls).forEach((audioEl) => {
+      //audioEl.volume = 0;
+      //audioEl.play();
+      audioEl.pause();
+      audioEl.volume = 0.8;
+      audioEl.currentTime = 0;
+    });
   }
 
   private getSlideIdxByID(customId: string): number | undefined {
