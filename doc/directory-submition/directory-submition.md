@@ -2,7 +2,7 @@
 
 Web Slider
 
-## 100 char  description
+## 100 char description
 
 Web Slider is a Web Animation Platform that redefines the approach to creating visual content.
 
