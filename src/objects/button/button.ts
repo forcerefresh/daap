@@ -759,7 +759,7 @@ export function getButtonHtml(props: {
     style += `box-shadow: ${buttonProperties.boxShadowDistanceX} ${buttonProperties.boxShadowDistanceY} ${buttonProperties.boxShadowBlur} ${buttonProperties.boxShadowSpread} rgba(${bsc?.r},${bsc?.g},${bsc?.b},${bsc?.a})${bsInset};`;
   }
 
-  style += "position: absolute;";
+  //style += "position: absolute;";
   style += "white-space: nowrap;";
   style += `transition-duration: ${buttonProperties.hoverTransitionDuration}ms;`;
 

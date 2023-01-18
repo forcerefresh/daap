@@ -22,6 +22,8 @@ export function tilesFadeAnimation() {
   function init(config: ITilesFadeAnimation) {
     logger.animation.debug(`${TILES_FADE_ANIMATION} init`);
 
+    //if (elements?.length > 0) return;
+
     element = getObjectElementById(config.itemId!);
 
     const target = element;
@@ -113,6 +115,11 @@ export function tilesFadeAnimation() {
       timeline.pause();
       timeline.progress(0);
     }
+
+    elements.forEach((el) => {
+      element.removeChild(el);
+    });
+    elements = [];
   }
 
   function start(config: any, isManual?: boolean) {
