@@ -30,6 +30,8 @@ import {
 import {
   calculateObjectSize,
   calculateObjectSizePerDevice,
+  //getRelativeTo,
+  //unitValueToPx,
 } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
@@ -183,6 +185,7 @@ export function generatePlayerData(
       breakpointReference: settings.breakpointReference,
       sliderBackgroundColor: settings.sliderBackgroundColor,
       autoPlay: settings.autoPlay,
+      hideOutsideContent: settings.hideOutsideContent,
     },
     breakpointData: {
       width: breakpointConfig.normal.maxSliderSize.width,
@@ -656,7 +659,8 @@ export function getObjectHtml(
   object: IObject,
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
-  isSave: boolean
+  isSave: boolean,
+  bpConfig?: BreakpointConfiguration
   // thumbnailHtmlArr: (string | undefined)[],
   // slidesCounter = 3
 ) {
@@ -681,6 +685,21 @@ export function getObjectHtml(
           calculatedObjectSize,
           isPlayer,
           isSave,
+          // calculateSize: (
+          //   value: string,
+          //   propertyName: "width" | "height" | "left" | "top"
+          // ) => {
+          //   const relativeTo = getRelativeTo(
+          //     {
+          //       layout: object.layout,
+          //       selfSize: object.selfSize,
+          //       ...pickLayoutFromLayouts(object.layout, object),
+          //     } as ILayout,
+          //     bpConfig!
+          //   );
+
+          //   return unitValueToPx(value, propertyName, relativeTo, bpConfig!);
+          // },
           // thumbnailHtmlArr,
           // slidesCounter,
         });

@@ -121,6 +121,17 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                 `If disabled start slide manually using "Object > Navigation > Slide > Slider "`,
                 { style: { width: "100px" } }
               )}
+              {getCheckboxField(
+                "Hide outside content",
+                !!settings.hideOutsideContent,
+                (hideOutsideContent: boolean) => {
+                  _updateProjectSettings({
+                    hideOutsideContent: hideOutsideContent,
+                  });
+                },
+                `Content outside the slider bounds will be hidden`,
+                { style: { width: "100px" } }
+              )}
             </FormGroup>
           </div>
         )}

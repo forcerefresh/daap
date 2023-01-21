@@ -24,6 +24,7 @@ import { IntegrationContext } from "../../integration";
 import PublishPanel from "../publish-panel/PublishPanel";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { setupNewProject } from "../../store/actions/multi-actions";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -74,6 +75,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     _initializeSlideAndLayer,
     _setDevice,
     _updateProjectMeta,
+    _setupNewProject,
     previewState,
     meta,
     editor,
@@ -103,7 +105,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const { supportStorageObjects, listAssignedStorageObjects } =
     globalContext.useObjectStorageHook();
 
-  const [isDiscartConfirmOpen, setIsDiscartConfirmOpen] = useState(false);
+  const [isDiscardConfirmOpen, setIsDiscardConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
   const isExistingProject = editor.isExistingProject;
 
@@ -129,21 +131,17 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
   const tryToCreateNew = () => {
     //if (editor.sliderChanged) {
-    setIsDiscartConfirmOpen(true);
+    setIsDiscardConfirmOpen(true);
     //} else {
-    //  createNewSlider();
+    //  createNew();
     //}
   };
 
-  const createNewSlider = () => {
-    _createNewProject();
-    _doClearHistory();
-    _initializeSlideAndLayer();
-    _updateEditor({ isExistingProject: false, sliderChanged: false });
-    if (isDiscartConfirmOpen) {
-      setIsDiscartConfirmOpen(false);
+  const createNew = () => {
+    _setupNewProject();
+    if (isDiscardConfirmOpen) {
+      setIsDiscardConfirmOpen(false);
     }
-    _doClearHistory();
   };
 
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {
@@ -323,9 +321,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           />
         }
         intent={Intent.PRIMARY}
-        isOpen={isDiscartConfirmOpen}
-        onCancel={() => setIsDiscartConfirmOpen(false)}
-        onConfirm={createNewSlider}
+        isOpen={isDiscardConfirmOpen}
+        onCancel={() => setIsDiscardConfirmOpen(false)}
+        onConfirm={createNew}
         className="bp3-dark"
       >
         {editor.sliderChanged ? (
@@ -365,6 +363,7 @@ const mapDispatchToProps = {
   _setDevice: setDevice,
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
+  _setupNewProject: () => setupNewProject(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);

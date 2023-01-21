@@ -16,7 +16,11 @@ import {
   NavigationType,
 } from "webslider-sdk/lib/objects/i-object";
 import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types";
-import { calculateObjectSize } from "../../panels/stage-panel/StagePanelUtils";
+import {
+  calculateObjectSize,
+  getRelativeTo,
+  unitValueToPx,
+} from "../../panels/stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { addClass, removeClass } from "../../utils/doom-utils/common";
@@ -324,7 +328,13 @@ export class Player {
     const sliderRoot = this.rootDiv.getElementsByClassName(
       "sliderRoot"
     )[0] as HTMLDivElement;
-    if (sliderRoot) sliderRoot.style.height = bp?.normal._page!.height + "px";
+    if (sliderRoot) {
+      sliderRoot.style.height = bp?.normal._page!.height + "px";
+      sliderRoot.style.width = bp?.normal._page!.width + "px";
+      sliderRoot.style.overflow = this.playerData?.config.hideOutsideContent
+        ? "hidden"
+        : "visible";
+    }
 
     const slideEls = this.rootDiv.getElementsByClassName("slide");
 
@@ -351,7 +361,14 @@ export class Player {
       ? "1px dotted #00d6ff"
       : "1px dotted rgba(255,255,255,0)";
 
-    Array.from(slideEls).forEach((el: any) => {
+    (Array.from(slideEls) as HTMLDivElement[]).forEach((el) => {
+      el.style.height = bp?.normal._page!.height + "px";
+      el.style.width = bp?.normal._page!.width + "px";
+      el.style.overflow = this.playerData?.config.hideOutsideContent
+        ? "hidden"
+        : "visible";
+      el.style.pointerEvents = "none";
+
       // SLIDE
       el.style.left =
         (bp?.normal._page!.width - bp?.normal._maxSliderSize!.width) / 2 + "px";
@@ -420,7 +437,7 @@ export class Player {
     bounds: { width: number; height: number }
   ) {
     const wScale = this.getScale(bp.normal.page.width, bounds.width);
-    const hScale = this.getScale(bp.normal.page.height, bounds.height);
+    let hScale = this.getScale(bp.normal.page.height, bounds.height);
 
     let _pageH = bp.normal.page.height;
     let _pageW = bp.normal.page.width;
@@ -463,7 +480,10 @@ export class Player {
       _maxSliderH = bp.normal.maxSliderSize.height;
     } else if (bp.normal.heightBehavior.type === "keepAspectRatio") {
       _pageH = bp.normal.page.height * wRatio;
+      _pageW = bp.normal.page.width * wRatio;
       _maxSliderH = bp.normal.maxSliderSize.height * wRatio;
+
+      hScale = wScale;
     } else if (
       bp.normal.heightBehavior.type === "keepAspectRatioBelowMaxSliderSize"
     ) {
@@ -479,6 +499,7 @@ export class Player {
       width: _pageW,
       height: _pageH,
     };
+    console.log(bp.normal._page);
 
     bp.normal._maxSliderSize = {
       width: _maxSliderW,
@@ -492,6 +513,9 @@ export class Player {
       width:
       height:
     }*/
+
+    //logger.player.notice("wScale:  " + wScale);
+    //logger.player.notice("hScale:  " + hScale);
 
     return {
       wScale,
@@ -525,6 +549,8 @@ export class Player {
         this.scaleParams
       );
 
+      console.log(calObjSize);
+
       /*
       const calObjSize =
         transitionData.calculatedObjectSizePerDevice?.[
@@ -544,6 +570,23 @@ export class Player {
           values: transitionData.itemValues,
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
+          scale: this.scaleParams,
+          calculateSize: (
+            value: string,
+            propertyName: "width" | "height" | "left" | "top"
+          ) => {
+            const relativeTo = getRelativeTo(
+              transitionData.layout as ILayout,
+              this.currentBp
+            );
+
+            return unitValueToPx(
+              value,
+              propertyName,
+              relativeTo,
+              this.currentBp
+            );
+          },
           isInitial,
         },
         true
@@ -904,6 +947,7 @@ export class Player {
       if (betweenSlideEffArr) {
         betweenSlideEffArr.forEach((betweenSlideEff) => {
           const transitionTl = new Timeline({
+            id: slide.id,
             name: "SlideTransitionTimeline",
             animationId: betweenSlideEff!.animation.id,
             ...betweenSlideEff!.animation.values,

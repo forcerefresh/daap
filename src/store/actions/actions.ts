@@ -1287,6 +1287,7 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
         height: undefined,
       },
       isPlayer: false,
+      // calculateSize: () => 0,
     });
     const holder = document.createElement("div");
     holder.style.overflow = "visible";
@@ -1380,7 +1381,12 @@ function handleTextUpdate(
     const objDeff = getPlayerObjectDefinition(object.type);
     let html = "";
     if (!!objDeff?.getHtml) {
-      html = objDeff?.getHtml({ object, calculatedObjectSize, isPlayer: true });
+      html = objDeff?.getHtml({
+        object,
+        calculatedObjectSize,
+        isPlayer: true,
+        //calculateSize: () => 0,
+      });
     } else if (object.type === RICH_TEXT) {
       html = getRichTextHtml({ object, calculatedObjectSize });
     }

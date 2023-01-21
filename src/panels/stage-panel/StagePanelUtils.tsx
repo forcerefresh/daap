@@ -37,6 +37,28 @@ export function calculateObjectSizePerDevice(
   return ret;
 }
 
+export function getRelativeTo(
+  object: ILayout,
+  breakpointConfig: BreakpointConfiguration
+) {
+  if (object.layout === "absolute") {
+    return object?.absoluteLayout?.relativeTo!;
+  } else if (object.layout === "inset") {
+    return object?.insetLayout?.relativeTo!;
+  } else if (object.layout === "grid") {
+    return "stage";
+  } else if (object.layout === "fit") {
+    const layoutItem = getFitLayoutSize(
+      object.fitLayout!,
+      breakpointConfig.type
+    );
+    return layoutItem.relativeTo;
+  } else if (object.layout === "snap") {
+    return object?.snapLayout?.relativeTo!;
+  }
+  return "page";
+}
+
 export function calculateObjectSize(
   object: ILayout,
   //stageSize: { width: number; height: number },
@@ -82,6 +104,10 @@ export function calculateObjectSize(
       object.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
+    console.log("+++++++");
+    console.log(absoluteValue.width);
+    console.log(width);
+    console.log(breakpointConfig);
 
     const height = unitValueToPx(
       absoluteValue.height,
@@ -105,6 +131,7 @@ export function calculateObjectSize(
       height,
     };
 
+    console.log(sizeObj);
     if (resetPosition) {
       sizeObj.left = 0;
       sizeObj.top = 0;
@@ -128,28 +155,28 @@ export function calculateObjectSize(
     const left = unitValueToPx(
       insetValue!.left,
       "width",
-      object.snapLayout?.relativeTo!,
+      object.insetLayout?.relativeTo!,
       breakpointConfig
     );
 
     const top = unitValueToPx(
       insetValue!.top,
       "height",
-      object.snapLayout?.relativeTo!,
+      object.insetLayout?.relativeTo!,
       breakpointConfig
     );
 
     const right = unitValueToPx(
       insetValue!.right,
       "width",
-      object.snapLayout?.relativeTo!,
+      object.insetLayout?.relativeTo!,
       breakpointConfig
     );
 
     const bottom = unitValueToPx(
       insetValue!.bottom,
       "height",
-      object.snapLayout?.relativeTo!,
+      object.insetLayout?.relativeTo!,
       breakpointConfig
     );
 
@@ -577,38 +604,40 @@ function getPSGSize(
 
 export function unitValueToPx(
   value: string,
-  propertyName: "width" | "height",
+  propertyName: "width" | "height" | "left" | "top",
   relativeTo: string,
   breakpointConfig: BreakpointConfiguration
 ) {
+  const sizeProperty =
+    propertyName === "width" || propertyName === "left" ? "width" : "height";
+
   if (value.indexOf("px") !== -1) {
     return parseFloat(value);
   } else if (value.indexOf("%") !== -1) {
     let newVal =
-      breakpointConfig.normal._page?.[propertyName] ||
-      breakpointConfig.normal.page?.[propertyName];
+      breakpointConfig.normal._page?.[sizeProperty] ||
+      breakpointConfig.normal.page?.[sizeProperty];
 
+    // IMPORTANT: max slider size nemoze da bude veci od setovanog
     if (relativeTo === "stage") {
       newVal =
-        breakpointConfig.normal._maxSliderSize?.[propertyName] ||
-        breakpointConfig.normal.maxSliderSize?.[propertyName];
+        breakpointConfig.normal._maxSliderSize?.[sizeProperty] ||
+        breakpointConfig.normal.maxSliderSize?.[sizeProperty];
     } else if (relativeTo === "guidelines") {
       newVal =
-        breakpointConfig.normal._maxSliderSize?.[propertyName] ||
-        breakpointConfig.normal.maxSliderSize?.[propertyName];
-
-      if (propertyName === "width") {
+        breakpointConfig.normal._maxSliderSize?.[sizeProperty] ||
+        breakpointConfig.normal.maxSliderSize?.[sizeProperty];
+      if (propertyName === "left") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.left || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.right || 0);
       }
-      if (propertyName === "height") {
+      if (propertyName === "top") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.top || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.bottom || 0);
       }
     }
-
     return roundNumber((newVal * parseFloat(value)) / 100, 1);
   }
   return parseFloat(value);

@@ -8,6 +8,19 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 
 (window as any).WebSliderPlayer = Player;
 
+if (!(window as any).WebSlider_GlobalScope) {
+  (window as any).WebSlider_GlobalScope = {};
+}
+// Logger
+// All = 0, Trace = 10, Debug = 20, Info = 30, Notice = 40, Warn = 50, Error = 60, Fatal = 70, None = 100
+// For Production we are using only Error and Fatal
+(window as any).WebSlider_GlobalScope.loggerLevel = {
+  player: 0,
+  object: 0,
+  animation: 0,
+  sdk: 0,
+};
+
 //*** */
 const exports = getExports();
 document.body.innerHTML += `<style>
@@ -61,6 +74,7 @@ selectEl?.addEventListener("change", (e: any) => {
   }
 
   player = new Player(selPlayerData as any, playerRootEl);
+  player.setDebug({ showBoundaries: true });
   player.play();
 });
 
@@ -71,6 +85,7 @@ refreshButtonEl?.addEventListener("click", (e: any) => {
   }
 
   player = new Player(latestPlayerData, playerRootEl);
+  player.setDebug({ showBoundaries: true });
   player.play();
 });
 

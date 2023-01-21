@@ -29,6 +29,7 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import { UpdateObjectSizeFuncPropsType } from "webslider-sdk/lib/objects/objects-register";
 
 export const TEXT = "text";
 
@@ -44,6 +45,7 @@ export interface TextValues {
   lineHeight: string;
   textAlign: string;
   preload: boolean;
+  applyObjectScale?: boolean;
 }
 
 export type TextPropertiesTuple = [
@@ -57,7 +59,8 @@ export type TextPropertiesTuple = [
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
+  ICheckboxInput<"applyObjectScale">
 ];
 
 export function createTextObject(
@@ -88,7 +91,6 @@ export function createTextObject(
       value: false,
       defaultValue: false,
     },
-
     {
       displayName: "Font",
       propertyName: "font",
@@ -137,7 +139,6 @@ export function createTextObject(
         { value: "950", label: "950	Extra Black" },
       ],
     },
-
     {
       displayName: "Italic",
       propertyName: "italic",
@@ -145,7 +146,6 @@ export function createTextObject(
       value: false,
       defaultValue: false,
     },
-
     {
       displayName: "Underline",
       propertyName: "underline",
@@ -153,7 +153,6 @@ export function createTextObject(
       value: false,
       defaultValue: false,
     },
-
     {
       displayName: "Line height",
       propertyName: "lineHeight",
@@ -162,7 +161,6 @@ export function createTextObject(
       defaultValue: "",
       optional: true,
     },
-
     {
       displayName: "Text align",
       propertyName: "textAlign",
@@ -183,6 +181,14 @@ export function createTextObject(
       defaultValue: true,
       inputProps: { disabled: true },
     },
+    {
+      displayName: "Scale",
+      propertyName: "applyObjectScale",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+      helperText: "Apply object scale to text",
+    },
   ];
 
   const values: TextValues = {
@@ -200,6 +206,7 @@ export function createTextObject(
     lineHeight: "20px",
     textAlign: "left",
     preload: true, // not visible,
+    applyObjectScale: false,
   };
 
   return {
@@ -269,28 +276,34 @@ export function getTextHtml(props: {
   )}</p>`;
 }
 
-export async function textSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
+export async function textSizeUpdate<UpdateObjectSizeFuncType>(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const { id, calculatedObjectSize, className, scale, values } = props;
+  const textValues = values as TextValues;
+
   const els = document.getElementsByClassName(className);
   const div = els[0] as HTMLDivElement;
   const parent = div.parentNode! as HTMLDivElement;
   const child = div.firstChild! as HTMLDivElement;
 
-  child.style.width = calculatedObjectSize.width;
-  child.style.height = calculatedObjectSize.height;
-
-  parent.style.width = calculatedObjectSize.width;
-  parent.style.height = calculatedObjectSize.height;
   parent.style.left = calculatedObjectSize.left;
   parent.style.top = calculatedObjectSize.top;
 
-  div.style.width = calculatedObjectSize.width;
-  div.style.height = calculatedObjectSize.height;
+  if (textValues.applyObjectScale) {
+    (
+      div.getElementsByClassName("object-content")[0] as HTMLElement
+    ).style.transform = "scale(" + scale?.wScale + ")";
+  } else {
+    child.style.width = calculatedObjectSize.width;
+    child.style.height = calculatedObjectSize.height;
+
+    parent.style.width = calculatedObjectSize.width;
+    parent.style.height = calculatedObjectSize.height;
+
+    div.style.width = calculatedObjectSize.width;
+    div.style.height = calculatedObjectSize.height;
+  }
 }
 
 export async function preloadText(props: {

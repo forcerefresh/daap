@@ -239,10 +239,7 @@ export function getVideoHtml(props: {
     filename: videoValues.video.filename,
   }).src;
 
-  const videoHtml = `<video style="${style}" ${attrs} class="video-content-${object.id}">
-  <source src="${videoSrc}" type="video/mp4">
-  Your browser does not support the video tag.
-</video>`;
+  const videoHtml = `<video style="${style}" ${attrs} class="video-content-${object.id}" src="${videoSrc}"></video>`;
 
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT

@@ -20,6 +20,7 @@ import { IMeta } from "../../store/reducers/meta";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./ProjectsPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
+import { setupNewProject } from "../../store/actions/multi-actions";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -31,12 +32,14 @@ export type IProjectsMergedProps = typeof mapDispatchToProps &
 
 const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const {
+    meta,
     onRequestClose,
     _updateProjectMeta,
     _openProject,
     _doClearHistory,
     _resetChangedState,
     _setDevice,
+    _setupNewProject,
   } = props;
 
   const [projects, setProjects] = useState<any[]>([]);
@@ -78,16 +81,16 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
 
-  const deleteIdRef = useRef("-1");
-  const onDeleteProject = (id: string) => {
+  const deleteIdRef = useRef<{ id: string; name: string } | null>(null);
+  const onDeleteProject = (id: string, name: string) => {
     setIsOpen(true);
-    deleteIdRef.current = id;
+    deleteIdRef.current = { id, name };
   };
 
   const deleteConfirm = () => {
     setDeleteLoading(true);
 
-    deleteProject(deleteIdRef.current).then(({ id }: { id: number }) => {
+    deleteProject(deleteIdRef.current!.id).then(({ id }: { id: number }) => {
       const newProjects = projects.concat();
       remove(newProjects, (p: any) => {
         return p.id === id;
@@ -104,6 +107,13 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         intent: "success",
         message: "Slider is successfully deleted.",
       });
+
+      // cleanup open project if its deleted
+      if (meta.id === deleteIdRef.current!.id) {
+        _setupNewProject();
+      }
+
+      deleteIdRef.current = null;
     });
   };
 
@@ -267,7 +277,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                     icon="trash"
                     className={css.delete}
                     minimal
-                    onClick={() => onDeleteProject(project.id)}
+                    onClick={() => onDeleteProject(project.id, project.name)}
                   ></Button>
                   <div className={css.idHolder}>{project.id}</div>
                 </div>
@@ -289,7 +299,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         className="bp3-dark"
       >
         <p>
-          Are you sure you want to delete <b>filename</b> slider?
+          Are you sure you want to delete <b>{deleteIdRef.current?.name}</b>{" "}
+          slider?
         </p>
       </Alert>
     </div>
@@ -297,6 +308,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => ({
+  meta: state.meta,
   activeLayerId: state.project.selection.activeLayerId,
 });
 
@@ -313,6 +325,7 @@ const mapDispatchToProps = {
   _resetChangedState: () =>
     updateEditor({ sliderChanged: false, isExistingProject: true }),
   _setDevice: setDevice,
+  _setupNewProject: () => setupNewProject(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

@@ -8,6 +8,7 @@ export interface ISettings {
   exitSlideDuration: string;
   skipFirstSlideAnimation: boolean;
   breakpointReference: "viewport" | "parent";
+  hideOutsideContent?: boolean;
 
   // slider config
   sliderBackgroundColor: RGBColor;

@@ -65,6 +65,7 @@ export interface IPlayerData {
     skipFirstSlideAnimation: boolean;
     breakpointReference: "viewport" | "parent";
     autoPlay?: boolean;
+    hideOutsideContent?: boolean;
   };
   breakpointData: {
     width: number;

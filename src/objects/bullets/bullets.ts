@@ -22,7 +22,9 @@ import { v4 as uuid } from "uuid";
 import {
   GetAssetsUrlFuncPropsType,
   GetAssetsUrlFuncReturnType,
+  GetHtmlFuncPropsType,
   PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
 import bulletsIcon from "./bullets-icon.svg";
 import { addBorderRadius } from "../../utils/utils";
@@ -258,7 +260,7 @@ export function createBulletsObject(initialValue?: {
                   inputType: InputType.UNITS_NUMBER,
                   value: "10px",
                   defaultValue: "10px",
-                  allowedUnits: ["%", "em", "px"],
+                  allowedUnits: ["px"],
                   placeholder: "",
                 },
               ],
@@ -274,7 +276,7 @@ export function createBulletsObject(initialValue?: {
                   value: "10px",
                   defaultValue: "10px",
                   placeholder: "",
-                  allowedUnits: ["%", "px", "em"],
+                  allowedUnits: ["px"],
                 },
                 {
                   displayName: "Height",
@@ -283,7 +285,7 @@ export function createBulletsObject(initialValue?: {
                   value: "10px",
                   defaultValue: "10px",
                   placeholder: "",
-                  allowedUnits: ["%", "px", "em"],
+                  allowedUnits: ["px"],
                 },
               ],
             },
@@ -680,13 +682,8 @@ export function createBulletsObject(initialValue?: {
   };
 }
 
-export function getBulletsHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-  isPlayer?: boolean;
-  isSave?: boolean;
-}) {
-  const { object, isSave } = props;
+export function getBulletsHtml(props: GetHtmlFuncPropsType) {
+  const { object, isSave /*calculateSize*/ } = props;
   const bulletsValues = object.definition.values as BulletsValues;
 
   const bulletsNumber =
@@ -697,8 +694,9 @@ export function getBulletsHtml(props: {
 
   // text properties
   if (bulletsValues.type === "circle") {
-    style += "width: " + bulletsValues.circleWidth + ";";
-    style += "height: " + bulletsValues.circleWidth + ";";
+    const circleWidth = bulletsValues.circleWidth; //calculateSize(bulletsValues.circleWidth, "width");
+    style += "width: " + circleWidth + ";";
+    style += "height: " + circleWidth + ";";
   } else {
     style += "width: " + bulletsValues.rectWidth + ";";
     style += "height: " + bulletsValues.rectHeight + ";";
@@ -876,13 +874,11 @@ export function getBulletsHtml(props: {
     `;
 }
 
-export async function bulletsSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
+export async function bulletsSizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const { id, calculatedObjectSize, className /*calculateSize, values*/ } =
+    props;
   const els = document.getElementsByClassName(className);
   const div = els[0] as HTMLDivElement;
   const parent = div.parentNode! as HTMLDivElement;
@@ -890,6 +886,18 @@ export async function bulletsSizeUpdate(props: {
   //parent.style.height = calculatedObjectSize.height;
   parent.style.left = calculatedObjectSize.left;
   parent.style.top = calculatedObjectSize.top;
+
+  // (
+  //   Array.from(
+  //     div.getElementsByClassName(`object-content-item-${id}`)
+  //   ) as HTMLDivElement[]
+  // ).forEach((el, idx) => {
+  //   el.style.width = calculateSize(values.circleWidth, "width") + "px";
+  //   el.style.height = calculateSize(values.circleWidth, "width") + "px";
+  //   if (idx !== 0) {
+  //     el.style.marginLeft = calculateSize(values.gap, "width") + "px";
+  //   }
+  // });
 
   //div.style.width = calculatedObjectSize.width;
   //div.style.height = calculatedObjectSize.height;

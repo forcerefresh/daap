@@ -44,6 +44,7 @@ Bugs
 // Dobde je za prvu verziju
 
 IMPORTANT:
+- kada inicijalizujemo i uklanjamo elemnte za strukturalne efekte
 - gestures za mobilni - levo desno
 - kod snimanja templejta treba da se svi id jevi zamene (kada imamo 2 sjaldera oni se overlapuju)
 - bug u manuelnj translaciji
