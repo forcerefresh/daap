@@ -21,6 +21,11 @@ import FormWithLayout, {
 } from "../../../utils/form-layout/form-layout";
 import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./TransformProperties.module.scss";
+import { createObject } from "../../../objects/create-object-factory";
+import {
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -44,15 +49,30 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
   } = props;
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    if (!object.transformDefinition)
+    const tmpObj = createObject(object.type, {});
+
+    if (!object.transformDefinition && !tmpObj.transformDefinition) {
       return "Element does not have common transform properties";
+    }
+
+    // check for forward compatibility
+    const transformDefinitionProperties =
+      tmpObj.transformDefinition?.properties ?? [];
+    const transformDefinitionValues = {
+      ...(tmpObj.transformDefinition?.values ?? {}),
+      ...(object.transformDefinition?.values ?? {}),
+    };
+    const transformDefinitionValuesMetadata = {
+      ...(tmpObj.transformDefinition?.valuesMetadata ?? {}),
+      ...(object.transformDefinition?.valuesMetadata ?? {}),
+    };
 
     return (
       <>
         {renderProperties(
-          object.transformDefinition.properties!, // TODO
-          object.transformDefinition.values,
-          object.transformDefinition.valuesMetadata,
+          transformDefinitionProperties,
+          transformDefinitionValues,
+          transformDefinitionValuesMetadata,
           object,
           _updateObject
         )}
@@ -61,15 +81,23 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderLayerProperties = (layer: ILayer) => {
-    if (!layer.transformDefinition)
-      return "Element does not have common transform properties";
+    // properties: [...getTransformObjectPropertiesDefinition()],
+    // values: { ...getTransformPropertiesValues() },
+    // if (!layer.transformDefinition)
+    //   return "Element does not have common transform properties";
 
     return (
       <>
         {renderProperties(
-          layer.transformDefinition.properties!, // TODO
-          layer.transformDefinition.values,
-          layer.transformDefinition.valuesMetadata,
+          getTransformObjectPropertiesDefinition(), // TODO
+          {
+            ...getTransformPropertiesValues(),
+            ...(layer.transformDefinition?.values ?? {}),
+          },
+          {
+            ...{},
+            ...(layer.transformDefinition?.valuesMetadata ?? {}),
+          },
           layer,
           _updateLayer
         )}
@@ -98,18 +126,30 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
 
       function onChange(value: any) {
         const retObj = cloneDeep(objectOrLayer);
+        const retValues = cloneDeep(values);
 
         if (retObj) {
-          const values = retObj.transformDefinition.values as {
-            [key: string]: any;
-          };
-          values[propertyName] = value;
+          //const values = retObj.transformDefinition.values as {
+          //[key: string]: any;
+          //};
+
+          retValues[propertyName] = value;
+
+          if (!retObj.transformDefinition) {
+            retObj.transformDefinition = {
+              properties,
+              values,
+              valuesMetadata,
+            };
+          }
+
+          retObj.transformDefinition.values = retValues;
 
           // >>> exception for image TODO: REMOVE TO POST PROCESS FUNCTIONS
           // use image w and h for the object
           if (property.inputType === InputType.IMAGE) {
             // set placeholder to false
-            values[propertyName].isPlaceholder = false;
+            retValues[propertyName].isPlaceholder = false;
             if ((retObj as IObject).width === 0) {
               (retObj as IObject).width = value.width;
             }

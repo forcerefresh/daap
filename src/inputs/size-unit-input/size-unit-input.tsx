@@ -17,6 +17,9 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
 ) => {
   const { value, onChange = noop, inputProps = {} } = props;
 
+  const labelW = (props.inputProps as any).labelW;
+  const labelH = (props.inputProps as any).labelH;
+
   const [internalValue, setInternalValue] = useState<{
     width: string;
     height: string;
@@ -115,7 +118,7 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
   return (
     <div className={css.main}>
       <div>
-        <FormGroup label={"W"} labelFor="text-input-W" inline>
+        <FormGroup label={labelW ?? "W"} labelFor="text-input-W" inline>
           {getUnitNumericFiled(
             "",
             internalValue?.width?.toString(),
@@ -136,7 +139,7 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
             intent={!valid.width ? Intent.WARNING : Intent.NONE}
           />*/}
         </FormGroup>
-        <FormGroup label={"H"} labelFor="text-input-H" inline>
+        <FormGroup label={labelH ?? "H"} labelFor="text-input-H" inline>
           {getUnitNumericFiled(
             "",
             internalValue?.height?.toString(),

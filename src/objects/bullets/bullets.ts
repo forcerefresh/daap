@@ -13,6 +13,11 @@ import {
   ISelectInput,
   IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  addTransformPropertiesToStyle,
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
@@ -38,6 +43,12 @@ import { RGBColor } from "react-color";
 import { addBorderBox } from "../../export/export-html";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { getImageThumbnailHtml } from "./bullets.utils";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const BULLETS = "bullets";
 
@@ -679,6 +690,16 @@ export function createBulletsObject(initialValue?: {
       values,
       valuesMetadata: {},
     },
+    commonStyleDefinition: {
+      properties: [...getCommonObjectPropertiesDefinition()],
+      values: { ...getCommonPropertiesValues() },
+      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+    },
+    transformDefinition: {
+      properties: [...getTransformObjectPropertiesDefinition()],
+      values: { ...getTransformPropertiesValues() },
+      valuesMetadata: {},
+    },
   };
 }
 
@@ -869,8 +890,12 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
     }
   }
 
+  let objStyle = "position:absolute; display: flex;";
+  objStyle = addCommonPropertiesToStyle(objStyle, object);
+  objStyle = addTransformPropertiesToStyle(objStyle, object);
+
   // HOVER END <<<
-  return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="position:absolute; display: flex;">${bulletsHtml}</div>
+  return `${css}<div class="object-content object-content-${object.id} ws-bullets-navigation" style="${objStyle}">${bulletsHtml}</div>
     `;
 }
 

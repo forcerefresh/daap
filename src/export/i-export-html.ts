@@ -18,6 +18,7 @@ import {
 import { RGBColor } from "react-color";
 import { string } from "yup";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import { ILayoutAdvanceValues } from "webslider-sdk/lib/objects/i-layout-types";
 
 export interface IItemsData {
   customId: string;
@@ -46,7 +47,7 @@ export interface IItemsData {
         ILayout,
         "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout"
       >
-    >;
+    > & { layoutAdvance?: ILayoutAdvanceValues };
 }
 
 export interface ISlideTransitionData {

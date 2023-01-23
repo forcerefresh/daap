@@ -135,6 +135,7 @@ export function tilesFadeAnimation() {
     });
 
     timeline.play(0);
+
     if (isManual) timeline.pause();
   }
 
@@ -171,7 +172,7 @@ export function tilesFadeAnimation() {
   }
 
   function update(config: any, time: number, isManual?: boolean) {
-    logger.animation.debug(`${TILES_FADE_ANIMATION} update`);
+    //logger.animation.debug(`${TILES_FADE_ANIMATION} update`);
     if (isManual) {
       timeline.seek(time / 1000);
     }

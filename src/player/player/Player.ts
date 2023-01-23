@@ -27,6 +27,7 @@ import { addClass, removeClass } from "../../utils/doom-utils/common";
 import {
   convertRGBColor2CSSProperties,
   convertTimeUnitToMs,
+  getBooleanValue,
 } from "../../utils/utils";
 import {
   createEventTimelineForObject,
@@ -41,6 +42,11 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
+import {
+  getLayerWrapperElementById,
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
 
 gsap.defaults(); // in order to bundle gsap
 gsap.install(window);
@@ -337,6 +343,8 @@ export class Player {
     }
 
     const slideEls = this.rootDiv.getElementsByClassName("slide");
+    const slideWrapperEls =
+      this.rootDiv.getElementsByClassName("slide-wrapper");
 
     const bgEl = this.rootDiv.getElementsByClassName(".sliderBackground")[0] as
       | HTMLDivElement
@@ -361,12 +369,21 @@ export class Player {
       ? "1px dotted #00d6ff"
       : "1px dotted rgba(255,255,255,0)";
 
-    (Array.from(slideEls) as HTMLDivElement[]).forEach((el) => {
+    (Array.from(slideWrapperEls) as HTMLDivElement[]).forEach((el) => {
       el.style.height = bp?.normal._page!.height + "px";
       el.style.width = bp?.normal._page!.width + "px";
       el.style.overflow = this.playerData?.config.hideOutsideContent
         ? "hidden"
         : "visible";
+      el.style.pointerEvents = "none";
+    });
+
+    (Array.from(slideEls) as HTMLDivElement[]).forEach((el) => {
+      el.style.height = bp?.normal._page!.height + "px";
+      el.style.width = bp?.normal._page!.width + "px";
+      // el.style.overflow = this.playerData?.config.hideOutsideContent
+      //   ? "hidden"
+      //   : "visible";
       el.style.pointerEvents = "none";
 
       // SLIDE
@@ -499,7 +516,6 @@ export class Player {
       width: _pageW,
       height: _pageH,
     };
-    console.log(bp.normal._page);
 
     bp.normal._maxSliderSize = {
       width: _maxSliderW,
@@ -549,8 +565,6 @@ export class Player {
         this.scaleParams
       );
 
-      console.log(calObjSize);
-
       /*
       const calObjSize =
         transitionData.calculatedObjectSizePerDevice?.[
@@ -564,6 +578,38 @@ export class Player {
         objDef = { sizeUpdate: layerSizeUpdate } as any;
       }
 
+      // if (textValues.applyObjectScale) {
+      //   (
+      //     div.getElementsByClassName("object-content")[0] as HTMLElement
+      //   ).style.transform = "scale(" + scale?.wScale + ")";
+      // } else {
+
+      debugger;
+      if (
+        getBooleanValue(
+          transitionData.layout.layoutAdvance?.hasLayoutAdvance
+        ) &&
+        getBooleanValue(
+          transitionData.layout.layoutAdvance?.updateScale,
+          true
+        ) &&
+        this.scaleParams?.wScale
+      ) {
+        const wrapperObjectOrLayerEl =
+          transitionData.itemType === "layer"
+            ? getLayerWrapperElementById(transitionData.itemId)
+            : getObjectWrapperElementById(transitionData.itemId);
+
+        if (wrapperObjectOrLayerEl) {
+          wrapperObjectOrLayerEl.style.transform =
+            "scale(" + this.scaleParams?.wScale + ")";
+        }
+      }
+
+      const forceUpdateSize =
+        !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
+        getBooleanValue(transitionData.layout.layoutAdvance?.updateSize, true);
+
       objDef?.sizeUpdate(
         {
           id: transitionData.itemId,
@@ -571,22 +617,23 @@ export class Player {
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
           scale: this.scaleParams,
-          calculateSize: (
-            value: string,
-            propertyName: "width" | "height" | "left" | "top"
-          ) => {
-            const relativeTo = getRelativeTo(
-              transitionData.layout as ILayout,
-              this.currentBp
-            );
+          skipSizeUpdate: !forceUpdateSize,
+          // calculateSize: (
+          //   value: string,
+          //   propertyName: "width" | "height" | "left" | "top"
+          // ) => {
+          //   const relativeTo = getRelativeTo(
+          //     transitionData.layout as ILayout,
+          //     this.currentBp
+          //   );
 
-            return unitValueToPx(
-              value,
-              propertyName,
-              relativeTo,
-              this.currentBp
-            );
-          },
+          //   return unitValueToPx(
+          //     value,
+          //     propertyName,
+          //     relativeTo,
+          //     this.currentBp
+          //   );
+          // },
           isInitial,
         },
         true
@@ -1140,19 +1187,18 @@ export class Player {
     //const currentSlideTime = this.currentSlideTimeline?.time();
     const prevSlideTl = this.currentSlideTimeline;
 
-    logger.player.log("slideIdx: " + slideIdx);
     const tl = this.timelines[slideIdx];
     if (this.currentSlideTimeline === tl) {
       return;
     }
 
     if (this.slideTransitionInProgress) {
-      logger.player.log("slideTransitionInProgress");
+      logger.player.info(
+        "Slide transition is in progress. Slide transition canceled."
+      );
 
       return;
     }
-
-    logger.player.log("qqqqq");
 
     this.slideTransitionInProgress = true;
     this.manuallyRequestedSlideIdx = slideIdx;
@@ -1254,14 +1300,9 @@ export class Player {
     className: string,
     objectEvent?: INavigationValues
   ) {
-    logger.player.log(no);
-    logger.player.log(className);
-
     if (!objectEvent) {
       return;
     }
-
-    logger.player.log(objectEvent);
 
     let el: HTMLDivElement | undefined;
     if (objectEvent.navigationType === NavigationType.None) {

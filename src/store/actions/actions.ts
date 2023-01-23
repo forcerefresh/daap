@@ -397,6 +397,8 @@ export function addNewLayer(slideId: string): any {
           width: "200px",
           height: "200px",
           gap: 0,
+          offsetX: "0px",
+          offsetY: "0px",
         },
       },
       insetLayout: {

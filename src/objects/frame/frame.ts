@@ -82,6 +82,7 @@ export function getFrameHtml(props: {
   style = addTransformPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
+  style += "box-sizing: border-box;";
 
   const html = `<div class="object-content" style="${style}"></div>`;
 

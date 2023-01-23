@@ -27,6 +27,13 @@ export function getAnimationElementById(
   return el;
 }
 
+export function getLayerWrapperElementById(id: string): HTMLDivElement {
+  const el = document.getElementsByClassName(
+    `layer-wrapper-${id}`
+  )[0] as HTMLDivElement;
+  return el;
+}
+
 export function getLayerElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
     `layer-${id}`

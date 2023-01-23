@@ -1,4 +1,4 @@
-import { mapValues, pick } from "lodash-es";
+import { mapValues, pick, size } from "lodash-es";
 import React from "react";
 import cx from "classnames";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
@@ -26,12 +26,19 @@ import css from "./StagePanel.module.scss";
 
 export function calculateObjectSizePerDevice(
   object: IObject,
-  breakpoints: Breakpoints
+  breakpoints: Breakpoints,
+  options?: { skipHeight: boolean }
 ): { [key: string]: React.CSSProperties } {
   const ret: { [key: string]: React.CSSProperties } = {};
 
   breakpoints.breakpointsConfiguration.forEach((bp) => {
-    ret[bp.type] = calculateObjectSize(object, bp, { resetPosition: false });
+    ret[bp.type] = calculateObjectSize(
+      object,
+      bp,
+      { resetPosition: false },
+      undefined,
+      options
+    );
   });
 
   return ret;
@@ -64,7 +71,8 @@ export function calculateObjectSize(
   //stageSize: { width: number; height: number },
   breakpointConfig: BreakpointConfiguration,
   { resetPosition }: { resetPosition: boolean },
-  scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 }
+  scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
+  options?: { skipHeight: boolean }
 ): React.CSSProperties {
   // Note: _maxSliderSize is calculated only in Player runtime
   const stageSize =
@@ -86,14 +94,14 @@ export function calculateObjectSize(
 
     const left = unitValueToPx(
       absoluteValue.left,
-      "width",
+      "left",
       object?.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
 
     const top = unitValueToPx(
       absoluteValue.top,
-      "height",
+      "top",
       object.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
@@ -104,10 +112,6 @@ export function calculateObjectSize(
       object.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
-    console.log("+++++++");
-    console.log(absoluteValue.width);
-    console.log(width);
-    console.log(breakpointConfig);
 
     const height = unitValueToPx(
       absoluteValue.height,
@@ -131,12 +135,12 @@ export function calculateObjectSize(
       height,
     };
 
-    console.log(sizeObj);
     if (resetPosition) {
       sizeObj.left = 0;
       sizeObj.top = 0;
     }
 
+    if (options?.skipHeight) delete (sizeObj as any).height;
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
@@ -154,14 +158,14 @@ export function calculateObjectSize(
 
     const left = unitValueToPx(
       insetValue!.left,
-      "width",
+      "left",
       object.insetLayout?.relativeTo!,
       breakpointConfig
     );
 
     const top = unitValueToPx(
       insetValue!.top,
-      "height",
+      "top",
       object.insetLayout?.relativeTo!,
       breakpointConfig
     );
@@ -195,6 +199,7 @@ export function calculateObjectSize(
       sizeObj.top = 0;
     }
 
+    if (options?.skipHeight) delete (sizeObj as any).height;
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
@@ -226,6 +231,8 @@ export function calculateObjectSize(
       sizeObj.left = 0;
       sizeObj.top = 0;
     }
+
+    if (options?.skipHeight) delete (sizeObj as any).height;
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
@@ -246,6 +253,7 @@ export function calculateObjectSize(
 
     const sizeObj = getPSGSize("page", breakpointConfig);
 
+    if (options?.skipHeight) delete (sizeObj as any).height;
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
@@ -256,13 +264,18 @@ export function calculateObjectSize(
       breakpointConfig.type
     );
 
-    const snapSizeObj = {
-      height: parseFloat(snapSizeObjStr.height),
-      width: parseFloat(snapSizeObjStr.width),
-      gap: snapSizeObjStr.gap,
-    };
+    // const snapSizeObj = {
+    //   height: parseFloat(snapSizeObjStr.height),
+    //   width: parseFloat(snapSizeObjStr.width),
+    //   //gap: snapSizeObjStr.gap,
+    //   offsetX: parseFloat(snapSizeObjStr.offsetX),
+    //   offsetY: parseFloat(snapSizeObjStr.offsetY),
+    // };
 
-    const gap = snapSizeObj.gap;
+    // const  offsetX = parseFloat(snapSizeObjStr.offsetX),
+    // const  offsetY = parseFloat(snapSizeObjStr.offsetY),
+
+    //const gap = snapSizeObj.gap;
 
     const relativeToSize = getPSGSize(
       object.snapLayout?.relativeTo!,
@@ -275,22 +288,41 @@ export function calculateObjectSize(
       snapSizeObjStr.width,
       "width",
       object.snapLayout?.relativeTo!,
-      breakpointConfig
+      breakpointConfig,
+      true
     );
+
     const h = unitValueToPx(
       snapSizeObjStr.height,
-      "height",
+      "height", // TODO shoud be height
       object.snapLayout?.relativeTo!,
-      breakpointConfig
+      breakpointConfig,
+      true
+    );
+
+    const offsetX = unitValueToPx(
+      snapSizeObjStr.offsetX ?? "0px", //INFO:  backward compatibility
+      "left",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig,
+      true
+    );
+
+    const offsetY = unitValueToPx(
+      snapSizeObjStr.offsetY ?? "0px", //INFO:  backward compatibility
+      "top",
+      object.snapLayout?.relativeTo!,
+      breakpointConfig,
+      true
     );
 
     switch (object.snapLayout?.edge!) {
       case "left": {
         const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
-
+        // (relativeToSize.top + relativeToSize.height) / 2;
         sizeObj = {
           top,
-          left: relativeToSize.left + gap,
+          left: relativeToSize.left + offsetX,
           width: w,
           height: h,
         };
@@ -300,7 +332,7 @@ export function calculateObjectSize(
         const left = relativeToSize.left + relativeToSize.width / 2 - w / 2;
 
         sizeObj = {
-          top: relativeToSize.top + gap,
+          top: relativeToSize.top + offsetY,
           left,
           width: w,
           height: h,
@@ -308,7 +340,7 @@ export function calculateObjectSize(
         break;
       }
       case "right": {
-        const left = relativeToSize.left + relativeToSize.width - w - gap;
+        const left = relativeToSize.left + relativeToSize.width - w - offsetX;
         const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
 
         sizeObj = {
@@ -322,7 +354,7 @@ export function calculateObjectSize(
 
       case "bottom": {
         const left = relativeToSize.left + relativeToSize.width / 2 - w / 2;
-        const top = relativeToSize.top + relativeToSize.height - h - gap;
+        const top = relativeToSize.top + relativeToSize.height - h - offsetY;
 
         sizeObj = {
           top,
@@ -334,18 +366,18 @@ export function calculateObjectSize(
       }
       case "top-left": {
         sizeObj = {
-          top: relativeToSize.top + gap,
-          left: relativeToSize.left + gap,
+          top: relativeToSize.top + offsetY,
+          left: relativeToSize.left + offsetX,
           width: w,
           height: h,
         };
         break;
       }
       case "top-right": {
-        const left = relativeToSize.left + relativeToSize.width - w - gap;
+        const left = relativeToSize.left + relativeToSize.width - w - offsetX;
 
         sizeObj = {
-          top: relativeToSize.top + gap,
+          top: relativeToSize.top + offsetY,
           left,
           width: w,
           height: h,
@@ -357,16 +389,16 @@ export function calculateObjectSize(
         const top = relativeToSize.top + relativeToSize.height - h;
 
         sizeObj = {
-          top: top - gap,
-          left: relativeToSize.left + gap,
+          top: top - offsetY,
+          left: relativeToSize.left + offsetX,
           width: w,
           height: h,
         };
         break;
       }
       case "bottom-right": {
-        const top = relativeToSize.top + relativeToSize.height - h - gap;
-        const left = relativeToSize.left + relativeToSize.width - w - gap;
+        const top = relativeToSize.top + relativeToSize.height - h - offsetY;
+        const left = relativeToSize.left + relativeToSize.width - w - offsetX;
 
         sizeObj = {
           top: top,
@@ -390,6 +422,7 @@ export function calculateObjectSize(
       }
     }
 
+    if (options?.skipHeight) delete (sizeObj as any).height;
     return mapValues(sizeObj, (size) => `${size}px`);
   }
 
@@ -482,13 +515,13 @@ export function getAbsoluteLayoutSizeInPx(
 
   const left = unitValueToPx(
     absoluteValue.left,
-    "width",
+    "left",
     absoluteLayout?.relativeTo!,
     breakpointConfig
   );
   const top = unitValueToPx(
     absoluteValue.top,
-    "height",
+    "top",
     absoluteLayout?.relativeTo!,
     breakpointConfig
   );
@@ -606,7 +639,8 @@ export function unitValueToPx(
   value: string,
   propertyName: "width" | "height" | "left" | "top",
   relativeTo: string,
-  breakpointConfig: BreakpointConfiguration
+  breakpointConfig: BreakpointConfiguration,
+  includeLastGuidelineOffset = false
 ) {
   const sizeProperty =
     propertyName === "width" || propertyName === "left" ? "width" : "height";
@@ -627,12 +661,17 @@ export function unitValueToPx(
       newVal =
         breakpointConfig.normal._maxSliderSize?.[sizeProperty] ||
         breakpointConfig.normal.maxSliderSize?.[sizeProperty];
-      if (propertyName === "left") {
+
+      if (includeLastGuidelineOffset) {
+        newVal -= breakpointConfig?.normal?.guidelinesPadding.right || 0;
+      } else if (propertyName === "left") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.left || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.right || 0);
       }
-      if (propertyName === "top") {
+      if (includeLastGuidelineOffset) {
+        newVal -= breakpointConfig?.normal?.guidelinesPadding.bottom || 0;
+      } else if (propertyName === "top") {
         newVal -=
           (breakpointConfig?.normal?.guidelinesPadding.top || 0) +
           (breakpointConfig?.normal?.guidelinesPadding.bottom || 0);
@@ -751,7 +790,8 @@ export function getPositionInfo(object: IObject, device: DeviceType) {
         <span> {"" + humanizeSting(object?.snapLayout?.edge ?? "")}</span>
         <span> {"W:" + objectSnapLayout?.width ?? ""}</span>
         <span> {"H:" + objectSnapLayout?.height ?? ""}</span>
-        <span> {"Gap:" + objectSnapLayout?.gap ?? ""}</span>
+        <span> {"Offset X:" + objectSnapLayout?.offsetX ?? ""}</span>
+        <span> {"Offset Y:" + objectSnapLayout?.offsetY ?? ""}</span>
       </>
     );
   }

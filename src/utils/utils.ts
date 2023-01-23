@@ -183,3 +183,10 @@ export function forceDownload(url: string) {
   };
   xhr.send();
 }
+
+export function getBooleanValue(
+  val: boolean | undefined,
+  defValue: boolean = false
+): boolean {
+  return typeof val === "undefined" ? defValue : val;
+}

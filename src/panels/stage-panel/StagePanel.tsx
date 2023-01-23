@@ -757,6 +757,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       objectHolderStyle.pointerEvents = "all";
 
+      // NOTE: FOR TEXT
+      const calculatedObjectSizeForObject = { ...calculatedObjectSize };
+      if (object.definition.values?.autoHeight) {
+        calculatedObjectSizeForObject.height = "auto";
+        objectStyle.height = "auto";
+      }
+
       return (
         <div
           key={`object-${object.id}`}
@@ -769,7 +776,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
               __html:
                 getObjectHtml(
                   object,
-                  calculatedObjectSize,
+                  calculatedObjectSizeForObject,
                   false,
                   false
                   // thumbnailHtmlArr,
@@ -1253,11 +1260,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     };
     layerStyle.position = "absolute";
 
-    //layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
-    //layerStyle.height = parseInt(layerStyle.height as string) * stageZoom + "px";
+    layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
+    layerStyle.height =
+      parseInt(layerStyle.height as string) * stageZoom + "px";
 
-    layerStyle.width = "auto";
-    layerStyle.height = "auto";
+    //layerStyle.width = "auto";
+    //layerStyle.height = "auto";
 
     //layerStyle.pointerEvents = "none";
     return (

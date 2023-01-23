@@ -305,6 +305,8 @@ function generateSlideData(
   if (slide.slideType === SlideType.Back) slideStyle += `z-index:-1000;`;
 
   // prettier-ignore
+  html += `  <div style='${slideStyle}' class='slide-wrapper slide-wrapper-${slide.id}'>`; // slide open
+  // prettier-ignore
   html += `  <div style='${slideStyle}' class='slide slide-${slide.id} ${getCustomIdClass(slide)}'>`; // slide open
 
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
@@ -364,6 +366,7 @@ function generateSlideData(
       },
       layout: {
         layout: layer.layout,
+        layoutAdvance: layer.layoutAdvance?.values,
         selfSize: layer.selfSize,
         ...pickLayoutFromLayouts(layer.layout, layer),
       },
@@ -437,6 +440,22 @@ function generateSlideData(
     layerStyle +=
       options.isForThumbnail && hideForThumbnail ? "display:none;" : "";
 
+    // NOTE exception for perspective >>>
+    if (layer.transformDefinition?.values?.hasPerspective) {
+      layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
+      //wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+    }
+
+    if (layer.transformDefinition?.values?.transformOriginX) {
+      layerStyle += `transform-origin: ${
+        layer.transformDefinition.values.transformOriginX ?? "center"
+      }  ${layer.transformDefinition.values.transformOriginY ?? "center"};`;
+
+      // wrapperStyle += `transform-origin: ${
+      //   object.transformDefinition.values.transformOriginX ?? "center"
+      // }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
+    }
+
     let layerWrapperStyle = layerStyle;
     layerStyle +=
       "position: relative; left:initial; top: initial; overflow: visible;";
@@ -504,18 +523,22 @@ function generateSlideData(
       const calculatedObjectSize = calculateObjectSize(
         object,
         breakpointConfig,
-        { resetPosition: false }
+        { resetPosition: false },
+        undefined,
+        { skipHeight: !!object.definition?.values?.autoHeight }
       );
 
       const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
         object,
-        breakpoints
+        breakpoints,
+        { skipHeight: !!object.definition?.values?.autoHeight }
       );
 
       let style = "";
       forOwn(calculatedObjectSize, function (value, key) {
         style += key + ":" + value + ";";
       });
+
       style += layerValues.hasLayoutChildren
         ? "position: static;"
         : object.layout === "absolute"
@@ -531,16 +554,24 @@ function generateSlideData(
       style +=
         "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
 
-      // NOTE exception for perspective
+      // NOTE exception for perspective >>>
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
-
-        // TODO: this should be configurable? maybe?
-        style += `transform-origin: center center;`;
-        wrapperStyle += `transform-origin: center center;`;
       }
 
+      if (object.transformDefinition?.values?.transformOriginX) {
+        style += `transform-origin: ${
+          object.transformDefinition.values.transformOriginX ?? "center"
+        }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
+
+        wrapperStyle += `transform-origin: ${
+          object.transformDefinition.values.transformOriginX ?? "center"
+        }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
+      }
+
+      // style+=
+      // wrapperStyle
       // TODO: check this
       //wrapperStyle += `overflow: hidden;`;
 
@@ -586,6 +617,7 @@ function generateSlideData(
         },
         layout: {
           layout: object.layout,
+          layoutAdvance: object.layoutAdvance?.values,
           selfSize: object.selfSize,
           ...pickLayoutFromLayouts(object.layout, object),
         },
@@ -603,6 +635,7 @@ function generateSlideData(
   });
 
   html += "  </div>"; // slide close
+  html += "  </div>"; // slide wrapper close
 
   return {
     slideData,

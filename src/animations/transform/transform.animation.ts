@@ -2,6 +2,7 @@ import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import {
   getAnimationElementById,
+  getLayerElementById,
   getObjectElementById,
 } from "../animation-utils";
 import { ITransformAnimation, TRANSFORM_ANIMATION } from "./transform.types";
@@ -38,8 +39,8 @@ function getPointValue(property: string, value: string | number | any) {
 export function transformAnimation() {
   let timeline: anime.AnimeTimelineInstance;
   let objectAnimationEl: HTMLElement;
-  let objectEl: HTMLElement;
-  let objectContentEl: HTMLElement;
+  //let objectEl: HTMLElement;
+  let objectContentEl: HTMLElement | null = null;
 
   // /let originalSize: { width: string; height: string } | undefined;
 
@@ -50,8 +51,16 @@ export function transformAnimation() {
       config.itemId!,
       TRANSFORM_ANIMATION
     );
-    objectEl = getObjectElementById(config.itemId!);
-    objectContentEl = objectEl.firstChild as HTMLElement;
+    // objectEl =
+    //   config.type === "layer"
+    //     ? getLayerElementById(config.itemId!)
+    //     : getObjectElementById(config.itemId!);
+    // objectContentEl = objectEl?.firstChild as HTMLElement;
+
+    objectContentEl = getObjectElementById(config.itemId!)
+      ?.firstChild as HTMLElement;
+
+    if (!objectContentEl) objectContentEl = getLayerElementById(config.itemId!);
   }
 
   function rootStart(config: any) {

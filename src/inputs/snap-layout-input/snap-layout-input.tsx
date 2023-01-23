@@ -13,6 +13,7 @@ import {
   getSelectField,
   getSizeLayoutField,
   getSizeUnitLayoutField,
+  getUnitNumericFiled,
 } from "../input-utils";
 import {
   ISnapLayoutInput,
@@ -91,6 +92,37 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           ["px", "%"],
           { disabled: inputProps.selfSize }
         )}
+
+        {getUnitNumericFiled(
+          "Offset X",
+          value.common.offsetX ?? "0px", // INFO: backward compatibility
+          (offsetX) => {
+            onChange({
+              ...value,
+              common: {
+                ...value.common,
+                offsetX: offsetX,
+              },
+            });
+          },
+          "",
+          { disabled: inputProps.disablePosition }
+        )}
+        {getUnitNumericFiled(
+          "Offset Y",
+          value.common.offsetY ?? "0px",
+          (offsetY) => {
+            onChange({
+              ...value,
+              common: {
+                ...value.common,
+                offsetY: offsetY,
+              },
+            });
+          },
+          "",
+          { disabled: inputProps.disablePosition }
+        )}
         {getNumericFiled(
           "Offset",
           value.common.gap,
@@ -103,8 +135,8 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
               },
             });
           },
-          "",
-          { disabled: inputProps.disablePosition }
+          "Offset is deprecated",
+          { disabled: true }
         )}
       </>
     );
@@ -137,7 +169,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
             <tr className={css.headerRow}>
               <td></td>
               <td>Size</td>
-              <td className={css.gapTD}>Gap</td>
+              <td className={css.gapTD}>Offset</td>
             </tr>
             {bcArr.map((bc) => {
               if (!bc.enabled) return null;
@@ -176,6 +208,31 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
 
     return (
       <td className={css.gapTD}>
+        {getSizeUnitLayoutField(
+          "Offset",
+          {
+            width: oneValue.offsetX ?? "0px", // INFO: backward compatibility
+            height: oneValue.offsetY ?? "0px", // INFO: backward compatibility
+          },
+          (newWH) => {
+            const newValue = cloneDeep(value);
+            const oneV = newValue.perDevice.find(
+              (item) => item.deviceType === t
+            );
+            if (oneV) {
+              oneV.offsetX = newWH.width; //roundNumber(newWH.width, 1);
+              oneV.offsetY = newWH.height; //roundNumber(, 1);
+            }
+            onChange(newValue);
+          },
+          ["px", "%"],
+          {
+            disabled: t !== selectedDevice,
+            labelW: "X",
+            labelH: "Y",
+          } as any
+        )}
+
         {getNumericFiled(
           "",
           oneValue.gap,
@@ -189,8 +246,8 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
             }
             onChange(newValue);
           },
-          "",
-          { disabled: t !== selectedDevice }
+          "deprecated",
+          { disabled: true }
         )}
       </td>
     );

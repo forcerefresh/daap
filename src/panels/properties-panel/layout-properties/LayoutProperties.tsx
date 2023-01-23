@@ -1,7 +1,9 @@
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, isEmpty } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
-
+import FormWithLayoutConnected, {
+  flattenForm,
+} from "../../../utils/form-layout/form-layout";
 import {
   getAbsoluteLayoutField,
   getSnapLayoutField,
@@ -28,7 +30,20 @@ import { ILayer } from "../../../store/reducers/i-layers";
 import { IStore } from "../../../store/store";
 import css from "./LayoutProperties.module.scss";
 import { InfoInputForm } from "../../../inputs/info-input/info-input";
-import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  IInputMetadataValues,
+  InputType,
+} from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  getInputForm,
+  getInputFormWithOptions,
+} from "../../../inputs/input-factory";
+import {
+  FormType,
+  IFormLayoutItem,
+} from "webslider-sdk/lib/form/i-form-layout";
+import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form";
+import { getDefaultLayoutAdvance } from "webslider-sdk/lib/objects/create-common-object";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -50,29 +65,121 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     _setDevice,
   } = props;
 
-  const renderLayerProperties = (layer: ILayer) => {
+  const renderLayerProperties = (lay: ILayer) => {
     return (
       <>
-        {renderLayoutOptions(layer, _updateLayer)}
-        {renderLayoutOptionProperties(layer, _updateLayer)}
+        {renderLayoutOptions(lay, _updateLayer)}
+        {renderLayoutOptionProperties(lay, _updateLayer)}
+
+        {renderAdvancedProperties(
+          layoutAdvancedDefinition,
+          lay.layoutAdvance?.values ?? {},
+          lay.layoutAdvance?.valuesMetadata ?? {},
+          lay,
+          _updateLayer
+        )}
       </>
     );
   };
 
-  const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
+  const renderObjectProperties = (obj: IObject, objectLayer: ILayer) => {
     const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
     const parentHasLayout = objectLayer.layout !== "none";
 
     return (
       <>
         {renderLayoutOptions(
-          object,
+          obj,
           _updateObject,
           layoutedByParent,
           parentHasLayout
         )}
-        {renderLayoutOptionProperties(object, _updateObject, layoutedByParent)}
+        {renderLayoutOptionProperties(obj, _updateObject, layoutedByParent)}
+
+        {renderAdvancedProperties(
+          layoutAdvancedDefinition,
+          obj.layoutAdvance?.values ?? {},
+          obj.layoutAdvance?.valuesMetadata ?? {},
+          obj,
+          _updateObject
+        )}
       </>
+    );
+  };
+
+  const renderAdvancedProperties = (
+    properties: any[],
+    values: any,
+    valuesMetadata: any,
+    objectOrLayer: ILayout,
+    updateFunction: (objectOrLayer: any) => any
+  ) => {
+    const flatForm = flattenForm(properties as IFormLayoutItem[]);
+
+    const inputs = flatForm.map((property, idx) => {
+      const { propertyName } = property;
+
+      function onChange(value: any) {
+        const retObj = cloneDeep(objectOrLayer);
+
+        // add default values to get form rendered
+        if (!retObj.layoutAdvance) {
+          retObj.layoutAdvance = {
+            values: getDefaultLayoutAdvance(),
+            valuesMetadata: {},
+          };
+        }
+
+        if (retObj) {
+          const values =
+            (retObj.layoutAdvance?.values as {
+              [key: string]: any;
+            }) ?? {};
+          values[propertyName] = value;
+          updateFunction(retObj);
+        }
+      }
+
+      function onMetadataChange(metadata: IInputMetadataValues) {
+        const retObj = cloneDeep(objectOrLayer);
+
+        if (retObj) {
+          const valuesMetadata =
+            (retObj.layoutAdvance?.valuesMetadata as {
+              [key: string]: any;
+            }) ?? {};
+          valuesMetadata[propertyName] = metadata;
+
+          updateFunction(retObj);
+        }
+      }
+
+      const inputProps: any = {
+        ...property,
+        value: values[propertyName],
+        metadata: valuesMetadata[propertyName],
+      };
+
+      return {
+        input: getInputFormWithOptions(
+          property.inputType,
+          inputProps,
+          onChange,
+          onChange,
+          onMetadataChange
+        ),
+        propertyName: property.propertyName,
+        duplicate: property.duplicate ? property.duplicate : "",
+      };
+    });
+
+    return (
+      <FormWithLayoutConnected
+        values={values}
+        inputs={inputs}
+        form={properties as IFormLayoutItem[]}
+        formId={"advanced-layout" as string}
+      />
     );
   };
 

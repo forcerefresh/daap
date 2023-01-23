@@ -30,6 +30,10 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import { UpdateObjectSizeFuncPropsType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  getObjectElementById,
+  getObjectWrapperElementById,
+} from "../../animations/animation-utils";
 
 export const TEXT = "text";
 
@@ -254,7 +258,8 @@ export function getTextHtml(props: {
   style += "font-weight: " + textProperties.weight + ";";
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
-  style += "position: absolute;";
+
+  //style += "position: absolute;";
 
   if (!textPropertiesMeta.lineHeight?.disabled) {
     style += "line-height: " + textProperties.lineHeight + ";";
@@ -276,34 +281,46 @@ export function getTextHtml(props: {
   )}</p>`;
 }
 
-export async function textSizeUpdate<UpdateObjectSizeFuncType>(
+export async function textSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
-  const { id, calculatedObjectSize, className, scale, values } = props;
+  const { id, calculatedObjectSize, className, scale, values, skipSizeUpdate } =
+    props;
   const textValues = values as TextValues;
 
-  const els = document.getElementsByClassName(className);
-  const div = els[0] as HTMLDivElement;
-  const parent = div.parentNode! as HTMLDivElement;
-  const child = div.firstChild! as HTMLDivElement;
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  //const els = document.getElementsByClassName(className);
 
-  parent.style.left = calculatedObjectSize.left;
-  parent.style.top = calculatedObjectSize.top;
+  //const div = els[0] as HTMLDivElement;
+  //const parent = objectEl.parentNode! as HTMLDivElement;
+  const child = objectEl.firstChild! as HTMLDivElement;
 
-  if (textValues.applyObjectScale) {
-    (
-      div.getElementsByClassName("object-content")[0] as HTMLElement
-    ).style.transform = "scale(" + scale?.wScale + ")";
-  } else {
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
+
+  // if (textValues.applyObjectScale) {
+  //   (
+  //     div.getElementsByClassName("object-content")[0] as HTMLElement
+  //   ).style.transform = "scale(" + scale?.wScale + ")";
+  // } else {
+  if (!skipSizeUpdate) {
+    if (!textValues.autoHeight) {
+      child.style.height = calculatedObjectSize.height;
+      objectWrapperEl.style.height = calculatedObjectSize.height;
+      objectEl.style.height = calculatedObjectSize.height;
+    }
     child.style.width = calculatedObjectSize.width;
-    child.style.height = calculatedObjectSize.height;
-
-    parent.style.width = calculatedObjectSize.width;
-    parent.style.height = calculatedObjectSize.height;
-
-    div.style.width = calculatedObjectSize.width;
-    div.style.height = calculatedObjectSize.height;
+    objectWrapperEl.style.width = calculatedObjectSize.width;
+    objectEl.style.width = calculatedObjectSize.width;
   }
+
+  // if (textValues.autoHeight) {
+  //   child.style.height = "auto";
+  //   parent.style.height = "auto";
+  //   div.style.height = "auto";
+  // }
+  //}
 }
 
 export async function preloadText(props: {
