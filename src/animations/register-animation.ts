@@ -2,7 +2,7 @@ import { registerAnimation } from "webslider-sdk/lib/animations/animations-regis
 import { fadeDef, fadeAppDef } from "./fade/fade";
 import { fadeRangeDef, fadeRangeAppDef } from "./fade-range/fade-range";
 import { slideDef, slideAppDef } from "./slide/slide";
-import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";
+//import { tilesZoomDef, tilesZoomAppDef } from "./tiles-zoom/tiles-zoom";
 import {
   fallingLeavesDef,
   fallingLeavesAppDef,
@@ -40,7 +40,7 @@ registerAnimation(splitAppDef, splitDef);
 //registerAnimation(trianglifyAppDef, trianglifyDef);
 registerAnimation(zoomAppDef, zoomDef);
 registerAnimation(slideAppDef, slideDef);
-registerAnimation(tilesZoomAppDef, tilesZoomDef);
+//registerAnimation(tilesZoomAppDef, tilesZoomDef);
 registerAnimation(fallingLeavesAppDef, fallingLeavesDef);
 registerAnimation(tilesFadeAppDef, tilesFadeDef);
 registerAnimation(tilesSlideAppDef, tilesSlideDef);
