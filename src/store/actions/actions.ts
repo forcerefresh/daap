@@ -1426,14 +1426,18 @@ function handleTextUpdate(
   // NOTE: check if we need to load fonts
   if (
     newObjectValues.font.source !== "system" &&
-    newFont !== oldFont &&
-    loadedFontFamilies.indexOf(newFont) === -1
+    (newFont !== oldFont ||
+      newObjectValues.font.weight !== oldObjectValues.font.weight) &&
+    loadedFontFamilies.indexOf(newFont + ":" + newObjectValues.font.weight) ===
+      -1
   ) {
+    console.log(newFont + ":" + newObjectValues.font.weight);
+
     delay(updateObjectOnce, 500);
     // load font
     load({
       google: {
-        families: [newFont],
+        families: [newFont + ":" + newObjectValues.font.weight],
       },
       classes: false,
       fontloading: (familyName: string, fvd: string) => {},
@@ -1442,6 +1446,7 @@ function handleTextUpdate(
         updateObjectOnce();
       },
       fontactive: (familyName: string, fvd: string) => {
+        console.log(familyName + ":" + fvd);
         dispatch(setExternalFontLoaded(familyName));
         updateObjectOnce();
       },
@@ -1449,6 +1454,10 @@ function handleTextUpdate(
   } else {
     updateObjectOnce();
   }
+}
+
+export function getFVD(weight: string) {
+  return "n" + weight.substring(0, 1);
 }
 
 export const UPDATE_OBJECT = "Update object";

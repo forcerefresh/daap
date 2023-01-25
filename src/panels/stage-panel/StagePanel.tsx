@@ -778,7 +778,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                   object,
                   calculatedObjectSizeForObject,
                   false,
-                  false
+                  false,
+                  breakpointConfig?.type
                   // thumbnailHtmlArr,
                   // slidesCounter
                 ) ||
@@ -1017,7 +1018,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                     { ...object, ...widthAndHeightObject },
                     { ...calculatedObjectSize },
                     false,
-                    false
+                    false,
+                    breakpointConfig?.type
                     // thumbnailHtmlArr,
                     // slidesCounter
                   ) ||

@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, includes } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { InfoInputForm } from "../../inputs/info-input/info-input";
@@ -24,6 +24,8 @@ import FormWithLayout, {
 } from "../../utils/form-layout/form-layout";
 import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import { createObject } from "../../objects/create-object-factory";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -111,18 +113,29 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    // TODO const objDef = getAppObjectDefinition(object.type)
+    const tmpObj = createObject(object.type, {});
 
-    if (object.definition.properties?.length === 0) {
+    if (!object.definition && !tmpObj.definition) {
       return <div>Object '{object.type}' has no properties.</div>;
     }
+
+    // check for forward compatibility
+    const definitionProperties = tmpObj.definition?.properties ?? [];
+    const definitionValues = {
+      ...(tmpObj.definition?.values ?? {}),
+      ...(object.definition?.values ?? {}),
+    };
+    const definitionValuesMetadata = {
+      ...(tmpObj.definition?.valuesMetadata ?? {}),
+      ...(object.definition?.valuesMetadata ?? {}),
+    };
 
     return (
       <>
         {renderProperties(
-          object.definition.properties!,
-          object.definition.values,
-          object.definition.valuesMetadata,
+          definitionProperties,
+          definitionValues,
+          definitionValuesMetadata,
           object,
           _updateObject
         )}
@@ -137,7 +150,29 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     objectOrLayer: IObjectOrLayer,
     updateFunction: (objectOrLayer: IObjectOrLayer) => any
   ) => {
-    const flatForm = flattenForm(properties as IFormLayoutItem[]);
+    let flatForm = flattenForm(properties as IFormLayoutItem[]);
+
+    // add devices inputs
+    flatForm = flatForm.reduce((acc, curr, idx) => {
+      acc.push(curr);
+
+      if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
+        valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
+          const dPropertyName = curr.propertyName + "_D_" + device;
+          const newInput = cloneDeep(curr);
+          newInput.propertyName = dPropertyName;
+          delete newInput?.extraOptions;
+          delete newInput?.optional;
+          acc.push(newInput);
+
+          // NOTE: copy default value
+          if (!values[dPropertyName]) {
+            values[dPropertyName] = cloneDeep(values[curr.propertyName]);
+          }
+        });
+      }
+      return acc;
+    }, [] as IFormLayoutItem[]);
 
     let layerObjects: IObject[] = [];
     if (objectOrLayer.type === "layer") {
@@ -182,6 +217,28 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             [key: string]: any;
           };
           valuesMetadata[propertyName] = metadata;
+
+          // cleanup if device is removed >>
+          const devicePropertiesNames: string[] = [];
+          Object.keys(retObj.definition.values).forEach((pName) => {
+            if (pName.startsWith(propertyName + "_D_")) {
+              devicePropertiesNames.push(pName);
+            }
+          });
+          if (devicePropertiesNames && metadata.devices) {
+            debugger;
+            devicePropertiesNames.forEach((possibleRemoveDevice) => {
+              if (
+                !includes(
+                  metadata.devices,
+                  possibleRemoveDevice.split("_D_")[1]
+                )
+              ) {
+                delete retObj.definition.values[possibleRemoveDevice];
+              }
+            });
+          }
+          // end cleanup
 
           updateFunction(retObj);
         }

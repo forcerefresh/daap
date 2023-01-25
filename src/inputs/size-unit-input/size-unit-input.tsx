@@ -67,10 +67,17 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
       propertyValueClean = propertyValueClean.replaceAll(unit as string, "");
     });
 
+    const isWidthOrHeight =
+      propertyValueClean === "width" || propertyValueClean === "height";
     const isNumber = new RegExp("^-?\\d*(\\.\\d+)?$").test(propertyValueClean);
 
     //validate is number
-    if (isNumber && !isNaN(parseFloat(propertyValue))) {
+    if (isWidthOrHeight) {
+      currValid[propertyName] = true;
+      const value2 = { ...value } as any;
+      value2[propertyName] = propertyValue;
+      setLatestValidValue({ ...value2 });
+    } else if (isNumber && !isNaN(parseFloat(propertyValue))) {
       //validate is positive for width and height
       const isValidValue =
         propertyName === "width" || propertyName === "height"
@@ -129,7 +136,7 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
               id: "text-input-W",
               // intent: !valid.width ? Intent.WARNING : Intent.NONE,
             } as any,
-            ALLOWED_UNITS
+            [...ALLOWED_UNITS, "height"]
           )}
           {/*<InputGroup
           
@@ -150,7 +157,7 @@ export const SizeUnitInputForm: React.FC<ISizeInput & IUpdateInput> = (
               id: "text-input-H",
               //intent: !valid.height ? Intent.WARNING : Intent.NONE,
             } as any,
-            ALLOWED_UNITS
+            [...ALLOWED_UNITS, "width"]
           )}
         </FormGroup>
       </div>

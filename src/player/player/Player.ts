@@ -584,7 +584,6 @@ export class Player {
       //   ).style.transform = "scale(" + scale?.wScale + ")";
       // } else {
 
-      debugger;
       if (
         getBooleanValue(
           transitionData.layout.layoutAdvance?.hasLayoutAdvance
@@ -618,6 +617,7 @@ export class Player {
           calculatedObjectSize: calObjSize,
           scale: this.scaleParams,
           skipSizeUpdate: !forceUpdateSize,
+          deviceType: this.currentBp.type,
           // calculateSize: (
           //   value: string,
           //   propertyName: "width" | "height" | "left" | "top"

@@ -152,7 +152,8 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           {
             disabled: inputProps.disabled,
             // className: css.perDeviceInput,
-          }
+          },
+          ["px", "%", "height"]
         )}
         {getUnitNumericFiled(
           "H",
@@ -164,7 +165,8 @@ export const SizePosInputForm: React.FC<ISizePosInput & IUpdateInput> = (
           {
             disabled: inputProps.disabled,
             // className: css.perDeviceInput,
-          }
+          },
+          ["px", "%", "width"]
         )}
       </div>
       {/* <FormGroup>

@@ -3,6 +3,7 @@ import React, { ChangeEvent } from "react";
 import { getGlobals } from "../../globals";
 import { getUnderFieldText } from "../input-utils";
 import { ISelectInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import { createInputLabel } from "../input-helpers";
 
 export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
   props
@@ -15,13 +16,14 @@ export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
     helperText,
     inputProps = {},
     externalError = "",
+    propertyName,
   } = props;
 
   const underFieldText = getUnderFieldText(helperText, externalError);
 
   return (
     <FormGroup
-      label={displayName}
+      label={createInputLabel(displayName, propertyName)}
       labelFor="text-input"
       inline
       helperText={underFieldText}

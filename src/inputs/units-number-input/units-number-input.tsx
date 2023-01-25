@@ -7,9 +7,19 @@ import {
   IUnitsNumberInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import { createInputLabel } from "../input-helpers";
 import css from "./units-number-input.module.scss";
 
-export type UnitType = "px" | "em" | "%" | "ms" | "s" | "deg" | null;
+export type UnitType =
+  | "px"
+  | "em"
+  | "%"
+  | "ms"
+  | "s"
+  | "deg"
+  | "width"
+  | "height"
+  | null;
 interface UnitValue {
   value: string;
   unit: UnitType;
@@ -72,6 +82,8 @@ export const UnitsNumberInputForm: React.FC<
   } = props;
   const id = `${propertyName}_units_input_number`;
 
+  const inputLabel = createInputLabel(displayName, propertyName);
+
   const latestUnit = React.useRef<UnitType>(allowedUnits[0]);
   if (value2UnitValue(value, allowedUnits).unit !== null) {
     latestUnit.current = value2UnitValue(value, allowedUnits).unit;
@@ -94,6 +106,15 @@ export const UnitsNumberInputForm: React.FC<
   const [valid, setValid] = useState<boolean>(true);
 
   const updateValue = (newValue: string) => {
+    if (
+      (allowedUnits.includes("width") && newValue === "width") ||
+      (allowedUnits.includes("height") && newValue === "height")
+    ) {
+      setValid(true);
+      onChange(newValue);
+      return;
+    }
+
     const newValueValue = value2UnitValue(newValue, allowedUnits).value;
     setInternalValue(value2UnitValue(newValue, allowedUnits));
 
@@ -124,7 +145,7 @@ export const UnitsNumberInputForm: React.FC<
   return (
     <FormGroup
       className={classnames(css.main, props.inputProps?.className)}
-      label={displayName}
+      label={inputLabel}
       labelFor={id}
       helperText={!!helperText && helperText}
       inline

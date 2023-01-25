@@ -244,7 +244,8 @@ export const AbsolutePlacementForm: React.FC<
             "",
             {
               // className: css.perDeviceInput,
-            }
+            },
+            ["%", "px", "height"]
           )}
           {getUnitNumericFiled(
             "H",
@@ -255,7 +256,8 @@ export const AbsolutePlacementForm: React.FC<
             "",
             {
               // className: css.perDeviceInput,
-            }
+            },
+            ["%", "px", "width"]
           )}
           {/* <FormGroup label={"W"} labelFor="text-input-W" inline>
             <InputGroup

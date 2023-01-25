@@ -60,6 +60,7 @@ import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-pro
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 
 export function generatePlayerData(
   sources: ISources,
@@ -588,9 +589,8 @@ function generateSlideData(
         object,
         calculatedObjectSize,
         true,
-        options.isSave
-        // thumbnailHtmlArr, // for bullets
-        // slidesLength // for bullets
+        options.isSave,
+        breakpointConfig.type
       );
 
       itemsData.push({
@@ -693,7 +693,7 @@ export function getObjectHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
   isSave: boolean,
-  bpConfig?: BreakpointConfiguration
+  deviceType?: DeviceType
   // thumbnailHtmlArr: (string | undefined)[],
   // slidesCounter = 3
 ) {
@@ -718,6 +718,7 @@ export function getObjectHtml(
           calculatedObjectSize,
           isPlayer,
           isSave,
+          deviceType,
           // calculateSize: (
           //   value: string,
           //   propertyName: "width" | "height" | "left" | "top"

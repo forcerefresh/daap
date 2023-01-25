@@ -1,15 +1,22 @@
-import { FormGroup, InputGroup, Intent, TextArea } from "@blueprintjs/core";
-import { debounce, noop, throttle } from "lodash-es";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { FormGroup, TextArea } from "@blueprintjs/core";
+import { debounce, noop } from "lodash-es";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   ITextAreaInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
+import { createInputLabel } from "../input-helpers";
 
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onInput = noop, inputProps = {} } = props;
+  const {
+    displayName,
+    value,
+    onInput = noop,
+    inputProps = {},
+    propertyName,
+  } = props;
   const { rows = 5 } = inputProps;
 
   const throttledOnChange = useCallback(
@@ -33,8 +40,10 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
     }
   };
 
+  const inputLabel = createInputLabel(displayName, propertyName);
+
   return (
-    <FormGroup label={displayName} labelFor="textarea-input">
+    <FormGroup label={inputLabel} labelFor="textarea-input">
       <TextArea
         id="textarea-input"
         growVertically={true}

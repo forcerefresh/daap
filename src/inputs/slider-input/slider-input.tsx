@@ -45,7 +45,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
       inline
     >
       <Slider
-        className={classnames({
+        className={classnames(css.slider, {
           [css.thumbPositionTop]: thumbPosition === "top",
           [css.hideLabels]: hideLabels,
         })}

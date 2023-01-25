@@ -29,11 +29,15 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
-import { UpdateObjectSizeFuncPropsType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetHtmlFuncPropsType,
+  UpdateObjectSizeFuncPropsType,
+} from "webslider-sdk/lib/objects/objects-register";
 import {
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
+import { getObjectValue, getObjectValues } from "../object-utils";
 
 export const TEXT = "text";
 
@@ -43,13 +47,12 @@ export interface TextValues {
   font: IFontSelectInputValue;
   color: RGBColor;
   fontSize: string;
-  weight: string;
+  bold: boolean;
   italic: boolean;
   underline: boolean;
   lineHeight: string;
   textAlign: string;
   preload: boolean;
-  applyObjectScale?: boolean;
 }
 
 export type TextPropertiesTuple = [
@@ -58,13 +61,12 @@ export type TextPropertiesTuple = [
   IFontSelectInput<"font">,
   IColorInput<"color">,
   IUnitsNumberInput<"fontSize">,
-  ISelectInput<"weight">,
+  ICheckboxInput<"bold">,
   ICheckboxInput<"italic">,
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
-  ICheckboxInput<"preload">,
-  ICheckboxInput<"applyObjectScale">
+  ICheckboxInput<"preload">
 ];
 
 export function createTextObject(
@@ -87,6 +89,8 @@ export function createTextObject(
       inputType: InputType.TEXTAREA,
       value: (initialValue?.text as string) || "",
       defaultValue: "",
+      // optional: true,
+      extraOptions: { devices: true, exportForWizard: true },
     },
     {
       displayName: "Auto height",
@@ -116,32 +120,22 @@ export function createTextObject(
       defaultValue: { r: 255, g: 255, b: 255, a: 1 },
     },
     {
-      displayName: "Font size",
+      displayName: "Size",
       placeholder: "Enter font size",
       allowedUnits: ["px", "em", "%"],
       propertyName: "fontSize",
       inputType: InputType.UNITS_NUMBER,
       value: initialValue?.fontSize || "1em",
       defaultValue: "1em",
+      extraOptions: { devices: true, exportForWizard: true },
     },
     {
-      displayName: "Weight",
-      propertyName: "weight",
-      inputType: InputType.SELECT,
-      value: "400",
-      defaultValue: "400",
-      options: [
-        { value: "100", label: "100	Thin" },
-        { value: "200", label: "200	Extra Light" },
-        { value: "300", label: "300	Light" },
-        { value: "400", label: "400	Normal" },
-        { value: "500", label: "500	Medium" },
-        { value: "600", label: "600	Semi Bold" },
-        { value: "700", label: "700	Bold" },
-        { value: "800", label: "800	Extra Bold" },
-        { value: "900", label: "900	Black" },
-        { value: "950", label: "950	Extra Black" },
-      ],
+      displayName: "Bold",
+      propertyName: "bold",
+      inputType: InputType.CHECKBOX,
+      value: false,
+      defaultValue: false,
+      helperText: "This overrides font weight config",
     },
     {
       displayName: "Italic",
@@ -163,7 +157,7 @@ export function createTextObject(
       inputType: InputType.UNITS_NUMBER,
       value: "",
       defaultValue: "",
-      optional: true,
+      extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
       displayName: "Text align",
@@ -176,6 +170,7 @@ export function createTextObject(
         { value: "center", label: "Center" },
         { value: "right", label: "Right" },
       ],
+      extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
       displayName: "Preload fonts",
@@ -183,15 +178,7 @@ export function createTextObject(
       inputType: InputType.CHECKBOX,
       value: true,
       defaultValue: true,
-      inputProps: { disabled: true },
-    },
-    {
-      displayName: "Scale",
-      propertyName: "applyObjectScale",
-      inputType: InputType.CHECKBOX,
-      value: false,
-      defaultValue: false,
-      helperText: "Apply object scale to text",
+      //inputProps: { disabled: true },
     },
   ];
 
@@ -201,16 +188,16 @@ export function createTextObject(
     font: (initialValue?.font as IFontSelectInputValue) || {
       fontFamily: "Arial",
       source: "system-fonts",
+      weight: "400",
     },
     color: { r: 255, g: 255, b: 255, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
-    weight: "400",
+    bold: false,
     italic: false,
     underline: false,
     lineHeight: "20px",
     textAlign: "left",
     preload: true, // not visible,
-    applyObjectScale: false,
   };
 
   return {
@@ -237,59 +224,87 @@ export function createTextObject(
   };
 }
 
-export function getTextHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-}) {
-  const { object, calculatedObjectSize } = props;
+export function getTextHtml(props: GetHtmlFuncPropsType) {
+  const { object, calculatedObjectSize, deviceType } = props;
 
-  const textProperties = object.definition.values as TextValues;
+  const textValues = getObjectValues(
+    object.definition.values as TextValues,
+    deviceType
+  );
+
+  console.log(object.definition.values);
+
+  console.log(textValues);
+
   const textPropertiesMeta = object.definition.valuesMetadata as {
     [key: string]: IInputMetadataValues;
   };
 
+  const fontWeight = textValues.bold
+    ? "700"
+    : (textValues.font.weight ?? "400")
+        .replace("italic", "")
+        .replace("bold", "")
+        .replace("regular", "400") + ";";
+
   let style = "";
   style = addCommonPropertiesToStyle(style, object);
   style = addTransformPropertiesToStyle(style, object);
-  style += "font-family: " + textProperties.font.fontFamily + ";";
-  style += "font-size: " + textProperties.fontSize + ";";
-  const c = textProperties.color;
+  style += "font-family: " + textValues.font.fontFamily + ";";
+  style += "font-size: " + textValues.fontSize + ";";
+  const c = textValues.color;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;
-  style += "font-weight: " + textProperties.weight + ";";
+  style += `font-weight: ${fontWeight};`;
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
 
   //style += "position: absolute;";
 
   if (!textPropertiesMeta.lineHeight?.disabled) {
-    style += "line-height: " + textProperties.lineHeight + ";";
+    style += "line-height: " + textValues.lineHeight + ";";
   }
 
-  if (textProperties.italic) {
+  if (textValues.italic) {
     style += "font-style: italic;";
   }
-  if (textProperties.underline) {
+  if (textValues.underline) {
     style += "text-decoration: underline;";
   }
 
-  style += "text-align:" + textProperties.textAlign + ";";
+  style += "text-align:" + textValues.textAlign + ";";
 
   style += "margin: 0px;";
 
+  console.log(style);
+
   return `<p class="object-content" style="${style}">${nl2br(
-    textProperties.text
+    textValues.text
   )}</p>`;
 }
 
 export async function textSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
-  const { id, calculatedObjectSize, className, scale, values, skipSizeUpdate } =
-    props;
-  const textValues = values as TextValues;
+  const {
+    id,
+    calculatedObjectSize,
+    className,
+    scale,
+    values,
+    skipSizeUpdate,
+    deviceType,
+  } = props;
+  const textValues = getObjectValues(values as TextValues, deviceType);
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
+  const objectContentEl = objectEl.getElementsByClassName("object-content")[0];
+
+  //const textValue = getObjectValue(textValues, "text", deviceType);
+  if (objectContentEl.innerHTML !== nl2br(textValues.text)) {
+    objectContentEl.innerHTML = nl2br(textValues.text);
+  }
+
   //const els = document.getElementsByClassName(className);
 
   //const div = els[0] as HTMLDivElement;

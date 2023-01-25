@@ -106,19 +106,22 @@ export function calculateObjectSize(
       breakpointConfig
     );
 
-    const width = unitValueToPx(
+    let width = unitValueToPx(
       absoluteValue.width,
       "width",
       object.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
 
-    const height = unitValueToPx(
+    let height = unitValueToPx(
       absoluteValue.height,
       "height",
       object.absoluteLayout?.relativeTo!,
       breakpointConfig
     );
+
+    if (absoluteValue.height === "width") height = width;
+    if (absoluteValue.width === "height") width = height;
 
     const relativeToSize = getPSGSize(
       object.absoluteLayout?.relativeTo!,
@@ -284,7 +287,7 @@ export function calculateObjectSize(
 
     let sizeObj;
 
-    const w = unitValueToPx(
+    let w = unitValueToPx(
       snapSizeObjStr.width,
       "width",
       object.snapLayout?.relativeTo!,
@@ -292,13 +295,16 @@ export function calculateObjectSize(
       true
     );
 
-    const h = unitValueToPx(
+    let h = unitValueToPx(
       snapSizeObjStr.height,
       "height", // TODO shoud be height
       object.snapLayout?.relativeTo!,
       breakpointConfig,
       true
     );
+
+    if (snapSizeObjStr.height === "width") h = w;
+    if (snapSizeObjStr.width === "height") w = h;
 
     const offsetX = unitValueToPx(
       snapSizeObjStr.offsetX ?? "0px", //INFO:  backward compatibility
@@ -519,6 +525,7 @@ export function getAbsoluteLayoutSizeInPx(
     absoluteLayout?.relativeTo!,
     breakpointConfig
   );
+
   const top = unitValueToPx(
     absoluteValue.top,
     "top",
@@ -526,18 +533,22 @@ export function getAbsoluteLayoutSizeInPx(
     breakpointConfig
   );
 
-  const width = unitValueToPx(
+  let width = unitValueToPx(
     absoluteValue.width,
     "width",
     absoluteLayout?.relativeTo!,
     breakpointConfig
   );
-  const height = unitValueToPx(
+
+  let height = unitValueToPx(
     absoluteValue.height,
     "height",
     absoluteLayout?.relativeTo!,
     breakpointConfig
   );
+
+  if (absoluteValue.height === "width") height = width;
+  if (absoluteValue.width === "height") width = height;
 
   const relativeToSize = getPSGSize(
     absoluteLayout?.relativeTo!,

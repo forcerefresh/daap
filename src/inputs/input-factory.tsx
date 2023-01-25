@@ -20,6 +20,7 @@ import { TextAreaInputForm } from "./textarea-input/textarea-input";
 import { AbsolutePlacementForm } from "./absolute-layout-input/absolute-layout-input";
 import { TransformOriginInputForm } from "./transform-origin/transform-origin";
 import {
+  IExtraOptions,
   IInputMetadataValues,
   InputType,
 } from "webslider-sdk/lib/inputs/i-inputs";
@@ -53,6 +54,7 @@ import { RangeSliderInputForm } from "./range-slider-input/range-slider-input";
 import { FitInputForm } from "./fit-input/fit-input";
 import { InsetLayoutInputForm } from "./inset-layout-input/inset-layout-input";
 import { AudioInputForm } from "./audio-input/audio-input";
+import ExtraOptionsInput from "./extra-options-optional/extra-options-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -78,7 +80,17 @@ export function getInputFormWithOptions<T>(
 
   const input = getInputForm(inputType, inputProps, onChange, onInput, data);
 
-  if (inputProps.optional) {
+  if (inputProps.extraOptions) {
+    return (
+      <ExtraOptionsInput
+        extraOptions={inputProps.extraOptions}
+        metadataValues={inputProps.metadata}
+        onMetadataChange={onMetadataChange || (() => {})}
+      >
+        {input}
+      </ExtraOptionsInput>
+    );
+  } else if (inputProps.optional) {
     return (
       <OptionalInput
         metadataValues={inputProps.metadata}

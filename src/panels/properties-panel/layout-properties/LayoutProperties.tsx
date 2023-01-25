@@ -70,7 +70,6 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
       <>
         {renderLayoutOptions(lay, _updateLayer)}
         {renderLayoutOptionProperties(lay, _updateLayer)}
-
         {renderAdvancedProperties(
           layoutAdvancedDefinition,
           lay.layoutAdvance?.values ?? {},
@@ -95,7 +94,6 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           parentHasLayout
         )}
         {renderLayoutOptionProperties(obj, _updateObject, layoutedByParent)}
-
         {renderAdvancedProperties(
           layoutAdvancedDefinition,
           obj.layoutAdvance?.values ?? {},

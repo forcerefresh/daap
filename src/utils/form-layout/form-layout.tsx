@@ -83,10 +83,18 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       );
     }
 
-    return findInputWithWrapper(
-      element.propertyName,
-      inputs,
-      element.duplicate
+    // get per device input
+    const perDeviceInputs = inputs.filter((input) => {
+      return input.propertyName.startsWith(element.propertyName + "_D_");
+    });
+
+    return (
+      <>
+        {findInputWithWrapper(element.propertyName, inputs, element.duplicate)}
+        {perDeviceInputs.map((dInput) =>
+          findInputWithWrapper(dInput.propertyName, inputs, element.duplicate)
+        )}
+      </>
     );
   };
 
@@ -212,11 +220,12 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
             </div>
           );
         } else if (formItem.type === FormType.INPUT) {
-          return findInputWithWrapper(
-            formItem.propertyName,
-            inputs,
-            formItem.duplicate
-          );
+          return renderElement(formItem);
+          // return findInputWithWrapper(
+          //   formItem.propertyName,
+          //   inputs,
+          //   formItem.duplicate
+          // );
         } else if (formItem.type === FormType.SWITCH_GROUP) {
           return (
             <div key={"switch_group_" + formItem.propertyName}>
