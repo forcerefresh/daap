@@ -36,6 +36,12 @@ const JUSTIFY_OPTIONS = [
   { label: "space-around", value: "space-around" },
 ];
 
+const WRAP_OPTIONS = [
+  { label: "nowrap", value: "nowrap" },
+  { label: "wrap", value: "wrap" },
+  { label: "wrap-reverse", value: "wrap-reverse" },
+];
+
 export const LayoutChildrenInputForm: React.FC<
   ILayoutChildrenInput &
     IUpdateInput & {
@@ -68,7 +74,9 @@ export const LayoutChildrenInputForm: React.FC<
           valueClone.align = align;
           onChange(valueClone);
         })}
+      </div>
 
+      <div className={cx("input60")}>
         {getSelectField(
           "Justify",
           value.justify,
@@ -79,6 +87,14 @@ export const LayoutChildrenInputForm: React.FC<
             onChange(valueClone);
           }
         )}
+      </div>
+
+      <div className={cx("input60")}>
+        {getSelectField("Wrap", value.wrap, WRAP_OPTIONS, (wrap: any) => {
+          const valueClone = cloneDeep(value);
+          valueClone.wrap = wrap;
+          onChange(valueClone);
+        })}
       </div>
 
       <div>

@@ -387,6 +387,7 @@ function generateSlideData(
         layerStyle += "display:flex;";
         layerStyle += `align-items: ${layerValues.layoutChildren.align};`;
         layerStyle += `justify-content: ${layerValues.layoutChildren.justify};`;
+        layerStyle += `flex-wrap: ${layerValues.layoutChildren.wrap};`;
 
         if (t === "row") {
           layerStyle += `flex-direction:row;`;

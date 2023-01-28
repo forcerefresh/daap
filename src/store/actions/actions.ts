@@ -329,6 +329,7 @@ export function addNewLayer(slideId: string): any {
             type: LayoutChildrenType.Column,
             align: "start",
             justify: "start",
+            wrap: "nowrap",
             itemsGap: {
               commonValue: "",
               eachValues: [],
@@ -1431,8 +1432,6 @@ function handleTextUpdate(
     loadedFontFamilies.indexOf(newFont + ":" + newObjectValues.font.weight) ===
       -1
   ) {
-    console.log(newFont + ":" + newObjectValues.font.weight);
-
     delay(updateObjectOnce, 500);
     // load font
     load({
@@ -1446,7 +1445,6 @@ function handleTextUpdate(
         updateObjectOnce();
       },
       fontactive: (familyName: string, fvd: string) => {
-        console.log(familyName + ":" + fvd);
         dispatch(setExternalFontLoaded(familyName));
         updateObjectOnce();
       },

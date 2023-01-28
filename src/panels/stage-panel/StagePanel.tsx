@@ -641,6 +641,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         layerStyle.display = "flex";
         layerStyle.alignItems = layerValues.layoutChildren.align;
         layerStyle.justifyContent = layerValues.layoutChildren.justify;
+        layerStyle.flexWrap = layerValues.layoutChildren.wrap;
 
         if (t === "row") {
           layerStyle.flexDirection = "row";

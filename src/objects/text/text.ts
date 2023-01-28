@@ -232,10 +232,6 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
     deviceType
   );
 
-  console.log(object.definition.values);
-
-  console.log(textValues);
-
   const textPropertiesMeta = object.definition.valuesMetadata as {
     [key: string]: IInputMetadataValues;
   };
@@ -274,8 +270,6 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
   style += "text-align:" + textValues.textAlign + ";";
 
   style += "margin: 0px;";
-
-  console.log(style);
 
   return `<p class="object-content" style="${style}">${nl2br(
     textValues.text

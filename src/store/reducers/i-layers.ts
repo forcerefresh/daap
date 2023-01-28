@@ -89,6 +89,7 @@ export const layerDefinition: LayerTuple = [
           type: LayoutChildrenType.Column,
           align: "start",
           justify: "start",
+          wrap: "nowrap",
           itemsGap: {
             commonValue: "",
             eachValues: [],
@@ -99,6 +100,7 @@ export const layerDefinition: LayerTuple = [
           type: LayoutChildrenType.Column,
           align: "start",
           justify: "start",
+          wrap: "nowrap",
           itemsGap: {
             commonValue: "",
             eachValues: [],
