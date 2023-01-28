@@ -4,21 +4,9 @@
 [submodule "marketplace/objects/countdown-object"]
 	path = marketplace/objects/countdown-object
 	url = git@bitbucket.org:srdjanarsic/countdown-object.git
-[submodule "marketplace/effects/magnetic-effect"]
-	path = marketplace/effects/magnetic-effect
-	url = git@bitbucket.org:srdjanarsic/magnetic-effect.git
 [submodule "src/webslider-sdk"]
 	path = src/webslider-sdk
 	url = git@bitbucket.org:srdjanarsic/webslider-sdk.git
 [submodule "marketplace/objects/retina-image"]
 	path = marketplace/objects/retina-image
 	url = git@bitbucket.org:srdjanarsic/retina-image.git
-[submodule "marketplace/effects/cube-effect"]
-	path = marketplace/effects/cube-effect
-	url = git@bitbucket.org:srdjanarsic/cube-effect.git
-[submodule "marketplace/effects/svg-draw-effect"]
-	path = marketplace/effects/svg-draw-effect
-	url = git@bitbucket.org:srdjanarsic/svg-draw-effect.git
-[submodule "marketplace/effects/mask-slide-effect"]
-	path = marketplace/effects/mask-slide-effect
-	url = git@bitbucket.org:srdjanarsic/mask-slide-effect.git
