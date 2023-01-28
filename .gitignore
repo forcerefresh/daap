@@ -25,15 +25,3 @@ yarn-debug.log*
 yarn-error.log*
 
 .eslintcache
-
-marketplace/objects/video-source/static/hash.json
-marketplace/objects/video-source/node_modules
-marketplace/objects/video-source/dist
-
-marketplace/objects/video-target-2/static/hash.json
-marketplace/objects/video-target-2/node_modules
-marketplace/objects/video-target-2/dist
-
-marketplace/objects/video-target/static/hash.json
-marketplace/objects/video-target/node_modules
-marketplace/objects/video-target/dist
