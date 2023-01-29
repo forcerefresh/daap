@@ -143,7 +143,8 @@ function createTimelineForAnimation(
   const tl = new Timeline({
     //timelineType: "object",
     ...(timelineGroup ? { group: timelineGroup } : {}),
-    name: "ObjectTimeline",
+    name: "AnimationTimeline",
+    transitionUid: eff.uid,
     ...eff.animation.values,
     animationId: eff.animation.id,
     itemId: data.itemId,

@@ -1,4 +1,5 @@
 import { HTMLSelect, Icon, Tab, Tabs, Tag } from "@blueprintjs/core";
+import { v4 as uuid } from "uuid";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
 import React, { ChangeEvent, useState } from "react";
@@ -7,6 +8,7 @@ import {
   IObject,
   ItemType,
   ITransition,
+  ITransitionAble,
   ITransitions,
 } from "webslider-sdk/lib/objects/i-object";
 import {
@@ -70,7 +72,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     event: 0,
   });
 
-  let item: IObject | ILayer | ISlide | any | undefined;
+  let item: ITransitionAble;
   let transitions: ITransitions | undefined;
   if (id) {
     switch (itemType) {
@@ -94,11 +96,15 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 
   const removeHandler = (animationType: AnimationType, idx: number) => {
     const newItem = cloneDeep(item);
-    newItem.transitions[animationType].splice(idx, 1);
-    if (itemType === "object") _updateObject(newItem);
-    if (itemType === "layer") _updateLayer(newItem);
-    if (itemType === "slide") _updateSlide(newItem);
-    setSelectedNo({ ...selectedNo, [animationType]: Math.max(0, idx - 1) });
+    newItem.transitions[animationType]!.splice(idx, 1);
+    if (itemType === "object") _updateObject(newItem as IObject);
+    if (itemType === "layer") _updateLayer(newItem as ILayer);
+    if (itemType === "slide") _updateSlide(newItem as ISlide);
+
+    setTimeout(() => {
+      // TODO: IMPORTANT strange behavior when deleting animation
+      setSelectedNo({ ...selectedNo, [animationType]: Math.max(0, idx - 1) });
+    }, 1);
   };
 
   const transitionChangeHandler = (
@@ -107,10 +113,10 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     value: ITransition
   ) => {
     const newItem = cloneDeep(item);
-    newItem.transitions[animationType][idx] = value;
-    if (itemType === "object") _updateObject(newItem);
-    if (itemType === "layer") _updateLayer(newItem);
-    if (itemType === "slide") _updateSlide(newItem);
+    newItem.transitions[animationType]![idx] = value;
+    if (itemType === "object") _updateObject(newItem as IObject);
+    if (itemType === "layer") _updateLayer(newItem as ILayer);
+    if (itemType === "slide") _updateSlide(newItem as ISlide);
   };
 
   const addAnimationToSection = (
@@ -121,10 +127,10 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     const isStructural = !effDef?.formDefaults.canBeCombined;
 
     const newItem = cloneDeep(item);
-    const length = newItem.transitions[animationType].length;
+    const length = newItem.transitions[animationType]!.length;
     setSelectedNo({ ...selectedNo, [animationType]: length });
 
-    const transition = getDefaultAnimationConfigForType(
+    const transition: ITransition = getDefaultAnimationConfigForType(
       animationType,
       isStructural,
       itemType
@@ -143,10 +149,12 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     });
     transition.animation.values = values;
 
-    newItem.transitions[animationType].push(transition);
-    if (itemType === "object") _updateObject(newItem);
-    if (itemType === "layer") _updateLayer(newItem);
-    if (itemType === "slide") _updateSlide(newItem);
+    transition.uid = uuid();
+    newItem.transitions[animationType]!.push(transition);
+
+    if (itemType === "object") _updateObject(newItem as IObject);
+    if (itemType === "layer") _updateLayer(newItem as ILayer);
+    if (itemType === "slide") _updateSlide(newItem as ISlide);
   };
 
   const getAnimationName = (
@@ -354,6 +362,9 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 
               {transitions?.[section]?.[selectedNo[section]] !== undefined && (
                 <AnimationConfigurationForm
+                  key={
+                    (transitions?.[section]?.[selectedNo[section]] as any).uid
+                  }
                   animationType={section}
                   objectType={objectType}
                   transition={transitions?.[section]?.[selectedNo[section]]!}

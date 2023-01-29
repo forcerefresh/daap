@@ -4,6 +4,7 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { isTimelineInBounds } from "./timeline-utild";
 
 export type ITimelineConfig = {
+  transitionUid?: string;
   duration?: number;
   delay?: number;
   name?: string;
@@ -28,6 +29,9 @@ export class Timeline {
   delay = 0;
 
   animIns: any;
+
+  // flag that will be set to false after we call init for the first time
+  firstInit: boolean = true;
 
   timelines: {
     playing: boolean; // when playhead is inside start and stop
@@ -134,10 +138,13 @@ export class Timeline {
   init() {
     logger.player.debug(`Timeline init (${this.config.name})`);
 
-    const animationDef = getPlayerAnimationDefinition(this.config.animationId);
-
-    if (animationDef) {
-      this.animIns = animationDef.animationFunc();
+    if (!this.animIns) {
+      const animationDef = getPlayerAnimationDefinition(
+        this.config.animationId
+      );
+      if (animationDef) {
+        this.animIns = animationDef.animationFunc();
+      }
     }
 
     this.execInit();
@@ -386,7 +393,10 @@ export class Timeline {
 
   execInit() {
     if (this.disable) return;
-    this.animIns?.init?.(this.config);
+
+    this.animIns?.init?.(this.config, this.firstInit);
+
+    this.firstInit = false;
 
     // if (this.config.animationId) {
     //   const animationDef = getAnimationDefinition(this.config.animationId);

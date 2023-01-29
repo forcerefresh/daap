@@ -17,15 +17,15 @@ export function getObjectWrapperElementById(id: string): HTMLDivElement {
   return el;
 }
 
-export function getAnimationElementById(
-  id: string,
-  animationId: string
-): HTMLDivElement {
-  const el = document.getElementsByClassName(
-    `animation-wrapper-${animationId}-${id}`
-  )[0] as HTMLDivElement;
-  return el;
-}
+// export function getAnimationElementById(
+//   id: string,
+//   animationId: string
+// ): HTMLDivElement {
+//   const el = document.getElementsByClassName(
+//     `animation-wrapper-${animationId}-${id}`
+//   )[0] as HTMLDivElement;
+//   return el;
+// }
 
 export function getLayerWrapperElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(

@@ -328,14 +328,15 @@ function generateSlideData(
 
     // TODO; we have similar code for layer
     const layerEffectWrappers: string[] = [];
-    forOwn(layer.transitions, (tArr: ITransition[] | any) => {
-      tArr.forEach((t: ITransition) => {
+    const lt = layer.transitions;
+    [lt.layer, lt.in, lt.out, lt.event].forEach((tArr) => {
+      tArr?.forEach((t: ITransition) => {
         const def = getAppAnimationDefinition(t?.animation?.id);
         if (def) {
           const requireWrapperElement = (def.formDefaults as IAnimationBase)
             .requireWrapperElement;
           if (requireWrapperElement) {
-            const animationWrapperClassName = `animation-wrapper-${def?.animationId}-${layer.id}`;
+            const animationWrapperClassName = `animation-wrapper-${t.uid}`;
             layerEffectWrappers.push(animationWrapperClassName);
           }
           if (def?.external) {
@@ -468,10 +469,12 @@ function generateSlideData(
 
     html += `    <div class="layer-wrapper layer-wrapper-${layer.id}" style='${layerWrapperStyle}'>`; // open layer wrapper
 
-    html += layerEffectWrappers.map(
-      (cn) =>
-        `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
-    );
+    html += layerEffectWrappers
+      .map(
+        (cn) =>
+          `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
+      )
+      .join("");
 
     html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
       layer
@@ -495,14 +498,16 @@ function generateSlideData(
 
       // TODO; we have similar code for layer
       const effectWrappers: string[] = [];
-      forOwn(object.transitions, (tArr: ITransition[] | any) => {
-        tArr.forEach((t: ITransition) => {
+      const ot = object.transitions;
+      [ot.animation, ot.in, ot.out, ot.event].forEach((tArr) => {
+        //forOwn(object.transitions, (tArr: ITransition[] | any) => {
+        tArr?.forEach((t: ITransition) => {
           const def = getAppAnimationDefinition(t?.animation?.id);
           if (def) {
             const requireWrapperElement = (def.formDefaults as IAnimationBase)
               .requireWrapperElement;
             if (requireWrapperElement) {
-              const animationWrapperClassName = `animation-wrapper-${def?.animationId}-${object.id}`;
+              const animationWrapperClassName = `animation-wrapper-${t.uid}`;
               effectWrappers.push(animationWrapperClassName);
             }
             if (def?.external) {
@@ -578,10 +583,12 @@ function generateSlideData(
       //wrapperStyle += `overflow: hidden;`;
 
       html += `      <div class="object-wrapper object-wrapper-${object.id}" style='${wrapperStyle}'>`; // open object wrapper
-      html += effectWrappers.map(
-        (cn) =>
-          `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>`
-      );
+      html += effectWrappers
+        .map(
+          (cn) =>
+            `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>`
+        )
+        .join("");
       html += `      <div class="object ${objectClass} ${getCustomIdClass(
         object
       )}" style='${style}'>`; // open object
@@ -626,11 +633,11 @@ function generateSlideData(
       html += objectHtml;
 
       html += "      </div>"; // object close
-      html += effectWrappers.map((cn) => `</div>`); // object-effect close
+      html += effectWrappers.map((cn) => `</div>`).join(""); // object-effect close
       html += "      </div>"; // object close wrapper
     });
 
-    html += layerEffectWrappers.map((cn) => `</div>`); // animation-wrapper close
+    html += layerEffectWrappers.map((cn) => `</div>`).join(""); // animation-wrapper close
     html += "    </div>"; // layer close
     html += "    </div>"; // layer wrapper close
   });

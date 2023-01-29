@@ -1,11 +1,8 @@
 import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import {
-  getAnimationElementById,
-  getLayerElementById,
-  getObjectElementById,
-} from "../animation-utils";
-import { ITransformAnimation, TRANSFORM_ANIMATION } from "./transform.types";
+import { getAnimationElementById } from "webslider-sdk/lib/utils/extensions-utils";
+import { getLayerElementById, getObjectElementById } from "../animation-utils";
+import { ITransformAnimation } from "./transform.types";
 import anime from "animejs";
 
 function getPointValue(property: string, value: string | number | any) {
@@ -47,10 +44,7 @@ export function transformAnimation() {
   function init(config: ITransformAnimation) {
     logger.animation.debug("timelines init");
 
-    objectAnimationEl = getAnimationElementById(
-      config.itemId!,
-      TRANSFORM_ANIMATION
-    );
+    objectAnimationEl = getAnimationElementById(config.transitionUid!);
     // objectEl =
     //   config.type === "layer"
     //     ? getLayerElementById(config.itemId!)
