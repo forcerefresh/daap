@@ -22,11 +22,12 @@ Web Slider is an animation platform for the web that gives you a wide range of p
 
 - https://www.getapp.com
 - https://www.capterra.com
-- https://www.g2.com
-- https://news.ycombinator.com/news
+- https://www.g2.com - published
+- https://news.ycombinator.com - published
 - https://www.producthunt.com
 - https://betalist.com
-- https://www.launchingnext.com/submit
+- https://www.launchingnext.com
+- https://www.saasworthy.com
 
 ## NEED FREE VERSION
 
@@ -35,3 +36,16 @@ Web Slider is an animation platform for the web that gives you a wide range of p
 - https://www.filehorse.com/submit
 - https://alternativeto.net/manage-item
 - https://sourceforge.net/p/add_project
+- https://reactjsexample.com/submit-project/
+- https://pixabay.com/
+- https://www.flaticon.com/
+- https://bitnami.com/
+- https://ubuntu.com/
+- https://filehippo.com/
+- https://www.strikingly.com/
+- https://osdn.net/
+
+## REPO
+
+- https://codeberg.org
+- https://www.electronjs.org/apps - started
