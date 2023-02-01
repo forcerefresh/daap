@@ -54,6 +54,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     activeSlideId,
     previewState,
     settings,
+    loadSlideId,
     frontSlideId,
     backSlideId,
     selectionForProperties,
@@ -69,6 +70,28 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _duplicatSlides,
     _moveLayers,
   } = props;
+
+  const dropLayersOnLoadHandler = (item: any, monitor: any) => {
+    _moveLayers(loadSlideId, "slide", item.ids);
+    _activateSlide(loadSlideId);
+    _selectSlides([loadSlideId]);
+    _selectForProperties({ id: loadSlideId, type: "slide" });
+  };
+
+  const [{ isOver: isLayerOverLoad }, loadDropRef] = useDrop<any, any, any>(
+    () => ({
+      accept: "layer",
+      collect: (monitor) => ({
+        isOver: monitor.isOver(),
+        item: monitor.getItem(),
+      }),
+      drop: dropLayersOnLoadHandler,
+      // canDrop: (monitor: DropTargetMonitor): boolean => {
+      //   return slide.layerIds.indexOf(item[0]) !== -1;
+      // },
+    }),
+    [loadSlideId]
+  );
 
   const dropLayersOnFrontHandler = (item: any, monitor: any) => {
     _moveLayers(frontSlideId, "slide", item.ids);
@@ -94,9 +117,9 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 
   const dropLayersOnBackHandler = (item: any, monitor: any) => {
     _moveLayers(backSlideId, "slide", item.ids);
-    _activateSlide(frontSlideId);
-    _selectSlides([frontSlideId]);
-    _selectForProperties({ id: frontSlideId, type: "slide" });
+    _activateSlide(backSlideId);
+    _selectSlides([backSlideId]);
+    _selectForProperties({ id: backSlideId, type: "slide" });
   };
 
   const [{ isOver: isLayerOverBack }, backDropRef] = useDrop<any, any, any>(
@@ -214,6 +237,25 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
           <div>SLIDES</div>
           <div>
             <div
+              ref={loadDropRef}
+              className={cx(css.frontBackHolder, {
+                [css.frontBackHolderDropOver]: isLayerOverLoad,
+              })}
+            >
+              <Button
+                small
+                minimal
+                active={activeSlideId === loadSlideId}
+                onClick={() => {
+                  _activateSlide(loadSlideId);
+                  _selectSlides([loadSlideId]);
+                  _selectForProperties({ id: loadSlideId, type: "slide" });
+                }}
+              >
+                Load
+              </Button>
+            </div>
+            <div
               ref={frontDropRef}
               className={cx(css.frontBackHolder, {
                 [css.frontBackHolderDropOver]: isLayerOverFront,
@@ -286,21 +328,22 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             const isLastSlide = idx === normalSlides.length - 1;
             return (
               <div key={slideId}>
-                {isDraggingSlides && selectedSlideIds.indexOf(slide.id) === -1 && (
-                  <DropHandle
-                    type={"slide"}
-                    key={slide.id + "_drophandle"}
-                    refId={slide.id}
-                    where="above"
-                    onDrop={(dropItem: IDropItem) => {
-                      _moveSlides(
-                        dropItem.id,
-                        dropItem.where,
-                        dropItem.idsToMove
-                      );
-                    }}
-                  />
-                )}
+                {isDraggingSlides &&
+                  selectedSlideIds.indexOf(slide.id) === -1 && (
+                    <DropHandle
+                      type={"slide"}
+                      key={slide.id + "_drophandle"}
+                      refId={slide.id}
+                      where="above"
+                      onDrop={(dropItem: IDropItem) => {
+                        _moveSlides(
+                          dropItem.id,
+                          dropItem.where,
+                          dropItem.idsToMove
+                        );
+                      }}
+                    />
+                  )}
                 <SlideRow
                   key={slide.id}
                   slide={slide}
@@ -358,6 +401,7 @@ const mapStateToProps = (state: IStore) => {
   const { previewState } = state.stage;
 
   // NOTE:  only one front and back slide
+  const loadSlideId = slides.loadSlides[0];
   const frontSlideId = slides.frontSlides[0];
   const backSlideId = slides.backSlides[0];
 
@@ -368,6 +412,7 @@ const mapStateToProps = (state: IStore) => {
     activeSlideId: selection.activeSlideId,
     previewState,
     settings,
+    loadSlideId,
     backSlideId,
     frontSlideId,
     selectionForProperties: selection.selectionForProperties,

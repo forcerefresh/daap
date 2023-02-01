@@ -21,6 +21,8 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./ProjectsPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { setupNewProject } from "../../store/actions/multi-actions";
+import { getDefaultSlide } from "../../objects/create-object-factory";
+import { SlideType } from "../../store/reducers/i-slides";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -148,6 +150,14 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           .reverse()
           .find((bc) => bc.enabled)?.type || "large-1"
       );
+
+      // NOTE: Backward compatibility: Front slide is added on 1st February 2023
+      if (!(project as any).slides.loadSlider) {
+        const loadSlide = getDefaultSlide("Load", SlideType.Load);
+        (project as any).slides.loadSlides = [loadSlide.id];
+        (project as any).slides.allSlides.push(loadSlide.id);
+        (project as any).slides.slideById[loadSlide.id] = loadSlide;
+      }
 
       _openProject(project);
 

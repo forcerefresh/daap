@@ -5,6 +5,7 @@ import {
   InputType,
   INumberInput,
   ISelectInput,
+  IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import {
   FormType,
@@ -41,15 +42,15 @@ export type SpinnerPropertiesTuple = [
   IFormSwitchGroupItem<"applyTo", [IFormSwitchGroup<[]>, IFormSwitchGroup<[]>]>,
   ISelectInput<"type">,
   IColorInput<"color">,
-  INumberInput<"fadeInTime">,
-  INumberInput<"fadeOutTime">
+  IUnitsNumberInput<"fadeInTime">,
+  IUnitsNumberInput<"fadeOutTime">
 ];
 
 export interface SpinnerValues {
   type: string;
   color: RGBColor;
-  fadeInTime: number;
-  fadeOutTime: number;
+  fadeInTime: string;
+  fadeOutTime: string;
   applyTo: "page" | "infinite";
 }
 
@@ -106,7 +107,6 @@ export function createSpinnerObject(
       value: "" as any,
       defaultValue: "" as any,
     },
-
     {
       displayName: "Color",
       propertyName: "color",
@@ -117,26 +117,28 @@ export function createSpinnerObject(
     {
       displayName: "Fade in",
       propertyName: "fadeInTime",
-      inputType: InputType.NUMBER,
+      inputType: InputType.UNITS_NUMBER,
       value: {} as any,
       defaultValue: {} as any,
       helperText: "Fade in time",
+      allowedUnits: ["ms", "s"],
     },
     {
       displayName: "Fade out",
       propertyName: "fadeOutTime",
-      inputType: InputType.NUMBER,
+      inputType: InputType.UNITS_NUMBER,
       value: {} as any,
       defaultValue: {} as any,
       helperText: "Fade out time",
+      allowedUnits: ["ms", "s"],
     },
   ];
 
   const values: SpinnerValues = {
     type: "plane",
     color: { r: 77, g: 77, b: 77, a: 1 },
-    fadeInTime: 500,
-    fadeOutTime: 500,
+    fadeInTime: "500ms",
+    fadeOutTime: "500ms",
     applyTo: "page",
   };
 
@@ -193,7 +195,16 @@ export function getSpinnerHtml(props: {
   style = addCommonPropertiesToStyle(style, object);
   style = addTransformPropertiesToStyle(style, object);
 
-  return `<div class="object-content object-content-${object.id}" style="${style}">${content?.html}</div><style>${content?.css}</style>`;
+  const css = `
+    .object-content-${object.id} {
+      opacity: 0;
+      transition: opacity 1s;
+    }
+    .wsSpinnerVisible {
+      opacity: 1;
+    }
+  `;
+  return `<div class="object-content object-content-${object.id}" style="${style}">${content?.html}</div><style>${content?.css}${css}</style>`;
 }
 
 export async function spinnerSizeUpdate(props: {
@@ -225,10 +236,10 @@ export const spinnerMeta = {
 function getFade(randId: string, spinnerValues: SpinnerValues) {
   let css = `
     .wsSpinnerFadeIn {
-      animation: wsSpinnerFadeInKF_${randId} ${spinnerValues.fadeInTime}ms;
+      animation: wsSpinnerFadeInKF_${randId} ${spinnerValues.fadeInTime};
     }
     .wsSpinnerFadeOut{
-      animation: wsSpinnerFadeOutKF_${randId} ${spinnerValues.fadeOutTime}ms;
+      animation: wsSpinnerFadeOutKF_${randId} ${spinnerValues.fadeOutTime};
     }
     @keyframes wsSpinnerFadeInKF_${randId} {
       0% {opacity:0;}

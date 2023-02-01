@@ -78,6 +78,7 @@ export function generatePlayerData(
   let itemsVisibility: ItemVisibility[] = [];
 
   let normalSlidesArr: ISlide[] = [];
+  let loadSlidesArr: ISlide[] = [];
   let frontSlidesArr: ISlide[] = [];
   let backSlidesArr: ISlide[] = [];
 
@@ -91,6 +92,7 @@ export function generatePlayerData(
     }
     default: {
       normalSlidesArr = getNormalSlideArr(slides);
+      loadSlidesArr = getLoadSlideArr(slides);
       frontSlidesArr = getFrontSlideArr(slides);
       backSlidesArr = getBackSlideArr(slides);
       break;
@@ -105,6 +107,7 @@ export function generatePlayerData(
   // );
 
   const slideDataArr: ISlideData[] = [];
+  const loadSlideDataArr: ISlideData[] = [];
   const frontSlideDataArr: ISlideData[] = [];
   const backSlideDataArr: ISlideData[] = [];
 
@@ -125,6 +128,24 @@ export function generatePlayerData(
       { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     slideDataArr.push(slideDataRes.slideData);
+    html += slideDataRes.html;
+    extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
+    itemsVisibility = [...itemsVisibility, ...slideDataRes.itemsVisibility];
+  });
+
+  loadSlidesArr.forEach((slide) => {
+    const slideDataRes = generateSlideData(
+      slide,
+      layers,
+      objects,
+      breakpointConfig,
+      breakpoints,
+      settings,
+      // thumbnailHtmlArr,
+      // normalSlidesArr.length,
+      { isSave: options.isSave }
+    );
+    loadSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
     extensionTypes = [...extensionTypes, ...slideDataRes.extensionTypes];
     itemsVisibility = [...itemsVisibility, ...slideDataRes.itemsVisibility];
@@ -178,6 +199,7 @@ export function generatePlayerData(
   return {
     html,
     slides: slideDataArr,
+    loadSlides: loadSlideDataArr,
     frontSlides: frontSlideDataArr,
     backSlides: backSlideDataArr,
     itemsVisibility,
@@ -663,6 +685,13 @@ function getObjectEvents(object: IObject) {
  */
 export function getNormalSlideArr(slides: ISlides): ISlide[] {
   return slides.normalSlides.map((slideId) => slides.slideById[slideId]);
+}
+
+/**
+ * Returns array of load slides from store>slides
+ */
+export function getLoadSlideArr(slides: ISlides): ISlide[] {
+  return slides.loadSlides.map((slideId) => slides.slideById[slideId]);
 }
 
 /**

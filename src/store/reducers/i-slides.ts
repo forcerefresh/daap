@@ -5,6 +5,7 @@ export enum SlideType {
   Normal = "normal",
   Front = "front",
   Back = "back",
+  Load = "load",
 }
 
 export interface ISlide {
@@ -31,6 +32,7 @@ export interface ISlides {
   allSlides: string[];
   nextSlideIdCounter: number;
   normalSlides: string[];
+  loadSlides: string[];
   frontSlides: string[];
   backSlides: string[];
 }

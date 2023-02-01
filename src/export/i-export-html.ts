@@ -58,6 +58,7 @@ export interface IPlayerData {
   html: string;
   name?: string;
   slides: ISlideData[];
+  loadSlides: ISlideData[];
   frontSlides: ISlideData[];
   backSlides: ISlideData[];
   itemsVisibility: ItemVisibility[];

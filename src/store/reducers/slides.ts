@@ -21,6 +21,7 @@ const getSlidesDefault = () => ({
   slideById: {},
   allSlides: [],
   normalSlides: [],
+  loadSlides: [],
   frontSlides: [],
   backSlides: [],
 });
@@ -34,6 +35,11 @@ export function slides(
       const slide = action.payload;
 
       const allSlides = [...state.allSlides, slide.id];
+
+      const loadSlides =
+        slide.slideType === SlideType.Load
+          ? [...state.loadSlides, slide.id]
+          : state.loadSlides;
 
       const frontSlides =
         slide.slideType === SlideType.Front
@@ -57,6 +63,7 @@ export function slides(
         },
         allSlides,
         normalSlides,
+        loadSlides,
         frontSlides,
         backSlides,
         nextSlideIdCounter:
@@ -70,6 +77,7 @@ export function slides(
       const slideById = omit(state.slideById, [deleteId]);
       const allSlides = without(state.allSlides, deleteId);
       const normalSlides = without(state.normalSlides, deleteId);
+      const loadSlides = without(state.loadSlides, deleteId);
       const frontSlides = without(state.frontSlides, deleteId);
       const backSlides = without(state.backSlides, deleteId);
 
@@ -78,6 +86,7 @@ export function slides(
         slideById,
         allSlides,
         normalSlides,
+        loadSlides,
         backSlides,
         frontSlides,
       };

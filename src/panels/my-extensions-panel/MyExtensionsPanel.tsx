@@ -74,7 +74,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           setExtensions([...extensions, ...result.data]);
         }
         setLoading(false);
-        setHasMore(result.data.length > 0);
+        setHasMore(false); //(result.data.length > 0);
       },
 
       (error) => {

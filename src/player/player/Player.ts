@@ -68,6 +68,7 @@ export class Player {
 
   private timelines: RootTimeline[];
   private staticTimelines: RootTimeline[];
+  private loadStaticTimelines: RootTimeline[];
 
   private outEffTimelines: RootTimeline[];
 
@@ -78,6 +79,7 @@ export class Player {
   private nextZIndex = 1;
 
   private normalSlideDataArr?: ISlideData[];
+  private loadSlideDataArr?: ISlideData[];
   private frontSlideDataArr?: ISlideData[];
   private backSlideDataArr?: ISlideData[];
 
@@ -170,6 +172,7 @@ export class Player {
     rootDiv.innerHTML = playerData?.html || "";
 
     this.normalSlideDataArr = this.playerData?.slides;
+    this.loadSlideDataArr = this.playerData?.loadSlides;
     this.frontSlideDataArr = this.playerData?.frontSlides;
     this.backSlideDataArr = this.playerData?.backSlides;
 
@@ -188,6 +191,7 @@ export class Player {
 
     this.timelines = [];
     this.staticTimelines = [];
+    this.loadStaticTimelines = [];
     this.outEffTimelines = [];
 
     // NOTE: this implementation initialize all slides
@@ -283,6 +287,10 @@ export class Player {
       const visibleItems = this.excludeNonVisibleItems(data);
       this.createStaticSlide(idx, { ...data, items: visibleItems });
     });
+    this.loadSlideDataArr?.forEach((data, idx) => {
+      const visibleItems = this.excludeNonVisibleItems(data);
+      this.createStaticSlide(idx, { ...data, items: visibleItems }, true);
+    });
     this.frontSlideDataArr?.forEach((data, idx) => {
       const visibleItems = this.excludeNonVisibleItems(data);
       this.createStaticSlide(idx, { ...data, items: visibleItems });
@@ -293,6 +301,11 @@ export class Player {
     });
 
     this.resizeAll(true);
+
+    this.loadStaticTimelines.forEach((tl) => {
+      tl.init();
+      tl.start();
+    });
   }
 
   private excludeNonVisibleItems(data: ISlideData) {
@@ -547,6 +560,9 @@ export class Player {
     this.normalSlideDataArr?.forEach((data, idx) => {
       this.bpUpdateObjectSize(idx, data, isInitial);
     });
+    this.loadSlideDataArr?.forEach((data, idx) => {
+      this.bpUpdateObjectSize(idx, data, isInitial);
+    });
     this.frontSlideDataArr?.forEach((data, idx) => {
       this.bpUpdateObjectSize(idx, data, isInitial);
     });
@@ -795,6 +811,10 @@ export class Player {
         tl.pause();
       });
 
+      this.loadStaticTimelines.forEach((tl) => {
+        tl.pause();
+      });
+
       this.outEffTimelines.forEach((tl) => {
         tl?.pause();
       });
@@ -820,6 +840,10 @@ export class Player {
       tl.paused(p);
     });
 
+    this.loadStaticTimelines.forEach((tl) => {
+      tl.paused(p);
+    });
+
     this.outEffTimelines.forEach((tl) => {
       tl?.paused(p);
     });
@@ -836,6 +860,12 @@ export class Player {
       tl.kill();
     });
     this.staticTimelines = [];
+
+    this.loadStaticTimelines.forEach((tl) => {
+      tl.clear();
+      tl.kill();
+    });
+    this.loadStaticTimelines = [];
 
     this.timelines.forEach((tl) => {
       tl.destroy();
@@ -864,6 +894,7 @@ export class Player {
     this.currentSlideTimeline = undefined;
   }
 
+  public initSpinners() {}
   public async play() {
     getTickerInstance().start();
     //// TMP
@@ -875,8 +906,14 @@ export class Player {
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
     this.pagePreloaderEls.forEach((item) => {
+      console.log(item);
       item.el.style.display = "block";
-      addClass(item.el, "wsSpinnerFadeIn");
+      //addClass(item.el, "wsSpinnerFadeIn");
+      const cEl = item.el.getElementsByClassName(
+        "object-content"
+      )[0] as HTMLDivElement;
+      cEl.style.transitionDuration = item.inTime + "ms";
+      addClass(cEl, "wsSpinnerVisible");
     });
     const ctime = Date.now();
 
@@ -888,10 +925,15 @@ export class Player {
       if (Date.now() - ctime < 50) {
         item.el.style.display = "none";
       } else {
-        addClass(item.el, "wsSpinnerFadeOut");
-        removeClass(item.el, "wsSpinnerFadeIn");
+        const cEl = item.el.getElementsByClassName(
+          "object-content"
+        )[0] as HTMLDivElement;
+        cEl.style.transitionDuration = item.outTime + "ms";
+        removeClass(cEl, "wsSpinnerVisible");
 
         setTimeout(() => {
+          console.log("ssss");
+
           item.el.style.display = "none";
         }, item.outTime);
       }
@@ -1107,7 +1149,10 @@ export class Player {
 
     this.currentSlideTimeline.emitter.removeAllListeners("start");
     this.currentSlideTimeline.emitter.addListener("start", () => {
+      // Note: showSlide
       slideEl.style.display = "block";
+      // Note: show static slides
+      this.showFrontBack();
     });
 
     // trigger on slide end
@@ -1386,14 +1431,18 @@ export class Player {
     });
   }
 
-  private createStaticSlide(no: number, data: ISlideData) {
+  private createStaticSlide(no: number, data: ISlideData, isLoadSlide = false) {
     this.createEvents(no, data);
 
     const staticTl = new RootTimeline({
       name: "StaticTimeline",
       duration: -1,
     });
-    this.staticTimelines[no] = staticTl;
+    if (isLoadSlide) {
+      this.loadStaticTimelines[no] = staticTl;
+    } else {
+      this.staticTimelines[no] = staticTl;
+    }
 
     data.items.forEach((itemData) => {
       // TODO: use only per device (add per device for layer)
@@ -1478,8 +1527,12 @@ export class Player {
     ) {
       const ppEl = document.querySelector(".object-" + transitionData.itemId);
       if (ppEl) {
-        const inTime = (transitionData.itemValues as any).fadeInTime;
-        const outTime = (transitionData.itemValues as any).fadeOutTime;
+        const inTime = convertTimeUnitToMs(
+          (transitionData.itemValues as any).fadeInTime
+        );
+        const outTime = convertTimeUnitToMs(
+          (transitionData.itemValues as any).fadeOutTime
+        );
 
         // ppEl.style.display = "none";
         this.pagePreloaderEls.push({
@@ -1491,11 +1544,23 @@ export class Player {
     }
   }
 
-  private hideAllSlides() {
+  private showFrontBack() {
     this.backSlideDataArr?.forEach((data) => {
-      //this.hideSlide(data);
+      this.showSlide(data);
     });
     this.frontSlideDataArr?.forEach((data) => {
+      this.showSlide(data);
+    });
+  }
+
+  private hideAllSlides() {
+    this.backSlideDataArr?.forEach((data) => {
+      this.hideSlide(data);
+    });
+    this.frontSlideDataArr?.forEach((data) => {
+      this.hideSlide(data);
+    });
+    this.loadSlideDataArr?.forEach((data) => {
       //this.hideSlide(data);
     });
     this.normalSlideDataArr?.forEach((data) => {
@@ -1507,6 +1572,11 @@ export class Player {
     const slideEl = getSlideById(data.slide.id);
     slideEl.style.display = "none";
     slideEl.style.pointerEvents = "none";
+  }
+
+  private showSlide(data: ISlideData) {
+    const slideEl = getSlideById(data.slide.id);
+    slideEl.style.display = "block";
   }
 
   private createSlide(slideIdx: number, data: ISlideData) {

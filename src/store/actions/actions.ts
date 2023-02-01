@@ -99,6 +99,10 @@ export interface AddSlideAction extends IUndoableAction<true> {
 export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     if (getState().project.slides.allSlides.length === 0) {
+      // load
+      const loadSlide = getDefaultSlide("Load", SlideType.Load);
+      dispatch(addSlide(loadSlide));
+      dispatch(addNewLayer(loadSlide.id));
       // back
       const backSlide = getDefaultSlide("Back", SlideType.Back);
       dispatch(addSlide(backSlide));

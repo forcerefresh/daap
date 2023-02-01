@@ -37,7 +37,7 @@ import {
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
-import { getObjectValue, getObjectValues } from "../object-utils";
+import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 
 export const TEXT = "text";
 
@@ -227,7 +227,7 @@ export function createTextObject(
 export function getTextHtml(props: GetHtmlFuncPropsType) {
   const { object, calculatedObjectSize, deviceType } = props;
 
-  const textValues = getObjectValues(
+  const textValues = getObjectValuesForDevice(
     object.definition.values as TextValues,
     deviceType
   );
@@ -288,7 +288,7 @@ export async function textSizeUpdate(
     skipSizeUpdate,
     deviceType,
   } = props;
-  const textValues = getObjectValues(values as TextValues, deviceType);
+  const textValues = getObjectValuesForDevice(values as TextValues, deviceType);
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
