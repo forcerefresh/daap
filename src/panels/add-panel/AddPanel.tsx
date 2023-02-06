@@ -44,11 +44,8 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   }, []);
 
   const isObjectDisabledForFree = (type: string) => {
-    console.log(hasLicense);
-
     if (hasLicense) return false;
 
-    console.log(type);
     return (
       type === "multi-image-object" ||
       type === "html-object" ||

@@ -906,7 +906,6 @@ export class Player {
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
     this.pagePreloaderEls.forEach((item) => {
-      console.log(item);
       item.el.style.display = "block";
       //addClass(item.el, "wsSpinnerFadeIn");
       const cEl = item.el.getElementsByClassName(
@@ -932,8 +931,6 @@ export class Player {
         removeClass(cEl, "wsSpinnerVisible");
 
         setTimeout(() => {
-          console.log("ssss");
-
           item.el.style.display = "none";
         }, item.outTime);
       }

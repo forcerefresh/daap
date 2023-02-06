@@ -49,7 +49,6 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
               playerDevUrl:
                 p[0] + "://" + p[1] + ":" + p[2] + "/" + p[4] + "-player.js",
             };
-            console.log(itemPartial);
 
             updateItem(item.id, "token", val, itemPartial);
           },
