@@ -568,6 +568,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       <div
         className={"RESIZE_HANDLES_HOLDER"}
         key={`handles_${object.id}${_forceRefreshRand}`}
+        style={{ pointerEvents: "all" }}
       >
         <div
           style={topLeftStyle}
@@ -1279,7 +1280,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           { [css.layerMoveForResizerWTFActive]: isLayerActive && hasLayout },
           "LAYER_MOVE_FOR_RESIZER"
         )}
-        style={layerStyle}
+        style={{ ...layerStyle, pointerEvents: "none" }}
       >
         {renderResizer(layer)}
       </div>

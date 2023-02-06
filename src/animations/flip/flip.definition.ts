@@ -62,7 +62,7 @@ export const flipDefaults: IFlipAnimation = {
   hasChildEase: false,
   ease: "none",
   supportedAnimationTypes: ["animation"],
-  supportedObjectTypes: ["multi_image"],
+  supportedObjectTypes: ["multi-image-object"],
   canBeCombined: false,
   // animation properties
   rotationTime: 1000,

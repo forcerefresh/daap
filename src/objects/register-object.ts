@@ -195,7 +195,7 @@ registerObject(
 );
 
 registerObject(
-  "html",
+  "html-object",
   "other",
   htmlMeta,
   createHtmlObject,
@@ -263,7 +263,7 @@ registerObject(
 // );
 
 registerObject(
-  "multi_image",
+  "multi-image-object",
   "media",
   multiImageMeta,
   createMultiImageObject,
@@ -298,7 +298,7 @@ registerObject(
 // );
 
 registerObject(
-  "rich_text",
+  "rich-text-object",
   "text",
   richMeta,
   createRichTextObject,

@@ -116,7 +116,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };*/
 
   const fetchData = (from = -1) => {
-    if (!hasApiKey) return;
+    // CHANGE123: if (!hasApiKey) return;
 
     setLoading(true);
 
@@ -160,7 +160,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    if (hasApiKey) debounceFetchData();
+    // CHANGE123: if (hasApiKey) debounceFetchData();
+    debounceFetchData();
   }, [hasApiKey]);
 
   const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
@@ -187,7 +188,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   };
 
   useEffect(() => {
-    if (hasApiKey) debounceFetchData(0);
+    //if (hasApiKey) debounceFetchData(0);
+    debounceFetchData(0);
   }, [requestReload]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
@@ -323,6 +325,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
       <div
         className={classnames(css.mainSection, {
           [css.mainSectionMultiple]: selectionType === SelectionType.Multiple,
+          [css.mainSectionFreeVer]: !hasApiKey,
         })}
         id="mediaHolder"
         onScroll={() => {
@@ -330,12 +333,30 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         }}
       >
         {!hasApiKey && (
+          <div className={css.registerAap}>
+            Get access to 10.000 photos
+            <br />
+            Browse{" "}
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const { shell } = window.require("electron");
+                shell.openExternal("http://webslider.io/prices");
+              }}
+            >
+              Plans
+            </a>
+          </div>
+        )}
+        {/*  // CHANGE123: {!hasApiKey && (
           <div className="error">
             {
               "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
             }
           </div>
-        )}
+        )} */}
         {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           className={css.infScroll}
@@ -343,7 +364,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            hasApiKey &&
+            //hasApiKey &&
             !errorMessage && (
               <div style={{ textAlign: "center", margin: "20px" }}>
                 <Spinner size={50} />
@@ -359,7 +380,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              <b>All images are loaded for the selected criteria.</b>
+              {hasApiKey && (
+                <b>All images are loaded for the selected criteria.</b>
+              )}
             </p>
           }
         >
@@ -397,6 +420,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                 },
                               }
                             );
+                            onRequestClose();
                           }
                         }}
                       >
@@ -461,16 +485,18 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                         [css.selectedImage]: selectedImage === idx,
                       })}
                     >
-                      <img
-                        width="200px"
-                        key={idx}
-                        src={getMediaSrc(type, imageOneSize || {}).src}
-                        alt=""
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedImage(idx);
-                        }}
-                      />
+                      <div className={css.imageHolder}>
+                        <img
+                          key={idx}
+                          src={getMediaSrc(type, imageOneSize || {}).src}
+                          alt=""
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedImage(idx);
+                          }}
+                        />
+                      </div>
+
                       <div className={css.imageListTitle}>{image.title}</div>
                       <div className={css.imageListTabs}>
                         <TagsView tags={image?.tags || []} />

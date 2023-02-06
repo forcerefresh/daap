@@ -130,27 +130,53 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
                         enter a Serial Number and Activate.
                       </span>
                       <br />
-                      <span>
+                      {/* <span>
                         <strong>Note:</strong> Application is partially disabled
                         without Serial Number.
-                      </span>
+                      </span> */}
+                      <div>
+                        Note:{" "}
+                        <span className={css.licenseStatusError}>
+                          To enable all features, restart the app after
+                          activation.
+                          <br />
+                          {/* <span>
+                    <strong>Note:</strong> Application is partially disabled
+                    without Serial Number.
+                  </span> */}
+                        </span>
+                      </div>
                     </>
                   )}
                 </div>
               )}
               {!licenseDetails?.status && (
-                <div>
-                  Status:{" "}
-                  <span className={css.licenseStatusError}>
-                    Serial Number is not found or it's not valid. Please enter a
-                    Serial Number and Activate.
-                    <br />
-                    <span>
+                <>
+                  <div>
+                    Status:{" "}
+                    <span className={css.licenseStatusError}>
+                      Serial Number is not found or it's not valid. Please enter
+                      a Serial Number and Activate.
+                      <br />
+                      {/* <span>
                       <strong>Note:</strong> Application is partially disabled
                       without Serial Number.
+                    </span> */}
                     </span>
-                  </span>
-                </div>
+                  </div>
+                  <div>
+                    Note:{" "}
+                    <span className={css.licenseStatusError}>
+                      To enable all features, restart the app after adding the
+                      serial.
+                      <br />
+                      {/* <span>
+                    <strong>Note:</strong> Application is partially disabled
+                    without Serial Number.
+                  </span> */}
+                    </span>
+                  </div>
+                </>
               )}
 
               {licenseDetails && licenseDetails.status === "OK" && (

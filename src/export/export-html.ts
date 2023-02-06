@@ -465,9 +465,11 @@ function generateSlideData(
     layerStyle +=
       options.isForThumbnail && hideForThumbnail ? "display:none;" : "";
 
+    let layerAnimWrapperStyle = "";
     // NOTE exception for perspective >>>
     if (layer.transformDefinition?.values?.hasPerspective) {
       layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
+      layerAnimWrapperStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
       //wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
     }
 
@@ -494,7 +496,7 @@ function generateSlideData(
     html += layerEffectWrappers
       .map(
         (cn) =>
-          `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
+          `<div class="animation-wrapper ${cn}" style='${layerAnimWrapperStyle}position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
       )
       .join("");
 
@@ -583,10 +585,12 @@ function generateSlideData(
       style +=
         "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
 
+      let objectAnimWrapperStyle = "";
       // NOTE exception for perspective >>>
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+        objectAnimWrapperStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
       }
 
       if (object.transformDefinition?.values?.transformOriginX) {
@@ -608,7 +612,7 @@ function generateSlideData(
       html += effectWrappers
         .map(
           (cn) =>
-            `<div class="animation-wrapper ${cn}" style='position:absolute;width:100%;height:100%;'>`
+            `<div class="animation-wrapper ${cn}" style='${objectAnimWrapperStyle}position:absolute;width:100%;height:100%;'>`
         )
         .join("");
       html += `      <div class="object ${objectClass} ${getCustomIdClass(

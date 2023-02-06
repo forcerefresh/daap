@@ -93,7 +93,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   };
 
   const fetchData = (from = -1) => {
-    if (!hasApiKey) return;
+    //if (!hasApiKey) return;
 
     setLoading(true);
 
@@ -199,7 +199,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
         ></InputGroup>
       </div>
       <div className={css.headerSection}>
-        {tags.map((tag) => (
+        {/* {tags.map((tag) => (
           <Tag
             key={tag}
             large
@@ -211,7 +211,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           >
             {tag}
           </Tag>
-        ))}
+        ))} */}
       </div>
       <div
         className={css.mainSection}
@@ -220,20 +220,20 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           setSelectedImage(-1);
         }}
       >
-        {!hasApiKey && (
+        {/* {!hasApiKey && (
           <div className="error">
             {
               "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
             }
           </div>
-        )}
+        )} */}
         {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           dataLength={images?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
           hasMore={hasMore}
           loader={
-            hasApiKey &&
+            //hasApiKey &&
             !errorMessage && (
               <div style={{ textAlign: "center", margin: "20px" }}>
                 <Spinner size={50} />

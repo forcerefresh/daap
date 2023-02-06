@@ -63,12 +63,12 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const { getLicenseDetails } = globalContext.useLicenseHook();
 
   useEffect(() => {
-    getLicenseDetails().then((data) => {
-      if (data?.status === "OK" || data?.status === "EXPIRED") {
-      } else {
-        setShowPanel(VisiblePanel.Settings);
-      }
-    });
+    // getLicenseDetails().then((data) => {
+    //   if (data?.status === "OK" || data?.status === "EXPIRED") {
+    //   } else {
+    //     setShowPanel(VisiblePanel.Settings);
+    //   }
+    // });
   }, []);
 
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
@@ -82,6 +82,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "image-preview-popover",
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
+    "bp3-toast",
   ]);
 
   const displayZoom = Number.isInteger(zoom * 100)

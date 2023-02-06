@@ -28,7 +28,7 @@ import {
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
 
-const MULTI_IMAGE = "multi_image";
+const MULTI_IMAGE = "multi-image-object";
 
 export interface MultiImageValues {
   fit: ICoverPlacementValue;

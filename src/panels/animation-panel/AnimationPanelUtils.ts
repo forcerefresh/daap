@@ -1,20 +1,32 @@
 import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
 import { ItemType } from "webslider-sdk/lib/objects/i-object";
 
-export function getAnimationTypesForItem(itemType?: ItemType): AnimationType[] {
+export function getAnimationTypesForItem(
+  itemType?: ItemType,
+  hasLicense = true
+): AnimationType[] {
   if (!itemType) {
     return [];
   }
 
   switch (itemType) {
     case "object":
-      return ["animation", "in", "out", "event"];
+      return hasLicense
+        ? ["animation", "in", "out", "event"]
+        : ["in", "out", "event", "animation"];
     case "layer":
-      return ["layer", "in", "out"];
+      return hasLicense ? ["layer", "in", "out"] : ["in", "out", "layer"];
     case "slide":
       return ["slide"];
   }
 }
+
+export const isAnimationTypeDisabled = (type: string, hasLicense = true) => {
+  if (!hasLicense) {
+    return type === "animation" || type === "layer";
+  }
+  return false;
+};
 
 export const animationType2Name = (animationType: AnimationType): string => {
   const def: any = {

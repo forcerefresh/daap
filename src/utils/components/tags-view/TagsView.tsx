@@ -7,7 +7,7 @@ type TagsViewProps = {
   show?: number;
 };
 
-export default function TagsView({ tags, show = 2 }: TagsViewProps) {
+export default function TagsView({ tags, show = 1 }: TagsViewProps) {
   if (!tags || tags.length === 0) {
     return null;
   }
@@ -19,7 +19,7 @@ export default function TagsView({ tags, show = 2 }: TagsViewProps) {
       {firstTwo?.map((tag) => (
         <>
           {tag && (
-            <Tag round minimal>
+            <Tag round minimal style={{ maxWidth: "100px" }}>
               {tag}
             </Tag>
           )}

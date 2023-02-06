@@ -20,7 +20,7 @@ import {
 } from "webslider-sdk/lib/objects/common-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 
-export const HTML = "html";
+export const HTML = "html-object";
 
 export type HtmlPropertiesTuple = [IHTMLInput<"html">];
 

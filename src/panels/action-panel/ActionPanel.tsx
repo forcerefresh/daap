@@ -98,6 +98,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     "color-picker-holder",
     "bp3-overlay-scroll-container", // alert
     "bp3-menu", //menu
+    "bp3-toast",
   ]);
 
   // api

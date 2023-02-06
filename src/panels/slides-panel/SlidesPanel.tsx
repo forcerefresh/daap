@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import cx from "classnames";
 import {
   Button,
@@ -42,6 +42,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
+import { IntegrationContext } from "../../integration";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -70,6 +71,19 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     _duplicatSlides,
     _moveLayers,
   } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const { getLicenseDetails } = globalContext.useLicenseHook();
+  const [hasLicense, setHasLicense] = useState<boolean>(false);
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      if (data?.status === "OK" || data?.status === "EXPIRED") {
+        setHasLicense(true);
+      } else {
+        setHasLicense(false);
+      }
+    });
+  }, []);
 
   const dropLayersOnLoadHandler = (item: any, monitor: any) => {
     _moveLayers(loadSlideId, "slide", item.ids);
@@ -298,8 +312,16 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             <Button
               minimal
               onClick={() => {
-                _addNewSlide(SlideType.Normal, true);
-                scrollToBottomDelayed();
+                if (!hasLicense && normalSlides.length >= 3) {
+                  AppToaster.show({
+                    intent: "warning",
+                    message:
+                      "You have reached the maximum number of slides in the FREE version.",
+                  });
+                } else {
+                  _addNewSlide(SlideType.Normal, true);
+                  scrollToBottomDelayed();
+                }
               }}
               className={css.addNewSlide}
               small={true}

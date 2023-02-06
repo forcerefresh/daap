@@ -31,16 +31,30 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
 
-  const [disabled, setDisabled] = useState<boolean>(false);
+  const [hasLicense, setHasLicense] = useState<boolean>(false);
 
   useEffect(() => {
     getLicenseDetails().then((data) => {
       if (data?.status === "OK" || data?.status === "EXPIRED") {
+        setHasLicense(true);
       } else {
-        setDisabled(true);
+        setHasLicense(false);
       }
     });
   }, []);
+
+  const isObjectDisabledForFree = (type: string) => {
+    console.log(hasLicense);
+
+    if (hasLicense) return false;
+
+    console.log(type);
+    return (
+      type === "multi-image-object" ||
+      type === "html-object" ||
+      type === "rich-text-object"
+    );
+  };
 
   const renderObjectsCards = (group: string) => {
     const objDeffs = getAppObjectDefinitionsByGroup(group);
@@ -50,14 +64,16 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         {objDeffs.map((deff) => (
           <Card
             key={"object_card_" + deff.type}
-            style={{ opacity: !activeLayerId || disabled ? "0.5" : "1" }}
+            style={{
+              opacity: !activeLayerId ? "0.5" : "1",
+            }} // || disabled
             interactive={!!activeLayerId}
             elevation={Elevation.TWO}
             className={cx(css.card, {
-              [css.disabled]: !activeLayerId || disabled,
+              [css.disabled]: !activeLayerId, //|| disabled,
             })}
             onClick={() => {
-              if (disabled) return;
+              if (isObjectDisabledForFree(deff.type)) return;
               if (activeLayerId) {
                 _addNewObject(activeLayerId, deff.type, {
                   left: (documentSize.width - 960) / 2,
@@ -77,6 +93,9 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             <p>{deff.meta.description}</p>
             {deff.external && <div className={css.external}>EXT</div>}
             {deff.development && <div className={css.development}>DEV</div>}
+            {isObjectDisabledForFree(deff.type) && (
+              <div className={css.licenseRequired}>LICENSE REQUIRED</div>
+            )}
           </Card>
         ))}
       </>
@@ -85,12 +104,12 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp3-dark", css.addPanel)}>
-      {disabled && (
+      {/* {disabled && (
         <div className="warning">
           Action panel is disabled. Goto "Settings &gt; License" and enter
           Serial Number in order to enable it.
         </div>
-      )}
+      )} */}
       {!activeLayerId && (
         <div className="info">
           No active layer found. Please select layer before adding objects.

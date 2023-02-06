@@ -172,7 +172,7 @@ export class Player {
     rootDiv.innerHTML = playerData?.html || "";
 
     this.normalSlideDataArr = this.playerData?.slides;
-    this.loadSlideDataArr = this.playerData?.loadSlides;
+    this.loadSlideDataArr = this.playerData?.loadSlides ?? [];
     this.frontSlideDataArr = this.playerData?.frontSlides;
     this.backSlideDataArr = this.playerData?.backSlides;
 

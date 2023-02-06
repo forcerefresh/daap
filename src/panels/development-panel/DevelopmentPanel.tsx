@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { v4 as uuid } from "uuid";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -7,12 +7,10 @@ import { Button, Card, Elevation } from "@blueprintjs/core";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./DevelopmentPanel.module.scss";
-import { forceRefresh } from "../../store/actions/actions";
-import { getSelectField, getTextField } from "../../inputs/input-utils";
-import { DevelopmentItem } from "./i-development-types";
-import { String } from "aws-sdk/clients/apigateway";
 import { unregisterObject } from "webslider-sdk/lib/objects/objects-register";
 import { DevelopmentContext } from "../../utils/development/DevelopmentProvider";
+import DevelopmentItemComp from "./DevelopmentItem";
+import { DevelopmentItem } from "./i-development-types";
 
 interface IDevelopmentPanelProps {
   onRequestClose: () => void;
@@ -40,7 +38,8 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
   const updateItem = async (
     id: String,
     propertyName: keyof DevelopmentItem,
-    value: string | any
+    value: string | any,
+    overrideMultiple: Partial<DevelopmentItem> = {}
   ) => {
     let itemToUpdate = items.find((item) => item.id === id);
     if (itemToUpdate) {
@@ -50,6 +49,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
         monitoringEnabled: false,
         status: "",
         statusMessage: "",
+        ...overrideMultiple,
       };
       await updateDevelopmentItem(itemToUpdate);
     }
@@ -58,6 +58,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
   const addItem = async (componentType: string) => {
     await addDevelopmentItem({
       id: uuid(),
+      token: "",
       componentType,
       type: "",
       playerDevUrl: "",
@@ -97,134 +98,21 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
           Register component you are working on to get instant preview directly
           in Web Slider app.
         </div>
+        <div>
+          Extension added here can be used only in Web Slider app. <br />
+          For production you have to build and upload extension to Local
+          Extensions.
+        </div>
       </div>
+
       {items.map((item, idx) => {
         return (
-          <Card
-            interactive={false}
-            elevation={Elevation.TWO}
-            className={cx(css.sectionCard)}
-          >
-            <div className={"input600"}>
-              <p>
-                <strong>Object 1</strong>
-              </p>
-              {getSelectField(
-                "Type",
-                item.componentType,
-                [
-                  { label: "Object", value: "object" },
-                  { label: "Animation", value: "animation" },
-                ],
-                (val) => updateItem(item.id, "componentType", val),
-                { disabled: item.monitoringEnabled }
-              )}
-              {getTextField(
-                "Player URL",
-                item.playerDevUrl,
-                (val: string) => updateItem(item.id, "playerDevUrl", val),
-                "URL for Player component",
-                { disabled: item.monitoringEnabled }
-              )}
-              {getTextField(
-                "App URL",
-                item.appDevUrl,
-                (val: string) => updateItem(item.id, "appDevUrl", val),
-                "URL for App component",
-                { disabled: item.monitoringEnabled }
-              )}
-              {getTextField(
-                "UID",
-                item.type,
-                (val: string) => updateItem(item.id, "type", val),
-                "",
-                { disabled: item.monitoringEnabled }
-              )}
-              <div className={css.buttonsHolder}>
-                <Button
-                  disabled={item.monitoringEnabled}
-                  onClick={async () => {
-                    if (
-                      !items?.[idx].appDevUrl ||
-                      !items?.[idx].playerDevUrl ||
-                      !items?.[idx].type
-                    ) {
-                      AppToaster.show({
-                        message: "All fields are mandatory.",
-                        intent: "warning",
-                      });
-                      return;
-                    } else {
-                      const obj: DevelopmentItem = {
-                        ...item,
-                        monitoringEnabled: true,
-                      };
-                      await updateDevelopmentItem(obj);
-                      //const newItems = await getAll();
-                      //setItems(newItems);
-
-                      AppToaster.show({
-                        message:
-                          "Item '" +
-                          item.type +
-                          "' monitoring has been started.",
-                        intent: "success",
-                      });
-                    }
-                  }}
-                >
-                  Start monitoring changes
-                </Button>
-                <Button
-                  disabled={!item.monitoringEnabled}
-                  onClick={async () => {
-                    const obj: DevelopmentItem = {
-                      ...item,
-                      monitoringEnabled: false,
-                    };
-                    await updateDevelopmentItem(obj);
-                    //const newItems = await getAll();
-                    //setItems(newItems);
-
-                    unregisterObject(obj.type);
-
-                    AppToaster.show({
-                      message:
-                        "Item '" + item.type + "' monitoring has been stopped.",
-                      intent: "success",
-                    });
-                  }}
-                >
-                  Stop monitoring changes
-                </Button>
-                <Button
-                  intent="danger"
-                  icon="trash"
-                  className={css.delete}
-                  minimal
-                  onClick={() => onDeleteItem(item.id)}
-                ></Button>
-              </div>
-              {item.monitoringEnabled && (
-                <>
-                  <p>
-                    Monitoring status:{" "}
-                    <strong
-                      className={cx({
-                        [css.error]: item.status === "ERROR",
-                        [css.ok]: item.status === "OK",
-                      })}
-                    >
-                      {item.status ? item.status : "Waiting for status...."}{" "}
-                    </strong>
-                  </p>
-                  {item.statusMessage && (
-                    <p>Error response: {item.statusMessage}</p>
-                  )}
-                </>
-              )}
-            </div>
-          </Card>
+          <DevelopmentItemComp
+            key={item.id}
+            onDeleteItem={onDeleteItem}
+            updateItem={updateItem}
+            item={item}
+          />
         );
       })}
 
@@ -244,7 +132,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({});
 
 const mapDispatchToProps = {
-  _forceRefresh: () => forceRefresh(),
+  // _forceRefresh: () => forceRefresh(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(DevelopmentPanel);

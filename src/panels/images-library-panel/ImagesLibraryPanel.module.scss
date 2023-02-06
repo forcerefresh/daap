@@ -166,3 +166,45 @@
     margin-right: 5px;
   }
 }
+
+.imageHolder {
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+  align-content: center;
+  > img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
+
+.mainSectionFreeVer {
+  position: relative;
+  background-color: rgba(16, 22, 26, 0);
+  &::after {
+    transition: all 2s;
+    content: "";
+    //background-color: rgba(16, 22, 26, 0.4);
+    position: absolute;
+    inset: 0 0 0 0;
+    height: 2100px;
+  }
+}
+
+.registerAap {
+  position: absolute;
+  right: 0px;
+  background: #000000d1;
+  left: 0;
+  /* bottom: 0; */
+  padding: 100px;
+  text-align: center;
+  font-size: 30px;
+  top: 100px;
+  height: 300px;
+  text-transform: uppercase;
+  z-index: 1000;
+}

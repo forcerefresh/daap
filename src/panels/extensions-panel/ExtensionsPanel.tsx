@@ -211,13 +211,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       </div>
 
       <div className={css.mainSection} id="mediaHolder">
-        {!apiKey && (
+        {/* {!apiKey && (
           <div className="error">
             {
               "API KEY is not found. Goto Settings > Licenses and enter valid serial number."
             }
           </div>
-        )}
+        )} */}
         {!!errorMessage && <div className="error">{errorMessage}</div>}
         <InfiniteScroll
           dataLength={extensions?.length || -1} //This is important field to render the next data
@@ -284,7 +284,10 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                       (item) => item.id === extension.id
                     ) && (
                       <Button
-                        disabled={currentlyInstallingExtensions[extension.type]}
+                        disabled={
+                          extension.licenseDisabled ||
+                          currentlyInstallingExtensions[extension.type]
+                        }
                         intent="primary"
                         onClick={() => onInstall(extension)}
                       >
@@ -310,6 +313,9 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                         </Button>
                       </>
                     )}
+                  {extension.licenseDisabled && (
+                    <div className={css.licenseRequired}>LICENSE REQUIRED</div>
+                  )}
                 </div>
               </div>
             </div>

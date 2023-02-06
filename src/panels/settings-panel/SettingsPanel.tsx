@@ -21,18 +21,18 @@ export type ISettingsPanelMergedProps = typeof mapDispatchToProps &
 const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { supportStorageObjects } = globalContext.useObjectStorageHook();
-  const { getLicenseDetails } = globalContext.useLicenseHook();
+  //const { getLicenseDetails } = globalContext.useLicenseHook();
 
-  const [defaultSelectedTabId, setDefaultSelectedTabId] = useState("");
-  useEffect(() => {
-    getLicenseDetails().then((data) => {
-      if (data?.status === "OK" || data?.status === "EXPIRED") {
-        setDefaultSelectedTabId("project");
-      } else {
-        setDefaultSelectedTabId("license");
-      }
-    });
-  }, []);
+  const [defaultSelectedTabId, setDefaultSelectedTabId] = useState("project");
+  // useEffect(() => {
+  //   getLicenseDetails().then((data) => {
+  //     if (data?.status === "OK" || data?.status === "EXPIRED") {
+  //       setDefaultSelectedTabId("project");
+  //     } else {
+  //       setDefaultSelectedTabId("license");
+  //     }
+  //   });
+  // }, []);
 
   if (!defaultSelectedTabId) {
     return null;

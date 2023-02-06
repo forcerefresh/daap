@@ -2,7 +2,7 @@ import { HTMLSelect, Icon, Tab, Tabs, Tag } from "@blueprintjs/core";
 import { v4 as uuid } from "uuid";
 import classnames from "classnames";
 import { cloneDeep } from "lodash-es";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import {
   IObject,
@@ -28,12 +28,14 @@ import {
   animationType2Name,
   getDefaultAnimationConfigForType,
   getAnimationTypesForItem,
+  isAnimationTypeDisabled,
 } from "./AnimationPanelUtils";
 import {
   getAppAnimationDefinition,
   getAnimationsOptions,
 } from "webslider-sdk/lib/animations/animations-register";
 import { AnimationType } from "webslider-sdk/lib/animations/i-animation-types";
+import { IntegrationContext } from "../../integration";
 
 type IAnimationPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -60,8 +62,17 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     layer,
     layerObjects,
   } = props;
+  const globalContext = useContext(IntegrationContext);
+  const { getLicenseDetails } = globalContext.useLicenseHook();
+  const [hasLicense, setHasLicense] = useState<boolean | undefined>();
 
-  const sections = getAnimationTypesForItem(itemType);
+  useEffect(() => {
+    getLicenseDetails().then((data) => {
+      setHasLicense(!!data.apiKey);
+    });
+  }, []);
+
+  const sections = getAnimationTypesForItem(itemType, hasLicense);
 
   const [selectedNo, setSelectedNo] = useState<{ [key: string]: number }>({
     in: 0,
@@ -195,6 +206,85 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     //   layerObjects = layer?.objectIds.map((id) => objectById[id]);
     // }
 
+    const animationAddOptions: any[] = [
+      {
+        label: `Add ${section.toLocaleUpperCase()} animation to object...`,
+        value: "",
+        readOnly: true,
+      },
+      {
+        label: "Attribute animations",
+        value: "Disabled1",
+        disabled: true,
+      },
+      ...getAnimationsOptions(section, true, objectType, itemType === "layer"),
+      {
+        label: "Structural animation",
+        value: "Disabled2",
+        disabled: true,
+      },
+      ...getAnimationsOptions(
+        section,
+        false,
+        objectType,
+        itemType === "layer"
+      ).map((item) => {
+        const retItem = { ...item } as any;
+        retItem.disabled = isAddStructuralDisabled;
+        return retItem;
+      }),
+    ] as any;
+
+    if (!hasLicense && isAnimationTypeDisabled(section as string, hasLicense)) {
+      animationAddOptions.forEach((item, idx) => {
+        item.disabled = idx > 0;
+      });
+      animationAddOptions.splice(
+        1,
+        0,
+        {
+          label: `**************************`,
+          value: "not-available",
+          disabled: true,
+        },
+        {
+          label: `${section.toLocaleUpperCase()} animations are not
+         available in FREE version`,
+          value: "not-available2",
+          disabled: true,
+        },
+        {
+          label: `**************************`,
+          value: "not-available3",
+          disabled: true,
+        }
+      );
+      //  = [
+      //   {
+      //     label: `Add ${section.toLocaleUpperCase()} animation to object...`,
+      //     value: "",
+      //     readOnly: true,
+      //   },
+      //   {
+      //     label: `**************************`,
+      //     value: "not-available",
+      //     disabled: true,
+      //   },
+      //   {
+      //     label: `${section.toLocaleUpperCase()} animations are not
+      //      available in FREE version`,
+      //     value: "not-available",
+      //     disabled: true,
+      //   },
+      //   {
+      //     label: `**************************`,
+      //     value: "not-available",
+      //     disabled: true,
+      //   },
+      //   ...animationAddOptions],
+      // ];
+    }
+
     return (
       <Tab
         key={section}
@@ -219,41 +309,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
               }}
             >
               <HTMLSelect
-                options={
-                  [
-                    {
-                      label: `Add ${section.toLocaleUpperCase()} animation to object...`,
-                      value: "",
-                      readOnly: true,
-                    },
-                    {
-                      label: "Attribute animations",
-                      value: "Disabled1",
-                      disabled: true,
-                    },
-                    ...getAnimationsOptions(
-                      section,
-                      true,
-                      objectType,
-                      itemType === "layer"
-                    ),
-                    {
-                      label: "Structural animation",
-                      value: "Disabled2",
-                      disabled: true,
-                    },
-                    ...getAnimationsOptions(
-                      section,
-                      false,
-                      objectType,
-                      itemType === "layer"
-                    ).map((item) => {
-                      const retItem = { ...item } as any;
-                      retItem.disabled = isAddStructuralDisabled;
-                      return retItem;
-                    }),
-                  ] as any
-                }
+                options={animationAddOptions}
                 value={""}
                 onChange={(event: ChangeEvent) => {
                   addAnimationToSection(
@@ -272,7 +328,10 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
                     active={selectedNo[section] === animationIdx}
                     minimal
                     onClick={() => {
-                      setSelectedNo({ ...selectedNo, [section]: animationIdx });
+                      setSelectedNo({
+                        ...selectedNo,
+                        [section]: animationIdx,
+                      });
                     }}
                   >
                     {animationIdx + 1}.
@@ -389,6 +448,9 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     );
   };
 
+  if (typeof hasLicense === "undefined") {
+    return null;
+  }
   return (
     <div className={classnames(css.animation, className)}>
       {!hideHeader && <div className={css.panelHeader}>ANIMATION PANEL</div>}

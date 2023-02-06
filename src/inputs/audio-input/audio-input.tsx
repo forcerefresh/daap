@@ -58,7 +58,7 @@ export const AudioInputForm: React.FC<IAudioInput & IUpdateInput> = (props) => {
         ]
       )}
 
-      {previewSrc ? previewSrc : null}
+      {previewSrc ? <div>{previewSrc}</div> : null}
 
       {sourceType === "url"
         ? getTextArea(

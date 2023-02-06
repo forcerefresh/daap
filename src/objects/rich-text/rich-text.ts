@@ -30,7 +30,7 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 
-export const RICH_TEXT = "rich_text";
+export const RICH_TEXT = "rich-text-object";
 
 export interface RichTextValues {
   text: string;
