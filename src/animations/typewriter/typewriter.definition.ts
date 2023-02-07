@@ -1,8 +1,8 @@
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 import {
+  IColorInput,
   InputType,
   INumberInput,
-  ITextAreaInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { TYPEWRITER_ANIMATION, ITypeWriterAnimation } from "./typewriter.types";
@@ -13,6 +13,7 @@ export type ITypewriterTuple = [
   INumberInput<"initialDelay">,
   INumberInput<"cursorBlinking">,
   INumberInput<"cursorPadding">,
+  IColorInput<"cursorColor">,
   IFormGroupItem<
     [
       INumberInput<"timeAfterWrite">,
@@ -65,6 +66,13 @@ export const typewriterDefinition: IAnimationDefinition<ITypewriterTuple> = {
       helperText: "Distance between text and cursor",
       propertyName: "cursorPadding",
       inputType: InputType.NUMBER,
+      value: {} as any,
+      defaultValue: {} as any,
+    },
+    {
+      displayName: "Cursor color",
+      propertyName: "cursorColor",
+      inputType: InputType.COLOR,
       value: {} as any,
       defaultValue: {} as any,
     },
@@ -124,4 +132,5 @@ export const typewriterDefaults: ITypeWriterAnimation = {
   initialDelay: 2000,
   timeAfterWrite: 2000,
   cursorPadding: 5,
+  cursorColor: { r: 255, g: 255, b: 255, a: 1 },
 };

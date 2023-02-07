@@ -6,6 +6,7 @@ import gsap, { SteppedEase } from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { TextValues } from "../../objects/text/text";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 
 export function getTypewriterAnimationDuration(object?: IObject, config?: any) {
   const effValues = config?.animation?.values!;
@@ -83,7 +84,9 @@ export function typewriterAnimation() {
     cursorEl.style.left = "0px";
     cursorEl.style.height = (chars[0] as HTMLElement).style.height;
     cursorEl.style.width = "2px";
-    cursorEl.style.background = "white";
+    cursorEl.style.background = `${convertRGBColor2RGBAString(
+      config.cursorColor
+    )}`;
     cursorEl.style.visibility = "visible";
     objectEl.appendChild(cursorEl);
 
