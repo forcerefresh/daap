@@ -1,3 +1,4 @@
+import { RGBColor } from "react-color";
 import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 
 export const TYPEWRITER_ANIMATION = "typewriter";
@@ -12,4 +13,5 @@ export interface ITypeWriterAnimation extends IAnimationBase {
   timeAfterWrite: number;
   cursorPadding: number;
   hasDelete?: boolean;
+  cursorColor: RGBColor;
 }
