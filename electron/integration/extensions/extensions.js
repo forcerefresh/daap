@@ -7,6 +7,9 @@ const {
   downloadToBuffer,
   fileToBuffer,
 } = require("../../utils/utils");
+
+const { loadLicenseData } = require("../license/license");
+
 const JSZip = require("jszip");
 /*
 ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
@@ -43,7 +46,15 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
     );
     zipPackage = await fileToBuffer(extensionZipPath);
   } else {
-    const fullPackageUrl = `${extension.packageUrl}`;
+    const license = await loadLicenseData();
+    let res = {};
+    if (license?.license?.licenseDetails) {
+      res = JSON.parse(atob(license.license.licenseDetails));
+    } else {
+      return Promise.reject();
+    }
+
+    const fullPackageUrl = `${extension.packageUrl}?api-key=${res.apiKey}`;
     zipPackage = await downloadToBuffer(fullPackageUrl);
   }
 

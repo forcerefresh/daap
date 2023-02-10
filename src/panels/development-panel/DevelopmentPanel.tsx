@@ -122,7 +122,7 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
           icon={"plus"}
           onClick={() => addItem("object")}
         >
-          Add Component
+          Add Extension
         </Button>
       </div>
     </div>
