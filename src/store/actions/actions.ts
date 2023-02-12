@@ -1068,7 +1068,7 @@ export function addNewObject(
     };
 
     const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
-    object.name = humanizeSting(type) + " " + nextNameIdx;
+    object.name = humanizeSting(type, true) + " " + nextNameIdx;
 
     switch (object.type) {
       case BUTTON: {

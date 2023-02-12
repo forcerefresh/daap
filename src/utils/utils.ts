@@ -161,10 +161,15 @@ export function addBorderSide(
   return style;
 }
 
-export function humanizeSting(str: string) {
-  let ret = str.replaceAll("_", " ").replaceAll("-", " ");
-  ret = ret.charAt(0).toUpperCase() + ret.slice(1);
-  return ret;
+export function humanizeSting(str: string, removeDottedPart = false) {
+  let targetStr = str;
+  if (removeDottedPart) {
+    const peaces = str.split(".");
+    targetStr = peaces[peaces.length - 1];
+  }
+  targetStr = targetStr.replaceAll("_", " ").replaceAll("-", " ");
+  targetStr = targetStr.charAt(0).toUpperCase() + targetStr.slice(1);
+  return targetStr;
 }
 
 export function forceDownload(url: string) {
