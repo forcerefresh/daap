@@ -42,6 +42,7 @@ import getTickerInstance from "./Ticker";
 import { Timeline } from "./Timeline";
 import { RootTimeline } from "./RootTimeline";
 import gsap from "gsap";
+import animejs from "animejs";
 import {
   getLayerWrapperElementById,
   getObjectElementById,
@@ -50,6 +51,7 @@ import {
 
 gsap.defaults(); // in order to bundle gsap
 gsap.install(window);
+(window as any).animejs = animejs;
 
 export enum InTransitionEnum {
   NO = 0,

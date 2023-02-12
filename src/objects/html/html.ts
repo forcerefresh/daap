@@ -130,7 +130,7 @@ export async function htmlSizeUpdate(props: {
 
 export const htmlMeta = {
   name: "HTML",
-  description: "Add html",
+  description: "Add HTML Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: htmlIcon,
 };

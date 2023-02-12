@@ -11,6 +11,7 @@ const {
   fileToBuffer,
   getMyImagesPath,
   getMyVideosPath,
+  getMyAudiosPath,
 } = require("../../utils/utils");
 const {
   loadTemplate,
@@ -106,6 +107,8 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
         const assetRoot =
           assetItem.mediaType === "video"
             ? getMyVideosPath()
+            : assetItem.mediaType === "audio"
+            ? getMyAudiosPath()
             : assetItem.mediaType === "image"
             ? getMyImagesPath()
             : undefined;

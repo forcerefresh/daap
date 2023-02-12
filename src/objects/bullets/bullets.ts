@@ -953,8 +953,8 @@ export const getBulletsAssetsUrls = (
 };
 
 export const bulletsMeta = {
-  name: "BULLETS",
-  description: "Add bullets navigation",
+  name: "Bullets",
+  description: "Add Bullets Navigation",
   preloadOrder: PreloadOrder.FIRST,
   icon: bulletsIcon,
 };

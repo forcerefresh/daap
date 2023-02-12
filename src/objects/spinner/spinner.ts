@@ -227,8 +227,8 @@ export async function spinnerSizeUpdate(props: {
 }
 
 export const spinnerMeta = {
-  name: "SPINNER",
-  description: "Add spinner",
+  name: "Spinner",
+  description: "Add Spinner Object",
   icon: svg,
   coreType: CoreObjectType.SPINNER,
 };

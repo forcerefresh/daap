@@ -322,8 +322,8 @@ export async function arrowSizeUpdate(props: {
 }
 
 export const arrowMeta = {
-  name: "ARROW",
-  description: "Add navigation arrow",
+  name: "Arrow",
+  description: "Add Navigation Arrow Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: arrowIcon,
 };

@@ -300,7 +300,7 @@ function replaceColors(svgSource: string, colors: RGBColor[]) {
 
 export const svgMeta = {
   name: "SVG",
-  description: "Add vector",
+  description: "Add Vector Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };

@@ -837,8 +837,8 @@ export async function buttonSizeUpdate(props: {
 }
 
 export const buttonMeta = {
-  name: "BUTTON",
-  description: "Add button",
+  name: "Button",
+  description: "Add Button Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: buttonIcon,
 };

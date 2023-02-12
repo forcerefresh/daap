@@ -280,7 +280,7 @@ export const getMultiImageAssetsUrls = (
 };
 
 export const multiImageMeta = {
-  name: "MULTI IMAGES",
+  name: "Multi Images",
   description: "Add multi image object",
   icon: svg,
 };

@@ -375,8 +375,8 @@ export const getAssetsUrls = (
 };
 
 export const videoMeta = {
-  name: "VIDEO",
-  description: "Add video",
+  name: "Video",
+  description: "Add Video Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: video,
 };

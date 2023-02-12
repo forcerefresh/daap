@@ -12,8 +12,10 @@ import {
 import { IStore } from "./store/store";
 
 import gsap from "gsap";
+import animejs from "animejs";
 
 gsap.install(window);
+(window as any).animejs = animejs;
 
 type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
 

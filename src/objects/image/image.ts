@@ -296,8 +296,8 @@ export const getAssetsUrls = (
 };
 
 export const imageMeta = {
-  name: "IMAGE",
-  description: "Add Image",
+  name: "Image",
+  description: "Add Image Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };

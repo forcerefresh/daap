@@ -109,8 +109,8 @@ export async function frameSizeUpdate(props: {
 }
 
 export const frameMeta = {
-  name: "FRAME",
-  description: "Add frame",
+  name: "Frame",
+  description: "Add Frame Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };

@@ -56,3 +56,7 @@ async function saveLicenseData(license) {
     JSON.stringify(license, undefined, 2)
   );
 }
+
+module.exports = {
+  loadLicenseData,
+};

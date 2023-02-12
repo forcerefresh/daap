@@ -194,8 +194,8 @@ export async function richTextSizeUpdate(props: {
 }
 
 export const richMeta = {
-  name: "RICH TEXT",
-  description: "Add rich text",
+  name: "Rich Text",
+  description: "Add Rich Text Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };

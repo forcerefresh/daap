@@ -204,7 +204,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       <div className={cx(css.headerSection, css.tableHeader)}>
         {/*<div className={css.id}>ID</div>*/}
         <div className={css.thumb}></div>
-        <div className={css.name}>Name &amp; Description</div>
+        <div className={css.nameAndDesc}>Name &amp; Description</div>
         <div className={css.created}>Created</div>
         <div className={css.modified}>Modified</div>
         <div className={css.action}>Action</div>
@@ -257,16 +257,12 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                     <img src={`${extension.logoUrl}`}></img>
                   </div>
                 </div>
-                <div className={css.name}>
-                  <span className={css["type-" + extension.componentType]}>
+                <div className={css.nameAndDesc}>
+                  <div className={css.name}> {extension.name}</div>
+                  <div className={css.description}>{extension.description}</div>
+                  <div className={css["type-" + extension.componentType]}>
                     {extension.componentType.toUpperCase()}
-                  </span>
-                  <br />
-                  {extension.name}
-                  <br />
-                  <span className={css.description}>
-                    {extension.description}
-                  </span>
+                  </div>
                 </div>
                 <div className={css.created}>
                   {new Date(extension.created).toLocaleDateString()}

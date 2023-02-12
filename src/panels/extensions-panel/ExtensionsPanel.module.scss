@@ -78,10 +78,18 @@
 .thumb {
   width: 120px;
   min-width: 120px;
+  img {
+    width: 100%;
+  }
 }
 
 .name {
-  width: 45%;
+  //width: 40%;
+}
+
+.nameAndDesc {
+  max-width: 400px;
+  width: 400px;
 }
 
 .id {

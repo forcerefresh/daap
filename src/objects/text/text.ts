@@ -357,7 +357,7 @@ export async function preloadText(props: {
 }
 
 export const textMeta = {
-  name: "TEXT",
+  name: "Text",
   description: "Add text object",
   icon: svg,
 };

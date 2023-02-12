@@ -123,8 +123,8 @@ export function delayObject_Stop(props: {
 }
 
 export const delayMeta = {
-  name: "DELAY",
-  description: "Add delay",
+  name: "Delay",
+  description: "Add Delay Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
 };
