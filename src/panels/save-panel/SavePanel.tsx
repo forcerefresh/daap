@@ -347,7 +347,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             <div className={css.saveAsTemplateBtnHolder}>
               <Button
                 className={css.saveAsTemplateBtn}
-                disabled={meta.inSaving}
+                disabled={meta.inSaving || !meta.id || meta.id === "-1"}
                 intent="none"
                 onClick={() => {
                   setSaveTemplateDialogOpen(true);
