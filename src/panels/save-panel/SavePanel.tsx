@@ -1,8 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { cloneDeep, last, noop, omit, round } from "lodash-es";
 import { connect } from "react-redux";
-import { Button, Label, Spinner } from "@blueprintjs/core";
+import {
+  Button,
+  Classes,
+  Dialog,
+  FormGroup,
+  InputGroup,
+  Label,
+  Spinner,
+} from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./SavePanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
@@ -65,6 +73,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
   const [thumbnailHtml, setThumbnailHtml] = useState("");
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
+
+  const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
+  const [templateDialogData, setTemplateDialogData] = useState<{
+    name: string;
+    description: string;
+  }>({ name: "", description: "" });
 
   // local state
   const [localMeta, setLocalMeta] = useState({
@@ -180,7 +194,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       });
   };
 
-  const onClickSaveTemplate = async (saveAs?: boolean) => {
+  const onSaveTemplate = async () => {
     _updateProjectMeta({ inSaving: true });
 
     const installedExtensions = await getInstalledExtensions();
@@ -198,8 +212,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const assetsUrls = getAllAssetsUrls(objects);
 
     saveTemplate({
-      name: localMeta.name!,
-      description: localMeta.description!,
+      name: templateDialogData.name,
+      description: templateDialogData.description,
       project,
       slides: project.slides.normalSlides.length,
       preview: {
@@ -320,16 +334,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           >
             {"Save"}
           </Button>
-          {!isSaveAs && (
-            <Button
-              className={css.saveAsTemplateBtn}
-              disabled={meta.inSaving}
-              intent="none"
-              onClick={() => onClickSaveTemplate(isSaveAs)}
-            >
-              {"Save as Template"}
-            </Button>
-          )}
           <Button
             disabled={meta.inSaving}
             intent="none"
@@ -339,6 +343,24 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           >
             {"Cancel"}
           </Button>
+          {!isSaveAs && (
+            <div className={css.saveAsTemplateBtnHolder}>
+              <Button
+                className={css.saveAsTemplateBtn}
+                disabled={meta.inSaving}
+                intent="none"
+                onClick={() => {
+                  setSaveTemplateDialogOpen(true);
+                  setTemplateDialogData({
+                    name: meta.name ?? "",
+                    description: "",
+                  });
+                }}
+              >
+                {"Save as Template"}
+              </Button>
+            </div>
+          )}
 
           {/* <div className={css.saveAsTemplateBtnHolder}>
             <Button
@@ -362,6 +384,68 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           </Button>*/}
         </div>
       </div>
+      <Dialog
+        className={cx("bp3-dark", css.dialog)}
+        isOpen={saveTemplateDialogOpen}
+        onClose={() => {
+          setSaveTemplateDialogOpen(false);
+        }}
+        title="Save project as Template"
+        canOutsideClickClose={false}
+      >
+        <div style={{ margin: "20px" }}>
+          <div className={cx("input330", css.inputHolder)}>
+            {getTextField(
+              "Template Name",
+              templateDialogData.name,
+              (name: any) => {
+                setTemplateDialogData((templateDialogData) => ({
+                  ...templateDialogData,
+                  name,
+                }));
+              },
+              ""
+            )}
+          </div>
+
+          <div className={cx("input440", css.inputHolder)}>
+            {getTextArea(
+              "Description",
+              templateDialogData.description,
+              (description: any) => {
+                setTemplateDialogData((templateDialogData) => ({
+                  ...templateDialogData,
+                  description,
+                }));
+              },
+              "",
+              { disabledDebounce: true }
+            )}
+          </div>
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            <Button
+              intent="primary"
+              onClick={() => {
+                // TODO
+                onSaveTemplate();
+                setSaveTemplateDialogOpen(false);
+              }}
+              disabled={false}
+            >
+              Save Template
+            </Button>
+            <Button
+              onClick={() => {
+                setSaveTemplateDialogOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 };

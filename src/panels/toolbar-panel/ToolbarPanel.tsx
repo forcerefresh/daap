@@ -1,4 +1,4 @@
-import { Button, Icon, Portal, Text } from "@blueprintjs/core";
+import { Button, Icon, Portal, Tag, Text } from "@blueprintjs/core";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -58,6 +58,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     stageTool,
     _setStageTool,
     setZoomFit,
+    missingExtensions,
   } = props;
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
@@ -298,11 +299,17 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         <div>
           <Button
             minimal
+            className={css.tbButton}
             active={showPanel === VisiblePanel.ProjectsLibrary}
             onClick={() => {
               setShowPanel(VisiblePanel.ProjectsLibrary);
             }}
           >
+            {missingExtensions?.length > 0 && (
+              <Tag intent={"danger"} round className={css.tbTag}>
+                {missingExtensions.length}
+              </Tag>
+            )}
             <Icon icon="projects" iconSize={ICON_SIZE} color={"gray"} />
           </Button>
 
@@ -330,6 +337,7 @@ const mapStateToProps = (state: IStore) => {
   const zoom = getZoom(stage, settings);
 
   return {
+    missingExtensions: state.editor.missingExtensions,
     zoom: zoom,
     zoomFit: state.stage.zoomFit,
     hasUndoItem: state.project.diff.prev.length !== 0,

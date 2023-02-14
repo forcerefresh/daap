@@ -1,0 +1,32 @@
+import { getAppAnimationDefinition } from "webslider-sdk/lib/animations/animations-register";
+import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+
+export function getMissingExtensionsFromProject(
+  extensions: IExtensionItem[]
+): IExtensionItem[] {
+  const retExtensions: IExtensionItem[] = [];
+
+  extensions.forEach((ext) => {
+    switch (ext.componentType) {
+      case "animation": {
+        const animDef = getAppAnimationDefinition(ext.type);
+        if (!animDef) retExtensions.push(ext);
+        break;
+      }
+      case "object": {
+        const objDef = getAppObjectDefinition(ext.type);
+        if (!objDef) retExtensions.push(ext);
+      }
+    }
+  });
+
+  return retExtensions;
+}
+
+export function removeExtensionFromMissing(
+  extensions: IExtensionItem[],
+  type: string
+) {
+  return extensions.filter((ex) => ex.type !== type);
+}

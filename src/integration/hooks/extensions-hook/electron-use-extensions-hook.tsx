@@ -7,6 +7,7 @@ export const useExtensionsHook = () => {
     from: number,
     search?: string,
     tags?: string[],
+    missingExtensions?: string[],
     apiKey?: string
   ): Promise<{ items: IExtensionItem[] }> => {
     logger.app.trace("Get extensions from directory (electron)");
@@ -20,6 +21,12 @@ export const useExtensionsHook = () => {
     if (tags && tags.length > 0) {
       url += `&tags=${tags.map((tag) => encodeURIComponent(tag)).join(",")}`;
     }
+    if (missingExtensions && missingExtensions.length > 0) {
+      url += `&missingExtensions=${missingExtensions
+        .map((ext) => encodeURIComponent(ext))
+        .join(",")}`;
+    }
+
     logger.app.log(url);
 
     return fetch(url).then((res) => res.json());

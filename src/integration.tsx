@@ -194,6 +194,7 @@ export const IntegrationContext = React.createContext({
       from: number,
       search?: string,
       tags?: string[],
+      missingExtensions?: string[],
       apiKey?: string
     ): Promise<{ items: IExtensionItem[] }> =>
       Promise.resolve({ items: [] as IExtensionItem[] }),

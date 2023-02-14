@@ -9,6 +9,7 @@ export const useExtensionsHook = () => {
     from: number,
     search?: string,
     tags?: string[],
+    missingExtensions?: string[],
     apiKey?: string
   ): Promise<{ items: IExtensionItem[] }> => {
     const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?api-key=${apiKey}`;
@@ -20,6 +21,12 @@ export const useExtensionsHook = () => {
     if (tags && tags.length > 0) {
       url += `&tags=${tags.map((tag) => encodeURIComponent(tag)).join(",")}`;
     }
+    if (missingExtensions && missingExtensions.length > 0) {
+      url += `&missingExtensions=${missingExtensions
+        .map((ext) => encodeURIComponent(ext))
+        .join(",")}`;
+    }
+
     return fetch(url).then((res) => res.json());
   };
 

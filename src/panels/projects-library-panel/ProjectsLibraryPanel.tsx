@@ -3,7 +3,7 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ProjectsLibraryPanel.module.scss";
-import { Tab, Tabs } from "@blueprintjs/core";
+import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import DevelopmentPanel from "../development-panel/DevelopmentPanel";
@@ -21,7 +21,7 @@ export type IProjectsLibraryPanelMergedProps = typeof mapDispatchToProps &
 const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
   props
 ) => {
-  const { enableDeveloper } = props;
+  const { enableDeveloper, missingExtensions } = props;
 
   return (
     <div className={cx("bp3-dark", css.projectsLibraryPanel)}>
@@ -40,7 +40,16 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
           />
           <Tab
             id="extensions"
-            title="Extensions"
+            title={
+              <>
+                Extensions{" "}
+                {missingExtensions?.length > 0 && (
+                  <Tag intent={"danger"} round>
+                    {missingExtensions.length}
+                  </Tag>
+                )}
+              </>
+            }
             panel={<ExtensionsPanel onRequestClose={props.onRequestClose} />}
           />
           <Tab
@@ -63,6 +72,7 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
 
 const mapStateToProps = (state: IStore) => ({
   enableDeveloper: state.globals.enableDeveloper,
+  missingExtensions: state.editor.missingExtensions,
 });
 
 const mapDispatchToProps = {};

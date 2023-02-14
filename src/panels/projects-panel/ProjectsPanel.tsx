@@ -23,6 +23,8 @@ import { ISettings } from "../../store/reducers/i-settings";
 import { setupNewProject } from "../../store/actions/multi-actions";
 import { getDefaultSlide } from "../../objects/create-object-factory";
 import { SlideType } from "../../store/reducers/i-slides";
+import { IEditor } from "../../store/reducers/editor";
+import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -42,6 +44,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     _resetChangedState,
     _setDevice,
     _setupNewProject,
+    _updateEditor,
   } = props;
 
   const [projects, setProjects] = useState<any[]>([]);
@@ -161,6 +164,19 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       _openProject(project);
 
+      const missingExtensions = getMissingExtensionsFromProject(
+        response.project.extensions
+      );
+
+      _updateEditor({ missingExtensions });
+
+      if (missingExtensions.length > 0) {
+        AppToaster.show({
+          intent: "warning",
+          message:
+            "Missing Extension found! Go to Library > Extensions to install missing extensions.",
+        });
+      }
       _doClearHistory();
 
       _resetChangedState();
@@ -336,6 +352,7 @@ const mapDispatchToProps = {
     updateEditor({ sliderChanged: false, isExistingProject: true }),
   _setDevice: setDevice,
   _setupNewProject: () => setupNewProject(),
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

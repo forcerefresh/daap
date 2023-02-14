@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import cx from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce } from "lodash-es";
@@ -14,6 +14,9 @@ import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 import { unregisterAnimation } from "webslider-sdk/lib/animations/animations-register";
+import { IEditor } from "../../store/reducers/editor";
+import { updateEditor } from "../../store/actions/actions";
+import { removeExtensionFromMissing } from "../../utils/extensions/extensions-utils";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -24,7 +27,7 @@ export type IExtensionsPanelMergedProps = typeof mapDispatchToProps &
   IExtensionsPanelProps;
 
 const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
-  const { onRequestClose, _registerObject, _unregisterObject } = props;
+  const { _updateEditor, missingExtensions } = props;
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -67,6 +70,11 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     });
   }, []);
 
+  const cachedMissingExtensions = useMemo(
+    () => missingExtensions.map((item) => item.type),
+    []
+  );
+
   const fetchData = (from = -1) => {
     // if (!apiKey) return;
 
@@ -74,7 +82,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     from = from === -1 ? extensions?.length || 0 : from;
 
-    getExtensions(from, searchValue, undefined, apiKeyRef.current).then(
+    getExtensions(
+      from,
+      searchValue,
+      undefined,
+      cachedMissingExtensions,
+      apiKeyRef.current
+    ).then(
       (result) => {
         const err = checkIfAssetsServiceHasError(result);
         if (err) {
@@ -164,6 +178,12 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       getInstalledExtensions().then((res) => {
         setInstalledExtensions(res.items);
       });
+
+      const newMissingExtensions = removeExtensionFromMissing(
+        missingExtensions,
+        mItem.type
+      );
+      _updateEditor({ missingExtensions: newMissingExtensions });
     });
   };
 
@@ -250,7 +270,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         >
           {extensions?.map((extension, idx) => (
             <div key={extension.type}>
-              <div className={cx(css.headerSection, css.tableRow)}>
+              <div
+                className={cx(css.headerSection, css.tableRow, {
+                  [css.missingExtension]: cachedMissingExtensions.includes(
+                    extension.type
+                  ),
+                })}
+              >
                 {/*<div className={css.id}>{extension.id}</div>*/}
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
@@ -339,11 +365,14 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({});
+const mapStateToProps = (state: IStore) => ({
+  missingExtensions: state.editor.missingExtensions,
+});
 
 const mapDispatchToProps = {
   _registerObject: (extObjectDef: any) => undefined,
   _unregisterObject: (extObjectDef: any) => undefined,
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExtensionsPanel);
