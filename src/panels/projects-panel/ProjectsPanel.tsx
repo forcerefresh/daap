@@ -164,12 +164,11 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       _openProject(project);
 
+      // missing extensions >>>
       const missingExtensions = getMissingExtensionsFromProject(
         response.project.extensions
       );
-
       _updateEditor({ missingExtensions });
-
       if (missingExtensions.length > 0) {
         AppToaster.show({
           intent: "warning",
@@ -177,6 +176,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
             "Missing Extension found! Go to Library > Extensions to install missing extensions.",
         });
       }
+      // missing extensions <<<
+
       _doClearHistory();
 
       _resetChangedState();

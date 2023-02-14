@@ -25,6 +25,7 @@ import { IMeta } from "../../store/reducers/meta";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./MyTemplatesPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
+import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -150,6 +151,20 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
           .reverse()
           .find((bc) => bc.enabled)?.type || "large-1"
       );
+
+      // missing extensions >>>
+      const missingExtensions = getMissingExtensionsFromProject(
+        response.template.extensions
+      );
+      _updateEditor({ missingExtensions });
+      if (missingExtensions.length > 0) {
+        AppToaster.show({
+          intent: "warning",
+          message:
+            "Missing Extension found! Go to Library > Extensions to install missing extensions.",
+        });
+      }
+      // missing extensions <<<
 
       _doClearHistory();
 

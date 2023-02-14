@@ -1,6 +1,8 @@
 // logger config has to be at the top of file
 require("./utils/logger-config");
 const { app, BrowserWindow } = require("electron");
+const path = require("path");
+const fs = require("fs");
 const windowStateKeeper = require("electron-window-state");
 const { registerFileProtocol } = require("./utils/file-protocol");
 const { copyPlayerFromAppToUserDataDelayed } = require("./utils/copy-player");
@@ -27,6 +29,9 @@ registerFileProtocol();
 
 // copy player to userData dir
 copyPlayerFromAppToUserDataDelayed();
+
+// create media dirs
+createMediaDirs();
 
 // electron reloader
 if (process.env.ELECTRON_ENV === "development") {
@@ -132,3 +137,21 @@ if (!gotTheLock) {
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
+
+function createMediaDirs() {
+  const userDataPath = app.getPath("userData");
+
+  [
+    "my-vectors",
+    "my-images",
+    "my-videos",
+    "my-templates",
+    "my-audios",
+    "my-extensions",
+  ].forEach((type) => {
+    const mPath = path.join(userDataPath, "my-uploads", type);
+    if (!fs.existsSync(mPath)) {
+      fs.mkdirSync(mPath);
+    }
+  });
+}
