@@ -95,6 +95,9 @@
     "yt-player": "^3.5.0",
     "yup": "^0.32.11"
   },
+  "resolutions": {
+    "@types/react": "^16.9.52"
+  },
   "eslintConfig": {
     "extends": "react-app"
   },

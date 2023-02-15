@@ -88,7 +88,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   if (!slide) return null;
 
   const effDef = getAppAnimationDefinition(
-    get(slide, `slideTransition.animation.id`)
+    get(slide, `slideTransition.animation.id`)!
   );
 
   return (
@@ -154,7 +154,8 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               const obj = cloneDeep(slide);
               set(obj, `slideTransition.animation.id`, value);
 
-              const values = get(obj, `slideTransition.animation.values`) || {};
+              const values = (get(obj, `slideTransition.animation.values`) ||
+                {}) as { [key: string]: any };
               const effDef = getAppAnimationDefinition(value);
               effDef?.formDefinition.form.forEach((item: any) => {
                 values[item.propertyName] =
@@ -182,7 +183,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             )}
           <div className={css.dynamicFields}>
             {renderAnimationForm(
-              get(slide, `slideTransition.animation.id`),
+              get(slide, `slideTransition.animation.id`)!,
               slide,
               `slideTransition.animation.values`
             )}

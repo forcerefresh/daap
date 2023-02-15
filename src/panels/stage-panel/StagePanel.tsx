@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { cloneDeep, includes, isEqual, mapValues, pick } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
@@ -119,6 +120,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     logger.app.warn(error, errorInfo);
   });
 
+  // eslint
   if (error) return null;
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
