@@ -10,3 +10,7 @@ Where this directory is varies by operating system.
 - **Linux:** ~/.config/<Your App Name>
 
 Electron provides app.getPath which returns the right directory, depending on your platform.
+
+
+app specific pass: Wb Slider : khwp-yajw-uwfo-ypit
+
