@@ -575,7 +575,11 @@ function generateSlideData(
         : object.layout === "absolute"
         ? "position: absolute;"
         : "position: absolute;"; //"position: relative;";
-      const overflow = objectValues.overflow;
+
+      const cd = object.commonStyleDefinition;
+      const overflow = cd?.valuesMetadata?.commonOverflow
+        ? cd.values?.commonOverflow
+        : "visible";
       style += `overflow: ${overflow};`;
       // << "left", "top", "width", "height"
 
