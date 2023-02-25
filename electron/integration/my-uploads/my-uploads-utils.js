@@ -181,33 +181,40 @@ function findAssetMediaType(assetsUrls, assetFileName) {
 }
 
 async function processTemplate(fileBase64, type, fileMetadata) {
+  const isRemoteTemplate = !!fileMetadata?.id;
+
   // use temporary id for zip and folder
-  const tempId = uuid();
+  const tempId = fileMetadata?.id ? fileMetadata?.id : uuid();
 
   const userDataPath = app.getPath("userData");
   const myTmpTemplateZipPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates",
+    type2MediaFolder(type),
     tempId + ".zip"
   );
-
-  let base64Zip = fileBase64.split(";base64,").pop();
-  await fsPromise.writeFile(myTmpTemplateZipPath, base64Zip, {
-    encoding: "base64",
-  });
 
   // create temp folder >>
   const myTmpTemplateDirPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates",
+    type2MediaFolder(type),
     tempId
   );
-  await fsPromise.mkdir(myTmpTemplateDirPath);
-  await fsPromise.mkdir(path.join(myTmpTemplateDirPath, "assets"));
+
+  if (!fs.existsSync(myTmpTemplateDirPath)) {
+    await fsPromise.mkdir(myTmpTemplateDirPath);
+    await fsPromise.mkdir(path.join(myTmpTemplateDirPath, "assets"));
+  }
 
   // create temp folder <<
+
+  //if (typeof fileBase64 === "string") {
+  let base64Zip = fileBase64.split(";base64,").pop();
+  await fsPromise.writeFile(myTmpTemplateZipPath, base64Zip, {
+    encoding: "base64",
+  });
+  //}
 
   // unzip >>
   let zip = new JSZip();
@@ -230,7 +237,7 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   const projectJsonPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates",
+    type2MediaFolder(type),
     tempId,
     "project.json"
   );
@@ -245,25 +252,31 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   const myTemplateZipPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates",
+    type2MediaFolder(type),
     templateId + ".zip"
   );
-  const templateExist = await checkFileExists(myTemplateZipPath);
 
-  if (templateExist) {
-    return false;
+  if (!isRemoteTemplate) {
+    const templateExist = await checkFileExists(myTemplateZipPath);
+    if (templateExist) {
+      return false;
+    }
   }
+
   // check if template exist <<
 
   // rename >>
   const myTemplateDirPath = path.join(
     userDataPath,
     "my-uploads",
-    "my-templates",
+    type2MediaFolder(type),
     templateId
   );
-  await fsPromise.rename(myTmpTemplateZipPath, myTemplateZipPath);
-  await fsPromise.rename(myTmpTemplateDirPath, myTemplateDirPath);
+
+  if (!isRemoteTemplate) {
+    await fsPromise.rename(myTmpTemplateZipPath, myTemplateZipPath);
+    await fsPromise.rename(myTmpTemplateDirPath, myTemplateDirPath);
+  }
   // rename <<
 
   // copy assets >>
@@ -280,6 +293,20 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   for (let i = 0; i < assetFileNames.length; i++) {
     const assetFileName = assetFileNames[i];
     const mediaType = findAssetMediaType(project.assetsUrls, assetFileName);
+
+    if (
+      fs.existsSync(
+        path.join(
+          userDataPath,
+          "my-uploads",
+          type2MediaFolder(mediaType),
+          assetFileName
+        )
+      )
+    ) {
+      continue;
+    }
+
     const fromAssetPath = path.join(assetsPath, assetFileName);
 
     if (mediaType === "image") {
@@ -349,7 +376,7 @@ async function processTemplate(fileBase64, type, fileMetadata) {
   let myMedia = await loadMyMedia("image");
   // NOTE: consider removing if we create at startup
   createMyMediaFolder(type);
-  saveMyMedia("image", [...myMedia, ...imageItems]);
+  saveMyMedia("image", [...imageItems, ...myMedia]);
 
   // add asset
 

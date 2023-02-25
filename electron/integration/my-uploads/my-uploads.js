@@ -169,7 +169,7 @@ ipcMain.handle("MyUploads::Upload", async (event, dataStr) => {
       break;
     }
     case "template": {
-      item = await processTemplate(fileBase64, type, fileMetadata);
+      item = await processTemplate(fileBase64, type);
       break;
     }
     default: {

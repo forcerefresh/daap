@@ -16,6 +16,7 @@ require("./top-menu");
 // integrations
 require("./integration/project/project");
 require("./integration/template/template");
+require("./integration/template/remote-template");
 require("./integration/object-storage/object-storage");
 require("./integration/api-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
@@ -48,8 +49,8 @@ if (process.env.ELECTRON_ENV === "development") {
 let mainWindow;
 async function createWindow() {
   const mainWindowState = windowStateKeeper({
-    defaultWidth: 1000,
-    defaultHeight: 600,
+    defaultWidth: 1024,
+    defaultHeight: 576,
     maximize: false,
   });
 
@@ -146,6 +147,7 @@ function createMediaDirs() {
     "my-images",
     "my-videos",
     "my-templates",
+    "my-remote-templates",
     "my-audios",
     "my-extensions",
   ].forEach((type) => {

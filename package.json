@@ -129,7 +129,6 @@
     "appId": "io.webslider",
     "artifactName": "Web-Slider-App-v${version}.${ext}",
     "productName": "Web Slider",
-    "afterSign": "scripts/notarize.js",
     "mac": {
       "target": "dmg",
       "category": "Web site builder",
@@ -137,9 +136,6 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
-    },
-    "dmg": {
-      "sign": false
     },
     "win": {
       "target": "nsis",

@@ -11,6 +11,8 @@ export async function layerSizeUpdate(
 
   // const layerId = getLayerElementById(id)
   const layerWrapper = getLayerWrapperElementById(id);
+  const layer = getLayerElementById(id);
+
   // const els = document.getElementsByClassName(className);
   // const div = els[0] as HTMLDivElement;
   // const parent = div.parentNode! as HTMLDivElement;
@@ -25,6 +27,8 @@ export async function layerSizeUpdate(
   if (!skipSizeUpdate) {
     layerWrapper.style.width = calculatedObjectSize.width;
     layerWrapper.style.height = calculatedObjectSize.height;
+    layer.style.width = calculatedObjectSize.width;
+    layer.style.height = calculatedObjectSize.height;
   }
 
   layerWrapper.style.left = calculatedObjectSize.left;

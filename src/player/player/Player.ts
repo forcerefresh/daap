@@ -1339,11 +1339,7 @@ export class Player {
     }
   }
 
-  private createEvent(
-    no: number,
-    className: string,
-    objectEvent?: INavigationValues
-  ) {
+  private createEvent(className: string, objectEvent?: INavigationValues) {
     if (!objectEvent) {
       return;
     }
@@ -1424,23 +1420,23 @@ export class Player {
     return slide ? this.normalSlideDataArr?.indexOf(slide) : undefined;
   }
 
-  private createEvents(slideIdx: number, data: ISlideData) {
+  private createEvents(data: ISlideData) {
     data.items.forEach((itemData) => {
-      this.createEvent(slideIdx, itemData.objectClass, itemData.events);
+      this.createEvent(itemData.objectClass, itemData.events);
     });
   }
 
   private createStaticSlide(no: number, data: ISlideData, isLoadSlide = false) {
-    this.createEvents(no, data);
+    this.createEvents(data);
 
     const staticTl = new RootTimeline({
       name: "StaticTimeline",
       duration: -1,
     });
     if (isLoadSlide) {
-      this.loadStaticTimelines[no] = staticTl;
+      this.loadStaticTimelines.push(staticTl);
     } else {
-      this.staticTimelines[no] = staticTl;
+      this.staticTimelines.push(staticTl);
     }
 
     data.items.forEach((itemData) => {
@@ -1455,6 +1451,7 @@ export class Player {
       // Note: create timelines
       const slideParallelTls = createTimelineForObject(itemData);
       slideParallelTls.effTls.forEach((pTl, idx) => {
+        pTl.duration = -1;
         staticTl.add(pTl);
       });
 
@@ -1583,7 +1580,7 @@ export class Player {
     slideEl.style.display = "none";
     slideEl.style.pointerEvents = "none";
 
-    this.createEvents(slideIdx, data);
+    this.createEvents(data);
 
     const slideTimeline = new RootTimeline({
       name: "RootSlideTimeline-id:" + slideIdx,

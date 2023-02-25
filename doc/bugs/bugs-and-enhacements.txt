@@ -43,6 +43,11 @@ Bugs
 
 // Dobde je za prvu verziju
 
+IMPORTTANT LATEST!!!!!!!
+- when disabling Deviced select curent enabled device
+- player uplload
+- integration and res. behavior
+
 IMPORTANT:
 - kada inicijalizujemo i uklanjamo elemnte za strukturalne efekte
 - gestures za mobilni - levo desno

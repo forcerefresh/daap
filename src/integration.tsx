@@ -210,6 +210,25 @@ export const IntegrationContext = React.createContext({
     }): Promise<any> => Promise.resolve({} as IExtensionItem),
   }),
 
+  useRemoteTemplateHook: () => ({
+    /* return template */
+    getRemoteTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    /* returns templates */
+    getRemoteTemplates: (from: number, search: string): Promise<any> =>
+      Promise.resolve({}), // todo: add interface for api response
+
+    /* uninstall template */
+    uninstallRemoteTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+
+    installRemoteTemplate: (req: any): Promise<string> => Promise.resolve(""),
+
+    /* get installed extensions */
+    getInstalledRemoteTemplates: (): Promise<{
+      items: any[] /*ITemplateItem[]*/;
+    }> => Promise.resolve({ items: [] as any[] /*ITemplateItem[]*/ }),
+  }),
+
   useTemplateHook: () => ({
     /* return template */
     getTemplate: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
@@ -418,6 +437,16 @@ function useTemplateHookFactory() {
   }
 }
 
+function useRemoteTemplateHookFactory() {
+  //if (process.env.REACT_APP_INTEGRATION === "electron") {
+  return require("./integration/hooks/remote-template-hook/electron-use-remote-template-hook")
+    .useRemoteTemplateHook;
+  // } else {
+  //   return require("./integration/hooks/template-hook/use-remote-template-hook")
+  //     .useTemplateHook;
+  // }
+}
+
 function getMyUploadComponentFactory() {
   /*if (process.env.REACT_APP_INTEGRATION === "wp") {
     return WPMyImageSelect;
@@ -502,6 +531,7 @@ export const IntegrationContextProvider = (
         useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),
         useLicenseHook: useLicenseHookFactory(),
+        useRemoteTemplateHook: useRemoteTemplateHookFactory(),
       }}
     >
       {props.children}
