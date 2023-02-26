@@ -52,6 +52,7 @@ export interface TextValues {
   underline: boolean;
   lineHeight: string;
   textAlign: string;
+  letterSpacing: string;
   preload: boolean;
 }
 
@@ -66,6 +67,7 @@ export type TextPropertiesTuple = [
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
+  IUnitsNumberInput<"letterSpacing">,
   ICheckboxInput<"preload">
 ];
 
@@ -173,6 +175,14 @@ export function createTextObject(
       extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
+      displayName: "Letter spacing",
+      propertyName: "letterSpacing",
+      inputType: InputType.UNITS_NUMBER,
+      value: "",
+      defaultValue: "",
+      extraOptions: { devices: true, exportForWizard: true, optional: true },
+    },
+    {
       displayName: "Preload fonts",
       propertyName: "preload",
       inputType: InputType.CHECKBOX,
@@ -197,6 +207,7 @@ export function createTextObject(
     underline: false,
     lineHeight: "20px",
     textAlign: "left",
+    letterSpacing: "0px",
     preload: true, // not visible,
   };
 
@@ -209,6 +220,7 @@ export function createTextObject(
       values,
       valuesMetadata: {
         ...{ lineHeight: { exportForWizard: false, disabled: true } },
+        ...{ letterSpacing: { exportForWizard: false, disabled: true } },
       },
     },
     commonStyleDefinition: {
@@ -258,6 +270,10 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
 
   if (!textPropertiesMeta.lineHeight?.disabled) {
     style += "line-height: " + textValues.lineHeight + ";";
+  }
+
+  if (!textPropertiesMeta.letterSpacing?.disabled && textValues.letterSpacing) {
+    style += "letter-spacing: " + textValues.letterSpacing + ";";
   }
 
   if (textValues.italic) {
