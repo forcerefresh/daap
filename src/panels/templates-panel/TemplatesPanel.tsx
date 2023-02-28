@@ -26,6 +26,7 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import css from "./TemplatesPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
+import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -340,12 +341,14 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                       (item) => item.id === template.id
                     ) && (
                       <>
-                        <Button
+                        <ChangeCheckerButton
                           intent="primary"
-                          onClick={() => onLoadTemplate(template.id)}
+                          onAllow={() => onLoadTemplate(template.id)}
+                          onDenied={() => {}}
+                          confirmButtonText="Discard changes and Load template"
                         >
                           Load template
-                        </Button>
+                        </ChangeCheckerButton>
                         <Button
                           disabled={currentlyInstallingTemplates[template.id]}
                           minimal

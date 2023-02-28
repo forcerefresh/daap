@@ -98,6 +98,10 @@ export const IntegrationContext = React.createContext({
     return <div></div>;
   }) as React.FC<getMyUploadComponentProps>,
 
+  CloseMonitorComponent: ((props) => {
+    return <div></div>;
+  }) as React.FC,
+
   useMyMediaHook: () => ({
     upload: (
       type: MediaType,
@@ -458,6 +462,16 @@ function getMyUploadComponentFactory() {
   /** }*/
 }
 
+function getCloseMonitorComponent() {
+  if (process.env.REACT_APP_INTEGRATION === "electron") {
+    return require("./integration/components/close-monitor/electron-close-monitor")
+      .CloseMonitor;
+  } else {
+    return require("./integration/components/close-monitor/close-monitor")
+      .CloseMonitor;
+  }
+}
+
 function useAppSettingsHookFactory() {
   if (process.env.REACT_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/app-settings-hook/electron-use-app-settings-hook")
@@ -525,13 +539,15 @@ export const IntegrationContextProvider = (
         useTemplateHook: useTemplateHookFactory(),
         //useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
-        getMyUploadComponent: getMyUploadComponentFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
         useExtensionsHook: useExtensionsHookFactory(),
         useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),
         useLicenseHook: useLicenseHookFactory(),
         useRemoteTemplateHook: useRemoteTemplateHookFactory(),
+        // components
+        CloseMonitorComponent: getCloseMonitorComponent(),
+        getMyUploadComponent: getMyUploadComponentFactory(),
       }}
     >
       {props.children}

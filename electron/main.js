@@ -6,10 +6,11 @@ const fs = require("fs");
 const windowStateKeeper = require("electron-window-state");
 const { registerFileProtocol } = require("./utils/file-protocol");
 const { copyPlayerFromAppToUserDataDelayed } = require("./utils/copy-player");
+const { registerMainWindow } = require("./integration/system/system");
 
 const {
   getAppSettingsConfiguration,
-} = require("./integration/api-settings/app-settings");
+} = require("./integration/app-settings/app-settings");
 // top-menu
 require("./top-menu");
 
@@ -18,7 +19,7 @@ require("./integration/project/project");
 require("./integration/template/template");
 require("./integration/template/remote-template");
 require("./integration/object-storage/object-storage");
-require("./integration/api-settings/app-settings");
+require("./integration/app-settings/app-settings");
 require("./integration/my-uploads/my-uploads");
 require("./integration/extensions/extensions");
 require("./integration/development/development");
@@ -73,6 +74,7 @@ async function createWindow() {
   mainWindow.once("ready-to-show", () => {
     //mainWindow.webContents.setZoomFactor(0.8);
     mainWindow.show();
+    registerMainWindow(mainWindow);
   });
 
   if (mainWindowState.isMaximized) {
@@ -141,6 +143,10 @@ app.on("window-all-closed", function () {
 
 function createMediaDirs() {
   const userDataPath = app.getPath("userData");
+  const myUploadsPath = path.join(userDataPath, "my-uploads");
+  if (!fs.existsSync(myUploadsPath)) {
+    fs.mkdirSync(myUploadsPath);
+  }
 
   [
     "my-vectors",
@@ -151,7 +157,7 @@ function createMediaDirs() {
     "my-audios",
     "my-extensions",
   ].forEach((type) => {
-    const mPath = path.join(userDataPath, "my-uploads", type);
+    const mPath = path.join(myUploadsPath, type);
     if (!fs.existsSync(mPath)) {
       fs.mkdirSync(mPath);
     }

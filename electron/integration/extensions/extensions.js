@@ -50,11 +50,11 @@ ipcMain.handle("Extensions::InstallExtension", async (event, reqJson) => {
     let res = {};
     if (license?.license?.licenseDetails) {
       res = JSON.parse(atob(license.license.licenseDetails));
-    } else {
-      return Promise.reject();
     }
 
-    const fullPackageUrl = `${extension.packageUrl}?api-key=${res.apiKey}`;
+    const fullPackageUrl = `${extension.packageUrl}?api-key=${
+      res.apiKey || ""
+    }`;
     zipPackage = await downloadToBuffer(fullPackageUrl);
   }
 

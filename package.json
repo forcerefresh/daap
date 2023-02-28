@@ -1,6 +1,11 @@
 {
   "name": "web-slider",
-  "version": "1.0.215",
+  "version": "2023.02.28",
+  "author": {
+    "name": "Force Refresh doo",
+    "email": "support@forcerefresh.io",
+    "url": "https://webslider.io"
+  },
   "private": true,
   "homepage": "./",
   "main": "electron/main.js",
@@ -128,7 +133,8 @@
   "build": {
     "appId": "io.webslider",
     "artifactName": "Web-Slider-App-v${version}.${ext}",
-    "productName": "Web Slider",
+    "productName": "WebSlider",
+    "afterSign": "scripts/notarize.js",
     "mac": {
       "target": "dmg",
       "category": "Web site builder",
@@ -136,6 +142,9 @@
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
       "entitlementsInherit": "build/entitlements.mac.plist"
+    },
+    "dmg": {
+      "sign": false
     },
     "win": {
       "target": "nsis",

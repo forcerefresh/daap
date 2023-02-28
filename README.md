@@ -1,5 +1,9 @@
 ## Run
 
+## Versioning
+
+Version format: YYYY.MM.DD.MICRO
+
 ### Development
 
 Run `yarn start` to run development mode

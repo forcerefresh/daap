@@ -25,6 +25,7 @@ import { getDefaultSlide } from "../../objects/create-object-factory";
 import { SlideType } from "../../store/reducers/i-slides";
 import { IEditor } from "../../store/reducers/editor";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
+import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -292,12 +293,14 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                   {new Date(project.modified).toLocaleTimeString()}
                 </div>
                 <div className={css.action}>
-                  <Button
+                  <ChangeCheckerButton
                     intent="primary"
-                    onClick={() => onOpenProject(project.id)}
+                    onAllow={() => onOpenProject(project.id)}
+                    onDenied={() => {}}
+                    confirmButtonText="Discard changes and Open project"
                   >
                     Open
-                  </Button>
+                  </ChangeCheckerButton>
                   {/*<Button intent="primary">Integration</Button>*/}
                   <Button
                     intent="danger"

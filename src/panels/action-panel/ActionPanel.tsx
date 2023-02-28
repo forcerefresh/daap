@@ -25,6 +25,7 @@ import PublishPanel from "../publish-panel/PublishPanel";
 import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i-object-storage-hook";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { setupNewProject } from "../../store/actions/multi-actions";
+import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -103,10 +104,11 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
+  const CloseMonitorComponent = globalContext?.CloseMonitorComponent;
+
   const { supportStorageObjects, listAssignedStorageObjects } =
     globalContext.useObjectStorageHook();
 
-  const [isDiscardConfirmOpen, setIsDiscardConfirmOpen] = useState(false);
   const isChanged = editor.sliderChanged;
   const isExistingProject = editor.isExistingProject;
 
@@ -130,19 +132,8 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
       (bucket) => bucket.assignedProject?.revision !== meta.saveRevision
     );
 
-  const tryToCreateNew = () => {
-    //if (editor.sliderChanged) {
-    setIsDiscardConfirmOpen(true);
-    //} else {
-    //  createNew();
-    //}
-  };
-
   const createNew = () => {
     _setupNewProject();
-    if (isDiscardConfirmOpen) {
-      setIsDiscardConfirmOpen(false);
-    }
   };
 
   const renderBreakpointButton = (conf: BreakpointConfiguration) => {
@@ -188,7 +179,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           </span>
         </div>
       </div>
-
       <div className={css.actionButtons}>
         {false && (
           <Button
@@ -205,18 +195,18 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             }}
           />
         )}
-
         <>
-          <Button
+          <ChangeCheckerButton
             minimal
-            onClick={() => tryToCreateNew()}
+            onAllow={() => createNew()}
+            onDenied={() => {}}
+            confirmButtonText={"Discard changes and Create New Project"}
             className={css.addNewSlide}
             small={true}
             icon="add"
           >
             New
-          </Button>
-
+          </ChangeCheckerButton>
           <Button
             intent={isChanged ? "primary" : "none"}
             minimal
@@ -283,7 +273,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           Publish
         </Button>
       </div>
-
       <div className={css.previewButtons}>
         <Button
           className={css.previewPlayStop}
@@ -306,37 +295,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           {[...breakpointsConfiguration].reverse().map(renderBreakpointButton)}
         </div>
       </div>
-      <Alert
-        cancelButtonText="Cancel"
-        confirmButtonText={
-          editor.sliderChanged
-            ? "Discard changes and create new Slider"
-            : "Create new Slider"
-        }
-        canOutsideClickCancel={false}
-        icon={
-          <Icon
-            icon="info-sign"
-            size={36}
-            intent={editor.sliderChanged ? Intent.WARNING : Intent.PRIMARY}
-          />
-        }
-        intent={Intent.PRIMARY}
-        isOpen={isDiscardConfirmOpen}
-        onCancel={() => setIsDiscardConfirmOpen(false)}
-        onConfirm={createNew}
-        className="bp3-dark"
-      >
-        {editor.sliderChanged ? (
-          <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
-        ) : (
-          <p>
-            Close current slider and create new one. <br />
-            It's safe to continue without save as you have not made any changes
-            to current project.
-          </p>
-        )}
-      </Alert>
+      <CloseMonitorComponent />
     </div>
   );
 };
