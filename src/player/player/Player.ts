@@ -627,35 +627,42 @@ export class Player {
         !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
         getBooleanValue(transitionData.layout.layoutAdvance?.updateSize, true);
 
-      objDef?.sizeUpdate(
-        {
-          id: transitionData.itemId,
-          values: transitionData.itemValues,
-          className: transitionData.objectClass,
-          calculatedObjectSize: calObjSize,
-          scale: this.scaleParams,
-          skipSizeUpdate: !forceUpdateSize,
-          deviceType: this.currentBp.type,
-          // calculateSize: (
-          //   value: string,
-          //   propertyName: "width" | "height" | "left" | "top"
-          // ) => {
-          //   const relativeTo = getRelativeTo(
-          //     transitionData.layout as ILayout,
-          //     this.currentBp
-          //   );
+      try {
+        objDef?.sizeUpdate(
+          {
+            id: transitionData.itemId,
+            values: transitionData.itemValues,
+            className: transitionData.objectClass,
+            calculatedObjectSize: calObjSize,
+            scale: this.scaleParams,
+            skipSizeUpdate: !forceUpdateSize,
+            deviceType: this.currentBp.type,
+            // calculateSize: (
+            //   value: string,
+            //   propertyName: "width" | "height" | "left" | "top"
+            // ) => {
+            //   const relativeTo = getRelativeTo(
+            //     transitionData.layout as ILayout,
+            //     this.currentBp
+            //   );
 
-          //   return unitValueToPx(
-          //     value,
-          //     propertyName,
-          //     relativeTo,
-          //     this.currentBp
-          //   );
-          // },
-          isInitial,
-        },
-        true
-      );
+            //   return unitValueToPx(
+            //     value,
+            //     propertyName,
+            //     relativeTo,
+            //     this.currentBp
+            //   );
+            // },
+            isInitial,
+          },
+          true
+        );
+      } catch (ex) {
+        console.error(
+          "Function sizeUpdate() has crashed for object " + objDef?.type + ""
+        );
+        console.error(ex);
+      }
     });
   }
 
@@ -855,36 +862,68 @@ export class Player {
   }
 
   public clear(destroy = false) {
+    this.breakpointChecker.stop();
     getTickerInstance().stop();
 
     this.staticTimelines.forEach((tl) => {
-      tl.clear();
-      tl.kill();
+      try {
+        tl.clear();
+        tl.kill();
+      } catch (ex) {
+        console.error("Stopping has failed (1).");
+        console.error(ex);
+      }
     });
     this.staticTimelines = [];
 
     this.loadStaticTimelines.forEach((tl) => {
-      tl.clear();
-      tl.kill();
+      try {
+        tl.clear();
+        tl.kill();
+      } catch (ex) {
+        console.error("Stopping has failed (2).");
+        console.error(ex);
+      }
     });
+
     this.loadStaticTimelines = [];
 
     this.timelines.forEach((tl) => {
-      tl.destroy();
+      try {
+        tl.destroy();
+      } catch (ex) {
+        console.error("Stopping has failed (3).");
+        console.error(ex);
+      }
     });
     this.timelines = [];
 
     this.outEffTimelines.forEach((tl) => {
-      tl?.destroy();
+      try {
+        tl?.destroy();
+      } catch (ex) {
+        console.error("Stopping has failed (4).");
+        console.error(ex);
+      }
     });
     this.outEffTimelines = [];
 
     this.eventTimelines.forEach((tlObj) => {
-      tlObj.rootTimeline.destroy();
+      try {
+        tlObj.rootTimeline.destroy();
+      } catch (ex) {
+        console.error("Stopping has failed (5).");
+        console.error(ex);
+      }
     });
     this.eventTimelines = [];
 
-    this.slideTransitionTimeline?.destroy();
+    try {
+      this.slideTransitionTimeline?.destroy();
+    } catch (ex) {
+      console.error("Stopping has failed (6).");
+      console.error(ex);
+    }
     this.slideTransitionTimeline = undefined;
 
     //this.breakpointChecker.setBPChangeHandler(null);
@@ -892,7 +931,12 @@ export class Player {
 
     this.currentSlideTimelineIdx = 0;
 
-    this.currentSlideTimeline?.destroy();
+    try {
+      this.currentSlideTimeline?.destroy();
+    } catch (ex) {
+      console.error("Stopping has failed (7).");
+      console.error(ex);
+    }
     this.currentSlideTimeline = undefined;
   }
 

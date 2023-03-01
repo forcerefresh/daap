@@ -31,6 +31,10 @@ export class BreakpointChecker {
 
   private int: any;
   init() {
+    if (this.int) {
+      clearInterval(this.int);
+    }
+
     this.int = setInterval(() => {
       this.checkVieport();
       this.check();

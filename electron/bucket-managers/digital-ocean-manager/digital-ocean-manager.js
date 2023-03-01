@@ -26,7 +26,7 @@ class DigitalOceanManager {
       indexUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/index.html`,
       debugUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/debug.html`,
       jsonUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/${projectId}/slider.json`,
-      playerUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/wsplayer/1.0.215/wsplayer.js`,
+      playerUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.digitaloceanspaces.com/wsplayer/2023.02.28/wsplayer.js`,
     };
   }
 

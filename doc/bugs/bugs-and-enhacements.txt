@@ -50,6 +50,7 @@ IMPORTTANT LATEST!!!!!!!
 - player uplload
 - integration and res. behavior
 - smooth idle ext. neradi nesto
+- proveriti sve komponente kada se ubace u docosaurus (proveriti da li objectStop ima sve provere)
 
 IMPORTANT:
 - kada inicijalizujemo i uklanjamo elemnte za strukturalne efekte
