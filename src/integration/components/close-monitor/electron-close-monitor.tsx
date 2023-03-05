@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { IStore } from "../../../store/store";
 
 export interface CloseMonitorProps {
-  onNewVersion?: (ver: string) => void;
+  onNewVersion?: (data: { version: string }) => void;
 }
 
 export const CloseMonitor = (props: CloseMonitorProps) => {
@@ -36,12 +36,13 @@ export const CloseMonitor = (props: CloseMonitorProps) => {
     // TMP ------
 
     ipcRenderer.removeAllListeners(`System::NewVersionAvailable`);
-    ipcRenderer.on(`System::NewVersionAvailable`, (evt: any, message: any) => {
-      const verData = JSON.parse(message);
-      console.log(`System::New version data:`);
-      console.log(verData);
-      onNewVersion?.(verData.availableVersion);
-    });
+    ipcRenderer.on(
+      `System::NewVersionAvailable`,
+      (evt: any, data: { version: string }) => {
+        console.log(data);
+        onNewVersion?.(data);
+      }
+    );
   }, [sliderChanged]);
 
   const sendQuit = () => {

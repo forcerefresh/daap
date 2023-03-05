@@ -40,6 +40,7 @@ autoUpdater.on("download-progress", (progressObj) => {
 autoUpdater.on("update-downloaded", (info) => {
   sendStatusToWindow("Update downloaded");
   sendStatusToWindow(info);
+  mainWindow.webContents.send("System::NewVersionAvailable", info);
 });
 
 // ----------

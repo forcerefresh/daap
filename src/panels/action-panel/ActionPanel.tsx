@@ -301,8 +301,8 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         </div>
       </div>
       <CloseMonitorComponent
-        onNewVersion={(ver: string) => {
-          _updateGlobalConfiguration({ availableVersion: ver });
+        onNewVersion={(props: { version: string }) => {
+          _updateGlobalConfiguration({ availableVersion: props.version });
         }}
       />
     </div>

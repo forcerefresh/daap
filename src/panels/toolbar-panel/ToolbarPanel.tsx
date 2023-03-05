@@ -18,6 +18,7 @@ import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-to
 import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
 import { ReactComponent as HelpIcon } from "../../assets/icons/help-icon.svg";
 import { ReactComponent as BulbIcon } from "../../assets/icons/bulb-icon.svg";
+import { ReactComponent as LinkOut } from "../../assets/icons/link-out.svg";
 
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -113,14 +114,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     <Menu>
       <MenuDivider title={`WebSlider v${appVersion}`} />
       <MenuItem
-        icon={"share"}
+        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="Open Documentation"
         onClick={() => {
           openExternalLink("https://webslider.io/docs/intro");
         }}
       />
       <MenuItem
-        icon={"share"}
+        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="Open Support Forum"
         onClick={() => {
           openExternalLink("https://support.webslider.io");
@@ -128,17 +129,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       />
       <MenuDivider />
       <MenuItem
-        icon={"share"}
+        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="Leave a Feedback"
         onClick={() => {
           openExternalLink("https://support.webslider.io/viewforum.php?f=12");
-        }}
-      />
-      <MenuItem
-        icon={"share"}
-        text="Visit webslider.io"
-        onClick={() => {
-          openExternalLink("https://webslider.io");
         }}
       />
     </Menu>
@@ -383,9 +377,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             position: "absolute",
             bottom: "0px",
             width: "68px",
-            fontSize: "9px",
+            fontSize: "12px",
             padding: "10px 0px",
             textAlign: "center",
+            fontWeight: "bold",
           }}
         >
           {appVersion}
@@ -393,19 +388,38 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
         <div>
           {availableVersion && (
-            <>
-              <Button minimal>
+            <Popover2
+              content={
+                <div style={{ background: "#282828", padding: "20px" }}>
+                  New version {availableVersion} is available and will be
+                  installer after application restart.
+                </div>
+              }
+              shouldReturnFocusOnClose={false}
+              interactionKind={Popover2InteractionKind.CLICK}
+              hoverCloseDelay={10}
+              hoverOpenDelay={15}
+            >
+              <Button
+                minimal
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
                 <BulbIcon
                   style={{
                     color: "#17ffe0",
-                    width: "36px",
-                    height: ICON_SIZE + "px",
+                    width: "26px",
+                    height: 26 + "px",
                     fill: "gray",
                   }}
                 />
+                <div style={{ fontSize: "10px" }}>NEW VERSION AVAILABLE</div>
               </Button>
-              <div>{availableVersion}</div>
-            </>
+            </Popover2>
           )}
           <Popover2
             content={helpMenu}
