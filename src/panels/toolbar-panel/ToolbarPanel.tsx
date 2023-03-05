@@ -1,4 +1,13 @@
-import { Button, Icon, Portal, Tag, Text } from "@blueprintjs/core";
+import {
+  Button,
+  Icon,
+  Menu,
+  MenuDivider,
+  MenuItem,
+  Portal,
+  Tag,
+  Text,
+} from "@blueprintjs/core";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -7,6 +16,8 @@ import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool
 import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
 import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-tool.svg";
 import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
+import { ReactComponent as HelpIcon } from "../../assets/icons/help-icon.svg";
+import { ReactComponent as BulbIcon } from "../../assets/icons/bulb-icon.svg";
 
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -28,6 +39,7 @@ import MediaLibraryPanel from "../media-library/MediaLibraryPanel";
 import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { IntegrationContext } from "../../integration";
+import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 
 enum VisiblePanel {
   None = "none",
@@ -59,6 +71,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     _setStageTool,
     setZoomFit,
     missingExtensions,
+    appVersion,
+    availableVersion,
   } = props;
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
@@ -89,6 +103,46 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const displayZoom = Number.isInteger(zoom * 100)
     ? zoom * 100
     : (zoom * 100).toFixed(2);
+
+  const openExternalLink = (url: string) => {
+    const { shell } = window.require("electron");
+    shell.openExternal(url);
+  };
+
+  const helpMenu = (
+    <Menu>
+      <MenuDivider title={`WebSlider v${appVersion}`} />
+      <MenuItem
+        icon={"share"}
+        text="Open Documentation"
+        onClick={() => {
+          openExternalLink("https://webslider.io/docs/intro");
+        }}
+      />
+      <MenuItem
+        icon={"share"}
+        text="Open Support Forum"
+        onClick={() => {
+          openExternalLink("https://support.webslider.io");
+        }}
+      />
+      <MenuDivider />
+      <MenuItem
+        icon={"share"}
+        text="Leave a Feedback"
+        onClick={() => {
+          openExternalLink("https://support.webslider.io/viewforum.php?f=12");
+        }}
+      />
+      <MenuItem
+        icon={"share"}
+        text="Visit webslider.io"
+        onClick={() => {
+          openExternalLink("https://webslider.io");
+        }}
+      />
+    </Menu>
+  );
 
   return (
     <div className={css.toolbar}>
@@ -324,19 +378,67 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Portal>
         </div>
 
-        <div></div>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "0px",
+            width: "68px",
+            fontSize: "9px",
+            padding: "10px 0px",
+            textAlign: "center",
+          }}
+        >
+          {appVersion}
+        </div>
+
+        <div>
+          {availableVersion && (
+            <>
+              <Button minimal>
+                <BulbIcon
+                  style={{
+                    color: "#17ffe0",
+                    width: "36px",
+                    height: ICON_SIZE + "px",
+                    fill: "gray",
+                  }}
+                />
+              </Button>
+              <div>{availableVersion}</div>
+            </>
+          )}
+          <Popover2
+            content={helpMenu}
+            placement="left-end"
+            interactionKind={Popover2InteractionKind.CLICK}
+            hoverCloseDelay={100}
+            hoverOpenDelay={150}
+          >
+            <Button minimal>
+              <HelpIcon
+                style={{
+                  width: "36px",
+                  height: ICON_SIZE + "px",
+                  fill: "gray",
+                }}
+              />
+            </Button>
+          </Popover2>
+        </div>
       </div>
     </div>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { stage, project } = state;
+  const { stage, project, globals } = state;
   const { settings } = project;
 
   const zoom = getZoom(stage, settings);
 
   return {
+    appVersion: globals.appVersion,
+    availableVersion: globals.availableVersion,
     missingExtensions: state.editor.missingExtensions,
     zoom: zoom,
     zoomFit: state.stage.zoomFit,

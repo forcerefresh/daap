@@ -11,7 +11,7 @@ exports.default = async function notarizing(context) {
   const appBundleId = "io.forcerefresh.webslider";
   const appPath = `${appOutDir}/${appName}.app`;
   const appleId = "jelena.arsic@forcerefresh.io";
-  const appleIdPassword = "twvx-ovny-ufiw-pkwn";
+  const appleIdPassword = "pfvh-gtff-wloc-fdwx";
   const teamId = "L337ULATL3";
 
   await notarize({

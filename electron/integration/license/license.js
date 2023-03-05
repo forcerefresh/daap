@@ -1,8 +1,10 @@
 const { app, ipcMain } = require("electron");
 var path = require("path");
 const fs = require("fs");
+const { v4: uuid } = require("uuid");
 const fsPromise = require("fs/promises");
 const { checkFileExists } = require("../../utils/utils");
+const fetch = require("node-fetch");
 
 ipcMain.handle("License::GetLicenseDetails", async (event, reqJson) => {
   const license = await loadLicenseData();
@@ -14,8 +16,19 @@ ipcMain.handle("License::GetLicenseDetails", async (event, reqJson) => {
 });
 
 ipcMain.handle("License::SaveSerialAndLicense", async (event, reqJson) => {
-  const existingLicense = await loadLicenseData();
   const license = JSON.parse(reqJson);
+
+  const uniqueKey = getUniqueLicenseKey();
+
+  const transferQuery = license.allowTransfer ? "&allow-transfer=1" : "";
+  let licenseData = await fetch(
+    `https://subscriptions.webslider.io/check-subscription?subscription-id=${license.serial}&unique-key=${uniqueKey}` +
+      transferQuery
+  ).then((data) => data.json());
+
+  license.license = licenseData;
+
+  const existingLicense = await loadLicenseData();
 
   const newLicense = { ...existingLicense, ...license };
 
@@ -50,6 +63,22 @@ function getLicensePath() {
   return path.join(userDataPath, "license", "license.json");
 }
 
+function getUniqueLicenseKey() {
+  const userDataPath = app.getPath("userData");
+  const dirPath = path.join(userDataPath, "license");
+  const filePath = path.join(dirPath, "unique.json");
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath);
+  }
+  if (!fs.existsSync(filePath)) {
+    fs.writeFileSync(filePath, JSON.stringify({ unique: uuid() }));
+  }
+
+  const str = fs.readFileSync(filePath, "utf-8");
+  const data = JSON.parse(str);
+  return data.unique;
+}
+
 async function saveLicenseData(license) {
   await fsPromise.writeFile(
     getLicensePath(),
@@ -59,4 +88,5 @@ async function saveLicenseData(license) {
 
 module.exports = {
   loadLicenseData,
+  getUniqueLicenseKey,
 };

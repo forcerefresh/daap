@@ -10,6 +10,7 @@ import {
   setDevice,
   setStagePreview,
   updateEditor,
+  updateGlobalConfiguration,
   updateProjectMeta,
 } from "../../store/actions/actions";
 import { IPreviewState } from "../../store/reducers/stage";
@@ -26,6 +27,7 @@ import { ObjectStorageItem } from "../../integration/hooks/object-storage-hook/i
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { setupNewProject } from "../../store/actions/multi-actions";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
+import { IAppSettings } from "../../store/reducers/globals";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -87,6 +89,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     layers,
     objects,
     settings,
+    _updateGlobalConfiguration,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // logic for handling click outside
@@ -104,7 +107,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
-  const CloseMonitorComponent = globalContext?.CloseMonitorComponent;
+  const CloseMonitorComponent = globalContext?.CloseMonitorComponent as
+    | React.FC
+    | any;
 
   const { supportStorageObjects, listAssignedStorageObjects } =
     globalContext.useObjectStorageHook();
@@ -295,7 +300,11 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           {[...breakpointsConfiguration].reverse().map(renderBreakpointButton)}
         </div>
       </div>
-      <CloseMonitorComponent />
+      <CloseMonitorComponent
+        onNewVersion={(ver: string) => {
+          _updateGlobalConfiguration({ availableVersion: ver });
+        }}
+      />
     </div>
   );
 };
@@ -315,6 +324,8 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = {
+  _updateGlobalConfiguration: (config: Partial<IAppSettings>) =>
+    updateGlobalConfiguration(config),
   _setStagePreview: (previewState: Partial<IPreviewState>) =>
     setStagePreview(previewState),
   _createNewProject: () => createNewProject(),

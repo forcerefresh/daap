@@ -5,6 +5,8 @@ export interface IAppSettings {
   appZoom: number;
   enableDeveloper: boolean;
   devTools: boolean;
+  appVersion?: string;
+  availableVersion?: string;
 }
 
 export function globals(

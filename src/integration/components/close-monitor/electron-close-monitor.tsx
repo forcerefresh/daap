@@ -3,7 +3,13 @@ import { Alert, Intent, Icon } from "@blueprintjs/core";
 import { useSelector } from "react-redux";
 import { IStore } from "../../../store/store";
 
-export const CloseMonitor = () => {
+export interface CloseMonitorProps {
+  onNewVersion?: (ver: string) => void;
+}
+
+export const CloseMonitor = (props: CloseMonitorProps) => {
+  const { onNewVersion } = props;
+
   const sliderChanged = useSelector(
     (state: IStore) => state.editor.sliderChanged
   );
@@ -19,6 +25,22 @@ export const CloseMonitor = () => {
       } else {
         sendQuit();
       }
+    });
+
+    // TMP ------
+    ipcRenderer.removeAllListeners(`System::Logger`);
+    ipcRenderer.on(`System::Logger`, (evt: any, message: any) => {
+      console.log(`System::Logger message:`);
+      console.log(message);
+    });
+    // TMP ------
+
+    ipcRenderer.removeAllListeners(`System::NewVersionAvailable`);
+    ipcRenderer.on(`System::NewVersionAvailable`, (evt: any, message: any) => {
+      const verData = JSON.parse(message);
+      console.log(`System::New version data:`);
+      console.log(verData);
+      onNewVersion?.(verData.availableVersion);
     });
   }, [sliderChanged]);
 

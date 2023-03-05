@@ -5,8 +5,8 @@ if (process.platform === "darwin") {
     {
       label: app.getName(),
       submenu: [
-        { role: "about" },
-        { type: "separator" },
+        // { role: "about" },
+        // { type: "separator" },
         { role: "hide" },
         { role: "hideothers" },
         { role: "unhide" },
@@ -25,11 +25,11 @@ if (process.platform === "darwin") {
         { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
         { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
         { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        {
-          label: "Select All",
-          accelerator: "CmdOrCtrl+A",
-          selector: "selectAll:",
-        },
+        // {
+        //   label: "Select All",
+        //   accelerator: "CmdOrCtrl+A",
+        //   selector: "selectAll:",
+        // },
       ],
     },
 

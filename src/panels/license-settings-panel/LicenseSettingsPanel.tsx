@@ -21,6 +21,7 @@ import {
   getLicenseNameByType,
   getSubscriptionNameByType,
 } from "./license-utils";
+import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 
 enum GlobalPanelSections {
   LicenseConfiguration = "licenseConfiguration",
@@ -62,6 +63,14 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
     });
   }, []);
 
+  const saveLicenseKey = async (allowTransfer = false) => {
+    setLoading(true);
+    await saveSerial({ serial: currentSerial, allowTransfer });
+    const licenceDetails = await getLicenseDetails();
+    setLicenseDetails(licenceDetails);
+    setLoading(false);
+  };
+
   return (
     <div className={css.licenseSettingsPanel}>
       <section>
@@ -85,20 +94,20 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
         {visibleSectionIds[GlobalPanelSections.LicenseConfiguration] && (
           <div className={css.panel}>
             <div className={css.serialGroup}>
-              {getTextField("Serial Number", currentSerial, (serial) => {
-                setCurrentSerial(serial);
-              })}
+              {getTextField(
+                "License Key or Item Purchase Code",
+                currentSerial,
+                (serial) => {
+                  setCurrentSerial(serial);
+                }
+              )}
             </div>
             <div>
               <Button
                 loading={loading}
                 intent={licenseDetails.status === "OK" ? "none" : "primary"}
                 onClick={async () => {
-                  setLoading(true);
-                  await saveSerial({ serial: currentSerial });
-                  const licenceDetails = await getLicenseDetails();
-                  setLicenseDetails(licenceDetails);
-                  setLoading(false);
+                  saveLicenseKey();
                 }}
               >
                 {licenseDetails.status === "OK"
@@ -109,46 +118,109 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
             <div className={css.licenseDetails}>
               <strong>License details</strong>
 
-              {licenseDetails && (
-                <div>
-                  Status:{" "}
-                  {licenseDetails.status === "OK" && (
-                    <span className={css.licenseStatusOk}>
-                      Your license is active.
-                    </span>
-                  )}
-                  {licenseDetails.status === "EXPIRED" && (
-                    <span className={css.licenseStatusError}>
-                      Your subscription license is expired. Please goto
-                      webslider.io to renew it.
-                    </span>
-                  )}
-                  {licenseDetails.status === "DOES_NOT_EXIST" && (
-                    <>
-                      <span className={css.licenseStatusError}>
-                        Serial Number is not found or it's not valid. Please
-                        enter a Serial Number and Activate.
+              {licenseDetails?.status && (
+                <>
+                  <div>
+                    Status:{" "}
+                    {licenseDetails.status === "OK" && (
+                      <span className={css.licenseStatusOk}>
+                        Your license is active.
                       </span>
-                      <br />
-                      {/* <span>
+                    )}
+                    {licenseDetails.status === "EXPIRED" && (
+                      <span className={css.licenseStatusError}>
+                        Your subscription license is expired. Please goto
+                        webslider.io to renew it.
+                      </span>
+                    )}
+                    {licenseDetails.status === "LICENSE_USED" && (
+                      <span className={css.licenseStatusError}>
+                        LICENSE IS IN USE. License is for one developer/machine.
+                        It cannot be used for more that one installation.
+                      </span>
+                    )}
+                    {licenseDetails.status === "DOES_NOT_EXIST" && (
+                      <>
+                        <span className={css.licenseStatusError}>
+                          Serial Number is not found or it's not valid. Please
+                          enter a Serial Number and Activate.
+                        </span>
+                        <br />
+                        {/* <span>
                         <strong>Note:</strong> Application is partially disabled
                         without Serial Number.
                       </span> */}
-                      <div>
-                        Note:{" "}
-                        <span className={css.licenseStatusError}>
-                          To enable all features, restart the app after
-                          activation.
-                          <br />
-                          {/* <span>
+                        <div>
+                          Note:{" "}
+                          <span className={css.licenseStatusError}>
+                            To enable all features, restart the app after
+                            activation.
+                            <br />
+                            {/* <span>
                     <strong>Note:</strong> Application is partially disabled
                     without Serial Number.
                   </span> */}
-                        </span>
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  {licenseDetails?.status === "LICENSE_USED" && (
+                    <div>
+                      <strong>
+                        To fix license issue follow one of the suggested options
+                      </strong>
+                      <div style={{ padding: "15px" }}>
+                        1. Transfer your license to this installation.
+                        <br />
+                        <strong>NOTE:</strong> After you transfer license to
+                        this machine, license will not be active anymore on
+                        other machines. <br />
+                        <ConfirmButton
+                          intent="primary"
+                          onClose={() => {}}
+                          onConfirm={() => {
+                            saveLicenseKey(true);
+                          }}
+                          buttonProps={{
+                            text: "Transfer license",
+                            disabled: loading,
+                          }}
+                          dialogProps={{}}
+                          text="Download"
+                          title={"Confirm license transfer"}
+                        >
+                          <>
+                            <p>Confirm license transfer to this machine.</p>
+                            <p>
+                              <strong>NOTE:</strong> After you transfer license
+                              to this machine, license will not be active
+                              anymore on other machines.
+                            </p>
+                          </>
+                        </ConfirmButton>
                       </div>
-                    </>
+
+                      <div style={{ padding: "15px" }}>
+                        2. Buy another license for this machine.
+                        <br />
+                        <Button
+                          disabled={loading}
+                          intent="primary"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            const { shell } = window.require("electron");
+                            shell.openExternal("http://webslider.io/prices");
+                          }}
+                        >
+                          Purchase another license
+                        </Button>
+                      </div>
+                    </div>
                   )}
-                </div>
+                </>
               )}
               {!licenseDetails?.status && (
                 <>
@@ -187,14 +259,14 @@ const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
                       {getLicenseNameByType(licenseDetails.licenseType)}
                     </span>
                   </div>
-                  <div>
+                  {/* <div>
                     Subscription period:{" "}
                     <span className={css.licenseSubscriptionPlan}>
                       {getSubscriptionNameByType(
                         licenseDetails.subscriptionType
                       )}
                     </span>
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>

@@ -146,7 +146,10 @@ export const IntegrationContext = React.createContext({
   }),
 
   useLicenseHook: () => ({
-    saveSerial: (props: { serial: string }): Promise<void> => {
+    saveSerial: (props: {
+      serial: string;
+      allowTransfer: boolean;
+    }): Promise<void> => {
       return Promise.resolve();
     },
 

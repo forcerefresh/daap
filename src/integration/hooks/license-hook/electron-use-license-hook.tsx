@@ -1,16 +1,17 @@
 import { getLicenseDetailsResponse } from "../../../integration";
 
 export const useLicenseHook = () => {
-  const saveSerial = (props: { serial: string }): Promise<void> => {
+  const saveSerial = (props: {
+    serial: string;
+    allowTransfer: boolean;
+  }): Promise<void> => {
     return new Promise(async (resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 
-      const licenseData = await fetch(
-        `https://subscriptions.webslider.io/check-subscription?subscription-id=${props.serial}`
-      ).then((data) => data.json());
-
-      const license = { serial: props.serial, license: licenseData };
-
+      const license = {
+        serial: props.serial,
+        allowTransfer: props.allowTransfer,
+      };
       ipcRenderer
         .invoke("License::SaveSerialAndLicense", JSON.stringify(license))
         .then((result: any) => {

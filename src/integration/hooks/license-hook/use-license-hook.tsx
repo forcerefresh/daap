@@ -1,7 +1,10 @@
 import { getLicenseDetailsResponse } from "../../../integration";
 
 export const useLicenseHook = () => {
-  const saveSerial = async (props: { serial: string }): Promise<void> => {
+  const saveSerial = async (props: {
+    serial: string;
+    allowTransfer: boolean;
+  }): Promise<void> => {
     const license = JSON.parse(localStorage.getItem(`license`) || "{}");
 
     license.serial = props.serial;

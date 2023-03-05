@@ -15,6 +15,8 @@ ipcMain.handle("AppSettings::ScaleUI", async (event, reqJson) => {
 
 ipcMain.handle("AppSettings::GetSettings", async (event, reqJson) => {
   const settings = await loadAppSettings();
+  settings.appVersion = app.getVersion();
+  console.log(app.getVersion());
   return settings;
 });
 
