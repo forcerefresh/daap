@@ -299,6 +299,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   const ManagerClass = getBucketManagerClass(bucketWithKeys.platform);
   const bucketManager = new ManagerClass(bucketWithKeys);
 
+  console.log(bucketWithKeys);
+
   // get publish urls >>
   const publishDetails = await bucketManager.getPublishDetails(
     bucket,
@@ -313,8 +315,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   let error;
   const files = await getPlayerFiles();
   for (const file of files) {
-    if (file === ".DS_Store") continue;
-
     try {
       await bucketManager.uploadFileToBucket(
         bucket,
@@ -829,11 +829,12 @@ async function saveObjectStorage(objectStorage) {
 }
 
 async function getPlayerFiles() {
-  const playerPath = getPlayerPath();
+  return ["wsplayer.js"];
+  // const playerPath = getPlayerPath();
 
-  const files = await fs.promises.readdir(playerPath);
+  // const files = await fs.promises.readdir(playerPath);
 
-  return files.filter((file) => file !== ".DS_Store");
+  // return files.filter((file) => file !== ".DS_Store");
 }
 /*
 async function uploadFileToS3(s3, bucketName, filePath, key) {

@@ -733,21 +733,32 @@ export class Player {
   private updateVisibility() {
     const type = this.currentBp.type;
     this.playerData?.itemsVisibility.forEach((itemVisibility) => {
+      const elType =
+        itemVisibility.itemType === "layer"
+          ? "layer-wrapper"
+          : itemVisibility.itemType;
       const itemEl = this.rootDiv.getElementsByClassName(
-        itemVisibility.itemType + "-" + itemVisibility.id
+        elType + "-" + itemVisibility.id
       )[0] as HTMLDivElement | undefined;
 
       if (itemEl) {
-        if (!this.visibilityDisplayState[itemVisibility.id]) {
-          this.visibilityDisplayState[itemVisibility.id] =
+        if (!this.visibilityDisplayState["display-" + itemVisibility.id]) {
+          this.visibilityDisplayState["display-" + itemVisibility.id] =
             itemEl.style.display || "block";
+          this.visibilityDisplayState["pointerEvents-" + itemVisibility.id] =
+            itemEl.style.pointerEvents || "auto";
         }
 
         const newDisplay = itemVisibility.displayOn.includes(type)
-          ? this.visibilityDisplayState[itemVisibility.id]
+          ? this.visibilityDisplayState["display-" + itemVisibility.id]
+          : "none";
+
+        const newPointerEvents = itemVisibility.displayOn.includes(type)
+          ? this.visibilityDisplayState["pointerEvents-" + itemVisibility.id]
           : "none";
 
         itemEl.style.display = newDisplay;
+        itemEl.style.pointerEvents = newPointerEvents;
       }
     });
   }
