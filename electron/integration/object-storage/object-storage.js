@@ -358,7 +358,8 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
           )
         );
       }
-      if (assetItem.sourceType === "local") {
+      // NOTE: assetItem.localFilename checks if user uses empty for media input
+      if (assetItem.sourceType === "local" && assetItem.localFilename) {
         let filename = assetItem.localFilename;
         if (assetItem.filename) {
           filename = assetItem.filename;
@@ -595,7 +596,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       if (assetItem.sourceType === "library") {
         pArr.push(downloadToBuffer(assetItem.url));
       }
-      if (assetItem.sourceType === "local") {
+      if (assetItem.sourceType === "local" && assetItem.localFilename) {
         pArr.push(
           fileToBuffer(path.join(getMyImagesPath(), assetItem.localFilename))
         );
@@ -622,7 +623,8 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
           });
         }
 
-        if (assetItem.sourceType === "local") {
+        // NOTE: assetItem.localFilename checks if user uses empty for media input
+        if (assetItem.sourceType === "local" && assetItem.localFilename) {
           filename = assetItem.localFilename;
           if (assetItem.filename) {
             filename = assetItem.filename;
@@ -693,7 +695,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         extension.packageFiles.playerObjectFilename ||
         extension.packageFiles.playerAnimationFilename;
 
-      const extensionZipFilePath = `wsplayer/extensions/${filename}`;
+      const extensionZipFilePath = `${req.projectId}/wsplayer/extensions/${filename}`;
       zip.file(extensionZipFilePath, buf);
 
       BrowserWindow.getAllWindows()[0].webContents.send(
@@ -775,7 +777,7 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       "utf-8"
     );
     //const indexBuffer = Buffer.from(fileCont, "utf-8");
-    zip.file(`wsplayer/${file}`, fileCont);
+    zip.file(`${req.projectId}/wsplayer/${file}`, fileCont);
 
     BrowserWindow.getAllWindows()[0].webContents.send(
       `ObjectStorageRenderer::SubscribeToPublishDetails`,

@@ -14,7 +14,7 @@ export async function loadAndRegisterExternalComponentForPlayer(
     extensionFileName?.startsWith("http:") ||
     extensionFileName?.startsWith("https:")
       ? extensionFileName
-      : "../extensions/" + extensionFileName;
+      : "./extensions/" + extensionFileName;
 
   try {
     await import(/* @ts-ignore */ /* webpackIgnore: true */ extensionUrl);

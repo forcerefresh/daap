@@ -43,11 +43,11 @@ Bugs
 
 - (DONE v1.0.6) kod kloniranja neklonira se animation id
 - (DONE v1.0.6) player uplload
+- (DONE v1.0.6) publish chrash i extension is empty - does not have selected file (audio object, sheck other)
 
 // Dobde je za prvu verziju
 
 IMPORTTANT LATEST!!!!!!!
-- publish chrash i extension is empty - does not have selected file (audio object, sheck other)
 - kada se podesi layer da se neprikazuje desava se da nemoze da se klikne iza
 - audio nemoze da se doda jer nema audio komponente
 - video je mutiran i treba opcija da bude pauziran

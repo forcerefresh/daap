@@ -113,7 +113,7 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
             ? getMyImagesPath()
             : undefined;
 
-        if (assetRoot) {
+        if (assetRoot && assetItem.localFilename) {
           pArr.push(
             fileToBuffer(path.join(assetRoot, assetItem.localFilename))
           );
