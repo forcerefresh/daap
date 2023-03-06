@@ -15,6 +15,7 @@ import {
 import update from "immutability-helper";
 import { EmptyID } from "../types";
 import { ISlide, ISlides, SlideType } from "./i-slides";
+import { applyNewAnimationIdsToTransitionAbleElement } from "./objects";
 
 const getSlidesDefault = () => ({
   nextSlideIdCounter: 1,
@@ -204,6 +205,7 @@ export function slides(
         const fromSlide = state.slideById[slideItem.fromId];
         if (!slideItem.skipCreate) {
           const toSlide = cloneDeep(fromSlide);
+          applyNewAnimationIdsToTransitionAbleElement(toSlide);
           toSlide.id = slideItem.toId as string;
           toSlide.name += " (copy)";
           toSlide.layerIds = slideItem.childs.map((item) => item.toId!);

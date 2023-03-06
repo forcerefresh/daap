@@ -1,4 +1,4 @@
-import { cloneDeep, forIn, omit, without } from "lodash-es";
+import { cloneDeep, forEach, forIn, omit, without } from "lodash-es";
 import { object } from "yup";
 import {
   getCommonPropertiesMetadataValues,
@@ -15,6 +15,12 @@ import {
   MOVE_OBJECTS,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
+import {
+  IObject,
+  ITransition,
+  ITransitionAble,
+} from "webslider-sdk/lib/objects/i-object";
+import { v4 as uuid } from "uuid";
 
 const getObjectsDefault = (): IObjects => ({
   objectById: {},
@@ -71,6 +77,7 @@ export function objects(
             toObject.id = objectItem.toId!; // CHEK THI !
             toObject.name += " (copy)";
             toObject.layerId = layerItem.toId!;
+            applyNewAnimationIdsToTransitionAbleElement(toObject);
             newState.allObjects.push(toObject.id);
             newState.objectById[toObject.id] = toObject;
           });
@@ -117,4 +124,15 @@ export function objects(
     default:
       return state;
   }
+}
+
+export function applyNewAnimationIdsToTransitionAbleElement(
+  object: ITransitionAble
+) {
+  Object.keys(object.transitions).forEach((key: string) => {
+    const animArr = (object.transitions as any)[key];
+    animArr.forEach((anim: ITransition) => {
+      anim.uid = uuid();
+    });
+  });
 }

@@ -178,7 +178,7 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
           <div className={cx(css.listHeader)}>
             <div className={css.cb}></div>
             <div className={css.content}>Bucket</div>
-            <div className={css.status}>Status</div>
+            {/* <div className={css.status}>Status</div> */}
           </div>
 
           <div className={css.list}>
@@ -207,7 +207,7 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
                     <br />
                     Environment: <strong>{item.environment}</strong>
                   </div>
-                  <div className={css.status}>
+                  {/* <div className={css.status}>
                     {!isUploaded ? (
                       <>
                         <p>
@@ -249,7 +249,7 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
                     >
                       {isUploaded ? "Upload Player Again" : "Upload Player"}
                     </Button>
-                  </div>
+                  </div> */}
                 </div>
               );
             })}

@@ -20,6 +20,7 @@ import {
   getCommonPropertiesMetadataValues,
   getCommonPropertiesValues,
 } from "webslider-sdk/lib/objects/common-properties";
+import { applyNewAnimationIdsToTransitionAbleElement } from "./objects";
 
 const getLayersDefault = () => ({ layerById: {}, allLayers: [] });
 
@@ -69,6 +70,7 @@ export function layers(
 
           if (!layerItem.skipCreate) {
             const toLayer = cloneDeep(fromLayer);
+            applyNewAnimationIdsToTransitionAbleElement(toLayer);
             toLayer.id = layerItem.toId!;
             toLayer.name += " (copy)";
             toLayer.objectIds = layerItem.childs.map((item) => item.toId!);

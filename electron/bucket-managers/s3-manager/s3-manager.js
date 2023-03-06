@@ -21,7 +21,7 @@ class S3Manager {
       indexUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/index.html`,
       debugUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/debug.html`,
       jsonUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/slider.json`,
-      playerUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/wsplayer/1.0.3/wsplayer.js`,
+      playerUrl: `https://${bucketConfig.bucketName}.s3.${bucketConfig.region}.amazonaws.com/${projectId}/wsplayer.js`,
     };
   }
 

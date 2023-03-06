@@ -124,50 +124,52 @@ ipcMain.handle("ObjectStorage::Delete", async (event, reqJson) => {
 ipcMain.handle("ObjectStorage::UploadPlayer", async (event, reqJson) => {
   debug("Handle ObjectStorage::UploadPlayer");
 
-  const req = JSON.parse(reqJson);
+  // const req = JSON.parse(reqJson);
 
-  const objectStorageList = await loadObjectStorage();
+  // const objectStorageList = await loadObjectStorage();
 
-  const bucket = objectStorageList.find((item) => item.id === req.id);
+  // const bucket = objectStorageList.find((item) => item.id === req.id);
 
-  const files = await getPlayerFiles();
+  // const files = await getPlayerFiles();
 
-  const secretKey = await keytar.getPassword(
-    "wsSliderAppBucketKey",
-    bucket.platform + "_" + bucket.bucketName
-  );
+  // const secretKey = await keytar.getPassword(
+  //   "wsSliderAppBucketKey",
+  //   bucket.platform + "_" + bucket.bucketName
+  // );
 
-  const ManagerClass = getBucketManagerClass(bucket.platform);
-  const bucketManager = new ManagerClass({
-    ...bucket,
-    secretKey,
-  });
+  // const ManagerClass = getBucketManagerClass(bucket.platform);
+  // const bucketManager = new ManagerClass({
+  //   ...bucket,
+  //   secretKey,
+  // });
 
-  let error = null;
-  for (const file of files) {
-    if (file === ".DS_Store") continue;
+  // let error = null;
+  // for (const file of files) {
+  //   if (file === ".DS_Store") continue;
 
-    try {
-      await bucketManager.uploadFileToBucket(
-        bucket,
-        path.join(getPlayerPath(), file),
-        `wsplayer/${app.getVersion()}/${file}`
-      );
-    } catch (ex) {
-      error = ex.toString();
-      break;
-    }
-  }
+  //   try {
+  //     await bucketManager.uploadFileToBucket(
+  //       bucket,
+  //       path.join(getPlayerPath(), file),
+  //       `wsplayer/${app.getVersion()}/${file}`
+  //     );
+  //   } catch (ex) {
+  //     error = ex.toString();
+  //     break;
+  //   }
+  // }
 
-  if (error) {
-    return { status: "ERROR", error };
-  }
+  // if (error) {
+  //   return { status: "ERROR", error };
+  // }
 
-  bucket.playerStatus = "uploaded";
+  // bucket.playerStatus = "uploaded";
 
-  await saveObjectStorage(objectStorageList);
+  // await saveObjectStorage(objectStorageList);
 
-  return { status: "OK" };
+  //return { status: "OK" };
+
+  return { status: "Operation is not available from version 1.0.6" };
 });
 
 ipcMain.handle("ObjectStorage::Get", async (event, reqJson) => {
@@ -307,6 +309,28 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // TODO
   const project = await loadProject(req.projectId);
 
+  // upload player
+  let error;
+  const files = await getPlayerFiles();
+  for (const file of files) {
+    if (file === ".DS_Store") continue;
+
+    try {
+      await bucketManager.uploadFileToBucket(
+        bucket,
+        path.join(getPlayerPath(), file),
+        `${req.projectId}/wsplayer/${file}`
+      );
+    } catch (ex) {
+      error = ex.toString();
+      break;
+    }
+  }
+  if (error) {
+    return { status: "ERROR", error };
+  }
+  // upload player
+
   // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
 
@@ -315,7 +339,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     JSON.stringify([{ log: "Publish started" }])
   );
 
-  let error;
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {
     const pArr = [];
@@ -408,7 +431,7 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
       bucketManager.uploadFileToBucket(
         bucketWithKeys,
         playerExtensionPath,
-        `wsplayer/extensions/${extensionFileName}`
+        `${req.projectId}/wsplayer/extensions/${extensionFileName}`
       )
     );
   }
@@ -464,13 +487,13 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
     if (extension.packageFiles?.playerAnimationFilename) {
       extension.packageFiles.playerAnimationFilename =
         publishDetails.bucketUrl +
-        "wsplayer/extensions/" +
+        `${req.projectId}/wsplayer/extensions/` +
         extension.packageFiles?.playerAnimationFilename;
     }
     if (extension.packageFiles?.playerObjectFilename) {
       extension.packageFiles.playerObjectFilename =
         publishDetails.bucketUrl +
-        "wsplayer/extensions/" +
+        `${req.projectId}/wsplayer/extensions/` +
         extension.packageFiles?.playerObjectFilename;
     }
 
@@ -600,7 +623,10 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
         }
 
         if (assetItem.sourceType === "local") {
-          filename = assetItem.filename;
+          filename = assetItem.localFilename;
+          if (assetItem.filename) {
+            filename = assetItem.filename;
+          }
 
           assetsResult.push({
             fromUrl: "file://" + assetItem.localFilename,
@@ -639,13 +665,21 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       extension.packageFiles.playerObjectFilename ||
       extension.packageFiles.playerAnimationFilename;
 
-    const playerExtensionPath = path.join(
+    let playerExtensionPath = path.join(
       userDataPath,
       "my-uploads",
       "my-extensions",
       extension.type,
       extensionFileName
     );
+    if (!(await checkFileExists(playerExtensionPath))) {
+      playerExtensionPath = path.join(
+        userDataPath,
+        "extensions",
+        extension.type,
+        extensionFileName
+      );
+    }
 
     pArr.push(fileToBuffer(playerExtensionPath));
   }
@@ -741,11 +775,11 @@ ipcMain.handle("ObjectStorage::Download", async (event, reqJson) => {
       "utf-8"
     );
     //const indexBuffer = Buffer.from(fileCont, "utf-8");
-    zip.file(`wsplayer/${app.getVersion()}/${file}`, fileCont);
+    zip.file(`wsplayer/${file}`, fileCont);
 
     BrowserWindow.getAllWindows()[0].webContents.send(
       `ObjectStorageRenderer::SubscribeToPublishDetails`,
-      JSON.stringify([{ log: `Add player files to package` }])
+      JSON.stringify([{ log: `Add player files to package: ` + file }])
     );
   }
 
@@ -796,7 +830,8 @@ async function getPlayerFiles() {
   const playerPath = getPlayerPath();
 
   const files = await fs.promises.readdir(playerPath);
-  return files;
+
+  return files.filter((file) => file !== ".DS_Store");
 }
 /*
 async function uploadFileToS3(s3, bucketName, filePath, key) {

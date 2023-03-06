@@ -20,7 +20,7 @@ function checkFileExists(file) {
 
 function getPlayerPath() {
   const userDataPath = app.getPath("userData");
-  return path.join(userDataPath, "player", "wsplayer", app.getVersion());
+  return path.join(userDataPath, "player", "wsplayer");
 }
 
 function getMyImagesPath() {
@@ -40,7 +40,7 @@ function getMyAudiosPath() {
 
 function getBucketPreviewPath() {
   const userDataPath = app.getPath("userData");
-  return path.join(userDataPath, "player", "bucket-preview", app.getVersion());
+  return path.join(userDataPath, "player", "bucket-preview");
 }
 
 async function downloadToBuffer(url) {

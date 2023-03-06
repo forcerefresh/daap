@@ -41,16 +41,18 @@ Bugs
 - (DONE - dve vasne stvari uradjene. anim assets urls and localMedia for player)Falling leaves na bucketu 
 - (DONE) - Click na Next slide vraca na isti. Prvi Slajd u templetu koji je radio Petar.
 
+- (DONE v1.0.6) kod kloniranja neklonira se animation id
+- (DONE v1.0.6) player uplload
+
 // Dobde je za prvu verziju
 
 IMPORTTANT LATEST!!!!!!!
-- kod kloniranja neklonira se animation id
+- publish chrash i extension is empty - does not have selected file (audio object, sheck other)
 - kada se podesi layer da se neprikazuje desava se da nemoze da se klikne iza
 - audio nemoze da se doda jer nema audio komponente
 - video je mutiran i treba opcija da bude pauziran
 - when disabling Deviced select curent enabled device
-- player uplload
-- integration and res. behavior
+- integration and responsive behavior
 - smooth idle ext. neradi nesto
 - proveriti sve komponente kada se ubace u docosaurus (proveriti da li objectStop ima sve provere)
 
