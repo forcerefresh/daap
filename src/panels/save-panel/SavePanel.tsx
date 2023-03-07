@@ -1,36 +1,23 @@
-import React, { FormEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
-import { cloneDeep, last, noop, omit, round } from "lodash-es";
+import { cloneDeep, last, noop, omit, round, uniq } from "lodash-es";
 import { connect } from "react-redux";
-import {
-  Button,
-  Classes,
-  Dialog,
-  FormGroup,
-  InputGroup,
-  Label,
-  Spinner,
-} from "@blueprintjs/core";
+import { Button, Classes, Dialog, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./SavePanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import {
-  updateObject,
-  updateProjectMeta,
-  updateEditor,
-} from "../../store/actions/actions";
+import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
-import {
-  getCheckboxField,
-  getSelectField,
-  getTextArea,
-  getTextField,
-} from "../../inputs/input-utils";
+import { getTextArea, getTextField } from "../../inputs/input-utils";
 import { IMeta } from "../../store/reducers/meta";
 import { generatePlayerData, getAllAssetsUrls } from "../../export/export-html";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
+import {
+  updateObjectWithNewIds,
+  updateProjectWithNewIds,
+} from "../../utils/project/project-utils";
 
 export const THUMB_WIDTH = 200;
 
@@ -124,6 +111,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const installedExtensions = await getInstalledExtensions();
 
+    const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
     const playerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
@@ -136,19 +125,21 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const assetsUrls = getAllAssetsUrls(objects);
 
+    const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
+
     saveProject({
       id: saveAs ? undefined : localMeta.id,
       name: localMeta.name!,
       description: localMeta.description!,
       slides: project.slides.normalSlides.length,
-      project,
+      project: updatedProject,
       preview: {
         width: thumbSize.width,
         height: thumbSize.height,
         scale: thumbSize.scale,
         html: thumbnailHtml,
       },
-      playerData,
+      playerData: updatedPlayerData,
       assetsUrls,
       extensions: playerData.extensions,
     })
@@ -197,6 +188,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const onSaveTemplate = async () => {
     _updateProjectMeta({ inSaving: true });
 
+    const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
     const installedExtensions = await getInstalledExtensions();
 
     const playerData = generatePlayerData(
@@ -211,10 +204,12 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const assetsUrls = getAllAssetsUrls(objects);
 
+    const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
+
     saveTemplate({
       name: templateDialogData.name,
       description: templateDialogData.description,
-      project,
+      project: updatedProject,
       slides: project.slides.normalSlides.length,
       preview: {
         width: thumbSize.width,
@@ -222,7 +217,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         scale: thumbSize.scale,
         html: thumbnailHtml,
       },
-      playerData,
+      playerData: updatedPlayerData,
       assetsUrls,
       extensions: playerData.extensions,
     })

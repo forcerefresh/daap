@@ -27,6 +27,8 @@ import css from "./MyTemplatesPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
+import { ISlides } from "../../store/reducers/i-slides";
+import { updateProjectWithNewIds } from "../../utils/project/project-utils";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -143,12 +145,15 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       const project: {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
+        slides: ISlides;
       } = response.template.project;
 
-      _openProject(project);
+      const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
+      _openProject(updatedProject);
 
       _setDevice(
-        [...project.settings.breakpoints.breakpointsConfiguration]
+        [...updatedProject.settings.breakpoints.breakpointsConfiguration]
           .reverse()
           .find((bc) => bc.enabled)?.type || "large-1"
       );
@@ -169,7 +174,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      const slideIdToSelect = response.template.project.slides.normalSlides[0];
+      const slideIdToSelect = updatedProject.slides.normalSlides[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);

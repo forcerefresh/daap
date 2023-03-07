@@ -44,43 +44,50 @@ Bugs
 - (DONE v1.0.6) kod kloniranja neklonira se animation id
 - (DONE v1.0.6) player uplload
 - (DONE v1.0.6) publish chrash i extension is empty - does not have selected file (audio object, sheck other)
-- (DONE v1.0.7 )kada se podesi layer da se neprikazuje desava se da nemoze da se klikne iza
+- (DONE v1.0.7) kada se podesi layer da se neprikazuje desava se da nemoze da se klikne iza
+- (DONE v1.0.8) video je mutiran i treba opcija da bude pauziran
+- (Probably DONE)JSON text target and image and source - check icons and make them external
+- (DONE)Srediti externe objekte i efekte
+- (DONE-HIGH) kod snimanja templejta ili save as treba da se svi id jevi zamene (kada imamo 2 sjaldera oni se overlapuju)
 
 // Dobde je za prvu verziju
 
+EPIC:
+- EPIC: integration and responsive behavior
+- EPIC: templates
+- EPIC: website brainstorming and improvements
+- EPIC: wizard
+- EPIC: wordpress (integration only)
+- EPIC: marketing
+
 IMPORTTANT LATEST!!!!!!!
-- load fonts on init
+- (HIGH) when disabling Deviced select curent enabled device
+- (HIGH) load fonts on init
+- (MAJOR) Preload does not work because it loads from wrong image path (vezano za absolutna putanja za assete )
+  - absolutna putanja za assete kreirana u animaciji i efektu
+- gestures za mobilni - levo desno
 - audio nemoze da se doda jer nema audio komponente
-- video je mutiran i treba opcija da bude pauziran
-- when disabling Deviced select curent enabled device
-- integration and responsive behavior
 - smooth idle ext. neradi nesto
 - proveriti sve komponente kada se ubace u docosaurus (proveriti da li objectStop ima sve provere)
+- ENH. Dodati da animation/transition moze da se disejlbluje
+- ENH. Dodati da slide moze da se disajbluje tj da bude radni.
 
 IMPORTANT:
 - kada inicijalizujemo i uklanjamo elemnte za strukturalne efekte
-- gestures za mobilni - levo desno
-- kod snimanja templejta treba da se svi id jevi zamene (kada imamo 2 sjaldera oni se overlapuju)
 - bug u manuelnj translaciji
-- Preload does not work because it loads from wrong image path (vezano za absolutna putanja za assete )
 - Timeline problem
-- absolutna putanja za assete kreirana u animaciji i efektu
 - Engine za click, nemoze da se klikne kada je iza slika
 - Izbaciti overlap
 - Proveriti da li imamo hendlere gde treba staviti:    if (previewState.isPreview) return;
-bugs: 
 - Cube neradi boja za edge
 - Proveriti kada ista extenzija se instalira preko lib, MyExt i development
 
 V1 or V2:
+- (IMPORTANT)Pauzirati player kada se pusti youtube. Ili neko drugo resenje.
 - (IMPORTANT) Kada je isto vreme animacije kao i slajda desava se da se animacija nepisti u sledecem ili 3-cem pistanju
 - disable html selection. when user click and mouse move 
 - Add button for manual load more (Library). Instead of auto infinitive scroll.
 - Deinstall extenzije i zatim install neinstalira extenziju
-- JSON text target and image and source - check icons and make them external
-- Srediti externe objekte i efekte
-- Pauzirati player kada se pusti youtube. Ili neko drugo resenje.
-- 
 
 Release V2:
 - Prilikom otvaranja templejta prikazati missing extensions
@@ -93,11 +100,11 @@ Release V2:
   Selection and resize functionality use only stage area. 
   They should use whole viewport.
 - Download Images from Image Library directory when user use it in project.
-- create more specific action for settings, object, layers, etc.
+- create more specific action for settings, object, layers, etc. (za undo/redo)
 - Rich text input text font is different 
 - Bullets cant resize using cursor.(this is expected). We should disable resize for non resizable objects.
 - For electron we are 
 - ENH. POC slides (allow user to expiriment in real project)
-- ENH. Dodati da animation/transition moze da se disejlbluje
-- Magnetic effect - Add mouse area offset (add offset to animation properties)
 - Bg za pojedinacni slajd
+- Magnetic effect - Add mouse area offset (add offset to animation properties)
+

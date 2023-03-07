@@ -36,10 +36,16 @@ export interface IBreakpointSettingsProps {
   breakpointConfiguration: BreakpointConfiguration;
   pixelMultiplier: number;
   onChange: (breakpointSettings: BreakpointConfiguration) => void;
+  disableEnableToBeDisabled: boolean;
 }
 
 export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
-  const { breakpointConfiguration, pixelMultiplier, onChange } = props;
+  const {
+    breakpointConfiguration,
+    pixelMultiplier,
+    onChange,
+    disableEnableToBeDisabled,
+  } = props;
 
   const responsiveIcon = getResponsiveIcon(
     getIconByType(breakpointConfiguration.type)
@@ -59,6 +65,11 @@ export const Breakpoint: React.FC<IBreakpointSettingsProps> = (props) => {
             (value: boolean) => {
               set(breakpointConfiguration, "enabled", value);
               onChange({ ...breakpointConfiguration });
+            },
+            "",
+            {
+              disabled:
+                disableEnableToBeDisabled && breakpointConfiguration.enabled,
             }
           )}
         </div>

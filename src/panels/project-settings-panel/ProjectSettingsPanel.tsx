@@ -5,6 +5,7 @@ import { IStore } from "../../store/store";
 import css from "./ProjectSettingsPanel.module.scss";
 import { Button, Card, Colors, Elevation, FormGroup } from "@blueprintjs/core";
 import {
+  setDevice,
   updateProjectSettings,
   updateSlideBreakpoints,
   updateSlideDuration,
@@ -45,6 +46,8 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
     _updateSlideDuration,
     _updateSlideBreakpoints,
     _updateProjectSettings,
+    _setDevice,
+    selectedDevice,
   } = props;
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
@@ -78,6 +81,11 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
       PREVIEW_SIZE / item.normal.maxSliderSize.height
     );
   });
+
+  const enabledDevicesLength =
+    breakpointConfiguration.breakpointsConfiguration.filter(
+      (bp) => bp.enabled
+    ).length;
 
   return (
     <div className={css.projectPanel}>
@@ -303,12 +311,25 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                     className={cx(css.card, css.breakpointHolder)}
                   >
                     <Breakpoint
+                      disableEnableToBeDisabled={enabledDevicesLength === 1}
                       breakpointConfiguration={conf}
                       pixelMultiplier={pixelMultiplier}
                       onChange={(newBreakpointConfiguration) => {
                         breakpointConfiguration.breakpointsConfiguration[idx] =
                           newBreakpointConfiguration;
                         _updateSlideBreakpoints(breakpointConfiguration);
+
+                        //NOTE if we disable currently selected device
+                        if (
+                          newBreakpointConfiguration.type === selectedDevice &&
+                          !newBreakpointConfiguration.enabled
+                        ) {
+                          const newSelectedDevice =
+                            breakpointConfiguration.breakpointsConfiguration.find(
+                              (bp) => bp.enabled
+                            )?.type ?? "large-1";
+                          _setDevice(newSelectedDevice);
+                        }
                       }}
                     />
                   </Card>
@@ -325,6 +346,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({
   settings: state.project.settings,
   breakpointConfiguration: state.project.settings.breakpoints,
+  selectedDevice: state.stage.selectedDevice,
 });
 
 const mapDispatchToProps = {
@@ -333,6 +355,7 @@ const mapDispatchToProps = {
     updateProjectSettings(newValue),
   _updateSlideBreakpoints: (slideBreakpoints: Breakpoints) =>
     updateSlideBreakpoints(slideBreakpoints),
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectPanel);
