@@ -5,6 +5,9 @@ import {
   IVideoInput,
   IVideoInputValue,
   IUnitsNumberInput,
+  ICheckboxInput,
+  ISliderInput,
+  ISelectInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
@@ -51,7 +54,14 @@ export type VideoPropertiesTuple = [
   ICoverPlacementInput<"videoFit">,
   IVideoInput<"video">,
   IUnitsNumberInput<"delayTime">,
-  IUnitsNumberInput<"initialTime">
+  IUnitsNumberInput<"initialTime">,
+  ISliderInput<"volume">,
+  ICheckboxInput<"autoplay">,
+  ICheckboxInput<"controls">,
+  ICheckboxInput<"loop">,
+  ICheckboxInput<"muted">,
+  ICheckboxInput<"playsinline">,
+  ISelectInput<"preload">
 ];
 
 export interface VideoValues {
@@ -59,6 +69,13 @@ export interface VideoValues {
   video: IVideoInputValue;
   initialTime: string;
   delayTime: string;
+  volume: number;
+  autoplay: boolean;
+  controls: boolean;
+  loop: boolean;
+  muted: boolean;
+  playsinline: boolean;
+  preload: string;
 }
 
 export function createVideoObject(
@@ -114,6 +131,65 @@ export function createVideoObject(
       defaultValue: "0ms",
       allowedUnits: ["ms", "s"],
     },
+    {
+      displayName: "Volume",
+      propertyName: "volume",
+      inputType: InputType.SLIDER_INPUT,
+      value: 100,
+      defaultValue: 100,
+      inputProps: {
+        min: 0,
+        max: 100,
+      },
+    },
+    {
+      displayName: "Autoplay",
+      propertyName: "autoplay",
+      helperText: "Autoplay require muted",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Controls",
+      propertyName: "controls",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Loop",
+      propertyName: "loop",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Muted",
+      propertyName: "muted",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Playsinline",
+      propertyName: "playsinline",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Preload",
+      propertyName: "preload",
+      inputType: InputType.SELECT,
+      value: {} as any,
+      defaultValue: {} as any,
+      options: [
+        { label: "none", value: "none" },
+        { label: "metadata", value: "metadata" },
+        { label: "auto", value: "auto" },
+      ],
+    },
   ];
 
   const values: VideoValues = {
@@ -129,6 +205,13 @@ export function createVideoObject(
     },
     delayTime: "0s",
     initialTime: "0s",
+    volume: 50,
+    autoplay: false,
+    controls: false,
+    loop: false,
+    muted: false,
+    playsinline: false,
+    preload: "auto",
   };
 
   return {
@@ -230,16 +313,27 @@ export function getVideoHtml(props: {
   style = addTransformPropertiesToStyle(style, object);
 
   let attrs = "";
-  if (isPlayer) attrs += " muted";
+  // if (isPlayer) attrs += " muted";
   attrs += ` width="100%"`;
   attrs += ` height="100%"`;
+  attrs += videoValues.controls ? " controls" : "";
+  attrs += videoValues.muted ? " muted" : "";
+  attrs += videoValues.autoplay ? " autoplay" : "";
+  attrs += videoValues.loop ? " loop" : "";
+  attrs += videoValues.playsinline ? " playsinline" : "";
+  attrs += ` ${videoValues.preload}`;
 
   const videoSrc = getMediaSrc("video", videoValues.video.video, {
     useId: isSave,
     filename: videoValues.video.filename,
   }).src;
 
-  const videoHtml = `<video style="${style}" ${attrs} class="video-content-${object.id}" src="${videoSrc}"></video>`;
+  const videoHtml = `
+    <video style="${style}" ${attrs} class="video-content-${object.id}">
+      <source type="video/mp4" src="${videoSrc}"></source>
+      <source type="video/ogg" src="${videoSrc}"></source>
+    </video>
+  `;
 
   //<source class="video-source-${object.id}" type="video/mp4" src="${videoSrc}">
   // TODO: IMPORTANT
@@ -271,6 +365,7 @@ export function video_objectStart(
   const waitingTime = setTimeout(() => {
     const initialTime = convertTimeUnitToMs(values.initialTime);
     videoElm.currentTime = initialTime ? initialTime / 1000 : 0;
+    videoElm.volume = values.volume / 100;
     videoElm.play();
   }, convertTimeUnitToMs(values.delayTime));
 
