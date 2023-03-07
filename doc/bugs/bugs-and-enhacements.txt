@@ -49,6 +49,7 @@ Bugs
 // Dobde je za prvu verziju
 
 IMPORTTANT LATEST!!!!!!!
+- load fonts on init
 - audio nemoze da se doda jer nema audio komponente
 - video je mutiran i treba opcija da bude pauziran
 - when disabling Deviced select curent enabled device
