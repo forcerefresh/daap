@@ -27,7 +27,10 @@ import css from "./TemplatesPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
-import { updateProjectWithNewIds } from "../../utils/project/project-utils";
+import {
+  preloadFonts,
+  updateProjectWithNewIds,
+} from "../../utils/project/project-utils";
 import { ISlides } from "../../store/reducers/i-slides";
 
 interface ITemplatesPanelProps {
@@ -210,6 +213,8 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       _updateEditor({ sliderChanged: true, isExistingProject: false });
 
       _doClearHistory();
+
+      preloadFonts(response.template?.fonts ?? []);
 
       onRequestClose();
 

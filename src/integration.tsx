@@ -11,7 +11,10 @@ import {
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
 import { Preset, PresetGroup } from "./utils/presets/i-presets";
 import { IStore } from "./store/store";
-import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetAssetsUrlFuncReturnType,
+  GetFontsFuncReturnType,
+} from "webslider-sdk/lib/objects/objects-register";
 
 export interface getMyUploadComponentProps {
   type: MediaType;
@@ -269,12 +272,8 @@ export const IntegrationContext = React.createContext({
         html: string;
       };
       playerData: IPlayerData;
-      assetsUrls: {
-        id?: string;
-        filename?: string;
-        url?: string;
-        sourceType?: "local" | "library" | "url" | string;
-      }[];
+      assetsUrls: GetAssetsUrlFuncReturnType;
+      fonts: GetFontsFuncReturnType;
       extensions: any[];
     }): Promise<{
       id: string;
@@ -331,6 +330,7 @@ export const IntegrationContext = React.createContext({
       };
       playerData: IPlayerData;
       assetsUrls: GetAssetsUrlFuncReturnType;
+      fonts: GetFontsFuncReturnType;
       extensions: IExtensionItem[];
     }): Promise<{
       id: string;

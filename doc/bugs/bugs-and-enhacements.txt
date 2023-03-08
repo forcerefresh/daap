@@ -49,6 +49,8 @@ Bugs
 - (Probably DONE)JSON text target and image and source - check icons and make them external
 - (DONE)Srediti externe objekte i efekte
 - (DONE-HIGH) kod snimanja templejta ili save as treba da se svi id jevi zamene (kada imamo 2 sjaldera oni se overlapuju)
+- (HIGH) when disabling Deviced select curent enabled device
+- (HIGH) load fonts on init
 
 // Dobde je za prvu verziju
 
@@ -61,8 +63,6 @@ EPIC:
 - EPIC: marketing
 
 IMPORTTANT LATEST!!!!!!!
-- (HIGH) when disabling Deviced select curent enabled device
-- (HIGH) load fonts on init
 - (MAJOR) Preload does not work because it loads from wrong image path (vezano za absolutna putanja za assete )
   - absolutna putanja za assete kreirana u animaciji i efektu
 - gestures za mobilni - levo desno

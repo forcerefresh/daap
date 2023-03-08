@@ -10,7 +10,11 @@ import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import { getTextArea, getTextField } from "../../inputs/input-utils";
 import { IMeta } from "../../store/reducers/meta";
-import { generatePlayerData, getAllAssetsUrls } from "../../export/export-html";
+import {
+  generatePlayerData,
+  getAllAssetsUrls,
+  getAllFonts,
+} from "../../export/export-html";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
@@ -124,6 +128,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     );
 
     const assetsUrls = getAllAssetsUrls(objects);
+    const fonts = getAllFonts(objects);
 
     const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
 
@@ -141,6 +146,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       },
       playerData: updatedPlayerData,
       assetsUrls,
+      fonts,
       extensions: playerData.extensions,
     })
       .then(
@@ -203,6 +209,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     );
 
     const assetsUrls = getAllAssetsUrls(objects);
+    const fonts = getAllFonts(objects);
 
     const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
 
@@ -219,6 +226,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       },
       playerData: updatedPlayerData,
       assetsUrls,
+      fonts,
       extensions: playerData.extensions,
     })
       .then(({ id, name, description, slides, created, assetsUrls }) => {

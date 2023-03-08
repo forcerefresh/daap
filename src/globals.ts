@@ -1,4 +1,3 @@
-import { string } from "yup";
 import { getFonts } from "./utils/fonts/fonts";
 import { getGoogleFontList } from "./utils/fonts/google-fonts";
 

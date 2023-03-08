@@ -39,6 +39,7 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
     preview,
     playerData,
     assetsUrls,
+    fonts,
     extensions,
   } = data;
 
@@ -57,6 +58,7 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
     preview,
     saveRevision,
     assetsUrls,
+    fonts,
     extensions,
   };
 
@@ -206,6 +208,7 @@ ipcMain.handle("Templates::SaveTemplate", async (event, dataStr) => {
     created: created.toString(),
     saveRevision,
     assetsUrls,
+    fonts,
   };
 });
 

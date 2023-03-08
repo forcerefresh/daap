@@ -1,7 +1,10 @@
 import { IPlayerData } from "../../../export/i-export-html";
 import { IStore } from "../../../store/store";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetAssetsUrlFuncReturnType,
+  GetFontsFuncReturnType,
+} from "webslider-sdk/lib/objects/objects-register";
 
 export const useProjectHook = () => {
   // const getNextProjectId = (): Promise<number> => {
@@ -61,6 +64,7 @@ export const useProjectHook = () => {
     preview,
     playerData,
     assetsUrls,
+    fonts,
     extensions,
   }: {
     id?: string;
@@ -78,6 +82,7 @@ export const useProjectHook = () => {
     };
     playerData: IPlayerData;
     assetsUrls: GetAssetsUrlFuncReturnType;
+    fonts: GetFontsFuncReturnType;
     extensions: IExtensionItem[];
   }): Promise<{
     id: string;
@@ -100,6 +105,7 @@ export const useProjectHook = () => {
         preview,
         playerData,
         assetsUrls,
+        fonts,
         extensions,
       };
 

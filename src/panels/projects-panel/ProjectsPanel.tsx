@@ -26,6 +26,7 @@ import { SlideType } from "../../store/reducers/i-slides";
 import { IEditor } from "../../store/reducers/editor";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
+import { preloadFonts } from "../../utils/project/project-utils";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -145,6 +146,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
         diff: any;
+        fonts: any[];
       } = response.project.project;
 
       delete project.diff;
@@ -182,6 +184,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       _doClearHistory();
 
       _resetChangedState();
+
+      preloadFonts(response.project?.fonts ?? []);
 
       onRequestClose();
     });

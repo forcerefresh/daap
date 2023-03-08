@@ -30,6 +30,8 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
+  GetFontsFuncPropsType,
+  GetFontsFuncReturnType,
   GetHtmlFuncPropsType,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
@@ -371,6 +373,17 @@ export async function preloadText(props: {
 
   return textValues.font.fontFamily;
 }
+
+export const getFonts = (
+  props: GetFontsFuncPropsType
+): GetFontsFuncReturnType => {
+  const textValues = props.values as TextValues;
+
+  if (textValues.font?.source === "google-fonts") {
+    return [{ ...textValues.font }];
+  }
+  return [];
+};
 
 export const textMeta = {
   name: "Text",

@@ -1,6 +1,6 @@
 {
   "name": "web-slider",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "author": {
     "name": "Force Refresh doo",
     "email": "support@forcerefresh.io",
@@ -57,6 +57,7 @@
     "debug": "^4.3.4",
     "deep-diff": "^1.0.2",
     "electron-reloader": "^1.2.1",
+    "electron-updater": "^5.3.0",
     "electron-window-state": "^5.0.3",
     "env-cmd": "^10.1.0",
     "events": "^3.3.0",
@@ -96,11 +97,10 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^1.1.91",
+    "webslider-sdk": "^1.1.95",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
-    "yup": "^0.32.11",
-    "electron-updater": "^5.3.0"
+    "yup": "^0.32.11"
   },
   "resolutions": {
     "@types/react": "^16.9.52"

@@ -1,7 +1,10 @@
 import { IPlayerData } from "../../../export/i-export-html";
 import { IStore } from "../../../store/store";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { GetAssetsUrlFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetAssetsUrlFuncReturnType,
+  GetFontsFuncReturnType,
+} from "webslider-sdk/lib/objects/objects-register";
 
 export const useTemplateHook = () => {
   const getTemplate = (id: string): Promise<any> => {
@@ -50,6 +53,7 @@ export const useTemplateHook = () => {
     preview,
     playerData,
     assetsUrls,
+    fonts,
     extensions,
   }: {
     name: string;
@@ -65,6 +69,7 @@ export const useTemplateHook = () => {
     };
     playerData: IPlayerData;
     assetsUrls: GetAssetsUrlFuncReturnType;
+    fonts: GetFontsFuncReturnType;
     extensions: IExtensionItem[];
   }): Promise<{
     id: string;
@@ -84,6 +89,7 @@ export const useTemplateHook = () => {
         preview,
         playerData,
         assetsUrls,
+        fonts,
         extensions,
       };
 

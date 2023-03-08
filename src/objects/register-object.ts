@@ -87,6 +87,7 @@ import {
   preloadText,
   textMeta,
   textSizeUpdate,
+  getFonts,
 } from "./text/text";
 import {
   createTrianglifyObject,
@@ -283,7 +284,13 @@ registerObject(
   createTextObject,
   textSizeUpdate,
   getTextHtml,
-  preloadText
+  preloadText,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  getFonts
 );
 
 // registerObject(

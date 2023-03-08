@@ -19,6 +19,7 @@ ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
     preview,
     playerData,
     assetsUrls,
+    fonts,
     extensions,
   } = data;
 
@@ -53,6 +54,7 @@ ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
       saveRevision,
       //publishRevision,
       assetsUrls,
+      fonts,
       extensions,
     });
   } else {
@@ -71,6 +73,7 @@ ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
       saveRevision,
       //publishRevision,
       assetsUrls,
+      fonts,
       extensions,
     };
   }
@@ -92,7 +95,7 @@ ipcMain.handle("Projects::SaveProject", async (event, dataStr) => {
     modified: modified.toString(),
     saveRevision,
     assetsUrls,
-
+    fonts,
     //publishRevision,
   };
 });

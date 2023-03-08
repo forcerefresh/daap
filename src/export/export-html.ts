@@ -5,6 +5,7 @@ import {
   forOwn,
   mapValues,
   pick,
+  uniqBy,
 } from "lodash-es";
 import React from "react";
 import { RGBColor } from "react-color";
@@ -1008,6 +1009,39 @@ export function getAllAssetsUrls(objects: IObjects): any {
       ];
     })
   );
+}
+
+// TODO: fix type
+export function getAllFonts(objects: IObjects): any {
+  const fonts = flatten(
+    objects.allObjects.map((objectId) => {
+      const object = objects.objectById[objectId];
+      const deff = getAppObjectDefinition(object.type);
+
+      // const transitionTypes = Object.keys(object.transitions);
+      // const arr = flatten(
+      //   transitionTypes.map((transType: string) => {
+      //     return flatten(
+      //       (object.transitions as any)[transType].map((anim: ITransition) => {
+      //         const def = getAppAnimationDefinition(anim.animation.id);
+      //         return def?.getAssetsUrls?.({
+      //           values: anim.animation.values as { [key: string]: any },
+      //         });
+      //       })
+      //     );
+      //   })
+      // );
+
+      return [
+        //...arr.filter((item) => !!item), //TODO: check why we are getting undefined
+        ...(deff?.getFonts?.({ values: object.definition.values }) || []),
+      ];
+    })
+  );
+
+  return uniqBy(fonts, (font) => {
+    return font.fontFamily;
+  });
 }
 
 function getCustomIdClass(props: { customId: string }) {

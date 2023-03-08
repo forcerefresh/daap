@@ -1,5 +1,7 @@
 import { uniq } from "lodash-es";
 import { v4 as uuid } from "uuid";
+import { GetFontsFuncReturnType } from "webslider-sdk/lib/objects/objects-register";
+import { FontPreloader } from "../../objects/font-preloader";
 
 export function updateObjectWithNewIds<T>(
   obj: T,
@@ -32,4 +34,12 @@ export function updateProjectWithNewIds<T>(project: T): {
   const updatedProject = updateObjectWithNewIds(project, fromToIds);
 
   return { updatedProject, fromToIds };
+}
+
+const fontPreloader = new FontPreloader();
+
+export function preloadFonts(fonts: GetFontsFuncReturnType) {
+  fonts.forEach((font) => {
+    fontPreloader.subscribe(font.fontFamily).then(() => {});
+  });
 }
