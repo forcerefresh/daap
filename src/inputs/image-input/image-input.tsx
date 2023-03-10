@@ -83,7 +83,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
           <>
             <div
               className={css.previewHolder}
-              style={{ backgroundImage: `url(${previewSrc}` }}
+              style={{ backgroundImage: `url('${previewSrc}'` }}
             ></div>
             {value.image.size && (
               <div>

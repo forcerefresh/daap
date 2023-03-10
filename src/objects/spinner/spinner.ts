@@ -197,7 +197,7 @@ export function getSpinnerHtml(props: {
 
   const css = `
     .object-content-${object.id} {
-      opacity: 0;
+      opacity: ${spinnerValues.applyTo === "page" ? "0" : "1"};
       transition: opacity 1s;
     }
     .wsSpinnerVisible {

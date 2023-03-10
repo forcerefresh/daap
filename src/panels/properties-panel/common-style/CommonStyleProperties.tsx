@@ -21,6 +21,12 @@ import FormWithLayout, {
 } from "../../../utils/form-layout/form-layout";
 import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./CommonStyleProperties.module.scss";
+import { createObject } from "../../../objects/create-object-factory";
+import {
+  getCommonObjectPropertiesDefinition,
+  getCommonPropertiesMetadataValues,
+  getCommonPropertiesValues,
+} from "webslider-sdk/lib/objects/common-properties";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -44,15 +50,29 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
   } = props;
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
+    const tmpObj = createObject(object.type, {});
+
     if (!object.commonStyleDefinition)
       return "Element does not have common style properties";
+
+    // check for forward compatibility
+    const commonStyleDefinitionProperties =
+      tmpObj.commonStyleDefinition?.properties ?? [];
+    const commonStyleDefinitionValues = {
+      ...(tmpObj.commonStyleDefinition?.values ?? {}),
+      ...(object.commonStyleDefinition?.values ?? {}),
+    };
+    const commonStyleDefinitionValuesMetadata = {
+      ...(tmpObj.commonStyleDefinition?.valuesMetadata ?? {}),
+      ...(object.commonStyleDefinition?.valuesMetadata ?? {}),
+    };
 
     return (
       <>
         {renderProperties(
-          object.commonStyleDefinition.properties!, // TODO
-          object.commonStyleDefinition.values,
-          object.commonStyleDefinition.valuesMetadata,
+          commonStyleDefinitionProperties,
+          commonStyleDefinitionValues,
+          commonStyleDefinitionValuesMetadata,
           object,
           _updateObject
         )}
@@ -67,14 +87,32 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
     return (
       <>
         {renderProperties(
-          layer.commonStyleDefinition.properties!, // TODO
-          layer.commonStyleDefinition.values,
-          layer.commonStyleDefinition.valuesMetadata,
+          getCommonObjectPropertiesDefinition(), // TODO
+          {
+            ...getCommonPropertiesValues(),
+            ...(layer.commonStyleDefinition?.values ?? {}),
+          },
+          {
+            ...getCommonPropertiesMetadataValues(),
+            ...(layer.commonStyleDefinition?.valuesMetadata ?? {}),
+          },
           layer,
           _updateLayer
         )}
       </>
     );
+
+    // return (
+    //   <>
+    //     {renderProperties(
+    //       layer.commonStyleDefinition.properties!, // TODO
+    //       layer.commonStyleDefinition.values,
+    //       layer.commonStyleDefinition.valuesMetadata,
+    //       layer,
+    //       _updateLayer
+    //     )}
+    //   </>
+    // );
   };
 
   const renderProperties = (

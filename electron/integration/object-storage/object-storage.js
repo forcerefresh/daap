@@ -311,11 +311,28 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
   // TODO
   const project = await loadProject(req.projectId);
 
+  BrowserWindow.getAllWindows()[0].webContents.send(
+    `ObjectStorageRenderer::SubscribeToPublishDetails`,
+    JSON.stringify([{ log: "Publish started" }])
+  );
+
   // upload player
+
   let error;
   const files = await getPlayerFiles();
   for (const file of files) {
     try {
+      BrowserWindow.getAllWindows()[0].webContents.send(
+        `ObjectStorageRenderer::SubscribeToPublishDetails`,
+        JSON.stringify([
+          {
+            log:
+              "Upload player to " +
+              `${publishDetails.bucketUrl}${req.projectId}/wsplayer/${file}`,
+          },
+        ])
+      );
+
       await bucketManager.uploadFileToBucket(
         bucket,
         path.join(getPlayerPath(), file),
@@ -333,11 +350,6 @@ ipcMain.handle("ObjectStorage::Publish", async (event, reqJson) => {
 
   // upload assets >>
   const assetsUrlsChunks = chunk(project.assetsUrls, PARALLEL_UPLOAD);
-
-  BrowserWindow.getAllWindows()[0].webContents.send(
-    `ObjectStorageRenderer::SubscribeToPublishDetails`,
-    JSON.stringify([{ log: "Publish started" }])
-  );
 
   let uploadResult = [];
   for (const assetsUrlsChunk of assetsUrlsChunks) {

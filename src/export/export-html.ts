@@ -144,7 +144,7 @@ export function generatePlayerData(
       settings,
       // thumbnailHtmlArr,
       // normalSlidesArr.length,
-      { isSave: options.isSave }
+      { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     loadSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -162,7 +162,7 @@ export function generatePlayerData(
       settings,
       // thumbnailHtmlArr,
       // normalSlidesArr.length,
-      { isSave: options.isSave }
+      { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     frontSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -180,7 +180,7 @@ export function generatePlayerData(
       settings,
       // thumbnailHtmlArr,
       // normalSlidesArr.length,
-      { isSave: options.isSave }
+      { isSave: options.isSave, isForThumbnail: options.isForThumbnail }
     );
     backSlideDataArr.push(slideDataRes.slideData);
     html += slideDataRes.html;
@@ -629,7 +629,8 @@ function generateSlideData(
         calculatedObjectSize,
         true,
         options.isSave,
-        breakpointConfig.type
+        breakpointConfig.type,
+        options.isForThumbnail
       );
 
       itemsData.push({
@@ -739,7 +740,8 @@ export function getObjectHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean,
   isSave: boolean,
-  deviceType?: DeviceType
+  deviceType?: DeviceType,
+  isForThumbnail?: boolean
   // thumbnailHtmlArr: (string | undefined)[],
   // slidesCounter = 3
 ) {
@@ -765,6 +767,7 @@ export function getObjectHtml(
           isPlayer,
           isSave,
           deviceType,
+          isForThumbnail,
           // calculateSize: (
           //   value: string,
           //   propertyName: "width" | "height" | "left" | "top"

@@ -182,7 +182,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     }
 
     const inputs = flatForm.map((property, idx) => {
-      const { propertyName } = property;
+      const propertyName = property.propertyName;
 
       function onChange(value: any) {
         const retObj = cloneDeep(objectOrLayer);
@@ -221,7 +221,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           // cleanup if device is removed >>
           const devicePropertiesNames: string[] = [];
           Object.keys(retObj.definition.values).forEach((pName) => {
-            if (pName.startsWith(propertyName + "_D_")) {
+            if (pName?.startsWith(propertyName + "_D_")) {
               devicePropertiesNames.push(pName);
             }
           });

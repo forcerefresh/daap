@@ -220,7 +220,10 @@ export function LayerRow(props: ILayerRowProps) {
 
         <div className={css.layerName}>{layer.name}</div>
 
-        <div className={css.layerResponseVisibility}>
+        <div
+          className={css.layerResponseVisibility}
+          onClick={(e) => e.stopPropagation()}
+        >
           <Popover
             position="bottom"
             usePortal={true}

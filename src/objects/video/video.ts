@@ -8,6 +8,7 @@ import {
   ICheckboxInput,
   ISliderInput,
   ISelectInput,
+  IInfoInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
@@ -45,6 +46,7 @@ import {
 } from "../../animations/animation-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
+import { VideoItem } from "webslider-sdk/lib/common/i-media-types";
 
 const timeoutMap = new Map<string, NodeJS.Timeout | any>();
 
@@ -53,15 +55,16 @@ export const VIDEO = "video";
 export type VideoPropertiesTuple = [
   ICoverPlacementInput<"videoFit">,
   IVideoInput<"video">,
-  IUnitsNumberInput<"delayTime">,
-  IUnitsNumberInput<"initialTime">,
   ISliderInput<"volume">,
-  ICheckboxInput<"autoplay">,
   ICheckboxInput<"controls">,
   ICheckboxInput<"loop">,
   ICheckboxInput<"muted">,
   ICheckboxInput<"playsinline">,
-  ISelectInput<"preload">
+  ISelectInput<"preload">,
+  ICheckboxInput<"autoplay">,
+  IUnitsNumberInput<"delayTime">,
+  IUnitsNumberInput<"initialTime">,
+  IInfoInput<"info">
 ];
 
 export interface VideoValues {
@@ -116,22 +119,6 @@ export function createVideoObject(
       defaultValue: { video: {} },
     },
     {
-      displayName: "Delay",
-      propertyName: "delayTime",
-      inputType: InputType.UNITS_NUMBER,
-      value: "0ms",
-      defaultValue: "0ms",
-      allowedUnits: ["ms", "s"],
-    },
-    {
-      displayName: "Initial time",
-      propertyName: "initialTime",
-      inputType: InputType.UNITS_NUMBER,
-      value: "0ms",
-      defaultValue: "0ms",
-      allowedUnits: ["ms", "s"],
-    },
-    {
       displayName: "Volume",
       propertyName: "volume",
       inputType: InputType.SLIDER_INPUT,
@@ -141,14 +128,6 @@ export function createVideoObject(
         min: 0,
         max: 100,
       },
-    },
-    {
-      displayName: "Autoplay",
-      propertyName: "autoplay",
-      helperText: "Autoplay require muted",
-      inputType: InputType.CHECKBOX,
-      defaultValue: true,
-      value: true,
     },
     {
       displayName: "Controls",
@@ -189,6 +168,38 @@ export function createVideoObject(
         { label: "metadata", value: "metadata" },
         { label: "auto", value: "auto" },
       ],
+    },
+    {
+      displayName: "Autoplay",
+      propertyName: "autoplay",
+      helperText: "Autoplay require muted",
+      inputType: InputType.CHECKBOX,
+      defaultValue: true,
+      value: true,
+    },
+    {
+      displayName: "Delay",
+      propertyName: "delayTime",
+      inputType: InputType.UNITS_NUMBER,
+      value: "0ms",
+      defaultValue: "0ms",
+      allowedUnits: ["ms", "s"],
+      helperText: "Works when Autoplay is on",
+    },
+    {
+      displayName: "Initial time",
+      propertyName: "initialTime",
+      inputType: InputType.UNITS_NUMBER,
+      value: "0ms",
+      defaultValue: "0ms",
+      allowedUnits: ["ms", "s"],
+      helperText: "Works when Autoplay is on",
+    },
+    {
+      displayName: "Info",
+      inputType: InputType.INFO,
+      helperText:
+        "Autoplay works on desktop when video is Muted. Mobile devices disable Autoplay and use choose 'none' for Preload.",
     },
   ];
 
@@ -318,7 +329,7 @@ export function getVideoHtml(props: {
   attrs += ` height="100%"`;
   attrs += videoValues.controls ? " controls" : "";
   attrs += videoValues.muted ? " muted" : "";
-  attrs += videoValues.autoplay ? " autoplay" : "";
+  //attrs += videoValues.autoplay ? " autoplay" : "";
   attrs += videoValues.loop ? " loop" : "";
   attrs += videoValues.playsinline ? " playsinline" : "";
   attrs += ` ${videoValues.preload}`;
@@ -362,14 +373,15 @@ export function video_objectStart(
     `video-content-${id}`
   )[0] as HTMLVideoElement;
 
-  const waitingTime = setTimeout(() => {
-    const initialTime = convertTimeUnitToMs(values.initialTime);
-    videoElm.currentTime = initialTime ? initialTime / 1000 : 0;
-    videoElm.volume = values.volume / 100;
-    videoElm.play();
-  }, convertTimeUnitToMs(values.delayTime));
-
-  timeoutMap.set(id, waitingTime);
+  if (values.autoplay) {
+    const waitingTime = setTimeout(() => {
+      const initialTime = convertTimeUnitToMs(values.initialTime);
+      videoElm.currentTime = initialTime ? initialTime / 1000 : 0;
+      videoElm.volume = values.volume / 100;
+      videoElm.play();
+    }, convertTimeUnitToMs(values.delayTime));
+    timeoutMap.set(id, waitingTime);
+  }
 
   // const waitingTime = setTimeout(() => {
   //   audioElm.volume = values.volume ? values.volume / 100 : 0;
@@ -446,6 +458,87 @@ function getDefaultValuesForSourceType(
     filename: "",
     previewImage: {},
   } as IVideoInputValue;
+}
+
+export async function preloadVideo(props: {
+  id: string;
+  className: string;
+  values: { [key: string]: any };
+  calculatedObjectSize: any;
+}): Promise<string> {
+  const { id, values } = props;
+  const videoValues = values as VideoValues;
+
+  if (videoValues.preload === "none") {
+    return id;
+  }
+
+  let imageSrc: VideoItem = {} as VideoItem;
+
+  if (
+    videoValues.video.video.baseUrl &&
+    videoValues.video.video.baseUrl.startsWith("http")
+  ) {
+    imageSrc = {
+      src: videoValues.video.video.baseUrl + videoValues.video.video.filename,
+    };
+  } else {
+    imageSrc = getMediaSrc("image", videoValues.video.video) as VideoItem;
+  }
+
+  // if there are no image to preload return instantly
+  if (!imageSrc.src) {
+    return id;
+  }
+
+  const videoEl = getObjectElementById(id).getElementsByTagName("video")[0];
+  if (videoEl) {
+    const eventToListen =
+      videoValues.preload === "auto" ? "loadeddata" : "loadedmetadata";
+
+    const p = new Promise<string>(function (resolve, reject) {
+      videoEl.addEventListener(eventToListen, () => {
+        videoEl.currentTime = 0;
+        videoEl.pause();
+        resolve(id);
+      });
+      videoEl.volume = 0;
+      videoEl.play();
+    });
+
+    try {
+      await p;
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+
+  // const p = new Promise<string>(function (resolve, reject) {
+  //   let img = new Image();
+  //   img.onload = function () {
+  //     // resolve the promise with our url so it is
+  //     // returned in the result of Promise.all
+  //     resolve(id);
+  //   };
+  //   img.onerror = function (err) {
+  //     reject(err);
+  //   };
+  //   img.src = imageSrc.src!;
+  // });
+
+  // try {
+  //   await p;
+  // } catch (ex) {
+  //   // TODO: log error
+  // }
+
+  // const el = getObjectElementById(id).getElementsByClassName(
+  //   "object-content-" + id
+  // )[0] as HTMLDivElement;
+
+  // el.style.backgroundImage = `url('${imageSrc.src}')`;
+
+  return id;
 }
 
 export const getAssetsUrls = (

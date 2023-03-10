@@ -210,8 +210,8 @@ export class Player {
 
     // if is app do not load external components
     if (playerConfig.isApp) {
-      this.createAllSlides();
-      this.addListenersForEventsAnimations();
+      // this.createAllSlides();
+      // this.addListenersForEventsAnimations();
     } else {
       this.playerData?.extensions?.forEach((extension) => {
         this.extComponentPreloaders.push(
@@ -219,18 +219,18 @@ export class Player {
         );
       });
 
-      Promise.all(this.extComponentPreloaders)
-        .then(() => {
-          logger.player.info("All external components are loaded.");
-        })
-        .catch((err) => {
-          logger.player.warn("External component loading has failed.");
-          console.warn(err);
-        })
-        .finally(() => {
-          this.createAllSlides();
-          this.addListenersForEventsAnimations();
-        });
+      // Promise.all(this.extComponentPreloaders)
+      //   .then(() => {
+      //     logger.player.info("All external components are loaded.");
+      //   })
+      //   .catch((err) => {
+      //     logger.player.warn("External component loading has failed.");
+      //     console.warn(err);
+      //   })
+      //   .finally(() => {
+      //     this.createAllSlides();
+      //     this.addListenersForEventsAnimations();
+      //   });
     }
 
     //initSliderElement(this.rootDiv);
@@ -960,6 +960,9 @@ export class Player {
     //// TMP
 
     await Promise.all(this.extComponentPreloaders);
+    this.createAllSlides();
+    this.addListenersForEventsAnimations();
+
     // for (let i = 0; i < this.preloaders.length; i++) await this.preloaders[i];
     this.rootDiv.style.display = "block";
     this.pagePreloaderEls.forEach((item) => {

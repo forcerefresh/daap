@@ -44,6 +44,8 @@ import {
 } from "webslider-sdk/lib/form/i-form-layout";
 import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form";
 import { getDefaultLayoutAdvance } from "webslider-sdk/lib/objects/create-common-object";
+import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { DeviceType } from "aws-sdk/clients/ec2";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -93,7 +95,12 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           layoutedByParent,
           parentHasLayout
         )}
-        {renderLayoutOptionProperties(obj, _updateObject, layoutedByParent)}
+        {renderLayoutOptionProperties(
+          obj,
+          _updateObject,
+          layoutedByParent,
+          objectLayer
+        )}
         {renderAdvancedProperties(
           layoutAdvancedDefinition,
           obj.layoutAdvance?.values ?? {},
@@ -181,11 +188,34 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
   };
 
+  const isBreakpointTypeVisibleForLayer = (
+    deviceType: DeviceType,
+    l: ILayer
+  ) => {
+    if (l.responsiveVisibility.showAll) return true;
+    return l.responsiveVisibility.displayOn.indexOf(deviceType as any) !== -1;
+  };
+
+  const getBreakpointConfigForLayer = (l?: ILayer, b?: Breakpoints) => {
+    if (!l || !b) return b;
+
+    return {
+      breakpointsConfiguration: b.breakpointsConfiguration.filter((bc) =>
+        isBreakpointTypeVisibleForLayer(bc.type, l)
+      ),
+    };
+  };
+
   const renderLayoutOptionProperties = (
     objectOrLayer: ILayout,
     updateFunction: any,
-    layoutedByParent = false
+    layoutedByParent = false,
+    objectLayer?: ILayer
   ) => {
+    const usedBreakpoints = getBreakpointConfigForLayer(
+      objectLayer ?? (objectOrLayer as ILayer),
+      breakpoints
+    );
     return (
       <>
         {objectOrLayer.layout === "grid" &&
@@ -198,7 +228,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               updateFunction(retObj);
             },
             { disablePosition: layoutedByParent },
-            breakpoints,
+            usedBreakpoints,
             selectedDevice,
             (device: string) => {
               _setDevice(device);
@@ -218,7 +248,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               disablePosition: layoutedByParent,
               disableSize: objectOrLayer.selfSize,
             },
-            breakpoints,
+            usedBreakpoints,
             selectedDevice,
             (device: string) => {
               _setDevice(device);
@@ -237,7 +267,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
             },
-            breakpoints,
+            usedBreakpoints,
             selectedDevice,
             (device: string) => {
               _setDevice(device);
@@ -257,7 +287,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
             },
-            breakpoints,
+            usedBreakpoints,
             selectedDevice,
             (device: string) => {
               _setDevice(device);
@@ -277,7 +307,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               selfSize: objectOrLayer.selfSize,
               disablePosition: layoutedByParent,
             },
-            breakpoints,
+            usedBreakpoints,
             selectedDevice,
             (device: string) => {
               _setDevice(device);

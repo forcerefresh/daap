@@ -127,7 +127,8 @@ export function SlideRow(props: ISlideRowProps) {
           <Button
             minimal
             active={inPlay}
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               if (inPlay) {
                 setStagePreview({
                   previewState: "stop",

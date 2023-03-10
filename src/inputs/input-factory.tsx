@@ -55,6 +55,7 @@ import { FitInputForm } from "./fit-input/fit-input";
 import { InsetLayoutInputForm } from "./inset-layout-input/inset-layout-input";
 import { AudioInputForm } from "./audio-input/audio-input";
 import ExtraOptionsInput from "./extra-options-optional/extra-options-input";
+import { ClipMaskInputForm } from "./clip-mask-input/clip-mask-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -338,6 +339,12 @@ export function getInputForm<T>(
     }
     case InputType.SIZE: {
       return <SizeInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+
+    case InputType.CLIP_MASK: {
+      return (
+        <ClipMaskInputForm key={key} {...inputProps} onChange={onChange} />
+      );
     }
 
     case InputType.SIZE_UNIT: {

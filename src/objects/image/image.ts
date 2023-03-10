@@ -145,8 +145,9 @@ export function getImageHtml(props: {
   calculatedObjectSize: React.CSSProperties;
   isPlayer?: boolean;
   isSave?: boolean;
+  isForThumbnail?: boolean;
 }) {
-  const { object, isPlayer, isSave } = props;
+  const { object, isPlayer, isSave, isForThumbnail } = props;
   const imageValues = object.definition.values as ImageValues;
 
   if (!isPlayer) {
@@ -186,7 +187,9 @@ export function getImageHtml(props: {
   style = addTransformPropertiesToStyle(style, object);
   style += "width: 100%;";
   style += "height: 100%;";
-  style += `background-image:url('${imageItem.src}');`;
+  if (!imageValues.preload || !isPlayer || isForThumbnail) {
+    style += `background-image:url('${imageItem.src}');`;
+  }
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
@@ -222,7 +225,18 @@ export async function preloadImage(props: {
   const { id, values } = props;
   const imageValues = values as ImageValues;
 
-  const imageSrc = getMediaSrc("image", imageValues.image.image) as ImageItem;
+  let imageSrc: ImageItem = {} as ImageItem;
+
+  if (
+    imageValues.image.image.baseUrl &&
+    imageValues.image.image.baseUrl.startsWith("http")
+  ) {
+    imageSrc = {
+      src: imageValues.image.image.baseUrl + imageValues.image.image.filename,
+    };
+  } else {
+    imageSrc = getMediaSrc("image", imageValues.image.image) as ImageItem;
+  }
 
   // if there are no image to preload return instantly
   if (!imageSrc.src) {
@@ -244,7 +258,15 @@ export async function preloadImage(props: {
 
   try {
     await p;
-  } catch (ex) {}
+  } catch (ex) {
+    // TODO: log error
+  }
+
+  const el = getObjectElementById(id).getElementsByClassName(
+    "object-content-" + id
+  )[0] as HTMLDivElement;
+
+  el.style.backgroundImage = `url('${imageSrc.src}')`;
 
   return id;
 }
@@ -263,6 +285,11 @@ export function imagePostProcess(
     newValues.image = getDefaultValuesForSourceType(
       newValues.image.image.sourceType
     );
+  }
+
+  // we are adding this so we can replace it with real base url
+  if (prevValues.image.image.sourceType === "local") {
+    newValues.image.image.baseUrl = `{MEDIA_ITEM_LOCAL}`;
   }
 
   return newObj;
@@ -291,6 +318,7 @@ export const getAssetsUrls = (
       localFilename: imageValues.image.image.filename,
       sourceType: imageValues.image.image.sourceType,
       mediaType: "image",
+      baseUrl: imageValues.image.image.baseUrl,
     },
   ];
 };

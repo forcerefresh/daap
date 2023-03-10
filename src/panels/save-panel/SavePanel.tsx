@@ -115,8 +115,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const installedExtensions = await getInstalledExtensions();
 
-    const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
-
     const playerData = generatePlayerData(
       { slides, layers, objects },
       { entityType: "project", entityId: "current-project" },
@@ -127,10 +125,17 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       { isSave: true }
     );
 
+    let updatedProject = project;
+    let updatedPlayerData = playerData;
+    // replace ids is saveAs
+    if (saveAs) {
+      const updated = updateProjectWithNewIds(project);
+      updatedProject = updated.updatedProject;
+      updatedPlayerData = updateObjectWithNewIds(playerData, updated.fromToIds);
+    }
+
     const assetsUrls = getAllAssetsUrls(objects);
     const fonts = getAllFonts(objects);
-
-    const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
 
     saveProject({
       id: saveAs ? undefined : localMeta.id,

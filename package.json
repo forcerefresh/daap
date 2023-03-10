@@ -1,6 +1,6 @@
 {
   "name": "web-slider",
-  "version": "1.0.9",
+  "version": "1.0.10-1",
   "author": {
     "name": "Force Refresh doo",
     "email": "support@forcerefresh.io",
@@ -97,7 +97,7 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^1.1.95",
+    "webslider-sdk": "^1.1.104",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
     "yup": "^0.32.11"

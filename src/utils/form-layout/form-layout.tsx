@@ -85,7 +85,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
 
     // get per device input
     const perDeviceInputs = inputs.filter((input) => {
-      return input.propertyName.startsWith(element.propertyName + "_D_");
+      return input.propertyName?.startsWith(element.propertyName + "_D_");
     });
 
     return (
