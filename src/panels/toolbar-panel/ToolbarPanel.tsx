@@ -115,14 +115,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       <MenuDivider title={`WebSlider v${appVersion}`} />
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Open Documentation"
+        text="Documentation"
         onClick={() => {
           openExternalLink("https://webslider.io/docs/intro");
         }}
       />
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Open Support Forum"
+        text="Support Forum"
         onClick={() => {
           openExternalLink("https://support.webslider.io");
         }}
