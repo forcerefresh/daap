@@ -1,6 +1,6 @@
 {
   "name": "web-slider",
-  "version": "1.0.10-1",
+  "version": "1.0.10",
   "author": {
     "name": "Force Refresh doo",
     "email": "support@forcerefresh.io",
@@ -134,16 +134,24 @@
   },
   "build": {
     "appId": "io.webslider",
-    "artifactName": "Web-Slider-App-v${version}.${ext}",
+    "artifactName": "Web-Slider-App-v${version}-${arch}.${ext}",
     "productName": "WebSlider",
     "afterSign": "scripts/notarize.js",
     "mac": {
-      "target": "default",
       "category": "Developer Tools",
       "hardenedRuntime": true,
       "gatekeeperAssess": false,
       "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
+      "entitlementsInherit": "build/entitlements.mac.plist",
+      "target": [
+        {
+          "target": "default",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ]
     },
     "dmg": {
       "sign": false
