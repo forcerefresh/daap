@@ -10,7 +10,7 @@
   "homepage": "./",
   "main": "electron/main.js",
   "scripts": {
-    "start": "npm run start:app",
+    "start": "yarn run start:app",
     "start:app": "env-cmd -f env/.env react-scripts start",
     "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
     "start:app:electron": "cross-env BROWSER=none env-cmd -f env/electron.env react-scripts start",
@@ -22,13 +22,14 @@
     "build:player": "env-cmd -f env/player.env react-scripts build",
     "bundle:player_DEL": "webpack --config bundle-player.webpack.config.js",
     "bundle:player": "gulp",
-    "bb:player": "npm run build:player && npm run bundle:player",
+    "prebuild:native": "npm rebuild --platform=darwin --arch=arm64 sharp && npm rebuild --platform=darwin --arch=x64 sharp",
+    "bb:player": "yarn run build:player && yarn run bundle:player",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "pack": "electron-builder --dir",
     "build:package:electron": "yarn run bb:player && yarn run build:app:electron && yarn run build:main:electron && electron-builder",
-    "releaseapp": "yarn run bb:player && yarn run build:app:electron && yarn run build:main:electron && electron-builder --publish always"
+    "releaseapp": "yarn run prebuild:native && yarn run bb:player && yarn run build:app:electron && yarn run build:main:electron && electron-builder --publish always"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.54.0",
