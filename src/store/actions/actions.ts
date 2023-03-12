@@ -327,7 +327,6 @@ export function addNewLayer(slideId: string): any {
       responsiveVisibility: { showAll: true, displayOn: [] },
       definition: {
         values: {
-          overflow: "visible",
           hasLayoutChildren: false,
           layoutChildren: {
             type: LayoutChildrenType.Column,
@@ -353,9 +352,9 @@ export function addNewLayer(slideId: string): any {
         values: { ...getTransformPropertiesValues() },
         valuesMetadata: {},
       },
-      layout: "none",
+      layout: "fit",
       supportedLayout: {
-        none: true,
+        none: false,
         absolute: true,
         snap: true,
         fit: true,

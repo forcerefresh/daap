@@ -99,17 +99,19 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderLayerProperties = (layer: ILayer) => {
-    return (
-      <>
-        {renderProperties(
-          layerDefinition,
-          layer.definition.values,
-          layer.definition.valuesMetadata,
-          layer,
-          _updateLayer
-        )}
-      </>
-    );
+    return "Layer does not have properties.";
+
+    // return (
+    //   <>
+    //     {/* {renderProperties(
+    //       layerDefinition,
+    //       layer.definition.values,
+    //       layer.definition.valuesMetadata,
+    //       layer,
+    //       _updateLayer
+    //     )} */}
+    //   </>
+    // );
   };
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {

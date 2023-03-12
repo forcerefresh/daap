@@ -402,7 +402,7 @@ function generateSlideData(
     //html += `    <div class="${layerClassName}" style="width:1000px; height: 500px">`; // layer open
     let layerStyle = `position:absolute;`;
     //layerStyle += `border: 1px solid red;`;
-    layerStyle += `overflow: ${layerValues.overflow};`;
+    //layerStyle += `overflow: ${layerValues.overflow};`;
     layerStyle += `box-sizing: border-box;`;
 
     if (layerValues.hasLayoutChildren) {
@@ -434,6 +434,11 @@ function generateSlideData(
     forOwn(calculatedLayerSize, function (value, key) {
       layerStyle += key + ":" + value + ";";
     });
+
+    // NOTE: transparent corner
+    html += `<style>
+      .${layerClassName}::-webkit-scrollbar-corner { background:transparent; }
+    </style>`;
 
     if (layerValues.layoutChildren.itemsGap.type === "common") {
       const t = layerValues.layoutChildren.type;
@@ -483,6 +488,9 @@ function generateSlideData(
       //   object.transformDefinition.values.transformOriginX ?? "center"
       // }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
     }
+
+    // TODO: check this for parallax e.g.
+    layerStyle += "pointer-events: none;";
 
     let layerWrapperStyle = layerStyle;
     layerStyle +=

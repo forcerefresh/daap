@@ -20,13 +20,14 @@ import {
   ISnapLayout,
   IFitLayout,
   IInsetLayout,
+  IDefinition,
 } from "webslider-sdk/lib/objects/i-object";
 import {
   setDevice,
   updateLayer,
   updateObject,
 } from "../../../store/actions/actions";
-import { ILayer } from "../../../store/reducers/i-layers";
+import { ILayer, layerDefinition } from "../../../store/reducers/i-layers";
 import { IStore } from "../../../store/store";
 import css from "./LayoutProperties.module.scss";
 import { InfoInputForm } from "../../../inputs/info-input/info-input";
@@ -72,7 +73,16 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
       <>
         {renderLayoutOptions(lay, _updateLayer)}
         {renderLayoutOptionProperties(lay, _updateLayer)}
-        {renderAdvancedProperties(
+        {renderNamedProperties(
+          "definition",
+          layerDefinition,
+          lay.definition.values,
+          lay.definition.valuesMetadata,
+          lay,
+          _updateLayer
+        )}
+        {renderNamedProperties(
+          "layoutAdvance",
           layoutAdvancedDefinition,
           lay.layoutAdvance?.values ?? {},
           lay.layoutAdvance?.valuesMetadata ?? {},
@@ -101,7 +111,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           layoutedByParent,
           objectLayer
         )}
-        {renderAdvancedProperties(
+        {renderNamedProperties(
+          "layoutAdvance",
           layoutAdvancedDefinition,
           obj.layoutAdvance?.values ?? {},
           obj.layoutAdvance?.valuesMetadata ?? {},
@@ -112,11 +123,12 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
   };
 
-  const renderAdvancedProperties = (
+  const renderNamedProperties = (
+    namedProperty: "layoutAdvance" | "definition",
     properties: any[],
     values: any,
     valuesMetadata: any,
-    objectOrLayer: ILayout,
+    objectOrLayer: ILayout & { definition: IDefinition },
     updateFunction: (objectOrLayer: any) => any
   ) => {
     const flatForm = flattenForm(properties as IFormLayoutItem[]);
@@ -137,7 +149,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 
         if (retObj) {
           const values =
-            (retObj.layoutAdvance?.values as {
+            (retObj[namedProperty]?.values as {
               [key: string]: any;
             }) ?? {};
           values[propertyName] = value;
@@ -150,7 +162,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 
         if (retObj) {
           const valuesMetadata =
-            (retObj.layoutAdvance?.valuesMetadata as {
+            (retObj[namedProperty]?.valuesMetadata as {
               [key: string]: any;
             }) ?? {};
           valuesMetadata[propertyName] = metadata;
@@ -183,7 +195,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
         values={values}
         inputs={inputs}
         form={properties as IFormLayoutItem[]}
-        formId={"advanced-layout" as string}
+        formId={namedProperty as string}
+        skipOpeningGroupByDefault={true}
       />
     );
   };
@@ -367,6 +380,9 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
       helperText
     );
   };
+
+  // >>>> ---- copy from PropertiesPanel START
+  // <<<< ---- copy from PropertiesPanel STOP
 
   const renderObjectOrLayerOrSlide = () => {
     if (!selectionForProperties) {

@@ -21,6 +21,7 @@ type FormWithLayoutProps = typeof mapDispatchToProps &
     values: any;
     formId: string;
     depth?: number;
+    skipOpeningGroupByDefault?: boolean;
   };
 
 const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
@@ -32,6 +33,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     formId,
     uiFormSate,
     _setFormState,
+    skipOpeningGroupByDefault,
   } = props;
 
   const visibleSectionIds = uiFormSate[formId] ?? {};
@@ -127,10 +129,13 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     elements: IFormLayoutItem[] = [],
     inputs: any,
     values: any,
-    indexInArray: number
+    indexInArray: number,
+    skipOpeningGroupByDefault = false
   ) => {
     const shouldBeOpenAnyhow =
-      typeof visibleSectionIds[title] === "undefined" && indexInArray === 0;
+      typeof visibleSectionIds[title] === "undefined" &&
+      indexInArray === 0 &&
+      !skipOpeningGroupByDefault;
 
     if (shouldBeOpenAnyhow) {
       setVisibleSectionIds({
@@ -201,7 +206,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
 
   return (
     <>
-      {form.map((formItem, indexInArray) => {
+      {form.map((formItem, idx) => {
         if (formItem.type === FormType.GROUP) {
           return (
             <div
@@ -215,7 +220,8 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
                 formItem.elements,
                 inputs,
                 values,
-                indexInArray
+                idx,
+                skipOpeningGroupByDefault
               )}
             </div>
           );

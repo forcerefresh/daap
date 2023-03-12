@@ -4,12 +4,7 @@ import {
   ILayoutChildrenInput,
   LayoutChildrenType,
   ILayoutChildrenValue,
-  ISelectInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import {
-  CommonPropertiesTuple,
-  getCommonObjectPropertiesDefinition,
-} from "webslider-sdk/lib/objects/common-properties";
 import {
   ILayout,
   ITransitions,
@@ -45,7 +40,6 @@ export interface ILayer extends ILayout {
 }
 
 export interface ILayerValues {
-  overflow: string;
   hasLayoutChildren: boolean;
   layoutChildren: ILayoutChildrenValue;
 }
@@ -56,25 +50,10 @@ export interface ILayers {
 }
 
 export type LayerTuple = [
-  ISelectInput<"overflow">,
   IFormGroupItem<[ILayoutChildrenInput<"layoutChildren">]>
-  //...CommonPropertiesTuple
 ];
 
 export const layerDefinition: LayerTuple = [
-  {
-    displayName: "Overflow",
-    propertyName: "overflow",
-    inputType: InputType.SELECT,
-    options: [
-      { label: "Visible", value: "visible" },
-      { label: "Hidden", value: "hidden" },
-      { label: "Scroll", value: "scroll" },
-      { label: "Auto", value: "auto" },
-    ],
-    value: "visible",
-    defaultValue: "visible",
-  },
   {
     displayName: "Layout children",
     type: FormType.GROUP,
