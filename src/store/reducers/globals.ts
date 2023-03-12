@@ -5,6 +5,7 @@ export interface IAppSettings {
   appZoom: number;
   enableDeveloper: boolean;
   devTools: boolean;
+  allowPrerelease?: boolean;
   appVersion?: string;
   availableVersion?: string;
 }

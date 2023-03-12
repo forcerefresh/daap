@@ -223,24 +223,44 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
               </div>
 
               {globals.enableDeveloper && (
-                <div className="input60d">
-                  {getCheckboxField(
-                    "Developer Tools",
-                    globals.devTools,
-                    (devTools: any) => {
-                      // save settings
-                      saveSettings({
-                        ...globals,
-                        devTools,
-                      });
+                <>
+                  <div className="input60d">
+                    {getCheckboxField(
+                      "Allow prerelease installation",
+                      globals.allowPrerelease,
+                      (allowPrerelease: any) => {
+                        // save settings
+                        saveSettings({
+                          ...globals,
+                          allowPrerelease,
+                        });
 
-                      //update store
-                      _updateGlobalConfiguration({
-                        devTools,
-                      });
-                    }
-                  )}
-                </div>
+                        //update store
+                        _updateGlobalConfiguration({
+                          allowPrerelease,
+                        });
+                      }
+                    )}
+                  </div>
+                  <div className="input60d">
+                    {getCheckboxField(
+                      "Developer Tools",
+                      globals.devTools,
+                      (devTools: any) => {
+                        // save settings
+                        saveSettings({
+                          ...globals,
+                          devTools,
+                        });
+
+                        //update store
+                        _updateGlobalConfiguration({
+                          devTools,
+                        });
+                      }
+                    )}
+                  </div>
+                </>
               )}
             </FormGroup>
           </div>

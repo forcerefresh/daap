@@ -8,6 +8,8 @@ import { DragSourceMonitor, useDrag, useDrop } from "react-dnd";
 import { useEffect } from "react";
 import css from "./LayersPanel.module.scss";
 import { getEmptyImage } from "react-dnd-html5-backend";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import SVG from "react-inlinesvg";
 
 export interface IObjectRowProps {
   object: IObject;
@@ -66,6 +68,8 @@ export function ObjectRow(props: IObjectRowProps) {
   useEffect(() => {
     onDragingChange(isDragging);
   }, [isDragging]);
+
+  const deff = getAppObjectDefinition(object.type);
 
   return (
     <div
@@ -134,6 +138,9 @@ export function ObjectRow(props: IObjectRowProps) {
               [css.locked]: object.isLocked,
             })}
           ></Button>
+          <div className={css.objectTypeSVGHolder}>
+            <SVG src={deff?.meta?.icon || ""} />
+          </div>
         </div>
         <div className={css.objectDescription}>
           <div className={css.objectName}>{object.name}</div>
