@@ -24,5 +24,6 @@ Versioning is based on semantic versioning with following rules.
   - *shared code: da app kreira strukturu za wizard i onda moze se koristi i za app i za sajt u jednoj komponenti.*
   - za sajt bi se koristilo merganje preko item id-ja i  property name-a
 - 3.0.0 - Wordpress integration (upload exported template and shortcode integration)
+- 3.1.0 - Upload to wordpress directly from app
 
 
