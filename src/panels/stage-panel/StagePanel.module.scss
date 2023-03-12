@@ -106,17 +106,26 @@
 .layerMoveForResizerWTF {
   //pointer-events: none;
 }
-.layerMoveForResizerWTFActive {
-  border: 1px solid #f438ca;
+
+.layerMoveForResizerWTFParent {
+  border: 1px solid #83216d;
   &::after {
     content: "";
     position: absolute;
     top: 0px;
     left: 0px;
-    border-top: 3px dotted #f438ca;
-    border-left: 3px dotted #f438ca;
+    border-top: 3px dotted #83216d;
+    border-left: 3px dotted #83216d;
     width: 30px;
     height: 30px;
+  }
+}
+.layerMoveForResizerWTFActive {
+  border: 1px solid #f438ca;
+
+  &::after {
+    border-top: 3px dotted #f438ca;
+    border-left: 3px dotted #f438ca;
   }
 }
 .layoutChildrenSelected {

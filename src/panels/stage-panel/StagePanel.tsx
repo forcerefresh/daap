@@ -1252,6 +1252,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   const renderResizerWithLayer = (layer: ILayer) => {
     const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
+    const isParentLayer = activeLayerId && activeLayerId === layer.id;
+
     const hasLayout = layer.layout !== "none";
 
     const layerValues = layer.definition.values;
@@ -1279,6 +1281,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         key={`layer-resizer-${layer.id}`}
         className={cx(
           css.layerMoveForResizerWTF,
+          { [css.layerMoveForResizerWTFParent]: isParentLayer && hasLayout },
           { [css.layerMoveForResizerWTFActive]: isLayerActive && hasLayout },
           "LAYER_MOVE_FOR_RESIZER"
         )}
