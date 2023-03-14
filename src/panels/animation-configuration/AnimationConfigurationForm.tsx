@@ -3,6 +3,7 @@ import classnames from "classnames";
 import { cloneDeep, merge } from "lodash-es";
 import React, { useState } from "react";
 import { getInputForm } from "../../inputs/input-factory";
+import { v4 as uuid } from "uuid";
 import {
   getInheritTimeField,
   getNumericFiled,
@@ -438,7 +439,9 @@ export const AnimationConfigurationForm: React.FC<
               newTransition.animation.values,
               presetValues
             );
-            onTransitionChange(newTransition);
+
+            newTransition.uid = uuid();
+            onTransitionChange(cloneDeep(newTransition));
           }}
         />
 

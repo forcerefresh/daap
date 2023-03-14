@@ -114,6 +114,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   } = props;
   //logger.app.debug("StagePanel render");
 
+  const isPreview = previewState.isPreview;
+
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
@@ -314,7 +316,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       }
     });
   }
-  const isPreview = previewState.isPreview;
 
   useEffect(() => {
     if (isPreview === true) {
@@ -353,6 +354,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     height: stageSize.height + "px",
     transform: "scale(" + stageZoom + ")",
     transformOrigin: "left top",
+    ...(isPreview
+      ? { overflow: settings.hideOutsideContent ? "hidden" : "visibile" }
+      : {}),
   };
 
   const guidelinesBorderStyle: React.CSSProperties = {

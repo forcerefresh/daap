@@ -232,23 +232,6 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
             labelH: "Y",
           } as any
         )}
-
-        {getNumericFiled(
-          "",
-          oneValue.gap,
-          (newGap) => {
-            const newValue = cloneDeep(value);
-            const oneV = newValue.perDevice.find(
-              (item) => item.deviceType === t
-            );
-            if (oneV) {
-              oneV.gap = newGap;
-            }
-            onChange(newValue);
-          },
-          "deprecated",
-          { disabled: true }
-        )}
       </td>
     );
   };
