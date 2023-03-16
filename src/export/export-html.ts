@@ -375,6 +375,7 @@ function generateSlideData(
     itemsData.push({
       itemId: layer.id,
       customId: layer.customId,
+      parentItemId: undefined,
       itemType: "layer",
       itemValues: layer.definition.values,
       objectClass: layerClassName,
@@ -428,9 +429,14 @@ function generateSlideData(
       layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
     }
 
-    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig, {
-      resetPosition: false,
-    });
+    const calculatedLayerSize = calculateObjectSize(
+      layer,
+      undefined,
+      breakpointConfig,
+      {
+        resetPosition: false,
+      }
+    );
     forOwn(calculatedLayerSize, function (value, key) {
       layerStyle += key + ":" + value + ";";
     });
@@ -562,6 +568,7 @@ function generateSlideData(
       // TODO: IMPORTANT (size issue)
       const calculatedObjectSize = calculateObjectSize(
         object,
+        layer,
         breakpointConfig,
         { resetPosition: false },
         undefined,
@@ -570,6 +577,7 @@ function generateSlideData(
 
       const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
         object,
+        layer,
         breakpoints,
         { skipHeight: !!object.definition?.values?.autoHeight }
       );
@@ -643,6 +651,7 @@ function generateSlideData(
 
       itemsData.push({
         itemId: object.id,
+        parentItemId: layer.id,
         customId: object.customId,
         itemType: object.type,
         itemValues: object.definition.values,

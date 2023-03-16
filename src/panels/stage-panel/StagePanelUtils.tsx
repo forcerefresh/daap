@@ -7,6 +7,7 @@ import {
   IAbsoluteLayoutItem,
   IFitLayout,
   IInsetLayout,
+  ILayer,
   ILayout,
   IObject,
   ISnapLayout,
@@ -24,8 +25,16 @@ import { humanizeSting } from "../../utils/utils";
 
 import css from "./StagePanel.module.scss";
 
+export interface IBounds {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+}
+
 export function calculateObjectSizePerDevice(
   object: IObject,
+  parentLayer: ILayer | undefined,
   breakpoints: Breakpoints,
   options?: { skipHeight: boolean }
 ): { [key: string]: React.CSSProperties } {
@@ -34,6 +43,7 @@ export function calculateObjectSizePerDevice(
   breakpoints.breakpointsConfiguration.forEach((bp) => {
     ret[bp.type] = calculateObjectSize(
       object,
+      parentLayer,
       bp,
       { resetPosition: false },
       undefined,
@@ -66,14 +76,65 @@ export function getRelativeTo(
   return "page";
 }
 
+function getParentBounds(
+  parentLayout: ILayout | undefined,
+  breakpointConfig: BreakpointConfiguration
+): IBounds | undefined {
+  let parentBounds: React.CSSProperties | undefined;
+  let parentBoundsNum: IBounds | undefined;
+
+  if (parentLayout && parentLayout.layout !== "none") {
+    parentBounds = calculateObjectSize(
+      parentLayout,
+      undefined,
+      breakpointConfig,
+      { resetPosition: false }
+    );
+
+    parentBoundsNum = {
+      left: parseInt(parentBounds.left as string, 10),
+      top: parseInt(parentBounds.top as string, 10),
+      width: parseInt(parentBounds.width as string, 10),
+      height: parseInt(parentBounds.height as string, 10),
+    };
+  }
+
+  return parentBoundsNum;
+}
+
 export function calculateObjectSize(
   object: ILayout,
+  parentLayout: ILayout | undefined, // << this is layer ... ILayer | undefined,
   //stageSize: { width: number; height: number },
   breakpointConfig: BreakpointConfiguration,
   { resetPosition }: { resetPosition: boolean },
   scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
   options?: { skipHeight: boolean }
 ): React.CSSProperties {
+  //const itemType = (object as IObject | ILayer).type;
+
+  const parentBoundsNum = getParentBounds(parentLayout, breakpointConfig);
+  // let parentBounds: React.CSSProperties | undefined;
+  // let parentBoundsNum: IBounds | undefined;
+
+  // if (parentLayout && parentLayout.layout !== "none") {
+  //   parentBounds = calculateObjectSize(
+  //     parentLayout,
+  //     undefined,
+  //     breakpointConfig,
+  //     { resetPosition },
+  //     scaleParams,
+  //     options
+  //   );
+
+  //   parentBoundsNum = {
+  //     left: parseInt(parentBounds.left as string, 10),
+  //     top: parseInt(parentBounds.top as string, 10),
+  //     width: parseInt(parentBounds.width as string, 10),
+  //     height: parseInt(parentBounds.height as string, 10),
+  //   };
+  // }
+
   // Note: _maxSliderSize is calculated only in Player runtime
   const stageSize =
     breakpointConfig.normal._maxSliderSize ||
@@ -92,40 +153,67 @@ export function calculateObjectSize(
       breakpointConfig.type
     );
 
+    let relativeTo = parentBoundsNum
+      ? "parent"
+      : object?.absoluteLayout?.relativeTo!;
+    // if (object?.absoluteLayout?.type === "common")
+    //   relativeTo = object?.absoluteLayout?.relativeTo!;
+    // if (
+    //   object?.absoluteLayout?.type === "perDevice" &&
+    //   object?.absoluteLayout?.relativeToDevice &&
+    //   object?.absoluteLayout?.relativeToDevice.length > 0 &&
+    //   object?.absoluteLayout?.relativeToDevice?.indexOf(
+    //     breakpointConfig.type
+    //   ) !== -1
+    // ) {
+    //   relativeTo = object?.absoluteLayout?.perDevice?.find(
+    //     (item) => item.deviceType === breakpointConfig.type
+    //   )?.relativeTo!;
+    // }
+
     const left = unitValueToPx(
       absoluteValue.left,
       "left",
-      object?.absoluteLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     const top = unitValueToPx(
       absoluteValue.top,
       "top",
-      object.absoluteLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     let width = unitValueToPx(
       absoluteValue.width,
       "width",
-      object.absoluteLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     let height = unitValueToPx(
       absoluteValue.height,
       "height",
-      object.absoluteLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     if (absoluteValue.height === "width") height = width;
     if (absoluteValue.width === "height") width = height;
 
     const relativeToSize = getPSGSize(
-      object.absoluteLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      parentBoundsNum
     )!;
 
     //const width = relativeToSize.width - (left + right);
@@ -153,38 +241,49 @@ export function calculateObjectSize(
 
     const insetValue = getInsetLayoutSize(insetLayout!, breakpointConfig.type);
 
+    const relativeTo = parentBoundsNum ? "parent" : insetLayout?.relativeTo!;
+
     //const sizeObj = pick(insetValue, "left", "top", "width", "height")!;
     const relativeToSize = getPSGSize(
-      object.insetLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      parentBoundsNum
     )!;
 
     const left = unitValueToPx(
       insetValue!.left,
       "left",
-      object.insetLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     const top = unitValueToPx(
       insetValue!.top,
       "top",
-      object.insetLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     const right = unitValueToPx(
       insetValue!.right,
       "width",
-      object.insetLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     const bottom = unitValueToPx(
       insetValue!.bottom,
       "height",
-      object.insetLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      false,
+      parentBoundsNum
     );
 
     const width = relativeToSize.width - (left + right);
@@ -246,7 +345,13 @@ export function calculateObjectSize(
       breakpointConfig.type
     );
 
-    if (layoutItem.relativeTo === "stage") {
+    if (parentBoundsNum)
+      return {
+        ...mapValues(parentBoundsNum, (size) => `${size}px`),
+        left: "0px",
+        top: "0px",
+      };
+    else if (layoutItem.relativeTo === "stage") {
       const sizeObj = getPSGSize("stage", breakpointConfig);
       return mapValues(sizeObj, (size) => `${size}px`);
     } else if (layoutItem.relativeTo === "guidelines") {
@@ -280,9 +385,14 @@ export function calculateObjectSize(
 
     //const gap = snapSizeObj.gap;
 
+    let relativeTo = parentBoundsNum
+      ? "parent"
+      : object?.snapLayout?.relativeTo!;
+
     const relativeToSize = getPSGSize(
-      object.snapLayout?.relativeTo!,
-      breakpointConfig
+      relativeTo,
+      breakpointConfig,
+      parentBoundsNum
     )!;
 
     let sizeObj;
@@ -290,17 +400,19 @@ export function calculateObjectSize(
     let w = unitValueToPx(
       snapSizeObjStr.width,
       "width",
-      object.snapLayout?.relativeTo!,
+      relativeTo,
       breakpointConfig,
-      true
+      true,
+      parentBoundsNum
     );
 
     let h = unitValueToPx(
       snapSizeObjStr.height,
       "height", // TODO shoud be height
-      object.snapLayout?.relativeTo!,
+      relativeTo,
       breakpointConfig,
-      true
+      true,
+      parentBoundsNum
     );
 
     if (snapSizeObjStr.height === "width") h = w;
@@ -309,20 +421,22 @@ export function calculateObjectSize(
     const offsetX = unitValueToPx(
       snapSizeObjStr.offsetX ?? "0px", //INFO:  backward compatibility
       "left",
-      object.snapLayout?.relativeTo!,
+      relativeTo,
       breakpointConfig,
-      true
+      true,
+      parentBoundsNum
     );
 
     const offsetY = unitValueToPx(
       snapSizeObjStr.offsetY ?? "0px", //INFO:  backward compatibility
       "top",
-      object.snapLayout?.relativeTo!,
+      relativeTo,
       breakpointConfig,
-      true
+      true,
+      parentBoundsNum
     );
 
-    switch (object.snapLayout?.edge!) {
+    switch (snapSizeObjStr?.edge!) {
       case "left": {
         const top = relativeToSize.top + relativeToSize.height / 2 - h / 2;
         // (relativeToSize.top + relativeToSize.height) / 2;
@@ -474,6 +588,7 @@ export function getInsetLayoutSize(
  */
 export function getAbsoluteLayoutSizeInSameUnit(
   prevValue: IAbsoluteLayoutItem,
+  parentLayout: ILayout | undefined,
   rect: {
     x: number;
     y: number;
@@ -483,7 +598,13 @@ export function getAbsoluteLayoutSizeInSameUnit(
   relativeTo: "stage" | "page" | "guidelines" | string,
   breakpointConfig: BreakpointConfiguration
 ) {
-  const relativeToSize = getPSGSize(relativeTo, breakpointConfig)!;
+  const parentBoundsNum = getParentBounds(parentLayout, breakpointConfig);
+
+  const relativeToSize = getPSGSize(
+    parentLayout?.layout !== "none" ? "parent" : relativeTo,
+    breakpointConfig,
+    parentBoundsNum
+  )!;
 
   const retSize: Partial<IAbsoluteLayoutItem> = {
     left: isPercentage(prevValue.left)
@@ -514,45 +635,57 @@ function isPercentage(value: string) {
  */
 export function getAbsoluteLayoutSizeInPx(
   absoluteLayout: IAbsoluteLayout,
+  parentLayout: ILayout | undefined,
   selectedDevice: DeviceType | "common" | string | any,
   breakpointConfig: BreakpointConfiguration
 ) {
+  const parentBoundsNum = getParentBounds(parentLayout, breakpointConfig);
+
   const absoluteValue = getAbsoluteLayoutSize(absoluteLayout, selectedDevice);
 
   const left = unitValueToPx(
     absoluteValue.left,
     "left",
-    absoluteLayout?.relativeTo!,
-    breakpointConfig
+    parentLayout?.layout !== "none" ? "parent" : absoluteLayout?.relativeTo!,
+    breakpointConfig,
+    false,
+    parentBoundsNum
   );
 
   const top = unitValueToPx(
     absoluteValue.top,
     "top",
-    absoluteLayout?.relativeTo!,
-    breakpointConfig
+    parentLayout?.layout !== "none" ? "parent" : absoluteLayout?.relativeTo!,
+    breakpointConfig,
+    false,
+    parentBoundsNum
   );
 
   let width = unitValueToPx(
     absoluteValue.width,
     "width",
-    absoluteLayout?.relativeTo!,
-    breakpointConfig
+    parentLayout?.layout !== "none" ? "parent" : absoluteLayout?.relativeTo!,
+    breakpointConfig,
+    false,
+    parentBoundsNum
   );
 
   let height = unitValueToPx(
     absoluteValue.height,
     "height",
-    absoluteLayout?.relativeTo!,
-    breakpointConfig
+    parentLayout?.layout !== "none" ? "parent" : absoluteLayout?.relativeTo!,
+    breakpointConfig,
+    false,
+    parentBoundsNum
   );
 
   if (absoluteValue.height === "width") height = width;
   if (absoluteValue.width === "height") width = height;
 
   const relativeToSize = getPSGSize(
-    absoluteLayout?.relativeTo!,
-    breakpointConfig
+    parentBoundsNum ? "parent" : absoluteLayout?.relativeTo!,
+    breakpointConfig,
+    parentBoundsNum
   )!;
 
   const sizeObj = {
@@ -601,9 +734,15 @@ export function getSnapLayoutSize(
 }
 
 function getPSGSize(
-  type: "page" | "stage" | "guidelines" | string,
-  breakpointConfig: BreakpointConfiguration
-) {
+  type: "page" | "stage" | "guidelines" | "parent" | string,
+  breakpointConfig: BreakpointConfiguration,
+  parentBoundsNum?: IBounds
+  //itemType: "object" | "layer" | string = "layer"
+): IBounds | undefined {
+  if (type === "parent" && parentBoundsNum) {
+    return { ...parentBoundsNum, left: 0, top: 0 };
+  }
+
   const stageSize =
     breakpointConfig.normal._maxSliderSize ||
     breakpointConfig.normal.maxSliderSize;
@@ -615,7 +754,13 @@ function getPSGSize(
     case "page": {
       return {
         top: -((pageSize.height || stageSize.height) - stageSize.height) / 2,
+        // itemType === "layer"
+        //   ? -((pageSize.height || stageSize.height) - stageSize.height) / 2
+        //   : 0,
         left: -((pageSize.width || stageSize.width) - stageSize.width) / 2,
+        // itemType === "layer"
+        //   ? -((pageSize.width || stageSize.width) - stageSize.width) / 2
+        //   : 0,
         width: pageSize.width || 0,
         height: pageSize.height || 0,
       };
@@ -651,7 +796,8 @@ export function unitValueToPx(
   propertyName: "width" | "height" | "left" | "top",
   relativeTo: string,
   breakpointConfig: BreakpointConfiguration,
-  includeLastGuidelineOffset = false
+  includeLastGuidelineOffset = false,
+  parentBounds?: IBounds
 ) {
   const sizeProperty =
     propertyName === "width" || propertyName === "left" ? "width" : "height";
@@ -664,7 +810,9 @@ export function unitValueToPx(
       breakpointConfig.normal.page?.[sizeProperty];
 
     // IMPORTANT: max slider size nemoze da bude veci od setovanog
-    if (relativeTo === "stage") {
+    if (relativeTo === "parent") {
+      newVal = parentBounds?.[sizeProperty]!;
+    } else if (relativeTo === "stage") {
       newVal =
         breakpointConfig.normal._maxSliderSize?.[sizeProperty] ||
         breakpointConfig.normal.maxSliderSize?.[sizeProperty];
@@ -688,6 +836,7 @@ export function unitValueToPx(
           (breakpointConfig?.normal?.guidelinesPadding.bottom || 0);
       }
     }
+
     return roundNumber((newVal * parseFloat(value)) / 100, 1);
   }
   return parseFloat(value);
@@ -798,7 +947,7 @@ export function getPositionInfo(object: IObject, device: DeviceType) {
     return (
       <>
         <span> Snap | </span>
-        <span> {"" + humanizeSting(object?.snapLayout?.edge ?? "")}</span>
+        <span> {"" + humanizeSting(objectSnapLayout?.edge ?? "")}</span>
         <span> {"W:" + objectSnapLayout?.width ?? ""}</span>
         <span> {"H:" + objectSnapLayout?.height ?? ""}</span>
         <span> {"Offset X:" + objectSnapLayout?.offsetX ?? ""}</span>

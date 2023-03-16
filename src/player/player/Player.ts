@@ -573,11 +573,24 @@ export class Player {
     });
   }
 
+  private getParentTransitionData(
+    items: IItemsData[],
+    itemId?: string
+  ): IItemsData | undefined {
+    return items.find((item) => item.itemId === itemId);
+  }
+
   private bpUpdateObjectSize(idx: number, data: ISlideData, isInitial = false) {
     data.items.forEach((transitionData) => {
+      const parentLayout = this.getParentTransitionData(
+        data.items,
+        transitionData.parentItemId
+      )?.layout as ILayout;
+
       // TODO: use only per device (add per device for layer)
       const calObjSize = calculateObjectSize(
         transitionData.layout as ILayout,
+        parentLayout,
         this.currentBp,
         { resetPosition: false },
         this.scaleParams

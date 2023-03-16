@@ -116,6 +116,7 @@ export function getInputForm<T>(
     breakpoints?: Breakpoints;
     selectedDevice?: string;
     onChangeDevice?: (device: string) => void;
+    relativeToLayer?: boolean;
   }
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
@@ -324,6 +325,7 @@ export function getInputForm<T>(
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
           onChangeDevice={data?.onChangeDevice}
+          relativeToLayer={data?.relativeToLayer}
         />
       );
     }
@@ -364,6 +366,7 @@ export function getInputForm<T>(
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
           onChangeDevice={data?.onChangeDevice}
+          relativeToLayer={data?.relativeToLayer}
         />
       );
     }
@@ -376,6 +379,7 @@ export function getInputForm<T>(
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
           onChangeDevice={data?.onChangeDevice}
+          relativeToLayer={data?.relativeToLayer}
         />
       );
     }
@@ -388,6 +392,7 @@ export function getInputForm<T>(
           breakpoints={data?.breakpoints}
           selectedDevice={data?.selectedDevice}
           onChangeDevice={data?.onChangeDevice}
+          relativeToLayer={data?.relativeToLayer}
         />
       );
     }

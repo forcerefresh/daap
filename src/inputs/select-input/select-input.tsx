@@ -17,6 +17,7 @@ export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
     inputProps = {},
     externalError = "",
     propertyName,
+    customReadonlySelectedLabel,
   } = props;
 
   const underFieldText = getUnderFieldText(helperText, externalError);
@@ -31,9 +32,19 @@ export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
       <HTMLSelect
         className={!!externalError ? "warning" : ""}
         id="text-input"
-        options={options}
-        value={value}
+        options={
+          customReadonlySelectedLabel
+            ? [
+                {
+                  label: customReadonlySelectedLabel,
+                  value: customReadonlySelectedLabel,
+                },
+              ]
+            : options
+        }
+        value={customReadonlySelectedLabel ?? value}
         onChange={(event: ChangeEvent) =>
+          !customReadonlySelectedLabel &&
           onChange((event.currentTarget as HTMLSelectElement).value)
         }
         {...inputProps}

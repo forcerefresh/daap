@@ -49,6 +49,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
     breakpoints = { breakpointsConfiguration: [] },
     selectedDevice = "",
     onChangeDevice = (device: string) => undefined,
+    relativeToLayer,
   } = props;
   const { type, perDevice, common } = value;
   const switchValue = type === "common" ? "common" : "perDevice";
@@ -76,6 +77,18 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
   const renderCommon = () => {
     return (
       <>
+        {getSelectField(
+          "Snap to",
+          value.common.edge,
+          EDGE_OPTIONS,
+          (newEdge) => {
+            onChange(
+              { ...value, common: { ...value.common, edge: newEdge } },
+              { disabled: inputProps.disablePosition } // TODO << this is probably not needed
+            );
+          },
+          { disabled: inputProps.disablePosition }
+        )}
         {getSizeUnitLayoutField(
           "Size",
           { width: value.common.width, height: value.common.height },
@@ -123,7 +136,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           "",
           { disabled: inputProps.disablePosition }
         )}
-        {getNumericFiled(
+        {/* {getNumericFiled(
           "Offset",
           value.common.gap,
           (newGap) => {
@@ -137,7 +150,7 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
           },
           "Offset is deprecated",
           { disabled: true }
-        )}
+        )} */}
       </>
     );
   };
@@ -175,23 +188,30 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
               if (!bc.enabled) return null;
 
               return (
-                <tr>
-                  <td>
-                    <Button
-                      minimal
-                      active={bc.type === selectedDevice}
-                      onClick={() => {
-                        onChangeDevice(bc.type);
-                      }}
-                    >
-                      {getIcon(bc)}
-                    </Button>
-                  </td>
-                  {renderOneSizeInput(bc.type)}
-                  {renderOneGapInput(bc.type)}
-
-                  <td></td>
-                </tr>
+                <>
+                  <tr>
+                    <td>
+                      <Button
+                        minimal
+                        active={bc.type === selectedDevice}
+                        onClick={() => {
+                          onChangeDevice(bc.type);
+                        }}
+                      >
+                        {getIcon(bc)}
+                      </Button>
+                    </td>
+                    {renderOneSizeInput(bc.type)}
+                    {renderOneGapInput(bc.type)}
+                    <td></td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    {renderOneSnapToInput(bc.type)}
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </>
               );
             })}
           </>
@@ -236,6 +256,33 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
     );
   };
 
+  const renderOneSnapToInput = (t: DeviceType) => {
+    let oneValue = perDevice.find((item) => item.deviceType === t);
+    if (!oneValue) {
+      return null;
+    }
+
+    return (
+      <td>
+        {getSelectField(
+          "",
+          oneValue.edge,
+          EDGE_OPTIONS,
+          (newEdge) => {
+            const newValue = cloneDeep(value);
+            const oneV = newValue.perDevice.find(
+              (item) => item.deviceType === t
+            );
+            if (oneV) {
+              oneV.edge = newEdge;
+            }
+            onChange(newValue);
+          },
+          { disabled: inputProps.disablePosition || t !== selectedDevice }
+        )}
+      </td>
+    );
+  };
   const renderOneSizeInput = (t: DeviceType) => {
     let oneValue = perDevice.find((item) => item.deviceType === t);
     if (!oneValue) {
@@ -308,26 +355,30 @@ export const SnapInputForm: React.FC<ISnapLayoutInput & IUpdateInput> = (
   return (
     <div className={css.main}>
       {getSelectField(
-        "Relative to",
+        "Relative",
+        value.relativeTo,
+        RELATIVE_TO_OPTIONS,
+        (newRelativeTo) => {
+          onChange({ ...value, relativeTo: newRelativeTo });
+        },
+        {
+          disabled: inputProps.disablePosition || relativeToLayer,
+          customReadonlySelectedLabel: relativeToLayer ? "Layer" : undefined,
+        },
+        relativeToLayer
+          ? "Object position is relative to layer when it has layout configured."
+          : ""
+      )}
+      {/*       
+      {getSelectField(
+        "Relative",
         value.relativeTo,
         RELATIVE_TO_OPTIONS,
         (newRelativeTo) => {
           onChange({ ...value, relativeTo: newRelativeTo });
         },
         { disabled: inputProps.disablePosition }
-      )}
-      {getSelectField(
-        "Snap to",
-        value.edge,
-        EDGE_OPTIONS,
-        (newEdge) => {
-          onChange(
-            { ...value, edge: newEdge },
-            { disabled: inputProps.disablePosition }
-          );
-        },
-        { disabled: inputProps.disablePosition }
-      )}
+      )} */}
 
       {getButtonGroupField(
         "",

@@ -24,6 +24,7 @@ export const FitInputForm: React.FC<IFitInput & IUpdateInput> = (props) => {
     breakpoints = { breakpointsConfiguration: [] },
     selectedDevice = "",
     onChangeDevice = (device: string) => undefined,
+    relativeToLayer,
   } = props;
   const { type, perDevice } = value;
   const switchValue = type === "common" ? "common" : "perDevice";
@@ -52,7 +53,7 @@ export const FitInputForm: React.FC<IFitInput & IUpdateInput> = (props) => {
     return (
       <>
         {getSelectField(
-          "Relative to",
+          "Relative",
           value.common.relativeTo,
           RELATIVE_TO_OPTIONS,
           (newRelativeTo) => {
@@ -136,7 +137,7 @@ export const FitInputForm: React.FC<IFitInput & IUpdateInput> = (props) => {
     return (
       <td className={css.gapTD}>
         {getSelectField(
-          "Relative to",
+          "Relative",
           oneValue.relativeTo,
           RELATIVE_TO_OPTIONS,
           (newRelativeTO) => {
@@ -154,6 +155,25 @@ export const FitInputForm: React.FC<IFitInput & IUpdateInput> = (props) => {
       </td>
     );
   };
+
+  // NOTE: this part shows DISABLED select
+  if (relativeToLayer) {
+    return (
+      <div className={css.main}>
+        {getSelectField(
+          "Relative",
+          "layer",
+          RELATIVE_TO_OPTIONS,
+          (newRelativeTo) => {},
+          {
+            disabled: true,
+            customReadonlySelectedLabel: relativeToLayer ? "Layer" : undefined,
+          },
+          "Object position is relative to layer when it has layout configured."
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className={css.main}>

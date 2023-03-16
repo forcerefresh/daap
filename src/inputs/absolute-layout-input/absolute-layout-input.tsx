@@ -1,5 +1,6 @@
 import { Button, FormGroup, Icon, InputGroup, Intent } from "@blueprintjs/core";
-import { cloneDeep, isEqual, noop, pick } from "lodash-es";
+import { cloneDeep, indexOf, isEqual, noop, pick } from "lodash-es";
+import cx from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 import { IAbsoluteLayoutItem } from "webslider-sdk/lib/objects/i-object";
 import { getIconSize } from "../../panels/action-panel/ActionPanel";
@@ -20,6 +21,7 @@ import {
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./absolute-layout-input.module.scss";
+import ExtraOptionsInput from "../extra-options-optional/extra-options-input";
 
 const RELATIVE_TO_OPTIONS = [
   { label: "Page", value: "page" },
@@ -39,6 +41,7 @@ export const AbsolutePlacementForm: React.FC<
     breakpoints = { breakpointsConfiguration: [] },
     selectedDevice = "",
     onChangeDevice = (device: string) => undefined,
+    relativeToLayer,
   } = props;
   const { type, perDevice, common } = value;
   const switchValue = type === "common" ? "common" : "perDevice";
@@ -354,22 +357,56 @@ export const AbsolutePlacementForm: React.FC<
             {bcArr.map((bc) => {
               if (!bc.enabled) return null;
 
-              return (
-                <tr key={bc.type}>
-                  <td>
-                    <Button
-                      minimal
-                      active={bc.type === selectedDevice}
-                      onClick={() => {
-                        onChangeDevice(bc.type);
-                      }}
-                    >
-                      {getIcon(bc)}
-                    </Button>
-                  </td>
+              // const renderPerDev =
+              //   value.relativeToDevice &&
+              //   value.relativeToDevice?.length > 0 &&
+              //   value.relativeToDevice?.indexOf(bc.type) !== -1;
 
-                  {renderOneInput(bc.type)}
-                </tr>
+              // let oneValue = perDevice.find(
+              //   (item) => item.deviceType === bc.type
+              // );
+
+              return (
+                <>
+                  {/* {renderPerDev && (
+                    <tr>
+                      <td></td>
+                      <td colSpan={3}>
+                        {getSelectField(
+                          "Relative",
+                          oneValue?.relativeTo ?? "page",
+                          RELATIVE_TO_OPTIONS,
+                          (newRelativeTo) => {
+                            const newValue = cloneDeep(value);
+                            const oneV = newValue.perDevice.find(
+                              (item) => item.deviceType === bc.type
+                            );
+                            if (oneV) {
+                              oneV.relativeTo = newRelativeTo;
+                            }
+                            onChange(newValue);
+                          },
+                          { disabled: inputProps.disablePosition }
+                        )}
+                      </td>
+                    </tr>
+                  )} */}
+                  <tr key={bc.type}>
+                    <td>
+                      <Button
+                        minimal
+                        active={bc.type === selectedDevice}
+                        onClick={() => {
+                          onChangeDevice(bc.type);
+                        }}
+                      >
+                        {getIcon(bc)}
+                      </Button>
+                    </td>
+
+                    {renderOneInput(bc.type)}
+                  </tr>
+                </>
               );
             })}
           </>
@@ -412,16 +449,45 @@ export const AbsolutePlacementForm: React.FC<
   };
 
   return (
-    <div className={css.main}>
+    <div className={cx("input60", css.main)}>
+      {/* {value.type === "perDevice" ? (
+        <ExtraOptionsInput
+          extraOptions={{
+            devices: true,
+          }}
+          metadataValues={{ devices: value.relativeToDevice ?? [] }}
+          onMetadataChange={(metaVal) => {
+            onChange({ ...value, relativeToDevice: metaVal.devices });
+          }}
+        >
+          {getSelectField(
+            "Relative",
+            value.relativeTo,
+            RELATIVE_TO_OPTIONS,
+            (newRelativeTo) => {
+              onChange({ ...value, relativeTo: newRelativeTo });
+            },
+            { disabled: inputProps.disablePosition }
+          )}
+        </ExtraOptionsInput>
+      ) : ( */}
       {getSelectField(
-        "Relative to",
+        "Relative",
         value.relativeTo,
         RELATIVE_TO_OPTIONS,
         (newRelativeTo) => {
           onChange({ ...value, relativeTo: newRelativeTo });
         },
-        { disabled: inputProps.disablePosition }
+        {
+          disabled: inputProps.disablePosition || relativeToLayer,
+          customReadonlySelectedLabel: relativeToLayer ? "Layer" : undefined,
+        },
+        relativeToLayer
+          ? "Object position is relative to layer when it has layout configured."
+          : ""
       )}
+
+      {/* )} */}
       {getButtonGroupField(
         "",
         switchValue,

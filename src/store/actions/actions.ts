@@ -352,9 +352,9 @@ export function addNewLayer(slideId: string): any {
         values: { ...getTransformPropertiesValues() },
         valuesMetadata: {},
       },
-      layout: "fit",
+      layout: "none",
       supportedLayout: {
-        none: false,
+        none: true,
         absolute: true,
         snap: true,
         fit: true,
@@ -393,14 +393,13 @@ export function addNewLayer(slideId: string): any {
       },
       snapLayout: {
         type: "common",
-        edge: "left",
         relativeTo: "stage",
         perDevice: [],
         common: {
           deviceType: "common",
           width: "200px",
           height: "200px",
-          gap: 0,
+          edge: "left",
           offsetX: "0px",
           offsetY: "0px",
         },
@@ -900,6 +899,7 @@ export function selectObjectsByRect(rect: IRect): any {
 
       const calculatedObjectSize = calculateObjectSize(
         object,
+        getState().project.layers.layerById[object.layerId],
         breakpointConfig!,
         {
           resetPosition: false,
@@ -1280,6 +1280,7 @@ function postProcessBullet(object: IObject, getState: () => IStore): void {
     // todo: calculate for all not only for one
     const calculatedObjectSize = calculateObjectSize(
       object,
+      getState().project.layers.layerById[object.layerId],
       breakpointConfig!,
       {
         resetPosition: false,
@@ -1324,6 +1325,7 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
     // todo: calculate for all not only for one
     const calculatedObjectSize = calculateObjectSize(
       object,
+      getState().project.layers.layerById[object.layerId],
       breakpointConfig!,
       {
         resetPosition: false,
@@ -1377,6 +1379,7 @@ function handleTextUpdate(
     // todo: calculate for all not only for one
     const calculatedObjectSize = calculateObjectSize(
       object,
+      getState().project.layers.layerById[object.layerId],
       breakpointConfig!,
       {
         resetPosition: false,

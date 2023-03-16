@@ -95,7 +95,11 @@ export function getSelectField<T>(
   value: T,
   options: { value: string | number; label: string }[],
   onChange: (value: T) => void,
-  inputProps: { disabled?: boolean; placeholder?: string } = {},
+  inputProps: {
+    disabled?: boolean;
+    placeholder?: string;
+    customReadonlySelectedLabel?: string;
+  } = {},
   helperText?: string,
   externalError?: string | string[]
 ) {
@@ -107,6 +111,7 @@ export function getSelectField<T>(
     inputProps,
     helperText,
     externalError,
+    customReadonlySelectedLabel: inputProps.customReadonlySelectedLabel,
   };
 
   return getInputForm(InputType.SELECT, objectDef, onChange);
@@ -264,7 +269,8 @@ export function getAbsoluteLayoutField<T>(
   },
   breakpoints: Breakpoints = { breakpointsConfiguration: [] },
   selectedDevice: string = "",
-  onChangeDevice: (device: string) => void = (device: string) => undefined
+  onChangeDevice: (device: string) => void = (device: string) => undefined,
+  relativeToLayer?: boolean
 ) {
   const objectDef = {
     displayName: label,
@@ -282,6 +288,7 @@ export function getAbsoluteLayoutField<T>(
       breakpoints,
       selectedDevice,
       onChangeDevice,
+      relativeToLayer,
     }
   );
 }
@@ -343,7 +350,8 @@ export function getSnapLayoutField<T>(
   inputProps?: { selfSize?: boolean; disablePosition?: boolean },
   breakpoints: Breakpoints = { breakpointsConfiguration: [] },
   selectedDevice: string = "",
-  onChangeDevice: (device: string) => void = (device: string) => undefined
+  onChangeDevice: (device: string) => void = (device: string) => undefined,
+  relativeToLayer?: boolean
 ) {
   const objectDef = {
     displayName: label,
@@ -356,6 +364,7 @@ export function getSnapLayoutField<T>(
     breakpoints,
     selectedDevice,
     onChangeDevice,
+    relativeToLayer,
   });
 }
 
@@ -366,7 +375,8 @@ export function getFitLayoutField<T>(
   inputProps?: { selfSize?: boolean; disablePosition?: boolean },
   breakpoints: Breakpoints = { breakpointsConfiguration: [] },
   selectedDevice: string = "",
-  onChangeDevice: (device: string) => void = (device: string) => undefined
+  onChangeDevice: (device: string) => void = (device: string) => undefined,
+  relativeToLayer?: boolean
 ) {
   const objectDef = {
     displayName: label,
@@ -379,6 +389,7 @@ export function getFitLayoutField<T>(
     breakpoints,
     selectedDevice,
     onChangeDevice,
+    relativeToLayer,
   });
 }
 
@@ -389,7 +400,8 @@ export function getInsetLayoutField<T>(
   inputProps?: { selfSize?: boolean; disablePosition?: boolean },
   breakpoints: Breakpoints = { breakpointsConfiguration: [] },
   selectedDevice: string = "",
-  onChangeDevice: (device: string) => void = (device: string) => undefined
+  onChangeDevice: (device: string) => void = (device: string) => undefined,
+  relativeToLayer?: boolean
 ) {
   const objectDef = {
     displayName: label,
@@ -402,6 +414,7 @@ export function getInsetLayoutField<T>(
     breakpoints,
     selectedDevice,
     onChangeDevice,
+    relativeToLayer,
   });
 }
 

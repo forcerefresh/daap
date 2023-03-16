@@ -205,7 +205,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             minimal
             onAllow={() => createNew()}
             onDenied={() => {}}
-            confirmButtonText={"Discard changes and Create New Project"}
+            confirmButtonText={"Discard changes and Create Project"}
             className={css.addNewSlide}
             small={true}
             icon="add"

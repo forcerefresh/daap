@@ -35,6 +35,7 @@ export const InsetLayoutInputForm: React.FC<
     breakpoints = { breakpointsConfiguration: [] },
     selectedDevice = "",
     onChangeDevice = (device: string) => undefined,
+    relativeToLayer,
   } = props;
   const { type, perDevice, common } = value;
   const switchValue = type === "common" ? "common" : "perDevice";
@@ -300,17 +301,42 @@ export const InsetLayoutInputForm: React.FC<
   //   );
   // };
 
+  const getRelativeToInput = () => {
+    // NOTE: this part shows DISABLED select
+    if (relativeToLayer) {
+      return (
+        <div className={css.main}>
+          {getSelectField(
+            "Relative",
+            "layer",
+            RELATIVE_TO_OPTIONS,
+            (newRelativeTo) => {},
+            {
+              disabled: true,
+              customReadonlySelectedLabel: relativeToLayer
+                ? "Layer"
+                : undefined,
+            },
+            "Object position is relative to layer when it has layout configured."
+          )}
+        </div>
+      );
+    }
+
+    return getSelectField(
+      "Relative",
+      value.relativeTo,
+      RELATIVE_TO_OPTIONS,
+      (newRelativeTo) => {
+        onChange({ ...value, relativeTo: newRelativeTo });
+      },
+      { disabled: inputProps.disablePosition }
+    );
+  };
+
   return (
     <div className={css.main}>
-      {getSelectField(
-        "Relative to",
-        value.relativeTo,
-        RELATIVE_TO_OPTIONS,
-        (newRelativeTo) => {
-          onChange({ ...value, relativeTo: newRelativeTo });
-        },
-        { disabled: inputProps.disablePosition }
-      )}
+      {getRelativeToInput()}
       {getButtonGroupField(
         "",
         switchValue,

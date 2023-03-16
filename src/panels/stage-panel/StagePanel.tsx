@@ -111,6 +111,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     breakpoints,
     forceRefreshRand: _forceRefreshRand, // NOTE: check this
     enableDeveloper,
+    showGrid,
   } = props;
   //logger.app.debug("StagePanel render");
 
@@ -263,6 +264,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (!objectByIdForDrag[objectId].isLocked) {
       const absSizeObjInPx = getAbsoluteLayoutSizeInPx(
         objectByIdForDrag[objectId].absoluteLayout!,
+        layers.layerById[objects.objectById[objectId].layerId],
         selectedDevice,
         breakpointConfig!
       );
@@ -274,6 +276,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
         absSizeObj,
+        layers.layerById[objects.objectById[objectId].layerId],
         {
           x: absSizeObjInPx.left + diff.x,
           y: absSizeObjInPx.top + diff.y,
@@ -544,6 +547,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
     const sizeObj = getAbsoluteLayoutSizeInPx(
       object.absoluteLayout!,
+      layers.layerById[object.layerId],
       selectedDevice,
       breakpointConfig!
     );
@@ -633,9 +637,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const hasLayout = layer.layout !== "none";
 
     const layerValues = layer.definition.values;
-    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
-      resetPosition: false,
-    });
+    const calculatedLayerSize = calculateObjectSize(
+      layer,
+      undefined,
+      breakpointConfig!,
+      {
+        resetPosition: false,
+      }
+    );
 
     const layerStyle = { ...calculatedLayerSize };
     layerStyle.position = "absolute";
@@ -710,7 +719,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             const layoutChildren = layer.definition.values.hasLayoutChildren
               ? layer.definition.values.layoutChildren
               : undefined;
-            return renderObject(object, layoutChildren);
+            return renderObject(object, layer, layoutChildren);
           })}
         </div>
       </div>
@@ -719,6 +728,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
   function renderObject(
     object: IObject,
+    parentLayer: ILayer,
     layoutChildren?: ILayoutChildrenValue
   ) {
     const objectId = object.id;
@@ -740,6 +750,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       //
       const calculatedObjectSize = calculateObjectSize(
         object,
+        parentLayer,
         breakpointConfig!,
         {
           resetPosition: false,
@@ -856,6 +867,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     // reset position to 0 (position gonna be set in Draggable)
     const calculatedObjectSize = calculateObjectSize(
       object,
+      parentLayer,
       breakpointConfig!,
       {
         resetPosition: false,
@@ -1093,6 +1105,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       const obj = objectByIdLocal.current[resizeData.objectId];
       const absSizeObj = getAbsoluteLayoutSizeInPx(
         obj.absoluteLayout!,
+        layers.layerById[obj.layerId],
         selectedDevice,
         breakpointConfig!
       );
@@ -1261,9 +1274,14 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const hasLayout = layer.layout !== "none";
 
     const layerValues = layer.definition.values;
-    const calculatedLayerSize = calculateObjectSize(layer, breakpointConfig!, {
-      resetPosition: false,
-    });
+    const calculatedLayerSize = calculateObjectSize(
+      layer,
+      undefined,
+      breakpointConfig!,
+      {
+        resetPosition: false,
+      }
+    );
 
     const layerStyle = {
       ...calculatedLayerSize,
@@ -1313,6 +1331,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       const calculatedObjectSize = calculateObjectSize(
         object,
+        layer,
         breakpointConfig!,
         {
           resetPosition: false,
@@ -1416,6 +1435,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
           const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
             absSizeObj,
+            layers.layerById[objects.objectById[obj.id].layerId],
             resizeRect!,
             obj.absoluteLayout!.relativeTo,
             breakpointConfig!
@@ -1537,24 +1557,31 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
             {!isPreview && (
               <>
-                {horizontalGridLines.map((item, hlIdx) => (
-                  <div
-                    key={`hor-lines-${hlIdx}`}
-                    style={{ top: item.top + "px", width: item.width + "px" }}
-                    className={cx(css.gridHorizontalLine)}
-                  ></div>
-                ))}
-                {verticalGridLines.map((item, hlIdx) => (
-                  <div
-                    key={`ver-lines-${hlIdx}`}
-                    style={{
-                      left: item.left + "px",
-                      height: item.height + "px",
-                      top: "0px",
-                    }}
-                    className={cx(css.gridVerticalLine)}
-                  ></div>
-                ))}
+                {showGrid && (
+                  <>
+                    {horizontalGridLines.map((item, hlIdx) => (
+                      <div
+                        key={`hor-lines-${hlIdx}`}
+                        style={{
+                          top: item.top + "px",
+                          width: item.width + "px",
+                        }}
+                        className={cx(css.gridHorizontalLine)}
+                      ></div>
+                    ))}
+                    {verticalGridLines.map((item, hlIdx) => (
+                      <div
+                        key={`ver-lines-${hlIdx}`}
+                        style={{
+                          left: item.left + "px",
+                          height: item.height + "px",
+                          top: "0px",
+                        }}
+                        className={cx(css.gridVerticalLine)}
+                      ></div>
+                    ))}
+                  </>
+                )}
 
                 <div
                   style={pageBorderStyle}
@@ -1609,6 +1636,12 @@ const mapStateToProps = (state: IStore) => {
       ? selection.selectionForProperties?.id
       : undefined;
 
+  // let showGrid = false;
+  // if (selection.selectionForProperties?.type === "layer") {
+  //   showGrid =
+  //     layers.layerById[selection.selectionForProperties?.id].layout === "grid";
+  // }
+
   return {
     slides,
     layers,
@@ -1632,6 +1665,7 @@ const mapStateToProps = (state: IStore) => {
     breakpoints: state.project.settings.breakpoints,
     forceRefreshRand: stage.forceRefreshRand,
     enableDeveloper: state.globals.enableDeveloper,
+    showGrid: true,
   };
 };
 

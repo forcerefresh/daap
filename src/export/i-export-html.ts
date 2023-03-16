@@ -23,6 +23,7 @@ import { ILayoutAdvanceValues } from "webslider-sdk/lib/objects/i-layout-types";
 export interface IItemsData {
   customId: string;
   itemId: string;
+  parentItemId?: string;
   itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
   itemValues: { [key: string]: any };
   itemSystemType?: CoreObjectType;

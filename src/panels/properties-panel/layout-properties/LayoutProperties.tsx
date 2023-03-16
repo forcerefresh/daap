@@ -109,7 +109,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           obj,
           _updateObject,
           layoutedByParent,
-          objectLayer
+          objectLayer,
+          parentHasLayout
         )}
         {renderNamedProperties(
           "layoutAdvance",
@@ -223,7 +224,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     objectOrLayer: ILayout,
     updateFunction: any,
     layoutedByParent = false,
-    objectLayer?: ILayer
+    objectLayer?: ILayer,
+    parentHasLayout?: boolean
   ) => {
     const usedBreakpoints = getBreakpointConfigForLayer(
       objectLayer ?? (objectOrLayer as ILayer),
@@ -265,7 +267,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             selectedDevice,
             (device: string) => {
               _setDevice(device);
-            }
+            },
+            parentHasLayout
           )}
         {objectOrLayer.layout === "snap" &&
           getSnapLayoutField(
@@ -284,7 +287,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             selectedDevice,
             (device: string) => {
               _setDevice(device);
-            }
+            },
+            parentHasLayout
           )}
 
         {objectOrLayer.layout === "fit" &&
@@ -304,7 +308,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             selectedDevice,
             (device: string) => {
               _setDevice(device);
-            }
+            },
+            parentHasLayout
           )}
 
         {objectOrLayer.layout === "inset" &&
@@ -324,7 +329,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             selectedDevice,
             (device: string) => {
               _setDevice(device);
-            }
+            },
+            parentHasLayout
           )}
       </>
     );
@@ -336,12 +342,14 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     layoutedByParent = false,
     parentHasLayout = false
   ) => {
+    const type = (object as unknown as { type: "object" | "layer" }).type;
     const options = [];
     object.supportedLayout.none &&
       options.push({ label: "No layout", value: "none" });
     object.supportedLayout.absolute &&
       options.push({ label: "Absolute", value: "absolute" });
     object.supportedLayout.grid &&
+      type === "layer" &&
       options.push({ label: "Grid", value: "grid" });
     options.push({ label: "Snap", value: "snap" });
     object.supportedLayout.fit && options.push({ label: "Fit", value: "fit" });
@@ -358,9 +366,6 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     if (layoutedByParent || parentHasLayout) {
       helperText = (
         <>
-          {parentHasLayout && (
-            <div>Note: Object position is relative to layer.</div>
-          )}
           {layoutedByParent && (
             <div>
               Note: Object is layouted by parent layer. Some configuration might
