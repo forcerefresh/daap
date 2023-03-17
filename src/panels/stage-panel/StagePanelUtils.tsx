@@ -609,10 +609,10 @@ export function getAbsoluteLayoutSizeInSameUnit(
   const retSize: Partial<IAbsoluteLayoutItem> = {
     left: isPercentage(prevValue.left)
       ? `${getPercent(relativeToSize.width, rect.x - relativeToSize.left)}%`
-      : `${roundNumber(rect.x, 1)}px`,
+      : `${roundNumber(rect.x, 1) - relativeToSize.left}px`,
     top: isPercentage(prevValue.top)
       ? `${getPercent(relativeToSize.height, rect.y - relativeToSize.top)}%`
-      : `${roundNumber(rect!.y!, 1)}px`,
+      : `${roundNumber(rect!.y!, 1) - relativeToSize.top}px`,
     width: isPercentage(prevValue.width)
       ? `${getPercent(relativeToSize.width, rect.w)}%`
       : `${roundNumber(rect.w, 1)}px`,

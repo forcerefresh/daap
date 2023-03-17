@@ -66,6 +66,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     _updateObject,
     _updateLayer,
     _setDevice,
+    objects,
   } = props;
 
   const renderLayerProperties = (lay: ILayer) => {
@@ -132,6 +133,13 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     objectOrLayer: ILayout & { definition: IDefinition },
     updateFunction: (objectOrLayer: any) => any
   ) => {
+    let layerObjects: IObject[] = [];
+    if ((objectOrLayer as any)?.type === "layer") {
+      layerObjects = (objectOrLayer as any)?.objectIds.map(
+        (id: any) => objects.objectById[id]
+      );
+    }
+
     const flatForm = flattenForm(properties as IFormLayoutItem[]);
 
     const inputs = flatForm.map((property, idx) => {
@@ -184,7 +192,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           inputProps,
           onChange,
           onChange,
-          onMetadataChange
+          onMetadataChange,
+          { layerData: { layer: layer!, objects: layerObjects } }
         ),
         propertyName: property.propertyName,
         duplicate: property.duplicate ? property.duplicate : "",

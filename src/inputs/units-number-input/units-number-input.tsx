@@ -135,8 +135,14 @@ export const UnitsNumberInputForm: React.FC<
 
     setValid(isValidValue);
 
-    if (!value2UnitValue(newValue, allowedUnits).unit) {
+    const peaces = value2UnitValue(newValue, allowedUnits);
+    if (!peaces.unit) {
       newValue += latestUnit.current;
+    } else {
+      // fix for case when user enter % in the middle of number
+      if (isValidValue) {
+        newValue = peaces.value + peaces.unit;
+      }
     }
 
     onChange(isValidValue ? newValue : value);
