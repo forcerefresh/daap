@@ -96,6 +96,13 @@ export function objects(
             object.layerId = payload.refId;
           }
         });
+      } else if (payload.where === "above") {
+        const toLayerId = state.objectById[payload.refId].layerId;
+        forIn(objectById, function (object, _objectId) {
+          if (payload.moveIds.indexOf(object.id) !== -1) {
+            object.layerId = toLayerId;
+          }
+        });
       }
 
       return { ...state, objectById };
