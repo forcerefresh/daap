@@ -158,7 +158,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       );
 
       // NOTE: Backward compatibility: Front slide is added on 1st February 2023
-      if (!(project as any).slides.loadSlider) {
+      if (!(project as any).slides.loadSlides) {
         const loadSlide = getDefaultSlide("Load", SlideType.Load);
         (project as any).slides.loadSlides = [loadSlide.id];
         (project as any).slides.allSlides.push(loadSlide.id);
