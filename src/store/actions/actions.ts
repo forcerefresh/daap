@@ -1058,7 +1058,7 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const object = {
+    let object = {
       ...createObject(type, objectProps, {
         ...values,
         //text: "Sample test",
@@ -1079,6 +1079,10 @@ export function addNewObject(
         break;
       }
       default: {
+        const objDeff = getAppObjectDefinition(object.type);
+        object = !!objDeff?.postProcess
+          ? objDeff.postProcess({ prevObject: object, object })
+          : object;
         break;
       }
     }
