@@ -88,7 +88,7 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
     return (
       <>
         {renderProperties(
-          getCommonObjectPropertiesDefinition(), // TODO
+          getCommonObjectPropertiesDefinition(true), // TODO
           {
             ...getCommonPropertiesValues(),
             ...(layer.commonStyleDefinition?.values ?? {}),

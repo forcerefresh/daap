@@ -91,7 +91,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     return (
       <>
         {renderProperties(
-          getTransformObjectPropertiesDefinition(), // TODO
+          getTransformObjectPropertiesDefinition(true), // TODO
           {
             ...getTransformPropertiesValues(),
             ...(layer.transformDefinition?.values ?? {}),

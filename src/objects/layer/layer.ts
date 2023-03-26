@@ -1,6 +1,7 @@
 import { UpdateObjectSizeFuncPropsType } from "webslider-sdk/lib/objects/objects-register";
 import {
   addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getLayerElementById,
   getLayerWrapperElementById,
 } from "../../animations/animation-utils";
@@ -43,6 +44,12 @@ export async function layerSizeUpdate(
   layerWrapper.style.top = calculatedObjectSize.top;
 
   addCommonStyleToObjectElementContent(
+    layer,
+    commonStyleDefinition,
+    deviceType
+  );
+
+  addTransformStyleToObjectElementContent(
     layer,
     commonStyleDefinition,
     deviceType

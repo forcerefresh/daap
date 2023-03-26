@@ -10,6 +10,7 @@ import {
 import { CommonPropertiesValues } from "webslider-sdk/lib/objects/common-properties";
 import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
+import { TransformPropertiesValues } from "webslider-sdk/lib/objects/transform-properties";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import {
   convertRGBColor2CSSStyle,
@@ -34,7 +35,7 @@ export function addCommonPropertiesToCSSProperties(
     values as CommonPropertiesValues,
     deviceType
   );
-  console.log(commonProperties);
+
   const commonPropertiesMeta = valuesMetadata as {
     [key: string]: IInputMetadataValues;
   };
@@ -174,4 +175,58 @@ export function addBorderSide_CSSProperties(
   (cssProperties as any)["border" + side + "Color"] =
     convertRGBColor2RGBAString(border.color);
   (cssProperties as any)["border" + side + "Style"] = border.style;
+}
+
+// TRANSFORM
+
+export function addTransformPropertiesToCSSProperties(
+  cssProperties: CSSProperties,
+  values?: {
+    [key: string]: any;
+  },
+  valuesMetadata?: {
+    [key: string]: IInputMetadataValues;
+  },
+  deviceType?: DeviceType
+) {
+  if (!values) {
+    return;
+  }
+
+  const transformProperties = getObjectValuesForDevice(
+    values as TransformPropertiesValues,
+    deviceType
+  );
+
+  let transform = "";
+  if (transformProperties.hasTranslate) {
+    transform += `translateX(${transformProperties.transformTranslateX}) translateY(${transformProperties.transformTranslateY}) translateZ(${transformProperties.transformTranslateZ}) `;
+  }
+
+  if (transformProperties.hasScale) {
+    transform += `scaleX(${transformProperties.transformScaleX}) scaleY(${transformProperties.transformScaleY}) scaleZ(${transformProperties.transformScaleY}) `;
+  }
+
+  if (transformProperties.hasRotate) {
+    transform += `rotateX(${transformProperties.transformRotateX}) rotateY(${transformProperties.transformRotateY}) rotateZ(${transformProperties.transformRotateZ}) `;
+  }
+
+  if (transformProperties.hasSkew) {
+    transform += `skewX(${transformProperties.transformSkewX}) skewY(${transformProperties.transformSkewY}) `;
+  }
+
+  if (transform) {
+    cssProperties.transform = transform;
+  }
+
+  // transform-origin
+  if (
+    transformProperties.transformOriginX &&
+    transformProperties.transformOriginY
+  ) {
+    cssProperties.transformOrigin =
+      transformProperties.transformOriginX +
+      " " +
+      transformProperties.transformOriginY;
+  }
 }

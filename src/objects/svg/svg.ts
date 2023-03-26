@@ -16,6 +16,7 @@ import { v4 as uuid } from "uuid";
 import {
   GetHtmlFuncPropsType,
   PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./svg-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
@@ -34,6 +35,8 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
+  addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -254,13 +257,17 @@ export function getSvgHtml(props: GetHtmlFuncPropsType) {
   //return ``;
 }
 
-export async function svgSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
+export async function svgSizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const {
+    id,
+    calculatedObjectSize,
+    className,
+    commonStyleDefinition,
+    transformDefinition,
+    deviceType,
+  } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -271,6 +278,20 @@ export async function svgSizeUpdate(props: {
 
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
+
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content"
+  )[0] as HTMLElement;
+  addCommonStyleToObjectElementContent(
+    objectContentEl,
+    commonStyleDefinition,
+    deviceType
+  );
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transformDefinition,
+    deviceType
+  );
 }
 
 function replaceColors(svgSource: string, colors: RGBColor[]) {

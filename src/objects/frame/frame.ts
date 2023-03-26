@@ -23,6 +23,7 @@ import {
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
   addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -114,13 +115,18 @@ export async function frameSizeUpdate(
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
 
-  // update style
+  // update style and transform
   const objectContentEl = objectEl.getElementsByClassName(
     "object-content"
   )[0] as HTMLElement;
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
+    deviceType
+  );
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transformDefinition,
     deviceType
   );
 }

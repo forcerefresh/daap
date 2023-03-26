@@ -36,6 +36,8 @@ import {
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
 import {
+  addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -258,8 +260,8 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
         .replace("regular", "400") + ";";
 
   let style = "";
-  style = addCommonPropertiesToStyle(style, object);
-  style = addTransformPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
   style += "font-family: " + textValues.font.fontFamily + ";";
   style += "font-size: " + textValues.fontSize + ";";
   const c = textValues.color;
@@ -305,12 +307,16 @@ export async function textSizeUpdate(
     values,
     skipSizeUpdate,
     deviceType,
+    commonStyleDefinition,
+    transformDefinition,
   } = props;
   const textValues = getObjectValuesForDevice(values as TextValues, deviceType);
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
-  const objectContentEl = objectEl.getElementsByClassName("object-content")[0];
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content"
+  )[0] as HTMLElement;
 
   //const textValue = getObjectValue(textValues, "text", deviceType);
   if (objectContentEl.innerHTML !== nl2br(textValues.text)) {
@@ -348,6 +354,17 @@ export async function textSizeUpdate(
   //   div.style.height = "auto";
   // }
   //}
+
+  addCommonStyleToObjectElementContent(
+    objectContentEl,
+    commonStyleDefinition,
+    deviceType
+  );
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transformDefinition,
+    deviceType
+  );
 }
 
 export async function preloadText(props: {

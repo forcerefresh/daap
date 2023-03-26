@@ -15,7 +15,6 @@ import {
   ICoverPlacementValue,
   SourceImageValues,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { ImageValues } from "../objects/image/image";
 import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
@@ -509,7 +508,6 @@ function generateSlideData(
     }
 
     if (layerTransformValues?.transformOriginX) {
-      console.log(layerTransformValues?.transformOriginX, "evoga");
       layerStyle += `transform-origin: ${
         layerTransformValues?.transformOriginX ?? "center"
       }  ${layerTransformValues?.transformOriginY ?? "center"};`;
@@ -538,7 +536,6 @@ function generateSlideData(
       breakpointConfig.type
     );
 
-    console.log(layerWrapperStyle);
     html += `    <div class="layer-wrapper layer-wrapper-${layer.id}" style='${layerWrapperStyle}'>`; // open layer wrapper
 
     html += layerEffectWrappers
@@ -547,8 +544,6 @@ function generateSlideData(
           `<div class="animation-wrapper ${cn}" style='${layerAnimWrapperStyle}position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
       )
       .join("");
-
-    console.log(layerStyle);
 
     html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
       layer

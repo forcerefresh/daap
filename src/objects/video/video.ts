@@ -21,9 +21,11 @@ import {
   ExecutionCodeFuncReturnType,
   GetAssetsUrlFuncPropsType,
   GetAssetsUrlFuncReturnType,
+  GetHtmlFuncPropsType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
   PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
 import video from "./video-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
@@ -41,6 +43,8 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
+  addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -249,13 +253,8 @@ export function createVideoObject(
   };
 }
 
-export function getVideoHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-  isPlayer?: boolean;
-  isSave?: boolean;
-}) {
-  const { object, isPlayer, isSave } = props;
+export function getVideoHtml(props: GetHtmlFuncPropsType) {
+  const { object, isPlayer, isSave, deviceType } = props;
 
   const videoValues = object.definition.values as VideoValues;
 
@@ -296,8 +295,8 @@ export function getVideoHtml(props: {
       });
 
       let style = "";
-      style = addCommonPropertiesToStyle(style, object);
-      style = addTransformPropertiesToStyle(style, object);
+      style = addCommonPropertiesToStyle(style, object, deviceType);
+      style = addTransformPropertiesToStyle(style, object, deviceType);
       style += "width: 100%;";
       style += "height: 100%;";
       style += `background-image:url('${imageItem.src}');`;
@@ -320,8 +319,8 @@ export function getVideoHtml(props: {
 
   let style = "";
   style += `object-fit: ${videoFit.size};`;
-  style = addCommonPropertiesToStyle(style, object);
-  style = addTransformPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
 
   let attrs = "";
   // if (isPlayer) attrs += " muted";
@@ -412,13 +411,16 @@ export function video_objectStop(
   videoElm.pause();
 }
 
-export async function videoSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize } = props;
+export async function videoSizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const {
+    id,
+    calculatedObjectSize,
+    deviceType,
+    transformDefinition,
+    commonStyleDefinition,
+  } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -429,6 +431,20 @@ export async function videoSizeUpdate(props: {
 
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
+
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content"
+  )[0] as HTMLElement;
+  addCommonStyleToObjectElementContent(
+    objectContentEl,
+    commonStyleDefinition,
+    deviceType
+  );
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transformDefinition,
+    deviceType
+  );
 }
 
 export function videoPostProcess(

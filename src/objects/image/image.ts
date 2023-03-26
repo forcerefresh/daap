@@ -38,6 +38,7 @@ import {
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import {
   addCommonStyleToObjectElementContent,
+  addTransformStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -197,7 +198,13 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
 export async function imageSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
-  const { id, calculatedObjectSize, commonStyleDefinition, deviceType } = props;
+  const {
+    id,
+    calculatedObjectSize,
+    commonStyleDefinition,
+    deviceType,
+    transformDefinition,
+  } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -215,6 +222,11 @@ export async function imageSizeUpdate(
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
+    deviceType
+  );
+  addTransformStyleToObjectElementContent(
+    objectContentEl,
+    transformDefinition,
     deviceType
   );
 }
