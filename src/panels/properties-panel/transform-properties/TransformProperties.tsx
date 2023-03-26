@@ -26,6 +26,7 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import { DeviceType } from "aws-sdk/clients/ec2";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -46,6 +47,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     _updateSlide,
     className,
     objects,
+    breakpoints,
   } = props;
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
@@ -112,7 +114,30 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     objectOrLayer: IObjectOrLayer,
     updateFunction: (objectOrLayer: IObjectOrLayer) => any
   ) => {
-    const flatForm = flattenForm(properties as IFormLayoutItem[]);
+    let flatForm = flattenForm(properties as IFormLayoutItem[]);
+
+    // add devices inputs
+    flatForm = flatForm.reduce((acc, curr, idx) => {
+      acc.push(curr);
+
+      // add if not exist
+      if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
+        valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
+          const dPropertyName = curr.propertyName + "_D_" + device;
+          const newInput = cloneDeep(curr);
+          newInput.propertyName = dPropertyName;
+          delete newInput?.extraOptions;
+          delete newInput?.optional;
+          acc.push(newInput);
+
+          // NOTE: copy default value
+          if (!values[dPropertyName]) {
+            values[dPropertyName] = cloneDeep(values[curr.propertyName]);
+          }
+        });
+      }
+      return acc;
+    }, [] as IFormLayoutItem[]);
 
     let layerObjects: IObject[] = [];
     if (objectOrLayer.type === "layer") {
@@ -171,6 +196,20 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
             [key: string]: any;
           };
           valuesMetadata[propertyName] = metadata;
+
+          const values = retObj.transformDefinition.values as {
+            [key: string]: any;
+          };
+          // delete value when deselect device
+          breakpoints.breakpointsConfiguration
+            .map((item) => item.type)
+            .forEach((allType) => {
+              if (
+                valuesMetadata[propertyName]?.devices.indexOf(allType) === -1
+              ) {
+                delete values[propertyName + "_D_" + allType];
+              }
+            });
 
           updateFunction(retObj);
         }
@@ -270,6 +309,7 @@ const mapStateToProps = (state: IStore) => {
     layer,
     slide,
     selectionForProperties: selection.selectionForProperties,
+    breakpoints,
   };
 };
 

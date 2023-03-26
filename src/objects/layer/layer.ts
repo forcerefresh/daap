@@ -1,5 +1,6 @@
 import { UpdateObjectSizeFuncPropsType } from "webslider-sdk/lib/objects/objects-register";
 import {
+  addCommonStyleToObjectElementContent,
   getLayerElementById,
   getLayerWrapperElementById,
 } from "../../animations/animation-utils";
@@ -7,7 +8,14 @@ import {
 export async function layerSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
-  const { id, calculatedObjectSize, className, skipSizeUpdate } = props;
+  const {
+    id,
+    calculatedObjectSize,
+    className,
+    skipSizeUpdate,
+    commonStyleDefinition,
+    deviceType,
+  } = props;
 
   // const layerId = getLayerElementById(id)
   const layerWrapper = getLayerWrapperElementById(id);
@@ -33,4 +41,10 @@ export async function layerSizeUpdate(
 
   layerWrapper.style.left = calculatedObjectSize.left;
   layerWrapper.style.top = calculatedObjectSize.top;
+
+  addCommonStyleToObjectElementContent(
+    layer,
+    commonStyleDefinition,
+    deviceType
+  );
 }

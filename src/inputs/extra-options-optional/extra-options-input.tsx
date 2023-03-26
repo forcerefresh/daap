@@ -42,6 +42,7 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
     breakpointsConfiguration,
   } = props;
 
+  // if there are no extraOptions or all are false
   if (!extraOptions) return null;
 
   const renderDeviceOptions = () => {
@@ -145,8 +146,12 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
           }}
         />
       )} */}
-      <MenuDivider title="Customize per device" />
-      {renderDeviceOptions()}
+      {extraOptions.devices && (
+        <>
+          <MenuDivider title="Customize per device" />
+          {renderDeviceOptions()}
+        </>
+      )}
     </Menu>
   );
 

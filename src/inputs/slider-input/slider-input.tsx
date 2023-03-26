@@ -4,11 +4,19 @@ import { FormGroup, Slider } from "@blueprintjs/core";
 import css from "./slider-input.module.scss";
 import classnames from "classnames";
 import { debounce } from "lodash-es";
+import { createInputLabel } from "../input-helpers";
 
 export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, helperText, value, onChange, inputProps = {} } = props;
+  const {
+    displayName,
+    propertyName,
+    helperText,
+    value,
+    onChange,
+    inputProps = {},
+  } = props;
   const {
     trackFill = false,
     thumbPosition = "bottom",
@@ -40,7 +48,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
   return (
     <FormGroup
       className={classnames(css.main, { [css.showLabels]: !hideLabels })}
-      label={displayName}
+      label={createInputLabel(displayName, propertyName)}
       helperText={!!helperText && helperText}
       inline
     >

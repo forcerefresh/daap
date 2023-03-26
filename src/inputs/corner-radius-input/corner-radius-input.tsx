@@ -8,13 +8,15 @@ import {
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./corner-radius-input.module.scss";
+import { createInputLabel } from "../input-helpers";
 
 const SMALL_ICON_SIZE = 18;
 
 export const CornerRadiusInputForm: React.FC<
   ICornerRadiusInput & IUpdateInput
 > = (props) => {
-  const { displayName, helperText, value, inputProps, onChange } = props;
+  const { displayName, propertyName, helperText, value, inputProps, onChange } =
+    props;
 
   const isLinked = !!value.common;
 
@@ -64,7 +66,9 @@ export const CornerRadiusInputForm: React.FC<
     <>
       <div className={cx(css.alignHolder, "input60")}>
         <div className="bp3-form-group bp3-inline">
-          <Label style={{ width: "45px" }}>{displayName}</Label>
+          <Label style={{ width: "45px" }}>
+            {createInputLabel(displayName, propertyName)}
+          </Label>
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {!isLinked ? (
               <>

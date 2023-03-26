@@ -14,9 +14,11 @@ import {
 import {
   GetAssetsUrlFuncPropsType,
   GetAssetsUrlFuncReturnType,
+  GetHtmlFuncPropsType,
   PostProcessFuncPropsType,
   PostProcessFuncReturnType,
   PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./image-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
@@ -35,6 +37,7 @@ import {
 } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import {
+  addCommonStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -128,26 +131,20 @@ export function createImageObject(
       valuesMetadata: {},
     },
     commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition()],
+      properties: [...getCommonObjectPropertiesDefinition(true)],
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
     transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition()],
+      properties: [...getTransformObjectPropertiesDefinition(true)],
       values: { ...getTransformPropertiesValues() },
       valuesMetadata: {},
     },
   };
 }
 
-export function getImageHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-  isPlayer?: boolean;
-  isSave?: boolean;
-  isForThumbnail?: boolean;
-}) {
-  const { object, isPlayer, isSave, isForThumbnail } = props;
+export function getImageHtml(props: GetHtmlFuncPropsType) {
+  const { object, isPlayer, isSave, isForThumbnail, deviceType } = props;
   const imageValues = object.definition.values as ImageValues;
 
   if (!isPlayer) {
@@ -183,8 +180,8 @@ export function getImageHtml(props: {
   });
 
   let style = "";
-  style = addCommonPropertiesToStyle(style, object);
-  style = addTransformPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
   style += "width: 100%;";
   style += "height: 100%;";
   if (!imageValues.preload || !isPlayer || isForThumbnail) {
@@ -197,13 +194,10 @@ export function getImageHtml(props: {
   return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
 
-export async function imageSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize } = props;
+export async function imageSizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const { id, calculatedObjectSize, commonStyleDefinition, deviceType } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -214,6 +208,15 @@ export async function imageSizeUpdate(props: {
 
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
+
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content"
+  )[0] as HTMLElement;
+  addCommonStyleToObjectElementContent(
+    objectContentEl,
+    commonStyleDefinition,
+    deviceType
+  );
 }
 
 export async function preloadImage(props: {

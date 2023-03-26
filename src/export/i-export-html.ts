@@ -2,6 +2,7 @@ import React from "react";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
 import {
+  IDefinition,
   ILayout,
   ITransitions,
   ObjectType,
@@ -19,6 +20,7 @@ import { RGBColor } from "react-color";
 import { string } from "yup";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { ILayoutAdvanceValues } from "webslider-sdk/lib/objects/i-layout-types";
+import { IInputMetadataValues } from "webslider-sdk/lib/inputs/i-inputs";
 
 export interface IItemsData {
   customId: string;
@@ -26,6 +28,9 @@ export interface IItemsData {
   parentItemId?: string;
   itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
   itemValues: { [key: string]: any };
+  itemValuesMetadata: { [key: string]: IInputMetadataValues };
+  commonStyleDefinition?: IDefinition;
+  transformDefinition?: IDefinition;
   itemSystemType?: CoreObjectType;
   calculatedObjectSize?: React.CSSProperties;
   calculatedObjectSizePerDevice?: { [key: string]: React.CSSProperties };

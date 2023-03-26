@@ -17,11 +17,12 @@ import {
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./border-input.module.scss";
+import { createInputLabel } from "../input-helpers";
 
 export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onChange } = props;
+  const { displayName, propertyName, value, onChange } = props;
 
   const renderForm1 = () => {
     return (
@@ -72,7 +73,7 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
   const renderForm2 = () => {
     return (
       <div className={classnames(css.inlineRow)}>
-        <Label>Common</Label>
+        {/* <Label>{Common}</Label> */}
         {getUnitNumericFiled(
           "",
           value.commonBorder.width,
@@ -164,7 +165,7 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
     return (
       <div>
         {getButtonGroupField(
-          displayName,
+          createInputLabel(displayName, propertyName),
           value.useCommonValue ? "common" : "sides",
           (useCommonValueStr: string) => {
             const valueClone = cloneDeep(value);
@@ -198,10 +199,10 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
       ) : (
         <div>
           {renderCB()}
-          {renderRow("Top", "top")}
-          {renderRow("Right", "right")}
-          {renderRow("Bottom", "bottom")}
-          {renderRow("Left", "left")}
+          {renderRow("T", "top")}
+          {renderRow("R", "right")}
+          {renderRow("B", "bottom")}
+          {renderRow("L", "left")}
         </div>
       )}
     </>

@@ -8,11 +8,13 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./clip-mask-input.module.scss";
 import { Label } from "@blueprintjs/core";
+import { createInputLabel } from "../input-helpers";
 
 export const ClipMaskInputForm: React.FC<IClipMaskInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, helperText, value, inputProps, onChange } = props;
+  const { displayName, helperText, propertyName, value, inputProps, onChange } =
+    props;
   const disabled = inputProps?.disabled;
 
   const points = value.point;
@@ -21,7 +23,9 @@ export const ClipMaskInputForm: React.FC<IClipMaskInput & IUpdateInput> = (
     <>
       <div className={cx(css.alignHolder, "input60")}>
         <div className="bp3-form-group bp3-inline">
-          <Label style={{ width: "45px" }}>{displayName}</Label>
+          <Label style={{ width: "45px" }}>
+            {createInputLabel(displayName, propertyName)}
+          </Label>
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {points.map((point, idx) => {
               return (

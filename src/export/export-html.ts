@@ -22,6 +22,7 @@ import {
 } from "webslider-sdk/lib/objects/objects-register";
 import {
   IAnimation,
+  IDefinition,
   ILayout,
   IObject,
   ITransition,
@@ -62,6 +63,7 @@ import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 
 export function generatePlayerData(
   sources: ISources,
@@ -349,6 +351,16 @@ function generateSlideData(
         -1;
     }
 
+    const layerTransformValues = getObjectValuesForDevice(
+      layer.transformDefinition?.values,
+      breakpointConfig.type
+    );
+
+    // const layerStyleValues = getObjectValuesForDevice(
+    //   layer.commonStyleDefinition?.values,
+    //   breakpointConfig.type
+    // );
+
     // TODO; we have similar code for layer
     const layerEffectWrappers: string[] = [];
     const lt = layer.transitions;
@@ -378,6 +390,17 @@ function generateSlideData(
       parentItemId: undefined,
       itemType: "layer",
       itemValues: layer.definition.values,
+      itemValuesMetadata: layer.definition.valuesMetadata,
+      commonStyleDefinition: pick(
+        layer.commonStyleDefinition,
+        "values",
+        "valuesMetadata"
+      ) as IDefinition,
+      transformDefinition: pick(
+        layer.transformDefinition,
+        "values",
+        "valuesMetadata"
+      ) as IDefinition,
       objectClass: layerClassName,
       transitions: layer.transitions,
       data: {
@@ -425,8 +448,8 @@ function generateSlideData(
     }
 
     // NOTE exception for perspective
-    if (layer.transformDefinition?.values?.hasPerspective) {
-      layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
+    if (layerTransformValues?.hasPerspective) {
+      layerStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
     }
 
     const calculatedLayerSize = calculateObjectSize(
@@ -479,16 +502,17 @@ function generateSlideData(
 
     let layerAnimWrapperStyle = "";
     // NOTE exception for perspective >>>
-    if (layer.transformDefinition?.values?.hasPerspective) {
-      layerStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
-      layerAnimWrapperStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
-      //wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
+    if (layerTransformValues?.hasPerspective) {
+      layerStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
+      layerAnimWrapperStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
+      //wrapperStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
     }
 
-    if (layer.transformDefinition?.values?.transformOriginX) {
+    if (layerTransformValues?.transformOriginX) {
+      console.log(layerTransformValues?.transformOriginX, "evoga");
       layerStyle += `transform-origin: ${
-        layer.transformDefinition.values.transformOriginX ?? "center"
-      }  ${layer.transformDefinition.values.transformOriginY ?? "center"};`;
+        layerTransformValues?.transformOriginX ?? "center"
+      }  ${layerTransformValues?.transformOriginY ?? "center"};`;
 
       // wrapperStyle += `transform-origin: ${
       //   object.transformDefinition.values.transformOriginX ?? "center"
@@ -503,9 +527,18 @@ function generateSlideData(
       "position: relative; left:initial; top: initial; overflow: visible;";
 
     // layerStyle += "perspective: 150px";
-    layerStyle = addCommonPropertiesToStyle(layerStyle, layer);
-    layerStyle = addTransformPropertiesToStyle(layerStyle, layer);
+    layerStyle = addCommonPropertiesToStyle(
+      layerStyle,
+      layer,
+      breakpointConfig.type
+    );
+    layerStyle = addTransformPropertiesToStyle(
+      layerStyle,
+      layer,
+      breakpointConfig.type
+    );
 
+    console.log(layerWrapperStyle);
     html += `    <div class="layer-wrapper layer-wrapper-${layer.id}" style='${layerWrapperStyle}'>`; // open layer wrapper
 
     html += layerEffectWrappers
@@ -514,6 +547,8 @@ function generateSlideData(
           `<div class="animation-wrapper ${cn}" style='${layerAnimWrapperStyle}position:absolute;width:100%;height:100%;'>` // IMPORTANT: Ovde ide transform-origin za animacije na lejeru
       )
       .join("");
+
+    console.log(layerStyle);
 
     html += `    <div class="layer ${layerClassName} ${getCustomIdClass(
       layer
@@ -611,7 +646,7 @@ function generateSlideData(
       if (object.transformDefinition?.values?.hasPerspective) {
         style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
         wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
-        objectAnimWrapperStyle += `perspective: ${layer.transformDefinition?.values?.transformPerspective};`;
+        objectAnimWrapperStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
       }
 
       if (object.transformDefinition?.values?.transformOriginX) {
@@ -655,6 +690,9 @@ function generateSlideData(
         customId: object.customId,
         itemType: object.type,
         itemValues: object.definition.values,
+        itemValuesMetadata: object.definition.valuesMetadata,
+        commonStyleDefinition: object.commonStyleDefinition,
+        transformDefinition: object.transformDefinition,
         itemSystemType: getAppObjectDefinition(object.type)?.meta?.coreType,
         calculatedObjectSize,
         calculatedObjectSizePerDevice,

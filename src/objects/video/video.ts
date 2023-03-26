@@ -237,12 +237,12 @@ export function createVideoObject(
       },
     },
     commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition()],
+      properties: [...getCommonObjectPropertiesDefinition(true)],
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
     transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition()],
+      properties: [...getTransformObjectPropertiesDefinition(true)],
       values: { ...getTransformPropertiesValues() },
       valuesMetadata: {},
     },

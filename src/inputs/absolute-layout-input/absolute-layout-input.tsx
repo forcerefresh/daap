@@ -21,7 +21,6 @@ import {
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./absolute-layout-input.module.scss";
-import ExtraOptionsInput from "../extra-options-optional/extra-options-input";
 
 const RELATIVE_TO_OPTIONS = [
   { label: "Page", value: "page" },

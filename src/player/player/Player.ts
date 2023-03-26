@@ -645,6 +645,9 @@ export class Player {
           {
             id: transitionData.itemId,
             values: transitionData.itemValues,
+            valuesMetadata: transitionData.itemValuesMetadata,
+            commonStyleDefinition: transitionData.commonStyleDefinition,
+            transformDefinition: transitionData.transformDefinition,
             className: transitionData.objectClass,
             calculatedObjectSize: calObjSize,
             scale: this.scaleParams,

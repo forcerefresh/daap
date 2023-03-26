@@ -1,3 +1,8 @@
+import { CSSProperties } from "react";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import { IDefinition } from "webslider-sdk/lib/objects/i-object";
+import { addCommonPropertiesToCSSProperties } from "../objects/common-properties-player-obj";
+
 export function getObjectElementById(id: string): HTMLDivElement {
   const el = document.getElementsByClassName(
     `object-${id}`
@@ -17,6 +22,23 @@ export function getObjectWrapperElementById(id: string): HTMLDivElement {
   return el;
 }
 
+export function addCommonStyleToObjectElementContent(
+  objectContentEl: HTMLElement,
+  commonStyleDefinition?: IDefinition,
+  deviceType?: DeviceType
+) {
+  const cssProperties: CSSProperties = {};
+  addCommonPropertiesToCSSProperties(
+    cssProperties,
+    commonStyleDefinition?.values,
+    commonStyleDefinition?.valuesMetadata,
+    deviceType
+  );
+
+  Object.keys(cssProperties).forEach((key) => {
+    objectContentEl.style[key as any] = (cssProperties as any)[key];
+  });
+}
 // export function getAnimationElementById(
 //   id: string,
 //   animationId: string

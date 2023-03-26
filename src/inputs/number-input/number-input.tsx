@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { getCheckboxField } from "../input-utils";
 import { INumberInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./number-input.module.scss";
+import { createInputLabel } from "../input-helpers";
 
 export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
   props
@@ -73,7 +74,7 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
   return (
     <FormGroup
       className={classnames(css.main, props.inputProps?.className)}
-      label={displayName}
+      label={createInputLabel(displayName, propertyName)}
       labelFor={id}
       helperText={!!helperText && helperText}
       inline

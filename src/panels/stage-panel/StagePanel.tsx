@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { cloneDeep, includes, isEqual, mapValues, pick } from "lodash-es";
+import { cloneDeep, includes, isEqual, mapValues, pick, set } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import React, {
   CSSProperties,
@@ -692,8 +692,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     }
 
     layerCss += `.${layerClassName} {
-     ${addCommonPropertiesToStyle("", layer)}
-     ${addTransformPropertiesToStyle("", layer)}
+     ${addCommonPropertiesToStyle("", layer, breakpointConfig?.type)}
+     ${addTransformPropertiesToStyle("", layer, breakpointConfig?.type)}
      z-index: 100;
     }`;
 

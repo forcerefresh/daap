@@ -13,7 +13,10 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetHtmlFuncPropsType,
+  PreloadOrder,
+} from "webslider-sdk/lib/objects/objects-register";
 import svg from "./svg-icon.svg";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
@@ -172,24 +175,20 @@ export function createSvgObject(
       valuesMetadata,
     },
     commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition()],
+      properties: [...getCommonObjectPropertiesDefinition(true)],
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
     transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition()],
+      properties: [...getTransformObjectPropertiesDefinition(true)],
       values: { ...getTransformPropertiesValues() },
       valuesMetadata: {},
     },
   };
 }
 
-export function getSvgHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-  isPlayer?: boolean;
-}) {
-  const { object, calculatedObjectSize, isPlayer } = props;
+export function getSvgHtml(props: GetHtmlFuncPropsType) {
+  const { object, calculatedObjectSize, isPlayer, deviceType } = props;
 
   const svgValues = object.definition.values as SvgValues;
   const svgValuesMetadata = object.definition.valuesMetadata;
@@ -229,8 +228,8 @@ export function getSvgHtml(props: {
       box-sizing: border-box;
       transform: scaleX(${scaleX}) scaleY(${scaleY});
       transform-origin: top left;
-      ${addCommonPropertiesToStyle("", object)}
-      ${addTransformPropertiesToStyle("", object)}   
+      ${addCommonPropertiesToStyle("", object, deviceType)}
+      ${addTransformPropertiesToStyle("", object, deviceType)}   
       ${svgValues.keepAspectRatio ? "width:100%;height:100%;" : ""}
     }
     .object-content-${object.id} svg {

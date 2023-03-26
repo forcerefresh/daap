@@ -7,7 +7,7 @@ export function getMissingExtensionsFromProject(
 ): IExtensionItem[] {
   const retExtensions: IExtensionItem[] = [];
 
-  extensions.forEach((ext) => {
+  extensions?.forEach((ext) => {
     switch (ext.componentType) {
       case "animation": {
         const animDef = getAppAnimationDefinition(ext.type);

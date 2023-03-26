@@ -81,7 +81,8 @@ export function getInputFormWithOptions<T>(
 
   const input = getInputForm(inputType, inputProps, onChange, onInput, data);
 
-  if (inputProps.extraOptions) {
+  const eo = inputProps.extraOptions;
+  if (eo && (eo.devices || eo.optional || eo.exportForWizard)) {
     return (
       <ExtraOptionsInput
         extraOptions={inputProps.extraOptions}

@@ -419,7 +419,7 @@ export function getInsetLayoutField<T>(
 }
 
 export function getButtonGroupField<T>(
-  label: string,
+  label: string | React.ReactNode,
   value: T,
   onChange: (value: T) => void,
   options: { value: string; label: string }[],

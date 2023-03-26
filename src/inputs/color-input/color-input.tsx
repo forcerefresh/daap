@@ -7,9 +7,17 @@ import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
 import { ReactComponent as BackgroundSVG } from "./transparent-bg.svg";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { createInputLabel } from "../input-helpers";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
-  const { value, defaultValue, displayName, helperText, onChange } = props;
+  const {
+    value,
+    defaultValue,
+    propertyName,
+    displayName,
+    helperText,
+    onChange,
+  } = props;
 
   const colorFromProp = (value || defaultValue) as RGBColor;
 
@@ -84,7 +92,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   return (
     <FormGroup
-      label={displayName}
+      label={createInputLabel(displayName, propertyName)}
       labelFor="color-input"
       inline
       helperText={!!helperText && helperText}

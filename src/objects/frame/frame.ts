@@ -4,7 +4,11 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
+import {
+  GetHtmlFuncPropsType,
+  PreloadOrder,
+  UpdateObjectSizeFuncPropsType,
+} from "webslider-sdk/lib/objects/objects-register";
 import svg from "./frame-icon.svg";
 import {
   getCommonObjectPropertiesDefinition,
@@ -18,6 +22,7 @@ import {
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
+  addCommonStyleToObjectElementContent,
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
@@ -55,31 +60,27 @@ export function createFrameObject(
       valuesMetadata: {},
     },
     commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition()],
+      properties: [...getCommonObjectPropertiesDefinition(true)],
       values: { ...getCommonPropertiesValues() },
       valuesMetadata: { ...getCommonPropertiesMetadataValues() },
     },
     transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition()],
+      properties: [...getTransformObjectPropertiesDefinition(true)],
       values: { ...getTransformPropertiesValues() },
       valuesMetadata: {},
     },
   };
 }
 
-export function getFrameHtml(props: {
-  object: IObject;
-  calculatedObjectSize: React.CSSProperties;
-  isPlayer?: boolean;
-}) {
-  const { object, calculatedObjectSize, isPlayer } = props;
+export function getFrameHtml(props: GetHtmlFuncPropsType) {
+  const { object, calculatedObjectSize, isPlayer, deviceType } = props;
   /*if (!isPlayer) {
     return getObjectPlaceholder(`FRAME<br/>(placeholder)`);
   }*/
 
   let style = "";
-  style = addCommonPropertiesToStyle(style, object);
-  style = addTransformPropertiesToStyle(style, object);
+  style = addCommonPropertiesToStyle(style, object, deviceType);
+  style = addTransformPropertiesToStyle(style, object, deviceType);
   style += "width: 100%;";
   style += "height: 100%;";
   style += "box-sizing: border-box;";
@@ -89,13 +90,19 @@ export function getFrameHtml(props: {
   return html;
 }
 
-export async function frameSizeUpdate(props: {
-  id: string;
-  className: string;
-  values: { [key: string]: any };
-  calculatedObjectSize: any;
-}): Promise<void> {
-  const { id, calculatedObjectSize, className } = props;
+export async function frameSizeUpdate(
+  props: UpdateObjectSizeFuncPropsType
+): Promise<void> {
+  const {
+    id,
+    calculatedObjectSize,
+    values,
+    valuesMetadata,
+    commonStyleDefinition,
+    transformDefinition,
+    className,
+    deviceType,
+  } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -106,6 +113,16 @@ export async function frameSizeUpdate(props: {
 
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
+
+  // update style
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content"
+  )[0] as HTMLElement;
+  addCommonStyleToObjectElementContent(
+    objectContentEl,
+    commonStyleDefinition,
+    deviceType
+  );
 }
 
 export const frameMeta = {
