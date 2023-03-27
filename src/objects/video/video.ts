@@ -339,7 +339,7 @@ export function getVideoHtml(props: GetHtmlFuncPropsType) {
   }).src;
 
   const videoHtml = `
-    <video style="${style}" ${attrs} class="video-content-${object.id}">
+    <video style="${style}" ${attrs} class="video-content video-content-${object.id}">
       <source type="video/mp4" src="${videoSrc}"></source>
       <source type="video/ogg" src="${videoSrc}"></source>
     </video>
@@ -432,9 +432,9 @@ export async function videoSizeUpdate(
   objectEl.style.width = calculatedObjectSize.width;
   objectEl.style.height = calculatedObjectSize.height;
 
-  const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
-  )[0] as HTMLElement;
+  const objectContentEl =
+    (objectEl.getElementsByClassName("object-content")[0] as HTMLElement) ??
+    (objectEl.getElementsByClassName("video-content")[0] as HTMLElement);
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
