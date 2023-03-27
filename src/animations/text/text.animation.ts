@@ -25,7 +25,7 @@ export function textAnimation() {
     objectEL = getObjectElementById(config.itemId!);
     pElOriginal = objectEL.firstChild as HTMLParagraphElement;
 
-    pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
+    //pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
 
     numberOfChars = pElOriginal.innerHTML.length;
 
@@ -55,6 +55,7 @@ export function textAnimation() {
 
     pElClone.style.opacity = "1"; // config.type === "in" ? "0" : "1";
     pElOriginal.style.opacity = config.type === "in" ? "0" : "1";
+    pElOriginal.style.display = "none";
 
     textChars = new SplitText(pElClone, {
       type: "words,chars",
@@ -157,6 +158,8 @@ export function textAnimation() {
       pElClone.style.opacity = "0";
     }
     pElOriginal.style.opacity = config.type === "in" ? "1" : "0";
+    pElOriginal.style.display = "block";
+
     pElClone = null;
 
     isAnimationInitialized = false;
