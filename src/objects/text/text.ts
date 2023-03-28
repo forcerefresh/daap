@@ -28,6 +28,7 @@ import {
   addTransformPropertiesToStyle,
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
+  TransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
   GetFontsFuncPropsType,
@@ -365,6 +366,17 @@ export async function textSizeUpdate(
     transformDefinition,
     deviceType
   );
+
+  const transformProperties = getObjectValuesForDevice(
+    transformDefinition?.values as TransformPropertiesValues,
+    deviceType
+  );
+
+  if (transformProperties?.transformOriginX) {
+    objectWrapperEl.style.transformOrigin = `${
+      transformProperties.transformOriginX ?? "center"
+    }  ${transformProperties.transformOriginY ?? "center"}`;
+  }
 }
 
 export async function preloadText(props: {

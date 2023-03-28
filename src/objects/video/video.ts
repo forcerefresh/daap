@@ -41,6 +41,7 @@ import {
   addTransformPropertiesToStyle,
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
+  TransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import {
   addCommonStyleToObjectElementContent,
@@ -49,7 +50,10 @@ import {
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
+import {
+  convertTimeUnitToMs,
+  getObjectValuesForDevice,
+} from "webslider-sdk/lib/objects/object-utils";
 import { VideoItem } from "webslider-sdk/lib/common/i-media-types";
 
 const timeoutMap = new Map<string, NodeJS.Timeout | any>();
@@ -445,6 +449,17 @@ export async function videoSizeUpdate(
     transformDefinition,
     deviceType
   );
+
+  const transformProperties = getObjectValuesForDevice(
+    transformDefinition?.values as TransformPropertiesValues,
+    deviceType
+  );
+
+  if (transformProperties?.transformOriginX) {
+    objectWrapperEl.style.transformOrigin = `${
+      transformProperties.transformOriginX ?? "center"
+    }  ${transformProperties.transformOriginY ?? "center"}`;
+  }
 }
 
 export function videoPostProcess(

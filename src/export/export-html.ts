@@ -468,27 +468,29 @@ function generateSlideData(
       .${layerClassName}::-webkit-scrollbar-corner { background:transparent; }
     </style>`;
 
-    if (layerValues.layoutChildren.itemsGap.type === "common") {
-      const t = layerValues.layoutChildren.type;
-      html += `<style>
+    if (layerValues.hasLayoutChildren) {
+      if (layerValues.layoutChildren.itemsGap.type === "common") {
+        const t = layerValues.layoutChildren.type;
+        html += `<style>
       .${layerClassName} > * {
         ${t === "column" ? "margin-bottom" : "margin-right"}: ${
-        layerValues.layoutChildren.itemsGap.commonValue
-      };
+          layerValues.layoutChildren.itemsGap.commonValue
+        };
       }
     </style>`;
-    } else {
-      const t = layerValues.layoutChildren.type;
-      html += `<style>`;
-      layerValues.layoutChildren.itemsGap.eachValues.forEach(
-        (eachValue, idx) => {
-          html += `.${layerClassName} > *:nth-child(${idx + 1}) {
+      } else {
+        const t = layerValues.layoutChildren.type;
+        html += `<style>`;
+        layerValues.layoutChildren.itemsGap.eachValues.forEach(
+          (eachValue, idx) => {
+            html += `.${layerClassName} > *:nth-child(${idx + 1}) {
             ${t === "column" ? "margin-bottom" : "margin-right"}: ${eachValue};
         }`;
-        }
-      );
+          }
+        );
 
-      html += `</style>`;
+        html += `</style>`;
+      }
     }
 
     const layerCustomIdClass = layer.customId

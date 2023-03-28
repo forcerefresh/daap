@@ -34,6 +34,7 @@ import {
   addTransformPropertiesToStyle,
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
+  TransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import {
@@ -42,6 +43,7 @@ import {
   getObjectElementById,
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
+import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 
 export const IMAGE = "image";
 
@@ -229,6 +231,17 @@ export async function imageSizeUpdate(
     transformDefinition,
     deviceType
   );
+
+  const transformProperties = getObjectValuesForDevice(
+    transformDefinition?.values as TransformPropertiesValues,
+    deviceType
+  );
+
+  if (transformProperties?.transformOriginX) {
+    objectWrapperEl.style.transformOrigin = `${
+      transformProperties.transformOriginX ?? "center"
+    }  ${transformProperties.transformOriginY ?? "center"}`;
+  }
 }
 
 export async function preloadImage(props: {

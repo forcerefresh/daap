@@ -111,8 +111,12 @@ export function createTimelineForObject(data: IItemsData): {
 function getDuration(data: IItemsData, eff: ITransition): number {
   // TODO: return duration from effect deff.
 
-  const hasDuration = getAppAnimationDefinition(eff.animation.id)?.formDefaults
-    .hasDuration;
+  const animDeff = getAppAnimationDefinition(eff.animation.id);
+  if (animDeff?.getDuration) {
+    return animDeff?.getDuration(data as any, eff);
+  }
+
+  const hasDuration = animDeff?.formDefaults.hasDuration;
 
   return eff.duration === "-1" || hasDuration === false
     ? convertTimeUnitToMs(data.data.slideDuration.customValue)
