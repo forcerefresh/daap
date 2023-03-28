@@ -306,6 +306,7 @@ export async function textSizeUpdate(
     className,
     scale,
     values,
+    valuesMetadata,
     skipSizeUpdate,
     deviceType,
     commonStyleDefinition,
@@ -313,6 +314,7 @@ export async function textSizeUpdate(
   } = props;
   const textValues = getObjectValuesForDevice(values as TextValues, deviceType);
 
+  console.log(valuesMetadata);
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
@@ -323,6 +325,15 @@ export async function textSizeUpdate(
   if (objectContentEl.innerHTML !== nl2br(textValues.text)) {
     objectContentEl.innerHTML = nl2br(textValues.text);
   }
+
+  if (valuesMetadata.fontSize?.disabled === false)
+    objectContentEl.style.fontSize = textValues.fontSize;
+  if (valuesMetadata.textAlign?.disabled === false)
+    objectContentEl.style.textAlign = textValues.textAlign;
+  if (valuesMetadata.lineHeight?.disabled === false)
+    objectContentEl.style.lineHeight = textValues.lineHeight;
+  if (valuesMetadata.letterSpacing?.disabled === false)
+    objectContentEl.style.letterSpacing = textValues.letterSpacing;
 
   //const els = document.getElementsByClassName(className);
 
