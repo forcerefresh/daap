@@ -30,8 +30,8 @@ export function textAnimation() {
     numberOfChars = pElOriginal.innerHTML.length;
 
     const totalDuration =
-      config.delayBetweenChar * numberOfChars +
-      (config.durationPerChar - config.delayBetweenChar);
+      parseInt(config.delayBetweenChar) * numberOfChars +
+      (parseInt(config.durationPerChar) - parseInt(config.delayBetweenChar));
 
     timeline = gsap.timeline({
       pause: true,

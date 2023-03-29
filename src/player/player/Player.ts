@@ -640,6 +640,14 @@ export class Player {
         !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
         getBooleanValue(transitionData.layout.layoutAdvance?.updateSize, true);
 
+      // const forceUpdateSize =
+      // !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
+      // getBooleanValue(
+      //   transitionData.layout.layoutAdvance?.updateSize,
+      //   true
+      // ) ||
+      // getBooleanValue(transitionData.layout.layoutAdvance?.updateScale, true);
+
       try {
         objDef?.sizeUpdate(
           {

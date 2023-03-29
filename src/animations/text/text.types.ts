@@ -7,8 +7,8 @@ import {
 export const TEXT_ANIMATION = "text-animation";
 
 export interface TextAnimationValues {
-  durationPerChar: number;
-  delayBetweenChar: number;
+  durationPerChar: string;
+  delayBetweenChar: string;
   opacity: INumericTimelineValue;
   blur: INumericTimelineValue;
   scaleX: INumericTimelineValue;

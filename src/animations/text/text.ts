@@ -34,7 +34,8 @@ export const textAppDef: IAnimationExtensionAppDefinition = {
     const charsStr = wordsArr?.join("");
 
     const dur =
-      charsStr.length * effValues.delayBetweenChar + effValues.durationPerChar;
+      charsStr.length * parseInt(effValues.delayBetweenChar) +
+      parseInt(effValues.durationPerChar);
 
     return dur;
   },

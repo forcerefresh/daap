@@ -69,31 +69,33 @@ export function addTextAnimationPartToTimeline({
   chars: Element[];
   timeline: gsap.core.Timeline;
   config: IAnimationBase & {
-    durationPerChar: number;
-    delayBetweenChar: number;
+    durationPerChar: string;
+    delayBetweenChar: string;
     startFrom: any;
   };
   propertyName: string;
   value: INumericTimelineValue;
   from?: string | number;
 }) {
+  const durationPerChar = parseInt(config.durationPerChar);
+  const delayBetweenChar = parseInt(config.delayBetweenChar);
+
   timeline[getMethodByType(config.type)](
     chars,
     {
       ease: config.ease,
       duration:
-        (value.hasTimelineProperties
-          ? value.duration
-          : config.durationPerChar) / 1000,
+        (value.hasTimelineProperties ? value.duration : durationPerChar) / 1000,
       [propertyName]: value.value,
       stagger: {
-        amount: (config.delayBetweenChar / 1000) * chars.length,
+        amount: (delayBetweenChar / 1000) * chars.length,
         from: from ? from : getStartFromCharacter(config.startFrom),
       },
     },
     value.hasTimelineProperties ? value.delay / 1000 : 0
   );
 }
+
 function getNodeIndex(element: any) {
   return [...element.parentNode.childNodes].indexOf(element);
 }

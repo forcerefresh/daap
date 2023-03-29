@@ -314,7 +314,6 @@ export async function textSizeUpdate(
   } = props;
   const textValues = getObjectValuesForDevice(values as TextValues, deviceType);
 
-  console.log(valuesMetadata);
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(

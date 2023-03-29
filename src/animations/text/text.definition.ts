@@ -3,13 +3,14 @@ import {
   INumberInput,
   INumericTimelineInput,
   ITextStartPositionInput,
+  IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { IAnimationDefinition } from "webslider-sdk/lib/animations/i-animation-types";
 import { ITextAnimation, TEXT_ANIMATION } from "./text.types";
 
 export type ITextTuple = [
-  INumberInput<"durationPerChar">,
-  INumberInput<"delayBetweenChar">,
+  IUnitsNumberInput<"durationPerChar">,
+  IUnitsNumberInput<"delayBetweenChar">,
   INumericTimelineInput<"opacity">,
   INumericTimelineInput<"blur">,
   INumericTimelineInput<"scaleX">,
@@ -28,17 +29,19 @@ export const textDefinition: IAnimationDefinition<ITextTuple> = {
       displayName: "Duration per char",
       helperText: "Time takes to display one char (default 0.2)",
       propertyName: "durationPerChar",
-      inputType: InputType.NUMBER,
-      value: {} as any,
-      defaultValue: {} as any,
+      inputType: InputType.UNITS_NUMBER,
+      value: "500ms",
+      defaultValue: "500ms",
+      allowedUnits: ["ms"],
     },
     {
       displayName: "Delay per char",
       helperText: "Time taken between two chars(default 0.05)",
       propertyName: "delayBetweenChar",
-      inputType: InputType.NUMBER,
-      value: {} as any,
-      defaultValue: {} as any,
+      inputType: InputType.UNITS_NUMBER,
+      value: "100ms",
+      defaultValue: "100ms",
+      allowedUnits: ["ms"],
     },
     {
       displayName: "Opacity",
@@ -123,8 +126,8 @@ export const textDefaults: ITextAnimation = {
   supportedObjectTypes: ["text"],
   canBeCombined: false,
   // animation properties
-  durationPerChar: 1000,
-  delayBetweenChar: 50,
+  durationPerChar: "300ms",
+  delayBetweenChar: "100ms",
   opacity: { value: 0, ...delayAndDuration },
   blur: { value: 0, ...delayAndDuration },
   scaleX: { value: 1, ...delayAndDuration },
