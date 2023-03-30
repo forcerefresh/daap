@@ -66,7 +66,7 @@ export function transformAnimation() {
   function rootStop(config: any) {
     logger.animation.debug("timelines rootStop");
 
-    timeline?.pause();
+    timeline.pause();
   }
 
   function start(config: any, isManual?: boolean) {
@@ -154,7 +154,7 @@ export function transformAnimation() {
 
   function pause(config: any) {
     logger.animation.debug("timelines pause");
-    timeline.pause();
+    timeline?.pause();
   }
 
   function resume(config: any) {

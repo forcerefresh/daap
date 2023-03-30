@@ -285,7 +285,7 @@ ipcMain.handle("Templates::Download", async (event, dataStr) => {
 
 async function getTemplateName(originalName) {
   let name = sanitize(originalName);
-  name = name.replace(" ", "-");
+  name = name.replaceAll(" ", "-");
   name = name.toLowerCase();
 
   const nameExist = await doesTemplateDirExist(name);
