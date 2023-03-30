@@ -468,7 +468,7 @@ export class Player {
     bp: BreakpointConfiguration,
     bounds: { width: number; height: number }
   ) {
-    const wScale = this.getScale(bp.normal.page.width, bounds.width);
+    let wScale = this.getScale(bp.normal.page.width, bounds.width);
     let hScale = this.getScale(bp.normal.page.height, bounds.height);
 
     let _pageH = bp.normal.page.height;
@@ -488,6 +488,8 @@ export class Player {
 
     //override
     if (bp.normal.widthBehavior.type === "useMaxWidth") {
+      // NOTE: we are not allowing scaling >1 when useMaxWidth is used
+      wScale = Math.min(wScale, 1);
       _pageW = Math.min(bp.normal.maxSliderSize.width, bounds.width);
     }
 

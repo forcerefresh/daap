@@ -1,3 +1,7 @@
+- (BUG) transnfrom.animation.ts - when pause slider in app
+  We call pause().... when have delay (or if its Out anim) we don't have timeline instance as its created in rootStart(). 
+ 
+
 Bugs
 - (DONE) style when is on ne moze da se vrati na jedno polje i default coner radius px
 - (DONE) object kad se resize na nulu puca
