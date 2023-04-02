@@ -22,7 +22,7 @@ class LinodeManager {
       indexUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.linodeobjects.com/${projectId}/index.html`,
       debugUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.linodeobjects.com/${projectId}/debug.html`,
       jsonUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.linodeobjects.com/${projectId}/slider.json`,
-      playerUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.linodeobjects.com/${projectId}/wsplayer.js`,
+      playerUrl: `https://${bucketConfig.bucketName}.${bucketConfig.region}.linodeobjects.com/${projectId}/wsplayer/wsplayer.js`,
     };
   }
 

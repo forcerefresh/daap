@@ -259,7 +259,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       <div className={cx(css.headerSection, css.tableHeader)}>
         <div className={css.thumb}>Thumbnail</div>
-        <div className={css.name}>Name, Id &amp; Description</div>
+        <div className={css.name}>Name, Id, Description</div>
         <div className={css.slides}>Slides</div>
         <div className={css.created}>Created</div>
         <div className={css.action}>Action</div>
@@ -324,8 +324,6 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                 <div className={css.slides}>{template.slides}</div>
                 <div className={css.created}>
                   {new Date(template.created).toLocaleDateString()}
-                  <br />
-                  {new Date(template.created).toLocaleTimeString()}
                 </div>
                 <div className={css.action}>
                   <ChangeCheckerButton

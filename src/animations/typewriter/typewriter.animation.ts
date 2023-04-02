@@ -7,10 +7,12 @@ import { SplitText } from "gsap/SplitText";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { TextValues } from "../../objects/text/text";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
+import { getAnimationValues } from "webslider-sdk/lib/animations/animation-utils";
 
 export function getTypewriterAnimationDuration(object?: IObject, config?: any) {
   const effValues = config?.animation?.values!;
-  const values = object?.definition.values as TextValues;
+  //const values = object?.definition.values as TextValues;
+  const values: TextValues = getAnimationValues<TextValues>(object);
 
   const wordsArr = values.text.split(" ");
   const charsStr = wordsArr?.join("");
