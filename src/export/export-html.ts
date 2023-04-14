@@ -647,13 +647,13 @@ function generateSlideData(
       }
 
       if (object.transformDefinition?.values?.transformOriginX) {
-        style += `transform-origin: ${
+        const trOrigin = `transform-origin: ${
           object.transformDefinition.values.transformOriginX ?? "center"
         }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
 
-        wrapperStyle += `transform-origin: ${
-          object.transformDefinition.values.transformOriginX ?? "center"
-        }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
+        style += trOrigin;
+        wrapperStyle += trOrigin;
+        objectAnimWrapperStyle += trOrigin;
       }
 
       // style+=
