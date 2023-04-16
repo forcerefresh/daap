@@ -51,8 +51,9 @@ export function transformAnimation() {
     //     : getObjectElementById(config.itemId!);
     // objectContentEl = objectEl?.firstChild as HTMLElement;
 
-    objectContentEl = getObjectElementById(config.itemId!)
-      ?.firstChild as HTMLElement;
+    objectContentEl = getObjectElementById(
+      config.itemId!
+    )?.getElementsByClassName("object-content")[0] as HTMLElement;
 
     if (!objectContentEl) objectContentEl = getLayerElementById(config.itemId!);
   }
