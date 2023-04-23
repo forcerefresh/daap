@@ -58,6 +58,7 @@ export interface TextValues {
   lineHeight: string;
   textAlign: string;
   letterSpacing: string;
+  fontKerning: boolean;
   preload: boolean;
 }
 
@@ -73,6 +74,7 @@ export type TextPropertiesTuple = [
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
   IUnitsNumberInput<"letterSpacing">,
+  ICheckboxInput<"fontKerning">,
   ICheckboxInput<"preload">
 ];
 
@@ -188,6 +190,13 @@ export function createTextObject(
       extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
+      displayName: "Font kerning",
+      propertyName: "fontKerning",
+      inputType: InputType.CHECKBOX,
+      value: true,
+      defaultValue: true,
+    },
+    {
       displayName: "Preload fonts",
       propertyName: "preload",
       inputType: InputType.CHECKBOX,
@@ -213,6 +222,7 @@ export function createTextObject(
     lineHeight: "20px",
     textAlign: "left",
     letterSpacing: "0px",
+    fontKerning: true,
     preload: true, // not visible,
   };
 
@@ -270,6 +280,7 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
   style += `font-weight: ${fontWeight};`;
   style += "width: " + calculatedObjectSize.width + ";";
   style += "height:" + calculatedObjectSize.height + ";";
+  style += "font-kerning:" + (textValues.fontKerning ? "auto" : "none") + ";";
 
   //style += "position: absolute;";
 
