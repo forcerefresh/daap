@@ -1,6 +1,6 @@
 // logger config has to be at the top of file
 require("./utils/logger-config");
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, BrowserView } = require("electron");
 const path = require("path");
 const fs = require("fs");
 const windowStateKeeper = require("electron-window-state");

@@ -114,10 +114,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     <Menu>
       <MenuDivider title={`WebSlider v${appVersion}`} />
       <MenuItem
-        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
+        icon={<LinkOut style={{ opacity: 0, width: "15px", height: "19px" }} />}
         text="Documentation"
         onClick={() => {
-          openExternalLink("https://webslider.io/docs/intro");
+          // TODO: this is only for Electron
+          const { ipcRenderer } = window.require("electron");
+          ipcRenderer.invoke("System::OpenDocs").then(() => {});
+        }}
+      />
+      <MenuItem
+        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
+        text="Live Documentation"
+        onClick={() => {
+          openExternalLink("https://webslider.io/docs/introduction");
         }}
       />
       <MenuItem
