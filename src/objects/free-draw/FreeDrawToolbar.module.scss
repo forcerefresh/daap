@@ -1,0 +1,39 @@
+.rightHolder {
+  flex-grow: 1;
+}
+
+.inputHolder {
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.checkboxHolder {
+  :global {
+    .bp3-form-group {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      & > div {
+        height: 25px;
+      }
+    }
+  }
+}
+
+.strokeInput {
+  width: 100px;
+  margin-bottom: 0px;
+}
+
+.textButton {
+  height: 34px !important;
+  display: flex;
+  align-items: center;
+
+  :global {
+    .bp3-button-text {
+      height: 16px;
+    }
+  }
+}

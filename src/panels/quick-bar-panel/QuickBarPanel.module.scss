@@ -1,0 +1,106 @@
+.quickBar {
+  //padding: 10px;
+  margin: 0px 1px;
+  //color: gray;
+  //width: calc(100vh - 300px);
+  height: 54px;
+  background-color: #232323;
+  display: flex;
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+
+    .bp3-button-text {
+      height: 36px;
+    }
+
+    .bp3-button:not(.bp3-small) {
+      width: 54px;
+      height: 54px;
+      color: gray;
+    }
+    .bp3-button:not(.bp3-small):hover {
+      color: white;
+    }
+    // .bp3-button.bp3-small {
+    //   width: 34px;
+    //   height: 34px;
+    //   // padding: 7px 14px;
+    // }
+  }
+
+  // .buttonGroupsHolder {
+  //   height: 100%;
+  //   display: flex;
+  //   flex-direction: column;
+  // }
+  // .buttonGroupsHolder > div:last-of-type {
+  //   margin-top: auto;
+  // }
+  // .buttonGroupsHolder > * + * {
+  //   margin-top: 0px;
+  // }
+}
+
+// .delimiter {
+//   height: 20px;
+// }
+
+// .tbButton {
+//   position: relative;
+// }
+
+// .tbTag {
+//   position: absolute;
+//   right: 3px;
+//   top: 3px;
+//   //background: #d31a1a !important;
+//   //color: white !important;
+//   //border-radius: 20px;
+//   //text-align: center;
+//   //line-height: 14px;
+//   //font-weight: bold;
+// }
+
+.rightHolder {
+  flex-grow: 1;
+}
+
+.inputHolder {
+  display: flex;
+  align-items: center;
+  padding: 0px 5px;
+}
+
+.checkboxHolder {
+  :global {
+    .bp3-form-group {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      & > div {
+        height: 25px;
+      }
+    }
+  }
+}
+
+.strokeInput {
+  width: 100px;
+  margin-bottom: 0px;
+}
+
+.textButton {
+  height: 34px !important;
+  display: flex;
+  align-items: center;
+
+  :global {
+    .bp3-button-text {
+      height: 16px;
+    }
+  }
+}

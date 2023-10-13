@@ -19,6 +19,7 @@ import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox
 import { ReactComponent as HelpIcon } from "../../assets/icons/help-icon.svg";
 import { ReactComponent as BulbIcon } from "../../assets/icons/bulb-icon.svg";
 import { ReactComponent as LinkOut } from "../../assets/icons/link-out.svg";
+import { ReactComponent as FreeDraw } from "../../assets/icons/free-draw.svg";
 
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -32,6 +33,7 @@ import {
   doRedo,
   setStageTool,
   setZoomFit,
+  addNewObject,
 } from "../../store/actions/actions";
 import HistoryPanel from "../history-panel/HistoryPanel";
 import { StageTools } from "../../store/reducers/stage";
@@ -41,19 +43,23 @@ import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { IntegrationContext } from "../../integration";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
+import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { FREE_DRAW } from "../../objects/free-draw/free-draw";
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
 
 enum VisiblePanel {
   None = "none",
   Add = "add",
   Settings = "settings",
+  Draw = "draw",
   History = "history",
   FontPreview = "font-preview",
   MediaLibrary = "media-library",
   ProjectsLibrary = "projects-library",
 }
 
-const ICON_SIZE = 36;
-const SMALL_ICON_SIZE = 18;
+const ICON_SIZE = 32;
+const SMALL_ICON_SIZE = 12;
 
 type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -74,6 +80,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     missingExtensions,
     appVersion,
     availableVersion,
+    activeLayerId,
+    _addNewObject,
   } = props;
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
@@ -87,7 +95,72 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     // });
   }, []);
 
+  // function createInstance<A>(c: new () => A): A {
+  //   return new c();
+  // }
+
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
+  // const latestShowPanel = useRef<VisiblePanel>();
+
+  // let inst = useRef<FreeHandDrawTool>();
+  const { activateTool, deactivateTool, activeTool } = useContext(ToolsContext);
+  console.log(activeTool);
+  // useEffect(() => {
+  //   inst.current?.setToolState(toolState as any);
+  // }, [toolState]);
+
+  // useEffect(() => {
+  //   if (showPanel !== VisiblePanel.Draw) {
+  //     deactivateTool();
+  //   }
+  // }, [showPanel, deactivateTool]);
+
+  // useEffect(() => {
+  //   if (showPanel === VisiblePanel.Draw) {
+  //     setTool("FREE_DRAW");
+  //     const toolCanvasEl =
+  //       document.getElementsByClassName("MainToolCanvas")[0]!;
+  //     const toolDef = getObjectToolDefinitions("wewewe");
+  //     const toolClazz = toolDef.toolHandlerClass;
+  //     inst.current = new toolClazz();
+  //     inst.current.setTool({
+  //       stageZoom: zoom,
+  //       canvas: toolCanvasEl as HTMLElement,
+  //       updateValues: (values, pos) => {
+  //         _addNewObject(
+  //           activeLayerId!,
+  //           FREE_DRAW,
+  //           {
+  //             layout: "absolute" as "absolute",
+  //             absoluteLayout: {
+  //               type: "common" as "common",
+  //               perDevice: [],
+  //               relativeTo: "stage",
+  //               common: {
+  //                 deviceType: "common" as "common",
+  //                 left: pos.left + "px",
+  //                 top: pos.top + "px",
+  //                 width: "650px",
+  //                 height: "650px",
+  //               },
+  //             },
+  //           } as any,
+  //           {
+  //             strokeWidth: "10",
+  //             ...values,
+  //           }
+  //         );
+
+  //         console.log(values);
+  //       },
+  //       values: { paths: [], strokeWidth: "5", color: "black" } as any,
+  //     });
+  //   } else {
+  //     setTool("NONE");
+  //   }
+
+  //   latestShowPanel.current = showPanel;
+  // }, [showPanel]);
 
   // logic for handling click outside
   const sharedRef = useRef(null);
@@ -224,12 +297,31 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Portal>
         </div>
 
+        <div>
+          <Button
+            minimal
+            active={activeTool === FREE_DRAW}
+            onClick={() => {
+              setShowPanel(VisiblePanel.None);
+              activateTool(FREE_DRAW);
+            }}
+          >
+            <FreeDraw
+              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+            />
+          </Button>
+        </div>
+
         <div className={css.delimiter}></div>
         <div>
           <Button
             small
             minimal
-            onClick={() => _setStageTool(StageTools.SELECT)}
+            onClick={() => {
+              deactivateTool();
+              setShowPanel(VisiblePanel.None);
+              _setStageTool(StageTools.SELECT);
+            }}
             active={stageTool === StageTools.SELECT}
           >
             <SelectToolIcon
@@ -460,6 +552,7 @@ const mapStateToProps = (state: IStore) => {
   const zoom = getZoom(stage, settings);
 
   return {
+    activeLayerId: state.project.selection.activeLayerId,
     appVersion: globals.appVersion,
     availableVersion: globals.availableVersion,
     missingExtensions: state.editor.missingExtensions,
@@ -478,6 +571,12 @@ const mapDispatchToProps = {
   doUndo: () => doUndo(),
   doRedo: () => doRedo(),
   _setStageTool: (tool: StageTools) => setStageTool(tool),
+  _addNewObject: (
+    layerId: string,
+    type: ObjectType | string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

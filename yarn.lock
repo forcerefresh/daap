@@ -6522,6 +6522,11 @@ fined@^1.0.1:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
+fit-curve@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/fit-curve/-/fit-curve-0.2.0.tgz#d48b7ec8775e915d126762868bb99a338bc82d06"
+  integrity sha512-op7ofeL13getbqL5J5ACeNxTlLWzusn4/jjEjSVA1sS7PfXWumdtNITvLuTjSobis+jZzMil2rsJ3Vhw7OxQyQ==
+
 flagged-respawn@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/flagged-respawn/-/flagged-respawn-1.0.1.tgz#e7de6f1279ddd9ca9aac8a5971d618606b3aab41"
@@ -11566,6 +11571,11 @@ react-use-error-boundary@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-use-error-boundary/-/react-use-error-boundary-2.0.1.tgz#1daffc4a8ddb2b9a39062bc646d23251091f0f38"
   integrity sha512-ebFzCag4xLNNTXD1XfFriyW8k1uq6j4OHgDnVU2jbDoY252uZA4iwiybG+oMqq58PElIan6H/vpcI7/QeCW9hg==
+
+react-virtuoso@^4.6.0:
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.6.0.tgz#402d86363b6fc6408273615bae9be83e4ce73037"
+  integrity sha512-paQbkLA8U6dRe9srltWgPeoFCtNKqUYIcOpUR01JyznzaXWVzgZQE0M9KGi9vMoq8vHvHkGzuxJ6jDCS6uzePg==
 
 react@^16.14.0:
   version "16.14.0"

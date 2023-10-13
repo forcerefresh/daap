@@ -189,6 +189,7 @@ export function getTextField<T>(
     readOnly?: boolean;
     placeholder?: string;
     style?: React.CSSProperties;
+    autoFocus?: boolean;
   } = {}
 ) {
   const objectDef = {

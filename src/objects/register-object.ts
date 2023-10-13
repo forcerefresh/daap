@@ -88,6 +88,7 @@ import {
   textMeta,
   textSizeUpdate,
   getFonts,
+  TEXT,
 } from "./text/text";
 import {
   createTrianglifyObject,
@@ -122,6 +123,17 @@ import {
   textTargetSizeUpdate,
   textTargetStart,
 } from "./text-target/text-target";
+import {
+  FREE_DRAW,
+  createFreeDrawObject,
+  freeDrawMeta,
+  freeDrawSizeUpdate,
+  getFreeDrawHtml,
+} from "./free-draw/free-draw";
+import { registerObjectTool } from "./objectToolFactory";
+import FreeHandDrawTool from "./free-draw/free-draw-tool";
+import TextTool from "./text/text-tool";
+import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
 
 registerObject(
   "button",
@@ -163,6 +175,27 @@ registerObject(
   spinnerSizeUpdate,
   getSpinnerHtml
 );
+
+registerObject(
+  FREE_DRAW,
+  "media",
+  freeDrawMeta,
+  createFreeDrawObject,
+  freeDrawSizeUpdate,
+  getFreeDrawHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
+
+registerObjectTool({
+  type: FREE_DRAW,
+  meta: freeDrawMeta,
+  toolClass: FreeHandDrawTool,
+  toolBar: FreeDrawToolbar,
+});
 
 registerObject(
   "image",
@@ -279,7 +312,7 @@ registerObject(
 );
 
 registerObject(
-  "text",
+  TEXT,
   "text",
   textMeta,
   createTextObject,
@@ -293,6 +326,8 @@ registerObject(
   undefined,
   getFonts
 );
+
+registerObjectTool({ type: TEXT, meta: textMeta, toolClass: TextTool });
 
 // registerObject(
 //   "text_target",

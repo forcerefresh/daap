@@ -50,9 +50,9 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
         enabled: true,
         layout: "normal",
         normal: {
-          breakpoint: { width: { from: 320, fromMin: true, to: 480 } },
-          page: { width: 480, height: 850 },
-          maxSliderSize: { width: 480, height: 850 },
+          breakpoint: { width: { from: 320, fromMin: true, to: 320 } },
+          page: { width: 480, height: 500 },
+          maxSliderSize: { width: 480, height: 500 },
           heightBehavior: { type: "keepAspectRatio" },
           widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },

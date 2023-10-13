@@ -13,6 +13,7 @@ export interface IMainLayout {
   properties?: React.ReactElement;
   animations?: React.ReactElement;
   action?: React.ReactElement;
+  quickBar?: React.ReactElement;
 }
 
 export type IMainLayoutMergedProps = typeof mapDispatchToProps &
@@ -29,6 +30,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
     action,
     animations,
     layoutType,
+    quickBar,
   } = props;
 
   switch (layoutType) {
@@ -36,7 +38,8 @@ function MainLayout(props: IMainLayoutMergedProps) {
       return (
         <div className={cx(css.mainLayout, css.defaultLayersStyle)}>
           <div className={css.left}>{toolbar}</div>
-          <div className={css.center}>
+          <div className={cx(css.center, "layout-center-area")}>
+            <div className={css.quickBar}>{quickBar}</div>
             <div className={css.content}>{content}</div>
           </div>
           <div className={css.right}>
@@ -57,7 +60,8 @@ function MainLayout(props: IMainLayoutMergedProps) {
       return (
         <div className={cx(css.mainLayout, css.defaultStyle)}>
           <div className={css.left}>{toolbar}</div>
-          <div className={css.center}>
+          <div className={cx(css.center, "layout-center-area")}>
+            <div className={css.quickBar}>{quickBar}</div>
             <div className={css.content}>{content}</div>
           </div>
           <div className={css.right}>

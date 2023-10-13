@@ -256,7 +256,7 @@ html {
   width: 14px;
 }
 *::-webkit-scrollbar-track {
-  background: rgb(30, 30, 30);
+  background: rgba(30, 30, 30, 0);
 }
 *::-webkit-scrollbar-thumb {
   background-color: rgb(73, 73, 73);

@@ -1,8 +1,11 @@
 /* eslint-disable */
 import { cloneDeep, includes, isEqual, mapValues, pick, set } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+
 import React, {
   CSSProperties,
+  useContext,
   useEffect,
   useMemo,
   useRef,
@@ -31,6 +34,7 @@ import {
   selectObjectsByRect,
   setStagePreview,
   setStageTool,
+  setStageZoom,
   setViewPortSize,
   updateObject,
 } from "../../store/actions/actions";
@@ -73,6 +77,8 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
+import { getCursorStyle } from "../../objects/free-draw/free-draw-tool";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -112,12 +118,20 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     forceRefreshRand: _forceRefreshRand, // NOTE: check this
     enableDeveloper,
     showGrid,
+    _setStageZoom,
   } = props;
   //logger.app.debug("StagePanel render");
 
   const isPreview = previewState.isPreview;
 
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
+
+  const {
+    activeTool,
+    activateTool,
+    activeObjectId: activeEditObjectId,
+  } = useContext(ToolsContext);
+  const showSelection = !activeTool;
 
   const [error, resetError] = useErrorBoundary((error, errorInfo) => {
     logger.app.warn(error, errorInfo);
@@ -320,6 +334,76 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     });
   }
 
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const panAndZoomTargetRef = useRef<HTMLDivElement | null>(null);
+  const initialWidthRef = useRef(1);
+  const initialStageZoom = useRef(stageZoom);
+  const pinchDelta = useRef(0);
+  const initialPanRef = useRef({ x: 0, y: 0 });
+  const panDelta = useRef({ x: 0, y: 0 });
+
+  function handleWheel(e: WheelEvent) {
+    //console.log(e);
+    e.preventDefault();
+    var target = panAndZoomTargetRef.current!;
+    //console.log(target);
+    if (e.ctrlKey) {
+      console.log("pinch", e.deltaY);
+      pinchDelta.current += e.deltaY;
+      //var width = getStyleInt(target, "width");
+      console.log(initialWidthRef.current);
+      console.log(e.deltaY);
+      console.log(pinchDelta.current);
+
+      var newWidth = initialWidthRef.current - pinchDelta.current;
+      //setStyleInt(target, "width", newWidth);
+      //setStyleInt(target, "height", newWidth);
+
+      _setStageZoom(
+        initialStageZoom.current * (newWidth / initialWidthRef.current)
+      );
+    } else {
+      console.log("pan", e.deltaX, e.deltaY);
+      var x = getStyleInt(target, "left");
+      setStyleInt(target, "left", x - e.deltaX);
+      var y = getStyleInt(target, "top");
+      setStyleInt(target, "top", y - e.deltaY);
+
+      initialPanRef.current.x -= e.deltaX;
+      initialPanRef.current.y -= e.deltaY;
+
+      var newPanX = initialPanRef.current.x;
+      var newPanY = initialPanRef.current.y;
+
+      setPanMove({ x: newPanX, y: newPanY });
+    }
+  }
+  function getStyleInt(target: HTMLElement, key: any) {
+    var val = getComputedStyle(target)[key];
+    return parseInt(val, 10);
+  }
+
+  function setStyleInt(target: HTMLElement, key: any, val: any) {
+    target.style[key] = val + "px";
+  }
+
+  useEffect(() => {
+    console.log("AAAAAAA");
+    initialStageZoom.current = stageZoom;
+    initialPanRef.current = { x: 0, y: 0 };
+
+    var width = getStyleInt(panAndZoomTargetRef.current!, "width");
+    initialWidthRef.current = width;
+
+    rootRef.current!.parentElement!.addEventListener("wheel", handleWheel, {
+      passive: false,
+    });
+
+    return () => {
+      rootRef.current!.parentElement!.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   useEffect(() => {
     if (isPreview === true) {
       const el = document.querySelector(".preview-scrollable-holder");
@@ -328,8 +412,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       }
     }
   }, [isPreview]);
-
-  const rootRef = useRef<HTMLDivElement | null>(null);
 
   const stageXOffset = Math.round(
     (viewPortSize.w - stageSize.width * stageZoom) / 2 +
@@ -525,6 +607,13 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 
       setSelectionStartPosition(null);
     } else {
+      if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
+        // NOTE: activate tool editor
+        const deff = getAppObjectDefinition(objectById[objectId].type);
+        if (deff?.meta.isEditable) {
+          activateTool(objectById[objectId].type, objectId);
+        }
+      }
       _activateObject(objectId);
       _selectObjects([objectId]);
       _selectForProperties({ type: "object", id: objectId });
@@ -734,6 +823,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
     const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
 
+    if (activeEditObjectId === objectId) return null;
+
     // thumbnail arr
     // const slidesArr = getNormalSlideArr(slides);
     // const slidesCounter = slidesArr.length;
@@ -778,8 +869,8 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       // NOTE: FOR TEXT
       const calculatedObjectSizeForObject = { ...calculatedObjectSize };
       if (object.definition.values?.autoHeight) {
-        calculatedObjectSizeForObject.height = "auto";
-        objectStyle.height = "auto";
+        //calculatedObjectSizeForObject.height = "auto";
+        //objectStyle.height = "auto";
       }
 
       return (
@@ -830,7 +921,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
             />
           )}
 
-          {isSelected && (
+          {isSelected && showSelection && (
             <>
               <div
                 ref={resizingSelectionRef}
@@ -851,9 +942,9 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                     <Icon icon="lock" />
                   </div>
                 ) : null}
-                <div className={css.currentPosition}>
+                {/* <div className={css.currentPosition}>
                   {getPositionInfo(object, selectedDevice)}
-                </div>
+                </div> */}
               </div>
             </>
           )}
@@ -1056,23 +1147,28 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
                 [css.notVisible]: !object.isVisible,
               })}
             />
-            <div
-              ref={resizingSelectionRef}
-              key={`${object.id}${_forceRefreshRand}`}
-              className={cx(css.selection, css[object.type])}
-              style={{ ...objectStyle2, left: "0px", top: "0px" }}
-            />
 
-            <div className={css.selectionInfo}>
-              {object.isLocked ? (
-                <div className={css.lockIconHolder}>
-                  <Icon icon="lock" />
+            {showSelection && (
+              <>
+                <div
+                  ref={resizingSelectionRef}
+                  key={`${object.id}${_forceRefreshRand}`}
+                  className={cx(css.selection, css[object.type])}
+                  style={{ ...objectStyle2, left: "0px", top: "0px" }}
+                />
+
+                <div className={css.selectionInfo}>
+                  {object.isLocked ? (
+                    <div className={css.lockIconHolder}>
+                      <Icon icon="lock" />
+                    </div>
+                  ) : null}
+                  {/* <div className={css.currentPosition}>
+                    {getPositionInfo(object, selectedDevice)}
+                  </div> */}
                 </div>
-              ) : null}
-              <div className={css.currentPosition}>
-                {getPositionInfo(object, selectedDevice)}
-              </div>
-            </div>
+              </>
+            )}
           </div>
         </Draggable>
       </div>
@@ -1297,7 +1393,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     //layerStyle.height = "auto";
 
     //layerStyle.pointerEvents = "none";
-    return (
+    return showSelection ? (
       <div
         key={`layer-resizer-${layer.id}`}
         className={cx(
@@ -1310,7 +1406,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       >
         {renderResizer(layer)}
       </div>
-    );
+    ) : null;
   };
 
   const renderResizer = (layer: ILayer) => {
@@ -1383,228 +1479,254 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   };
 
   return (
-    <div
-      key={rerender}
-      ref={rootRef}
-      className={cx(css.stagePanel, {
-        [css.panCursor]: stageToolInternal === StageTools.PAN,
-        //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
-      })}
-      onMouseDown={(e: React.MouseEvent) => {
-        if (previewState.isPreview) return;
-        e.persist();
-        const target = e.target as HTMLElement;
-        if (
-          target?.className?.indexOf &&
-          target?.className?.indexOf("resizeHandle") !== -1
-        ) {
-          e.stopPropagation();
-          //debugger;
-          setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
-          return;
-        }
-
-        if (stageToolInternal === StageTools.PAN) {
-          setPanMoveStart({
-            x: panMoveStart.x + panMove.x,
-            y: panMoveStart.y + panMove.y,
-          });
-          setPanMove({ x: 0, y: 0 });
-        }
-
-        //e.persist();
-        //_activateObject(null);
-        //_selectObjects([]);
-        setSelectionStartPosition(getMousePosition(e));
-      }}
-      onMouseMove={(e) => {
-        if (previewState.isPreview) return;
-        handleStageMouseMove(e);
-      }}
-      onMouseUp={(e) => {
-        if (previewState.isPreview) return;
-        e.stopPropagation();
-        if (resizeStartPosition !== null && resizeData !== null) {
-          const obj = cloneDeep(objectByIdLocal.current[resizeData?.objectId!]);
-
-          const absSizeObj = getAbsoluteLayoutSize(
-            obj.absoluteLayout!,
-            selectedDevice
-          );
-
-          const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
-            absSizeObj,
-            layers.layerById[objects.objectById[obj.id].layerId],
-            resizeRect!,
-            obj.absoluteLayout!.relativeTo,
-            breakpointConfig!
-          );
-          Object.assign(absSizeObj, newAbsSizeObj);
-          // absSizeObj.left = roundNumber(resizeRect!.x!, 1) + "px";
-          // absSizeObj.top = roundNumber(resizeRect!.y!, 1) + "px";
-          // absSizeObj.width = roundNumber(resizeRect!.w!, 1) + "px";
-          // absSizeObj.height = roundNumber(resizeRect!.h!, 1) + "px";
-
-          _updateObject(obj);
-
-          setResizeStartPosition(null);
-          setResizeRect(null);
-          setResizeData(null);
-          // setRerender((rerender) => rerender + 1);
-          return;
-        }
-
-        if (stageToolInternal === StageTools.PAN) {
-          //setPanMoveStart(() => ({ ...panMove }));
-          //setPanMove(() => ({ x: 0, y: 0 }));
-          setSelectionStartPosition(null);
-          return;
-        }
-
-        if (selectionStartPosition != null) {
-          const point = getMousePosition(e);
-          let rect = getRectFromPoints(selectionStartPosition, point);
-          rect.x -= stageXOffset + (rootRef?.current?.offsetLeft || 0);
-          rect.y -= stageYOffset;
-
-          if (rect.w > 1 && rect.h > 1) {
-            // if (stageToolInternal === StageTools.DRAW && stageToolObjectType) {
-            //   if (activeLayerId) {
-            //     const rect2 = multiplyRect(rect, 1 / stageZoom);
-            //     _addNewObject(activeLayerId, stageToolObjectType, {
-            //       layout: "absolute",
-            //       absoluteLayout: {
-            //         type: "common",
-            //         perDevice: [],
-            //         relativeTo: "stage",
-            //         common: {
-            //           deviceType: "common",
-            //           left: rect2.x + "px",
-            //           top: rect2.y + "px",
-            //           width: rect2.w + "px",
-            //           height: rect2.h + "px",
-            //         },
-            //       },
-            //     });
-            //     _resetStageTool();
-            //   }
-            // } else {
-            _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
-            //}
-          } else {
-            try {
-              const t1 = e.target as any;
-              const t2 = t1.parentElement! as any;
-              const t3 = t2.parentElement! as any;
-              const t4 = t3.parentElement! as any;
-
-              if (
-                t1.className.indexOf("StagePanel_stage_") !== -1 ||
-                t2.className.indexOf("StagePanel_stage_") !== -1 ||
-                t3.className.indexOf("StagePanel_stage_") !== -1 ||
-                t4.className.indexOf("StagePanel_stage_") !== -1 ||
-                t1.className.indexOf("StagePanel_stagePanel_") !== -1 // <<< t1 === stagePanel
-              ) {
-                // deselect objects
-                _selectObjects([]);
-              }
-            } catch (ex) {}
+    <>
+      <div
+        key={rerender}
+        ref={rootRef}
+        className={cx(css.stagePanel, {
+          [css.panCursor]: stageToolInternal === StageTools.PAN,
+          //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
+        })}
+        onMouseDown={(e: React.MouseEvent) => {
+          if (previewState.isPreview) return;
+          e.persist();
+          const target = e.target as HTMLElement;
+          if (
+            target?.className?.indexOf &&
+            target?.className?.indexOf("resizeHandle") !== -1
+          ) {
+            e.stopPropagation();
+            //debugger;
+            setResizeStartPosition({ ...getMousePosition(e), corner: "tl" });
+            return;
           }
-        }
 
-        setSelectionStartPosition(null);
+          if (stageToolInternal === StageTools.PAN) {
+            setPanMoveStart({
+              x: panMoveStart.x + panMove.x,
+              y: panMoveStart.y + panMove.y,
+            });
+            setPanMove({ x: 0, y: 0 });
+          }
 
-        if (selectionBoxRef?.current?.style) {
-          selectionBoxRef.current.style.display = "none";
-        }
-      }}
-    >
-      {!isPreview && (
-        <div ref={selectionBoxRef} className={css.selectionBox}></div>
-      )}
-      {isPreview &&
-        previewState.scope?.entityType === "slide" &&
-        renderSlideTimelineInfo()}
-      {isPreview && enableDeveloper && renderViewportSize()}
-      {isPreview &&
-        previewState.scope?.entityType === "project" &&
-        renderProjectTimelineInfo()}
-      <div style={stageStyle} className={cx("tmp-stage-selector", css.stage)}>
-        <div className="preview-scrollable-holder" style={scrollableDivStyle}>
-          {isPreview && previewLayout.header.component}
-          <div style={scrollableDivInnerStyle}>
-            <div
-              className="scrollableDivInnerSlideBackground"
-              style={scrollableDivInnerSlideBackgroundStyle}
-            ></div>
+          //e.persist();
+          //_activateObject(null);
+          //_selectObjects([]);
+          setSelectionStartPosition(getMousePosition(e));
+        }}
+        onMouseMove={(e) => {
+          if (previewState.isPreview) return;
+          handleStageMouseMove(e);
+        }}
+        onMouseUp={(e) => {
+          if (previewState.isPreview) return;
+          e.stopPropagation();
+          if (resizeStartPosition !== null && resizeData !== null) {
+            const obj = cloneDeep(
+              objectByIdLocal.current[resizeData?.objectId!]
+            );
 
-            <div style={canvasStyle} className={css.canvas}>
-              {isPreview && (
-                <AppPlayer
-                  selectedDevice={selectedDevice}
-                  customBPWidth={customBPWidth}
-                  playerData={exportData}
-                  previewState={previewState}
-                  manualProgress={manualProgress}
-                  requestStop={() => {
-                    _setStagePreview({ previewState: "stop", scope: null });
-                  }}
-                />
-              )}
-              {!isPreview && layerArr?.map(renderLayer)}
-            </div>
+            const absSizeObj = getAbsoluteLayoutSize(
+              obj.absoluteLayout!,
+              selectedDevice
+            );
 
-            {!isPreview && (
-              <>
-                {showGrid && (
-                  <>
-                    {horizontalGridLines.map((item, hlIdx) => (
-                      <div
-                        key={`hor-lines-${hlIdx}`}
-                        style={{
-                          top: item.top + "px",
-                          width: item.width + "px",
-                        }}
-                        className={cx(css.gridHorizontalLine)}
-                      ></div>
-                    ))}
-                    {verticalGridLines.map((item, hlIdx) => (
-                      <div
-                        key={`ver-lines-${hlIdx}`}
-                        style={{
-                          left: item.left + "px",
-                          height: item.height + "px",
-                          top: "0px",
-                        }}
-                        className={cx(css.gridVerticalLine)}
-                      ></div>
-                    ))}
-                  </>
+            const newAbsSizeObj = getAbsoluteLayoutSizeInSameUnit(
+              absSizeObj,
+              layers.layerById[objects.objectById[obj.id].layerId],
+              resizeRect!,
+              obj.absoluteLayout!.relativeTo,
+              breakpointConfig!
+            );
+            Object.assign(absSizeObj, newAbsSizeObj);
+            // absSizeObj.left = roundNumber(resizeRect!.x!, 1) + "px";
+            // absSizeObj.top = roundNumber(resizeRect!.y!, 1) + "px";
+            // absSizeObj.width = roundNumber(resizeRect!.w!, 1) + "px";
+            // absSizeObj.height = roundNumber(resizeRect!.h!, 1) + "px";
+
+            _updateObject(obj);
+
+            setResizeStartPosition(null);
+            setResizeRect(null);
+            setResizeData(null);
+            // setRerender((rerender) => rerender + 1);
+            return;
+          }
+
+          if (stageToolInternal === StageTools.PAN) {
+            //setPanMoveStart(() => ({ ...panMove }));
+            //setPanMove(() => ({ x: 0, y: 0 }));
+            setSelectionStartPosition(null);
+            return;
+          }
+
+          if (selectionStartPosition != null) {
+            const point = getMousePosition(e);
+            let rect = getRectFromPoints(selectionStartPosition, point);
+            rect.x -= stageXOffset + (rootRef?.current?.offsetLeft || 0);
+            rect.y -= stageYOffset;
+
+            if (rect.w > 1 && rect.h > 1) {
+              // if (stageToolInternal === StageTools.DRAW && stageToolObjectType) {
+              //   if (activeLayerId) {
+              //     const rect2 = multiplyRect(rect, 1 / stageZoom);
+              //     _addNewObject(activeLayerId, stageToolObjectType, {
+              //       layout: "absolute",
+              //       absoluteLayout: {
+              //         type: "common",
+              //         perDevice: [],
+              //         relativeTo: "stage",
+              //         common: {
+              //           deviceType: "common",
+              //           left: rect2.x + "px",
+              //           top: rect2.y + "px",
+              //           width: rect2.w + "px",
+              //           height: rect2.h + "px",
+              //         },
+              //       },
+              //     });
+              //     _resetStageTool();
+              //   }
+              // } else {
+              _selectObjectsByRect(multiplyRect(rect, 1 / stageZoom));
+              //}
+            } else {
+              try {
+                const t1 = e.target as any;
+                const t2 = t1.parentElement! as any;
+                const t3 = t2.parentElement! as any;
+                const t4 = t3.parentElement! as any;
+
+                if (
+                  t1.className.indexOf("StagePanel_stage_") !== -1 ||
+                  t2.className.indexOf("StagePanel_stage_") !== -1 ||
+                  t3.className.indexOf("StagePanel_stage_") !== -1 ||
+                  t4.className.indexOf("StagePanel_stage_") !== -1 ||
+                  t1.className.indexOf("StagePanel_stagePanel_") !== -1 // <<< t1 === stagePanel
+                ) {
+                  // deselect objects
+                  _selectObjects([]);
+                }
+              } catch (ex) {}
+            }
+          }
+
+          setSelectionStartPosition(null);
+
+          if (selectionBoxRef?.current?.style) {
+            selectionBoxRef.current.style.display = "none";
+          }
+        }}
+      >
+        {!isPreview && (
+          <div ref={selectionBoxRef} className={css.selectionBox}></div>
+        )}
+        {isPreview &&
+          previewState.scope?.entityType === "slide" &&
+          renderSlideTimelineInfo()}
+        {isPreview && enableDeveloper && renderViewportSize()}
+        {isPreview &&
+          previewState.scope?.entityType === "project" &&
+          renderProjectTimelineInfo()}
+        <div
+          ref={panAndZoomTargetRef}
+          style={stageStyle}
+          className={cx("tmp-stage-selector", css.stage)}
+        >
+          <div className="preview-scrollable-holder" style={scrollableDivStyle}>
+            {isPreview && previewLayout.header.component}
+            <div style={scrollableDivInnerStyle}>
+              <div
+                className="scrollableDivInnerSlideBackground"
+                style={scrollableDivInnerSlideBackgroundStyle}
+              ></div>
+
+              <div style={canvasStyle} className={css.canvas}>
+                {isPreview && (
+                  <AppPlayer
+                    selectedDevice={selectedDevice}
+                    customBPWidth={customBPWidth}
+                    playerData={exportData}
+                    previewState={previewState}
+                    manualProgress={manualProgress}
+                    requestStop={() => {
+                      _setStagePreview({ previewState: "stop", scope: null });
+                    }}
+                  />
                 )}
+                {!isPreview && layerArr?.map(renderLayer)}
+              </div>
 
-                <div
-                  style={pageBorderStyle}
-                  className={cx(css.borderBase, css.pageBorder)}
-                ></div>
-                <div
-                  style={stageBorderStyle}
-                  className={cx(css.borderBase, css.stageBorder)}
-                ></div>
+              {!isPreview && (
+                <>
+                  {showGrid && (
+                    <>
+                      {horizontalGridLines.map((item, hlIdx) => (
+                        <div
+                          key={`hor-lines-${hlIdx}`}
+                          style={{
+                            top: item.top + "px",
+                            width: item.width + "px",
+                          }}
+                          className={cx(css.gridHorizontalLine)}
+                        ></div>
+                      ))}
+                      {verticalGridLines.map((item, hlIdx) => (
+                        <div
+                          key={`ver-lines-${hlIdx}`}
+                          style={{
+                            left: item.left + "px",
+                            height: item.height + "px",
+                            top: "0px",
+                          }}
+                          className={cx(css.gridVerticalLine)}
+                        ></div>
+                      ))}
+                    </>
+                  )}
 
-                <div
-                  style={guidelinesBorderStyle}
-                  className={cx(css.borderBase, css.guidelinesBorder)}
-                ></div>
-              </>
-            )}
-            <div className="resizeHolder">
-              {!isPreview && layerArr?.map(renderResizerWithLayer)}
+                  <div
+                    style={pageBorderStyle}
+                    className={cx(css.borderBase, css.pageBorder)}
+                  ></div>
+                  <div
+                    style={stageBorderStyle}
+                    className={cx(css.borderBase, css.stageBorder)}
+                  ></div>
+
+                  <div
+                    style={guidelinesBorderStyle}
+                    className={cx(css.borderBase, css.guidelinesBorder)}
+                  ></div>
+                </>
+              )}
+              <div className="resizeHolder">
+                {!isPreview && layerArr?.map(renderResizerWithLayer)}
+              </div>
             </div>
+            {isPreview && previewLayout.body.component}
           </div>
-          {isPreview && previewLayout.body.component}
         </div>
       </div>
-    </div>
+
+      <div
+        style={{ display: "none" }}
+        className={cx(css.toolCanvas, "MainToolCanvas")}
+      >
+        <div
+          className={"MainToolStage"}
+          style={{ ...stageStyle, position: "absolute" }}
+        ></div>
+        {/* <svg className={css.previewSvg} width="100%" height="100%"> */}
+        {/* <path
+            fill="none"
+            stroke="#d3d3d3"
+            stroke-linejoin="round"
+            stroke-linecap="round"
+          ></path> */}
+        {/* </svg> */}
+      </div>
+    </>
   );
 };
 
@@ -1689,6 +1811,7 @@ const mapDispatchToProps = {
   _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
+  _setStageZoom: (zoom: number) => setStageZoom(zoom),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 

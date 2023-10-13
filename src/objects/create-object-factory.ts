@@ -52,13 +52,13 @@ export function createObject(
       const objDeff = getAppObjectDefinition(type);
 
       return {
-        ...objectProps,
         ...objDeff!.createObject({
           ...initialValue,
           commonProperties: {
             hasOverflowProperty: true,
           },
         }),
+        ...objectProps,
       };
     }
   }

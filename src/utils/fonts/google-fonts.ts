@@ -1,13 +1,14 @@
 import { compact, uniq } from "lodash-es";
-import googleFontList from "./google-fonts.deff.json";
+import googleFontList from "./google-font-data.json";
 
 export function getGoogleFontList(): string[] {
-  return googleFontList.map((item) => item.family);
+  return googleFontList.items.map((item) => item.family);
 }
 
 export function getGoogleVariants(fontFamily: string): string[] {
   return (
-    googleFontList.find((item) => item.family === fontFamily)?.variants ?? []
+    googleFontList.items.find((item) => item.family === fontFamily)?.variants ??
+    []
   );
 }
 

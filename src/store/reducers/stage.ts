@@ -11,6 +11,7 @@ import {
   VIEWPORT_SIZE,
   FORCE_REFRESH,
   ZOOM_FIT,
+  NEXT_TEXT_POSITION,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -42,11 +43,13 @@ export interface IStage {
   stageTool: { tool: StageTools; objectType?: ObjectType };
   selectedDevice: DeviceType;
   forceRefreshRand: number;
+  // text position
+  nextTextPositionY: number;
 }
 
 const getStageDefault = (): IStage => ({
   stageViewportSize: { w: 0, h: 0 },
-  zoomFit: true,
+  zoomFit: false,
   zoom: 1,
   previewState: {
     previewState: "stop",
@@ -56,8 +59,9 @@ const getStageDefault = (): IStage => ({
     repeat: true,
   },
   stageTool: { tool: StageTools.SELECT },
-  selectedDevice: "large-1",
+  selectedDevice: "small-1",
   forceRefreshRand: 0,
+  nextTextPositionY: 100,
 });
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
@@ -106,6 +110,9 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
     }
     case CREATE_NEW_PROJECT: {
       return { ...state, ...omit(getStageDefault(), "stageViewportSize") };
+    }
+    case NEXT_TEXT_POSITION: {
+      return { ...state, nextTextPositionY: action.payload };
     }
     default:
       return state;

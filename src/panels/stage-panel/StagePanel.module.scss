@@ -1,6 +1,9 @@
 .stagePanel {
-  height: 100%;
-  position: relative;
+  position: absolute;
+  inset: 0px;
+  //inset: 68px 700px 0px 68px;
+  // height: 100%;
+  // position: relative;
 
   // dotted bg
   $bg-color: rgb(30, 30, 30);
@@ -202,3 +205,16 @@
   top: 0px;
   z-index: 100;
 }
+
+.toolCanvas {
+  position: absolute;
+  z-index: 1000;
+  inset: 0px;
+  //background-color: rgba(255, 255, 255, 0.2);
+}
+
+// .previewSvg {
+//   position: absolute;
+//   z-index: 1000;
+//   inset: 0px;
+// }

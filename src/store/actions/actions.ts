@@ -53,7 +53,7 @@ import {
   getPlayerObjectDefinition,
 } from "webslider-sdk/lib/objects/objects-register";
 import { IMAGE, ImageValues } from "../../objects/image/image";
-import { TextValues } from "../../objects/text/text";
+import { TEXT, TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
 import {
   getCommonObjectPropertiesDefinition,
@@ -1070,6 +1070,11 @@ export function addNewObject(
     object.name = humanizeSting(type, true) + " " + nextNameIdx;
 
     switch (object.type) {
+      case TEXT:
+      case RICH_TEXT: {
+        handleTextUpdate(object, dispatch, getState, true);
+        break;
+      }
       case BUTTON: {
         postProcessButton(object, getState);
         break;
@@ -1091,6 +1096,9 @@ export function addNewObject(
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
     dispatch(selectForProperties({ id: object.id, type: "object" }));
+    if (object.type !== "text") {
+      dispatch(setNextTextPosition(100));
+    }
   };
 }
 
@@ -1368,7 +1376,8 @@ function handleButtonUpdate(
 function handleTextUpdate(
   object: IObject,
   dispatch: Dispatch,
-  getState: () => IStore
+  getState: () => IStore,
+  isAdd = false
 ): void {
   // * handle auto height
   const objectValues = object.definition.values as TextValues;
@@ -1408,13 +1417,29 @@ function handleTextUpdate(
     holder.innerHTML = html;
     const pEl = holder.firstChild! as HTMLElement;
     pEl.style.position = "relative";
-    pEl.style.width = `${calculatedObjectSize.width}`;
+    pEl.style.display = "inline-block";
+    pEl.style.width = objectValues.initialAutoWidth
+      ? "auto"
+      : `${calculatedObjectSize.width}`;
     pEl.style.height = `auto`;
     document.body.appendChild(holder);
     object.height = pEl.offsetHeight;
     if (object.absoluteLayout) {
       object.absoluteLayout.common.height = `${pEl.offsetHeight}px`;
+
+      if (isAdd) {
+        if (objectValues.initialAutoWidth === true) {
+          object.absoluteLayout.common.width = `${pEl.offsetWidth + 5}px`;
+          objectValues.initialAutoWidth = false;
+        }
+
+        const nextTextPositionY = getState().stage.nextTextPositionY;
+        object.absoluteLayout.common.top = `${nextTextPositionY}px`;
+
+        dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
+      }
     }
+
     document.body.removeChild(holder);
   }
 
@@ -1423,7 +1448,9 @@ function handleTextUpdate(
   const { loadedFontFamilies } = getState().fonts;
 
   const newObjectValues = object.definition.values as TextValues;
-  const oldObjectValues = objectPrevState.definition.values as TextValues;
+  const oldObjectValues = (objectPrevState?.definition?.values ?? {
+    font: {},
+  }) as TextValues;
 
   const newFont = newObjectValues.font.fontFamily;
   const oldFont = oldObjectValues.font.fontFamily;
@@ -1576,6 +1603,25 @@ export function setZoomFit(zoomFit: boolean): SetZoomFitAction {
 }
 // ******
 
+// ******
+
+export const NEXT_TEXT_POSITION = "Next text position";
+
+export interface NextTextPositionAction extends IUndoableAction<false> {
+  type: typeof NEXT_TEXT_POSITION;
+  payload: number;
+}
+
+export function setNextTextPosition(yPos: number): NextTextPositionAction {
+  return {
+    type: NEXT_TEXT_POSITION,
+    payload: yPos,
+    isUndoable: false,
+  };
+}
+// ******
+
+// ******
 export const VIEWPORT_SIZE = "Set viewport size";
 
 export interface SetViewportSizeAction extends IUndoableAction<false> {
@@ -2026,4 +2072,6 @@ export type ActionTypes =
   | SetDeviceAction
 
   // form state
-  | SetFormStateAction;
+  | SetFormStateAction
+  //
+  | NextTextPositionAction;

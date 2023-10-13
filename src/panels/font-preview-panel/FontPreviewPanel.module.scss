@@ -3,7 +3,7 @@
   position: absolute;
   top: 0px;
   left: 68px;
-  width: 950px;
+  min-width: 340px;
   height: 100vh;
 
   background: rgb(40, 40, 40);
@@ -17,7 +17,7 @@
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
-    max-height: 80%;
+    max-height: 88%;
 
     overflow: auto;
 
@@ -37,6 +37,11 @@
     padding: 20px;
     padding-top: 5px;
     overflow: auto;
+    position: relative;
+    overflow-x: hidden;
+    height: 80vh;
+    display: flex;
+    flex-grow: 1;
 
     :global {
       .bp3-form-group .bp3-control {
@@ -46,6 +51,9 @@
         margin-bottom: 0px;
         color: #b5b5b5;
         font-weight: bold;
+      }
+      .virtuoso-scroller {
+        flex-grow: 1;
       }
     }
 
@@ -61,13 +69,36 @@
 
     .fontListItem {
       cursor: pointer;
+      height: 28px;
+      width: 220px;
+      //display: flex;
+
+      &.googleFontsItem {
+        //flex-direction: row-reverse;
+      }
+
+      .previewFontBtn {
+        display: none;
+        float: right;
+      }
+      &:hover .previewFontBtn {
+        display: block;
+        cursor: pointer;
+        margin: 5px;
+      }
 
       &.active {
-        background: rgba(255, 255, 255, 0.2);
+        //border: 1px solid gray;
+        margin: 0px;
+
+        background-color: rgba(255, 255, 255, 0.2);
       }
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        //border: 1px solid gray;
+        margin: 0px;
+
+        background-color: rgba(255, 255, 255, 0.1);
       }
 
       > span {
@@ -104,4 +135,14 @@
   p {
     margin: 0;
   }
+}
+
+.searchFontHolder {
+  margin-left: 16px;
+}
+
+.fontsSprite {
+  background: url("../../utils/fonts2/google-font-image.png");
+  width: 300px;
+  height: 28px;
 }

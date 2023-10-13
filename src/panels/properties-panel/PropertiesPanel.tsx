@@ -228,7 +228,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             }
           });
           if (devicePropertiesNames && metadata.devices) {
-            debugger;
             devicePropertiesNames.forEach((possibleRemoveDevice) => {
               if (
                 !includes(

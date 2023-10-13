@@ -1,6 +1,6 @@
 .toolbar {
   text-align: center;
-  padding: 8px 0px;
+  padding: 0px 0px;
   color: gray;
   height: 100vh;
 
@@ -12,12 +12,12 @@
     }
 
     .bp3-button:not(.bp3-small) {
-      width: 68px;
-      height: 68px;
+      width: 54px;
+      height: 54px;
     }
     .bp3-button.bp3-small {
-      width: 34px;
-      height: 34px;
+      width: 27px;
+      height: 27px;
       // padding: 7px 14px;
     }
   }

@@ -49,6 +49,7 @@ export const TEXT = "text";
 export interface TextValues {
   text: string;
   autoHeight: boolean;
+  initialAutoWidth: boolean;
   font: IFontSelectInputValue;
   color: RGBColor;
   fontSize: string;
@@ -208,7 +209,8 @@ export function createTextObject(
 
   const values: TextValues = {
     text: (initialValue?.text as string) || "",
-    autoHeight: false,
+    autoHeight: initialValue?.autoHeight ?? true,
+    initialAutoWidth: initialValue?.initialAutoWidth ?? false,
     font: (initialValue?.font as IFontSelectInputValue) || {
       fontFamily: "Arial",
       source: "system-fonts",
@@ -302,10 +304,10 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
   style += "text-align:" + textValues.textAlign + ";";
 
   style += "margin: 0px;";
+  style += "white-space: pre-wrap;";
+  style += "overflow-wrap: break-word;";
 
-  return `<p class="object-content" style="${style}">${nl2br(
-    textValues.text
-  )}</p>`;
+  return `<p class="object-content object-content-${object.id}" style="${style}">${textValues.text}</p>`;
 }
 
 export async function textSizeUpdate(
@@ -332,8 +334,8 @@ export async function textSizeUpdate(
   )[0] as HTMLElement;
 
   //const textValue = getObjectValue(textValues, "text", deviceType);
-  if (objectContentEl.innerHTML !== nl2br(textValues.text)) {
-    objectContentEl.innerHTML = nl2br(textValues.text);
+  if (objectContentEl.innerHTML !== textValues.text) {
+    objectContentEl.innerHTML = textValues.text;
   }
 
   if (valuesMetadata.fontSize?.disabled === false)
@@ -439,4 +441,5 @@ export const textMeta = {
   name: "Text",
   description: "Add text object",
   icon: svg,
+  isEditable: true,
 };

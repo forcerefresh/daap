@@ -1,0 +1,456 @@
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import {
+  ActivationParams,
+  EditorConfig,
+  DeactivationParams,
+  IToolClass,
+  Point,
+} from "../../webslider-sdk/object/i-tool-class";
+import { FreeDrawValues } from "./free-draw";
+import { IBezier, IFreeDrawToolConfig, Points } from "./types";
+import { bezierArr2Path, lineIntersection } from "./utils";
+var fitCurve = require("fit-curve");
+var error = 1;
+
+export const getCursorStyle = () => {
+  return `crosshair`;
+};
+
+export default class FreeHandDrawTool implements IToolClass {
+  canvas: HTMLDivElement | null = null;
+  stageEl: HTMLDivElement | null = null;
+  getMousePoint: ActivationParams["getMousePoint"] = () => ({ x: 0, y: 0 });
+
+  requestObjectUpdate: ActivationParams["requestObjectUpdate"] | null = null;
+  requestDeactivation: ActivationParams["requestDeactivation"] | null = null;
+  requestObjectDelete: ActivationParams["requestObjectDelete"] | null = null;
+  mouseDownHandlerBind: EventListener | undefined;
+  mouseMoveHandlerBind: EventListener | undefined;
+  mouseUpHandlerBind: EventListener | undefined;
+  clickOutsideEventHandlerBind: EventListenerOrEventListenerObject | undefined;
+
+  getObjects: (type: string) => IObject[] = () => [];
+  objects: IObject[] = [];
+
+  isMouseDown: boolean = false;
+  currentPoints: Points = [];
+  stack: {
+    points: Points;
+    toolConfig: IFreeDrawToolConfig;
+    options: EditorConfig;
+  }[] = [];
+
+  toolConfig: IFreeDrawToolConfig = {
+    color: "white",
+    strokeWidth: "5",
+    eraser: false,
+  };
+  editorConfig: EditorConfig = { stageZoom: 1 };
+  objectId: string | null = null;
+
+  isEdit: boolean = false;
+
+  activate(activationParams: ActivationParams) {
+    const {
+      canvas,
+      getMousePoint,
+      requestObjectUpdate,
+      requestDeactivation,
+      requestObjectDelete,
+      editorConfig,
+      objectValues,
+      objectId,
+      position,
+      getObjects,
+    } = activationParams;
+
+    this.objectId = objectId ?? null;
+    this.isEdit = !!objectId;
+
+    this.stack = [];
+
+    this.setCanvas(canvas);
+
+    this.getMousePoint = getMousePoint;
+    this.requestObjectUpdate = requestObjectUpdate;
+    this.requestDeactivation = requestDeactivation;
+    this.requestObjectDelete = requestObjectDelete;
+    this.editorConfig = editorConfig;
+    this.objectId = objectId ?? null;
+    this.getObjects = getObjects;
+    this.mouseDownHandlerBind = this.mouseDownHandler.bind(this);
+    this.mouseMoveHandlerBind = this.mouseMoveHandler.bind(this);
+    this.mouseUpHandlerBind = this.mouseUpHandler.bind(this);
+    this.clickOutsideEventHandlerBind =
+      this.clickOutsideEventHandler.bind(this);
+
+    this.canvas?.addEventListener("mousedown", this.mouseDownHandlerBind!);
+    this.canvas?.addEventListener("mousemove", this.mouseMoveHandlerBind!);
+    this.canvas?.addEventListener("mouseup", this.mouseUpHandlerBind!);
+    document.addEventListener("mousedown", this.clickOutsideEventHandlerBind);
+
+    if (objectValues) {
+      this.stack = (objectValues as unknown as FreeDrawValues).lines.map(
+        (line) => {
+          const points: Points = line.points.map((p) => {
+            return [
+              p[0] + parseFloat(position.x),
+              p[1] + parseFloat(position.y),
+            ];
+          });
+
+          return {
+            points,
+            toolConfig: {
+              color: line.color,
+              strokeWidth: line.strokeWidth,
+              eraser: false,
+            },
+            options: { stageZoom: 1 },
+          };
+        }
+      );
+
+      this.redraw();
+
+      // hide object
+      const objectEl = document.getElementsByClassName(
+        `object-content-${this.objectId}`
+      )[0] as HTMLElement;
+
+      if (objectEl) objectEl.style.display = "none";
+
+      return;
+    }
+  }
+
+  deactivate(deactivationParams: DeactivationParams) {
+    if (!deactivationParams.delete && this.stack.length > 0) {
+      const objProps = this.convertStackToPoints();
+      this.requestObjectUpdate?.({
+        objectValues: { lines: objProps.lines },
+        bounds: objProps.bounds,
+        isEdit: this.isEdit,
+        objectId: this.objectId!,
+      });
+    }
+
+    this.canvas?.removeEventListener("mousedown", this.mouseDownHandlerBind!);
+    this.canvas?.removeEventListener("mousemove", this.mouseMoveHandlerBind!);
+    this.canvas?.removeEventListener("mouseup", this.mouseUpHandlerBind!);
+    document.removeEventListener(
+      "mousedown",
+      this.clickOutsideEventHandlerBind!
+    );
+
+    this.unsetCanvas();
+
+    if (this.objectId) {
+      // NOTE: show object
+      const objectEl = document.getElementsByClassName(
+        `object-content-${this.objectId}`
+      )[0] as HTMLElement;
+
+      if (objectEl) objectEl.style.display = "block";
+
+      this.objectId = null;
+    }
+  }
+
+  toolConfigChange(toolConfig: unknown) {
+    this.toolConfig = {
+      ...this.toolConfig,
+      ...(toolConfig as IFreeDrawToolConfig),
+    };
+  }
+
+  objectsChange(objects: IObject[]) {
+    this.objects = objects;
+  }
+
+  editorChange(editorConfig: EditorConfig) {
+    this.editorConfig = { ...this.editorConfig, ...editorConfig };
+
+    const svgArr = this.canvas!.querySelectorAll("svg");
+
+    svgArr.forEach((svg) => {
+      svg.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
+      svg.style.margin = `1px 0px 0px 1px`;
+    });
+  }
+
+  private convertStackToPoints() {
+    const minPos = { x: 100000, y: 100000 };
+    const maxPos = { x: -100000, y: -100000 };
+
+    this.stack.forEach((stackItem) => {
+      const points = stackItem.points.map((p) => {
+        minPos.x = Math.min(minPos.x, p[0]);
+        minPos.y = Math.min(minPos.y, p[1]);
+        maxPos.x = Math.max(maxPos.x, p[0]);
+        maxPos.y = Math.max(maxPos.y, p[1]);
+      });
+
+      return {
+        ...stackItem,
+        points,
+      };
+    });
+
+    const normalizedStack = this.stack.map((stackItem) => {
+      const points = stackItem.points.map((p) => {
+        return [p[0] - minPos.x, p[1] - minPos.y];
+      });
+
+      return {
+        ...stackItem,
+        points,
+      };
+    });
+
+    const normalizedBezier = normalizedStack.map((stackItem) => {
+      const bezier: IBezier[] = fitCurve(stackItem.points, error);
+      return {
+        bezier,
+        points: stackItem.points,
+        color: stackItem.toolConfig.color,
+        strokeWidth: stackItem.toolConfig.strokeWidth,
+      };
+    });
+
+    return {
+      lines: normalizedBezier,
+      bounds: {
+        x: minPos.x,
+        y: minPos.y,
+        width: maxPos.x - minPos.x,
+        height: maxPos.y - minPos.y,
+      },
+    };
+  }
+
+  private latestPoint = { x: 0, y: 0 };
+  private mouseDownHandler(evt: Event) {
+    const e = evt as MouseEvent;
+
+    this.isMouseDown = true;
+
+    if (this.toolConfig.eraser) {
+      this.latestPoint = this.getMousePoint(e);
+      return;
+    }
+
+    this.currentPoints = [];
+
+    const { x, y } = this.getMousePoint(e);
+    this.createPath();
+    this.currentPoints.push([x, y]);
+  }
+
+  private mouseMoveHandler(evt: Event) {
+    if (!this.isMouseDown) return;
+
+    const e = evt as MouseEvent;
+
+    if (this.toolConfig.eraser) {
+      const { x, y } = this.getMousePoint(e);
+
+      const isRemoved = this.removeIntersection(this.latestPoint, { x, y });
+      if (isRemoved) this.redraw();
+
+      this.latestPoint = { x, y };
+      return;
+    }
+
+    const { x, y } = this.getMousePoint(e);
+
+    this.currentPoints.push([x, y]);
+
+    this.drawPoints();
+  }
+
+  private mouseUpHandler(evt: Event) {
+    this.isMouseDown = false;
+
+    if (this.toolConfig.eraser) {
+      return;
+    }
+
+    const e = evt as MouseEvent;
+
+    const { x, y } = this.getMousePoint(e);
+
+    this.currentPoints.push([x, y]);
+    this.stack.push({
+      points: this.currentPoints,
+      options: { ...this.editorConfig },
+      toolConfig: { ...this.toolConfig },
+    });
+
+    // TODO: NEW FOR INDIVIDUAL >>>
+    const objProps = this.convertStackToPoints();
+    this.requestObjectUpdate?.({
+      objectValues: { lines: objProps.lines },
+      bounds: objProps.bounds,
+      isEdit: false, // this.isEdit,
+      // objectId: this.objectId!,
+    });
+
+    const svgEl = this.canvas!.getElementsByTagName("svg")[0] as
+      | SVGElement
+      | undefined;
+
+    if (svgEl) svgEl.parentElement!.removeChild(svgEl);
+
+    this.stack = [];
+  }
+
+  // OTHER
+
+  removeIntersection(p1: Point, p2: Point) {
+    this.objects.forEach((obj: IObject) => {
+      const lines = (obj.definition.values as FreeDrawValues).lines;
+
+      const pomX = parseInt(obj.absoluteLayout?.common.left!);
+      const pomY = parseInt(obj.absoluteLayout?.common.top!);
+      let removed = false;
+      lines.forEach((line) => {
+        for (let i = 1; i < line.points.length; i++) {
+          const lp1 = {
+            x: line.points[i - 1][0] + pomX,
+            y: line.points[i - 1][1] + pomY,
+          };
+          const lp2 = {
+            x: line.points[i][0] + pomX,
+            y: line.points[i][1] + pomY,
+          };
+          if (
+            lineIntersection(p1.x, p1.y, p2.x, p2.y, lp1.x, lp1.y, lp2.x, lp2.y)
+          ) {
+            removed = true;
+          }
+        }
+      });
+
+      if (removed && !obj.isLocked) {
+        this.requestObjectDelete?.(obj.id);
+      }
+    });
+
+    let removed = false;
+
+    this.stack = this.stack
+      .map((stackItem) => {
+        for (let i = 1; i < stackItem.points.length; i++) {
+          const lp1 = {
+            x: stackItem.points[i - 1][0],
+            y: stackItem.points[i - 1][1],
+          };
+          const lp2 = { x: stackItem.points[i][0], y: stackItem.points[i][1] };
+          if (
+            lineIntersection(p1.x, p1.y, p2.x, p2.y, lp1.x, lp1.y, lp2.x, lp2.y)
+          ) {
+            removed = true;
+            return null as any;
+          }
+        }
+        return stackItem;
+      })
+      .filter((item) => item !== null);
+
+    return removed;
+  }
+
+  currentPathEl: SVGPathElement | null = null;
+  private createPath(toolConfig?: IFreeDrawToolConfig) {
+    const config = toolConfig ? toolConfig : this.toolConfig;
+    let svgEl = this.stageEl?.getElementsByTagName("svg")[0] as
+      | SVGElement
+      | undefined;
+    if (!svgEl) {
+      svgEl = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svgEl.style.overflow = "visible";
+
+      this.stageEl?.appendChild(svgEl);
+      svgEl.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
+      svgEl.style.transformOrigin = "left top";
+      svgEl.style.margin = `1px 0px 0px 1px`;
+    }
+
+    const pathEl = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+    pathEl.setAttribute("fill", "none");
+    pathEl.setAttribute("stroke-linejoin", "round");
+    pathEl.setAttribute("stroke-linecap", "round");
+    pathEl.setAttribute(
+      "stroke-width",
+      config.strokeWidth //* this.options.stageZoom + ""
+    );
+    pathEl.setAttribute("color", config.color);
+    pathEl.setAttribute("stroke", config.color);
+
+    this.currentPathEl = pathEl;
+    svgEl.appendChild(pathEl);
+
+    return pathEl;
+  }
+
+  private redraw() {
+    let svgEl = this.canvas!.getElementsByTagName("svg")[0];
+    if (svgEl) svgEl.innerHTML = "";
+
+    this.stack.forEach((stackItem) => {
+      const pathEl = this.createPath(stackItem.toolConfig);
+      this.drawPoints(pathEl, stackItem.points);
+    });
+  }
+
+  private drawPoints(pathEl?: SVGPathElement, currentPoints?: Points) {
+    const points = currentPoints ? currentPoints : this.currentPoints;
+
+    const el = pathEl ? pathEl : this.currentPathEl!;
+
+    let bezierCurves = fitCurve(points, error);
+    const path = bezierArr2Path(bezierCurves);
+    el.setAttribute("d", path);
+  }
+
+  private setCanvas(canvas: HTMLDivElement) {
+    this.canvas = canvas;
+    this.canvas.style.display = "block";
+    this.canvas.style.background = "rgba(34,56,1,0,2)";
+
+    this.canvas.style.cursor = "crosshair";
+
+    this.stageEl = this.canvas.getElementsByClassName(
+      "MainToolStage"
+    )[0] as HTMLDivElement;
+  }
+
+  private unsetCanvas() {
+    if (this.canvas) {
+      const svgEl = this.stageEl?.getElementsByTagName("svg")[0] as
+        | SVGElement
+        | undefined;
+
+      if (svgEl) svgEl.parentElement!.removeChild(svgEl);
+
+      this.canvas.style.cursor = "default";
+      this.canvas.style.display = "none";
+      this.canvas.style.background = "";
+      this.canvas = null;
+    }
+  }
+
+  private clickOutsideEventHandler(e: Event) {
+    const el = document.getElementsByClassName("layout-center-area")[0];
+    // Do nothing if clicking ref's element or descendent elements
+    if (!el || el.contains((e?.target as Node) || null)) {
+      return;
+    }
+
+    this.requestDeactivation?.();
+  }
+}

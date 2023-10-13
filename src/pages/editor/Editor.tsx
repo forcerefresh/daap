@@ -10,23 +10,28 @@ import PropertiesPanelAll from "../../panels/properties-panel-all/PropertiesPane
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { PropertiesPanelContextProvider } from "../../panels/properties-panel-all/PropertiesPanelProvider";
+import QuickBarPanel from "../../panels/quick-bar-panel/QuickBarPanel";
+import { ToolsProvider } from "../../utils/tools/ToolsProvider";
 
 function Editor() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <MainLayout
-        slides={<SlidesPanel />}
-        layers={<LayersPanel />}
-        properties={
-          <PropertiesPanelContextProvider>
-            <PropertiesPanelAll />
-          </PropertiesPanelContextProvider>
-        }
-        action={<ActionPanel />}
-        toolbar={<ToolbarPanel />}
-        content={<StagePanel />}
-        animations={<StaticAnimationPanel />}
-      />
+      <ToolsProvider>
+        <MainLayout
+          slides={<SlidesPanel />}
+          layers={<LayersPanel />}
+          properties={
+            <PropertiesPanelContextProvider>
+              <PropertiesPanelAll />
+            </PropertiesPanelContextProvider>
+          }
+          action={<ActionPanel />}
+          toolbar={<ToolbarPanel />}
+          content={<StagePanel />}
+          animations={<StaticAnimationPanel />}
+          quickBar={<QuickBarPanel />}
+        />
+      </ToolsProvider>
     </DndProvider>
   );
 }
