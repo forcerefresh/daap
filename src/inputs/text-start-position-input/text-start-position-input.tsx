@@ -41,7 +41,7 @@ export const TextStartPositionInputForm: React.FC<
       {(value.startFrom === "from-character" ||
         value.startFrom === "custom-order") && (
         <div className={cx(css.alignHolder, "input60")}>
-          <div className="bp3-form-group bp3-inline">
+          <div className="bp5-form-group bp5-inline">
             <Label></Label>
             <div className={cx("labelAuto")}>
               {value.startFrom === "from-character" &&

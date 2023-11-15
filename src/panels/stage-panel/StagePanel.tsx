@@ -78,7 +78,7 @@ import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-pro
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { getCursorStyle } from "../../objects/free-draw/free-draw-tool";
+import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -1633,7 +1633,10 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
           style={stageStyle}
           className={cx("tmp-stage-selector", css.stage)}
         >
-          <div className="preview-scrollable-holder" style={scrollableDivStyle}>
+          <div
+            className={cx(css.scrollableHolder, "preview-scrollable-holder")}
+            style={scrollableDivStyle}
+          >
             {isPreview && previewLayout.header.component}
             <div style={scrollableDivInnerStyle}>
               <div
@@ -1786,7 +1789,7 @@ const mapStateToProps = (state: IStore) => {
     breakpoints: state.project.settings.breakpoints,
     forceRefreshRand: stage.forceRefreshRand,
     enableDeveloper: state.globals.enableDeveloper,
-    showGrid: true,
+    showGrid: state.globals.showGrid,
   };
 };
 

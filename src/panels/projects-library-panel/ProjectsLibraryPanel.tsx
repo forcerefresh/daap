@@ -25,7 +25,7 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
   const { enableDeveloper, missingExtensions } = props;
 
   return (
-    <div className={cx("bp3-dark", css.projectsLibraryPanel)}>
+    <div className={cx("bp5-dark", css.projectsLibraryPanel)}>
       <div>
         <Tabs className={css.tabs} renderActiveTabPanelOnly>
           <Tab

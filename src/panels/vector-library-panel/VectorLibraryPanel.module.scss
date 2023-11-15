@@ -107,7 +107,7 @@
 
 .imageListTabs {
   :global {
-    .bp3-tag {
+    .bp5-tag {
       cursor: default;
       margin-top: 5px;
       margin-right: 5px;
@@ -117,7 +117,7 @@
 
 .tooltipMore {
   :global {
-    .bp3-tag {
+    .bp5-tag {
       cursor: default;
       margin-top: 5px;
       margin-right: 5px;
@@ -125,10 +125,10 @@
   }
 
   :global {
-    .bp3-popover {
+    .bp5-popover {
       background: #333333;
     }
-    .bp3-popover-content {
+    .bp5-popover-content {
       background: none !important;
     }
   }

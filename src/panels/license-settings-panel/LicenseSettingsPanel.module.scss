@@ -18,14 +18,14 @@
     padding-top: 5px;
 
     :global {
-      .bp3-form-group {
+      .bp5-form-group {
         flex-direction: column;
       }
 
-      .bp3-form-group .bp3-control {
+      .bp5-form-group .bp5-control {
         margin-bottom: 5px;
       }
-      .bp3-label {
+      .bp5-label {
         //margin-bottom: 5px;
         color: #b5b5b5;
         font-weight: bold;
@@ -40,7 +40,7 @@
 
 .serialGroup {
   :global {
-    .bp3-input-group input {
+    .bp5-input-group input {
       width: 400px;
     }
   }

@@ -376,7 +376,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         isOpen={isOpen}
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>
           Are you sure you want to delete{" "}

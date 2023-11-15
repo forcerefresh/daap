@@ -216,7 +216,7 @@ export function createTextObject(
       source: "system-fonts",
       weight: "400",
     },
-    color: { r: 255, g: 255, b: 255, a: 1 },
+    color: { r: 128, g: 128, b: 128, a: 1 },
     fontSize: initialValue?.fontSize || "1em",
     bold: false,
     italic: false,

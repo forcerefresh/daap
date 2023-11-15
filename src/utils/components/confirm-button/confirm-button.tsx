@@ -91,7 +91,7 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
         {...buttonProps}
       />
       <Dialog
-        className={classnames("bp3-dark", css.dialog, {
+        className={classnames("bp5-dark", css.dialog, {
           [css.logsView]: loading,
         })}
         isOpen={isOpen}

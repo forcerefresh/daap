@@ -8,6 +8,7 @@ export interface IAppSettings {
   allowPrerelease?: boolean;
   appVersion?: string;
   availableVersion?: string;
+  showGrid?: boolean;
 }
 
 export function globals(

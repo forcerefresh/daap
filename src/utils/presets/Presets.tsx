@@ -170,7 +170,7 @@ export const Presets: React.FC<IPresets<any>> = (props) => {
       </div>
 
       <Dialog
-        className={cx("bp3-dark", css.dialog)}
+        className={cx("bp5-dark", css.dialog)}
         isOpen={addDialogOpen}
         onClose={() => {
           addNewPreset(newPresetName);
@@ -223,7 +223,7 @@ export const Presets: React.FC<IPresets<any>> = (props) => {
           setDeleteOpen(false);
         }}
         onConfirm={deletePresetConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>Are you sure you want to delete preset?</p>
       </Alert>

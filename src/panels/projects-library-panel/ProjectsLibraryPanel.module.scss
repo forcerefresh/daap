@@ -23,7 +23,7 @@
       outline: none !important;
     }
 
-    .bp3-form-content {
+    .bp5-form-content {
       display: flex;
       flex-direction: column;
     }
@@ -57,10 +57,10 @@
     padding-top: 5px;
 
     :global {
-      .bp3-form-group .bp3-control {
+      .bp5-form-group .bp5-control {
         margin-bottom: 5px;
       }
-      .bp3-label {
+      .bp5-label {
         margin-bottom: 0px;
         color: #b5b5b5;
         font-weight: bold;

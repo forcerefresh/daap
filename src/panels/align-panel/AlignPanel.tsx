@@ -178,7 +178,7 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
   };
 
   return (
-    <div className={cx("bp3-dark", css.alignPanel)}>
+    <div className={cx("bp5-dark", css.alignPanel)}>
       <div className={css.panelHeader}>
         <div>ALIGN &amp; DISTRIBUTE PANEL</div>
       </div>

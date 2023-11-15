@@ -8,7 +8,7 @@ export const dzBaseStyle = {
   borderRadius: 6,
   borderColor: "#eeeeee",
   borderStyle: "dashed",
-  color: "#bdbdbd",
+  //color: "#bdbdbd",
   outline: "none",
   transition: "border .24s ease-in-out",
 };

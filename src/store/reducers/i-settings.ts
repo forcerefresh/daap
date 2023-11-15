@@ -2,6 +2,8 @@ import { RGBColor } from "react-color";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 
+export type ITheme = "light" | "dark" | string;
+
 export interface ISettings {
   // slide config
   slideDuration: string;
@@ -21,4 +23,8 @@ export interface ISettings {
 
   // breakpoint
   breakpoints: Breakpoints;
+
+  //theme
+  theme: ITheme;
+  themeClass: string;
 }

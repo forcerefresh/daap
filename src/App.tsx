@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
-import "./App.scss";
+//import "./App.scss";
+import "./AppNew.scss";
 import { IntegrationContext } from "./integration";
 import { loadAndRegisterExternalComponent } from "./objects/external-object-utils";
 import Editor from "./pages/editor/Editor";
@@ -24,6 +25,7 @@ function App(props: IAppProps) {
     _initializeSlideAndLayer,
     _updateGlobalConfiguration,
     _doClearHistory,
+    theme,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -56,19 +58,20 @@ function App(props: IAppProps) {
   }, []);
 
   return (
-    <div className="bp3-dark" style={{ height: "100%" }}>
+    <div className={`bp5-${theme}`} style={{ height: "100%" }}>
       <Editor />
     </div>
   );
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection } = state.project;
+  const { slides, selection, settings } = state.project;
   return {
     allSlides: slides.allSlides,
     slideById: slides.slideById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
+    theme: settings.theme,
   };
 };
 

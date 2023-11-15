@@ -33,7 +33,7 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const onUrlChange = (url: string) => {
@@ -90,11 +90,31 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
           interactionKind={PopoverInteractionKind.CLICK}
           position={Position.LEFT}
           modifiers={{ preventOverflow: { enabled: true } }}
-          boundary={"window"}
           usePortal={true}
           minimal
           popoverClassName={css.mediaLibraryPanelPopup}
           isOpen={libraryOpen}
+          content={
+            <div ref={sharedRef}>
+              <MediaLibraryPanel
+                onRequestClose={() => {
+                  setLibraryOpen(false);
+                }}
+                className={css.mediaLibraryPanel}
+                addObject={false}
+                onSelect={(videoItem) => {
+                  const newValue = cloneDeep(value);
+                  newValue.video = videoItem.video;
+                  newValue.previewImage = videoItem.previewImage;
+                  newValue.filename = videoItem.video.filename!; //extractFileName(videoItem.video.filename!);
+
+                  onChange(newValue);
+                  setLibraryOpen(false);
+                }}
+                panelsToShow={[Panels.MyVideos]}
+              />
+            </div>
+          }
         >
           <Button
             small
@@ -107,25 +127,6 @@ export const VideoInputForm: React.FC<IVideoInput & IUpdateInput> = (props) => {
           >
             Browse
           </Button>
-          <div ref={sharedRef}>
-            <MediaLibraryPanel
-              onRequestClose={() => {
-                setLibraryOpen(false);
-              }}
-              className={css.mediaLibraryPanel}
-              addObject={false}
-              onSelect={(videoItem) => {
-                const newValue = cloneDeep(value);
-                newValue.video = videoItem.video;
-                newValue.previewImage = videoItem.previewImage;
-                newValue.filename = videoItem.video.filename!; //extractFileName(videoItem.video.filename!);
-
-                onChange(newValue);
-                setLibraryOpen(false);
-              }}
-              panelsToShow={[Panels.MyVideos]}
-            />
-          </div>
         </Popover>
       ) : null}
     </FormGroup>

@@ -427,7 +427,7 @@ export const AnimationConfigurationForm: React.FC<
         </>
 
         {animationType === "animation" && (
-          <div className="bp3-form-helper-text"></div>
+          <div className="bp5-form-helper-text"></div>
         )}
 
         <Presets
@@ -497,7 +497,7 @@ export const AnimationConfigurationForm: React.FC<
           setIsRemoveAnimationConfirmationOpen(false);
           onRemove();
         }}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>Remove "{selectedAnimationName}" animation from list?</p>
       </Alert>

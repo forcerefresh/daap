@@ -1,11 +1,26 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .quickBar {
+    color: $pt-dark-text-color-muted;
+    background: $pt-dark-app-background-color;
+    border-bottom: 1px solid $dark-gray5;
+  }
+}
+
 .quickBar {
+  color: $pt-text-color-muted;
+  background: $pt-app-background-color;
+  border-bottom: 1px solid $light-gray1;
+
   //padding: 10px;
   margin: 0px 1px;
   //color: gray;
   //width: calc(100vh - 300px);
   height: 54px;
-  background-color: #232323;
+
   display: flex;
+
   :global {
     *,
     *:hover,
@@ -13,19 +28,19 @@
       outline: none;
     }
 
-    .bp3-button-text {
+    .bp5-button-text {
       height: 36px;
     }
 
-    .bp3-button:not(.bp3-small) {
+    .bp5-button:not(.bp5-small) {
       width: 54px;
       height: 54px;
       color: gray;
     }
-    .bp3-button:not(.bp3-small):hover {
+    .bp5-button:not(.bp5-small):hover {
       color: white;
     }
-    // .bp3-button.bp3-small {
+    // .bp5-button.bp5-small {
     //   width: 34px;
     //   height: 34px;
     //   // padding: 7px 14px;
@@ -77,7 +92,7 @@
 
 .checkboxHolder {
   :global {
-    .bp3-form-group {
+    .bp5-form-group {
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
@@ -99,7 +114,7 @@
   align-items: center;
 
   :global {
-    .bp3-button-text {
+    .bp5-button-text {
       height: 16px;
     }
   }

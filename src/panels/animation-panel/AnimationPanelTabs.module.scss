@@ -11,7 +11,7 @@
   padding-top: 10px;
 
   :global {
-    .bp3-tab-indicator-wrapper {
+    .bp5-tab-indicator-wrapper {
       // workaround for bpjs bug(nested tabs)
       min-width: 36px !important;
       height: 100% !important;
@@ -89,7 +89,7 @@
     }
 
     :global {
-      .bp3-form-group {
+      .bp5-form-group {
         margin-bottom: 5px;
       }
     }
@@ -130,7 +130,7 @@
     padding: 7px 5px;
 
     :global {
-      .bp3-active {
+      .bp5-active {
         color: #48aff0 !important;
       }
     }
@@ -150,7 +150,7 @@
 .enableSlideHolder {
   margin: 5px 5px 0px 10px;
   :global {
-    .bp3-form-group {
+    .bp5-form-group {
       margin: 0px;
     }
   }

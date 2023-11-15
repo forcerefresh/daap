@@ -18,6 +18,7 @@ import FontsPreview from "../../utils/fonts2/google-font-image.png";
 import { getTextField } from "../../inputs/input-utils";
 
 import { Virtuoso } from "react-virtuoso";
+import { settings } from "../../store/reducers/settings";
 
 enum FontSections {
   SystemFonts = "system-fonts",
@@ -47,6 +48,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
     loadedFontFamilies,
     _addNewObject,
     _setExternalFontLoaded,
+    themeClass,
   } = props;
 
   //const inputRef = useRef<HTMLInputElement>(null);
@@ -243,7 +245,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
     );
   };
   return (
-    <div className={cx("bp3-dark", css.fontPreviewPanel)}>
+    <div className={cx(themeClass, css.fontPreviewPanel)}>
       <div className={css.fontList}>
         <section
           className={cx({
@@ -390,8 +392,7 @@ const mapStateToProps = (state: IStore) => ({
   activeLayerId: state.project.selection.activeLayerId,
   loadedFontFamilies: state.fonts.loadedFontFamilies,
   documentSize: state.project.document.documentSize,
-
-  //editObjectId: state.project.selection.activeObjectId,
+  themeClass: state.project.settings.themeClass,
 });
 
 const mapDispatchToProps = {

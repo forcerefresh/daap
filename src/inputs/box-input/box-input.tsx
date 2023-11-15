@@ -57,7 +57,7 @@ export const BoxInputForm: React.FC<IBoxInput & IUpdateInput> = (props) => {
   return (
     <>
       <div className={cx(css.alignHolder, "input60")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label>{displayName}</Label>
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {!isLinked ? (

@@ -361,7 +361,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         isOpen={isUninstallOpen}
         onCancel={uninstallCancel}
         onConfirm={uninstallConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>
           If component is used in some projects it won't be available and
@@ -382,7 +382,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         isOpen={isDeleteOpen}
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>
           Are you sure you want to delete{" "}

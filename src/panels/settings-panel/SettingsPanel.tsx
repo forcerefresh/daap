@@ -38,7 +38,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
     return null;
   }
   return (
-    <div className={cx("bp3-dark", css.settingsPanel)}>
+    <div className={cx("bp5-dark", css.settingsPanel)}>
       <div>
         <Tabs className={css.tabs} defaultSelectedTabId={defaultSelectedTabId}>
           <Tab id="project" title="Project Settings" panel={<ProjectPanel />} />

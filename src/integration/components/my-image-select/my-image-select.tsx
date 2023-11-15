@@ -304,7 +304,7 @@ function UploadDialog(props: UploadDialogProps) {
   }, [currentUploadIndex]);
 
   return (
-    <Dialog isOpen={true} portalClassName={"bp3-dark"}>
+    <Dialog isOpen={true} portalClassName={"bp5-dark"}>
       <div className={css.uploadFilesHolder}>
         <Text className={css.fileUploadTitle}>Upload files status</Text>
 

@@ -130,7 +130,7 @@ const PublishPanel: React.FC<IPublishPanelMergedProps> = (props) => {
     });
   };
   return (
-    <div className={cx("bp3-dark", css.publishPanel)}>
+    <div className={cx("bp5-dark", css.publishPanel)}>
       <div className={css.panelHeader}>
         <div>PUBLISH PANEL</div>
       </div>

@@ -58,7 +58,7 @@ export const SVGTextAreaInputForm: React.FC<
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   return (
@@ -83,11 +83,29 @@ export const SVGTextAreaInputForm: React.FC<
         interactionKind={PopoverInteractionKind.CLICK}
         position={Position.RIGHT}
         modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
         isOpen={libraryOpen}
+        content={
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              onRequestClose={() => {
+                setLibraryOpen(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(item) => {
+                onInput({
+                  ...localValue,
+                  source: (item.initialValues as any).svg,
+                });
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.MyVectors, Panels.Vectors]}
+            />
+          </div>
+        }
       >
         <Button
           small
@@ -100,23 +118,6 @@ export const SVGTextAreaInputForm: React.FC<
         >
           Browse
         </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            onRequestClose={() => {
-              setLibraryOpen(false);
-            }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(item) => {
-              onInput({
-                ...localValue,
-                source: (item.initialValues as any).svg,
-              });
-              setLibraryOpen(false);
-            }}
-            panelsToShow={[Panels.MyVectors, Panels.Vectors]}
-          />
-        </div>
       </Popover>
     </FormGroup>
   );

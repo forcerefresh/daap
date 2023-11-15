@@ -1,9 +1,4 @@
-import {
-  Checkbox,
-  FormGroup,
-  ICheckboxProps,
-  InputGroup,
-} from "@blueprintjs/core";
+import { Checkbox, CheckboxProps, FormGroup } from "@blueprintjs/core";
 import { noop } from "lodash-es";
 import React from "react";
 import {
@@ -12,7 +7,7 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 
 export const CheckboxInputForm: React.FC<
-  ICheckboxInput & IUpdateInput & { inputProps: ICheckboxProps }
+  ICheckboxInput & IUpdateInput & { inputProps: CheckboxProps }
 > = (props) => {
   const { displayName, value, onChange = noop, helperText, inputProps } = props;
   const labelFor = Math.random() + displayName;

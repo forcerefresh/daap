@@ -37,7 +37,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const onFileNameChange = (filename: string) => {
@@ -94,7 +94,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
         ) : null}
         {sourceType === "library" ? (
           <div
-            className="bp3-text-small"
+            className="bp5-text-small"
             style={{ maxWidth: "250px", wordBreak: "break-all" }}
           >
             {value.image.url ? (
@@ -124,11 +124,34 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.LEFT}
             modifiers={{ preventOverflow: { enabled: true } }}
-            boundary={"window"}
             usePortal={true}
             minimal
             popoverClassName={css.mediaLibraryPanelPopup}
             isOpen={libraryOpen}
+            content={
+              <div ref={sharedRef}>
+                <MediaLibraryPanel
+                  onRequestClose={() => {
+                    setLibraryOpen(false);
+                  }}
+                  className={css.mediaLibraryPanel}
+                  addObject={false}
+                  onSelect={(imageItem: { image: ImageItem }) => {
+                    const newValue = cloneDeep(value);
+                    newValue.image = { ...imageItem.image };
+                    newValue.filename = extractFileName(
+                      imageItem.image.filename!
+                    );
+                    onChange(newValue);
+                    setLibraryOpen(false);
+                  }}
+                  panelsToShow={[
+                    ...(sourceType === "local" ? [Panels.MyImages] : []),
+                    ...(sourceType === "library" ? [Panels.Images] : []),
+                  ]}
+                />
+              </div>
+            }
           >
             <Button
               small
@@ -141,28 +164,6 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             >
               Browse
             </Button>
-            <div ref={sharedRef}>
-              <MediaLibraryPanel
-                onRequestClose={() => {
-                  setLibraryOpen(false);
-                }}
-                className={css.mediaLibraryPanel}
-                addObject={false}
-                onSelect={(imageItem: { image: ImageItem }) => {
-                  const newValue = cloneDeep(value);
-                  newValue.image = { ...imageItem.image };
-                  newValue.filename = extractFileName(
-                    imageItem.image.filename!
-                  );
-                  onChange(newValue);
-                  setLibraryOpen(false);
-                }}
-                panelsToShow={[
-                  ...(sourceType === "local" ? [Panels.MyImages] : []),
-                  ...(sourceType === "library" ? [Panels.Images] : []),
-                ]}
-              />
-            </div>
           </Popover>
         ) : null}
       </FormGroup>

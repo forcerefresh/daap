@@ -1,3 +1,30 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .stagePanel {
+    // $bg-color: red !important;
+    // $dot-color: blue !important;
+
+    $bg-color: $pt-dark-app-background-color-secondary;
+    $dot-color: $gray3;
+
+    // Dimensions
+    $dot-size: 1px;
+    $dot-space: 22px;
+
+    background: linear-gradient(
+          90deg,
+          $bg-color ($dot-space - $dot-size),
+          transparent 1%
+        )
+        center,
+      linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+      $dot-color;
+
+    background-size: $dot-space $dot-space;
+  }
+}
+
 .stagePanel {
   position: absolute;
   inset: 0px;
@@ -5,17 +32,16 @@
   // height: 100%;
   // position: relative;
 
-  // dotted bg
-  $bg-color: rgb(30, 30, 30);
-  $dot-color: rgb(120, 120, 120);
+  * {
+    user-select: none;
+  }
+
+  $bg-color: #eeeeee; //$pt-app-background-color-secondary;
+  $dot-color: $gray3;
 
   // Dimensions
   $dot-size: 1px;
   $dot-space: 22px;
-
-  * {
-    user-select: none;
-  }
 
   background: linear-gradient(
         90deg,
@@ -25,6 +51,7 @@
       center,
     linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
     $dot-color;
+
   background-size: $dot-space $dot-space;
 }
 
@@ -165,20 +192,34 @@
 
 .guidelinesBorder {
   position: absolute;
-  border: 1px dotted #00d6ff;
+  border: $pt-stage-guidebox-guidelines-border;
   pointer-events: none;
 }
 
 .pageBorder {
   position: absolute;
-  border: 1px dotted #ff2121;
+  border: $pt-stage-page-guidelines-border;
   pointer-events: none;
 }
 
 .stageBorder {
   position: absolute;
-  border: 1px solid #45c750;
+  border: $pt-stage-stage-guidelines-border;
   pointer-events: none;
+}
+
+:global(.bp5-dark) {
+  .guidelinesBorder {
+    border: 1px dotted $pt-dark-stage-guidebox-guidelines-border;
+  }
+
+  .pageBorder {
+    border: $pt-dark-stage-page-guidelines-border;
+  }
+
+  .stageBorder {
+    border: $pt-dark-stage-stage-guidelines-border;
+  }
 }
 
 .gridHorizontalLine {
@@ -218,3 +259,13 @@
 //   z-index: 1000;
 //   inset: 0px;
 // }
+
+.scrollableHolder {
+  background: white;
+}
+
+:global(.bp5-dark) {
+  .scrollableHolder {
+    background: rgb(22, 22, 22);
+  }
+}

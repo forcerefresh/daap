@@ -1,14 +1,17 @@
+@import "/src/theme";
+
 .addPanel {
   z-index: 100;
   position: absolute;
   top: 0px;
   left: 68px;
-  width: 950px;
+  width: 730px;
   height: 100vh;
 
-  background: rgb(40, 40, 40);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  padding: 30px;
+  background: $pt-app-background-color;
+  box-shadow: $pt-elevation-shadow-0;
+
+  padding: 0 30px 30px 30px;
   display: flex;
   flex-direction: column;
 
@@ -17,12 +20,26 @@
   > * {
     display: flex;
   }
+
+  section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  h1,
+  p {
+    margin: 5px 14px;
+  }
+
+  h1 {
+    margin-top: 20px;
+  }
 }
 
 .card {
   position: relative;
   display: inline-block;
-  background: rgb(51, 51, 51) !important;
+  // background: rgb(51, 51, 51) !important;
   text-align: center;
   margin: 10px;
   width: 200px;
@@ -48,19 +65,19 @@
   }
 }
 
-.sectionCard {
-  border: 0px solid black;
+// .sectionCard {
+//   border: 0px solid black;
 
-  background: rgba(0, 0, 0, 0) !important;
-  box-shadow: none !important;
-  text-align: left;
-  margin: 20px 10px 10px 10px;
-  width: 150px;
-  max-width: 150px;
-  min-width: 150px;
-  padding: 10px 0;
-  //height: 150px;
-}
+//   background: rgba(0, 0, 0, 0) !important;
+//   box-shadow: none !important;
+//   text-align: left;
+//   margin: 20px 10px 10px 10px;
+//   width: 150px;
+//   max-width: 150px;
+//   min-width: 150px;
+//   padding: 10px 0;
+//   //height: 150px;
+// }
 
 .external {
   color: #fbff00;
@@ -88,4 +105,18 @@
   left: 0px;
   right: 0px;
   bottom: 5px;
+}
+
+.description {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+:global(.bp5-dark) {
+  &.addPanel {
+    background: $pt-dark-app-background-color !important;
+    box-shadow: $pt-dark-elevation-shadow-1 !important;
+  }
 }

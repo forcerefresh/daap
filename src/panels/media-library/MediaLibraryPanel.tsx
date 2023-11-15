@@ -61,6 +61,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       Panels.Images,
       Panels.Vectors,
     ],
+    themeClass,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -82,13 +83,13 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   //if (apiKey === null) return null;
 
   return (
-    <div className={cx("bp3-dark", css.mediaLibraryPanel, className)}>
+    <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
       <div>
         <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
               id="myImages"
-              title="My Images"
+              title="Images"
               panel={
                 <ImagesLibraryPanel
                   hasApiKey={true}
@@ -118,7 +119,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
           {includes(panelsToShow, Panels.MyVideos) && (
             <Tab
               id="myVideos"
-              title="My Videos"
+              title="Videos"
               panel={
                 <ImagesLibraryPanel
                   hasApiKey={true}
@@ -148,7 +149,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
           {includes(panelsToShow, Panels.MyAudios) && (
             <Tab
               id="myAudios"
-              title="My Audios"
+              title="Audios"
               panel={
                 <ImagesLibraryPanel
                   hasApiKey={true}
@@ -178,7 +179,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
           {includes(panelsToShow, Panels.MyVectors) && (
             <Tab
               id="myVectors"
-              title="My Vectors"
+              title="Vectors"
               panel={
                 <VectorsLibraryPanel
                   hasApiKey={true}
@@ -278,7 +279,9 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({});
+const mapStateToProps = (state: IStore) => ({
+  themeClass: state.project.settings.themeClass,
+});
 
 const mapDispatchToProps = {};
 

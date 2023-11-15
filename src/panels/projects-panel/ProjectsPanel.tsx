@@ -330,7 +330,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         isOpen={isOpen}
         onCancel={deleteCancel}
         onConfirm={deleteConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>
           Are you sure you want to delete <b>{deleteIdRef.current?.name}</b>{" "}

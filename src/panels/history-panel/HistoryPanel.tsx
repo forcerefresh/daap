@@ -62,7 +62,7 @@ const HistoryPanel: React.FC<IHistoryPanelMergedProps> = (props) => {
   const prevHistory = getHistory(prev);
 
   return (
-    <div className={cx("bp3-dark", css.historyPanel)}>
+    <div className={cx("bp5-dark", css.historyPanel)}>
       <div className={css.panelHeader}>
         <div>HISTORY PANEL</div>
         <div>

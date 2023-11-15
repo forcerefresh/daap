@@ -30,10 +30,10 @@ export interface ToolsContextInterface {
   deactivateTool: () => void;
   deleteCurrentObject: () => void;
   applyCurrentObject: () => void;
-  deleteObject: (objectId: string) => void;
+  deleteObject: (object: IObject) => void;
   // tool state
   toolConfig: IToolConfig;
-  updateToolConfig: (state: IToolConfig) => void;
+  setToolConfig: (state: IToolConfig) => void;
   updateObject: (_object: IObject) => void;
 }
 
@@ -45,10 +45,11 @@ export const ToolsContext = React.createContext<ToolsContextInterface>({
   deactivateTool: () => {},
   deleteCurrentObject: () => {},
   applyCurrentObject: () => {},
-  deleteObject: (objectId: string) => {},
+  deleteObject: (object: IObject) => {},
   //
   toolConfig: {},
-  updateToolConfig: (_state: unknown) => {},
+  setToolConfig: (_state: unknown) => {},
+  //
   updateObject: (_object: IObject) => undefined,
 });
 
@@ -75,7 +76,7 @@ export const ToolsProvider = (
   //const stageZoom = state.stage.zoom;
 
   console.log(stageZoom);
-  const [toolConfig, setToolConfig] = useState<IToolConfig>({});
+  const [toolConfig, setToolConfigState] = useState<IToolConfig>({});
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [activeObjectId, setActiveObjectId] = useState<
     string | null | undefined
@@ -234,7 +235,7 @@ export const ToolsProvider = (
       activeToolInst.current = null;
       setActiveTool(null);
       setActiveObjectId(null);
-      setToolConfig({});
+      setToolConfigState({});
     }
   };
 
@@ -243,12 +244,12 @@ export const ToolsProvider = (
       activeToolInst.current.deactivate({ delete: true });
       activeToolInst.current = null;
       setActiveTool(null);
-      setToolConfig({});
+      setToolConfigState({});
     }
   };
 
-  const deleteObject = (objectId: string) => {
-    dispatch(deleteObjects([objectId]));
+  const deleteObject = (object: IObject) => {
+    dispatch(deleteObjects([object.id]));
   };
 
   const applyCurrentObject = () => {
@@ -256,12 +257,12 @@ export const ToolsProvider = (
       activeToolInst.current.deactivate({});
       activeToolInst.current = null;
       setActiveTool(null);
-      setToolConfig({});
+      setToolConfigState({});
     }
   };
 
-  const updateToolConfig = (config: IToolConfig) => {
-    setToolConfig(config);
+  const setToolConfig = (config: IToolConfig) => {
+    setToolConfigState(config);
     if (activeToolInst.current) {
       activeToolInst.current.toolConfigChange(config);
     }
@@ -297,7 +298,7 @@ export const ToolsProvider = (
         isToolActive: activateTool !== null,
         //
         toolConfig,
-        updateToolConfig,
+        setToolConfig,
         //
         updateObject,
       }}

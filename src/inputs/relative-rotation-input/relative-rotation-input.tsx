@@ -32,7 +32,7 @@ export const RelativeRotationInputForm: React.FC<
   return (
     <>
       <div className={cx(css.main, "input60")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label>{displayName}</Label>
 
           {value.enabled ? (

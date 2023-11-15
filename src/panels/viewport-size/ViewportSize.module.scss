@@ -28,26 +28,26 @@
   margin-top: 20px;
 
   :global {
-    .bp3-slider-handle > .bp3-slider-label {
+    .bp5-slider-handle > .bp5-slider-label {
       margin-top: -55px;
       font-weight: bold;
       padding: 5px;
     }
 
-    .bp3-slider-handle,
-    .bp3-slider-handle:hover,
-    .bp3-slider-handle.bp3-active {
+    .bp5-slider-handle,
+    .bp5-slider-handle:hover,
+    .bp5-slider-handle.bp5-active {
       background-color: rgb(10, 144, 189);
     }
 
-    .bp3-slider-axis .bp3-slider-label {
+    .bp5-slider-axis .bp5-slider-label {
       margin-top: -22px;
     }
 
-    .bp3-slider-axis .bp3-slider-label:first-child {
+    .bp5-slider-axis .bp5-slider-label:first-child {
       margin-left: -30px;
     }
-    .bp3-slider-axis .bp3-slider-label:last-child {
+    .bp5-slider-axis .bp5-slider-label:last-child {
       margin-left: 30px;
     }
   }

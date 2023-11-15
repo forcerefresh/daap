@@ -5,19 +5,8 @@ import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
-import {
-  cloneDeep,
-  delay,
-  differenceWith,
-  intersection,
-  isEqual,
-  once,
-} from "lodash-es";
-import {
-  IObject,
-  ItemType,
-  ObjectType,
-} from "webslider-sdk/lib/objects/i-object";
+import { delay, differenceWith, intersection, isEqual, once } from "lodash-es";
+import { IObject, ItemType } from "webslider-sdk/lib/objects/i-object";
 import {
   createObject,
   getDefaultSlide,
@@ -34,7 +23,7 @@ import {
 } from "../../utils/doom-utils/common";
 import { LayoutChildrenType } from "webslider-sdk/lib/inputs/i-inputs";
 import { load } from "webfontloader";
-import { ISettings } from "../reducers/i-settings";
+import { ISettings, ITheme } from "../reducers/i-settings";
 import {
   BreakpointConfiguration,
   Breakpoints,
@@ -52,7 +41,6 @@ import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
 } from "webslider-sdk/lib/objects/objects-register";
-import { IMAGE, ImageValues } from "../../objects/image/image";
 import { TEXT, TextValues } from "../../objects/text/text";
 import { humanizeSting } from "../../utils/utils";
 import {
@@ -1053,7 +1041,7 @@ export interface AddObjectAction extends IUndoableAction<true> {
 
 export function addNewObject(
   layerId: string,
-  type: ObjectType | string,
+  type: string,
   objectProps: Partial<IObject>,
   values?: { [key: string]: string }
 ): any {
@@ -1796,6 +1784,23 @@ export function createNewProject(): CreateNewProjectAction {
   };
 }
 
+// ***
+
+export const SET_THEME = "Set theme";
+
+export interface SetThemeAction extends IUndoableAction<false> {
+  type: typeof SET_THEME;
+  payload: ITheme;
+}
+
+export function setTheme(theme: ITheme): SetThemeAction {
+  return {
+    type: SET_THEME,
+    payload: theme,
+    isUndoable: false,
+  };
+}
+
 // *** UNDO - REDO
 /*
 const ignoreActions = [
@@ -1887,12 +1892,12 @@ export const SET_STAGE_TOOL = "Set stage tool";
 
 export interface SetStageToolAction extends IUndoableAction<false> {
   type: typeof SET_STAGE_TOOL;
-  payload: { tool: StageTools; objectType?: ObjectType };
+  payload: { tool: StageTools; objectType?: string };
 }
 
 export function setStageTool(
   tool: StageTools,
-  objectType?: ObjectType
+  objectType?: string
 ): SetStageToolAction {
   return {
     type: SET_STAGE_TOOL,
@@ -2040,6 +2045,7 @@ export type ActionTypes =
   | UpdateProjectSettingsAction
   | UpdateSlideDurationAction
   | UpdateSlideBreakpointsAction
+  | SetThemeAction
 
   //stage
   | SetDocumentSizeAction

@@ -1,0 +1,48 @@
+// NOTE: add all overrides before variables import
+
+$pt-app-background-color: #e5e5e5; // rgb(241, 241, 241);
+$pt-dark-app-background-color: rgb(51, 51, 51);
+
+$pt-text-color-muted: #555555;
+
+@import "@blueprintjs/core/lib/scss/variables";
+
+// APP
+$pt-app-background-color-secondary: rgb(251, 251, 251);
+$pt-dark-app-background-color-secondary: rgb(41, 41, 41);
+
+// TOOLBAR
+$pt-toolbar-large-button-size: 54px;
+$pt-toolbar-large-button-svg-size: 32px;
+
+$pt-toolbar-small-button-size: 27px;
+$pt-toolbar-small-button-svg-size: 18px;
+
+// STAGE
+$pt-stage-page-guidelines-border: 1px solid #ff2121;
+$pt-stage-stage-guidelines-border: 1px solid #45c750;
+$pt-stage-guidebox-guidelines-border: 1px solid #00d6ff;
+
+$pt-dark-stage-page-guidelines-border: 1px dotted #ff2121;
+$pt-dark-stage-stage-guidelines-border: 1px dotted #45c750;
+$pt-dark-stage-guidebox-guidelines-border: 1px dotted #00d6ff;
+
+// LAYERS
+$pt-layer-header-color: #dddddd;
+$pt-dark-layer-header-color: #3c3c3c;
+
+// COMMON TO STAGE/LAYERS/OBJECTS
+$pt-row-selection: #d2d2d2;
+$pt-dark-row-selection: #525252;
+
+$pt-active-color: #4a90c5;
+//$pt-dark-active-color: #4a90c5;
+
+$pt-all-devices-color: #24ac23;
+$pt-dark-all-devices-color: #34ec43;
+
+$pt-none-devices-color: #ff4555;
+$pt-dark-none-devices-color: #ff5f6d;
+
+$pt-panel-border-color: #bdbdbd;
+$pt-dark-panel-border-color: #0e0e0e;

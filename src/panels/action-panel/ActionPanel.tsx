@@ -1,6 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { connect } from "react-redux";
-import { Alert, Button, Icon, Intent, Portal } from "@blueprintjs/core";
+import { Alert, Button, Icon, Intent, Portal, Switch } from "@blueprintjs/core";
 import css from "./ActionPanel.module.scss";
 import { IStore } from "../../store/store";
 import {
@@ -9,6 +15,7 @@ import {
   initializeSlideAndLayer,
   setDevice,
   setStagePreview,
+  setTheme,
   updateEditor,
   updateGlobalConfiguration,
   updateProjectMeta,
@@ -16,7 +23,7 @@ import {
 import { IPreviewState } from "../../store/reducers/stage";
 import cx from "classnames";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
-import { getIconByType } from "../../store/reducers/settings";
+import { getIconByType, settings } from "../../store/reducers/settings";
 import SavePanel from "../save-panel/SavePanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IMeta } from "../../store/reducers/meta";
@@ -28,6 +35,8 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { setupNewProject } from "../../store/actions/multi-actions";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 import { IAppSettings } from "../../store/reducers/globals";
+import { ITheme } from "../../store/reducers/i-settings";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -90,6 +99,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
     objects,
     settings,
     _updateGlobalConfiguration,
+    _setTheme,
   } = props;
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // logic for handling click outside
@@ -100,9 +110,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
-    "bp3-menu", //menu
-    "bp3-toast",
+    "bp5-overlay-scroll-container", // alert
+    "bp5-menu", //menu
+    "bp5-toast",
   ]);
 
   // api
@@ -176,14 +186,23 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
 
   return (
     <div className={css.actionPanel}>
-      <div className={css.panelHeader}>
+      {/* <div className={css.\}> */}
+      <PanelHeader>
         <div style={{ display: "flex" }}>
           SLIDER
           <span className={cx(css.sliderName)}>
-            {!!meta.id ? " [ " + meta.name + " ] " : " [ Untitled ] "}
+            {!!meta.id ? meta.name : "Untitled"}
           </span>
         </div>
-      </div>
+        <Switch
+          style={{ margin: "2px" }}
+          checked={settings.theme === "dark"}
+          onChange={(evt: SyntheticEvent<HTMLInputElement>) => {
+            _setTheme(evt.currentTarget.checked ? "dark" : "light");
+          }}
+        />
+      </PanelHeader>
+      {/* </div> */}
       <div className={css.actionButtons}>
         {false && (
           <Button
@@ -335,6 +354,7 @@ const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
   _setupNewProject: () => setupNewProject(),
+  _setTheme: (theme: ITheme) => setTheme(theme),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActionPanel);

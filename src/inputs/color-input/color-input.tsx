@@ -102,6 +102,24 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         isOpen={state.displayColorPicker}
         portalClassName="color-picker-popover"
         minimal
+        content={
+          <div
+            className={cx("color-picker-holder", css.popover)}
+            ref={colorPickerHolderRef}
+          >
+            <div className={css.buttonHolder}>
+              <Button icon="tick" small onClick={handleApply} intent="success">
+                Apply
+              </Button>
+              <Button icon="cross" small onClick={handleClose} intent="none">
+                Cancel
+              </Button>
+            </div>
+            <div>
+              <SketchPicker color={state.color} onChange={handleChange} />
+            </div>
+          </div>
+        }
       >
         <div
           id="color-input"
@@ -111,23 +129,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         >
           <BackgroundSVG />
           <div className={css.color} style={style} />
-        </div>
-
-        <div
-          className={cx("color-picker-holder", css.popover)}
-          ref={colorPickerHolderRef}
-        >
-          <div className={css.buttonHolder}>
-            <Button icon="tick" small onClick={handleApply} intent="success">
-              Apply
-            </Button>
-            <Button icon="cross" small onClick={handleClose} intent="none">
-              Cancel
-            </Button>
-          </div>
-          <div>
-            <SketchPicker color={state.color} onChange={handleChange} />
-          </div>
         </div>
       </Popover>
     </FormGroup>

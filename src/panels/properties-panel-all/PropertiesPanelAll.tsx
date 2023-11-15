@@ -21,6 +21,7 @@ import LayoutProperties from "../properties-panel/layout-properties/LayoutProper
 import BasicProperties from "../properties-panel/basic-properties/BasicProperties";
 import CommonStyleProperties from "../properties-panel/common-style/CommonStyleProperties";
 import TransformProperties from "../properties-panel/transform-properties/TransformProperties";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -32,18 +33,10 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
 
   return (
     <div className={css.propertiesPanelAll} key={panelName?.id}>
-      <div className={css.panelHeader}>
+      <PanelHeader>
         {panelName?.type.toUpperCase() || "PROPERTIES"}
-        {panelName && (
-          <span
-            className={classnames(css.panelName, {
-              /*[css.panelNameLayer]: panelName.type === "layer",*/
-            })}
-          >
-            {" [ " + panelName.name + " ] "}
-          </span>
-        )}
-      </div>
+        {panelName && <span className={css.panelName}>{panelName.name}</span>}
+      </PanelHeader>
       <PropertiesSectionsPanel />
 
       {activeSection === PropertiesPanelSection.Layout && <LayoutProperties />}

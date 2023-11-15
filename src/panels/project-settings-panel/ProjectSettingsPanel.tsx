@@ -239,7 +239,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
           <div className={settingsCss.panel}>
             <div
               style={{ marginBottom: "15px", color: Colors.ORANGE5 }}
-              className="bp3-form-helper-text"
+              className="bp5-form-helper-text"
             >
               Preview configuration are only used for preview inside app. They
               are not aplied to slider configuration.

@@ -66,7 +66,7 @@ export const CloseMonitor = (props: CloseMonitorProps) => {
         setConfirmOpen(false);
       }}
       onConfirm={sendQuit}
-      className="bp3-dark"
+      className="bp5-dark"
     >
       <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
     </Alert>

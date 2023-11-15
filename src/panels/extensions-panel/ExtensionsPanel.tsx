@@ -354,7 +354,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         isOpen={isUninstallOpen}
         onCancel={uninstallCancel}
         onConfirm={uninstallConfirm}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>
           Are you sure you want to uninstall{" "}

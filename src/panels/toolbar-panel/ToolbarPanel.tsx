@@ -1,31 +1,19 @@
 import {
   Button,
-  Icon,
-  Menu,
-  MenuDivider,
-  MenuItem,
+  Popover,
+  PopoverInteractionKind,
   Portal,
   Tag,
   Text,
 } from "@blueprintjs/core";
+import cx from "classnames";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-
-import { ReactComponent as SelectToolIcon } from "../../assets/icons/select-tool.svg";
-import { ReactComponent as ZoomToolIcon } from "../../assets/icons/zoom-tool.svg";
-import { ReactComponent as HistoryToolIcon } from "../../assets/icons/history-tool.svg";
-import { ReactComponent as AddTextboxIcon } from "../../assets/icons/add-textbox2.svg";
-import { ReactComponent as HelpIcon } from "../../assets/icons/help-icon.svg";
-import { ReactComponent as BulbIcon } from "../../assets/icons/bulb-icon.svg";
-import { ReactComponent as LinkOut } from "../../assets/icons/link-out.svg";
-import { ReactComponent as FreeDraw } from "../../assets/icons/free-draw.svg";
-
 import AddPanel from "../add-panel/AddPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import SettingsPanel from "../settings-panel/SettingsPanel";
 
-import css from "./ToolbarPanel.module.scss";
 import {
   decreaseStageZoom,
   increaseStageZoom,
@@ -34,6 +22,7 @@ import {
   setStageTool,
   setZoomFit,
   addNewObject,
+  setTheme,
 } from "../../store/actions/actions";
 import HistoryPanel from "../history-panel/HistoryPanel";
 import { StageTools } from "../../store/reducers/stage";
@@ -43,10 +32,29 @@ import ProjectsLibraryPanel from "../projects-library-panel/ProjectsLibraryPanel
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { IntegrationContext } from "../../integration";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { FREE_DRAW } from "../../objects/free-draw/free-draw";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
+import { HelpMenu } from "./HelpMenu";
+import { ITheme } from "../../store/reducers/i-settings";
 
+import { ReactComponent as AddObjectIcon } from "./assets/add-object-icon.svg";
+import { ReactComponent as MediaLibraryIcon } from "./assets/media-library-icon.svg";
+import { ReactComponent as TextIcon } from "./assets/text-icon.svg";
+import { ReactComponent as FreeDrawIcon } from "./assets/free-draw-icon.svg";
+import { ReactComponent as SelectToolIcon } from "./assets/select-tool-icon.svg";
+import { ReactComponent as HandToolIcon } from "./assets/hand-tool-icon.svg";
+import { ReactComponent as HistoryToolIcon } from "./assets/history-icon.svg";
+import { ReactComponent as HelpIcon } from "./assets/help-icon.svg";
+import { ReactComponent as BulbIcon } from "./assets/new-version-icon.svg";
+import { ReactComponent as ZoomInIcon } from "./assets/zoom-in-icon.svg";
+import { ReactComponent as ZoomOutIcon } from "./assets/zoom-out-icon.svg";
+import { ReactComponent as UndoIcon } from "./assets/undo-icon.svg";
+import { ReactComponent as RedoIcon } from "./assets/redo-icon.svg";
+import { ReactComponent as LibraryIcon } from "./assets/library-icon.svg";
+import { ReactComponent as SettingsIcon } from "./assets/settings-icon.svg";
+
+import css from "./ToolbarPanel.module.scss";
 enum VisiblePanel {
   None = "none",
   Add = "add",
@@ -82,6 +90,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     availableVersion,
     activeLayerId,
     _addNewObject,
+    _setTheme,
+    theme,
   } = props;
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
@@ -170,68 +180,28 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
-    "bp3-toast",
+    "bp5-overlay-scroll-container", // alert
+    "bp5-toast",
+    "multiselect-tags",
   ]);
 
   const displayZoom = Number.isInteger(zoom * 100)
     ? zoom * 100
     : (zoom * 100).toFixed(2);
 
-  const openExternalLink = (url: string) => {
-    const { shell } = window.require("electron");
-    shell.openExternal(url);
-  };
-
-  const helpMenu = (
-    <Menu>
-      <MenuDivider title={`WebSlider v${appVersion}`} />
-      <MenuItem
-        icon={<LinkOut style={{ opacity: 0, width: "15px", height: "19px" }} />}
-        text="Documentation"
-        onClick={() => {
-          // TODO: this is only for Electron
-          const { ipcRenderer } = window.require("electron");
-          ipcRenderer.invoke("System::OpenDocs").then(() => {});
-        }}
-      />
-      <MenuItem
-        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Live Documentation"
-        onClick={() => {
-          openExternalLink("https://webslider.io/docs/introduction");
-        }}
-      />
-      <MenuItem
-        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Support Forum"
-        onClick={() => {
-          openExternalLink("https://support.webslider.io");
-        }}
-      />
-      <MenuDivider />
-      <MenuItem
-        icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Leave a Feedback"
-        onClick={() => {
-          openExternalLink("https://support.webslider.io/viewforum.php?f=12");
-        }}
-      />
-    </Menu>
-  );
-
   return (
     <div className={css.toolbar}>
-      <div className={css.buttonGroupsHolder}>
+      <div>
         <div>
           <Button
+            className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.Add}
             onClick={() => {
               setShowPanel(VisiblePanel.Add);
             }}
           >
-            <Icon icon="add" iconSize={ICON_SIZE} color={"gray"} />
+            <AddObjectIcon />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.Add && (
@@ -244,24 +214,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-            {showPanel === VisiblePanel.FontPreview && (
-              <div ref={sharedRef}>
-                <FontPreviewPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
-                />
-              </div>
-            )}
           </Portal>
         </div>
         <div>
           <Button
+            className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.MediaLibrary}
             onClick={() => {
               setShowPanel(VisiblePanel.MediaLibrary);
             }}
           >
-            <Icon icon="media" iconSize={ICON_SIZE} color={"gray"} />
+            <MediaLibraryIcon />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.MediaLibrary && (
@@ -276,15 +240,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
         <div>
           <Button
+            className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.FontPreview}
             onClick={() => {
               setShowPanel(VisiblePanel.FontPreview);
             }}
           >
-            <AddTextboxIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />{" "}
+            <TextIcon />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.FontPreview && (
@@ -299,6 +262,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
         <div>
           <Button
+            className={css.largeButton}
             minimal
             active={activeTool === FREE_DRAW}
             onClick={() => {
@@ -306,16 +270,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               activateTool(FREE_DRAW);
             }}
           >
-            <FreeDraw
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
+            <FreeDrawIcon />
           </Button>
         </div>
 
         <div className={css.delimiter}></div>
         <div>
           <Button
-            small
+            className={css.smallButton}
             minimal
             onClick={() => {
               deactivateTool();
@@ -324,45 +286,39 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             }}
             active={stageTool === StageTools.SELECT}
           >
-            <SelectToolIcon
-              style={{
-                width: SMALL_ICON_SIZE + "px",
-                height: SMALL_ICON_SIZE + "px",
-                fill: "gray",
-              }}
-            />
+            <SelectToolIcon />
           </Button>
           <Button
+            className={css.smallButton}
             minimal
-            small
             onClick={() => _setStageTool(StageTools.PAN)}
             active={stageTool === StageTools.PAN}
           >
-            <Icon icon="hand" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+            <HandToolIcon />
           </Button>
         </div>
         <div>
           <Text>{displayZoom} %</Text>
           <div>
             <Button
+              className={css.smallButton}
               minimal
-              small
               onClick={() => {
                 increaseStageZoom(zoom);
                 setZoomFit(false);
               }}
             >
-              <Icon icon="zoom-in" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+              <ZoomInIcon />
             </Button>
             <Button
+              className={css.smallButton}
               minimal
-              small
               onClick={() => {
                 decreaseStageZoom(zoom);
                 setZoomFit(false);
               }}
             >
-              <Icon icon="zoom-out" iconSize={SMALL_ICON_SIZE} color={"gray"} />
+              <ZoomOutIcon />
             </Button>
           </div>
           <div>
@@ -377,15 +333,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             </Button>
           </div>
           <Button
+            className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.History}
             onClick={() => {
               setShowPanel(VisiblePanel.History);
             }}
           >
-            <HistoryToolIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
+            <HistoryToolIcon />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.History && (
@@ -399,40 +354,33 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         </div>
         <div>
           <Button
+            className={css.smallButton}
             disabled={!hasUndoItem}
             minimal
-            small
             onClick={() => doUndo()}
           >
-            <Icon
-              icon="undo"
-              iconSize={SMALL_ICON_SIZE}
-              color={hasUndoItem ? "gray" : "#555"}
-            />
+            <UndoIcon />
           </Button>
           <Button
+            className={css.smallButton}
             disabled={!hasRedoItem}
             minimal
-            small
             onClick={() => doRedo()}
           >
-            <Icon
-              icon="redo"
-              iconSize={SMALL_ICON_SIZE}
-              color={hasRedoItem ? "gray" : "#555"}
-            />
+            <RedoIcon />
           </Button>
         </div>
         <div className={css.delimiter}></div>
         <div>
           <Button
             minimal
+            className={css.largeButton}
             active={showPanel === VisiblePanel.Settings}
             onClick={() => {
               setShowPanel(VisiblePanel.Settings);
             }}
           >
-            <Icon icon="cog" iconSize={ICON_SIZE} color={"gray"} />
+            <SettingsIcon />
           </Button>
           <Portal>
             {showPanel === VisiblePanel.Settings && (
@@ -448,18 +396,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         <div>
           <Button
             minimal
-            className={css.tbButton}
+            className={css.largeButton}
             active={showPanel === VisiblePanel.ProjectsLibrary}
             onClick={() => {
               setShowPanel(VisiblePanel.ProjectsLibrary);
             }}
           >
             {missingExtensions?.length > 0 && (
-              <Tag intent={"danger"} round className={css.tbTag}>
+              <Tag intent={"danger"} round className={css.buttonTag}>
                 {missingExtensions.length}
               </Tag>
             )}
-            <Icon icon="projects" iconSize={ICON_SIZE} color={"gray"} />
+            <LibraryIcon />
           </Button>
 
           <Portal>
@@ -472,7 +420,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             )}
           </Portal>
         </div>
+      </div>
 
+      <div>
         <div
           style={{
             position: "absolute",
@@ -489,7 +439,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
         <div>
           {availableVersion && (
-            <Popover2
+            <Popover
               content={
                 <div style={{ background: "#282828", padding: "20px" }}>
                   New version {availableVersion} is available and will be
@@ -497,48 +447,30 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 </div>
               }
               shouldReturnFocusOnClose={false}
-              interactionKind={Popover2InteractionKind.CLICK}
+              interactionKind={PopoverInteractionKind.CLICK}
               hoverCloseDelay={10}
               hoverOpenDelay={15}
             >
               <Button
+                className={cx(css.largeButton, css.newVersionButton)}
                 minimal
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  textAlign: "center",
-                }}
               >
-                <BulbIcon
-                  style={{
-                    color: "#17ffe0",
-                    width: "26px",
-                    height: 26 + "px",
-                    fill: "gray",
-                  }}
-                />
+                <BulbIcon />
                 <div style={{ fontSize: "10px" }}>NEW VERSION AVAILABLE</div>
               </Button>
-            </Popover2>
+            </Popover>
           )}
-          <Popover2
-            content={helpMenu}
+          <Popover
+            content={<HelpMenu appVersion={appVersion} />}
             placement="left-end"
-            interactionKind={Popover2InteractionKind.CLICK}
+            interactionKind={PopoverInteractionKind.CLICK}
             hoverCloseDelay={100}
             hoverOpenDelay={150}
           >
-            <Button minimal>
-              <HelpIcon
-                style={{
-                  width: "36px",
-                  height: ICON_SIZE + "px",
-                  fill: "gray",
-                }}
-              />
+            <Button minimal className={css.largeButton}>
+              <HelpIcon />
             </Button>
-          </Popover2>
+          </Popover>
         </div>
       </div>
     </div>
@@ -561,6 +493,7 @@ const mapStateToProps = (state: IStore) => {
     hasUndoItem: state.project.diff.prev.length !== 0,
     hasRedoItem: state.project.diff.next.length !== 0,
     stageTool: state.stage.stageTool.tool,
+    theme: settings.theme,
   };
 };
 
@@ -573,10 +506,11 @@ const mapDispatchToProps = {
   _setStageTool: (tool: StageTools) => setStageTool(tool),
   _addNewObject: (
     layerId: string,
-    type: ObjectType | string,
+    type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
+  _setTheme: (theme: ITheme) => setTheme(theme),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

@@ -22,6 +22,7 @@ import {
   updateObjectWithNewIds,
   updateProjectWithNewIds,
 } from "../../utils/project/project-utils";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 
 export const THUMB_WIDTH = 200;
 
@@ -48,6 +49,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     _updateProjectMeta,
     _updateEditor,
     onRequestClose,
+    themeClass,
   } = props;
 
   const isEdit = !!meta.id;
@@ -253,8 +255,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   };
 
   return (
-    <div className={cx("bp3-dark", css.savePanel)}>
-      <div className={cx("bp3-label", css.thumbTitle)}>
+    <div className={cx(themeClass, css.savePanel)}>
+      <div className={cx("bp5-label", css.thumbTitle)}>
         Thumbnail
         {/*getSelectField(
           "Thumbnail",
@@ -280,7 +282,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           }}
         ></div>
       </div>
-      <div className={css.panelHeader}>
+      <PanelHeader>
         <div>{isSaveAs ? "SAVE AS..." : "SAVE PANEL"}</div>
         <div className={css.saving}>
           {meta.inSaving && (
@@ -289,7 +291,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             </>
           )}
         </div>
-      </div>
+      </PanelHeader>
 
       <div className={css.saveHolder}>
         {/*<Label>Align</Label>*/}
@@ -393,7 +395,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         </div>
       </div>
       <Dialog
-        className={cx("bp3-dark", css.dialog)}
+        className={cx("bp5-dark", css.dialog)}
         isOpen={saveTemplateDialogOpen}
         onClose={() => {
           setSaveTemplateDialogOpen(false);
@@ -475,6 +477,7 @@ const mapStateToProps = (state: IStore) => {
     breakpointConfig,
     settings: state.project.settings,
     breakpoints: state.project.settings.breakpoints,
+    themeClass: state.project.settings.themeClass,
   };
 };
 

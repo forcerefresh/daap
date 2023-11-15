@@ -34,7 +34,7 @@ export const TransformOriginInputForm: React.FC<
         <div className={css.area} onClick={onAreaClick}>
           <div className={css.point} style={pointStyle}></div>
         </div>
-        <div className="bp3-form-helper-text">{helperText}</div>
+        <div className="bp5-form-helper-text">{helperText}</div>
       </div>
     </div>
   );

@@ -92,7 +92,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
   );
 
   return (
-    <div className={cx("bp3-dark", css.slideSettings)}>
+    <div className={cx("bp5-dark", css.slideSettings)}>
       <div className={css.slidePanel} key={slide?.id}>
         <div className={css.slideHeader}>
           <div>

@@ -19,6 +19,7 @@ import { IAppSettings } from "../../store/reducers/globals";
 import { IntegrationContext } from "../../integration";
 
 enum GlobalPanelSections {
+  Editor = "editor",
   UiLayout = "uiLayout",
   OtherSettings = "otherSettings",
   DeveloperSettings = "developerSettings",
@@ -36,6 +37,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
   }>({
+    [GlobalPanelSections.Editor]: true,
     [GlobalPanelSections.UiLayout]: true,
     [GlobalPanelSections.OtherSettings]: true,
     [GlobalPanelSections.DeveloperSettings]: true,
@@ -50,6 +52,46 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
   return (
     <div className={css.appSettingsPanel}>
+      <section>
+        <div
+          className={css.sectionHeader}
+          onClick={() => toggleSection(GlobalPanelSections.Editor)}
+        >
+          <Button
+            minimal
+            small={true}
+            icon={
+              visibleSectionIds[GlobalPanelSections.Editor]
+                ? "caret-down"
+                : "caret-right"
+            }
+          ></Button>
+          Editor{" "}
+        </div>
+        {visibleSectionIds[GlobalPanelSections.UiLayout] && (
+          <div className={css.panel}>
+            <div className="input60d">
+              {getCheckboxField(
+                "Show grid",
+                globals.showGrid,
+                (showGrid: any) => {
+                  // save settings
+                  saveSettings({
+                    ...globals,
+                    showGrid,
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    showGrid,
+                  });
+                }
+              )}
+            </div>
+          </div>
+        )}
+      </section>
+
       <section>
         <div
           className={css.sectionHeader}

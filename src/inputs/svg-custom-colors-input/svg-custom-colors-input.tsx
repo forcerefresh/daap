@@ -31,7 +31,7 @@ export const SVGCustomColorsForm: React.FC<ISVGInput & IUpdateInput> = (
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const [customColors, setCustomColors] = useState<RGBColor[]>([]);

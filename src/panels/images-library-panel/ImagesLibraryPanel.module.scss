@@ -61,7 +61,7 @@
   padding: 20px;
   display: flex;
   flex-direction: row;
-  background: #333333;
+  //THEME background: #333333;
 
   > div:nth-child(2) {
     padding-left: 20px;
@@ -88,7 +88,8 @@
   box-shadow: 0 0 0 1px #137cbd;
 }
 
-.imageListHolder {
+.imageItemHolder {
+  position: relative;
   border: 8px solid transparent;
   &:hover {
     background: rgba(99, 99, 99, 0.5);
@@ -114,7 +115,7 @@
   top: 0px;
   right: 10px;
   :global {
-    .bp3-icon-delete {
+    .bp5-icon-delete {
       color: #ff5151 !important;
     }
   }
@@ -141,7 +142,7 @@
 
 .imageListTabs {
   :global {
-    .bp3-tag {
+    .bp5-tag {
       cursor: default;
       margin-top: 5px;
       margin-right: 5px;
@@ -149,10 +150,10 @@
   }
 
   :global {
-    .bp3-popover {
-      background: #333333;
+    .bp5-popover {
+      //THEME background: #333333;
     }
-    .bp3-popover-content {
+    .bp5-popover-content {
       background: none !important;
     }
   }
@@ -168,8 +169,8 @@
 }
 
 .imageHolder {
-  width: 200px;
-  height: 200px;
+  width: 140px;
+  height: 150px;
   display: flex;
   align-items: center;
   justify-items: center;
@@ -207,4 +208,35 @@
   height: 300px;
   text-transform: uppercase;
   z-index: 1000;
+}
+.multiSelectPortalClass {
+  z-index: 1000;
+
+  :global {
+    ul {
+      max-height: 300px;
+      overflow: auto;
+    }
+  }
+}
+
+.imagePreviewPortal {
+  z-index: 1000;
+}
+
+.openPreview {
+  display: none;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.imageItemHolder {
+  position: relative;
+  border: 8px solid transparent;
+  &:hover {
+    .openPreview {
+      display: block;
+    }
+  }
 }

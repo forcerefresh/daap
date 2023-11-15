@@ -122,7 +122,7 @@ export function LayerRow(props: ILayerRowProps) {
             iconName,
             size.w,
             size.h,
-            "lightgray",
+            undefined,
             bpConfig.portrait,
             { verticalAlign: "text-bottom", ...iconStyle }
           );
@@ -145,7 +145,7 @@ export function LayerRow(props: ILayerRowProps) {
           iconName,
           size.w,
           size.h,
-          "lightgray",
+          undefined,
           bpConfig.portrait
         );
 
@@ -228,44 +228,49 @@ export function LayerRow(props: ILayerRowProps) {
             position="bottom"
             usePortal={true}
             minimal
-            popoverClassName={css.devicePopup}
-          >
-            <div className={css.devicesHolder}>
-              {renderSelectedDevices(layer)}{" "}
-              <Icon icon="caret-down" style={{ marginBottom: "2px" }} />
-            </div>
-            <div className={css.devicePopup}>
-              <div
-                style={{
-                  textAlign: "left",
-                  marginBottom: "15px",
-                  color: "gray",
-                }}
-              >
-                {layer.name}
-              </div>
-
-              <Checkbox
-                checked={layer.responsiveVisibility.showAll}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  const newLayer = cloneDeep(layer);
-                  newLayer.responsiveVisibility.showAll = event.target.checked;
-                  updateLayer(newLayer);
-                }}
-              >
-                <span
+            //className={css.devicePopup}
+            content={
+              <div className={css.devicePopup}>
+                <div
                   style={{
-                    marginRight: "5px",
-                    verticalAlign: "middle",
+                    textAlign: "left",
+                    marginBottom: "15px",
+                    color: "gray",
                   }}
                 >
-                  {null}
-                </span>
-                ALL
-              </Checkbox>
-              <hr />
-              {renderDeviceOptions(layer)}
-            </div>
+                  {layer.name}
+                </div>
+
+                <Checkbox
+                  checked={layer.responsiveVisibility.showAll}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    const newLayer = cloneDeep(layer);
+                    newLayer.responsiveVisibility.showAll =
+                      event.target.checked;
+                    updateLayer(newLayer);
+                  }}
+                >
+                  <span
+                    style={{
+                      marginRight: "5px",
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    {null}
+                  </span>
+                  ALL
+                </Checkbox>
+                <hr />
+                {renderDeviceOptions(layer)}
+              </div>
+            }
+          >
+            {/* <div className={css.devicesHolder}> */}
+            <Button minimal>
+              {renderSelectedDevices(layer)}{" "}
+              <Icon icon="caret-down" style={{ marginBottom: "2px" }} />
+            </Button>
+            {/* </div> */}
           </Popover>
         </div>
       </div>

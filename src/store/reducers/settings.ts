@@ -3,6 +3,7 @@ import {
   ActionTypes,
   CREATE_NEW_PROJECT,
   OPEN_PROJECT,
+  SET_THEME,
   UPDATE_PROJECT_SETTINGS,
   UPDATE_SLIDE_BREAKPOINTS,
   UPDATE_SLIDE_DURATION,
@@ -143,7 +144,7 @@ const getSettingsDefault = (): ISettings => ({
   skipFirstSlideAnimation: false,
   breakpointReference: "viewport",
   // slider
-  sliderBackgroundColor: { r: 33, g: 33, b: 33, a: 1 },
+  sliderBackgroundColor: { r: 255, g: 255, b: 255, a: 0 },
   autoPlay: true,
   // preview
   pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },
@@ -151,6 +152,9 @@ const getSettingsDefault = (): ISettings => ({
   transparentHeader: false,
   // breakpoints
   breakpoints: getDefaultBreakpointConfiguration(),
+  //theme
+  theme: "dark",
+  themeClass: "bp5-dark",
 });
 
 export function settings(
@@ -183,6 +187,13 @@ export function settings(
     }
     case CREATE_NEW_PROJECT: {
       return getSettingsDefault();
+    }
+    case SET_THEME: {
+      return {
+        ...state,
+        theme: action.payload,
+        themeClass: action.payload === "dark" ? "bp5-dark" : "",
+      };
     }
     default:
       return state;

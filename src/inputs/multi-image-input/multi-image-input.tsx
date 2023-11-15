@@ -45,7 +45,7 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const renderAddLocalBtn = () => {
@@ -54,11 +54,28 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
         interactionKind={PopoverInteractionKind.CLICK}
         position={Position.LEFT}
         modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
         isOpen={multiSelectLibraryOpenLocal}
+        content={
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              selectionType={SelectionType.Multiple}
+              onRequestClose={() => {
+                setMultiSelectLibraryOpenLocal(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(items) => {
+                const newValue = [...value, ...items];
+                onChange(newValue);
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.MyImages]}
+            />
+          </div>
+        }
       >
         <Button
           small
@@ -71,22 +88,6 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
         >
           Select Local Images
         </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            selectionType={SelectionType.Multiple}
-            onRequestClose={() => {
-              setMultiSelectLibraryOpenLocal(false);
-            }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(items) => {
-              const newValue = [...value, ...items];
-              onChange(newValue);
-              setLibraryOpen(false);
-            }}
-            panelsToShow={[Panels.MyImages]}
-          />
-        </div>
       </Popover>
     );
   };
@@ -97,11 +98,28 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
         interactionKind={PopoverInteractionKind.CLICK}
         position={Position.LEFT}
         modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
         isOpen={multiSelectLibraryOpenLibrary}
+        content={
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              selectionType={SelectionType.Multiple}
+              onRequestClose={() => {
+                setMultiSelectLibraryOpenLibrary(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(items) => {
+                const newValue = [...value, ...items];
+                onChange(newValue);
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.Images]}
+            />
+          </div>
+        }
       >
         <Button
           small
@@ -114,22 +132,6 @@ export const MultiImageInputForm: React.FC<IMultiImageInput & IUpdateInput> = (
         >
           Select Library Images
         </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            selectionType={SelectionType.Multiple}
-            onRequestClose={() => {
-              setMultiSelectLibraryOpenLibrary(false);
-            }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(items) => {
-              const newValue = [...value, ...items];
-              onChange(newValue);
-              setLibraryOpen(false);
-            }}
-            panelsToShow={[Panels.Images]}
-          />
-        </div>
       </Popover>
     );
   };

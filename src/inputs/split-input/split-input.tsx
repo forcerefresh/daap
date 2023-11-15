@@ -163,9 +163,9 @@ export const SplitInputForm: React.FC<ISplitInput & IUpdateInput> = (props) => {
             );
           })}
         </div>
-        <div className="bp3-form-helper-text">{helperText}</div>
+        <div className="bp5-form-helper-text">{helperText}</div>
         {!isValid() && (
-          <div className={cx("bp3-form-helper-text", "error", css.error)}>
+          <div className={cx("bp5-form-helper-text", "error", css.error)}>
             Each side or rectangle should have at least 1 point, otherwise some
             part of image will be cut out.
           </div>

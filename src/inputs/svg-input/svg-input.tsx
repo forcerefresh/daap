@@ -28,7 +28,7 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const [isCustomColor, setIsCustomColor] = useState(false);
@@ -43,13 +43,34 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
 
       <Popover
         interactionKind={PopoverInteractionKind.CLICK}
-        position={Position.RIGHT}
+        position={Position.LEFT}
         modifiers={{ preventOverflow: { enabled: true } }}
-        boundary={"window"}
+        boundary={"window" as any}
         usePortal={true}
         minimal
         popoverClassName={css.mediaLibraryPanelPopup}
         isOpen={libraryOpen}
+        content={
+          <div ref={sharedRef}>
+            <MediaLibraryPanel
+              onRequestClose={() => {
+                setLibraryOpen(false);
+              }}
+              className={css.mediaLibraryPanel}
+              addObject={false}
+              onSelect={(item) => {
+                onInput({
+                  source: (item.initialValues as any).svg,
+                  colors: undefined,
+                  colorsType: "unique",
+                  disableCustomColors: false,
+                });
+                setLibraryOpen(false);
+              }}
+              panelsToShow={[Panels.MyVectors, Panels.Vectors]}
+            />
+          </div>
+        }
       >
         <Button
           small
@@ -62,25 +83,6 @@ export const SVGInputForm: React.FC<ISVGInput & IUpdateInput> = (props) => {
         >
           Browse
         </Button>
-        <div ref={sharedRef}>
-          <MediaLibraryPanel
-            onRequestClose={() => {
-              setLibraryOpen(false);
-            }}
-            className={css.mediaLibraryPanel}
-            addObject={false}
-            onSelect={(item) => {
-              onInput({
-                source: (item.initialValues as any).svg,
-                colors: undefined,
-                colorsType: "unique",
-                disableCustomColors: false,
-              });
-              setLibraryOpen(false);
-            }}
-            panelsToShow={[Panels.MyVectors, Panels.Vectors]}
-          />
-        </div>
       </Popover>
     </FormGroup>
   );

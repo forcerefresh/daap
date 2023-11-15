@@ -28,7 +28,7 @@ export default function TagsView({ tags, show = 1 }: TagsViewProps) {
       {workingTags.length > 0 && (
         <Popover
           interactionKind="hover"
-          portalClassName={classnames("bp3-dark")}
+          portalClassName={classnames("bp5-dark")}
           minimal
           content={
             <div style={{ margin: "10px" }}>

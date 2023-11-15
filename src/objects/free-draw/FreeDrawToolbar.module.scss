@@ -10,7 +10,7 @@
 
 .checkboxHolder {
   :global {
-    .bp3-form-group {
+    .bp5-form-group {
       display: flex;
       flex-direction: column-reverse;
       align-items: center;
@@ -32,7 +32,7 @@
   align-items: center;
 
   :global {
-    .bp3-button-text {
+    .bp5-button-text {
       height: 16px;
     }
   }

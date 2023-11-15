@@ -5,9 +5,9 @@ import {
   Menu,
   MenuDivider,
   MenuItem,
+  Popover,
   Switch,
 } from "@blueprintjs/core";
-import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import { cloneDeep, includes, remove } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
@@ -21,6 +21,7 @@ import { getIconByType } from "../../store/reducers/settings";
 import { IStore } from "../../store/store";
 import { getResponsiveIcon } from "../../utils/icons/responsive-icons-factory";
 import css from "./extra-options-input.module.scss";
+import { Popover2InteractionKind } from "@blueprintjs/popover2";
 
 export type IExtraOptionsInput = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -57,13 +58,15 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
           iconName,
           size.w,
           size.h,
-          "lightgray",
+          undefined,
           bpConfig.portrait
         );
 
-        const tickColor = includes(metadataValues?.devices ?? [], bpConfig.type)
-          ? "#34ec43"
-          : "#666";
+        const tickColor =
+          !metadataValues.disabled &&
+          includes(metadataValues?.devices ?? [], bpConfig.type)
+            ? "#34ec43"
+            : "#666";
 
         return (
           <MenuItem
@@ -174,19 +177,20 @@ const ExtraOptionsInput: React.FC<IExtraOptionsInput> = (props) => {
       {children}
       <div className={css.optionsHolder}>
         {metadataValues.exportForWizard && getWizardIcon()}
-        <Popover2
+        <Popover
           popoverClassName={css.popover}
           content={metaMenu}
           placement="left-end"
           shouldReturnFocusOnClose={false}
-          interactionKind={Popover2InteractionKind.CLICK}
+          //interactionKind={Popover2InteractionKind.CLICK}
           hoverCloseDelay={100}
           hoverOpenDelay={150}
+          usePortal={false}
         >
           <Button className={css.button} minimal small>
             {getIcon()}
           </Button>
-        </Popover2>
+        </Popover>
       </div>
     </div>
   );

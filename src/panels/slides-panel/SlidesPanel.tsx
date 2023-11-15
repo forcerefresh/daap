@@ -43,6 +43,7 @@ import { DropHandle, IDropItem } from "../layers-panel/DropHandle";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
 import { IntegrationContext } from "../../integration";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -189,7 +190,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   // const renderPanels = () => {
   //   return (
   //     <>
-  //       <Portal className="bp3-dark">
+  //       <Portal className="bp5-dark">
   //         {showSettingsPanelForSlideId !== EmptyID && (
   //           <div ref={ref}>
   //             <SlideSettingsPanel slideId={showSettingsPanelForSlideId} />
@@ -247,7 +248,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   return (
     <>
       <div className={css.panel}>
-        <div className={css.panelHeader}>
+        <PanelHeader>
           <div>SLIDES</div>
           <div>
             <div
@@ -343,7 +344,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               ></Button>
             </Popover2>
           </div>
-        </div>
+        </PanelHeader>
         <div className={css.slidesHolder} ref={slidesHolderRef}>
           {normalSlides.map((slideId: string, idx) => {
             const slide = slideById[slideId];

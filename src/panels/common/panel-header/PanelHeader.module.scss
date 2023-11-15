@@ -1,0 +1,25 @@
+@import "/src/theme";
+
+.panelHeader {
+  background: #ececec;
+  border-bottom: 1px solid $pt-panel-border-color;
+  border-top: 1px solid $pt-panel-border-color;
+  display: flex;
+  align-items: center;
+  padding: 3px 6px;
+  color: gray;
+  font-weight: bold;
+  min-height: 30px;
+
+  > *:first-child {
+    flex-grow: 1;
+  }
+}
+
+:global(.bp5-dark) {
+  .panelHeader {
+    background: #3c3c3c;
+    border-bottom: 1px solid $pt-dark-panel-border-color;
+    border-top: 1px solid $pt-dark-panel-border-color;
+  }
+}

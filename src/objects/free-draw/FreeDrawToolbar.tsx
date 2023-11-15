@@ -8,22 +8,20 @@ import { FreeDrawValues } from "./free-draw";
 import { Button } from "@blueprintjs/core";
 import { IToolConfig } from "../../utils/tools/ToolsProvider";
 import { IFreeDrawToolConfig } from "./types";
+import { ToolbarMode } from "../../utils/tools/types";
 import css from "./FreeDrawToolbar.module.scss";
 
 const ICON_HEIGHT = 36;
 
-export enum ToolbarMode {
-  Selection = "Selection",
-  Edit = "Edit",
-}
-
 export interface IToolbarProps {
-  mode: ToolbarMode;
+  mode?: ToolbarMode;
   object: IObject | null;
-  toolConfig: IToolConfig<unknown>;
+  addObject: (object: IObject) => void;
   updateObject: (object: IObject) => void;
-  deleteObject: (object: IObject | undefined) => void;
-  updateFreeDrawToolConfig: (toolConfig: IToolConfig<unknown>) => void;
+  deleteObject: (object: IObject) => void;
+  // tool configuration (use for internal shared state between Quick Toolbar and Stage Tool )
+  toolConfig: IToolConfig<unknown>;
+  setToolConfig: (toolConfig: IToolConfig<unknown>) => void;
 }
 
 export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
@@ -33,7 +31,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
     updateObject,
     deleteObject,
     toolConfig,
-    updateFreeDrawToolConfig,
+    setToolConfig,
   } = props;
 
   const freeDrawToolState = toolConfig as IToolConfig<IFreeDrawToolConfig>;
@@ -45,25 +43,6 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
     <>
       {mode === ToolbarMode.Selection && object && values && (
         <>
-          {/* <div className={css.inputHolder} style={{ marginLeft: "10px" }}>
-            <Button
-              className={css.textButton}
-              minimal
-              onClick={() => {
-                activateTool(FREE_DRAW, selectedObjectIds[0]);
-
-                // updateFreeDrawToolConfig({
-                //   ...freeDrawToolState,
-                //   strokeWidth: "5",
-                //   eraser: false,
-                // });
-              }}
-              icon="edit"
-            >
-              Edit
-            </Button>
-          </div> */}
-
           <div className={css.inputHolder}>
             {getUnitNumericFiled(
               "",
@@ -113,179 +92,149 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
         </>
       )}
 
-      <>
-        <div>
-          <Button
-            minimal
-            active={currentStroke === "1" && !freeDrawToolState.eraser}
-            onClick={() => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                strokeWidth: "1",
-                eraser: false,
-              });
-            }}
-          >
-            <Pencil
-              style={{
-                width: "12px",
-                height: ICON_HEIGHT + "px",
+      {mode === ToolbarMode.Edit && (
+        <>
+          <div>
+            <Button
+              minimal
+              active={currentStroke === "1" && !freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  strokeWidth: "1",
+                  eraser: false,
+                });
               }}
-            />
-          </Button>
-        </div>
+            >
+              <Pencil
+                style={{
+                  width: "12px",
+                  height: ICON_HEIGHT + "px",
+                }}
+              />
+            </Button>
+          </div>
 
-        <div>
-          <Button
-            minimal
-            active={currentStroke === "5" && !freeDrawToolState.eraser}
-            onClick={() => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                strokeWidth: "5",
-                eraser: false,
-              });
-            }}
-          >
-            <Pencil
-              style={{
-                width: "17px",
-                height: ICON_HEIGHT + "px",
+          <div>
+            <Button
+              minimal
+              active={currentStroke === "5" && !freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  strokeWidth: "5",
+                  eraser: false,
+                });
               }}
-            />
-          </Button>
-        </div>
+            >
+              <Pencil
+                style={{
+                  width: "17px",
+                  height: ICON_HEIGHT + "px",
+                }}
+              />
+            </Button>
+          </div>
 
-        <div>
-          <Button
-            minimal
-            active={currentStroke === "10" && !freeDrawToolState.eraser}
-            onClick={() => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                strokeWidth: "10",
-                eraser: false,
-              });
-            }}
-          >
-            <Pencil
-              style={{
-                width: "22px",
-                height: ICON_HEIGHT + "px",
+          <div>
+            <Button
+              minimal
+              active={currentStroke === "10" && !freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  strokeWidth: "10",
+                  eraser: false,
+                });
               }}
-            />
-          </Button>
-        </div>
+            >
+              <Pencil
+                style={{
+                  width: "22px",
+                  height: ICON_HEIGHT + "px",
+                }}
+              />
+            </Button>
+          </div>
 
-        <div>
-          <Button
-            minimal
-            active={currentStroke === "20" && !freeDrawToolState.eraser}
-            onClick={() => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                strokeWidth: "20",
-                eraser: false,
-              });
-            }}
-          >
-            <Pencil
-              style={{
-                width: "27px",
-                height: ICON_HEIGHT + "px",
+          <div>
+            <Button
+              minimal
+              active={currentStroke === "20" && !freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  strokeWidth: "20",
+                  eraser: false,
+                });
               }}
-            />
-          </Button>
-        </div>
+            >
+              <Pencil
+                style={{
+                  width: "27px",
+                  height: ICON_HEIGHT + "px",
+                }}
+              />
+            </Button>
+          </div>
 
-        <div className={css.inputHolder}>
-          {getUnitNumericFiled(
-            "",
-            currentStroke + "px",
-            (v: string) => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                strokeWidth: parseInt(v).toString(),
-                eraser: false,
-              });
-            },
-            "",
-            {
-              className: css.strokeInput,
-            },
-            ["px"]
-          )}
-        </div>
+          <div className={css.inputHolder}>
+            {getUnitNumericFiled(
+              "",
+              currentStroke + "px",
+              (v: string) => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  strokeWidth: parseInt(v).toString(),
+                  eraser: false,
+                });
+              },
+              "",
+              {
+                className: css.strokeInput,
+              },
+              ["px"]
+            )}
+          </div>
 
-        <div>
-          <input
-            type="color"
-            id="head"
-            name="head"
-            value={freeDrawToolState?.color ?? "white"}
-            onChange={(evt) => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                color: evt.currentTarget.value,
-                eraser: false,
-              });
-            }}
-            style={{ width: "35px", height: "35px", margin: "10px" }}
-          />
-        </div>
-
-        <div>
-          <Button
-            minimal
-            active={freeDrawToolState.eraser}
-            onClick={() => {
-              updateFreeDrawToolConfig({
-                ...freeDrawToolState,
-                eraser: true,
-              });
-            }}
-          >
-            <Eraser
-              style={{
-                width: "27px",
-                height: ICON_HEIGHT + "px",
+          <div>
+            <input
+              type="color"
+              id="head"
+              name="head"
+              value={freeDrawToolState?.color ?? "white"}
+              onChange={(evt) => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  color: evt.currentTarget.value,
+                  eraser: false,
+                });
               }}
+              style={{ width: "35px", height: "35px", margin: "10px" }}
             />
-          </Button>
-        </div>
+          </div>
 
-        {/* <div className={css.checkboxHolder}>
-            {getCheckboxField("Multiple", freeDrawToolState.multiLines, onClick={() => {
-                updateFreeDrawToolConfig({
+          <div>
+            <Button
+              minimal
+              active={freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
                   ...freeDrawToolState,
                   eraser: true,
                 });
-              }})}
-          </div> */}
-
-        {/* <div className={css.rightHolder}>
-            <div>
-              <Button
-                style={{ float: "right" }}
-                minimal
-                onClick={() => {
-                  deleteCurrentObject();
+              }}
+            >
+              <Eraser
+                style={{
+                  width: "27px",
+                  height: ICON_HEIGHT + "px",
                 }}
-                icon={"trash"}
-              ></Button>
-            </div>
-            <div>
-              <Button
-                style={{ float: "right" }}
-                minimal
-                onClick={() => {
-                  applyCurrentObject();
-                }}
-                icon={"tick"}
-              ></Button>
-            </div>
-          </div> */}
-      </>
+              />
+            </Button>
+          </div>
+        </>
+      )}
     </>
   );
 }

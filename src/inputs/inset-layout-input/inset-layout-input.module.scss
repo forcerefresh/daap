@@ -1,6 +1,6 @@
 .main {
   :global {
-    .bp3-form-group {
+    .bp5-form-group {
       margin-bottom: 5px;
     }
   }
@@ -13,7 +13,7 @@
   place-items: unset;
   // Label (displayName) style
   :global {
-    .bp3-label {
+    .bp5-label {
       width: var(--animations-panel-label-width);
       min-width: var(--animations-panel-label-width);
       margin-right: 10px;
@@ -50,7 +50,7 @@
 
 .commonRow {
   :global {
-    .bp3-label {
+    .bp5-label {
       width: 50px !important;
     }
     input {

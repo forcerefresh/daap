@@ -1,8 +1,43 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .toolbar {
+    color: $pt-dark-text-color-muted;
+    background: $pt-dark-app-background-color;
+    border-right: 1px solid $dark-gray5;
+  }
+  .largeButton,
+  .smallButton {
+    :global {
+      svg {
+        color: $pt-dark-text-color-muted !important;
+      }
+    }
+  }
+
+  :global(.bp5-disabled) {
+    &.largeButton,
+    &.smallButton {
+      :global {
+        svg {
+          color: $pt-dark-text-color-disabled !important;
+        }
+      }
+    }
+  }
+}
+
 .toolbar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
   text-align: center;
   padding: 0px 0px;
-  color: gray;
-  height: 100vh;
+
+  background: $pt-app-background-color;
+  color: $pt-text-color-muted;
+  border-right: 1px solid $light-gray1;
 
   :global {
     *,
@@ -10,28 +45,17 @@
     *:active {
       outline: none;
     }
-
-    .bp3-button:not(.bp3-small) {
-      width: 54px;
-      height: 54px;
-    }
-    .bp3-button.bp3-small {
-      width: 27px;
-      height: 27px;
-      // padding: 7px 14px;
-    }
   }
 
-  .buttonGroupsHolder {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  .buttonGroupsHolder > div:last-of-type {
-    margin-top: auto;
-  }
-  .buttonGroupsHolder > * + * {
-    margin-top: 0px;
+  :global(.bp5-disabled) {
+    &.largeButton,
+    &.smallButton {
+      :global {
+        svg {
+          color: $pt-text-color-disabled;
+        }
+      }
+    }
   }
 }
 
@@ -39,18 +63,54 @@
   height: 20px;
 }
 
-.tbButton {
-  position: relative;
-}
-
-.tbTag {
+.buttonTag {
   position: absolute;
   right: 3px;
   top: 3px;
-  //background: #d31a1a !important;
-  //color: white !important;
-  //border-radius: 20px;
-  //text-align: center;
-  //line-height: 14px;
-  //font-weight: bold;
+}
+
+.largeButton {
+  position: relative;
+  width: $pt-toolbar-large-button-size;
+  height: $pt-toolbar-large-button-size;
+
+  :global {
+    svg {
+      width: $pt-toolbar-large-button-svg-size;
+      height: $pt-toolbar-large-button-svg-size;
+      color: $pt-text-color-muted;
+    }
+  }
+}
+
+.smallButton {
+  position: relative;
+  width: $pt-toolbar-small-button-size;
+  height: $pt-toolbar-small-button-size;
+
+  :global {
+    svg {
+      width: $pt-toolbar-small-button-svg-size;
+      height: $pt-toolbar-small-button-svg-size;
+      color: $pt-text-color-muted;
+    }
+  }
+}
+
+.newVersionButton {
+  height: 78px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.helpMenu {
+  background: $pt-app-background-color !important;
+}
+
+:global(.bp5-dark) {
+  .helpMenu {
+    background: $pt-dark-app-background-color !important;
+  }
 }

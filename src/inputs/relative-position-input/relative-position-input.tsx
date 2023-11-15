@@ -22,7 +22,7 @@ export const RelativePositionInputForm: React.FC<
   return (
     <>
       <div className={cx(css.main, "input120")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label>{displayName}</Label>
           <div className={css.row}>
             {getUnitNumericFiled(

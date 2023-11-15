@@ -2,7 +2,7 @@
   display: flex;
 
   :global {
-    .bp3-form-group {
+    .bp5-form-group {
       margin-bottom: 5px;
     }
   }
@@ -14,11 +14,11 @@
       outline: none;
     }
 
-    .bp3-label {
+    .bp5-label {
       width: 10px !important;
       padding-left: 10px;
     }
-    .bp3-input {
+    .bp5-input {
       width: 90px !important;
       margin-right: 5px;
     }

@@ -26,6 +26,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     activeLayerId,
     onRequestClose,
     onRequestFontPreview,
+    themeClass,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -65,7 +66,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               opacity: !activeLayerId ? "0.5" : "1",
             }} // || disabled
             interactive={!!activeLayerId}
-            elevation={Elevation.TWO}
+            elevation={Elevation.ONE}
             className={cx(css.card, {
               [css.disabled]: !activeLayerId, //|| disabled,
             })}
@@ -87,7 +88,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             </div>
 
             <h3>{deff.meta.name}</h3>
-            <p>{deff.meta.description}</p>
+            <p className={css.description}>{deff.meta.description}</p>
             {deff.external && <div className={css.external}>EXT</div>}
             {deff.development && <div className={css.development}>DEV</div>}
             {isObjectDisabledForFree(deff.type) && (
@@ -100,7 +101,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   };
 
   return (
-    <div className={cx("bp3-dark", css.addPanel)}>
+    <div className={cx(themeClass, css.addPanel)}>
       {/* {disabled && (
         <div className="warning">
           Action panel is disabled. Goto "Settings &gt; License" and enter
@@ -112,39 +113,38 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           No active layer found. Please select layer before adding objects.
         </div>
       )}
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
+      <section>
+        <div>
           <h1>Media</h1>
           <p>Image, Video, Svg and other objects that use media resources</p>
-        </Card>
+        </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           {renderObjectsCards("media")}
         </div>
-      </div>
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
+      </section>
+      <section>
+        <div>
           <h1>Text</h1>
           <p>Add text content</p>
-        </Card>
-
-        {renderObjectsCards("text")}
-      </div>
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
+        </div>
+        <div>{renderObjectsCards("text")}</div>{" "}
+      </section>
+      <section>
+        <div>
           <h1>Navigation</h1>
           <p>Navigate bettwen slides or point to extenal page</p>
-        </Card>
+        </div>
         <div>{renderObjectsCards("navigation")}</div>
-      </div>
+      </section>
 
-      <div>
-        <Card interactive={false} className={css.sectionCard}>
+      <section>
+        <div>
           <h1>Other</h1>
           <p>Various objects</p>
-        </Card>
+        </div>
 
         <div>{renderObjectsCards("other")}</div>
-      </div>
+      </section>
     </div>
   );
 };
@@ -152,6 +152,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({
   activeLayerId: state.project.selection.activeLayerId,
   documentSize: state.project.document.documentSize,
+  themeClass: state.project.settings.themeClass,
 });
 
 const mapDispatchToProps = {

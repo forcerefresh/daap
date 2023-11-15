@@ -263,10 +263,63 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                   interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.RIGHT_TOP}
                   modifiers={{ preventOverflow: { enabled: true } }}
-                  boundary={"window"}
                   portalClassName={"image-preview-popover"}
                   minimal
                   isOpen={selectedImage === idx}
+                  content={
+                    <div
+                      className={css.popoverHolder}
+                      onClick={(event) => {
+                        event.stopPropagation();
+                      }}
+                    >
+                      <div style={{ paddingBottom: "50px" }}>
+                        <Button
+                          intent="primary"
+                          onClick={() => {
+                            if (activeLayerId) {
+                              if (addObject) {
+                                _addNewObject(
+                                  activeLayerId,
+                                  SVG,
+                                  {
+                                    left: 0,
+                                    top: 0,
+                                    width: 100,
+                                    height: 100,
+                                  },
+                                  {
+                                    svg: { source: image.svgString },
+                                  }
+                                );
+                              }
+                              onSelect({
+                                type: SVG,
+                                initialValues: {
+                                  svg: image.svgString,
+                                },
+                              });
+                              onRequestClose();
+                            }
+                          }}
+                        >
+                          {addObject ? "Add SVG" : "Select SVG"}
+                        </Button>
+
+                        {!!deleteImagesFunc && (
+                          <Button
+                            className={css.deleteImageButton}
+                            onClick={() => {
+                              setSelectedImage(-1);
+                              setImagesForDelete([image]);
+                            }}
+                            icon="trash"
+                            minimal
+                          ></Button>
+                        )}
+                      </div>
+                    </div>
+                  }
                 >
                   <div
                     className={classnames(css.imageListHolder, {
@@ -285,58 +338,6 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                     <div className={css.imageListTitle}>{image.title}</div>
                     <div className={css.imageListTabs}>
                       <TagsView tags={image?.tags || []} />
-                    </div>
-                  </div>
-                  <div
-                    className={css.popoverHolder}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                    }}
-                  >
-                    <div style={{ paddingBottom: "50px" }}>
-                      <Button
-                        intent="primary"
-                        onClick={() => {
-                          if (activeLayerId) {
-                            if (addObject) {
-                              _addNewObject(
-                                activeLayerId,
-                                SVG,
-                                {
-                                  left: 0,
-                                  top: 0,
-                                  width: 100,
-                                  height: 100,
-                                },
-                                {
-                                  svg: { source: image.svgString },
-                                }
-                              );
-                            }
-                            onSelect({
-                              type: SVG,
-                              initialValues: {
-                                svg: image.svgString,
-                              },
-                            });
-                            onRequestClose();
-                          }
-                        }}
-                      >
-                        {addObject ? "Add SVG" : "Select SVG"}
-                      </Button>
-
-                      {!!deleteImagesFunc && (
-                        <Button
-                          className={css.deleteImageButton}
-                          onClick={() => {
-                            setSelectedImage(-1);
-                            setImagesForDelete([image]);
-                          }}
-                          icon="trash"
-                          minimal
-                        ></Button>
-                      )}
                     </div>
                   </div>
                 </Popover>
@@ -373,7 +374,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
           setIsDeleting(true);
           setImagesForDelete(undefined);
         }}
-        className="bp3-dark"
+        className="bp5-dark"
         style={{ zIndex: 1001 }}
       >
         <p>Delete "{imagesForDelete?.[0].title}" image?</p>

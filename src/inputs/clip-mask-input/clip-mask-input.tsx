@@ -22,7 +22,7 @@ export const ClipMaskInputForm: React.FC<IClipMaskInput & IUpdateInput> = (
   return (
     <>
       <div className={cx(css.alignHolder, "input60")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label style={{ width: "45px" }}>
             {createInputLabel(displayName, propertyName)}
           </Label>
@@ -60,7 +60,7 @@ export const ClipMaskInputForm: React.FC<IClipMaskInput & IUpdateInput> = (
             })}
 
             {helperText && (
-              <div className="bp3-form-helper-text">{helperText}</div>
+              <div className="bp5-form-helper-text">{helperText}</div>
             )}
           </div>
         </div>

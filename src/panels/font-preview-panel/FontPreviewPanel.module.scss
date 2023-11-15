@@ -1,3 +1,5 @@
+@import "/src/theme";
+
 .fontPreviewPanel {
   z-index: 100;
   position: absolute;
@@ -6,14 +8,14 @@
   min-width: 340px;
   height: 100vh;
 
-  background: rgb(40, 40, 40);
-  box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
-  padding: 30px;
+  background: $pt-app-background-color;
+  box-shadow: $pt-elevation-shadow-0;
+  padding: 15px;
   display: flex;
   flex-direction: row;
 
   section {
-    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    //box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;
@@ -44,10 +46,10 @@
     flex-grow: 1;
 
     :global {
-      .bp3-form-group .bp3-control {
+      .bp5-form-group .bp5-control {
         margin-bottom: 5px;
       }
-      .bp3-label {
+      .bp5-label {
         margin-bottom: 0px;
         color: #b5b5b5;
         font-weight: bold;
@@ -71,11 +73,6 @@
       cursor: pointer;
       height: 28px;
       width: 220px;
-      //display: flex;
-
-      &.googleFontsItem {
-        //flex-direction: row-reverse;
-      }
 
       .previewFontBtn {
         display: none;
@@ -88,16 +85,12 @@
       }
 
       &.active {
-        //border: 1px solid gray;
         margin: 0px;
-
         background-color: rgba(255, 255, 255, 0.2);
       }
 
       &:hover {
-        //border: 1px solid gray;
         margin: 0px;
-
         background-color: rgba(255, 255, 255, 0.1);
       }
 
@@ -118,12 +111,10 @@
 
 .card {
   display: inline-block;
-  background: rgb(51, 51, 51) !important;
-  //text-align: center;
+  //background: rgb(51, 51, 51) !important;
   margin: 10px;
 
   cursor: pointer;
-  //width: 100%;
   &.disabled {
     opacity: 0.3;
   }
@@ -145,4 +136,14 @@
   background: url("../../utils/fonts2/google-font-image.png");
   width: 300px;
   height: 28px;
+}
+
+:global(.bp5-dark) {
+  &.fontPreviewPanel {
+    background: $pt-dark-app-background-color !important;
+    box-shadow: $pt-dark-elevation-shadow-1 !important;
+  }
+  .fontsSprite {
+    background: url("../../utils/fonts2/google-font-image-dark.png");
+  }
 }

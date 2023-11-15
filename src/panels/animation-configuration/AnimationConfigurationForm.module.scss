@@ -4,7 +4,7 @@ animationConfigurationForm {
   padding-top: 0px;
 
   :global {
-    .labelAuto .bp3-label {
+    .labelAuto .bp5-label {
       width: auto;
       min-width: auto;
     }
@@ -21,12 +21,12 @@ animationConfigurationForm {
 
 .dynamicFields {
   :global {
-    .bp3-label {
+    .bp5-label {
       width: var(--animations-panel-label-width);
       min-width: var(--animations-panel-label-width);
     }
 
-    .bp3-form-group.bp3-inline label.bp3-label {
+    .bp5-form-group.bp5-inline label.bp5-label {
       //line-height: 30px;
       line-height: 20px;
       padding-top: 5px;

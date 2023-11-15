@@ -39,6 +39,7 @@ import { LayerRow } from "./LayerRow";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { Popover2, Popover2InteractionKind } from "@blueprintjs/popover2";
+import { PanelHeader } from "../common/panel-header/PanelHeader";
 //import { DragLayerComponent } from "./CustomDragLayer";
 
 type ISlidesPanel = typeof mapDispatchToProps &
@@ -237,10 +238,10 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   return (
     <>
       <div className={css.layerPanel}>
-        <div className={css.panelHeader}>
-          <div>
+        <PanelHeader>
+          <div style={{ display: "flex" }}>
             <span>LAYERS AND OBJECTS</span>
-            <span className={css.slideName}>[ {slide?.name} ]</span>
+            <span className={css.slideName}>{slide?.name}</span>
           </div>
           <div>
             <Button
@@ -270,7 +271,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
               ></Button>
             </Popover2>
           </div>
-        </div>
+        </PanelHeader>
         <div className={css.layersHolder} ref={layersHolderRef}>
           {layerArr?.map((layer, idx) => {
             if (!layer) return null; // TODO: IMPORTANT ko kopiranja slajda

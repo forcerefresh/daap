@@ -54,7 +54,7 @@ function ChangeCheckerButton(props: ChangeCheckerButtonProps) {
           setConfirmOpen(false);
           onAllow();
         }}
-        className="bp3-dark"
+        className="bp5-dark"
       >
         <p>You have unsaved changes. Press "Cancel" to go back to project.</p>
       </Alert>

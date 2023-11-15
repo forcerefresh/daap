@@ -33,7 +33,7 @@ export const AudioInputForm: React.FC<IAudioInput & IUpdateInput> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp3-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container", // alert
   ]);
 
   const onUrlChange = (url: string) => {
@@ -79,7 +79,7 @@ export const AudioInputForm: React.FC<IAudioInput & IUpdateInput> = (props) => {
           interactionKind={PopoverInteractionKind.CLICK}
           position={Position.LEFT}
           modifiers={{ preventOverflow: { enabled: true } }}
-          boundary={"window"}
+          //boundary={"window"}
           usePortal={true}
           minimal
           popoverClassName={css.mediaLibraryPanelPopup}

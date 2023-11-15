@@ -6,7 +6,7 @@
   overflow: auto;
 
   :global {
-    .bp3-control input:focus ~ .bp3-control-indicator,
+    .bp5-control input:focus ~ .bp5-control-indicator,
     #color-input:focus {
       box-shadow: 0 0 0 1px #137cbd, 0 0 0 1px #137cbd,
         0 0 0 3px rgba(19, 124, 189, 0.3), inset 0 0 0 1px rgba(16, 22, 26, 0.3),
@@ -14,20 +14,20 @@
       outline: none !important;
     }
 
-    .bp3-form-group.bp3-inline label.bp3-label {
+    .bp5-form-group.bp5-inline label.bp5-label {
       line-height: 20px;
       padding-top: 5px;
     }
 
-    .bp3-label {
+    .bp5-label {
       width: 70px;
     }
 
-    .labelAuto .bp3-label {
+    .labelAuto .bp5-label {
       width: auto;
     }
 
-    .bp3-form-group {
+    .bp5-form-group {
       margin-bottom: 5px;
     }
   }

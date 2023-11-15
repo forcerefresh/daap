@@ -36,7 +36,7 @@ export const NumericTimelineInputForm: React.FC<
       </div>
 
       <div className={cx(css.rowHolder, "input60")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label></Label>
 
           <div className={cx(css.rowHolderInputs)}>

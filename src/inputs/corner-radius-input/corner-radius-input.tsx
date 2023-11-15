@@ -65,7 +65,7 @@ export const CornerRadiusInputForm: React.FC<
   return (
     <>
       <div className={cx(css.alignHolder, "input60")}>
-        <div className="bp3-form-group bp3-inline">
+        <div className="bp5-form-group bp5-inline">
           <Label style={{ width: "45px" }}>
             {createInputLabel(displayName, propertyName)}
           </Label>
@@ -120,7 +120,7 @@ export const CornerRadiusInputForm: React.FC<
               </div>
             )}
             {helperText && (
-              <div className="bp3-form-helper-text">{helperText}</div>
+              <div className="bp5-form-helper-text">{helperText}</div>
             )}
           </div>
         </div>

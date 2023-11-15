@@ -1,16 +1,18 @@
+@import "/src/theme";
+
 // COMMON STYLE
 .mainLayout {
   display: flex;
   flex-direction: row;
   width: 100%;
   height: 100%;
-  background: rgb(30, 30, 30);
+  //background: rgb(30, 30, 30);
 
   .left {
     overflow: auto;
     z-index: 40;
     width: 68px;
-    background: rgb(51, 51, 51);
+    //THEME move to toolbar... background: rgb(51, 51, 51);
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
     flex: 0 0 68px;
   }
@@ -32,6 +34,12 @@
 
   .right {
     z-index: 95;
+    background: $pt-app-background-color;
+  }
+}
+:global(.bp5-dark) {
+  .right {
+    background: $pt-dark-app-background-color;
   }
 }
 
@@ -40,7 +48,6 @@
     z-index: 50;
     width: 370px;
     min-width: 370px;
-    background: rgb(37, 37, 38);
     box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
     display: flex;
     flex-direction: column;
@@ -64,8 +71,8 @@
       }
     }
     .action {
-      height: 105px;
-      min-height: 105px;
+      height: 112px;
+      min-height: 112px;
     }
   }
 }
@@ -77,13 +84,14 @@
     display: flex;
     flex-direction: row;
     box-shadow: none;
-    background: rgb(37, 37, 38);
     > div {
       height: 100vh;
       max-height: 100vh;
       display: flex;
       flex-direction: column;
-      box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+      //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+      border-left: 1px solid $pt-panel-border-color;
+
       width: 352px;
 
       &:last-child {
@@ -94,8 +102,8 @@
       }
 
       .action {
-        height: 105px;
-        min-height: 105px;
+        height: 112px;
+        min-height: 112px;
       }
       .slides {
         min-height: 200px;
@@ -116,9 +124,20 @@
         overflow: auto;
         //width: 340px;
         // height: 70vh !important;
-        background: rgb(37, 37, 38);
-        box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+        //THEME background: rgb(37, 37, 38);
+        //box-shadow: -1px 0px 2px rgba(0, 0, 0, 0.3);
+        //  border-left: 1px solid $pt-panel-border-color
         z-index: 100;
+      }
+    }
+  }
+}
+
+:global(.bp5-dark) {
+  .defaultLayersStyle {
+    .right {
+      > div {
+        border-left: 1px solid $pt-dark-panel-border-color;
       }
     }
   }
