@@ -6,23 +6,15 @@ import { ReactComponent as Pencil } from "./assets/pencil2.svg";
 import { ReactComponent as Eraser } from "./assets/eraser.svg";
 import { FreeDrawValues } from "./free-draw";
 import { Button } from "@blueprintjs/core";
-import { IToolConfig } from "../../utils/tools/ToolsProvider";
 import { IFreeDrawToolConfig } from "./types";
-import { ToolbarMode } from "../../utils/tools/types";
+import {
+  IToolConfig,
+  IToolbarProps,
+  ToolbarMode,
+} from "../../utils/tools/types";
 import css from "./FreeDrawToolbar.module.scss";
 
 const ICON_HEIGHT = 36;
-
-export interface IToolbarProps {
-  mode?: ToolbarMode;
-  object: IObject | null;
-  addObject: (object: IObject) => void;
-  updateObject: (object: IObject) => void;
-  deleteObject: (object: IObject) => void;
-  // tool configuration (use for internal shared state between Quick Toolbar and Stage Tool )
-  toolConfig: IToolConfig<unknown>;
-  setToolConfig: (toolConfig: IToolConfig<unknown>) => void;
-}
 
 export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
   const {

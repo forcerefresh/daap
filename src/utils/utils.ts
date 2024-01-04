@@ -195,3 +195,15 @@ export function getBooleanValue(
 ): boolean {
   return typeof val === "undefined" ? defValue : val;
 }
+
+export function hexToRGB(hex: string, a?: number) {
+  var r = parseInt(hex.slice(1, 3), 16),
+    g = parseInt(hex.slice(3, 5), 16),
+    b = parseInt(hex.slice(5, 7), 16);
+
+  if (a) {
+    return { r, g, b, a };
+  } else {
+    return { r, g, b, a: 1 };
+  }
+}

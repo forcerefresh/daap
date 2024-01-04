@@ -1,26 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
-import {
-  IToolClass,
-  Point,
-  Rect,
-} from "../../webslider-sdk/object/i-tool-class";
+import { IToolClass, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { getCanvas } from "./ToolsProviderUtils";
-import { FREE_DRAW } from "../../objects/free-draw/free-draw";
 import {
   updateObject as updateObjectAction,
   addNewObject,
   deleteObjects,
 } from "../../store/actions/actions";
 import { IStore } from "../../store/store";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
-import { connect, useSelector, useStore } from "react-redux";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { useSelector, useStore } from "react-redux";
 import { cloneDeep } from "lodash-es";
-
-// type UpdateType = React.Dispatch<React.SetStateAction<DevelopmentItem[]>>;
-// const defaultUpdate: UpdateType = () => [];
-
-export type IToolConfig<T = unknown> = T;
+import { IToolConfig } from "./types";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -184,42 +175,41 @@ export const ToolsProvider = (
       const x = object?.absoluteLayout?.common.left;
       const y = object?.absoluteLayout?.common.top;
 
-      //console.log(values);
       const canvas = getCanvas();
 
-      //console.log(toolDef.toolClass);
-
       const clazz = toolDef.toolClass;
-      const inst = new clazz();
-      inst.activate({
-        canvas,
-        object,
-        requestDeactivation,
-        requestObjectUpdate,
-        getMousePoint,
-        isEdit: !!objectId,
-        editorConfig: { stageZoom },
-        objectValues: values,
-        objectId,
-        position: object ? { x: x ?? "0", y: y ?? "0" } : { x: "0", y: "0" },
-        getObjects: (type: string): IObject[] => {
-          console.log(type);
-          console.log(allObjects);
-          console.log(objectById);
+      if (clazz) {
+        const inst = new clazz();
+        inst.activate({
+          canvas,
+          object,
+          requestDeactivation,
+          requestObjectUpdate,
+          getMousePoint,
+          isEdit: !!objectId,
+          editorConfig: { stageZoom },
+          objectValues: values,
+          objectId,
+          position: object ? { x: x ?? "0", y: y ?? "0" } : { x: "0", y: "0" },
+          getObjects: (type: string): IObject[] => {
+            console.log(type);
+            console.log(allObjects);
+            console.log(objectById);
 
-          const retObjs: IObject[] = [];
-          allObjects.forEach((objectId) => {
-            if (objectById[objectId].type === type) {
-              retObjs.push(objectById[objectId]);
-            }
-          });
-          return retObjs;
-        },
-        requestObjectDelete: (objectId: string) => {
-          dispatch(deleteObjects([objectId]));
-        },
-      });
-      activeToolInst.current = inst;
+            const retObjs: IObject[] = [];
+            allObjects.forEach((objectId) => {
+              if (objectById[objectId].type === type) {
+                retObjs.push(objectById[objectId]);
+              }
+            });
+            return retObjs;
+          },
+          requestObjectDelete: (objectId: string) => {
+            dispatch(deleteObjects([objectId]));
+          },
+        });
+        activeToolInst.current = inst;
+      }
 
       setActiveTool(tool);
       setActiveObjectId(objectId);

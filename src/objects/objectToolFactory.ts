@@ -1,5 +1,5 @@
+import { IToolbarProps } from "../utils/tools/types";
 import { IToolClass } from "../webslider-sdk/object/i-tool-class";
-import { IToolbarProps } from "./free-draw/FreeDrawToolbar";
 
 export interface IToolDefinition {
   type: string;
@@ -8,7 +8,7 @@ export interface IToolDefinition {
     description?: string;
     icon?: string;
   };
-  toolClass: new () => IToolClass;
+  toolClass?: new () => IToolClass;
   toolBar?: (props: IToolbarProps) => React.ReactElement;
 }
 

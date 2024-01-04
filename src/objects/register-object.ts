@@ -134,6 +134,7 @@ import { registerObjectTool } from "./objectToolFactory";
 import FreeHandDrawTool from "./free-draw/free-draw-stage-tool";
 import TextTool from "./text/text-tool";
 import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
+import { TextToolbar } from "./text/TextToolbar";
 
 registerObject(
   "button",
@@ -326,6 +327,13 @@ registerObject(
   undefined,
   getFonts
 );
+
+registerObjectTool({
+  type: TEXT,
+  meta: textMeta,
+  //toolClass: FreeHandDrawTool,
+  toolBar: TextToolbar,
+});
 
 registerObjectTool({ type: TEXT, meta: textMeta, toolClass: TextTool });
 
