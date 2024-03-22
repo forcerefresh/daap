@@ -56,6 +56,10 @@ import {
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
+import {
+  boundsUnion,
+  getObjectBoundingBox,
+} from "../helpers/objectBoundingBox";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1080,6 +1084,8 @@ export function addNewObject(
       }
     }
 
+    if (!object.parentId) object.parentId = object.layerId;
+
     dispatch(addObject(object));
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
@@ -1162,6 +1168,78 @@ export function duplicateObjects(objectIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
+  };
+}
+
+// ***
+// ******
+
+export const GROUP_OBJECTS = "Group objects";
+
+export interface GroupObjectsAction extends IUndoableAction<true> {
+  type: typeof GROUP_OBJECTS;
+  payload: { objectIds: string[]; group: IObject };
+}
+
+export function _groupObjects(
+  group: IObject,
+  objectIds: string[]
+): GroupObjectsAction {
+  return {
+    type: GROUP_OBJECTS,
+    payload: { group, objectIds },
+    isUndoable: true,
+  };
+}
+
+export function groupObjects(objectIds: string[]): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const firstObject = getState().project.objects.objectById[objectIds[0]];
+
+    // get group bounds
+    let groupBounds = getObjectBoundingBox(firstObject);
+    objectIds.forEach((objectId) => {
+      const object = getState().project.objects.objectById[objectId];
+      const bounds = getObjectBoundingBox(object);
+      groupBounds = boundsUnion(groupBounds, bounds);
+    });
+
+    const objects: IObject[] = [];
+    //  normalize object pos
+    objectIds.forEach((objectId) => {
+      const object = getState().project.objects.objectById[objectId];
+      object.absoluteLayout!.common.top =
+        parseInt(object.absoluteLayout!.common.top) - groupBounds.y + "px";
+      object.absoluteLayout!.common.left =
+        parseInt(object.absoluteLayout!.common.left) - groupBounds.x + "px";
+
+      objects.push(object);
+    });
+
+    const groupObject: IObject = {
+      ...createObject("group", {}, {}),
+      layout: "absolute",
+      absoluteLayout: {
+        relativeTo: "page",
+        perDevice: [],
+        type: "common",
+        common: {
+          deviceType: "common",
+          left: groupBounds.x + "px",
+          top: groupBounds.y + "px",
+          width: groupBounds.width + "px",
+          height: groupBounds.height + "px",
+        },
+      },
+      layerId: firstObject.layerId,
+      objectIds: objectIds,
+    };
+
+    objects.forEach((object) => {
+      dispatch(_updateObject(object));
+    });
+
+    dispatch(_groupObjects(groupObject, objectIds));
   };
 }
 
@@ -2021,6 +2099,7 @@ export type ActionTypes =
   | MoveObjectsAction
   | MoveLayersAction
   | MoveSlidesAction
+  | GroupObjectsAction
 
   // layer selection
   | SelectLayerAction

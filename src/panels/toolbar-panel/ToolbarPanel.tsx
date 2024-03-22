@@ -114,7 +114,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
   // let inst = useRef<FreeHandDrawTool>();
   const { activateTool, deactivateTool, activeTool } = useContext(ToolsContext);
-  console.log(activeTool);
+  //console.log(activeTool);
   // useEffect(() => {
   //   inst.current?.setToolState(toolState as any);
   // }, [toolState]);

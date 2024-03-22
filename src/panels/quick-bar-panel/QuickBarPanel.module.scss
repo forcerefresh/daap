@@ -4,7 +4,8 @@
   .quickBar {
     color: $pt-dark-text-color-muted;
     background: $pt-dark-app-background-color;
-    border-bottom: 1px solid $dark-gray5;
+    border-bottom: none; //1px solid $dark-gray5;
+    margin: 0px;
   }
 }
 

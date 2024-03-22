@@ -395,12 +395,12 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     var width = getStyleInt(panAndZoomTargetRef.current!, "width");
     initialWidthRef.current = width;
 
-    rootRef.current!.parentElement!.addEventListener("wheel", handleWheel, {
+    rootRef.current!.addEventListener("wheel", handleWheel, {
       passive: false,
     });
 
     return () => {
-      rootRef.current!.parentElement!.removeEventListener("wheel", handleWheel);
+      rootRef.current!.removeEventListener("wheel", handleWheel);
     };
   }, []);
 

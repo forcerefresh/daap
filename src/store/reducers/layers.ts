@@ -12,6 +12,7 @@ import {
   OPEN_PROJECT,
   UPDATE_LAYER,
   MOVE_LAYERS,
+  GROUP_OBJECTS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
@@ -51,14 +52,38 @@ export function layers(
     }
     case ADD_OBJECT: {
       const object = action.payload;
-      return update(state, {
-        layerById: {
-          [object.layerId]: {
-            objectIds: { $push: [object.id] },
-            //nextObjectIdCounter: (idx) => idx + 1,
+
+      //  condition to prevent adding object to layer when object is added to group
+      if (object.parentId && state.layerById[object.parentId]) {
+        return update(state, {
+          layerById: {
+            [object.layerId]: {
+              objectIds: { $push: [object.id] },
+              //nextObjectIdCounter: (idx) => idx + 1,
+            },
           },
-        },
+        });
+      }
+
+      return state;
+    }
+
+    case GROUP_OBJECTS: {
+      const { group, objectIds } = action.payload;
+
+      const newState = cloneDeep(state);
+
+      // remove object
+      forIn(newState.layerById, function (layer, _layerId) {
+        remove(layer.objectIds, (objectId) => {
+          return objectIds.indexOf(objectId) !== -1;
+        });
       });
+
+      // add group
+      newState.layerById[group.layerId].objectIds.push(group.id);
+
+      return newState;
     }
     case DUPLICATE: {
       // Note: this part duplicate object

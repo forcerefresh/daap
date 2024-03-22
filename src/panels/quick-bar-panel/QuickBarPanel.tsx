@@ -9,12 +9,21 @@ import {
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { ToolbarMode } from "../../utils/tools/types";
 import css from "./QuickBarPanel.module.scss";
+import { Button } from "@blueprintjs/core";
+import { addNewObject, groupObjects } from "../../store/actions/actions";
+import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 
 type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
-  const { selectedObjectIds, activeObject } = props;
+  const {
+    selectedObjectIds,
+    activeObject,
+    _addNewObject,
+    activeLayerId,
+    _groupObjects,
+  } = props;
   const {
     toolConfig,
     setToolConfig,
@@ -53,6 +62,32 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           toolConfig={toolConfig}
         />
       ) : null}
+      {activeLayerId && (
+        <div>
+          <Button
+            style={{ float: "right" }}
+            minimal
+            onClick={() => {
+              _addNewObject(activeLayerId, "group", {});
+            }}
+          >
+            AddGroup
+          </Button>
+        </div>
+      )}
+      {selectedObjectIds.length > 1 && (
+        <div>
+          <Button
+            style={{ float: "right" }}
+            minimal
+            onClick={() => {
+              _groupObjects(selectedObjectIds);
+            }}
+          >
+            Group objects
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
@@ -60,18 +95,27 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
 const mapStateToProps = (state: IStore) => {
   const { objects, selection } = state.project;
 
-  const { activeObjectId } = selection;
+  const { activeObjectId, activeLayerId } = selection;
 
   const activeObject = activeObjectId
     ? objects.objectById[activeObjectId]
     : null;
 
   return {
+    activeLayerId,
     activeObject,
     selectedObjectIds: selection.selectedObjectIds,
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  _addNewObject: (
+    layerId: string,
+    type: ObjectType | string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
+  _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

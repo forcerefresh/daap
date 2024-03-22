@@ -2,7 +2,11 @@ import { cloneDeep } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 
-import { getTextArea, getTextField } from "../../../inputs/input-utils";
+import {
+  getNumericFiled,
+  getTextArea,
+  getTextField,
+} from "../../../inputs/input-utils";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   setDevice,
@@ -131,6 +135,12 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             _updateObject(retObj);
           }
         )}
+
+        {getNumericFiled("Title", object.scale ?? "", (title: string) => {
+          const retObj = cloneDeep(object);
+          retObj.title = title;
+          _updateObject(retObj);
+        })}
       </>
     );
   };

@@ -1,0 +1,288 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .stagePanel {
+    // $bg-color: red !important;
+    // $dot-color: blue !important;
+
+    $bg-color: #1e1e1e; //$pt-dark-app-background-color-secondary;
+    $dot-color: $gray3;
+
+    // Dimensions
+    $dot-size: 1px;
+    $dot-space: 22px;
+
+    background: linear-gradient(
+          90deg,
+          $bg-color ($dot-space - $dot-size),
+          transparent 1%
+        )
+        center,
+      linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+      $dot-color;
+
+    background-size: $dot-space $dot-space;
+  }
+}
+
+.stagePanel {
+  position: absolute;
+  inset: 0px;
+  //inset: 68px 700px 0px 68px;
+  // height: 100%;
+  // position: relative;
+
+  * {
+    user-select: none;
+  }
+
+  $bg-color: #eeeeee; //$pt-app-background-color-secondary;
+  $dot-color: $gray3;
+
+  // Dimensions
+  $dot-size: 1px;
+  $dot-space: 22px;
+
+  background: linear-gradient(
+        90deg,
+        $bg-color ($dot-space - $dot-size),
+        transparent 1%
+      )
+      center,
+    linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+    $dot-color;
+
+  background-size: $dot-space $dot-space;
+}
+
+.stage {
+  position: absolute;
+  //border: 1px dotted #51c35a;
+  //background: rgb(30, 30, 30);
+}
+
+.text {
+  position: absolute;
+  border: 1px dotted #828282;
+}
+
+.active {
+  border: 1px solid #48aff0; // greenyellow;
+}
+
+.selection.selected {
+  z-index: 500;
+}
+
+.selectionInfo {
+  position: absolute;
+  z-index: 100;
+  top: -24px;
+  height: 24px;
+  width: max-content;
+
+  display: flex;
+  align-items: center;
+}
+
+.currentPosition {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+
+  background: #48aff0; // greenyellow;
+  color: black;
+  padding: 3px 6px;
+  font-family: monospace;
+}
+
+.notVisible {
+  display: none;
+}
+
+.notVisibleHolder {
+  .currentPosition {
+    opacity: 0.5;
+  }
+}
+
+.lockIconHolder {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background: red;
+  padding: 3px 6px;
+  color: white;
+  fll: white;
+}
+
+.selectionBox {
+  display: none;
+  position: absolute;
+  z-index: 300;
+  border: 1px dotted #48aff0;
+}
+
+.layer {
+  // TODO: IMPORTANT: this is for layer selection background
+  // &::after {
+  //   content: "";
+  //   position: absolute;
+  //   width: inherit;
+  //   height: inherit;
+  //   z-index: 10000;
+  //   box-shadow: 10px 10px 0px 10000px rgba(86, 86, 86, 0.2);
+  // }
+}
+
+.layerMoveForResizerWTF {
+  //pointer-events: none;
+}
+
+.layerMoveForResizerWTFParent {
+  border: 1px solid #83216d;
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    border-top: 3px dotted #83216d;
+    border-left: 3px dotted #83216d;
+    width: 30px;
+    height: 30px;
+  }
+}
+.layerMoveForResizerWTFActive {
+  border: 1px solid #f438ca;
+
+  &::after {
+    border-top: 3px dotted #f438ca;
+    border-left: 3px dotted #f438ca;
+  }
+}
+.layoutChildrenSelected {
+  border: 1px solid #48aff0;
+}
+
+.panCursor {
+  cursor: url("../../assets/cursors/hand.png"), auto;
+}
+
+.drawCursor {
+  cursor: crosshair;
+}
+
+.resizeHandle {
+  position: absolute;
+  z-index: 550;
+  background-color: white;
+  border: 1px solid #48aff0;
+  width: 8px;
+  height: 8px;
+  cursor: pointer;
+}
+
+.guidelinesHolder {
+  position: absolute;
+  border: 1px dotted #1f82c0;
+  top: 10px;
+  left: 10px;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+}
+
+.guidelinesBorder {
+  position: absolute;
+  border: $pt-stage-guidebox-guidelines-border;
+  pointer-events: none;
+}
+
+.pageBorder {
+  position: absolute;
+  border: $pt-stage-page-guidelines-border;
+  pointer-events: none;
+}
+
+.stageBorder {
+  position: absolute;
+  border: $pt-stage-stage-guidelines-border;
+  pointer-events: none;
+}
+
+:global(.bp5-dark) {
+  .guidelinesBorder {
+    border: 1px dotted $pt-dark-stage-guidebox-guidelines-border;
+  }
+
+  .pageBorder {
+    border: $pt-dark-stage-page-guidelines-border;
+  }
+
+  .stageBorder {
+    border: $pt-dark-stage-stage-guidelines-border;
+  }
+}
+
+.gridHorizontalLine {
+  position: absolute;
+  height: 0px;
+  border-top: 1px dotted #5b5a5a;
+  pointer-events: none;
+}
+.gridVerticalLine {
+  position: absolute;
+  width: 0px;
+  border-left: 1px dotted #5b5a5a;
+  pointer-events: none;
+}
+
+.layoutBox {
+  position: relative;
+  //background: #565656;
+  //border-radius: 5px;
+}
+
+.headerLayoutBox {
+  position: absolute;
+  top: 0px;
+  z-index: 100;
+}
+
+.toolCanvas {
+  position: absolute;
+  z-index: 1000;
+  inset: 0px;
+  //background-color: rgba(255, 255, 255, 0.2);
+}
+
+// .previewSvg {
+//   position: absolute;
+//   z-index: 1000;
+//   inset: 0px;
+// }
+
+.scrollableHolder {
+  background: white;
+}
+
+:global(.bp5-dark) {
+  .scrollableHolder {
+    background: rgb(22, 22, 22);
+  }
+}
+
+.rotationHandle {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: -20px;
+  background-color: rgb(90, 90, 247);
+}
+
+.rotationHandleGroup {
+  top: -40px;
+  background-color: red;
+}
+
+.objectBounds {
+  border: 1px dotted rgba(255, 255, 255, 0.2);
+}

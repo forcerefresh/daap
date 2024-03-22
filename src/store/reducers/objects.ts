@@ -13,6 +13,7 @@ import {
   OPEN_PROJECT,
   UPDATE_OBJECT,
   MOVE_OBJECTS,
+  GROUP_OBJECTS,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 import {
@@ -36,7 +37,7 @@ export function objects(
     case ADD_OBJECT: {
       const object = action.payload;
 
-      return Object.assign({}, state, {
+      const newState = Object.assign({}, state, {
         objectById: {
           ...state.objectById,
           ...{ [object.id]: object },
@@ -49,21 +50,51 @@ export function objects(
             : 2,
         },
       });
+
+      // add to parent object parentObject.objectIds
+      if (object.parentId && newState.objectById[object.parentId]) {
+        if (!newState.objectById[object.parentId].objectIds) {
+          newState.objectById[object.parentId].objectIds = [];
+        }
+
+        newState.objectById[object.parentId].objectIds!.push(object.id);
+      }
+
+      return newState;
     }
     case UPDATE_OBJECT: {
       const object = action.payload;
-      return Object.assign({}, state, {
+
+      return {
+        ...state,
         objectById: {
           ...state.objectById,
           ...{ [object.id]: { ...object } },
         },
-      });
+      };
+
+      // return Object.assign({}, state, {
+      //   objectById: {
+      //     ...state.objectById,
+      //     ...{ [object.id]: { ...object } },
+      //   },
+      // });
     }
     case DELETE_OBJECTS: {
       const objectIds = action.payload;
       const objectById = omit(state.objectById, objectIds);
       const allObjects = without(state.allObjects, ...objectIds);
       return { ...state, objectById, allObjects };
+    }
+    case GROUP_OBJECTS: {
+      const { group } = action.payload;
+
+      return Object.assign({}, state, {
+        objectById: {
+          ...state.objectById,
+          ...{ [group.id]: { ...group } },
+        },
+      });
     }
     case DUPLICATE: {
       // Note: this part duplicate object

@@ -1,6 +1,5 @@
 .smallTimeline {
   position: relative;
-  z-index: 100;
 
   :global {
     *,
@@ -12,10 +11,11 @@
 
   .smallTimelineInner {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
     height: 40px;
+    z-index: 1000;
+    top: 110px;
+    left: 80px;
+    right: 720px;
     background: rgba(255, 255, 255, 0.1);
   }
 

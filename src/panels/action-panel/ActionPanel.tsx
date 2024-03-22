@@ -191,7 +191,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         <div style={{ display: "flex" }}>
           SLIDER
           <span className={cx(css.sliderName)}>
-            {!!meta.id ? meta.name : "Untitled"}
+            {meta.name ? meta.name : "Untitled"}
           </span>
         </div>
         <Switch

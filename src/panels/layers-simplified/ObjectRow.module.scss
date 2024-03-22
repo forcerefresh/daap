@@ -1,0 +1,22 @@
+.objectItem {
+  width: 80px;
+  padding: 2px;
+  height: 65px;
+  border: 1px solid #5c5c5c;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+
+  &.selected {
+    border: 1px solid #48aff0;
+    border-radius: 4px;
+  }
+}
+
+.groupObjectsCounter {
+  background-color: #48aff0 !important;
+  position: absolute;
+  top: -0px;
+  right: -0px;
+}

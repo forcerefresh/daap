@@ -18,6 +18,8 @@ export function getAnimationTypesForItem(
       return hasLicense ? ["layer", "in", "out"] : ["in", "out", "layer"];
     case "slide":
       return ["slide"];
+    default:
+      return [];
   }
 }
 

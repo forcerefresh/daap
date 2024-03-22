@@ -23,6 +23,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const {
     _addNewObject,
     documentSize,
+    activeObject,
     activeLayerId,
     onRequestClose,
     onRequestFontPreview,
@@ -78,6 +79,10 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
                   top: (documentSize.height - 540) / 2,
                   width: 960,
                   height: 540,
+                  parentId:
+                    activeObject?.type === "group"
+                      ? activeObject.id
+                      : undefined,
                 });
                 onRequestClose();
               }
@@ -149,11 +154,19 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-  documentSize: state.project.document.documentSize,
-  themeClass: state.project.settings.themeClass,
-});
+const mapStateToProps = (state: IStore) => {
+  const activeObject =
+    state.project.objects.objectById[
+      state.project.selection.activeObjectId as string
+    ];
+
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+    activeObject: activeObject,
+    documentSize: state.project.document.documentSize,
+    themeClass: state.project.settings.themeClass,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (

@@ -17,7 +17,11 @@ export interface IMeta {
   // publishRevision: number;
 }
 
-const getMetaDefault = () => ({ saveRevision: 0, publishRevision: 0 });
+const getMetaDefault = () => ({
+  saveRevision: 0,
+  publishRevision: 0,
+  name: "Untitled - " + new Date().toDateString(),
+});
 
 export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
   switch (action.type) {

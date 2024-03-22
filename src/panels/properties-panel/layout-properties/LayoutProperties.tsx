@@ -95,8 +95,9 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
   };
 
   const renderObjectProperties = (obj: IObject, objectLayer: ILayer) => {
-    const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
-    const parentHasLayout = objectLayer.layout !== "none";
+    // TODO: V2
+    const layoutedByParent = false; // objectLayer.definition.values.hasLayoutChildren;
+    const parentHasLayout = false; // objectLayer.layout !== "none";
 
     return (
       <>

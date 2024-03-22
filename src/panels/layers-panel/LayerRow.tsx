@@ -226,7 +226,7 @@ export function LayerRow(props: ILayerRowProps) {
         >
           <Popover
             position="bottom"
-            usePortal={true}
+            //usePortal={true}
             minimal
             //className={css.devicePopup}
             content={

@@ -12,6 +12,8 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { PropertiesPanelContextProvider } from "../../panels/properties-panel-all/PropertiesPanelProvider";
 import QuickBarPanel from "../../panels/quick-bar-panel/QuickBarPanel";
 import { ToolsProvider } from "../../utils/tools/ToolsProvider";
+import LayersSimplified from "../../panels/layers-simplified/LayersSimplified";
+import StagePanelNew from "../../panels/stage-panel-new/StagePanelNew";
 
 function Editor() {
   return (
@@ -20,6 +22,7 @@ function Editor() {
         <MainLayout
           slides={<SlidesPanel />}
           layers={<LayersPanel />}
+          layersSimplified={<LayersSimplified />}
           properties={
             <PropertiesPanelContextProvider>
               <PropertiesPanelAll />
@@ -27,7 +30,7 @@ function Editor() {
           }
           action={<ActionPanel />}
           toolbar={<ToolbarPanel />}
-          content={<StagePanel />}
+          content={<StagePanelNew />}
           animations={<StaticAnimationPanel />}
           quickBar={<QuickBarPanel />}
         />
