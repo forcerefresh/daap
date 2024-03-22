@@ -4,6 +4,13 @@
 
 @import "./theme";
 
+// website pages
+@import "./pages/css/demo.css";
+@import "./pages/css/animate.css";
+@import "./pages/css/magenta-theme.css";
+@import "./pages/css/responsive.css";
+@import "./pages//css//bootstrap.min.css";
+
 .bp5-dark .bp5-input {
   box-shadow: none;
 }
@@ -14,6 +21,16 @@
 
 .bp5-dark .bp5-card {
   background-color: #363636;
+}
+
+.bp5-portal {
+  top: 52px !important;
+  z-index: 1000;
+}
+
+.bp5-dark .bp5-html-select select,
+.bp5-dark .bp5-select select {
+  background: #282828;
 }
 // //rgba($black, 0.2),
 // $button-border-width: 1px;

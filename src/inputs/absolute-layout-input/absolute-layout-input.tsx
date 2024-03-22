@@ -393,6 +393,7 @@ export const AbsolutePlacementForm: React.FC<
                   <tr key={bc.type}>
                     <td>
                       <Button
+                        style={{ width: "20px" }}
                         minimal
                         active={bc.type === selectedDevice}
                         onClick={() => {

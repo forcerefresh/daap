@@ -1,3 +1,17 @@
+.mainHeader {
+  height: 52px;
+  z-index: 1000;
+  position: relative;
+}
+
+.editor {
+  height: calc(100vh - 52px);
+}
+
+.editor100 {
+  height: 100%;
+}
+
 // body,
 // html {
 //   --animations-panel-label-width: 80px;

@@ -18,7 +18,8 @@ import animejs from "animejs";
 gsap.install(window);
 (window as any).animejs = animejs;
 
-type IAppProps = typeof mapDispatchToProps & ReturnType<typeof mapStateToProps>;
+type IAppProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> & { className?: string };
 
 function App(props: IAppProps) {
   const {
@@ -26,6 +27,7 @@ function App(props: IAppProps) {
     _updateGlobalConfiguration,
     _doClearHistory,
     theme,
+    className,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -58,7 +60,7 @@ function App(props: IAppProps) {
   }, []);
 
   return (
-    <div className={`bp5-${theme}`} style={{ height: "100%" }}>
+    <div className={`bp5-${theme} ${className}`}>
       <Editor />
     </div>
   );

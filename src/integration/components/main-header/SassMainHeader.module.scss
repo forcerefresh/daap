@@ -1,0 +1,75 @@
+.mainHeader {
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  padding: 6px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  & > * {
+    margin-right: 10px;
+  }
+
+  > button {
+    box-shadow: none !important;
+    border-radius: 5px;
+  }
+
+  :global {
+    .bp5-control.bp5-switch:not(.bp5-align-right) {
+      padding-left: 46px;
+    }
+
+    .bp5-control.bp5-switch input:checked ~ .bp5-control-indicator {
+      background: rgba(143, 153, 168, 0.3);
+      color: #1c2127;
+    }
+  }
+}
+
+.logo {
+  margin-left: 5px;
+}
+
+.themeIcon {
+  margin-right: 10px;
+}
+
+.themeLabel {
+  text-align: center;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: gray;
+}
+
+.themeHolder {
+  margin-right: 20px;
+}
+
+.title {
+  color: rgb(69, 69, 69);
+
+  svg {
+    margin-left: 10px;
+  }
+
+  &.uploading {
+    svg {
+      color: #38ae38;
+    }
+  }
+}

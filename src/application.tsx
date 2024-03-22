@@ -19,6 +19,7 @@ import {
   registerExternalAnimation,
   unregisterAnimation,
 } from "webslider-sdk/lib/animations/animations-register";
+import css from "./App.module.scss";
 
 const global = window as any;
 
@@ -34,7 +35,7 @@ function application(): {
             <Provider store={store}>
               <DevelopmentManager />
               <PreviewTimelineContextProvider>
-                <App />
+                <App className={css.editor100} />
               </PreviewTimelineContextProvider>
             </Provider>
           </IntegrationContextProvider>

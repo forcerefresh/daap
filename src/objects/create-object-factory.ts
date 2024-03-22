@@ -18,6 +18,10 @@ import {
   ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
+import {
+  getTransformObjectPropertiesDefinition,
+  getTransformPropertiesValues,
+} from "webslider-sdk/lib/objects/transform-properties";
 
 /**
  * Exclude from T those types that are assignable to U
@@ -46,6 +50,20 @@ export function createObject(
         ...createSourceImageObject(initialValue, {
           hasOverflowProperty: true,
         }),
+      };
+    }
+    case "group": {
+      return {
+        ...objectProps,
+        ...createGroupObject(initialValue, {
+          hasOverflowProperty: true,
+        }),
+        transformDefinition: {
+          properties: [...getTransformObjectPropertiesDefinition(true)],
+          values: { ...getTransformPropertiesValues() },
+          valuesMetadata: {},
+        },
+        type: "group",
       };
     }
     default: {
@@ -172,6 +190,28 @@ function createCanvasObject(
       type: ObjectType.CANVAS,
       properties,
       values,
+      valuesMetadata: {},
+    },
+  };
+}
+
+function createGroupObject(
+  initialValue?: {
+    [key: string]: any;
+  },
+  commonProperties?: {
+    hasOverflowProperty: boolean;
+  }
+): Omit<IObject<CanvasProperties>, keyof ICommonObjectProperties | "layerId"> {
+  const object = createCommonObject(ObjectType.GROUP);
+
+  return {
+    ...object,
+    definition: {
+      id: uuid(),
+      type: ObjectType.GROUP,
+      properties: [],
+      values: {},
       valuesMetadata: {},
     },
   };

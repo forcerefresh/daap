@@ -13,6 +13,10 @@ function importBuildTarget() {
     logger.app.log("Module: WebSlider Player For Development (player-dev)");
     showLoggerUsage(LoggerDomain.Player);
     return require("./player-dev-react.tsx");
+  } else if (process.env.REACT_APP_INTEGRATION === "saas") {
+    logger.app.log("Module: Web Slider Application (application:saas)");
+    showLoggerUsage(LoggerDomain.App);
+    return require("./application-saas.tsx");
   } else {
     logger.app.log("Module: Web Slider Application (application)");
     showLoggerUsage(LoggerDomain.App);

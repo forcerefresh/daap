@@ -331,11 +331,11 @@ registerObject(
 registerObjectTool({
   type: TEXT,
   meta: textMeta,
-  //toolClass: FreeHandDrawTool,
+  toolClass: TextTool,
   toolBar: TextToolbar,
 });
 
-registerObjectTool({ type: TEXT, meta: textMeta, toolClass: TextTool });
+//registerObjectTool({ type: TEXT, meta: textMeta, toolClass: TextTool });
 
 // registerObject(
 //   "text_target",
