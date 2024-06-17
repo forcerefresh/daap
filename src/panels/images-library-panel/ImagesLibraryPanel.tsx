@@ -35,7 +35,7 @@ import { forceDownload } from "../../utils/utils";
 import { ReactComponent as MP3Icon } from "./assets/mp3.svg";
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
-  type: "image" | "video" | "audio";
+  type: "image" | "video" | "audio" | "font";
   uploadComponent?: ReactNode;
   fetchImagesFunc: (props: {
     type: MediaType;
@@ -423,20 +423,48 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
               }}
             >
               {hasApiKey && (
-                <b>All images are loaded for the selected criteria.</b>
+                <b>All items are loaded for the selected criteria.</b>
               )}
             </p>
           }
         >
           {images?.map((image, idx) => {
+            if (!image) return null;
+
             const resolutionObject =
-              ((image as any).videos as any) || image.images;
+              ((image as any).videos as any) ||
+              image.images ||
+              ((image as any).font as any);
             const resolutionImages = Object.entries<any>(resolutionObject);
             const originalResolution = resolutionObject["original"]
               ? "original"
               : last(resolutionImages)?.[0];
 
             const isAudio = !!(image as any)?.audio;
+            const isFont = !!(image as any)?.font;
+
+            if (isFont) {
+              return (
+                <div
+                  className={classnames(css.imageItemHolder, {
+                    [css.selectedImage]: selectedImage === idx,
+                  })}
+                  style={{ display: "inline-block" }}
+                >
+                  <div style={{ display: "inline-block" }}>
+                    <Icon icon={"font"} size={100} />
+                  </div>
+                  <div className={css.imageListTitle222}>
+                    {prepareText(image.filename || "")}
+                  </div>
+                  <div className={css.imageListTitle}>{image.title}</div>
+                  <div className={css.imageListTabs}>
+                    <TagsView tags={image?.tags || []} />
+                  </div>
+                </div>
+              );
+            }
+
             if (isAudio) {
               return (
                 <div

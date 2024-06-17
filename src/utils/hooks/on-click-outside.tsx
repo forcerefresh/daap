@@ -1,5 +1,5 @@
 import { isArray } from "lodash-es";
-import { RefObject, useEffect } from "react";
+import { RefObject, useEffect, useMemo } from "react";
 
 // Hook
 type Event = MouseEvent | TouchEvent;
@@ -8,11 +8,15 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   handler: (event: Event) => void,
   skipClassName?: string | string[]
 ) {
-  const skipClassNames = isArray(skipClassName)
-    ? skipClassName
-    : skipClassName
-    ? [skipClassName]
-    : undefined;
+  const skipClassNames = useMemo(
+    () =>
+      isArray(skipClassName)
+        ? skipClassName
+        : skipClassName
+        ? [skipClassName]
+        : undefined,
+    [skipClassName]
+  );
 
   useEffect(() => {
     const listener = (event: Event) => {
@@ -33,13 +37,13 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
       handler(event);
     };
 
-    document.addEventListener(`mousedown`, listener);
-    document.addEventListener(`touchstart`, listener);
+    document.addEventListener(`mousedown`, listener, { capture: true });
+    document.addEventListener(`touchstart`, listener, { capture: true });
     return () => {
       document.removeEventListener(`mousedown`, listener);
       document.removeEventListener(`touchstart`, listener);
     };
     // Reload only if ref or handler changes
-  }, [ref, handler]);
+  }, [ref, handler, skipClassNames]);
 }
 export default useOnClickOutside;

@@ -12,6 +12,9 @@ import {
   FORCE_REFRESH,
   ZOOM_FIT,
   NEXT_TEXT_POSITION,
+  SET_STAGE_PAN,
+  OVERRIDE_STAGE_TOOL,
+  CANCEL_OVERRIDE_STAGE_TOOL,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -39,8 +42,10 @@ export interface IStage {
   stageViewportSize: { w: number; h: number };
   zoomFit: boolean;
   zoom: number;
+  pan: { x: number; y: number; currentX: number; currentY: number };
   previewState: IPreviewState;
   stageTool: { tool: StageTools; objectType?: ObjectType };
+  activeStageTool: { tool: StageTools; objectType?: ObjectType };
   selectedDevice: DeviceType;
   forceRefreshRand: number;
   // text position
@@ -51,6 +56,7 @@ const getStageDefault = (): IStage => ({
   stageViewportSize: { w: 0, h: 0 },
   zoomFit: false,
   zoom: 1,
+  pan: { x: 0, y: 0, currentX: 0, currentY: 0 },
   previewState: {
     previewState: "stop",
     isPreview: false,
@@ -59,6 +65,7 @@ const getStageDefault = (): IStage => ({
     repeat: true,
   },
   stageTool: { tool: StageTools.SELECT },
+  activeStageTool: { tool: StageTools.SELECT },
   selectedDevice: "small-1",
   forceRefreshRand: 0,
   nextTextPositionY: 100,
@@ -90,6 +97,12 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
         zoomFit: action.payload,
       };
     }
+    case SET_STAGE_PAN: {
+      return {
+        ...state,
+        pan: { ...state.pan, ...action.payload },
+      };
+    }
     case SET_STAGE_PREVIEW: {
       return {
         ...state,
@@ -99,7 +112,20 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
     case SET_STAGE_TOOL: {
       return {
         ...state,
-        stageTool: action.payload,
+        stageTool: { ...action.payload },
+        activeStageTool: { ...action.payload },
+      };
+    }
+    case OVERRIDE_STAGE_TOOL: {
+      return {
+        ...state,
+        activeStageTool: { ...action.payload },
+      };
+    }
+    case CANCEL_OVERRIDE_STAGE_TOOL: {
+      return {
+        ...state,
+        activeStageTool: { ...state.stageTool },
       };
     }
     case SET_DEVICE: {

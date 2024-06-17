@@ -22,8 +22,8 @@ export interface ISize {
   height: number;
 }
 
-export function getMousePosition(e: React.MouseEvent) {
-  var rect = e.currentTarget.getBoundingClientRect();
+export function getMousePosition(e: { clientX: number; clientY: number }) {
+  //var rect = (e.currentTarget as HTMLElement)?.getBoundingClientRect();
   var x = e.clientX; //- rect.left;
   var y = e.clientY; //- rect.top;
   return { x, y };

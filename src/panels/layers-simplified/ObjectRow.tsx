@@ -16,6 +16,11 @@ export interface IObjectRowProps {
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
   ) => void;
+  onObjectDblClick: (
+    event: React.MouseEvent<HTMLDivElement>,
+    isGroup: boolean,
+    objectId: string
+  ) => void;
   //   activeObjectId: string | null;
   selectedObjectIds: string[];
   //   selectionForProperties: selectForPropertiesProps | null;
@@ -33,6 +38,7 @@ export function ObjectRow(props: IObjectRowProps) {
     object,
     layer,
     onObjectClick,
+    onObjectDblClick,
     breakpointConfig,
     // activeObjectId,
     selectedObjectIds,
@@ -75,7 +81,7 @@ export function ObjectRow(props: IObjectRowProps) {
       true
     );
 
-    console.log(calculatedObjectSize);
+    //console.log(calculatedObjectSize);
     const scaleX = 76 / parseInt(calculatedObjectSize?.width as string);
     const scaleY = 61 / parseInt(calculatedObjectSize?.height as string);
     const scale = Math.min(scaleX, !isNaN(scaleY) ? scaleY : scaleX);
@@ -83,10 +89,13 @@ export function ObjectRow(props: IObjectRowProps) {
     setObjectHtml({ scale, html, calculatedObjectSize });
   }, [breakpointConfig, layer, object]);
 
-  console.log({
-    transform: `scale(${objectHtml.scale})`,
-    transformOrigin: "0 0",
-  });
+  //   console.log({
+  //     transform: `scale(${objectHtml.scale})`,
+  //     transformOrigin: "0 0",
+  //   });
+
+  const isGroup = !!(object?.objectIds && object?.objectIds?.length > 0);
+
   return (
     <div
       className={cx(css.objectItem, {
@@ -96,6 +105,9 @@ export function ObjectRow(props: IObjectRowProps) {
       })}
       onClick={(event) => {
         onObjectClick(event, object.id);
+      }}
+      onDoubleClick={(event) => {
+        onObjectDblClick(event, isGroup, object.id);
       }}
     >
       <div
@@ -114,7 +126,7 @@ export function ObjectRow(props: IObjectRowProps) {
           dangerouslySetInnerHTML={{ __html: objectHtml.html }}
         ></div>
       </div>
-      {object?.objectIds && object?.objectIds?.length > 0 && (
+      {isGroup && (
         <Tag className={css.groupObjectsCounter}>
           {object?.objectIds?.length}
         </Tag>

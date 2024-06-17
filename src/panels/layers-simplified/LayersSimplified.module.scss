@@ -1,5 +1,5 @@
 .layerPanel {
-  padding: 10px;
+  padding: 5px;
   background: #333333;
 
   display: flex;
@@ -12,4 +12,8 @@
 .layersHolder {
   flex-grow: 1;
   overflow: auto;
+}
+
+.objectsHolder {
+  padding: 5px;
 }

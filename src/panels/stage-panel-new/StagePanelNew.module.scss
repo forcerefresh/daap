@@ -159,7 +159,20 @@
   }
 }
 .layoutChildrenSelected {
-  border: 1px solid #48aff0;
+  //border: 1px solid #48aff0;
+  box-shadow: 0 0 0 1px #48aff0;
+}
+
+.ancestorGroupSelected:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border: 1px lightgray dotted;
+
+  z-index: -1;
 }
 
 .panCursor {
@@ -260,6 +273,10 @@
 //   inset: 0px;
 // }
 
+.canvas {
+  //transition: 2s all ease-in;
+}
+
 .scrollableHolder {
   background: white;
 }
@@ -271,11 +288,36 @@
 }
 
 .rotationHandle {
-  width: 15px;
-  height: 15px;
+  //width: 15px;
+  //height: 35px;
   position: absolute;
-  top: -20px;
-  background-color: rgb(90, 90, 247);
+  top: -35px;
+  left: 0px;
+  right: 0px;
+  z-index: 2200;
+
+  //
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  //position: relative;
+
+  > .circle {
+    position: absolute;
+    z-index: 2201;
+    border-radius: 10px;
+    background-color: #48aff0;
+    // border: 1px solid green;
+    width: 20px;
+    height: 20px;
+    transform-origin: top;
+    // padding: 2px;
+  }
+  // > .line {
+  //   height: 15px;
+  //   width: 0px;
+  //   box-shadow: 0 0 0 1px #48aff0;
+  // }
 }
 
 .rotationHandleGroup {
@@ -284,5 +326,5 @@
 }
 
 .objectBounds {
-  border: 1px dotted rgba(255, 255, 255, 0.2);
+  border: 2px dotted rgba(255, 255, 255, 0.3);
 }

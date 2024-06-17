@@ -1,5 +1,13 @@
 /* eslint-disable */
-import { cloneDeep, includes, isEqual, mapValues, pick, set } from "lodash-es";
+import {
+  cloneDeep,
+  includes,
+  isEqual,
+  mapValues,
+  pick,
+  round,
+  set,
+} from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
@@ -23,10 +31,12 @@ import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { ISlide } from "../../store/reducers/i-slides";
 import {
+  cancelOverrideStageTool,
   activateObject,
   addNewObject,
   addObjectsToSelection,
   deactivateObject,
+  overrideStageTool,
   removeObjectsFromSelection,
   selectForProperties,
   selectForPropertiesProps,
@@ -75,6 +85,10 @@ import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { WithRotationHandle } from "./WithRotationHandle";
 import StageLayer from "./StageLayer";
+import { getObjectIdToSelect } from "../../store/actions/actions-utils";
+import { getGlobalProp } from "./utils";
+import { StageManagerContext } from "./StageManagerProvider";
+import { StageToolEnum } from "../../utils/selection-manager/types";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -90,8 +104,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     objectById,
     activeObjectId,
     selectedObjectIds,
+    selectionParentId,
     activeLayerId,
     viewPortSize,
+    _setStageTool,
     _setStagePreview,
     _updateObject,
     _selectObjects,
@@ -104,6 +120,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     _setViewPortSize,
     _selectForProperties,
     _resetStageTool,
+    _overrideStageTool,
+    _cancelOverrideStageTool,
+    activeStageTool,
+    stagePan,
     stageTool,
     stageToolObjectType,
     breakpointConfig,
@@ -117,11 +137,30 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     _setStageZoom,
   } = props;
 
-  const objectByIdRef = useRef(objectById);
-  objectByIdRef.current = objectById;
+  const { stageManager } = useContext(StageManagerContext);
 
-  const stageZoomRef = useRef(1);
-  stageZoomRef.current = stageZoom;
+  const { spaceDown } = useKeyDown();
+
+  const [isLocalPan, setLocalPan] = useState(false);
+  useEffect(() => {
+    if (stageManager.hasCurrentToolActive()) {
+      return;
+    }
+
+    if (spaceDown) {
+      _overrideStageTool(StageTools.PAN);
+    } else {
+      if (activeStageTool !== stageTool) {
+        _cancelOverrideStageTool(StageTools.PAN);
+      }
+    }
+  }, [spaceDown]);
+  // const objectByIdRef = useRef(objectById);
+  // objectByIdRef.current = objectById;
+
+  // const stageZoomRef = useRef(1);
+  // stageZoomRef.current = stageZoom;
+  const rootRef = useRef<HTMLDivElement | null>(null);
 
   const {
     activeTool,
@@ -130,49 +169,76 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   } = useContext(ToolsContext);
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
-  const pageSize = breakpointConfig?.normal.page!;
+  // const pageSize = breakpointConfig?.normal.page!;
 
-  const onObjectClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    objectId: string
-  ) => {
-    if (event.ctrlKey || event.metaKey) {
-      selectedObjectIds.indexOf(objectId) === -1
-        ? _addObjectsToSelection([objectId])
-        : _removeObjectsFromSelection([objectId]);
-      if (activeObjectId === objectId) {
-        _deactivateObject(objectId);
-      }
+  // const onObjectClick = (
+  //   event: React.MouseEvent<HTMLDivElement>,
+  //   objectId: string
+  // ) => {
+  //   if (event.shiftKey) {
+  //     selectedObjectIds.indexOf(objectId) === -1
+  //       ? _addObjectsToSelection([objectId])
+  //       : _removeObjectsFromSelection([objectId]);
+  //     if (activeObjectId === objectId) {
+  //       _deactivateObject(objectId);
+  //     }
 
-      //setSelectionStartPosition(null);
-    } else {
-      if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
-        // NOTE: activate tool editor
-        const deff = getAppObjectDefinition(objectById[objectId].type);
-        if (deff?.meta.isEditable) {
-          activateTool(objectById[objectId].type, objectId);
-        }
-      }
-      _activateObject(objectId);
-      _selectObjects([objectId]);
-      _selectForProperties({ type: "object", id: objectId });
+  //     //setSelectionStartPosition(null);
+  //   } else {
+  //     if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
+  //       // NOTE: activate tool editor
+  //       const deff = getAppObjectDefinition(objectById[objectId].type);
+  //       if (deff?.meta.isEditable) {
+  //         activateTool(objectById[objectId].type, objectId);
+  //       }
+  //     }
+
+  //     const objectToSelectId = getObjectIdToSelect({
+  //       targetId: objectId,
+  //       activeObjectId,
+  //       selectedObjectIds,
+  //       objectById,
+  //     });
+  //     if (objectToSelectId) {
+  //       _activateObject(objectToSelectId);
+  //       _selectObjects([objectToSelectId]);
+  //       _selectForProperties({ type: "object", id: objectToSelectId });
+  //     }
+  //   }
+  // };
+
+  const { height: windowHeight, width: windowWidth } = useWindowSize();
+  useEffect(() => {
+    if (rootRef.current) {
+      _setViewPortSize({
+        w: (rootRef.current as any).clientWidth,
+        h: (rootRef.current as any).clientHeight,
+      });
     }
-  };
+  }, [rootRef, windowWidth, windowHeight]);
 
-  const stageXOffset = 100;
-  //   Math.round(
-  //     (viewPortSize.w - stageSize.width) /* * stageZoom*/ / 2 + 300
-  // +
-  //   panMove.x +
-  //   panMoveStart.x
-  //   );
-  const stageYOffset = 100;
-  //   Math.round(
-  //     (viewPortSize.h - stageSize.height) /* * stageZoom*/ / 2 + 300
-  // +
-  //   panMove.y +
-  //   panMoveStart.y
-  //   );
+  // use form PAN tool
+  // const [panMove, setPanMove] = useState({
+  //   x: 0,
+  //   y: 0,
+  // });
+  // const [panMoveStart, setPanMoveStart] = useState({
+  //   x: 0,
+  //   y: 0,
+  // });
+
+  const stageXOffset = Math.round(
+    (viewPortSize.w - stageSize.width * stageZoom) / 2 +
+      stagePan.x +
+      stagePan.currentX //+
+    //panMoveStart.x
+  );
+  const stageYOffset = Math.round(
+    (viewPortSize.h - stageSize.height * stageZoom) / 2 +
+      stagePan.y +
+      stagePan.currentY //+
+    //panMoveStart.y
+  );
 
   const stageStyle: React.CSSProperties = {
     top: 0 + stageYOffset + "px",
@@ -195,31 +261,222 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     //   : {}),
   };
 
+  // const [selectionStartPosition, setSelectionStartPosition] = useState<{
+  //   x: number;
+  //   y: number;
+  // } | null>(null);
+
+  // const [dragStartPosition, setDragStartPosition] = useState({ x: -1, y: -1 });
+  // const [dragDelta, setDragDelta] = useState<{
+  //   x: number;
+  //   y: number;
+  // } | null>({ x: 0, y: 0 });
+
+  // const handleStageMouseMove = (e: any) => {
+  //   e.persist();
+  //   if (selectionStartPosition !== null) {
+  //     const point = getMousePosition(e);
+  //     // if (
+  //     //   stageToolInternal === StageTools.SELECT // || stageToolInternal === StageTools.DRAW
+  //     // ) {
+  //     const rect = getRectFromPoints(selectionStartPosition, point);
+  //     rect.x -= rootRef?.current?.offsetLeft || 0;
+  //     //rect.y -= stageYOffset;
+  //     applyRectValuesToElement(selectionBoxRef?.current, rect);
+  //     if (selectionBoxRef?.current?.style) {
+  //       selectionBoxRef.current.style.display = "block";
+  //     }
+  //     // } else if (stageToolInternal === StageTools.PAN) {
+  //     //   const panMoveNew = getPointsDiff(selectionStartPosition, point);
+  //     //   setPanMove({ ...panMove, ...panMoveNew });
+  //     // }
+  //   }
+  // };
+
+  const handleMouseWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    const delta = e.deltaY * -0.01;
+    let newStageZoom = stageZoom + delta;
+
+    newStageZoom = Math.min(newStageZoom, 10);
+    newStageZoom = Math.max(newStageZoom, 0.1);
+
+    const ratio = 1 - newStageZoom / stageZoom;
+
+    _setStageZoom(round(newStageZoom, 2));
+
+    // x: pos.x + (e.clientX - pos.x) * ratio,
+    // y: pos.y + (e.clientY - pos.y) * ratio,
+  };
+
+  // >>>>>> STYLE FORM // TODO: CHECK THIS
+  const pageColumnWidth =
+    ((breakpointConfig?.normal?.page.width || stageSize.width) -
+      stageSize.width) /
+    2;
+
+  const pageColumnHeight =
+    ((breakpointConfig?.normal?.page.height || stageSize.height) -
+      stageSize.height) /
+    2;
+
+  // const scrollableDivInnerSlideBackgroundStyle: React.CSSProperties = {
+  //   position: "absolute",
+  //   top: -pageColumnHeight * stageZoom + "px",
+  //   left: -pageColumnWidth * stageZoom + "px",
+  //   height: breakpointConfig?.normal?.page.height! * stageZoom + "px",
+  //   width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
+  //   ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
+  // };
+
+  const pageBorderStyle = {
+    top: -pageColumnHeight * stageZoom + "px",
+    left: -pageColumnWidth * stageZoom + "px",
+    width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
+    height: (breakpointConfig?.normal?.page.height || 0) * stageZoom + "px",
+  };
+
+  const scrollableDivStyle: React.CSSProperties = {
+    position: "relative",
+    left: -pageColumnWidth * stageZoom + "px",
+    top: -pageColumnHeight * stageZoom + "px",
+    // top: isPreview
+    //   ? -previewLayout.header.height - pageColumnHeight * stageZoom
+    //   : -pageColumnHeight * stageZoom + "px",
+    width: parseInt(pageBorderStyle.width, 10) + "px",
+    // width: parseInt(pageBorderStyle.width, 10) + (isPreview ? 14 : 0) + "px",
+    height: parseInt(pageBorderStyle.height, 10) + "px",
+    overflowX: "visible",
+    overflowY: "visible",
+    border: "1px solid transparent",
+
+    //   height:
+    //   parseInt(pageBorderStyle.height, 10) +
+    //   (isPreview ? previewLayout.header.height : 0) +
+    //   "px",
+    // overflowX: isPreview ? "hidden" : "visible",
+    // overflowY: isPreview ? "scroll" : "visible",
+    // border: isPreview ? "1px solid #545454" : "1px solid transparent",
+    // ...(isPreview
+    //   ? convertRGBColor2CSSProperties(settings.pageBackgroundColor)
+    //   : {}),
+  };
+  // <<<<
+
   return (
     <React.Fragment key={stageZoom}>
       <div
+        ref={rootRef}
         className={cx(css.stagePanel, {
-          // [css.panCursor]: stageToolInternal === StageTools.PAN,
+          [css.panCursor]: activeStageTool === StageTools.PAN,
           //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
         })}
+        onWheel={(e) => {
+          if (stageManager.hasCurrentToolActive()) {
+            return;
+          }
+          handleMouseWheel(e);
+        }}
+        onMouseDown={(e) => {
+          e.persist();
+
+          if (activeStageTool === StageTools.PAN) {
+            stageManager.start(StageToolEnum.PAN, {
+              boundingClientRects: [], // Not needed
+              mousePosition: getMousePosition(e),
+              contextMatrix: new DOMMatrix(), // Not needed
+              objectRotation: 0, // Not needed
+              objectScale: 1, // Not needed
+              objectId: "", // Not needed
+              originalMouseEvent: e.nativeEvent,
+            });
+            return;
+          }
+
+          console.log("MOUSE UP 111");
+          //setSelectionStartPosition(null);
+          // select parent
+          if (selectionParentId) {
+            _activateObject(selectionParentId);
+            _selectObjects([selectionParentId]);
+            _selectForProperties({ type: "object", id: selectionParentId });
+          } else {
+            console.log("uncomment 2");
+            _activateObject(null);
+            _selectObjects([]);
+          }
+
+          // const objectId = getGlobalProp("mouseDownObjectId");
+          // console.log("stage mouse down" + objectId);
+        }}
+        //   setDragStartPosition(getMousePosition(e));
+
+        //   //setSelectionStartPosition(getMousePosition(e));
+        // }}
+        // onMouseMove={(e) => {
+        // if (previewState.isPreview) return;
+        // //handleStageMouseMove(e);
+        // const data = getMousePosition(e);
+        // const diff = {
+        //   x: data.x - dragStartPosition.x,
+        //   y: data.y - dragStartPosition.y,
+        // };
+        // //console.log(diff);
+        // setDragDelta(diff);
+        // }}
+        // onMouseUp={() => {
+        // console.log("MOUSE UP 111");
+        // //setSelectionStartPosition(null);
+        // // select parent
+        // if (selectionParentId) {
+        //   _activateObject(selectionParentId);
+        //   _selectObjects([selectionParentId]);
+        //   _selectForProperties({ type: "object", id: selectionParentId });
+        // } else {
+        //   console.log("uncomment 2");
+        //   _selectObjects([]);
+        //   _activateObject(null);
+        // }
+        // }}
+        // onClick={(e) => {
+        //if (getGlobalProp("rotationInProgress")) return;
+        //   console.log(window.DAAP);
+        //   if (window.DAAP?.rotationInProgress) {
+        //     window.DAAP = window.DAAP
+        //       ? { ...window.DAAP, rotationInProgress: false }
+        //       : { rotationInProgress: false };
+        //     return;
+        //   }
+        // select parent
+        // if (selectionParentId) {
+        //   _activateObject(selectionParentId);
+        //   _selectObjects([selectionParentId]);
+        //   _selectForProperties({ type: "object", id: selectionParentId });
+        // } else {
+        //   console.log("uncomment 2");
+        //   //_selectObjects([]);
+        //   //_activateObject(null);
+        // }
+        //alert("a");
+        // }}
       >
         <div style={stageStyle} className={cx("pan-and-zoom", css.stage)}>
           <div
             className={cx(css.scrollableHolder, "preview-scrollable-holder")}
+            style={scrollableDivStyle}
           >
-            <div>
-              {/* <div
+            {/* <div> */}
+            {/* <div
                 className="scrollableDivInnerSlideBackground"
                 style={scrollableDivInnerSlideBackgroundStyle}
               ></div> */}
-              <div style={canvasStyle} className={css.canvas}>
-                {layerArr?.map((layer) => (
-                  <StageLayer key={layer.id} layer={layer} />
-                ))}
-              </div>
+            <div style={canvasStyle} className={css.canvas}>
+              {layerArr?.map((layer) => (
+                <StageLayer key={layer.id} layer={layer} />
+              ))}
             </div>
-            {/* {isPreview && previewLayout.body.component} */}
           </div>
+          {/* {isPreview && previewLayout.body.component} */}
+          {/* </div> */}
         </div>
       </div>
 
@@ -279,12 +536,19 @@ const mapStateToProps = (state: IStore) => {
   //     layers.layerById[selection.selectionForProperties?.id].layout === "grid";
   // }
 
+  // TODO: later selection
+  const selectionParentId =
+    selection.selectionPath && selection.selectionPath.length > 1
+      ? selection.selectionPath[selection.selectionPath.length - 1]
+      : undefined;
+
   return {
     slides,
     layers,
     objects,
     stageSize: document.documentSize,
     stageZoom: zoom,
+    stagePan: stage.pan,
     previewState: stage.previewState,
     layerArr,
     slide,
@@ -292,7 +556,9 @@ const mapStateToProps = (state: IStore) => {
     activeObjectId: selection.activeObjectId,
     activeLayerId: selection.activeLayerId,
     selectedObjectIds: selection.selectedObjectIds,
+    selectionParentId,
     stageTool: state.stage.stageTool.tool,
+    activeStageTool: state.stage.activeStageTool.tool,
     stageToolObjectType: state.stage.stageTool.objectType,
     breakpointConfig,
     settings,
@@ -324,6 +590,9 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
+  _setStageTool: (tool: StageTools) => setStageTool(tool),
+  _overrideStageTool: (tool: StageTools) => overrideStageTool(tool),
+  _cancelOverrideStageTool: (tool: StageTools) => cancelOverrideStageTool(),
   _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),

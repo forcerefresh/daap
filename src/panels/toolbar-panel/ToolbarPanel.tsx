@@ -55,6 +55,7 @@ import { ReactComponent as LibraryIcon } from "./assets/library-icon.svg";
 import { ReactComponent as SettingsIcon } from "./assets/settings-icon.svg";
 
 import css from "./ToolbarPanel.module.scss";
+import { round } from "lodash-es";
 enum VisiblePanel {
   None = "none",
   Add = "add",
@@ -185,9 +186,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "multiselect-tags",
   ]);
 
-  const displayZoom = Number.isInteger(zoom * 100)
-    ? zoom * 100
-    : (zoom * 100).toFixed(2);
+  // const displayZoom = Number.isInteger(zoom * 100)
+  //   ? zoom * 100
+  //   : (zoom * 100).toFixed(2);
+
+  const displayZoom = round(zoom * 100);
 
   return (
     <div className={css.toolbar}>

@@ -72,7 +72,7 @@ export default class TextTool implements IToolClass {
     document.addEventListener("mousedown", this.clickOutsideEventHandlerBind);
 
     const textObjectValue = objectValues as unknown as TextValues;
-    console.log(objectValues);
+    //console.log(objectValues);
 
     // set initial value
     this.latestValue = textObjectValue.text;

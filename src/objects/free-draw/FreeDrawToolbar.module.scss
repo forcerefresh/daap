@@ -21,6 +21,16 @@
   }
 }
 
+.pencilButton {
+  width: 54px;
+  height: 54px;
+  color: gray !important;
+}
+
+.pencilButton:hover {
+  color: white !important;
+}
+
 .strokeInput {
   width: 100px;
   margin-bottom: 0px;

@@ -97,6 +97,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                   eraser: false,
                 });
               }}
+              className={css.pencilButton}
             >
               <Pencil
                 style={{
@@ -118,6 +119,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                   eraser: false,
                 });
               }}
+              className={css.pencilButton}
             >
               <Pencil
                 style={{
@@ -139,6 +141,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                   eraser: false,
                 });
               }}
+              className={css.pencilButton}
             >
               <Pencil
                 style={{
@@ -160,6 +163,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                   eraser: false,
                 });
               }}
+              className={css.pencilButton}
             >
               <Pencil
                 style={{

@@ -17,6 +17,7 @@ export enum Panels {
   MyVideos = "myVideos",
   MyAudios = "myAudios",
   MyVectors = "myVectors",
+  MyFonts = "myFonts",
   Images = "images",
   Vectors = "vectors",
 }
@@ -58,6 +59,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       Panels.MyVideos,
       Panels.MyAudios,
       Panels.MyVectors,
+      Panels.MyFonts,
       Panels.Images,
       Panels.Vectors,
     ],
@@ -188,7 +190,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   fetchImagesFunc={fetchImages}
                   uploadComponent={
                     <UploadComponent
-                      type="vector"
+                      type="font"
                       onComplete={() => {
                         setForceUpdate(Math.random());
                       }}
@@ -198,8 +200,38 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     />
                   }
                   onRequestClose={onRequestClose}
-                  addObject={addObject}
-                  onSelect={onSelect}
+                  //addObject={addObject}
+                  //onSelect={onSelect}
+                />
+              }
+            />
+          )}
+          {includes(panelsToShow, Panels.MyFonts) && (
+            <Tab
+              id="myFonts"
+              title="Fonts"
+              panel={
+                <ImagesLibraryPanel
+                  hasApiKey={true}
+                  type="font"
+                  key={forceUpdate}
+                  deleteImagesFunc={deleteImages}
+                  fetchImagesFunc={fetchImages}
+                  uploadComponent={
+                    <UploadComponent
+                      type="font"
+                      onComplete={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                      onStop={() => {
+                        setForceUpdate(Math.random());
+                      }}
+                    />
+                  }
+                  //selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  // addObject={addObject}
+                  // onSelect={onSelect}
                 />
               }
             />

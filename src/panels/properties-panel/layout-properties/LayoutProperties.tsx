@@ -47,6 +47,7 @@ import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form"
 import { getDefaultLayoutAdvance } from "webslider-sdk/lib/objects/create-common-object";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "aws-sdk/clients/ec2";
+import { getAncestorLayer } from "../../../store/actions/actions-utils";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -431,7 +432,14 @@ const mapStateToProps = (state: IStore) => {
   const { breakpoints } = settings;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
-  const objectLayer = layers.layerById[object?.layerId as any] || null;
+
+  // console.log(activeObjectId);
+  // console.log(object);
+
+  const objectLayer = object
+    ? getAncestorLayer(object, layers.layerById, objects.objectById)
+    : null; //layers.layerById[object?.layerId as any] || null;
+
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 

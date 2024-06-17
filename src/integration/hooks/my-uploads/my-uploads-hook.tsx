@@ -23,7 +23,10 @@ type AudioItem = {
   src?: string;
 };
 
+type FontItem = {};
+
 type AudioData = MediaDataInfo & { audio: AudioItem };
+type FontData = MediaDataInfo & { font: FontItem };
 
 export const useMyMediaHook = () => {
   const upload = (
@@ -44,7 +47,13 @@ export const useMyMediaHook = () => {
         localStorage.getItem(lsMediaKey) || "{}"
       );
 
-      let item: ImageData | VectorData | VideoData | ExtensionData | AudioData;
+      let item:
+        | ImageData
+        | VectorData
+        | VideoData
+        | ExtensionData
+        | AudioData
+        | FontData;
 
       switch (type) {
         case "image": {
@@ -178,6 +187,14 @@ export const useMyMediaHook = () => {
             id: uuid(),
             ...fileMetadata,
             svgString: await file.text(),
+          };
+          break;
+        }
+        case "font": {
+          item = {
+            id: uuid(),
+            ...fileMetadata,
+            font: {},
           };
           break;
         }

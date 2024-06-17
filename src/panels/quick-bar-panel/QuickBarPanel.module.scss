@@ -9,6 +9,11 @@
   }
 }
 
+.button {
+  height: 50px;
+  align-items: center;
+}
+
 .quickBar {
   color: $pt-text-color-muted;
   background: $pt-app-background-color;
@@ -29,18 +34,20 @@
       outline: none;
     }
 
-    .bp5-button-text {
-      height: 36px;
-    }
+    // .bp5-button-text {
+    //   height: 36px;
+    // }
 
-    .bp5-button:not(.bp5-small) {
-      width: 54px;
-      height: 54px;
-      color: gray;
-    }
-    .bp5-button:not(.bp5-small):hover {
-      color: white;
-    }
+    // .bp5-button:not(.bp5-small) {
+    //   //width: 54px;
+    //   height: 54px;
+    //   color: gray;
+    // }
+
+    // .bp5-button:not(.bp5-small):hover {
+    //   color: white;
+    // }
+
     // .bp5-button.bp5-small {
     //   width: 34px;
     //   height: 34px;
@@ -80,9 +87,13 @@
 //   //line-height: 14px;
 //   //font-weight: bold;
 // }
-
-.rightHolder {
+.leftHolder {
   flex-grow: 1;
+  display: flex;
+}
+.rightHolder {
+  flex-grow: 0;
+  display: flex;
 }
 
 .inputHolder {

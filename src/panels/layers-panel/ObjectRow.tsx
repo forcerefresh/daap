@@ -10,6 +10,9 @@ import css from "./LayersPanel.module.scss";
 import { getEmptyImage } from "react-dnd-html5-backend";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 import SVG from "react-inlinesvg";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { convertTimeUnitToMs } from "webslider-sdk/lib/objects/object-utils";
+import { cloneDeep } from "lodash-es";
 
 export interface IObjectRowProps {
   object: IObject;
@@ -26,6 +29,9 @@ export interface IObjectRowProps {
   updateObject: (object: IObject) => void;
   deleteObjects: (objectIds: string[]) => void;
   onDragingChange: (isDragging: boolean) => void;
+  objectById: {
+    [id: string]: IObject<{}>;
+  };
 }
 
 export function ObjectRow(props: IObjectRowProps) {
@@ -41,6 +47,7 @@ export function ObjectRow(props: IObjectRowProps) {
     updateObject,
     deleteObjects,
     onDragingChange,
+    objectById,
   } = props;
 
   const [{ isDragging }, drag, preview] = useDrag(
@@ -72,26 +79,27 @@ export function ObjectRow(props: IObjectRowProps) {
   const deff = getAppObjectDefinition(object.type);
 
   return (
-    <div
-      ref={drag}
-      key={object.id}
-      onClick={(event) => {
-        onObjectClick(event, object.id);
-      }}
-      className={cx(css.objectHolder, {
-        [css.active]: activeObjectId === object.id,
-        [css.propertiesActive]:
-          selectionForProperties?.id === object.id &&
-          selectionForProperties.type === "object", // activeObjectId === objectId,
-        [css.selected]:
-          selectedObjectIds.length > 0 /*1*/ &&
-          selectedObjectIds.indexOf(object.id) !== -1,
-        [css.disableObjectVisibility]: disableVisibility,
-      })}
-    >
-      <div className={css.objectHolderInner}>
-        <div className={css.actionButtons}>
-          {/*!layoutStaticAnimationsPanel && (
+    <div className={css.objectGroup}>
+      <div
+        ref={drag}
+        key={object.id}
+        onClick={(event) => {
+          onObjectClick(event, object.id);
+        }}
+        className={cx(css.objectHolder, {
+          [css.active]: activeObjectId === object.id,
+          [css.propertiesActive]:
+            selectionForProperties?.id === object.id &&
+            selectionForProperties.type === "object", // activeObjectId === objectId,
+          [css.selected]:
+            selectedObjectIds.length > 0 /*1*/ &&
+            selectedObjectIds.indexOf(object.id) !== -1,
+          [css.disableObjectVisibility]: disableVisibility,
+        })}
+      >
+        <div className={css.objectHolderInner}>
+          <div className={css.actionButtons}>
+            {/*!layoutStaticAnimationsPanel && (
           <Button
             active={object.id === showAnimationPanelForId.id}
             minimal
@@ -106,45 +114,63 @@ export function ObjectRow(props: IObjectRowProps) {
             icon="walk"
           ></Button>
           )*/}
-          <Button
-            intent={disableVisibility ? "danger" : "none"}
-            active={!object.isVisible}
-            minimal
-            onClick={(event: any) => {
-              event.stopPropagation();
-              updateObject({
-                ...object,
-                isVisible: !object.isVisible,
-              });
-            }}
-            small={true}
-            icon={
-              object.isVisible && !disableVisibility ? "eye-open" : "eye-off"
-            }
-          ></Button>
-          <Button
-            minimal
-            active={object.isLocked}
-            onClick={(event: any) => {
-              event.stopPropagation();
-              updateObject({
-                ...object,
-                isLocked: !object.isLocked,
-              });
-            }}
-            small={true}
-            icon={object.isLocked ? "lock" : "unlock"}
-            className={cx({
-              [css.locked]: object.isLocked,
-            })}
-          ></Button>
-          <div className={css.objectTypeSVGHolder}>
-            <SVG src={deff?.meta?.icon || ""} />
+
+            {object.objectIds && object.objectIds.length > 0 && (
+              <Button
+                minimal
+                onClick={(event: any) => {
+                  event.stopPropagation();
+                  const objectClone = cloneDeep(object);
+                  objectClone.isOpen = !objectClone.isOpen;
+                  updateObject(objectClone);
+                }}
+                className={cx(css.layerToggle, {
+                  /*[css.layerOpen]: openLayerById[layer.id],*/
+                })}
+                small={true}
+                icon={object.isOpen ? "caret-down" : "caret-right"}
+              ></Button>
+            )}
+
+            <Button
+              intent={disableVisibility ? "danger" : "none"}
+              active={!object.isVisible}
+              minimal
+              onClick={(event: any) => {
+                event.stopPropagation();
+                updateObject({
+                  ...object,
+                  isVisible: !object.isVisible,
+                });
+              }}
+              small={true}
+              icon={
+                object.isVisible && !disableVisibility ? "eye-open" : "eye-off"
+              }
+            ></Button>
+            <Button
+              minimal
+              active={object.isLocked}
+              onClick={(event: any) => {
+                event.stopPropagation();
+                updateObject({
+                  ...object,
+                  isLocked: !object.isLocked,
+                });
+              }}
+              small={true}
+              icon={object.isLocked ? "lock" : "unlock"}
+              className={cx({
+                [css.locked]: object.isLocked,
+              })}
+            ></Button>
+            <div className={css.objectTypeSVGHolder}>
+              <SVG src={deff?.meta?.icon || ""} />
+            </div>
           </div>
-        </div>
-        <div className={css.objectDescription}>
-          <div className={css.objectName}>{object.name}</div>
-          {/*<div>
+          <div className={css.objectDescription}>
+            <div className={css.objectName}>{object.name}</div>
+            {/*<div>
           delay:{" "}
           <span className={css.inlineValue}>
             {get(object, "transitions.in.delay")}ms
@@ -166,25 +192,58 @@ export function ObjectRow(props: IObjectRowProps) {
             </span>
           </div>
         )} */}
+          </div>
+          <div>
+            <Button
+              minimal
+              onClick={(event: any) => {
+                event.stopPropagation();
+                deleteObjects([object.id]);
+              }}
+              className={css.deleteObject}
+              small={true}
+              icon="delete"
+            ></Button>
+          </div>
         </div>
-        <div>
-          <Button
-            minimal
-            onClick={(event: any) => {
-              event.stopPropagation();
-              deleteObjects([object.id]);
-            }}
-            className={css.deleteObject}
-            small={true}
-            icon="delete"
-          ></Button>
-        </div>
+        <TimelineView
+          object={object}
+          slideDuration={slideDuration}
+          slideExitDuration={slideExitDuration}
+        ></TimelineView>
       </div>
-      <TimelineView
-        object={object}
-        slideDuration={slideDuration}
-        slideExitDuration={slideExitDuration}
-      ></TimelineView>
+      {object.isOpen &&
+        object.objectIds &&
+        object.objectIds.length > 0 &&
+        object.objectIds.map((objectId) => {
+          const childObject = objectById[objectId];
+          return (
+            <ObjectRow
+              key={childObject.id}
+              object={childObject}
+              disableVisibility={disableVisibility}
+              activeObjectId={activeObjectId}
+              selectedObjectIds={selectedObjectIds}
+              selectionForProperties={selectionForProperties}
+              updateObject={updateObject}
+              deleteObjects={(objectIds) => {
+                deleteObjects(objectIds);
+                AppToaster.show({
+                  intent: "warning",
+                  message:
+                    objectIds.length === 1
+                      ? "Object has been deleted."
+                      : "Multiple objects has been deleted.",
+                });
+              }}
+              onObjectClick={onObjectClick}
+              slideDuration={slideDuration}
+              slideExitDuration={slideExitDuration}
+              onDragingChange={onDragingChange}
+              objectById={objectById}
+            />
+          );
+        })}
     </div>
   );
 }

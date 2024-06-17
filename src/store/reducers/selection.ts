@@ -19,6 +19,7 @@ import {
   CREATE_NEW_PROJECT,
   SELECT_FOR_PROPERTIES,
   selectForPropertiesProps,
+  UNGROUP_OBJECTS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { cloneDeep, uniq } from "lodash-es";
@@ -33,6 +34,9 @@ export interface ISelection {
   selectedObjectIds: string[];
 
   selectionForProperties: selectForPropertiesProps | null;
+
+  // array og object id starting from selectedObject to root (e.g. [object, objectGroup, objectGroup])
+  selectionPath: string[];
 }
 
 const getSelectionDefault = () => ({
@@ -43,6 +47,7 @@ const getSelectionDefault = () => ({
   selectedLayerIds: [],
   selectedObjectIds: [],
   selectionForProperties: null, //{ type: "none", id: "" },
+  selectionPath: [],
 });
 
 export function selection(
@@ -117,9 +122,10 @@ export function selection(
       });
     }
     case SELECT_OBJECTS: {
-      const selectedObjectIds = action.payload;
+      const { selectedObjectIds, selectionPath } = action.payload;
 
-      return { ...state, selectedObjectIds };
+      //console.log(selectionPath);
+      return { ...state, selectedObjectIds, selectionPath };
     }
 
     case ADD_OBJECTS_TO_SELECTION: {
@@ -209,6 +215,35 @@ export function selection(
             selIds.filter((id) => removeLayerIds.indexOf(id) === -1),
         },
       });
+    }
+    case UNGROUP_OBJECTS: {
+      const { groupId } = action.payload;
+
+      const newState = update(state, {
+        activeObjectId: {
+          $apply: (activeId) => {
+            return [groupId].indexOf(activeId as string) !== -1
+              ? null
+              : activeId;
+          },
+        },
+
+        selectedObjectIds: {
+          $apply: (selIds: string[]) =>
+            selIds.filter((id) => [groupId].indexOf(id) === -1),
+        },
+
+        selectionForProperties: {
+          $apply: (curr) => {
+            return curr && [groupId].indexOf(curr.id) !== -1 ? null : curr;
+          },
+        },
+      });
+
+      newState.selectionPath = [];
+
+      //console.log(newState);
+      return newState;
     }
     case DELETE_OBJECTS: {
       const deletedObjectIds = action.payload;

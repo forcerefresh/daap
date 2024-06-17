@@ -159,7 +159,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     slideId: string
   ) => {
-    if (event.ctrlKey || event.metaKey) {
+    if (event.shiftKey) {
       selectedSlideIds.indexOf(slideId) === -1
         ? _addSlidesToSelection([slideId])
         : _removeSlidesFromSelection([slideId]);

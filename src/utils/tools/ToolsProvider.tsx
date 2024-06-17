@@ -66,7 +66,7 @@ export const ToolsProvider = (
   // const activeLayerId = state.project.selection.activeLayerId;
   //const stageZoom = state.stage.zoom;
 
-  console.log(stageZoom);
+  //console.log(stageZoom);
   const [toolConfig, setToolConfigState] = useState<IToolConfig>({});
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [activeObjectId, setActiveObjectId] = useState<
@@ -88,10 +88,10 @@ export const ToolsProvider = (
     objectId?: string;
   }) => {
     //debugger;
-    console.log(params.objectValues);
-    console.log(params);
+    // console.log(params.objectValues);
+    // console.log(params);
     if (!params.isEdit) {
-      console.log(params);
+      // console.log(params);
       dispatch(
         addNewObject(
           activeLayerId!,
@@ -192,9 +192,9 @@ export const ToolsProvider = (
           objectId,
           position: object ? { x: x ?? "0", y: y ?? "0" } : { x: "0", y: "0" },
           getObjects: (type: string): IObject[] => {
-            console.log(type);
-            console.log(allObjects);
-            console.log(objectById);
+            // console.log(type);
+            // console.log(allObjects);
+            // console.log(objectById);
 
             const retObjs: IObject[] = [];
             allObjects.forEach((objectId) => {

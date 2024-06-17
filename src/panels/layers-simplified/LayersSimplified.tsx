@@ -32,6 +32,7 @@ import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ObjectRow } from "./ObjectRow";
 import { last } from "lodash-es";
+import { Button } from "@blueprintjs/core";
 
 //import { DragLayerComponent } from "./CustomDragLayer";
 
@@ -43,14 +44,19 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     layerArr,
     objectById,
     activeObjectId,
+    activeLayerId,
+    layerById,
     breakpointConfig,
     selectedObjectIds,
+    selectionPath,
     _addObjectsToSelection,
     _removeObjectsFromSelection,
     _deactivateObject,
     _activateObject,
     _selectObjects,
     _selectForProperties,
+    _activateLayer,
+    _selectLayers,
   } = props;
 
   const onObjectClick = (
@@ -71,51 +77,112 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
 
+  const onObjectDblClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    isGroup: boolean,
+    objectId: string
+  ) => {
+    if (isGroup) {
+      _activateObject(objectById[objectId]?.objectIds?.[0]!);
+      _selectObjects(objectById[objectId]?.objectIds ?? []);
+      //_selectForProperties({ type: "object", id: objectId });
+    }
+  };
+
+  let objectIds: string[] = [];
+
+  const firstSelectedObject = objectById[selectedObjectIds[0]];
+  if (firstSelectedObject) {
+    if (layerById[firstSelectedObject.parentId!]) {
+      objectIds = layerById[firstSelectedObject.parentId!].objectIds;
+    } else if (objectById[firstSelectedObject.id].parentId) {
+      objectIds =
+        objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+    }
+  } else if (activeLayerId) {
+    objectIds = layerById[activeLayerId].objectIds!;
+  }
+
+  //console.log(selectionPath, "selectionPath");
+
+  const [parentLayerId, ...selectionPathWithoutLayer] = selectionPath;
+  //selectionPathWithoutLayer.pop();
+
+  console.log(selectionPathWithoutLayer);
+  if (!parentLayerId) return null;
+
   return (
     <>
       <div className={css.layerPanel}>
         <>
           <div className={css.layersHolder}>
-            {layerArr?.map((layer, idx) => {
-              //if (!layer) return null; // TODO: IMPORTANT koo kopiranja slajda
+            {/* {layerArr?.map((layer, idx) => { */}
+            {/* //if (!layer) return null; // TODO: IMPORTANT koo kopiranja slajda */}
 
-              return (
-                <>
-                  <div className={css.layersHeader}>{layer.name}</div>
+            {/* return ( */}
+            <>
+              <Button
+                intent={"primary"}
+                minimal
+                small
+                onClick={() => {
+                  _activateLayer(parentLayerId);
+                  _selectLayers([parentLayerId]);
+                  _selectForProperties({ type: "layer", id: parentLayerId });
+                }}
+              >
+                {layerById[parentLayerId]?.name}
+              </Button>
 
-                  <div key={layer.id} className={cx(css.layer, {})}>
-                    {layer.objectIds.length > 0 ? (
-                      <>
-                        {layer.objectIds.map((objectId, idx) => {
-                          const object = objectById[objectId];
+              {selectionPathWithoutLayer.map((pathObjectId) => (
+                <Button
+                  intent={"primary"}
+                  minimal
+                  small
+                  onClick={() => {
+                    _activateObject(pathObjectId);
+                    _selectObjects([pathObjectId]);
+                    _selectForProperties({ type: "object", id: pathObjectId });
+                  }}
+                >
+                  {objectById[pathObjectId]?.name}
+                </Button>
+              ))}
+              {/* key={layer.id} */}
+              <div className={cx(css.objectsHolder, {})}>
+                {objectIds?.length > 0 ? (
+                  <>
+                    {objectIds.map((objectId, idx) => {
+                      const object = objectById[objectId];
 
-                          return (
-                            <React.Fragment key={`object-${objectId}`}>
-                              <ObjectRow
-                                onObjectClick={onObjectClick}
-                                breakpointConfig={breakpointConfig}
-                                selectedObjectIds={selectedObjectIds}
-                                object={object}
-                                layer={layer}
-                              />
-                              {/* <div
+                      return (
+                        <React.Fragment key={`object-${objectId}`}>
+                          <ObjectRow
+                            onObjectClick={onObjectClick}
+                            onObjectDblClick={onObjectDblClick}
+                            breakpointConfig={breakpointConfig}
+                            selectedObjectIds={selectedObjectIds}
+                            object={object}
+                            layer={layerById[activeLayerId!]} // todo
+                          />
+                          {/* <div
                             className={cx(css.objectItem, {
                               [css.selected]: object.id === activeObjectId,
                             })}
                           >
                             {object.name}
                           </div> */}
-                            </React.Fragment>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      "No objects found"
-                    )}
-                  </div>
-                </>
-              );
-            })}
+                        </React.Fragment>
+                      );
+                    })}
+                  </>
+                ) : (
+                  "No objects found"
+                )}
+              </div>
+            </>
+            {/* ); */}
+            {/* })} */}
           </div>
         </>
       </div>
@@ -145,12 +212,14 @@ const mapStateToProps = (state: IStore) => {
     layerArr,
     slide,
     objectById: objects.objectById,
+    layerById: layers.layerById,
     activeSlideId: selection.activeSlideId,
     activeLayerId: selection.activeLayerId,
     activeObjectId: selection.activeObjectId,
     selectedLayerIds: selection.selectedLayerIds,
     selectedObjectIds: selection.selectedObjectIds,
     selectionForProperties: selection.selectionForProperties,
+    selectionPath: selection.selectionPath,
     selectedDevice: state.stage.selectedDevice,
     //layoutStaticAnimationsPanel: layoutType === "default-layers",
     breakpointsConfiguration: state.project.settings.breakpoints,

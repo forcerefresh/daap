@@ -60,6 +60,8 @@ import {
   boundsUnion,
   getObjectBoundingBox,
 } from "../helpers/objectBoundingBox";
+import { createGroupWithObjects } from "../../panels/stage-panel-new/stage-panel-utils";
+import { getAncestorLayer, populateObjectThreeIds } from "./actions-utils";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -178,13 +180,25 @@ export interface DeleteSlideAction extends IUndoableAction<true> {
 export function deleteSlideThree(slideId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerIds = getState().project.slides.slideById[slideId].layerIds;
-    const objectIds = getState().project.objects.allObjects.filter(
+    const objectById = getState().project.objects.objectById;
+    const layerById = getState().project.layers.layerById;
+
+    const rootObjectIds = getState().project.objects.allObjects.filter(
       (objectId: string) =>
         layerIds.indexOf(
-          getState().project.objects.objectById[objectId].layerId
+          getState().project.objects.objectById[objectId].parentId!
         ) !== -1
     );
 
+    const objectIds = rootObjectIds.reduce(
+      (acc: string[], objectId: string) => {
+        const threeIds: string[] = [];
+        populateObjectThreeIds(threeIds, objectId, objectById, layerById);
+        return [...acc, ...threeIds];
+      },
+      []
+    );
+    debugger;
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
     dispatch(deleteSlide(slideId));
@@ -863,18 +877,54 @@ export const SELECT_OBJECTS = "Select objects";
 
 export interface SelectObjectAction extends IUndoableAction<true, true> {
   type: typeof SELECT_OBJECTS;
-  payload: string[];
+  payload: { selectedObjectIds: string[]; selectionPath: string[] };
 }
 
-export function selectObjects(objectsId: string[]): SelectObjectAction {
+export function _selectObjects(
+  selectedObjectIds: string[],
+  selectionPath: string[]
+): SelectObjectAction {
   return {
     type: SELECT_OBJECTS,
-    payload: objectsId,
+    payload: { selectedObjectIds, selectionPath },
     isUndoable: true,
     skipHistory: true,
   };
 }
 
+// function populateObjectPathArr(
+//   path: string[],
+//   objectId: string,
+//   objectById: {
+//     [id: string]: IObject;
+//   }
+// ) {
+//   const object = objectById[objectId];
+
+//   if (object) {
+//     path.push(object.id);
+//     if (object.parentId) {
+//       populateObjectPathArr(path, object.parentId, objectById);
+//     }
+//   }
+// }
+
+export function selectObjects(selectedObjectIds: string[]): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectById = getState().project.objects.objectById;
+    const layerById = getState().project.layers.layerById;
+
+    const selectionPath: string[] = [];
+    // use first one to get selection path (selectedObjectIds[0])
+    populateObjectThreeIds(
+      selectionPath,
+      selectedObjectIds[0],
+      objectById,
+      layerById
+    );
+    dispatch(_selectObjects(selectedObjectIds, selectionPath));
+  };
+}
 export function selectObjectsByRect(rect: IRect): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const objectToSelectIds: string[] = [];
@@ -1050,12 +1100,13 @@ export function addNewObject(
   values?: { [key: string]: string }
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    let object = {
+    let object: IObject = {
       ...createObject(type, objectProps, {
         ...values,
         //text: "Sample test",
       }),
       layerId,
+      parentId: layerId,
     };
 
     const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
@@ -1171,6 +1222,67 @@ export function duplicateObjects(objectIds: string[]) {
   };
 }
 
+export const UNGROUP_OBJECTS = "Ungroup objects";
+
+export interface UngroupObjectAction extends IUndoableAction<true> {
+  type: typeof UNGROUP_OBJECTS;
+  payload: {
+    groupId: string;
+    objectIds: string[];
+    parentId: string;
+    transformPerObject: any;
+  };
+}
+
+export function _ungroupObject(
+  groupId: string,
+  objectIds: string[],
+  parentId: string,
+  transformPerObject: any
+): UngroupObjectAction {
+  return {
+    type: UNGROUP_OBJECTS,
+    payload: { groupId, objectIds, parentId, transformPerObject },
+    isUndoable: true,
+  };
+}
+
+export function ungroupObject(objectId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const state = getState();
+    const { settings, layers } = state.project;
+
+    const objectById = getState().project.objects.objectById;
+    const layerById = getState().project.layers.layerById;
+    const groupObject = objectById[objectId];
+    const parentId = groupObject.parentId;
+    const groupId = groupObject.id;
+    const objectIds = groupObject.objectIds;
+
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      settings.breakpoints.breakpointsConfiguration.find(
+        (breakpointConfig: any) =>
+          breakpointConfig.type === state.stage.selectedDevice
+      );
+
+    const transformPerObject = createGroupWithObjects({
+      group: groupObject,
+      objects: groupObject.objectIds!.map((objectId) => objectById[objectId]),
+      breakpointConfig: breakpointConfig!,
+      parentLayer: getAncestorLayer(groupObject, layerById, objectById),
+    });
+
+    if (objectIds && parentId) {
+      dispatch(
+        _ungroupObject(groupId, objectIds, parentId, transformPerObject)
+      );
+
+      // dispatch(activateObject(objectIds[0]));
+      // dispatch(selectObjects(objectIds));
+      // dispatch(selectForProperties({ id: objectIds[0], type: "object" }));
+    }
+  };
+}
 // ***
 // ******
 
@@ -1196,7 +1308,7 @@ export function groupObjects(objectIds: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const firstObject = getState().project.objects.objectById[objectIds[0]];
 
-    // get group bounds
+    // get group bounds (TODO: duplicate)
     let groupBounds = getObjectBoundingBox(firstObject);
     objectIds.forEach((objectId) => {
       const object = getState().project.objects.objectById[objectId];
@@ -1204,20 +1316,24 @@ export function groupObjects(objectIds: string[]): any {
       groupBounds = boundsUnion(groupBounds, bounds);
     });
 
-    const objects: IObject[] = [];
+    //const objects: IObject[] = [];
     //  normalize object pos
+    const layerId = firstObject.layerId;
     objectIds.forEach((objectId) => {
+      // TODO: why we are mutating ???
       const object = getState().project.objects.objectById[objectId];
       object.absoluteLayout!.common.top =
         parseInt(object.absoluteLayout!.common.top) - groupBounds.y + "px";
       object.absoluteLayout!.common.left =
         parseInt(object.absoluteLayout!.common.left) - groupBounds.x + "px";
 
-      objects.push(object);
+      delete object.layerId;
+      //objects.push(object);
     });
 
     const groupObject: IObject = {
       ...createObject("group", {}, {}),
+      name: "Group",
       layout: "absolute",
       absoluteLayout: {
         relativeTo: "page",
@@ -1231,15 +1347,23 @@ export function groupObjects(objectIds: string[]): any {
           height: groupBounds.height + "px",
         },
       },
-      layerId: firstObject.layerId,
+      parentId: firstObject.parentId,
       objectIds: objectIds,
+      layerId,
     };
 
-    objects.forEach((object) => {
-      dispatch(_updateObject(object));
-    });
+    const nextNameIdx = getState().project.objects.nextObjectId["group"] || 1;
+    groupObject.name = humanizeSting("group", true) + " " + nextNameIdx;
+
+    // objects.forEach((object) => {
+    //   object.parentId = groupObject.id;
+    //   dispatch(_updateObject(object));
+    // });
 
     dispatch(_groupObjects(groupObject, objectIds));
+    dispatch(activateObject(groupObject.id));
+    dispatch(selectObjects([groupObject.id]));
+    dispatch(selectForProperties({ id: groupObject.id, type: "object" }));
   };
 }
 
@@ -1669,6 +1793,22 @@ export function setZoomFit(zoomFit: boolean): SetZoomFitAction {
 }
 // ******
 
+export const SET_STAGE_PAN = "Set stage pan";
+
+export interface SetPanFitAction extends IUndoableAction<false> {
+  type: typeof SET_STAGE_PAN;
+  payload: { x: number; y: number };
+}
+
+export function setStagePan(pan: { x: number; y: number }): SetPanFitAction {
+  return {
+    type: SET_STAGE_PAN,
+    payload: pan,
+    isUndoable: false,
+  };
+}
+// ******
+
 // ******
 
 export const NEXT_TEXT_POSITION = "Next text position";
@@ -1966,6 +2106,7 @@ export function doJump(jumpIdx: number): any {
 }
 
 // ***
+// selected tool
 export const SET_STAGE_TOOL = "Set stage tool";
 
 export interface SetStageToolAction extends IUndoableAction<false> {
@@ -1980,6 +2121,38 @@ export function setStageTool(
   return {
     type: SET_STAGE_TOOL,
     payload: { tool, objectType },
+    isUndoable: false,
+  };
+}
+
+// we have shortcuts e.g. SPACE that change to PAN tool
+export const OVERRIDE_STAGE_TOOL = "Override stage tool";
+
+export interface OverrideStageToolAction extends IUndoableAction<false> {
+  type: typeof OVERRIDE_STAGE_TOOL;
+  payload: { tool: StageTools; objectType?: string };
+}
+
+export function overrideStageTool(
+  tool: StageTools,
+  objectType?: string
+): OverrideStageToolAction {
+  return {
+    type: OVERRIDE_STAGE_TOOL,
+    payload: { tool, objectType },
+    isUndoable: false,
+  };
+}
+
+export const CANCEL_OVERRIDE_STAGE_TOOL = "Cancel override stage tool";
+
+export interface CancelOverrideStageToolAction extends IUndoableAction<false> {
+  type: typeof CANCEL_OVERRIDE_STAGE_TOOL;
+}
+
+export function cancelOverrideStageTool(): CancelOverrideStageToolAction {
+  return {
+    type: CANCEL_OVERRIDE_STAGE_TOOL,
     isUndoable: false,
   };
 }
@@ -2100,6 +2273,7 @@ export type ActionTypes =
   | MoveLayersAction
   | MoveSlidesAction
   | GroupObjectsAction
+  | UngroupObjectAction
 
   // layer selection
   | SelectLayerAction
@@ -2139,6 +2313,8 @@ export type ActionTypes =
 
   //tools
   | SetStageToolAction
+  | OverrideStageToolAction
+  | CancelOverrideStageToolAction
 
   //external fonts
   | ExternalFontLoadedAction
@@ -2159,4 +2335,5 @@ export type ActionTypes =
   // form state
   | SetFormStateAction
   //
-  | NextTextPositionAction;
+  | NextTextPositionAction
+  | SetPanFitAction;

@@ -29,7 +29,7 @@ export function StageLayer(props: IStageLayer) {
     stageZoom,
   } = props;
 
-  console.log("RERENDER LAYER");
+  //console.log("RERENDER LAYER");
   const disableVisibility =
     !layer.responsiveVisibility.showAll &&
     !includes(layer.responsiveVisibility.displayOn, selectedDevice);
@@ -122,7 +122,7 @@ export function StageLayer(props: IStageLayer) {
       >
         {layer.objectIds.map((objectId) => {
           const object = objectById[objectId]; //objectByIdLocalRef
-          console.log(object?.absoluteLayout?.common?.left);
+          //console.log(object?.absoluteLayout?.common?.left);
 
           const layoutChildren = layer.definition.values.hasLayoutChildren
             ? layer.definition.values.layoutChildren
@@ -133,6 +133,7 @@ export function StageLayer(props: IStageLayer) {
               object={object}
               layer={layer}
               layoutChildren={layoutChildren}
+              objectZoom={object.scale}
               // stageZoom={stageZoom}
             />
           );

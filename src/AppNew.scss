@@ -11,6 +11,14 @@
 @import "./pages/css/responsive.css";
 @import "./pages//css//bootstrap.min.css";
 
+html {
+  overflow: hidden;
+}
+
+body {
+  font-size: 0.9em;
+}
+
 .bp5-dark .bp5-input {
   box-shadow: none;
 }

@@ -215,8 +215,13 @@ export function LayerRow(props: ILayerRowProps) {
             /*[css.layerOpen]: openLayerById[layer.id],*/
           })}
           small={true}
-          icon={isOpen ? "folder-open" : "folder-close"}
+          icon={isOpen ? "caret-down" : "caret-right"}
         ></Button>
+
+        <Icon
+          icon={isOpen ? "folder-open" : "folder-close"}
+          className={css.layerTypeIcon}
+        />
 
         <div className={css.layerName}>{layer.name}</div>
 

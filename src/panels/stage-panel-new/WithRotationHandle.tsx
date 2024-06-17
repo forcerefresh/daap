@@ -1,23 +1,65 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { getMousePosition } from "../../utils/doom-utils/common";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { debounce } from "lodash-es";
+import { setGlobalProp } from "./utils";
+import useDeepCompareEffect from "use-deep-compare-effect";
+import { StageManagerContext } from "./StageManagerProvider";
+import { object } from "yup";
+import {
+  createTransformForPath,
+  getFullMatrixFromTransformArr,
+  getGroupMatrixFromSelectionPath,
+} from "./stage-panel-utils";
+import { StageToolEnum } from "../../utils/selection-manager/types";
 
 interface WithRotationHandleProps {
   object: IObject;
   stageZoom: number;
   children: JSX.Element;
   rotation: number;
-  onRotationDone: (rotation: number) => void;
+  scale: number;
+  translateX: number;
+  translateY: number;
+  // onRotationDone: (rotation: number) => void;
+  // onRotationStart: (rotation: number) => void;
+  selectionPath: string[];
+  objectById: {
+    [id: string]: IObject<{}>;
+  };
 }
 
 export function WithRotationHandle(
   props: WithRotationHandleProps
 ): JSX.Element {
-  const { stageZoom, rotation: initialRotation, onRotationDone } = props;
+  const {
+    stageZoom,
+    rotation: initialRotation,
+    scale: initialScale,
+    // onRotationDone,
+    // onRotationStart,
+    translateX,
+    translateY,
+    selectionPath,
+    objectById,
+  } = props;
 
-  console.info(initialRotation);
+  //console.log(selectionPath);
+
+  const { stageManager } = useContext(StageManagerContext);
+  //console.log(selectionPath.shift());
+  //console.info(initialRotation);
   const initialRotationRef = useRef(initialRotation);
   initialRotationRef.current = initialRotation;
+
+  const initialScaleRef = useRef(initialScale);
+  initialScaleRef.current = initialScale;
 
   const rotationRef = useRef(0);
   const childRef = useRef<HTMLDivElement>();
@@ -32,11 +74,15 @@ export function WithRotationHandle(
     //////console.log(objectCenter);
     //////console.log(event.clientY, "event.clientY");
 
-    var angle = Math.atan2(
+    var angleRad = Math.atan2(
       objectCenter.current.y - event.clientY,
       objectCenter.current.x - event.clientX
     );
-    getAbsEl("mouse", { x: event.clientX, y: event.clientY });
+
+    const angle = (angleRad * 180) / Math.PI;
+    // FOR DEBUG
+
+    //getAbsEl("mouse", { x: event.clientX, y: event.clientY });
 
     ////console.log(angle);
     ////console.log(startAngle.current);
@@ -44,97 +90,164 @@ export function WithRotationHandle(
     return angle - startAngle.current;
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
-    const rotation = getDragAngle(e);
+  // useEffect(() => {
+  //   childRef.current!.style.transform =
+  //     "rotate(" +
+  //     totalRotation +
+  //     "deg" +
+  //     ") scale(" +
+  //     initialScaleRef.current +
+  //     ") translateX(" +
+  //     translateX +
+  //     "px) translateY(" +
+  //     translateY +
+  //     "px) ";
+  // }, [translateX, translateY]);
 
-    ////console.log("ROTATION:" + rotation);
-    rotationRef.current = rotation;
+  // const handleMouseMove = (e: MouseEvent) => {
+  //   const rotation = getDragAngle(e);
 
-    console.log(initialRotationRef.current);
-    const totalRotation = initialRotationRef.current + rotation;
-    childRef.current!.style.transform = "rotate(" + totalRotation + "rad" + ")";
+  //   ////console.log("ROTATION:" + rotation);
+  //   rotationRef.current = rotation;
 
-    const w = parseInt(childRef.current?.style?.width);
-    const h = parseInt(childRef.current?.style?.height);
+  //   //console.log(initialRotationRef.current);
+  //   const totalRotation = initialRotationRef.current + rotation;
+  //   childRef.current!.style.transform =
+  //     "rotate(" +
+  //     totalRotation +
+  //     "deg" +
+  //     ") scale(" +
+  //     initialScaleRef.current +
+  //     ") translateX(" +
+  //     translateX +
+  //     "px) translateY(" +
+  //     translateY +
+  //     "px) ";
 
-    const x = parseInt(childRef.current?.style?.left);
-    const y = parseInt(childRef.current?.style?.top);
+  //   const w = parseInt(childRef.current?.style?.width!);
+  //   const h = parseInt(childRef.current?.style?.height!);
 
-    const rXCenter = x + w / 2;
-    const rYCenter = y + h / 2;
+  //   const x = parseInt(childRef.current?.style?.left!);
+  //   const y = parseInt(childRef.current?.style?.top!);
 
-    const boundsEl = document.getElementsByClassName(
-      `object-bounds-${props.object.id}`
-    )[0] as HTMLDivElement;
+  //   const rXCenter = x + w / 2;
+  //   const rYCenter = y + h / 2;
 
-    //////////console.log(rect);
+  //   const boundsEl = document.getElementsByClassName(
+  //     `object-bounds-${props.object.id}`
+  //   )[0] as HTMLDivElement;
 
-    const fullRotation = initialRotationRef.current + rotation;
-    const H =
-      w * Math.abs(Math.sin(fullRotation)) +
-      h * Math.abs(Math.cos(fullRotation));
-    const W =
-      w * Math.abs(Math.cos(fullRotation)) +
-      h * Math.abs(Math.sin(fullRotation));
+  //   //////////console.log(rect);
 
-    const X = rXCenter - W / 2;
-    const Y = rYCenter - H / 2;
+  //   const fullRotation =
+  //     (initialRotationRef.current + rotation) * (Math.PI / 180);
+  //   const H =
+  //     w * Math.abs(Math.sin(fullRotation)) +
+  //     h * Math.abs(Math.cos(fullRotation));
+  //   const W =
+  //     w * Math.abs(Math.cos(fullRotation)) +
+  //     h * Math.abs(Math.sin(fullRotation));
 
-    ////////console.log({ X, Y });
-    ////////console.log({ H, W });
-    ////////console.log({ rXCenter, rYCenter });
+  //   const X = rXCenter - W / 2;
+  //   const Y = rYCenter - H / 2;
 
-    if (boundsEl) {
-      boundsEl.style.position = "absolute";
-      boundsEl.style.top = Y + "px";
-      boundsEl.style.left = X + "px";
-      boundsEl.style.width = W + "px"; //rect.width / stageZoom + "px";
-      boundsEl.style.height = H + "px"; //rect.height / stageZoom + "px";
-    }
-  };
+  //   ////////console.log({ X, Y });
+  //   ////////console.log({ H, W });
+  //   ////////console.log({ rXCenter, rYCenter });
 
-  const handleMouseUp = (e: Event) => {
-    (window as any).removeEventListener("mousemove", handleMouseMove);
-    (window as any).removeEventListener("mouseup", handleMouseUp);
+  //   if (boundsEl) {
+  //     boundsEl.style.position = "absolute";
+  //     boundsEl.style.top = Y - (H * (initialScaleRef.current - 1)) / 2 + "px";
+  //     boundsEl.style.left = X - (W * (initialScaleRef.current - 1)) / 2 + "px";
+  //     boundsEl.style.width = W * initialScaleRef.current + "px"; //rect.width / stageZoom + "px";
+  //     boundsEl.style.height = H * initialScaleRef.current + "px"; //rect.height / stageZoom + "px";
+  //   }
+  // };
 
-    ////////console.log(rotationRef.current);
+  // const delayerCleanup = debounce(() => {
+  //   setGlobalProp("rotationInProgress", false);
+  // }, 10);
 
-    //initialRotationRef.current +
-    //initialRotationRef.current +
-    onRotationDone(initialRotationRef.current + rotationRef.current);
-    //rotationRef.current = 0;
-  };
+  // const handleMouseUp = (e: Event) => {
+  //   e.stopPropagation();
+  //   e.stopImmediatePropagation();
 
-  const handleMouseDown = (e: Event) => {
-    ////////console.log(e.target);
-    startMousePosition.current = getMousePosition(
-      e as unknown as React.MouseEvent
-    );
-    ////////console.log(startMousePosition.current);
+  //   delayerCleanup();
 
-    var rect = childRef.current!.getBoundingClientRect();
-    ////console.log(rect);
-    objectCenter.current = {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
+  //   (window as any).removeEventListener("mousemove", handleMouseMove);
+  //   (window as any).removeEventListener("mouseup", handleMouseUp);
 
-    getAbsEl("center", objectCenter.current);
+  //   ////////console.log(rotationRef.current);
 
-    //if (!startAngle.current)
-    startAngle.current = 0;
-    startAngle.current = getDragAngle(e as MouseEvent);
+  //   //initialRotationRef.current +
+  //   //initialRotationRef.current +
+  //   onRotationDone(initialRotationRef.current + rotationRef.current);
+  //   //rotationRef.current = 0;
+  // };
 
-    ////console.log("START ANGLE:" + startAngle.current);
+  const handleMouseDown = useCallback(
+    (e: MouseEvent) => {
+      e.stopPropagation();
 
-    ////////console.log(startAngle.current);
+      console.log(selectionPath);
 
-    (window as any).removeEventListener("mousemove", handleMouseMove);
-    (window as any).addEventListener("mousemove", handleMouseMove);
+      const groupsMatrix = getGroupMatrixFromSelectionPath(
+        selectionPath,
+        objectById
+      );
 
-    (window as any).removeEventListener("mouseup", handleMouseUp);
-    (window as any).addEventListener("mouseup", handleMouseUp);
-  };
+      //console.log(groupsMatrix, "groupsMatrix");
+
+      stageManager.start(StageToolEnum.ROTATE, {
+        boundingClientRects: [childRef.current!.getBoundingClientRect()],
+        mousePosition: getMousePosition(e),
+        contextMatrix: groupsMatrix,
+        objectId: props.object.id,
+        objectRotation: initialRotation,
+        objectScale: initialScale,
+        originalMouseEvent: e,
+      });
+
+      // TODO remove following code
+
+      return;
+
+      // //onRotationStart?.();
+
+      // setGlobalProp("rotationInProgress", true);
+
+      // ////////console.log(e.target);
+      // startMousePosition.current = getMousePosition(
+      //   e as unknown as React.MouseEvent
+      // );
+      // ////////console.log(startMousePosition.current);
+
+      // var rect = childRef.current!.getBoundingClientRect();
+      // ////console.log(rect);
+      // objectCenter.current = {
+      //   x: rect.left + rect.width / 2,
+      //   y: rect.top + rect.height / 2,
+      // };
+
+      // // FOR DEBUG
+      // //getAbsEl("center", objectCenter.current);
+
+      // //if (!startAngle.current)
+      // startAngle.current = 0;
+      // startAngle.current = getDragAngle(e as MouseEvent);
+
+      // ////console.log("START ANGLE:" + startAngle.current);
+
+      // ////////console.log(startAngle.current);
+
+      // (window as any).removeEventListener("mousemove", handleMouseMove);
+      // (window as any).addEventListener("mousemove", handleMouseMove);
+
+      // (window as any).removeEventListener("mouseup", handleMouseUp);
+      // (window as any).addEventListener("mouseup", handleMouseUp);
+    },
+    [objectById, props.object.id, selectionPath, stageManager]
+  );
 
   useEffect(() => {
     childRef.current = document.getElementsByClassName(
@@ -147,8 +260,8 @@ export function WithRotationHandle(
 
     if (childRef.current) {
       const objectRootEl = childRef.current as HTMLElement;
-      childRef.current!.style.transform =
-        "rotate(" + initialRotation + "rad" + ")";
+      // childRef.current!.style.transform =
+      //   "rotate(" + initialRotation + "deg" + ")";
 
       rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
 
@@ -169,7 +282,7 @@ export function WithRotationHandle(
     }
     // const bounds = objectRootEl.getBoundingClientRect();
     // ////////console.log(bounds);
-  }, []);
+  }, [handleMouseDown, initialRotation, props.object.id]);
 
   const renderChildren = () => {
     return React.Children.map(props.children, (child) => {
@@ -184,7 +297,7 @@ export function WithRotationHandle(
 
 let absEl: Record<string, HTMLDivElement> = {};
 
-function getAbsEl(
+export function getAbsEl(
   id: string,
   { x, y }: { x: any; y: any } = { x: 0, y: 0 }
 ): HTMLDivElement {
@@ -202,6 +315,7 @@ function getAbsEl(
   absEl[id].style.backgroundColor = "red";
   absEl[id].style.left = parseInt(x) + "px";
   absEl[id].style.top = parseInt(y) + "px";
+  absEl[id].style.pointerEvents = "none";
 
   document.body.appendChild(absEl[id]);
 

@@ -59,6 +59,17 @@ function App(props: IAppProps) {
     });
   }, []);
 
+  // disable pinch
+  useEffect(() => {
+    window.addEventListener(
+      "wheel",
+      (e) => {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+  }, []);
+
   return (
     <div className={`bp5-${theme} ${className}`}>
       <Editor />

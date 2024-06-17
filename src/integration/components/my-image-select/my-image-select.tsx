@@ -48,6 +48,8 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
       ? "audio/mp3, audio/mpeg"
       : type === "vector"
       ? "image/svg+xml"
+      : type === "font"
+      ? "font/otf, font/ttf, font/woff2"
       : type === "extension"
       ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
       : type === "template"
@@ -143,6 +145,11 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
           ) : type === "vector" ? (
             <p>
               Drag 'n' drop some SVG files here, or click to open select dialog.
+            </p>
+          ) : type === "font" ? (
+            <p>
+              Drag 'n' drop some Font files here, or click to open select
+              dialog.
             </p>
           ) : type === "extension" ? (
             <p>

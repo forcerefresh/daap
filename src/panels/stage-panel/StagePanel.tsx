@@ -597,7 +597,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
   ) => {
-    if (event.ctrlKey || event.metaKey) {
+    if (event.shiftKey) {
       selectedObjectIds.indexOf(objectId) === -1
         ? _addObjectsToSelection([objectId])
         : _removeObjectsFromSelection([objectId]);

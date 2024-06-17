@@ -249,7 +249,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              <b>All images are loaded for the selected criteria.</b>
+              <b>All items are loaded for the selected criteria.</b>
             </p>
           }
         >

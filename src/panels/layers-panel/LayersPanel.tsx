@@ -123,7 +123,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     layerId: string
   ) => {
-    if (event.ctrlKey || event.metaKey) {
+    if (event.shiftKey) {
       selectedLayerIds.indexOf(layerId) === -1
         ? _addLayersToSelection([layerId])
         : _removeLayersFromSelection([layerId]);
@@ -138,7 +138,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
   ) => {
-    if (event.ctrlKey || event.metaKey) {
+    if (event.shiftKey) {
       selectedObjectIds.indexOf(objectId) === -1
         ? _addObjectsToSelection([objectId])
         : _removeObjectsFromSelection([objectId]);
@@ -374,6 +374,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               slide?.exitDuration.customValue || "1ms"
                             )}
                             onDragingChange={onDragingObjectsChange}
+                            objectById={objectById}
                           />
                         </React.Fragment>
                       );

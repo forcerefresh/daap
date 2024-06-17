@@ -10,7 +10,11 @@ import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { ToolbarMode } from "../../utils/tools/types";
 import css from "./QuickBarPanel.module.scss";
 import { Button } from "@blueprintjs/core";
-import { addNewObject, groupObjects } from "../../store/actions/actions";
+import {
+  addNewObject,
+  groupObjects,
+  ungroupObject,
+} from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 
 type IToolbarPanel = typeof mapDispatchToProps &
@@ -23,6 +27,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     _addNewObject,
     activeLayerId,
     _groupObjects,
+    _ungroupObject,
+    objectById,
   } = props;
   const {
     toolConfig,
@@ -51,43 +57,58 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
 
   return (
     <div className={cx(css.quickBar)}>
-      {toolBarComponent?.toolBar ? (
-        <toolBarComponent.toolBar
-          mode={mode}
-          object={activeObject}
-          addObject={() => {}}
-          updateObject={updateObject}
-          deleteObject={deleteObject}
-          setToolConfig={setToolConfig}
-          toolConfig={toolConfig}
-        />
-      ) : null}
-      {activeLayerId && (
-        <div>
-          <Button
-            style={{ float: "right" }}
-            minimal
-            onClick={() => {
-              _addNewObject(activeLayerId, "group", {});
-            }}
-          >
-            AddGroup
-          </Button>
-        </div>
-      )}
-      {selectedObjectIds.length > 1 && (
-        <div>
-          <Button
-            style={{ float: "right" }}
-            minimal
-            onClick={() => {
-              _groupObjects(selectedObjectIds);
-            }}
-          >
-            Group objects
-          </Button>
-        </div>
-      )}
+      <div className={css.leftHolder}>
+        {toolBarComponent?.toolBar ? (
+          <toolBarComponent.toolBar
+            mode={mode}
+            object={activeObject}
+            addObject={() => {}}
+            updateObject={updateObject}
+            deleteObject={deleteObject}
+            setToolConfig={setToolConfig}
+            toolConfig={toolConfig}
+          />
+        ) : null}
+      </div>
+      <div className={css.rightHolder}>
+        {
+          <div>
+            <Button
+              style={{ float: "right" }}
+              minimal
+              onClick={() => {
+                _groupObjects(selectedObjectIds);
+              }}
+              icon={"group-objects"}
+              className={css.button}
+              disabled={selectedObjectIds.length === 0}
+            >
+              Group
+            </Button>
+          </div>
+        }
+        {
+          <div>
+            <Button
+              style={{ float: "right" }}
+              minimal
+              onClick={() => {
+                _ungroupObject(selectedObjectIds[0]);
+              }}
+              icon={"ungroup-objects"}
+              className={css.button}
+              disabled={
+                !(
+                  selectedObjectIds.length === 1 &&
+                  objectById[selectedObjectIds[0]].type === "group"
+                )
+              }
+            >
+              Ungroup
+            </Button>
+          </div>
+        }
+      </div>
     </div>
   );
 };
@@ -104,6 +125,7 @@ const mapStateToProps = (state: IStore) => {
   return {
     activeLayerId,
     activeObject,
+    objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
   };
 };
@@ -116,6 +138,8 @@ const mapDispatchToProps = {
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
+
+  _ungroupObject: (groupId: string) => ungroupObject(groupId),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

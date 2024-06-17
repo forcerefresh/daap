@@ -106,8 +106,8 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
   };
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
-    const parentHasLayout = objectLayer.layout !== "none";
+    //const layoutedByParent = objectLayer.definition.values.hasLayoutChildren;
+    //const parentHasLayout = objectLayer.layout !== "none";
 
     return (
       <>
@@ -136,11 +136,20 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           }
         )}
 
-        {getNumericFiled("Title", object.scale ?? "", (title: string) => {
+        {getNumericFiled("Scale", `${object.scale}`, (scale: string) => {
           const retObj = cloneDeep(object);
-          retObj.title = title;
+          retObj.scale = parseFloat(scale);
           _updateObject(retObj);
         })}
+        {getNumericFiled(
+          "Rotation",
+          `${object.rotation}`,
+          (rotation: string) => {
+            const retObj = cloneDeep(object);
+            retObj.rotation = parseFloat(rotation);
+            _updateObject(retObj);
+          }
+        )}
       </>
     );
   };
