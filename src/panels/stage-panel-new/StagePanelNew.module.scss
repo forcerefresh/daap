@@ -61,10 +61,10 @@
   //background: rgb(30, 30, 30);
 }
 
-.text {
-  position: absolute;
-  border: 1px dotted #828282;
-}
+// .text {
+//   position: absolute;
+//   border: 1px dotted #828282;
+// }
 
 .active {
   border: 1px solid #48aff0; // greenyellow;
@@ -274,6 +274,10 @@
 // }
 
 .canvas {
+  position: absolute;
+}
+.stageToolsCanvas {
+  pointer-events: none;
   //transition: 2s all ease-in;
 }
 
@@ -320,11 +324,11 @@
   // }
 }
 
-.rotationHandleGroup {
-  top: -40px;
-  background-color: red;
-}
-
 .objectBounds {
   border: 2px dotted rgba(255, 255, 255, 0.3);
+}
+
+.resizeHandleHolder {
+  pointer-events: none;
+  //background-color: red;
 }

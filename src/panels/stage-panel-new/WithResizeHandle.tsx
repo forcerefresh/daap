@@ -1,0 +1,254 @@
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+} from "react";
+import { getMousePosition } from "../../utils/doom-utils/common";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { StageManagerContext } from "./StageManagerProvider";
+import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
+import { StageToolEnum } from "../../utils/selection-manager/types";
+import { isObjectInGroup } from "../../store/actions/actions-utils";
+
+const HANDLE_SIZE = 20;
+
+const groupSelectionColor = "#48aff0"; /// "#48f08d";
+const objectSelectionColor = "#48aff0";
+
+interface WithResizeHandleProps {
+  object: IObject;
+  stageZoom: number;
+  children: JSX.Element;
+  rotation: number;
+  scale: number;
+  selectionPath: string[];
+  objectById: {
+    [id: string]: IObject<{}>;
+  };
+  isSelected: boolean;
+}
+
+export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
+  const {
+    stageZoom,
+    rotation: initialRotation,
+    scale: initialScale,
+    selectionPath,
+    objectById,
+    object,
+    isSelected,
+  } = props;
+
+  const { stageManager } = useContext(StageManagerContext);
+
+  // const initialRotationRef = useRef(initialRotation);
+  // initialRotationRef.current = initialRotation;
+
+  // const initialScaleRef = useRef(initialScale);
+  // initialScaleRef.current = initialScale;
+
+  const childRef = useRef<HTMLDivElement>();
+  const resizeHolderRef = useRef<HTMLDivElement>();
+
+  const handlesRef = useRef<{
+    tl?: HTMLElement;
+    tr?: HTMLElement;
+    bl?: HTMLElement;
+    br?: HTMLElement;
+  }>({});
+
+  const handleMouseDown = useCallback(
+    (e: MouseEvent) => {
+      console.log("SASdsadsada");
+      e.stopPropagation();
+
+      const handle = (e.currentTarget as HTMLElement)?.getAttribute(
+        "data-scale-handle"
+      );
+
+      console.log(selectionPath);
+
+      const groupsMatrix = getGroupMatrixFromSelectionPath(
+        selectionPath,
+        objectById
+      );
+
+      stageManager.start(StageToolEnum.SCALE, {
+        boundingClientRects: [childRef.current!.getBoundingClientRect()],
+        mousePosition: getMousePosition(e),
+        contextMatrix: groupsMatrix,
+        objectId: object.id,
+        objectRotation: initialRotation,
+        objectScale: initialScale,
+        originalMouseEvent: e,
+        handle: handle ?? "",
+      });
+    },
+    [
+      initialRotation,
+      initialScale,
+      object.id,
+      objectById,
+      selectionPath,
+      stageManager,
+    ]
+  );
+
+  useLayoutEffect(() => {
+    console.log(isSelected);
+
+    if (!isSelected) return;
+    // if (isObjectInGroup(object, objectById)) {
+    //   return;
+    // }
+
+    childRef.current = document.getElementsByClassName(
+      `object-holder-${props.object.id}`
+    )[0] as HTMLDivElement;
+
+    resizeHolderRef.current = document.getElementsByClassName(
+      `resize-handle-holder-${props.object.id}`
+    )[0] as HTMLDivElement;
+
+    const scaledHandleSize = HANDLE_SIZE / Math.abs(initialScale) / stageZoom;
+    //initialRotationRef.current = initialRotation;
+    if (resizeHolderRef.current) {
+      let el: HTMLDivElement;
+
+      el = document.createElement("div");
+      el.style.left = "-" + scaledHandleSize + "px";
+      el.style.top = "-" + scaledHandleSize + "px";
+      el.style.width = scaledHandleSize + "px";
+      el.style.height = scaledHandleSize + "px";
+      el.style.background = `${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.border = `0.1px solid ${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.position = "absolute";
+      el.style.pointerEvents = "all";
+      el.setAttribute("data-scale-handle", "tl");
+      el.setAttribute("class", "resize-handle");
+      resizeHolderRef.current.appendChild(el);
+      // el.removeEventListener("mousedown", handleMouseDown);
+      el.addEventListener("mousedown", handleMouseDown);
+      handlesRef.current.tl = el;
+
+      el = document.createElement("div");
+      el.style.right = "-" + scaledHandleSize + "px";
+      el.style.top = "-" + scaledHandleSize + "px";
+      el.style.width = scaledHandleSize + "px";
+      el.style.height = scaledHandleSize + "px";
+      el.style.background = `${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.border = `0.1px solid ${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.position = "absolute";
+      el.style.pointerEvents = "all";
+      el.setAttribute("data-scale-handle", "tr");
+      el.setAttribute("class", "resize-handle");
+
+      resizeHolderRef.current.appendChild(el);
+      // el.removeEventListener("mousedown", handleMouseDown);
+      el.addEventListener("mousedown", handleMouseDown);
+      handlesRef.current.tr = el;
+
+      el = document.createElement("div");
+      el.style.bottom = "-" + scaledHandleSize + "px";
+      el.style.left = "-" + scaledHandleSize + "px";
+      el.style.width = scaledHandleSize + "px";
+      el.style.height = scaledHandleSize + "px";
+      el.style.background = `${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.border = `0.1px solid ${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.position = "absolute";
+      el.style.pointerEvents = "all";
+      el.setAttribute("data-scale-handle", "bl");
+      el.setAttribute("class", "resize-handle");
+      resizeHolderRef.current.appendChild(el);
+      // el.removeEventListener("mousedown", handleMouseDown);
+      el.addEventListener("mousedown", handleMouseDown);
+      handlesRef.current.bl = el;
+
+      el = document.createElement("div");
+      el.style.bottom = "-" + scaledHandleSize + "px";
+      el.style.right = "-" + scaledHandleSize + "px";
+      el.style.width = scaledHandleSize + "px";
+      el.style.height = scaledHandleSize + "px";
+      el.style.background = `${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.border = `0.1px solid ${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      el.style.position = "absolute";
+      el.style.pointerEvents = "all";
+      el.setAttribute("data-scale-handle", "br");
+      el.setAttribute("class", "resize-handle");
+      resizeHolderRef.current.appendChild(el);
+      // el.removeEventListener("mousedown", handleMouseDown);
+      el.addEventListener("mousedown", handleMouseDown);
+      handlesRef.current.br = el;
+    }
+
+    return () => {
+      if (handlesRef.current?.tl && resizeHolderRef.current) {
+        handlesRef.current.tl.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.tl);
+      }
+      if (handlesRef.current?.tr && resizeHolderRef.current) {
+        handlesRef.current.tr.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.tr);
+      }
+      if (handlesRef.current?.bl && resizeHolderRef.current) {
+        handlesRef.current.bl.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.bl);
+      }
+      if (handlesRef.current?.br && resizeHolderRef.current) {
+        handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.br);
+      }
+    };
+    // if (childRef.current) {
+    //   const objectRootEl = childRef.current as HTMLElement;
+
+    //   rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
+
+    //   rotationHandle.current?.removeEventListener("mousedown", handleMouseDown);
+    //   rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
+
+    //   return () => {
+    //     rotationHandle.current?.removeEventListener(
+    //       "mousedown",
+    //       handleMouseDown
+    //     );
+    //   };
+
+    //   // (window as any).addEventListener("blur", windowBlurHandler);
+    //   // (window as any).addEventListener("mouseup", documentMouseUpHandler);
+    //   // document.addEventListener("mouseout", documentMouseOutHandler);
+    // }
+  }, [
+    initialRotation,
+    props.object.id,
+    isSelected,
+    handleMouseDown,
+    stageZoom,
+  ]);
+
+  const renderChildren = () => {
+    return React.Children.map(props.children, (child) => {
+      return React.cloneElement(child, {});
+    });
+  };
+
+  return <>{renderChildren()}</>;
+}

@@ -7,6 +7,7 @@ import {
   StageToolRotateEventData,
 } from "./events/StageToolEvent";
 import { IStageTool, IStageToolData, StageToolEnum } from "./types";
+import { updateBoxShadow, updateHandleVisibility } from "./utils";
 
 export class RotateTool extends EventTarget implements IStageTool {
   private initialMousePosition: Point;
@@ -18,6 +19,8 @@ export class RotateTool extends EventTarget implements IStageTool {
 
   private mouseMove;
   private mouseUp;
+
+  private prevBoxShadow: string | undefined;
 
   constructor(data: IStageToolData) {
     super();
@@ -40,6 +43,9 @@ export class RotateTool extends EventTarget implements IStageTool {
 
     (window as any).addEventListener("mousemove", this.mouseMove);
     (window as any).addEventListener("mouseup", this.mouseUp, true);
+
+    updateHandleVisibility("resize-handle", false);
+    this.prevBoxShadow = updateBoxShadow(this.objectId, "none");
   }
 
   handleMouseMove(e: MouseEvent) {
@@ -91,6 +97,9 @@ export class RotateTool extends EventTarget implements IStageTool {
 
     (window as any).removeEventListener("mousemove", this.mouseMove);
     (window as any).removeEventListener("mouseup", this.mouseUp, true);
+
+    updateHandleVisibility("resize-handle", true);
+    updateBoxShadow(this.objectId, this.prevBoxShadow);
   }
 
   stop() {}

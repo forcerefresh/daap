@@ -5,7 +5,14 @@ import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 
-import { delay, differenceWith, intersection, isEqual, once } from "lodash-es";
+import {
+  cloneDeep,
+  delay,
+  differenceWith,
+  intersection,
+  isEqual,
+  once,
+} from "lodash-es";
 import { IObject, ItemType } from "webslider-sdk/lib/objects/i-object";
 import {
   createObject,
@@ -60,8 +67,12 @@ import {
   boundsUnion,
   getObjectBoundingBox,
 } from "../helpers/objectBoundingBox";
-import { createGroupWithObjects } from "../../panels/stage-panel-new/stage-panel-utils";
-import { getAncestorLayer, populateObjectThreeIds } from "./actions-utils";
+import { getUngroupObjectsCalculation } from "../../panels/stage-panel-new/stage-panel-utils";
+import {
+  getAncestorLayer,
+  isObjectGroup,
+  populateObjectThreeIds,
+} from "./actions-utils";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1265,7 +1276,7 @@ export function ungroupObject(objectId: string): any {
           breakpointConfig.type === state.stage.selectedDevice
       );
 
-    const transformPerObject = createGroupWithObjects({
+    const transformPerObject = getUngroupObjectsCalculation({
       group: groupObject,
       objects: groupObject.objectIds!.map((objectId) => objectById[objectId]),
       breakpointConfig: breakpointConfig!,
@@ -1290,28 +1301,124 @@ export const GROUP_OBJECTS = "Group objects";
 
 export interface GroupObjectsAction extends IUndoableAction<true> {
   type: typeof GROUP_OBJECTS;
-  payload: { objectIds: string[]; group: IObject };
+  payload: {
+    objectIds: string[];
+    updatedObjectsById: { [id: string]: IObject<{}> };
+    group: IObject;
+    groupIdsForRemoval: string[];
+  };
 }
 
 export function _groupObjects(
   group: IObject,
-  objectIds: string[]
+  objectIds: string[],
+  updatedObjectsById: { [id: string]: IObject<{}> },
+  groupIdsForRemoval: string[]
 ): GroupObjectsAction {
   return {
     type: GROUP_OBJECTS,
-    payload: { group, objectIds },
+    payload: { group, objectIds, groupIdsForRemoval, updatedObjectsById },
     isUndoable: true,
   };
 }
 
 export function groupObjects(objectIds: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const firstObject = getState().project.objects.objectById[objectIds[0]];
+    const objectById = getState().project.objects.objectById;
+    const settings = getState().project.settings;
+    const layerById = getState().project.layers.layerById;
+    const { selectedDevice } = getState().stage;
+
+    // ***********
+    // 1. UNGROUP
+    // ***********
+    let allObjectsIds: string[] = [];
+    const allObjectsById: { [id: string]: IObject<{}> } = {};
+    const groupIdsForRemoval: string[] = [];
+    objectIds.forEach((objectId) => {
+      const object = objectById[objectId];
+      if (isObjectGroup(object)) {
+        const groupObject = objectById[objectId];
+        const parentLayerId = groupObject.parentId;
+        const groupId = groupObject.id;
+        const objectIds = groupObject.objectIds;
+
+        const breakpointConfig: BreakpointConfiguration | undefined =
+          settings.breakpoints.breakpointsConfiguration.find(
+            (breakpointConfig: any) => breakpointConfig.type === selectedDevice
+          );
+
+        const transformPerObject = getUngroupObjectsCalculation({
+          group: groupObject,
+          objects: groupObject.objectIds!.map(
+            (objectId) => objectById[objectId]
+          ),
+          breakpointConfig: breakpointConfig!,
+          parentLayer: getAncestorLayer(groupObject, layerById, objectById),
+        });
+
+        //////
+        objectIds?.forEach((objId: string) => {
+          const obj = cloneDeep(objectById[objId]);
+          //const obj: IObject = {
+          //  ...objectById[objId],
+          obj.scale = transformPerObject[objId].scale;
+          obj.rotation = transformPerObject[objId].rotation;
+          obj.absoluteLayout!.common.left =
+            transformPerObject[objId].left + "px";
+          obj.absoluteLayout!.common.top = transformPerObject[objId].top + "px";
+
+          obj.parentId = groupObject.parentId;
+          obj.layerId = groupObject.layerId;
+          // obj.absoluteLayout!.common.left =
+          //   parseInt(obj.absoluteLayout!.common.left) +
+          //   parseInt(groupObject.absoluteLayout!.common.left) +
+          //   "px";
+          // obj.absoluteLayout!.common.top =
+          //   parseInt(obj.absoluteLayout!.common.top) +
+          //   parseInt(groupObject.absoluteLayout!.common.top) +
+          //   "px";
+          allObjectsById[objId] = obj;
+
+          allObjectsIds.push(objId);
+        });
+        // ///
+        //
+        groupIdsForRemoval.push(objectId);
+
+        //if (objectIds && parentId) {
+        //dispatch(
+        //   _ungroupObject(
+        //     groupId,
+        //     objectIds,
+        //     parentLayerId,
+        //     transformPerObject
+        //   )
+        // );
+
+        // dispatch(activateObject(objectIds[0]));
+        // dispatch(selectObjects(objectIds));
+        // dispatch(selectForProperties({ id: objectIds[0], type: "object" }));
+        // }
+        // TODO
+        //
+        //allObjectsIds = [...allObjectsIds];
+      } else {
+        allObjectsIds.push(objectId);
+        allObjectsById[objectId] = cloneDeep(objectById[objectId]);
+      }
+    });
+
+    // ***********
+    // 2. GROUP
+    // ***********
+
+    const firstObject = allObjectsById[allObjectsIds[0]];
 
     // get group bounds (TODO: duplicate)
     let groupBounds = getObjectBoundingBox(firstObject);
-    objectIds.forEach((objectId) => {
-      const object = getState().project.objects.objectById[objectId];
+    allObjectsIds.forEach((objectId) => {
+      const object = allObjectsById[objectId];
       const bounds = getObjectBoundingBox(object);
       groupBounds = boundsUnion(groupBounds, bounds);
     });
@@ -1319,15 +1426,15 @@ export function groupObjects(objectIds: string[]): any {
     //const objects: IObject[] = [];
     //  normalize object pos
     const layerId = firstObject.layerId;
-    objectIds.forEach((objectId) => {
+    allObjectsIds.forEach((objectId) => {
       // TODO: why we are mutating ???
-      const object = getState().project.objects.objectById[objectId];
+      const object = allObjectsById[objectId];
       object.absoluteLayout!.common.top =
-        parseInt(object.absoluteLayout!.common.top) - groupBounds.y + "px";
+        parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
       object.absoluteLayout!.common.left =
-        parseInt(object.absoluteLayout!.common.left) - groupBounds.x + "px";
+        parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
 
-      delete object.layerId;
+      //delete object.layerId;
       //objects.push(object);
     });
 
@@ -1348,7 +1455,7 @@ export function groupObjects(objectIds: string[]): any {
         },
       },
       parentId: firstObject.parentId,
-      objectIds: objectIds,
+      objectIds: allObjectsIds,
       layerId,
     };
 
@@ -1360,7 +1467,14 @@ export function groupObjects(objectIds: string[]): any {
     //   dispatch(_updateObject(object));
     // });
 
-    dispatch(_groupObjects(groupObject, objectIds));
+    dispatch(
+      _groupObjects(
+        groupObject,
+        allObjectsIds,
+        allObjectsById,
+        groupIdsForRemoval
+      )
+    );
     dispatch(activateObject(groupObject.id));
     dispatch(selectObjects([groupObject.id]));
     dispatch(selectForProperties({ id: groupObject.id, type: "object" }));

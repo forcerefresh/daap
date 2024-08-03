@@ -4,6 +4,7 @@ import { getMousePosition } from "../doom-utils/common";
 import { MoveTool } from "./MoveTool";
 import { PanTool } from "./PanTool";
 import { RotateTool } from "./RotateTool";
+import { ScaleTool } from "./ScaleTool";
 import { StageToolEvent } from "./events/StageToolEvent";
 import { IStageTool, IStageToolData, StageToolEnum } from "./types";
 import EventTarget from "@ungap/event-target";
@@ -38,6 +39,7 @@ export class StageManager extends EventTarget {
           eventType: stageTool,
           objectId: data.objectId,
           originalMouseEvent: data.originalMouseEvent,
+          handle: data.handle,
         },
       })
     );
@@ -64,6 +66,7 @@ export class StageManager extends EventTarget {
   }
 
   changeHandler(e: StageToolEvent) {
+    console.log("Sdsdsd");
     this.dispatchEvent(new StageToolEvent("change", { detail: e.detail }));
   }
 
@@ -89,5 +92,9 @@ function createStageTool(
       return new RotateTool(data);
     case StageToolEnum.PAN:
       return new PanTool(data);
+    case StageToolEnum.SCALE: {
+      console.log("SSSSSSSS");
+      return new ScaleTool(data);
+    }
   }
 }

@@ -21,6 +21,14 @@ export interface StageToolMoveEventData extends StageToolEventData {
   mouseMove: Point;
 }
 
+export interface StageToolScaleEventData extends StageToolEventData {
+  eventType: StageToolEnum.SCALE;
+  x: number;
+  y: number;
+  mouseMove: Point;
+  handle: string;
+}
+
 export interface StageToolPanEventData extends StageToolEventData {
   eventType: StageToolEnum.PAN;
   x: number;
@@ -37,7 +45,8 @@ export type StageToolEventDataUnion =
   | StageToolRotateEventData
   | StageToolMoveEventData
   | StageToolSelectEventData
-  | StageToolPanEventData;
+  | StageToolPanEventData
+  | StageToolScaleEventData;
 
 export class StageToolEvent<
   T = StageToolEventDataUnion

@@ -6,6 +6,7 @@ import React, {
   useContext,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -45,7 +46,7 @@ import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-regist
 import { StageTools } from "../../store/reducers/stage";
 import { IRect, getMousePosition } from "../../utils/doom-utils/common";
 import {
-  createGroupWithObjects,
+  getUngroupObjectsCalculation,
   createTransformForPath,
   decomposeMatrix2DW3,
   getFullMatrixFromTransformArr,
@@ -62,7 +63,14 @@ import {
 } from "../../store/helpers/objectBoundingBox";
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
-import { populateObjectThreeIds } from "../../store/actions/actions-utils";
+import {
+  isObjectInGroup,
+  populateObjectThreeIds,
+} from "../../store/actions/actions-utils";
+import { WithResizeHandle } from "./WithResizeHandle";
+
+const groupSelectionColor = "#48aff0"; /// "#48f08d";
+const objectSelectionColor = "#48aff0";
 
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -182,16 +190,17 @@ export function StageObjectInternal(props: IStageLayer) {
     }
   );
 
-  useEffect(() => {
-    if (object?.objectIds && object.objectIds.length > 0) {
-      createGroupWithObjects({
-        group: object,
-        objects: object.objectIds.map((objectId) => objectById[objectId]),
-        breakpointConfig: breakpointConfig!,
-        parentLayer,
-      });
-    }
-  });
+  //debug
+  // useEffect(() => {
+  //   if (object?.objectIds && object.objectIds.length > 0) {
+  //     getUngroupObjectsCalculation({
+  //       group: object,
+  //       objects: object.objectIds.map((objectId) => objectById[objectId]),
+  //       breakpointConfig: breakpointConfig!,
+  //       parentLayer,
+  //     });
+  //   }
+  // });
 
   useLayoutEffect(() => {
     const objectHolder = document.getElementsByClassName(
@@ -226,12 +235,15 @@ export function StageObjectInternal(props: IStageLayer) {
     top: !layoutChildren ? calculatedObjectSize.top : "0px",
     width: calculatedObjectSize.width ?? "0px",
     height: calculatedObjectSize.height ?? "0px",
-    ...(isSelected
+    ...(isSelected || (isInSelectionPath && !isSelected)
       ? {
-          boxShadow: `0 0 0 ${1 / objectZoom}px #48aff0`,
+          boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
+            object.objectIds && !isSelected ? "#444444" : "#48aff0"
+          }`,
         }
       : {}),
   };
+
   if (layoutChildren?.type === "inline") {
     objectHolderStyle.display = "inline-block";
   }
@@ -249,6 +261,9 @@ export function StageObjectInternal(props: IStageLayer) {
     selectedObjectIds.length === 1 &&
     selectedObjectIds[0] === objectRef.current.id;
 
+  console.log(
+    "Obj:" + objectRef.current?.name + " :  sel: " + isOnlyThisObjectSelected
+  );
   const onObjectClick = (
     event: React.MouseEvent<HTMLDivElement>,
     objectId: string
@@ -268,7 +283,7 @@ export function StageObjectInternal(props: IStageLayer) {
         const deff = getAppObjectDefinition(objectById[objectId].type);
         if (deff?.meta.isEditable) {
           // TODO>TODO>>
-          console.log("UNComment");
+          console.log("Uncomment");
           //activateTool(objectById[objectId].type, objectId);
         }
       }
@@ -277,8 +292,6 @@ export function StageObjectInternal(props: IStageLayer) {
       _selectForProperties({ type: "object", id: objectId });
     }
   };
-
-  //console.log(object.rotation);
 
   const rootObjectSelection =
     selectedObjectIds.length === 0 && !!layerById[object.parentId!];
@@ -299,278 +312,200 @@ export function StageObjectInternal(props: IStageLayer) {
     }
   }
 
-  //console.log(siblingObjectSelection, "siblingObjectSelection");
   let allowObjectSelection =
     rootObjectSelection ||
     childObjectInGroupSelection ||
     siblingObjectSelection;
 
-  console.log(allowObjectSelection + " :" + object.name);
-  // TODO temporary
-  ///allowObjectSelection = !object.objectIds;
+  console.log(objectHolderStyle);
 
-  console.log("SELECTED ------------");
-  console.log(isSelected + " : " + object.name);
+  const objectInGroup = isObjectInGroup(object, objectById);
+
   return (
     <>
       {/* NOTE: FOR DEBUGING */}
       {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
-      <WithRotationHandle
+
+      <WithResizeHandle
         key={`object-${object.id}`}
         object={object}
         stageZoom={stageZoom ?? 1}
-        // onRotationDone={handleRotationDone}
-        // onRotationStart={handleRotationStart}
         rotation={object.rotation}
         scale={object.scale}
-        translateX={mouseDiff.x}
-        translateY={mouseDiff.y}
         selectionPath={selectionPath}
         objectById={objectById}
-        //visible={isOnlyThisObjectSelected}
+        isSelected={isSelected}
       >
-        <div
-          ref={childRef}
-          style={objectHolderStyle}
-          className={cx(`object-holder-${object.id}`, {
-            [css.layoutChildrenSelected]: isSelected,
-            [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
-          })}
-          onMouseDown={(e) => {
-            if (activeStageTool === StageTools.PAN) {
-              return;
-            }
-
-            e.stopPropagation();
-
-            // TODO: Remove this as we have this logic in provider
-            const objectPath: string[] = [];
-            populateObjectThreeIds(
-              objectPath,
-              object.id,
-              objectById,
-              layerById
-            );
-
-            const groupsMatrix = getGroupMatrixFromSelectionPath(
-              [...objectPath, object.id],
-              objectById
-            );
-            // <<
-
-            //console.log(groupsMatrix, "groupsMatrix");
-
-            // const groupId = last(groupsPath ?? [])
-
-            stageManager.start(StageToolEnum.MOVE, {
-              boundingClientRects: [childRef.current!.getBoundingClientRect()],
-              mousePosition: getMousePosition(e),
-              contextMatrix: groupsMatrix,
-              objectRotation: object.rotation,
-              objectScale: object.scale,
-              objectId: props.object.id,
-              originalMouseEvent: e.nativeEvent,
-            });
-
-            // TODO remove following code
-
-            return;
-
-            return;
-
-            // if (isRotationInProgress.current) return;
-
-            // setGlobalProp("mouseDownObjectId", object.id);
-            // //console.log("obje mouse down");
-            // if (isSelected) {
-            //   //object.type === "group" &&
-            //   // var x = e.offsetX != null ? e.offsetX : e.originalEvent.layerX;
-            //   // var y = e.offsetY != null ? e.offsetY : e.originalEvent.layerY;
-            //   mouseInitialPos.current = getMousePosition(e);
-            //   // console.log(e.clientX);
-            //   // console.log(mouseInitialPos.current);
-            // }
-          }}
-          onMouseMove={(e) => {
-            return;
-
-            // if (isRotationInProgress.current) return;
-            // if (!mouseInitialPos.current) return;
-
-            // if (isSelected) {
-            //   //object.type === "group" &&
-            //   const mousePoint = getMousePosition(e);
-
-            //   const diff = {
-            //     x: mousePoint.x - mouseInitialPos.current?.x,
-            //     y: mousePoint.y - mouseInitialPos.current?.y,
-            //   };
-
-            //   const groupsMatrix = getFullMatrixFromTransformArr(
-            //     transformArrayRef.current
-            //   );
-
-            //   const computedDiff = mouseToReal(diff, 0, groupsMatrix);
-
-            //   mouseDiffPos.current = computedDiff;
-            //   setMouseDiff(computedDiff);
-            // }
-          }}
-          onMouseUp={(e) => {
-            return;
-
-            // if (!mouseInitialPos.current) return;
-
-            // const obj = cloneDeep(objectRef.current); //(objectByIdRef.current[object.id]);
-            // const top = parseFloat(obj.absoluteLayout!.common.top);
-            // const left = parseFloat(obj.absoluteLayout!.common.left);
-
-            // const mousePoint = getMousePosition(e);
-
-            // const diff = {
-            //   x: mousePoint.x - mouseInitialPos.current?.x,
-            //   y: mousePoint.y - mouseInitialPos.current?.y,
-            // };
-
-            // const groupsMatrix = getFullMatrixFromTransformArr(
-            //   transformArrayRef.current
-            // );
-
-            // const computedDiff = mouseToReal(
-            //   diff,
-            //   object.rotation,
-            //   groupsMatrix
-            // );
-
-            // obj.absoluteLayout!.common.top = `${top + computedDiff.y}px`;
-            // obj.absoluteLayout!.common.left = `${left + computedDiff.x}px`;
-            // _updateObject(obj);
-
-            // // parent project id update(TODO: this should be recursive)
-            // // if (obj.parentId) {
-            // //   const boundsBefore = calculateBounds(objectById, obj, false);
-            // //   const boundsAfter = calculateBounds(objectById, obj, true);
-            // //   console.log("BOUNDS");
-            // //   console.log(boundsBefore);
-            // //   console.log(boundsAfter);
-
-            // //   const parentObjClone = cloneDeep(objectById[obj.parentId]);
-            // //   parentObjClone.absoluteLayout!.common.left =
-            // //     boundsAfter?.x + "px";
-            // //   parentObjClone.absoluteLayout!.common.top = boundsAfter?.y + "px";
-            // //   parentObjClone.absoluteLayout!.common.width =
-            // //     boundsAfter?.width + "px";
-            // //   parentObjClone.absoluteLayout!.common.height =
-            // //     boundsAfter?.height + "px";
-
-            // //   _updateObject(parentObjClone);
-            // // }
-
-            // // << parent object update
-            // mouseInitialPos.current = undefined;
-            // setMouseDiff({ x: 0, y: 0 });
-          }}
-          //className="NOT_isSelected_OR_NOT_isAbsolutePosition"
+        <WithRotationHandle
+          key={`object-${object.id}`}
+          object={object}
+          stageZoom={stageZoom ?? 1}
+          rotation={object.rotation}
+          scale={object.scale}
+          selectionPath={selectionPath}
+          objectById={objectById}
         >
           <div
-            className={cx(css.rotationHandle, {
-              [css.rotationHandleGroup]: object.objectIds,
+            ref={childRef}
+            style={objectHolderStyle}
+            className={cx(`object-holder-${object.id}`, {
+              [css.layoutChildrenSelected]: isSelected,
+              // [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
             })}
-            style={{
-              // height: 15 + 20 / objectZoom + "px",
-              // //height: 35 / objectZoom + "px",
-              top: -(35 / objectZoom) + "px",
+            onMouseDown={(e) => {
+              if (activeStageTool === StageTools.PAN) {
+                return;
+              }
+
+              e.stopPropagation();
+
+              // TODO: Remove this as we have this logic in provider
+              const objectPath: string[] = [];
+              populateObjectThreeIds(
+                objectPath,
+                object.id,
+                objectById,
+                layerById
+              );
+
+              const groupsMatrix = getGroupMatrixFromSelectionPath(
+                [...objectPath, object.id],
+                objectById
+              );
+              // <<
+
+              // setRectangleOrigin(childRef.current, "bottom right");
+
+              stageManager.start(StageToolEnum.MOVE, {
+                boundingClientRects: [
+                  childRef.current!.getBoundingClientRect(),
+                ],
+                mousePosition: getMousePosition(e),
+                contextMatrix: groupsMatrix,
+                objectRotation: object.rotation,
+                objectScale: object.scale,
+                objectId: props.object.id,
+                originalMouseEvent: e.nativeEvent,
+              });
             }}
           >
-            {
+            {/* {object.type === "group" && (
               <div
-                className={cx(css.circle, "rotation-handle")}
                 style={{
-                  // width: 20 / objectZoom + "px",
-                  // height: 20 / objectZoom + "px",
-                  // borderRadius: 10 / objectZoom + "px",
-                  transform: `scale(${1 / objectZoom})`,
-                  display: isOnlyThisObjectSelected ? "block" : "none",
-                  pointerEvents: "all",
+                  ...objectHolderStyle,
+                  height:
+                    parseFloat(objectHolderStyle.height as string) + 100 + "px",
+                  width:
+                    parseFloat(objectHolderStyle.width as string) + 100 + "px",
                 }}
-              />
-            }
-            {/* <div
-              className={cx(css.line)}
-              style={{
-                width: 1 / objectZoom + "px",
-                height: 15 / objectZoom + "px",
-              }}
-            /> */}
-          </div>
-          {object.type === "group" ? (
-            object.objectIds?.map((objectId) => {
-              const object = objectById[objectId]; //objectByIdLocalRef
-              const layoutChildren = parentLayer.definition.values
-                .hasLayoutChildren
-                ? parentLayer.definition.values.layoutChildren
-                : undefined;
-              return (
-                <StageObject
-                  key={objectId}
-                  object={object}
-                  layer={parentLayer}
-                  layoutChildren={layoutChildren}
-                  objectZoom={objectZoom * object.scale}
-                  //stageZoom={stageZoom}
-                />
-              );
-            })
-          ) : (
-            <>
-              <div
-                key={object.id + "_1"}
-                dangerouslySetInnerHTML={{
-                  __html:
-                    getObjectHtml(
-                      object,
-                      calculatedObjectSizeForObject,
-                      false,
-                      false,
-                      breakpointConfig?.type
-                      // thumbnailHtmlArr,
-                      // slidesCounter
-                    ) ||
-                    getObjectPlaceholder(
-                      `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
-                    ),
-                }}
-                style={objectStyle}
-                // className={cx({
-                //   [css.notVisible]: !object.isVisible,
-                //   [css.layoutChildrenSelected]: isSelected,
-                // })}
-              />
-            </>
-          )}
-          {allowObjectSelection && (
+              ></div>
+            )} */}
             <div
-              onClick={(event) => {
-                //event.stopPropagation();
-                //onObjectClick(event, objectId);
+              className={cx(css.rotationHandle)}
+              style={{
+                // TODO: will be removed when we remove "selection" outside
+                top: -(35 / objectZoom / stageZoom) + "px",
               }}
-              key={object.id}
+            >
+              {
+                //!objectInGroup &&
+                <div
+                  className={cx(css.circle, "rotation-handle")}
+                  style={{
+                    // TODO: will be removed when we remove "selection" outside
+                    transform: `scale(${1 / objectZoom / stageZoom})`,
+                    display: isOnlyThisObjectSelected ? "block" : "none",
+                    pointerEvents: "all",
+                    background: object.objectIds
+                      ? groupSelectionColor
+                      : objectSelectionColor,
+                  }}
+                />
+              }
+            </div>
+
+            {object.type === "group" ? (
+              object.objectIds?.map((objectId) => {
+                const object = objectById[objectId]; //objectByIdLocalRef
+                const layoutChildren = parentLayer.definition.values
+                  .hasLayoutChildren
+                  ? parentLayer.definition.values.layoutChildren
+                  : undefined;
+                return (
+                  <StageObject
+                    key={objectId}
+                    object={object}
+                    layer={parentLayer}
+                    layoutChildren={layoutChildren}
+                    objectZoom={objectZoom * object.scale}
+                    //stageZoom={stageZoom}
+                  />
+                );
+              })
+            ) : (
+              <>
+                <div
+                  key={object.id + "_1"}
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      getObjectHtml(
+                        object,
+                        calculatedObjectSizeForObject,
+                        false,
+                        false,
+                        breakpointConfig?.type
+                        // thumbnailHtmlArr,
+                        // slidesCounter
+                      ) ||
+                      getObjectPlaceholder(
+                        `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
+                      ),
+                  }}
+                  style={objectStyle}
+                  // className={cx({
+                  //   [css.notVisible]: !object.isVisible,
+                  //   [css.layoutChildrenSelected]: isSelected,
+                  // })}
+                />
+              </>
+            )}
+            {allowObjectSelection && (
+              <div
+                onClick={(event) => {
+                  //event.stopPropagation();
+                  //onObjectClick(event, objectId);
+                }}
+                key={object.id}
+                className={cx(
+                  css[object.type],
+                  "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
+                )}
+                style={{
+                  ...objectStyle,
+                  position: "relative",
+                  pointerEvents: "all",
+                  //transform: "translateX(100) translateY(100)",
+                  //left: "0px",
+                  //top: "0px",
+                }}
+              />
+            )}
+            <div
               className={cx(
-                css[object.type],
-                "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
+                css.resizeHandleHolder,
+                "resize-handle-holder-" + object.id
               )}
               style={{
+                // TODO: will be removed when we remove "selection" outside
                 ...objectStyle,
-                position: "relative",
-                pointerEvents: "all",
-                //transform: "translateX(100) translateY(100)",
-                //left: "0px",
-                //top: "0px",
+                position: "absolute",
+                top: "0px",
+                left: "0px",
               }}
-            />
-          )}
-        </div>
-      </WithRotationHandle>
+            ></div>
+          </div>
+        </WithRotationHandle>
+      </WithResizeHandle>
     </>
   );
 }
@@ -696,4 +631,18 @@ function calculateBounds(
       return groupBounds;
     }
   }
+}
+
+export function setRectangleOrigin(elem: HTMLDivElement, newOrigin: string) {
+  const compStyle = window.getComputedStyle(elem);
+
+  const prevML = parseInt(compStyle.left);
+  const prevMT = parseInt(compStyle.top);
+
+  const r1 = elem.getBoundingClientRect();
+  elem.style.transformOrigin = newOrigin;
+  const r2 = elem.getBoundingClientRect();
+
+  elem.style.left = prevML + (r1.x - r2.x) + "px";
+  elem.style.top = prevMT + (r1.y - r2.y) + "px";
 }

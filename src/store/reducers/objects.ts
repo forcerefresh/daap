@@ -96,9 +96,15 @@ export function objects(
       return { ...state, objectById, allObjects };
     }
     case GROUP_OBJECTS: {
-      const { group, objectIds } = action.payload;
+      const { group, objectIds, groupIdsForRemoval, updatedObjectsById } =
+        action.payload;
 
       let newState = cloneDeep(state);
+
+      unlinkObjectIds(groupIdsForRemoval, newState.objectById);
+      groupIdsForRemoval.forEach((groupId) => {
+        delete newState.objectById[groupId];
+      });
 
       // get index for group add
       let firstIndex = 0;
@@ -134,6 +140,7 @@ export function objects(
       // console.log(newState);
 
       objectIds.forEach((objectId) => {
+        newState.objectById[objectId] = updatedObjectsById[objectId];
         newState.objectById[objectId].parentId = group.id;
         //dispatch(_updateObject(object));
       });
@@ -191,7 +198,7 @@ export function objects(
       const { groupId, objectIds, parentId, transformPerObject } =
         action.payload;
 
-      ungroupTransformCalc(groupId, objectIds);
+      //ungroupTransformCalc(groupId, objectIds);
 
       const groupObject = state.objectById[groupId];
 

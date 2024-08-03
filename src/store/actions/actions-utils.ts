@@ -116,3 +116,17 @@ export function getObjectIdToSelect({
   // // TODO - ovde stao
   // return "";
 }
+
+export function isObjectGroup(object: IObject): boolean {
+  return !!object?.objectIds && object.objectIds.length > 0;
+}
+
+export function isObjectInGroup(
+  object: IObject,
+  objectById: { [key: string]: IObject }
+): boolean {
+  if (!object.parentId) return false;
+  if (!objectById[object.parentId]?.objectIds) return false;
+
+  return objectById[object.parentId].objectIds!.length > 0;
+}

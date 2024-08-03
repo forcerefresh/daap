@@ -2,7 +2,9 @@ import { forOwn } from "lodash-es";
 import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { Point } from "../../webslider-sdk/object/i-tool-class";
+import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
+import { getAbsEl } from "./WithRotationHandle";
+import { degrees_to_radians } from "./StageManagerProvider";
 
 export interface CreateGroupWithObjectsProps {
   group: IObject;
@@ -11,7 +13,9 @@ export interface CreateGroupWithObjectsProps {
   breakpointConfig: BreakpointConfiguration;
 }
 
-export function createGroupWithObjects(props: CreateGroupWithObjectsProps) {
+export function getUngroupObjectsCalculation(
+  props: CreateGroupWithObjectsProps
+) {
   const { group, parentLayer, objects, breakpointConfig } = props;
 
   const rootEl = addElement("root-el", document.body);
@@ -273,6 +277,32 @@ export function screenPointToLocal(
   };
 }
 
+export function getObjectBBoxRelativeToParent(
+  rotate: number,
+  scale: number,
+  left: number,
+  top: number
+): Point {
+  console.log(arguments);
+  //TODO return Rect
+  const pointMatrix = new DOMMatrix(
+    `translateX(${left}px) translateY(${top}px)`
+  );
+
+  const localMatrix = new DOMMatrix(
+    (rotate ? `rotate(${rotate}deg) ` : "") + (scale ? `scale(${scale}) ` : "")
+  );
+
+  const resultMatrix = localMatrix.inverse().multiply(pointMatrix);
+
+  const objectDecMatrix = decomposeMatrix2DW3(resultMatrix);
+
+  return {
+    x: objectDecMatrix.translateX,
+    y: objectDecMatrix.translateY,
+  };
+}
+
 export function getObjectTransform(
   object: IObject,
   override?: Partial<Pick<IObject, "scale" | "rotation">>
@@ -285,4 +315,256 @@ export function getObjectTransform(
     (override?.scale ?? object.scale ?? 1) +
     ")"
   );
+}
+
+// TODO
+
+export function getCorners(
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  R: number,
+  scale: number
+) {
+  let cxOrg = w / 2,
+    cyOrg = h / 2;
+
+  let cx = (w / 2) * scale,
+    cy = (h / 2) * scale,
+    r = toRadians(R);
+
+  let X = x + cxOrg,
+    Y = y + cyOrg;
+
+  let bl = GetPoint(X, Y, r, -cx, cy);
+  let br = GetPoint(X, Y, r, cx, cy);
+  let tl = GetPoint(X, Y, r, -cx, -cy);
+  let tr = GetPoint(X, Y, r, cx, -cy);
+
+  return { tl, tr, bl, br };
+
+  // TweenMax.set("#top-left", { x: tl.x, y: tl.y });
+  // TweenMax.set("#bot-left", { x: bl.x, y: bl.y });
+  // TweenMax.set("#bot-right", { x: br.x, y: br.y });
+  // TweenMax.set("#top-right", { x: tr.x, y: tr.y });
+
+  // $("textarea#data").val(
+  //   JSON.stringify(
+  //     { botRight: br, botLeft: bl, topRight: tr, topLeft: tl },
+  //     null,
+  //     4
+  //   )
+  // );
+}
+
+function GetPoint(X: number, Y: number, rot: number, Xos: number, Yos: number) {
+  var rotatedX = X + Xos * Math.cos(rot) - Yos * Math.sin(rot);
+  var rotatedY = Y + Xos * Math.sin(rot) + Yos * Math.cos(rot);
+  return { x: Math.round(rotatedX), y: Math.round(rotatedY) };
+}
+
+function toRadians(angle: number) {
+  return angle * (Math.PI / 180);
+}
+
+export interface ICorners {
+  tl: Point;
+  tr: Point;
+  bl: Point;
+  br: Point;
+}
+export function removeCornerMarkers(parentId: string) {
+  const cornersEls = document.getElementsByClassName(
+    `object-corner-${parentId}`
+  );
+  Array.from(cornersEls).forEach((el) => el.parentElement?.removeChild(el));
+}
+
+export function addCornerMarkers(
+  parentId: string,
+  corners: ICorners,
+  color?: string
+) {
+  const parentHolder = document.getElementsByClassName(
+    `object-holder-${parentId}`
+  )[0] as HTMLDivElement;
+
+  addCorner(parentHolder, corners.tl, parentId, color);
+  addCorner(parentHolder, corners.tr, parentId, color);
+  addCorner(parentHolder, corners.bl, parentId, color);
+  addCorner(parentHolder, corners.br, parentId, color);
+}
+
+function addCorner(
+  parentEl: HTMLDivElement,
+  p: Point,
+  parentId: string,
+  color?: string
+) {
+  if (!p) return;
+
+  const el = getAbsEl(Math.random().toString(), p);
+  el.className = `object-corner-${parentId}`;
+  if (color) el.style.background = color;
+  parentEl.appendChild(el);
+}
+
+export function getLeftTopFromCorners(corners: ICorners) {
+  let x = 100000000;
+  let y = 100000000;
+
+  x = Math.min(x, corners.tl.x);
+  y = Math.min(y, corners.tl.y);
+
+  x = Math.min(x, corners.tr.x);
+  y = Math.min(y, corners.tr.y);
+
+  x = Math.min(x, corners.bl.x);
+  y = Math.min(y, corners.bl.y);
+
+  x = Math.min(x, corners.br.x);
+  y = Math.min(y, corners.br.y);
+
+  return { x, y };
+}
+
+export function getBottomRightFromCorners(corners: ICorners) {
+  let x = -100000000;
+  let y = -100000000;
+
+  x = Math.max(x, corners.tl.x);
+  y = Math.max(y, corners.tl.y);
+
+  x = Math.max(x, corners.tr.x);
+  y = Math.max(y, corners.tr.y);
+
+  x = Math.max(x, corners.bl.x);
+  y = Math.max(y, corners.bl.y);
+
+  x = Math.max(x, corners.br.x);
+  y = Math.max(y, corners.br.y);
+
+  return { x, y };
+}
+// ++++++++++=
+
+export function tmpDrawNewGroup(
+  parentGroup: IObject,
+  parentLayer: ILayer,
+  object: IObject,
+  xyDiff: Point,
+  bboxW: number,
+  bboxH: number
+) {
+  const layerEl = getElementByClass("layer-" + parentLayer.id);
+
+  const x = parseFloat(parentGroup.absoluteLayout?.common!.left!);
+  const y = parseFloat(parentGroup.absoluteLayout?.common!.top!);
+  const width = parseFloat(parentGroup.absoluteLayout?.common!.width!);
+  const height = parseFloat(parentGroup.absoluteLayout?.common!.height!);
+  const scale = parentGroup.scale;
+  const rotate = parentGroup.rotation;
+
+  //const adjustmentX = 0; //scale === 1 ? 0 : (width - width / scale) / 2;
+
+  const existingGroupProps = { x, y, width, height, rotate, scale };
+
+  // SCALE ADJUSTMENT
+  const adjustmentX = (width * scale - width) / 4;
+  const adjustmentY = (height * scale - height) / 4;
+
+  const adjX =
+    adjustmentX * Math.cos(degrees_to_radians(rotate)) -
+    adjustmentY * Math.sin(degrees_to_radians(rotate));
+
+  const adjY =
+    adjustmentX * Math.sin(degrees_to_radians(rotate)) +
+    adjustmentY * Math.cos(degrees_to_radians(rotate));
+
+  const newGroupProps = {
+    x:
+      x +
+      (xyDiff.x * Math.cos(degrees_to_radians(rotate)) -
+        xyDiff.y * Math.sin(degrees_to_radians(rotate))) *
+        +adjX,
+
+    y:
+      y +
+      (xyDiff.x * Math.sin(degrees_to_radians(rotate)) +
+        xyDiff.y * Math.cos(degrees_to_radians(rotate))) *
+        scale +
+      adjY,
+
+    //height / scale,
+
+    // width,
+    // height,
+    // rotate,
+    // scale,
+  };
+
+  const newGroupCorners = getCorners(
+    newGroupProps.x,
+    newGroupProps.y,
+    bboxW,
+    bboxH,
+    parentGroup.rotation,
+    parentGroup.scale
+  );
+
+  const topLEftGroupPoint = getLeftTopFromCorners(newGroupCorners);
+
+  const pointMatrix = new DOMMatrix(
+    `translateX(${xyDiff.x}px) translateY(${xyDiff.y}px)`
+  );
+
+  const newGroupMatrix = new DOMMatrix(
+    `rotate(${parentGroup.rotation}deg) scale(${parentGroup.scale})`
+  );
+
+  const resultMatrix = pointMatrix.inverse().multiply(newGroupMatrix);
+  const resultDecMatrix = decomposeMatrix2DW3(resultMatrix);
+
+  console.log(" resultDecMatrix.translateX:" + resultDecMatrix.translateX);
+  console.log(" resultDecMatrix.translateY:" + resultDecMatrix.translateY);
+
+  const diff2 = {
+    x: resultDecMatrix.translateX,
+    y: resultDecMatrix.translateY,
+  };
+
+  // >>
+  removeElementByClass("diff-el");
+  const diffGroupEl = getAbsEl(Math.random().toString(), diff2, false);
+  diffGroupEl.className = "diff-el";
+  layerEl.appendChild(diffGroupEl);
+  // <<
+
+  console.log(diff2, "diff2");
+
+  const className = "group-new-" + parentGroup.id;
+  removeElementByClass(className);
+  const tmpGroupEl = getAbsEl(Math.random().toString(), newGroupProps, false);
+  tmpGroupEl.className = className;
+  tmpGroupEl.style.width = bboxW + "px";
+  tmpGroupEl.style.height = bboxH + "px";
+  tmpGroupEl.style.border = "1px solid red";
+  tmpGroupEl.style.backgroundColor = "transparent";
+  tmpGroupEl.style.transform = getObjectTransform(parentGroup);
+
+  layerEl.appendChild(tmpGroupEl);
+
+  return { ...newGroupProps, width: bboxW, height: bboxH };
+}
+
+export function getElementByClass(className: string) {
+  return document.getElementsByClassName(className)[0];
+}
+
+export function removeElementByClass(className: string) {
+  const el = document.getElementsByClassName(className)[0];
+  if (el) {
+    el.parentElement?.removeChild(el);
+  }
 }

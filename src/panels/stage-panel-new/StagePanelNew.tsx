@@ -47,6 +47,7 @@ import {
   setStageZoom,
   setViewPortSize,
   updateObject,
+  setStagePan,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
@@ -83,12 +84,13 @@ import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
-import { WithRotationHandle } from "./WithRotationHandle";
 import StageLayer from "./StageLayer";
 import { getObjectIdToSelect } from "../../store/actions/actions-utils";
 import { getGlobalProp } from "./utils";
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
+import { Point } from "../../webslider-sdk/object/i-tool-class";
+import StageToolsCanvas from "./StageToolsCanvas";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -135,8 +137,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     enableDeveloper,
     showGrid,
     _setStageZoom,
+    _setStagePan,
   } = props;
 
+  const stageToolCanvasRef = useRef();
   const { stageManager } = useContext(StageManagerContext);
 
   const { spaceDown } = useKeyDown();
@@ -302,7 +306,17 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
     const ratio = 1 - newStageZoom / stageZoom;
 
-    _setStageZoom(round(newStageZoom, 2));
+    const newScale = round(newStageZoom, 2);
+    stageToolCanvasRef.current.handleStageScaleChange(newScale);
+
+    _setStageZoom(newScale);
+
+    // x: stagePan.x + x,
+    // y: stagePan.y + y,
+
+    // _setStagePan({ x: e.clientX, y: e.clientY });
+
+    //  stagePan.y;
 
     // x: pos.x + (e.clientX - pos.x) * ratio,
     // y: pos.y + (e.clientY - pos.y) * ratio,
@@ -363,7 +377,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   // <<<<
 
   return (
-    <React.Fragment key={stageZoom}>
+    <React.Fragment>
       <div
         ref={rootRef}
         className={cx(css.stagePanel, {
@@ -379,6 +393,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         onMouseDown={(e) => {
           e.persist();
 
+          console.log("ASDASDASDS");
           if (activeStageTool === StageTools.PAN) {
             stageManager.start(StageToolEnum.PAN, {
               boundingClientRects: [], // Not needed
@@ -469,10 +484,18 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
                 className="scrollableDivInnerSlideBackground"
                 style={scrollableDivInnerSlideBackgroundStyle}
               ></div> */}
+            {/* class not set */}
             <div style={canvasStyle} className={css.canvas}>
               {layerArr?.map((layer) => (
                 <StageLayer key={layer.id} layer={layer} />
               ))}
+            </div>
+            {/* class not set */}
+            <div
+              style={{ ...canvasStyle, transform: "scale(" + 1 + ")" }}
+              className={cx("stage-tools-canvas", css.stageToolsCanvas)}
+            >
+              <StageToolsCanvas innerRef={stageToolCanvasRef} />
             </div>
           </div>
           {/* {isPreview && previewLayout.body.component} */}
@@ -597,6 +620,7 @@ const mapDispatchToProps = {
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
   _setStageZoom: (zoom: number) => setStageZoom(zoom),
+  _setStagePan: (p: Point) => setStagePan(p),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 

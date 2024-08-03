@@ -2,6 +2,7 @@ import { Point } from "../../webslider-sdk/object/i-tool-class";
 
 export enum StageToolEnum {
   ROTATE = "ROTATE",
+  SCALE = "SCALE",
   MOVE = "MOVE",
   SELECT = "SELECT",
   //   RESIZE = "RESIZE",
@@ -23,4 +24,5 @@ export interface IStageToolData {
   objectScale: number;
   objectId: string;
   boundingClientRects: DOMRect[];
+  handle: string;
 }

@@ -158,6 +158,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                       return (
                         <React.Fragment key={`object-${objectId}`}>
                           <ObjectRow
+                            objectById={objectById}
                             onObjectClick={onObjectClick}
                             onObjectDblClick={onObjectDblClick}
                             breakpointConfig={breakpointConfig}

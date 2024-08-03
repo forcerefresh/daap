@@ -72,7 +72,7 @@ export function layers(
     }
 
     case GROUP_OBJECTS: {
-      const { group, objectIds } = action.payload;
+      const { group, objectIds, groupIdsForRemoval } = action.payload;
 
       // do nothing if parent is not
       if (!state.layerById[group.parentId!]) {
@@ -92,7 +92,11 @@ export function layers(
       // remove object
       forIn(newState.layerById, function (layer, _layerId) {
         remove(layer.objectIds, (objectId) => {
-          return objectIds.indexOf(objectId) !== -1;
+          // note, remove object or removed groups
+          return (
+            objectIds.indexOf(objectId) !== -1 ||
+            groupIdsForRemoval.indexOf(objectId) !== -1
+          );
         });
       });
 

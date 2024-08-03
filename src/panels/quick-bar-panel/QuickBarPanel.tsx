@@ -16,6 +16,7 @@ import {
   ungroupObject,
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { isObjectGroup } from "../../store/actions/actions-utils";
 
 type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -55,6 +56,20 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     mode = undefined;
   }
 
+  const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
+
+  // >> ----
+  const groupingDisabled =
+    selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+  // const firstSelectedObject = objectById[selectedObjectIds[0]];
+  // const isFirstSelectedGroup = !!(
+  //   firstSelectedObject?.objectIds && firstSelectedObject?.objectIds?.length > 0
+  // );
+  // groupingDisabled =
+  //   groupingDisabled ||
+  //   (selectedObjectIds.length === 1 && isFirstSelectedGroup);
+  // << ---
+
   return (
     <div className={cx(css.quickBar)}>
       <div className={css.leftHolder}>
@@ -81,7 +96,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               }}
               icon={"group-objects"}
               className={css.button}
-              disabled={selectedObjectIds.length === 0}
+              disabled={groupingDisabled}
             >
               Group
             </Button>

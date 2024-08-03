@@ -1,13 +1,15 @@
 import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
 import cx from "classnames";
 import { selectForPropertiesProps } from "../../store/actions/actions";
-import { useEffect, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import css from "./ObjectRow.module.scss";
 import React from "react";
 import { getObjectHtml } from "../../export/export-html";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { Tag } from "@blueprintjs/core";
+import { Icon, Tag } from "@blueprintjs/core";
+import { ReactComponent as ObjectsGroup } from "./assets/objects-group.svg";
+import StageObjectMinimap from "../stage-panel-new/StageObjectMinimap";
 
 export interface IObjectRowProps {
   object: IObject;
@@ -31,6 +33,7 @@ export interface IObjectRowProps {
   //   deleteObjects: (objectIds: string[]) => void;
   //   onDragingChange: (isDragging: boolean) => void;
   breakpointConfig?: BreakpointConfiguration;
+  objectById: any;
 }
 
 export function ObjectRow(props: IObjectRowProps) {
@@ -50,6 +53,7 @@ export function ObjectRow(props: IObjectRowProps) {
     // updateObject,
     // deleteObjects,
     // onDragingChange,
+    objectById,
   } = props;
 
   const [objectHtml, setObjectHtml] = useState<{
@@ -116,15 +120,25 @@ export function ObjectRow(props: IObjectRowProps) {
           transformOrigin: "0 0",
           width: 76 / objectHtml.scale,
           height: 61 / objectHtml.scale,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
         }}
       >
-        <div
+        <StageObjectMinimap
+          isRoot={true}
+          parentLayer={layer}
+          object={object}
+          objectById={objectById}
+          breakpointConfig={breakpointConfig!}
+        />
+        {/* <div
           style={{
             width: objectHtml.calculatedObjectSize.width as string,
             height: objectHtml.calculatedObjectSize.height as string,
           }}
           dangerouslySetInnerHTML={{ __html: objectHtml.html }}
-        ></div>
+        ></div> */}
       </div>
       {isGroup && (
         <Tag className={css.groupObjectsCounter}>
