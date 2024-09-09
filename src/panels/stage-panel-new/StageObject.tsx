@@ -68,6 +68,7 @@ import {
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
+import { group } from "console";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -78,6 +79,7 @@ type IStageLayer = typeof mapDispatchToProps &
     layoutChildren?: ILayoutChildrenValue;
     layer: ILayer;
     objectZoom: number;
+    parentGroup: IObject;
   };
 
 export function StageObjectInternal(props: IStageLayer) {
@@ -101,6 +103,8 @@ export function StageObjectInternal(props: IStageLayer) {
     _selectForProperties,
     objectZoom,
     selectionPath,
+    parentGroup,
+    clipboard,
   } = props;
 
   // ++
@@ -146,11 +150,8 @@ export function StageObjectInternal(props: IStageLayer) {
   // console.log(object?.absoluteLayout?.common?.left);
   // console.log(object2?.absoluteLayout?.common?.left);
 
-  const {
-    activeTool,
-    activateTool,
-    activeObjectId: activeEditObjectId,
-  } = useContext(ToolsContext);
+  const { activeTool, activeObjectId: activeEditObjectId } =
+    useContext(ToolsContext);
 
   // const isRotationInProgress = useRef(false);
   // const handleRotationStart = () => {
@@ -210,16 +211,22 @@ export function StageObjectInternal(props: IStageLayer) {
     if (objectHolder) {
       objectHolder.style.transform = getObjectTransform(object);
 
+      objectHolder.style.visibility =
+        activeEditObjectId === objectId ? "hidden" : "visible";
+      //return null;
+
       // translateX(" +
       // translateX +
       // "px) translateY(" +
       // translateY +
       // "px)";
     }
-  }, [object.rotation, object.scale, object.id, object]);
+  }, [object.rotation, object.scale, object.id, object, activeEditObjectId]);
 
   // TODO: mode this to parent
-  if (activeEditObjectId === objectId) return null;
+  // if (activeEditObjectId === objectId) {
+  //   return null;
+  // }
 
   const objectStyle = { ...calculatedObjectSize, left: "0px", top: "0px" };
   objectStyle.position = cssPosition;
@@ -227,15 +234,24 @@ export function StageObjectInternal(props: IStageLayer) {
     objectStyle.perspective = `${object.transformDefinition?.values?.transformPerspective}`;
   }
 
+  // NOTO: We are explicitly moving div, ad when x,y is not change it does not rerender.
+  //  We add Math.random() / 100 to force rerender
+  const left =
+    parseFloat(calculatedObjectSize.left as string) +
+    Math.random() / 100 +
+    "px";
+  const top =
+    parseFloat(calculatedObjectSize.top as string) + Math.random() / 100 + "px";
+
   // object holder
   const objectHolderStyle: CSSProperties = {
     zIndex: 100,
     position: "absolute", //!layoutChildren ? "relative" : "static",
-    left: !layoutChildren ? calculatedObjectSize.left : "0px",
-    top: !layoutChildren ? calculatedObjectSize.top : "0px",
+    left: !layoutChildren ? left : "0px",
+    top: !layoutChildren ? top : "0px",
     width: calculatedObjectSize.width ?? "0px",
     height: calculatedObjectSize.height ?? "0px",
-    ...(isSelected || (isInSelectionPath && !isSelected)
+    ...((isSelected || (isInSelectionPath && !isSelected)) && !activeTool
       ? {
           boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
             object.objectIds && !isSelected ? "#444444" : "#48aff0"
@@ -243,12 +259,22 @@ export function StageObjectInternal(props: IStageLayer) {
         }
       : {}),
   };
+  // console.log(objectHolderStyle, object.type);
 
   if (layoutChildren?.type === "inline") {
     objectHolderStyle.display = "inline-block";
   }
 
   objectHolderStyle.pointerEvents = "none"; // "all";
+
+  if (clipboard?.entityIds?.includes(object.id)) {
+    if (clipboard?.operation === "cut") objectHolderStyle.opacity = 0.5;
+    // const copyBoxShadow = `,0 0 0 ${
+    //   1.5 / objectZoom / stageZoom
+    // }px ${"yellow"}`;
+    // objectHolderStyle.boxShadow += copyBoxShadow;
+    //objectHolderStyle.borderStyle = "dotted";
+  }
 
   // NOTE: FOR TEXT
   const calculatedObjectSizeForObject = { ...calculatedObjectSize };
@@ -261,50 +287,50 @@ export function StageObjectInternal(props: IStageLayer) {
     selectedObjectIds.length === 1 &&
     selectedObjectIds[0] === objectRef.current.id;
 
-  console.log(
-    "Obj:" + objectRef.current?.name + " :  sel: " + isOnlyThisObjectSelected
-  );
-  const onObjectClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    objectId: string
-  ) => {
-    if (event.shiftKey) {
-      selectedObjectIds.indexOf(objectId) === -1
-        ? _addObjectsToSelection([objectId])
-        : _removeObjectsFromSelection([objectId]);
-      if (activeObjectId === objectId) {
-        _deactivateObject(objectId);
-      }
+  // console.log(
+  //   "Obj:" + objectRef.current?.name + " :  sel: " + isOnlyThisObjectSelected
+  // );
+  // const onObjectClick = (
+  //   event: React.MouseEvent<HTMLDivElement>,
+  //   objectId: string
+  // ) => {
+  //   if (event.shiftKey) {
+  //     selectedObjectIds.indexOf(objectId) === -1
+  //       ? _addObjectsToSelection([objectId])
+  //       : _removeObjectsFromSelection([objectId]);
+  //     if (activeObjectId === objectId) {
+  //       _deactivateObject(objectId);
+  //     }
 
-      //setSelectionStartPosition(null);
-    } else {
-      if (isOnlyThisObjectSelected) {
-        // NOTE: activate tool editor
-        const deff = getAppObjectDefinition(objectById[objectId].type);
-        if (deff?.meta.isEditable) {
-          // TODO>TODO>>
-          console.log("Uncomment");
-          //activateTool(objectById[objectId].type, objectId);
-        }
-      }
-      _activateObject(objectId);
-      _selectObjects([objectId]);
-      _selectForProperties({ type: "object", id: objectId });
-    }
-  };
+  //     //setSelectionStartPosition(null);
+  //   } else {
+  //     if (isOnlyThisObjectSelected) {
+  //       // NOTE: activate tool editor
+  //       const deff = getAppObjectDefinition(objectById[objectId].type);
+  //       if (deff?.meta.isEditable) {
+  //         // TODO>TODO>>
+  //         console.log("Uncomment");
+  //         //activateTool(objectById[objectId].type, objectId);
+  //       }
+  //     }
+  //     _activateObject(objectId);
+  //     _selectObjects([objectId]);
+  //     _selectForProperties({ type: "object", id: objectId });
+  //   }
+  // };
 
   const rootObjectSelection =
     selectedObjectIds.length === 0 && !!layerById[object.parentId!];
 
   const childObjectInGroupSelection =
     selectedObjectIds.length === 1 &&
-    objectById[selectedObjectIds[0]].objectIds &&
-    objectById[selectedObjectIds[0]].objectIds!.length > 0 &&
-    objectById[selectedObjectIds[0]].objectIds?.includes(object.id);
+    objectById[selectedObjectIds[0]]?.objectIds &&
+    objectById[selectedObjectIds[0]]?.objectIds!.length > 0 &&
+    objectById[selectedObjectIds[0]]?.objectIds?.includes(object.id);
 
   let siblingObjectSelection = false;
   if (selectedObjectIds.length > 0) {
-    const parentId = objectById[selectedObjectIds[0]].parentId;
+    const parentId = objectById[selectedObjectIds[0]]?.parentId;
     if (layerById[object.parentId!]) {
       siblingObjectSelection = true;
     } else if (objectById[parentId!]?.objectIds?.includes(object.id)) {
@@ -317,7 +343,7 @@ export function StageObjectInternal(props: IStageLayer) {
     childObjectInGroupSelection ||
     siblingObjectSelection;
 
-  console.log(objectHolderStyle);
+  // console.log(objectHolderStyle);
 
   const objectInGroup = isObjectInGroup(object, objectById);
 
@@ -335,6 +361,7 @@ export function StageObjectInternal(props: IStageLayer) {
         selectionPath={selectionPath}
         objectById={objectById}
         isSelected={isSelected}
+        forceHide={activeTool}
       >
         <WithRotationHandle
           key={`object-${object.id}`}
@@ -344,50 +371,55 @@ export function StageObjectInternal(props: IStageLayer) {
           scale={object.scale}
           selectionPath={selectionPath}
           objectById={objectById}
+          forceHide={activeTool}
         >
           <div
             ref={childRef}
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`, {
-              [css.layoutChildrenSelected]: isSelected,
+              [css.layoutChildrenSelected]: isSelected && !activeTool,
               // [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
             })}
-            onMouseDown={(e) => {
-              if (activeStageTool === StageTools.PAN) {
-                return;
-              }
+            onMouseDown={
+              allowObjectSelection
+                ? (e) => {
+                    if (activeStageTool === StageTools.PAN) {
+                      return;
+                    }
 
-              e.stopPropagation();
+                    e.stopPropagation();
 
-              // TODO: Remove this as we have this logic in provider
-              const objectPath: string[] = [];
-              populateObjectThreeIds(
-                objectPath,
-                object.id,
-                objectById,
-                layerById
-              );
+                    // TODO: Remove this as we have this logic in provider
+                    const objectPath: string[] = [];
+                    populateObjectThreeIds(
+                      objectPath,
+                      object.id,
+                      objectById,
+                      layerById
+                    );
 
-              const groupsMatrix = getGroupMatrixFromSelectionPath(
-                [...objectPath, object.id],
-                objectById
-              );
-              // <<
+                    const groupsMatrix = getGroupMatrixFromSelectionPath(
+                      [...objectPath, object.id],
+                      objectById
+                    );
+                    // <<
 
-              // setRectangleOrigin(childRef.current, "bottom right");
+                    // setRectangleOrigin(childRef.current, "bottom right");
 
-              stageManager.start(StageToolEnum.MOVE, {
-                boundingClientRects: [
-                  childRef.current!.getBoundingClientRect(),
-                ],
-                mousePosition: getMousePosition(e),
-                contextMatrix: groupsMatrix,
-                objectRotation: object.rotation,
-                objectScale: object.scale,
-                objectId: props.object.id,
-                originalMouseEvent: e.nativeEvent,
-              });
-            }}
+                    stageManager.start(StageToolEnum.MOVE, {
+                      boundingClientRects: [
+                        childRef.current!.getBoundingClientRect(),
+                      ],
+                      mousePosition: getMousePosition(e),
+                      contextMatrix: groupsMatrix,
+                      objectRotation: object.rotation,
+                      objectScale: object.scale,
+                      objectId: props.object.id,
+                      originalMouseEvent: e.nativeEvent,
+                    });
+                  }
+                : undefined
+            }
           >
             {/* {object.type === "group" && (
               <div
@@ -407,8 +439,7 @@ export function StageObjectInternal(props: IStageLayer) {
                 top: -(35 / objectZoom / stageZoom) + "px",
               }}
             >
-              {
-                //!objectInGroup &&
+              {!activeTool && (
                 <div
                   className={cx(css.circle, "rotation-handle")}
                   style={{
@@ -421,12 +452,12 @@ export function StageObjectInternal(props: IStageLayer) {
                       : objectSelectionColor,
                   }}
                 />
-              }
+              )}
             </div>
 
             {object.type === "group" ? (
               object.objectIds?.map((objectId) => {
-                const object = objectById[objectId]; //objectByIdLocalRef
+                const childObject = objectById[objectId]; //objectByIdLocalRef
                 const layoutChildren = parentLayer.definition.values
                   .hasLayoutChildren
                   ? parentLayer.definition.values.layoutChildren
@@ -434,10 +465,11 @@ export function StageObjectInternal(props: IStageLayer) {
                 return (
                   <StageObject
                     key={objectId}
-                    object={object}
+                    object={childObject}
+                    parentGroup={object}
                     layer={parentLayer}
                     layoutChildren={layoutChildren}
-                    objectZoom={objectZoom * object.scale}
+                    objectZoom={objectZoom * childObject.scale}
                     //stageZoom={stageZoom}
                   />
                 );
@@ -469,27 +501,28 @@ export function StageObjectInternal(props: IStageLayer) {
                 />
               </>
             )}
-            {allowObjectSelection && (
-              <div
-                onClick={(event) => {
-                  //event.stopPropagation();
-                  //onObjectClick(event, objectId);
-                }}
-                key={object.id}
-                className={cx(
-                  css[object.type],
-                  "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
-                )}
-                style={{
-                  ...objectStyle,
-                  position: "relative",
-                  pointerEvents: "all",
-                  //transform: "translateX(100) translateY(100)",
-                  //left: "0px",
-                  //top: "0px",
-                }}
-              />
-            )}
+            {/* {allowObjectSelection && ( */}
+            <div
+              onClick={(event) => {
+                //event.stopPropagation();
+                //onObjectClick(event, objectId);
+              }}
+              key={object.id}
+              className={cx(
+                css[object.type],
+                "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
+              )}
+              style={{
+                ...objectStyle,
+                position: "relative",
+                pointerEvents: "all",
+                //transform: "translateX(100) translateY(100)",
+                //left: "0px",
+                //top: "0px",
+              }}
+            />
+            {/* )} */}
+
             <div
               className={cx(
                 css.resizeHandleHolder,
@@ -498,6 +531,7 @@ export function StageObjectInternal(props: IStageLayer) {
               style={{
                 // TODO: will be removed when we remove "selection" outside
                 ...objectStyle,
+                display: isOnlyThisObjectSelected ? "block" : "none",
                 position: "absolute",
                 top: "0px",
                 left: "0px",
@@ -511,7 +545,7 @@ export function StageObjectInternal(props: IStageLayer) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings } =
+  const { slides, layers, objects, selection, document, settings, clipboard } =
     state.project;
   const { stage } = state;
 
@@ -545,6 +579,7 @@ const mapStateToProps = (state: IStore) => {
   // }
 
   return {
+    clipboard,
     slides,
     layers,
     objects,
@@ -626,8 +661,8 @@ function calculateBounds(
         const bounds = getObjectBoundingBox(object);
         groupBounds = boundsUnion(groupBounds, bounds);
       });
-      console.log("BOUNDS");
-      console.log(groupBounds);
+      // console.log("BOUNDS");
+      // console.log(groupBounds);
       return groupBounds;
     }
   }

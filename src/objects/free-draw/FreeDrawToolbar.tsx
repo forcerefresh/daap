@@ -32,26 +32,24 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
   const values = object?.definition.values as FreeDrawValues | undefined;
 
   return (
-    <>
+    <div className={css.inputsHolder}>
       {mode === ToolbarMode.Selection && object && values && (
-        <>
-          <div className={css.inputHolder}>
-            {getUnitNumericFiled(
-              "",
-              values.lines[0].strokeWidth + "px",
-              (v: string) => {
-                const newObject = cloneDeep(object);
-                newObject.definition.values.lines[0].strokeWidth =
-                  parseInt(v).toString();
-                updateObject(newObject);
-              },
-              "",
-              {
-                className: css.strokeInput,
-              },
-              ["px"]
-            )}
-          </div>
+        <div className={css.inputHolder}>
+          {getUnitNumericFiled(
+            "",
+            values.lines[0].strokeWidth + "px",
+            (v: string) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.lines[0].strokeWidth =
+                parseInt(v).toString();
+              updateObject(newObject);
+            },
+            "",
+            {
+              className: css.strokeInput,
+            },
+            ["px"]
+          )}
 
           <div>
             <input
@@ -70,7 +68,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
             />
           </div>
           <div className={css.rightHolder}>
-            <div>
+            {/* <div>
               <Button
                 style={{ float: "right" }}
                 minimal
@@ -79,9 +77,9 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                 }}
                 icon={"trash"}
               ></Button>
-            </div>
+            </div> */}
           </div>
-        </>
+        </div>
       )}
 
       {mode === ToolbarMode.Edit && (
@@ -231,6 +229,6 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }

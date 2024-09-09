@@ -162,7 +162,7 @@ const ProjectSmallTimeline: React.FC<IProjectTimelineProps> = (props) => {
     <div className={css.smallTimeline}>
       <div className={css.smallTimelineInner}>
         <div className={css.pagination}>
-          Slide <strong>{previewTimelineState.slideIdx + 1}</strong>
+          Page <strong>{previewTimelineState.slideIdx + 1}</strong>
           {" of "}
           {projectTimelineData?.slides.length}(
           {previewTimelineState.time.toFixed(2)})

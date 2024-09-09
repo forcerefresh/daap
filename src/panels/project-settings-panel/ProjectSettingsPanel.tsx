@@ -25,8 +25,8 @@ import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 
 enum ProjectPanelSections {
-  Slider = "Slider",
-  Slide = "Slide",
+  Project = "Project",
+  Page = "Page",
   Preview = "Preview",
   Breakpoints = "Breakpoints",
 }
@@ -53,8 +53,8 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
   }>({
-    [ProjectPanelSections.Slider]: true,
-    [ProjectPanelSections.Slide]: true,
+    [ProjectPanelSections.Project]: true,
+    [ProjectPanelSections.Page]: true,
     [ProjectPanelSections.Preview]: true,
     [ProjectPanelSections.Breakpoints]: true,
   });
@@ -92,20 +92,20 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
       <section>
         <div
           className={settingsCss.sectionHeader}
-          onClick={() => toggleSection(ProjectPanelSections.Slider)}
+          onClick={() => toggleSection(ProjectPanelSections.Project)}
         >
           <Button
             minimal
             small={true}
             icon={
-              visibleSectionIds[ProjectPanelSections.Slider]
+              visibleSectionIds[ProjectPanelSections.Project]
                 ? "caret-down"
                 : "caret-right"
             }
           ></Button>
-          Slider
+          Project
         </div>
-        {visibleSectionIds[ProjectPanelSections.Slider] && (
+        {visibleSectionIds[ProjectPanelSections.Project] && (
           <div className={settingsCss.panel}>
             <FormGroup>
               <div className="input60">
@@ -126,7 +126,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                     autoPlay: autoPlay,
                   });
                 },
-                `If disabled start slide manually using "Object > Navigation > Slide > Slider "`,
+                `If disabled start slide manually using "Object > Navigation > Page > Project "`,
                 { style: { width: "100px" } }
               )}
               {getCheckboxField(
@@ -148,25 +148,25 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
       <section>
         <div
           className={settingsCss.sectionHeader}
-          onClick={() => toggleSection(ProjectPanelSections.Slide)}
+          onClick={() => toggleSection(ProjectPanelSections.Page)}
         >
           <Button
             minimal
             small={true}
             icon={
-              visibleSectionIds[ProjectPanelSections.Slide]
+              visibleSectionIds[ProjectPanelSections.Page]
                 ? "caret-down"
                 : "caret-right"
             }
           ></Button>
-          Slide
+          Page
         </div>
-        {visibleSectionIds[ProjectPanelSections.Slide] && (
+        {visibleSectionIds[ProjectPanelSections.Page] && (
           <div className={settingsCss.panel}>
             <FormGroup>
               <div className="">
                 {getUnitNumericFiled(
-                  "Slide duration",
+                  "Page/Slide duration",
                   settings.slideDuration,
                   (value: string) => {
                     _updateSlideDuration(value);
@@ -183,7 +183,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                   (value: string) => {
                     _updateProjectSettings({ exitSlideDuration: value });
                   },
-                  "Duration before end of slide when Out Animation starts. Example: Slide: 10s; Exit: 2s; 10s - 2s= 8s. Out Animation starts at 8th second.",
+                  "Duration before end of page/slide when Out Animation starts. Example: Page/Slide: 10s; Exit: 2s; 10s - 2s= 8s. Out Animation starts at 8th second.",
                   { style: { width: "100px" } },
                   ["ms", "s"]
                 )}

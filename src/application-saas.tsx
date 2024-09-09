@@ -23,6 +23,7 @@ import {
 import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
 import Login from "./pages/login/Login";
+import { HotkeysProvider } from "@blueprintjs/core";
 
 const global = window as any;
 
@@ -47,12 +48,14 @@ function application(): {
   return {
     component: (
       <React.StrictMode>
-        <BrowserRouter>
-          <Routes>
-            <Route path="login" element={<Login />} />
-            <Route index element={Editor} />
-          </Routes>
-        </BrowserRouter>
+        <HotkeysProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="login" element={<Login />} />
+              <Route index element={Editor} />
+            </Routes>
+          </BrowserRouter>
+        </HotkeysProvider>
       </React.StrictMode>
     ),
     useAppRootSelector: useAppRootSelector,

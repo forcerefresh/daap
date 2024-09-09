@@ -19,7 +19,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Icon } from "@blueprintjs/core";
+import { Icon, useHotkeys } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import cx from "classnames";
 import { ILayer } from "../../store/reducers/i-layers";
@@ -48,6 +48,13 @@ import {
   setViewPortSize,
   updateObject,
   setStagePan,
+  ungroupObject,
+  groupObjects,
+  duplicateObjects,
+  deleteObjects,
+  copyToClipboard,
+  cutToClipboard,
+  pasteObjectsFromClipboard,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
@@ -82,7 +89,7 @@ import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-pro
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
+// import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import StageLayer from "./StageLayer";
 import { getObjectIdToSelect } from "../../store/actions/actions-utils";
@@ -91,6 +98,7 @@ import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
 import StageToolsCanvas from "./StageToolsCanvas";
+import { IClipboard } from "../../store/reducers/i-clipboard";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -138,7 +146,121 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     showGrid,
     _setStageZoom,
     _setStagePan,
+    _ungroupObject,
+    _groupObjects,
+    _duplicateObjects,
+    _deleteObjects,
+    _cutToClipboard,
+    _copyToClipboard,
+    clipboard,
+    _pasteObjectsFromClipboard,
   } = props;
+
+  const groupingAllowed = selectedObjectIds.length > 1;
+  const ungroupingAllowed =
+    selectedObjectIds.length === 1 &&
+    objectById[selectedObjectIds[0]]?.type === "group";
+
+  const hotkeys = useMemo(
+    () => [
+      {
+        combo: "cmd + G",
+        global: true,
+        label: "Group or Ungroup objects",
+        onKeyDown: (e: Event) => {
+          e.preventDefault();
+          if (groupingAllowed) {
+            _groupObjects(selectedObjectIds);
+          } else if (ungroupingAllowed) {
+            _ungroupObject(selectedObjectIds[0]);
+          }
+        },
+      },
+      {
+        combo: "cmd + D",
+        global: true,
+        label: "Duplicate objects",
+        onKeyDown: (e: Event) => {
+          e.preventDefault();
+          _duplicateObjects(selectedObjectIds);
+        },
+      },
+      {
+        combo: "del",
+        global: true,
+        label: "Delete objects",
+        onKeyDown: (e: Event) => {
+          console.log(e.target);
+          if ((e.target as Element).closest("input")) {
+            return;
+          }
+          e.preventDefault();
+          _deleteObjects(selectedObjectIds);
+        },
+      },
+      {
+        combo: "cmd + X",
+        global: true,
+        label: "Cut",
+        onKeyDown: () => {
+          _cutToClipboard({
+            entityIds: selectedObjectIds,
+            entityType: "object",
+          });
+        },
+      },
+      {
+        combo: "cmd + C",
+        global: true,
+        label: "Copy",
+        onKeyDown: () => {
+          _copyToClipboard({
+            entityIds: selectedObjectIds,
+            entityType: "object",
+          });
+        },
+      },
+      {
+        combo: "cmd + V",
+        global: true,
+        label: "Paste",
+        onKeyDown: () => {
+          if (!!clipboard.entityIds && activeLayerId) {
+            _pasteObjectsFromClipboard(activeLayerId);
+          }
+        },
+      },
+      {
+        combo: "backspace",
+        global: true,
+        label: "Delete",
+        onKeyDown: (e) => {
+          console.log(e.target);
+          if (
+            (e.target as Element).closest("input") ||
+            (e.target as Element).closest(".MainToolCanvas")
+          ) {
+            return;
+          }
+          if (selectedObjectIds.length > 0) {
+            _deleteObjects(selectedObjectIds);
+          }
+        },
+      },
+    ],
+    [
+      _deleteObjects,
+      _ungroupObject,
+      selectedObjectIds,
+      _duplicateObjects,
+      _copyToClipboard,
+      _cutToClipboard,
+      _duplicateObjects,
+      clipboard,
+      activeLayerId,
+    ]
+  );
+  const {} = useHotkeys(hotkeys);
 
   const stageToolCanvasRef = useRef();
   const { stageManager } = useContext(StageManagerContext);
@@ -166,11 +288,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   // stageZoomRef.current = stageZoom;
   const rootRef = useRef<HTMLDivElement | null>(null);
 
-  const {
-    activeTool,
-    activateTool,
-    activeObjectId: activeEditObjectId,
-  } = useContext(ToolsContext);
+  // const {
+  //   activeTool,
+  //   activateTool,
+  //   activeObjectId: activeEditObjectId,
+  // } = useContext(ToolsContext);
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
   // const pageSize = breakpointConfig?.normal.page!;
@@ -384,7 +506,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           [css.panCursor]: activeStageTool === StageTools.PAN,
           //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
         })}
-        onWheel={(e) => {
+        onWheelCapture={(e) => {
           if (stageManager.hasCurrentToolActive()) {
             return;
           }
@@ -526,7 +648,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings } =
+  const { slides, layers, objects, selection, document, settings, clipboard } =
     state.project;
   const { stage } = state;
 
@@ -592,6 +714,7 @@ const mapStateToProps = (state: IStore) => {
     forceRefreshRand: stage.forceRefreshRand,
     enableDeveloper: state.globals.enableDeveloper,
     showGrid: state.globals.showGrid,
+    clipboard,
   };
 };
 
@@ -621,6 +744,21 @@ const mapDispatchToProps = {
     selectForProperties(payload),
   _setStageZoom: (zoom: number) => setStageZoom(zoom),
   _setStagePan: (p: Point) => setStagePan(p),
+  _ungroupObject: (groupId: string) => ungroupObject(groupId),
+  _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
+  _duplicateObjects: (ids: string[], toLayerId?: string): any =>
+    duplicateObjects(ids, toLayerId),
+  _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
+  _cutToClipboard: (
+    payload: Pick<IClipboard, "entityType" | "entityIds">
+  ): any => cutToClipboard(payload),
+  _copyToClipboard: (
+    payload: Pick<IClipboard, "entityType" | "entityIds">
+  ): any => copyToClipboard(payload),
+
+  _pasteObjectsFromClipboard: (toLayerId: string): any =>
+    pasteObjectsFromClipboard(toLayerId),
+
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 

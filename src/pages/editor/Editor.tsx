@@ -4,6 +4,7 @@ import LayersPanel from "../../panels/layers-panel/LayersPanel";
 import MainLayout from "../../layouts/main-layout/MainLayout";
 import ToolbarPanel from "../../panels/toolbar-panel/ToolbarPanel";
 import ActionPanel from "../../panels/action-panel/ActionPanel";
+import FloatingActionPanel from "../../panels/floating-actions-panel/FloatingActionsPanel";
 import StaticAnimationPanel from "../../panels/animation-panel/StaticAnimationPanel";
 import PropertiesPanelAll from "../../panels/properties-panel-all/PropertiesPanelAll";
 import { DndProvider } from "react-dnd";
@@ -13,6 +14,7 @@ import QuickBarPanel from "../../panels/quick-bar-panel/QuickBarPanel";
 import { ToolsProvider } from "../../utils/tools/ToolsProvider";
 import LayersSimplified from "../../panels/layers-simplified/LayersSimplified";
 import { StagePanelNewWrapper } from "../../panels/stage-panel-new/StagePanelNewWrapper";
+import FloatingPointerPanel from "../../panels/floating-pointer-panel/FloatingPointerPanel";
 
 function Editor() {
   return (
@@ -32,6 +34,8 @@ function Editor() {
           content={<StagePanelNewWrapper />}
           animations={<StaticAnimationPanel />}
           quickBar={<QuickBarPanel />}
+          floatingActions={<FloatingActionPanel />}
+          floatingPointer={<FloatingPointerPanel />}
         />
       </ToolsProvider>
     </DndProvider>

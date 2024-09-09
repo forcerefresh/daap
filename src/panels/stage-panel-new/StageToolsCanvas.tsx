@@ -86,7 +86,7 @@ import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-pro
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
+// import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import StageLayer from "./StageLayer";
 import {
@@ -105,11 +105,12 @@ import {
   getGroupMatrixFromSelectionPath,
   screenPointToLocal,
 } from "./stage-panel-utils";
+import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
-const StagePanelNew: React.FC<IStagePanel> = (props) => {
+const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
     innerRef,
     slides,
@@ -194,6 +195,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         "data-scale-handle"
       );
 
+      // if (handle === "width") {
+      //   return;
+      // }
+
       console.log(selectionPath);
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
@@ -233,6 +238,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     if (selectedObjectId) {
       console.log(stageZoom);
       // >>>>>>>>>>>>>>>>>>
+      // duplicate 123
       const objectPath: string[] = [];
 
       populateObjectThreeIds(
@@ -356,6 +362,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     tr?: HTMLElement;
     bl?: HTMLElement;
     br?: HTMLElement;
+    width?: HTMLElement;
   }>({});
 
   // const handleMouseDown = useCallback((e: MouseEvent) => {
@@ -412,7 +419,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     };
   }, [handleMouseDown, selectedObjectIds]);
 
-  const HANDLE_SIZE = 20;
+  const HANDLE_SIZE = 15;
   const scaledHandleSize =
     HANDLE_SIZE / (selectedObject?.scale ?? 1) / stageZoom;
 
@@ -511,6 +518,27 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.br = el;
+
+      // width resize
+      const object = objectById[selectedObjectIds[0]];
+      const toolDef = getObjectToolDefinitions(object.type);
+      if (toolDef?.meta.supportWidthResize) {
+        el = document.createElement("div");
+        el.style.top = `calc(50% - ${scaledHandleSize / 1.25}px)`;
+        el.style.right = "-" + scaledHandleSize / 1.5 + "px";
+        el.style.width = scaledHandleSize / 1.5 + "px";
+        el.style.height = scaledHandleSize * 1.5 + "px";
+        el.style.background = "transparent"; //"rgba(255,0,255,0.4)"; //handleColor;
+        el.style.border = "0.1px solid" + handleColor;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "width");
+        el.setAttribute("class", "resize-handle");
+        holderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.width = el;
+      }
     }
 
     return () => {
@@ -529,6 +557,13 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       if (handlesRef.current?.br && holderRef.current) {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
         holderRef.current.removeChild(handlesRef.current.br);
+      }
+      if (handlesRef.current?.width && holderRef.current) {
+        handlesRef.current.width.removeEventListener(
+          "mousedown",
+          handleMouseDown
+        );
+        holderRef.current.removeChild(handlesRef.current.width);
       }
     };
     // if (childRef.current) {
@@ -678,5 +713,5 @@ const mapDispatchToProps = {
 };
 
 export default withErrorBoundary(
-  connect(mapStateToProps, mapDispatchToProps)(StagePanelNew)
+  connect(mapStateToProps, mapDispatchToProps)(StageToolsCanvas)
 );

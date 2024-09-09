@@ -16,7 +16,7 @@ export function normalizeGroup(
     breakpointConfig?: BreakpointConfiguration;
   }
 ): {
-  objects: Object[];
+  objects: IObject[];
   group: IObject;
 } {
   const { objectById, breakpointConfig } = utils;

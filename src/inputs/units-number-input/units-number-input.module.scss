@@ -1,10 +1,11 @@
 .main {
+  width: fit-content !important;
   :global {
     .bp5-input-group {
       display: inline-block;
     }
     .bp5-form-content {
-      display: block !important;
+      display: flex !important;
     }
   }
 }

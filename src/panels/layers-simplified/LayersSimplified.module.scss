@@ -1,19 +1,37 @@
+@import "/src/theme";
+
 .layerPanel {
   padding: 5px;
-  background: #333333;
+  background: $pt-app-background-color;
 
   display: flex;
   flex-direction: column;
   height: 100%;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
 }
 .layersHeader {
   flex-grow: 0;
 }
 .layersHolder {
   flex-grow: 1;
-  overflow: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .objectsHolder {
+  overflow: auto;
   padding: 5px;
+}
+
+:global(.bp5-dark) {
+  .layerPanel {
+    background: $pt-dark-app-background-color !important;
+  }
 }

@@ -1,0 +1,39 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .floatingPointer {
+    // color: $pt-dark-text-color-muted;
+  }
+  .floatingPointerInner {
+    background: $pt-dark-app-background-color;
+  }
+}
+
+.floatingPointer {
+  z-index: 1000;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+
+  display: flex;
+  overflow: visible;
+
+  transition: opacity;
+  transition-duration: 200ms;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+}
+
+.floatingPointerInner {
+  padding: 4px;
+  // padding: 4px;
+  background: $pt-app-background-color;
+  display: inline-flex;
+  max-width: fit-content;
+  margin: 0 auto;
+}

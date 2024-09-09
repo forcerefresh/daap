@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { StageManager } from "../../utils/selection-manager/StageManager";
 import { IStore } from "../../store/store";
 import {
@@ -6,6 +6,8 @@ import {
   addObjectsToSelection,
   deactivateObject,
   removeObjectsFromSelection,
+  selectForProperties,
+  selectForPropertiesProps,
   selectObjects,
   setStagePan,
   updateObject,
@@ -45,6 +47,10 @@ import {
 } from "../../store/helpers/objectBoundingBox";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { normalizeGroup } from "./normalize-group-utils";
+import { HANDLE_SIZE } from "./WithResizeHandle";
+import { setFloatingActionPanelVisibility } from "../floating-actions-panel/utils";
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
+import { TextValues } from "../../objects/text/text";
 
 type StageManagerProviderProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
@@ -80,10 +86,15 @@ export const StageManagerProviderInternal = (
     _removeObjectsFromSelection,
     _deactivateObject,
     _setStagePan,
+    _selectForProperties,
   } = props;
+
+  const { activateTool } = useContext(ToolsContext);
 
   const selectedObjectIdsRef = useRef(selectedObjectIds);
   selectedObjectIdsRef.current = selectedObjectIds;
+
+  const recentlySelectedRef = useRef(false);
 
   //console.log(objectById);
   const [stageManager] = useState(new StageManager());
@@ -104,6 +115,7 @@ export const StageManagerProviderInternal = (
               selectedObjectIdsRef,
               zoom,
               selectionPath,
+              recentlySelectedRef,
             },
             {
               _updateObject,
@@ -112,6 +124,7 @@ export const StageManagerProviderInternal = (
               _addObjectsToSelection,
               _removeObjectsFromSelection,
               _deactivateObject,
+              _selectForProperties,
             }
           );
           break;
@@ -207,11 +220,14 @@ export const StageManagerProviderInternal = (
               selectedObjectIdsRef,
               zoom,
               breakpointConfig,
+              recentlySelectedRef,
             },
             {
               _updateObject,
               _activateObject,
               _selectObjects,
+              _selectForProperties,
+              activateTool: activateTool,
             }
           );
           break;
@@ -315,6 +331,8 @@ const mapDispatchToProps = {
   _removeObjectsFromSelection: (objectIds: string[]) =>
     removeObjectsFromSelection(objectIds),
   _setStagePan: (p: Point) => setStagePan(p),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
 };
 
 const StageManagerProvider = connect(
@@ -446,6 +464,7 @@ function processMoveStartEvent(
   storeProps: {
     activeObjectId: string | null;
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
+    recentlySelectedRef: React.MutableRefObject<boolean>;
     zoom: number;
     selectionPath: string[];
   },
@@ -453,13 +472,19 @@ function processMoveStartEvent(
     _updateObject: any;
     _activateObject: any;
     _selectObjects: (objectIds: string[]) => any;
+    _selectForProperties: (props: selectForPropertiesProps) => any;
     _addObjectsToSelection: any;
     _removeObjectsFromSelection: any;
     _deactivateObject: any;
   }
 ) {
-  const { selectedObjectIdsRef, activeObjectId, zoom, selectionPath } =
-    storeProps;
+  const {
+    selectedObjectIdsRef,
+    activeObjectId,
+    zoom,
+    selectionPath,
+    recentlySelectedRef,
+  } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   const {
@@ -469,6 +494,7 @@ function processMoveStartEvent(
     _removeObjectsFromSelection,
     _selectObjects,
     _deactivateObject,
+    _selectForProperties,
   } = storeActions;
 
   //const [_, ...selectionPathWithoutLayerId] = selectionPath;
@@ -518,10 +544,13 @@ function processMoveStartEvent(
 
   console.log(hasSelectedParent);
 
+  recentlySelectedRef.current = false;
   if (!selectedObjectIds.includes(objectId) && !hasSelectedParent) {
     selectedObjectIdsRef.current = [objectId];
+    recentlySelectedRef.current = true;
     _activateObject(objectId);
     _selectObjects([objectId]);
+    _selectForProperties({ type: "object", id: objectId });
   }
 }
 
@@ -535,6 +564,8 @@ function processMoveChangeEvent(
     zoom: number;
   }
 ) {
+  setFloatingActionPanelVisibility(false);
+
   const { selectedObjectIdsRef, zoom } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
   //const objectId = eData.objectId;
@@ -591,7 +622,7 @@ function processMoveChangeEvent(
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      console.log(eData);
+      console.log(eData, "updateObject");
       //    const currentAngle = object.rotation + angle;
       // objectHolder.style.transform =
       //   "translateX(" + x + "px) translateY(" + y + "px)";
@@ -650,6 +681,7 @@ function processMoveStopEvent(
   layerById: { [key: string]: ILayer },
   storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
+    recentlySelectedRef: React.MutableRefObject<boolean>;
     zoom: number;
     breakpointConfig?: BreakpointConfiguration;
   },
@@ -657,12 +689,23 @@ function processMoveStopEvent(
     _updateObject: any;
     _activateObject: any;
     _selectObjects: any;
+    _selectForProperties: any;
+    activateTool: (tool: string, objectId?: string | undefined) => void;
   }
 ) {
-  const { selectedObjectIdsRef, zoom, breakpointConfig } = storeProps;
+  // setFloatingActionPanelVisibility(true);
+
+  const { selectedObjectIdsRef, zoom, breakpointConfig, recentlySelectedRef } =
+    storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
-  const { _updateObject, _activateObject, _selectObjects } = storeActions;
+  const {
+    _updateObject,
+    _activateObject,
+    _selectObjects,
+    _selectForProperties,
+    activateTool,
+  } = storeActions;
   const objectId = eData.objectId;
   //const object = objectById[objectId];
   const x = eData.x! / zoom;
@@ -670,11 +713,23 @@ function processMoveStopEvent(
 
   // NOTE: mouseup and down in the same point (no mouse move)
   if (x === 0 && y === 0) {
+    if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
+      // TODO
+      if (
+        objectById[objectId].type === "text" &&
+        !recentlySelectedRef.current
+      ) {
+        activateTool(objectById[objectId].type, objectId);
+      }
+    }
+
     // select child element inside group
     if (!eData.originalMouseEvent.shiftKey) {
       _activateObject(objectId);
       _selectObjects([objectId]);
+      _selectForProperties({ type: "object", id: objectId });
     }
+    return;
   }
 
   const parentGroup = objectById[selectedObjectIds[0]].parentId
@@ -755,14 +810,18 @@ function processMoveStopEvent(
 
   let calc: ReturnType<typeof getUngroupObjectsCalculation> = {};
 
+  objectToUpdate.forEach((object) => _updateObject(cloneDeep(object)));
+  _updateObject(cloneDeep(parentGroup));
+  return;
+
   if (parentGroup) {
     const { group, objects } = normalizeGroup(parentGroup, objectToUpdateById, {
       breakpointConfig,
       objectById,
     });
 
-    objects.forEach((object) => _updateObject(object));
-    _updateObject(group);
+    objects.forEach((object) => _updateObject(cloneDeep(object)));
+    _updateObject(cloneDeep(group));
 
     return;
     const groupRotation = parentGroup.rotation;
@@ -1018,11 +1077,53 @@ function processScaleChangeEvent(
           // Math.cos(degrees_to_radians(object.rotation));
         }
       }
-      objectHolder.style.left = left + "px";
-      objectHolder.style.top = top + "px";
-      objectHolder.style.transform = getObjectTransform(object, {
-        scale: scale,
-      });
+
+      // WIDTH
+      if (eData.handle === "width") {
+        const newWidth = objectSize.width + mouseMoveX + "px";
+        objectHolder.style.width = newWidth;
+
+        const contentEl = objectHolder.getElementsByClassName(
+          "object-content"
+        )[0] as HTMLElement;
+        if (contentEl) contentEl.style.width = newWidth;
+
+        const resizeHolderEl = objectHolder.getElementsByClassName(
+          "resize-handle-holder-" + objectId
+        )[0] as HTMLElement;
+        if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+
+        // objectHolder.style.boxShadow = `0 0 0 ${1 / object.scale / zoom}px ${
+        //   object.objectIds ? "#444444" : "#48aff0"
+        // }`;
+      }
+      // SCALE
+      else {
+        objectHolder.style.left = left + "px";
+        objectHolder.style.top = top + "px";
+        objectHolder.style.transform = getObjectTransform(object, {
+          scale: scale,
+        });
+
+        const scaledHandleSize = HANDLE_SIZE / Math.abs(scale) / zoom;
+
+        const handlesEls = Array.from(
+          document.getElementsByClassName(`resize-handle-${objectId}`)
+        ) as HTMLDivElement[];
+
+        handlesEls.forEach((handleEL) => {
+          handleEL.style.scale = `${object.scale / scale}`;
+
+          // handleEL.style.left = "-" + scaledHandleSize + "px";
+          // handleEL.style.top = "-" + scaledHandleSize + "px";
+          // handleEL.style.width = scaledHandleSize + "px";
+          // handleEL.style.height = scaledHandleSize + "px";
+        });
+
+        objectHolder.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
+          object.objectIds ? "#444444" : "#48aff0"
+        }`;
+      }
 
       //   scale(" +
       //   initialScale +
@@ -1178,9 +1279,16 @@ function processScaleStopEvent(
         // Math.cos(degrees_to_radians(object.rotation));
       }
     }
-    objectClone.absoluteLayout!.common.left = left + "px";
-    objectClone.absoluteLayout!.common.top = top + "px";
-    objectClone.scale = scale;
+
+    if (eData.handle === "width") {
+      objectClone.absoluteLayout!.common.width =
+        objectSize.width + realMoveXY + "px";
+    } else {
+      objectClone.absoluteLayout!.common.left = left + "px";
+      objectClone.absoluteLayout!.common.top = top + "px";
+      objectClone.scale = scale;
+    }
+
     _updateObject(objectClone);
   });
 }

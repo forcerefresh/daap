@@ -54,7 +54,7 @@ export class ScaleTool extends EventTarget implements IStageTool {
     (window as any).addEventListener("mouseup", this.mouseUp);
 
     updateHandleVisibility("rotation-handle", false);
-    this.prevBoxShadow = updateBoxShadow(this.objectId, "none");
+    // TODO this.prevBoxShadow = updateBoxShadow(this.objectId, "none");
   }
 
   handleMouseMove(e: MouseEvent) {

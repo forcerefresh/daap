@@ -24,9 +24,12 @@ import { editor, IEditor } from "./reducers/editor";
 import { updateEditor } from "./actions/actions";
 import { IUIForms, uiforms } from "./reducers/uiforms";
 import { ISettings } from "./reducers/i-settings";
+import { IClipboard } from "./reducers/i-clipboard";
+import { clipboard } from "./reducers/clipboard";
 
 export interface IStore {
   project: {
+    clipboard: IClipboard;
     slides: ISlides;
     layers: ILayers;
     objects: IObjects;
@@ -48,6 +51,7 @@ export interface IStore {
 
 const project = diff(
   combineReducers({
+    clipboard,
     slides,
     layers,
     objects,

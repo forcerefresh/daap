@@ -119,7 +119,7 @@ export const navigationDefinition: NavigationTuple = [
         ],
       },
       {
-        groupName: "Slide",
+        groupName: "Page",
         groupValue: "slide",
         elements: [
           {
@@ -151,7 +151,7 @@ export const navigationDefinition: NavigationTuple = [
                 groupValue: "slideNo",
                 elements: [
                   {
-                    displayName: "Slide No",
+                    displayName: "Page No",
                     propertyName: "slideNo",
                     inputType: InputType.TEXT,
                     value: "1",
@@ -164,7 +164,7 @@ export const navigationDefinition: NavigationTuple = [
                 groupValue: "slideId",
                 elements: [
                   {
-                    displayName: "Slide Id",
+                    displayName: "Page Id",
                     propertyName: "slideId",
                     inputType: InputType.TEXT,
                     value: "",
@@ -183,7 +183,7 @@ export const navigationDefinition: NavigationTuple = [
                 elements: [],
               },
               {
-                groupName: "Slider",
+                groupName: "Project",
                 groupValue: "slider",
                 elements: [
                   {
@@ -192,8 +192,8 @@ export const navigationDefinition: NavigationTuple = [
                     inputType: InputType.SELECT,
                     options: [
                       { label: "None", value: "none" },
-                      { label: "Stop slider on event", value: "stop" },
-                      { label: "Start slider on event", value: "start" },
+                      { label: "Stop project on event", value: "stop" },
+                      { label: "Start project on event", value: "start" },
                     ],
                     value: "none",
                     defaultValue: "none",

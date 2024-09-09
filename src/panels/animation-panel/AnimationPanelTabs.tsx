@@ -29,6 +29,7 @@ import {
   getDefaultAnimationConfigForType,
   getAnimationTypesForItem,
   isAnimationTypeDisabled,
+  animationType2ShortName,
 } from "./AnimationPanelUtils";
 import {
   getAppAnimationDefinition,
@@ -208,7 +209,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 
     const animationAddOptions: any[] = [
       {
-        label: `Add ${section.toLocaleUpperCase()} animation to object...`,
+        label: `Add ${animationType2ShortName(section)} animation`,
         value: "",
         readOnly: true,
       },

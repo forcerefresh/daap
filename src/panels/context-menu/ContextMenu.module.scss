@@ -1,0 +1,15 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .contextMenu {
+    background: $pt-dark-app-background-color;
+  }
+}
+
+.contextMenu {
+  :global(a:hover) {
+    color: inherit !important;
+  }
+
+  background: $pt-app-background-color;
+}

@@ -14,6 +14,7 @@ import {
   MOVE_LAYERS,
   GROUP_OBJECTS,
   UNGROUP_OBJECTS,
+  CLIPBOARD_PASTE_OBJECTS,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
@@ -144,7 +145,28 @@ export function layers(
 
       return newState;
     }
+    case CLIPBOARD_PASTE_OBJECTS: {
+      const { newObjectMapping, objectIds, operation } = action.payload;
 
+      const newState = cloneDeep(state);
+      newObjectMapping.forEach((objectMap) => {
+        const layer = newState.layerById[objectMap.toLayerId];
+        layer.objectIds.push(objectMap.newObjectId);
+      });
+
+      if (operation === "cut") {
+        forIn(newState.layerById, function (layer, _layerId) {
+          remove(layer.objectIds, (objectId) => {
+            return objectIds.indexOf(objectId) !== -1;
+          });
+        });
+      }
+      // if (action.payload.operation === "cut") {
+      //   forEach(newState.layerById);
+      // }
+
+      return newState;
+    }
     case DUPLICATE: {
       // Note: this part duplicate object
       const newState = cloneDeep(state);

@@ -15,6 +15,8 @@ export interface IMainLayout {
   action?: React.ReactElement;
   quickBar?: React.ReactElement;
   layersSimplified?: React.ReactElement;
+  floatingActions?: React.ReactElement;
+  floatingPointer?: React.ReactElement;
 }
 
 export type IMainLayoutMergedProps = typeof mapDispatchToProps &
@@ -33,6 +35,8 @@ function MainLayout(props: IMainLayoutMergedProps) {
     layoutType,
     quickBar,
     layersSimplified,
+    floatingActions,
+    floatingPointer,
   } = props;
 
   switch (layoutType) {
@@ -42,9 +46,15 @@ function MainLayout(props: IMainLayoutMergedProps) {
           <div className={css.left}>{toolbar}</div>
           <div className={cx(css.center, "layout-center-area")}>
             <div className={css.quickBar}>{quickBar}</div>
-            <div className={css.content}>
+            <div className={cx(css.content, "layout-content-area")}>
               {content}
-              <div className={css.layersSimplified}>{layersSimplified}</div>
+              {floatingActions}
+              {floatingPointer}
+              <div
+                className={cx(css.layersSimplified, "layers-simplified-panel")}
+              >
+                {layersSimplified}
+              </div>
             </div>
           </div>
           <div className={css.right}>
@@ -67,7 +77,16 @@ function MainLayout(props: IMainLayoutMergedProps) {
           <div className={css.left}>{toolbar}</div>
           <div className={cx(css.center, "layout-center-area")}>
             <div className={css.quickBar}>{quickBar}</div>
-            <div className={css.content}>{content}</div>
+            <div className={cx(css.content, "layout-content-area")}>
+              {content}
+              {floatingActions}
+              {floatingPointer}
+              <div
+                className={cx(css.layersSimplified, "layers-simplified-panel")}
+              >
+                {layersSimplified}
+              </div>
+            </div>
           </div>
           <div className={css.right}>
             <div className={css.action}>{action}</div>

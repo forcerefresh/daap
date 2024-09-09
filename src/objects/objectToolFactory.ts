@@ -7,9 +7,11 @@ export interface IToolDefinition {
     name: string;
     description?: string;
     icon?: string;
+    supportWidthResize?: boolean;
   };
   toolClass?: new () => IToolClass;
-  toolBar?: (props: IToolbarProps) => React.ReactElement;
+  toolBar?: (props: IToolbarProps) => React.ReactElement | null;
+  floatingBar?: (props: IToolbarProps) => React.ReactElement | null;
 }
 
 const toolsBank: IToolDefinition[] = [];

@@ -24,6 +24,8 @@ import {
   moveLayers,
   duplicateLayers,
   duplicateObjects,
+  activateSlide,
+  selectSlides,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersSimplified.module.scss";
@@ -41,6 +43,7 @@ type ISlidesPanel = typeof mapDispatchToProps &
 
 const LayersPanel: React.FC<ISlidesPanel> = (props) => {
   const {
+    slide,
     layerArr,
     objectById,
     activeObjectId,
@@ -57,6 +60,8 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _selectForProperties,
     _activateLayer,
     _selectLayers,
+    _activateSlide,
+    _selectSlides,
   } = props;
 
   const onObjectClick = (
@@ -113,7 +118,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
   return (
     <>
-      <div className={css.layerPanel}>
+      <div className={cx(css.layerPanel, "no-custom-cursor")}>
         <>
           <div className={css.layersHolder}>
             {/* {layerArr?.map((layer, idx) => { */}
@@ -121,19 +126,38 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
             {/* return ( */}
             <>
-              <Button
-                intent={"primary"}
-                minimal
-                small
-                onClick={() => {
-                  _activateLayer(parentLayerId);
-                  _selectLayers([parentLayerId]);
-                  _selectForProperties({ type: "layer", id: parentLayerId });
-                }}
-              >
-                {layerById[parentLayerId]?.name}
-              </Button>
-
+              <div style={{ display: "flex" }}>
+                <Button
+                  intent={"primary"}
+                  minimal
+                  small
+                  onClick={() => {
+                    if (slide?.id) {
+                      _activateSlide(slide.id);
+                      _selectSlides([slide.id]);
+                      _selectForProperties({ id: slide.id, type: "slide" });
+                    }
+                  }}
+                >
+                  {slide?.name}
+                </Button>
+                {/* <Button small icon="caret-down" minimal></Button> */}
+              </div>
+              <div style={{ display: "flex" }}>
+                <Button
+                  intent={"primary"}
+                  minimal
+                  small
+                  onClick={() => {
+                    _activateLayer(parentLayerId);
+                    _selectLayers([parentLayerId]);
+                    _selectForProperties({ type: "layer", id: parentLayerId });
+                  }}
+                >
+                  {layerById[parentLayerId]?.name}{" "}
+                </Button>
+                {/* <Button small icon="caret-down" minimal></Button> */}
+              </div>
               {selectionPathWithoutLayer.map((pathObjectId) => (
                 <Button
                   intent={"primary"}
@@ -266,6 +290,8 @@ const mapDispatchToProps = {
     where: "above" | "below" | "layer" | "slide" | "bottom",
     moveIds: string[]
   ) => moveLayers(refId, where, moveIds),
+  _activateSlide: (id: string): any => activateSlide(id),
+  _selectSlides: (ids: string[]): any => selectSlides(ids),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);

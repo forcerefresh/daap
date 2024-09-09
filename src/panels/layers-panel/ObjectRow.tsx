@@ -2,7 +2,7 @@ import * as React from "react";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import cx from "classnames";
 import { selectForPropertiesProps } from "../../store/actions/actions";
-import { Button } from "@blueprintjs/core";
+import { Button, Icon } from "@blueprintjs/core";
 import TimelineView from "./TimelineView";
 import { DragSourceMonitor, useDrag, useDrop } from "react-dnd";
 import { useEffect } from "react";
@@ -165,7 +165,11 @@ export function ObjectRow(props: IObjectRowProps) {
               })}
             ></Button>
             <div className={css.objectTypeSVGHolder}>
-              <SVG src={deff?.meta?.icon || ""} />
+              {object.type === "group" ? (
+                <Icon icon={"group-objects"} />
+              ) : (
+                <SVG src={deff?.meta?.icon || ""} />
+              )}
             </div>
           </div>
           <div className={css.objectDescription}>

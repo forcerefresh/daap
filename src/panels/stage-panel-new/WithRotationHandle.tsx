@@ -15,6 +15,7 @@ interface WithRotationHandleProps {
   objectById: {
     [id: string]: IObject<{}>;
   };
+  forceHide: boolean;
 }
 
 export function WithRotationHandle(
@@ -27,6 +28,7 @@ export function WithRotationHandle(
     selectionPath,
     objectById,
     object,
+    forceHide,
   } = props;
 
   const { stageManager } = useContext(StageManagerContext);
@@ -84,8 +86,18 @@ export function WithRotationHandle(
 
       rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
 
-      rotationHandle.current?.removeEventListener("mousedown", handleMouseDown);
-      rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
+      if (rotationHandle.current) {
+        rotationHandle.current?.removeEventListener(
+          "mousedown",
+          handleMouseDown
+        );
+        rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
+
+        // const handleBoxShadow =
+        //   "0 0 0 " + 1 / Math.abs(object.scale) / stageZoom + "px white";
+
+        // rotationHandle.current.style.boxShadow = handleBoxShadow;
+      }
 
       return () => {
         rotationHandle.current?.removeEventListener(
@@ -98,7 +110,18 @@ export function WithRotationHandle(
       // (window as any).addEventListener("mouseup", documentMouseUpHandler);
       // document.addEventListener("mouseout", documentMouseOutHandler);
     }
-  }, [handleMouseDown, initialRotation, props.object.id]);
+  }, [handleMouseDown, initialRotation, props.object.id, forceHide]);
+
+  useEffect(() => {
+    const objectRootEl = childRef.current as HTMLElement;
+    rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
+
+    if (rotationHandle.current) {
+      const handleBoxShadow = "0 0 0 " + 1 + "px white";
+
+      rotationHandle.current.style.boxShadow = handleBoxShadow;
+    }
+  }, [stageZoom, object.scale]);
 
   const renderChildren = () => {
     return React.Children.map(props.children, (child) => {

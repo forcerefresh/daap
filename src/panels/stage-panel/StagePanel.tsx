@@ -26,6 +26,8 @@ import {
   activateObject,
   addNewObject,
   addObjectsToSelection,
+  copyToClipboard,
+  cutToClipboard,
   deactivateObject,
   removeObjectsFromSelection,
   selectForProperties,
@@ -78,7 +80,8 @@ import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-pro
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
+// import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
+import { IClipboard } from "../../store/reducers/i-clipboard";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -1815,6 +1818,12 @@ const mapDispatchToProps = {
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
   _setStageZoom: (zoom: number) => setStageZoom(zoom),
+  _cutToClipboard: (
+    payload: Pick<IClipboard, "entityType" | "entityIds">
+  ): any => cutToClipboard(payload),
+  _copyToClipboard: (
+    payload: Pick<IClipboard, "entityType" | "entityIds">
+  ): any => copyToClipboard(payload),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 

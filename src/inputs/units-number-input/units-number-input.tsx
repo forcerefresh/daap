@@ -1,4 +1,4 @@
-import { FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
+import { Button, FormGroup, InputGroup, Intent, Tag } from "@blueprintjs/core";
 import { Tooltip2 } from "@blueprintjs/popover2";
 import classnames from "classnames";
 import { isEqual } from "lodash-es";
@@ -156,6 +156,16 @@ export const UnitsNumberInputForm: React.FC<
       helperText={!!helperText && helperText}
       inline
     >
+      {inputProps?.showIncDec && (
+        <Button
+          onClick={() => {
+            const newVal = parseInt(value) - 1;
+            updateValue(newVal + latestUnit?.current!);
+          }}
+          icon="minus"
+          minimal
+        ></Button>
+      )}
       <InputGroup
         inputRef={(el) => {
           if (el) el!.autocomplete = "off";
@@ -192,6 +202,16 @@ export const UnitsNumberInputForm: React.FC<
         placeholder={placeholder}
         {...inputProps}
       />
+      {inputProps?.showIncDec && (
+        <Button
+          onClick={() => {
+            const newVal = parseInt(value) + 1;
+            updateValue(newVal + latestUnit?.current!);
+          }}
+          icon="plus"
+          minimal
+        ></Button>
+      )}
     </FormGroup>
   );
 };

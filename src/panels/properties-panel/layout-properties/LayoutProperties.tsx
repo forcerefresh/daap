@@ -414,7 +414,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return <div>Slide has no layout options.</div>;
+      return <div>Page has no layout options.</div>;
     }
   };
 

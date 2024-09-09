@@ -45,8 +45,10 @@
 }
 .layersHolder {
   width: 357px;
-  flex-grow: 1;
+  // flex-grow: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .layer {
@@ -226,8 +228,13 @@
   }
 
   .actionButtons {
-    width: 100px;
+    //width: 100px;
+    display: flex;
+    align-items: center;
+
     > * {
+      padding: 0px;
+      margin: 0 2px;
       //margin-right: 5px;
     }
   }
@@ -423,6 +430,7 @@
   vertical-align: middle;
   margin-left: 5px;
   svg {
+    display: block;
     color: #eee;
     width: 100%;
     height: 100%;
@@ -458,5 +466,5 @@
 }
 
 .objectGroup {
-  border-left: 25px solid transparent;
+  border-left: 28px solid transparent;
 }

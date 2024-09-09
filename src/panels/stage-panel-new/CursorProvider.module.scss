@@ -1,0 +1,40 @@
+.hideCursor {
+  cursor: none;
+}
+
+.movable {
+  width: 5px;
+  height: 5px;
+  background: red;
+  position: absolute;
+  z-index: 999999999;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  transition: background 0.5s;
+  display: none;
+}
+
+.active {
+  background: red;
+  display: block;
+}
+
+.active:after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.movable.cursor-pointer:after {
+  content: "!";
+}
+
+.movable.cursor-right:after {
+  content: ">";
+}
+
+.movable.cursor-left:after {
+  content: "<";
+}

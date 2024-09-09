@@ -1,3 +1,14 @@
+.inputsHolder {
+  display: flex;
+  :global {
+    *,
+    *:hover,
+    *:focus,
+    *:active {
+      outline: none;
+    }
+  }
+}
 .rightHolder {
   flex-grow: 1;
 }

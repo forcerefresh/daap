@@ -5,6 +5,7 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { getAbsEl } from "./WithRotationHandle";
 import { degrees_to_radians } from "./StageManagerProvider";
+import { isObjectGroup } from "../../store/actions/actions-utils";
 
 export interface CreateGroupWithObjectsProps {
   group: IObject;
@@ -220,13 +221,24 @@ export function createTransformForPath(
   },
   config?: {
     inverseRotation?: boolean;
+    includeTranslate?: boolean;
   }
 ) {
   return groupsPath.map((id: string) => {
     const object = objectById[id];
 
     const rotationSign = config?.inverseRotation ? "-" : "";
-    return `rotate(${rotationSign}${object.rotation}deg) scale(${object.scale})`;
+
+    const translate = config?.includeTranslate
+      ? `translateX(${object.absoluteLayout?.common.left}) translateY(${object.absoluteLayout?.common.top})`
+      : "";
+
+    let left = "",
+      right = "";
+    isObjectGroup(object) ? (right = translate) : (left = translate);
+    if (translate) console.log(translate, "translate");
+
+    return `${translate} rotate(${rotationSign}${object.rotation}deg) scale(${object.scale})`;
   });
 }
 
@@ -241,13 +253,15 @@ export function getGroupMatrixFromSelectionPath(
   selectionPath: string[],
   objectById: {
     [id: string]: IObject<{}>;
-  }
+  },
+  options?: { includeTranslate?: boolean }
 ) {
   const groupsPath = [...selectionPath];
   groupsPath.shift();
 
   const transformArrayRef = createTransformForPath(groupsPath, objectById, {
     inverseRotation: false,
+    includeTranslate: options?.includeTranslate,
   });
 
   const groupsMatrix = getFullMatrixFromTransformArr(transformArrayRef);

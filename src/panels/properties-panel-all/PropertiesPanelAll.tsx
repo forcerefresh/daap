@@ -31,10 +31,16 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
 
   const { activeSection } = useContext(PropertiesPanelContext);
 
+  const entityType2Name: Record<string, string> = {
+    object: "Object",
+    layer: "Layer",
+    slide: "Page",
+  };
+
   return (
     <div className={css.propertiesPanelAll} key={panelName?.id}>
       <PanelHeader>
-        {panelName?.type.toUpperCase() || "PROPERTIES"}
+        {entityType2Name[panelName?.type ?? ""]?.toUpperCase() || "PROPERTIES"}
         {panelName && <span className={css.panelName}>{panelName.name}</span>}
       </PanelHeader>
       <PropertiesSectionsPanel />

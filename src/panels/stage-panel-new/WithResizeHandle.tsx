@@ -12,7 +12,7 @@ import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { isObjectInGroup } from "../../store/actions/actions-utils";
 
-const HANDLE_SIZE = 20;
+export const HANDLE_SIZE = 16;
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -28,6 +28,7 @@ interface WithResizeHandleProps {
     [id: string]: IObject<{}>;
   };
   isSelected: boolean;
+  forceHide: boolean;
 }
 
 export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
@@ -39,6 +40,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     objectById,
     object,
     isSelected,
+    forceHide,
   } = props;
 
   const { stageManager } = useContext(StageManagerContext);
@@ -57,11 +59,11 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     tr?: HTMLElement;
     bl?: HTMLElement;
     br?: HTMLElement;
+    width?: HTMLElement;
   }>({});
 
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
-      console.log("SASdsadsada");
       e.stopPropagation();
 
       const handle = (e.currentTarget as HTMLElement)?.getAttribute(
@@ -99,7 +101,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   useLayoutEffect(() => {
     console.log(isSelected);
 
-    if (!isSelected) return;
+    if (!isSelected || forceHide) return;
     // if (isObjectInGroup(object, objectById)) {
     //   return;
     // }
@@ -113,90 +115,151 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     )[0] as HTMLDivElement;
 
     const scaledHandleSize = HANDLE_SIZE / Math.abs(initialScale) / stageZoom;
+
+    const borderRadius = "10%"; //  2 / Math.abs(initialScale) / stageZoom;
+
     //initialRotationRef.current = initialRotation;
     if (resizeHolderRef.current) {
       let el: HTMLDivElement;
+
+      const handleBoxShadow =
+        "0 0 0 " + 1 / Math.abs(object.scale) / stageZoom + "px white";
 
       el = document.createElement("div");
       el.style.left = "-" + scaledHandleSize + "px";
       el.style.top = "-" + scaledHandleSize + "px";
       el.style.width = scaledHandleSize + "px";
       el.style.height = scaledHandleSize + "px";
+      el.style.transformOrigin = "bottom right";
       el.style.background = `${
         object.objectIds ? groupSelectionColor : objectSelectionColor
       }`;
-      el.style.border = `0.1px solid ${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
+      el.style.boxShadow = handleBoxShadow;
+      el.style.borderRadius = borderRadius;
+
+      // el.style.border = `0.1px solid ${
+      //   object.objectIds ? groupSelectionColor : objectSelectionColor
+      // }`;
       el.style.position = "absolute";
       el.style.pointerEvents = "all";
       el.setAttribute("data-scale-handle", "tl");
-      el.setAttribute("class", "resize-handle");
+      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
       resizeHolderRef.current.appendChild(el);
       // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.tl = el;
+      // ----
 
       el = document.createElement("div");
       el.style.right = "-" + scaledHandleSize + "px";
       el.style.top = "-" + scaledHandleSize + "px";
       el.style.width = scaledHandleSize + "px";
       el.style.height = scaledHandleSize + "px";
+      el.style.transformOrigin = "bottom left";
+
       el.style.background = `${
         object.objectIds ? groupSelectionColor : objectSelectionColor
       }`;
-      el.style.border = `0.1px solid ${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
+      el.style.boxShadow = handleBoxShadow;
+      el.style.borderRadius = borderRadius;
+
+      // el.style.border = `0.1px solid ${
+      //   object.objectIds ? groupSelectionColor : objectSelectionColor
+      // }`;
       el.style.position = "absolute";
       el.style.pointerEvents = "all";
       el.setAttribute("data-scale-handle", "tr");
-      el.setAttribute("class", "resize-handle");
+      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
 
       resizeHolderRef.current.appendChild(el);
       // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.tr = el;
+      // ----
 
       el = document.createElement("div");
       el.style.bottom = "-" + scaledHandleSize + "px";
       el.style.left = "-" + scaledHandleSize + "px";
       el.style.width = scaledHandleSize + "px";
       el.style.height = scaledHandleSize + "px";
+      el.style.transformOrigin = "top right";
+
       el.style.background = `${
         object.objectIds ? groupSelectionColor : objectSelectionColor
       }`;
-      el.style.border = `0.1px solid ${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
+      el.style.boxShadow = handleBoxShadow;
+      el.style.borderRadius = borderRadius;
+
+      // el.style.border = `0.1px solid ${
+      //   object.objectIds ? groupSelectionColor : objectSelectionColor
+      // }`;
       el.style.position = "absolute";
       el.style.pointerEvents = "all";
       el.setAttribute("data-scale-handle", "bl");
-      el.setAttribute("class", "resize-handle");
+      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
       resizeHolderRef.current.appendChild(el);
       // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.bl = el;
+
+      // ----
 
       el = document.createElement("div");
       el.style.bottom = "-" + scaledHandleSize + "px";
       el.style.right = "-" + scaledHandleSize + "px";
       el.style.width = scaledHandleSize + "px";
       el.style.height = scaledHandleSize + "px";
+      el.style.transformOrigin = "top left";
+
       el.style.background = `${
         object.objectIds ? groupSelectionColor : objectSelectionColor
       }`;
-      el.style.border = `0.1px solid ${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
+      // el.style.border =
+      //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
+      el.style.boxShadow = handleBoxShadow;
+      el.style.borderRadius = borderRadius;
+
+      // el.style.border = `0.1px solid ${
+      //   object.objectIds ? groupSelectionColor : objectSelectionColor
+      // }`;
       el.style.position = "absolute";
       el.style.pointerEvents = "all";
       el.setAttribute("data-scale-handle", "br");
-      el.setAttribute("class", "resize-handle");
+      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
       resizeHolderRef.current.appendChild(el);
       // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.br = el;
+
+      // ----
+
+      el = document.createElement("div");
+      el.style.top = `calc(50% - ${scaledHandleSize / 1.25}px)`;
+      el.style.right = "-" + scaledHandleSize / 1.5 + "px";
+      el.style.width = scaledHandleSize / 1.5 + "px";
+      el.style.height = scaledHandleSize * 1.5 + "px";
+      el.style.transformOrigin = "center left";
+
+      el.style.background = `${
+        object.objectIds ? groupSelectionColor : objectSelectionColor
+      }`;
+      // el.style.border =
+      //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
+      el.style.boxShadow = handleBoxShadow;
+      el.style.borderTopRightRadius = "15%";
+      el.style.borderBottomRightRadius = "15%";
+
+      // el.style.border = `0.1px solid ${
+      //   object.objectIds ? groupSelectionColor : objectSelectionColor
+      // }`;
+      el.style.position = "absolute";
+      el.style.pointerEvents = "all";
+      el.setAttribute("data-scale-handle", "width");
+      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+      resizeHolderRef.current.appendChild(el);
+      // el.removeEventListener("mousedown", handleMouseDown);
+      el.addEventListener("mousedown", handleMouseDown);
+      handlesRef.current.width = el;
     }
 
     return () => {
@@ -215,6 +278,13 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
       if (handlesRef.current?.br && resizeHolderRef.current) {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current.removeChild(handlesRef.current.br);
+      }
+      if (handlesRef.current?.width && resizeHolderRef.current) {
+        handlesRef.current.width.removeEventListener(
+          "mousedown",
+          handleMouseDown
+        );
+        resizeHolderRef.current.removeChild(handlesRef.current.width);
       }
     };
     // if (childRef.current) {
@@ -242,6 +312,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     isSelected,
     handleMouseDown,
     stageZoom,
+    forceHide,
   ]);
 
   const renderChildren = () => {

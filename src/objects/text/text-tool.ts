@@ -7,6 +7,8 @@ import {
   Point,
 } from "../../webslider-sdk/object/i-tool-class";
 import { TextValues } from "./text";
+import { populateObjectThreeIds } from "../../store/actions/actions-utils";
+import { getGroupMatrixFromSelectionPath } from "../../panels/stage-panel-new/stage-panel-utils";
 
 export const getCursorStyle = () => {
   return `text`;
@@ -16,6 +18,9 @@ export default class TextTool implements IToolClass {
   canvas: HTMLDivElement | null = null;
   stageEl: HTMLDivElement | null = null;
   getMousePoint: ActivationParams["getMousePoint"] = () => ({ x: 0, y: 0 });
+
+  getObjectTransform: ActivationParams["getObjectTransform"] = () =>
+    new DOMMatrix();
 
   requestObjectUpdate: ActivationParams["requestObjectUpdate"] | null = null;
   requestDeactivation: ActivationParams["requestDeactivation"] | null = null;
@@ -40,6 +45,7 @@ export default class TextTool implements IToolClass {
     const {
       canvas,
       getMousePoint,
+      getObjectTransform,
       requestObjectUpdate,
       requestDeactivation,
       requestObjectDelete,
@@ -56,6 +62,7 @@ export default class TextTool implements IToolClass {
     this.setCanvas(canvas);
 
     this.getMousePoint = getMousePoint;
+    this.getObjectTransform = getObjectTransform;
     this.requestObjectUpdate = requestObjectUpdate;
     this.requestDeactivation = requestDeactivation;
     this.requestObjectDelete = requestObjectDelete;
@@ -211,7 +218,7 @@ export default class TextTool implements IToolClass {
         `object-content-${this.objectId}`
       )[0] as HTMLElement;
 
-      if (objectEl) objectEl.style.display = "block";
+      // if (objectEl) objectEl.style.display = "block";
 
       this.objectId = undefined;
     }
@@ -231,19 +238,24 @@ export default class TextTool implements IToolClass {
   editorChange(editorConfig: EditorConfig) {
     this.editorConfig = { ...this.editorConfig, ...editorConfig };
 
-    this.textEl!.style.left =
-      this.editorConfig.stageZoom *
-        parseFloat(this.object?.absoluteLayout?.common.left!) +
-      "px";
-    this.textEl!.style.top =
-      this.editorConfig.stageZoom *
-        parseFloat(this.object?.absoluteLayout?.common.top!) +
-      "px";
+    // this.textEl!.style.left =
+    //   this.editorConfig.stageZoom *
+    //     parseFloat(this.object?.absoluteLayout?.common.left!) +
+    //   "px";
+    // this.textEl!.style.top =
+    //   this.editorConfig.stageZoom *
+    //     parseFloat(this.object?.absoluteLayout?.common.top!) +
+    //   "px";
 
-    if (this.textEl) {
-      this.textEl.style.transform =
-        "scale(" + this.editorConfig.stageZoom + ")";
-      this.textEl.style.transformOrigin = "top left";
+    if (this.textEl && this.objectId) {
+      const transform = this.getObjectTransform(this.objectId, {
+        includeTranslate: true,
+      }).toString();
+      this.textEl.style.transform = transform;
+
+      // this.textEl.style.transform =
+      //   "scale(" + this.editorConfig.stageZoom + ")";
+      // this.textEl.style.transformOrigin = "top left";
     }
     // const svgArr = this.canvas!.querySelectorAll("svg");
     // svgArr.forEach((svg) => {

@@ -9,11 +9,12 @@ import {
 import { FreeDrawValues } from "./free-draw";
 import { IBezier, IFreeDrawToolConfig, Points } from "./types";
 import { bezierArr2Path, lineIntersection } from "./utils";
+import { ICursorStyle } from "../../panels/stage-panel-new/CursorProvider";
 var fitCurve = require("fit-curve");
 var error = 1;
 
 export const getCursorStyle = () => {
-  return `crosshair`;
+  return ""; // `crosshair`;
 };
 
 export default class FreeHandDrawTool implements IToolClass {
@@ -28,6 +29,8 @@ export default class FreeHandDrawTool implements IToolClass {
   mouseMoveHandlerBind: EventListener | undefined;
   mouseUpHandlerBind: EventListener | undefined;
   clickOutsideEventHandlerBind: EventListenerOrEventListenerObject | undefined;
+
+  requestCursorChange: ActivationParams["requestCursorChange"] | null = null;
 
   getObjects: (type: string) => IObject[] = () => [];
   objects: IObject[] = [];
@@ -62,6 +65,7 @@ export default class FreeHandDrawTool implements IToolClass {
       objectId,
       position,
       getObjects,
+      requestCursorChange,
     } = activationParams;
 
     this.objectId = objectId ?? null;
@@ -84,10 +88,17 @@ export default class FreeHandDrawTool implements IToolClass {
     this.clickOutsideEventHandlerBind =
       this.clickOutsideEventHandler.bind(this);
 
+    this.requestCursorChange = requestCursorChange;
+
     this.canvas?.addEventListener("mousedown", this.mouseDownHandlerBind!);
     this.canvas?.addEventListener("mousemove", this.mouseMoveHandlerBind!);
     this.canvas?.addEventListener("mouseup", this.mouseUpHandlerBind!);
     document.addEventListener("mousedown", this.clickOutsideEventHandlerBind);
+
+    this.requestCursorChange({
+      size: 5,
+      style: { background: "white" },
+    });
 
     if (objectValues) {
       this.stack = (objectValues as unknown as FreeDrawValues).lines.map(
@@ -162,6 +173,13 @@ export default class FreeHandDrawTool implements IToolClass {
       ...this.toolConfig,
       ...(toolConfig as IFreeDrawToolConfig),
     };
+
+    this.requestCursorChange?.({
+      size: parseInt(this.toolConfig.strokeWidth),
+      style: {
+        background: this.toolConfig.color,
+      },
+    });
   }
 
   objectsChange(objects: IObject[]) {
@@ -422,7 +440,7 @@ export default class FreeHandDrawTool implements IToolClass {
     this.canvas.style.display = "block";
     this.canvas.style.background = "rgba(34,56,1,0,2)";
 
-    this.canvas.style.cursor = "crosshair";
+    //this.canvas.style.cursor = "crosshair";
 
     this.stageEl = this.canvas.getElementsByClassName(
       "MainToolStage"
@@ -437,7 +455,7 @@ export default class FreeHandDrawTool implements IToolClass {
 
       if (svgEl) svgEl.parentElement!.removeChild(svgEl);
 
-      this.canvas.style.cursor = "default";
+      //this.canvas.style.cursor = "default";
       this.canvas.style.display = "none";
       this.canvas.style.background = "";
       this.canvas = null;
@@ -445,6 +463,14 @@ export default class FreeHandDrawTool implements IToolClass {
   }
 
   private clickOutsideEventHandler(e: Event) {
+    if (
+      document
+        .getElementsByClassName("layers-simplified-panel")[0]
+        ?.contains(e?.target as Node)
+    ) {
+      this.requestDeactivation?.();
+    }
+
     const el = document.getElementsByClassName("layout-center-area")[0];
     // Do nothing if clicking ref's element or descendent elements
     if (!el || el.contains((e?.target as Node) || null)) {

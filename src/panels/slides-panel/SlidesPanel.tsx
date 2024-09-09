@@ -237,8 +237,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             intent: "warning",
             message:
               selectedSlideIds.length === 1
-                ? "Slide has been deleted."
-                : "Multiple slides has been deleted.",
+                ? "Page has been deleted."
+                : "Multiple pages/slides has been deleted.",
           });
         }}
       />
@@ -388,7 +388,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     _deleteSlideThree(slideId);
                     AppToaster.show({
                       intent: "warning",
-                      message: "Slide has been deleted.",
+                      message: "Page has been deleted.",
                     });
                   }}
                   onDragingChange={onDragingSlideChange}

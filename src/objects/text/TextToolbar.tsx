@@ -1,5 +1,8 @@
 import React from "react";
-import { getUnitNumericFiled } from "../../inputs/input-utils";
+import {
+  getFontFamilyField,
+  getUnitNumericFiled,
+} from "../../inputs/input-utils";
 import { cloneDeep } from "lodash-es";
 import { Button } from "@blueprintjs/core";
 import { IToolbarProps } from "../../utils/tools/types";
@@ -7,8 +10,12 @@ import { TextValues } from "./text";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { hexToRGB } from "../../utils/utils";
 import css from "./TextToolbar.module.scss";
+import { IFontSelectInputValue } from "webslider-sdk/lib/inputs/i-inputs";
+import cx from "classnames";
 
 const ICON_HEIGHT = 36;
+
+const alignArr = ["left", "center", "right", "justify"];
 
 export function TextToolbar(props: IToolbarProps): React.ReactElement {
   const { mode, object, updateObject, deleteObject } = props;
@@ -18,42 +25,118 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
   return (
     <>
       {object && values && (
-        <>
-          <div className={css.inputHolder}>
-            {getUnitNumericFiled(
-              "",
-              values.fontSize + "px",
-              (v: string) => {
-                const newObject = cloneDeep(object);
-                newObject.definition.values.fontSize = v;
-                updateObject(newObject);
-              },
-              "",
-              {
-                className: css.strokeInput,
-              },
-              ["px", "em"]
-            )}
-          </div>
+        <div className={css.inputsHolder}>
+          {getFontFamilyField(
+            "",
+            values.font,
+            (v: IFontSelectInputValue) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.font = v;
+              updateObject(newObject);
+            },
+            { minimal: true }
+          )}
 
-          <div>
-            <input
-              type="color"
-              id="head"
-              name="head"
-              value={convertRGBColor2RGBAString(values.color)}
-              onChange={(evt) => {
-                const newObject = cloneDeep(object);
-                newObject.definition.values.color = hexToRGB(
-                  evt.currentTarget.value
-                );
-                updateObject(newObject);
-              }}
-              style={{ width: "35px", height: "35px", margin: "10px" }}
-            />
-          </div>
+          {/* {getUnitNumericFiled(
+            "",
+            values.fontSize + "px",
+            (v: string) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.fontSize = v;
+              updateObject(newObject);
+            },
+            "",
+            {
+              //className: css.fontSizeInput,
+            },
+            ["px", "em"]
+          )} */}
+
+          {/* <div className={css.inputHolder}> */}
+          {getUnitNumericFiled(
+            "",
+            values.fontSize,
+            (v: string) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.fontSize = v;
+              updateObject(newObject);
+            },
+            "",
+            {
+              className: css.strokeInput,
+              showIncDec: true,
+            },
+            ["px", "em"]
+          )}
+          {/* </div> */}
+
+          <input
+            type="color"
+            id="head"
+            name="head"
+            value={convertRGBColor2RGBAString(values.color)}
+            onChange={(evt) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.color = hexToRGB(
+                evt.currentTarget.value
+              );
+              updateObject(newObject);
+            }}
+            style={{ width: "35px", height: "35px", margin: "10px" }}
+          />
+
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            active={values.bold}
+            onClick={(e: React.MouseEvent) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.bold = !values.bold;
+              updateObject(newObject);
+            }}
+            icon={"bold"}
+          ></Button>
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            active={values.italic}
+            onClick={(e: React.MouseEvent) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.italic =
+                !newObject.definition.values.italic;
+              updateObject(newObject);
+            }}
+            icon={"italic"}
+          ></Button>
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            active={values.underline}
+            onClick={(e: React.MouseEvent) => {
+              const newObject = cloneDeep(object);
+              newObject.definition.values.underline =
+                !newObject.definition.values.underline;
+              updateObject(newObject);
+            }}
+            icon={"underline"}
+          ></Button>
+
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={(e: React.MouseEvent) => {
+              const newObject = cloneDeep(object);
+
+              let nextIndex = alignArr.indexOf(values.textAlign) + 1;
+              nextIndex = nextIndex >= alignArr.length ? 0 : nextIndex;
+
+              newObject.definition.values.textAlign = alignArr[nextIndex];
+              updateObject(newObject);
+            }}
+            icon={`align-${values.textAlign}`}
+          ></Button>
           <div className={css.rightHolder}>
-            <div>
+            {/* <div>
               <Button
                 style={{ float: "right" }}
                 minimal
@@ -62,9 +145,9 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
                 }}
                 icon={"trash"}
               ></Button>
-            </div>
+            </div> */}
           </div>
-        </>
+        </div>
       )}
     </>
   );

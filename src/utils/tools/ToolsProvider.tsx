@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 import { IToolClass, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { getCanvas } from "./ToolsProviderUtils";
@@ -12,6 +12,14 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { useSelector, useStore } from "react-redux";
 import { cloneDeep } from "lodash-es";
 import { IToolConfig } from "./types";
+import {
+  CursorContext,
+  ICursorContext,
+  ICursorStyle,
+} from "../../panels/stage-panel-new/CursorProvider";
+import { getZoom } from "../../store/helpers/calculateZoom";
+import { populateObjectThreeIds } from "../../store/actions/actions-utils";
+import { getGroupMatrixFromSelectionPath } from "../../panels/stage-panel-new/stage-panel-utils";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -26,6 +34,8 @@ export interface ToolsContextInterface {
   toolConfig: IToolConfig;
   setToolConfig: (state: IToolConfig) => void;
   updateObject: (_object: IObject) => void;
+  //
+  cursorStyle: ICursorStyle | undefined;
 }
 
 export const ToolsContext = React.createContext<ToolsContextInterface>({
@@ -42,6 +52,8 @@ export const ToolsContext = React.createContext<ToolsContextInterface>({
   setToolConfig: (_state: unknown) => {},
   //
   updateObject: (_object: IObject) => undefined,
+  //
+  cursorStyle: undefined,
 });
 
 export const ToolsProvider = (
@@ -51,17 +63,19 @@ export const ToolsProvider = (
 
   const { dispatch } = useStore<IStore>();
 
-  const { stageZoom, activeLayerId, objectById, allObjects } = useSelector(
-    (_state: IStore) => {
+  const { stageZoom, activeLayerId, objectById, allObjects, layerById } =
+    useSelector((_state: IStore) => {
       return {
-        stageZoom: _state.stage.zoom,
+        stageZoom: getZoom(_state.stage, _state.project.settings),
         activeLayerId: _state.project.selection.activeLayerId,
         objectById: _state.project.objects.objectById,
         allObjects: _state.project.objects.allObjects,
+        layerById: _state.project.layers.layerById,
       };
-    }
-  );
+    });
 
+  const [cursorStyle, setCursorStyle] = useState<ICursorStyle | undefined>();
+  // const { setCursorStyle } = useContext(CursorContext);
   // const state = getState();
   // const activeLayerId = state.project.selection.activeLayerId;
   //const stageZoom = state.stage.zoom;
@@ -166,6 +180,35 @@ export const ToolsProvider = (
     return { x, y };
   };
 
+  const getObjectTransform = (
+    objectId: string,
+    options?: { includeTranslate?: boolean }
+  ): DOMMatrix => {
+    // >>>>>>>>>>>>>>>>>>
+    // duplicate 123
+    const objectPath: string[] = [];
+
+    populateObjectThreeIds(objectPath, objectId, objectById, layerById);
+
+    console.log(objectPath, "objectPath123");
+    const groupsMatrix = getGroupMatrixFromSelectionPath(
+      [...objectPath, objectId],
+      objectById,
+      options
+    );
+
+    //groupsMatrix.e = groupsMatrix.f = 0;
+
+    const transform = groupsMatrix.multiply(
+      new DOMMatrix("scale(" + stageZoom + ")")
+    );
+
+    console.log(transform);
+
+    return transform;
+    /////
+  };
+
   const activateTool = (tool: string, objectId?: string) => {
     const toolDef = getObjectToolDefinitions(tool);
     if (toolDef) {
@@ -186,6 +229,7 @@ export const ToolsProvider = (
           requestDeactivation,
           requestObjectUpdate,
           getMousePoint,
+          getObjectTransform,
           isEdit: !!objectId,
           editorConfig: { stageZoom },
           objectValues: values,
@@ -207,6 +251,9 @@ export const ToolsProvider = (
           requestObjectDelete: (objectId: string) => {
             dispatch(deleteObjects([objectId]));
           },
+          requestCursorChange: (cursor) => {
+            setCursorStyle(cursor);
+          },
         });
         activeToolInst.current = inst;
       }
@@ -226,6 +273,7 @@ export const ToolsProvider = (
       setActiveTool(null);
       setActiveObjectId(null);
       setToolConfigState({});
+      setCursorStyle(undefined);
     }
   };
 
@@ -291,6 +339,7 @@ export const ToolsProvider = (
         setToolConfig,
         //
         updateObject,
+        cursorStyle,
       }}
     >
       {children}

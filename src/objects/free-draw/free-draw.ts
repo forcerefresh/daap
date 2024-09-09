@@ -46,7 +46,7 @@ export function createFreeDrawObject(initialValue?: {
 > {
   const object = createCommonObject(FREE_DRAW);
 
-  console.log();
+  // console.log();
   const properties: FreeDrawPropertiesTuple = [
     {
       inputType: InputType.TEXT,
@@ -88,7 +88,7 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, deviceType } = props;
   const freeDrawValues = object.definition.values as FreeDrawValues;
 
-  console.log(freeDrawValues);
+  // console.log(freeDrawValues);
   if (!isPlayer) {
     if (!freeDrawValues.lines || freeDrawValues.lines.length === 0) {
       return getObjectPlaceholder(`FREE DRAW<br/>(placeholder)`);

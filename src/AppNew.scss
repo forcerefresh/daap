@@ -19,6 +19,9 @@ body {
   font-size: 0.9em;
 }
 
+.bp5-toast-container-top {
+  top: 52px !important;
+}
 .bp5-dark .bp5-input {
   box-shadow: none;
 }
@@ -39,6 +42,10 @@ body {
 .bp5-dark .bp5-html-select select,
 .bp5-dark .bp5-select select {
   background: #282828;
+}
+
+.bp5-button .bp5-icon:first-child:last-child {
+  margin: inherit;
 }
 // //rgba($black, 0.2),
 // $button-border-width: 1px;

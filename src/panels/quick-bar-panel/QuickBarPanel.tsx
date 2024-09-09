@@ -12,6 +12,7 @@ import css from "./QuickBarPanel.module.scss";
 import { Button } from "@blueprintjs/core";
 import {
   addNewObject,
+  deleteObjects,
   groupObjects,
   ungroupObject,
 } from "../../store/actions/actions";
@@ -30,6 +31,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     _groupObjects,
     _ungroupObject,
     objectById,
+    _deleteObjects,
   } = props;
   const {
     toolConfig,
@@ -61,6 +63,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
   // >> ----
   const groupingDisabled =
     selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+  const ungroupDisabled = !(
+    selectedObjectIds.length === 1 &&
+    objectById[selectedObjectIds[0]]?.type === "group"
+  );
   // const firstSelectedObject = objectById[selectedObjectIds[0]];
   // const isFirstSelectedGroup = !!(
   //   firstSelectedObject?.objectIds && firstSelectedObject?.objectIds?.length > 0
@@ -71,7 +77,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
   // << ---
 
   return (
-    <div className={cx(css.quickBar)}>
+    <div className={cx(css.quickBar, "no-custom-cursor")}>
       <div className={css.leftHolder}>
         {toolBarComponent?.toolBar ? (
           <toolBarComponent.toolBar
@@ -86,7 +92,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
         ) : null}
       </div>
       <div className={css.rightHolder}>
-        {
+        {!groupingDisabled && (
           <div>
             <Button
               style={{ float: "right" }}
@@ -95,14 +101,15 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
                 _groupObjects(selectedObjectIds);
               }}
               icon={"group-objects"}
-              className={css.button}
+              className={cx(css.button)}
               disabled={groupingDisabled}
             >
               Group
             </Button>
           </div>
-        }
-        {
+        )}
+
+        {!ungroupDisabled && (
           <div>
             <Button
               style={{ float: "right" }}
@@ -112,17 +119,25 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               }}
               icon={"ungroup-objects"}
               className={css.button}
-              disabled={
-                !(
-                  selectedObjectIds.length === 1 &&
-                  objectById[selectedObjectIds[0]].type === "group"
-                )
-              }
+              disabled={ungroupDisabled}
             >
               Ungroup
             </Button>
           </div>
-        }
+        )}
+
+        <div>
+          <Button
+            className={cx(css.button, css.squareButton)}
+            style={{ float: "right" }}
+            minimal
+            onClick={() => {
+              _deleteObjects(selectedObjectIds);
+            }}
+            disabled={selectedObjectIds.length < 1}
+            icon={"trash"}
+          ></Button>
+        </div>
       </div>
     </div>
   );
@@ -155,6 +170,7 @@ const mapDispatchToProps = {
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
 
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
+  _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

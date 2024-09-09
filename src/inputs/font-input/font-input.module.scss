@@ -2,3 +2,15 @@
   display: inline-block;
   margin-left: 10px;
 }
+
+// minimal
+.formGroupMinimal {
+  position: relative;
+  margin: 0px !important;
+}
+
+.spinnerMinimal {
+  position: absolute;
+  right: 32px;
+  top: 6px;
+}

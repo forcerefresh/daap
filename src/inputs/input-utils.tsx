@@ -13,6 +13,7 @@ export function getUnitNumericFiled<T>(
     disabled?: boolean;
     style?: React.CSSProperties;
     className?: string;
+    showIncDec?: boolean;
   } = {},
   allowedUnits?: Units[]
 ) {
@@ -470,4 +471,20 @@ export function getUnderFieldText(
     );
   }
   return ret;
+}
+
+export function getFontFamilyField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  options?: { minimal?: boolean }
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.FONT_SELECT,
+    value: value,
+    minimal: options?.minimal,
+  };
+
+  return getInputForm(InputType.FONT_SELECT, objectDef, onChange);
 }

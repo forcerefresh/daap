@@ -30,13 +30,28 @@ export const isAnimationTypeDisabled = (type: string, hasLicense = true) => {
   return false;
 };
 
+export const animationType2ShortName = (
+  animationType: AnimationType
+): string => {
+  const def: any = {
+    in: "In",
+    out: "Out",
+    animation: "Animation",
+    layer: "Layer",
+    slide: "Page",
+    event: "Event",
+  };
+
+  return def[animationType] ?? animationType;
+};
+
 export const animationType2Name = (animationType: AnimationType): string => {
   const def: any = {
     in: "In",
     out: "Out",
     animation: "Animation",
     layer: "Layer animation",
-    slide: "Slide transition",
+    slide: "Page transition",
     event: "Event",
   };
 

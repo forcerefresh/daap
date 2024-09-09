@@ -442,4 +442,5 @@ export const textMeta = {
   description: "Add text object",
   icon: svg,
   isEditable: true,
+  supportWidthResize: true,
 };

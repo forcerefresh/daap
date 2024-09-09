@@ -15,6 +15,9 @@ import {
   MOVE_OBJECTS,
   GROUP_OBJECTS,
   UNGROUP_OBJECTS,
+  SELECT_OBJECTS,
+  NORMALIZE_OBJECT_GROUP,
+  CLIPBOARD_PASTE_OBJECTS,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 import {
@@ -25,6 +28,9 @@ import {
 import { v4 as uuid } from "uuid";
 import { ungroupTransformCalc } from "./layers";
 import { unlinkObjectIds } from "../actions/actions-utils";
+import { normalizeGroup } from "../../panels/stage-panel-new/normalize-group-utils";
+import { store } from "../store";
+import { getCopyName } from "../helpers/utils";
 
 const getObjectsDefault = (): IObjects => ({
   objectById: {},
@@ -91,8 +97,23 @@ export function objects(
     }
     case DELETE_OBJECTS: {
       const objectIds = action.payload;
-      const objectById = omit(state.objectById, objectIds);
-      const allObjects = without(state.allObjects, ...objectIds);
+
+      let childObjectIds: string[] = [];
+      objectIds.forEach((objectId) => {
+        const childObjIds = state.objectById[objectId].objectIds;
+        if (childObjIds && childObjIds.length > 0) {
+          childObjectIds = [...childObjectIds, ...childObjIds];
+        }
+      });
+
+      const objectById = omit(state.objectById, [
+        ...objectIds,
+        ...childObjectIds,
+      ]);
+      const allObjects = without(
+        state.allObjects,
+        ...[...objectIds, ...childObjectIds]
+      );
       return { ...state, objectById, allObjects };
     }
     case GROUP_OBJECTS: {
@@ -151,21 +172,127 @@ export function objects(
 
       return newState;
     }
+    case CLIPBOARD_PASTE_OBJECTS: {
+      const { newObjectMapping, objectIds, operation } = action.payload;
+
+      const newState = cloneDeep(state);
+
+      let oldObjectChildIds: string[] = [];
+
+      objectIds.map((fromObjectId, idx) => {
+        const newObjectId = newObjectMapping[idx].newObjectId;
+        const fromObject = state.objectById[fromObjectId];
+        const toObject = cloneDeep(fromObject);
+        toObject.id = newObjectId;
+        toObject.name =
+          operation === "copy"
+            ? getCopyName(state.objectById, toObject.name)
+            : toObject.name;
+        toObject.layerId = newObjectMapping[idx].toLayerId;
+        toObject.parentId = newObjectMapping[idx].toLayerId;
+
+        // // if (objectItem.positionMove) {
+        // toObject.absoluteLayout!.common.left =
+        //   parseFloat(toObject.absoluteLayout?.common.left!) + 20 + "px";
+        // toObject.absoluteLayout!.common.top =
+        //   parseFloat(toObject.absoluteLayout?.common.top!) + 20 + "px";
+        // // }
+
+        newState.allObjects.push(toObject.id);
+        newState.objectById[toObject.id] = toObject;
+
+        const child = newObjectMapping[idx].child;
+
+        if (child) {
+          toObject.objectIds = child.map((childItem) => childItem.newObjectId);
+
+          child.map((childItem) => {
+            oldObjectChildIds.push(childItem.objectId);
+            const newObjectId = childItem.newObjectId;
+            const fromObject = state.objectById[childItem.objectId];
+            const toObject = cloneDeep(fromObject);
+            toObject.id = newObjectId;
+            toObject.parentId = childItem.toParentId;
+            toObject.layerId = childItem.toLayerId;
+            toObject.name =
+              operation === "copy"
+                ? getCopyName(state.objectById, toObject.name)
+                : toObject.name;
+            toObject.layerId = newObjectMapping[idx].toLayerId;
+            // // if (objectItem.positionMove) {
+            // toObject.absoluteLayout!.common.left =
+            //   parseFloat(toObject.absoluteLayout?.common.left!) + 20 + "px";
+            // toObject.absoluteLayout!.common.top =
+            //   parseFloat(toObject.absoluteLayout?.common.top!) + 20 + "px";
+            // // }
+            newState.allObjects.push(toObject.id);
+            newState.objectById[toObject.id] = toObject;
+          });
+        }
+      });
+
+      if (operation === "cut") {
+        // remove id from parent group
+        objectIds.map((fromObjectId, idx) => {
+          const newObjectId = newObjectMapping[idx].newObjectId;
+          const fromObject = state.objectById[fromObjectId];
+          const parentObjectIds =
+            state.objectById[fromObject.parentId!]?.objectIds;
+          if (parentObjectIds && parentObjectIds.length > 0) {
+            newState.objectById[fromObject.parentId!].objectIds =
+              newState.objectById[fromObject.parentId!].objectIds?.filter(
+                (id) => id !== fromObjectId
+              );
+          }
+        });
+
+        newState.objectById = omit(
+          newState.objectById,
+          ...[...objectIds, ...oldObjectChildIds]
+        );
+        newState.allObjects = without(
+          newState.allObjects,
+          ...[...objectIds, ...oldObjectChildIds]
+        );
+      }
+
+      return newState;
+    }
     case DUPLICATE: {
       // Note: this part duplicate object
       const newState = cloneDeep(state);
       const dS = action.payload;
       dS.forEach((slideItem) => {
         slideItem.childs.forEach((layerItem) => {
-          layerItem.childs.forEach((objectItem) => {
-            const fromObject = state.objectById[objectItem.fromId];
-            const toObject = cloneDeep(fromObject);
-            toObject.id = objectItem.toId!; // CHEK THI !
-            toObject.name += " (copy)";
-            toObject.layerId = layerItem.toId!;
-            applyNewAnimationIdsToTransitionAbleElement(toObject);
-            newState.allObjects.push(toObject.id);
-            newState.objectById[toObject.id] = toObject;
+          layerItem.childs.forEach((rootObjectItem) => {
+            [...[rootObjectItem], ...rootObjectItem.childs].forEach(
+              (objectItem) => {
+                const fromObject = state.objectById[objectItem.fromId];
+                const toObject = cloneDeep(fromObject);
+                toObject.id = objectItem.toId!; // CHEK THI !
+                toObject.name = getCopyName(newState.objectById, toObject.name);
+                toObject.layerId = layerItem.toId!;
+                if (objectItem.newObjectIds)
+                  toObject.objectIds = objectItem.newObjectIds;
+                if (objectItem.newParentId)
+                  toObject.parentId = objectItem.newParentId;
+
+                if (objectItem.positionMove) {
+                  toObject.absoluteLayout!.common.left =
+                    parseFloat(toObject.absoluteLayout?.common.left!) +
+                    20 +
+                    "px";
+                  toObject.absoluteLayout!.common.top =
+                    parseFloat(toObject.absoluteLayout?.common.top!) +
+                    20 +
+                    "px";
+                }
+
+                applyNewAnimationIdsToTransitionAbleElement(toObject);
+                newState.allObjects.push(toObject.id);
+                newState.objectById[toObject.id] = toObject;
+              }
+            );
           });
         });
       });
@@ -277,6 +404,39 @@ export function objects(
 
       // return { ...state, objectById, allObjects };
     }
+    case NORMALIZE_OBJECT_GROUP: {
+      const { objects: groups, breakpointConfiguration } = action.payload;
+
+      const updatedObjectsById: { [key: string]: IObject } = {};
+
+      groups.map((group) => {
+        const groupObjectsById: { [key: string]: IObject } = {};
+
+        group.objectIds?.forEach((id) => {
+          groupObjectsById[id] = state.objectById[id];
+        });
+
+        const { group: normalizedGroup, objects: normalizedObjects } =
+          normalizeGroup(group, groupObjectsById, {
+            objectById: state.objectById,
+            breakpointConfig: breakpointConfiguration,
+          });
+
+        // apply group and objects
+        updatedObjectsById[normalizedGroup.id] = normalizedGroup;
+        normalizedObjects?.forEach((updatedObject) => {
+          updatedObjectsById[updatedObject.id] = updatedObject;
+        });
+      });
+
+      return {
+        ...state,
+        objectById: {
+          ...state.objectById,
+          ...updatedObjectsById,
+        },
+      };
+    }
     case OPEN_PROJECT: {
       action.payload.objects.allObjects.map((id: string) => {
         const object = action.payload.objects.objectById[id];
@@ -297,6 +457,18 @@ export function objects(
     case CREATE_NEW_PROJECT: {
       return getObjectsDefault();
     }
+    // case SELECT_OBJECTS: {
+    //   const { selectedObjectIds, selectionPath } = action.payload;
+
+    //   // >>> NORMALIZE GROUP ON UNSELECT - START
+    //   // if (state.selectedObjectIds) {
+    //   // }
+    //   // <<< NORMALIZE GROUP ON UNSELECT - END
+
+    //   //console.log(selectionPath);
+    //   return { ...state, selectedObjectIds, selectionPath };
+    // }
+
     default:
       return state;
   }

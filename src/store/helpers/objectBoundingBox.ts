@@ -7,10 +7,10 @@ export function getObjectBoundingBox(object: IObject): Rect {
   const scale = object.scale;
 
   // TODO: getObject size
-  let oX = parseInt(object.absoluteLayout!.common.left);
-  let oY = parseInt(object.absoluteLayout!.common.top);
-  let oH = parseInt(object.absoluteLayout!.common.height);
-  let oW = parseInt(object.absoluteLayout!.common.width);
+  let oX = parseFloat(object.absoluteLayout!.common.left);
+  let oY = parseFloat(object.absoluteLayout!.common.top);
+  let oH = parseFloat(object.absoluteLayout!.common.height);
+  let oW = parseFloat(object.absoluteLayout!.common.width);
 
   oX = oX - (oW * (scale - 1)) / 2;
   oY = oY - (oH * (scale - 1)) / 2;
@@ -47,4 +47,8 @@ export function boundsUnion(b1: Rect, b2: Rect): Rect {
     width: Math.max(b1.x + b1.width, b2.x + b2.width) - minX,
     height: Math.max(b1.y + b1.height, b2.y + b2.height) - minY,
   };
+}
+
+export function rect2DOMRect(rect: Rect): DOMRect {
+  return new DOMRect(rect.x, rect.y, rect.width, rect.height);
 }

@@ -64,7 +64,11 @@ function App(props: IAppProps) {
     window.addEventListener(
       "wheel",
       (e) => {
-        e.preventDefault();
+        if ((e.target as Element).closest(".no-custom-cursor")) {
+        } else if ((e.target as Element).closest(".layout-content-area")) {
+          console.log("SSSSSSS");
+          e.preventDefault();
+        }
       },
       { passive: false }
     );

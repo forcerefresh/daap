@@ -1,4 +1,5 @@
 import { FormGroup, HTMLSelect, Spinner } from "@blueprintjs/core";
+import cx from "classnames";
 import { compact, pick, uniq } from "lodash-es";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { getGlobals } from "../../globals";
@@ -48,7 +49,7 @@ const W_MAP = {
 export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
   props
 ) => {
-  const { displayName, value, onChange } = props;
+  const { displayName, value, onChange, minimal } = props;
 
   const googleFonts = getGlobals()
     .getFonts()
@@ -108,7 +109,12 @@ export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
 
   return (
     <>
-      <FormGroup label={displayName} labelFor="text-input" inline>
+      <FormGroup
+        label={displayName}
+        labelFor="text-input"
+        inline
+        className={cx({ [css.formGroupMinimal]: minimal })}
+      >
         <HTMLSelect
           style={{ width: "200px", display: "inline-block" }}
           id="text-input"
@@ -131,14 +137,25 @@ export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
             onChange({ ...value, fontFamily, source, weight });
           }}
         />
-        {loading && <Spinner size={18} className={css.spinner} />}
+        {loading && (
+          <Spinner
+            size={18}
+            className={cx(css.spinner, { [css.spinnerMinimal]: minimal })}
+          />
+        )}
       </FormGroup>
 
-      <FormGroup label={"Weight"} labelFor="text-input" inline>
+      <FormGroup
+        label={minimal ? "" : "Weight"}
+        labelFor="text-input"
+        inline
+        className={cx({ [css.formGroupMinimal]: minimal })}
+      >
         <HTMLSelect
           id="text-input"
           options={weightOptions}
           value={value.weight}
+          style={{ width: "130px", display: "inline-block" }}
           onChange={(event: ChangeEvent) => {
             const weight = (event.currentTarget as HTMLSelectElement).value;
 

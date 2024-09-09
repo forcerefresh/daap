@@ -8,6 +8,7 @@ import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
 import {
   cloneDeep,
   delay,
+  difference,
   differenceWith,
   intersection,
   isEqual,
@@ -73,6 +74,8 @@ import {
   isObjectGroup,
   populateObjectThreeIds,
 } from "./actions-utils";
+import { IClipboard } from "../reducers/i-clipboard";
+import { clipboard } from "../reducers/clipboard";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -117,7 +120,7 @@ export function initializeSlideAndLayer(): any {
       dispatch(addSlide(frontSlide));
       dispatch(addNewLayer(frontSlide.id));
       // normal
-      const slideName = `Slide ${getState().project.slides.nextSlideIdCounter}`;
+      const slideName = `Page ${getState().project.slides.nextSlideIdCounter}`;
       const slide = getDefaultSlide(slideName, SlideType.Normal);
       dispatch(addSlide(slide));
       // select
@@ -140,7 +143,7 @@ export function addNewSlide(
     const slide: ISlide = {
       id: uuid(),
       customId: "",
-      name: `Slide ${getState().project.slides.nextSlideIdCounter}`,
+      name: `Page ${getState().project.slides.nextSlideIdCounter}`,
       duration: {
         inheritFrom: "inherit",
         customValue: "10s",
@@ -209,7 +212,6 @@ export function deleteSlideThree(slideId: string) {
       },
       []
     );
-    debugger;
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
     dispatch(deleteSlide(slideId));
@@ -255,6 +257,10 @@ export type IDuplicateSchema = {
   toId: string | null;
   skipCreate?: boolean;
   childs: IDuplicateSchema;
+  // if true it will increase x,y slightly
+  positionMove?: boolean;
+  newObjectIds?: string[];
+  newParentId?: string;
 }[];
 
 function _duplicateSlides(
@@ -271,6 +277,8 @@ export function duplicateSlides(slideIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const duplicateSlidesSchema: IDuplicateSchema = [];
 
+    const newObjectIds: string[] = [];
+
     slideIds.forEach((slideId) => {
       const duplicateLayersSchema: IDuplicateSchema = [];
       const layerIds = getState().project.slides.slideById[slideId].layerIds;
@@ -280,10 +288,13 @@ export function duplicateSlides(slideIds: string[]) {
         const objectIds =
           getState().project.layers.layerById[layerId].objectIds;
 
+        const newObjectId = uuid();
+        newObjectIds.push(newObjectId);
+
         objectIds.forEach((objectId) => {
           duplicateObjectSchema.push({
             fromId: objectId,
-            toId: uuid(),
+            toId: newObjectId,
             childs: [],
           });
         });
@@ -303,6 +314,7 @@ export function duplicateSlides(slideIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
+    dispatch(selectObjects(newObjectIds));
   };
 }
 
@@ -694,12 +706,18 @@ export function activateObject(objectId: string | null): any {
       return;
     }
 
-    const layerId =
-      getState().project.objects.objectById[objectId as string].layerId;
+    console.log(cloneDeep(getState().project.objects.objectById));
 
-    dispatch(_activateLayer(layerId));
-    dispatch(_selectLayers([layerId]));
     dispatch(_activateObject(objectId));
+
+    setTimeout(() => {
+      const layerId =
+        getState().project.objects.objectById[objectId as string].layerId;
+
+      // dispatch(_activateLayer(layerId));
+      // dispatch(_selectLayers([layerId]));
+      // dispatch(_activateObject(objectId));
+    }, 2);
   };
 }
 
@@ -882,6 +900,48 @@ export function selectObjectsByRect(rect: IRect): SelectObjectsByRectAction {
   };
 }*/
 
+export const NORMALIZE_OBJECT_GROUP = "Normalize object group";
+
+export interface NormalizeObjectGroupAction
+  extends IUndoableAction<true, true> {
+  type: typeof NORMALIZE_OBJECT_GROUP;
+  payload: {
+    objects: IObject[];
+    breakpointConfiguration: BreakpointConfiguration;
+  };
+}
+
+export function _normalizeObjectGroups(
+  objects: IObject[],
+  breakpointConfiguration: BreakpointConfiguration
+): NormalizeObjectGroupAction {
+  return {
+    type: NORMALIZE_OBJECT_GROUP,
+    payload: { objects, breakpointConfiguration },
+    isUndoable: true,
+    skipHistory: true,
+  };
+}
+
+export function normalizeObjectGroups(objects: IObject[]): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const { stage, project } = getState();
+
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      project.settings.breakpoints.breakpointsConfiguration.find(
+        (breakpointConfig: any) =>
+          breakpointConfig.type === stage.selectedDevice
+      );
+
+    dispatch(
+      _normalizeObjectGroups(
+        objects,
+        breakpointConfig ??
+          project.settings.breakpoints.breakpointsConfiguration[0]
+      )
+    );
+  };
+}
 // *****
 
 export const SELECT_OBJECTS = "Select objects";
@@ -925,6 +985,27 @@ export function selectObjects(selectedObjectIds: string[]): any {
     const objectById = getState().project.objects.objectById;
     const layerById = getState().project.layers.layerById;
 
+    // // >>> Normalize group on unselect - START
+    // const prevSelectedObjectIds =
+    //   getState().project.selection.selectedObjectIds;
+
+    // const unselectedObjectIds = difference(
+    //   prevSelectedObjectIds,
+    //   selectedObjectIds
+    // );
+    // console.log(unselectedObjectIds, "unselectedObjectIds");
+    // const unselectedObject = unselectedObjectIds.map((id) => {
+    //   return objectById[id];
+    // });
+
+    // const unselectedObjectGroup = unselectedObject.filter((object) => {
+    //   return isObjectGroup(object);
+    // });
+    // console.log(unselectedObjectGroup, "unselectedObjectGroup");
+
+    // dispatch(normalizeObjectGroups(unselectedObjectGroup));
+    // // >>> Normalize group on unselect - END
+
     const selectionPath: string[] = [];
     // use first one to get selection path (selectedObjectIds[0])
     populateObjectThreeIds(
@@ -933,6 +1014,7 @@ export function selectObjects(selectedObjectIds: string[]): any {
       objectById,
       layerById
     );
+
     dispatch(_selectObjects(selectedObjectIds, selectionPath));
   };
 }
@@ -1190,7 +1272,11 @@ export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
 
 export function duplicateObjects(objectIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectById = getState().project.objects.objectById;
+
     const duplicateSlidesSchema: IDuplicateSchema = [];
+
+    const newObjectIds: string[] = [];
 
     const allSlides = getState().project.slides.allSlides;
     allSlides.forEach((allSlideId) => {
@@ -1206,11 +1292,33 @@ export function duplicateObjects(objectIds: string[]) {
         const currentObjectsIds = intersection(allObjectIds, objectIds);
 
         currentObjectsIds.forEach((objectId) => {
+          const newObjectId = uuid();
+          newObjectIds.push(newObjectId);
+
+          const duplicateChildObjectSchema: IDuplicateSchema = [];
+          const toChildObjectIds: string[] = [];
+          if (isObjectGroup(objectById[objectId])) {
+            objectById[objectId].objectIds?.forEach((childObjectId) => {
+              const toChildObjectId = uuid();
+              duplicateChildObjectSchema.push({
+                fromId: childObjectId,
+                toId: toChildObjectId,
+                childs: [],
+                newParentId: newObjectId,
+              });
+              toChildObjectIds.push(toChildObjectId);
+            });
+          }
+
           duplicateObjectSchema.push({
             fromId: objectId,
-            toId: uuid(),
-            childs: [],
+            toId: newObjectId,
+            childs: duplicateChildObjectSchema,
+            positionMove: true,
+            newObjectIds: toChildObjectIds,
           });
+
+          //
         });
 
         duplicateLayersSchema.push({
@@ -1230,6 +1338,12 @@ export function duplicateObjects(objectIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
+
+    console.log(cloneDeep(duplicateSlidesSchema));
+
+    dispatch(activateObject(newObjectIds[0]));
+    dispatch(selectObjects(newObjectIds));
+    dispatch(selectForProperties({ id: newObjectIds[0], type: "object" }));
   };
 }
 
@@ -1288,9 +1402,9 @@ export function ungroupObject(objectId: string): any {
         _ungroupObject(groupId, objectIds, parentId, transformPerObject)
       );
 
-      // dispatch(activateObject(objectIds[0]));
-      // dispatch(selectObjects(objectIds));
-      // dispatch(selectForProperties({ id: objectIds[0], type: "object" }));
+      dispatch(activateObject(objectIds[0]));
+      dispatch(selectObjects(objectIds));
+      dispatch(selectForProperties({ id: objectIds[0], type: "object" }));
     }
   };
 }
@@ -1809,6 +1923,14 @@ export interface UpdateObjectAction extends IUndoableAction<true> {
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     handleObjectUpdate(object, dispatch, getState);
+
+    const { objectById } = getState().project.objects;
+    const parent = objectById[object.parentId!];
+    // if(object.parentId && objectById[object.parentId]){
+    // if (isObjectGroup(parent)) {
+    //   dispatch(normalizeObjectGroups([parent]));
+    // }
+
     /*
     const skipUpdateObject = handleObjectUpdate(
       object,
@@ -1973,6 +2095,157 @@ export function forceRefresh(): ForceRefreshAction {
   return {
     type: FORCE_REFRESH,
     payload: undefined,
+    isUndoable: false,
+  };
+}
+
+// ******
+
+export const CLIPBOARD_CUT = "Cut to clipboard";
+
+export interface CutToClipboardAction extends IUndoableAction<false> {
+  type: typeof CLIPBOARD_CUT;
+  payload: IClipboard;
+}
+
+export function cutToClipboard(
+  payload: Pick<IClipboard, "entityType" | "entityIds">
+): CutToClipboardAction {
+  return {
+    type: CLIPBOARD_CUT,
+    payload: { ...payload, operation: "cut" },
+    isUndoable: false,
+  };
+}
+
+// ******
+
+export const CLIPBOARD_COPY = "Copy to clipboard";
+
+export interface CopyToClipboardAction extends IUndoableAction<false> {
+  type: typeof CLIPBOARD_COPY;
+  payload: IClipboard;
+}
+
+export function copyToClipboard(
+  payload: Pick<IClipboard, "entityType" | "entityIds">
+): CopyToClipboardAction {
+  return {
+    type: CLIPBOARD_COPY,
+    payload: { ...payload, operation: "copy" },
+    isUndoable: false,
+  };
+}
+
+// ******
+
+// ******
+
+export const CLIPBOARD_PASTE_OBJECTS = "Paste objects from clipboard";
+
+export interface PasteObjectsFromClipboardAction
+  extends IUndoableAction<false> {
+  type: typeof CLIPBOARD_PASTE_OBJECTS;
+  payload: {
+    objectIds: string[];
+    newObjectMapping: {
+      objectId: string;
+      newObjectId: string;
+      fromLayer?: string;
+      fromParent?: string;
+      toLayerId: string;
+      child:
+        | {
+            objectId: string;
+            newObjectId: string;
+            fromLayer: string | undefined;
+            fromParent: string | undefined;
+            toLayerId: string;
+            toParentId: string;
+          }[]
+        | undefined;
+    }[];
+    operation: "copy" | "cut";
+  };
+}
+
+export function pasteObjectsFromClipboard(toLayerId: string): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const state = getState();
+    const { clipboard, objects } = state.project;
+
+    const getChildMapping = (objectId: string, newObjectId: string) => {
+      const object = objects.objectById[objectId];
+      if (object.objectIds && object.objectIds.length > 0) {
+        return object.objectIds.map((childObjectId) => {
+          return {
+            objectId: childObjectId,
+            newObjectId: uuid(),
+            fromLayer: objects.objectById[childObjectId].layerId,
+            fromParent: objects.objectById[childObjectId].parentId,
+            toLayerId,
+            toParentId: newObjectId,
+          };
+        });
+      }
+      return undefined;
+    };
+
+    if (clipboard.entityIds && clipboard.operation) {
+      const objectIds = clipboard.entityIds;
+      const newObjectMapping = objectIds.map((objectId) => {
+        const newObjectId = uuid();
+        return {
+          objectId,
+          newObjectId,
+          fromLayer: objects.objectById[objectId].layerId,
+          fromParent: objects.objectById[objectId].parentId,
+          toLayerId,
+          child: getChildMapping(objectId, newObjectId),
+        };
+      });
+
+      const newObjectIds = newObjectMapping.map((item) => item.newObjectId);
+
+      dispatch(
+        _pasteObjectsFromClipboard(
+          objectIds,
+          newObjectMapping,
+          clipboard.operation
+        )
+      );
+
+      dispatch(activateObject(newObjectIds[0]));
+      dispatch(selectObjects(newObjectIds));
+      dispatch(selectForProperties({ type: "object", id: newObjectIds[0] }));
+    }
+  };
+}
+
+export function _pasteObjectsFromClipboard(
+  objectIds: string[],
+  newObjectMapping: {
+    objectId: string;
+    newObjectId: string;
+    fromLayer?: string;
+    fromParent?: string;
+    toLayerId: string;
+    child:
+      | {
+          objectId: string;
+          newObjectId: string;
+          fromLayer: string | undefined;
+          fromParent: string | undefined;
+          toLayerId: string;
+          toParentId: string;
+        }[]
+      | undefined;
+  }[],
+  operation: "cut" | "copy"
+): PasteObjectsFromClipboardAction {
+  return {
+    type: CLIPBOARD_PASTE_OBJECTS,
+    payload: { objectIds, newObjectMapping, operation },
     isUndoable: false,
   };
 }
@@ -2450,4 +2723,10 @@ export type ActionTypes =
   | SetFormStateAction
   //
   | NextTextPositionAction
-  | SetPanFitAction;
+  | SetPanFitAction
+  //
+  | NormalizeObjectGroupAction
+  //
+  | CutToClipboardAction
+  | CopyToClipboardAction
+  | PasteObjectsFromClipboardAction;
