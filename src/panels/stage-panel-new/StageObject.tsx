@@ -267,6 +267,8 @@ export function StageObjectInternal(props: IStageLayer) {
 
   objectHolderStyle.pointerEvents = "none"; // "all";
 
+  objectHolderStyle.transformOrigin = "top left";
+
   if (clipboard?.entityIds?.includes(object.id)) {
     if (clipboard?.operation === "cut") objectHolderStyle.opacity = 0.5;
     // const copyBoxShadow = `,0 0 0 ${

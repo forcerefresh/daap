@@ -11,6 +11,9 @@ import { StageManagerContext } from "./StageManagerProvider";
 import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { isObjectInGroup } from "../../store/actions/actions-utils";
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 
 export const HANDLE_SIZE = 16;
 
@@ -44,6 +47,11 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   } = props;
 
   const { stageManager } = useContext(StageManagerContext);
+
+  const { activeTool } = useContext(ToolsContext);
+
+  const showWidthResize =
+    getObjectToolDefinitions(object.type)?.meta?.supportWidthResize ?? false;
 
   // const initialRotationRef = useRef(initialRotation);
   // initialRotationRef.current = initialRotation;
@@ -252,14 +260,17 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
       // el.style.border = `0.1px solid ${
       //   object.objectIds ? groupSelectionColor : objectSelectionColor
       // }`;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "width");
-      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-      resizeHolderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.width = el;
+
+      if (showWidthResize) {
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "width");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.width = el;
+      }
     }
 
     return () => {
@@ -313,6 +324,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     handleMouseDown,
     stageZoom,
     forceHide,
+    showWidthResize,
   ]);
 
   const renderChildren = () => {

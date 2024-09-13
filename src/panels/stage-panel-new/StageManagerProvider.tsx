@@ -27,6 +27,7 @@ import {
 import {
   ICorners,
   addCornerMarkers,
+  decomposeMatrix2DW3,
   getBottomRightFromCorners,
   getCorners,
   getGroupMatrixFromSelectionPath,
@@ -363,23 +364,42 @@ function processRotateChangeEvent(
   const object = objectById[objectId];
   const angle = eData.angle;
 
+  const objectSize: Rect = {
+    x: parseInt(object.absoluteLayout?.common!.left!),
+    y: parseInt(object.absoluteLayout?.common!.top!),
+    width: parseInt(object.absoluteLayout?.common!.width!),
+    height: parseInt(object.absoluteLayout?.common!.height!),
+  };
+
+  let left = objectSize.x;
+  let top = objectSize.y;
+
+  const m = new DOMMatrix();
+
+  m.translateSelf(objectSize.x, objectSize.y);
+  m.rotateSelf(object.rotation);
+  m.translateSelf(
+    (objectSize.width / 2) * object.scale,
+    (objectSize.height / 2) * object.scale
+  );
+  m.rotateSelf(angle);
+  m.scaleSelf(object.scale);
+  m.translateSelf(-(objectSize.width / 2), -(objectSize.height / 2));
+
+  const d = decomposeMatrix2DW3(m);
+
+  left = d.translateX;
+  top = d.translateY;
+  const transform = "rotate(" + d.rotateZ + "deg) scale(" + d.scaleX + ")";
+
   const objectHolder = document.getElementsByClassName(
     `object-holder-${objectId}`
   )[0] as HTMLDivElement;
 
   if (objectHolder) {
-    const currentAngle = object.rotation + angle;
-    objectHolder.style.transform = getObjectTransform(object, {
-      rotation: currentAngle,
-    });
-
-    //   scale(" +
-    //   initialScale +
-    //   ") translateX(" +
-    //   translateX +
-    //   "px) translateY(" +
-    //   translateY +
-    //   "px)";
+    objectHolder.style.left = left + "px";
+    objectHolder.style.top = top + "px";
+    objectHolder.style.transform = transform;
   }
 }
 
@@ -401,10 +421,42 @@ function processRotateStopEvent(
   const { _updateObject } = storeActions;
 
   const objectId = eData.objectId;
+  const object = objectById[objectId];
   const angle = eData.angle;
 
-  const newObject = cloneDeep(objectById[objectId]);
-  newObject.rotation += angle;
+  const objectSize: Rect = {
+    x: parseInt(object.absoluteLayout?.common!.left!),
+    y: parseInt(object.absoluteLayout?.common!.top!),
+    width: parseInt(object.absoluteLayout?.common!.width!),
+    height: parseInt(object.absoluteLayout?.common!.height!),
+  };
+
+  let left = objectSize.x;
+  let top = objectSize.y;
+
+  const m = new DOMMatrix();
+
+  m.translateSelf(objectSize.x, objectSize.y);
+  m.rotateSelf(object.rotation);
+  m.translateSelf(
+    (objectSize.width / 2) * object.scale,
+    (objectSize.height / 2) * object.scale
+  );
+  m.rotateSelf(angle);
+  m.scaleSelf(object.scale);
+  m.translateSelf(-(objectSize.width / 2), -(objectSize.height / 2));
+
+  const d = decomposeMatrix2DW3(m);
+
+  left = d.translateX;
+  top = d.translateY;
+  const transform = "rotate(" + d.rotateZ + "deg) scale(" + d.scaleX + ")";
+
+  const newObject = cloneDeep(object);
+
+  newObject.rotation = d.rotateZ;
+  newObject.absoluteLayout!.common!.left! = left + "px";
+  newObject.absoluteLayout!.common!.top! = top + "px";
 
   _updateObject(newObject);
 
@@ -953,19 +1005,20 @@ function processScaleChangeEvent(
 
   console.log(zoom);
 
-  const x = eData.x! / zoom;
-  const y = eData.y! / zoom;
+  // asd
+  // // const x = eData.x! / zoom;
+  // // const y = eData.y! / zoom;
 
-  // // >>>>>>>>>>>>>>>>>>
-  // const objectPath: string[] = [];
-  // const firstObjectId = selectedObjectIdsRef.current![0];
-  // populateObjectThreeIds(objectPath, firstObjectId, objectById, layerById);
+  // // // >>>>>>>>>>>>>>>>>>
+  // // const objectPath: string[] = [];
+  // // const firstObjectId = selectedObjectIdsRef.current![0];
+  // // populateObjectThreeIds(objectPath, firstObjectId, objectById, layerById);
 
-  // const groupsMatrix = getGroupMatrixFromSelectionPath(
-  //   [...objectPath, firstObjectId],
-  //   objectById
-  // );
-  // // <<<<<<<<<<<<<<<<
+  // // const groupsMatrix = getGroupMatrixFromSelectionPath(
+  // //   [...objectPath, firstObjectId],
+  // //   objectById
+  // // );
+  // // // <<<<<<<<<<<<<<<<
 
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
@@ -973,13 +1026,15 @@ function processScaleChangeEvent(
     // >>>>>>>>>>>>>>>>>>
     const objectPath: string[] = [];
 
-    populateObjectThreeIds(objectPath, objectId, objectById, layerById);
+    // populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
-    const groupsMatrix = getGroupMatrixFromSelectionPath(
-      [...objectPath, objectId],
-      objectById
-    );
+    // const groupsMatrix = getGroupMatrixFromSelectionPath(
+    //   [...objectPath, objectId],
+    //   objectById
+    // );
     // <<<<<<<<<<<<<<<<
+
+    const groupsMatrix = new DOMMatrix(getObjectTransform(object));
 
     const mouseMoveX = eData.mouseMove.x / zoom;
     // >>>>>>>>>>>>>>>>
@@ -989,6 +1044,7 @@ function processScaleChangeEvent(
       0, //object.rotation,
       object.scale
     );
+    console.log(realMove);
     // <<<<<<<<<<<<<<<<
 
     const objectHolder = document.getElementsByClassName(
@@ -997,90 +1053,103 @@ function processScaleChangeEvent(
 
     if (objectHolder) {
       console.log(eData);
-      //    const currentAngle = object.rotation + angle;
-      // objectHolder.style.transform =
-      //   "translateX(" + x + "px) translateY(" + y + "px)";
-
+      //       //    const currentAngle = object.rotation + angle;
+      //       // objectHolder.style.transform =
+      //       //   "translateX(" + x + "px) translateY(" + y + "px)";
+      // sd
       const realMoveXY = realMove.x; // Math.max(realMove.x, realMove.y);
 
-      // var s = Math.sin(degrees_to_radians(object.rotation));
-      // var c = Math.cos(degrees_to_radians(object.rotation));
-      // var mouseLocalX = c * realMoveXY + s * realMoveXY;
-      // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
-
+      //       // var s = Math.sin(degrees_to_radians(object.rotation));
+      //       // var c = Math.cos(degrees_to_radians(object.rotation));
+      //       // var mouseLocalX = c * realMoveXY + s * realMoveXY;
+      //       // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
+      // sf
       const objectSize: Rect = {
         x: parseInt(object.absoluteLayout?.common!.left!),
         y: parseInt(object.absoluteLayout?.common!.top!),
-        width: parseInt(object.absoluteLayout?.common!.width!) * object.scale,
-        height: parseInt(object.absoluteLayout?.common!.height!) * object.scale,
+        width: parseInt(object.absoluteLayout?.common!.width!), //* object.scale,
+        height: parseInt(object.absoluteLayout?.common!.height!), //* object.scale,
       };
-
-      const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
-      let scale =
-        (objectSize.width * object.scale - dir * realMoveXY * object.scale) /
-        objectSize.width; //(realMoveXY + objectSize.x);
 
       let left = objectSize.x;
       let top = objectSize.y;
+      let scale = object.scale;
 
-      // const bb = getObjectBoundingBox(object);
-      // const scaledBB = getObjectBoundingBox({ ...object, scale });
+      const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
-      // if (eData.handle === "tl") {
-      //   const diff = {
-      //     x: scaledBB.width - bb.width,
-      //     y: scaledBB.height - bb.height,
-      //   };
+      scale =
+        (object.scale * objectSize.width - dir * realMoveXY) / objectSize.width;
 
-      //   console.log(diff);
-      //   left = objectSize.x + mouseMoveX / 2 / object.scale; // diff.x / 2; //+
-      //   //Math.cos(degrees_to_radians(object.rotation)); //*
-      //   // objectSize.height *
-      //   // scale; //(scale * hDif) / 2; //
-      //   // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-      //   top = objectSize.y - diff.y / 2;
-      //   //  ((scale * wDif) / 2) * (objectSize.height / objectSize.width);
-      //   //   Math.cos(degrees_to_radians(object.rotation));
-      // }
+      let m = new DOMMatrix();
 
-      if (!object.rotation) {
-        if (eData.handle === "tl") {
-          left = objectSize.x + realMoveXY / 2; //
-          // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-          top =
-            objectSize.y +
-            (realMoveXY / 2) * (objectSize.height / objectSize.width);
-          //   Math.cos(degrees_to_radians(object.rotation));
-        }
-        if (eData.handle === "bl") {
-          left = objectSize.x + realMoveXY / 2; //
-          // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-          top =
-            objectSize.y -
-            (realMoveXY / 2) * (objectSize.height / objectSize.width);
-          // Math.cos(degrees_to_radians(object.rotation));
-        }
-        if (eData.handle === "br") {
-          left = objectSize.x + realMoveXY / 2; //
-          // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-          top =
-            objectSize.y +
-            (realMoveXY / 2) * (objectSize.height / objectSize.width);
-          // Math.cos(degrees_to_radians(object.rotation));
-        }
-        if (eData.handle === "tr") {
-          left = objectSize.x + realMoveXY / 2; //
-          // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-          top =
-            objectSize.y -
-            (realMoveXY / 2) * (objectSize.height / objectSize.width);
-          // Math.cos(degrees_to_radians(object.rotation));
-        }
+      let transform = "";
+
+      if (eData.handle === "tr") {
+        m.rotateSelf(object.rotation);
+        m.translateSelf(
+          0, //objectSize.width * object.scale - objectSize.width,
+          objectSize.height * object.scale - objectSize.height
+        ); // old scale here
+
+        m.scaleSelf(scale); // new scale here
+        m.translateSelf(
+          0, //-(objectSize.width * scale - objectSize.width) / scale,
+          -(objectSize.height * scale - objectSize.height) / scale
+        );
+
+        const d = decomposeMatrix2DW3(m);
+
+        left = left + d.translateX;
+        top = top + d.translateY;
+        transform =
+          "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+      }
+      if (eData.handle === "bl") {
+        m.rotateSelf(object.rotation);
+        m.translateSelf(
+          objectSize.width * object.scale - objectSize.width,
+          0 //objectSize.height * object.scale - objectSize.height
+        ); // old scale here
+
+        m.scaleSelf(scale); // new scale here
+        m.translateSelf(
+          -(objectSize.width * scale - objectSize.width) / scale,
+          0 //-(objectSize.height * scale - objectSize.height) / scale
+        );
+
+        const d = decomposeMatrix2DW3(m);
+
+        left = left + d.translateX;
+        top = top + d.translateY;
+        transform =
+          "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+      }
+      if (eData.handle === "tl") {
+        m.rotateSelf(object.rotation);
+        m.translateSelf(
+          objectSize.width * object.scale - objectSize.width,
+          objectSize.height * object.scale - objectSize.height
+        ); // old scale here
+
+        m.scaleSelf(scale); // new scale here
+        m.translateSelf(
+          -(objectSize.width * scale - objectSize.width) / scale,
+          -(objectSize.height * scale - objectSize.height) / scale
+        );
+
+        const d = decomposeMatrix2DW3(m);
+
+        left = left + d.translateX;
+        top = top + d.translateY;
+        transform =
+          "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+      } else if (eData.handle === "br") {
+        transform = "rotate(" + object.rotation + "deg) scale(" + scale + ")";
       }
 
       // WIDTH
       if (eData.handle === "width") {
-        const newWidth = objectSize.width + mouseMoveX + "px";
+        const newWidth = objectSize.width + mouseMoveX / object.scale + "px";
         objectHolder.style.width = newWidth;
 
         const contentEl = objectHolder.getElementsByClassName(
@@ -1096,42 +1165,24 @@ function processScaleChangeEvent(
         // objectHolder.style.boxShadow = `0 0 0 ${1 / object.scale / zoom}px ${
         //   object.objectIds ? "#444444" : "#48aff0"
         // }`;
-      }
-      // SCALE
-      else {
+      } else {
         objectHolder.style.left = left + "px";
         objectHolder.style.top = top + "px";
-        objectHolder.style.transform = getObjectTransform(object, {
-          scale: scale,
-        });
+        objectHolder.style.transform = transform;
 
-        const scaledHandleSize = HANDLE_SIZE / Math.abs(scale) / zoom;
-
+        // HANDLES
         const handlesEls = Array.from(
           document.getElementsByClassName(`resize-handle-${objectId}`)
         ) as HTMLDivElement[];
 
         handlesEls.forEach((handleEL) => {
           handleEL.style.scale = `${object.scale / scale}`;
-
-          // handleEL.style.left = "-" + scaledHandleSize + "px";
-          // handleEL.style.top = "-" + scaledHandleSize + "px";
-          // handleEL.style.width = scaledHandleSize + "px";
-          // handleEL.style.height = scaledHandleSize + "px";
         });
 
         objectHolder.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
           object.objectIds ? "#444444" : "#48aff0"
         }`;
       }
-
-      //   scale(" +
-      //   initialScale +
-      //   ") translateX(" +
-      //   translateX +
-      //   "px) translateY(" +
-      //   translateY +
-      //   "px)";
     }
   });
 }
@@ -1179,10 +1230,13 @@ function processScaleStopEvent(
 
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
-    const groupsMatrix = getGroupMatrixFromSelectionPath(
-      [...objectPath, objectId],
-      objectById
-    );
+    // const groupsMatrix = getGroupMatrixFromSelectionPath(
+    //   [...objectPath, objectId],
+    //   objectById
+    // );
+
+    const groupsMatrix = new DOMMatrix(getObjectTransform(object));
+
     // <<<<<<<<<<<<<<<<
 
     // >>>>>>>>>>>>>>>>
@@ -1213,76 +1267,144 @@ function processScaleStopEvent(
     const objectSize: Rect = {
       x: parseInt(object.absoluteLayout?.common!.left!),
       y: parseInt(object.absoluteLayout?.common!.top!),
-      width: parseInt(object.absoluteLayout?.common!.width!) * object.scale,
-      height: parseInt(object.absoluteLayout?.common!.height!) * object.scale,
+      width: parseInt(object.absoluteLayout?.common!.width!), // * object.scale,
+      height: parseInt(object.absoluteLayout?.common!.height!), //* object.scale,
     };
 
-    var len = Math.sqrt(Math.pow(realMoveXY, 2) + Math.pow(realMoveXY, 2));
-    var hDif = Math.sin(degrees_to_radians(object.rotation)) * len;
-    var wDif = Math.cos(degrees_to_radians(object.rotation)) * len;
+    // var len = Math.sqrt(Math.pow(realMoveXY, 2) + Math.pow(realMoveXY, 2));
+    // var hDif = Math.sin(degrees_to_radians(object.rotation)) * len;
+    // var wDif = Math.cos(degrees_to_radians(object.rotation)) * len;
+
+    // const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
+    // let scale =
+    //   (objectSize.width * object.scale - dir * realMoveXY * object.scale) /
+    //   objectSize.width; //(realMoveXY + objectSize.x);
 
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
+
     let scale =
-      (objectSize.width * object.scale - dir * realMoveXY * object.scale) /
-      objectSize.width; //(realMoveXY + objectSize.x);
+      (object.scale * objectSize.width - dir * realMoveXY) / objectSize.width;
 
     let left = objectSize.x;
     let top = objectSize.y;
 
-    const bb = getObjectBoundingBox(object);
-    const scaledBB = getObjectBoundingBox(object);
+    // const bb = getObjectBoundingBox(object);
+    // const scaledBB = getObjectBoundingBox(object);
 
-    // if (eData.handle === "tl") {
-    //   const diff = {
-    //     x: scaledBB.width - bb.width,
-    //     y: scaledBB.height - bb.height,
-    //   };
+    // // if (eData.handle === "tl") {
+    // //   const diff = {
+    // //     x: scaledBB.width - bb.width,
+    // //     y: scaledBB.height - bb.height,
+    // //   };
 
-    //   console.log(diff);
-    //   left = objectSize.x + diff.x; //(scale * hDif) / 2; //
-    //   // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-    //   top = objectSize.y + diff.y;
-    //   //  ((scale * wDif) / 2) * (objectSize.height / objectSize.width);
-    //   //   Math.cos(degrees_to_radians(object.rotation));
+    // //   console.log(diff);
+    // //   left = objectSize.x + diff.x; //(scale * hDif) / 2; //
+    // //   // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
+    // //   top = objectSize.y + diff.y;
+    // //   //  ((scale * wDif) / 2) * (objectSize.height / objectSize.width);
+    // //   //   Math.cos(degrees_to_radians(object.rotation));
+    // // }
+    // lk
+    // if (!object.rotation) {
+    //   if (eData.handle === "tl") {
+    //     left = objectSize.x + realMoveXY / 2; //
+    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
+    //     top =
+    //       objectSize.y +
+    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
+    //     //   Math.cos(degrees_to_radians(object.rotation));
+    //   }
+    //   if (eData.handle === "bl") {
+    //     left = objectSize.x + realMoveXY / 2; //
+    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
+    //     top =
+    //       objectSize.y -
+    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
+    //     // Math.cos(degrees_to_radians(object.rotation));
+    //   }
+    //   if (eData.handle === "br") {
+    //     left = objectSize.x + realMoveXY / 2; //
+    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
+    //     top =
+    //       objectSize.y +
+    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
+    //     // Math.cos(degrees_to_radians(object.rotation));
+    //   }
+    //   if (eData.handle === "tr") {
+    //     left = objectSize.x + realMoveXY / 2; //
+    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
+    //     top =
+    //       objectSize.y -
+    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
+    //     // Math.cos(degrees_to_radians(object.rotation));
+    //   }
     // }
-    if (!object.rotation) {
-      if (eData.handle === "tl") {
-        left = objectSize.x + realMoveXY / 2; //
-        // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-        top =
-          objectSize.y +
-          (realMoveXY / 2) * (objectSize.height / objectSize.width);
-        //   Math.cos(degrees_to_radians(object.rotation));
-      }
-      if (eData.handle === "bl") {
-        left = objectSize.x + realMoveXY / 2; //
-        // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-        top =
-          objectSize.y -
-          (realMoveXY / 2) * (objectSize.height / objectSize.width);
-        // Math.cos(degrees_to_radians(object.rotation));
-      }
-      if (eData.handle === "br") {
-        left = objectSize.x + realMoveXY / 2; //
-        // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-        top =
-          objectSize.y +
-          (realMoveXY / 2) * (objectSize.height / objectSize.width);
-        // Math.cos(degrees_to_radians(object.rotation));
-      }
-      if (eData.handle === "tr") {
-        left = objectSize.x + realMoveXY / 2; //
-        // (realMoveXY / 2) * Math.cos(degrees_to_radians(object.rotation));
-        top =
-          objectSize.y -
-          (realMoveXY / 2) * (objectSize.height / objectSize.width);
-        // Math.cos(degrees_to_radians(object.rotation));
-      }
+
+    let transform = "";
+    const m = new DOMMatrix();
+    if (eData.handle === "tr") {
+      m.rotateSelf(object.rotation);
+      m.translateSelf(
+        0, //objectSize.width * object.scale - objectSize.width,
+        objectSize.height * object.scale - objectSize.height
+      ); // old scale here
+
+      m.scaleSelf(scale); // new scale here
+      m.translateSelf(
+        0, //-(objectSize.width * scale - objectSize.width) / scale,
+        -(objectSize.height * scale - objectSize.height) / scale
+      );
+
+      const d = decomposeMatrix2DW3(m);
+
+      left = left + d.translateX;
+      top = top + d.translateY;
+      transform = "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+    }
+    if (eData.handle === "bl") {
+      m.rotateSelf(object.rotation);
+      m.translateSelf(
+        objectSize.width * object.scale - objectSize.width,
+        0 //objectSize.height * object.scale - objectSize.height
+      ); // old scale here
+
+      m.scaleSelf(scale); // new scale here
+      m.translateSelf(
+        -(objectSize.width * scale - objectSize.width) / scale,
+        0 //-(objectSize.height * scale - objectSize.height) / scale
+      );
+
+      const d = decomposeMatrix2DW3(m);
+
+      left = left + d.translateX;
+      top = top + d.translateY;
+      transform = "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+    }
+    if (eData.handle === "tl") {
+      m.rotateSelf(object.rotation);
+      m.translateSelf(
+        objectSize.width * object.scale - objectSize.width,
+        objectSize.height * object.scale - objectSize.height
+      ); // old scale here
+
+      m.scaleSelf(scale); // new scale here
+      m.translateSelf(
+        -(objectSize.width * scale - objectSize.width) / scale,
+        -(objectSize.height * scale - objectSize.height) / scale
+      );
+
+      const d = decomposeMatrix2DW3(m);
+
+      left = left + d.translateX;
+      top = top + d.translateY;
+      transform = "rotate(" + object.rotation + "deg) scale(" + d.scaleX + ")";
+    } else if (eData.handle === "br") {
+      transform = "rotate(" + object.rotation + "deg) scale(" + scale + ")";
     }
 
     if (eData.handle === "width") {
       objectClone.absoluteLayout!.common.width =
-        objectSize.width + realMoveXY + "px";
+        objectSize.width + realMoveXY / object.scale + "px";
     } else {
       objectClone.absoluteLayout!.common.left = left + "px";
       objectClone.absoluteLayout!.common.top = top + "px";

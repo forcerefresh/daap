@@ -239,8 +239,8 @@ export async function imageSizeUpdate(
 
   if (transformProperties?.transformOriginX) {
     objectWrapperEl.style.transformOrigin = `${
-      transformProperties.transformOriginX ?? "center"
-    }  ${transformProperties.transformOriginY ?? "center"}`;
+      transformProperties.transformOriginX ?? "left"
+    }  ${transformProperties.transformOriginY ?? "top"}`;
   }
 }
 

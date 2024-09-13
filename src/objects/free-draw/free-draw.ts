@@ -78,7 +78,10 @@ export function createFreeDrawObject(initialValue?: {
     },
     transformDefinition: {
       properties: [...getTransformObjectPropertiesDefinition(true)],
-      values: { ...getTransformPropertiesValues() },
+      values: {
+        ...getTransformPropertiesValues(),
+        ...{ transformOriginX: "left", transformOriginY: "top" },
+      },
       valuesMetadata: {},
     },
   };

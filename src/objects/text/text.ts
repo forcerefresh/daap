@@ -247,7 +247,10 @@ export function createTextObject(
     },
     transformDefinition: {
       properties: [...getTransformObjectPropertiesDefinition(true)],
-      values: { ...getTransformPropertiesValues() },
+      values: {
+        ...getTransformPropertiesValues(),
+        ...{ transformOriginX: "left", transformOriginY: "top" },
+      },
       valuesMetadata: {},
     },
   };
@@ -397,8 +400,8 @@ export async function textSizeUpdate(
 
   if (transformProperties?.transformOriginX) {
     objectWrapperEl.style.transformOrigin = `${
-      transformProperties.transformOriginX ?? "center"
-    }  ${transformProperties.transformOriginY ?? "center"}`;
+      transformProperties.transformOriginX ?? "left"
+    }  ${transformProperties.transformOriginY ?? "top"}`;
   }
 }
 

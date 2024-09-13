@@ -16,7 +16,87 @@ export interface CreateGroupWithObjectsProps {
 
 export function getUngroupObjectsCalculation(
   props: CreateGroupWithObjectsProps
-) {
+): {
+  [key: string]: {
+    scale: number;
+    rotation: number;
+    left: number;
+    top: number;
+  };
+} {
+  const { group, parentLayer, objects, breakpointConfig } = props;
+
+  // const calculatedGroupObjectSize = calculateObjectSize(
+  //   group,
+  //   parentLayer,
+  //   breakpointConfig!,
+  //   {
+  //     resetPosition: false,
+  //   }
+  // );
+
+  const groupObjectSize = {
+    x: parseFloat(group.absoluteLayout?.common.left!),
+    y: parseFloat(group.absoluteLayout?.common.top!),
+    width: parseFloat(group.absoluteLayout?.common.width!),
+    height: parseFloat(group.absoluteLayout?.common.height!),
+  };
+
+  console.log(groupObjectSize);
+
+  const getGroupMatrix = () => {
+    const m = new DOMMatrix();
+    m.translateSelf(groupObjectSize.x, groupObjectSize.y);
+    m.rotateSelf(group.rotation);
+    m.scaleSelf(group.scale);
+    return m;
+  };
+
+  let ret: {
+    [key: string]: {
+      scale: number;
+      rotation: number;
+      left: number;
+      top: number;
+    };
+  } = {};
+
+  objects?.map((obj) => {
+    const objectSize = {
+      x: parseFloat(obj.absoluteLayout?.common.left!),
+      y: parseFloat(obj.absoluteLayout?.common.top!),
+      width: parseFloat(obj.absoluteLayout?.common.width!),
+      height: parseFloat(obj.absoluteLayout?.common.height!),
+    };
+
+    const objectMatrix = getGroupMatrix();
+    objectMatrix.translateSelf(objectSize.x, objectSize.y);
+    objectMatrix.rotateSelf(obj.rotation);
+    objectMatrix.scaleSelf(obj.scale);
+
+    const objectDecMatrix = decomposeMatrix2DW3(objectMatrix);
+
+    ret[obj.id] = {
+      scale: objectDecMatrix.scaleX,
+      rotation: objectDecMatrix.rotateZ,
+      left: objectDecMatrix.translateX,
+      top: objectDecMatrix.translateY,
+    };
+  });
+
+  return ret;
+}
+
+export function getUngroupObjectsCalculationOld(
+  props: CreateGroupWithObjectsProps
+): {
+  [key: string]: {
+    scale: number;
+    rotation: number;
+    left: number;
+    top: number;
+  };
+} {
   const { group, parentLayer, objects, breakpointConfig } = props;
 
   const rootEl = addElement("root-el", document.body);
@@ -39,6 +119,7 @@ export function getUngroupObjectsCalculation(
     height: (calculatedObjectSize.height as string) ?? "0px",
     border: "0.5 dotted red",
     transform: `rotate(${group.rotation}deg) scale(${group.scale})`,
+    transformOrigin: "top left",
   };
 
   const groupEl = addElement("group", rootEl, { style: objectHolderStyle });
@@ -82,6 +163,7 @@ export function getUngroupObjectsCalculation(
       height: (calculatedObjectSize2.height as string) ?? "0px",
       border: "0.5 solid green",
       transform: `rotate(${obj.rotation}deg) scale(${obj.scale})`,
+      transformOrigin: "top left",
     };
 
     const objectEl = addElement("obj_" + obj.id, groupEl, {
@@ -137,6 +219,7 @@ function addElement(
   el.style.top = "0px";
   el.style.left = "0px";
   el.style.pointerEvents = "none";
+  el.style.transformOrigin = "top left";
   //el.style.boxSizing = "border-box";
 
   forOwn(style, (value, key) => {

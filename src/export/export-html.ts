@@ -511,8 +511,8 @@ function generateSlideData(
 
     if (layerTransformValues?.transformOriginX) {
       layerStyle += `transform-origin: ${
-        layerTransformValues?.transformOriginX ?? "center"
-      }  ${layerTransformValues?.transformOriginY ?? "center"};`;
+        layerTransformValues?.transformOriginX ?? "left"
+      }  ${layerTransformValues?.transformOriginY ?? "top"};`;
 
       // wrapperStyle += `transform-origin: ${
       //   object.transformDefinition.values.transformOriginX ?? "center"
@@ -648,8 +648,8 @@ function generateSlideData(
 
       if (object.transformDefinition?.values?.transformOriginX) {
         const trOrigin = `transform-origin: ${
-          object.transformDefinition.values.transformOriginX ?? "center"
-        }  ${object.transformDefinition.values.transformOriginY ?? "center"};`;
+          object.transformDefinition.values.transformOriginX ?? "left"
+        }  ${object.transformDefinition.values.transformOriginY ?? "top"};`;
 
         style += trOrigin;
         wrapperStyle += trOrigin;
