@@ -365,10 +365,10 @@ function processRotateChangeEvent(
   const angle = eData.angle;
 
   const objectSize: Rect = {
-    x: parseInt(object.absoluteLayout?.common!.left!),
-    y: parseInt(object.absoluteLayout?.common!.top!),
-    width: parseInt(object.absoluteLayout?.common!.width!),
-    height: parseInt(object.absoluteLayout?.common!.height!),
+    x: parseFloat(object.absoluteLayout?.common!.left!),
+    y: parseFloat(object.absoluteLayout?.common!.top!),
+    width: parseFloat(object.absoluteLayout?.common!.width!),
+    height: parseFloat(object.absoluteLayout?.common!.height!),
   };
 
   let left = objectSize.x;
@@ -425,10 +425,10 @@ function processRotateStopEvent(
   const angle = eData.angle;
 
   const objectSize: Rect = {
-    x: parseInt(object.absoluteLayout?.common!.left!),
-    y: parseInt(object.absoluteLayout?.common!.top!),
-    width: parseInt(object.absoluteLayout?.common!.width!),
-    height: parseInt(object.absoluteLayout?.common!.height!),
+    x: parseFloat(object.absoluteLayout?.common!.left!),
+    y: parseFloat(object.absoluteLayout?.common!.top!),
+    width: parseFloat(object.absoluteLayout?.common!.width!),
+    height: parseFloat(object.absoluteLayout?.common!.height!),
   };
 
   let left = objectSize.x;
@@ -646,6 +646,8 @@ function processMoveChangeEvent(
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
 
+    if (object.isLocked) return;
+
     parentGroup = objectById[object.parentId!];
     parentLayer = layerById[parentGroup?.layerId ?? object.layerId ?? ""];
 
@@ -679,8 +681,9 @@ function processMoveChangeEvent(
       // objectHolder.style.transform =
       //   "translateX(" + x + "px) translateY(" + y + "px)";
 
-      const left = parseInt(object.absoluteLayout?.common!.left!) + realMove.x;
-      const top = parseInt(object.absoluteLayout?.common!.top!) + realMove.y;
+      const left =
+        parseFloat(object.absoluteLayout?.common!.left!) + realMove.x;
+      const top = parseFloat(object.absoluteLayout?.common!.top!) + realMove.y;
       objectHolder.style.left = left + "px";
       objectHolder.style.top = top + "px";
 
@@ -813,6 +816,8 @@ function processMoveStopEvent(
 
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
+
+    if (object.isLocked) return;
 
     // >>>>>>>>>>>>>>>>>>
     const objectPath: string[] = [];
@@ -1037,6 +1042,8 @@ function processScaleChangeEvent(
     const groupsMatrix = new DOMMatrix(getObjectTransform(object));
 
     const mouseMoveX = eData.mouseMove.x / zoom;
+    const mouseMoveY = eData.mouseMove.y / zoom;
+
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
@@ -1065,10 +1072,10 @@ function processScaleChangeEvent(
       //       // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
       // sf
       const objectSize: Rect = {
-        x: parseInt(object.absoluteLayout?.common!.left!),
-        y: parseInt(object.absoluteLayout?.common!.top!),
-        width: parseInt(object.absoluteLayout?.common!.width!), //* object.scale,
-        height: parseInt(object.absoluteLayout?.common!.height!), //* object.scale,
+        x: parseFloat(object.absoluteLayout?.common!.left!),
+        y: parseFloat(object.absoluteLayout?.common!.top!),
+        width: parseFloat(object.absoluteLayout?.common!.width!), //* object.scale,
+        height: parseFloat(object.absoluteLayout?.common!.height!), //* object.scale,
       };
 
       let left = objectSize.x;
@@ -1160,7 +1167,24 @@ function processScaleChangeEvent(
         const resizeHolderEl = objectHolder.getElementsByClassName(
           "resize-handle-holder-" + objectId
         )[0] as HTMLElement;
-        if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+        if (resizeHolderEl) resizeHolderEl.style.width = newWidth; //+ 0.001; // NOTE:  0.001 is to trigger change
+
+        // objectHolder.style.boxShadow = `0 0 0 ${1 / object.scale / zoom}px ${
+        //   object.objectIds ? "#444444" : "#48aff0"
+        // }`;
+      } else if (eData.handle === "height") {
+        const newHeight = objectSize.height + mouseMoveY / object.scale + "px";
+        objectHolder.style.height = newHeight;
+
+        const contentEl = objectHolder.getElementsByClassName(
+          "object-content"
+        )[0] as HTMLElement;
+        if (contentEl) contentEl.style.height = newHeight;
+
+        const resizeHolderEl = objectHolder.getElementsByClassName(
+          "resize-handle-holder-" + objectId
+        )[0] as HTMLElement;
+        if (resizeHolderEl) resizeHolderEl.style.height = newHeight; //+ 0.001; // NOTE:  0.001 is to trigger change
 
         // objectHolder.style.boxShadow = `0 0 0 ${1 / object.scale / zoom}px ${
         //   object.objectIds ? "#444444" : "#48aff0"
@@ -1257,7 +1281,8 @@ function processScaleStopEvent(
     // objectHolder.style.transform =
     //   "translateX(" + x + "px) translateY(" + y + "px)";
 
-    const realMoveXY = realMove.x; // Math.max(realMove.x, realMove.y);
+    const realMoveX = realMove.x; // Math.max(realMove.x, realMove.y);
+    const realMoveY = realMove.y; // Math.max(realMove.x, realMove.y);
 
     // var s = Math.sin(degrees_to_radians(object.rotation));
     // var c = Math.cos(degrees_to_radians(object.rotation));
@@ -1265,10 +1290,10 @@ function processScaleStopEvent(
     // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
 
     const objectSize: Rect = {
-      x: parseInt(object.absoluteLayout?.common!.left!),
-      y: parseInt(object.absoluteLayout?.common!.top!),
-      width: parseInt(object.absoluteLayout?.common!.width!), // * object.scale,
-      height: parseInt(object.absoluteLayout?.common!.height!), //* object.scale,
+      x: parseFloat(object.absoluteLayout?.common!.left!),
+      y: parseFloat(object.absoluteLayout?.common!.top!),
+      width: parseFloat(object.absoluteLayout?.common!.width!), // * object.scale,
+      height: parseFloat(object.absoluteLayout?.common!.height!), //* object.scale,
     };
 
     // var len = Math.sqrt(Math.pow(realMoveXY, 2) + Math.pow(realMoveXY, 2));
@@ -1283,7 +1308,7 @@ function processScaleStopEvent(
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
     let scale =
-      (object.scale * objectSize.width - dir * realMoveXY) / objectSize.width;
+      (object.scale * objectSize.width - dir * realMoveX) / objectSize.width;
 
     let left = objectSize.x;
     let top = objectSize.y;
@@ -1404,7 +1429,10 @@ function processScaleStopEvent(
 
     if (eData.handle === "width") {
       objectClone.absoluteLayout!.common.width =
-        objectSize.width + realMoveXY / object.scale + "px";
+        objectSize.width + realMoveX / object.scale + "px";
+    } else if (eData.handle === "height") {
+      objectClone.absoluteLayout!.common.height =
+        objectSize.height + realMoveY / object.scale + "px";
     } else {
       objectClone.absoluteLayout!.common.left = left + "px";
       objectClone.absoluteLayout!.common.top = top + "px";

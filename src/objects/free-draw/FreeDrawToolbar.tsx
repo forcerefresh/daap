@@ -13,6 +13,11 @@ import {
   ToolbarMode,
 } from "../../utils/tools/types";
 import css from "./FreeDrawToolbar.module.scss";
+import { ColorInputForm } from "../../inputs/color-input/color-input";
+import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
+import { hexToRGB } from "../../utils/utils";
+import colorInputCss from "../../inputs/color-input/color-input.module.scss";
+import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 
 const ICON_HEIGHT = 36;
 
@@ -47,26 +52,32 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
             "",
             {
               className: css.strokeInput,
+              showIncDec: true,
             },
             ["px"]
           )}
 
-          <div>
-            <input
-              type="color"
-              id="head"
-              name="head"
-              value={values.lines[0]?.color ?? "white"}
-              onChange={(evt) => {
-                const newObject = cloneDeep(object);
-                newObject.definition.values.lines[0].color =
-                  evt.currentTarget.value;
-
-                updateObject(newObject);
+          <div className={css.colorInputHolder}>
+            <ColorInputForm
+              inputType={InputType.COLOR}
+              displayName={""}
+              propertyName={""}
+              value={values.lines[0]?.color ?? { r: 255, g: 255, b: 255, a: 1 }}
+              defaultValue={null}
+              onChange={(value: any) => {
+                if (object) {
+                  const newObject = cloneDeep(object);
+                  newObject.definition.values.lines[0].color = value;
+                  updateObject(newObject);
+                }
               }}
-              style={{ width: "35px", height: "35px", margin: "10px" }}
+              inputProps={{
+                swatchClassName: colorInputCss.squareSwatch,
+                className: colorInputCss.squareColorInput,
+              }}
             />
           </div>
+
           <div className={css.rightHolder}>
             {/* <div>
               <Button
@@ -84,6 +95,25 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
 
       {mode === ToolbarMode.Edit && (
         <>
+          <div>
+            <Button
+              minimal
+              active={freeDrawToolState.eraser}
+              onClick={() => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  eraser: true,
+                });
+              }}
+            >
+              <Eraser
+                style={{
+                  width: "27px",
+                  height: ICON_HEIGHT + "px",
+                }}
+              />
+            </Button>
+          </div>
           <div>
             <Button
               minimal
@@ -186,12 +216,42 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
               "",
               {
                 className: css.strokeInput,
+                showIncDec: true,
               },
               ["px"]
             )}
           </div>
 
-          <div>
+          <div className={css.colorInputHolder}>
+            <ColorInputForm
+              inputType={InputType.COLOR}
+              displayName={""}
+              propertyName={""}
+              value={
+                freeDrawToolState?.color ?? { r: 255, g: 255, b: 255, a: 1 }
+              }
+              defaultValue={null}
+              onChange={(value: any) => {
+                setToolConfig({
+                  ...freeDrawToolState,
+                  color: value,
+                  eraser: false,
+                });
+
+                // if (object) {
+                //   const newObject = cloneDeep(object);
+                //   newObject.definition.values.color = value;
+                //   updateObject(newObject);
+                // }
+              }}
+              inputProps={{
+                swatchClassName: colorInputCss.squareSwatch,
+                className: colorInputCss.squareColorInput,
+              }}
+            />
+          </div>
+
+          {/* <div>
             <input
               type="color"
               id="head"
@@ -206,27 +266,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
               }}
               style={{ width: "35px", height: "35px", margin: "10px" }}
             />
-          </div>
-
-          <div>
-            <Button
-              minimal
-              active={freeDrawToolState.eraser}
-              onClick={() => {
-                setToolConfig({
-                  ...freeDrawToolState,
-                  eraser: true,
-                });
-              }}
-            >
-              <Eraser
-                style={{
-                  width: "27px",
-                  height: ICON_HEIGHT + "px",
-                }}
-              />
-            </Button>
-          </div>
+          </div> */}
         </>
       )}
     </div>

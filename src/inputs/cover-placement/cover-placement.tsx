@@ -45,7 +45,7 @@ export const CoverPlacementInputForm: React.FC<
       {!inputProps?.hidePosition && (
         <div className={cx(css.alignHolder, "input60")}>
           <div className="bp5-form-group bp5-inline">
-            <Label>Fit align</Label>
+            {!inputProps?.minimal && <Label>Fit align</Label>}
             <div className={cx(css.alignHolderInner, "labelAuto")}>
               {getSelectField(
                 "H",

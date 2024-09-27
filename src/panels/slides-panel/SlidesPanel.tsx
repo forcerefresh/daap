@@ -248,7 +248,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   return (
     <>
       <div className={css.panel}>
-        <PanelHeader>
+        <PanelHeader className={css.withoutTopBorder}>
           <div>SLIDES</div>
           <div>
             <div

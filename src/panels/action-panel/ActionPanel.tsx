@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import html2canvas from "html2canvas";
 import { connect } from "react-redux";
 import { Alert, Button, Icon, Intent, Portal, Switch } from "@blueprintjs/core";
 import css from "./ActionPanel.module.scss";
@@ -187,7 +188,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   return (
     <div className={css.actionPanel}>
       {/* <div className={css.\}> */}
-      <PanelHeader>
+      {/* <PanelHeader>
         <div style={{ display: "flex" }}>
           SLIDER
           <span className={cx(css.sliderName)}>
@@ -201,9 +202,9 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             _setTheme(evt.currentTarget.checked ? "dark" : "light");
           }}
         />
-      </PanelHeader>
+      </PanelHeader> */}
       {/* </div> */}
-      <div className={css.actionButtons}>
+      {/* <div className={css.actionButtons}>
         {false && (
           <Button
             minimal
@@ -296,7 +297,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         >
           Publish
         </Button>
-      </div>
+      </div> */}
       <div className={css.previewButtons}>
         <Button
           className={css.previewPlayStop}
@@ -315,10 +316,23 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             });
           }}
         />
+        <Button
+          onClick={() => {
+            html2canvas(
+              document.getElementsByClassName("pan-and-zoom")[0] as HTMLElement,
+              { scale: 3 }
+            ).then(function (canvas) {
+              document.body.appendChild(canvas);
+            });
+          }}
+        >
+          SS
+        </Button>
         <div>
           {[...breakpointsConfiguration].reverse().map(renderBreakpointButton)}
         </div>
       </div>
+
       <CloseMonitorComponent
         onNewVersion={(props: { version: string }) => {
           _updateGlobalConfiguration({ availableVersion: props.version });

@@ -25,4 +25,5 @@ export interface IStageToolData {
   objectId: string;
   boundingClientRects: DOMRect[];
   handle: string;
+  isLocked?: boolean;
 }

@@ -10,6 +10,7 @@ import { FreeDrawValues } from "./free-draw";
 import { IBezier, IFreeDrawToolConfig, Points } from "./types";
 import { bezierArr2Path, lineIntersection } from "./utils";
 import { ICursorStyle } from "../../panels/stage-panel-new/CursorProvider";
+import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 var fitCurve = require("fit-curve");
 var error = 1;
 
@@ -44,7 +45,7 @@ export default class FreeHandDrawTool implements IToolClass {
   }[] = [];
 
   toolConfig: IFreeDrawToolConfig = {
-    color: "white",
+    color: { r: 255, g: 255, b: 255, a: 1 },
     strokeWidth: "5",
     eraser: false,
   };
@@ -177,7 +178,8 @@ export default class FreeHandDrawTool implements IToolClass {
     this.requestCursorChange?.({
       size: parseInt(this.toolConfig.strokeWidth),
       style: {
-        background: this.toolConfig.color,
+        background: convertRGBColor2CSSStyle(this.toolConfig.color)
+          .backgroundColor,
       },
     });
   }
@@ -406,8 +408,14 @@ export default class FreeHandDrawTool implements IToolClass {
       "stroke-width",
       config.strokeWidth //* this.options.stageZoom + ""
     );
-    pathEl.setAttribute("color", config.color);
-    pathEl.setAttribute("stroke", config.color);
+    pathEl.setAttribute(
+      "color",
+      convertRGBColor2CSSStyle(config.color).backgroundColor ?? ""
+    );
+    pathEl.setAttribute(
+      "stroke",
+      convertRGBColor2CSSStyle(config.color).backgroundColor ?? ""
+    );
 
     this.currentPathEl = pathEl;
     svgEl.appendChild(pathEl);
@@ -463,6 +471,10 @@ export default class FreeHandDrawTool implements IToolClass {
   }
 
   private clickOutsideEventHandler(e: Event) {
+    if ((e?.target as Element)?.closest(".color-picker-holder")) {
+      return;
+    }
+
     if (
       document
         .getElementsByClassName("layers-simplified-panel")[0]

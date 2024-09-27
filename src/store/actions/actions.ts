@@ -275,6 +275,8 @@ function _duplicateSlides(
 
 export function duplicateSlides(slideIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectById = getState().project.objects.objectById;
+
     const duplicateSlidesSchema: IDuplicateSchema = [];
 
     const newObjectIds: string[] = [];
@@ -288,14 +290,31 @@ export function duplicateSlides(slideIds: string[]) {
         const objectIds =
           getState().project.layers.layerById[layerId].objectIds;
 
-        const newObjectId = uuid();
-        newObjectIds.push(newObjectId);
-
         objectIds.forEach((objectId) => {
+          const newObjectId = uuid();
+          newObjectIds.push(newObjectId);
+
+          // child objects
+          const duplicateChildObjectSchema: IDuplicateSchema = [];
+          const toChildObjectIds: string[] = [];
+          if (isObjectGroup(objectById[objectId])) {
+            objectById[objectId].objectIds?.forEach((childObjectId) => {
+              const toChildObjectId = uuid();
+              duplicateChildObjectSchema.push({
+                fromId: childObjectId,
+                toId: toChildObjectId,
+                childs: [],
+                newParentId: newObjectId,
+              });
+              toChildObjectIds.push(toChildObjectId);
+            });
+          }
+
           duplicateObjectSchema.push({
             fromId: objectId,
             toId: newObjectId,
-            childs: [],
+            childs: duplicateChildObjectSchema,
+            newObjectIds: toChildObjectIds,
           });
         });
 
@@ -314,7 +333,7 @@ export function duplicateSlides(slideIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
-    dispatch(selectObjects(newObjectIds));
+    //dispatch(selectObjects(newObjectIds));
   };
 }
 
@@ -499,6 +518,8 @@ export function deleteLayersThree(layerIds: string[]) {
 
 export function duplicateLayers(layerIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectById = getState().project.objects.objectById;
+
     const duplicateSlidesSchema: IDuplicateSchema = [];
 
     const allSlides = getState().project.slides.allSlides;
@@ -515,10 +536,30 @@ export function duplicateLayers(layerIds: string[]) {
           getState().project.layers.layerById[currentLayerId].objectIds;
 
         objectIds.forEach((objectId) => {
+          const newObjectId = uuid();
+          //newObjectIds.push(newObjectId);
+
+          // child objects
+          const duplicateChildObjectSchema: IDuplicateSchema = [];
+          const toChildObjectIds: string[] = [];
+          if (isObjectGroup(objectById[objectId])) {
+            objectById[objectId].objectIds?.forEach((childObjectId) => {
+              const toChildObjectId = uuid();
+              duplicateChildObjectSchema.push({
+                fromId: childObjectId,
+                toId: toChildObjectId,
+                childs: [],
+                newParentId: newObjectId,
+              });
+              toChildObjectIds.push(toChildObjectId);
+            });
+          }
+
           duplicateObjectSchema.push({
             fromId: objectId,
-            toId: uuid(),
-            childs: [],
+            toId: newObjectId,
+            childs: duplicateChildObjectSchema,
+            newObjectIds: toChildObjectIds,
           });
         });
 
@@ -1295,6 +1336,7 @@ export function duplicateObjects(objectIds: string[]) {
           const newObjectId = uuid();
           newObjectIds.push(newObjectId);
 
+          // child objects
           const duplicateChildObjectSchema: IDuplicateSchema = [];
           const toChildObjectIds: string[] = [];
           if (isObjectGroup(objectById[objectId])) {

@@ -24,6 +24,8 @@ import {
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { IBezier, Points } from "./types";
 import { bezierArr2Path } from "./utils";
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
+import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 
 export const FREE_DRAW = "free-draw";
 
@@ -31,7 +33,7 @@ export interface FreeDrawValues {
   lines: {
     points: Points;
     bezier: IBezier[];
-    color: string;
+    color: RGBColor;
     strokeWidth: string;
   }[];
 }
@@ -101,7 +103,9 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   let pathsHtml = "";
   freeDrawValues.lines.forEach((line) => {
     const d = bezierArr2Path(line.bezier);
-    pathsHtml += `<path stroke-width="${line.strokeWidth}px" stroke="${line.color}" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
+    pathsHtml += `<path stroke-width="${line.strokeWidth}px" stroke="${
+      convertRGBColor2CSSStyle(line.color).backgroundColor
+    }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
   });
 
   let style = "";

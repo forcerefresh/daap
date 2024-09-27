@@ -15,6 +15,7 @@ import {
   groupObjects,
   normalizeObjectGroups,
   ungroupObject,
+  updateObject,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { connect } from "react-redux";
@@ -43,10 +44,13 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
     _normalizeObjectGroups,
     _cutToClipboard,
     _deleteObjects,
+    _updateObject,
   } = props;
 
   const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
+
+  const object = objectById[selectedObjectIds[0]];
 
   return (
     <Menu className={css.contextMenu}>
@@ -106,6 +110,20 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
       {(ungroupingAllowed || groupingAllowed) && <MenuDivider />}
 
       <MenuItem
+        text={object.isLocked ? "Unlock" : "Lock"}
+        icon={object.isLocked ? "lock" : "unlock"}
+        // label={(<Icon icon="key-backspace" />) as unknown as string}
+        onClick={(event: any) => {
+          event.stopPropagation();
+          _updateObject({
+            ...object,
+            isLocked: !object.isLocked,
+          });
+        }}
+      />
+      <MenuDivider />
+
+      <MenuItem
         text="Delete"
         icon="delete"
         label={(<Icon icon="key-backspace" />) as unknown as string}
@@ -137,6 +155,7 @@ const mapDispatchToProps = {
     payload: Pick<IClipboard, "entityType" | "entityIds">
   ): any => cutToClipboard(payload),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
+  _updateObject: (object: IObject) => updateObject(object),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContextMenu);

@@ -40,6 +40,7 @@ export class StageManager extends EventTarget {
           objectId: data.objectId,
           originalMouseEvent: data.originalMouseEvent,
           handle: data.handle,
+          isLocked: data.isLocked,
         },
       })
     );

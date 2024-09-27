@@ -1,7 +1,15 @@
-import React from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
+import update from "immutability-helper";
 import {
   addNewLayer,
   addLayersToSelection,
@@ -26,6 +34,7 @@ import {
   duplicateObjects,
   activateSlide,
   selectSlides,
+  _updateObject,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersSimplified.module.scss";
@@ -33,8 +42,14 @@ import { ISlide } from "../../store/reducers/i-slides";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ObjectRow } from "./ObjectRow";
-import { last } from "lodash-es";
+import { cloneDeep, last } from "lodash-es";
 import { Button } from "@blueprintjs/core";
+import withScrolling, {
+  createVerticalStrength,
+  useDndScrolling,
+} from "react-dnd-scrolling";
+
+const ScrollingComponent = withScrolling("div");
 
 //import { DragLayerComponent } from "./CustomDragLayer";
 
@@ -62,7 +77,28 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     _selectLayers,
     _activateSlide,
     _selectSlides,
+    _updateLayer,
   } = props;
+
+  // const objectsHolderRef = useRef<HTMLDivElement | null>(null);
+  // // const linearVerticalStrength = createVerticalStrength(60);
+  // useDndScrolling(objectsHolderRef, {
+  //   // verticalStrength: linearVerticalStrength,
+  // });
+
+  // function ease(val) {
+  //   const t = (val + 1) / 2; // [-1, 1] -> [0, 1]
+  //   const easedT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+  //   return easedT * 2 - 1; // [0, 1] -> [-1, 1]
+  // }
+
+  // function hStrength(box, point) {
+  //   return ease(linearHorizontalStrength(box, point));
+  // }
+
+  // function vStrength(box, point) {
+  //   return ease(linearVerticalStrength(box, point));
+  // }
 
   const onObjectClick = (
     event: React.MouseEvent<HTMLDivElement>,
@@ -94,24 +130,81 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     }
   };
 
-  let objectIds: string[] = [];
+  // let objectIds: string[] = [];
 
-  const firstSelectedObject = objectById[selectedObjectIds[0]];
-  if (firstSelectedObject) {
-    if (layerById[firstSelectedObject.parentId!]) {
-      objectIds = layerById[firstSelectedObject.parentId!].objectIds;
-    } else if (objectById[firstSelectedObject.id].parentId) {
-      objectIds =
-        objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+  // const firstSelectedObject = objectById[selectedObjectIds[0]];
+  // if (firstSelectedObject) {
+  //   if (layerById[firstSelectedObject.parentId!]) {
+  //     objectIds = layerById[firstSelectedObject.parentId!].objectIds;
+  //   } else if (objectById[firstSelectedObject.id].parentId) {
+  //     objectIds =
+  //       objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+  //   }
+  // } else if (activeLayerId) {
+  //   objectIds = layerById[activeLayerId].objectIds!;
+  // }
+
+  // const [objectIds, setObjectIds] = useState<string[]>([]);
+
+  // useLayoutEffect(() => {
+  //   let objectIds: string[] = [];
+
+  //   const firstSelectedObject = objectById[selectedObjectIds[0]];
+  //   if (firstSelectedObject) {
+  //     if (layerById[firstSelectedObject.parentId!]) {
+  //       objectIds = layerById[firstSelectedObject.parentId!].objectIds;
+  //     } else if (objectById[firstSelectedObject.id].parentId) {
+  //       objectIds =
+  //         objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+  //     }
+  //   } else if (activeLayerId) {
+  //     objectIds = layerById[activeLayerId].objectIds!;
+  //   }
+  //   setObjectIds(objectIds);
+  // }, [objectById, layerById, selectedObjectIds]);
+
+  const objectIds = useMemo(() => {
+    let objectIdsInternal: string[] = [];
+    const firstSelectedObject = objectById[selectedObjectIds[0]];
+
+    if (firstSelectedObject) {
+      if (layerById[firstSelectedObject.parentId!]) {
+        objectIdsInternal = layerById[firstSelectedObject.parentId!].objectIds;
+      } else if (objectById[firstSelectedObject.id].parentId) {
+        objectIdsInternal =
+          objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+      }
+    } else if (activeLayerId) {
+      objectIdsInternal = layerById[activeLayerId].objectIds!;
     }
-  } else if (activeLayerId) {
-    objectIds = layerById[activeLayerId].objectIds!;
-  }
+    return objectIdsInternal;
+  }, [objectById, layerById, selectedObjectIds]);
+
+  const [sortedObjectIds, setSortedObjectIds] = useState<
+    string[] | undefined
+  >();
 
   //console.log(selectionPath, "selectionPath");
 
   const [parentLayerId, ...selectionPathWithoutLayer] = selectionPath;
   //selectionPathWithoutLayer.pop();
+
+  const moveObject = useCallback(
+    (dragIndex: number, hoverIndex: number) => {
+      setSortedObjectIds((prev) =>
+        update(prev ?? objectIds, {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, (prev ?? objectIds)[dragIndex] as string],
+          ],
+        })
+      );
+    },
+    [objectIds, setSortedObjectIds]
+  );
+
+  console.log(sortedObjectIds);
+  console.log(objectIds);
 
   console.log(selectionPathWithoutLayer);
   if (!parentLayerId) return null;
@@ -173,15 +266,30 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                 </Button>
               ))}
               {/* key={layer.id} */}
-              <div className={cx(css.objectsHolder, {})}>
-                {objectIds?.length > 0 ? (
+              <ScrollingComponent className={cx(css.objectsHolder, {})}>
+                {(sortedObjectIds ?? objectIds)?.length > 0 ? (
                   <>
-                    {objectIds.map((objectId, idx) => {
+                    {(sortedObjectIds ?? objectIds)?.map((objectId, idx) => {
                       const object = objectById[objectId];
 
                       return (
                         <React.Fragment key={`object-${objectId}`}>
                           <ObjectRow
+                            moveObject={moveObject}
+                            dropCancel={() => {
+                              setSortedObjectIds(undefined);
+                            }}
+                            dropDone={() => {
+                              const newLayer = cloneDeep(
+                                layerById[parentLayerId]
+                              );
+                              if (sortedObjectIds)
+                                newLayer.objectIds = sortedObjectIds;
+
+                              _updateLayer(newLayer);
+
+                              setSortedObjectIds(undefined);
+                            }}
                             objectById={objectById}
                             onObjectClick={onObjectClick}
                             onObjectDblClick={onObjectDblClick}
@@ -189,6 +297,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                             selectedObjectIds={selectedObjectIds}
                             object={object}
                             layer={layerById[activeLayerId!]} // todo
+                            rowIndex={idx}
                           />
                           {/* <div
                             className={cx(css.objectItem, {
@@ -204,7 +313,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                 ) : (
                   "No objects found"
                 )}
-              </div>
+              </ScrollingComponent>
             </>
             {/* ); */}
             {/* })} */}

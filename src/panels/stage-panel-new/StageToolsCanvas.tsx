@@ -363,6 +363,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     bl?: HTMLElement;
     br?: HTMLElement;
     width?: HTMLElement;
+    height?: HTMLElement;
   }>({});
 
   // const handleMouseDown = useCallback((e: MouseEvent) => {
@@ -437,6 +438,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   useLayoutEffect(() => {
     if (!selectedObject) return;
+    if (selectedObject.isLocked) return;
 
     // childRef.current = document.getElementsByClassName(
     //   `object-holder-${props.object.id}`
@@ -521,7 +523,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
       // width resize
       const object = objectById[selectedObjectIds[0]];
-      const toolDef = getObjectToolDefinitions(object.type);
+      const toolDef = getAppObjectDefinition(object.type);
+
       if (toolDef?.meta.supportWidthResize) {
         el = document.createElement("div");
         el.style.top = `calc(50% - ${scaledHandleSize / 1.25}px)`;
@@ -538,6 +541,24 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.width = el;
+      }
+
+      if (toolDef?.meta.supportHeightResize) {
+        el = document.createElement("div");
+        el.style.bottom = "-" + scaledHandleSize / 1.5 + "px";
+        el.style.right = `calc(50% - ${scaledHandleSize / 1.25}px)`;
+        el.style.width = scaledHandleSize * 1.5 + "px";
+        el.style.height = scaledHandleSize / 1.5 + "px";
+        el.style.background = "transparent"; //"rgba(255,0,255,0.4)"; //handleColor;
+        el.style.border = "0.1px solid" + handleColor;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "height");
+        el.setAttribute("class", "resize-handle");
+        holderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.height = el;
       }
     }
 
@@ -564,6 +585,13 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
           handleMouseDown
         );
         holderRef.current.removeChild(handlesRef.current.width);
+      }
+      if (handlesRef.current?.height && holderRef.current) {
+        handlesRef.current.height.removeEventListener(
+          "mousedown",
+          handleMouseDown
+        );
+        holderRef.current.removeChild(handlesRef.current.height);
       }
     };
     // if (childRef.current) {

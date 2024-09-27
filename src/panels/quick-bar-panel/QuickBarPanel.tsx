@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -9,7 +9,13 @@ import {
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { ToolbarMode } from "../../utils/tools/types";
 import css from "./QuickBarPanel.module.scss";
-import { Button } from "@blueprintjs/core";
+import {
+  Button,
+  Divider,
+  Popover,
+  PopoverInteractionKind,
+  Position,
+} from "@blueprintjs/core";
 import {
   addNewObject,
   deleteObjects,
@@ -18,6 +24,14 @@ import {
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
 import { isObjectGroup } from "../../store/actions/actions-utils";
+
+import { ReactComponent as PropertiesIcon } from "../../panels/properties-sections-panel/icons/properties.svg";
+import { ReactComponent as TransformIcon } from "../../panels/properties-sections-panel/icons/transform.svg";
+import MediaLibraryPanel, { Panels } from "../media-library/MediaLibraryPanel";
+import { cloneDeep } from "lodash-es";
+import useOnClickOutside from "../../utils/hooks/on-click-outside";
+
+const PANEL_ICON_SIZE = 22;
 
 type IToolbarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -42,6 +56,29 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     updateObject,
     deleteObject,
   } = useContext(ToolsContext);
+
+  const [isMaskOpen, setIsMaskOpen] = useState(false);
+
+  // logic for handling click outside
+  const sharedRef = useRef(null);
+  const handleClickOutside = () => {
+    setIsMaskOpen(false);
+  };
+  useOnClickOutside(sharedRef, handleClickOutside, [
+    "image-preview-popover",
+    "color-picker-holder",
+    "bp5-overlay-scroll-container", // alert
+  ]);
+
+  //   const mSelectionType: MultiSelectionType =
+  //   !selectedObjectIds || selectedObjectIds.length === 0
+  //     ? MultiSelectionType.None
+  //     : selectedObjectIds.length === 1
+  //     ? MultiSelectionType.Single
+  //     : MultiSelectionType.Multiple;
+
+  // const activeObject = objectById[selectedObjectIds[0]];
+
   let toolBarComponent: IToolDefinition | null = null;
   let mode: ToolbarMode | undefined;
 
@@ -127,9 +164,67 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
         )}
 
         <div>
+          {/* <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={() => {
+              setIsMaskOpen(true);
+            }}
+            // disabled={selectedObjectIds.length !== 1}
+            icon={"mask"}
+          ></Button> */}
+
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.BOTTOM}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            usePortal={true}
+            minimal
+            popoverClassName={css.mediaLibraryPanelPopup}
+            isOpen={isMaskOpen}
+            content={
+              <div ref={sharedRef}>
+                <MediaLibraryPanel
+                  onRequestClose={() => {
+                    setIsMaskOpen(false);
+                  }}
+                  className={css.mediaLibraryPanel}
+                  addObject={false}
+                  onSelect={(item) => {
+                    debugger;
+                    if (activeObject && item?.initialValues?.svg) {
+                      const newObject = cloneDeep(activeObject);
+                      newObject.mask = {
+                        type: "svg",
+                        svg: item.initialValues.svg,
+                      };
+                      updateObject(newObject);
+                    }
+                    // onInput({
+                    //   ...localValue,
+                    //   source: (item.initialValues as any).svg,
+                    // });
+                    // setLibraryOpen(false);
+                  }}
+                  panelsToShow={[Panels.MyVectors]}
+                />
+              </div>
+            }
+          >
+            <Button
+              minimal
+              className={cx(css.button, css.squareButton)}
+              icon={"clip"}
+              onClick={() => {
+                setIsMaskOpen(!isMaskOpen);
+              }}
+            ></Button>
+          </Popover>
+        </div>
+
+        <div>
           <Button
             className={cx(css.button, css.squareButton)}
-            style={{ float: "right" }}
             minimal
             onClick={() => {
               _deleteObjects(selectedObjectIds);
@@ -138,6 +233,75 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             icon={"trash"}
           ></Button>
         </div>
+        <Divider />
+        <div>
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={() => {}}
+            disabled={selectedObjectIds.length < 1}
+            icon={"link"}
+          ></Button>
+        </div>
+
+        <div>
+          <Button
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={() => {}}
+            disabled={selectedObjectIds.length < 1}
+            icon={"properties"}
+          ></Button>
+        </div>
+
+        <div>
+          <Button
+            active={true}
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={() => {}}
+            disabled={selectedObjectIds.length < 1}
+            icon={"list"}
+          ></Button>
+        </div>
+
+        {/* <div className={css.panelButtons}>
+          <Button
+            minimal
+            active={true}
+            onClick={() => {
+              // setActiveSection(PropertiesPanelSection.Properties);
+            }}
+          >
+            <PropertiesIcon
+              style={{
+                width: "36px",
+                height: PANEL_ICON_SIZE + "px",
+                fill: "gray",
+              }}
+            />
+            <div>Properties</div>
+          </Button>
+        </div>
+
+        <div className={css.panelButtons}>
+          <Button
+            minimal
+            active={false}
+            onClick={() => {
+              // setActiveSection(PropertiesPanelSection.Transform);
+            }}
+          >
+            <TransformIcon
+              style={{
+                width: "36px",
+                height: PANEL_ICON_SIZE + "px",
+                fill: "gray",
+              }}
+            />
+            <div>Transform</div>
+          </Button>
+        </div> */}
       </div>
     </div>
   );

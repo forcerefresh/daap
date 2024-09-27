@@ -8,6 +8,8 @@ import css from "./color-input.module.scss";
 import { ReactComponent as BackgroundSVG } from "./transparent-bg.svg";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { createInputLabel } from "../input-helpers";
+import { hexToRGB } from "../../utils/utils";
+import { ReactComponent as ColorPickerIcon } from "../../assets/icons/color-picker-icon.svg";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const {
@@ -17,6 +19,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     displayName,
     helperText,
     onChange,
+    inputProps,
   } = props;
 
   const colorFromProp = (value || defaultValue) as RGBColor;
@@ -90,44 +93,75 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     }
   });
 
+  const EyeDropperClass = (window as any).EyeDropper;
+
   return (
     <FormGroup
+      className={cx(css.colorInput, inputProps?.className)}
       label={createInputLabel(displayName, propertyName)}
       labelFor="color-input"
       inline
       helperText={!!helperText && helperText}
     >
       <Popover
-        position="top"
+        //position="top"
         isOpen={state.displayColorPicker}
         portalClassName="color-picker-popover"
         minimal
         content={
           <div
-            className={cx("color-picker-holder", css.popover)}
+            className={cx("color-picker-holder", css.popoverContent)}
             ref={colorPickerHolderRef}
           >
-            <div className={css.buttonHolder}>
-              <Button icon="tick" small onClick={handleApply} intent="success">
-                Apply
-              </Button>
-              <Button icon="cross" small onClick={handleClose} intent="none">
-                Cancel
-              </Button>
-            </div>
             <div>
               <SketchPicker color={state.color} onChange={handleChange} />
+            </div>
+            <div className={css.actionHolder}>
+              <div className={css.buttonHolder}>
+                <Button icon="tick" onClick={handleApply} intent="success">
+                  Apply
+                </Button>
+                <Button
+                  icon="cross"
+                  onClick={handleClose}
+                  intent="none"
+                  minimal
+                >
+                  Cancel
+                </Button>
+              </div>
+              <Button
+                icon={<ColorPickerIcon style={{ width: "20px" }} />}
+                minimal
+                onClick={() => {
+                  if (!EyeDropperClass) {
+                    return;
+                  }
+
+                  const eyeDropper = new (window as any).EyeDropper();
+
+                  eyeDropper
+                    .open()
+                    .then((result: any) => {
+                      setState({
+                        ...state,
+                        color: hexToRGB(result.sRGBHex),
+                      });
+                    })
+                    .catch((_e) => {});
+                }}
+              />
             </div>
           </div>
         }
       >
         <div
           id="color-input"
-          className={css.swatch}
+          className={cx(css.swatch, inputProps?.swatchClassName)}
           onClick={handleClick}
           tabIndex={1}
         >
-          <BackgroundSVG />
+          <BackgroundSVG style={{ position: "absolute" }} />
           <div className={css.color} style={style} />
         </div>
       </Popover>

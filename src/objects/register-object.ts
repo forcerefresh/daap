@@ -50,6 +50,7 @@ import {
   htmlSizeUpdate,
 } from "./html/html";
 import {
+  IMAGE,
   createImageObject,
   getAssetsUrls,
   getImageHtml,
@@ -136,6 +137,7 @@ import TextTool from "./text/text-tool";
 import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
 import { TextToolbar } from "./text/TextToolbar";
 import { TextFloatingToolbar } from "./text/TextFloatingBar";
+import { ImageToolbar } from "./image/ImageToolbar";
 
 registerObject(
   "button",
@@ -200,7 +202,7 @@ registerObjectTool({
 });
 
 registerObject(
-  "image",
+  IMAGE,
   "media",
   imageMeta,
   createImageObject,
@@ -212,6 +214,14 @@ registerObject(
   imagePostProcess,
   getAssetsUrls
 );
+
+registerObjectTool({
+  type: IMAGE,
+  meta: imageMeta,
+  // toolClass: TextTool,
+  toolBar: ImageToolbar,
+  // floatingBar: TextFloatingToolbar,
+});
 
 registerObject(
   "frame",

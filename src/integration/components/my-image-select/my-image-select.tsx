@@ -127,7 +127,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
 
   return (
     <>
-      <section className="container">
+      <section className={css.main}>
         <div {...getRootProps({ style: style as any })}>
           <input {...getInputProps()} />
           {type === "image" ? (

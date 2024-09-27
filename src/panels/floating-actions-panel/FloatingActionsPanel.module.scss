@@ -3,9 +3,10 @@
 :global(.bp5-dark) {
   .floatingActions {
     // color: $pt-dark-text-color-muted;
+    background: $pt-dark-app-background-color;
   }
   .floatingActionInner {
-    background: $pt-dark-app-background-color;
+    // background: $pt-dark-app-background-color;
   }
 }
 
@@ -27,12 +28,19 @@
   :focus {
     outline: none;
   }
-}
-.floatingActionInner {
+
   padding: 4px;
   background: $pt-app-background-color;
   display: inline-flex;
   max-width: fit-content;
   margin: 0 auto;
   gap: 5px;
+}
+.floatingActionInner {
+  // padding: 4px;
+  // background: $pt-app-background-color;
+  display: inline-flex;
+  max-width: fit-content;
+  // margin: 0 auto;
+  // gap: 5px;
 }

@@ -1,6 +1,8 @@
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
+
 export interface IFreeDrawToolConfig {
   strokeWidth: string;
-  color: string;
+  color: RGBColor;
   eraser: boolean;
 }
 

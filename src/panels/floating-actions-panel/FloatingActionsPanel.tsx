@@ -41,6 +41,12 @@ import { object } from "yup";
 import { ToolbarMode } from "../../utils/tools/types";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 
+enum MultiSelectionType {
+  None = "None",
+  Single = "Single",
+  Multiple = "Multiple",
+}
+
 type IFloatingActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
@@ -69,22 +75,29 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     deleteObject,
   } = useContext(ToolsContext);
 
-  const activeObject = objectById[selectedObjectIds[0]];
-  const FloatingBarComponent = getObjectToolDefinitions(
-    activeObject?.type
-  )?.floatingBar;
+  const mSelectionType: MultiSelectionType =
+    !selectedObjectIds || selectedObjectIds.length === 0
+      ? MultiSelectionType.None
+      : selectedObjectIds.length === 1
+      ? MultiSelectionType.Single
+      : MultiSelectionType.Multiple;
 
-  const [isVisible, setIsVisible] = useState(false);
+  const activeObject = objectById[selectedObjectIds[0]];
+  const FloatingBarComponent =
+    mSelectionType === MultiSelectionType.Single &&
+    getObjectToolDefinitions(activeObject?.type)?.floatingBar;
+
+  // const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(1);
 
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
   const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
 
-  useEffect(() => {
-    setIsVisible(selectedObjectIds.length > 0);
-    //setOpacity(0);
-  }, [selectedObjectIds]);
+  // useEffect(() => {
+  //   setIsVisible(selectedObjectIds.length === 1);
+  //   //setOpacity(0);
+  // }, [selectedObjectIds]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -145,7 +158,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
 
   return (
     <>
-      {isVisible && (
+      {mSelectionType !== MultiSelectionType.None && (
         <>
           {/* <div ref={tmpRef}></div> */}
           <div
@@ -153,6 +166,21 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
             ref={mainRef}
             style={{ opacity: opacity, position: "absolute", top: "-100px" }}
           >
+            {activeObject?.isLocked && (
+              <Button
+                intent={"danger"}
+                icon="lock"
+                minimal
+                onClick={(event: any) => {
+                  event.stopPropagation();
+                  updateObject({
+                    ...activeObject,
+                    isLocked: !activeObject.isLocked,
+                  });
+                }}
+              ></Button>
+            )}
+
             <div className={cx(css.floatingActionInner)}>
               {FloatingBarComponent ? (
                 <FloatingBarComponent

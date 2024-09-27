@@ -8,6 +8,7 @@ export interface IToolDefinition {
     description?: string;
     icon?: string;
     supportWidthResize?: boolean;
+    supportHeightResize?: boolean;
   };
   toolClass?: new () => IToolClass;
   toolBar?: (props: IToolbarProps) => React.ReactElement | null;

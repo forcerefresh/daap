@@ -72,16 +72,16 @@
       }
     }
     .action {
-      height: 112px;
-      min-height: 112px;
+      height: 55px;
+      min-height: 55px;
     }
   }
 }
 
 .defaultLayersStyle {
   .right {
-    width: 711px !important;
-    min-width: 711px !important;
+    // width: 711px !important;
+    // min-width: 711px !important;
     display: flex;
     flex-direction: row;
     box-shadow: none;
@@ -103,8 +103,8 @@
       }
 
       .action {
-        height: 112px;
-        min-height: 112px;
+        height: 55px;
+        min-height: 55px;
       }
       .slides {
         min-height: 200px;
@@ -139,7 +139,7 @@
   right: 10px;
   top: 10px;
   bottom: 10px;
-  width: 100px;
+  width: 103px;
   overflow: hidden;
   z-index: 2001;
 }

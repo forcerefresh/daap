@@ -69,6 +69,7 @@ import {
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
 import { group } from "console";
+import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -228,7 +229,32 @@ export function StageObjectInternal(props: IStageLayer) {
   //   return null;
   // }
 
-  const objectStyle = { ...calculatedObjectSize, left: "0px", top: "0px" };
+  const [clipMaskHtml, setClipMaskHtml] = useState<string | null>(null);
+  const [maskStyle, setMaskStyle] = useState<CSSProperties | null>({});
+
+  useEffect(() => {
+    if (object.mask?.type === "svg") {
+      const clipMaskId = `clip-mask-${objectId}`;
+      getClipMaskFromSvg(
+        object.mask?.svg!,
+        clipMaskId,
+        calculatedObjectSize.width as any, // TODO <<
+        calculatedObjectSize.height as any // TODO <<
+      ).then((svgString) => {
+        setMaskStyle({
+          clipPath: `url(#${clipMaskId})`,
+        });
+        setClipMaskHtml(svgString);
+      });
+    }
+  });
+
+  const objectStyle = {
+    ...calculatedObjectSize,
+    left: "0px",
+    top: "0px",
+  };
+
   objectStyle.position = cssPosition;
   if (object.transformDefinition?.values?.hasPerspective) {
     objectStyle.perspective = `${object.transformDefinition?.values?.transformPerspective}`;
@@ -243,6 +269,10 @@ export function StageObjectInternal(props: IStageLayer) {
   const top =
     parseFloat(calculatedObjectSize.top as string) + Math.random() / 100 + "px";
 
+  const selectedColor = object.isLocked
+    ? "rgba(72, 175,240, 0.5)"
+    : "rgba(72, 175,240, 1)";
+
   // object holder
   const objectHolderStyle: CSSProperties = {
     zIndex: 100,
@@ -254,7 +284,7 @@ export function StageObjectInternal(props: IStageLayer) {
     ...((isSelected || (isInSelectionPath && !isSelected)) && !activeTool
       ? {
           boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
-            object.objectIds && !isSelected ? "#444444" : "#48aff0"
+            object.objectIds && !isSelected ? "#444444" : selectedColor
           }`,
         }
       : {}),
@@ -353,6 +383,9 @@ export function StageObjectInternal(props: IStageLayer) {
     <>
       {/* NOTE: FOR DEBUGING */}
       {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
+      {clipMaskHtml && (
+        <div dangerouslySetInnerHTML={{ __html: clipMaskHtml }}></div>
+      )}
 
       <WithResizeHandle
         key={`object-${object.id}`}
@@ -363,7 +396,7 @@ export function StageObjectInternal(props: IStageLayer) {
         selectionPath={selectionPath}
         objectById={objectById}
         isSelected={isSelected}
-        forceHide={activeTool}
+        forceHide={!!activeTool}
       >
         <WithRotationHandle
           key={`object-${object.id}`}
@@ -373,7 +406,7 @@ export function StageObjectInternal(props: IStageLayer) {
           scale={object.scale}
           selectionPath={selectionPath}
           objectById={objectById}
-          forceHide={activeTool}
+          forceHide={!!activeTool}
         >
           <div
             ref={childRef}
@@ -388,6 +421,10 @@ export function StageObjectInternal(props: IStageLayer) {
                     if (activeStageTool === StageTools.PAN) {
                       return;
                     }
+
+                    // if (object.isLocked) {
+                    //   return; // TODO: does not work as we cannot select object
+                    // }
 
                     e.stopPropagation();
 
@@ -418,6 +455,7 @@ export function StageObjectInternal(props: IStageLayer) {
                       objectScale: object.scale,
                       objectId: props.object.id,
                       originalMouseEvent: e.nativeEvent,
+                      isLocked: object.isLocked,
                     });
                   }
                 : undefined
@@ -441,7 +479,7 @@ export function StageObjectInternal(props: IStageLayer) {
                 top: -(35 / objectZoom / stageZoom) + "px",
               }}
             >
-              {!activeTool && (
+              {!activeTool && !object.isLocked && (
                 <div
                   className={cx(css.circle, "rotation-handle")}
                   style={{
@@ -495,7 +533,7 @@ export function StageObjectInternal(props: IStageLayer) {
                         `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
                       ),
                   }}
-                  style={objectStyle}
+                  style={{ ...objectStyle, ...maskStyle }}
                   // className={cx({
                   //   [css.notVisible]: !object.isVisible,
                   //   [css.layoutChildrenSelected]: isSelected,

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useLayoutEffect } from "react";
 import { connect } from "react-redux";
 //import "./App.scss";
 import "./AppNew.scss";
@@ -74,8 +74,12 @@ function App(props: IAppProps) {
     );
   }, []);
 
+  useLayoutEffect(() => {
+    document.body.className = `bp5-${theme}`;
+  }, [theme]);
+
   return (
-    <div className={`bp5-${theme} ${className}`}>
+    <div className={`${className}`}>
       <Editor />
     </div>
   );

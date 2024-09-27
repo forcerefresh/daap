@@ -190,7 +190,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   fetchImagesFunc={fetchImages}
                   uploadComponent={
                     <UploadComponent
-                      type="font"
+                      type="vector"
                       onComplete={() => {
                         setForceUpdate(Math.random());
                       }}
@@ -200,8 +200,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     />
                   }
                   onRequestClose={onRequestClose}
-                  //addObject={addObject}
-                  //onSelect={onSelect}
+                  addObject={addObject}
+                  onSelect={onSelect}
                 />
               }
             />

@@ -232,6 +232,9 @@ export function getCoverLayoutField<T>(
     displayName: label,
     inputType: InputType.COVER_LAYOUT,
     value: value,
+    inputProps: {
+      minimal: true,
+    },
   };
 
   return getInputForm(InputType.COVER_LAYOUT, objectDef, onChange);

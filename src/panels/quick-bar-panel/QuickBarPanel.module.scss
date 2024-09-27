@@ -31,11 +31,39 @@
 
   display: flex;
 
+  // .panelButtons {
+  //   line-height: 14px;
+  //   :global {
+  //     *,
+  //     *:hover,
+  //     *:active {
+  //       outline: none;
+  //     }
+
+  //     .bp5-button {
+  //       text-align: center;
+  //       position: relative;
+  //     }
+
+  //     .bp5-button:not(.bp5-small) {
+  //       width: 82px;
+  //       height: 55px;
+  //       margin-left: 2px;
+  //       margin-right: 2px;
+  //     }
+  //     .bp5-button.bp5-small {
+  //       width: 34px;
+  //       height: 34px;
+  //       // padding: 7px 14px;
+  //     }
+  //   }
+  // }
+
   :global {
     *,
     *:hover,
     *:active {
-      outline: none;
+      outline: none !important;
     }
 
     // .bp5-button-text {

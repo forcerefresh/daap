@@ -10,8 +10,13 @@ import { TextValues } from "./text";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { hexToRGB } from "../../utils/utils";
 import css from "./TextToolbar.module.scss";
-import { IFontSelectInputValue } from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  IFontSelectInputValue,
+  InputType,
+} from "webslider-sdk/lib/inputs/i-inputs";
 import cx from "classnames";
+import colorInputCss from "../../inputs/color-input/color-input.module.scss";
+import { ColorInputForm } from "../../inputs/color-input/color-input";
 
 const ICON_HEIGHT = 36;
 
@@ -70,6 +75,25 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
           )}
           {/* </div> */}
 
+          <div className={css.colorInputHolder}>
+            <ColorInputForm
+              inputType={InputType.COLOR}
+              displayName={""}
+              propertyName={""}
+              value={values.color}
+              defaultValue={null}
+              onChange={(value: any) => {
+                const newObject = cloneDeep(object);
+                newObject.definition.values.color = value;
+                updateObject(newObject);
+              }}
+              inputProps={{
+                swatchClassName: colorInputCss.squareSwatch,
+                className: colorInputCss.squareColorInput,
+              }}
+            />
+          </div>
+          {/* 
           <input
             type="color"
             id="head"
@@ -83,7 +107,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
               updateObject(newObject);
             }}
             style={{ width: "35px", height: "35px", margin: "10px" }}
-          />
+          /> */}
 
           <Button
             className={cx(css.button, css.squareButton)}

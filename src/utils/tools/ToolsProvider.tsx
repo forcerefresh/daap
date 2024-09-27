@@ -252,6 +252,7 @@ export const ToolsProvider = (
             dispatch(deleteObjects([objectId]));
           },
           requestCursorChange: (cursor) => {
+            console.log(cursor);
             setCursorStyle(cursor);
           },
         });

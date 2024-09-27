@@ -549,7 +549,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 {/*qwe(image, idx)   // TODO: remove this in the future*/}
                 {imageOneSize || (image as any)?.videos ? (
                   <Popover
-                    interactionKind={PopoverInteractionKind.HOVER_TARGET_ONLY}
+                    interactionKind={PopoverInteractionKind.HOVER}
                     position={Position.RIGHT}
                     modifiers={{ preventOverflow: { enabled: true } }}
                     portalClassName={cx(
