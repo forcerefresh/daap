@@ -39,38 +39,47 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
 
   return (
     <div className={css.propertiesPanelAll} key={panelName?.id}>
-      <PanelHeader>
+      {/* <PanelHeader>
         {entityType2Name[panelName?.type ?? ""]?.toUpperCase() || "PROPERTIES"}
         {panelName && <span className={css.panelName}>{panelName.name}</span>}
-      </PanelHeader>
+      </PanelHeader> */}
       <PropertiesSectionsPanel />
 
-      {activeSection === PropertiesPanelSection.Layout && <LayoutProperties />}
+      <div className={css.propertiesPanelPropertiesHolder}>
+        {/* {activeSection === PropertiesPanelSection.Layout && <LayoutProperties />} */}
 
-      {activeSection === PropertiesPanelSection.Basic && <BasicProperties />}
+        {/* {activeSection === PropertiesPanelSection.Basic && <BasicProperties />} */}
 
-      {activeSection === PropertiesPanelSection.CommonStyle && (
-        <CommonStyleProperties />
-      )}
+        {activeSection === PropertiesPanelSection.CommonStyle && (
+          <CommonStyleProperties />
+        )}
 
-      {activeSection === PropertiesPanelSection.Transform && (
-        <TransformProperties />
-      )}
+        {activeSection === PropertiesPanelSection.Transform && (
+          <TransformProperties />
+        )}
 
-      {activeSection === PropertiesPanelSection.Properties && (
-        <PropertiesPanel className={"propertiesPanel " + css.propertiesPanel} />
-      )}
+        {activeSection === PropertiesPanelSection.Properties && (
+          <>
+            <BasicProperties />
+            <LayoutProperties />
+            <PropertiesPanel
+              className={"propertiesPanel " + css.propertiesPanel}
+            />
+          </>
+        )}
 
-      {activeSection === PropertiesPanelSection.Animation && (
+        {/* {activeSection === PropertiesPanelSection.Animation && (
         <StaticAnimationPanel
           hideHeader
           className={"propertiesPanel " + css.propertiesPanel}
         />
-      )}
+      )} */}
 
-      {activeSection === PropertiesPanelSection.Linking && <NavigationPanel />}
+        {activeSection === PropertiesPanelSection.Linking && (
+          <NavigationPanel />
+        )}
 
-      {/*<Tabs className={css.tabs}>
+        {/*<Tabs className={css.tabs}>
         <Tab
           id="properties-panel"
           title="Properties"
@@ -111,6 +120,7 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           />
         )}
       </Tabs>*/}
+      </div>
     </div>
   );
 };

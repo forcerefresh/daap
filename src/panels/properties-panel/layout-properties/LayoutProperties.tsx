@@ -11,6 +11,8 @@ import {
   getSelectField,
   getFitLayoutField,
   getInsetLayoutField,
+  getNumericFiled,
+  getSelectSlider,
 } from "../../../inputs/input-utils";
 import {
   ILayout,
@@ -71,28 +73,29 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
   } = props;
 
   const renderLayerProperties = (lay: ILayer) => {
-    return (
-      <>
-        {renderLayoutOptions(lay, _updateLayer)}
-        {renderLayoutOptionProperties(lay, _updateLayer)}
-        {renderNamedProperties(
-          "definition",
-          layerDefinition,
-          lay.definition.values,
-          lay.definition.valuesMetadata,
-          lay,
-          _updateLayer
-        )}
-        {renderNamedProperties(
-          "layoutAdvance",
-          layoutAdvancedDefinition,
-          lay.layoutAdvance?.values ?? {},
-          lay.layoutAdvance?.valuesMetadata ?? {},
-          lay,
-          _updateLayer
-        )}
-      </>
-    );
+    return null;
+    // return (
+    // <>
+    //     {renderLayoutOptions(lay, _updateLayer)}
+    //     {renderLayoutOptionProperties(lay, _updateLayer)}
+    //     {renderNamedProperties(
+    //       "definition",
+    //       layerDefinition,
+    //       lay.definition.values,
+    //       lay.definition.valuesMetadata,
+    //       lay,
+    //       _updateLayer
+    //     )}
+    //     {renderNamedProperties(
+    //       "layoutAdvance",
+    //       layoutAdvancedDefinition,
+    //       lay.layoutAdvance?.values ?? {},
+    //       lay.layoutAdvance?.valuesMetadata ?? {},
+    //       lay,
+    //       _updateLayer
+    //     )}
+    //   </>
+    // );
   };
 
   const renderObjectProperties = (obj: IObject, objectLayer: ILayer) => {
@@ -102,12 +105,12 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 
     return (
       <>
-        {renderLayoutOptions(
+        {/* {renderLayoutOptions(
           obj,
           _updateObject,
           layoutedByParent,
           parentHasLayout
-        )}
+        )} */}
         {renderLayoutOptionProperties(
           obj,
           _updateObject,
@@ -115,14 +118,69 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           objectLayer,
           parentHasLayout
         )}
-        {renderNamedProperties(
+
+        {/* commonStyleDefinition.values.commonOpacity = 0.5
+        commonStyleDefinition.valuesMetadata.commonOpacity.enabled = true */}
+
+        {getNumericFiled(
+          "Scale",
+          `${obj.scale}`,
+          (scale: string) => {
+            const retObj = cloneDeep(obj);
+            retObj.scale = parseFloat(scale);
+            _updateObject(retObj);
+          },
+          "",
+          { stepSize: 0.1, majorStepSize: 1 }
+        )}
+        {getNumericFiled("Rotation", `${obj.rotation}`, (rotation: string) => {
+          const retObj = cloneDeep(obj);
+          retObj.rotation = parseFloat(rotation);
+          _updateObject(retObj);
+        })}
+        {getSelectSlider(
+          "Opacity",
+          obj.commonStyleDefinition?.values?.commonOpacity ?? 1,
+          {
+            min: 0,
+            max: 100,
+            suffix: "",
+            stepSize: 1,
+            labelStepSize: 1,
+            trackFill: false,
+          },
+          (opacity: string) => {
+            const retObj = cloneDeep(obj);
+
+            if (!retObj.commonStyleDefinition?.values) {
+              retObj.commonStyleDefinition!.values = {};
+            }
+
+            retObj.commonStyleDefinition!.values.commonOpacity =
+              parseInt(opacity);
+
+            if (!retObj.commonStyleDefinition?.valuesMetadata?.commonOpacity) {
+              retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity = {};
+            }
+
+            (
+              retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
+            ).enabled = true;
+            (
+              retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
+            ).disabled = false;
+
+            _updateObject(retObj);
+          }
+        )}
+        {/* {renderNamedProperties(
           "layoutAdvance",
           layoutAdvancedDefinition,
           obj.layoutAdvance?.values ?? {},
           obj.layoutAdvance?.valuesMetadata ?? {},
           obj,
           _updateObject
-        )}
+        )} */}
       </>
     );
   };
@@ -244,7 +302,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
     return (
       <>
-        {objectOrLayer.layout === "grid" &&
+        {/* {objectOrLayer.layout === "grid" &&
           getGridLayoutField(
             "",
             objectOrLayer.gridLayout,
@@ -259,7 +317,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             (device: string) => {
               _setDevice(device);
             }
-          )}
+          )} */}
         {objectOrLayer.layout === "absolute" &&
           getAbsoluteLayoutField(
             "",
@@ -281,7 +339,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             },
             parentHasLayout
           )}
-        {objectOrLayer.layout === "snap" &&
+
+        {/* {objectOrLayer.layout === "snap" &&
           getSnapLayoutField(
             "",
             objectOrLayer.snapLayout,
@@ -300,9 +359,9 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               _setDevice(device);
             },
             parentHasLayout
-          )}
+          )} */}
 
-        {objectOrLayer.layout === "fit" &&
+        {/* {objectOrLayer.layout === "fit" &&
           getFitLayoutField(
             "",
             objectOrLayer.fitLayout,
@@ -321,9 +380,9 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               _setDevice(device);
             },
             parentHasLayout
-          )}
+          )} */}
 
-        {objectOrLayer.layout === "inset" &&
+        {/* {objectOrLayer.layout === "inset" &&
           getInsetLayoutField(
             "",
             objectOrLayer.insetLayout,
@@ -342,7 +401,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               _setDevice(device);
             },
             parentHasLayout
-          )}
+          )} */}
       </>
     );
   };
@@ -402,7 +461,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 
   const renderObjectOrLayerOrSlide = () => {
     if (!selectionForProperties) {
-      return <div>No object selected</div>;
+      return null; // <div>No object selected</div>;
     }
 
     if (selectionForProperties?.type === "layer" && layer) {
@@ -414,7 +473,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return <div>Page has no layout options.</div>;
+      return null; // <div>Page has no layout options.</div>;
     }
   };
 

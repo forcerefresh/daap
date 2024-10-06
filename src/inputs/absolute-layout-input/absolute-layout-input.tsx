@@ -22,11 +22,11 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./absolute-layout-input.module.scss";
 
-const RELATIVE_TO_OPTIONS = [
-  { label: "Page", value: "page" },
-  { label: "Stage", value: "stage" },
-  { label: "Guidelines", value: "guidelines" },
-];
+// const RELATIVE_TO_OPTIONS = [
+//   { label: "Page", value: "page" },
+//   { label: "Stage", value: "stage" },
+//   { label: "Guidelines", value: "guidelines" },
+// ];
 
 const SMALL_ICON_SIZE = 18;
 
@@ -471,7 +471,7 @@ export const AbsolutePlacementForm: React.FC<
           )}
         </ExtraOptionsInput>
       ) : ( */}
-      {getSelectField(
+      {/* {getSelectField(
         "Relative",
         value.relativeTo,
         RELATIVE_TO_OPTIONS,
@@ -485,10 +485,10 @@ export const AbsolutePlacementForm: React.FC<
         relativeToLayer
           ? "Object position is relative to layer when it has layout configured."
           : ""
-      )}
+      )} */}
 
       {/* )} */}
-      {getButtonGroupField(
+      {/* {getButtonGroupField(
         "",
         switchValue,
         (type: any) => {
@@ -501,9 +501,10 @@ export const AbsolutePlacementForm: React.FC<
           },
           { value: "perDevice", label: `Per device` },
         ]
-      )}
-      {type === "common" && renderCommon()}
-      {type === "perDevice" && renderPerDevice()}
+      )} */}
+      {/* {type === "common" && renderCommon()} */}
+      {/* {type === "perDevice" && renderPerDevice()} */}
+      {renderCommon()}
     </div>
   );
 };

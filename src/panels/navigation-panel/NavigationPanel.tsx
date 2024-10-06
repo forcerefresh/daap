@@ -122,7 +122,7 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return <div>Page has no layout options.</div>;
+      return null; //<div>Page has no layout options.</div>;
     }
   };
 

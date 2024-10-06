@@ -9,8 +9,16 @@
   }
 }
 
+.sliderHolder {
+  :global {
+    .bp5-form-group {
+      padding: 5px 5px 5px 18px !important;
+      margin-bottom: 0px;
+    }
+  }
+}
 .button {
-  height: 50px;
+  height: 55px;
   align-items: center;
 }
 
@@ -27,7 +35,8 @@
   margin: 0px 1px;
   //color: gray;
   //width: calc(100vh - 300px);
-  height: 54px;
+  height: 55px;
+  min-height: 55px;
 
   display: flex;
 
@@ -163,4 +172,19 @@
       height: 16px;
     }
   }
+}
+
+.mediaLibraryPanel {
+  position: static;
+  top: initial;
+  left: initial;
+  width: initial;
+  height: 75vh !important;
+
+  // height: calc(75vh - 110px);
+}
+
+.mediaLibraryPanelPopup {
+  width: 650px;
+  height: 75vh;
 }

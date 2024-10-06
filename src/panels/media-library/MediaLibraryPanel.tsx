@@ -31,6 +31,8 @@ interface IMediaLibraryPanelProps {
   selectionType?: SelectionType;
   panelsToShow?: Panels[];
   addObject?: boolean;
+  instaSelect?: boolean;
+  showRemoveItem?: boolean;
   onSelect?: (
     item:
       | {
@@ -51,6 +53,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const {
     selectionType = SelectionType.Single,
     addObject = true,
+    instaSelect = false,
+    showRemoveItem = false,
     onSelect = noop,
     onRequestClose,
     className,
@@ -86,7 +90,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
 
   return (
     <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
-      <div>
+      <div style={{ overflow: "hidden" }}>
         <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
@@ -202,6 +206,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   onRequestClose={onRequestClose}
                   addObject={addObject}
                   onSelect={onSelect}
+                  instaSelect={instaSelect}
+                  showRemoveItem={showRemoveItem}
                 />
               }
             />
@@ -298,6 +304,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   onRequestClose={onRequestClose}
                   addObject={addObject}
                   onSelect={onSelect}
+                  instaSelect={instaSelect}
+                  showRemoveItem={showRemoveItem}
                 />
               }
             />

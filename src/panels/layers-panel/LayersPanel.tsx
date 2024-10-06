@@ -240,7 +240,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
       <div className={css.layerPanel}>
         <PanelHeader>
           <div style={{ display: "flex" }}>
-            <span>LAYERS AND OBJECTS</span>
+            <span>OBJECTS</span>
             <span className={css.slideName}>{slide?.name}</span>
           </div>
           <div>

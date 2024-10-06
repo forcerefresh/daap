@@ -27,9 +27,14 @@ import { isObjectGroup } from "../../store/actions/actions-utils";
 
 import { ReactComponent as PropertiesIcon } from "../../panels/properties-sections-panel/icons/properties.svg";
 import { ReactComponent as TransformIcon } from "../../panels/properties-sections-panel/icons/transform.svg";
+
+import { ReactComponent as OpacityIcon } from "../../assets/icons/opacity2.svg";
+
 import MediaLibraryPanel, { Panels } from "../media-library/MediaLibraryPanel";
 import { cloneDeep } from "lodash-es";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
+import { object } from "yup";
+import { getSelectSlider } from "../../inputs/input-utils";
 
 const PANEL_ICON_SIZE = 22;
 
@@ -164,6 +169,73 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
         )}
 
         <div>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.BOTTOM}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            usePortal={true}
+            minimal
+            // isOpen={isMaskOpen}
+            content={
+              <div className={css.sliderHolder}>
+                {getSelectSlider(
+                  "",
+                  activeObject?.commonStyleDefinition?.values?.commonOpacity ??
+                    100,
+                  {
+                    min: 0,
+                    max: 100,
+                    suffix: "",
+                    stepSize: 1,
+                    labelStepSize: 1,
+                    trackFill: false,
+                  },
+                  (opacity: string) => {
+                    if (!activeObject) return;
+
+                    const retObj = cloneDeep(activeObject);
+
+                    if (!retObj.commonStyleDefinition?.values) {
+                      retObj.commonStyleDefinition!.values = {};
+                    }
+
+                    retObj.commonStyleDefinition!.values.commonOpacity =
+                      parseInt(opacity);
+
+                    if (
+                      !retObj.commonStyleDefinition?.valuesMetadata
+                        ?.commonOpacity
+                    ) {
+                      retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity =
+                        {};
+                    }
+
+                    (
+                      retObj.commonStyleDefinition!.valuesMetadata
+                        .commonOpacity as any
+                    ).enabled = true;
+                    (
+                      retObj.commonStyleDefinition!.valuesMetadata
+                        .commonOpacity as any
+                    ).disabled = false;
+
+                    updateObject(retObj);
+                  }
+                )}
+              </div>
+            }
+          >
+            <Button
+              style={{ transform: "rotate(180deg)" }}
+              icon={<OpacityIcon />}
+              minimal
+              className={cx(css.button, css.squareButton)}
+              disabled={selectedObjectIds.length !== 1}
+            ></Button>
+          </Popover>
+        </div>
+
+        <div>
           {/* <Button
             className={cx(css.button, css.squareButton)}
             minimal
@@ -190,14 +262,20 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
                   }}
                   className={css.mediaLibraryPanel}
                   addObject={false}
+                  instaSelect={true}
+                  showRemoveItem={!!activeObject?.mask}
                   onSelect={(item) => {
-                    debugger;
-                    if (activeObject && item?.initialValues?.svg) {
+                    if (activeObject) {
                       const newObject = cloneDeep(activeObject);
-                      newObject.mask = {
-                        type: "svg",
-                        svg: item.initialValues.svg,
-                      };
+                      if (item?.initialValues?.svg) {
+                        newObject.mask = {
+                          type: "svg",
+                          svg: item.initialValues.svg,
+                        };
+                      } else {
+                        newObject.mask = null;
+                      }
+
                       updateObject(newObject);
                     }
                     // onInput({
@@ -218,6 +296,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               onClick={() => {
                 setIsMaskOpen(!isMaskOpen);
               }}
+              disabled={selectedObjectIds.length !== 1}
             ></Button>
           </Popover>
         </div>
@@ -234,7 +313,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           ></Button>
         </div>
         <Divider />
-        <div>
+        {/* <div>
           <Button
             className={cx(css.button, css.squareButton)}
             minimal
@@ -252,7 +331,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             disabled={selectedObjectIds.length < 1}
             icon={"properties"}
           ></Button>
-        </div>
+        </div> */}
 
         <div>
           <Button

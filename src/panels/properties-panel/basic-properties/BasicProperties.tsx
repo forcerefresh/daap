@@ -51,7 +51,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           undefined,
           { disabled: slide.slideType !== SlideType.Normal }
         )}
-        {getTextField("ID", slide.customId, (customId: string) => {
+        {/* {getTextField("ID", slide.customId, (customId: string) => {
           const retObj = cloneDeep(slide);
           retObj.customId = customId;
           _updateSlide(retObj);
@@ -69,7 +69,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             retObj.description = description;
             _updateSlide(retObj);
           }
-        )}
+        )} */}
       </>
     );
   };
@@ -82,7 +82,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           retObj.name = name;
           _updateLayer(retObj);
         })}
-        {getTextField("ID", layer.customId, (customId: string) => {
+        {/* {getTextField("ID", layer.customId, (customId: string) => {
           const retObj = cloneDeep(layer);
           retObj.customId = customId;
           _updateLayer(retObj);
@@ -100,7 +100,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             retObj.description = description;
             _updateLayer(retObj);
           }
-        )}
+        )} */}
       </>
     );
   };
@@ -116,7 +116,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
           retObj.name = name;
           _updateObject(retObj);
         })}
-        {getTextField("ID", object.customId, (customId: string) => {
+        {/* {getTextField("ID", object.customId, (customId: string) => {
           const retObj = cloneDeep(object);
           retObj.customId = customId;
           _updateObject(retObj);
@@ -134,29 +134,14 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             retObj.description = description;
             _updateObject(retObj);
           }
-        )}
-
-        {getNumericFiled("Scale", `${object.scale}`, (scale: string) => {
-          const retObj = cloneDeep(object);
-          retObj.scale = parseFloat(scale);
-          _updateObject(retObj);
-        })}
-        {getNumericFiled(
-          "Rotation",
-          `${object.rotation}`,
-          (rotation: string) => {
-            const retObj = cloneDeep(object);
-            retObj.rotation = parseFloat(rotation);
-            _updateObject(retObj);
-          }
-        )}
+        )} */}
       </>
     );
   };
 
   const renderObjectOrLayerOrSlide = () => {
     if (!selectionForProperties) {
-      return <div>No object selected</div>;
+      return null; // <div>No object selected</div>;
     }
 
     if (selectionForProperties?.type === "layer" && layer) {

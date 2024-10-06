@@ -1,0 +1,15 @@
+<svg id="icon" width="20" height="20" version="1.1" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+	<rect width="4" height="4" fill="#5b5b5b" />
+	<rect x="4" y="4" width="4" height="4" fill="#737373" />
+	<rect x="8" width="4" height="4" fill="#8c8c8c" />
+	<rect x="16" width="4" height="4" fill="#a6a6a6" />
+	<rect y="8" width="4" height="4" fill="#5b5b5b" />
+	<rect x="8" y="8" width="4" height="4" fill="#8c8c8c" />
+	<rect x="16" y="8" width="4" height="4" fill="#a6a6a6" />
+	<rect y="16" width="4" height="4" fill="#5b5b5b" />
+	<rect x="8" y="16" width="4" height="4" fill="#8c8c8c" />
+	<rect x="16" y="16" width="4" height="4" fill="#a6a6a6" />
+	<rect x="12" y="4" width="4" height="4" fill="#999999" />
+	<rect x="4" y="12" width="4" height="4" fill="#737373" />
+	<rect x="12" y="12" width="4" height="4" fill="#999999" />
+</svg>

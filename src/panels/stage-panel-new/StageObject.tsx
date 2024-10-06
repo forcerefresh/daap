@@ -229,25 +229,20 @@ export function StageObjectInternal(props: IStageLayer) {
   //   return null;
   // }
 
-  const [clipMaskHtml, setClipMaskHtml] = useState<string | null>(null);
-  const [maskStyle, setMaskStyle] = useState<CSSProperties | null>({});
-
-  useEffect(() => {
-    if (object.mask?.type === "svg") {
-      const clipMaskId = `clip-mask-${objectId}`;
-      getClipMaskFromSvg(
-        object.mask?.svg!,
-        clipMaskId,
-        calculatedObjectSize.width as any, // TODO <<
-        calculatedObjectSize.height as any // TODO <<
-      ).then((svgString) => {
-        setMaskStyle({
-          clipPath: `url(#${clipMaskId})`,
-        });
-        setClipMaskHtml(svgString);
-      });
-    }
-  });
+  const clipMaskId = `clip-mask-${objectId}`;
+  let clipMaskHtml = "";
+  let maskStyle: CSSProperties = {};
+  if (object.mask?.type === "svg") {
+    maskStyle = {
+      clipPath: `url(#${clipMaskId})`,
+    };
+    clipMaskHtml = getClipMaskFromSvg(
+      object.mask?.svg!,
+      clipMaskId,
+      calculatedObjectSize.width as any, // TODO <<
+      calculatedObjectSize.height as any // TODO <<
+    );
+  }
 
   const objectStyle = {
     ...calculatedObjectSize,
@@ -383,9 +378,7 @@ export function StageObjectInternal(props: IStageLayer) {
     <>
       {/* NOTE: FOR DEBUGING */}
       {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
-      {clipMaskHtml && (
-        <div dangerouslySetInnerHTML={{ __html: clipMaskHtml }}></div>
-      )}
+      <div dangerouslySetInnerHTML={{ __html: clipMaskHtml }}></div>
 
       <WithResizeHandle
         key={`object-${object.id}`}

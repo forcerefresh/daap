@@ -99,7 +99,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderLayerProperties = (layer: ILayer) => {
-    return "Layer does not have properties.";
+    return null; //"Layer does not have properties.";
 
     // return (
     //   <>
@@ -289,7 +289,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return renderSlideProperties(slide);
+      return null; //renderSlideProperties(slide);
     }
   };
 

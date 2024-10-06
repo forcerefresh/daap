@@ -204,7 +204,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         />
       </PanelHeader> */}
       {/* </div> */}
-      {/* <div className={css.actionButtons}>
+      <div className={css.actionButtons}>
         {false && (
           <Button
             minimal
@@ -297,7 +297,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         >
           Publish
         </Button>
-      </div> */}
+      </div>
       <div className={css.previewButtons}>
         <Button
           className={css.previewPlayStop}

@@ -249,9 +249,9 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     <>
       <div className={css.panel}>
         <PanelHeader className={css.withoutTopBorder}>
-          <div>SLIDES</div>
+          <div>PAGES</div>
           <div>
-            <div
+            {/* <div
               ref={loadDropRef}
               className={cx(css.frontBackHolder, {
                 [css.frontBackHolderDropOver]: isLayerOverLoad,
@@ -269,8 +269,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               >
                 Load
               </Button>
-            </div>
-            <div
+            </div> */}
+            {/* <div
               ref={frontDropRef}
               className={cx(css.frontBackHolder, {
                 [css.frontBackHolderDropOver]: isLayerOverFront,
@@ -288,8 +288,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               >
                 Front
               </Button>
-            </div>
-            <div
+            </div> */}
+            {/* <div
               ref={backDropRef}
               className={cx(css.frontBackHolder, {
                 [css.frontBackHolderDropOver]: isLayerOverBack,
@@ -307,22 +307,22 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
               >
                 Back
               </Button>
-            </div>
+            </div> */}
           </div>
           <div>
             <Button
               minimal
               onClick={() => {
-                if (!hasLicense && normalSlides.length >= 3) {
-                  AppToaster.show({
-                    intent: "warning",
-                    message:
-                      "You have reached the maximum number of slides in the FREE version.",
-                  });
-                } else {
-                  _addNewSlide(SlideType.Normal, true);
-                  scrollToBottomDelayed();
-                }
+                // if (!hasLicense && normalSlides.length >= 3) {
+                //   AppToaster.show({
+                //     intent: "warning",
+                //     message:
+                //       "You have reached the maximum number of slides in the FREE version.",
+                //   });
+                // } else {
+                _addNewSlide(SlideType.Normal, true);
+                scrollToBottomDelayed();
+                // }
               }}
               className={css.addNewSlide}
               small={true}

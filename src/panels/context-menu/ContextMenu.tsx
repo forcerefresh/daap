@@ -109,6 +109,24 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
 
       {(ungroupingAllowed || groupingAllowed) && <MenuDivider />}
 
+      {!!object?.mask && (
+        <>
+          <MenuItem
+            text={"Remove mask"}
+            icon={"clip"}
+            // label={(<Icon icon="key-backspace" />) as unknown as string}
+            onClick={(event: any) => {
+              event.stopPropagation();
+              _updateObject({
+                ...object,
+                mask: null,
+              });
+            }}
+          />
+          <MenuDivider />
+        </>
+      )}
+
       <MenuItem
         text={object.isLocked ? "Unlock" : "Lock"}
         icon={object.isLocked ? "lock" : "unlock"}

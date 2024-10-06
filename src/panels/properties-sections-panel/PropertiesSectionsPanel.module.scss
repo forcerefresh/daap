@@ -1,8 +1,17 @@
+@import "/src/theme";
+
+:global(.bp5-dark) {
+  .propertiesSections {
+    background: $pt-dark-app-background-color;
+  }
+}
+
 .propertiesSections {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  // border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   text-align: center;
-  padding: 8px 0px 4px 0px;
+  padding: 0px; //8px 0px 4px 0px;
   color: gray;
+  background: $pt-app-background-color;
 
   :global {
     *,
@@ -18,9 +27,10 @@
 
     .bp5-button:not(.bp5-small) {
       width: 82px;
-      height: 68px;
+      height: 55px;
       margin-left: 2px;
       margin-right: 2px;
+      line-height: 10px;
     }
     .bp5-button.bp5-small {
       width: 34px;
@@ -30,8 +40,8 @@
   }
 
   .buttonGroupsHolder {
-    display: block;
-    text-align: left;
+    display: flex;
+    // justify-content: center;
     //flex-direction: row;
     > * {
       display: inline-block;

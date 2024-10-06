@@ -4,7 +4,7 @@ import {
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { cloneDeep } from "lodash-es";
-import { Button } from "@blueprintjs/core";
+import { Button, Icon, Popover } from "@blueprintjs/core";
 import { IToolbarProps } from "../../utils/tools/types";
 import { TextValues } from "./text";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
@@ -17,6 +17,7 @@ import {
 import cx from "classnames";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";
 import { ColorInputForm } from "../../inputs/color-input/color-input";
+import AIContextMenu from "./AIContextMenu";
 
 const ICON_HEIGHT = 36;
 
@@ -31,6 +32,26 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
     <>
       {object && values && (
         <div className={css.inputsHolder}>
+          <Popover
+            content={<AIContextMenu />}
+            placement="bottom-end"
+            // tslint:disable-next-line jsx-no-lambda
+            renderTarget={({ isOpen, ...p }) => (
+              <Button
+                {...p}
+                minimal
+                style={{ color: "rgb(110 240 239)" }}
+                className={cx(css.button, css.squareButton)}
+                icon={
+                  <Icon
+                    icon={"clean"}
+                    style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
+                  />
+                }
+              ></Button>
+            )}
+          />
+
           {getFontFamilyField(
             "",
             values.font,

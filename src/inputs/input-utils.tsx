@@ -35,7 +35,12 @@ export function getNumericFiled<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean; className?: string } = {}
+  inputProps: {
+    disabled?: boolean;
+    className?: string;
+    stepSize?: number;
+    majorStepSize?: number;
+  } = {}
 ) {
   const objectDef = {
     displayName: label,

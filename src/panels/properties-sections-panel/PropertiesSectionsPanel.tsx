@@ -1,5 +1,5 @@
 import { Button, Tag } from "@blueprintjs/core";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
@@ -24,16 +24,22 @@ type IPropertiesSectionsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
-  const { totalAnimationCounter, elementType } = props;
+  const { totalAnimationCounter, elementType, selectionForProperties } = props;
 
   const { activeSection, setActiveSection } = useContext(
     PropertiesPanelContext
   );
 
+  useEffect(() => {
+    if (selectionForProperties?.type !== "object") {
+      setActiveSection(PropertiesPanelSection.Properties);
+    }
+  }, [selectionForProperties]);
+
   return (
     <div className={css.propertiesSections}>
       <div className={css.buttonGroupsHolder}>
-        <div>
+        {/* <div>
           <Button
             minimal
             active={activeSection === PropertiesPanelSection.Layout}
@@ -46,7 +52,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             />
             <div>Layout</div>
           </Button>
-        </div>
+        </div> */}
         <div>
           <Button
             minimal
@@ -56,28 +62,38 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             }}
           >
             <PropertiesIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
+              style={{
+                width: "36px",
+                height: ICON_SIZE + "px",
+                fill: "gray",
+              }}
             />
             <div>Properties</div>
           </Button>
         </div>
 
         <div>
-          <Button
-            minimal
-            active={activeSection === PropertiesPanelSection.Transform}
-            onClick={() => {
-              setActiveSection(PropertiesPanelSection.Transform);
-            }}
-          >
-            <TransformIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
-            <div>Transform</div>
-          </Button>
+          {selectionForProperties?.type === "object" && (
+            <Button
+              minimal
+              active={activeSection === PropertiesPanelSection.Transform}
+              onClick={() => {
+                setActiveSection(PropertiesPanelSection.Transform);
+              }}
+            >
+              <TransformIcon
+                style={{
+                  width: "36px",
+                  height: ICON_SIZE + "px",
+                  fill: "gray",
+                }}
+              />
+              <div>Transform</div>
+            </Button>
+          )}
         </div>
 
-        <div>
+        {/* <div>
           <Button
             minimal
             active={activeSection === PropertiesPanelSection.Basic}
@@ -90,22 +106,28 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             />
             <div>Basic</div>
           </Button>
-        </div>
+        </div> */}
         <div>
-          <Button
-            minimal
-            active={activeSection === PropertiesPanelSection.Linking}
-            onClick={() => {
-              setActiveSection(PropertiesPanelSection.Linking);
-            }}
-          >
-            <LinkIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
-            Navigation
-          </Button>
+          {selectionForProperties?.type === "object" && (
+            <Button
+              minimal
+              active={activeSection === PropertiesPanelSection.Linking}
+              onClick={() => {
+                setActiveSection(PropertiesPanelSection.Linking);
+              }}
+            >
+              <LinkIcon
+                style={{
+                  width: "36px",
+                  height: ICON_SIZE + "px",
+                  fill: "gray",
+                }}
+              />
+              Link
+            </Button>
+          )}
         </div>
-        <div>
+        {/* <div>
           <Button
             minimal
             active={activeSection === PropertiesPanelSection.Animation}
@@ -123,20 +145,26 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
               </Tag>
             )}
           </Button>
-        </div>
+        </div> */}
         <div>
-          <Button
-            minimal
-            active={activeSection === PropertiesPanelSection.CommonStyle}
-            onClick={() => {
-              setActiveSection(PropertiesPanelSection.CommonStyle);
-            }}
-          >
-            <CommonStyleIcon
-              style={{ width: "36px", height: ICON_SIZE + "px", fill: "gray" }}
-            />
-            Style
-          </Button>
+          {selectionForProperties?.type === "object" && (
+            <Button
+              minimal
+              active={activeSection === PropertiesPanelSection.CommonStyle}
+              onClick={() => {
+                setActiveSection(PropertiesPanelSection.CommonStyle);
+              }}
+            >
+              <CommonStyleIcon
+                style={{
+                  width: "36px",
+                  height: ICON_SIZE + "px",
+                  fill: "gray",
+                }}
+              />
+              Style
+            </Button>
+          )}
         </div>
       </div>
     </div>
@@ -175,6 +203,7 @@ const mapStateToProps = (state: IStore) => {
   return {
     elementType: selection.selectionForProperties?.type,
     totalAnimationCounter,
+    selectionForProperties: selection.selectionForProperties,
   };
 };
 

@@ -1,15 +1,15 @@
 // const outlineStroke = require("svg-outline-stroke");
-const outlineStroke = require("svg-outline-stroke");
+// const outlineStroke = require("svg-outline-stroke");
 
-export async function getClipMaskFromSvg(
+export function getClipMaskFromSvg(
   svgInput: string,
   clipMaskId: string,
   width: string,
   height: string
 ) {
-  const svgEl = createElementFromHTML(svg) as SVGElement;
+  const svg = svgInput; //await outlineStroke(svgInput);
 
-  const svg = await outlineStroke(svgInput);
+  const svgEl = createElementFromHTML(svg) as SVGElement;
 
   console.log(svgInput);
 

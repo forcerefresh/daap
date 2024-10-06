@@ -1,25 +1,28 @@
 @import "/src/theme";
 
+:global(.bp5-dark) {
+  .panelHeader {
+    background: $pt-dark-app-background-color;
+    // border-bottom: 1px solid $pt-dark-panel-border-color;
+    // border-top: 1px solid $pt-dark-panel-border-color;
+  }
+}
+
 .panelHeader {
   background: #ececec;
-  border-bottom: 1px solid $pt-panel-border-color;
-  border-top: 1px solid $pt-panel-border-color;
+  // border-bottom: 1px solid $pt-panel-border-color;
+  // border-top: 1px solid $pt-panel-border-color;
   display: flex;
   align-items: center;
   padding: 3px 6px;
   color: gray;
   font-weight: bold;
-  min-height: 30px;
+  min-height: 54px;
+  background: $pt-app-background-color;
+
+  padding-left: 10px;
 
   > *:first-child {
     flex-grow: 1;
-  }
-}
-
-:global(.bp5-dark) {
-  .panelHeader {
-    background: #2a2a2a;
-    border-bottom: 1px solid $pt-dark-panel-border-color;
-    border-top: 1px solid $pt-dark-panel-border-color;
   }
 }

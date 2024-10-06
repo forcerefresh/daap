@@ -1,4 +1,10 @@
 .main {
+  :global {
+    .bp5-button-group.bp5-vertical.bp5-fixed > button {
+      background: none !important;
+      box-shadow: none;
+    }
+  }
 }
 
 .optionalCheckbox {

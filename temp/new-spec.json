@@ -1,0 +1,169 @@
+[
+  {
+    "id": "38a38fbb-3bf3-4e8c-8ee8-6c74bc9a1a20",
+    "name": "Slider",
+    "meta": {
+      "created": 1727993432864,
+      "modified": 1727993432864
+    },
+    "project": {
+      "documentSize": { "width": "960px", "height": "485px" },
+      "pages": {
+        "nextPageIdCounter": 2,
+        "pageById": {
+          "dfdaa1f4-672f-4770-be78-80287ac0e535": {
+            "id": "dfdaa1f4-672f-4770-be78-80287ac0e535",
+            "name": "Page 1",
+            "layerIds": ["e670287f-9da5-4123-9c94-772eb55cc4c1"],
+            "nextLayerIdCounter": 2
+          },
+          "dfdaa1f4-672f-4770-be78-80287ac0e535": {
+            "id": "dfdaa1f4-672f-4770-be78-80287ac0e535",
+            "name": "Page 2",
+            "layerIds": ["e670287f-9da5-4123-9c94-772eb55cc4c1"],
+            "nextLayerIdCounter": 2
+          },
+          "pages": [
+            "dfdaa1f4-672f-4770-be78-80287ac0e535",
+            "ed51af16-5f85-4018-815d-e93a57590e78"
+          ]
+        }
+      }
+    },
+
+    "layers": {
+      "layerById": {
+        "e670287f-9da5-4123-9c94-772eb55cc4c1": {
+          "id": "e670287f-9da5-4123-9c94-772eb55cc4c1",
+          "slideId": "dfdaa1f4-672f-4770-be78-80287ac0e535",
+          "type": "layer",
+          "name": "Layer 1",
+          "objectIds": [],
+          "editor": {
+            "isHidden": false,
+            "isLocked": false
+          },
+          "style": {
+            "opacity": 50,
+            "background": { "r": 4, "g": 4, "b": 4, "a": 4 }
+          },
+          "transform": {
+            "transformOriginX": "center",
+            "transformOriginY": "center",
+            "hasTranslate": false,
+            "transformTranslateX": "0px",
+            "transformTranslateY": "0px",
+            "transformTranslateZ": "0px",
+            "hasScale": false,
+            "transformScaleY": "100%",
+            "transformScaleZ": "100%",
+            "transformScaleX": "100%",
+            "hasRotate": false,
+            "transformRotateX": "0deg",
+            "transformRotateY": "0deg",
+            "transformRotateZ": "0deg",
+            "hasSkew": false,
+            "transformSkewX": "0deg",
+            "transformSkewY": "0deg",
+            "hasPerspective": false,
+            "transformPerspective": "700px"
+          }
+        }
+      },
+      "allLayers": [
+        "e670287f-9da5-4123-9c94-772eb55cc4c1",
+        "3758bd2b-717d-4b34-a702-451e0737bbf3",
+        "95287534-6d98-4f34-b45c-240870ac830a",
+        "a6d61ce7-8de3-44f2-8a35-000254ed86fe"
+      ]
+    },
+
+    "settings": {
+      "sliderBackgroundColor": { "r": 255, "g": 255, "b": 255, "a": 0 },
+      "pageBackgroundColor": { "r": 44, "g": 44, "b": 44, "a": 1 },
+      "layoutBoxBackgroundColor": { "r": 20, "g": 155, "b": 70, "a": 0.8 },
+      "transparentHeader": false,
+      "theme": "dark"
+    },
+
+    "preview": {
+      "width": 200,
+      "height": 130.9090909090909,
+      "scale": 0.18181818181818182,
+      "html": "<div class='sliderRoot'><div class='sliderBackground'></div><div class='slidesHolder'>  <div style='position: absolute;' class='slide-wrapper slide-wrapper-8635c3ac-c6e0-4343-ab4f-4109e28c8ddf'>  <div style='position: absolute;' class='slide slide-8635c3ac-c6e0-4343-ab4f-4109e28c8ddf '><style>\n      .layer-a6d61ce7-8de3-44f2-8a35-000254ed86fe::-webkit-scrollbar-corner { background:transparent; }\n    </style>    <div class=\"layer-wrapper layer-wrapper-a6d61ce7-8de3-44f2-8a35-000254ed86fe\" style='position:absolute;box-sizing: border-box;left:0;top:0;width:0;height:0;transform-origin: center  center;pointer-events: none;'>    <div class=\"layer layer-a6d61ce7-8de3-44f2-8a35-000254ed86fe \" style=\"position:absolute;box-sizing: border-box;left:0;top:0;width:0;height:0;transform-origin: center  center;pointer-events: none;position: relative; left:initial; top: initial; overflow: visible;transform-origin: center  center;\">      <div class=\"object-wrapper object-wrapper-30a6066b-651c-42ae-a0b4-ab15969ce5b1\" style='left:118.10349254741436px;top:51.92236003378321px;width:100px;height:100px;position: absolute;overflow: visible;pointer-events: none;perspective: 700px;transform-origin: center  center;'>      <div class=\"object object-30a6066b-651c-42ae-a0b4-ab15969ce5b1 \" style='left:118.10349254741436px;top:51.92236003378321px;width:100px;height:100px;position: absolute;overflow: visible;position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;perspective: 700px;transform-origin: center  center;'><div class=\"object-content object-content-30a6066b-651c-42ae-a0b4-ab15969ce5b1\" style=\"opacity: 0.76;transform: scaleX(200%) scaleY(100%) scaleZ(100%) ;transform-origin: center  center;width: 100%;height: 100%;background-image:url('data:image/jpeg;base64,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');background-repeat:no-repeat;background-size: cover;background-position: right center;\"></div>      </div>      </div>      <div class=\"object-wrapper object-wrapper-692fc699-9cf2-4b36-8f26-9a360af03933\" style='left:182px;top:243px;width:133px;position: absolute;overflow: visible;pointer-events: none;transform-origin: left  top;'>      <div class=\"object object-692fc699-9cf2-4b36-8f26-9a360af03933 \" style='left:182px;top:243px;width:133px;position: absolute;overflow: visible;position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;transform-origin: left  top;'><p class=\"object-content object-content-692fc699-9cf2-4b36-8f26-9a360af03933\" style=\"transform-origin: left  top;font-family: Aclonica;font-size: 20px;color: rgba(128,128,128,1);font-weight: 400;;width: 133px;height:undefined;font-kerning:auto;text-align:left;margin: 0px;white-space: pre-wrap;overflow-wrap: break-word;\">Sample text</p>      </div>      </div>      <div class=\"object-wrapper object-wrapper-addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2\" style='left:336.00390625px;top:55.0078125px;width:116px;height:92px;position: absolute;overflow: visible;pointer-events: none;transform-origin: left  top;'>      <div class=\"object object-addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2 \" style='left:336.00390625px;top:55.0078125px;width:116px;height:92px;position: absolute;overflow: visible;position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;transform-origin: left  top;'>\n<div class=\"object-content object-content-addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2\" style=\"transform-origin: left  top;width: 100%;height: 100%;\">\n  <svg fill=\"none\"  style=\"width: 100%; height: 100%; overflow:visible;\">\n  <path stroke-width=\"5px\" stroke=\"rgba(255, 255, 255, 1)\" stroke-linejoin=\"round\" stroke-linecap=\"round\" d=\"M 0 37C 0 30.666666666666664, 0 24.333333333333332, 0 18 C 0 13.691133869066633, -1.3719886811400714 8.179628131738234, 3 5 C 12.835537709378324 -2.1531183340933273, 32.39714251726239 -0.2650714370684403, 43 0 C 58.362876448370024 0.38407191120925055, 68.94715266527089 -0.22717862928925392, 83 7 C 100.64155113750269 16.07279772785853, 110.61865277024455 33.22279758676234, 115 52 C 116.61107136622974 58.90459156955602, 118.37793847236905 76.18987348742591, 114 83 C 101.56479345122602 102.3436546314262, 65.66433869616858 90.66014834927203, 59 72 C 57.24502377909156 67.08606658145638, 55.581637144847086 52.852605713401296, 62 50 C 65.58130994464749 48.40830669126778, 73.05972837951538 48.343288063252565, 77 49 C 77.51913198727493 49.08652199787915, 82.23792718415221 51.76207281584779, 81 53 C 80.02817468419245 53.97182531580755, 78.32148826589466 53.622431924030096, 77 54 C 71.13526665623702 55.675638098217995, 66.03078786246496 54, 61 54 \"/>\n  </svg>\n</div>      </div>      </div>    </div>    </div>  </div>  </div></div></div>"
+    },
+
+    "objects": {
+      "objectById": {
+        "30a6066b-651c-42ae-a0b4-ab15969ce5b1": {
+          "id": "30a6066b-651c-42ae-a0b4-ab15969ce5b1",
+          "name": "Image 1",
+          "type": "image",
+          "rotation": 10.984389302657064,
+          "scale": 1.4020316024790065,
+
+          "layerId": "a6d61ce7-8de3-44f2-8a35-000254ed86fe",
+          "parentId": "a6d61ce7-8de3-44f2-8a35-000254ed86fe",
+
+          "x": null,
+          "width": null,
+          "y": null,
+          "height": null,
+
+          "mask": {
+            "type": "svg",
+            "svg": "<svg width=\"20\" height=\"20\" version=\"1.1\" viewBox=\"0 0 20 20\" xmlns=\"http://www.w3.org/2000/svg\">\n  <path d=\"M15,7c-0.12,0-0.24,0.03-0.36,0.04C13.83,4.69,11.62,3,9,3C5.69,3,3,5.69,3,9    c0,0.05,0.01,0.09,0.01,0.14C1.28,9.58,0,11.13,0,13c0,2.21,1.79,4,4,4h11c2.76,0,5-2.24,5-5S17.76,7,15,7z\" clip-rule=\"evenodd\" fill-rule=\"evenodd\"/>\n \n</svg>\n"
+          },
+
+          "link": {
+            "targetId": "",
+            "navigationType": "link",
+            "linkEvent": "click",
+            "linkTarget": "_blank",
+            "linkHref": "http://////.....",
+            "slideEvent": "click",
+            "slideReferenceType": "slideNo",
+            "slideNo": "1",
+            "slideId": "",
+            "cursor": "default",
+            "sliderActionOnEvent": "none"
+          },
+
+          "properties": {
+            "fit": {
+              "size": "cover",
+              "positionHorizontal": "right",
+              "positionVertical": "center"
+            },
+            "image": {
+              "image": {
+                "id": "32b590a1-9bea-4748-b56c-16cc523d1599",
+                "filename": "Screenshot 2024-09-27 at 19.57.32.png",
+                "mediaType": "image",
+                "sourceType": "local",
+                "sizeType": "original",
+                "size": { "width": 80, "height": 80, "type": "jpg" },
+                "baseUrl": "{MEDIA_ITEM_LOCAL}"
+              },
+              "filename": ""
+            },
+            "preload": true
+          }
+        }
+      }
+    },
+    "selection": {
+      "activeSlideId": "8635c3ac-c6e0-4343-ab4f-4109e28c8ddf",
+      "activeLayerId": "a6d61ce7-8de3-44f2-8a35-000254ed86fe",
+      "activeObjectId": "addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2",
+      "selectedSlideIds": ["8635c3ac-c6e0-4343-ab4f-4109e28c8ddf"],
+      "selectedLayerIds": ["a6d61ce7-8de3-44f2-8a35-000254ed86fe"],
+      "selectedObjectIds": ["addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2"],
+      "selectionForProperties": {
+        "id": "addaafeb-8c1f-4eab-a3a0-b5cba4ac3ec2",
+        "type": "object"
+      },
+      "selectionPath": ["a6d61ce7-8de3-44f2-8a35-000254ed86fe"]
+    }
+  }
+]

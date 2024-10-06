@@ -5,11 +5,11 @@
 @import "./theme";
 
 // website pages
-@import "./pages/css/demo.css";
-@import "./pages/css/animate.css";
-@import "./pages/css/magenta-theme.css";
-@import "./pages/css/responsive.css";
-@import "./pages//css//bootstrap.min.css";
+// @import "./pages/css/demo.css";
+// @import "./pages/css/animate.css";
+// @import "./pages/css/magenta-theme.css";
+// @import "./pages/css/responsive.css";
+// @import "./pages//css//bootstrap.min.css";
 
 html {
   overflow: hidden;
@@ -61,3 +61,8 @@ body {
 // $dark-button-box-shadow-active: inset 0 0 0 $button-border-width
 //     rgba($white, 0.1),
 //   0 1px 2px rgba($black, 0.4);
+
+.bp5-popover.bp5-dark .bp5-popover-content,
+.bp5-dark .bp5-popover .bp5-popover-content {
+  background-color: #333333;
+}

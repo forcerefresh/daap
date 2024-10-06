@@ -22,7 +22,7 @@ export const PropertiesPanelContextProvider = (
   props: React.PropsWithChildren<React.ReactNode>
 ) => {
   const [activeSection, setActiveSection] = useState<PropertiesPanelSection>(
-    PropertiesPanelSection.Layout
+    PropertiesPanelSection.Properties
   );
 
   return (

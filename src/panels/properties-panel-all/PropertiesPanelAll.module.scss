@@ -21,6 +21,11 @@
   }
 }
 
+.propertiesPanelPropertiesHolder {
+  height: 100%;
+
+  overflow: auto;
+}
 .panelName {
   vertical-align: text-bottom;
   color: #1f82c0;
@@ -42,5 +47,5 @@
 }
 
 .propertiesPanel {
-  overflow: auto;
+  // overflow: auto;
 }

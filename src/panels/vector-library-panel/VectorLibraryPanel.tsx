@@ -27,6 +27,7 @@ import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
+import { ReactComponent as NoSelection } from "../media-library/assets/no-selection.svg";
 
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
@@ -45,6 +46,8 @@ interface IMediaLibraryPanelProps {
   //
   //
   addObject?: boolean;
+  instaSelect?: boolean;
+  showRemoveItem?: boolean;
   onSelect?: (item: {
     type: ObjectType;
     initialValues: { [key: string]: any }[];
@@ -67,6 +70,8 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
     _addNewObject,
     onRequestClose,
     addObject = true,
+    instaSelect = false,
+    showRemoveItem = false,
     onSelect = noop,
   } = props;
 
@@ -253,12 +258,39 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
             </p>
           }
         >
+          {showRemoveItem && (
+            <div style={{ display: "inline-block", verticalAlign: "bottom" }}>
+              <div className={classnames(css.imageListHolder)}>
+                <div
+                  className={cx(css.imageHolder)}
+                  onClick={(e) => {
+                    onSelect(null);
+                    onRequestClose();
+                  }}
+                  // dangerouslySetInnerHTML={{ __html: "qwqwqw" }}
+                >
+                  <NoSelection style={{ fill: "#dc3545" }} />
+                </div>
+                <div
+                  className={css.imageListTitle}
+                  style={{
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                    fontSize: "12px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Remove mask
+                </div>
+              </div>
+            </div>
+          )}
           {images?.map((image, idx) => (
             <div
               key={image.id + "_" + image.title + "_" + image.filename}
-              style={{ display: "inline-block" }}
+              style={{ display: "inline-block", verticalAlign: "bottom" }}
             >
-              {image?.svgString ? (
+              {image?.svgString && !instaSelect ? (
                 <Popover
                   interactionKind={PopoverInteractionKind.CLICK}
                   position={Position.RIGHT_TOP}
@@ -321,10 +353,12 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                     </div>
                   }
                 >
+                  {/* // TODO: duplicated code */}
                   <div
                     className={classnames(css.imageListHolder, {
                       [css.selectedImage]: selectedImage === idx,
                     })}
+                    style={{ display: "inline-block" }}
                   >
                     <div
                       className={cx(css.imageHolder)}
@@ -335,12 +369,56 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                       }}
                       dangerouslySetInnerHTML={{ __html: image.svgString }}
                     ></div>
+                    {image.title && (
+                      <div className={css.imageListTitle}>{image.title}</div>
+                    )}
+                    {image.tags && (
+                      <div className={css.imageListTabs}>
+                        <TagsView tags={image?.tags || []} />
+                      </div>
+                    )}
+                  </div>
+                </Popover>
+              ) : null}
+              {image?.svgString && instaSelect ? (
+                <div
+                  className={classnames(css.imageListHolder, {
+                    [css.selectedImage]: selectedImage === idx,
+                  })}
+                  onClick={() => {
+                    onSelect({
+                      type: SVG,
+                      initialValues: {
+                        svg: image.svgString,
+                      },
+                    });
+                    onRequestClose();
+                  }}
+                >
+                  {/* // TODO: duplicated code */}
+                  <div
+                    className={cx(css.imageHolder)}
+                    key={idx}
+                    onClick={() => {
+                      onSelect({
+                        type: SVG,
+                        initialValues: {
+                          svg: image.svgString,
+                        },
+                      });
+                      onRequestClose();
+                    }}
+                    dangerouslySetInnerHTML={{ __html: image.svgString }}
+                  ></div>
+                  {image.title && (
                     <div className={css.imageListTitle}>{image.title}</div>
+                  )}
+                  {image.tags && (
                     <div className={css.imageListTabs}>
                       <TagsView tags={image?.tags || []} />
                     </div>
-                  </div>
-                </Popover>
+                  )}
+                </div>
               ) : null}
             </div>
           ))}
