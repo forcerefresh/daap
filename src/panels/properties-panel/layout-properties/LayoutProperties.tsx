@@ -98,7 +98,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     // );
   };
 
-  const renderObjectProperties = (obj: IObject, objectLayer: ILayer) => {
+  const renderObjectProperties = (obj: IObject, objectLayer: ILayer | null) => {
     // TODO: V2
     const layoutedByParent = false; // objectLayer.definition.values.hasLayoutChildren;
     const parentHasLayout = false; // objectLayer.layout !== "none";
@@ -293,7 +293,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     objectOrLayer: ILayout,
     updateFunction: any,
     layoutedByParent = false,
-    objectLayer?: ILayer,
+    objectLayer?: ILayer | null,
     parentHasLayout?: boolean
   ) => {
     const usedBreakpoints = getBreakpointConfigForLayer(

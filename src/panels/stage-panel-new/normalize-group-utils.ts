@@ -1,25 +1,27 @@
 import { cloneDeep } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
 import { getUngroupObjectsCalculation } from "./stage-panel-utils";
 import { getLayerIdRec } from "./StageManagerProvider";
 import {
   boundsUnion,
   getObjectBoundingBox,
 } from "../../store/helpers/objectBoundingBox";
+import { getAncestorLayer } from "../../store/actions/actions-utils";
 
 export function normalizeGroup(
   parentGroup: IObject,
   changeObjectById: { [key: string]: IObject },
   utils: {
     objectById: { [key: string]: IObject };
+    layerById: { [key: string]: ILayer };
     breakpointConfig?: BreakpointConfiguration;
   }
 ): {
   objects: IObject[];
   group: IObject;
 } {
-  const { objectById, breakpointConfig } = utils;
+  const { objectById, breakpointConfig, layerById } = utils;
 
   const groupRotation = parentGroup.rotation;
 
@@ -32,7 +34,7 @@ export function normalizeGroup(
     group: { ...parentGroup }, //, rotation: 0 },
     objects: groupObjectsToUpdate,
     breakpointConfig: breakpointConfig!,
-    parentLayer: getLayerIdRec(objectById, parentGroup.id),
+    parentLayer: getAncestorLayer(parentGroup, layerById, objectById),
   });
 
   groupObjectsToUpdate.forEach((object: IObject) => {

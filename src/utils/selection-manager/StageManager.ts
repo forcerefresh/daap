@@ -94,7 +94,6 @@ function createStageTool(
     case StageToolEnum.PAN:
       return new PanTool(data);
     case StageToolEnum.SCALE: {
-      console.log("SSSSSSSS");
       return new ScaleTool(data);
     }
   }

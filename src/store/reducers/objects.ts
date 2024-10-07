@@ -405,7 +405,11 @@ export function objects(
       // return { ...state, objectById, allObjects };
     }
     case NORMALIZE_OBJECT_GROUP: {
-      const { objects: groups, breakpointConfiguration } = action.payload;
+      const {
+        objects: groups,
+        breakpointConfiguration,
+        layerById,
+      } = action.payload;
 
       const updatedObjectsById: { [key: string]: IObject } = {};
 
@@ -420,6 +424,7 @@ export function objects(
           normalizeGroup(group, groupObjectsById, {
             objectById: state.objectById,
             breakpointConfig: breakpointConfiguration,
+            layerById,
           });
 
         // apply group and objects

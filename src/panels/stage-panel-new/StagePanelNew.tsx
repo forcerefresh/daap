@@ -262,7 +262,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   );
   const {} = useHotkeys(hotkeys);
 
-  const stageToolCanvasRef = useRef();
+  // const stageToolCanvasRef = useRef(); // TODO check this
   const { stageManager } = useContext(StageManagerContext);
 
   const { spaceDown } = useKeyDown();
@@ -429,7 +429,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     const ratio = 1 - newStageZoom / stageZoom;
 
     const newScale = round(newStageZoom, 2);
-    stageToolCanvasRef.current.handleStageScaleChange(newScale);
+    // stageToolCanvasRef.current.handleStageScaleChange(newScale);
 
     _setStageZoom(newScale);
 
@@ -525,6 +525,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
               objectScale: 1, // Not needed
               objectId: "", // Not needed
               originalMouseEvent: e.nativeEvent,
+              handle: "", // TODO
             });
             return;
           }
@@ -617,7 +618,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
               style={{ ...canvasStyle, transform: "scale(" + 1 + ")" }}
               className={cx("stage-tools-canvas", css.stageToolsCanvas)}
             >
-              <StageToolsCanvas innerRef={stageToolCanvasRef} />
+              <StageToolsCanvas />
+              {/* //innerRef={stageToolCanvasRef} */}
             </div>
           </div>
           {/* {isPreview && previewLayout.body.component} */}
@@ -746,8 +748,7 @@ const mapDispatchToProps = {
   _setStagePan: (p: Point) => setStagePan(p),
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
-  _duplicateObjects: (ids: string[], toLayerId?: string): any =>
-    duplicateObjects(ids, toLayerId),
+  _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
   _cutToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">

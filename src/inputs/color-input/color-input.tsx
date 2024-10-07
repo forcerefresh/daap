@@ -138,7 +138,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                     return;
                   }
 
-                  const eyeDropper = new (window as any).EyeDropper();
+                  const eyeDropper = new EyeDropperClass();
 
                   eyeDropper
                     .open()
@@ -148,7 +148,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                         color: hexToRGB(result.sRGBHex),
                       });
                     })
-                    .catch((_e) => {});
+                    .catch((_e: any) => {});
                 }}
               />
             </div>

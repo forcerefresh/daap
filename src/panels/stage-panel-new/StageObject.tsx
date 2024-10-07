@@ -80,7 +80,7 @@ type IStageLayer = typeof mapDispatchToProps &
     layoutChildren?: ILayoutChildrenValue;
     layer: ILayer;
     objectZoom: number;
-    parentGroup: IObject;
+    parentGroup?: IObject; // TODO: not in use
   };
 
 export function StageObjectInternal(props: IStageLayer) {
@@ -449,6 +449,7 @@ export function StageObjectInternal(props: IStageLayer) {
                       objectId: props.object.id,
                       originalMouseEvent: e.nativeEvent,
                       isLocked: object.isLocked,
+                      handle: "", // TODO: not needed
                     });
                   }
                 : undefined

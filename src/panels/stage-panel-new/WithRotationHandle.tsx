@@ -62,6 +62,7 @@ export function WithRotationHandle(
         objectRotation: initialRotation,
         objectScale: initialScale,
         originalMouseEvent: e,
+        handle: "", // TODO ???
       });
     },
     [

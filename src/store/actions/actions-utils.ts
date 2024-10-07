@@ -44,7 +44,7 @@ export function getAncestorLayer(
   objectById: {
     [id: string]: IObject<{}>;
   }
-) {
+): ILayer {
   if (layerById[object.parentId!]) return layerById[object.parentId!];
 
   return getAncestorLayer(objectById[object.parentId!], layerById, objectById);

@@ -112,7 +112,7 @@ type IStagePanel = typeof mapDispatchToProps &
 
 const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
-    innerRef,
+    // innerRef, // do wee need this
     slides,
     layers,
     objects,
@@ -160,18 +160,20 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   const [forceRerender, setForceRerender] = useState(1);
 
-  useImperativeHandle(innerRef, () => ({
-    handleStageScaleChange(stageScale: number) {
-      // if (holderRef.current && groupsMatrixRef.current) {
-      //   const transform = groupsMatrixRef.current
-      //     .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
-      //     .toString();
-      //   holderRef.current.style.transform = transform;
-      //   console.log(transform);
-      // }
-      // console.log(stageScale);
-    },
-  }));
+  // TODO check this
+  // useImperativeHandle(innerRef, () => ({
+  //   handleStageScaleChange(stageScale: number) {
+
+  // if (holderRef.current && groupsMatrixRef.current) {
+  //   const transform = groupsMatrixRef.current
+  //     .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
+  //     .toString();
+  //   holderRef.current.style.transform = transform;
+  //   console.log(transform);
+  // }
+  // console.log(stageScale);
+  // },
+  // }));
 
   const groupsMatrixRef = useRef(new DOMMatrix());
   const holderRef = useRef<HTMLDivElement | null>(null);
@@ -217,6 +219,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         objectScale: object.scale,
         originalMouseEvent: e,
         handle: handle ?? "",
+        boundingClientRects: [new DOMRect()], // TODO: not needed
       });
     },
     [objectById]

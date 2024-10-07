@@ -219,14 +219,16 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   // // object holder
   const objectHolderStyle: CSSProperties = {
     zIndex: 100,
-    position: "absolute", //!layoutChildren ? "relative" : "static",
     left: !layoutChildren ? calculatedObjectSize.left : "0px",
     top: !layoutChildren ? calculatedObjectSize.top : "0px",
     width: calculatedObjectSize.width ?? "0px",
     height: calculatedObjectSize.height ?? "0px",
     ...(isRoot
       ? { position: "relative" }
-      : { transform: getObjectTransform(object) }),
+      : {
+          transform: getObjectTransform(object),
+          position: "absolute", //!layoutChildren ? "relative" : "static",
+        }),
   };
 
   // if (layoutChildren?.type === "inline") {

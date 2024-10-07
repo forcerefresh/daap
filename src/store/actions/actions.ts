@@ -949,16 +949,18 @@ export interface NormalizeObjectGroupAction
   payload: {
     objects: IObject[];
     breakpointConfiguration: BreakpointConfiguration;
+    layerById: { [key: string]: ILayer };
   };
 }
 
 export function _normalizeObjectGroups(
   objects: IObject[],
-  breakpointConfiguration: BreakpointConfiguration
+  breakpointConfiguration: BreakpointConfiguration,
+  layerById: { [key: string]: ILayer }
 ): NormalizeObjectGroupAction {
   return {
     type: NORMALIZE_OBJECT_GROUP,
-    payload: { objects, breakpointConfiguration },
+    payload: { objects, breakpointConfiguration, layerById },
     isUndoable: true,
     skipHistory: true,
   };
@@ -978,7 +980,8 @@ export function normalizeObjectGroups(objects: IObject[]): any {
       _normalizeObjectGroups(
         objects,
         breakpointConfig ??
-          project.settings.breakpoints.breakpointsConfiguration[0]
+          project.settings.breakpoints.breakpointsConfiguration[0],
+        project.layers.layerById
       )
     );
   };

@@ -7,7 +7,7 @@ export enum StageToolEnum {
   SELECT = "SELECT",
   //   RESIZE = "RESIZE",
   PAN = "PAN",
-  DESELECT = "DESELECT",
+  // DESELECT = "DESELECT",
 }
 
 export interface IStageTool extends EventTarget {

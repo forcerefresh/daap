@@ -638,7 +638,7 @@ function processMoveChangeEvent(
   // );
   // // <<<<<<<<<<<<<<<<
 
-  removeCornerMarkers(objectById[selectedObjectIds[0]]?.parentId);
+  removeCornerMarkers(objectById[selectedObjectIds[0]]?.parentId ?? ""); // TODO: check ""
 
   let parentGroup: IObject;
   let parentLayer: ILayer;
@@ -869,81 +869,81 @@ function processMoveStopEvent(
 
   objectToUpdate.forEach((object) => _updateObject(cloneDeep(object)));
   _updateObject(cloneDeep(parentGroup));
-  return;
+  // return;
 
-  if (parentGroup) {
-    const { group, objects } = normalizeGroup(parentGroup, objectToUpdateById, {
-      breakpointConfig,
-      objectById,
-    });
+  // if (parentGroup) {
+  //   const { group, objects } = normalizeGroup(parentGroup, objectToUpdateById, {
+  //     breakpointConfig,
+  //     objectById,
+  //   });
 
-    objects.forEach((object) => _updateObject(cloneDeep(object)));
-    _updateObject(cloneDeep(group));
+  //   objects.forEach((object) => _updateObject(cloneDeep(object)));
+  //   _updateObject(cloneDeep(group));
 
-    return;
-    const groupRotation = parentGroup.rotation;
+  //   return;
+  //   const groupRotation = parentGroup.rotation;
 
-    const groupObjectsToUpdate =
-      parentGroup.objectIds?.map((objectId) => {
-        return objectToUpdateById[objectId] ?? cloneDeep(objectById[objectId]);
-      }) ?? [];
-    //1. "UNGROUP"
-    calc = getUngroupObjectsCalculation({
-      group: { ...parentGroup }, //, rotation: 0 },
-      objects: groupObjectsToUpdate,
-      breakpointConfig: breakpointConfig!,
-      parentLayer: getLayerIdRec(objectById, parentGroup.id),
-    });
+  //   const groupObjectsToUpdate =
+  //     parentGroup.objectIds?.map((objectId) => {
+  //       return objectToUpdateById[objectId] ?? cloneDeep(objectById[objectId]);
+  //     }) ?? [];
+  //   //1. "UNGROUP"
+  //   calc = getUngroupObjectsCalculation({
+  //     group: { ...parentGroup }, //, rotation: 0 },
+  //     objects: groupObjectsToUpdate,
+  //     breakpointConfig: breakpointConfig!,
+  //     parentLayer: getLayerIdRec(objectById, parentGroup.id),
+  //   });
 
-    groupObjectsToUpdate.forEach((object: IObject) => {
-      object.absoluteLayout!.common.left = calc[object.id].left + "px";
-      object.absoluteLayout!.common.top = calc[object.id].top + "px";
-      object.rotation = calc[object.id].rotation;
-      object.scale = calc[object.id].scale;
-    });
+  //   groupObjectsToUpdate.forEach((object: IObject) => {
+  //     object.absoluteLayout!.common.left = calc[object.id].left + "px";
+  //     object.absoluteLayout!.common.top = calc[object.id].top + "px";
+  //     object.rotation = calc[object.id].rotation;
+  //     object.scale = calc[object.id].scale;
+  //   });
 
-    //2. "GROUP"
-    const firstObject = groupObjectsToUpdate[0];
+  //   //2. "GROUP"
+  //   const firstObject = groupObjectsToUpdate[0];
 
-    // get group bounds (TODO: duplicate)
-    let groupBounds = getObjectBoundingBox(firstObject);
-    groupObjectsToUpdate.forEach((object) => {
-      const bounds = getObjectBoundingBox(object);
-      groupBounds = boundsUnion(groupBounds, bounds);
-    });
+  //   // get group bounds (TODO: duplicate)
+  //   let groupBounds = getObjectBoundingBox(firstObject);
+  //   groupObjectsToUpdate.forEach((object) => {
+  //     const bounds = getObjectBoundingBox(object);
+  //     groupBounds = boundsUnion(groupBounds, bounds);
+  //   });
 
-    console.log(prevBounds);
-    console.log(groupBounds);
+  //   console.log(prevBounds);
+  //   console.log(groupBounds);
 
-    //const objects: IObject[] = [];
-    //  normalize object pos
-    groupObjectsToUpdate.forEach((object) => {
-      object.absoluteLayout!.common.top =
-        parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
-      object.absoluteLayout!.common.left =
-        parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
+  //   //const objects: IObject[] = [];
+  //   //  normalize object pos
+  //   groupObjectsToUpdate.forEach((object) => {
+  //     object.absoluteLayout!.common.top =
+  //       parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
+  //     object.absoluteLayout!.common.left =
+  //       parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
 
-      _updateObject(object);
-    });
+  //     _updateObject(object);
+  //   });
 
-    const parentGroupClone = cloneDeep(parentGroup);
+  //   const parentGroupClone = cloneDeep(parentGroup);
 
-    parentGroupClone.absoluteLayout!.common.left = groupBounds.x + "px";
-    parentGroupClone.absoluteLayout!.common.top = groupBounds.y + "px";
-    parentGroupClone.absoluteLayout!.common.width = groupBounds.width + "px";
-    parentGroupClone.absoluteLayout!.common.height = groupBounds.height + "px";
-    parentGroupClone.rotation = 0; //groupRotation;
-    parentGroupClone.scale = 1; //groupRotation;
+  //   parentGroupClone.absoluteLayout!.common.left = groupBounds.x + "px";
+  //   parentGroupClone.absoluteLayout!.common.top = groupBounds.y + "px";
+  //   parentGroupClone.absoluteLayout!.common.width = groupBounds.width + "px";
+  //   parentGroupClone.absoluteLayout!.common.height = groupBounds.height + "px";
+  //   parentGroupClone.rotation = 0; //groupRotation;
+  //   parentGroupClone.scale = 1; //groupRotation;
 
-    //parentGroupClone.rotation = groupRotation;
-    _updateObject(parentGroupClone);
+  //   //parentGroupClone.rotation = groupRotation;
+  //   _updateObject(parentGroupClone);
 
-    // +++++
-  } else {
-    objectToUpdate.forEach((object) => {
-      _updateObject(object);
-    });
-  }
+  //   // +++++
+  // } else {
+  //   objectToUpdate.forEach((object) => {
+  //     _updateObject(object);
+  //   });
+  // }
 }
 
 // ++++++++++++++++++=
@@ -1500,7 +1500,7 @@ export function degrees_to_radians(degrees: number) {
   return degrees * (pi / 180);
 }
 
-export function getLayerIdRec(objectsById: any, id: string) {
+export function getLayerIdRec(objectsById: any, id: string): string {
   if (objectsById[id].layerId) return objectsById[id].layerId;
 
   return getLayerIdRec(objectsById, objectsById[id].parentId);
