@@ -1,141 +1,117 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useLayoutEffect } from "react";
+import { Link, Navigate } from "react-router-dom";
+import cx from "classnames";
 
-export default function Login() {
+import { useFormik } from "formik";
+
+import { compose } from "redux";
+import { connect } from "react-redux";
+import _ from "lodash";
+
+// import { loginUserWithEmail } from "../../store/actions/authActions";
+import { FACEBOOK_AUTH_LINK, GOOGLE_AUTH_LINK } from "./constants";
+import { loginSchema } from "./validation";
+import css from "./Login.module.scss";
+import { IStore } from "../../store/store";
+import { ReactComponent as GoogleIcon } from "../assets/google-logo.svg";
+import { ReactComponent as FacebookIcon } from "../assets/facebook-logo.svg";
+import { ReactComponent as EmailIcon } from "../assets/email-icon.svg";
+
+import { Button, FormGroup, Icon, InputGroup } from "@blueprintjs/core";
+
+interface ILoginProps {}
+
+export type IAlignPanelMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  ILoginProps;
+
+const Login: React.FC<IAlignPanelMergedProps> = (props) => {
+  const { theme } = props;
+
+  useLayoutEffect(() => {
+    document.body.className = `bp5-${theme}`;
+  }, [theme]);
+
+  const formik = useFormik({
+    initialValues: {
+      email: "",
+      password: "",
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      // loginUserWithEmail(values, history);
+    },
+  });
+
+  //if (auth.isAuthenticated) return <Redirect to="/" />;
+
   return (
-    <>
-      <div id="page" className="page font--jakarta">
-        {/* LOGIN PAGE
-============================================= */}
-        <div id="login" className="bg--scroll login-section division">
-          <div className="container">
-            <div className="row justify-content-center">
-              {/* REGISTER PAGE WRAPPER */}
-              <div className="col-lg-11">
-                <div className="register-page-wrapper r-16 bg--fixed">
-                  <div className="row">
-                    {/* LOGIN PAGE TEXT */}
-                    <div className="col-md-6">
-                      <div className="register-page-txt color--white">
-                        {/* Logo */}
-                        <img
-                          className="img-fluid"
-                          src="/images/logo-white.png"
-                          alt="daap-logo"
-                        />
-                        {/* Title */}
-                        <h2 className="s-42 w-700">Welcome</h2>
-                        <h2 className="s-42 w-700">back to DAAP</h2>
-                        {/* Text */}
-                        <p className="p-md mt-25">
-                          Integer congue sagittis and velna augue egestas magna
-                          suscipit purus aliquam
-                        </p>
-                        {/* Copyright */}
-                        <div className="register-page-copyright">
-                          <p className="p-sm">
-                            © 2023 Martex. <span>All Rights Reserved</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>{" "}
-                    {/* END LOGIN PAGE TEXT */}
-                    {/* LOGIN FORM */}
-                    <div className="col-md-6">
-                      <div className="register-page-form">
-                        <form name="signinform" className="row sign-in-form">
-                          {/* Google Button */}
-                          <div className="col-md-12">
-                            <a
-                              href="/api/auth/google"
-                              className="btn btn-google ico-left"
-                            >
-                              <img
-                                src="/images/png_icons/google.png"
-                                alt="google-icon"
-                              />{" "}
-                              Sign in with Google
-                            </a>
-                          </div>
-                          {/* Login Separator */}
-                          <div className="col-md-12 text-center">
-                            <div className="separator-line">
-                              Or, sign in with your emai
-                            </div>
-                          </div>
-                          {/* Form Input */}
-                          <div className="col-md-12">
-                            <p className="p-sm input-header">Email address</p>
-                            <input
-                              className="form-control email"
-                              type="email"
-                              name="email"
-                              placeholder="example@example.com"
-                            />
-                          </div>
-                          {/* Form Input */}
-                          <div className="col-md-12">
-                            <p className="p-sm input-header">Password</p>
-                            <div className="wrap-input">
-                              <span className="btn-show-pass ico-20">
-                                <span className="flaticon-visibility eye-pass" />
-                              </span>
-                              <input
-                                className="form-control password"
-                                type="password"
-                                name="password"
-                                placeholder="* * * * * * * * *"
-                              />
-                            </div>
-                          </div>
-                          {/* Reset Password Link */}
-                          <div className="col-md-12">
-                            <div className="reset-password-link">
-                              <p className="p-sm">
-                                <Link
-                                  to="/reset-password"
-                                  className="color--theme"
-                                >
-                                  Forgot your password?
-                                </Link>
-                              </p>
-                            </div>
-                          </div>
-                          {/* Form Submit Button */}
-                          <div className="col-md-12">
-                            <button
-                              type="submit"
-                              className="btn btn--theme hover--theme submit"
-                            >
-                              Log In
-                            </button>
-                          </div>
-                          {/* Sign Up Link */}
-                          <div className="col-md-12">
-                            <p className="create-account text-center">
-                              Don't have an account?{" "}
-                              <Link to="/signup" className="color--theme">
-                                Sign up
-                              </Link>
-                            </p>
-                          </div>
-                        </form>
-                      </div>
-                    </div>{" "}
-                    {/* END LOGIN FORM */}
-                  </div>{" "}
-                  {/* End row */}
-                </div>{" "}
-                {/* End register-page-wrapper */}
-              </div>{" "}
-              {/* END REGISTER PAGE WRAPPER */}
-            </div>{" "}
-            {/* End row */}
-          </div>{" "}
-          {/* End container */}
-        </div>{" "}
-        {/* END LOGIN PAGE */}
+    <div className={css.login}>
+      <div className={css.container}>
+        <h1>Log in</h1>
+        <p>Log in and start creating!</p>
+        <form onSubmit={formik.handleSubmit} className={css.form}>
+          {/* <a className={cx(css.google, css.btn)} href={GOOGLE_AUTH_LINK}>
+            <GoogleIcon width={30} height={30} /> Continue with Google
+          </a> */}
+          <a href={GOOGLE_AUTH_LINK} className={css.buttonAnchor}>
+            <Button className={cx(css.google, css.btn)}>
+              <GoogleIcon width={30} height={30} /> Continue with Google
+            </Button>
+          </a>
+
+          <a href={FACEBOOK_AUTH_LINK} className={css.buttonAnchor}>
+            <Button className={cx(css.fb, css.btn)}>
+              <FacebookIcon width={30} height={30} /> Continue with Facebook
+            </Button>
+          </a>
+          <h2>or</h2>
+          <FormGroup
+            // label={"YOU EMAIL"}
+            labelFor={"you_email_input"}
+            // inline
+            // helperText={underFieldText}
+          >
+            <InputGroup
+              large
+              id={"you_email_input"}
+              placeholder="Enter you email address"
+              // value={value}
+              // intent={!!externalError ? Intent.WARNING : Intent.NONE}
+              // onChange={(event: any) => onChange(event.target.value)}
+              // onInput={(event: any) => onInput(event.target.value)}
+              // {...inputProps}
+            />
+          </FormGroup>
+
+          <div className={css.buttonAnchor}>
+            <Button className={cx(css.email, css.btn)}>
+              <EmailIcon width={28} height={28} /> Send Me Login Link
+            </Button>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
-}
+};
+
+// const mapStateToProps = (state) => ({
+//   auth: state.auth,
+//   errors: state.errors,
+// });
+
+// export default compose(
+//   withRouter,
+//   connect(mapStateToProps, { loginUserWithEmail })
+// )(Login);
+
+const mapStateToProps = (state: IStore) => {
+  const { settings } = state.project;
+  return {
+    theme: settings.theme,
+  };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

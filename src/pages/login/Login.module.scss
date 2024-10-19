@@ -1,0 +1,97 @@
+@import "../../theme.scss";
+
+.login {
+  //   background: $pt-dark-app-background-color;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+
+  padding-bottom: 20px;
+
+  :global {
+    .bp5-form-group {
+      width: 100%;
+    }
+  }
+}
+
+.container {
+  max-width: 300px;
+  flex: 1;
+}
+
+.fb {
+  background-color: #3b5998 !important;
+  color: white !important;
+  // display: block;
+  // text-align: center;
+}
+
+.email {
+  background-color: #2e9630 !important;
+  color: white !important;
+}
+
+.google {
+  background-color: white !important; // #dd4b39 !important;
+  color: black !important;
+  display: block;
+  text-align: center;
+}
+
+.loginText {
+  display: inline-block;
+  min-width: 250px;
+}
+
+.logins {
+  margin: 5px 0;
+}
+
+.buttonAnchor {
+  display: flex;
+  width: 100%;
+  text-decoration: none !important;
+}
+
+.btn {
+  width: 100%;
+  display: block;
+  // align-items: center;
+  // justify-content: center;
+  margin-top: 30px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  margin: 10px 0;
+  font-size: 17px;
+  line-height: 20px;
+  text-decoration: none;
+  box-sizing: border-box;
+  background-color: lightgray;
+
+  :global {
+    svg {
+      margin-right: 10px;
+    }
+    .bp5-button-text {
+      display: flex;
+      // justify-content: center;
+      align-items: center;
+    }
+  }
+  > svg {
+    margin-right: 10px;
+  }
+}
+
+.btn:hover {
+  opacity: 1;
+}
+
+.form {
+  // width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

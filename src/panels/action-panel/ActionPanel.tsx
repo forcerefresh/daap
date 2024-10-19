@@ -188,7 +188,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   return (
     <div className={css.actionPanel}>
       {/* <div className={css.\}> */}
-      {/* <PanelHeader>
+      <PanelHeader>
         <div style={{ display: "flex" }}>
           SLIDER
           <span className={cx(css.sliderName)}>
@@ -202,7 +202,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
             _setTheme(evt.currentTarget.checked ? "dark" : "light");
           }}
         />
-      </PanelHeader> */}
+      </PanelHeader>
       {/* </div> */}
       <div className={css.actionButtons}>
         {false && (

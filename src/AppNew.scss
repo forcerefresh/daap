@@ -66,3 +66,25 @@ body {
 .bp5-dark .bp5-popover .bp5-popover-content {
   background-color: #333333;
 }
+
+.bp5-dialog,
+.bp5-dialog {
+  background-color: $pt-app-background-color;
+}
+
+.bp5-dialog.bp5-dark,
+.bp5-dark .bp5-dialog {
+  background-color: $pt-dark-app-background-color;
+}
+
+.bp5-dark .bp5-overlay-backdrop {
+  background-color: rgba(17, 20, 24, 0.5) !important;
+}
+
+.bp5-dark .bp5-menu {
+  background: $pt-dark-app-background-color-secondary;
+}
+
+.bp5-menu {
+  background: $pt-app-background-color-secondary;
+}

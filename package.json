@@ -70,6 +70,7 @@
     "events": "^3.3.0",
     "express": "^4.18.2",
     "fit-curve": "^0.2.0",
+    "formik": "^2.4.6",
     "fs-extra": "^11.1.0",
     "gsap": "file:gsap-bonus.tgz",
     "gulp-replace": "^1.1.3",
@@ -114,10 +115,10 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^1.1.131",
+    "webslider-sdk": "^1.1.132",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
-    "yup": "^0.32.11"
+    "yup": "^1.4.0"
   },
   "resolutions": {
     "@types/react": "^16.9.52"

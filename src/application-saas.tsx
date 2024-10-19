@@ -30,13 +30,11 @@ const global = window as any;
 const Editor = (
   <DevelopmentContextProvider>
     <IntegrationContextProvider>
-      <Provider store={store}>
-        <DevelopmentManager />
-        <PreviewTimelineContextProvider>
-          <MainHeader className={css.mainHeader} />
-          <App className={css.editor} />
-        </PreviewTimelineContextProvider>
-      </Provider>
+      <DevelopmentManager />
+      <PreviewTimelineContextProvider>
+        <MainHeader className={css.mainHeader} />
+        <App className={css.editor} />
+      </PreviewTimelineContextProvider>
     </IntegrationContextProvider>
   </DevelopmentContextProvider>
 );
@@ -48,14 +46,16 @@ function application(): {
   return {
     component: (
       <React.StrictMode>
-        <HotkeysProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="login" element={<Login />} />
-              <Route index element={Editor} />
-            </Routes>
-          </BrowserRouter>
-        </HotkeysProvider>
+        <Provider store={store}>
+          <HotkeysProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="login" element={<Login />} />
+                <Route index element={Editor} />
+              </Routes>
+            </BrowserRouter>
+          </HotkeysProvider>
+        </Provider>
       </React.StrictMode>
     ),
     useAppRootSelector: useAppRootSelector,
