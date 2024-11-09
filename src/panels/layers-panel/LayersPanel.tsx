@@ -55,6 +55,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     activeObjectId,
     selectedLayerIds,
     selectedObjectIds,
+    layerById,
     //layoutStaticAnimationsPanel,
     breakpointsConfiguration,
     selectionForProperties,
@@ -222,13 +223,18 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
         text="Delete selected Layers"
         disabled={selectedLayerIds.length === 0}
         onClick={() => {
+          const layersNames = selectedLayerIds.map(
+            (layerId) => layerById[layerId].name
+          );
           _deleteLayersThree(selectedLayerIds);
           AppToaster.show({
             intent: "warning",
             message:
               selectedLayerIds.length === 1
-                ? "Layer has been deleted."
-                : "Multiple layers has been deleted.",
+                ? "Layer '" + layersNames[0] + "' has been deleted."
+                : "Multiple layers '" +
+                  layersNames.join(", ") +
+                  "' has been deleted.",
           });
         }}
       />
@@ -309,13 +315,18 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                   selectedLayerIds={selectedLayerIds}
                   updateLayer={_updateLayer}
                   deleteLayers={(layerIds) => {
+                    const layersNames = layerIds.map(
+                      (layerId) => layerById[layerId].name
+                    );
                     _deleteLayersThree(layerIds);
                     AppToaster.show({
                       intent: "warning",
                       message:
                         layerIds.length === 1
-                          ? "Layer has been deleted."
-                          : "Multiple layers has been deleted.",
+                          ? "Layer '" + layersNames[0] + "' has been deleted."
+                          : "Multiple layers '" +
+                            layersNames.join(", ") +
+                            "' has been deleted.",
                     });
                   }}
                   onLayerClick={onLayerClick}
@@ -457,6 +468,7 @@ const mapStateToProps = (state: IStore) => {
     layerArr,
     slide,
     objectById: objects.objectById,
+    layerById: layers.layerById,
     activeSlideId: selection.activeSlideId,
     activeLayerId: selection.activeLayerId,
     activeObjectId: selection.activeObjectId,

@@ -156,6 +156,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     _pasteObjectsFromClipboard,
   } = props;
 
+  const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
+  const [manualProgress, setManualProgress] = useState(0);
+
+  const isPreview = previewState.isPreview;
+
   const groupingAllowed = selectedObjectIds.length > 1;
   const ungroupingAllowed =
     selectedObjectIds.length === 1 &&
@@ -333,6 +338,43 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   //   }
   // };
 
+  // -------- PLAYER >>
+  // generate data for player
+  let exportData: IPlayerData | null = null;
+  let projectTimelineData: ProjectTimelineData | null = null;
+  if (previewState.isPreview) {
+    exportData = generatePlayerData(
+      { slides, layers, objects },
+      previewState.scope,
+      //stageSize,
+      breakpointConfig!,
+      breakpoints,
+      settings,
+      undefined,
+      { isSave: false }
+    );
+
+    //let totalDuration = 0;
+    const slideTimelineDataArr: SlideTimelineData[] = exportData.slides.map(
+      (slideData) => {
+        return {
+          duration: convertTimeUnitToMs(
+            slideData.slide.duration.customValue || "0ms"
+          ),
+          transitionDuration: slideData.slide.transitionEnabled
+            ? slideData.slide.transitionDurationTime
+            : 0,
+          transitionOverlap: slideData.slide.transitionEnabled
+            ? slideData.slide.transitionOverlapTime
+            : 0,
+        };
+      }
+    );
+
+    projectTimelineData = { slides: slideTimelineDataArr };
+  }
+
+  // -------- PLAYER <<
   const { height: windowHeight, width: windowWidth } = useWindowSize();
   useEffect(() => {
     if (rootRef.current) {
@@ -609,9 +651,23 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
               ></div> */}
             {/* class not set */}
             <div style={canvasStyle} className={css.canvas}>
-              {layerArr?.map((layer) => (
-                <StageLayer key={layer.id} layer={layer} />
-              ))}
+              {isPreview && (
+                <AppPlayer
+                  selectedDevice={selectedDevice}
+                  customBPWidth={customBPWidth}
+                  playerData={exportData}
+                  previewState={previewState}
+                  manualProgress={manualProgress}
+                  requestStop={() => {
+                    _setStagePreview({ previewState: "stop", scope: null });
+                  }}
+                />
+              )}
+
+              {!isPreview &&
+                layerArr?.map((layer) => (
+                  <StageLayer key={layer.id} layer={layer} />
+                ))}
             </div>
             {/* class not set */}
             <div

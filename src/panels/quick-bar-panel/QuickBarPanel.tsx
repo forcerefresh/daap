@@ -20,6 +20,7 @@ import {
   addNewObject,
   deleteObjects,
   groupObjects,
+  showSimplifiedLayers,
   ungroupObject,
 } from "../../store/actions/actions";
 import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
@@ -51,6 +52,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     _ungroupObject,
     objectById,
     _deleteObjects,
+    _showSimplifiedLayers,
+    showSimplifiedLayers,
   } = props;
   const {
     toolConfig,
@@ -301,7 +304,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           </Popover>
         </div>
 
-        <div>
+        {/* <div>
           <Button
             className={cx(css.button, css.squareButton)}
             minimal
@@ -311,8 +314,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             disabled={selectedObjectIds.length < 1}
             icon={"trash"}
           ></Button>
-        </div>
+        </div> */}
+
         <Divider />
+
         {/* <div>
           <Button
             className={cx(css.button, css.squareButton)}
@@ -335,11 +340,13 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
 
         <div>
           <Button
-            active={true}
+            active={showSimplifiedLayers}
             className={cx(css.button, css.squareButton)}
             minimal
-            onClick={() => {}}
-            disabled={selectedObjectIds.length < 1}
+            onClick={() => {
+              _showSimplifiedLayers(!showSimplifiedLayers);
+            }}
+            //disabled={selectedObjectIds.length < 1}
             icon={"list"}
           ></Button>
         </div>
@@ -400,6 +407,7 @@ const mapStateToProps = (state: IStore) => {
     activeObject,
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
+    showSimplifiedLayers: state.stage.showSimplifiedLayerPanel,
   };
 };
 
@@ -414,6 +422,7 @@ const mapDispatchToProps = {
 
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
+  _showSimplifiedLayers: (show: boolean) => showSimplifiedLayers(show),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

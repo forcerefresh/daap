@@ -9,6 +9,7 @@ import { ObjectStorage } from "../object-storage/ObjectStorage";
 import { IntegrationContext } from "../../integration";
 import AppSettingsPanel from "../app-settings-panel/AppSettingsPanel";
 import LicenseSettingsPanel from "../license-settings-panel/LicenseSettingsPanel";
+import AccountSettingsPanel from "../account-settings-panel/AccountSettingsPanel";
 
 interface ISettingsPanelProps {
   onRequestClose: () => void;
@@ -16,27 +17,31 @@ interface ISettingsPanelProps {
 
 export type ISettingsPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
-  ISettingsPanelProps;
+  ISettingsPanelProps & { defaultSelectedTabId?: string };
 
-const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
+const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
+  defaultSelectedTabId = "project",
+}) => {
   const globalContext = useContext(IntegrationContext);
   const { supportStorageObjects } = globalContext.useObjectStorageHook();
   //const { getLicenseDetails } = globalContext.useLicenseHook();
 
-  const [defaultSelectedTabId, setDefaultSelectedTabId] = useState("project");
-  // useEffect(() => {
-  //   getLicenseDetails().then((data) => {
-  //     if (data?.status === "OK" || data?.status === "EXPIRED") {
-  //       setDefaultSelectedTabId("project");
-  //     } else {
-  //       setDefaultSelectedTabId("license");
-  //     }
-  //   });
-  // }, []);
+  // const [defaultSelectedTabId, setDefaultSelectedTabId] = useState("project");
+  useEffect(() => {
+    // getLicenseDetails().then((data) => {
+    //   if (data?.status === "OK" || data?.status === "EXPIRED") {
+    //     setDefaultSelectedTabId("project");
+    //   } else {
+    //     setDefaultSelectedTabId("license");
+    //   }
+    // });
+    // setDefaultSelectedTabId();
+  }, []);
 
-  if (!defaultSelectedTabId) {
-    return null;
-  }
+  // if (!defaultSelectedTabId) {
+  //   return null;
+  // }
+
   return (
     <div className={cx("bp5-dark", css.settingsPanel)}>
       <div>
@@ -51,6 +56,7 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = (props) => {
             />
           )}
           <Tab id="license" title="License" panel={<LicenseSettingsPanel />} />
+          <Tab id="account" title="Account" panel={<AccountSettingsPanel />} />
 
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}

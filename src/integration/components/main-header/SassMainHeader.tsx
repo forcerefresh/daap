@@ -1,29 +1,33 @@
 import React, { useEffect, useState } from "react";
+import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import cx from "classnames";
 import axios from "axios";
 import {
   Button,
+  ButtonGroup,
   Dialog,
   DialogBody,
+  Divider,
   Icon,
   Menu,
   MenuDivider,
   MenuItem,
   Popover,
-  Text,
+  Portal,
+  Tag,
 } from "@blueprintjs/core";
 import { ReactComponent as DaapLogo } from "./daap-logo.svg";
-
-import css from "./SassMainHeader.module.scss";
 import { IStore } from "../../../store/store";
 import { ITheme } from "../../../store/reducers/i-settings";
 import { setTheme, updateProjectMeta } from "../../../store/actions/actions";
 import { connect } from "react-redux";
 import { IMeta } from "../../../store/reducers/meta";
 import EditableText from "../../../utils/components/editable-text/editable-text";
-import { Link } from "react-router-dom";
 import Login from "../../../pages/login/Login";
 import { AUTH_LOGOUT } from "../../../pages/login/constants";
+import css from "./SassMainHeader.module.scss";
+import { ReactComponent as LibraryIcon } from "../../../panels/toolbar-panel/assets/library-icon.svg";
+import { ReactComponent as AddObjectIcon } from "../../../panels/toolbar-panel/assets/add-object-icon.svg";
 
 type IMainHeader = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -31,103 +35,112 @@ type IMainHeader = typeof mapDispatchToProps &
   };
 
 const MainHeader = (props: IMainHeader) => {
-  const { className, _setTheme, settings, meta, _updateProjectMeta, theme } =
+  const { className, _setTheme, meta, _updateProjectMeta, theme, account } =
     props;
 
-  const [meData, setMeData] = useState<{
-    loading?: boolean;
-    data?: any;
-    error?: string;
-    errorMessage?: string;
-  }>({});
+  // const [meData, setMeData] = useState<{
+  //   loading?: boolean;
+  //   data?: any;
+  //   error?: string;
+  //   errorMessage?: string;
+  // }>({});
 
-  // const [height, setHeight] = useState(100);
   const [loginOpen, setLoginOpen] = useState(false);
-
-  useEffect(() => {
-    axios
-      .get("/api/me")
-      .then(function (response) {
-        if (response?.data?.error) {
-          setMeData({
-            data: null,
-            ...(response?.data ? response?.data : {}),
-            loading: false,
-          });
-        } else {
-          setMeData({
-            data: response?.data,
-            error: undefined,
-            errorMessage: undefined,
-            loading: false,
-          });
-        }
-
-        // handle success
-        console.log(response);
-      })
-      .catch(function (error) {
-        setMeData({ loading: false, data: undefined, error: "Error" });
-        console.log(error);
-      });
-  }, []);
 
   return (
     <>
-      <div
-        className={cx(css.mainHeader, className)}
-        // style={{ height: height + "px" }}
-      >
+      <div className={cx(css.mainHeader, className)}>
         <div className={css.left}>
           <DaapLogo className={css.logo} />
+          <div className={css.leftActionHolder}>
+            <div>
+              <ButtonGroup minimal={true}>
+                <Button
+                  minimal
+                  large
+                  className={css.largeButton}
+                  icon={<LibraryIcon width={25} height={25} />}
+                  //active={showPanel === VisiblePanel.ProjectsLibrary}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_PROJECTS");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  {/* {missingExtensions?.length > 0 && (
+                  <Tag intent={"danger"} round className={css.buttonTag}>
+                    {missingExtensions.length}
+                  </Tag>
+                )} */}
+                  Projects
+                </Button>
+
+                <Divider dir="horizontal" />
+
+                <Portal>
+                  <></>
+                  {/* {showPanel === VisiblePanel.ProjectsLibrary && (
+                  <div ref={sharedRef}>
+                    <ProjectsLibraryPanel
+                      onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                    />
+                  </div>
+                )} */}
+                </Portal>
+              </ButtonGroup>
+            </div>
+
+            <Button
+              minimal
+              large
+              // rightIcon="caret-down"
+              style={{ marginRight: "20px" }}
+              icon={<AddObjectIcon width={25} height={25} />}
+            >
+              Create
+            </Button>
+          </div>
         </div>
         <div className={css.center}>
-          <EditableText
+          {/* <EditableText
             value={meta.name ?? ""}
             onChange={(value) => {
               _updateProjectMeta({ ...meta, name: value });
             }}
           />
-          <Icon icon="cloud-tick" className={css.title} />
+          <Icon icon="cloud-tick" className={css.title} /> */}
         </div>
         <div className={css.right}>
-          {/* <div className={css.themeHolder}>
-           <Text className={css.themeLabel}>Theme</Text>
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <Icon icon="moon" />
-            <Switch
-              style={{ margin: "0px" }}
-              checked={settings.theme === "light"}
-              onChange={(evt: SyntheticEvent<HTMLInputElement>) => {
-                _setTheme(evt.currentTarget.checked ? "light" : "dark");
-              }}
-            />
-            <Icon icon="flash" />
+          <div className={css.rightActionsHolder}>
+            <ButtonGroup minimal={true}>
+              <div className={css.projectNameHolder}>
+                <EditableText
+                  value={meta.name ?? ""}
+                  onChange={(value) => {
+                    _updateProjectMeta({ ...meta, name: value });
+                  }}
+                />
+                <Icon icon="cloud-tick" className={css.inlineIcon} />
+                {/* cloud-upload / cloud */}
+              </div>
+              {/* <Divider /> */}
+              <Button large intent="none" className={css.downloadBtn}>
+                Download
+              </Button>
+            </ButtonGroup>
           </div>
-        </div> */}
-          <Button
-            minimal
-            large
-            rightIcon="caret-down"
-            style={{ marginRight: "20px" }}
-          >
-            Create
-          </Button>
-          <Button large icon="download">
-            Download
-          </Button>
-          {/* <Link to={"/login"}> */}
-          {meData.loading || !meData.data?.userData?.username ? (
+          {account.userDataLoading ||
+          typeof account.userData?.displayName === "undefined" ? (
             <Button
               large
               intent="primary"
               icon="person"
-              loading={meData.loading}
+              loading={account.userDataLoading}
+              style={{ marginRight: "0px" }}
               onClick={() => {
                 setLoginOpen(true);
               }}
             >
-              {meData.loading ? "Loading..." : "Sign in"}
+              {account.userDataLoading ? "Loading..." : "Log in"}
             </Button>
           ) : (
             <Popover
@@ -135,26 +148,40 @@ const MainHeader = (props: IMainHeader) => {
               className="bp5-light"
               content={
                 <Menu className={css.contextMenu}>
-                  <MenuItem text="Theme" icon="contrast">
-                    <MenuItem
-                      text="Dark"
-                      icon="moon"
-                      labelElement={
-                        <Icon icon={theme === "dark" ? "tick" : undefined} />
-                      }
-                      onClick={() => {
-                        _setTheme("dark");
-                      }}
-                    />
-                    <MenuItem
-                      text="Light"
-                      icon="flash"
-                      labelElement={theme === "light" ? "tick" : undefined}
-                      onClick={() => {
-                        _setTheme("light");
-                      }}
-                    />
-                  </MenuItem>
+                  <MenuDivider title="Account" />
+                  <MenuItem
+                    text="Settings"
+                    icon="cog"
+                    // labelElement={
+                    //   <Icon icon={theme === "dark" ? "tick" : undefined} />
+                    // }
+                    onClick={() => {
+                      const event = new CustomEvent("OPEN_ACCOUNT_SETTINGS");
+                      window.dispatchEvent(event);
+                    }}
+                  />
+                  <MenuDivider title="Theme" />
+                  <MenuItem
+                    text="Dark"
+                    icon="moon"
+                    labelElement={
+                      <Icon icon={theme === "dark" ? "tick" : undefined} />
+                    }
+                    onClick={() => {
+                      _setTheme("dark");
+                    }}
+                  />
+                  <MenuItem
+                    text="Light"
+                    icon="flash"
+                    labelElement={
+                      <Icon icon={theme === "light" ? "tick" : undefined} />
+                    }
+                    onClick={() => {
+                      _setTheme("light");
+                    }}
+                  />
+                  {/* </MenuItem> */}
 
                   <MenuDivider />
 
@@ -164,8 +191,26 @@ const MainHeader = (props: IMainHeader) => {
                 </Menu>
               }
             >
-              <Button large intent="primary" icon="person">
-                {meData.data?.userData?.username}
+              <Button
+                large
+                minimal
+                rightIcon="caret-down"
+                style={{ marginRight: "0px" }}
+                icon={
+                  account.userData?.profilePicture ? (
+                    <img
+                      style={{ borderRadius: "50%" }}
+                      width="30"
+                      height="30"
+                      alt="Profile avatar"
+                      src={account.userData?.profilePicture}
+                    />
+                  ) : (
+                    "person"
+                  )
+                }
+              >
+                {account.userData?.displayName}
               </Button>
             </Popover>
           )}
@@ -185,7 +230,11 @@ const MainHeader = (props: IMainHeader) => {
         //   footerStyle === "minimal" ? false : undefined
         // }
         >
-          <Login />
+          <GoogleReCaptchaProvider
+            reCaptchaKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+          >
+            <Login />
+          </GoogleReCaptchaProvider>
         </DialogBody>
 
         {/* {footerStyle === "default" && (
@@ -204,6 +253,7 @@ const mapStateToProps = (state: IStore) => ({
   settings: state.project.settings,
   meta: state.meta,
   theme: state.project.settings.theme,
+  account: state.account,
 });
 
 const mapDispatchToProps = {

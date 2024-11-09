@@ -8,12 +8,14 @@ import Editor from "./pages/editor/Editor";
 import {
   doClearHistory,
   initializeSlideAndLayer,
+  loadUserData,
   updateGlobalConfiguration,
 } from "./store/actions/actions";
 import { IStore } from "./store/store";
 
 import gsap from "gsap";
 import animejs from "animejs";
+import { AppToaster } from "./utils/components/app-toaster/AppToaster";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -26,6 +28,7 @@ function App(props: IAppProps) {
     _initializeSlideAndLayer,
     _updateGlobalConfiguration,
     _doClearHistory,
+    _loadUserData,
     theme,
     className,
   } = props;
@@ -57,6 +60,8 @@ function App(props: IAppProps) {
         scaleUI(settings.appZoom);
       }
     });
+
+    _loadUserData();
   }, []);
 
   // disable pinch
@@ -66,12 +71,26 @@ function App(props: IAppProps) {
       (e) => {
         if ((e.target as Element).closest(".no-custom-cursor")) {
         } else if ((e.target as Element).closest(".layout-content-area")) {
-          console.log("SSSSSSS");
           e.preventDefault();
         }
       },
       { passive: false }
     );
+  }, []);
+
+  // global errors
+  useEffect(() => {
+    const globalErrorCallback = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      AppToaster.show({
+        intent: "warning",
+        message: customEvent.detail.message,
+      });
+    };
+
+    window.addEventListener("GLOBAL_ERROR", globalErrorCallback);
+    return () =>
+      window.removeEventListener("GLOBAL_ERROR", globalErrorCallback);
   }, []);
 
   useLayoutEffect(() => {
@@ -100,6 +119,7 @@ const mapDispatchToProps = {
   _initializeSlideAndLayer: initializeSlideAndLayer,
   _updateGlobalConfiguration: updateGlobalConfiguration,
   _doClearHistory: () => doClearHistory(),
+  _loadUserData: () => loadUserData(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

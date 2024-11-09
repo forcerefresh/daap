@@ -29,7 +29,7 @@ function Editor() {
               <PropertiesPanelAll />
             </PropertiesPanelContextProvider>
           }
-          // action={<ActionPanel />}
+          action={<ActionPanel />}
           toolbar={<ToolbarPanel />}
           content={<StagePanelNewWrapper />}
           animations={<StaticAnimationPanel />}

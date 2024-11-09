@@ -26,6 +26,7 @@ import { IUIForms, uiforms } from "./reducers/uiforms";
 import { ISettings } from "./reducers/i-settings";
 import { IClipboard } from "./reducers/i-clipboard";
 import { clipboard } from "./reducers/clipboard";
+import { account, IAccount } from "./reducers/account";
 
 export interface IStore {
   project: {
@@ -41,6 +42,7 @@ export interface IStore {
       next: any[];
     };
   };
+  account: IAccount;
   editor: IEditor;
   meta: IMeta;
   stage: IStage;
@@ -80,6 +82,7 @@ const rootReducer = combineReducers({
   globals,
   fonts,
   editor,
+  account,
   uiforms,
 }) as any;
 

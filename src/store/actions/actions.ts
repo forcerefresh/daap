@@ -4,6 +4,7 @@ import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
 import { Action, AnyAction } from "@reduxjs/toolkit";
 import { clear, jump } from "../../3rd-party-libs/undo-redo/actions";
+import axios from "axios";
 
 import {
   cloneDeep,
@@ -11,6 +12,7 @@ import {
   difference,
   differenceWith,
   intersection,
+  isArray,
   isEqual,
   once,
 } from "lodash-es";
@@ -2108,6 +2110,24 @@ export function setNextTextPosition(yPos: number): NextTextPositionAction {
 }
 // ******
 
+export const SHOW_SIMPLIFIED_LAYERS = "Show simplified layer";
+
+export interface ShowSimplifiedLayersAction extends IUndoableAction<false> {
+  type: typeof SHOW_SIMPLIFIED_LAYERS;
+  payload: boolean;
+}
+
+export function showSimplifiedLayers(
+  show: boolean
+): ShowSimplifiedLayersAction {
+  return {
+    type: SHOW_SIMPLIFIED_LAYERS,
+    payload: show,
+    isUndoable: false,
+  };
+}
+// ******
+
 // ******
 export const VIEWPORT_SIZE = "Set viewport size";
 
@@ -2682,6 +2702,80 @@ export function setFormState(payload: {
 }
 
 // ***
+
+// ***
+
+export const UPDATE_USER_DATA = "Update user data";
+
+export interface UpdateUserDataAction extends IUndoableAction<false> {
+  type: typeof UPDATE_USER_DATA;
+  payload: {
+    userData?: { displayName: string; profilePhoto?: string };
+    error?: { error: string; errorMessage: string };
+  };
+}
+
+export function updateUserData(userData?: {
+  displayName: string;
+  profilePhoto?: string;
+}): UpdateUserDataAction {
+  return {
+    type: UPDATE_USER_DATA,
+    payload: { userData, error: undefined },
+    isUndoable: false,
+  };
+}
+
+export function updateUserDataError(error?: {
+  error: string;
+  errorMessage: string;
+  displayError?: string;
+}): UpdateUserDataAction {
+  return {
+    type: UPDATE_USER_DATA,
+    payload: { userData: undefined, error },
+    isUndoable: false,
+  };
+}
+
+export function loadUserData(): any {
+  return function (dispatch: Dispatch | any, _getState: () => IStore) {
+    axios
+      .get("/api/v1/me")
+      .then(function (response) {
+        if (response?.data?.error) {
+          dispatch(updateUserDataError(response?.data));
+        } else {
+          dispatch(updateUserData(response?.data));
+        }
+
+        const displayMessages = response?.data?.displayMessages;
+
+        if (displayMessages && isArray(displayMessages)) {
+          const event = new CustomEvent("GLOBAL_ERROR", {
+            detail: { message: displayMessages.join(", ") },
+          });
+          window.dispatchEvent(event);
+        }
+      })
+      .catch(function (error) {
+        console.log();
+        dispatch(
+          updateUserDataError({
+            error: "USER_DATA_ERROR_1",
+            errorMessage: "User authentication has API has failed.",
+          })
+        );
+
+        console.log(error);
+      });
+  };
+}
+
+// ***
+
+// ***
+
 export type ActionTypes =
   // slide
   | AddSlideAction
@@ -2774,4 +2868,6 @@ export type ActionTypes =
   //
   | CutToClipboardAction
   | CopyToClipboardAction
-  | PasteObjectsFromClipboardAction;
+  | PasteObjectsFromClipboardAction
+  | UpdateUserDataAction
+  | ShowSimplifiedLayersAction;

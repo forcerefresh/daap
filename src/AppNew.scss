@@ -19,6 +19,10 @@ body {
   font-size: 0.9em;
 }
 
+.bp5-dark p {
+  color: $pt-dark-text-color;
+}
+
 .bp5-toast-container-top {
   top: 52px !important;
 }
@@ -87,4 +91,14 @@ body {
 
 .bp5-menu {
   background: $pt-app-background-color-secondary;
+}
+
+.bp5-overlay-open,
+.bp5-overlay-start-focus-trap {
+  outline: none !important;
+}
+
+.root-toaster {
+  left: 60px;
+  z-index: 1001;
 }

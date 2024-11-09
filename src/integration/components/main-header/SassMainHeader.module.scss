@@ -30,9 +30,9 @@
 .right {
   display: flex;
   align-items: center;
-  & > * {
-    margin-right: 10px;
-  }
+  // & > * {
+  //   margin-right: 10px;
+  // }
 
   > button {
     box-shadow: none !important;
@@ -53,6 +53,7 @@
 
 .logo {
   margin-left: 5px;
+  height: 40px;
 }
 
 .themeIcon {
@@ -72,8 +73,8 @@
   margin-right: 20px;
 }
 
-.title {
-  color: rgb(69, 69, 69);
+.inlineIcon {
+  color: rgb(97, 97, 97);
 
   svg {
     margin-left: 10px;
@@ -84,4 +85,47 @@
       color: #38ae38;
     }
   }
+}
+
+.contextMenu {
+  :global {
+    a,
+    a:hover,
+    a:visited,
+    a:active {
+      color: unset;
+      text-decoration: unset;
+    }
+  }
+}
+
+.leftActionHolder {
+  margin-left: 50px;
+  display: flex;
+}
+
+.rightActionsHolder {
+  margin-right: 20px;
+  // display: flex;
+  // column-gap: 20px;
+}
+
+.projectNameHolder {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-left: 10px;
+  margin-right: 20px;
+  // :global {
+  //   span {
+  //     display: flex;
+  //     flex-direction: row;
+  //     justify-content: center;
+  //   }
+  // }
+}
+
+.downloadBtn {
+  background: rgba(125, 125, 125, 0.2) !important;
 }

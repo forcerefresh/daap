@@ -56,7 +56,7 @@ const ScrollingComponent = withScrolling("div");
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
-const LayersPanel: React.FC<ISlidesPanel> = (props) => {
+const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   const {
     slide,
     layerArr,
@@ -186,8 +186,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
   //console.log(selectionPath, "selectionPath");
 
-  const [parentLayerId, ...selectionPathWithoutLayer] = selectionPath;
-  //selectionPathWithoutLayer.pop();
+  const [parentLayerIdFromSelection, ...selectionPathWithoutLayer] =
+    selectionPath;
+  const parentLayerId = parentLayerIdFromSelection ?? activeLayerId;
 
   const moveObject = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -403,4 +404,7 @@ const mapDispatchToProps = {
   _selectSlides: (ids: string[]): any => selectSlides(ids),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LayersPanel);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LayersSimplifiedPanel);

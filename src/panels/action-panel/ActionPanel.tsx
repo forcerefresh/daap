@@ -38,6 +38,8 @@ import ChangeCheckerButton from "../../utils/components/change-checker-button/Ch
 import { IAppSettings } from "../../store/reducers/globals";
 import { ITheme } from "../../store/reducers/i-settings";
 import { PanelHeader } from "../common/panel-header/PanelHeader";
+import * as htmlToImage from "html-to-image";
+import { toPng, toJpeg, toBlob, toPixelData, toSvg } from "html-to-image";
 
 export const getIconSize = (type: string): { w: string; h: string } => {
   if (type === "phone") {
@@ -318,10 +320,42 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         />
         <Button
           onClick={() => {
+            var node = document.getElementsByClassName(
+              "pan-and-zoom"
+            )[0] as HTMLElement;
+
+            htmlToImage
+              .toPng(node, {})
+              .then(function (dataUrl) {
+                var img = new Image();
+                img.src = dataUrl;
+                img.style!.zIndex = "2300";
+                img.style!.position = "absolute";
+                img.style!.bottom = "0px";
+                img.style!.left = "0px";
+                // img.style!.width = "300px";
+
+                // img.style!.height = "300px";
+
+                document.body.appendChild(img);
+              })
+              .catch(function (error) {
+                console.error("oops, something went wrong!", error);
+              });
+            //
+            return;
             html2canvas(
               document.getElementsByClassName("pan-and-zoom")[0] as HTMLElement,
-              { scale: 3 }
+              { scale: 1 }
             ).then(function (canvas) {
+              canvas.style!.zIndex = "2300";
+              canvas.style!.position = "absolute";
+              canvas.style!.bottom = "0px";
+              canvas.style!.left = "0px";
+              canvas.style!.width = "300px";
+
+              canvas.style!.height = "300px";
+
               document.body.appendChild(canvas);
             });
           }}

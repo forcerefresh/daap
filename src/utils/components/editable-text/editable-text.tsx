@@ -26,6 +26,7 @@ export default function EditableText(props: IEditableText) {
         <InputGroup
           inputRef={inputRef}
           large
+          style={{ minWidth: "300px" }}
           placeholder="Set document name..."
           value={currentValue}
           onChange={(event: any) => {
@@ -43,19 +44,19 @@ export default function EditableText(props: IEditableText) {
           }}
         ></InputGroup>
       ) : (
-        <Tooltip content={value}>
-          <Text
-            style={{
-              textOverflow: "ellipsis",
-              overflow: "hidden",
-              whiteSpace: "nowrap",
-              maxWidth,
-            }}
-            onClick={() => setIsEdit(true)}
-          >
-            {value}
-          </Text>
-        </Tooltip>
+        // <Tooltip content={value}>
+        <Text
+          style={{
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            maxWidth,
+          }}
+          onClick={() => setIsEdit(true)}
+        >
+          {value}
+        </Text>
+        // </Tooltip>
       )}
     </>
   );

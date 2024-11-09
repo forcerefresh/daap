@@ -10,6 +10,7 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
+  deleteObjects,
   duplicateObjects,
   groupObjects,
   normalizeObjectGroups,
@@ -60,6 +61,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     _ungroupObject,
     _duplicateObjects,
     _normalizeObjectGroups,
+    _deleteObjects,
     zoom,
   } = props;
   const mainRef = useRef<HTMLDivElement>(null);
@@ -220,6 +222,10 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
                   icon="duplicate"
                   onClick={() => [_duplicateObjects(selectedObjectIds)]}
                 ></Button>
+                <Button
+                  icon="trash"
+                  onClick={() => [_deleteObjects(selectedObjectIds)]}
+                ></Button>
 
                 <Popover
                   content={<ContextMenu />}
@@ -252,6 +258,8 @@ const mapDispatchToProps = {
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
+  _deleteObjects: (ids: string[]): any => deleteObjects(ids),
+
   _normalizeObjectGroups: (objects: IObject[]): any =>
     normalizeObjectGroups(objects),
 };

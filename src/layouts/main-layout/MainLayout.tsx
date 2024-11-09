@@ -12,7 +12,7 @@ export interface IMainLayout {
   layers?: React.ReactElement;
   properties?: React.ReactElement;
   animations?: React.ReactElement;
-  // action?: React.ReactElement;
+  action?: React.ReactElement;
   quickBar?: React.ReactElement;
   layersSimplified?: React.ReactElement;
   floatingActions?: React.ReactElement;
@@ -30,13 +30,14 @@ function MainLayout(props: IMainLayoutMergedProps) {
     properties,
     slides,
     layers,
-    // action,
+    action,
     animations,
     layoutType,
     quickBar,
     layersSimplified,
     floatingActions,
     floatingPointer,
+    showSimplifiedLayerPanel,
   } = props;
 
   switch (layoutType) {
@@ -50,11 +51,16 @@ function MainLayout(props: IMainLayoutMergedProps) {
               {content}
               {floatingActions}
               {floatingPointer}
-              <div
-                className={cx(css.layersSimplified, "layers-simplified-panel")}
-              >
-                {layersSimplified}
-              </div>
+              {showSimplifiedLayerPanel && (
+                <div
+                  className={cx(
+                    css.layersSimplified,
+                    "layers-simplified-panel"
+                  )}
+                >
+                  {layersSimplified}
+                </div>
+              )}
             </div>
           </div>
           <div className={css.right}>
@@ -62,7 +68,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
               <div className={css.properties}>{properties}</div>
             </div>
             <div>
-              {/* <div className={css.action}>{action}</div> */}
+              <div className={css.action}>{action}</div>
               <div className={css.slides}>{slides}</div>
               <div className={css.layers}>{layers}</div>
             </div>
@@ -81,15 +87,20 @@ function MainLayout(props: IMainLayoutMergedProps) {
               {content}
               {floatingActions}
               {floatingPointer}
-              <div
-                className={cx(css.layersSimplified, "layers-simplified-panel")}
-              >
-                {layersSimplified}
-              </div>
+              {showSimplifiedLayerPanel && (
+                <div
+                  className={cx(
+                    css.layersSimplified,
+                    "layers-simplified-panel"
+                  )}
+                >
+                  {layersSimplified}
+                </div>
+              )}
             </div>
           </div>
           <div className={css.right}>
-            {/* <div className={css.action}>{action}</div> */}
+            <div className={css.action}>{action}</div>
             <div className={css.slides}>{slides}</div>
             <div className={css.layers}>{layers}</div>
             <div className={css.properties}>{properties}</div>
@@ -102,6 +113,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
 
 const mapStateToProps = (state: IStore) => ({
   layoutType: state.globals.layoutType,
+  showSimplifiedLayerPanel: state.stage.showSimplifiedLayerPanel,
 });
 
 const mapDispatchToProps = {};

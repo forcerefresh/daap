@@ -97,6 +97,31 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
 
+  const [defaultSettingsSelectedTabId, setDefaultSettingsSelectedTabId] =
+    useState<string | undefined>();
+
+  useEffect(() => {
+    const openAccountCallback = () => {
+      setDefaultSettingsSelectedTabId("account");
+      setShowPanel(VisiblePanel.Settings);
+    };
+    const openProjectsCallback = () => {
+      setShowPanel(
+        showPanel === VisiblePanel.ProjectsLibrary
+          ? VisiblePanel.None
+          : VisiblePanel.ProjectsLibrary
+      );
+    };
+
+    window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
+    window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
+
+    return () => {
+      window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
+      window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
+    };
+  }, []);
+
   useEffect(() => {
     // getLicenseDetails().then((data) => {
     //   if (data?.status === "OK" || data?.status === "EXPIRED") {
@@ -113,6 +138,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // const latestShowPanel = useRef<VisiblePanel>();
 
+  console.log(showPanel);
   // let inst = useRef<FreeHandDrawTool>();
   const { activateTool, deactivateTool, activeTool } = useContext(ToolsContext);
   //console.log(activeTool);
@@ -196,7 +222,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     <div className={css.toolbar}>
       <div>
         <div>
-          <Button
+          <div style={{ height: "54px" }}></div>
+          {/* <Button
             className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.Add}
@@ -217,7 +244,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-          </Portal>
+          </Portal> */}
         </div>
         <div>
           <Button
@@ -335,7 +362,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               FIT
             </Button>
           </div>
-          <Button
+          {/* <Button
             className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.History}
@@ -353,7 +380,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-          </Portal>
+          </Portal> */}
         </div>
         <div>
           <Button
@@ -389,6 +416,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Settings && (
               <div ref={sharedRef}>
                 <SettingsPanel
+                  defaultSelectedTabId={defaultSettingsSelectedTabId}
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>
@@ -397,7 +425,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         </div>
 
         <div>
-          <Button
+          {/* <Button
             minimal
             className={css.largeButton}
             active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -411,7 +439,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               </Tag>
             )}
             <LibraryIcon />
-          </Button>
+          </Button> */}
 
           <Portal>
             {showPanel === VisiblePanel.ProjectsLibrary && (

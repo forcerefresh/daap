@@ -1,0 +1,26 @@
+{
+  "folders": [
+	{
+		"path": "../../.."
+	},
+	{
+		"path": "../../../../replica-test"
+	},
+	{
+		"path": "../../../../webslider-sdk"
+	},
+	{
+		"path": "../../../../daap-server"
+	},
+	{
+		"path": "../../../../mern-boilerplate"
+	},
+	{
+		"path": "../../../../node-ts-test"
+	},
+	{
+		"path": "../../../../daap-server-2"
+	}
+],
+  "settings": {}
+}

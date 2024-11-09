@@ -15,6 +15,7 @@ import {
   SET_STAGE_PAN,
   OVERRIDE_STAGE_TOOL,
   CANCEL_OVERRIDE_STAGE_TOOL,
+  SHOW_SIMPLIFIED_LAYERS,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -50,6 +51,7 @@ export interface IStage {
   forceRefreshRand: number;
   // text position
   nextTextPositionY: number;
+  showSimplifiedLayerPanel: boolean;
 }
 
 const getStageDefault = (): IStage => ({
@@ -69,6 +71,7 @@ const getStageDefault = (): IStage => ({
   selectedDevice: "small-1",
   forceRefreshRand: 0,
   nextTextPositionY: 100,
+  showSimplifiedLayerPanel: true,
 });
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
@@ -139,6 +142,9 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
     }
     case NEXT_TEXT_POSITION: {
       return { ...state, nextTextPositionY: action.payload };
+    }
+    case SHOW_SIMPLIFIED_LAYERS: {
+      return { ...state, showSimplifiedLayerPanel: action.payload };
     }
     default:
       return state;
