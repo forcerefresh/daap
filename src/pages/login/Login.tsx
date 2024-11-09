@@ -1,23 +1,20 @@
-import React, { useLayoutEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useCallback, useLayoutEffect, useState } from "react";
 import cx from "classnames";
-
-import { useFormik } from "formik";
-
-import { compose } from "redux";
+import * as yup from "yup";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { connect } from "react-redux";
-import _ from "lodash";
-
-// import { loginUserWithEmail } from "../../store/actions/authActions";
-import { FACEBOOK_AUTH_LINK, GOOGLE_AUTH_LINK } from "./constants";
-import { loginSchema } from "./validation";
+import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
+import {
+  APPLE_AUTH_LINK,
+  // FACEBOOK_AUTH_LINK,
+  GOOGLE_AUTH_LINK,
+} from "./constants";
 import css from "./Login.module.scss";
 import { IStore } from "../../store/store";
 import { ReactComponent as GoogleIcon } from "../assets/google-logo.svg";
-import { ReactComponent as FacebookIcon } from "../assets/facebook-logo.svg";
+// import { ReactComponent as FacebookIcon } from "../assets/facebook-logo.svg";
 import { ReactComponent as EmailIcon } from "../assets/email-icon.svg";
-
-import { Button, FormGroup, Icon, InputGroup } from "@blueprintjs/core";
+import { ReactComponent as AppleIcon } from "../assets/apple-logo.svg";
 
 interface ILoginProps {}
 
@@ -27,66 +24,148 @@ export type IAlignPanelMergedProps = typeof mapDispatchToProps &
 
 const Login: React.FC<IAlignPanelMergedProps> = (props) => {
   const { theme } = props;
+  const [loading, setLoading] = useState(false);
+  const [emailValidationError, setEmailValidationError] = useState(false);
+  const [showMagicLoginEmailSent, setShowMagicLoginEmailSent] = useState(false);
+  const [recaptchaValid, setRecaptchaValid] = useState({
+    valid: true,
+    message: "",
+  });
+
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
+  const submitEmailForMagicLogin = useCallback(async () => {
+    const email = (
+      document.getElementById("your_email_input") as HTMLInputElement
+    ).value;
+
+    try {
+      yup.string().required().email().validateSync(email);
+      setEmailValidationError(false);
+    } catch (ex) {
+      setEmailValidationError(true);
+      return;
+    }
+
+    if (!executeRecaptcha) {
+      setRecaptchaValid({ valid: false, message: "" });
+      return;
+    }
+
+    const token = await executeRecaptcha("login");
+
+    setLoading(true);
+
+    fetch(`/auth/magiclogin`, {
+      method: `POST`,
+      body: JSON.stringify({
+        // `destination` is required.
+        recaptchaToken: token,
+        destination: email,
+      }),
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        console.log(json);
+        if (json.success) {
+          setShowMagicLoginEmailSent(true);
+          // The request successfully completed and the email to the user with the
+          // magic login link was sent!
+          // You can now prompt the user to click on the link in their email
+          // We recommend you display json.code in the UI (!) so the user can verify
+          // that they're clicking on the link for their _current_ login attempt
+          //document.body.innerText = json.code;
+        } else if (json.error) {
+          setRecaptchaValid({ valid: false, message: json.errorMessage });
+        }
+      })
+      .catch((ex) => {
+        console.error(ex);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [executeRecaptcha]);
 
   useLayoutEffect(() => {
     document.body.className = `bp5-${theme}`;
   }, [theme]);
 
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: loginSchema,
-    onSubmit: (values) => {
-      // loginUserWithEmail(values, history);
-    },
-  });
-
-  //if (auth.isAuthenticated) return <Redirect to="/" />;
-
+  if (showMagicLoginEmailSent) {
+    return (
+      <div className={css.login}>
+        <div className={css.containerEmailSent}>
+          <h1>We have sent you an email!</h1>
+          <p>
+            An email with a login link has been sent to your email.
+            <br />
+            Check your inbox.
+          </p>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className={css.login}>
       <div className={css.container}>
         <h1>Log in</h1>
         <p>Log in and start creating!</p>
-        <form onSubmit={formik.handleSubmit} className={css.form}>
-          {/* <a className={cx(css.google, css.btn)} href={GOOGLE_AUTH_LINK}>
-            <GoogleIcon width={30} height={30} /> Continue with Google
-          </a> */}
+        <form className={css.form}>
           <a href={GOOGLE_AUTH_LINK} className={css.buttonAnchor}>
-            <Button className={cx(css.google, css.btn)}>
+            <Button className={cx(css.whiteButton, css.btn)}>
               <GoogleIcon width={30} height={30} /> Continue with Google
             </Button>
           </a>
 
-          <a href={FACEBOOK_AUTH_LINK} className={css.buttonAnchor}>
+          {/* <a href={FACEBOOK_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.fb, css.btn)}>
               <FacebookIcon width={30} height={30} /> Continue with Facebook
             </Button>
+          </a> */}
+
+          <a href={APPLE_AUTH_LINK} className={css.buttonAnchor}>
+            <Button className={cx(css.whiteButton, css.btn)}>
+              <AppleIcon width={30} height={30} />
+              Continue with Apple
+            </Button>
           </a>
           <h2>or</h2>
-          <FormGroup
-            // label={"YOU EMAIL"}
-            labelFor={"you_email_input"}
-            // inline
-            // helperText={underFieldText}
-          >
+          <FormGroup labelFor={"your_email_input"}>
             <InputGroup
+              onFocus={() => {
+                setEmailValidationError(false);
+              }}
               large
-              id={"you_email_input"}
+              id={"your_email_input"}
               placeholder="Enter you email address"
-              // value={value}
-              // intent={!!externalError ? Intent.WARNING : Intent.NONE}
-              // onChange={(event: any) => onChange(event.target.value)}
-              // onInput={(event: any) => onInput(event.target.value)}
-              // {...inputProps}
             />
+            {emailValidationError && (
+              <div className={css.errorMessage}>
+                Email is not valid. Please enter valid email.
+              </div>
+            )}
           </FormGroup>
 
+          {!recaptchaValid.valid && (
+            <>
+              <div className={css.errorMessage}>
+                Recaptch check has failed. Reload page and try to login again.
+              </div>
+              {recaptchaValid.message && (
+                <div className={css.errorMessage}>{recaptchaValid.message}</div>
+              )}
+            </>
+          )}
+
           <div className={css.buttonAnchor}>
-            <Button className={cx(css.email, css.btn)}>
-              <EmailIcon width={28} height={28} /> Send Me Login Link
+            <Button
+              disabled={loading}
+              className={cx(css.greenButton, css.btn)}
+              onClick={submitEmailForMagicLogin}
+            >
+              <EmailIcon width={28} height={28} />
+              Send Me Login Link
             </Button>
           </div>
         </form>
@@ -94,16 +173,6 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
     </div>
   );
 };
-
-// const mapStateToProps = (state) => ({
-//   auth: state.auth,
-//   errors: state.errors,
-// });
-
-// export default compose(
-//   withRouter,
-//   connect(mapStateToProps, { loginUserWithEmail })
-// )(Login);
 
 const mapStateToProps = (state: IStore) => {
   const { settings } = state.project;

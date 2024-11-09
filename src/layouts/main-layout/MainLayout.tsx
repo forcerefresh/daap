@@ -12,7 +12,7 @@ export interface IMainLayout {
   layers?: React.ReactElement;
   properties?: React.ReactElement;
   animations?: React.ReactElement;
-  action?: React.ReactElement;
+  // action?: React.ReactElement;
   quickBar?: React.ReactElement;
   layersSimplified?: React.ReactElement;
   floatingActions?: React.ReactElement;
@@ -30,7 +30,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
     properties,
     slides,
     layers,
-    action,
+    // action,
     animations,
     layoutType,
     quickBar,
@@ -62,7 +62,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
               <div className={css.properties}>{properties}</div>
             </div>
             <div>
-              <div className={css.action}>{action}</div>
+              {/* <div className={css.action}>{action}</div> */}
               <div className={css.slides}>{slides}</div>
               <div className={css.layers}>{layers}</div>
             </div>
@@ -89,7 +89,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
             </div>
           </div>
           <div className={css.right}>
-            <div className={css.action}>{action}</div>
+            {/* <div className={css.action}>{action}</div> */}
             <div className={css.slides}>{slides}</div>
             <div className={css.layers}>{layers}</div>
             <div className={css.properties}>{properties}</div>
