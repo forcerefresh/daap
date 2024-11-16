@@ -20,23 +20,27 @@ export interface IResponsiveVisibility {
 
 export interface ILayer extends ILayout {
   id: string;
-  customId: string;
+  customId?: string;
   type: "layer";
   slideId: string;
-  name: string;
-  title?: string;
+  name?: string;
+  // title?: string;
   description?: string;
-  isVisible: boolean;
-  hasTimeline: boolean;
+  isHidden?: boolean;
+  // hasTimeline: boolean;
   objectIds: string[];
-  transitions: ITransitions;
-  responsiveVisibility: IResponsiveVisibility;
-  definition: {
-    values: ILayerValues;
-    valuesMetadata: { [key: string]: IInputMetadataValues };
-  };
-  commonStyleDefinition?: IDefinition;
-  transformDefinition?: IDefinition;
+  // transitions: ITransitions;
+  // responsiveVisibility: IResponsiveVisibility;
+  properties?: Record<string, any>;
+  // definition: {
+  //   values: ILayerValues;
+  //   valuesMetadata: { [key: string]: IInputMetadataValues };
+  // };
+  style?: Record<string, any>;
+  transform?: Record<string, any>;
+
+  // commonStyleDefinition?: IDefinition;
+  // transformDefinition?: IDefinition;
 }
 
 export interface ILayerValues {

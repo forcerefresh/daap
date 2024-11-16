@@ -26,7 +26,6 @@ import {
   IObject,
   ITransition,
   LayoutTypes,
-  ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
 import {
   calculateObjectSize,
@@ -63,6 +62,7 @@ import { IAnimationBase } from "webslider-sdk/lib/animations/i-animation-types";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
+import { getObjectTransform } from "../panels/stage-panel-new/stage-panel-utils";
 
 export function generatePlayerData(
   sources: ISources,
@@ -227,39 +227,40 @@ export function generatePlayerData(
   };
 }
 
-function pickLayoutFromLayouts(
-  layout: LayoutTypes,
-  layer: ILayout
-): Partial<
-  Pick<
-    ILayout,
-    "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout" | "insetLayout"
-  >
-> {
-  switch (layout) {
-    case "absolute": {
-      return { absoluteLayout: layer.absoluteLayout };
-    }
-    case "grid": {
-      return { gridLayout: layer.gridLayout };
-    }
-    case "fit": {
-      return { fitLayout: layer.fitLayout };
-    }
-    case "snap": {
-      return { snapLayout: layer.snapLayout };
-    }
-    case "inset": {
-      return { insetLayout: layer.insetLayout };
-    }
-    // case "anchor": {
-    //   return { snapLayout: layer.snapLayout };
-    // }
-    case "none": {
-      return {};
-    }
-  }
-}
+// function pickLayoutFromLayouts(
+//   layout: LayoutTypes,
+//   layer: ILayout
+// ): Partial<
+//   Pick<
+//     ILayout,
+//     "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout" | "insetLayout"
+//   >
+// > {
+//   switch (layout) {
+//     case "absolute": {
+//       return { absoluteLayout: layer.absoluteLayout };
+//     }
+//     case "grid": {
+//       return { gridLayout: layer.gridLayout };
+//     }
+//     case "fit": {
+//       return { fitLayout: layer.fitLayout };
+//     }
+//     case "snap": {
+//       return { snapLayout: layer.snapLayout };
+//     }
+//     case "inset": {
+//       return { insetLayout: layer.insetLayout };
+//     }
+//     // case "anchor": {
+//     //   return { snapLayout: layer.snapLayout };
+//     // }
+//     case "none": {
+//       return {};
+//     }
+//   }
+// }
+
 function generateSlideData(
   slide: ISlide,
   layers: ILayers,
@@ -285,7 +286,7 @@ function generateSlideData(
     "id",
     "slideType",
     "transitionEnabled",
-    "transitions",
+    // "transitions",
     "duration",
     "exitDuration",
     "moveToTop",
@@ -294,18 +295,18 @@ function generateSlideData(
     "description",
   ]);
 
-  someSlideData.transitionOverlapTime = convertTimeUnitToMs(
-    slide.transitionOverlapTime
-  );
-  someSlideData.transitionDurationTime = convertTimeUnitToMs(
-    slide.transitionDurationTime
-  );
-  someSlideData.duration!.customValue = getRealSlideDuration(slide, settings);
-  someSlideData.exitDuration!.customValue = getRealExitSlideDuration(
-    slide,
-    settings
-  );
-  someSlideData.moveToTop = slide.moveToTop;
+  // someSlideData.transitionOverlapTime = convertTimeUnitToMs(
+  //   slide.transitionOverlapTime
+  // );
+  // someSlideData.transitionDurationTime = convertTimeUnitToMs(
+  //   slide.transitionDurationTime
+  // );
+  // someSlideData.duration!.customValue = getRealSlideDuration(slide, settings);
+  // someSlideData.exitDuration!.customValue = getRealExitSlideDuration(
+  //   slide,
+  //   settings
+  // );
+  // someSlideData.moveToTop = slide.moveToTop;
 
   // slide data
   const slideData: ISlideData = {
@@ -337,18 +338,18 @@ function generateSlideData(
   const layerArr: ILayer[] = getLayerArr(layers, slide.layerIds);
   layerArr.forEach((layer) => {
     let hideForThumbnail = false;
-    const visibleForAllDevices = layer.responsiveVisibility.showAll;
-    if (!visibleForAllDevices) {
-      itemsVisibility.push({
-        itemType: "layer",
-        id: layer.id,
-        displayOn: layer.responsiveVisibility.displayOn,
-      });
+    const visibleForAllDevices = true; //layer.responsiveVisibility.showAll;
+    // if (!visibleForAllDevices) {
+    //   itemsVisibility.push({
+    //     itemType: "layer",
+    //     id: layer.id,
+    //     displayOn: layer.responsiveVisibility.displayOn,
+    //   });
 
-      hideForThumbnail =
-        layer.responsiveVisibility.displayOn.indexOf(breakpointConfig.type) ===
-        -1;
-    }
+    //   hideForThumbnail =
+    //     layer.responsiveVisibility.displayOn.indexOf(breakpointConfig.type) ===
+    //     -1;
+    // }
 
     const layerTransformValues = getObjectValuesForDevice(
       layer.transformDefinition?.values,
@@ -362,30 +363,30 @@ function generateSlideData(
 
     // TODO; we have similar code for layer
     const layerEffectWrappers: string[] = [];
-    const lt = layer.transitions;
-    [lt.layer, lt.in, lt.out, lt.event].forEach((tArr) => {
-      tArr?.forEach((t: ITransition) => {
-        const def = getAppAnimationDefinition(t?.animation?.id);
-        if (def) {
-          const requireWrapperElement = (def.formDefaults as IAnimationBase)
-            .requireWrapperElement;
-          if (requireWrapperElement) {
-            const animationWrapperClassName = `animation-wrapper-${t.uid}`;
-            layerEffectWrappers.push(animationWrapperClassName);
-          }
-          if (def?.external) {
-            extensionTypes.push(t.animation.id);
-          }
-        }
-      });
-    });
+    // const lt = layer.transitions;
+    // [lt.layer, lt.in, lt.out, lt.event].forEach((tArr) => {
+    //   tArr?.forEach((t: ITransition) => {
+    //     const def = getAppAnimationDefinition(t?.animation?.id);
+    //     if (def) {
+    //       const requireWrapperElement = (def.formDefaults as IAnimationBase)
+    //         .requireWrapperElement;
+    //       if (requireWrapperElement) {
+    //         const animationWrapperClassName = `animation-wrapper-${t.uid}`;
+    //         layerEffectWrappers.push(animationWrapperClassName);
+    //       }
+    //       if (def?.external) {
+    //         extensionTypes.push(t.animation.id);
+    //       }
+    //     }
+    //   });
+    // });
 
     const layerValues = layer.definition.values as ILayerValues;
 
     const layerClassName = "layer-" + layer.id;
     itemsData.push({
       itemId: layer.id,
-      customId: layer.customId,
+      // customId: layer.customId,
       parentItemId: undefined,
       itemType: "layer",
       itemValues: layer.definition.values,
@@ -401,10 +402,10 @@ function generateSlideData(
         "valuesMetadata"
       ) as IDefinition,
       objectClass: layerClassName,
-      transitions: layer.transitions,
+      // transitions: layer.transitions,
       data: {
-        slideDuration: slide.duration,
-        exitSlideDuration: slide.exitDuration,
+        // slideDuration: slide.duration,
+        // exitSlideDuration: slide.exitDuration,
         objectWidth: 1000,
         objectHeight: 500,
         objectLeft: 0,
@@ -413,10 +414,10 @@ function generateSlideData(
         objectHtml: " ",
       },
       layout: {
-        layout: layer.layout,
-        layoutAdvance: layer.layoutAdvance?.values,
+        //layout: layer.layout,
+        //layoutAdvance: layer.layoutAdvance?.values,
         selfSize: layer.selfSize,
-        ...pickLayoutFromLayouts(layer.layout, layer),
+        //...pickLayoutFromLayouts(layer.layout, layer),
       },
     });
 
@@ -527,16 +528,16 @@ function generateSlideData(
       "position: relative; left:initial; top: initial; overflow: visible;";
 
     // layerStyle += "perspective: 150px";
-    layerStyle = addCommonPropertiesToStyle(
-      layerStyle,
-      layer,
-      breakpointConfig.type
-    );
-    layerStyle = addTransformPropertiesToStyle(
-      layerStyle,
-      layer,
-      breakpointConfig.type
-    );
+    // layerStyle = addCommonPropertiesToStyle(
+    //   layerStyle,
+    //   layer,
+    //   breakpointConfig.type
+    // );
+    // layerStyle = addTransformPropertiesToStyle(
+    //   layerStyle,
+    //   layer,
+    //   breakpointConfig.type
+    // );
 
     html += `    <div class="layer-wrapper layer-wrapper-${layer.id}" style='${layerWrapperStyle}'>`; // open layer wrapper
 
@@ -553,13 +554,13 @@ function generateSlideData(
 
     const objectArr = getObjectArr(objects, layer.objectIds);
     objectArr.forEach((object) => {
-      if (!visibleForAllDevices) {
-        itemsVisibility.push({
-          itemType: "object",
-          id: object.id,
-          displayOn: layer.responsiveVisibility.displayOn,
-        });
-      }
+      // if (!visibleForAllDevices) {
+      //   itemsVisibility.push({
+      //     itemType: "object",
+      //     id: object.id,
+      //     displayOn: layer.responsiveVisibility.displayOn,
+      //   });
+      // }
 
       //part for externals
       const objDeff = getAppObjectDefinition(object.type);
@@ -569,24 +570,24 @@ function generateSlideData(
 
       // TODO; we have similar code for layer
       const effectWrappers: string[] = [];
-      const ot = object.transitions;
-      [ot.animation, ot.in, ot.out, ot.event].forEach((tArr) => {
-        //forOwn(object.transitions, (tArr: ITransition[] | any) => {
-        tArr?.forEach((t: ITransition) => {
-          const def = getAppAnimationDefinition(t?.animation?.id);
-          if (def) {
-            const requireWrapperElement = (def.formDefaults as IAnimationBase)
-              .requireWrapperElement;
-            if (requireWrapperElement) {
-              const animationWrapperClassName = `animation-wrapper-${t.uid}`;
-              effectWrappers.push(animationWrapperClassName);
-            }
-            if (def?.external) {
-              extensionTypes.push(t.animation.id);
-            }
-          }
-        });
-      });
+      // const ot = object.transitions;
+      // [ot.animation, ot.in, ot.out, ot.event].forEach((tArr) => {
+      //   //forOwn(object.transitions, (tArr: ITransition[] | any) => {
+      //   tArr?.forEach((t: ITransition) => {
+      //     const def = getAppAnimationDefinition(t?.animation?.id);
+      //     if (def) {
+      //       const requireWrapperElement = (def.formDefaults as IAnimationBase)
+      //         .requireWrapperElement;
+      //       if (requireWrapperElement) {
+      //         const animationWrapperClassName = `animation-wrapper-${t.uid}`;
+      //         effectWrappers.push(animationWrapperClassName);
+      //       }
+      //       if (def?.external) {
+      //         extensionTypes.push(t.animation.id);
+      //       }
+      //     }
+      //   });
+      // });
 
       // << part for externlas
       const objectValues = object.definition.values;
@@ -621,9 +622,10 @@ function generateSlideData(
 
       style += layerValues.hasLayoutChildren
         ? "position: static;"
-        : object.layout === "absolute"
-        ? "position: absolute;"
-        : "position: absolute;"; //"position: relative;";
+        : "position: absolute;";
+      // : object.layout === "absolute"
+      // ? "position: absolute;"
+      // : "position: absolute;"; //"position: relative;";
 
       const cd = object.commonStyleDefinition;
       const overflow = cd?.valuesMetadata?.commonOverflow
@@ -637,6 +639,8 @@ function generateSlideData(
 
       style +=
         "position: relative; left:initial; top: initial; overflow: visible; pointer-events:all;";
+
+      style += "transform :" + getObjectTransform(object) + ";";
 
       let objectAnimWrapperStyle = "";
       // NOTE exception for perspective >>>
@@ -684,7 +688,7 @@ function generateSlideData(
       itemsData.push({
         itemId: object.id,
         parentItemId: layer.id,
-        customId: object.customId,
+        // customId: object.customId,
         itemType: object.type,
         itemValues: object.definition.values,
         itemValuesMetadata: object.definition.valuesMetadata,
@@ -694,11 +698,11 @@ function generateSlideData(
         calculatedObjectSize,
         calculatedObjectSizePerDevice,
         objectClass: objectClass,
-        transitions: object.transitions,
-        events: getObjectEvents(object),
+        // transitions: object.transitions,
+        // events: getObjectEvents(object),
         data: {
-          slideDuration: slide.duration,
-          exitSlideDuration: slide.exitDuration,
+          // slideDuration: slide.duration,
+          // exitSlideDuration: slide.exitDuration,
           // TODO: IMPORTANT (size issue)
           objectWidth: parseInt(calculatedObjectSize!.width + "", 10),
           objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
@@ -708,10 +712,10 @@ function generateSlideData(
           objectHtml,
         },
         layout: {
-          layout: object.layout,
-          layoutAdvance: object.layoutAdvance?.values,
+          //layout: object.layout,
+          //layoutAdvance: object.layoutAdvance?.values,
           selfSize: object.selfSize,
-          ...pickLayoutFromLayouts(object.layout, object),
+          //...pickLayoutFromLayouts(object.layout, object),
         },
       });
       html += objectHtml;
@@ -737,10 +741,10 @@ function generateSlideData(
   };
 }
 
-function getObjectEvents(object: IObject) {
-  const navValues = object.navigationDefinition.values;
-  return navValues;
-}
+// function getObjectEvents(object: IObject) {
+//   const navValues = object.navigationDefinition.values;
+//   return navValues;
+// }
 
 /**
  * Returns array of slides from store>slides
@@ -800,9 +804,9 @@ export function getObjectHtml(
   switch (object.type) {
     //case ObjectType.YOUTUBE_VIDEO:
     //return getYoutubeVideoHtml(object, calculatedObjectSize, isPlayer);
-    case ObjectType.CANVAS:
+    case "canvas":
       return getCanvasHtml(object, calculatedObjectSize, isPlayer);
-    case ObjectType.SOURCE_IMAGE:
+    case "source_image":
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
       const objDeff = isPlayer
@@ -1044,22 +1048,22 @@ export function getAllAssetsUrls(objects: IObjects): any {
       const object = objects.objectById[objectId];
       const deff = getAppObjectDefinition(object.type);
 
-      const transitionTypes = Object.keys(object.transitions);
-      const arr = flatten(
-        transitionTypes.map((transType: string) => {
-          return flatten(
-            (object.transitions as any)[transType].map((anim: ITransition) => {
-              const def = getAppAnimationDefinition(anim.animation.id);
-              return def?.getAssetsUrls?.({
-                values: anim.animation.values as { [key: string]: any },
-              });
-            })
-          );
-        })
-      );
+      // const transitionTypes = Object.keys(object.transitions);
+      // const arr = flatten(
+      //   transitionTypes.map((transType: string) => {
+      //     return flatten(
+      //       (object.transitions as any)[transType].map((anim: ITransition) => {
+      //         const def = getAppAnimationDefinition(anim.animation.id);
+      //         return def?.getAssetsUrls?.({
+      //           values: anim.animation.values as { [key: string]: any },
+      //         });
+      //       })
+      //     );
+      //   })
+      // );
 
       return [
-        ...arr.filter((item) => !!item), //TODO: check why we are getting undefined
+        // ...arr.filter((item) => !!item), //TODO: check why we are getting undefined
         ...(deff?.getAssetsUrls?.({ values: object.definition.values }) || []),
       ];
     })

@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { cloneDeep, includes } from "lodash-es";
+import { cloneDeep, includes, isEmpty } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { InfoInputForm } from "../../inputs/info-input/info-input";
@@ -26,6 +26,7 @@ import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
 import css from "./PropertiesPanel.module.scss";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { createObject } from "../../objects/create-object-factory";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -55,7 +56,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     if (slide.slideType === SlideType.Normal) {
       return (
         <>
-          {getInheritTimeField(
+          {/* {getInheritTimeField(
             "Duration",
             slide.duration,
             [
@@ -68,8 +69,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
               _updateSlide(retObj);
             },
             commonSlideDuration
-          )}
-          {getInheritTimeField(
+          )} */}
+          {/* {getInheritTimeField(
             "Exit",
             slide.exitDuration,
             [
@@ -82,7 +83,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
               _updateSlide(retObj);
             },
             commonSlideExitDuration
-          )}
+          )} */}
         </>
       );
     } else {
@@ -115,21 +116,22 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    const tmpObj = createObject(object.type, {});
+    //const tmpObj = createObject(object.type, {});
 
-    if (!object.definition && !tmpObj.definition) {
+    if (isEmpty(object.properties)) {
       return <div>Object '{object.type}' has no properties.</div>;
     }
 
     // check for forward compatibility
-    const definitionProperties = tmpObj.definition?.properties ?? [];
+    const definitionProperties = getAppObjectDefinition(
+      object.type
+    )?.getObjectForm();
     const definitionValues = {
-      ...(tmpObj.definition?.values ?? {}),
-      ...(object.definition?.values ?? {}),
+      ...object.properties,
     };
     const definitionValuesMetadata = {
-      ...(tmpObj.definition?.valuesMetadata ?? {}),
-      ...(object.definition?.valuesMetadata ?? {}),
+      // ...(tmpObj.definition?.valuesMetadata ?? {}),
+      // ...(object.definition?.valuesMetadata ?? {}),
     };
 
     return (
@@ -190,7 +192,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {
-          const values = retObj.definition.values as { [key: string]: any };
+          const values = retObj.properties as { [key: string]: any };
           values[propertyName] = value;
 
           // >>> exception for image TODO: REMOVE TO POST PROCESS FUNCTIONS
@@ -321,7 +323,7 @@ const mapStateToProps = (state: IStore) => {
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   let panelName:
-    | { name: string; type: "object" | "layer" | "slide" }
+    | { name?: string; type: "object" | "layer" | "slide" }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {

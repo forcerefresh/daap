@@ -39,7 +39,7 @@ import {
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersSimplified.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ObjectRow } from "./ObjectRow";
 import { cloneDeep, last } from "lodash-es";
@@ -374,7 +374,7 @@ const mapDispatchToProps = {
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),

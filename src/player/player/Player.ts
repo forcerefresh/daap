@@ -13,6 +13,7 @@ import {
 import {
   ILayout,
   ISlideTransition,
+  ITransition,
   NavigationType,
 } from "webslider-sdk/lib/objects/i-object";
 import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types";
@@ -617,30 +618,30 @@ export class Player {
       //   ).style.transform = "scale(" + scale?.wScale + ")";
       // } else {
 
-      if (
-        getBooleanValue(
-          transitionData.layout.layoutAdvance?.hasLayoutAdvance
-        ) &&
-        getBooleanValue(
-          transitionData.layout.layoutAdvance?.updateScale,
-          true
-        ) &&
-        this.scaleParams?.wScale
-      ) {
-        const wrapperObjectOrLayerEl =
-          transitionData.itemType === "layer"
-            ? getLayerWrapperElementById(transitionData.itemId)
-            : getObjectWrapperElementById(transitionData.itemId);
+      // if (
+      //   getBooleanValue(
+      //     transitionData.layout.layoutAdvance?.hasLayoutAdvance
+      //   ) &&
+      //   getBooleanValue(
+      //     transitionData.layout.layoutAdvance?.updateScale,
+      //     true
+      //   ) &&
+      //   this.scaleParams?.wScale
+      // ) {
+      //   const wrapperObjectOrLayerEl =
+      //     transitionData.itemType === "layer"
+      //       ? getLayerWrapperElementById(transitionData.itemId)
+      //       : getObjectWrapperElementById(transitionData.itemId);
 
-        if (wrapperObjectOrLayerEl) {
-          wrapperObjectOrLayerEl.style.transform =
-            "scale(" + this.scaleParams?.wScale + ")";
-        }
-      }
+      //   if (wrapperObjectOrLayerEl) {
+      //     wrapperObjectOrLayerEl.style.transform =
+      //       "scale(" + this.scaleParams?.wScale + ")";
+      //   }
+      // }
 
-      const forceUpdateSize =
-        !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
-        getBooleanValue(transitionData.layout.layoutAdvance?.updateSize, true);
+      const forceUpdateSize = true;
+      // !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
+      // getBooleanValue(transitionData.layout.layoutAdvance?.updateSize, true);
 
       // const forceUpdateSize =
       // !transitionData.layout.layoutAdvance?.hasLayoutAdvance ||
@@ -654,10 +655,13 @@ export class Player {
         objDef?.sizeUpdate(
           {
             id: transitionData.itemId,
-            values: transitionData.itemValues,
-            valuesMetadata: transitionData.itemValuesMetadata,
-            commonStyleDefinition: transitionData.commonStyleDefinition,
-            transformDefinition: transitionData.transformDefinition,
+            properties: transitionData.properties,
+            style: transitionData.style,
+            transform: transitionData.transform,
+            // values: transitionData.itemValues,
+            // valuesMetadata: transitionData.itemValuesMetadata,
+            // commonStyleDefinition: transitionData.commonStyleDefinition,
+            // transformDefinition: transitionData.transformDefinition,
             className: transitionData.objectClass,
             calculatedObjectSize: calObjSize,
             scale: this.scaleParams,
@@ -1077,7 +1081,9 @@ export class Player {
 
     // NOTE: Transition between slides start when slide starts
     // TODO: SLIDE TRANSITION >>>
-    const slideTransitions = slide?.transitions.slide;
+
+    const slideTransitions: ITransition[] = []; // slide?.transitions.slide;
+
     let betweenSlideEffArr: ISlideTransition[] = [];
     if (slideTransitions) {
       betweenSlideEffArr = slideTransitions.map((slideTransition) => {
@@ -1566,17 +1572,17 @@ export class Player {
           objDef.execStart,
           objDef.execStop,
           objDef.updateTime,
-          itemData.itemValues,
+          itemData.properties,
           calObjSize
         );
         staticTl.add(execTl);
       }
 
       // preload
-      if (itemData.itemValues.preload && !!objDef?.preload) {
+      if (itemData.properties.preload && !!objDef?.preload) {
         const preloadPromise = objDef.preload({
           id: itemData.itemId,
-          values: itemData.itemValues,
+          values: itemData.properties,
           className: itemData.objectClass,
           calculatedObjectSize: calObjSize,
         });
@@ -1603,15 +1609,15 @@ export class Player {
   private populatePageSpinners(transitionData: IItemsData) {
     if (
       transitionData.itemSystemType === CoreObjectType.SPINNER &&
-      transitionData.itemValues.applyTo === "page"
+      transitionData.properties.applyTo === "page"
     ) {
       const ppEl = document.querySelector(".object-" + transitionData.itemId);
       if (ppEl) {
         const inTime = convertTimeUnitToMs(
-          (transitionData.itemValues as any).fadeInTime
+          (transitionData.properties as any).fadeInTime
         );
         const outTime = convertTimeUnitToMs(
-          (transitionData.itemValues as any).fadeOutTime
+          (transitionData.properties as any).fadeOutTime
         );
 
         // ppEl.style.display = "none";
@@ -1668,7 +1674,7 @@ export class Player {
 
     const slideTimeline = new RootTimeline({
       name: "RootSlideTimeline-id:" + slideIdx,
-      duration: convertTimeUnitToMs(data.slide.duration.customValue),
+      duration: 10000, //convertTimeUnitToMs(data.slide.duration.customValue),
     }); // gsap.timeline({ paused: true });
     this.timelines[slideIdx] = slideTimeline;
 
@@ -1696,17 +1702,17 @@ export class Player {
         slideTimeline.add(pTl);
       });
       // NOTE: create root timeline for out animation
-      if (slideParallelTls.outEffTlExist) {
-        const manTlDur = convertTimeUnitToMs(
-          itemData.data.exitSlideDuration.customValue
-        );
-        const outAnimationManualRootTimeline = new RootTimeline({
-          name: "RootTimelineForManualOutAnimation-" + slideIdx,
-          duration: manTlDur,
-        });
+      // if (slideParallelTls.outEffTlExist) {
+      //   const manTlDur = convertTimeUnitToMs(
+      //     itemData.data.exitSlideDuration.customValue
+      //   );
+      //   const outAnimationManualRootTimeline = new RootTimeline({
+      //     name: "RootTimelineForManualOutAnimation-" + slideIdx,
+      //     duration: manTlDur,
+      //   });
 
-        this.outEffTimelines[slideIdx] = outAnimationManualRootTimeline;
-      }
+      //   this.outEffTimelines[slideIdx] = outAnimationManualRootTimeline;
+      // }
 
       this.eventTimelines = [
         ...this.eventTimelines,
@@ -1735,17 +1741,17 @@ export class Player {
           objDef.execStart,
           objDef.execStop,
           objDef.updateTime,
-          itemData.itemValues,
+          itemData.properties,
           calObjSize
         );
         slideTimeline.add(execTl);
       }
 
       // preload
-      if (itemData.itemValues.preload && !!objDef?.preload) {
+      if (itemData.properties.preload && !!objDef?.preload) {
         const preloadPromise = objDef.preload({
           id: itemData.itemId,
-          values: itemData.itemValues,
+          values: itemData.properties,
           className: itemData.objectClass,
           calculatedObjectSize: calObjSize,
         });
@@ -1786,9 +1792,9 @@ export class Player {
     const exitTriggerTimeline = new Timeline({
       id: "exitTriggerTimeline",
       name: "ExitTriggerTimeline-" + slideIdx,
-      duration:
-        convertTimeUnitToMs(data.slide.duration.customValue) -
-        (convertTimeUnitToMs(data.slide.exitDuration.customValue) + overlap),
+      duration: 2000,
+      // convertTimeUnitToMs(data.slide.duration.customValue) -
+      // (convertTimeUnitToMs(data.slide.exitDuration.customValue) + overlap),
     });
     slideTimeline.add(exitTriggerTimeline);
 
@@ -1796,7 +1802,7 @@ export class Player {
     const triggerTimeline = new Timeline({
       id: "triggerTimeline",
       name: "TriggerTimeline-" + slideIdx,
-      duration: convertTimeUnitToMs(data.slide.duration.customValue) - overlap,
+      duration: 10000, // convertTimeUnitToMs(data.slide.duration.customValue) - overlap,
     });
     slideTimeline.add(triggerTimeline);
   }

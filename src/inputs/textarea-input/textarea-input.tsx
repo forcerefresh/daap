@@ -21,7 +21,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
 
   const throttledOnChange = useCallback(
     debounce((value: any) => onInput(value), 500),
-    [onInput]
+    []
   );
 
   const [localValue, setLocalValue] = useState(value);

@@ -14,38 +14,38 @@ export interface TimelineViewProps {
 export default function TimelineView(props: TimelineViewProps) {
   const { object, slideDuration, slideExitDuration } = props;
 
-  const tlsIn = createTimelines(
-    object,
-    object?.transitions?.in || [],
-    slideDuration,
-    slideExitDuration,
-    "in"
-  );
-  const tlsOut = createTimelines(
-    object,
-    object?.transitions?.out || [],
-    slideDuration,
-    slideExitDuration,
-    "out",
-    true
-  );
-  const tlsEff = createTimelines(
-    object,
-    object?.transitions?.animation || [],
-    slideDuration,
-    slideExitDuration,
-    "animation"
-  );
+  // const tlsIn = createTimelines(
+  //   object,
+  //   object?.transitions?.in || [],
+  //   slideDuration,
+  //   slideExitDuration,
+  //   "in"
+  // );
+  // const tlsOut = createTimelines(
+  //   object,
+  //   object?.transitions?.out || [],
+  //   slideDuration,
+  //   slideExitDuration,
+  //   "out",
+  //   true
+  // );
+  // const tlsEff = createTimelines(
+  //   object,
+  //   object?.transitions?.animation || [],
+  //   slideDuration,
+  //   slideExitDuration,
+  //   "animation"
+  // );
 
-  const tlsEvent = createTimelines(
-    object,
-    object?.transitions?.event || [],
-    slideDuration,
-    slideExitDuration,
-    "event"
-  );
+  // const tlsEvent = createTimelines(
+  //   object,
+  //   object?.transitions?.event || [],
+  //   slideDuration,
+  //   slideExitDuration,
+  //   "event"
+  // );
 
-  const tls = [...tlsIn, ...tlsOut, ...tlsEff, ...tlsEvent];
+  const tls: TimelineViewData[] = []; //[...tlsIn, ...tlsOut, ...tlsEff, ...tlsEvent];
 
   /*const sizeOut = calculateTimelineRect(
     slideDuration,

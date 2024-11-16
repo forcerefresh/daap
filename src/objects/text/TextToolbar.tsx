@@ -26,7 +26,7 @@ const alignArr = ["left", "center", "right", "justify"];
 export function TextToolbar(props: IToolbarProps): React.ReactElement {
   const { mode, object, updateObject, deleteObject } = props;
 
-  const values = object?.definition.values as TextValues | undefined;
+  const values = object?.properties as TextValues | undefined;
 
   return (
     <>
@@ -57,7 +57,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
             values.font,
             (v: IFontSelectInputValue) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.font = v;
+              newObject.properties.font = v;
               updateObject(newObject);
             },
             { minimal: true }
@@ -84,7 +84,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
             values.fontSize,
             (v: string) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.fontSize = v;
+              newObject.properties.fontSize = v;
               updateObject(newObject);
             },
             "",

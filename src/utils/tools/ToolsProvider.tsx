@@ -111,6 +111,10 @@ export const ToolsProvider = (
           activeLayerId!,
           activeToolRef.current!,
           {
+            left: params.bounds?.x ?? 100,
+            top: params.bounds?.y ?? 100,
+            width: params.bounds?.width ?? 100,
+            height: params.bounds?.height ?? 100,
             layout: "absolute" as "absolute",
             absoluteLayout: {
               type: "common" as "common",
@@ -134,17 +138,18 @@ export const ToolsProvider = (
       const newObj = cloneDeep(objectById[params.objectId!]);
       // NOTE maybe replace, rather that merge
       if (params.objectValues) {
-        newObj.definition.values = {
-          ...newObj.definition.values,
+        newObj.properties = {
+          ...(newObj.properties ?? {}),
           ...(params.objectValues as any),
         };
       }
 
       if (params.bounds) {
-        newObj.absoluteLayout!.common.left = params.bounds.x + "px";
-        newObj.absoluteLayout!.common.top = params.bounds.y + "px";
-        newObj.absoluteLayout!.common.width = params.bounds.width + "px";
-        newObj.absoluteLayout!.common.height = params.bounds.height + "px";
+        // NOTE: LAYOUT CHANGE
+        newObj.left = params.bounds.x;
+        newObj.top = params.bounds.y;
+        newObj.width = params.bounds.width;
+        newObj.height = params.bounds.height;
       }
 
       dispatch(updateObjectAction(newObj));
@@ -213,10 +218,11 @@ export const ToolsProvider = (
     const toolDef = getObjectToolDefinitions(tool);
     if (toolDef) {
       const object = objectId ? objectById[objectId] : null;
-      const values = object?.definition?.values;
+      const values = object?.properties;
 
-      const x = object?.absoluteLayout?.common.left;
-      const y = object?.absoluteLayout?.common.top;
+      // NOTE: LAYOUT CHANGE
+      const x = object?.left;
+      const y = object?.top;
 
       const canvas = getCanvas();
 
@@ -234,7 +240,7 @@ export const ToolsProvider = (
           editorConfig: { stageZoom },
           objectValues: values,
           objectId,
-          position: object ? { x: x ?? "0", y: y ?? "0" } : { x: "0", y: "0" },
+          position: object ? { x: x ?? 0, y: y ?? 0 } : { x: 0, y: 0 },
           getObjects: (type: string): IObject[] => {
             // console.log(type);
             // console.log(allObjects);

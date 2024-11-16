@@ -80,27 +80,45 @@ export type TextPropertiesTuple = [
 ];
 
 export function createTextObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<TextPropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
+  initialValue?: Record<string, any>
+): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(TEXT);
 
-  const properties: TextPropertiesTuple = [
+  const values: TextValues = {
+    text: (initialValue?.text as string) || "",
+    autoHeight: initialValue?.autoHeight ?? true,
+    initialAutoWidth: initialValue?.initialAutoWidth ?? false,
+    font: (initialValue?.font as IFontSelectInputValue) || {
+      fontFamily: "Arial",
+      source: "system-fonts",
+      weight: "400",
+    },
+    color: { r: 128, g: 128, b: 128, a: 1 },
+    fontSize: initialValue?.fontSize || "1em",
+    bold: false,
+    italic: false,
+    underline: false,
+    lineHeight: "20px",
+    textAlign: "left",
+    letterSpacing: "0px",
+    fontKerning: true,
+    preload: true,
+  };
+
+  object.properties = values;
+
+  return object;
+}
+
+export function getTextObjectForm(): TextPropertiesTuple {
+  const form: TextPropertiesTuple = [
     {
       displayName: "Text",
       propertyName: "text",
       inputType: InputType.TEXTAREA,
-      value: (initialValue?.text as string) || "",
+      value: "",
       defaultValue: "",
-      // optional: true,
-      extraOptions: { devices: true, exportForWizard: true },
+      // extraOptions: { devices: true, exportForWizard: true },
     },
     {
       displayName: "Auto height",
@@ -113,7 +131,7 @@ export function createTextObject(
       displayName: "Font",
       propertyName: "font",
       inputType: InputType.FONT_SELECT,
-      value: (initialValue?.font as IFontSelectInputValue) || {
+      value: {
         fontFamily: "Arial",
         source: "system-fonts",
       },
@@ -135,9 +153,9 @@ export function createTextObject(
       allowedUnits: ["px", "em", "%"],
       propertyName: "fontSize",
       inputType: InputType.UNITS_NUMBER,
-      value: initialValue?.fontSize || "1em",
+      value: "1em",
       defaultValue: "1em",
-      extraOptions: { devices: true, exportForWizard: true },
+      // extraOptions: { devices: true, exportForWizard: true },
     },
     {
       displayName: "Bold",
@@ -145,7 +163,7 @@ export function createTextObject(
       inputType: InputType.CHECKBOX,
       value: false,
       defaultValue: false,
-      helperText: "This overrides font weight config",
+      // helperText: "This overrides font weight config",
     },
     {
       displayName: "Italic",
@@ -167,7 +185,7 @@ export function createTextObject(
       inputType: InputType.UNITS_NUMBER,
       value: "",
       defaultValue: "",
-      extraOptions: { devices: true, exportForWizard: true, optional: true },
+      // extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
       displayName: "Text align",
@@ -180,7 +198,7 @@ export function createTextObject(
         { value: "center", label: "Center" },
         { value: "right", label: "Right" },
       ],
-      extraOptions: { devices: true, exportForWizard: true, optional: true },
+      // extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
       displayName: "Letter spacing",
@@ -188,7 +206,7 @@ export function createTextObject(
       inputType: InputType.UNITS_NUMBER,
       value: "",
       defaultValue: "",
-      extraOptions: { devices: true, exportForWizard: true, optional: true },
+      // extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
       displayName: "Font kerning",
@@ -203,70 +221,23 @@ export function createTextObject(
       inputType: InputType.CHECKBOX,
       value: true,
       defaultValue: true,
-      //inputProps: { disabled: true },
     },
   ];
 
-  const values: TextValues = {
-    text: (initialValue?.text as string) || "",
-    autoHeight: initialValue?.autoHeight ?? true,
-    initialAutoWidth: initialValue?.initialAutoWidth ?? false,
-    font: (initialValue?.font as IFontSelectInputValue) || {
-      fontFamily: "Arial",
-      source: "system-fonts",
-      weight: "400",
-    },
-    color: { r: 128, g: 128, b: 128, a: 1 },
-    fontSize: initialValue?.fontSize || "1em",
-    bold: false,
-    italic: false,
-    underline: false,
-    lineHeight: "20px",
-    textAlign: "left",
-    letterSpacing: "0px",
-    fontKerning: true,
-    preload: true, // not visible,
-  };
-
-  return {
-    ...object,
-    definition: {
-      id: uuid(),
-      type: TEXT,
-      properties,
-      values,
-      valuesMetadata: {
-        ...{ lineHeight: { exportForWizard: false, disabled: true } },
-        ...{ letterSpacing: { exportForWizard: false, disabled: true } },
-      },
-    },
-    commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition(true)],
-      values: { ...getCommonPropertiesValues() },
-      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
-    },
-    transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition(true)],
-      values: {
-        ...getTransformPropertiesValues(),
-        ...{ transformOriginX: "left", transformOriginY: "top" },
-      },
-      valuesMetadata: {},
-    },
-  };
+  return form;
 }
 
 export function getTextHtml(props: GetHtmlFuncPropsType) {
   const { object, calculatedObjectSize, deviceType } = props;
 
   const textValues = getObjectValuesForDevice(
-    object.definition.values as TextValues,
+    object.properties as TextValues,
     deviceType
   );
 
-  const textPropertiesMeta = object.definition.valuesMetadata as {
-    [key: string]: IInputMetadataValues;
-  };
+  // const textPropertiesMeta = object.definition.valuesMetadata as {
+  //   [key: string]: IInputMetadataValues;
+  // };
 
   const fontWeight = textValues.bold
     ? "700"
@@ -289,11 +260,11 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
 
   //style += "position: absolute;";
 
-  if (!textPropertiesMeta.lineHeight?.disabled) {
+  if ("lineHeight" in textValues) {
     style += "line-height: " + textValues.lineHeight + ";";
   }
 
-  if (!textPropertiesMeta.letterSpacing?.disabled && textValues.letterSpacing) {
+  if ("letterSpacing" in textValues) {
     style += "letter-spacing: " + textValues.letterSpacing + ";";
   }
 
@@ -321,14 +292,16 @@ export async function textSizeUpdate(
     calculatedObjectSize,
     className,
     scale,
-    values,
-    valuesMetadata,
+    properties,
     skipSizeUpdate,
     deviceType,
-    commonStyleDefinition,
-    transformDefinition,
+    style,
+    transform,
   } = props;
-  const textValues = getObjectValuesForDevice(values as TextValues, deviceType);
+  const textValues = getObjectValuesForDevice(
+    properties as TextValues,
+    deviceType
+  );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -341,13 +314,13 @@ export async function textSizeUpdate(
     objectContentEl.innerHTML = textValues.text;
   }
 
-  if (valuesMetadata.fontSize?.disabled === false)
+  if ("fontSize" in textValues)
     objectContentEl.style.fontSize = textValues.fontSize;
-  if (valuesMetadata.textAlign?.disabled === false)
+  if ("textAlign" in textValues)
     objectContentEl.style.textAlign = textValues.textAlign;
-  if (valuesMetadata.lineHeight?.disabled === false)
+  if ("lineHeight" in textValues)
     objectContentEl.style.lineHeight = textValues.lineHeight;
-  if (valuesMetadata.letterSpacing?.disabled === false)
+  if ("letterSpacing" in textValues)
     objectContentEl.style.letterSpacing = textValues.letterSpacing;
 
   //const els = document.getElementsByClassName(className);
@@ -382,21 +355,14 @@ export async function textSizeUpdate(
   // }
   //}
 
-  addCommonStyleToObjectElementContent(
-    objectContentEl,
-    commonStyleDefinition,
-    deviceType
-  );
+  addCommonStyleToObjectElementContent(objectContentEl, style, deviceType);
   addTransformStyleToObjectElementContent(
     objectContentEl,
-    transformDefinition,
+    transform,
     deviceType
   );
 
-  const transformProperties = getObjectValuesForDevice(
-    transformDefinition?.values as TransformPropertiesValues,
-    deviceType
-  );
+  const transformProperties = getObjectValuesForDevice(transform);
 
   if (transformProperties?.transformOriginX) {
     objectWrapperEl.style.transformOrigin = `${

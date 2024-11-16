@@ -35,26 +35,26 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
       function onChange(value: any) {
         const retObj = cloneDeep(objectOrLayer);
 
-        if (retObj) {
-          const values = retObj.navigationDefinition.values as {
-            [key: string]: any;
-          };
-          values[propertyName] = value;
-          updateFunction(retObj);
-        }
+        // if (retObj) {
+        //   const values = retObj.navigationDefinition.values as {
+        //     [key: string]: any;
+        //   };
+        //   values[propertyName] = value;
+        //   updateFunction(retObj);
+        // }
       }
 
       function onMetadataChange(metadata: IInputMetadataValues) {
         const retObj = cloneDeep(objectOrLayer);
 
-        if (retObj) {
-          const valuesMetadata = retObj.navigationDefinition.valuesMetadata as {
-            [key: string]: any;
-          };
-          valuesMetadata[propertyName] = metadata;
+        // if (retObj) {
+        //   const valuesMetadata = retObj.navigationDefinition.valuesMetadata as {
+        //     [key: string]: any;
+        //   };
+        //   valuesMetadata[propertyName] = metadata;
 
-          updateFunction(retObj);
-        }
+        //   updateFunction(retObj);
+        // }
       }
 
       const inputProps = {
@@ -89,13 +89,13 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
   const renderObjectProperties = (object: IObject) => {
     return (
       <>
-        {renderProperties(
+        {/* {renderProperties(
           navigationDefinition,
           object.navigationDefinition.values,
           object.navigationDefinition.valuesMetadata,
           object,
           _updateObject
-        )}
+        )} */}
       </>
     );
   };

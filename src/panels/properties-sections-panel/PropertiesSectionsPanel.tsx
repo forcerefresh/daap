@@ -182,22 +182,22 @@ const mapStateToProps = (state: IStore) => {
   let totalAnimationCounter = 0;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
-    totalAnimationCounter =
-      (layer?.transitions?.in?.length || 0) +
-      (layer?.transitions?.out?.length || 0) +
-      (layer?.transitions?.layer?.length || 0);
+    // totalAnimationCounter =
+    //   (layer?.transitions?.in?.length || 0) +
+    //   (layer?.transitions?.out?.length || 0) +
+    //   (layer?.transitions?.layer?.length || 0);
   }
 
   if (selection.selectionForProperties?.type === "slide" && slide) {
-    totalAnimationCounter = slide?.transitions?.slide?.length || 0;
+    // totalAnimationCounter = slide?.transitions?.slide?.length || 0;
   }
 
   if (selection.selectionForProperties?.type === "object" && object) {
-    totalAnimationCounter =
-      (object?.transitions?.in?.length || 0) +
-      (object?.transitions?.out?.length || 0) +
-      (object?.transitions?.animation?.length || 0) +
-      (object?.transitions?.event?.length || 0);
+    // totalAnimationCounter =
+    //   (object?.transitions?.in?.length || 0) +
+    //   (object?.transitions?.out?.length || 0) +
+    //   (object?.transitions?.animation?.length || 0) +
+    //   (object?.transitions?.event?.length || 0);
   }
 
   return {

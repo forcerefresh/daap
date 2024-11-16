@@ -31,7 +31,7 @@ export function getUnitNumericFiled<T>(
 }
 
 export function getNumericFiled<T>(
-  label: string,
+  label: string | undefined,
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
@@ -187,7 +187,7 @@ export function getTextArea<T>(
 
 export function getTextField<T>(
   label: string,
-  value: T,
+  value: T | undefined,
   onChange: (value: T) => void,
   helperText?: string,
   inputProps: {
@@ -270,7 +270,7 @@ export function getGridLayoutField<T>(
 
 export function getAbsoluteLayoutField<T>(
   label: string,
-  value: T,
+  value: T | undefined,
   onChange: (value: T) => void,
   inputProps?: {
     selfSize?: boolean;

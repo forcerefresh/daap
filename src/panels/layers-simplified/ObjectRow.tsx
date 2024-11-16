@@ -1,4 +1,4 @@
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import cx from "classnames";
 import { selectForPropertiesProps } from "../../store/actions/actions";
 import { ReactElement, useEffect, useState } from "react";
@@ -14,6 +14,7 @@ import type { Identifier, XYCoord } from "dnd-core";
 import type { CSSProperties, FC } from "react";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
+import { ILayer } from "../../store/reducers/i-layers";
 
 interface DragItem {
   index: number;

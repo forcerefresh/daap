@@ -29,38 +29,38 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
   const itemType = selectionForProperties?.type;
   const id = selectionForProperties?.id!;
 
-  const getEnableSlideTransitionCheckbox = () => {
-    const slide = slideById[id];
+  // const getEnableSlideTransitionCheckbox = () => {
+  //   const slide = slideById[id];
 
-    return getCheckboxField(
-      "Enable slide transition",
-      slide.transitionEnabled,
-      (value: boolean) => {
-        const newItem = cloneDeep(slide);
-        newItem.transitionEnabled = value;
-        _updateSlide(newItem);
-      },
-      "",
-      { alignIndicator: "left" }
-    );
-  };
+  //   return getCheckboxField(
+  //     "Enable slide transition",
+  //     slide.transitionEnabled,
+  //     (value: boolean) => {
+  //       const newItem = cloneDeep(slide);
+  //       newItem.transitionEnabled = value;
+  //       _updateSlide(newItem);
+  //     },
+  //     "",
+  //     { alignIndicator: "left" }
+  //   );
+  // };
 
   let slideForm = <></>;
   if (itemType === "slide") {
     const slide = slideById[id];
 
-    if (!slide.transitionEnabled) {
-      return (
-        <div className={css.enableSlideHolder}>
-          {getEnableSlideTransitionCheckbox()}
-        </div>
-      );
-    }
+    // if (!slide.transitionEnabled) {
+    //   return (
+    //     <div className={css.enableSlideHolder}>
+    //       {getEnableSlideTransitionCheckbox()}
+    //     </div>
+    //   );
+    // }
     slideForm = (
       <div className={css.enableSlideHolder}>
-        {getEnableSlideTransitionCheckbox()}
+        {/* {getEnableSlideTransitionCheckbox()} */}
 
-        {getUnitNumericFiled(
+        {/* {getUnitNumericFiled(
           "Overlap",
           slide.transitionOverlapTime,
           (value: any) => {
@@ -71,9 +71,9 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
           "",
           { style: { width: "90px" } },
           ["ms", "s"]
-        )}
+        )} */}
 
-        {getUnitNumericFiled(
+        {/* {getUnitNumericFiled(
           "Duration",
           slide.transitionDurationTime,
           (value: any) => {
@@ -84,9 +84,9 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
           "",
           { style: { width: "90px" } },
           ["ms", "s"]
-        )}
+        )} */}
 
-        {getCheckboxField(
+        {/* {getCheckboxField(
           "Move to top",
           slide.moveToTop,
           (value) => {
@@ -96,12 +96,12 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
           },
           "Move slide to top when slide starts",
           { alignIndicator: "left" }
-        )}
+        )} */}
       </div>
     );
-    if (!slide.transitionEnabled) {
-      return slideForm;
-    }
+    // if (!slide.transitionEnabled) {
+    //   return slideForm;
+    // }
   }
 
   return (

@@ -100,92 +100,92 @@ export function LayerRow(props: ILayerRowProps) {
     drop: dropHandler,
   }));
 
-  const renderSelectedDevices = (layer: ILayer) => {
-    const resVis = layer.responsiveVisibility;
-    if (resVis.showAll) {
-      return <span className={css.layerResponseVisibilityAll}>ALL</span>;
-    } else if (resVis.displayOn.length === 0) {
-      return <span className={css.layerResponseVisibilityNone}>NONE</span>;
-    } else {
-      return breakpointsConfiguration.breakpointsConfiguration.map(
-        (bpConfig) => {
-          if (!includes(resVis.displayOn, bpConfig.type)) {
-            return null;
-          }
-          const iconName = getIconByType(bpConfig.type);
-          const size = getIconSize(iconName);
-          const iconStyle = getIconStyle(iconName);
+  // const renderSelectedDevices = (layer: ILayer) => {
+  //   const resVis = layer.responsiveVisibility;
+  //   if (resVis.showAll) {
+  //     return <span className={css.layerResponseVisibilityAll}>ALL</span>;
+  //   } else if (resVis.displayOn.length === 0) {
+  //     return <span className={css.layerResponseVisibilityNone}>NONE</span>;
+  //   } else {
+  //     return breakpointsConfiguration.breakpointsConfiguration.map(
+  //       (bpConfig) => {
+  //         if (!includes(resVis.displayOn, bpConfig.type)) {
+  //           return null;
+  //         }
+  //         const iconName = getIconByType(bpConfig.type);
+  //         const size = getIconSize(iconName);
+  //         const iconStyle = getIconStyle(iconName);
 
-          if (disableVisibility) iconStyle.fill = "#ff5f6d";
+  //         if (disableVisibility) iconStyle.fill = "#ff5f6d";
 
-          const icon = getResponsiveIcon(
-            iconName,
-            size.w,
-            size.h,
-            undefined,
-            bpConfig.portrait,
-            { verticalAlign: "text-bottom", ...iconStyle }
-          );
+  //         const icon = getResponsiveIcon(
+  //           iconName,
+  //           size.w,
+  //           size.h,
+  //           undefined,
+  //           bpConfig.portrait,
+  //           { verticalAlign: "text-bottom", ...iconStyle }
+  //         );
 
-          return icon;
-        }
-      );
-    }
-  };
+  //         return icon;
+  //       }
+  //     );
+  //   }
+  // };
 
-  const renderDeviceOptions = (layer: ILayer) => {
-    return breakpointsConfiguration.breakpointsConfiguration.map(
-      (bpConfig: BreakpointConfiguration) => {
-        if (!bpConfig.enabled) return null;
+  // const renderDeviceOptions = (layer: ILayer) => {
+  //   return breakpointsConfiguration.breakpointsConfiguration.map(
+  //     (bpConfig: BreakpointConfiguration) => {
+  //       if (!bpConfig.enabled) return null;
 
-        const iconName = getIconByType(bpConfig.type);
-        const size = getIconSize(iconName);
+  //       const iconName = getIconByType(bpConfig.type);
+  //       const size = getIconSize(iconName);
 
-        const icon = getResponsiveIcon(
-          iconName,
-          size.w,
-          size.h,
-          undefined,
-          bpConfig.portrait
-        );
+  //       const icon = getResponsiveIcon(
+  //         iconName,
+  //         size.w,
+  //         size.h,
+  //         undefined,
+  //         bpConfig.portrait
+  //       );
 
-        return (
-          <Checkbox
-            key={bpConfig.type}
-            disabled={layer.responsiveVisibility.showAll}
-            checked={
-              layer.responsiveVisibility.showAll ||
-              includes(layer.responsiveVisibility.displayOn, bpConfig.type)
-            }
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              let newLayer = cloneDeep(layer);
-              remove(
-                newLayer.responsiveVisibility.displayOn,
-                (type) => type === bpConfig.type
-              );
+  //       return (
+  //         <Checkbox
+  //           key={bpConfig.type}
+  //           disabled={layer.responsiveVisibility.showAll}
+  //           checked={
+  //             layer.responsiveVisibility.showAll ||
+  //             includes(layer.responsiveVisibility.displayOn, bpConfig.type)
+  //           }
+  //           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+  //             let newLayer = cloneDeep(layer);
+  //             remove(
+  //               newLayer.responsiveVisibility.displayOn,
+  //               (type) => type === bpConfig.type
+  //             );
 
-              if (event.target.checked) {
-                newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
-              }
+  //             if (event.target.checked) {
+  //               newLayer.responsiveVisibility.displayOn.push(bpConfig.type);
+  //             }
 
-              newLayer.responsiveVisibility.showAll = false;
-              updateLayer(newLayer);
-            }}
-          >
-            <span
-              style={{
-                marginRight: "5px",
-                verticalAlign: "middle",
-              }}
-            >
-              {icon}
-            </span>
-            {bpConfig.name}
-          </Checkbox>
-        );
-      }
-    );
-  };
+  //             newLayer.responsiveVisibility.showAll = false;
+  //             updateLayer(newLayer);
+  //           }}
+  //         >
+  //           <span
+  //             style={{
+  //               marginRight: "5px",
+  //               verticalAlign: "middle",
+  //             }}
+  //           >
+  //             {icon}
+  //           </span>
+  //           {bpConfig.name}
+  //         </Checkbox>
+  //       );
+  //     }
+  //   );
+  // };
 
   return (
     <div
@@ -220,15 +220,13 @@ export function LayerRow(props: ILayerRowProps) {
 
         <div className={css.layerName}>{layer.name}</div>
 
-        <div
+        {/* <div
           className={css.layerResponseVisibility}
           onClick={(e) => e.stopPropagation()}
         >
           <Popover
             position="bottom"
-            //usePortal={true}
             minimal
-            //className={css.devicePopup}
             content={
               <div className={css.devicePopup}>
                 <div
@@ -265,15 +263,14 @@ export function LayerRow(props: ILayerRowProps) {
               </div>
             }
           >
-            {/* <div className={css.devicesHolder}> */}
             <Button minimal>
               {renderSelectedDevices(layer)}{" "}
               <Icon icon="caret-down" style={{ marginBottom: "2px" }} />
             </Button>
-            {/* </div> */}
           </Popover>
-        </div>
+        </div> */}
       </div>
+
       <div
         className={cx(css.dropHereHint, {
           [css.dropHereHintVisible]: isObjectOver,

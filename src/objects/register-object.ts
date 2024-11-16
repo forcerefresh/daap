@@ -90,6 +90,7 @@ import {
   textSizeUpdate,
   getFonts,
   TEXT,
+  getTextObjectForm,
 } from "./text/text";
 import {
   createTrianglifyObject,
@@ -139,142 +140,177 @@ import { TextToolbar } from "./text/TextToolbar";
 import { TextFloatingToolbar } from "./text/TextFloatingBar";
 import { ImageToolbar } from "./image/ImageToolbar";
 
-registerObject(
-  "button",
-  "navigation",
-  buttonMeta,
-  createButtonObject,
-  buttonSizeUpdate,
-  getButtonHtml
-);
+// -------------------------
 
 registerObject(
-  "arrow",
-  "navigation",
-  arrowMeta,
-  createArrowObject,
-  arrowSizeUpdate,
-  getArrowHtml
-);
-
-registerObject(
-  "bullets",
-  "navigation",
-  bulletsMeta,
-  createBulletsObject,
-  bulletsSizeUpdate,
-  getBulletsHtml,
+  TEXT,
+  "text",
+  textMeta,
+  createTextObject,
+  getTextObjectForm,
+  textSizeUpdate,
+  getTextHtml,
+  preloadText,
   undefined,
   undefined,
   undefined,
   undefined,
-  getBulletsAssetsUrls
-);
-
-registerObject(
-  "spinner",
-  "navigation",
-  spinnerMeta,
-  createSpinnerObject,
-  spinnerSizeUpdate,
-  getSpinnerHtml
-);
-
-registerObject(
-  FREE_DRAW,
-  "media",
-  freeDrawMeta,
-  createFreeDrawObject,
-  freeDrawSizeUpdate,
-  getFreeDrawHtml,
   undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined
+  getFonts
 );
 
 registerObjectTool({
-  type: FREE_DRAW,
-  meta: freeDrawMeta,
-  toolClass: FreeHandDrawTool,
-  toolBar: FreeDrawToolbar,
+  type: TEXT,
+  meta: textMeta,
+  toolClass: TextTool,
+  toolBar: TextToolbar,
+  floatingBar: TextFloatingToolbar,
 });
 
-registerObject(
-  IMAGE,
-  "media",
-  imageMeta,
-  createImageObject,
-  imageSizeUpdate,
-  getImageHtml,
-  preloadImage,
-  undefined,
-  undefined,
-  imagePostProcess,
-  getAssetsUrls
-);
+// -------------------------
 
-registerObjectTool({
-  type: IMAGE,
-  meta: imageMeta,
-  // toolClass: TextTool,
-  toolBar: ImageToolbar,
-  // floatingBar: TextFloatingToolbar,
-});
+// registerObject(
+//   IMAGE,
+//   "media",
+//   imageMeta,
+//   createImageObject,
+//   imageSizeUpdate,
+//   getImageHtml,
+//   preloadImage,
+//   undefined,
+//   undefined,
+//   imagePostProcess,
+//   getAssetsUrls
+// );
 
-registerObject(
-  "frame",
-  "other",
-  frameMeta,
-  createFrameObject,
-  frameSizeUpdate,
-  getFrameHtml
-);
+// registerObjectTool({
+//   type: IMAGE,
+//   meta: imageMeta,
+//   // toolClass: TextTool,
+//   toolBar: ImageToolbar,
+//   // floatingBar: TextFloatingToolbar,
+// });
 
-registerObject(
-  "svg",
-  "media",
-  svgMeta,
-  createSvgObject,
-  svgSizeUpdate,
-  getSvgHtml
-);
+// -------------------------
 
-registerObject(
-  "html-object",
-  "other",
-  htmlMeta,
-  createHtmlObject,
-  htmlSizeUpdate,
-  getHtmlHtml
-);
+// registerObject(
+//   FREE_DRAW,
+//   "media",
+//   freeDrawMeta,
+//   createFreeDrawObject,
+//   freeDrawSizeUpdate,
+//   getFreeDrawHtml,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined
+// );
 
-registerObject(
-  "video",
-  "media",
-  videoMeta,
-  createVideoObject,
-  videoSizeUpdate,
-  getVideoHtml,
-  preloadVideo,
-  video_objectStart,
-  video_objectStop,
-  videoPostProcess,
-  getVideoAssetsUrls
-);
+// registerObjectTool({
+//   type: FREE_DRAW,
+//   meta: freeDrawMeta,
+//   toolClass: FreeHandDrawTool,
+//   toolBar: FreeDrawToolbar,
+// });
 
-registerObject(
-  "delay",
-  "other",
-  delayMeta,
-  createDelayObject,
-  delaySizeUpdate,
-  getDelayHtml,
-  preloadDelay,
-  delayObject_Start,
-  delayObject_Stop
-);
+// -------------------------
+
+// registerObject(
+//   "svg",
+//   "media",
+//   svgMeta,
+//   createSvgObject,
+//   svgSizeUpdate,
+//   getSvgHtml
+// );
+
+// -------------------------
+
+// registerObject(
+//   "button",
+//   "navigation",
+//   buttonMeta,
+//   createButtonObject,
+//   buttonSizeUpdate,
+//   getButtonHtml
+// );
+
+// registerObject(
+//   "arrow",
+//   "navigation",
+//   arrowMeta,
+//   createArrowObject,
+//   arrowSizeUpdate,
+//   getArrowHtml
+// );
+
+// registerObject(
+//   "bullets",
+//   "navigation",
+//   bulletsMeta,
+//   createBulletsObject,
+//   bulletsSizeUpdate,
+//   getBulletsHtml,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   getBulletsAssetsUrls
+// );
+
+// registerObject(
+//   "spinner",
+//   "navigation",
+//   spinnerMeta,
+//   createSpinnerObject,
+//   spinnerSizeUpdate,
+//   getSpinnerHtml
+// );
+
+// registerObject(
+//   "frame",
+//   "other",
+//   frameMeta,
+//   createFrameObject,
+//   frameSizeUpdate,
+//   getFrameHtml
+// );
+
+// registerObject(
+//   "html-object",
+//   "other",
+//   htmlMeta,
+//   createHtmlObject,
+//   htmlSizeUpdate,
+//   getHtmlHtml
+// );
+
+// registerObject(
+//   "video",
+//   "media",
+//   videoMeta,
+//   createVideoObject,
+//   videoSizeUpdate,
+//   getVideoHtml,
+//   preloadVideo,
+//   video_objectStart,
+//   video_objectStop,
+//   videoPostProcess,
+//   getVideoAssetsUrls
+// );
+
+// registerObject(
+//   "delay",
+//   "other",
+//   delayMeta,
+//   createDelayObject,
+//   delaySizeUpdate,
+//   getDelayHtml,
+//   preloadDelay,
+//   delayObject_Start,
+//   delayObject_Stop
+// );
 
 // registerObject(
 //   "json_source",
@@ -309,43 +345,19 @@ registerObject(
 //   getTrianglifyHtml
 // );
 
-registerObject(
-  "multi-image-object",
-  "media",
-  multiImageMeta,
-  createMultiImageObject,
-  multiImageSizeUpdate,
-  getMultiImageHtml,
-  preloadMultiImage,
-  undefined,
-  undefined,
-  multiImagePostProcess,
-  getMultiImageAssetsUrls
-);
-
-registerObject(
-  TEXT,
-  "text",
-  textMeta,
-  createTextObject,
-  textSizeUpdate,
-  getTextHtml,
-  preloadText,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  getFonts
-);
-
-registerObjectTool({
-  type: TEXT,
-  meta: textMeta,
-  toolClass: TextTool,
-  toolBar: TextToolbar,
-  floatingBar: TextFloatingToolbar,
-});
+// registerObject(
+//   "multi-image-object",
+//   "media",
+//   multiImageMeta,
+//   createMultiImageObject,
+//   multiImageSizeUpdate,
+//   getMultiImageHtml,
+//   preloadMultiImage,
+//   undefined,
+//   undefined,
+//   multiImagePostProcess,
+//   getMultiImageAssetsUrls
+// );
 
 //registerObjectTool({ type: TEXT, meta: textMeta, toolClass: TextTool });
 
@@ -360,12 +372,12 @@ registerObjectTool({
 //   textTargetStart
 // );
 
-registerObject(
-  "rich-text-object",
-  "text",
-  richMeta,
-  createRichTextObject,
-  richTextSizeUpdate,
-  getRichTextHtml,
-  preloadText
-);
+// registerObject(
+//   "rich-text-object",
+//   "text",
+//   richMeta,
+//   createRichTextObject,
+//   richTextSizeUpdate,
+//   getRichTextHtml,
+//   preloadText
+// );

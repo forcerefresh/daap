@@ -12,7 +12,7 @@ import {
   setStagePan,
   updateObject,
 } from "../../store/actions/actions";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { connect } from "react-redux";
 import { cloneDeep, remove } from "lodash-es";
 import { StageToolEnum } from "../../utils/selection-manager/types";
@@ -52,6 +52,7 @@ import { HANDLE_SIZE } from "./WithResizeHandle";
 import { setFloatingActionPanelVisibility } from "../floating-actions-panel/utils";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { TextValues } from "../../objects/text/text";
+import { ILayer } from "../../store/reducers/i-layers";
 
 type StageManagerProviderProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
@@ -364,11 +365,12 @@ function processRotateChangeEvent(
   const object = objectById[objectId];
   const angle = eData.angle;
 
+  // NOTE: LAYOUT CHANGE
   const objectSize: Rect = {
-    x: parseFloat(object.absoluteLayout?.common!.left!),
-    y: parseFloat(object.absoluteLayout?.common!.top!),
-    width: parseFloat(object.absoluteLayout?.common!.width!),
-    height: parseFloat(object.absoluteLayout?.common!.height!),
+    x: object.left!,
+    y: object.top!,
+    width: object.width!,
+    height: object.height!,
   };
 
   let left = objectSize.x;
@@ -424,11 +426,12 @@ function processRotateStopEvent(
   const object = objectById[objectId];
   const angle = eData.angle;
 
+  // NOTE: LAYOUT CHANGE
   const objectSize: Rect = {
-    x: parseFloat(object.absoluteLayout?.common!.left!),
-    y: parseFloat(object.absoluteLayout?.common!.top!),
-    width: parseFloat(object.absoluteLayout?.common!.width!),
-    height: parseFloat(object.absoluteLayout?.common!.height!),
+    x: object.left!,
+    y: object.top!,
+    width: object.width!,
+    height: object.height!,
   };
 
   let left = objectSize.x;
@@ -439,8 +442,8 @@ function processRotateStopEvent(
   m.translateSelf(objectSize.x, objectSize.y);
   m.rotateSelf(object.rotation);
   m.translateSelf(
-    (objectSize.width / 2) * object.scale,
-    (objectSize.height / 2) * object.scale
+    (objectSize.width / 2) * (object.scale ?? 1),
+    (objectSize.height / 2) * (object.scale ?? 1)
   );
   m.rotateSelf(angle);
   m.scaleSelf(object.scale);
@@ -454,9 +457,10 @@ function processRotateStopEvent(
 
   const newObject = cloneDeep(object);
 
+  // NOTE: LAYOUT CHANGE
   newObject.rotation = d.rotateZ;
-  newObject.absoluteLayout!.common!.left! = left + "px";
-  newObject.absoluteLayout!.common!.top! = top + "px";
+  newObject.left = left;
+  newObject.top = top;
 
   _updateObject(newObject);
 
@@ -681,9 +685,9 @@ function processMoveChangeEvent(
       // objectHolder.style.transform =
       //   "translateX(" + x + "px) translateY(" + y + "px)";
 
-      const left =
-        parseFloat(object.absoluteLayout?.common!.left!) + realMove.x;
-      const top = parseFloat(object.absoluteLayout?.common!.top!) + realMove.y;
+      // NOTE: LAYOUT CHANGE
+      const left = object.left! + realMove.x;
+      const top = object.top! + realMove.y;
       objectHolder.style.left = left + "px";
       objectHolder.style.top = top + "px";
 
@@ -698,10 +702,10 @@ function processMoveChangeEvent(
       const corners = getCorners(
         left,
         top,
-        parseFloat(object.absoluteLayout?.common!.width!),
-        parseFloat(object.absoluteLayout?.common!.height!),
-        object.rotation,
-        object.scale
+        object.width!,
+        object.height!,
+        object.rotation ?? 0,
+        object.scale ?? 1
       );
 
       // addCornerMarkers(object.parentId!, corners);
@@ -841,11 +845,10 @@ function processMoveStopEvent(
 
     console.log(realMove);
 
+    // NOTE: LAYOUT CHANGE
     const newObject = cloneDeep(object);
-    newObject.absoluteLayout!.common!.left! =
-      parseFloat(newObject.absoluteLayout!.common!.left!) + realMove.x + "px";
-    newObject.absoluteLayout!.common!.top! =
-      parseFloat(newObject.absoluteLayout!.common!.top!) + realMove.y + "px";
+    newObject.left = newObject.left! + realMove.x;
+    newObject.top = newObject.top! + realMove.y;
 
     objectToUpdate.push(newObject);
 
@@ -1071,21 +1074,23 @@ function processScaleChangeEvent(
       //       // var mouseLocalX = c * realMoveXY + s * realMoveXY;
       //       // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
       // sf
+      // NOTE: LAYOUT CHANGE
       const objectSize: Rect = {
-        x: parseFloat(object.absoluteLayout?.common!.left!),
-        y: parseFloat(object.absoluteLayout?.common!.top!),
-        width: parseFloat(object.absoluteLayout?.common!.width!), //* object.scale,
-        height: parseFloat(object.absoluteLayout?.common!.height!), //* object.scale,
+        x: object.left!,
+        y: object.top!,
+        width: object.width!, //* object.scale,
+        height: object.height!, //* object.scale,
       };
 
       let left = objectSize.x;
       let top = objectSize.y;
-      let scale = object.scale;
+      let scale = object.scale ?? 1;
 
       const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
       scale =
-        (object.scale * objectSize.width - dir * realMoveXY) / objectSize.width;
+        ((object.scale ?? 1) * objectSize.width - dir * realMoveXY) /
+        objectSize.width;
 
       let m = new DOMMatrix();
 
@@ -1095,7 +1100,7 @@ function processScaleChangeEvent(
         m.rotateSelf(object.rotation);
         m.translateSelf(
           0, //objectSize.width * object.scale - objectSize.width,
-          objectSize.height * object.scale - objectSize.height
+          objectSize.height * (object.scale ?? 1) - objectSize.height
         ); // old scale here
 
         m.scaleSelf(scale); // new scale here
@@ -1114,7 +1119,7 @@ function processScaleChangeEvent(
       if (eData.handle === "bl") {
         m.rotateSelf(object.rotation);
         m.translateSelf(
-          objectSize.width * object.scale - objectSize.width,
+          objectSize.width * (object.scale ?? 1) - objectSize.width,
           0 //objectSize.height * object.scale - objectSize.height
         ); // old scale here
 
@@ -1134,8 +1139,8 @@ function processScaleChangeEvent(
       if (eData.handle === "tl") {
         m.rotateSelf(object.rotation);
         m.translateSelf(
-          objectSize.width * object.scale - objectSize.width,
-          objectSize.height * object.scale - objectSize.height
+          objectSize.width * (object.scale ?? 1) - objectSize.width,
+          objectSize.height * (object.scale ?? 1) - objectSize.height
         ); // old scale here
 
         m.scaleSelf(scale); // new scale here
@@ -1156,7 +1161,8 @@ function processScaleChangeEvent(
 
       // WIDTH
       if (eData.handle === "width") {
-        const newWidth = objectSize.width + mouseMoveX / object.scale + "px";
+        const newWidth =
+          objectSize.width + mouseMoveX / (object.scale ?? 1) + "px";
         objectHolder.style.width = newWidth;
 
         const contentEl = objectHolder.getElementsByClassName(
@@ -1173,7 +1179,8 @@ function processScaleChangeEvent(
         //   object.objectIds ? "#444444" : "#48aff0"
         // }`;
       } else if (eData.handle === "height") {
-        const newHeight = objectSize.height + mouseMoveY / object.scale + "px";
+        const newHeight =
+          objectSize.height + mouseMoveY / (object.scale ?? 1) + "px";
         objectHolder.style.height = newHeight;
 
         const contentEl = objectHolder.getElementsByClassName(
@@ -1200,7 +1207,7 @@ function processScaleChangeEvent(
         ) as HTMLDivElement[];
 
         handlesEls.forEach((handleEL) => {
-          handleEL.style.scale = `${object.scale / scale}`;
+          handleEL.style.scale = `${(object.scale ?? 1) / scale}`;
         });
 
         objectHolder.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
@@ -1289,11 +1296,12 @@ function processScaleStopEvent(
     // var mouseLocalX = c * realMoveXY + s * realMoveXY;
     // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
 
+    // NOTE: LAYOUT CHANGE
     const objectSize: Rect = {
-      x: parseFloat(object.absoluteLayout?.common!.left!),
-      y: parseFloat(object.absoluteLayout?.common!.top!),
-      width: parseFloat(object.absoluteLayout?.common!.width!), // * object.scale,
-      height: parseFloat(object.absoluteLayout?.common!.height!), //* object.scale,
+      x: object.left!,
+      y: object.top!,
+      width: object.width!, // * object.scale,
+      height: object.height!, //* object.scale,
     };
 
     // var len = Math.sqrt(Math.pow(realMoveXY, 2) + Math.pow(realMoveXY, 2));
@@ -1308,7 +1316,8 @@ function processScaleStopEvent(
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
     let scale =
-      (object.scale * objectSize.width - dir * realMoveX) / objectSize.width;
+      ((object.scale ?? 1) * objectSize.width - dir * realMoveX) /
+      objectSize.width;
 
     let left = objectSize.x;
     let top = objectSize.y;
@@ -1371,7 +1380,7 @@ function processScaleStopEvent(
       m.rotateSelf(object.rotation);
       m.translateSelf(
         0, //objectSize.width * object.scale - objectSize.width,
-        objectSize.height * object.scale - objectSize.height
+        objectSize.height * (object.scale ?? 1) - objectSize.height
       ); // old scale here
 
       m.scaleSelf(scale); // new scale here
@@ -1389,7 +1398,7 @@ function processScaleStopEvent(
     if (eData.handle === "bl") {
       m.rotateSelf(object.rotation);
       m.translateSelf(
-        objectSize.width * object.scale - objectSize.width,
+        objectSize.width * (object.scale ?? 1) - objectSize.width,
         0 //objectSize.height * object.scale - objectSize.height
       ); // old scale here
 
@@ -1408,8 +1417,8 @@ function processScaleStopEvent(
     if (eData.handle === "tl") {
       m.rotateSelf(object.rotation);
       m.translateSelf(
-        objectSize.width * object.scale - objectSize.width,
-        objectSize.height * object.scale - objectSize.height
+        objectSize.width * (object.scale ?? 1) - objectSize.width,
+        objectSize.height * (object.scale ?? 1) - objectSize.height
       ); // old scale here
 
       m.scaleSelf(scale); // new scale here
@@ -1427,15 +1436,14 @@ function processScaleStopEvent(
       transform = "rotate(" + object.rotation + "deg) scale(" + scale + ")";
     }
 
+    // NOTE: LAYOUT CHANGE
     if (eData.handle === "width") {
-      objectClone.absoluteLayout!.common.width =
-        objectSize.width + realMoveX / object.scale + "px";
+      objectClone.width = objectSize.width + realMoveX / (object.scale ?? 1);
     } else if (eData.handle === "height") {
-      objectClone.absoluteLayout!.common.height =
-        objectSize.height + realMoveY / object.scale + "px";
+      objectClone.height = objectSize.height + realMoveY / (object.scale ?? 1);
     } else {
-      objectClone.absoluteLayout!.common.left = left + "px";
-      objectClone.absoluteLayout!.common.top = top + "px";
+      objectClone.left = left;
+      objectClone.top = top;
       objectClone.scale = scale;
     }
 

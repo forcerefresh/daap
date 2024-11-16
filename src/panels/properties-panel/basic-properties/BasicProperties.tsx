@@ -175,7 +175,7 @@ const mapStateToProps = (state: IStore) => {
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   let panelName:
-    | { name: string; type: "object" | "layer" | "slide" }
+    | { name?: string; type: "object" | "layer" | "slide" }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {

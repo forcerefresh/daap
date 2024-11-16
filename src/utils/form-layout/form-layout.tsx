@@ -69,6 +69,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     if (element.type === FormType.GROUP) {
       return (
         <FormWithLayoutConnected
+          // key={element.propertyName + "-" + element.inputType}
           inputs={inputs}
           values={values}
           form={[element]}

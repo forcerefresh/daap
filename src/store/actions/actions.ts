@@ -110,20 +110,20 @@ export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     if (getState().project.slides.allSlides.length === 0) {
       // load
-      const loadSlide = getDefaultSlide("Load", SlideType.Load);
+      const loadSlide = getDefaultSlide(SlideType.Load, "Load");
       dispatch(addSlide(loadSlide));
       dispatch(addNewLayer(loadSlide.id));
       // back
-      const backSlide = getDefaultSlide("Back", SlideType.Back);
+      const backSlide = getDefaultSlide(SlideType.Back, "Back");
       dispatch(addSlide(backSlide));
       dispatch(addNewLayer(backSlide.id));
       // front
-      const frontSlide = getDefaultSlide("Front", SlideType.Front);
+      const frontSlide = getDefaultSlide(SlideType.Front, "Front");
       dispatch(addSlide(frontSlide));
       dispatch(addNewLayer(frontSlide.id));
       // normal
       const slideName = `Page ${getState().project.slides.nextSlideIdCounter}`;
-      const slide = getDefaultSlide(slideName, SlideType.Normal);
+      const slide = getDefaultSlide(SlideType.Normal, slideName);
       dispatch(addSlide(slide));
       // select
       dispatch(activateSlide(slide.id));
@@ -146,22 +146,22 @@ export function addNewSlide(
       id: uuid(),
       customId: "",
       name: `Page ${getState().project.slides.nextSlideIdCounter}`,
-      duration: {
-        inheritFrom: "inherit",
-        customValue: "10s",
-      },
-      exitDuration: {
-        inheritFrom: "inherit",
-        customValue: "1s",
-      },
-      moveToTop: true,
+      // duration: {
+      //   inheritFrom: "inherit",
+      //   customValue: "10s",
+      // },
+      // exitDuration: {
+      //   inheritFrom: "inherit",
+      //   customValue: "1s",
+      // },
+      // moveToTop: true,
       layerIds: [],
       nextLayerIdCounter: 1,
       slideType,
-      transitionEnabled: false,
-      transitionOverlapTime: "1000ms",
-      transitionDurationTime: "1000ms",
-      transitions: getDefaultTransitionsForSlide(),
+      // transitionEnabled: false,
+      // transitionOverlapTime: "1000ms",
+      // transitionDurationTime: "1000ms",
+      // transitions: getDefaultTransitionsForSlide(),
     };
     dispatch(addSlide(slide));
     dispatch(activateSlide(slide.id));
@@ -364,108 +364,111 @@ export function addNewLayer(slideId: string): any {
 
     const layer: ILayer = {
       id: uuid(),
-      customId: "",
+      // customId: "",
       type: "layer",
       slideId,
       // isBackground: isBackground,
       // name: isBackground ? `Background layer` : `Layer ${nextId}`,
       name: `Layer ${nextId}`,
-      isVisible: true,
-      hasTimeline: true,
+      //hasTimeline: true,
       objectIds: [],
-      transitions: getDefaultTransitionsForLayer(),
-      responsiveVisibility: { showAll: true, displayOn: [] },
-      definition: {
-        values: {
-          hasLayoutChildren: false,
-          layoutChildren: {
-            type: LayoutChildrenType.Column,
-            align: "start",
-            justify: "start",
-            wrap: "nowrap",
-            itemsGap: {
-              commonValue: "",
-              eachValues: [],
-              type: "common",
-            },
-          },
-        },
-        valuesMetadata: {},
-      },
-      commonStyleDefinition: {
-        properties: [...getCommonObjectPropertiesDefinition(true)],
-        values: { ...getCommonPropertiesValues() },
-        valuesMetadata: { ...getCommonPropertiesMetadataValues() },
-      },
-      transformDefinition: {
-        properties: [...getTransformObjectPropertiesDefinition(true)],
-        values: { ...getTransformPropertiesValues() },
-        valuesMetadata: {},
-      },
-      layout: "none",
-      supportedLayout: {
-        none: true,
-        absolute: true,
-        snap: true,
-        fit: true,
-        grid: true,
-        inset: true,
-        // anchor: true,
-      },
-      selfSize: false,
-      fitLayout: {
-        type: "common",
-        common: { deviceType: "common", relativeTo: "page" },
-        perDevice: [],
-      },
-      absoluteLayout: {
-        type: "common",
-        perDevice: [],
-        relativeTo: "stage",
-        common: {
-          deviceType: "common",
-          left: "0px",
-          top: "0px",
-          width: `${absoluteSize?.width}px`,
-          height: `${absoluteSize?.height}px`,
-        },
-      },
-      gridLayout: {
-        type: "common",
-        perDevice: [],
-        common: {
-          deviceType: "common",
-          left: 0,
-          width: gridSize?.horizontal!,
-          top: 0,
-          height: gridSize?.vertical!,
-        },
-      },
-      snapLayout: {
-        type: "common",
-        relativeTo: "stage",
-        perDevice: [],
-        common: {
-          deviceType: "common",
-          width: "200px",
-          height: "200px",
-          edge: "left",
-          offsetX: "0px",
-          offsetY: "0px",
-        },
-      },
-      insetLayout: {
-        type: "common",
-        perDevice: [],
-        relativeTo: "stage",
-        common: {
-          deviceType: "common",
-          top: "0px",
-          left: "0px",
-          bottom: "0px",
-          right: "0px",
-        },
-      },
+      //transitions: getDefaultTransitionsForLayer(),
+      //responsiveVisibility: { showAll: true, displayOn: [] },
+      left: 0,
+      top: 0,
+      width: absoluteSize?.width,
+      height: absoluteSize?.height,
+      // definition: {
+      //   values: {
+      //     hasLayoutChildren: false,
+      //     layoutChildren: {
+      //       type: LayoutChildrenType.Column,
+      //       align: "start",
+      //       justify: "start",
+      //       wrap: "nowrap",
+      //       itemsGap: {
+      //         commonValue: "",
+      //         eachValues: [],
+      //         type: "common",
+      //       },
+      //     },
+      //   },
+      //   valuesMetadata: {},
+      // },
+      // commonStyleDefinition: {
+      //   properties: [...getCommonObjectPropertiesDefinition(true)],
+      //   values: { ...getCommonPropertiesValues() },
+      //   valuesMetadata: { ...getCommonPropertiesMetadataValues() },
+      // },
+      // transformDefinition: {
+      //   properties: [...getTransformObjectPropertiesDefinition(true)],
+      //   values: { ...getTransformPropertiesValues() },
+      //   valuesMetadata: {},
+      // },
+      // layout: "none",
+      // supportedLayout: {
+      //   none: true,
+      //   absolute: true,
+      //   snap: true,
+      //   fit: true,
+      //   grid: true,
+      //   inset: true,
+      //   // anchor: true,
+      // },
+      // selfSize: false,
+      // fitLayout: {
+      //   type: "common",
+      //   common: { deviceType: "common", relativeTo: "page" },
+      //   perDevice: [],
+      // },
+      // absoluteLayout: {
+      //   type: "common",
+      //   perDevice: [],
+      //   relativeTo: "stage",
+      //   common: {
+      //     deviceType: "common",
+      //     left: "0px",
+      //     top: "0px",
+      //     width: `${absoluteSize?.width}px`,
+      //     height: `${absoluteSize?.height}px`,
+      //   },
+      // },
+      // gridLayout: {
+      //   type: "common",
+      //   perDevice: [],
+      //   common: {
+      //     deviceType: "common",
+      //     left: 0,
+      //     width: gridSize?.horizontal!,
+      //     top: 0,
+      //     height: gridSize?.vertical!,
+      //   },
+      // },
+      // snapLayout: {
+      //   type: "common",
+      //   relativeTo: "stage",
+      //   perDevice: [],
+      //   common: {
+      //     deviceType: "common",
+      //     width: "200px",
+      //     height: "200px",
+      //     edge: "left",
+      //     offsetX: "0px",
+      //     offsetY: "0px",
+      //   },
+      // },
+      // insetLayout: {
+      //   type: "common",
+      //   perDevice: [],
+      //   relativeTo: "stage",
+      //   common: {
+      //     deviceType: "common",
+      //     top: "0px",
+      //     left: "0px",
+      //     bottom: "0px",
+      //     right: "0px",
+      //   },
+      // },
     };
 
     dispatch(addLayer(layer));
@@ -1261,10 +1264,10 @@ export function addNewObject(
         postProcessButton(object, getState);
         break;
       }
-      case BULLETS: {
-        postProcessBullet(object, getState);
-        break;
-      }
+      // case BULLETS: {
+      //   postProcessBullet(object, getState);
+      //   break;
+      // }
       default: {
         const objDeff = getAppObjectDefinition(object.type);
         object = !!objDeff?.postProcess
@@ -1525,9 +1528,10 @@ export function groupObjects(objectIds: string[]): any {
           //  ...objectById[objId],
           obj.scale = transformPerObject[objId].scale;
           obj.rotation = transformPerObject[objId].rotation;
-          obj.absoluteLayout!.common.left =
-            transformPerObject[objId].left + "px";
-          obj.absoluteLayout!.common.top = transformPerObject[objId].top + "px";
+
+          // NOTE: LAYOUT CHANGE
+          obj.left = transformPerObject[objId].left;
+          obj.top = transformPerObject[objId].top;
 
           obj.parentId = groupObject.parentId;
           obj.layerId = groupObject.layerId;
@@ -1590,10 +1594,9 @@ export function groupObjects(objectIds: string[]): any {
     allObjectsIds.forEach((objectId) => {
       // TODO: why we are mutating ???
       const object = allObjectsById[objectId];
-      object.absoluteLayout!.common.top =
-        parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
-      object.absoluteLayout!.common.left =
-        parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
+      // NOTE: LAYOUT CHANGE
+      object.top = object.top! - groupBounds.y;
+      object.left = object.left! - groupBounds.x;
 
       //delete object.layerId;
       //objects.push(object);
@@ -1601,20 +1604,24 @@ export function groupObjects(objectIds: string[]): any {
 
     const groupObject: IObject = {
       ...createObject("group", {}, {}),
+      left: groupBounds.x,
+      top: groupBounds.y,
+      width: groupBounds.width,
+      height: groupBounds.height,
       name: "Group",
-      layout: "absolute",
-      absoluteLayout: {
-        relativeTo: "page",
-        perDevice: [],
-        type: "common",
-        common: {
-          deviceType: "common",
-          left: groupBounds.x + "px",
-          top: groupBounds.y + "px",
-          width: groupBounds.width + "px",
-          height: groupBounds.height + "px",
-        },
-      },
+      //layout: "absolute",
+      // absoluteLayout: {
+      //   relativeTo: "page",
+      //   perDevice: [],
+      //   type: "common",
+      //   common: {
+      //     deviceType: "common",
+      //     left: groupBounds.x + "px",
+      //     top: groupBounds.y + "px",
+      //     width: groupBounds.width + "px",
+      //     height: groupBounds.height + "px",
+      //   },
+      // },
       parentId: firstObject.parentId,
       objectIds: allObjectsIds,
       layerId,
@@ -1741,93 +1748,94 @@ function handleBulletsUpdate(
   dispatch: Dispatch,
   getState: () => IStore
 ): void {
-  postProcessBullet(object, getState);
+  //postProcessBullet(object, getState);
   dispatch(_updateObject(object));
   dispatch(forceRefresh());
 }
 
 /* This method mutate object*/
-function postProcessBullet(object: IObject, getState: () => IStore): void {
-  if (object.layout === "absolute" || object.layout === "snap") {
-    const breakpointConfig: BreakpointConfiguration | undefined =
-      getState().project.settings.breakpoints.breakpointsConfiguration.find(
-        (breakpointConfig: any) =>
-          breakpointConfig.type === getState().stage.selectedDevice
-      );
-    // todo: calculate for all not only for one
-    const calculatedObjectSize = calculateObjectSize(
-      object,
-      getState().project.layers.layerById[object.layerId],
-      breakpointConfig!,
-      {
-        resetPosition: false,
-      }
-    );
-    const html = getBulletsHtml({
-      object,
-      calculatedObjectSize: {
-        ...calculatedObjectSize,
-        width: undefined,
-        height: undefined,
-      },
-      isPlayer: false,
-      // calculateSize: () => 0,
-    });
-    const holder = document.createElement("div");
-    holder.style.overflow = "visible";
-    holder.innerHTML = html;
-    const el = holder.querySelector("div")! as HTMLDivElement;
-    //el.style.position = "relative";
-    document.body.appendChild(holder);
-    object.absoluteLayout!.common.width = `${el.offsetWidth!}px`;
-    object.absoluteLayout!.common.height = `${el.offsetHeight!}px`;
-    const snapSizeObj = getSnapLayoutSize(
-      object.snapLayout!,
-      getState().stage.selectedDevice
-    );
-    snapSizeObj.width = el.offsetWidth! + "px";
-    snapSizeObj.height = el.offsetHeight! + "px";
-    document.body.removeChild(holder);
-  }
-}
+// function postProcessBullet(object: IObject, getState: () => IStore): void {
+//   if (object.layout === "absolute" || object.layout === "snap") {
+//     const breakpointConfig: BreakpointConfiguration | undefined =
+//       getState().project.settings.breakpoints.breakpointsConfiguration.find(
+//         (breakpointConfig: any) =>
+//           breakpointConfig.type === getState().stage.selectedDevice
+//       );
+//     // todo: calculate for all not only for one
+//     const calculatedObjectSize = calculateObjectSize(
+//       object,
+//       getState().project.layers.layerById[object.layerId],
+//       breakpointConfig!,
+//       {
+//         resetPosition: false,
+//       }
+//     );
+//     const html = getBulletsHtml({
+//       object,
+//       calculatedObjectSize: {
+//         ...calculatedObjectSize,
+//         width: undefined,
+//         height: undefined,
+//       },
+//       isPlayer: false,
+//       // calculateSize: () => 0,
+//     });
+//     const holder = document.createElement("div");
+//     holder.style.overflow = "visible";
+//     holder.innerHTML = html;
+//     const el = holder.querySelector("div")! as HTMLDivElement;
+//     //el.style.position = "relative";
+//     document.body.appendChild(holder);
+//     // NOTE: LAYOUT CHANGE
+//     object.width = el.offsetWidth!;
+//     object.height = el.offsetHeight!;
+//     const snapSizeObj = getSnapLayoutSize(
+//       object.snapLayout!,
+//       getState().stage.selectedDevice
+//     );
+//     snapSizeObj.width = el.offsetWidth! + "px";
+//     snapSizeObj.height = el.offsetHeight! + "px";
+//     document.body.removeChild(holder);
+//   }
+// }
 
 /* This method mutate object*/
 function postProcessButton(object: IObject, getState: () => IStore): void {
-  if (object.layout === "absolute") {
-    const breakpointConfig: BreakpointConfiguration | undefined =
-      getState().project.settings.breakpoints.breakpointsConfiguration.find(
-        (breakpointConfig: any) =>
-          breakpointConfig.type === getState().stage.selectedDevice
-      );
-    // todo: calculate for all not only for one
-    const calculatedObjectSize = calculateObjectSize(
-      object,
-      getState().project.layers.layerById[object.layerId],
-      breakpointConfig!,
-      {
-        resetPosition: false,
-      }
-    );
-    const html = getButtonHtml({
-      object,
-      calculatedObjectSize: {
-        ...calculatedObjectSize,
-        width: undefined,
-        height: undefined,
-      },
-    });
-    const holder = document.createElement("div");
-    holder.style.overflow = "visible";
-    holder.innerHTML = html;
-    holder.querySelector("button")!.style.position = "relative";
-    document.body.appendChild(holder);
-    object.absoluteLayout!.common.width = `${holder.querySelector("button")
-      ?.offsetWidth!}px`;
-    object.absoluteLayout!.common.height = `${holder.querySelector("button")
-      ?.offsetHeight!}px`;
-    document.body.removeChild(holder);
-  }
+  //if (object.layout === "absolute") {
+  // const breakpointConfig: BreakpointConfiguration | undefined =
+  //   getState().project.settings.breakpoints.breakpointsConfiguration.find(
+  //     (breakpointConfig: any) =>
+  //       breakpointConfig.type === getState().stage.selectedDevice
+  //   );
+  // todo: calculate for all not only for one
+  // const calculatedObjectSize = calculateObjectSize(
+  //   object,
+  //   getState().project.layers.layerById[object.layerId],
+  //   breakpointConfig!,
+  //   {
+  //     resetPosition: false,
+  //   }
+  // );
+  const html = getButtonHtml({
+    object,
+    // calculatedObjectSize: {
+    //   ...calculatedObjectSize,
+    //   width: undefined,
+    //   height: undefined,
+    // },
+  });
+  const holder = document.createElement("div");
+  holder.style.overflow = "visible";
+  holder.innerHTML = html;
+  holder.querySelector("button")!.style.position = "relative";
+  document.body.appendChild(holder);
+  // NOTE: LAYOUT CHANGE
+  object.width = holder.querySelector("button")?.offsetWidth!;
+  object.height = holder.querySelector("button")?.offsetHeight!;
+  document.body.removeChild(holder);
+  //}
 }
+
 function handleButtonUpdate(
   object: IObject,
   dispatch: Dispatch,
@@ -1845,7 +1853,7 @@ function handleTextUpdate(
   isAdd = false
 ): void {
   // * handle auto height
-  const objectValues = object.definition.values as TextValues;
+  const objectValues = object.properties as TextValues;
 
   if (objectValues.autoHeight === true) {
     // TODO: IMPORTANT hardcoded
@@ -1889,21 +1897,22 @@ function handleTextUpdate(
     pEl.style.height = `auto`;
     document.body.appendChild(holder);
     object.height = pEl.offsetHeight;
-    if (object.absoluteLayout) {
-      object.absoluteLayout.common.height = `${pEl.offsetHeight}px`;
+    // NOTE: LAYOUT CHANGE
+    //if (object.absoluteLayout) {
+    object.height = pEl.offsetHeight;
 
-      if (isAdd) {
-        if (objectValues.initialAutoWidth === true) {
-          object.absoluteLayout.common.width = `${pEl.offsetWidth + 5}px`;
-          objectValues.initialAutoWidth = false;
-        }
-
-        const nextTextPositionY = getState().stage.nextTextPositionY;
-        object.absoluteLayout.common.top = `${nextTextPositionY}px`;
-
-        dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
+    if (isAdd) {
+      if (objectValues.initialAutoWidth === true) {
+        object.width = pEl.offsetWidth + 5;
+        objectValues.initialAutoWidth = false;
       }
+
+      const nextTextPositionY = getState().stage.nextTextPositionY;
+      object.top = nextTextPositionY;
+
+      dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
     }
+    //}
 
     document.body.removeChild(holder);
   }
@@ -1912,8 +1921,8 @@ function handleTextUpdate(
   const objectPrevState = getState().project.objects.objectById[object.id];
   const { loadedFontFamilies } = getState().fonts;
 
-  const newObjectValues = object.definition.values as TextValues;
-  const oldObjectValues = (objectPrevState?.definition?.values ?? {
+  const newObjectValues = object.properties as TextValues;
+  const oldObjectValues = (objectPrevState?.properties ?? {
     font: {},
   }) as TextValues;
 

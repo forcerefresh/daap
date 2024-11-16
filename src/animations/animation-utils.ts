@@ -27,15 +27,15 @@ export function getObjectWrapperElementById(id: string): HTMLDivElement {
 
 export function addCommonStyleToObjectElementContent(
   objectContentEl: HTMLElement,
-  commonStyleDefinition?: IDefinition,
+  style?: Record<string, any>,
   deviceType?: DeviceType
 ) {
   const cssProperties: CSSProperties = {};
   addCommonPropertiesToCSSProperties(
-    cssProperties,
-    commonStyleDefinition?.values,
-    commonStyleDefinition?.valuesMetadata,
-    deviceType
+    cssProperties
+    // commonStyleDefinition?.values,
+    // commonStyleDefinition?.valuesMetadata,
+    // deviceType
   );
 
   Object.keys(cssProperties).forEach((key) => {
@@ -45,15 +45,15 @@ export function addCommonStyleToObjectElementContent(
 
 export function addTransformStyleToObjectElementContent(
   objectContentEl: HTMLElement,
-  commonStyleDefinition?: IDefinition,
+  style?: Record<string, any>,
   deviceType?: DeviceType
 ) {
   const cssProperties: CSSProperties = {};
   addTransformPropertiesToCSSProperties(
-    cssProperties,
-    commonStyleDefinition?.values,
-    commonStyleDefinition?.valuesMetadata,
-    deviceType
+    cssProperties
+    // commonStyleDefinition?.values,
+    // commonStyleDefinition?.valuesMetadata,
+    // deviceType
   );
 
   Object.keys(cssProperties).forEach((key) => {

@@ -56,7 +56,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
   // api
   const globalContext = useContext(IntegrationContext);
-  const { saveProject } = globalContext.useProjectHook();
+  const { updateProject, createProject } = globalContext.useProjectHook();
   const { saveTemplate } = globalContext.useTemplateHook();
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
@@ -139,63 +139,122 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const assetsUrls = getAllAssetsUrls(objects);
     const fonts = getAllFonts(objects);
 
-    saveProject({
-      id: saveAs ? undefined : localMeta.id,
-      name: localMeta.name!,
-      description: localMeta.description!,
-      slides: project.slides.normalSlides.length,
-      project: updatedProject,
-      preview: {
-        width: thumbSize.width,
-        height: thumbSize.height,
-        scale: thumbSize.scale,
-        html: thumbnailHtml,
-      },
-      playerData: updatedPlayerData,
-      assetsUrls,
-      fonts,
-      extensions: playerData.extensions,
-    })
-      .then(
-        ({
-          id,
-          name,
-          description,
-          slides,
-          created,
-          modified,
-          saveRevision,
-          assetsUrls,
-          //publishRevision,
-        }) => {
-          _updateProjectMeta({
+    const id = saveAs ? undefined : localMeta.id;
+    if (id) {
+      updateProject(id, {
+        name: localMeta.name!,
+        description: localMeta.description!,
+        slides: project.slides.normalSlides.length,
+        project: updatedProject,
+        preview: {
+          width: thumbSize.width,
+          height: thumbSize.height,
+          scale: thumbSize.scale,
+          html: thumbnailHtml,
+        },
+        playerData: updatedPlayerData,
+        assetsUrls,
+        fonts,
+        extensions: playerData.extensions,
+      })
+        .then(
+          ({
             id,
             name,
             description,
             slides,
             created,
             modified,
-            inSaving: false,
             saveRevision,
             assetsUrls,
             //publishRevision,
-          });
-          _updateEditor({ sliderChanged: false, isExistingProject: true });
+          }) => {
+            _updateProjectMeta({
+              id,
+              name,
+              description,
+              slides,
+              created,
+              modified,
+              inSaving: false,
+              saveRevision,
+              assetsUrls,
+              //publishRevision,
+            });
+            _updateEditor({ sliderChanged: false, isExistingProject: true });
+            onRequestClose();
+            AppToaster.show({
+              intent: "success",
+              message: "Slider is successfully saved.",
+            });
+          }
+        )
+        .catch((e) => {
+          _updateProjectMeta({ inSaving: false });
           onRequestClose();
           AppToaster.show({
-            intent: "success",
-            message: "Slider is successfully saved.",
+            intent: "danger",
+            message: "Something went wrong. Slider is not saved.",
           });
-        }
-      )
-      .catch((e) => {
-        _updateProjectMeta({ inSaving: false });
-        onRequestClose();
-        AppToaster.show({
-          intent: "danger",
-          message: "Something went wrong. Slider is not saved.",
         });
-      });
+    } else {
+      createProject({
+        name: localMeta.name!,
+        description: localMeta.description!,
+        slides: project.slides.normalSlides.length,
+        project: updatedProject,
+        preview: {
+          width: thumbSize.width,
+          height: thumbSize.height,
+          scale: thumbSize.scale,
+          html: thumbnailHtml,
+        },
+        playerData: updatedPlayerData,
+        assetsUrls,
+        fonts,
+        extensions: playerData.extensions,
+      })
+        .then(
+          ({
+            id,
+            name,
+            description,
+            slides,
+            created,
+            modified,
+            saveRevision,
+            assetsUrls,
+            //publishRevision,
+          }) => {
+            _updateProjectMeta({
+              id,
+              name,
+              description,
+              slides,
+              created,
+              modified,
+              inSaving: false,
+              saveRevision,
+              assetsUrls,
+              //publishRevision,
+            });
+            _updateEditor({ sliderChanged: false, isExistingProject: true });
+            onRequestClose();
+            AppToaster.show({
+              intent: "success",
+              message: "Slider is successfully saved.",
+            });
+          }
+        )
+        .catch((e) => {
+          _updateProjectMeta({ inSaving: false });
+          onRequestClose();
+          AppToaster.show({
+            intent: "danger",
+            message: "Something went wrong. Slider is not saved.",
+          });
+        });
+    }
   };
 
   const onSaveTemplate = async () => {

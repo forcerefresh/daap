@@ -8,7 +8,7 @@ import {
   IInputMetadataValues,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { CommonPropertiesValues } from "webslider-sdk/lib/objects/common-properties";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { TransformPropertiesValues } from "webslider-sdk/lib/objects/transform-properties";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";

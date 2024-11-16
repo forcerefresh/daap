@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, remove, round, uniq } from "lodash-es";
+import { debounce, isNil, remove, round, uniq } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
@@ -13,7 +13,7 @@ import {
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
@@ -27,6 +27,7 @@ import { IEditor } from "../../store/reducers/editor";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 import { preloadFonts } from "../../utils/project/project-utils";
+import { Pagination } from "../../types/pagination";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -56,37 +57,64 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteLoading, setDeleteLoading] = useState(false);
 
+  const [latestPagination, setLatestPagination] = useState<Pagination | null>(
+    null
+  );
+
   const globalContext = useContext(IntegrationContext);
   const { getProject, getProjects, deleteProject } =
     globalContext.useProjectHook();
 
-  const fetchData = (from = -1) => {
+  const fetchData = (fromPage?: number) => {
     setLoading(true);
 
-    from = from === -1 ? projects?.length || 0 : from;
+    let from: number | null = null;
 
-    getProjects(from, searchValue).then(
-      (result) => {
-        if (from === 0) {
-          setProjects([...result.projects]);
-        } else {
-          setProjects([...projects, ...result.projects]);
+    if (isNil(fromPage)) {
+      if (isNil(latestPagination)) {
+        // load first page
+        from = 1;
+      } else {
+        // load next page
+        if (!isNil(latestPagination.nextPage)) {
+          from = latestPagination.nextPage;
         }
-        setLoading(false);
-        setHasMore(result.projects.length > 0);
-      },
-
-      (error) => {
-        logger.app.error(error);
       }
-    );
+    } else {
+      from = fromPage;
+    }
+
+    // from = from === -1 ? projects?.length || 0 : from;
+
+    if (!isNil(from)) {
+      getProjects(from, searchValue).then(
+        (result) => {
+          if (from === 1) {
+            setProjects([...result.data]);
+          } else {
+            setProjects([...projects, ...result.data]);
+          }
+
+          setLatestPagination(result.pagination);
+          setLoading(false);
+          setHasMore(!!result.pagination.nextPage);
+        },
+
+        (error) => {
+          logger.app.error(error);
+        }
+      );
+    }
   };
 
   useEffect(() => {
     debounceFetchData();
   }, []);
 
-  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
+  const debounceFetchData = debounce(
+    (fromPage?: number) => fetchData(fromPage),
+    100
+  );
 
   const deleteIdRef = useRef<{ id: string; name: string } | null>(null);
   const onDeleteProject = (id: string, name: string) => {
@@ -97,7 +125,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const deleteConfirm = () => {
     setDeleteLoading(true);
 
-    deleteProject(deleteIdRef.current!.id).then(({ id }: { id: number }) => {
+    deleteProject(deleteIdRef.current!.id).then(({ id }: { id: string }) => {
       const newProjects = projects.concat();
       remove(newProjects, (p: any) => {
         return p.id === id;
@@ -130,14 +158,14 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   };
 
   const onOpenProject = (id: string) => {
-    getProject(id).then((response: any) => {
+    getProject(id).then((responseProject: any) => {
       const meta: IMeta = {
-        id: response.project.id,
-        name: response.project.name,
-        description: response.project.description,
-        modified: response.project.modified,
-        created: response.project.created,
-        saveRevision: response.project.saveRevision,
+        id: responseProject.id,
+        name: responseProject.name,
+        description: responseProject.description,
+        modified: responseProject.modified,
+        created: responseProject.created,
+        saveRevision: responseProject.saveRevision,
         //publishRevision: response.project.publishRevision,
       };
       _updateProjectMeta(meta);
@@ -147,7 +175,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         settings: ISettings;
         diff: any;
         fonts: any[];
-      } = response.project.project;
+      } = responseProject.project;
 
       delete project.diff;
 
@@ -159,7 +187,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       // NOTE: Backward compatibility: Front slide is added on 1st February 2023
       if (!(project as any).slides.loadSlides) {
-        const loadSlide = getDefaultSlide("Load", SlideType.Load);
+        const loadSlide = getDefaultSlide(SlideType.Load, "Load");
         (project as any).slides.loadSlides = [loadSlide.id];
         (project as any).slides.allSlides.push(loadSlide.id);
         (project as any).slides.slideById[loadSlide.id] = loadSlide;
@@ -169,7 +197,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       // missing extensions >>>
       const missingExtensions = getMissingExtensionsFromProject(
-        response.project.extensions
+        responseProject.extensions
       );
       _updateEditor({ missingExtensions });
       if (missingExtensions.length > 0) {
@@ -185,7 +213,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       _resetChangedState();
 
-      preloadFonts(response.project?.fonts ?? []);
+      preloadFonts(responseProject?.fonts ?? []);
 
       onRequestClose();
     });
@@ -203,7 +231,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
               icon="arrow-right"
               onClick={() => {
                 setProjects(() => []);
-                debounceFetchData(0);
+                debounceFetchData(1);
               }}
             />
           }
@@ -214,7 +242,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
           onKeyPress={(event) => {
             if (event.key === "Enter") {
               setProjects(() => []);
-              debounceFetchData(0);
+              debounceFetchData(1);
             }
           }}
         ></InputGroup>
@@ -349,7 +377,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

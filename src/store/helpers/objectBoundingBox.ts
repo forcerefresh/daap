@@ -3,10 +3,11 @@ import { Rect } from "../../webslider-sdk/object/i-tool-class";
 import { decomposeMatrix2DW3 } from "../../panels/stage-panel-new/stage-panel-utils";
 
 export function getObjectBoundingBox(object: IObject): Rect {
-  const oX = parseInt(object.absoluteLayout!.common.left);
-  const oY = parseInt(object.absoluteLayout!.common.top);
-  const oW = parseInt(object.absoluteLayout!.common.width);
-  const oH = parseInt(object.absoluteLayout!.common.height);
+  // NOTE: LAYOUT CHANGE
+  const oX = object.left;
+  const oY = object.top;
+  const oW = object.width;
+  const oH = object.height;
 
   const getBasePointMatrix = (object: IObject) => {
     const pm = new DOMMatrix();

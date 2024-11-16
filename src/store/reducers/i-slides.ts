@@ -10,21 +10,23 @@ export enum SlideType {
 
 export interface ISlide {
   id: string;
+  customId: string;
+  name?: string;
+  description?: string;
   layerIds: string[];
   nextLayerIdCounter: number;
   slideType: SlideType;
-  transitionEnabled: boolean;
-  transitionOverlapTime: string;
-  transitionDurationTime: string;
-  transitions: ITransitions;
+  // transitionEnabled: boolean;
+  // transitionOverlapTime: string;
+  // transitionDurationTime: string;
+  // transitions: ITransitions;
   //props
-  customId: string;
-  name: string;
-  title?: string;
-  description?: string;
-  duration: ISlideDuration;
-  exitDuration: ISlideDuration;
-  moveToTop: boolean;
+
+  // title?: string;
+
+  // duration: ISlideDuration;
+  // exitDuration: ISlideDuration;
+  // moveToTop: boolean;
 }
 
 export interface ISlides {

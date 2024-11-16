@@ -1,26 +1,23 @@
 {
   "folders": [
-	{
-		"path": "../../.."
-	},
-	{
-		"path": "../../../../replica-test"
-	},
-	{
-		"path": "../../../../webslider-sdk"
-	},
-	{
-		"path": "../../../../daap-server"
-	},
-	{
-		"path": "../../../../mern-boilerplate"
-	},
-	{
-		"path": "../../../../node-ts-test"
-	},
-	{
-		"path": "../../../../daap-server-2"
-	}
-],
+    {
+      "path": "../../.."
+    },
+    {
+      "path": "../../../../replica-test"
+    },
+    {
+      "path": "../../../../webslider-sdk"
+    },
+    {
+      "path": "../../../../mern-boilerplate"
+    },
+    {
+      "path": "../../../../node-ts-test"
+    },
+    {
+      "path": "../../../../daap-server"
+    }
+  ],
   "settings": {}
 }

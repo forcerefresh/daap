@@ -1,11 +1,12 @@
 import { forOwn } from "lodash-es";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { getAbsEl } from "./WithRotationHandle";
 import { degrees_to_radians } from "./StageManagerProvider";
 import { isObjectGroup } from "../../store/actions/actions-utils";
+import { ILayer } from "../../store/reducers/i-layers";
 
 export interface CreateGroupWithObjectsProps {
   group: IObject;
@@ -35,11 +36,18 @@ export function getUngroupObjectsCalculation(
   //   }
   // );
 
+  // NOTE: LAYOUT CHANGE
+  // const groupObjectSize = {
+  //   x: parseFloat(group.absoluteLayout?.common.left!),
+  //   y: parseFloat(group.absoluteLayout?.common.top!),
+  //   width: parseFloat(group.absoluteLayout?.common.width!),
+  //   height: parseFloat(group.absoluteLayout?.common.height!),
+  // };
   const groupObjectSize = {
-    x: parseFloat(group.absoluteLayout?.common.left!),
-    y: parseFloat(group.absoluteLayout?.common.top!),
-    width: parseFloat(group.absoluteLayout?.common.width!),
-    height: parseFloat(group.absoluteLayout?.common.height!),
+    x: group.left!,
+    y: group.top!,
+    width: group.width!,
+    height: group.height,
   };
 
   console.log(groupObjectSize);
@@ -62,11 +70,18 @@ export function getUngroupObjectsCalculation(
   } = {};
 
   objects?.map((obj) => {
+    // NOTE: LAYOUT CHANGE
+    // const objectSize = {
+    //   x: parseFloat(obj.absoluteLayout?.common.left!),
+    //   y: parseFloat(obj.absoluteLayout?.common.top!),
+    //   width: parseFloat(obj.absoluteLayout?.common.width!),
+    //   height: parseFloat(obj.absoluteLayout?.common.height!),
+    // };
     const objectSize = {
-      x: parseFloat(obj.absoluteLayout?.common.left!),
-      y: parseFloat(obj.absoluteLayout?.common.top!),
-      width: parseFloat(obj.absoluteLayout?.common.width!),
-      height: parseFloat(obj.absoluteLayout?.common.height!),
+      x: obj.left!,
+      y: obj.top!,
+      width: obj.width!,
+      height: obj.height!,
     };
 
     const objectMatrix = getGroupMatrix();
@@ -312,8 +327,12 @@ export function createTransformForPath(
 
     const rotationSign = config?.inverseRotation ? "-" : "";
 
+    // NOTE: LAYOUT CHANGE
+    // const translate = config?.includeTranslate
+    //   ? `translateX(${object.absoluteLayout?.common.left}) translateY(${object.absoluteLayout?.common.top})`
+    //   : "";
     const translate = config?.includeTranslate
-      ? `translateX(${object.absoluteLayout?.common.left}) translateY(${object.absoluteLayout?.common.top})`
+      ? `translateX(${object.left}px) translateY(${object.top}px)`
       : "";
 
     let left = "",
@@ -321,7 +340,9 @@ export function createTransformForPath(
     isObjectGroup(object) ? (right = translate) : (left = translate);
     if (translate) console.log(translate, "translate");
 
-    return `${translate} rotate(${rotationSign}${object.rotation}deg) scale(${object.scale})`;
+    return `${translate} rotate(${rotationSign}${
+      object.rotation ?? 0
+    }deg) scale(${object.scale ?? 1})`;
   });
 }
 
@@ -556,12 +577,17 @@ export function tmpDrawNewGroup(
 ) {
   const layerEl = getElementByClass("layer-" + parentLayer.id);
 
-  const x = parseFloat(parentGroup.absoluteLayout?.common!.left!);
-  const y = parseFloat(parentGroup.absoluteLayout?.common!.top!);
-  const width = parseFloat(parentGroup.absoluteLayout?.common!.width!);
-  const height = parseFloat(parentGroup.absoluteLayout?.common!.height!);
-  const scale = parentGroup.scale;
-  const rotate = parentGroup.rotation;
+  // NOTE: LAYOUT CHANGE
+  // const x = parseFloat(parentGroup.absoluteLayout?.common!.left!);
+  // const y = parseFloat(parentGroup.absoluteLayout?.common!.top!);
+  // const width = parseFloat(parentGroup.absoluteLayout?.common!.width!);
+  // const height = parseFloat(parentGroup.absoluteLayout?.common!.height!);
+  const x = parentGroup.left!;
+  const y = parentGroup.top!;
+  const width = parentGroup.width!;
+  const height = parentGroup.height!;
+  const scale = parentGroup.scale ?? 1;
+  const rotate = parentGroup.rotation ?? 0;
 
   //const adjustmentX = 0; //scale === 1 ? 0 : (width - width / scale) / 2;
 
@@ -606,8 +632,8 @@ export function tmpDrawNewGroup(
     newGroupProps.y,
     bboxW,
     bboxH,
-    parentGroup.rotation,
-    parentGroup.scale
+    parentGroup.rotation ?? 0,
+    parentGroup.scale ?? 1
   );
 
   const topLEftGroupPoint = getLeftTopFromCorners(newGroupCorners);

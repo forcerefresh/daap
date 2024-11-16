@@ -7,8 +7,10 @@ export function getCopyName(
   objectById: {
     [id: string]: IObject<{}>;
   },
-  name: string
+  name?: string
 ) {
+  if (!name) return;
+
   const newNameBse = name.replace(/\s+copy \d+/, "");
   let fromIdx = parseInt(name.split("copy").pop()?.trim() ?? "0");
   fromIdx = isNaN(fromIdx) ? 0 : fromIdx;

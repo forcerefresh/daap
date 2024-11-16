@@ -1,3 +1,5 @@
+// eslint-disable
+// @ts-nocheck
 import { mapValues, pick, size } from "lodash-es";
 import React from "react";
 import cx from "classnames";
@@ -103,6 +105,23 @@ function getParentBounds(
 }
 
 export function calculateObjectSize(
+  object: ILayout,
+  parentLayout: ILayout | undefined, // << this is layer ... ILayer | undefined,
+  //stageSize: { width: number; height: number },
+  breakpointConfig: BreakpointConfiguration,
+  { resetPosition }: { resetPosition: boolean },
+  scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
+  options?: { skipHeight: boolean }
+): React.CSSProperties {
+  return {
+    left: object.left + "px",
+    top: object.top + "px",
+    width: object.width + "px",
+    height: object.height + "px",
+  };
+}
+
+export function calculateObjectSize_Layout(
   object: ILayout,
   parentLayout: ILayout | undefined, // << this is layer ... ILayer | undefined,
   //stageSize: { width: number; height: number },

@@ -23,7 +23,7 @@ import {
   showSimplifiedLayers,
   ungroupObject,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { isObjectGroup } from "../../store/actions/actions-utils";
 
 import { ReactComponent as PropertiesIcon } from "../../panels/properties-sections-panel/icons/properties.svg";
@@ -183,8 +183,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               <div className={css.sliderHolder}>
                 {getSelectSlider(
                   "",
-                  activeObject?.commonStyleDefinition?.values?.commonOpacity ??
-                    100,
+                  activeObject?.style?.commonOpacity ?? 100,
                   {
                     min: 0,
                     max: 100,
@@ -198,29 +197,31 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
 
                     const retObj = cloneDeep(activeObject);
 
-                    if (!retObj.commonStyleDefinition?.values) {
-                      retObj.commonStyleDefinition!.values = {};
-                    }
+                    retObj.style!.commonOpacity = parseInt(opacity);
 
-                    retObj.commonStyleDefinition!.values.commonOpacity =
-                      parseInt(opacity);
+                    // if (!retObj.commonStyleDefinition?.values) {
+                    //   retObj.commonStyleDefinition!.values = {};
+                    // }
 
-                    if (
-                      !retObj.commonStyleDefinition?.valuesMetadata
-                        ?.commonOpacity
-                    ) {
-                      retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity =
-                        {};
-                    }
+                    // retObj.commonStyleDefinition!.values.commonOpacity =
+                    //   parseInt(opacity);
 
-                    (
-                      retObj.commonStyleDefinition!.valuesMetadata
-                        .commonOpacity as any
-                    ).enabled = true;
-                    (
-                      retObj.commonStyleDefinition!.valuesMetadata
-                        .commonOpacity as any
-                    ).disabled = false;
+                    // if (
+                    //   !retObj.commonStyleDefinition?.valuesMetadata
+                    //     ?.commonOpacity
+                    // ) {
+                    //   retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity =
+                    //     {};
+                    // }
+
+                    // (
+                    //   retObj.commonStyleDefinition!.valuesMetadata
+                    //     .commonOpacity as any
+                    // ).enabled = true;
+                    // (
+                    //   retObj.commonStyleDefinition!.valuesMetadata
+                    //     .commonOpacity as any
+                    // ).disabled = false;
 
                     updateObject(retObj);
                   }
@@ -414,7 +415,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType | string,
+    type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

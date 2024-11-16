@@ -21,7 +21,7 @@ import {
 import { MultiSelect } from "@blueprintjs/select";
 
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce, filter, forOwn, last, noop, remove } from "lodash-es";
 import classnames from "classnames";
@@ -52,7 +52,7 @@ interface IMediaLibraryPanelProps {
   selectionType?: SelectionType;
   addObject?: boolean;
   onSelect?: (item: {
-    type: ObjectType;
+    type: string;
     initialValues: { [key: string]: any }[];
   }) => void;
   onRequestClose: () => void;
@@ -892,7 +892,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType | string,
+    type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

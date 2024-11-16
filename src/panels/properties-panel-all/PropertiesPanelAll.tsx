@@ -136,29 +136,29 @@ const mapStateToProps = (state: IStore) => {
   let totalAnimationCounter = 0;
 
   let panelName:
-    | { name: string; type: "object" | "layer" | "slide"; id: string }
+    | { name?: string; type: "object" | "layer" | "slide"; id: string }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {
     panelName = { name: layer.name, type: "layer", id: layer.id };
-    totalAnimationCounter =
-      (layer?.transitions?.in?.length || 0) +
-      (layer?.transitions?.out?.length || 0) +
-      (layer?.transitions?.layer?.length || 0);
+    // totalAnimationCounter =
+    //   (layer?.transitions?.in?.length || 0) +
+    //   (layer?.transitions?.out?.length || 0) +
+    //   (layer?.transitions?.layer?.length || 0);
   }
 
   if (selection.selectionForProperties?.type === "slide" && slide) {
     panelName = { name: slide.name, type: "slide", id: slide.id };
-    totalAnimationCounter = slide?.transitions?.slide?.length || 0;
+    // totalAnimationCounter = slide?.transitions?.slide?.length || 0;
   }
 
   if (selection.selectionForProperties?.type === "object" && object) {
     panelName = { name: object.name, type: "object", id: object.id };
-    totalAnimationCounter =
-      (object?.transitions?.in?.length || 0) +
-      (object?.transitions?.out?.length || 0) +
-      (object?.transitions?.animation?.length || 0) +
-      (object?.transitions?.event?.length || 0);
+    // totalAnimationCounter =
+    //   (object?.transitions?.in?.length || 0) +
+    //   (object?.transitions?.out?.length || 0) +
+    //   (object?.transitions?.animation?.length || 0) +
+    //   (object?.transitions?.event?.length || 0);
   }
 
   return {

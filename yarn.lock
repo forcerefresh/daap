@@ -1110,12 +1110,28 @@
   dependencies:
     tslib "~2.5.0"
 
-"@blueprintjs/colors@^5.0.9":
-  version "5.0.9"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/colors/-/colors-5.0.9.tgz#efc5bfe070a2721e157a0d57c110be818be35781"
-  integrity sha512-dWCw4WQ+vuXe4sp+o0owDOuqO84hCMR4mZwdBpsBPbb2eE1G1Vt91e9WH3G8/+6A8xONS8GHOAhWkiAlkr/ENg==
+"@blueprintjs/colors@^5.1.1":
+  version "5.1.3"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/colors/-/colors-5.1.3.tgz#c747b56bcc5354bb81801878c3cd96821b91a146"
+  integrity sha512-H4TM1PgHf95oV3GeyK5kH2hHXbq7SM8bWJk0w7jrZSa8DBWh1ut4CnF7lufrok1dCr3ePzBxDLmd7RvprexMjg==
   dependencies:
     tslib "~2.6.2"
+
+"@blueprintjs/core@5.10.0":
+  version "5.10.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-5.10.0.tgz#3ad53fe624f6f7d9ed8b4ed27f5acee280b88123"
+  integrity sha512-jJNRw61ITWDJlrqSM+vx8kG6nBrFO55SmIQU2TepQ6iPIv3PQtv1gmLWc0TmUdtiROMy0ehhddMqEulOmOXGsQ==
+  dependencies:
+    "@blueprintjs/colors" "^5.1.1"
+    "@blueprintjs/icons" "^5.8.0"
+    "@popperjs/core" "^2.11.8"
+    classnames "^2.3.1"
+    normalize.css "^8.0.1"
+    react-popper "^2.3.0"
+    react-transition-group "^4.4.5"
+    react-uid "^2.3.3"
+    tslib "~2.6.2"
+    use-sync-external-store "^1.2.0"
 
 "@blueprintjs/core@^5.5.0":
   version "5.5.0"
@@ -1145,20 +1161,6 @@
     react-transition-group "^4.4.5"
     tslib "~2.5.0"
 
-"@blueprintjs/core@^5.8.2":
-  version "5.8.2"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/core/-/core-5.8.2.tgz#06af6677fa02018bbefac0bc679f0353c5bd1256"
-  integrity sha512-reeCUMT7exH2zxA4T6aAfgK9YARE9nUkRKwZK9XgZ/sTzojB75SuaUehrTYz4hQ6HrWbWtUzhhpK4ooI8OIWJA==
-  dependencies:
-    "@blueprintjs/colors" "^5.0.9"
-    "@blueprintjs/icons" "^5.7.0"
-    "@popperjs/core" "^2.11.8"
-    classnames "^2.3.1"
-    normalize.css "^8.0.1"
-    react-popper "^2.3.0"
-    react-transition-group "^4.4.5"
-    tslib "~2.6.2"
-
 "@blueprintjs/icons@^5.2.1":
   version "5.2.1"
   resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-5.2.1.tgz#3b2409fc01ca4c140b9e4cb10c6da3a22b24eed7"
@@ -1168,10 +1170,10 @@
     classnames "^2.3.1"
     tslib "~2.5.0"
 
-"@blueprintjs/icons@^5.7.0":
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-5.7.0.tgz#ea18c9118c2fbf2444efd40913aed1d3842b9676"
-  integrity sha512-rRTDhdbDjY6WWCoZtgbD2UNPwpvjGGhieJcrvP/RcKaJKxRP4BeE9ejFq+5NWtBuVfVOraIiYF7fx6xc0wd/ww==
+"@blueprintjs/icons@^5.8.0":
+  version "5.14.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-5.14.0.tgz#70b8c81985268274f034b3a1f309d741ce5a8601"
+  integrity sha512-9+gE8liHqpizm1WSR1hxLg/RFKrMw9a820JF8wczj+6li7coC/QZF/SzvLUHxI92zy6++IRBr0fiBnWTAMAsPA==
   dependencies:
     change-case "^4.1.2"
     classnames "^2.3.1"
@@ -13094,6 +13096,13 @@ react-transition-group@^4.4.5:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react-uid@^2.3.3:
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/react-uid/-/react-uid-2.3.3.tgz#6a485ccc868555997f3506c6db97a3e735d97adf"
+  integrity sha512-iNpDovcb9qBpBTo8iUgqRSQOS8GV3bWoNaTaUptHkXtAooXSo0OWe7vN6TqqB8x3x0bNBbQx96kkmSltQ5h9kQ==
+  dependencies:
+    tslib "^2.0.0"
+
 react-use-error-boundary@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-use-error-boundary/-/react-use-error-boundary-2.0.1.tgz#1daffc4a8ddb2b9a39062bc646d23251091f0f38"
@@ -15441,6 +15450,11 @@ use-deep-compare-effect@^1.5.0:
     "@babel/runtime" "^7.12.5"
     dequal "^2.0.2"
 
+use-sync-external-store@^1.2.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.2.tgz#c3b6390f3a30eba13200d2302dcdf1e7b57b2ef9"
+  integrity sha512-PElTlVMwpblvbNqQ82d2n6RjStvdSoNe9FG28kNfz3WiXilJm4DdNkEzRhCZuIDwY8U08WVihhGR5iRqAwfDiw==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
@@ -15823,10 +15837,17 @@ webpack@^5.64.4, webpack@^5.70.0:
     watchpack "^2.4.0"
     webpack-sources "^3.2.3"
 
-webslider-sdk@^1.1.132:
-  version "1.1.132"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.132.tgz#cc6ce5fe4f2034db611fb2d008464759b2ed6726"
-  integrity sha512-X2uNqjIhaQTWDCkoB5a5Ff1NZQJYpUaeBs0M650t82IEO45qBTGuQjOwjb2KeXA2i+Lx+8RKqO7i1ZqdMJFa6g==
+webslider-sdk@^1.1.144:
+  version "1.1.144"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.144.tgz#ff9a41bd09fc66ae2a9b4886092bb7d38709d6ee"
+  integrity sha512-rrwOj+e90IkqxUIQylrOgOfDUcuKUhObgsHyJPxYuaN5jlBKdXpW51jfaM+OeWbJKj87J737Q2iQZoKrg2Gw/A==
+
+webslider-sdk@^1.1.145:
+  version "1.1.145"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.145.tgz#5adfcdd05f81fed1998720fcaff1679bd43d4974"
+  integrity sha512-GBld/DTJ9Oe2SpwUwzKjCjK/Gz8EXVmR7OsmvcoA6R/XUg6xNsiYAh8Nm8RD9OZhttTjhPMzcnrxckGMmQn+tA==
+  dependencies:
+    webslider-sdk "^1.1.144"
 
 websocket-driver@>=0.5.1, websocket-driver@^0.7.4:
   version "0.7.4"

@@ -38,7 +38,7 @@ export function TextFloatingToolbar(
 ): React.ReactElement | null {
   const { mode, object, updateObject, deleteObject } = props;
 
-  const values = object?.definition.values as TextValues | undefined;
+  const values = object?.properties as TextValues | undefined;
 
   console.log(values);
   return object && values ? (
@@ -74,7 +74,7 @@ export function TextFloatingToolbar(
         values.fontSize + "px",
         (v: string) => {
           const newObject = cloneDeep(object);
-          newObject.definition.values.fontSize = v;
+          newObject.properties.fontSize = v;
           updateObject(newObject);
         },
         "",
@@ -94,7 +94,7 @@ export function TextFloatingToolbar(
           defaultValue={null}
           onChange={(value: any) => {
             const newObject = cloneDeep(object);
-            newObject.definition.values.color = value;
+            newObject.properties.color = value;
             updateObject(newObject);
           }}
           inputProps={{

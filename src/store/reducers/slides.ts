@@ -205,7 +205,7 @@ export function slides(
         const fromSlide = state.slideById[slideItem.fromId];
         if (!slideItem.skipCreate) {
           const toSlide = cloneDeep(fromSlide);
-          applyNewAnimationIdsToTransitionAbleElement(toSlide);
+          //applyNewAnimationIdsToTransitionAbleElement(toSlide);
           toSlide.id = slideItem.toId as string;
           toSlide.name += " (copy)";
           toSlide.layerIds = slideItem.childs.map((item) => item.toId!);

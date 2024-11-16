@@ -1,4 +1,6 @@
-/* eslint-disable */
+// eslint-disable
+// @ts-nocheck
+
 import { cloneDeep, includes, isEqual, mapValues, pick, set } from "lodash-es";
 import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
@@ -141,7 +143,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   });
 
   // eslint
-  if (error) return null;
+  //if (error) return null;
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
   const pageSize = breakpointConfig?.normal.page!;

@@ -13,7 +13,7 @@ import React, {
 import cx from "classnames";
 import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { ISlide } from "../../store/reducers/i-slides";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
@@ -65,6 +65,7 @@ import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { populateObjectThreeIds } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
+import { ILayer } from "../../store/reducers/i-layers";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -315,8 +316,8 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
       {object.type === "group" ? (
         object.objectIds?.map((objectId) => {
           const object = objectById[objectId]; //objectByIdLocalRef
-          const layoutChildren = parentLayer.definition.values.hasLayoutChildren
-            ? parentLayer.definition.values.layoutChildren
+          const layoutChildren = parentLayer.properties?.hasLayoutChildren
+            ? parentLayer.properties.layoutChildren
             : undefined;
           return (
             <StageObjectMinimap

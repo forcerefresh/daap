@@ -15,7 +15,6 @@ import {
   ICommonObjectProperties,
   IObject,
   ITransitions,
-  ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
@@ -29,14 +28,14 @@ import {
 type Exclude<T, U> = T extends U ? never : T;
 
 export function createObject(
-  type: ObjectType | string,
+  type: string,
   objectProps: Partial<IObject>,
   initialValue?: {
     [key: string]: string;
   }
 ): Omit<IObject, "layerId"> {
   switch (type) {
-    case ObjectType.CANVAS: {
+    case "canvas": {
       return {
         ...objectProps,
         ...createCanvasObject(initialValue, {
@@ -44,7 +43,7 @@ export function createObject(
         }),
       };
     }
-    case ObjectType.SOURCE_IMAGE: {
+    case "source_image": {
       return {
         ...objectProps,
         ...createSourceImageObject(initialValue, {
@@ -107,7 +106,7 @@ function createSourceImageObject(
   IObject<SourceImagePropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
 > {
-  const object = createCommonObject(ObjectType.SOURCE_IMAGE);
+  const object = createCommonObject("source_image");
 
   const properties: SourceImagePropertiesTuple = [
     {
@@ -151,7 +150,7 @@ function createSourceImageObject(
     ...object,
     definition: {
       id: uuid(),
-      type: ObjectType.SOURCE_IMAGE,
+      type: "source_image",
       properties,
       values,
       valuesMetadata: {},
@@ -167,7 +166,7 @@ function createCanvasObject(
     hasOverflowProperty: boolean;
   }
 ): Omit<IObject<CanvasProperties>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(ObjectType.CANVAS);
+  const object = createCommonObject("canvas");
 
   const properties: CanvasPropertiesTuple = [
     {
@@ -187,7 +186,7 @@ function createCanvasObject(
     ...object,
     definition: {
       id: uuid(),
-      type: ObjectType.CANVAS,
+      type: "canvas",
       properties,
       values,
       valuesMetadata: {},
@@ -203,13 +202,13 @@ function createGroupObject(
     hasOverflowProperty: boolean;
   }
 ): Omit<IObject<CanvasProperties>, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(ObjectType.GROUP);
+  const object = createCommonObject("group");
 
   return {
     ...object,
     definition: {
       id: uuid(),
-      type: ObjectType.GROUP,
+      type: "group",
       properties: [],
       values: {},
       valuesMetadata: {},
@@ -242,26 +241,26 @@ export function getBorderOptions() {
   ];
 }
 
-export function getDefaultSlide(name: string, slideType: SlideType): ISlide {
+export function getDefaultSlide(slideType: SlideType, name?: string): ISlide {
   return {
     id: uuid(),
     customId: "",
     name,
-    duration: {
-      inheritFrom: "inherit",
-      customValue: "20s",
-    },
-    exitDuration: {
-      inheritFrom: "inherit",
-      customValue: "1s",
-    },
+    // duration: {
+    //   inheritFrom: "inherit",
+    //   customValue: "20s",
+    // },
+    // exitDuration: {
+    //   inheritFrom: "inherit",
+    //   customValue: "1s",
+    // },
     layerIds: [],
     nextLayerIdCounter: 1,
     slideType,
-    transitionEnabled: false,
-    transitionOverlapTime: "1000ms",
-    transitionDurationTime: "1000ms",
-    transitions: getDefaultTransitionsForSlide(),
-    moveToTop: true,
+    // transitionEnabled: false,
+    // transitionOverlapTime: "1000ms",
+    // transitionDurationTime: "1000ms",
+    // transitions: getDefaultTransitionsForSlide(),
+    // moveToTop: true,
   };
 }

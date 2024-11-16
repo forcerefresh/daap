@@ -213,8 +213,8 @@ export function createBulletsObject(initialValue?: {
   const object = createCommonObject(BULLETS);
   object.selfSize = true;
 
-  object.supportedLayout.fit = false;
-  object.supportedLayout.grid = false;
+  // object.supportedLayout.fit = false;
+  // object.supportedLayout.grid = false;
 
   const properties: BulletsPropertiesTuple = [
     {

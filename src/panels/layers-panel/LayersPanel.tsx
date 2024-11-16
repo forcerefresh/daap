@@ -30,7 +30,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
 import { ISlide } from "../../store/reducers/i-slides";
 import { cloneDeep, delay, isEmpty, includes } from "lodash-es";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { EmptyID } from "../../store/types";
 import { ObjectRow } from "./ObjectRow";
@@ -284,9 +284,9 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 
             const isLastLayer = idx === layerArr.length - 1;
 
-            const disableVisibility =
-              !layer.responsiveVisibility.showAll &&
-              !includes(layer.responsiveVisibility.displayOn, selectedDevice);
+            const disableVisibility = false;
+            // !layer.responsiveVisibility.showAll &&
+            // !includes(layer.responsiveVisibility.displayOn, selectedDevice);
 
             return (
               <div key={layer.id} className={cx(css.layer, {})}>
@@ -378,12 +378,12 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
                               });
                             }}
                             onObjectClick={onObjectClick}
-                            slideDuration={convertTimeUnitToMs(
-                              slide?.duration.customValue || "1ms"
-                            )}
-                            slideExitDuration={convertTimeUnitToMs(
-                              slide?.exitDuration.customValue || "1ms"
-                            )}
+                            // slideDuration={convertTimeUnitToMs(
+                            //   slide?.duration.customValue || "1ms"
+                            // )}
+                            // slideExitDuration={convertTimeUnitToMs(
+                            //   slide?.exitDuration.customValue || "1ms"
+                            // )}
                             onDragingChange={onDragingObjectsChange}
                             objectById={objectById}
                           />
@@ -493,7 +493,7 @@ const mapDispatchToProps = {
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),

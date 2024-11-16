@@ -5,7 +5,6 @@ import {
   IDefinition,
   ILayout,
   ITransitions,
-  ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
 import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types";
 import { ILayers } from "../store/reducers/i-layers";
@@ -23,23 +22,27 @@ import { ILayoutAdvanceValues } from "webslider-sdk/lib/objects/i-layout-types";
 import { IInputMetadataValues } from "webslider-sdk/lib/inputs/i-inputs";
 
 export interface IItemsData {
-  customId: string;
+  // customId: string;
   itemId: string;
   parentItemId?: string;
-  itemType: "layer" | "stage" | ObjectType | string; // stage, layer, or object type text, image, video...
-  itemValues: { [key: string]: any };
-  itemValuesMetadata: { [key: string]: IInputMetadataValues };
-  commonStyleDefinition?: IDefinition;
-  transformDefinition?: IDefinition;
+  itemType: "layer" | "stage" | string; // stage, layer, or object type text, image, video...
+  // itemValues: { [key: string]: any };
+  // itemValuesMetadata: { [key: string]: IInputMetadataValues };
+  // commonStyleDefinition?: IDefinition;
+  // transformDefinition?: IDefinition;
+  properties: Record<string, any>;
+  style: Record<string, any>;
+  transform: Record<string, any>;
+
   itemSystemType?: CoreObjectType;
   calculatedObjectSize?: React.CSSProperties;
   calculatedObjectSizePerDevice?: { [key: string]: React.CSSProperties };
   objectClass: string;
-  transitions: ITransitions;
+  // transitions: ITransitions;
   events?: INavigationValues;
   data: {
-    slideDuration: ISlideDuration;
-    exitSlideDuration: ISlideDuration;
+    // slideDuration: ISlideDuration;
+    // exitSlideDuration: ISlideDuration;
     objectWidth?: number;
     objectHeight?: number;
     objectLeft?: number;
@@ -47,13 +50,15 @@ export interface IItemsData {
     objectHtml?: string;
     overflow: string;
   };
-  layout: Pick<ILayout, "layout" | "selfSize"> &
-    Partial<
-      Pick<
-        ILayout,
-        "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout"
-      >
-    > & { layoutAdvance?: ILayoutAdvanceValues };
+  layout: Pick<ILayout, "selfSize">;
+
+  // layout: Pick<ILayout, "layout" | "selfSize"> &
+  //   Partial<
+  //     Pick<
+  //       ILayout,
+  //       "absoluteLayout" | "fitLayout" | "gridLayout" | "snapLayout"
+  //     >
+  //   > & { layoutAdvance?: ILayoutAdvanceValues };
 }
 
 export interface ISlideTransitionData {

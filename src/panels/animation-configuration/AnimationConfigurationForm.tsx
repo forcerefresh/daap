@@ -11,11 +11,7 @@ import {
   getTextField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
-import {
-  ILayer,
-  IObject,
-  ITransition,
-} from "webslider-sdk/lib/objects/i-object";
+import { IObject, ITransition } from "webslider-sdk/lib/objects/i-object";
 import FormWithLayout, {
   flattenForm,
 } from "../../utils/form-layout/form-layout";
@@ -32,6 +28,7 @@ import {
   EasingOptions,
   AnimationType,
 } from "webslider-sdk/lib/animations/i-animation-types";
+import { ILayer } from "../../store/reducers/i-layers";
 /*
 type IAnimationConfigurationForm = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {

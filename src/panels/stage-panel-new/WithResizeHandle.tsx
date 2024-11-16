@@ -135,7 +135,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
       let el: HTMLDivElement;
 
       const handleBoxShadow =
-        "0 0 0 " + 1 / Math.abs(object.scale) / stageZoom + "px white";
+        "0 0 0 " + 1 / Math.abs(object.scale ?? 1) / stageZoom + "px white";
 
       el = document.createElement("div");
       el.style.left = "-" + scaledHandleSize + "px";

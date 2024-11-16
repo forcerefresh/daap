@@ -11,15 +11,17 @@ import { ISettings } from "../store/reducers/i-settings";
 import { ISlide } from "../store/reducers/i-slides";
 
 export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
-  return slide.duration.inheritFrom === "inherit"
-    ? settings.slideDuration
-    : slide.duration.customValue;
+  return "10s";
+  // return slide.duration.inheritFrom === "inherit"
+  //   ? settings.slideDuration
+  //   : slide.duration.customValue;
 }
 
 export function getRealExitSlideDuration(slide: ISlide, settings: ISettings) {
-  return slide.exitDuration.inheritFrom === "inherit"
-    ? settings.exitSlideDuration
-    : slide.exitDuration.customValue;
+  return "2s";
+  // return slide.exitDuration.inheritFrom === "inherit"
+  //   ? settings.exitSlideDuration
+  // : slide.exitDuration.customValue;
 }
 
 export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {

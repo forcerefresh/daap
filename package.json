@@ -33,7 +33,7 @@
     "releaseapp": "yarn run prebuild:native && yarn run bb:player && yarn run build:app:electron && yarn run build:main:electron && electron-builder --publish always"
   },
   "dependencies": {
-    "@blueprintjs/core": "^5.8.2",
+    "@blueprintjs/core": "5.10.0",
     "@blueprintjs/popover2": "^2.0.15",
     "@blueprintjs/select": "^5.0.16",
     "@davestewart/outliner": "^1.2.0",
@@ -119,7 +119,7 @@
     "webfontloader": "^1.6.28",
     "webpack-cli": "^4.9.2",
     "webpack-node-externals": "^3.0.0",
-    "webslider-sdk": "^1.1.132",
+    "webslider-sdk": "^1.1.145",
     "write-file-atomic": "^5.0.0",
     "yt-player": "^3.5.0",
     "yup": "^1.4.0"

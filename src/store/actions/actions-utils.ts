@@ -1,5 +1,6 @@
 import { forOwn } from "lodash-es";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { ILayer } from "../reducers/i-layers";
 
 /**
  * Return array of ids from object to root layer. Includes provided objectId as first element and layer id as last one.

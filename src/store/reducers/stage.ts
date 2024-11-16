@@ -1,6 +1,5 @@
 import { omit } from "lodash";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
-import { ObjectType } from "webslider-sdk/lib/objects/i-object";
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,
@@ -45,8 +44,8 @@ export interface IStage {
   zoom: number;
   pan: { x: number; y: number; currentX: number; currentY: number };
   previewState: IPreviewState;
-  stageTool: { tool: StageTools; objectType?: ObjectType };
-  activeStageTool: { tool: StageTools; objectType?: ObjectType };
+  stageTool: { tool: StageTools; objectType?: string };
+  activeStageTool: { tool: StageTools; objectType?: string };
   selectedDevice: DeviceType;
   forceRefreshRand: number;
   // text position

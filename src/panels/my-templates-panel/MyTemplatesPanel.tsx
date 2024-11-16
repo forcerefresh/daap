@@ -18,7 +18,7 @@ import {
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IMeta } from "../../store/reducers/meta";
@@ -394,7 +394,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

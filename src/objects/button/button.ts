@@ -31,7 +31,6 @@ import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import {
   ICommonObjectProperties,
   IObject,
-  ObjectType,
 } from "webslider-sdk/lib/objects/i-object";
 
 import buttonIcon from "./button-icon.svg";
@@ -692,9 +691,9 @@ export function createButtonObject(initialValue?: {
 
 export function getButtonHtml(props: {
   object: IObject;
-  calculatedObjectSize: React.CSSProperties;
+  //calculatedObjectSize: React.CSSProperties;
 }) {
-  const { object, calculatedObjectSize } = props;
+  const { object /*calculatedObjectSize*/ } = props;
   const buttonProperties = object.definition.values as ButtonValues;
 
   let style = "";

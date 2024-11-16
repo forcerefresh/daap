@@ -2,7 +2,6 @@ import React from "react";
 import cx from "classnames";
 import { includes } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { ILayer } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { ISlide } from "../../store/reducers/i-slides";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
@@ -13,6 +12,7 @@ import { IStore } from "../../store/store";
 import { withErrorBoundary } from "react-use-error-boundary";
 import { connect } from "react-redux";
 import StageObject from "./StageObject";
+import { ILayer } from "../../store/reducers/i-layers";
 
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -30,18 +30,19 @@ export function StageLayer(props: IStageLayer) {
   } = props;
 
   //console.log("RERENDER LAYER");
-  const disableVisibility =
-    !layer.responsiveVisibility.showAll &&
-    !includes(layer.responsiveVisibility.displayOn, selectedDevice);
+  // const disableVisibility =
+  //   !layer.responsiveVisibility.showAll &&
+  //   !includes(layer.responsiveVisibility.displayOn, selectedDevice);
 
-  if (disableVisibility) {
-    return null;
-  }
+  // if (disableVisibility) {
+  //   return null;
+  // }
 
   const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
-  const hasLayout = layer.layout !== "none";
+  // const hasLayout = layer.layout !== "none";
+  const hasLayout = false;
 
-  const layerValues = layer.definition.values;
+  const layerValues = layer.properties ?? {};
   const calculatedLayerSize = calculateObjectSize(
     layer,
     undefined,
@@ -84,28 +85,28 @@ export function StageLayer(props: IStageLayer) {
           }
         `;
     } else {
-      layerValues.layoutChildren.itemsGap.eachValues.forEach(
-        (eachValue, idx) => {
-          layerCss += `.${layerClassName} > *:nth-child(${idx + 1}) {
-                ${
-                  t === "column" ? "margin-bottom" : "margin-right"
-                }: ${eachValue};
-            }
-            `;
-        }
-      );
+      // layerValues.layoutChildren.itemsGap.eachValues.forEach(
+      //   (eachValue, idx) => {
+      //     layerCss += `.${layerClassName} > *:nth-child(${idx + 1}) {
+      //           ${
+      //             t === "column" ? "margin-bottom" : "margin-right"
+      //           }: ${eachValue};
+      //       }
+      //       `;
+      //   }
+      // );
     }
   }
 
-  layerCss += `.${layerClassName} {
-         ${addCommonPropertiesToStyle("", layer, breakpointConfig?.type)}
-         ${addTransformPropertiesToStyle("", layer, breakpointConfig?.type)}
-         z-index: 100;
-        }`;
+  // layerCss += `.${layerClassName} {
+  //        ${addCommonPropertiesToStyle("", layer, breakpointConfig?.type)}
+  //        ${addTransformPropertiesToStyle("", layer, breakpointConfig?.type)}
+  //        z-index: 100;
+  //       }`;
 
   const layerHolderStyle: React.CSSProperties = {};
-  if (layer.transformDefinition?.values?.hasPerspective) {
-    layerHolderStyle.perspective = `${layer.transformDefinition?.values?.transformPerspective}`;
+  if (layer.transform?.hasPerspective) {
+    layerHolderStyle.perspective = `${layer.transform?.transformPerspective}`;
   }
 
   // NOTE: when layer has layout
@@ -120,12 +121,12 @@ export function StageLayer(props: IStageLayer) {
         })}
         style={layerStyle}
       >
-        {layer.objectIds.map((objectId) => {
+        {layer.objectIds.map((objectId: string) => {
           const object = objectById[objectId]; //objectByIdLocalRef
           //console.log(object?.absoluteLayout?.common?.left);
 
-          const layoutChildren = layer.definition.values.hasLayoutChildren
-            ? layer.definition.values.layoutChildren
+          const layoutChildren = layer.properties?.hasLayoutChildren
+            ? layer.properties.layoutChildren
             : undefined;
           return (
             <StageObject
@@ -133,7 +134,7 @@ export function StageLayer(props: IStageLayer) {
               object={object}
               layer={layer}
               layoutChildren={layoutChildren}
-              objectZoom={object.scale}
+              objectZoom={object.scale ?? 1}
               // stageZoom={stageZoom}
             />
           );

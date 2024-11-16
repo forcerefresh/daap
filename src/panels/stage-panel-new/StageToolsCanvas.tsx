@@ -55,7 +55,7 @@ import {
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   applyRectValuesToElement,
   getMousePosition,
@@ -215,8 +215,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         mousePosition: getMousePosition(e),
         contextMatrix: groupsMatrix,
         objectId: selectedObjectIds[0], //object.id,
-        objectRotation: object.rotation,
-        objectScale: object.scale,
+        objectRotation: object.rotation ?? 0,
+        objectScale: object.scale ?? 1,
         originalMouseEvent: e,
         handle: handle ?? "",
         boundingClientRects: [new DOMRect()], // TODO: not needed
@@ -392,9 +392,9 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
     var len = Math.sqrt(Math.pow(a2x - a1x, 2) + Math.pow(a2y - a1y, 2));
 
-    var hDif = Math.sin(degrees_to_radians(firstObject.rotation)) * len;
+    var hDif = Math.sin(degrees_to_radians(firstObject.rotation ?? 0)) * len;
     //line from a1 to H
-    var wDif = Math.cos(degrees_to_radians(firstObject.rotation)) * len;
+    var wDif = Math.cos(degrees_to_radians(firstObject.rotation ?? 0)) * len;
 
     setDiff({ x: wDif, y: hDif });
     setMove({ x: a2x, y: a2y });
@@ -728,7 +728,7 @@ const mapDispatchToProps = {
   _selectObjectsByRect: (rect: IRect) => selectObjectsByRect(rect),
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),

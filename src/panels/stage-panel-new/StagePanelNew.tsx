@@ -58,7 +58,7 @@ import {
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   applyRectValuesToElement,
   getMousePosition,
@@ -355,23 +355,23 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     );
 
     //let totalDuration = 0;
-    const slideTimelineDataArr: SlideTimelineData[] = exportData.slides.map(
-      (slideData) => {
-        return {
-          duration: convertTimeUnitToMs(
-            slideData.slide.duration.customValue || "0ms"
-          ),
-          transitionDuration: slideData.slide.transitionEnabled
-            ? slideData.slide.transitionDurationTime
-            : 0,
-          transitionOverlap: slideData.slide.transitionEnabled
-            ? slideData.slide.transitionOverlapTime
-            : 0,
-        };
-      }
-    );
+    // const slideTimelineDataArr: SlideTimelineData[] = exportData.slides.map(
+    //   (slideData) => {
+    //     return {
+    //       duration: convertTimeUnitToMs(
+    //         slideData.slide.duration.customValue || "0ms"
+    //       ),
+    //       transitionDuration: slideData.slide.transitionEnabled
+    //         ? slideData.slide.transitionDurationTime
+    //         : 0,
+    //       transitionOverlap: slideData.slide.transitionEnabled
+    //         ? slideData.slide.transitionOverlapTime
+    //         : 0,
+    //     };
+    //   }
+    // );
 
-    projectTimelineData = { slides: slideTimelineDataArr };
+    // projectTimelineData = { slides: slideTimelineDataArr };
   }
 
   // -------- PLAYER <<
@@ -790,7 +790,7 @@ const mapDispatchToProps = {
   _selectObjectsByRect: (rect: IRect) => selectObjectsByRect(rect),
   _addNewObject: (
     layerId: string,
-    type: ObjectType,
+    type: string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),

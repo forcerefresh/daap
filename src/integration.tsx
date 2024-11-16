@@ -15,6 +15,7 @@ import {
   GetAssetsUrlFuncReturnType,
   GetFontsFuncReturnType,
 } from "webslider-sdk/lib/objects/objects-register";
+import { Pagination } from "./types/pagination";
 
 export interface getMyUploadComponentProps {
   type: MediaType;
@@ -298,24 +299,26 @@ export const IntegrationContext = React.createContext({
     getProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
 
     /* returns projects */
-    getProjects: (from: number, search: string): Promise<any> =>
-      Promise.resolve({}), // todo: add interface for api response
+    getProjects: (
+      from: number,
+      search: string
+    ): Promise<{ pagination: Pagination; data: any[] }> =>
+      Promise.resolve({} as any), // todo: add interface for api response
 
     /* delete project */
-    deleteProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+    deleteProject: (id: string): Promise<{ id: string }> =>
+      Promise.resolve({ id: "" }), // todo: add interface for api response
 
     /* get next id for project (NOTE: use only for slider name) */
     //getNextProjectId: (): Promise<number> => Promise.resolve(1),
 
-    /* save project */
-    saveProject: ({
-      id,
+    /* create project */
+    createProject: ({
       name,
       description,
       project,
       preview,
     }: {
-      id?: string;
       name: string;
       description?: string;
       slides?: number;
@@ -351,7 +354,54 @@ export const IntegrationContext = React.createContext({
         modified: "",
         saveRevision: 0,
         assetsUrls: [],
-      }), // todo: add interface for api response
+      }),
+
+    /* create project */
+    updateProject: (
+      id: string,
+      {
+        name,
+        description,
+        project,
+        preview,
+      }: {
+        name: string;
+        description?: string;
+        slides?: number;
+        created?: string;
+        modified?: string;
+        project: Omit<IStore["project"], "diff">;
+        preview: {
+          width: number;
+          height: number;
+          scale: number;
+          html: string;
+        };
+        playerData: IPlayerData;
+        assetsUrls: GetAssetsUrlFuncReturnType;
+        fonts: GetFontsFuncReturnType;
+        extensions: IExtensionItem[];
+      }
+    ): Promise<{
+      id: string;
+      name: string;
+      description: string;
+      slides: number;
+      created: string;
+      modified: string;
+      saveRevision: number;
+      assetsUrls: { url: string; type: "url" | string }[];
+    }> =>
+      Promise.resolve({
+        id: "",
+        name: "",
+        description: "",
+        slides: 0,
+        created: "",
+        modified: "",
+        saveRevision: 0,
+        assetsUrls: [],
+      }),
   }),
 
   usePresets: () => ({
@@ -421,6 +471,10 @@ function useMyMediaHookFactory() {
 // }
 
 function useProjectHookFactory() {
+  if (process.env.REACT_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/project-hook/saas-use-project-hook")
+      .useProjectHook;
+  }
   if (process.env.REACT_APP_INTEGRATION === "wp") {
     return require("./integration/hooks/project-hook/wp-use-project-hook")
       .useProjectHook;

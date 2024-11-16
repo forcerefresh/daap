@@ -13,6 +13,7 @@ import {
   getInsetLayoutField,
   getNumericFiled,
   getSelectSlider,
+  getSizePosLayoutField,
 } from "../../../inputs/input-utils";
 import {
   ILayout,
@@ -46,7 +47,7 @@ import {
   IFormLayoutItem,
 } from "webslider-sdk/lib/form/i-form-layout";
 import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form";
-import { getDefaultLayoutAdvance } from "webslider-sdk/lib/objects/create-common-object";
+// import { getDefaultLayoutAdvance } from "webslider-sdk/lib/objects/create-common-object";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "aws-sdk/clients/ec2";
 import { getAncestorLayer } from "../../../store/actions/actions-utils";
@@ -124,23 +125,35 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 
         {getNumericFiled(
           "Scale",
-          `${obj.scale}`,
+          `${obj.scale ?? 1}`,
           (scale: string) => {
             const retObj = cloneDeep(obj);
-            retObj.scale = parseFloat(scale);
+            if (scale === "1") {
+              delete retObj.scale;
+            } else {
+              retObj.scale = parseFloat(scale);
+            }
             _updateObject(retObj);
           },
           "",
           { stepSize: 0.1, majorStepSize: 1 }
         )}
-        {getNumericFiled("Rotation", `${obj.rotation}`, (rotation: string) => {
-          const retObj = cloneDeep(obj);
-          retObj.rotation = parseFloat(rotation);
-          _updateObject(retObj);
-        })}
+        {getNumericFiled(
+          "Rotation",
+          `${obj.rotation ?? 0}`,
+          (rotation: string) => {
+            const retObj = cloneDeep(obj);
+            if (rotation === "0") {
+              delete retObj.rotation;
+            } else {
+              retObj.rotation = parseFloat(rotation);
+            }
+            _updateObject(retObj);
+          }
+        )}
         {getSelectSlider(
           "Opacity",
-          obj.commonStyleDefinition?.values?.commonOpacity ?? 1,
+          obj.style?.commonOpacity ?? 100,
           {
             min: 0,
             max: 100,
@@ -152,23 +165,22 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           (opacity: string) => {
             const retObj = cloneDeep(obj);
 
-            if (!retObj.commonStyleDefinition?.values) {
-              retObj.commonStyleDefinition!.values = {};
+            if (!retObj.style) {
+              retObj.style = {};
             }
 
-            retObj.commonStyleDefinition!.values.commonOpacity =
-              parseInt(opacity);
+            retObj.style.commonOpacity = parseInt(opacity);
 
-            if (!retObj.commonStyleDefinition?.valuesMetadata?.commonOpacity) {
-              retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity = {};
-            }
+            // if (!retObj.commonStyleDefinition?.valuesMetadata?.commonOpacity) {
+            //   retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity = {};
+            // }
 
-            (
-              retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
-            ).enabled = true;
-            (
-              retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
-            ).disabled = false;
+            // (
+            //   retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
+            // ).enabled = true;
+            // (
+            //   retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
+            // ).disabled = false;
 
             _updateObject(retObj);
           }
@@ -185,98 +197,99 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
   };
 
-  const renderNamedProperties = (
-    namedProperty: "layoutAdvance" | "definition",
-    properties: any[],
-    values: any,
-    valuesMetadata: any,
-    objectOrLayer: ILayout & { definition: IDefinition },
-    updateFunction: (objectOrLayer: any) => any
-  ) => {
-    let layerObjects: IObject[] = [];
-    if ((objectOrLayer as any)?.type === "layer") {
-      layerObjects = (objectOrLayer as any)?.objectIds.map(
-        (id: any) => objects.objectById[id]
-      );
-    }
+  // const renderNamedProperties = (
+  //   namedProperty: "layoutAdvance" | "definition",
+  //   properties: any[],
+  //   values: any,
+  //   valuesMetadata: any,
+  //   objectOrLayer: ILayout & { definition: IDefinition },
+  //   updateFunction: (objectOrLayer: any) => any
+  // ) => {
+  //   let layerObjects: IObject[] = [];
+  //   if ((objectOrLayer as any)?.type === "layer") {
+  //     layerObjects = (objectOrLayer as any)?.objectIds.map(
+  //       (id: any) => objects.objectById[id]
+  //     );
+  //   }
 
-    const flatForm = flattenForm(properties as IFormLayoutItem[]);
+  //   const flatForm = flattenForm(properties as IFormLayoutItem[]);
 
-    const inputs = flatForm.map((property, idx) => {
-      const { propertyName } = property;
+  //   const inputs = flatForm.map((property, idx) => {
+  //     const { propertyName } = property;
 
-      function onChange(value: any) {
-        const retObj = cloneDeep(objectOrLayer);
+  //     function onChange(value: any) {
+  //       const retObj = cloneDeep(objectOrLayer);
 
-        // add default values to get form rendered
-        if (!retObj.layoutAdvance) {
-          retObj.layoutAdvance = {
-            values: getDefaultLayoutAdvance(),
-            valuesMetadata: {},
-          };
-        }
+  //       // add default values to get form rendered
+  //       if (!retObj.layoutAdvance) {
+  //         retObj.layoutAdvance = {
+  //           values: getDefaultLayoutAdvance(),
+  //           valuesMetadata: {},
+  //         };
+  //       }
 
-        if (retObj) {
-          const values =
-            (retObj[namedProperty]?.values as {
-              [key: string]: any;
-            }) ?? {};
-          values[propertyName] = value;
-          updateFunction(retObj);
-        }
-      }
+  //       if (retObj) {
+  //         const values =
+  //           (retObj[namedProperty]?.values as {
+  //             [key: string]: any;
+  //           }) ?? {};
+  //         values[propertyName] = value;
+  //         updateFunction(retObj);
+  //       }
+  //     }
 
-      function onMetadataChange(metadata: IInputMetadataValues) {
-        const retObj = cloneDeep(objectOrLayer);
+  //     function onMetadataChange(metadata: IInputMetadataValues) {
+  //       const retObj = cloneDeep(objectOrLayer);
 
-        if (retObj) {
-          const valuesMetadata =
-            (retObj[namedProperty]?.valuesMetadata as {
-              [key: string]: any;
-            }) ?? {};
-          valuesMetadata[propertyName] = metadata;
+  //       if (retObj) {
+  //         const valuesMetadata =
+  //           (retObj[namedProperty]?.valuesMetadata as {
+  //             [key: string]: any;
+  //           }) ?? {};
+  //         valuesMetadata[propertyName] = metadata;
 
-          updateFunction(retObj);
-        }
-      }
+  //         updateFunction(retObj);
+  //       }
+  //     }
 
-      const inputProps: any = {
-        ...property,
-        value: values[propertyName],
-        metadata: valuesMetadata[propertyName],
-      };
+  //     const inputProps: any = {
+  //       ...property,
+  //       value: values[propertyName],
+  //       metadata: valuesMetadata[propertyName],
+  //     };
 
-      return {
-        input: getInputFormWithOptions(
-          property.inputType,
-          inputProps,
-          onChange,
-          onChange,
-          onMetadataChange,
-          { layerData: { layer: layer!, objects: layerObjects } }
-        ),
-        propertyName: property.propertyName,
-        duplicate: property.duplicate ? property.duplicate : "",
-      };
-    });
+  //     return {
+  //       input: getInputFormWithOptions(
+  //         property.inputType,
+  //         inputProps,
+  //         onChange,
+  //         onChange,
+  //         onMetadataChange,
+  //         { layerData: { layer: layer!, objects: layerObjects } }
+  //       ),
+  //       propertyName: property.propertyName,
+  //       duplicate: property.duplicate ? property.duplicate : "",
+  //     };
+  //   });
 
-    return (
-      <FormWithLayoutConnected
-        values={values}
-        inputs={inputs}
-        form={properties as IFormLayoutItem[]}
-        formId={namedProperty as string}
-        skipOpeningGroupByDefault={true}
-      />
-    );
-  };
+  //   return (
+  //     <FormWithLayoutConnected
+  //       values={values}
+  //       inputs={inputs}
+  //       form={properties as IFormLayoutItem[]}
+  //       formId={namedProperty as string}
+  //       skipOpeningGroupByDefault={true}
+  //     />
+  //   );
+  // };
 
   const isBreakpointTypeVisibleForLayer = (
     deviceType: DeviceType,
     l: ILayer
   ) => {
-    if (l.responsiveVisibility.showAll) return true;
-    return l.responsiveVisibility.displayOn.indexOf(deviceType as any) !== -1;
+    return true;
+    // if (l.responsiveVisibility.showAll) return true;
+    // return l.responsiveVisibility.displayOn.indexOf(deviceType as any) !== -1;
   };
 
   const getBreakpointConfigForLayer = (l?: ILayer, b?: Breakpoints) => {
@@ -302,6 +315,24 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
     return (
       <>
+        {getSizePosLayoutField(
+          "",
+          {
+            left: objectOrLayer.left + "px",
+            top: objectOrLayer.top + "px",
+            width: objectOrLayer.width + "px",
+            height: objectOrLayer.height + "px",
+          },
+          (v: any) => {
+            const retObj = cloneDeep(objectOrLayer);
+            retObj.left = parseFloat(v.left);
+            retObj.top = parseFloat(v.top);
+            retObj.width = parseFloat(v.width);
+            retObj.height = parseFloat(v.height);
+            updateFunction(retObj);
+          }
+        )}
+
         {/* {objectOrLayer.layout === "grid" &&
           getGridLayoutField(
             "",
@@ -318,13 +349,15 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               _setDevice(device);
             }
           )} */}
-        {objectOrLayer.layout === "absolute" &&
+
+        {/* {objectOrLayer.layout === "absolute" &&
           getAbsoluteLayoutField(
             "",
             objectOrLayer.absoluteLayout,
-            (absoluteLayout?: IAbsoluteLayout) => {
+            (absoluteLayout: IAbsoluteLayout) => {
               const retObj = cloneDeep(objectOrLayer);
               retObj.absoluteLayout = absoluteLayout;
+
               updateFunction(retObj);
             },
             {
@@ -338,7 +371,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
               _setDevice(device);
             },
             parentHasLayout
-          )}
+          )} */}
 
         {/* {objectOrLayer.layout === "snap" &&
           getSnapLayoutField(
@@ -406,55 +439,55 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
   };
 
-  const renderLayoutOptions = (
-    object: ILayout,
-    updateFunction: any,
-    layoutedByParent = false,
-    parentHasLayout = false
-  ) => {
-    const type = (object as unknown as { type: "object" | "layer" }).type;
-    const options = [];
-    object.supportedLayout.none &&
-      options.push({ label: "No layout", value: "none" });
-    object.supportedLayout.absolute &&
-      options.push({ label: "Absolute", value: "absolute" });
-    object.supportedLayout.grid &&
-      type === "layer" &&
-      options.push({ label: "Grid", value: "grid" });
-    options.push({ label: "Snap", value: "snap" });
-    object.supportedLayout.fit && options.push({ label: "Fit", value: "fit" });
-    object.supportedLayout.inset &&
-      options.push({ label: "Inset", value: "inset" });
+  // const renderLayoutOptions = (
+  //   object: ILayout,
+  //   updateFunction: any,
+  //   layoutedByParent = false,
+  //   parentHasLayout = false
+  // ) => {
+  //   const type = (object as unknown as { type: "object" | "layer" }).type;
+  //   const options = [];
+  //   object.supportedLayout.none &&
+  //     options.push({ label: "No layout", value: "none" });
+  //   object.supportedLayout.absolute &&
+  //     options.push({ label: "Absolute", value: "absolute" });
+  //   object.supportedLayout.grid &&
+  //     type === "layer" &&
+  //     options.push({ label: "Grid", value: "grid" });
+  //   options.push({ label: "Snap", value: "snap" });
+  //   object.supportedLayout.fit && options.push({ label: "Fit", value: "fit" });
+  //   object.supportedLayout.inset &&
+  //     options.push({ label: "Inset", value: "inset" });
 
-    const onChange = (layout: any) => {
-      const retObj = cloneDeep(object);
-      retObj.layout = layout;
-      updateFunction(retObj);
-    };
+  //   const onChange = (layout: any) => {
+  //     const retObj = cloneDeep(object);
+  //     retObj.layout = layout;
+  //     updateFunction(retObj);
+  //   };
 
-    let helperText: any;
-    if (layoutedByParent || parentHasLayout) {
-      helperText = (
-        <>
-          {layoutedByParent && (
-            <div>
-              Note: Object is layouted by parent layer. Some configuration might
-              be disabled (Width and Height are used, Left and Top are ignored).
-            </div>
-          )}
-        </>
-      );
-    }
+  //   let helperText: any;
+  //   if (layoutedByParent || parentHasLayout) {
+  //     helperText = (
+  //       <>
+  //         {layoutedByParent && (
+  //           <div>
+  //             Note: Object is layouted by parent layer. Some configuration might
+  //             be disabled (Width and Height are used, Left and Top are ignored).
+  //           </div>
+  //         )}
+  //       </>
+  //     );
+  //   }
 
-    return getSelectField(
-      "Layout",
-      object.layout,
-      options,
-      onChange,
-      {},
-      helperText
-    );
-  };
+  //   return getSelectField(
+  //     "Layout",
+  //     object.layout,
+  //     options,
+  //     onChange,
+  //     {},
+  //     helperText
+  //   );
+  // };
 
   // >>>> ---- copy from PropertiesPanel START
   // <<<< ---- copy from PropertiesPanel STOP
@@ -503,7 +536,7 @@ const mapStateToProps = (state: IStore) => {
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   let panelName:
-    | { name: string; type: "object" | "layer" | "slide" }
+    | { name?: string; type: "object" | "layer" | "slide" }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {

@@ -13,7 +13,7 @@ import React, {
 import cx from "classnames";
 import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { ILayer, IObject } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
 import { ISlide } from "../../store/reducers/i-slides";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
@@ -70,6 +70,7 @@ import {
 import { WithResizeHandle } from "./WithResizeHandle";
 import { group } from "console";
 import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
+import { ILayer } from "../../store/reducers/i-layers";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -173,7 +174,7 @@ export function StageObjectInternal(props: IStageLayer) {
   const objectId = object.id;
   const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
   const isInSelectionPath = selectionPath.indexOf(objectId) !== -1;
-  const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
+  //const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
 
   //const cssPosition = !layoutChildren ? "absolute" : "static";
   const cssPosition = "absolute";
@@ -251,8 +252,8 @@ export function StageObjectInternal(props: IStageLayer) {
   };
 
   objectStyle.position = cssPosition;
-  if (object.transformDefinition?.values?.hasPerspective) {
-    objectStyle.perspective = `${object.transformDefinition?.values?.transformPerspective}`;
+  if (object.transform?.hasPerspective) {
+    objectStyle.perspective = `${object.transform?.transformPerspective}`;
   }
 
   // NOTO: We are explicitly moving div, ad when x,y is not change it does not rerender.
@@ -305,7 +306,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   // NOTE: FOR TEXT
   const calculatedObjectSizeForObject = { ...calculatedObjectSize };
-  if (object.definition.values?.autoHeight) {
+  if (object.properties?.autoHeight) {
     //calculatedObjectSizeForObject.height = "auto";
     //objectStyle.height = "auto";
   }
@@ -384,8 +385,8 @@ export function StageObjectInternal(props: IStageLayer) {
         key={`object-${object.id}`}
         object={object}
         stageZoom={stageZoom ?? 1}
-        rotation={object.rotation}
-        scale={object.scale}
+        rotation={object.rotation ?? 0}
+        scale={object.scale ?? 1}
         selectionPath={selectionPath}
         objectById={objectById}
         isSelected={isSelected}
@@ -395,8 +396,8 @@ export function StageObjectInternal(props: IStageLayer) {
           key={`object-${object.id}`}
           object={object}
           stageZoom={stageZoom ?? 1}
-          rotation={object.rotation}
-          scale={object.scale}
+          rotation={object.rotation ?? 0}
+          scale={object.scale ?? 1}
           selectionPath={selectionPath}
           objectById={objectById}
           forceHide={!!activeTool}
@@ -444,8 +445,8 @@ export function StageObjectInternal(props: IStageLayer) {
                       ],
                       mousePosition: getMousePosition(e),
                       contextMatrix: groupsMatrix,
-                      objectRotation: object.rotation,
-                      objectScale: object.scale,
+                      objectRotation: object.rotation ?? 0,
+                      objectScale: object.scale ?? 1,
                       objectId: props.object.id,
                       originalMouseEvent: e.nativeEvent,
                       isLocked: object.isLocked,
@@ -492,9 +493,8 @@ export function StageObjectInternal(props: IStageLayer) {
             {object.type === "group" ? (
               object.objectIds?.map((objectId) => {
                 const childObject = objectById[objectId]; //objectByIdLocalRef
-                const layoutChildren = parentLayer.definition.values
-                  .hasLayoutChildren
-                  ? parentLayer.definition.values.layoutChildren
+                const layoutChildren = parentLayer.properties?.hasLayoutChildren
+                  ? parentLayer.properties.layoutChildren
                   : undefined;
                 return (
                   <StageObject
@@ -503,7 +503,7 @@ export function StageObjectInternal(props: IStageLayer) {
                     parentGroup={object}
                     layer={parentLayer}
                     layoutChildren={layoutChildren}
-                    objectZoom={objectZoom * childObject.scale}
+                    objectZoom={objectZoom * (childObject.scale ?? 1)}
                     //stageZoom={stageZoom}
                   />
                 );

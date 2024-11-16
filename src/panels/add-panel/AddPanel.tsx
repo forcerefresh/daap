@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AddPanel.module.scss";
 import { addNewObject } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getAppObjectDefinitionsByGroup } from "webslider-sdk/lib/objects/objects-register";
 import SVG from "react-inlinesvg";
 import { IntegrationContext } from "../../integration";
@@ -171,7 +171,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType | string,
+    type: string,
     objectProps: Partial<IObject>
   ) => addNewObject(layerId, type, objectProps),
 };

@@ -8,7 +8,7 @@ import {
   addNewObject,
   setExternalFontLoaded,
 } from "../../store/actions/actions";
-import { IObject, ObjectType } from "webslider-sdk/lib/objects/i-object";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
 
 import { load } from "webfontloader";
 import { getGlobals } from "../../globals";
@@ -398,7 +398,7 @@ const mapStateToProps = (state: IStore) => ({
 const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
-    type: ObjectType | string,
+    type: string,
     objectProps: Partial<IObject>,
     values: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),

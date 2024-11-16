@@ -128,7 +128,6 @@
             "cursor": "default",
             "sliderActionOnEvent": "none"
           },
-
           "properties": {
             "fit": {
               "size": "cover",

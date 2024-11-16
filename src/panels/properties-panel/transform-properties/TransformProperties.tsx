@@ -53,20 +53,22 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
     const tmpObj = createObject(object.type, {});
 
-    if (!object.transformDefinition && !tmpObj.transformDefinition) {
-      return "Element does not have common transform properties";
-    }
+    // if (!object.transformDefinition && !tmpObj.transformDefinition) {
+    //   return "Element does not have common transform properties";
+    // }
 
     // check for forward compatibility
     const transformDefinitionProperties =
-      tmpObj.transformDefinition?.properties ?? [];
+      getTransformObjectPropertiesDefinition();
+    // tmpObj.transformDefinition?.properties ?? [];
+
     const transformDefinitionValues = {
-      ...(tmpObj.transformDefinition?.values ?? {}),
-      ...(object.transformDefinition?.values ?? {}),
+      ...(tmpObj.transform ?? {}),
+      ...(object.transform ?? {}),
     };
     const transformDefinitionValuesMetadata = {
-      ...(tmpObj.transformDefinition?.valuesMetadata ?? {}),
-      ...(object.transformDefinition?.valuesMetadata ?? {}),
+      // ...(tmpObj.transformDefinition?.valuesMetadata ?? {}),
+      // ...(object.transformDefinition?.valuesMetadata ?? {}),
     };
 
     return (
@@ -94,11 +96,11 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
           getTransformObjectPropertiesDefinition(true), // TODO
           {
             ...getTransformPropertiesValues(),
-            ...(layer.transformDefinition?.values ?? {}),
+            ...(layer.transform ?? {}),
           },
           {
             ...{},
-            ...(layer.transformDefinition?.valuesMetadata ?? {}),
+            // ...(layer.transformDefinition?.valuesMetadata ?? {}),
           },
           layer,
           _updateLayer
@@ -287,7 +289,7 @@ const mapStateToProps = (state: IStore) => {
   const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
 
   let panelName:
-    | { name: string; type: "object" | "layer" | "slide" }
+    | { name?: string; type: "object" | "layer" | "slide" }
     | undefined;
 
   if (selection.selectionForProperties?.type === "layer" && layer) {

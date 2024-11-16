@@ -278,17 +278,12 @@ export function objects(
                   toObject.parentId = objectItem.newParentId;
 
                 if (objectItem.positionMove) {
-                  toObject.absoluteLayout!.common.left =
-                    parseFloat(toObject.absoluteLayout?.common.left!) +
-                    20 +
-                    "px";
-                  toObject.absoluteLayout!.common.top =
-                    parseFloat(toObject.absoluteLayout?.common.top!) +
-                    20 +
-                    "px";
+                  // NOTE: LAYOUT CHANGE
+                  toObject.left = toObject.left! + 20;
+                  toObject.top = toObject.top! + 20;
                 }
 
-                applyNewAnimationIdsToTransitionAbleElement(toObject);
+                //applyNewAnimationIdsToTransitionAbleElement(toObject);
                 newState.allObjects.push(toObject.id);
                 newState.objectById[toObject.id] = toObject;
               }
@@ -379,8 +374,9 @@ export function objects(
           scale: transformPerObject[objId].scale,
           rotation: transformPerObject[objId].rotation,
         };
-        obj.absoluteLayout!.common.left = transformPerObject[objId].left + "px";
-        obj.absoluteLayout!.common.top = transformPerObject[objId].top + "px";
+        // NOTE: LAYOUT CHANGE
+        obj.left = transformPerObject[objId].left;
+        obj.top = transformPerObject[objId].top;
 
         obj.parentId = parentId;
         obj.layerId = layerId;
@@ -443,17 +439,17 @@ export function objects(
       };
     }
     case OPEN_PROJECT: {
-      action.payload.objects.allObjects.map((id: string) => {
-        const object = action.payload.objects.objectById[id];
-        object.definition.values = {
-          ...getCommonPropertiesValues(),
-          ...object.definition.values,
-        };
-        object.definition.valuesMetadata = {
-          ...getCommonPropertiesMetadataValues(),
-          ...object.definition.valuesMetadata,
-        };
-      });
+      // action.payload.objects.allObjects.map((id: string) => {
+      //   const object = action.payload.objects.objectById[id];
+      //   object.definition.values = {
+      //     ...getCommonPropertiesValues(),
+      //     ...object.definition.values,
+      //   };
+      //   object.definition.valuesMetadata = {
+      //     ...getCommonPropertiesMetadataValues(),
+      //     ...object.definition.valuesMetadata,
+      //   };
+      // });
 
       return {
         ...action.payload.objects,

@@ -105,10 +105,7 @@ export default class FreeHandDrawTool implements IToolClass {
       this.stack = (objectValues as unknown as FreeDrawValues).lines.map(
         (line) => {
           const points: Points = line.points.map((p) => {
-            return [
-              p[0] + parseFloat(position.x),
-              p[1] + parseFloat(position.y),
-            ];
+            return [p[0] + position.x, p[1] + position.y];
           });
 
           return {
@@ -331,8 +328,13 @@ export default class FreeHandDrawTool implements IToolClass {
     this.objects.forEach((obj: IObject) => {
       const lines = (obj.definition.values as FreeDrawValues).lines;
 
-      const pomX = parseInt(obj.absoluteLayout?.common.left!);
-      const pomY = parseInt(obj.absoluteLayout?.common.top!);
+      // const pomX = parseInt(obj.absoluteLayout?.common.left!);
+      // const pomY = parseInt(obj.absoluteLayout?.common.top!);
+      // NOTE: LAYOUT CHANGE
+
+      const pomX = obj.left!;
+      const pomY = obj.top!;
+
       let removed = false;
       lines.forEach((line) => {
         for (let i = 1; i < line.points.length; i++) {

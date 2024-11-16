@@ -23,8 +23,8 @@ export interface IObjectRowProps {
   activeObjectId: string | null;
   selectedObjectIds: string[];
   selectionForProperties: selectForPropertiesProps | null;
-  slideDuration: number;
-  slideExitDuration: number;
+  // slideDuration: number;
+  // slideExitDuration: number;
   disableVisibility: boolean;
   updateObject: (object: IObject) => void;
   deleteObjects: (objectIds: string[]) => void;
@@ -40,8 +40,8 @@ export function ObjectRow(props: IObjectRowProps) {
     activeObjectId,
     selectedObjectIds,
     selectionForProperties,
-    slideDuration,
-    slideExitDuration,
+    // slideDuration,
+    // slideExitDuration,
     disableVisibility,
     onObjectClick,
     updateObject,
@@ -210,11 +210,11 @@ export function ObjectRow(props: IObjectRowProps) {
             ></Button>
           </div>
         </div>
-        <TimelineView
+        {/* <TimelineView
           object={object}
           slideDuration={slideDuration}
           slideExitDuration={slideExitDuration}
-        ></TimelineView>
+        ></TimelineView> */}
       </div>
       {object.isOpen &&
         object.objectIds &&
@@ -241,8 +241,8 @@ export function ObjectRow(props: IObjectRowProps) {
                 });
               }}
               onObjectClick={onObjectClick}
-              slideDuration={slideDuration}
-              slideExitDuration={slideExitDuration}
+              // slideDuration={slideDuration}
+              // slideExitDuration={slideExitDuration}
               onDragingChange={onDragingChange}
               objectById={objectById}
             />

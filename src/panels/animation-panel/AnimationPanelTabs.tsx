@@ -86,32 +86,32 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 
   let item: ITransitionAble;
   let transitions: ITransitions | undefined;
-  if (id) {
-    switch (itemType) {
-      case "object": {
-        item = objectById[id];
-        transitions = (objectById[id] as IObject).transitions;
-        break;
-      }
-      case "layer": {
-        item = layerById[id];
-        transitions = (layerById[id] as ILayer).transitions;
-        break;
-      }
-      case "slide": {
-        item = slideById[id];
-        transitions = (slideById[id] as ISlide).transitions;
-        break;
-      }
-    }
-  }
+  // if (id) {
+  //   switch (itemType) {
+  //     case "object": {
+  //       item = objectById[id];
+  //       transitions = (objectById[id] as IObject).transitions;
+  //       break;
+  //     }
+  //     case "layer": {
+  //       item = layerById[id];
+  //       transitions = (layerById[id] as ILayer).transitions;
+  //       break;
+  //     }
+  //     case "slide": {
+  //       item = slideById[id];
+  //       transitions = (slideById[id] as ISlide).transitions;
+  //       break;
+  //     }
+  //   }
+  // }
 
   const removeHandler = (animationType: AnimationType, idx: number) => {
     const newItem = cloneDeep(item);
     newItem.transitions[animationType]!.splice(idx, 1);
-    if (itemType === "object") _updateObject(newItem as IObject);
-    if (itemType === "layer") _updateLayer(newItem as ILayer);
-    if (itemType === "slide") _updateSlide(newItem as ISlide);
+    // if (itemType === "object") _updateObject(newItem as IObject);
+    // if (itemType === "layer") _updateLayer(newItem as ILayer);
+    // if (itemType === "slide") _updateSlide(newItem as ISlide);
 
     setTimeout(() => {
       // TODO: IMPORTANT strange behavior when deleting animation
@@ -126,9 +126,9 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
   ) => {
     const newItem = cloneDeep(item);
     newItem.transitions[animationType]![idx] = value;
-    if (itemType === "object") _updateObject(newItem as IObject);
-    if (itemType === "layer") _updateLayer(newItem as ILayer);
-    if (itemType === "slide") _updateSlide(newItem as ISlide);
+    // if (itemType === "object") _updateObject(newItem as IObject);
+    // if (itemType === "layer") _updateLayer(newItem as ILayer);
+    // if (itemType === "slide") _updateSlide(newItem as ISlide);
   };
 
   const addAnimationToSection = (
@@ -164,9 +164,9 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     transition.uid = uuid();
     newItem.transitions[animationType]!.push(transition);
 
-    if (itemType === "object") _updateObject(newItem as IObject);
-    if (itemType === "layer") _updateLayer(newItem as ILayer);
-    if (itemType === "slide") _updateSlide(newItem as ISlide);
+    // if (itemType === "object") _updateObject(newItem as IObject);
+    // if (itemType === "layer") _updateLayer(newItem as ILayer);
+    // if (itemType === "slide") _updateSlide(newItem as ISlide);
   };
 
   const getAnimationName = (
@@ -190,8 +190,8 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     isAddStructuralDisabled =
       isAddStructuralDisabled ||
       (itemType === "slide" &&
-        ((item as ISlide).slideType === SlideType.Back ||
-          (item as ISlide).slideType === SlideType.Front));
+        ((item as unknown as ISlide).slideType === SlideType.Back ||
+          (item as unknown as ISlide).slideType === SlideType.Front));
 
     /*const objectOrLayerOrSlide =
       objectType === "object"

@@ -30,22 +30,22 @@ export function createEventTimelineForObject(
 ): IEventTimeline[] {
   const eventTimelines: IEventTimeline[] = [];
 
-  data.transitions.event?.forEach((animTransition) => {
-    const timeline = createTimelineForAnimation(data, animTransition, "event");
-    const rootTimeline = new RootTimeline({
-      name: "RootTimelineForEvent" + animTransition.event,
-      duration: timeline.duration,
-    });
-    rootTimeline.add(timeline);
+  // data.transitions.event?.forEach((animTransition) => {
+  //   const timeline = createTimelineForAnimation(data, animTransition, "event");
+  //   const rootTimeline = new RootTimeline({
+  //     name: "RootTimelineForEvent" + animTransition.event,
+  //     duration: timeline.duration,
+  //   });
+  //   rootTimeline.add(timeline);
 
-    eventTimelines.push({
-      event: animTransition.event,
-      eventTargetId: animTransition.eventTargetId,
-      reverseEvent: animTransition.reverseEvent,
-      reverseEventTargetId: animTransition.reverseEventTargetId,
-      rootTimeline: rootTimeline,
-    });
-  });
+  //   eventTimelines.push({
+  //     event: animTransition.event,
+  //     eventTargetId: animTransition.eventTargetId,
+  //     reverseEvent: animTransition.reverseEvent,
+  //     reverseEventTargetId: animTransition.reverseEventTargetId,
+  //     rootTimeline: rootTimeline,
+  //   });
+  // });
 
   return eventTimelines;
 }
@@ -59,35 +59,35 @@ export function createTimelineForObject(data: IItemsData): {
 
   // note only one per object
 
-  data.transitions.in?.forEach((effIn) => {
-    const tl = createTimelineForAnimation(data, effIn, "in");
-    effTls.push(tl);
-  });
+  // data.transitions.in?.forEach((effIn) => {
+  //   const tl = createTimelineForAnimation(data, effIn, "in");
+  //   effTls.push(tl);
+  // });
 
-  data.transitions.out?.forEach((effOut) => {
-    // NOTE: only NOT "absolute" will have id in order to remove them
-    const timelineGroup =
-      effOut.outStartTime.inheritFrom === "absolute"
-        ? undefined
-        : DYNAMIC_OUT_EFF_TIMELINE_GROUP;
+  // data.transitions.out?.forEach((effOut) => {
+  //   // NOTE: only NOT "absolute" will have id in order to remove them
+  //   const timelineGroup =
+  //     effOut.outStartTime.inheritFrom === "absolute"
+  //       ? undefined
+  //       : DYNAMIC_OUT_EFF_TIMELINE_GROUP;
 
-    const tl = createTimelineForAnimation(data, effOut, "out", timelineGroup);
-    effTls.push(tl);
+  //   const tl = createTimelineForAnimation(data, effOut, "out", timelineGroup);
+  //   effTls.push(tl);
 
-    if (effOut.outStartTime.inheritFrom === "inheritFromSlide") {
-      outEffTlExist = true;
-    }
-  });
+  //   if (effOut.outStartTime.inheritFrom === "inheritFromSlide") {
+  //     outEffTlExist = true;
+  //   }
+  // });
 
-  data.transitions.animation?.forEach((animTransition) => {
-    const tl = createTimelineForAnimation(data, animTransition, "animation");
-    effTls.push(tl);
-  });
+  // data.transitions.animation?.forEach((animTransition) => {
+  //   const tl = createTimelineForAnimation(data, animTransition, "animation");
+  //   effTls.push(tl);
+  // });
 
-  data.transitions.layer?.forEach((animTransition) => {
-    const tl = createTimelineForAnimation(data, animTransition, "in");
-    effTls.push(tl);
-  });
+  // data.transitions.layer?.forEach((animTransition) => {
+  //   const tl = createTimelineForAnimation(data, animTransition, "in");
+  //   effTls.push(tl);
+  // });
 
   /*data.transitions.in?.forEach((_, idx) => {
     const transIn = data.transitions.in?.[idx];
@@ -108,20 +108,20 @@ export function createTimelineForObject(data: IItemsData): {
   };
 }
 
-function getDuration(data: IItemsData, eff: ITransition): number {
-  // TODO: return duration from effect deff.
+// function getDuration(data: IItemsData, eff: ITransition): number {
+//   // TODO: return duration from effect deff.
 
-  const animDeff = getAppAnimationDefinition(eff.animation.id);
-  if (animDeff?.getDuration) {
-    return animDeff?.getDuration(data as any, eff);
-  }
+//   const animDeff = getAppAnimationDefinition(eff.animation.id);
+//   if (animDeff?.getDuration) {
+//     return animDeff?.getDuration(data as any, eff);
+//   }
 
-  const hasDuration = animDeff?.formDefaults.hasDuration;
+//   const hasDuration = animDeff?.formDefaults.hasDuration;
 
-  return eff.duration === "-1" || hasDuration === false
-    ? convertTimeUnitToMs(data.data.slideDuration.customValue)
-    : convertTimeUnitToMs(eff.duration);
-}
+//   return eff.duration === "-1" || hasDuration === false
+//     ? convertTimeUnitToMs(data.data.slideDuration.customValue)
+//     : convertTimeUnitToMs(eff.duration);
+// }
 
 function createTimelineForAnimation(
   data: IItemsData,
@@ -132,17 +132,17 @@ function createTimelineForAnimation(
 ) {
   // only out animation is different
   let delay = convertTimeUnitToMs(eff.delay);
-  if (effType === "out") {
-    if (eff.outStartTime.inheritFrom === "absolute") {
-      delay =
-        convertTimeUnitToMs(eff.outStartTime.customValue) +
-        convertTimeUnitToMs(eff.delay);
-    } else if (eff.outStartTime.inheritFrom === "inheritFromSlide") {
-      delay =
-        convertTimeUnitToMs(data.data.slideDuration.customValue) -
-        convertTimeUnitToMs(data.data.exitSlideDuration.customValue);
-    }
-  }
+  // if (effType === "out") {
+  //   if (eff.outStartTime.inheritFrom === "absolute") {
+  //     delay =
+  //       convertTimeUnitToMs(eff.outStartTime.customValue) +
+  //       convertTimeUnitToMs(eff.delay);
+  //   } else if (eff.outStartTime.inheritFrom === "inheritFromSlide") {
+  //     delay =
+  //       convertTimeUnitToMs(data.data.slideDuration.customValue) -
+  //       convertTimeUnitToMs(data.data.exitSlideDuration.customValue);
+  //   }
+  // }
 
   const tl = new Timeline({
     //timelineType: "object",
@@ -160,7 +160,7 @@ function createTimelineForAnimation(
       objectHtml: data.data.objectHtml,
     },
     type: effType,
-    duration: getDuration(data, eff),
+    duration: 10000, //getDuration(data, eff),
     ease: eff.ease,
     childEase: eff.childEase,
     timeDistribution: eff.timeDistribution,
@@ -184,7 +184,7 @@ export function createTimelineForExecutionCode(
     name: "ExecCode",
     animationId: EXEC_CODE_ANIMATION,
     delay: 0,
-    duration: convertTimeUnitToMs(data.data.slideDuration.customValue),
+    duration: 10000, //convertTimeUnitToMs(data.data.slideDuration.customValue),
     //
     execStart,
     execStop,
