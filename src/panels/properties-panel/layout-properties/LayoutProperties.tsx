@@ -29,6 +29,7 @@ import {
   setDevice,
   updateLayer,
   updateObject,
+  updateObjectForPreview,
 } from "../../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../../store/reducers/i-layers";
 import { IStore } from "../../../store/store";
@@ -51,6 +52,7 @@ import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form"
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "aws-sdk/clients/ec2";
 import { getAncestorLayer } from "../../../store/actions/actions-utils";
+import { opacity } from "html2canvas/dist/types/css/property-descriptors/opacity";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -67,6 +69,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     layer,
     slide,
     selectionForProperties,
+    _updateObjectForPreview,
     _updateObject,
     _updateLayer,
     _setDevice,
@@ -164,25 +167,19 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
           },
           (opacity: string) => {
             const retObj = cloneDeep(obj);
-
             if (!retObj.style) {
               retObj.style = {};
             }
-
             retObj.style.commonOpacity = parseInt(opacity);
-
-            // if (!retObj.commonStyleDefinition?.valuesMetadata?.commonOpacity) {
-            //   retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity = {};
-            // }
-
-            // (
-            //   retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
-            // ).enabled = true;
-            // (
-            //   retObj.commonStyleDefinition!.valuesMetadata.commonOpacity as any
-            // ).disabled = false;
-
             _updateObject(retObj);
+          },
+          (opacity: string) => {
+            const retObj = cloneDeep(obj);
+            if (!retObj.style) {
+              retObj.style = {};
+            }
+            retObj.style.commonOpacity = parseInt(opacity);
+            _updateObjectForPreview(retObj);
           }
         )}
         {/* {renderNamedProperties(
@@ -565,6 +562,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
+  _updateObjectForPreview: (object: IObject) => updateObjectForPreview(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
   _setDevice: setDevice,
 };

@@ -86,7 +86,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
         activeLayerId,
         TEXT,
         {
-          left: 0, // documentSize.width / 4,
+          left: 100, // documentSize.width / 4,
           top: 0, // documentSize.height / 4,
           width: documentSize.width / 2,
           height: documentSize.height / 2,

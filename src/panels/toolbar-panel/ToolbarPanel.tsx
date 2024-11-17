@@ -362,7 +362,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               FIT
             </Button>
           </div>
-          {/* <Button
+          <Button
             className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.History}
@@ -380,7 +380,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-          </Portal> */}
+          </Portal>
         </div>
         <div>
           <Button

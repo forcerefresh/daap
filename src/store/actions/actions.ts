@@ -14,6 +14,7 @@ import {
   intersection,
   isArray,
   isEqual,
+  isUndefined,
   once,
 } from "lodash-es";
 import { IObject, ItemType } from "webslider-sdk/lib/objects/i-object";
@@ -1654,7 +1655,8 @@ export function groupObjects(objectIds: string[]): any {
 function handleObjectUpdate(
   object: IObject,
   dispatch: Dispatch,
-  getState: () => IStore
+  getState: () => IStore,
+  isPreview = false
 ) {
   const prevObject = getState().project.objects.objectById[object.id];
 
@@ -1673,7 +1675,7 @@ function handleObjectUpdate(
   switch (object.type) {
     case "text":
     case RICH_TEXT: {
-      handleTextUpdate(object, dispatch, getState);
+      handleTextUpdate(object, dispatch, getState, undefined, !isPreview);
       break;
     }
     case BUTTON: {
@@ -1689,7 +1691,7 @@ function handleObjectUpdate(
     //   break;
     // }
     default: {
-      dispatch(_updateObject(object));
+      dispatch(_updateObject(object, !isPreview));
     }
   }
 }
@@ -1850,7 +1852,8 @@ function handleTextUpdate(
   object: IObject,
   dispatch: Dispatch,
   getState: () => IStore,
-  isAdd = false
+  isAdd = false,
+  isUndoable = true
 ): void {
   // * handle auto height
   const objectValues = object.properties as TextValues;
@@ -1931,7 +1934,7 @@ function handleTextUpdate(
 
   // NOTE: update object once. update either after font is loaded or after 500ms
   const updateObjectOnce = once(() => {
-    dispatch(_updateObject(object));
+    dispatch(_updateObject(object, isUndoable));
     dispatch(forceRefresh());
   });
 
@@ -1971,17 +1974,23 @@ export function getFVD(weight: string) {
 
 export const UPDATE_OBJECT = "Update object";
 
-export interface UpdateObjectAction extends IUndoableAction<true> {
+export interface UpdateObjectAction extends IUndoableAction<true | false> {
   type: typeof UPDATE_OBJECT;
   payload: IObject;
+}
+
+export function updateObjectForPreview(object: IObject): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    handleObjectUpdate(object, dispatch, getState, true);
+  };
 }
 
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     handleObjectUpdate(object, dispatch, getState);
 
-    const { objectById } = getState().project.objects;
-    const parent = objectById[object.parentId!];
+    // const { objectById } = getState().project.objects;
+    // const parent = objectById[object.parentId!];
     // if(object.parentId && objectById[object.parentId]){
     // if (isObjectGroup(parent)) {
     //   dispatch(normalizeObjectGroups([parent]));
@@ -1999,11 +2008,14 @@ export function updateObject(object: IObject): any {
   };
 }
 
-export function _updateObject(object: IObject): UpdateObjectAction {
+export function _updateObject(
+  object: IObject,
+  isUndoable = true
+): UpdateObjectAction {
   return {
     type: UPDATE_OBJECT,
     payload: object,
-    isUndoable: true,
+    isUndoable,
   };
 }
 

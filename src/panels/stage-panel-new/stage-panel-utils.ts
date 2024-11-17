@@ -428,7 +428,7 @@ export function getObjectTransform(
   console.log(override?.rotation);
   return (
     "rotate(" +
-    (override?.rotation ?? object.rotation) +
+    (override?.rotation ?? object.rotation ?? 0) +
     "deg) scale(" +
     (override?.scale ?? object.scale ?? 1) +
     ")"

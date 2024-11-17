@@ -12,6 +12,7 @@ export interface IToolbarProps {
   object: IObject | null;
   addObject: (object: IObject) => void;
   updateObject: (object: IObject) => void;
+  updateObjectForPreview: (object: IObject) => void;
   deleteObject: (object: IObject) => void;
   // tool configuration (use for internal shared state between Quick Toolbar and Stage Tool )
   toolConfig: IToolConfig<unknown>;

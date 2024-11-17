@@ -7,6 +7,7 @@ import {
   IInputMetadataValues,
   InputType,
   ISelectInput,
+  ISliderInput,
   ITextAreaInput,
   IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
@@ -56,7 +57,7 @@ export interface TextValues {
   bold: boolean;
   italic: boolean;
   underline: boolean;
-  lineHeight: string;
+  lineHeight: number;
   textAlign: string;
   letterSpacing: string;
   fontKerning: boolean;
@@ -72,7 +73,8 @@ export type TextPropertiesTuple = [
   ICheckboxInput<"bold">,
   ICheckboxInput<"italic">,
   ICheckboxInput<"underline">,
-  IUnitsNumberInput<"lineHeight">,
+  ISliderInput<"lineHeight">,
+  // IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
   IUnitsNumberInput<"letterSpacing">,
   ICheckboxInput<"fontKerning">,
@@ -98,7 +100,7 @@ export function createTextObject(
     bold: false,
     italic: false,
     underline: false,
-    lineHeight: "20px",
+    lineHeight: 0,
     textAlign: "left",
     letterSpacing: "0px",
     fontKerning: true,
@@ -182,9 +184,19 @@ export function getTextObjectForm(): TextPropertiesTuple {
     {
       displayName: "Line height",
       propertyName: "lineHeight",
-      inputType: InputType.UNITS_NUMBER,
-      value: "",
-      defaultValue: "",
+      inputType: InputType.SLIDER_INPUT,
+      value: 0,
+      defaultValue: 0,
+      inputProps: {
+        min: -50,
+        max: 150,
+        suffix: "%",
+        stepSize: 1,
+        labelStepSize: 1,
+        // trackFill: false,
+        thumbPosition: "top",
+        hideLabels: false,
+      },
       // extraOptions: { devices: true, exportForWizard: true, optional: true },
     },
     {
@@ -261,7 +273,7 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
   //style += "position: absolute;";
 
   if ("lineHeight" in textValues) {
-    style += "line-height: " + textValues.lineHeight + ";";
+    style += "line-height: " + (1.25 + textValues.lineHeight / 100) + ";";
   }
 
   if ("letterSpacing" in textValues) {

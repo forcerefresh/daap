@@ -74,6 +74,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     // deleteCurrentObject,
     // applyCurrentObject,
     updateObject,
+    updateObjectForPreview,
     deleteObject,
   } = useContext(ToolsContext);
 
@@ -190,6 +191,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
                   object={activeObject}
                   addObject={() => {}}
                   updateObject={updateObject}
+                  updateObjectForPreview={updateObjectForPreview}
                   deleteObject={deleteObject}
                   setToolConfig={setToolConfig}
                   toolConfig={toolConfig}

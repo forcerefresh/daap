@@ -135,6 +135,7 @@ export function getSelectSlider<T>(
     trackFill: boolean;
   },
   onChange: (value: T) => void,
+  onPreview: (value: T) => void,
   inputProps: { disabled?: boolean } = {}
 ) {
   const objectDef = {
@@ -145,7 +146,14 @@ export function getSelectSlider<T>(
     inputProps,
   };
 
-  return getInputForm(InputType.SLIDER_INPUT, objectDef, onChange);
+  return getInputForm(
+    InputType.SLIDER_INPUT,
+    objectDef,
+    onChange,
+    undefined,
+    undefined,
+    onPreview
+  );
 }
 
 export function getCheckboxField<T>(

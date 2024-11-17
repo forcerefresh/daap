@@ -40,8 +40,8 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
     document.addEventListener(`mousedown`, listener, { capture: true });
     document.addEventListener(`touchstart`, listener, { capture: true });
     return () => {
-      document.removeEventListener(`mousedown`, listener);
-      document.removeEventListener(`touchstart`, listener);
+      document.removeEventListener(`mousedown`, listener, { capture: true });
+      document.removeEventListener(`touchstart`, listener, { capture: true });
     };
     // Reload only if ref or handler changes
   }, [ref, handler, skipClassNames]);

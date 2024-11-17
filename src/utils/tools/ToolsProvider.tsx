@@ -4,6 +4,7 @@ import { IToolClass, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { getCanvas } from "./ToolsProviderUtils";
 import {
   updateObject as updateObjectAction,
+  updateObjectForPreview as updateObjectForPreviewAction,
   addNewObject,
   deleteObjects,
 } from "../../store/actions/actions";
@@ -34,6 +35,8 @@ export interface ToolsContextInterface {
   toolConfig: IToolConfig;
   setToolConfig: (state: IToolConfig) => void;
   updateObject: (_object: IObject) => void;
+  updateObjectForPreview: (_object: IObject) => void;
+
   //
   cursorStyle: ICursorStyle | undefined;
 }
@@ -52,6 +55,8 @@ export const ToolsContext = React.createContext<ToolsContextInterface>({
   setToolConfig: (_state: unknown) => {},
   //
   updateObject: (_object: IObject) => undefined,
+  updateObjectForPreview: (_object: IObject) => undefined,
+
   //
   cursorStyle: undefined,
 });
@@ -160,6 +165,11 @@ export const ToolsProvider = (
   const updateObject = (object: IObject) => {
     const newObj = cloneDeep(object);
     dispatch(updateObjectAction(newObj));
+  };
+
+  const updateObjectForPreview = (object: IObject) => {
+    const newObj = cloneDeep(object);
+    dispatch(updateObjectForPreviewAction(newObj));
   };
 
   // const updateObject = (params: { objectValues: IObject,, objectId: }) => {
@@ -346,6 +356,7 @@ export const ToolsProvider = (
         setToolConfig,
         //
         updateObject,
+        updateObjectForPreview,
         cursorStyle,
       }}
     >

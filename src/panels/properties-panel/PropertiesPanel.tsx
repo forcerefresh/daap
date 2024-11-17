@@ -13,6 +13,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   updateLayer,
   updateObject,
+  updateObjectForPreview,
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
@@ -45,6 +46,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     panelName,
     commonSlideDuration,
     commonSlideExitDuration,
+    _updateObjectForPreview,
     _updateObject,
     _updateLayer,
     _updateSlide,
@@ -141,7 +143,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           definitionValues,
           definitionValuesMetadata,
           object,
-          _updateObject
+          _updateObject,
+          _updateObjectForPreview
         )}
       </>
     );
@@ -152,7 +155,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     values: any,
     valuesMetadata: any,
     objectOrLayer: IObjectOrLayer,
-    updateFunction: (objectOrLayer: IObjectOrLayer) => any
+    updateFunction: (objectOrLayer: IObjectOrLayer) => any,
+    updateFunctionForPreview: (objectOrLayer: IObjectOrLayer) => any
   ) => {
     let flatForm = flattenForm(properties as IFormLayoutItem[]);
 
@@ -213,6 +217,31 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         }
       }
 
+      function onPreview(value: any) {
+        const retObj = cloneDeep(objectOrLayer);
+
+        if (retObj) {
+          const values = retObj.properties as { [key: string]: any };
+          values[propertyName] = value;
+
+          // >>> exception for image TODO: REMOVE TO POST PROCESS FUNCTIONS
+          // use image w and h for the object
+          if (property.inputType === InputType.IMAGE) {
+            // set placeholder to false
+            values[propertyName].isPlaceholder = false;
+            if ((retObj as IObject).width === 0) {
+              (retObj as IObject).width = value.width;
+            }
+            if ((retObj as IObject).height === 0) {
+              (retObj as IObject).height = value.height;
+            }
+          }
+          // >>> exception for image
+
+          updateFunctionForPreview(retObj);
+        }
+      }
+
       function onMetadataChange(metadata: IInputMetadataValues) {
         const retObj = cloneDeep(objectOrLayer);
 
@@ -260,13 +289,15 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           onChange,
           onChange,
           onMetadataChange,
-          { layerData: { layer: layer!, objects: layerObjects } }
+          { layerData: { layer: layer!, objects: layerObjects } },
+          onPreview
         ),
         propertyName: property.propertyName,
         duplicate: property.duplicate ? property.duplicate : "",
       };
     });
 
+    console.log(inputs);
     return (
       <FormWithLayout
         values={values}
@@ -354,6 +385,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
+  _updateObjectForPreview: (object: IObject) => updateObjectForPreview(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
   _updateSlide: (slide: ISlide) => updateSlide(slide),
 };

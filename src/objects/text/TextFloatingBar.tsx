@@ -36,7 +36,8 @@ const ICON_HEIGHT = 36;
 export function TextFloatingToolbar(
   props: IToolbarProps
 ): React.ReactElement | null {
-  const { mode, object, updateObject, deleteObject } = props;
+  const { mode, object, updateObject, updateObjectForPreview, deleteObject } =
+    props;
 
   const values = object?.properties as TextValues | undefined;
 
@@ -96,6 +97,11 @@ export function TextFloatingToolbar(
             const newObject = cloneDeep(object);
             newObject.properties.color = value;
             updateObject(newObject);
+          }}
+          onPreview={(value: any) => {
+            const newObject = cloneDeep(object);
+            newObject.properties.color = value;
+            updateObjectForPreview(newObject);
           }}
           inputProps={{
             swatchClassName: colorInputCss.squareSwatch,

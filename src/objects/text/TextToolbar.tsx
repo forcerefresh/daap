@@ -24,7 +24,8 @@ const ICON_HEIGHT = 36;
 const alignArr = ["left", "center", "right", "justify"];
 
 export function TextToolbar(props: IToolbarProps): React.ReactElement {
-  const { mode, object, updateObject, deleteObject } = props;
+  const { mode, object, updateObject, updateObjectForPreview, deleteObject } =
+    props;
 
   const values = object?.properties as TextValues | undefined;
 
@@ -105,8 +106,13 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
               defaultValue={null}
               onChange={(value: any) => {
                 const newObject = cloneDeep(object);
-                newObject.definition.values.color = value;
+                newObject.properties.color = value;
                 updateObject(newObject);
+              }}
+              onPreview={(value: any) => {
+                const newObject = cloneDeep(object);
+                newObject.properties.color = value;
+                updateObjectForPreview(newObject);
               }}
               inputProps={{
                 swatchClassName: colorInputCss.squareSwatch,
@@ -136,7 +142,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
             active={values.bold}
             onClick={(e: React.MouseEvent) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.bold = !values.bold;
+              newObject.properties.bold = !values.bold;
               updateObject(newObject);
             }}
             icon={"bold"}
@@ -147,8 +153,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
             active={values.italic}
             onClick={(e: React.MouseEvent) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.italic =
-                !newObject.definition.values.italic;
+              newObject.properties.italic = !newObject.properties.italic;
               updateObject(newObject);
             }}
             icon={"italic"}
@@ -159,8 +164,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
             active={values.underline}
             onClick={(e: React.MouseEvent) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.underline =
-                !newObject.definition.values.underline;
+              newObject.properties.underline = !newObject.properties.underline;
               updateObject(newObject);
             }}
             icon={"underline"}
@@ -175,7 +179,7 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
               let nextIndex = alignArr.indexOf(values.textAlign) + 1;
               nextIndex = nextIndex >= alignArr.length ? 0 : nextIndex;
 
-              newObject.definition.values.textAlign = alignArr[nextIndex];
+              newObject.properties.textAlign = alignArr[nextIndex];
               updateObject(newObject);
             }}
             icon={`align-${values.textAlign}`}

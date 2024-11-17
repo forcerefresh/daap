@@ -62,6 +62,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     // deleteCurrentObject,
     // applyCurrentObject,
     updateObject,
+    updateObjectForPreview,
     deleteObject,
   } = useContext(ToolsContext);
 
@@ -130,6 +131,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             object={activeObject}
             addObject={() => {}}
             updateObject={updateObject}
+            updateObjectForPreview={updateObjectForPreview}
             deleteObject={deleteObject}
             setToolConfig={setToolConfig}
             toolConfig={toolConfig}
@@ -194,36 +196,17 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
                   },
                   (opacity: string) => {
                     if (!activeObject) return;
-
                     const retObj = cloneDeep(activeObject);
-
-                    retObj.style!.commonOpacity = parseInt(opacity);
-
-                    // if (!retObj.commonStyleDefinition?.values) {
-                    //   retObj.commonStyleDefinition!.values = {};
-                    // }
-
-                    // retObj.commonStyleDefinition!.values.commonOpacity =
-                    //   parseInt(opacity);
-
-                    // if (
-                    //   !retObj.commonStyleDefinition?.valuesMetadata
-                    //     ?.commonOpacity
-                    // ) {
-                    //   retObj.commonStyleDefinition!.valuesMetadata!.commonOpacity =
-                    //     {};
-                    // }
-
-                    // (
-                    //   retObj.commonStyleDefinition!.valuesMetadata
-                    //     .commonOpacity as any
-                    // ).enabled = true;
-                    // (
-                    //   retObj.commonStyleDefinition!.valuesMetadata
-                    //     .commonOpacity as any
-                    // ).disabled = false;
-
+                    if (!retObj.style) retObj.style = {};
+                    retObj.style.commonOpacity = parseInt(opacity);
                     updateObject(retObj);
+                  },
+                  (opacity: string) => {
+                    if (!activeObject) return;
+                    const retObj = cloneDeep(activeObject);
+                    if (!retObj.style) retObj.style = {};
+                    retObj.style.commonOpacity = parseInt(opacity);
+                    updateObjectForPreview(retObj);
                   }
                 )}
               </div>

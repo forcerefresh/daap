@@ -1,6 +1,6 @@
 import { FormGroup, TextArea } from "@blueprintjs/core";
 import { debounce, noop } from "lodash-es";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ITextAreaInput,
   IUpdateInput,
@@ -19,8 +19,11 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   } = props;
   const { rows = 5 } = inputProps;
 
+  const onInputRef = useRef(onInput);
+  onInputRef.current = onInput;
+
   const throttledOnChange = useCallback(
-    debounce((value: any) => onInput(value), 500),
+    debounce((value: any) => onInputRef.current(value), 500),
     []
   );
 

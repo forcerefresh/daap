@@ -1,5 +1,11 @@
-import React, { RefObject, useEffect, useRef, useState } from "react";
-import { isEqual } from "lodash-es";
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { debounce, isEqual, throttle } from "lodash-es";
 import cx from "classnames";
 import { Button, FormGroup, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
@@ -19,8 +25,17 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     displayName,
     helperText,
     onChange,
+    onPreview,
     inputProps,
   } = props;
+
+  const onPreviewRef = useRef(onPreview);
+  onPreviewRef.current = onPreview;
+
+  const debounceOnChange = useCallback(
+    throttle((value: any) => onPreviewRef.current?.(value), 250),
+    []
+  );
 
   const colorFromProp = (value || defaultValue) as RGBColor;
 
@@ -34,17 +49,21 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     initialColor: colorFromProp,
   });
 
-  const handleClickOutside = () => handleClose();
-
+  const handleClickOutside = () => {
+    handleClose();
+  };
   const colorPickerHolderRef = useRef(null);
   useOnClickOutside(colorPickerHolderRef, handleClickOutside);
 
   // update state when props.value is changed
   useEffect(() => {
-    if (!isEqual(colorFromProp, state.color)) {
-      setState({ ...state, color: colorFromProp, initialColor: colorFromProp });
+    if (
+      !state.displayColorPicker &&
+      !isEqual(colorFromProp, state.initialColor)
+    ) {
+      setState({ ...state, initialColor: colorFromProp });
     }
-  }, []); //colorFromProp, state
+  }, [colorFromProp, state]); //
 
   const handleClick = () => {
     setState({
@@ -56,10 +75,11 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const handleClose = () => {
     setState({
-      color: colorFromProp,
-      initialColor: colorFromProp,
+      color: state.initialColor,
+      initialColor: state.initialColor,
       displayColorPicker: false,
     });
+    onPreview?.(state.initialColor);
   };
 
   const handleApply = () => {
@@ -67,13 +87,17 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     onChange(state.color);
   };
 
-  const handleChange = (color: any) => {
+  const handleChange = (color: { rgb: RGBColor }) => {
     setState({ ...state, color: color.rgb });
-    //onChange(color.rgb);
+    debounceOnChange?.(color.rgb);
   };
 
-  const { color } = state;
+  const { initialColor, color } = state;
   const style = {
+    background: `rgba(${initialColor.r}, ${initialColor.g}, ${initialColor.b}, ${initialColor.a})`,
+  };
+
+  const styleCurrent = {
     background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
   };
 
@@ -85,7 +109,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
         displayColorPicker: false,
       });
     } else if (event.keyCode === 13) {
-      //onChange(state.color);
       setState({
         ...state,
         displayColorPicker: false,
@@ -104,7 +127,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
       helperText={!!helperText && helperText}
     >
       <Popover
-        //position="top"
         isOpen={state.displayColorPicker}
         portalClassName="color-picker-popover"
         minimal
@@ -118,11 +140,35 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
             </div>
             <div className={css.actionHolder}>
               <div className={css.buttonHolder}>
-                <Button icon="tick" onClick={handleApply} intent="success">
+                <Button
+                  className={css.colorButton}
+                  //  icon="tick"
+                  onClick={handleApply}
+                  icon={
+                    <div
+                      id="color-input"
+                      className={cx(css.swatch)}
+                      tabIndex={1}
+                    >
+                      <BackgroundSVG style={{ position: "absolute" }} />
+                      <div className={css.color} style={styleCurrent} />
+                    </div>
+                  }
+                >
                   Apply
                 </Button>
                 <Button
-                  icon="cross"
+                  icon={
+                    <div
+                      id="color-input"
+                      className={cx(css.swatch)}
+                      tabIndex={1}
+                    >
+                      <BackgroundSVG style={{ position: "absolute" }} />
+                      <div className={css.color} style={style} />
+                    </div>
+                  }
+                  className={css.colorButton}
                   onClick={handleClose}
                   intent="none"
                   minimal
@@ -143,10 +189,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                   eyeDropper
                     .open()
                     .then((result: any) => {
-                      setState({
-                        ...state,
-                        color: hexToRGB(result.sRGBHex),
-                      });
+                      handleChange({ rgb: hexToRGB(result.sRGBHex) });
                     })
                     .catch((_e: any) => {});
                 }}

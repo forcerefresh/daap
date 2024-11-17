@@ -71,7 +71,8 @@ export function getInputFormWithOptions<T>(
     breakpoints?: Breakpoints;
     selectedDevice?: string;
     onChangeDevice?: (device: string) => void;
-  }
+  },
+  onPreview?: (config: any) => void
 ): React.ReactElement | undefined {
   // force DISABLED if metadata.disabled===true
   if (inputProps?.metadata?.disabled) {
@@ -79,7 +80,14 @@ export function getInputFormWithOptions<T>(
     inputProps.inputProps.disabled = true;
   }
 
-  const input = getInputForm(inputType, inputProps, onChange, onInput, data);
+  const input = getInputForm(
+    inputType,
+    inputProps,
+    onChange,
+    onInput,
+    data,
+    onPreview
+  );
 
   const eo = inputProps.extraOptions;
   if (eo && (eo.devices || eo.optional || eo.exportForWizard)) {
@@ -118,7 +126,8 @@ export function getInputForm<T>(
     selectedDevice?: string;
     onChangeDevice?: (device: string) => void;
     relativeToLayer?: boolean;
-  }
+  },
+  onPreview?: (config: any) => void
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
 
@@ -219,6 +228,7 @@ export function getInputForm<T>(
           key={key}
           {...inputProps}
           onChange={onChange}
+          onPreview={onPreview}
           onInput={onInput}
         />
       );
@@ -307,7 +317,14 @@ export function getInputForm<T>(
       );
     }
     case InputType.COLOR: {
-      return <ColorInputForm key={key} {...inputProps} onChange={onChange} />;
+      return (
+        <ColorInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onPreview={onPreview}
+        />
+      );
     }
     case InputType.SELECT: {
       return <SelectInputForm key={key} {...inputProps} onChange={onChange} />;
