@@ -8,7 +8,7 @@ import {
   getTextField,
 } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { IStore } from "../../store/store";
 
 import css from "./SlideSettingsPanel.module.scss";
@@ -22,7 +22,7 @@ import { EasingOptions } from "webslider-sdk/lib/animations/i-animation-types";
 
 type ISlideSettingsPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
-    slideId: string;
+    pageId: string;
   };
 
 const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
@@ -50,7 +50,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
         (value: any) => {
           const obj = cloneDeep(slide);
           set(obj!, "slideTransition.duration", value);
-          _updateSlide(obj as any as ISlide);
+          _updateSlide(obj as any as IPage);
         }
       )}
     </div>
@@ -58,7 +58,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
 
   const renderAnimationForm = (
     animationId: string,
-    object: ISlide,
+    object: IPage,
     valuesPath: string
   ) => {
     const animationDefinition = getAppAnimationDefinition(animationId);
@@ -71,7 +71,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
           values[item.propertyName] = value;
           set(retObj, valuesPath, values);
 
-          _updateSlide(retObj as any as ISlide);
+          _updateSlide(retObj as any as IPage);
         }
       }
 
@@ -119,7 +119,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
             (value: string) => {
               const obj = cloneDeep(slide);
               obj.customId = value;
-              _updateSlide(obj as any as ISlide);
+              _updateSlide(obj as any as IPage);
             },
             "",
             { placeholder: "Enter slide ID" }
@@ -163,7 +163,7 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
               });
               set(obj, `slideTransition.animation.values`, values);
 
-              _updateSlide(obj as any as ISlide);
+              _updateSlide(obj as any as IPage);
             }
           )}
           <div>
@@ -195,11 +195,11 @@ const SlidesPanel: React.FC<ISlideSettingsPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection, settings } = state.project;
-  let slide: ISlide | null = null;
+  const { pages, selection, settings } = state.project;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   return {
@@ -209,7 +209,7 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SlidesPanel);

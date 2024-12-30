@@ -2,32 +2,35 @@
 
 :global(.bp5-dark) {
   .stagePanel {
+    background-color: #232323;
     // $bg-color: red !important;
     // $dot-color: blue !important;
 
-    $bg-color: #1e1e1e; //$pt-dark-app-background-color-secondary;
-    $dot-color: $gray3;
+    // $bg-color: #1e1e1e; //$pt-dark-app-background-color-secondary;
+    // $dot-color: $gray3;
 
-    // Dimensions
-    $dot-size: 1px;
-    $dot-space: 22px;
+    // // Dimensions
+    // $dot-size: 1px;
+    // $dot-space: 22px;
 
-    background: linear-gradient(
-          90deg,
-          $bg-color ($dot-space - $dot-size),
-          transparent 1%
-        )
-        center,
-      linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-      $dot-color;
+    // background: linear-gradient(
+    //       90deg,
+    //       $bg-color ($dot-space - $dot-size),
+    //       transparent 1%
+    //     )
+    //     center,
+    //   linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+    //   $dot-color;
 
-    background-size: $dot-space $dot-space;
+    // background-size: $dot-space $dot-space;
   }
 }
 
 .stagePanel {
   position: absolute;
   inset: 0px;
+
+  background-color: #eeeeee;
   //inset: 68px 700px 0px 68px;
   // height: 100%;
   // position: relative;
@@ -36,27 +39,31 @@
     user-select: none;
   }
 
-  $bg-color: #eeeeee; //$pt-app-background-color-secondary;
-  $dot-color: $gray3;
+  // $bg-color: #eeeeee; //$pt-app-background-color-secondary;
+  // $dot-color: $gray3;
 
   // Dimensions
-  $dot-size: 1px;
-  $dot-space: 22px;
+  // $dot-size: 1px;
+  // $dot-space: 22px;
 
-  background: linear-gradient(
-        90deg,
-        $bg-color ($dot-space - $dot-size),
-        transparent 1%
-      )
-      center,
-    linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-    $dot-color;
+  // background: linear-gradient(
+  //       90deg,
+  //       $bg-color ($dot-space - $dot-size),
+  //       transparent 1%
+  //     )
+  //     center,
+  //   linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+  //   $dot-color;
 
-  background-size: $dot-space $dot-space;
+  // background-size: $dot-space $dot-space;
 }
 
 .stage {
   position: absolute;
+  transform-origin: top left;
+  transform: translate(var(--translateX), var(--translateY)) scale(var(--scale));
+  will-change: transform;
+
   //border: 1px dotted #51c35a;
   //background: rgb(30, 30, 30);
 }

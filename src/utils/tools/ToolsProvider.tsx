@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 import { IToolClass, Rect } from "../../webslider-sdk/object/i-tool-class";
-import { getCanvas } from "./ToolsProviderUtils";
+import { getCanvas, getStage } from "./ToolsProviderUtils";
 import {
   updateObject as updateObjectAction,
   updateObjectForPreview as updateObjectForPreviewAction,
@@ -79,6 +79,25 @@ export const ToolsProvider = (
       };
     });
 
+  const storeRef = useRef({
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+  });
+  storeRef.current = {
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+  };
+
+  console.log("INVESTIGATE");
+  console.log(cloneDeep(allObjects));
+  console.log(cloneDeep(objectById));
+
   const [cursorStyle, setCursorStyle] = useState<ICursorStyle | undefined>();
   // const { setCursorStyle } = useContext(CursorContext);
   // const state = getState();
@@ -120,20 +139,20 @@ export const ToolsProvider = (
             top: params.bounds?.y ?? 100,
             width: params.bounds?.width ?? 100,
             height: params.bounds?.height ?? 100,
-            layout: "absolute" as "absolute",
-            absoluteLayout: {
-              type: "common" as "common",
-              perDevice: [],
-              relativeTo: "stage",
-              common: {
-                deviceType: "common" as "common",
-                left: (params.bounds?.x ?? "100") + "px",
-                top: (params.bounds?.y ?? "100") + "px",
-                width: (params.bounds?.width ?? "100") + "px",
-                height: (params.bounds?.height ?? "100") + "px",
-              },
-            },
-          } as any,
+            // layout: "absolute" as "absolute",
+            // absoluteLayout: {
+            //   type: "common" as "common",
+            //   perDevice: [],
+            //   relativeTo: "stage",
+            //   common: {
+            //     deviceType: "common" as "common",
+            //     left: (params.bounds?.x ?? "100") + "px",
+            //     top: (params.bounds?.y ?? "100") + "px",
+            //     width: (params.bounds?.width ?? "100") + "px",
+            //     height: (params.bounds?.height ?? "100") + "px",
+            //   },
+            // },
+          },
           {
             ...(params.objectValues as any),
           }
@@ -189,15 +208,15 @@ export const ToolsProvider = (
     )[0] as HTMLDivElement;
 
     const rect = stageEl?.getBoundingClientRect()!;
-    const x = (e.pageX - rect.left) / stageZoom; //(e.currentTarget as HTMLElement).offsetLeft;
-    const y = (e.pageY - rect.top) / stageZoom; //(e.currentTarget as HTMLElement).offsetTop;
+    const x = (e.pageX - rect.left) / storeRef.current.stageZoom; //(e.currentTarget as HTMLElement).offsetLeft;
+    const y = (e.pageY - rect.top) / storeRef.current.stageZoom; //(e.currentTarget as HTMLElement).offsetTop;
 
     return { x, y };
   };
 
   const getObjectTransform = (
     objectId: string,
-    options?: { includeTranslate?: boolean }
+    options?: { includeTranslate?: boolean; skipStageScale?: boolean }
   ): DOMMatrix => {
     // >>>>>>>>>>>>>>>>>>
     // duplicate 123
@@ -206,6 +225,8 @@ export const ToolsProvider = (
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
     console.log(objectPath, "objectPath123");
+    console.log([...objectPath, objectId], "objectPath123");
+
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
       objectById,
@@ -214,9 +235,9 @@ export const ToolsProvider = (
 
     //groupsMatrix.e = groupsMatrix.f = 0;
 
-    const transform = groupsMatrix.multiply(
-      new DOMMatrix("scale(" + stageZoom + ")")
-    );
+    const transform = options?.skipStageScale
+      ? groupsMatrix
+      : groupsMatrix.multiply(new DOMMatrix("scale(" + stageZoom + ")"));
 
     console.log(transform);
 
@@ -235,11 +256,13 @@ export const ToolsProvider = (
       const y = object?.top;
 
       const canvas = getCanvas();
+      const rootStage = getStage();
 
       const clazz = toolDef.toolClass;
       if (clazz) {
         const inst = new clazz();
         inst.activate({
+          rootStage,
           canvas,
           object,
           requestDeactivation,
@@ -329,6 +352,10 @@ export const ToolsProvider = (
 
   useEffect(() => {
     if (!activeTool) return;
+
+    console.log("INVEST");
+    console.log(cloneDeep(objectById));
+    console.log(cloneDeep(allObjects));
 
     const retObjs: IObject[] = [];
     allObjects.forEach((objectId) => {

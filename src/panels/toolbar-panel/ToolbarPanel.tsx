@@ -56,6 +56,7 @@ import { ReactComponent as SettingsIcon } from "./assets/settings-icon.svg";
 
 import css from "./ToolbarPanel.module.scss";
 import { round } from "lodash-es";
+import { BLOB } from "../../objects/blob/blob";
 enum VisiblePanel {
   None = "none",
   Add = "add",
@@ -138,7 +139,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // const latestShowPanel = useRef<VisiblePanel>();
 
-  console.log(showPanel);
+  // console.log(showPanel);
   // let inst = useRef<FreeHandDrawTool>();
   const { activateTool, deactivateTool, activeTool } = useContext(ToolsContext);
   //console.log(activeTool);
@@ -304,6 +305,25 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Button>
         </div>
 
+        <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, BLOB, {
+                  left: 100,
+                  top: 100,
+                  width: 400,
+                  height: 400,
+                });
+              }
+            }}
+          >
+            BLOB
+          </Button>
+        </div>
+
         <div className={css.delimiter}></div>
         <div>
           <Button
@@ -353,7 +373,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </div>
           <div>
             <Button
-              active={zoomFit}
+              // active={zoomFit}
               minimal
               small
               onClick={() => setZoomFit(!zoomFit)}

@@ -54,6 +54,7 @@ import {
   createImageObject,
   getAssetsUrls,
   getImageHtml,
+  getImageObjectForm,
   imageMeta,
   imagePostProcess,
   imageSizeUpdate,
@@ -130,6 +131,7 @@ import {
   createFreeDrawObject,
   freeDrawMeta,
   freeDrawSizeUpdate,
+  getFreeDrawForm,
   getFreeDrawHtml,
 } from "./free-draw/free-draw";
 import { registerObjectTool } from "./objectToolFactory";
@@ -139,6 +141,14 @@ import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
 import { TextToolbar } from "./text/TextToolbar";
 import { TextFloatingToolbar } from "./text/TextFloatingBar";
 import { ImageToolbar } from "./image/ImageToolbar";
+import {
+  BLOB,
+  blobMeta,
+  blobSizeUpdate,
+  createBlobObject,
+  getBlobHtml,
+  getBlobObjectForm,
+} from "./blob/blob";
 
 // -------------------------
 
@@ -169,50 +179,69 @@ registerObjectTool({
 
 // -------------------------
 
-// registerObject(
-//   IMAGE,
-//   "media",
-//   imageMeta,
-//   createImageObject,
-//   imageSizeUpdate,
-//   getImageHtml,
-//   preloadImage,
-//   undefined,
-//   undefined,
-//   imagePostProcess,
-//   getAssetsUrls
-// );
+registerObject(
+  IMAGE,
+  "media",
+  imageMeta,
+  createImageObject,
+  getImageObjectForm,
+  imageSizeUpdate,
+  getImageHtml,
+  preloadImage,
+  undefined,
+  undefined,
+  imagePostProcess,
+  getAssetsUrls
+);
 
-// registerObjectTool({
-//   type: IMAGE,
-//   meta: imageMeta,
-//   // toolClass: TextTool,
-//   toolBar: ImageToolbar,
-//   // floatingBar: TextFloatingToolbar,
-// });
+registerObjectTool({
+  type: IMAGE,
+  meta: imageMeta,
+  // toolClass: TextTool,
+  toolBar: ImageToolbar,
+  // floatingBar: TextFloatingToolbar,
+});
 
 // -------------------------
 
-// registerObject(
-//   FREE_DRAW,
-//   "media",
-//   freeDrawMeta,
-//   createFreeDrawObject,
-//   freeDrawSizeUpdate,
-//   getFreeDrawHtml,
-//   undefined,
-//   undefined,
-//   undefined,
-//   undefined,
-//   undefined
-// );
+registerObject(
+  FREE_DRAW,
+  "media",
+  freeDrawMeta,
+  createFreeDrawObject,
+  getFreeDrawForm,
+  freeDrawSizeUpdate,
+  getFreeDrawHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
 
-// registerObjectTool({
-//   type: FREE_DRAW,
-//   meta: freeDrawMeta,
-//   toolClass: FreeHandDrawTool,
-//   toolBar: FreeDrawToolbar,
-// });
+registerObjectTool({
+  type: FREE_DRAW,
+  meta: freeDrawMeta,
+  toolClass: FreeHandDrawTool,
+  toolBar: FreeDrawToolbar,
+});
+
+// -------------------------
+
+registerObject(
+  BLOB,
+  "media",
+  blobMeta,
+  createBlobObject,
+  getBlobObjectForm,
+  blobSizeUpdate,
+  getBlobHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
 
 // -------------------------
 

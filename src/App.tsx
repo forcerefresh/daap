@@ -105,10 +105,9 @@ function App(props: IAppProps) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection, settings } = state.project;
+  const { pages, selection, settings } = state.project;
   return {
-    allSlides: slides.allSlides,
-    slideById: slides.slideById,
+    pageById: pages.pageById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
     theme: settings.theme,

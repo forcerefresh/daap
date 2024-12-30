@@ -65,7 +65,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
         inline
         className={css.main}
       >
-        {getButtonGroupField(
+        {/* {getButtonGroupField(
           "",
           sourceType,
           (sourceType: string) => {
@@ -74,11 +74,11 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             onChange(valueClone);
           },
           [
-            { value: "local", label: "Local" },
+            { value: "local", label: "Images" },
             { value: "library", label: "Library" },
             { value: "url", label: "Url" },
           ]
-        )}
+        )} */}
         {previewSrc ? (
           <>
             <div
@@ -168,7 +168,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
         ) : null}
       </FormGroup>
 
-      {sourceType === "local" || sourceType === "library" ? (
+      {/* {sourceType === "local" || sourceType === "library" ? (
         <div className={css.fileNameHolder}>
           {getTextField("Filename", filename, onFileNameChange, "", {
             disabled:
@@ -176,7 +176,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
               (sourceType === "library" && !value.image.url),
           })}
         </div>
-      ) : null}
+      ) : null} */}
     </>
   );
 };

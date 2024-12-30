@@ -14,7 +14,7 @@ import {
   updateSlide,
 } from "../../../store/actions/actions";
 import { ILayer } from "../../../store/reducers/i-layers";
-import { ISlide } from "../../../store/reducers/i-slides";
+import { IPage } from "../../../store/reducers/i-pages";
 import { IStore } from "../../../store/store";
 import FormWithLayout, {
   flattenForm,
@@ -53,20 +53,24 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
     const tmpObj = createObject(object.type, {});
 
-    if (!object.commonStyleDefinition)
-      return "Element does not have common style properties";
+    // if (!object.commonStyleDefinition)
+    //   return "Element does not have style properties";
 
     // check for forward compatibility
     const commonStyleDefinitionProperties =
-      tmpObj.commonStyleDefinition?.properties ?? [];
+      getCommonObjectPropertiesDefinition();
+    // tmpObj.commonStyleDefinition?.properties ?? [];
     const commonStyleDefinitionValues = {
-      ...(tmpObj.commonStyleDefinition?.values ?? {}),
-      ...(object.commonStyleDefinition?.values ?? {}),
+      ...getCommonPropertiesValues(),
+      ...(object.style ?? {}),
     };
-    const commonStyleDefinitionValuesMetadata = {
-      ...(tmpObj.commonStyleDefinition?.valuesMetadata ?? {}),
-      ...(object.commonStyleDefinition?.valuesMetadata ?? {}),
-    };
+    const commonStyleDefinitionValuesMetadata = {};
+    // {
+    //   ...(tmpObj.commonStyleDefinition?.valuesMetadata ?? {}),
+    //   ...(object.commonStyleDefinition?.valuesMetadata ?? {}),
+    // };
+
+    console.log(commonStyleDefinitionValues);
 
     return (
       <>
@@ -82,26 +86,26 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderLayerProperties = (layer: ILayer) => {
-    if (!layer.commonStyleDefinition)
-      return "Element does not have common style properties";
+    // if (!layer.commonStyleDefinition)
+    return "Element does not have style properties";
 
-    return (
-      <>
-        {renderProperties(
-          getCommonObjectPropertiesDefinition(true), // TODO
-          {
-            ...getCommonPropertiesValues(),
-            ...(layer.commonStyleDefinition?.values ?? {}),
-          },
-          {
-            ...getCommonPropertiesMetadataValues(),
-            ...(layer.commonStyleDefinition?.valuesMetadata ?? {}),
-          },
-          layer,
-          _updateLayer
-        )}
-      </>
-    );
+    // return (
+    //   <>
+    //     {renderProperties(
+    //       getCommonObjectPropertiesDefinition(true), // TODO
+    //       {
+    //         ...getCommonPropertiesValues(),
+    //         ...(layer.commonStyleDefinition?.values ?? {}),
+    //       },
+    //       {
+    //         ...getCommonPropertiesMetadataValues(),
+    //         ...(layer.commonStyleDefinition?.valuesMetadata ?? {}),
+    //       },
+    //       layer,
+    //       _updateLayer
+    //     )}
+    //   </>
+    // );
 
     // return (
     //   <>
@@ -125,26 +129,29 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
   ) => {
     let flatForm = flattenForm(properties as IFormLayoutItem[]);
 
+    console.log("VALUES--");
+
+    console.log(values);
     // add devices inputs
     flatForm = flatForm.reduce((acc, curr, idx) => {
       acc.push(curr);
 
       // add if not exist
-      if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
-        valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
-          const dPropertyName = curr.propertyName + "_D_" + device;
-          const newInput = cloneDeep(curr);
-          newInput.propertyName = dPropertyName;
-          delete newInput?.extraOptions;
-          delete newInput?.optional;
-          acc.push(newInput);
+      // if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
+      //   valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
+      //     const dPropertyName = curr.propertyName + "_D_" + device;
+      //     const newInput = cloneDeep(curr);
+      //     newInput.propertyName = dPropertyName;
+      //     delete newInput?.extraOptions;
+      //     delete newInput?.optional;
+      //     acc.push(newInput);
 
-          // NOTE: copy default value
-          if (!values[dPropertyName]) {
-            values[dPropertyName] = cloneDeep(values[curr.propertyName]);
-          }
-        });
-      }
+      //     // NOTE: copy default value
+      //     if (!values[dPropertyName]) {
+      //       values[dPropertyName] = cloneDeep(values[curr.propertyName]);
+      //     }
+      //   });
+      // }
       return acc;
     }, [] as IFormLayoutItem[]);
 
@@ -162,16 +169,14 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
         const retObj = cloneDeep(objectOrLayer);
 
         if (retObj) {
-          const values = retObj.commonStyleDefinition.values as {
-            [key: string]: any;
-          };
-          values[propertyName] = value;
+          if (!retObj.style) retObj.style = {};
+          retObj.style[propertyName] = value;
 
           // >>> exception for image TODO: REMOVE TO POST PROCESS FUNCTIONS
           // use image w and h for the object
           if (property.inputType === InputType.IMAGE) {
             // set placeholder to false
-            values[propertyName].isPlaceholder = false;
+            retObj.style[propertyName].isPlaceholder = false;
             if ((retObj as IObject).width === 0) {
               (retObj as IObject).width = value.width;
             }
@@ -181,6 +186,7 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
           }
           // >>> exception for image
 
+          console.log(retObj);
           updateFunction(retObj);
         }
       }
@@ -205,6 +211,7 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
         metadata: valuesMetadata[propertyName],
       };
 
+      console.log(inputProps);
       return {
         input: getInputFormWithOptions(
           property.inputType,
@@ -234,17 +241,19 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
       return <div>No object selected</div>;
     }
 
-    if (selectionForProperties?.type === "layer" && layer) {
-      return renderLayerProperties(layer);
-    }
+    // if (selectionForProperties?.type === "layer" && layer) {
+    //   return renderLayerProperties(layer);
+    // }
 
     if (selectionForProperties?.type === "object" && object) {
       return renderObjectProperties(object, objectLayer);
     }
 
-    if (selectionForProperties?.type === "slide" && slide) {
-      return null;
-    }
+    // if (selectionForProperties?.type === "slide" && slide) {
+    //   return null;
+    // }
+
+    return <div>Element does not have style properties</div>;
   };
 
   return (
@@ -258,7 +267,7 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings, slides } = state.project;
+  const { objects, layers, selection, settings, pages } = state.project;
   const { selectedDevice } = state.stage;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
@@ -268,7 +277,7 @@ const mapStateToProps = (state: IStore) => {
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let panelName:
     | { name?: string; type: "object" | "layer" | "slide" }
@@ -299,7 +308,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(

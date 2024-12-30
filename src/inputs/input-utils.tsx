@@ -123,6 +123,26 @@ export function getSelectField<T>(
   return getInputForm(InputType.SELECT, objectDef, onChange);
 }
 
+export function getTagsField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  inputProps: {
+    disabled?: boolean;
+    placeholder?: string;
+  } = {},
+  helperText?: string
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.TAGS,
+    value: value,
+    inputProps,
+    helperText,
+  };
+
+  return getInputForm(InputType.TAGS, objectDef, onChange);
+}
 export function getSelectSlider<T>(
   label: string,
   value: T,

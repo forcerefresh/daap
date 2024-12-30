@@ -22,7 +22,7 @@ import css from "./ProjectsPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { setupNewProject } from "../../store/actions/multi-actions";
 import { getDefaultSlide } from "../../objects/create-object-factory";
-import { SlideType } from "../../store/reducers/i-slides";
+import { PageType } from "../../store/reducers/i-pages";
 import { IEditor } from "../../store/reducers/editor";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
@@ -186,12 +186,12 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       );
 
       // NOTE: Backward compatibility: Front slide is added on 1st February 2023
-      if (!(project as any).slides.loadSlides) {
-        const loadSlide = getDefaultSlide(SlideType.Load, "Load");
-        (project as any).slides.loadSlides = [loadSlide.id];
-        (project as any).slides.allSlides.push(loadSlide.id);
-        (project as any).slides.slideById[loadSlide.id] = loadSlide;
-      }
+      // if (!(project as any).projects.loadPages) {
+      //   const loadPage = getDefaultSlide(PageType.Load, "Load");
+      //   (project as any).pages.loadPages = [loadPage.id];
+      //   (project as any).pages.allPages.push(loadPage.id);
+      //   (project as any).pages.pageById[loadPage.id] = loadPage;
+      // }
 
       _openProject(project);
 
@@ -224,7 +224,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find slider..."
+          placeholder="Find project..."
           rightElement={
             <Button
               large

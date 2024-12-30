@@ -56,6 +56,7 @@ import { InsetLayoutInputForm } from "./inset-layout-input/inset-layout-input";
 import { AudioInputForm } from "./audio-input/audio-input";
 import ExtraOptionsInput from "./extra-options-optional/extra-options-input";
 import { ClipMaskInputForm } from "./clip-mask-input/clip-mask-input";
+import { TagsInputForm } from "./tags-input/tags-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -92,22 +93,22 @@ export function getInputFormWithOptions<T>(
   const eo = inputProps.extraOptions;
   if (eo && (eo.devices || eo.optional || eo.exportForWizard)) {
     return (
-      <ExtraOptionsInput
-        extraOptions={inputProps.extraOptions}
-        metadataValues={inputProps.metadata}
-        onMetadataChange={onMetadataChange || (() => {})}
-      >
-        {input}
-      </ExtraOptionsInput>
+      // <ExtraOptionsInput
+      //   extraOptions={inputProps.extraOptions}
+      //   metadataValues={inputProps.metadata}
+      //   onMetadataChange={onMetadataChange || (() => {})}
+      // >
+      <>{input}</>
+      // </ExtraOptionsInput>
     );
   } else if (inputProps.optional) {
     return (
-      <OptionalInput
-        metadataValues={inputProps.metadata}
-        onMetadataChange={onMetadataChange || (() => {})}
-      >
-        {input}
-      </OptionalInput>
+      // <OptionalInput
+      //   metadataValues={inputProps.metadata}
+      //   onMetadataChange={onMetadataChange || (() => {})}
+      // >
+      <>{input}</>
+      // </OptionalInput>
     );
   }
   return input;
@@ -328,6 +329,9 @@ export function getInputForm<T>(
     }
     case InputType.SELECT: {
       return <SelectInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.TAGS: {
+      return <TagsInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.FONT_SELECT: {
       return (

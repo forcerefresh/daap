@@ -17,6 +17,12 @@
     },
     {
       "path": "../../../../daap-server"
+    },
+    {
+      "path": "../../../../pptx-parser-test"
+    },
+    {
+      "path": "../../../../GoogleFontSpriteImageGenerator"
     }
   ],
   "settings": {}

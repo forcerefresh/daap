@@ -1,4 +1,4 @@
-import { cloneDeep, forEach, forIn, omit, without } from "lodash-es";
+import { cloneDeep, forEach, forIn, forOwn, omit, without } from "lodash-es";
 import { object } from "yup";
 import {
   getCommonPropertiesMetadataValues,
@@ -35,7 +35,7 @@ import { getCopyName } from "../helpers/utils";
 const getObjectsDefault = (): IObjects => ({
   objectById: {},
   allObjects: [],
-  nextObjectId: {},
+  nextObjectNameNumber: {},
 });
 
 export function objects(
@@ -52,16 +52,16 @@ export function objects(
           ...{ [object.id]: object },
         },
         allObjects: [...state.allObjects, object.id],
-        nextObjectId: {
-          ...state.nextObjectId,
-          [object.type]: state.nextObjectId[object.type]
-            ? state.nextObjectId[object.type] + 1
+        nextObjectNameNumber: {
+          ...state.nextObjectNameNumber,
+          [object.type]: state.nextObjectNameNumber[object.type]
+            ? state.nextObjectNameNumber[object.type] + 1
             : 2,
         },
       });
 
-      // newState.nextObjectId[object.type] = newState.nextObjectId[object.type]
-      //   ? newState.nextObjectId[object.type]+1
+      // newState.nextObjectNameNumber[object.type] = newState.nextObjectNameNumber[object.type]
+      //   ? newState.nextObjectNameNumber[object.type]+1
       //   : 2;
 
       //console.log(newState);
@@ -96,8 +96,11 @@ export function objects(
       // });
     }
     case DELETE_OBJECTS: {
+      console.log("DELETE_OBJECTS REDUCER");
+
       const objectIds = action.payload;
 
+      // collect children objects id (e.g. for group))
       let childObjectIds: string[] = [];
       objectIds.forEach((objectId) => {
         const childObjIds = state.objectById[objectId].objectIds;
@@ -106,14 +109,23 @@ export function objects(
         }
       });
 
-      const objectById = omit(state.objectById, [
+      let objectById = omit(state.objectById, [
         ...objectIds,
         ...childObjectIds,
       ]);
+
+      // remove deleted objects from group
+      forOwn(objectById, (object, id: any) => {
+        objectById[id].objectIds = object.objectIds?.filter(
+          (id) => !objectIds.includes(id)
+        );
+      });
+
       const allObjects = without(
         state.allObjects,
         ...[...objectIds, ...childObjectIds]
       );
+
       return { ...state, objectById, allObjects };
     }
     case GROUP_OBJECTS: {
@@ -158,6 +170,10 @@ export function objects(
       // });
 
       newState.allObjects.push(group.id);
+      newState.allObjects = newState.allObjects.filter(
+        (id) => !groupIdsForRemoval.includes(id)
+      );
+
       // console.log(newState);
 
       objectIds.forEach((objectId) => {
@@ -166,8 +182,10 @@ export function objects(
         //dispatch(_updateObject(object));
       });
 
-      newState.nextObjectId["group"] = newState.nextObjectId["group"]
-        ? newState.nextObjectId["group"] + 1
+      newState.nextObjectNameNumber["group"] = newState.nextObjectNameNumber[
+        "group"
+      ]
+        ? newState.nextObjectNameNumber["group"] + 1
         : 2;
 
       return newState;
@@ -297,7 +315,7 @@ export function objects(
       const payload = action.payload;
       const objectById = cloneDeep(state.objectById);
 
-      // If layer are moved to "slide" update slideId on each layer
+      // If layer are moved to "slide" update pageId on each layer
       if (payload.where === "layer") {
         forIn(objectById, function (object, _objectId) {
           if (payload.moveIds.indexOf(object.id) !== -1) {
@@ -357,7 +375,11 @@ export function objects(
       // ]);
 
       // remove group id from allObjects
+      console.log("UNGROUP123");
+      console.log([...newState.allObjects]);
+
       newState.allObjects = newState.allObjects.filter((id) => id !== groupId);
+      console.log([...newState.allObjects]);
 
       if (newState.objectById[parentId!]) {
         newState.objectById[parentId!].objectIds?.splice(

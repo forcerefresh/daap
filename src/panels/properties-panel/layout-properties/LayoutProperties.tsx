@@ -52,7 +52,6 @@ import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form"
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "aws-sdk/clients/ec2";
 import { getAncestorLayer } from "../../../store/actions/actions-utils";
-import { opacity } from "html2canvas/dist/types/css/property-descriptors/opacity";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -107,6 +106,10 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     const layoutedByParent = false; // objectLayer.definition.values.hasLayoutChildren;
     const parentHasLayout = false; // objectLayer.layout !== "none";
 
+    console.log("VAZNO123");
+
+    console.log(obj);
+
     return (
       <>
         {/* {renderLayoutOptions(
@@ -154,7 +157,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             _updateObject(retObj);
           }
         )}
-        {getSelectSlider(
+        {/* {getSelectSlider(
           "Opacity",
           obj.style?.commonOpacity ?? 100,
           {
@@ -181,7 +184,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
             retObj.style.commonOpacity = parseInt(opacity);
             _updateObjectForPreview(retObj);
           }
-        )}
+        )} */}
         {/* {renderNamedProperties(
           "layoutAdvance",
           layoutAdvancedDefinition,
@@ -513,7 +516,7 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings, slides } = state.project;
+  const { objects, layers, selection, settings, pages } = state.project;
   const { selectedDevice } = state.stage;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
@@ -530,7 +533,7 @@ const mapStateToProps = (state: IStore) => {
     : null; //layers.layerById[object?.layerId as any] || null;
 
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let panelName:
     | { name?: string; type: "object" | "layer" | "slide" }

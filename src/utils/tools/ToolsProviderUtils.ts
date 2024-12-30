@@ -3,3 +3,7 @@ export function getCanvas(): HTMLDivElement {
     "MainToolCanvas"
   )[0]! as HTMLDivElement;
 }
+
+export function getStage(): HTMLDivElement {
+  return document.getElementsByClassName("StagePanel")[0]! as HTMLDivElement;
+}

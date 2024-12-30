@@ -143,6 +143,10 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
       el.style.width = scaledHandleSize + "px";
       el.style.height = scaledHandleSize + "px";
       el.style.transformOrigin = "bottom right";
+      // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
+
+      // el.style.transform = "scale(" + stageZoom + ")";
+
       el.style.background = `${
         object.objectIds ? groupSelectionColor : objectSelectionColor
       }`;

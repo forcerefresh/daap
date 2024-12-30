@@ -107,7 +107,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
             <div>Basic</div>
           </Button>
         </div> */}
-        <div>
+        {/* <div>
           {selectionForProperties?.type === "object" && (
             <Button
               minimal
@@ -126,7 +126,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
               Link
             </Button>
           )}
-        </div>
+        </div> */}
         {/* <div>
           <Button
             minimal
@@ -172,12 +172,12 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, slides, selection } = state.project;
+  const { objects, layers, pages, selection } = state.project;
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let totalAnimationCounter = 0;
 

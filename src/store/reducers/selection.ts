@@ -183,16 +183,16 @@ export function selection(
         },
         activeSlideId: {
           $apply: (activeId) => {
-            return activeId === action.payload.slideId ? null : activeId;
+            return activeId === action.payload.pageId ? null : activeId;
           },
         },
         selectedSlideIds: {
           $apply: (selIds: string[]) =>
-            selIds.filter((id) => action.payload.slideId !== id),
+            selIds.filter((id) => action.payload.pageId !== id),
         },
         selectionForProperties: {
           $apply: (curr) => {
-            return curr && action.payload.slideId === curr.id ? null : curr;
+            return curr && action.payload.pageId === curr.id ? null : curr;
           },
         },
       });
@@ -246,30 +246,39 @@ export function selection(
       return newState;
     }
     case DELETE_OBJECTS: {
+      console.log("DELETE_OBJECTS REDUCER");
+
       const deletedObjectIds = action.payload;
 
-      return update(state, {
-        activeObjectId: {
-          $apply: (activeId) => {
-            return deletedObjectIds.indexOf(activeId as string) !== -1
-              ? null
-              : activeId;
-          },
-        },
+      return {
+        ...state,
+        activeObjectId: null,
+        selectedObjectIds: [],
+        selectionForProperties: null,
+        selectionPath: [],
+      };
+      // return update(state, {
+      //   activeObjectId: {
+      //     $apply: (activeId) => {
+      //       return deletedObjectIds.indexOf(activeId as string) !== -1
+      //         ? null
+      //         : activeId;
+      //     },
+      //   },
 
-        selectedObjectIds: {
-          $apply: (selIds: string[]) =>
-            selIds.filter((id) => deletedObjectIds.indexOf(id) === -1),
-        },
+      //   selectedObjectIds: {
+      //     $apply: (selIds: string[]) =>
+      //       selIds.filter((id) => deletedObjectIds.indexOf(id) === -1),
+      //   },
 
-        selectionForProperties: {
-          $apply: (curr) => {
-            return curr && deletedObjectIds.indexOf(curr.id) !== -1
-              ? null
-              : curr;
-          },
-        },
-      });
+      //   selectionForProperties: {
+      //     $apply: (curr) => {
+      //       return curr && deletedObjectIds.indexOf(curr.id) !== -1
+      //         ? null
+      //         : curr;
+      //     },
+      //   },
+      // });
     }
     case OPEN_PROJECT: {
       return {

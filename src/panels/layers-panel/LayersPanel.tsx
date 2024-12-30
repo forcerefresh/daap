@@ -28,7 +28,7 @@ import {
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersPanel.module.scss";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { cloneDeep, delay, isEmpty, includes } from "lodash-es";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -453,15 +453,15 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection } = state.project;
+  const { pages, layers, objects, selection } = state.project;
   //const { layoutType } = state.globals;
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   return {
@@ -482,7 +482,7 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _addNewLayer: (slideId: string) => addNewLayer(slideId),
+  _addNewLayer: (pageId: string) => addNewLayer(pageId),
   _addLayersToSelection: (layerIds: string[]) => addLayersToSelection(layerIds),
   _removeLayersFromSelection: (layerIds: string[]) =>
     removeLayersFromSelection(layerIds),

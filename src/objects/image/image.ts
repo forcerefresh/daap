@@ -1,5 +1,6 @@
 import {
   ICheckboxInput,
+  ICornerRadiusValue,
   ICoverPlacementInput,
   ICoverPlacementValue,
   IImageInput,
@@ -29,14 +30,15 @@ import {
 } from "webslider-sdk/lib/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, isEmpty, isEqual } from "lodash-es";
 import {
   addTransformPropertiesToStyle,
+  // addTransformPropertiesToStyle,
   getTransformObjectPropertiesDefinition,
   getTransformPropertiesValues,
   TransformPropertiesValues,
 } from "webslider-sdk/lib/objects/transform-properties";
-import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+// import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import {
   addCommonStyleToObjectElementContent,
   addTransformStyleToObjectElementContent,
@@ -44,6 +46,15 @@ import {
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
+import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
+import {
+  addBackgroundColor,
+  addBorder,
+  addClipMask,
+  addCommonPropertiesToStyle,
+  addPaddingColor,
+} from "webslider-sdk/lib/objects/common-properties-player";
+import { nlRemove } from "webslider-sdk/lib/utils/utils";
 
 export const IMAGE = "image";
 
@@ -51,30 +62,38 @@ export interface ImageValues {
   fit: ICoverPlacementValue;
   image: IImageInputValue;
   // useForThumbnail: boolean;
-  preload: boolean;
+  preload?: boolean;
 }
 
 export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IImageInput<"image">,
+  IImageInput<"image">
   // ICheckboxInput<"useForThumbnail">,
-  ICheckboxInput<"preload">
+  // ICheckboxInput<"preload">
 ];
 
 export function createImageObject(
-  initialValue?: {
-    [key: string]: any;
-  },
-  commonProperties?: {
-    hasOverflowProperty: boolean;
-  }
-): Omit<
-  IObject<ImagePropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
+  initialValue?: Record<string, any>
+): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(IMAGE);
 
-  const properties: ImagePropertiesTuple = [
+  const values: ImageValues = {
+    fit: {
+      size: "fill",
+      positionHorizontal: "center",
+      positionVertical: "center",
+    },
+    image: initialValue?.image || { image: { sourceType: "local" } },
+    preload: true,
+  };
+
+  object.properties = values;
+
+  return object;
+}
+
+export function getImageObjectForm(): ImagePropertiesTuple {
+  const form: ImagePropertiesTuple = [
     {
       inputType: InputType.COVER_LAYOUT,
       displayName: "Fit",
@@ -94,61 +113,25 @@ export function createImageObject(
       displayName: "Image",
       propertyName: "image",
       inputType: InputType.IMAGE,
-      value: initialValue?.image || {},
-      defaultValue: { image: {} },
+      value: { image: { sourceType: "local" } },
+      defaultValue: { image: { sourceType: "local" } },
     },
+
     // {
-    //   displayName: "Use for thumbnail",
-    //   propertyName: "useForThumbnail",
+    //   displayName: "Preload",
+    //   propertyName: "preload",
     //   inputType: InputType.CHECKBOX,
-    //   value: false,
-    //   defaultValue: false,
+    //   defaultValue: true,
+    //   value: true,
     // },
-    {
-      displayName: "Preload",
-      propertyName: "preload",
-      inputType: InputType.CHECKBOX,
-      defaultValue: true,
-      value: true,
-    },
   ];
 
-  const values: ImageValues = {
-    fit: {
-      size: "fill",
-      positionHorizontal: "center",
-      positionVertical: "center",
-    },
-    image: initialValue?.image || { image: { sourceType: "local" } },
-    // useForThumbnail: false,
-    preload: true,
-  };
-
-  return {
-    ...object,
-    definition: {
-      //id: uuid(),
-      //type: IMAGE,
-      properties,
-      values,
-      valuesMetadata: {},
-    },
-    commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition(true)],
-      values: { ...getCommonPropertiesValues() },
-      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
-    },
-    transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition(true)],
-      values: { ...getTransformPropertiesValues() },
-      valuesMetadata: {},
-    },
-  };
+  return form;
 }
 
 export function getImageHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, isSave, isForThumbnail, deviceType } = props;
-  const imageValues = object.definition.values as ImageValues;
+  const imageValues = object.properties as ImageValues;
 
   if (!isPlayer) {
     if (
@@ -200,13 +183,7 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
 export async function imageSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
-  const {
-    id,
-    calculatedObjectSize,
-    commonStyleDefinition,
-    deviceType,
-    transformDefinition,
-  } = props;
+  const { id, calculatedObjectSize, style, deviceType, transform } = props;
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
@@ -221,19 +198,15 @@ export async function imageSizeUpdate(
   const objectContentEl = objectEl.getElementsByClassName(
     "object-content"
   )[0] as HTMLElement;
-  addCommonStyleToObjectElementContent(
-    objectContentEl,
-    commonStyleDefinition,
-    deviceType
-  );
+  addCommonStyleToObjectElementContent(objectContentEl, style, deviceType);
   addTransformStyleToObjectElementContent(
     objectContentEl,
-    transformDefinition,
+    transform,
     deviceType
   );
 
   const transformProperties = getObjectValuesForDevice(
-    transformDefinition?.values as TransformPropertiesValues,
+    transform as TransformPropertiesValues,
     deviceType
   );
 
@@ -306,8 +279,8 @@ export function imagePostProcess(
 
   const newObj = cloneDeep(object);
 
-  const prevValues = prevObject.definition.values as ImageValues;
-  const newValues = newObj.definition.values as ImageValues;
+  const prevValues = prevObject.properties as ImageValues;
+  const newValues = newObj.properties as ImageValues;
 
   if (prevValues.image.image.sourceType !== newValues.image.image.sourceType) {
     newValues.image = getDefaultValuesForSourceType(

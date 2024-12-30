@@ -61,3 +61,14 @@ export function lineIntersection(
 
   return { x, y };
 }
+
+export const bezierToFixed = (bezier: IBezier[]): IBezier[] => {
+  return bezier.map((b: IBezier) => {
+    return [
+      [parseFloat(b[0][0].toFixed(2)), parseFloat(b[0][1].toFixed())],
+      [parseFloat(b[1][0].toFixed(2)), parseFloat(b[1][1].toFixed())],
+      [parseFloat(b[2][0].toFixed(2)), parseFloat(b[2][1].toFixed())],
+      [parseFloat(b[3][0].toFixed(2)), parseFloat(b[3][1].toFixed())],
+    ];
+  });
+};

@@ -15,7 +15,7 @@ import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
@@ -89,6 +89,11 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
     isRoot,
   } = props;
 
+  console.log("OBJECT_ID");
+
+  if (!object) return <>qwe</>;
+
+  console.log(object.id);
   // // ++
   // const groupsPath = [...selectionPath];
   // groupsPath.shift();

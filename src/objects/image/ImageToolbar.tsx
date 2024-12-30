@@ -26,7 +26,7 @@ const alignArr = ["left", "center", "right", "justify"];
 export function ImageToolbar(props: IToolbarProps): React.ReactElement {
   const { mode, object, updateObject, deleteObject } = props;
 
-  const values = object?.definition.values as ImageValues | undefined;
+  const values = object?.properties as ImageValues | undefined;
 
   return (
     <>
@@ -35,7 +35,7 @@ export function ImageToolbar(props: IToolbarProps): React.ReactElement {
           {getCoverLayoutField("", values.fit, (v) => {
             if (object) {
               const newObject = cloneDeep(object);
-              newObject.definition.values.fit = v;
+              newObject.properties.fit = v;
               updateObject(newObject);
             }
           })}

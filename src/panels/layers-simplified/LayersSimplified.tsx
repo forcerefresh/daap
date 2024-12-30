@@ -38,7 +38,7 @@ import {
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./LayersSimplified.module.scss";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ObjectRow } from "./ObjectRow";
@@ -204,11 +204,16 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     [objectIds, setSortedObjectIds]
   );
 
-  console.log(sortedObjectIds);
-  console.log(objectIds);
+  // console.log(sortedObjectIds);
+  // console.log(objectIds);
 
-  console.log(selectionPathWithoutLayer);
+  // console.log(selectionPathWithoutLayer);
   if (!parentLayerId) return null;
+
+  console.log("LAYERS_S");
+
+  console.log([...(sortedObjectIds ?? [])]);
+  console.log([...objectIds]);
 
   return (
     <>
@@ -253,18 +258,23 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                 {/* <Button small icon="caret-down" minimal></Button> */}
               </div>
               {selectionPathWithoutLayer.map((pathObjectId) => (
-                <Button
-                  intent={"primary"}
-                  minimal
-                  small
-                  onClick={() => {
-                    _activateObject(pathObjectId);
-                    _selectObjects([pathObjectId]);
-                    _selectForProperties({ type: "object", id: pathObjectId });
-                  }}
-                >
-                  {objectById[pathObjectId]?.name}
-                </Button>
+                <div style={{ display: "flex" }}>
+                  <Button
+                    intent={"primary"}
+                    minimal
+                    small
+                    onClick={() => {
+                      _activateObject(pathObjectId);
+                      _selectObjects([pathObjectId]);
+                      _selectForProperties({
+                        type: "object",
+                        id: pathObjectId,
+                      });
+                    }}
+                  >
+                    {objectById[pathObjectId]?.name}
+                  </Button>
+                </div>
               ))}
               {/* key={layer.id} */}
               <ScrollingComponent className={cx(css.objectsHolder, {})}>
@@ -326,15 +336,15 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection } = state.project;
+  const { pages, layers, objects, selection } = state.project;
   //const { layoutType } = state.globals;
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined = last(
@@ -363,7 +373,7 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _addNewLayer: (slideId: string) => addNewLayer(slideId),
+  _addNewLayer: (pageId: string) => addNewLayer(pageId),
   _addLayersToSelection: (layerIds: string[]) => addLayersToSelection(layerIds),
   _removeLayersFromSelection: (layerIds: string[]) =>
     removeLayersFromSelection(layerIds),

@@ -3118,6 +3118,13 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==
 
+"@types/lodash-es@^4.17.12":
+  version "4.17.12"
+  resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.12.tgz#65f6d1e5f80539aa7cfbfc962de5def0cf4f341b"
+  integrity sha512-0NgftHUcV4v34VhXm8QBSftKVXtbkBG3ViCjs6+eJ5a6y6Mi/jiFGPc1sC7QK+9BFhWrURE3EOggmWaSxL9OzQ==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash-es@^4.17.3":
   version "4.17.6"
   resolved "https://registry.yarnpkg.com/@types/lodash-es/-/lodash-es-4.17.6.tgz#c2ed4c8320ffa6f11b43eb89e9eaeec65966a0a0"
@@ -15842,11 +15849,13 @@ webslider-sdk@^1.1.144:
   resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.144.tgz#ff9a41bd09fc66ae2a9b4886092bb7d38709d6ee"
   integrity sha512-rrwOj+e90IkqxUIQylrOgOfDUcuKUhObgsHyJPxYuaN5jlBKdXpW51jfaM+OeWbJKj87J737Q2iQZoKrg2Gw/A==
 
-webslider-sdk@^1.1.148:
-  version "1.1.148"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.148.tgz#ae6ffceb06aed48222fdc7889ed3c6c54558db63"
-  integrity sha512-pK0193jxEpnsWOkydZmLCicomUD+F7nYWwrzUBe7ymVlbXH0s5tGxQkwNLv/Keg22Og98I61AfI8Jfli625cyg==
+webslider-sdk@^1.1.160:
+  version "1.1.160"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.160.tgz#a85dcc0dd3534b57c015cd463cd71e52212b04d2"
+  integrity sha512-V4LKWOxnkyvu1dMahGTtdwcr+puUWUFbwjJm9JnmzqoWWatBFqOwWIGoJ/pFdlFg9jLGhxjBM/Peib/k5/6IUg==
   dependencies:
+    "@types/lodash-es" "^4.17.12"
+    lodash-es "^4.17.21"
     webslider-sdk "^1.1.144"
 
 websocket-driver@>=0.5.1, websocket-driver@^0.7.4:

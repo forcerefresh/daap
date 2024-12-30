@@ -3,7 +3,11 @@ import { remove } from "lodash-es";
 import { stringify } from "querystring";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
-import { getSelectField, getTextField } from "../../../inputs/input-utils";
+import {
+  getSelectField,
+  getTagsField,
+  getTextField,
+} from "../../../inputs/input-utils";
 import {
   getMyUploadComponentProps,
   IntegrationContext,
@@ -14,7 +18,11 @@ import {
 } from "webslider-sdk/lib/common/i-media-types";
 import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
 import { getImageTags } from "../../../utils/tags/tags";
-import { formatBytes, getCroppedFileName } from "../../../utils/utils";
+import {
+  formatBytes,
+  getCroppedFileName,
+  getNameFromFilename,
+} from "../../../utils/utils";
 import {
   dzAcceptStyle,
   dzBaseStyle,
@@ -25,9 +33,10 @@ import css from "./my-image-select.module.scss";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export interface UploadFileInfo {
-  tag: string;
-  title: string;
+  tags: string[];
   filename: string;
+  name: string;
+  description: string;
   uploaded?: boolean;
 }
 /*
@@ -81,7 +90,8 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
   useEffect(() => {
     const arr: UploadFileInfo[] = [];
     acceptedFiles.forEach((file) => {
-      arr.push({ tag: "", title: "", filename: file.name });
+      const name = getNameFromFilename(file.name);
+      arr.push({ tags: [], name: name, description: "", filename: file.name });
     });
     setFormData(arr);
   }, [acceptedFiles]);
@@ -99,24 +109,55 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
     return (
       <div key={file.name} className={css.uploadFileRow}>
         <div>
-          {idx + 1}. {getCroppedFileName(file.name)}
+          <strong>
+            {idx + 1}. {getCroppedFileName(file.name)} -{" "}
+            {formatBytes(file.size)}
+          </strong>
         </div>
-        <div>{formatBytes(file.size)}</div>
-        {getTextField("", formData[idx]?.filename, (value: string) => {
-          const newArr = [...formData];
-          newArr[idx].filename = value;
-          setFormData(newArr);
-        })}
-        {getTextField("", formData[idx]?.title, (value: string) => {
-          const newArr = [...formData];
-          newArr[idx].title = value;
-          setFormData(newArr);
-        })}
-        {getSelectField("", formData[idx]?.tag, tagOptions, (value: string) => {
-          const newArr = [...formData];
-          newArr[idx].tag = value;
-          setFormData(newArr);
-        })}
+
+        <div>
+          {getTextField("Name", formData[idx]?.name, (value: string) => {
+            const newArr = [...formData];
+            newArr[idx].filename = value;
+            setFormData(newArr);
+          })}
+        </div>
+        <div>
+          {getTextField(
+            "Description",
+            formData[idx]?.description,
+            (value: string) => {
+              const newArr = [...formData];
+              newArr[idx].description = value;
+              setFormData(newArr);
+            }
+          )}
+        </div>
+
+        <div>
+          {getTagsField(
+            "Tags",
+            formData[idx]?.tags ?? [],
+            (value: string[]) => {
+              const newArr = [...formData];
+              newArr[idx].tags = value;
+              setFormData(newArr);
+            }
+          )}
+        </div>
+
+        <div>
+          {getTextField(
+            "Filename",
+            formData[idx]?.filename,
+            (value: string) => {
+              const newArr = [...formData];
+              newArr[idx].filename = value;
+              setFormData(newArr);
+            },
+            "Override original filename"
+          )}
+        </div>
       </div>
     );
   });
@@ -165,13 +206,13 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         </div>
         {acceptedFiles.length > 0 && (
           <div className={css.uploadFileHolder}>
-            <div className={css.uploadFileRow}>
+            {/* <div className={css.uploadFileRow}>
               <div>File</div>
               <div>Size</div>
               <div>Filename</div>
               <div>Title</div>
               <div>Tag</div>
-            </div>
+            </div> */}
             {files}
           </div>
         )}
@@ -184,7 +225,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
                 uploadFiles();
               }}
             >
-              Upload files
+              Upload {acceptedFiles.length} files
             </Button>
             <Button
               intent={"none"}
@@ -287,8 +328,10 @@ function UploadDialog(props: UploadDialogProps) {
     const filesInfo = filesInfoArr[currentUploadIndex];
     //(file.name as any) = filesInfo.filename;
     upload(type, file, {
-      tags: [filesInfo.tag],
-      title: filesInfo.title,
+      tags: filesInfo.tags,
+      name: filesInfo.name,
+      // title: filesInfo.name, // TODO remove
+      description: filesInfo.description,
       filename: filesInfo.filename,
     }).then((status) => {
       statusesArrRef.current.push(status);

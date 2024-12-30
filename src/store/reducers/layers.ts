@@ -63,7 +63,6 @@ export function layers(
           layerById: {
             [object.layerId]: {
               objectIds: { $push: [object.id] },
-              //nextObjectIdCounter: (idx) => idx + 1,
             },
           },
         });
@@ -138,7 +137,6 @@ export function layers(
       //   layerById: {
       //     [object.layerId]: {
       //       objectIds: { $push: [object.id] },
-      //       //nextObjectIdCounter: (idx) => idx + 1,
       //     },
       //   },
       // });
@@ -181,7 +179,7 @@ export function layers(
             toLayer.id = layerItem.toId!;
             toLayer.name += " (copy)";
             toLayer.objectIds = layerItem.childs.map((item) => item.toId!);
-            toLayer.slideId = slideItem.toId!;
+            toLayer.pageId = slideItem.toId!;
             newState.allLayers.push(toLayer.id);
             newState.layerById[toLayer.id] = toLayer;
           } else {
@@ -194,7 +192,7 @@ export function layers(
               ...toLayer.objectIds,
               ...compact(objectIdToAdd),
             ];
-            toLayer.slideId = slideItem.toId!;
+            toLayer.pageId = slideItem.toId!;
             newState.layerById[toLayer.id] = toLayer;
           }
         });
@@ -209,9 +207,9 @@ export function layers(
       return { ...state, layerById, allLayers };
     }
     case DELETE_SLIDE: {
-      const deleteId = action.payload.slideId;
+      const deleteId = action.payload.pageId;
       const layersToDeleteIds: string[] = Object.values(state.layerById)
-        .filter((layer) => layer.slideId === deleteId)
+        .filter((layer) => layer.pageId === deleteId)
         .map((layer) => layer.id);
 
       const layerById = omit(state.layerById, layersToDeleteIds);
@@ -297,11 +295,11 @@ export function layers(
       const payload = action.payload;
       const layerById = cloneDeep(state.layerById);
 
-      // If layer are moved to "slide" update slideId on each layer
+      // If layer are moved to "slide" update pageId on each layer
       if (payload.where === "slide") {
         forIn(layerById, function (layer, _layerId) {
           if (payload.moveIds.indexOf(layer.id) !== -1) {
-            layer.slideId = payload.refId;
+            layer.pageId = payload.refId;
           }
         });
       }

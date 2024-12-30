@@ -31,7 +31,7 @@ import {
   preloadFonts,
   updateProjectWithNewIds,
 } from "../../utils/project/project-utils";
-import { ISlides } from "../../store/reducers/i-slides";
+import { IPages } from "../../store/reducers/i-pages";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -174,7 +174,7 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       const project: {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
-        slides: ISlides;
+        slides: IPages;
       } = response.template.project;
 
       const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
@@ -203,7 +203,7 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      const slideIdToSelect = updatedProject.slides.normalSlides[0];
+      const slideIdToSelect = updatedProject.slides.pages[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);
@@ -234,7 +234,7 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find slider..."
+          placeholder="Find template..."
           rightElement={
             <Button
               large

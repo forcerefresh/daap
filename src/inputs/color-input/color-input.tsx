@@ -141,13 +141,13 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
             <div className={css.actionHolder}>
               <div className={css.buttonHolder}>
                 <Button
-                  className={css.colorButton}
+                  className={cx(css.colorButton)}
                   //  icon="tick"
                   onClick={handleApply}
                   icon={
                     <div
                       id="color-input"
-                      className={cx(css.swatch)}
+                      className={cx(css.swatch, css.squareSwatch)}
                       tabIndex={1}
                     >
                       <BackgroundSVG style={{ position: "absolute" }} />
@@ -161,7 +161,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                   icon={
                     <div
                       id="color-input"
-                      className={cx(css.swatch)}
+                      className={cx(css.swatch, css.squareSwatch)}
                       tabIndex={1}
                     >
                       <BackgroundSVG style={{ position: "absolute" }} />

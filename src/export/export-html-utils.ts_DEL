@@ -30,14 +30,14 @@ import { ISlide } from "../store/reducers/i-slides";
 // }
 
 // function getSlideThumbnailObject(
-//   slideId: string,
+//   pageId: string,
 //   layers: ILayers,
 //   objects: IObjects
 // ) {
 //   let retObject: IObject | undefined;
 //   Object.keys(layers.layerById).forEach((layerId) => {
 //     const layer = layers.layerById[layerId];
-//     if (layer.slideId === slideId) {
+//     if (layer.pageId === pageId) {
 //       layer.objectIds.forEach((objectId) => {
 //         if (
 //           (objects.objectById[objectId].definition.values as ImageValues)

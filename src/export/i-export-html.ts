@@ -10,7 +10,7 @@ import { INavigationValues } from "webslider-sdk/lib/objects/i-navigation-types"
 import { ILayers } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { ISlides, SlideType } from "../store/reducers/i-slides";
+import { IPages, PageType } from "../store/reducers/i-pages";
 import {
   ISlideDuration,
   ISlideExitTime,
@@ -91,7 +91,7 @@ export interface IPlayerData {
 }
 
 export interface ISources {
-  slides: ISlides;
+  slides: IPages;
   layers: ILayers;
   objects: IObjects;
 }
@@ -100,7 +100,7 @@ export interface ISlideData {
   slide: {
     id: string;
     customId: string;
-    slideType: SlideType;
+    slideType: PageType;
     transitionEnabled: boolean;
     transitionOverlapTime: number;
     transitionDurationTime: number;

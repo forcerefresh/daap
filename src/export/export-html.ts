@@ -35,7 +35,7 @@ import {
 } from "../panels/stage-panel/StagePanelUtils";
 import { ILayer, ILayers, ILayerValues } from "../store/reducers/i-layers";
 import { IObjects } from "../store/reducers/i-objects";
-import { ISlide, ISlides, SlideType } from "../store/reducers/i-slides";
+import { IPage, IPages, PageType } from "../store/reducers/i-pages";
 import { ISettings } from "../store/reducers/i-settings";
 import {
   BreakpointConfiguration,
@@ -79,10 +79,10 @@ export function generatePlayerData(
 
   let itemsVisibility: ItemVisibility[] = [];
 
-  let normalSlidesArr: ISlide[] = [];
-  let loadSlidesArr: ISlide[] = [];
-  let frontSlidesArr: ISlide[] = [];
-  let backSlidesArr: ISlide[] = [];
+  let normalSlidesArr: IPage[] = [];
+  let loadSlidesArr: IPage[] = [];
+  let frontSlidesArr: IPage[] = [];
+  let backSlidesArr: IPage[] = [];
 
   switch (scope?.entityType) {
     case "slide": {
@@ -262,7 +262,7 @@ export function generatePlayerData(
 // }
 
 function generateSlideData(
-  slide: ISlide,
+  slide: IPage,
   layers: ILayers,
   objects: IObjects,
   breakpointConfig: BreakpointConfiguration,
@@ -327,8 +327,8 @@ function generateSlideData(
   slideStyle += "position: absolute;";
   //slideStyle += `width: ${breakpointConfig.normal.maxSliderSize.width}px;`;
   //slideStyle += `height: ${breakpointConfig.normal.maxSliderSize.height}px;`;
-  if (slide.slideType === SlideType.Front) slideStyle += `z-index:1000;`;
-  if (slide.slideType === SlideType.Back) slideStyle += `z-index:-1000;`;
+  if (slide.type === PageType.Front) slideStyle += `z-index:1000;`;
+  if (slide.type === PageType.Back) slideStyle += `z-index:-1000;`;
 
   // prettier-ignore
   html += `  <div style='${slideStyle}' class='slide-wrapper slide-wrapper-${slide.id}'>`; // slide open
@@ -352,10 +352,9 @@ function generateSlideData(
     // }
 
     const layerTransformValues = getObjectValuesForDevice(
-      layer.transformDefinition?.values,
-      breakpointConfig.type
+      layer.transform,
+      breakpointConfig.type // TODO
     );
-
     // const layerStyleValues = getObjectValuesForDevice(
     //   layer.commonStyleDefinition?.values,
     //   breakpointConfig.type
@@ -381,7 +380,7 @@ function generateSlideData(
     //   });
     // });
 
-    const layerValues = layer.definition.values as ILayerValues;
+    const layerValues = (layer.properties ?? {}) as ILayerValues;
 
     const layerClassName = "layer-" + layer.id;
     itemsData.push({
@@ -389,18 +388,20 @@ function generateSlideData(
       // customId: layer.customId,
       parentItemId: undefined,
       itemType: "layer",
-      itemValues: layer.definition.values,
-      itemValuesMetadata: layer.definition.valuesMetadata,
-      commonStyleDefinition: pick(
-        layer.commonStyleDefinition,
-        "values",
-        "valuesMetadata"
-      ) as IDefinition,
-      transformDefinition: pick(
-        layer.transformDefinition,
-        "values",
-        "valuesMetadata"
-      ) as IDefinition,
+      properties: layer.properties ?? {},
+      // itemValuesMetadata: {} // layer.definition.valuesMetadata,
+      style: layer.style ?? {},
+      transform: layer.transform ?? {},
+      // commonStyleDefinition: pick(
+      //   layer.commonStyleDefinition,
+      //   "values",
+      //   "valuesMetadata"
+      // ) as IDefinition,
+      // transformDefinition: pick(
+      //   layer.transformDefinition,
+      //   "values",
+      //   "valuesMetadata"
+      // ) as IDefinition,
       objectClass: layerClassName,
       // transitions: layer.transitions,
       data: {
@@ -590,7 +591,7 @@ function generateSlideData(
       // });
 
       // << part for externlas
-      const objectValues = object.definition.values;
+      const objectValues = object.properties;
 
       const objectClass = "object-" + object.id;
 
@@ -605,14 +606,14 @@ function generateSlideData(
         breakpointConfig,
         { resetPosition: false },
         undefined,
-        { skipHeight: !!object.definition?.values?.autoHeight }
+        { skipHeight: !!object.properties?.autoHeight }
       );
 
       const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
         object,
         layer,
         breakpoints,
-        { skipHeight: !!object.definition?.values?.autoHeight }
+        { skipHeight: !!object.properties?.autoHeight }
       );
 
       let style = "";
@@ -627,11 +628,12 @@ function generateSlideData(
       // ? "position: absolute;"
       // : "position: absolute;"; //"position: relative;";
 
-      const cd = object.commonStyleDefinition;
-      const overflow = cd?.valuesMetadata?.commonOverflow
-        ? cd.values?.commonOverflow
-        : "visible";
-      style += `overflow: ${overflow};`;
+      // const cd = object.commonStyleDefinition;
+      // const overflow = cd?.valuesMetadata?.commonOverflow
+      //   ? cd.values?.commonOverflow
+      //   : "visible";
+      const overflowValue = object.style?.overflow ?? "visible";
+      style += `overflow: ${overflowValue};`;
       // << "left", "top", "width", "height"
 
       let wrapperStyle = style;
@@ -644,21 +646,24 @@ function generateSlideData(
 
       let objectAnimWrapperStyle = "";
       // NOTE exception for perspective >>>
-      if (object.transformDefinition?.values?.hasPerspective) {
-        style += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
-        wrapperStyle += `perspective: ${object.transformDefinition?.values?.transformPerspective};`;
-        objectAnimWrapperStyle += `perspective: ${layerTransformValues?.transformPerspective};`;
+      if (
+        object.transform?.perspective &&
+        object.transform?.perspective !== "0px"
+      ) {
+        style += `perspective: ${object.transform?.perspective};`;
+        wrapperStyle += `perspective: ${object.transform?.perspective};`;
+        objectAnimWrapperStyle += `perspective: ${layerTransformValues?.perspective};`;
       }
 
-      if (object.transformDefinition?.values?.transformOriginX) {
-        const trOrigin = `transform-origin: ${
-          object.transformDefinition.values.transformOriginX ?? "left"
-        }  ${object.transformDefinition.values.transformOriginY ?? "top"};`;
+      // if (object.transformDefinition?.values?.transformOriginX) {
+      const trOrigin = `transform-origin: ${
+        object.transform?.transformOriginX ?? "left"
+      }  ${object.transform?.transformOriginY ?? "top"};`;
 
-        style += trOrigin;
-        wrapperStyle += trOrigin;
-        objectAnimWrapperStyle += trOrigin;
-      }
+      style += trOrigin;
+      wrapperStyle += trOrigin;
+      objectAnimWrapperStyle += trOrigin;
+      // }
 
       // style+=
       // wrapperStyle
@@ -690,10 +695,10 @@ function generateSlideData(
         parentItemId: layer.id,
         // customId: object.customId,
         itemType: object.type,
-        itemValues: object.definition.values,
-        itemValuesMetadata: object.definition.valuesMetadata,
-        commonStyleDefinition: object.commonStyleDefinition,
-        transformDefinition: object.transformDefinition,
+        properties: object.properties,
+        // itemValuesMetadata: object.definition.valuesMetadata,
+        style: object.style ?? {},
+        transform: object.transform ?? {},
         itemSystemType: getAppObjectDefinition(object.type)?.meta?.coreType,
         calculatedObjectSize,
         calculatedObjectSizePerDevice,
@@ -708,7 +713,7 @@ function generateSlideData(
           objectHeight: parseInt(calculatedObjectSize!.height + "", 10),
           objectLeft: parseInt(calculatedObjectSize!.left + "", 10),
           objectTop: parseInt(calculatedObjectSize!.top + "", 10),
-          overflow,
+          overflow: overflowValue,
           objectHtml,
         },
         layout: {
@@ -749,29 +754,29 @@ function generateSlideData(
 /**
  * Returns array of slides from store>slides
  */
-export function getNormalSlideArr(slides: ISlides): ISlide[] {
-  return slides.normalSlides.map((slideId) => slides.slideById[slideId]);
+export function getNormalSlideArr(pages: IPages): IPage[] {
+  return pages.pages.map((pageId) => pages.pageById[pageId]);
 }
 
 /**
  * Returns array of load slides from store>slides
  */
-export function getLoadSlideArr(slides: ISlides): ISlide[] {
-  return slides.loadSlides.map((slideId) => slides.slideById[slideId]);
+export function getLoadSlideArr(pages: IPages): IPage[] {
+  return pages.loadPages?.map((pageId) => pages.pageById[pageId]) ?? [];
 }
 
 /**
  * Returns array of front slides from store>slides
  */
-export function getFrontSlideArr(slides: ISlides): ISlide[] {
-  return slides.frontSlides.map((slideId) => slides.slideById[slideId]);
+export function getFrontSlideArr(pages: IPages): IPage[] {
+  return pages.frontPages?.map((pageId) => pages.pageById[pageId]) ?? [];
 }
 
 /**
  * Returns array of front slides from store>slides
  */
-export function getBackSlideArr(slides: ISlides): ISlide[] {
-  return slides.backSlides.map((slideId) => slides.slideById[slideId]);
+export function getBackSlideArr(pages: IPages): IPage[] {
+  return pages.backPages?.map((pageId) => pages.pageById[pageId]) ?? [];
 }
 
 /**
@@ -934,7 +939,7 @@ function getSourceImageHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const imageValues = object.definition.values as SourceImageValues;
+  const imageValues = object.properties as SourceImageValues;
 
   if (!imageValues.url.image.sourceType) {
     return `<div class="object-content" style="background-color: #eee; color: #1f82c0; font-weight: bold; display: flex; justify-content: center; align-items: center; text-align: center; width: 100%;; height: 100%;">IMAGE<br/>PLACEHOLDER</div>`;
@@ -992,7 +997,7 @@ function getCanvasHtml(
   calculatedObjectSize: React.CSSProperties,
   isPlayer: boolean
 ) {
-  const canvasProperties = object.definition.values as CanvasValues;
+  const canvasProperties = object.properties as CanvasValues;
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object);
@@ -1064,7 +1069,7 @@ export function getAllAssetsUrls(objects: IObjects): any {
 
       return [
         // ...arr.filter((item) => !!item), //TODO: check why we are getting undefined
-        ...(deff?.getAssetsUrls?.({ values: object.definition.values }) || []),
+        ...(deff?.getAssetsUrls?.({ values: object.properties }) || []),
       ];
     })
   );
@@ -1093,7 +1098,7 @@ export function getAllFonts(objects: IObjects): any {
 
       return [
         //...arr.filter((item) => !!item), //TODO: check why we are getting undefined
-        ...(deff?.getFonts?.({ values: object.definition.values }) || []),
+        ...(deff?.getFonts?.({ values: object.properties }) || []),
       ];
     })
   );
@@ -1103,6 +1108,8 @@ export function getAllFonts(objects: IObjects): any {
   });
 }
 
-function getCustomIdClass(props: { customId: string }) {
-  return props.customId ? `custom-id-${props.customId}` : "";
+function getCustomIdClass({ customId }: { customId?: string }) {
+  if (!customId) return "";
+
+  return customId ? `custom-id-${customId}` : "";
 }

@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import cx from "classnames";
 import { cloneDeep } from "lodash-es";
 import { Button, Icon, Label } from "@blueprintjs/core";
 import { getUnitNumericFiled } from "../input-utils";
 import {
   ICornerRadiusInput,
+  ICornerRadiusValue,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./corner-radius-input.module.scss";
@@ -18,18 +19,28 @@ export const CornerRadiusInputForm: React.FC<
   const { displayName, propertyName, helperText, value, inputProps, onChange } =
     props;
 
-  const isLinked = !!value.common;
+  const isLinked = typeof value === "string";
 
-  if (isLinked) {
-    value.common = value.common || "0px";
-  } else {
-    value.tl = value.tl || "0px";
-    value.tr = value.tr || "0px";
-    value.bl = value.bl || "0px";
-    value.br = value.br || "0px";
-  }
+  const internalValue: ICornerRadiusValue & { common?: string } =
+    useMemo(() => {
+      if (isLinked) {
+        return { common: value };
+        // value.common = value.common || "0px";
+      } else {
+        return {
+          tl: value.tl || "0px",
+          tr: value.tr || "0px",
+          bl: value.bl || "0px",
+          br: value.br || "0px",
+        };
+        // value.tl = value.tl || "0px";
+        // value.tr = value.tr || "0px";
+        // value.bl = value.bl || "0px";
+        // value.br = value.br || "0px";
+      }
+    }, [value, isLinked]);
 
-  const renderLinkBtn = () => {
+  const renderLinkBtn = useCallback(() => {
     return (
       <Button
         disabled={inputProps?.disabled}
@@ -39,28 +50,33 @@ export const CornerRadiusInputForm: React.FC<
         active={isLinked}
         onClick={() => {
           if (isLinked) {
-            const valueClone = cloneDeep(value);
-            valueClone.tl = value.common;
-            valueClone.tr = value.common;
-            valueClone.bl = value.common;
-            valueClone.br = value.common;
-            delete valueClone.common;
-            onChange(valueClone);
+            // const valueClone = cloneDeep(value);
+            // valueClone.tl = value as string;
+            // valueClone.tr = value as string;
+            // valueClone.bl = value as string;
+            // valueClone.br = value as string;
+            // delete valueClone.common;
+            onChange({
+              tl: internalValue.common,
+              tr: internalValue.common,
+              bl: internalValue.common,
+              br: internalValue.common,
+            });
           } else {
-            const valueClone = cloneDeep(value);
-            valueClone.common = value.tl;
-            delete valueClone.tl;
-            delete valueClone.tr;
-            delete valueClone.bl;
-            delete valueClone.br;
-            onChange(valueClone);
+            // const valueClone = cloneDeep(value);
+            // valueClone.common = value.tl;
+            // delete valueClone.tl;
+            // delete valueClone.tr;
+            // delete valueClone.bl;
+            // delete valueClone.br;
+            onChange(internalValue.tl ?? "0px");
           }
         }}
       >
         <Icon icon="link" iconSize={SMALL_ICON_SIZE} color={"gray"} />
       </Button>
     );
-  };
+  }, [inputProps?.disabled, isLinked, onChange, internalValue]);
 
   return (
     <>
@@ -72,17 +88,17 @@ export const CornerRadiusInputForm: React.FC<
           <div className={cx(css.alignHolderInner, "labelAuto")}>
             {!isLinked ? (
               <>
-                <div className={cx(css.row, "input65-force")}>
-                  {getUnitNumericFiled("TL", value.tl, (tl: any) => {
-                    const valueClone = cloneDeep(value);
+                <div className={cx(css.row, "input80-force")}>
+                  {getUnitNumericFiled("TL", internalValue.tl, (tl: any) => {
+                    const valueClone = cloneDeep(internalValue);
                     valueClone.tl = tl;
                     onChange(valueClone);
                   })}
                   {getUnitNumericFiled(
                     "TR",
-                    value.tr,
+                    internalValue.tr,
                     (tr: any) => {
-                      const valueClone = cloneDeep(value);
+                      const valueClone = cloneDeep(internalValue);
                       valueClone.tr = tr;
                       onChange(valueClone);
                     },
@@ -90,28 +106,28 @@ export const CornerRadiusInputForm: React.FC<
                   )}
                   {renderLinkBtn()}
                 </div>
-                <div className={cx(css.row, "input65-force")}>
-                  {getUnitNumericFiled("BL", value.bl, (bl: any) => {
-                    const valueClone = cloneDeep(value);
+                <div className={cx(css.row, "input80-force")}>
+                  {getUnitNumericFiled("BL", internalValue.bl, (bl: any) => {
+                    const valueClone = cloneDeep(internalValue);
                     valueClone.bl = bl;
                     onChange(valueClone);
                   })}
-                  {getUnitNumericFiled("BR", value.br, (br: any) => {
-                    const valueClone = cloneDeep(value);
+                  {getUnitNumericFiled("BR", internalValue.br, (br: any) => {
+                    const valueClone = cloneDeep(internalValue);
                     valueClone.br = br;
                     onChange(valueClone);
                   })}
                 </div>
               </>
             ) : (
-              <div className={cx(css.row, "input70-force")}>
+              <div className={cx(css.row, "input80-force")}>
                 {getUnitNumericFiled(
                   "",
-                  value.common,
-                  (common: any) => {
-                    const valueClone = cloneDeep(value);
-                    valueClone.common = common;
-                    onChange(valueClone);
+                  internalValue.common ?? "0px",
+                  (common: string) => {
+                    // const valueClone = cloneDeep(value);
+                    // valueClone.common = common;
+                    onChange(common);
                   },
                   undefined,
                   { disabled: inputProps?.disabled }

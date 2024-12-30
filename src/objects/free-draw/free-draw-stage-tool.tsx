@@ -8,7 +8,7 @@ import {
 } from "../../webslider-sdk/object/i-tool-class";
 import { FreeDrawValues } from "./free-draw";
 import { IBezier, IFreeDrawToolConfig, Points } from "./types";
-import { bezierArr2Path, lineIntersection } from "./utils";
+import { bezierArr2Path, bezierToFixed, lineIntersection } from "./utils";
 import { ICursorStyle } from "../../panels/stage-panel-new/CursorProvider";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 var fitCurve = require("fit-curve");
@@ -19,6 +19,7 @@ export const getCursorStyle = () => {
 };
 
 export default class FreeHandDrawTool implements IToolClass {
+  rootStage: HTMLDivElement | null = null;
   canvas: HTMLDivElement | null = null;
   stageEl: HTMLDivElement | null = null;
   getMousePoint: ActivationParams["getMousePoint"] = () => ({ x: 0, y: 0 });
@@ -56,6 +57,7 @@ export default class FreeHandDrawTool implements IToolClass {
 
   activate(activationParams: ActivationParams) {
     const {
+      rootStage,
       canvas,
       getMousePoint,
       requestObjectUpdate,
@@ -74,6 +76,7 @@ export default class FreeHandDrawTool implements IToolClass {
 
     this.stack = [];
 
+    this.rootStage = rootStage;
     this.setCanvas(canvas);
 
     this.getMousePoint = getMousePoint;
@@ -91,9 +94,9 @@ export default class FreeHandDrawTool implements IToolClass {
 
     this.requestCursorChange = requestCursorChange;
 
-    this.canvas?.addEventListener("mousedown", this.mouseDownHandlerBind!);
-    this.canvas?.addEventListener("mousemove", this.mouseMoveHandlerBind!);
-    this.canvas?.addEventListener("mouseup", this.mouseUpHandlerBind!);
+    this.rootStage?.addEventListener("mousedown", this.mouseDownHandlerBind!);
+    this.rootStage?.addEventListener("mousemove", this.mouseMoveHandlerBind!);
+    this.rootStage?.addEventListener("mouseup", this.mouseUpHandlerBind!);
     document.addEventListener("mousedown", this.clickOutsideEventHandlerBind);
 
     this.requestCursorChange({
@@ -101,36 +104,36 @@ export default class FreeHandDrawTool implements IToolClass {
       style: { background: "white" },
     });
 
-    if (objectValues) {
-      this.stack = (objectValues as unknown as FreeDrawValues).lines.map(
-        (line) => {
-          const points: Points = line.points.map((p) => {
-            return [p[0] + position.x, p[1] + position.y];
-          });
+    // if (objectValues) {
+    //   this.stack = (objectValues as unknown as FreeDrawValues).lines.map(
+    //     (line) => {
+    //       const points: Points = line.points.map((p) => {
+    //         return [p[0] + position.x, p[1] + position.y];
+    //       });
 
-          return {
-            points,
-            toolConfig: {
-              color: line.color,
-              strokeWidth: line.strokeWidth,
-              eraser: false,
-            },
-            options: { stageZoom: 1 },
-          };
-        }
-      );
+    //       return {
+    //         points,
+    //         toolConfig: {
+    //           color: line.color,
+    //           strokeWidth: line.strokeWidth,
+    //           eraser: false,
+    //         },
+    //         options: { stageZoom: 1 },
+    //       };
+    //     }
+    //   );
 
-      this.redraw();
+    //   this.redraw();
 
-      // hide object
-      const objectEl = document.getElementsByClassName(
-        `object-content-${this.objectId}`
-      )[0] as HTMLElement;
+    //   // hide object
+    //   const objectEl = document.getElementsByClassName(
+    //     `object-content-${this.objectId}`
+    //   )[0] as HTMLElement;
 
-      if (objectEl) objectEl.style.display = "none";
+    //   if (objectEl) objectEl.style.display = "none";
 
-      return;
-    }
+    //   return;
+    // }
   }
 
   deactivate(deactivationParams: DeactivationParams) {
@@ -144,9 +147,15 @@ export default class FreeHandDrawTool implements IToolClass {
       });
     }
 
-    this.canvas?.removeEventListener("mousedown", this.mouseDownHandlerBind!);
-    this.canvas?.removeEventListener("mousemove", this.mouseMoveHandlerBind!);
-    this.canvas?.removeEventListener("mouseup", this.mouseUpHandlerBind!);
+    this.rootStage?.removeEventListener(
+      "mousedown",
+      this.mouseDownHandlerBind!
+    );
+    this.rootStage?.removeEventListener(
+      "mousemove",
+      this.mouseMoveHandlerBind!
+    );
+    this.rootStage?.removeEventListener("mouseup", this.mouseUpHandlerBind!);
     document.removeEventListener(
       "mousedown",
       this.clickOutsideEventHandlerBind!
@@ -191,7 +200,7 @@ export default class FreeHandDrawTool implements IToolClass {
     const svgArr = this.canvas!.querySelectorAll("svg");
 
     svgArr.forEach((svg) => {
-      svg.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
+      // svg.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
       svg.style.margin = `1px 0px 0px 1px`;
     });
   }
@@ -226,10 +235,11 @@ export default class FreeHandDrawTool implements IToolClass {
     });
 
     const normalizedBezier = normalizedStack.map((stackItem) => {
-      const bezier: IBezier[] = fitCurve(stackItem.points, error);
+      let bezier: IBezier[] = fitCurve(stackItem.points, error);
+      bezier = bezierToFixed(bezier);
       return {
         bezier,
-        points: stackItem.points,
+        // points: stackItem.points,
         color: stackItem.toolConfig.color,
         strokeWidth: stackItem.toolConfig.strokeWidth,
       };
@@ -249,6 +259,7 @@ export default class FreeHandDrawTool implements IToolClass {
   private latestPoint = { x: 0, y: 0 };
   private mouseDownHandler(evt: Event) {
     const e = evt as MouseEvent;
+    e.stopPropagation();
 
     this.isMouseDown = true;
 
@@ -326,7 +337,7 @@ export default class FreeHandDrawTool implements IToolClass {
 
   removeIntersection(p1: Point, p2: Point) {
     this.objects.forEach((obj: IObject) => {
-      const lines = (obj.definition.values as FreeDrawValues).lines;
+      const lines = (obj.properties as FreeDrawValues).lines;
 
       // const pomX = parseInt(obj.absoluteLayout?.common.left!);
       // const pomY = parseInt(obj.absoluteLayout?.common.top!);
@@ -394,7 +405,7 @@ export default class FreeHandDrawTool implements IToolClass {
       svgEl.style.overflow = "visible";
 
       this.stageEl?.appendChild(svgEl);
-      svgEl.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
+      // svgEl.style.transform = "scale(" + this.editorConfig.stageZoom + ")";
       svgEl.style.transformOrigin = "left top";
       svgEl.style.margin = `1px 0px 0px 1px`;
     }
@@ -441,6 +452,8 @@ export default class FreeHandDrawTool implements IToolClass {
     const el = pathEl ? pathEl : this.currentPathEl!;
 
     let bezierCurves = fitCurve(points, error);
+    bezierCurves = bezierToFixed(bezierCurves);
+
     const path = bezierArr2Path(bezierCurves);
     el.setAttribute("d", path);
   }

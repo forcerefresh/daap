@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import css from "./SlidesPanel.module.scss";
 import cx from "classnames";
 import { selectForPropertiesProps } from "../../store/actions/actions";
@@ -10,10 +10,10 @@ import { useEffect } from "react";
 import { getEmptyImage } from "react-dnd-html5-backend";
 
 export interface ISlideRowProps {
-  slide: ISlide;
-  onSlideClick: (
+  slide: IPage;
+  onPageClick: (
     event: React.MouseEvent<HTMLDivElement>,
-    slideId: string
+    pageId: string
   ) => void;
   setStagePreview: (preview: Partial<IPreviewState>) => void;
   deleteSlideThree: (id: string) => void;
@@ -40,7 +40,7 @@ export function SlideRow(props: ISlideRowProps) {
     realSlideDuration,
     realSlideExitDuration,
     inPlay,
-    onSlideClick,
+    onPageClick,
     setStagePreview,
     deleteSlideThree,
     onDragingChange,
@@ -49,7 +49,7 @@ export function SlideRow(props: ISlideRowProps) {
 
   const dropLayersHandler = (item: any, monitor: any) => {
     _moveLayers(slide.id, "slide", item.ids);
-    onSlideClick({} as any, slide.id);
+    onPageClick({} as any, slide.id);
   };
 
   const [{ isOver: isLayerOver, item }, drop] = useDrop<any, any, any>(() => ({
@@ -102,7 +102,7 @@ export function SlideRow(props: ISlideRowProps) {
       <div
         ref={drag}
         key={slide.id}
-        onClick={(event) => onSlideClick(event, slide.id)}
+        onClick={(event) => onPageClick(event, slide.id)}
         className={cx(
           css.slide,
           {
@@ -152,7 +152,7 @@ export function SlideRow(props: ISlideRowProps) {
           ></Button>
           {/*<Button
                   minimal
-                  onClick={() => setShowSettingsPanelForSlideId(slideId)}
+                  onClick={() => setShowSettingsPanelForSlideId(pageId)}
                   className={css.slideProperties}
                   small={true}
                   icon="cog"

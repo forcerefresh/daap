@@ -137,12 +137,12 @@ export const NavigationPanel: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, slides, selection } = state.project;
+  const { objects, layers, pages, selection } = state.project;
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   return {
     object,

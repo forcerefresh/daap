@@ -98,7 +98,7 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
 
       {ungroupingAllowed && (
         <MenuItem
-          text="Flatten"
+          text="Reset"
           icon="square"
           //label={"⌘G"}
           onClick={() => {

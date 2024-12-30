@@ -7,17 +7,17 @@ import thunk from "redux-thunk";
 import diff from "../3rd-party-libs/undo-redo/reducer";
 
 import { composeWithDevTools } from "redux-devtools-extension";
-import { slides } from "./reducers/slides";
+import { pages } from "./reducers/pages";
 import { layers } from "./reducers/layers";
 import { ISelection, selection } from "./reducers/selection";
 import { IStage, stage } from "./reducers/stage";
 import { objects } from "./reducers/objects";
 import { settings } from "./reducers/settings";
-import { IDocument, document } from "./reducers/document";
+// import { IDocument, document } from "./reducers/document";
 import { IAppSettings, globals } from "./reducers/globals";
 import { IFonts, fonts } from "./reducers/fonts";
 import { IMeta, meta } from "./reducers/meta";
-import { ISlides } from "./reducers/i-slides";
+import { IPages } from "./reducers/i-pages";
 import { ILayers } from "./reducers/i-layers";
 import { IObjects } from "./reducers/i-objects";
 import { editor, IEditor } from "./reducers/editor";
@@ -31,11 +31,11 @@ import { account, IAccount } from "./reducers/account";
 export interface IStore {
   project: {
     clipboard: IClipboard;
-    slides: ISlides;
+    pages: IPages;
     layers: ILayers;
     objects: IObjects;
     selection: ISelection;
-    document: IDocument;
+    // document: IDocument;
     settings: ISettings;
     diff: {
       prev: any[];
@@ -54,11 +54,11 @@ export interface IStore {
 const project = diff(
   combineReducers({
     clipboard,
-    slides,
+    pages,
     layers,
     objects,
     selection,
-    document,
+    // document,
     settings,
   }),
   {

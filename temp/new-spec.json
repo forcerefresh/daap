@@ -15,13 +15,13 @@
             "id": "dfdaa1f4-672f-4770-be78-80287ac0e535",
             "name": "Page 1",
             "layerIds": ["e670287f-9da5-4123-9c94-772eb55cc4c1"],
-            "nextLayerIdCounter": 2
+            "nextLayerNameNumber": 2
           },
           "dfdaa1f4-672f-4770-be78-80287ac0e535": {
             "id": "dfdaa1f4-672f-4770-be78-80287ac0e535",
             "name": "Page 2",
             "layerIds": ["e670287f-9da5-4123-9c94-772eb55cc4c1"],
-            "nextLayerIdCounter": 2
+            "nextLayerNameNumber": 2
           },
           "pages": [
             "dfdaa1f4-672f-4770-be78-80287ac0e535",
@@ -35,7 +35,7 @@
       "layerById": {
         "e670287f-9da5-4123-9c94-772eb55cc4c1": {
           "id": "e670287f-9da5-4123-9c94-772eb55cc4c1",
-          "slideId": "dfdaa1f4-672f-4770-be78-80287ac0e535",
+          "pageId": "dfdaa1f4-672f-4770-be78-80287ac0e535",
           "type": "layer",
           "name": "Layer 1",
           "objectIds": [],
@@ -122,9 +122,9 @@
             "linkTarget": "_blank",
             "linkHref": "http://////.....",
             "slideEvent": "click",
-            "slideReferenceType": "slideNo",
-            "slideNo": "1",
-            "slideId": "",
+            "slideReferenceType": "pageNo",
+            "pageNo": "1",
+            "pageId": "",
             "cursor": "default",
             "sliderActionOnEvent": "none"
           },

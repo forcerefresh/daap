@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   width: 700px;
-  height: 100vh;
+  height: calc(100vh - 52px);
   overflow: hidden;
 
   background: $pt-app-background-color;
@@ -30,12 +30,12 @@
     .bp5-form-content {
       display: flex;
       flex-direction: column;
-      > div:last-child {
-        order: 1;
-      }
-      > div:first-child {
-        order: 21;
-      }
+      // > div:last-child {
+      //   order: 1;
+      // }
+      // > div:first-child {
+      //   order: 21;
+      // }
     }
 
     /*.bp5-tab-panel {

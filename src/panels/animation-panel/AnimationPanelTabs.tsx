@@ -17,7 +17,7 @@ import {
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
-import { ISlide, SlideType } from "../../store/reducers/i-slides";
+import { IPage, PageType } from "../../store/reducers/i-pages";
 import { IStore } from "../../store/store";
 import { flattenForm } from "../../utils/form-layout/form-layout";
 import { IFormLayoutItem } from "webslider-sdk/lib/form/i-form-layout";
@@ -55,7 +55,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     className,
     objectById,
     layerById,
-    slideById,
+    pageById,
     _updateLayer,
     _updateObject,
     _updateSlide,
@@ -99,8 +99,8 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
   //       break;
   //     }
   //     case "slide": {
-  //       item = slideById[id];
-  //       transitions = (slideById[id] as ISlide).transitions;
+  //       item = pageById[id];
+  //       transitions = (pageById[id] as ISlide).transitions;
   //       break;
   //     }
   //   }
@@ -190,15 +190,15 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
     isAddStructuralDisabled =
       isAddStructuralDisabled ||
       (itemType === "slide" &&
-        ((item as unknown as ISlide).slideType === SlideType.Back ||
-          (item as unknown as ISlide).slideType === SlideType.Front));
+        ((item as unknown as IPage).type === PageType.Back ||
+          (item as unknown as IPage).type === PageType.Front));
 
     /*const objectOrLayerOrSlide =
       objectType === "object"
         ? objectById[id!]
         : objectType === "layer"
         ? layerById[id!]
-        : slideById[id!];*/
+        : pageById[id!];*/
 
     //let layer: ILayer | undefined;
     // let layerObjects: IObject[] | undefined;
@@ -469,7 +469,7 @@ const AnimationPanelTabs: React.FC<IAnimationPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, slides, selection } = state.project;
+  const { objects, layers, pages, selection } = state.project;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
@@ -490,7 +490,7 @@ const mapStateToProps = (state: IStore) => {
     objectType,
     objectById: objects.objectById,
     layerById: layers.layerById,
-    slideById: slides.slideById,
+    pageById: pages.pageById,
     layer,
     layerObjects,
   };
@@ -499,7 +499,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AnimationPanelTabs);

@@ -11,7 +11,7 @@ import {
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import {
-  addNewSlide,
+  addNewPage,
   deleteSlideThree,
   selectSlides,
   activateSlide,
@@ -30,7 +30,7 @@ import css from "./SlidesPanel.module.scss";
 import { EmptyID } from "../../store/types";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { IPreviewState } from "../../store/reducers/stage";
-import { SlideType } from "../../store/reducers/i-slides";
+import { PageType } from "../../store/reducers/i-pages";
 import {
   getRealExitSlideDurationVis,
   getRealSlideDurationVisual,
@@ -50,8 +50,8 @@ type ISlidesPanel = typeof mapDispatchToProps &
 
 const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   const {
-    normalSlides,
-    slideById,
+    pages,
+    pageById,
     selectedSlideIds,
     activeSlideId,
     previewState,
@@ -61,7 +61,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
     backSlideId,
     selectionForProperties,
     _selectForProperties,
-    _addNewSlide,
+    _addNewPage,
     _deleteSlideThree,
     _activateSlide,
     _selectSlides,
@@ -87,6 +87,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   }, []);
 
   const dropLayersOnLoadHandler = (item: any, monitor: any) => {
+    if (!loadSlideId) return; // TODO
+
     _moveLayers(loadSlideId, "slide", item.ids);
     _activateSlide(loadSlideId);
     _selectSlides([loadSlideId]);
@@ -109,6 +111,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   );
 
   const dropLayersOnFrontHandler = (item: any, monitor: any) => {
+    if (!frontSlideId) return; // TODO
+
     _moveLayers(frontSlideId, "slide", item.ids);
     _activateSlide(frontSlideId);
     _selectSlides([frontSlideId]);
@@ -131,6 +135,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   );
 
   const dropLayersOnBackHandler = (item: any, monitor: any) => {
+    if (!backSlideId) return; // TODO
+
     _moveLayers(backSlideId, "slide", item.ids);
     _activateSlide(backSlideId);
     _selectSlides([backSlideId]);
@@ -155,18 +161,18 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   const [showSettingsPanelForSlideId, setShowSettingsPanelForSlideId] =
     useState<string>(EmptyID);
 
-  const onSlideClick = (
+  const onPageClick = (
     event: React.MouseEvent<HTMLDivElement>,
-    slideId: string
+    pageId: string
   ) => {
     if (event.shiftKey) {
-      selectedSlideIds.indexOf(slideId) === -1
-        ? _addSlidesToSelection([slideId])
-        : _removeSlidesFromSelection([slideId]);
+      selectedSlideIds.indexOf(pageId) === -1
+        ? _addSlidesToSelection([pageId])
+        : _removeSlidesFromSelection([pageId]);
     } else {
-      _activateSlide(slideId);
-      _selectSlides([slideId]);
-      _selectForProperties({ id: slideId, type: "slide" });
+      _activateSlide(pageId);
+      _selectSlides([pageId]);
+      _selectForProperties({ id: pageId, type: "slide" });
     }
   };
 
@@ -178,11 +184,11 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   useOnClickOutside(ref, handleClickOutside, "color-picker-holder");
 
   //
-  const isSlideInPlay = (slideId: string) => {
+  const isSlideInPlay = (pageId: string) => {
     return (
       previewState.previewState === "play" &&
       previewState.scope?.entityType === "slide" &&
-      previewState.scope?.entityId === slideId
+      previewState.scope?.entityId === pageId
     );
   };
 
@@ -193,7 +199,7 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
   //       <Portal className="bp5-dark">
   //         {showSettingsPanelForSlideId !== EmptyID && (
   //           <div ref={ref}>
-  //             <SlideSettingsPanel slideId={showSettingsPanelForSlideId} />
+  //             <SlideSettingsPanel pageId={showSettingsPanelForSlideId} />
   //           </div>
   //         )}
   //       </Portal>
@@ -230,8 +236,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
         text="Delete selected"
         disabled={selectedSlideIds.length === 0}
         onClick={() => {
-          selectedSlideIds.forEach((slideId) => {
-            _deleteSlideThree(slideId);
+          selectedSlideIds.forEach((pageId) => {
+            _deleteSlideThree(pageId);
           });
           AppToaster.show({
             intent: "warning",
@@ -313,18 +319,18 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
             <Button
               minimal
               onClick={() => {
-                // if (!hasLicense && normalSlides.length >= 3) {
+                // if (!hasLicense && pages.length >= 3) {
                 //   AppToaster.show({
                 //     intent: "warning",
                 //     message:
                 //       "You have reached the maximum number of slides in the FREE version.",
                 //   });
                 // } else {
-                _addNewSlide(SlideType.Normal, true);
+                _addNewPage(PageType.Normal, true);
                 scrollToBottomDelayed();
                 // }
               }}
-              className={css.addNewSlide}
+              className={css.addNewPage}
               small={true}
               icon="add"
             ></Button>
@@ -346,11 +352,11 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
           </div>
         </PanelHeader>
         <div className={css.slidesHolder} ref={slidesHolderRef}>
-          {normalSlides.map((slideId: string, idx) => {
-            const slide = slideById[slideId];
-            const isLastSlide = idx === normalSlides.length - 1;
+          {pages.map((pageId: string, idx) => {
+            const slide = pageById[pageId];
+            const isLastSlide = idx === pages.length - 1;
             return (
-              <div key={slideId}>
+              <div key={pageId}>
                 {isDraggingSlides &&
                   selectedSlideIds.indexOf(slide.id) === -1 && (
                     <DropHandle
@@ -372,9 +378,9 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                   slide={slide}
                   activeSlideId={activeSlideId}
                   selectedSlideIds={selectedSlideIds}
-                  onSlideClick={onSlideClick}
+                  onPageClick={onPageClick}
                   selectionForProperties={selectionForProperties}
-                  inPlay={isSlideInPlay(slideId)}
+                  inPlay={isSlideInPlay(pageId)}
                   realSlideDuration={getRealSlideDurationVisual(
                     slide,
                     settings
@@ -384,8 +390,8 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
                     settings
                   )}
                   setStagePreview={_setStagePreview}
-                  deleteSlideThree={(slideId: string) => {
-                    _deleteSlideThree(slideId);
+                  deleteSlideThree={(pageId: string) => {
+                    _deleteSlideThree(pageId);
                     AppToaster.show({
                       intent: "warning",
                       message: "Page has been deleted.",
@@ -420,17 +426,17 @@ const SlidesPanel: React.FC<ISlidesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, selection, settings } = state.project;
+  const { pages, selection, settings } = state.project;
   const { previewState } = state.stage;
 
   // NOTE:  only one front and back slide
-  const loadSlideId = slides.loadSlides[0];
-  const frontSlideId = slides.frontSlides[0];
-  const backSlideId = slides.backSlides[0];
+  const loadSlideId = pages.loadPages?.[0];
+  const frontSlideId = pages.frontPages?.[0];
+  const backSlideId = pages.backPages?.[0];
 
   return {
-    normalSlides: slides.normalSlides,
-    slideById: slides.slideById,
+    pages: pages.pages,
+    pageById: pages.pageById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
     previewState,
@@ -443,7 +449,7 @@ const mapStateToProps = (state: IStore) => {
 };
 
 const mapDispatchToProps = {
-  _addNewSlide: addNewSlide,
+  _addNewPage: addNewPage,
   _duplicatSlides: (ids: string[]): any => duplicateSlides(ids),
   _deleteSlideThree: (id: string): any => deleteSlideThree(id),
   _activateSlide: (id: string): any => activateSlide(id),

@@ -102,7 +102,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
 
     const thumbnailPlayerData = generatePlayerData(
       { slides, layers, objects },
-      { entityType: "slide", entityId: slides.normalSlides[0] },
+      { entityType: "slide", entityId: slides.pages[0] },
       breakpointConfig!,
       breakpoints,
       settings,
@@ -144,7 +144,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       updateProject(id, {
         name: localMeta.name!,
         description: localMeta.description!,
-        slides: project.slides.normalSlides.length,
+        slides: project.pages.pages.length,
         project: updatedProject,
         preview: {
           width: thumbSize.width,
@@ -201,7 +201,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       createProject({
         name: localMeta.name!,
         description: localMeta.description!,
-        slides: project.slides.normalSlides.length,
+        slides: project.pages.pages.length,
         project: updatedProject,
         preview: {
           width: thumbSize.width,
@@ -283,7 +283,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       name: templateDialogData.name,
       description: templateDialogData.description,
       project: updatedProject,
-      slides: project.slides.normalSlides.length,
+      slides: project.pages.pages.length,
       preview: {
         width: thumbSize.width,
         height: thumbSize.height,
@@ -528,9 +528,9 @@ const mapStateToProps = (state: IStore) => {
   );
 
   return {
-    project: omit({ ...state.project }, "diff"),
+    project: omit({ ...state.project }, "diff", "clipboard"), //, "selection"
     meta: state.meta,
-    slides: state.project.slides,
+    slides: state.project.pages,
     layers: state.project.layers,
     objects: state.project.objects,
     breakpointConfig,

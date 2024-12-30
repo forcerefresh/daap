@@ -29,7 +29,7 @@ import css from "./StagePanelNew.module.scss";
 import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import {
   cancelOverrideStageTool,
   activateObject,
@@ -55,6 +55,8 @@ import {
   copyToClipboard,
   cutToClipboard,
   pasteObjectsFromClipboard,
+  setZoomFit,
+  forceRefresh,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
@@ -81,7 +83,11 @@ import ProjectSmallTimeline, {
 } from "../project-small-timeline/ProjectSmallTimeline";
 import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
-import { getZoom } from "../../store/helpers/calculateZoom";
+import {
+  getInitialStageTransform,
+  getZoom,
+  getZoom2,
+} from "../../store/helpers/calculateZoom";
 import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
 import ViewportSize from "../viewport-size/ViewportSize";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
@@ -99,13 +105,14 @@ import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
 import StageToolsCanvas from "./StageToolsCanvas";
 import { IClipboard } from "../../store/reducers/i-clipboard";
+import { useZoomPan } from "./zoom-pan/useZoomPan";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const StagePanelNew: React.FC<IStagePanel> = (props) => {
   const {
-    slides,
+    pages,
     layers,
     objects,
     stageZoom,
@@ -142,8 +149,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     selectedDevice,
     breakpoints,
     forceRefreshRand: _forceRefreshRand, // NOTE: check this
+    _forceRefresh,
     enableDeveloper,
     showGrid,
+    zoomFit,
     _setStageZoom,
     _setStagePan,
     _ungroupObject,
@@ -152,9 +161,31 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     _deleteObjects,
     _cutToClipboard,
     _copyToClipboard,
+    _setZoomFit,
     clipboard,
     _pasteObjectsFromClipboard,
   } = props;
+
+  const { spaceDown } = useKeyDown();
+
+  const { setRefs, canvasTransform, setTransform, handleScaleChange } =
+    useZoomPan({ spaceDown });
+
+  useEffect(() => {
+    console.log("++++++++++++++++");
+    console.log(viewPortSize);
+    console.log(breakpointConfig);
+
+    const newTransform = getInitialStageTransform(
+      viewPortSize,
+      breakpointConfig,
+      113
+    );
+
+    if (newTransform.scale > 0) {
+      setTransform(newTransform);
+    }
+  }, [viewPortSize, breakpointConfig]);
 
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
   const [manualProgress, setManualProgress] = useState(0);
@@ -270,8 +301,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   // const stageToolCanvasRef = useRef(); // TODO check this
   const { stageManager } = useContext(StageManagerContext);
 
-  const { spaceDown } = useKeyDown();
-
   const [isLocalPan, setLocalPan] = useState(false);
   useEffect(() => {
     if (stageManager.hasCurrentToolActive()) {
@@ -291,13 +320,39 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
   // const stageZoomRef = useRef(1);
   // stageZoomRef.current = stageZoom;
-  const rootRef = useRef<HTMLDivElement | null>(null);
 
-  // const {
-  //   activeTool,
-  //   activateTool,
-  //   activeObjectId: activeEditObjectId,
-  // } = useContext(ToolsContext);
+  useEffect(() => {
+    if (stageZoom !== canvasTransform.scale) {
+      _setStageZoom(canvasTransform.scale);
+      _setZoomFit(false);
+    }
+
+    _setStagePan({
+      x: canvasTransform.translateX,
+      y: canvasTransform.translateY,
+    });
+  }, [canvasTransform]);
+
+  useEffect(() => {
+    if (stageZoom !== canvasTransform.scale) {
+      handleScaleChange(stageZoom);
+      // setTransform({ scale: stageZoom });
+    }
+  }, [stageZoom]);
+
+  useEffect(() => {
+    if (zoomFit) {
+      setTransform(getInitialStageTransform(viewPortSize, breakpointConfig));
+    }
+  }, [zoomFit, viewPortSize, breakpointConfig]);
+
+  const stagePanelElementRef = useRef<HTMLDivElement | null>(null);
+  const stageElementRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setRefs(stagePanelElementRef, stageElementRef);
+  }, [stagePanelElementRef, stageElementRef]);
+  const { activeTool } = useContext(ToolsContext);
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
   // const pageSize = breakpointConfig?.normal.page!;
@@ -344,7 +399,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   let projectTimelineData: ProjectTimelineData | null = null;
   if (previewState.isPreview) {
     exportData = generatePlayerData(
-      { slides, layers, objects },
+      { slides: pages, layers, objects },
       previewState.scope,
       //stageSize,
       breakpointConfig!,
@@ -377,13 +432,13 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   // -------- PLAYER <<
   const { height: windowHeight, width: windowWidth } = useWindowSize();
   useEffect(() => {
-    if (rootRef.current) {
+    if (stagePanelElementRef.current) {
       _setViewPortSize({
-        w: (rootRef.current as any).clientWidth,
-        h: (rootRef.current as any).clientHeight,
+        w: (stagePanelElementRef.current as any).clientWidth,
+        h: (stagePanelElementRef.current as any).clientHeight,
       });
     }
-  }, [rootRef, windowWidth, windowHeight]);
+  }, [stagePanelElementRef, windowWidth, windowHeight]);
 
   // use form PAN tool
   // const [panMove, setPanMove] = useState({
@@ -395,24 +450,35 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   //   y: 0,
   // });
 
-  const stageXOffset = Math.round(
-    (viewPortSize.w - stageSize.width * stageZoom) / 2 +
-      stagePan.x +
-      stagePan.currentX //+
-    //panMoveStart.x
-  );
-  const stageYOffset = Math.round(
-    (viewPortSize.h - stageSize.height * stageZoom) / 2 +
-      stagePan.y +
-      stagePan.currentY //+
-    //panMoveStart.y
-  );
+  // const stageXOffset = useMemo(
+  //   () =>
+  //     Math.round(
+  //       (viewPortSize.w - stageSize.width * stageZoom) / 2 +
+  //         stagePan.x +
+  //         stagePan.currentX //+
+  //       //panMoveStart.x
+  //     ),
+  //   [stageSize, viewPortSize]
+  // );
+  // const stageYOffset = useMemo(
+  //   () =>
+  //     Math.round(
+  //       (viewPortSize.h - stageSize.height * stageZoom) / 2 +
+  //         stagePan.y +
+  //         stagePan.currentY //+
+  //       //panMoveStart.y
+  //     ),
+  //   [stageSize, viewPortSize]
+  // );
 
   const stageStyle: React.CSSProperties = {
-    top: 0 + stageYOffset + "px",
-    left: 0 + stageXOffset + "px",
-    width: stageSize.width * stageZoom + "px",
-    height: stageSize.height * stageZoom + "px",
+    // top: 0 + stageYOffset + "px",
+    // left: 0 + stageXOffset + "px",
+    // width: stageSize.width * stageZoom + "px",
+    // height: stageSize.height * stageZoom + "px",
+    // transform: "scale(" + stageZoom + ")",
+    // transformOrigin: "left top",
+
     overflowX: "visible", //isPreview ? "hidden" :
     overflowY: "visible", // isPreview ? "scroll" :
   };
@@ -422,13 +488,46 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     left: 0 + "px",
     width: stageSize.width + "px",
     height: stageSize.height + "px",
-    transform: "scale(" + stageZoom + ")",
-    transformOrigin: "left top",
+    // transform: "scale(" + stageZoom + ")",
+    // transformOrigin: "left top",
     // ...(isPreview
     //   ? { overflow: settings.hideOutsideContent ? "hidden" : "visibile" }
     //   : {}),
   };
+  // const toolsCanvasStyle = { ...canvasStyle };
 
+  if (showGrid) {
+    // const gridStrokeWidth = Math.max(0.5 / stageZoom);
+    const gridStrokeWidth = `calc(0.5px/var(--scale))`;
+
+    // const gridColor = "rgba(125, 125, 125, 0.1)";
+    // const gridLineWeight = `calc(2px/var(--scale))`;
+
+    // canvasStyle.willChange = "background";
+
+    // canvasStyle.backgroundImage = `linear-gradient(${gridColor} ${gridLineWeight}, transparent ${gridLineWeight}), linear-gradient(90deg, ${gridColor} ${gridLineWeight}, transparent ${gridLineWeight}), linear-gradient(rgba(150, 150, 150, .3) ${gridLineWeight}, transparent ${gridLineWeight}), linear-gradient(90deg, rgba(150, 150, 150, .3) ${gridLineWeight}, transparent ${gridLineWeight})`;
+    // canvasStyle.backgroundSize =
+    //   "100px 100px, 100px 100px, 20px 20px, 20px 20px";
+    // canvasStyle.backgroundPosition =
+    //   "-2px -2px, -2px -2px, -1px -1px, -1px -1px";
+
+    //   canvasStyle.backgroundImage = `
+    // linear-gradient(rgba(125, 125, 125, 0.1 ) ${gridStrokeWidth}, transparent ${gridStrokeWidth}),
+    // linear-gradient(90deg, rgba(125, 125, 125, 0.1) ${gridStrokeWidth}, transparent ${gridStrokeWidth}),
+    // linear-gradient(rgba(125, 125, 125, 0.15) ${gridStrokeWidth}, transparent ${gridStrokeWidth}),
+    // linear-gradient(90deg, rgba(125, 125, 125, 0.15) ${gridStrokeWidth}, transparent ${gridStrokeWidth})
+    // `;
+
+    //   if (stageZoom < 1) {
+    //     canvasStyle.backgroundSize =
+    //       "100px 100px, 100px 100px, 50px 50px, 50px 50px";
+    //   } else if (stageZoom > 5) {
+    //     canvasStyle.backgroundSize = "10px 10px, 10px 10px, 1px 1px, 1px 1px";
+    //   } else {
+    //     canvasStyle.backgroundSize =
+    //       "100px 100px, 100px 100px, 10px 10px, 10px 10px";
+    //   }
+  }
   // const [selectionStartPosition, setSelectionStartPosition] = useState<{
   //   x: number;
   //   y: number;
@@ -474,6 +573,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     // stageToolCanvasRef.current.handleStageScaleChange(newScale);
 
     _setStageZoom(newScale);
+    if (zoomFit) _setZoomFit(false);
 
     // x: stagePan.x + x,
     // y: stagePan.y + y,
@@ -506,23 +606,27 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   //   ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
   // };
 
-  const pageBorderStyle = {
-    top: -pageColumnHeight * stageZoom + "px",
-    left: -pageColumnWidth * stageZoom + "px",
-    width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
-    height: (breakpointConfig?.normal?.page.height || 0) * stageZoom + "px",
-  };
+  // const pageBorderStyle = {
+  //   top: -pageColumnHeight * stageZoom + "px",
+  //   left: -pageColumnWidth * stageZoom + "px",
+  //   width: (breakpointConfig?.normal?.page.width || 0) * stageZoom + "px",
+  //   height: (breakpointConfig?.normal?.page.height || 0) * stageZoom + "px",
+  // };
 
   const scrollableDivStyle: React.CSSProperties = {
     position: "relative",
-    left: -pageColumnWidth * stageZoom + "px",
-    top: -pageColumnHeight * stageZoom + "px",
+    // left: -pageColumnWidth * stageZoom - 55 + "px",
+    // top: -pageColumnHeight * stageZoom + "px",
     // top: isPreview
     //   ? -previewLayout.header.height - pageColumnHeight * stageZoom
     //   : -pageColumnHeight * stageZoom + "px",
-    width: parseInt(pageBorderStyle.width, 10) + "px",
+
     // width: parseInt(pageBorderStyle.width, 10) + (isPreview ? 14 : 0) + "px",
-    height: parseInt(pageBorderStyle.height, 10) + "px",
+    // width: parseInt(pageBorderStyle.width, 10) + "px",
+    // height: parseInt(pageBorderStyle.height, 10) + "px",
+
+    width: (breakpointConfig?.normal?.page.width || 0) + "px",
+    height: (breakpointConfig?.normal?.page.height || 0) + "px",
     overflowX: "visible",
     overflowY: "visible",
     border: "1px solid transparent",
@@ -538,23 +642,33 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     //   ? convertRGBColor2CSSProperties(settings.pageBackgroundColor)
     //   : {}),
   };
+
+  const toolsCanvasStyle = {
+    // left: -pageColumnWidth * stageZoom - 55 + "px",
+    // top: -pageColumnHeight * stageZoom + "px",
+  };
   // <<<<
 
   return (
     <React.Fragment>
       <div
-        ref={rootRef}
-        className={cx(css.stagePanel, {
+        ref={stagePanelElementRef}
+        className={cx("StagePanel", css.stagePanel, {
           [css.panCursor]: activeStageTool === StageTools.PAN,
           //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
         })}
+        // style={{ background: "green" }}
         onWheelCapture={(e) => {
-          if (stageManager.hasCurrentToolActive()) {
-            return;
-          }
-          handleMouseWheel(e);
+          // if (stageManager.hasCurrentToolActive()) {
+          //   return;
+          // }
+          // handleMouseWheel(e);
         }}
         onMouseDown={(e) => {
+          if (activeTool) {
+            return;
+          }
+
           e.persist();
 
           console.log("ASDASDASDS");
@@ -576,9 +690,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           //setSelectionStartPosition(null);
           // select parent
           if (selectionParentId) {
-            _activateObject(selectionParentId);
-            _selectObjects([selectionParentId]);
-            _selectForProperties({ type: "object", id: selectionParentId });
+            if (activeObjectId !== selectionParentId) {
+              _activateObject(selectionParentId);
+              _selectObjects([selectionParentId]);
+              _selectForProperties({ type: "object", id: selectionParentId });
+            }
           } else {
             console.log("uncomment 2");
             _activateObject(null);
@@ -639,7 +755,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         //alert("a");
         // }}
       >
-        <div style={stageStyle} className={cx("pan-and-zoom", css.stage)}>
+        <div
+          ref={stageElementRef}
+          style={stageStyle}
+          className={cx("pan-and-zoom", css.stage)}
+        >
           <div
             className={cx(css.scrollableHolder, "preview-scrollable-holder")}
             style={scrollableDivStyle}
@@ -671,52 +791,56 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
             </div>
             {/* class not set */}
             <div
-              style={{ ...canvasStyle, transform: "scale(" + 1 + ")" }}
+              style={{ ...toolsCanvasStyle, transform: "scale(" + 1 + ")" }}
               className={cx("stage-tools-canvas", css.stageToolsCanvas)}
             >
               <StageToolsCanvas />
               {/* //innerRef={stageToolCanvasRef} */}
             </div>
           </div>
-          {/* {isPreview && previewLayout.body.component} */}
-          {/* </div> */}
-        </div>
-      </div>
 
-      {/* Canvas for editing */}
-      <div
-        style={{ display: "none" }}
-        className={cx(css.toolCanvas, "MainToolCanvas")}
-      >
-        <div
-          className={"MainToolStage"}
-          style={{ ...stageStyle, position: "absolute" }}
-        ></div>
-        {/* <svg className={css.previewSvg} width="100%" height="100%"> */}
-        {/* <path
+          {/* -- */}
+          {/* Canvas for editing */}
+          <div
+            style={{ ...toolsCanvasStyle, display: "none" }}
+            className={cx(css.toolCanvas, "MainToolCanvas")}
+            // onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div
+              className={"MainToolStage"}
+              // style={{ ...stageStyle, position: "absolute" }}
+            ></div>
+            {/* <svg className={css.previewSvg} width="100%" height="100%"> */}
+            {/* <path
             fill="none"
             stroke="#d3d3d3"
             stroke-linejoin="round"
             stroke-linecap="round"
           ></path> */}
-        {/* </svg> */}
+            {/* </svg> */}
+          </div>
+          {/* -- */}
+
+          {/* {isPreview && previewLayout.body.component} */}
+          {/* </div> */}
+        </div>
       </div>
     </React.Fragment>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings, clipboard } =
+  const { pages, layers, objects, selection, document, settings, clipboard } =
     state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
@@ -725,7 +849,13 @@ const mapStateToProps = (state: IStore) => {
         breakpointConfig.type === state.stage.selectedDevice
     );
 
-  const zoom = getZoom(stage, settings);
+  // const zoom = getZoom2(
+  //   stage.zoomFit,
+  //   stage.stageViewportSize,
+  //   breakpointConfig
+  // );
+
+  const zoom = stage.zoom; //getZoom(stage, settings);
 
   ////console.log(zoom);
   const forceShowLayerId =
@@ -746,10 +876,10 @@ const mapStateToProps = (state: IStore) => {
       : undefined;
 
   return {
-    slides,
+    pages,
     layers,
     objects,
-    stageSize: document.documentSize,
+    // stageSize: document.documentSize,
     stageZoom: zoom,
     stagePan: stage.pan,
     previewState: stage.previewState,
@@ -773,6 +903,7 @@ const mapStateToProps = (state: IStore) => {
     enableDeveloper: state.globals.enableDeveloper,
     showGrid: state.globals.showGrid,
     clipboard,
+    zoomFit: stage.zoomFit,
   };
 };
 
@@ -805,7 +936,9 @@ const mapDispatchToProps = {
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
   _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
-  _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
+  _deleteObjects: (objectIds: string[]) => {
+    deleteObjects(objectIds);
+  },
   _cutToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">
   ): any => cutToClipboard(payload),
@@ -816,6 +949,8 @@ const mapDispatchToProps = {
   _pasteObjectsFromClipboard: (toLayerId: string): any =>
     pasteObjectsFromClipboard(toLayerId),
 
+  _setZoomFit: (fit: boolean) => setZoomFit(fit),
+  _forceRefresh: () => forceRefresh(),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 

@@ -17,7 +17,7 @@ import {
 import { ILayer } from "../../../store/reducers/i-layers";
 import { IStore } from "../../../store/store";
 import css from "./BasicProperties.module.scss";
-import { ISlide, SlideType } from "../../../store/reducers/i-slides";
+import { IPage, PageType } from "../../../store/reducers/i-pages";
 
 type IBasicProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -37,7 +37,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
     _updateSlide,
   } = props;
 
-  const renderSlideProperties = (slide: ISlide) => {
+  const renderSlideProperties = (slide: IPage) => {
     return (
       <>
         {getTextField(
@@ -49,7 +49,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             _updateSlide(retObj);
           },
           undefined,
-          { disabled: slide.slideType !== SlideType.Normal }
+          { disabled: !slide.type || slide.type !== PageType.Normal }
         )}
         {/* {getTextField("ID", slide.customId, (customId: string) => {
           const retObj = cloneDeep(slide);
@@ -163,7 +163,7 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings, slides } = state.project;
+  const { objects, layers, selection, settings, pages } = state.project;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
 
@@ -172,7 +172,7 @@ const mapStateToProps = (state: IStore) => {
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let panelName:
     | { name?: string; type: "object" | "layer" | "slide" }
@@ -203,7 +203,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BasicProperties);

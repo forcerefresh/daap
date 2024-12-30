@@ -8,32 +8,29 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import { ISettings } from "../store/reducers/i-settings";
-import { ISlide } from "../store/reducers/i-slides";
+import { IPage } from "../store/reducers/i-pages";
 
-export function getRealSlideDuration(slide: ISlide, settings: ISettings) {
+export function getRealSlideDuration(slide: IPage, settings: ISettings) {
   return "10s";
   // return slide.duration.inheritFrom === "inherit"
   //   ? settings.slideDuration
   //   : slide.duration.customValue;
 }
 
-export function getRealExitSlideDuration(slide: ISlide, settings: ISettings) {
+export function getRealExitSlideDuration(slide: IPage, settings: ISettings) {
   return "2s";
   // return slide.exitDuration.inheritFrom === "inherit"
   //   ? settings.exitSlideDuration
   // : slide.exitDuration.customValue;
 }
 
-export function getRealSlideDurationVisual(slide: ISlide, settings: ISettings) {
+export function getRealSlideDurationVisual(slide: IPage, settings: ISettings) {
   const dur = getRealSlideDuration(slide, settings);
   const durMs = convertTimeUnitToMs(dur);
   return (durMs / 1000).toString() + "s";
 }
 
-export function getRealExitSlideDurationVis(
-  slide: ISlide,
-  settings: ISettings
-) {
+export function getRealExitSlideDurationVis(slide: IPage, settings: ISettings) {
   const dur = getRealExitSlideDuration(slide, settings);
   const durMs = convertTimeUnitToMs(dur);
   return (durMs / 1000).toString() + "s exit";
@@ -208,4 +205,10 @@ export function hexToRGB(hex: string, a?: number) {
   } else {
     return { r, g, b, a: 1 };
   }
+}
+
+export function getNameFromFilename(filename: string): string {
+  const arr = filename.split(".");
+  arr.pop();
+  return arr.join(".");
 }

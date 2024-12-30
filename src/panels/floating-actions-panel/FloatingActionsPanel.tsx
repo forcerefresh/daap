@@ -63,6 +63,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     _normalizeObjectGroups,
     _deleteObjects,
     zoom,
+    pan,
   } = props;
   const mainRef = useRef<HTMLDivElement>(null);
   // const tmpRef = useRef<HTMLDivElement>(null);
@@ -157,7 +158,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     return () => {
       clearTimeout(timeout);
     };
-  }, [selectedObjectIds, objectById, zoom]);
+  }, [selectedObjectIds, objectById, zoom, pan]);
 
   return (
     <>
@@ -253,6 +254,7 @@ const mapStateToProps = (state: IStore) => {
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
     zoom: state.stage.zoom,
+    pan: state.stage.pan,
   };
 };
 

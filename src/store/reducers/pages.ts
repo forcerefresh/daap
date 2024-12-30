@@ -14,92 +14,89 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { ISlide, ISlides, SlideType } from "./i-slides";
+import { IPages, PageType } from "./i-pages";
 import { applyNewAnimationIdsToTransitionAbleElement } from "./objects";
 
-const getSlidesDefault = () => ({
-  nextSlideIdCounter: 1,
-  slideById: {},
-  allSlides: [],
-  normalSlides: [],
-  loadSlides: [],
-  frontSlides: [],
-  backSlides: [],
+const getPagesDefault = () => ({
+  nextPageNameNumber: 1,
+  pageById: {},
+  // allPages: [],
+  pages: [],
+  // loadPages: [],
+  // frontPages: [],
+  // backPages: [],
 });
 
-export function slides(
-  state: ISlides = getSlidesDefault(),
-  action: ActionTypes
-) {
+export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
   switch (action.type) {
     case ADD_SLIDE: {
-      const slide = action.payload;
+      const page = action.payload;
 
-      const allSlides = [...state.allSlides, slide.id];
+      // const allPages = [...state.allPages, page.id];
 
-      const loadSlides =
-        slide.slideType === SlideType.Load
-          ? [...state.loadSlides, slide.id]
-          : state.loadSlides;
+      const loadPages =
+        page.type === PageType.Load
+          ? [...(state.loadPages ?? []), page.id]
+          : state.loadPages;
 
-      const frontSlides =
-        slide.slideType === SlideType.Front
-          ? [...state.frontSlides, slide.id]
-          : state.frontSlides;
+      const frontPages =
+        page.type === PageType.Front
+          ? [...(state.frontPages ?? []), page.id]
+          : state.frontPages;
 
-      const backSlides =
-        slide.slideType === SlideType.Back
-          ? [...state.backSlides, slide.id]
-          : state.backSlides;
+      const backPages =
+        page.type === PageType.Back
+          ? [...(state.backPages ?? []), page.id]
+          : state.backPages;
 
-      const normalSlides =
-        slide.slideType === SlideType.Normal
-          ? [...state.normalSlides, slide.id]
-          : state.normalSlides;
+      const pages =
+        !page.type || page.type === PageType.Normal
+          ? [...state.pages, page.id]
+          : state.pages;
 
       return Object.assign({}, state, {
-        slideById: {
-          ...state.slideById,
-          ...{ [slide.id]: slide },
+        pageById: {
+          ...state.pageById,
+          ...{ [page.id]: page },
         },
-        allSlides,
-        normalSlides,
-        loadSlides,
-        frontSlides,
-        backSlides,
-        nextSlideIdCounter:
-          slide.slideType === SlideType.Normal
-            ? state.nextSlideIdCounter + 1
-            : state.nextSlideIdCounter,
-      });
+        // allPages,
+        pages,
+        loadPages: loadPages,
+        frontPages: frontPages,
+        backPages: backPages,
+        nextPageNameNumber:
+          !page.type || page.type === PageType.Normal
+            ? state.nextPageNameNumber + 1
+            : state.nextPageNameNumber,
+      } satisfies IPages);
     }
     case DELETE_SLIDE: {
-      const deleteId = action.payload.slideId;
-      const slideById = omit(state.slideById, [deleteId]);
-      const allSlides = without(state.allSlides, deleteId);
-      const normalSlides = without(state.normalSlides, deleteId);
-      const loadSlides = without(state.loadSlides, deleteId);
-      const frontSlides = without(state.frontSlides, deleteId);
-      const backSlides = without(state.backSlides, deleteId);
+      const deleteId = action.payload.pageId;
+      const pageById = omit(state.pageById, [deleteId]);
+      // const allPages = without(state.allPages, deleteId);
+      const pages = without(state.pages, deleteId);
+      const loadPages = without(state.loadPages, deleteId);
+      const frontPages = without(state.frontPages, deleteId);
+      const backPages = without(state.backPages, deleteId);
 
       return {
         ...state,
-        slideById,
-        allSlides,
-        normalSlides,
-        loadSlides,
-        backSlides,
-        frontSlides,
+        pageById,
+        // allPages,
+        pages,
+        loadPages,
+        backPages,
+        frontPages,
       };
     }
     case ADD_LAYER: {
       const layer = action.payload;
 
       return update(state, {
-        slideById: {
-          [layer.slideId]: {
+        pageById: {
+          [layer.pageId]: {
             layerIds: { $push: [layer.id] },
-            nextLayerIdCounter: (idx) => idx + 1,
+            nextLayerNameNumber: (idx) => idx + 1,
           },
         },
       });
@@ -108,32 +105,32 @@ export function slides(
       const slide = action.payload;
 
       return Object.assign({}, state, {
-        slideById: {
-          ...state.slideById,
+        pageById: {
+          ...state.pageById,
           ...{ [slide.id]: { ...slide } },
         },
-      });
+      } satisfies Partial<IPages>);
     }
     case DELETE_LAYERS: {
       const deleteLayerIds = action.payload;
 
-      // find slideId by first delete layer id (all delete layer ids belong to one slide)
-      let slideId: string = EmptyID;
-      forIn(state.slideById, function (slide, _slideId) {
+      // find pageId by first delete layer id (all delete layer ids belong to one slide)
+      let pageId: string = EmptyID;
+      forIn(state.pageById, function (slide, _pageId) {
         if (slide.layerIds.indexOf(deleteLayerIds[0]) !== -1) {
-          slideId = _slideId;
+          pageId = _pageId;
         }
       });
 
-      if (slideId === EmptyID) return state;
+      if (pageId === EmptyID) return state;
 
       return update(state, {
-        slideById: {
-          [slideId]: {
+        pageById: {
+          [pageId]: {
             layerIds: {
               $apply: (_layerIds: string[]) =>
                 without(
-                  state.slideById[slideId as string].layerIds,
+                  state.pageById[pageId as string].layerIds,
                   ...deleteLayerIds
                 ),
             },
@@ -143,9 +140,9 @@ export function slides(
     }
     case MOVE_LAYERS: {
       const payload = action.payload;
-      const slideById = cloneDeep(state.slideById);
+      const slideById = cloneDeep(state.pageById);
 
-      forIn(slideById, function (slide, _slideId) {
+      forIn(slideById, function (slide, _pageId) {
         remove(slide.layerIds, (id) => {
           return payload.moveIds.indexOf(id) !== -1;
         });
@@ -153,7 +150,7 @@ export function slides(
 
       // add layers above layer id
       if (payload.where === "above") {
-        forIn(slideById, function (slide, _slideId) {
+        forIn(slideById, function (slide, _pageId) {
           const idx = slide.layerIds.indexOf(payload.refId);
           if (idx !== -1) {
             slide.layerIds.splice(idx, 0, ...payload.moveIds);
@@ -175,26 +172,26 @@ export function slides(
 
     case MOVE_SLIDES: {
       const payload = action.payload;
-      const normalSlides = cloneDeep(state.normalSlides);
+      const pages = cloneDeep(state.pages);
 
-      remove(normalSlides, (id) => {
+      remove(pages, (id) => {
         return payload.moveIds.indexOf(id) !== -1;
       });
 
       // add layers above layer id
       if (payload.where === "above") {
-        const idx = normalSlides.indexOf(payload.refId);
+        const idx = pages.indexOf(payload.refId);
         if (idx != -1) {
-          normalSlides.splice(idx, 0, ...payload.moveIds);
+          pages.splice(idx, 0, ...payload.moveIds);
         }
       }
 
       // add object in layer (at bottom)
       if (payload.where === "bottom") {
-        normalSlides.splice(normalSlides.length, 0, ...payload.moveIds);
+        pages.splice(pages.length, 0, ...payload.moveIds);
       }
 
-      return { ...state, normalSlides };
+      return { ...state, pages };
     }
 
     case DUPLICATE: {
@@ -202,16 +199,16 @@ export function slides(
       const newState = cloneDeep(state);
       const dS = action.payload;
       dS.forEach((slideItem) => {
-        const fromSlide = state.slideById[slideItem.fromId];
+        const fromSlide = state.pageById[slideItem.fromId];
         if (!slideItem.skipCreate) {
           const toSlide = cloneDeep(fromSlide);
           //applyNewAnimationIdsToTransitionAbleElement(toSlide);
           toSlide.id = slideItem.toId as string;
           toSlide.name += " (copy)";
           toSlide.layerIds = slideItem.childs.map((item) => item.toId!);
-          newState.allSlides.push(toSlide.id);
-          newState.normalSlides.push(toSlide.id);
-          newState.slideById[toSlide.id] = toSlide;
+          // newState.allPages.push(toSlide.id);
+          newState.pages.push(toSlide.id);
+          newState.pageById[toSlide.id] = toSlide;
         } else {
           const toSlide = cloneDeep(fromSlide);
           // add new layer ids if skipCreate is not true
@@ -219,7 +216,7 @@ export function slides(
             item.skipCreate ? undefined : item.toId!
           );
           toSlide.layerIds = [...toSlide.layerIds, ...compact(layerIdToAdd)];
-          newState.slideById[toSlide.id] = toSlide;
+          newState.pageById[toSlide.id] = toSlide;
         }
       });
       return newState;
@@ -227,11 +224,11 @@ export function slides(
 
     case OPEN_PROJECT: {
       return {
-        ...action.payload.slides,
+        ...action.payload.pages,
       };
     }
     case CREATE_NEW_PROJECT: {
-      return getSlidesDefault();
+      return getPagesDefault();
     }
     default:
       return state;

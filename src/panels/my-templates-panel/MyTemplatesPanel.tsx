@@ -27,7 +27,7 @@ import css from "./MyTemplatesPanel.module.scss";
 import { ISettings } from "../../store/reducers/i-settings";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
-import { ISlides } from "../../store/reducers/i-slides";
+import { IPages } from "../../store/reducers/i-pages";
 import {
   preloadFonts,
   updateProjectWithNewIds,
@@ -148,7 +148,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       const project: {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
-        slides: ISlides;
+        slides: IPages;
       } = response.template.project;
 
       const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
@@ -177,7 +177,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      const slideIdToSelect = updatedProject.slides.normalSlides[0];
+      const slideIdToSelect = updatedProject.slides.pages[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);
@@ -233,7 +233,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find slider..."
+          placeholder="Find template..."
           rightElement={
             <Button
               large

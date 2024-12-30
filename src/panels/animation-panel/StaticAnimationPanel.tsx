@@ -6,7 +6,7 @@ import {
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { updateSlide } from "../../store/actions/actions";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { IStore } from "../../store/store";
 import AnimationPanelTabs from "./AnimationPanelTabs";
 import css from "./AnimationPanelTabs.module.scss";
@@ -19,7 +19,7 @@ type IStaticAnimationPanel = typeof mapDispatchToProps &
 
 const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
   const {
-    slideById,
+    pageById,
     selectionForProperties,
     hideHeader,
     className,
@@ -30,7 +30,7 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
   const id = selectionForProperties?.id!;
 
   // const getEnableSlideTransitionCheckbox = () => {
-  //   const slide = slideById[id];
+  //   const slide = pageById[id];
 
   //   return getCheckboxField(
   //     "Enable slide transition",
@@ -47,7 +47,7 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
 
   let slideForm = <></>;
   if (itemType === "slide") {
-    const slide = slideById[id];
+    const slide = pageById[id];
 
     // if (!slide.transitionEnabled) {
     //   return (
@@ -118,15 +118,15 @@ const StaticAnimationPanel: React.FC<IStaticAnimationPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides } = state.project;
+  const { pages } = state.project;
 
   const selectionForProperties = state.project.selection.selectionForProperties;
 
-  return { selectionForProperties, slideById: slides.slideById };
+  return { selectionForProperties, pageById: pages.pageById };
 };
 
 const mapDispatchToProps = {
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(

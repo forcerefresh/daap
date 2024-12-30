@@ -1,4 +1,4 @@
-import { ISlide, ISlides, SlideType } from "../reducers/i-slides";
+import { IPage, IPages, PageType } from "../reducers/i-pages";
 import { ILayer, ILayers } from "../reducers/i-layers";
 import { IStore } from "../store";
 import { v4 as uuid } from "uuid";
@@ -75,6 +75,7 @@ import { getUngroupObjectsCalculation } from "../../panels/stage-panel-new/stage
 import {
   getAncestorLayer,
   isObjectGroup,
+  isObjectInGroup,
   populateObjectThreeIds,
 } from "./actions-utils";
 import { IClipboard } from "../reducers/i-clipboard";
@@ -99,32 +100,32 @@ export interface IUndoableAction<IsUndoable = boolean, SkipHistory = boolean> {
 export const ADD_SLIDE = "Add slide";
 
 export interface AddSlideActionPayload {
-  slide: ISlide;
+  slide: IPage;
 }
 
 export interface AddSlideAction extends IUndoableAction<true> {
   type: typeof ADD_SLIDE;
-  payload: ISlide;
+  payload: IPage;
 }
 
 export function initializeSlideAndLayer(): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
-    if (getState().project.slides.allSlides.length === 0) {
+    if (getState().project.pages.pages.length === 0) {
       // load
-      const loadSlide = getDefaultSlide(SlideType.Load, "Load");
-      dispatch(addSlide(loadSlide));
-      dispatch(addNewLayer(loadSlide.id));
+      // const loadSlide = getDefaultSlide(PageType.Load, "Load");
+      // dispatch(addSlide(loadSlide));
+      // dispatch(addNewLayer(loadSlide.id));
       // back
-      const backSlide = getDefaultSlide(SlideType.Back, "Back");
-      dispatch(addSlide(backSlide));
-      dispatch(addNewLayer(backSlide.id));
+      // const backSlide = getDefaultSlide(PageType.Back, "Back");
+      // dispatch(addSlide(backSlide));
+      // dispatch(addNewLayer(backSlide.id));
       // front
-      const frontSlide = getDefaultSlide(SlideType.Front, "Front");
-      dispatch(addSlide(frontSlide));
-      dispatch(addNewLayer(frontSlide.id));
+      // const frontSlide = getDefaultSlide(PageType.Front, "Front");
+      // dispatch(addSlide(frontSlide));
+      // dispatch(addNewLayer(frontSlide.id));
       // normal
-      const slideName = `Page ${getState().project.slides.nextSlideIdCounter}`;
-      const slide = getDefaultSlide(SlideType.Normal, slideName);
+      const slideName = `Page ${getState().project.pages.nextPageNameNumber}`;
+      const slide = getDefaultSlide(PageType.Normal, slideName);
       dispatch(addSlide(slide));
       // select
       dispatch(activateSlide(slide.id));
@@ -138,15 +139,12 @@ export function initializeSlideAndLayer(): any {
   };
 }
 
-export function addNewSlide(
-  slideType = SlideType.Normal,
-  addLayer = false
-): any {
+export function addNewPage(pageType = PageType.Normal, addLayer = false): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
-    const slide: ISlide = {
+    const slide: IPage = {
       id: uuid(),
-      customId: "",
-      name: `Page ${getState().project.slides.nextSlideIdCounter}`,
+      //customId: "",
+      name: `Page ${getState().project.pages.nextPageNameNumber}`,
       // duration: {
       //   inheritFrom: "inherit",
       //   customValue: "10s",
@@ -157,8 +155,8 @@ export function addNewSlide(
       // },
       // moveToTop: true,
       layerIds: [],
-      nextLayerIdCounter: 1,
-      slideType,
+      nextLayerNameNumber: 1,
+      ...(pageType === PageType.Normal ? {} : { pageType }),
       // transitionEnabled: false,
       // transitionOverlapTime: "1000ms",
       // transitionDurationTime: "1000ms",
@@ -173,7 +171,7 @@ export function addNewSlide(
   };
 }
 
-export function addSlide(slide: ISlide): AddSlideAction {
+export function addSlide(slide: IPage): AddSlideAction {
   return {
     type: ADD_SLIDE,
     payload: slide,
@@ -186,7 +184,7 @@ export function addSlide(slide: ISlide): AddSlideAction {
 export const DELETE_SLIDE = "Delete slide";
 
 export interface DeleteSlideActionPayload {
-  slideId: string;
+  pageId: string;
 }
 
 export interface DeleteSlideAction extends IUndoableAction<true> {
@@ -194,9 +192,9 @@ export interface DeleteSlideAction extends IUndoableAction<true> {
   payload: DeleteSlideActionPayload;
 }
 
-export function deleteSlideThree(slideId: string) {
+export function deleteSlideThree(pageId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const layerIds = getState().project.slides.slideById[slideId].layerIds;
+    const layerIds = getState().project.pages.pageById[pageId].layerIds;
     const objectById = getState().project.objects.objectById;
     const layerById = getState().project.layers.layerById;
 
@@ -217,14 +215,14 @@ export function deleteSlideThree(slideId: string) {
     );
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
-    dispatch(deleteSlide(slideId));
+    dispatch(deleteSlide(pageId));
   };
 }
 
-export function deleteSlide(slideId: string): DeleteSlideAction {
+export function deleteSlide(pageId: string): DeleteSlideAction {
   return {
     type: DELETE_SLIDE,
-    payload: { slideId },
+    payload: { pageId: pageId },
     isUndoable: true,
   };
 }
@@ -235,10 +233,10 @@ export const UPDATE_SLIDE = "Update slide";
 
 export interface UpdateSlideAction extends IUndoableAction<true> {
   type: typeof UPDATE_SLIDE;
-  payload: ISlide;
+  payload: IPage;
 }
 
-export function updateSlide(slide: ISlide): UpdateSlideAction {
+export function updateSlide(slide: IPage): UpdateSlideAction {
   return {
     type: UPDATE_SLIDE,
     payload: slide,
@@ -284,9 +282,9 @@ export function duplicateSlides(slideIds: string[]) {
 
     const newObjectIds: string[] = [];
 
-    slideIds.forEach((slideId) => {
+    slideIds.forEach((pageId) => {
       const duplicateLayersSchema: IDuplicateSchema = [];
-      const layerIds = getState().project.slides.slideById[slideId].layerIds;
+      const layerIds = getState().project.pages.pageById[pageId].layerIds;
       layerIds.forEach((layerId) => {
         const duplicateObjectSchema: IDuplicateSchema = [];
 
@@ -329,7 +327,7 @@ export function duplicateSlides(slideIds: string[]) {
       });
 
       duplicateSlidesSchema.push({
-        fromId: slideId,
+        fromId: pageId,
         toId: uuid(),
         childs: duplicateLayersSchema,
       });
@@ -349,10 +347,10 @@ export interface AddLayerAction extends IUndoableAction<true> {
   payload: ILayer;
 }
 
-export function addNewLayer(slideId: string): any {
+export function addNewLayer(pageId: string): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const nextId =
-      getState().project.slides.slideById[slideId].nextLayerIdCounter;
+      getState().project.pages.pageById[pageId].nextLayerNameNumber;
 
     // size fro absolute posstion from breakpoint;
     const breakpointsConfiguration =
@@ -367,7 +365,7 @@ export function addNewLayer(slideId: string): any {
       id: uuid(),
       // customId: "",
       type: "layer",
-      slideId,
+      pageId: pageId,
       // isBackground: isBackground,
       // name: isBackground ? `Background layer` : `Layer ${nextId}`,
       name: `Layer ${nextId}`,
@@ -375,10 +373,10 @@ export function addNewLayer(slideId: string): any {
       objectIds: [],
       //transitions: getDefaultTransitionsForLayer(),
       //responsiveVisibility: { showAll: true, displayOn: [] },
-      left: 0,
-      top: 0,
-      width: absoluteSize?.width,
-      height: absoluteSize?.height,
+      // left: 0,
+      // top: 0,
+      // width: absoluteSize?.width,
+      // height: absoluteSize?.height,
       // definition: {
       //   values: {
       //     hasLayoutChildren: false,
@@ -528,11 +526,18 @@ export function duplicateLayers(layerIds: string[]) {
 
     const duplicateSlidesSchema: IDuplicateSchema = [];
 
-    const allSlides = getState().project.slides.allSlides;
+    const pages = getState().project.pages;
+    const allSlides = [
+      ...pages.pages,
+      ...(pages.frontPages ?? []),
+      ...(pages.backPages ?? []),
+      ...(pages.loadPages ?? []),
+    ];
+
     allSlides.forEach((allSlideId) => {
       const duplicateLayersSchema: IDuplicateSchema = [];
       const allLayerIds =
-        getState().project.slides.slideById[allSlideId].layerIds;
+        getState().project.pages.pageById[allSlideId].layerIds;
       const currentLayersIds = intersection(allLayerIds, layerIds);
 
       currentLayersIds.forEach((currentLayerId) => {
@@ -630,24 +635,23 @@ export interface ActivateSlideAction extends IUndoableAction<true, true> {
   payload: string;
 }
 
-function _activateSlide(slideId: string): ActivateSlideAction {
+function _activateSlide(pageId: string): ActivateSlideAction {
   return {
     type: ACTIVATE_SLIDE,
-    payload: slideId,
+    payload: pageId,
     isUndoable: true,
     skipHistory: true,
   };
 }
 
-export function activateSlide(slideId: string) {
+export function activateSlide(pageId: string) {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    if (getState().project.selection.activeSlideId === slideId) {
+    if (getState().project.selection.activeSlideId === pageId) {
       return;
     }
-    dispatch(_activateSlide(slideId));
+    dispatch(_activateSlide(pageId));
     // activate first layer (BY DESING)
-    const firstLayerId =
-      getState().project.slides.slideById[slideId].layerIds[0];
+    const firstLayerId = getState().project.pages.pageById[pageId].layerIds[0];
     if (firstLayerId) {
       dispatch(activateLayer(firstLayerId));
       dispatch(selectLayers([firstLayerId]));
@@ -1252,7 +1256,8 @@ export function addNewObject(
       parentId: layerId,
     };
 
-    const nextNameIdx = getState().project.objects.nextObjectId[type] || 1;
+    const nextNameIdx =
+      getState().project.objects.nextObjectNameNumber[type] || 1;
     object.name = humanizeSting(type, true) + " " + nextNameIdx;
 
     switch (object.type) {
@@ -1308,11 +1313,34 @@ export interface DeleteObjectsAction extends IUndoableAction<true> {
   payload: string[];
 }
 
-export function deleteObjects(objectIds: string[]): DeleteObjectsAction {
+export function _deleteObjects(objectIds: string[]): DeleteObjectsAction {
   return {
     type: DELETE_OBJECTS,
     payload: objectIds,
     isUndoable: true,
+  };
+}
+
+export function deleteObjects(objectToDeleteIds: string[]) {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const objectById = getState().project.objects.objectById;
+
+    const finalObjectToDeleteIds = objectToDeleteIds.map((objectToDeleteId) => {
+      const objectToDelete = objectById[objectToDeleteId];
+      if (isObjectInGroup(objectToDelete, objectById)) {
+        // check if after delete group will be empty
+        const group = objectById[objectToDelete.parentId!];
+        const newIds = group.objectIds?.filter(
+          (objId) => !objectToDeleteIds.includes(objId)
+        );
+
+        // if group will be empty return group id - we are deleting group as well
+        if (newIds?.length === 0) return group.id;
+      }
+      return objectToDeleteId;
+    });
+
+    dispatch(_deleteObjects(finalObjectToDeleteIds));
   };
 }
 
@@ -1328,11 +1356,18 @@ export function duplicateObjects(objectIds: string[]) {
 
     const newObjectIds: string[] = [];
 
-    const allSlides = getState().project.slides.allSlides;
+    const pages = getState().project.pages;
+    const allSlides = [
+      ...pages.pages,
+      ...(pages.frontPages ?? []),
+      ...(pages.backPages ?? []),
+      ...(pages.loadPages ?? []),
+    ];
+
     allSlides.forEach((allSlideId) => {
       const duplicateLayersSchema: IDuplicateSchema = [];
       const allLayerIds =
-        getState().project.slides.slideById[allSlideId].layerIds;
+        getState().project.pages.pageById[allSlideId].layerIds;
       //const currentLayersIds = intersection(allLayerIds, layerIds);
       allLayerIds.forEach((allLayerId) => {
         const duplicateObjectSchema: IDuplicateSchema = [];
@@ -1628,7 +1663,8 @@ export function groupObjects(objectIds: string[]): any {
       layerId,
     };
 
-    const nextNameIdx = getState().project.objects.nextObjectId["group"] || 1;
+    const nextNameIdx =
+      getState().project.objects.nextObjectNameNumber["group"] || 1;
     groupObject.name = humanizeSting("group", true) + " " + nextNameIdx;
 
     // objects.forEach((object) => {
@@ -1722,8 +1758,8 @@ function handleObjectUpdate(
 //   }
 
 //   const layer = getState().project.layers.layerById[object.layerId];
-//   const slideId = layer.slideId;
-//   const slide = getState().project.slides.slideById[slideId];
+//   const pageId = layer.pageId;
+//   const slide = getState().project.pages.pageById[pageId];
 //   const layerById = getState().project.layers.layerById;
 
 //   let objectIdsInSlide: any[] = [];
@@ -2043,6 +2079,7 @@ export function setDocumentSize(
 export const getZoomScale = () => [
   10, 20, 40, 60, 80, 100, 125, 150, 175, 200, 300, 400, 500, 600, 800, 1000,
 ];
+
 export const SET_STAGE_ZOOM = "Set stage zoom";
 
 export interface SetStageZoomAction extends IUndoableAction<false> {
@@ -2436,7 +2473,7 @@ export const OPEN_PROJECT = "Open project";
 export interface OpenProjectAction extends IUndoableAction<false> {
   type: typeof OPEN_PROJECT;
   payload: {
-    slides: ISlides;
+    pages: IPages;
     layers: ILayers;
     objects: IObjects;
     selection: ISelection;
@@ -2446,7 +2483,7 @@ export interface OpenProjectAction extends IUndoableAction<false> {
 }
 
 export function openProject(project: {
-  slides: ISlides;
+  pages: IPages;
   layers: ILayers;
   objects: IObjects;
   selection: ISelection;

@@ -33,7 +33,7 @@ import css from "./StagePanelNew.module.scss";
 import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import {
   cancelOverrideStageTool,
   activateObject,
@@ -113,7 +113,7 @@ type IStagePanel = typeof mapDispatchToProps &
 const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
     // innerRef, // do wee need this
-    slides,
+    pages,
     layers,
     objects,
     stageZoom,
@@ -239,7 +239,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   const style: CSSProperties = useMemo(() => {
     if (selectedObjectId) {
-      console.log(stageZoom);
+      // console.log(stageZoom);
       // >>>>>>>>>>>>>>>>>>
       // duplicate 123
       const objectPath: string[] = [];
@@ -643,17 +643,17 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings } =
+  const { pages, layers, objects, selection, document, settings } =
     state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
@@ -683,10 +683,10 @@ const mapStateToProps = (state: IStore) => {
       : undefined;
 
   return {
-    slides,
+    pages,
     layers,
     objects,
-    stageSize: document.documentSize,
+    // stageSize: document.documentSize,
     stageZoom: zoom,
     stagePan: stage.pan,
     previewState: stage.previewState,

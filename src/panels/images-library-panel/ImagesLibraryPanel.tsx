@@ -782,27 +782,31 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     >
                       <div
                         className={css.imageHolder}
+                        onMouseDown={(e) => {
+                          e.stopPropagation();
+                        }}
                         onClick={(e) => {
+                          e.stopPropagation();
                           // TODO duplicated code
-                          if (activeLayerId) {
-                            if (addObject) {
-                              _addNewObject(
-                                activeLayerId,
-                                "image", //cover
-                                {},
-                                {
-                                  image: {
-                                    image: (image?.images as any)[
-                                      originalResolution!
-                                    ],
-                                    filename: "",
-                                  },
-                                }
-                              );
-                            }
+                          // if (activeLayerId) {
+                          //   if (addObject) {
+                          //     _addNewObject(
+                          //       activeLayerId,
+                          //       "image", //cover
+                          //       {},
+                          //       {
+                          //         image: {
+                          //           image: (image?.images as any)[
+                          //             originalResolution!
+                          //           ],
+                          //           filename: "",
+                          //         },
+                          //       }
+                          //     );
+                          //   }
 
-                            onRequestClose();
-                          }
+                          //   onRequestClose();
+                          // }
                         }}
                       >
                         <img

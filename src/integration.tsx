@@ -451,7 +451,10 @@ function useObjectStorageFactory() {
 }
 
 function useMyMediaHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (process.env.REACT_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/my-uploads/saas-my-uploads-hook")
+      .useMyMediaHook;
+  } else if (process.env.REACT_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/my-uploads/electron-my-uploads-hook")
       .useMyMediaHook;
   } else {

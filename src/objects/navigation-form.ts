@@ -30,8 +30,8 @@ export type NavigationTuple = [
           IFormSwitchGroupItem<
             "slideReferenceType",
             [
-              IFormSwitchGroup<[ITextInput<"slideNo">]>,
-              IFormSwitchGroup<[ITextInput<"slideId">]>,
+              IFormSwitchGroup<[ITextInput<"pageNo">]>,
+              IFormSwitchGroup<[ITextInput<"pageId">]>,
               IFormSwitchGroup<[]>,
               IFormSwitchGroup<[]>,
               IFormSwitchGroup<
@@ -148,11 +148,11 @@ export const navigationDefinition: NavigationTuple = [
             groups: [
               {
                 groupName: "No",
-                groupValue: "slideNo",
+                groupValue: "pageNo",
                 elements: [
                   {
                     displayName: "Page No",
-                    propertyName: "slideNo",
+                    propertyName: "pageNo",
                     inputType: InputType.TEXT,
                     value: "1",
                     defaultValue: "1",
@@ -161,11 +161,11 @@ export const navigationDefinition: NavigationTuple = [
               },
               {
                 groupName: "Id",
-                groupValue: "slideId",
+                groupValue: "pageId",
                 elements: [
                   {
                     displayName: "Page Id",
-                    propertyName: "slideId",
+                    propertyName: "pageId",
                     inputType: InputType.TEXT,
                     value: "",
                     defaultValue: "",

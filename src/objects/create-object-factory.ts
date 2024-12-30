@@ -7,7 +7,7 @@ import {
   SourceImagePropertiesTuple,
   SourceImageValues,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { ISlide, SlideType } from "../store/reducers/i-slides";
+import { IPage, PageType } from "../store/reducers/i-pages";
 import { FormType } from "webslider-sdk/lib/form/i-form-layout";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 import { createSvgObject, SVG } from "./svg/svg";
@@ -241,10 +241,10 @@ export function getBorderOptions() {
   ];
 }
 
-export function getDefaultSlide(slideType: SlideType, name?: string): ISlide {
+export function getDefaultSlide(pageType: PageType, name?: string): IPage {
   return {
     id: uuid(),
-    customId: "",
+    // customId: "",
     name,
     // duration: {
     //   inheritFrom: "inherit",
@@ -255,8 +255,8 @@ export function getDefaultSlide(slideType: SlideType, name?: string): ISlide {
     //   customValue: "1s",
     // },
     layerIds: [],
-    nextLayerIdCounter: 1,
-    slideType,
+    nextLayerNameNumber: 1,
+    ...(pageType === PageType.Normal ? {} : { type: pageType }),
     // transitionEnabled: false,
     // transitionOverlapTime: "1000ms",
     // transitionDurationTime: "1000ms",

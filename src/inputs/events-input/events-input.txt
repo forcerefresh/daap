@@ -14,7 +14,7 @@ export const EventsInputForm: React.FC<IEventsInput & IUpdateInput> = (
 ) => {
   const { displayName, value, onChange } = props;
 
-  const action: IGoToSlideAction = { action: "goToSlideAction", slideId: 1 };
+  const action: IGoToSlideAction = { action: "goToPageAction", pageIdId: 1 };
   const oneValue: IObjectEvent = value?.events?.[0] || {
     type: "click",
     action: action,
@@ -45,7 +45,7 @@ export const EventsInputForm: React.FC<IEventsInput & IUpdateInput> = (
         <NumericInput
           intent={!slideIdxValid ? Intent.WARNING : Intent.NONE}
           id="event-input-slide-idx"
-          value={(oneValue.action as IGoToSlideAction).slideId}
+          value={(oneValue.action as IGoToSlideAction).pageId}
           onValueChange={(value, valueAsString) => {
             //updateValue(valueAsString);
 
@@ -55,7 +55,7 @@ export const EventsInputForm: React.FC<IEventsInput & IUpdateInput> = (
                   ...oneValue,
                   action: {
                     ...action,
-                    slideId: parseInt(valueAsString),
+                    pageId: parseInt(valueAsString),
                   },
                 },
               ],

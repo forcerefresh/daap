@@ -62,7 +62,7 @@ export const AnimationConfigurationForm: React.FC<
     objectType,
     objectById,
     layerById,
-    slideById,
+    pageById,
     animationType,
     _updateObject,
     _updateLayer,
@@ -79,7 +79,7 @@ export const AnimationConfigurationForm: React.FC<
       ? objectById[objectId]
       : objectType === "layer"
       ? layerById[objectId]
-      : slideById[objectId];*/
+      : pageById[objectId];*/
 
   /*let layer: ILayer | undefined;
   let layerObjects: IObject[] | undefined;
@@ -507,7 +507,7 @@ const mapStateToProps = (state: IStore) => {
   return {
     objectById: objects.objectById,
     layerById: layers.layerById,
-    slideById: slides.slideById,
+    pageById: slides.pageById,
   };
 };
 

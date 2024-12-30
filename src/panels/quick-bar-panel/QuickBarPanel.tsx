@@ -185,7 +185,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               <div className={css.sliderHolder}>
                 {getSelectSlider(
                   "",
-                  activeObject?.style?.commonOpacity ?? 100,
+                  activeObject?.style?.opacity ?? 100,
                   {
                     min: 0,
                     max: 100,
@@ -198,14 +198,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
                     if (!activeObject) return;
                     const retObj = cloneDeep(activeObject);
                     if (!retObj.style) retObj.style = {};
-                    retObj.style.commonOpacity = parseInt(opacity);
+                    retObj.style.opacity = parseInt(opacity);
                     updateObject(retObj);
                   },
                   (opacity: string) => {
                     if (!activeObject) return;
                     const retObj = cloneDeep(activeObject);
                     if (!retObj.style) retObj.style = {};
-                    retObj.style.commonOpacity = parseInt(opacity);
+                    retObj.style.opacity = parseInt(opacity);
                     updateObjectForPreview(retObj);
                   }
                 )}
@@ -213,8 +213,27 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             }
           >
             <Button
-              style={{ transform: "rotate(180deg)" }}
-              icon={<OpacityIcon />}
+              icon={
+                <>
+                  <OpacityIcon style={{ transform: "rotate(180deg)" }} />
+                  {
+                    <span
+                      style={{
+                        position: "absolute",
+                        opacity: 0.8,
+                        // marginLeft: "9px",
+                        color: "#fff",
+                        textShadow: "1px 1px 2px black",
+                        background: "#33333357",
+                        lineHeight: "13px",
+                      }}
+                    >
+                      {activeObject?.style?.opacity !== 100 &&
+                        activeObject?.style?.opacity}
+                    </span>
+                  }
+                </>
+              }
               minimal
               className={cx(css.button, css.squareButton)}
               disabled={selectedObjectIds.length !== 1}

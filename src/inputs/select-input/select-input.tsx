@@ -1,16 +1,12 @@
 import { FormGroup, HTMLSelect, Intent } from "@blueprintjs/core";
 import React, { ChangeEvent } from "react";
-import { getGlobals } from "../../globals";
 import { getUnderFieldText } from "../input-utils";
 import { ISelectInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { createInputLabel } from "../input-helpers";
 
-export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
-  props
-) => {
+export const TagsInputForm: React.FC<ISelectInput & IUpdateInput> = (props) => {
   const {
     displayName,
-    options,
     value,
     onChange,
     helperText,

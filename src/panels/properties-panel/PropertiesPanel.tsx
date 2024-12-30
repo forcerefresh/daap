@@ -17,7 +17,7 @@ import {
   updateSlide,
 } from "../../store/actions/actions";
 import { ILayer, layerDefinition } from "../../store/reducers/i-layers";
-import { ISlide, SlideType } from "../../store/reducers/i-slides";
+import { IPage, PageType } from "../../store/reducers/i-pages";
 import { ISlideDuration } from "webslider-sdk/lib/common/i-slider-duration";
 import { IStore } from "../../store/store";
 import FormWithLayout, {
@@ -54,8 +54,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     objects,
   } = props;
 
-  const renderSlideProperties = (slide: ISlide) => {
-    if (slide.slideType === SlideType.Normal) {
+  const renderSlideProperties = (slide: IPage) => {
+    if (!slide.type || slide.type === PageType.Normal) {
       return (
         <>
           {/* {getInheritTimeField(
@@ -337,7 +337,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings, slides } = state.project;
+  const { objects, layers, selection, settings, pages } = state.project;
   const { selectedDevice } = state.stage;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
@@ -351,7 +351,7 @@ const mapStateToProps = (state: IStore) => {
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let panelName:
     | { name?: string; type: "object" | "layer" | "slide" }
@@ -387,7 +387,7 @@ const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateObjectForPreview: (object: IObject) => updateObjectForPreview(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);

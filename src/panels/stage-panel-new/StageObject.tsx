@@ -15,7 +15,7 @@ import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
@@ -252,8 +252,11 @@ export function StageObjectInternal(props: IStageLayer) {
   };
 
   objectStyle.position = cssPosition;
-  if (object.transform?.hasPerspective) {
-    objectStyle.perspective = `${object.transform?.transformPerspective}`;
+  if (
+    object.transform?.perspective &&
+    object.transform?.perspective !== "0px"
+  ) {
+    objectStyle.perspective = `${object.transform?.perspective}`;
   }
 
   // NOTO: We are explicitly moving div, ad when x,y is not change it does not rerender.
@@ -527,7 +530,11 @@ export function StageObjectInternal(props: IStageLayer) {
                         `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
                       ),
                   }}
-                  style={{ ...objectStyle, ...maskStyle }}
+                  style={{
+                    ...objectStyle,
+                    ...maskStyle,
+                    overflow: object.style?.overflow ?? "visible",
+                  }}
                   // className={cx({
                   //   [css.notVisible]: !object.isVisible,
                   //   [css.layoutChildrenSelected]: isSelected,
@@ -579,17 +586,17 @@ export function StageObjectInternal(props: IStageLayer) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings, clipboard } =
+  const { pages, layers, objects, selection, document, settings, clipboard } =
     state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
@@ -614,10 +621,10 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     clipboard,
-    slides,
+    pages,
     layers,
     objects,
-    stageSize: document.documentSize,
+    // stageSize: document.documentSize,
     stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,

@@ -23,7 +23,7 @@ import css from "./StagePanel.module.scss";
 import { generatePlayerData, getObjectHtml } from "../../export/export-html";
 
 import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import {
   activateObject,
   addNewObject,
@@ -40,6 +40,7 @@ import {
   setStageTool,
   setStageZoom,
   setViewPortSize,
+  setZoomFit,
   updateObject,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
@@ -90,9 +91,10 @@ type IStagePanel = typeof mapDispatchToProps &
 
 const StagePanel: React.FC<IStagePanel> = (props) => {
   const {
-    slides,
+    pages,
     layers,
     objects,
+    zoomFit,
     stageZoom,
     previewState,
     layerArr,
@@ -153,7 +155,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   let projectTimelineData: ProjectTimelineData | null = null;
   if (previewState.isPreview) {
     exportData = generatePlayerData(
-      { slides, layers, objects },
+      { pages, layers, objects },
       previewState.scope,
       //stageSize,
       breakpointConfig!,
@@ -164,7 +166,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     );
 
     //let totalDuration = 0;
-    const slideTimelineDataArr: SlideTimelineData[] = exportData.slides.map(
+    const slideTimelineDataArr: SlideTimelineData[] = exportData.pages.map(
       (slideData) => {
         return {
           duration: convertTimeUnitToMs(
@@ -180,7 +182,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       }
     );
 
-    projectTimelineData = { slides: slideTimelineDataArr };
+    projectTimelineData = { pages: slideTimelineDataArr };
   }
 
   const { ctrlDown, spaceDown, escapeDown } = useKeyDown();
@@ -381,6 +383,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
       var newPanY = initialPanRef.current.y;
 
       setPanMove({ x: newPanX, y: newPanY });
+      if (zoomFit) setZoomFit(false);
     }
   }
   function getStyleInt(target: HTMLElement, key: any) {
@@ -831,7 +834,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     if (activeEditObjectId === objectId) return null;
 
     // thumbnail arr
-    // const slidesArr = getNormalSlideArr(slides);
+    // const slidesArr = getNormalSlideArr(pages);
     // const slidesCounter = slidesArr.length;
     // const thumbnailHtmlArr = getThumbnailHtmlArr(slidesArr, layers, objects);
 
@@ -1739,17 +1742,17 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings } =
+  const { pages, layers, objects, selection, document, settings } =
     state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
@@ -1772,14 +1775,15 @@ const mapStateToProps = (state: IStore) => {
   // }
 
   return {
-    slides,
+    pages,
     layers,
     objects,
-    stageSize: document.documentSize,
+    // stageSize: document.documentSize,
     stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,
     slide,
+    zoomFit: stage.zoomFit,
     objectById: objects.objectById,
     activeObjectId: selection.activeObjectId,
     activeLayerId: selection.activeLayerId,
@@ -1827,6 +1831,7 @@ const mapDispatchToProps = {
     payload: Pick<IClipboard, "entityType" | "entityIds">
   ): any => copyToClipboard(payload),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
+  _setZoomFit: (fit: boolean) => setZoomFit(fit),
 };
 
 export default withErrorBoundary(

@@ -14,7 +14,7 @@ import {
   updateSlide,
 } from "../../../store/actions/actions";
 import { ILayer } from "../../../store/reducers/i-layers";
-import { ISlide } from "../../../store/reducers/i-slides";
+import { IPage } from "../../../store/reducers/i-pages";
 import { IStore } from "../../../store/store";
 import FormWithLayout, {
   flattenForm,
@@ -51,7 +51,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
   } = props;
 
   const renderObjectProperties = (object: IObject, objectLayer: ILayer) => {
-    const tmpObj = createObject(object.type, {});
+    // const tmpObj = createObject(object.type, {});
 
     // if (!object.transformDefinition && !tmpObj.transformDefinition) {
     //   return "Element does not have common transform properties";
@@ -63,7 +63,8 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
     // tmpObj.transformDefinition?.properties ?? [];
 
     const transformDefinitionValues = {
-      ...(tmpObj.transform ?? {}),
+      // ...(tmpObj.transform ?? {}),
+      ...getTransformPropertiesValues(),
       ...(object.transform ?? {}),
     };
     const transformDefinitionValuesMetadata = {
@@ -123,21 +124,21 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
       acc.push(curr);
 
       // add if not exist
-      if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
-        valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
-          const dPropertyName = curr.propertyName + "_D_" + device;
-          const newInput = cloneDeep(curr);
-          newInput.propertyName = dPropertyName;
-          delete newInput?.extraOptions;
-          delete newInput?.optional;
-          acc.push(newInput);
+      // if (valuesMetadata[curr.propertyName!]?.devices?.length > 0) {
+      //   valuesMetadata[curr.propertyName!].devices.map((device: DeviceType) => {
+      //     const dPropertyName = curr.propertyName + "_D_" + device;
+      //     const newInput = cloneDeep(curr);
+      //     newInput.propertyName = dPropertyName;
+      //     delete newInput?.extraOptions;
+      //     delete newInput?.optional;
+      //     acc.push(newInput);
 
-          // NOTE: copy default value
-          if (!values[dPropertyName]) {
-            values[dPropertyName] = cloneDeep(values[curr.propertyName]);
-          }
-        });
-      }
+      //     // NOTE: copy default value
+      //     if (!values[dPropertyName]) {
+      //       values[dPropertyName] = cloneDeep(values[curr.propertyName]);
+      //     }
+      //   });
+      // }
       return acc;
     }, [] as IFormLayoutItem[]);
 
@@ -162,15 +163,15 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
 
           retValues[propertyName] = value;
 
-          if (!retObj.transformDefinition) {
-            retObj.transformDefinition = {
-              properties,
-              values,
-              valuesMetadata,
-            };
-          }
+          // if (!retObj.transformDefinition) {
+          //   retObj.transformDefinition = {
+          //     properties,
+          //     values,
+          //     valuesMetadata,
+          //   };
+          // }
 
-          retObj.transformDefinition.values = retValues;
+          retObj.transform = retValues;
 
           // >>> exception for image TODO: REMOVE TO POST PROCESS FUNCTIONS
           // use image w and h for the object
@@ -276,7 +277,7 @@ const TransformProperties: React.FC<IPropertiesPanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { objects, layers, selection, settings, slides } = state.project;
+  const { objects, layers, selection, settings, pages } = state.project;
   const { selectedDevice } = state.stage;
 
   const { activeObjectId, activeLayerId, activeSlideId } = selection;
@@ -286,7 +287,7 @@ const mapStateToProps = (state: IStore) => {
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
   const objectLayer = layers.layerById[object?.layerId as any] || null;
   const layer = activeLayerId ? layers.layerById[activeLayerId] : null;
-  const slide = activeSlideId ? slides.slideById[activeSlideId] : null;
+  const slide = activeSlideId ? pages.pageById[activeSlideId] : null;
 
   let panelName:
     | { name?: string; type: "object" | "layer" | "slide" }
@@ -318,7 +319,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _updateObject: (object: IObject) => updateObject(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
-  _updateSlide: (slide: ISlide) => updateSlide(slide),
+  _updateSlide: (slide: IPage) => updateSlide(slide),
 };
 
 export default connect(

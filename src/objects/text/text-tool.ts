@@ -250,8 +250,10 @@ export default class TextTool implements IToolClass {
     if (this.textEl && this.objectId) {
       const transform = this.getObjectTransform(this.objectId, {
         includeTranslate: true,
+        skipStageScale: true,
       }).toString();
       this.textEl.style.transform = transform;
+      this.textEl.style.transformOrigin = "top left";
 
       // this.textEl.style.transform =
       //   "scale(" + this.editorConfig.stageZoom + ")";
@@ -292,6 +294,8 @@ export default class TextTool implements IToolClass {
   }
 
   private clickOutsideEventHandler(e: Event) {
+    e.stopPropagation();
+
     const el = document.getElementsByClassName("layout-center-area")[0];
     // Do nothing if clicking ref's element or descendent elements
     if (!el || el.contains((e?.target as Node) || null)) {

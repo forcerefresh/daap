@@ -42,7 +42,7 @@ export type IFontPreviewPanelMergedProps = typeof mapDispatchToProps &
 const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
   const {
     onRequestClose,
-    documentSize,
+    // documentSize,
     editObjectId,
     activeLayerId,
     loadedFontFamilies,
@@ -81,18 +81,21 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
   };
 
   const addObjectToStage = (selectedFont: IFontPreview) => {
-    if (activeLayerId) {
+    if (activeLayerId && selectedFont) {
       _addNewObject(
         activeLayerId,
         TEXT,
         {
           left: 100, // documentSize.width / 4,
           top: 0, // documentSize.height / 4,
-          width: documentSize.width / 2,
-          height: documentSize.height / 2,
+          width: 200, //documentSize.width / 2,
+          height: 50, //documentSize.height / 2,
         },
         {
-          font: selectedFont!,
+          font: {
+            fontFamily: selectedFont.fontFamily,
+            source: selectedFont.source,
+          }!,
           autoHeight: true,
           initialAutoWidth: true,
           //fontSize: previewSize.size.toString() + "px",
@@ -357,8 +360,8 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                     {
                       left: 0, //documentSize.width / 4,
                       top: 0, //documentSize.height / 4,
-                      width: documentSize.width / 2,
-                      height: documentSize.height / 2,
+                      width: 200, //documentSize.width / 2,
+                      height: 50, //documentSize.height / 2,
                     },
                     {
                       font: previewFont!,
@@ -391,7 +394,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({
   activeLayerId: state.project.selection.activeLayerId,
   loadedFontFamilies: state.fonts.loadedFontFamilies,
-  documentSize: state.project.document.documentSize,
+  // documentSize: state.project.document.documentSize,
   themeClass: state.project.settings.themeClass,
 });
 

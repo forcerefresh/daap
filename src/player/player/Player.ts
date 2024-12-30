@@ -1454,10 +1454,10 @@ export class Player {
       const clickHandler = () => {
         if (objectEvent.enableAudioPlay) this.enableAudio();
 
-        if (objectEvent.slideReferenceType === "slideNo") {
-          this.manualPlaySlide(parseInt(objectEvent?.slideNo, 10) - 1);
-        } else if (objectEvent.slideReferenceType === "slideId") {
-          const slideIdx = this.getSlideIdxByID(objectEvent.slideId);
+        if (objectEvent.slideReferenceType === "pageNo") {
+          this.manualPlaySlide(parseInt(objectEvent?.pageNo, 10) - 1);
+        } else if (objectEvent.slideReferenceType === "pageId") {
+          const slideIdx = this.getSlideIdxByID(objectEvent.pageId);
           if (slideIdx) this.manualPlaySlide(slideIdx);
         } else if (objectEvent.slideReferenceType === "next") {
           //debugger;
@@ -1859,8 +1859,8 @@ export class Player {
     }
   }
 
-  getSlideOverlap(slideId: number) {
-    const slide = this.normalSlideDataArr?.[slideId]?.slide;
+  getSlideOverlap(pageId: number) {
+    const slide = this.normalSlideDataArr?.[pageId]?.slide;
     let overlap = 0;
     if (slide?.transitionEnabled) {
       overlap = slide.transitionOverlapTime;

@@ -40,16 +40,22 @@ export interface FreeDrawValues {
 
 export type FreeDrawPropertiesTuple = [ITextInput<"strokeWidth">];
 
-export function createFreeDrawObject(initialValue?: {
-  [key: string]: any;
-}): Omit<
-  IObject<FreeDrawPropertiesTuple>,
-  keyof ICommonObjectProperties | "layerId"
-> {
+export function createFreeDrawObject(
+  initialValue?: Record<string, any>
+): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(FREE_DRAW);
 
-  // console.log();
-  const properties: FreeDrawPropertiesTuple = [
+  const values: FreeDrawValues = {
+    lines: initialValue?.lines ?? [],
+  };
+
+  object.properties = values;
+
+  return object;
+}
+
+export function getFreeDrawForm(): FreeDrawPropertiesTuple {
+  const form: FreeDrawPropertiesTuple = [
     {
       inputType: InputType.TEXT,
       displayName: "Strike width",
@@ -59,39 +65,12 @@ export function createFreeDrawObject(initialValue?: {
     },
   ];
 
-  const values: FreeDrawValues = {
-    lines: initialValue?.lines ?? [],
-    // strokeWidth: initialValue?.strokeWidth ?? "1",
-    // color: initialValue?.color ?? "black",
-    // paths: initialValue?.paths ?? [],
-  };
-
-  return {
-    ...object,
-    definition: {
-      properties,
-      values,
-      valuesMetadata: {},
-    },
-    commonStyleDefinition: {
-      properties: [...getCommonObjectPropertiesDefinition(true)],
-      values: { ...getCommonPropertiesValues() },
-      valuesMetadata: { ...getCommonPropertiesMetadataValues() },
-    },
-    transformDefinition: {
-      properties: [...getTransformObjectPropertiesDefinition(true)],
-      values: {
-        ...getTransformPropertiesValues(),
-        ...{ transformOriginX: "left", transformOriginY: "top" },
-      },
-      valuesMetadata: {},
-    },
-  };
+  return form;
 }
 
 export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, deviceType } = props;
-  const freeDrawValues = object.definition.values as FreeDrawValues;
+  const freeDrawValues = object.properties as FreeDrawValues;
 
   // console.log(freeDrawValues);
   if (!isPlayer) {

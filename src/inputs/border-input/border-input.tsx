@@ -14,73 +14,77 @@ import {
 import {
   IBorderColorInput,
   IBorderInput,
+  IBorderSidesValue,
+  IBorderValue,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import css from "./border-input.module.scss";
 import { createInputLabel } from "../input-helpers";
+import { isIBorderValue } from "webslider-sdk/lib/objects/common-properties-player";
 
 export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
   props
 ) => {
   const { displayName, propertyName, value, onChange } = props;
 
-  const renderForm1 = () => {
-    return (
-      <div>
-        <div className="input60">
-          {getColorField(
-            "Bottom",
-            value.bottom.color,
-            (color: RGBColor) => {
-              onChange({ ...value, bottom: { ...value.bottom, color } });
-            },
-            ""
-          )}
-        </div>
-        <div className="input60">
-          {getColorField(
-            "Top",
-            value.top.color,
-            (color: RGBColor) => {
-              onChange({ ...value, top: { ...value.top, color } });
-            },
-            ""
-          )}
-        </div>
-        <div className="input60">
-          {getColorField(
-            "Left",
-            value.left.color,
-            (color: RGBColor) => {
-              onChange({ ...value, top: { ...value.top, color } });
-            },
-            ""
-          )}
-        </div>
-        <div className="input60">
-          {getColorField(
-            "Right",
-            value.right.color,
-            (color: RGBColor) => {
-              onChange({ ...value, right: { ...value.right, color } });
-            },
-            ""
-          )}
-        </div>
-      </div>
-    );
-  };
-  const renderForm2 = () => {
+  // const renderForm1 = () => {
+  //   return (
+  //     <div>
+  //       <div className="input60">
+  //         {getColorField(
+  //           "Bottom",
+  //           value.bottom.color,
+  //           (color: RGBColor) => {
+  //             onChange({ ...value, bottom: { ...value.bottom, color } });
+  //           },
+  //           ""
+  //         )}
+  //       </div>
+  //       <div className="input60">
+  //         {getColorField(
+  //           "Top",
+  //           value.top.color,
+  //           (color: RGBColor) => {
+  //             onChange({ ...value, top: { ...value.top, color } });
+  //           },
+  //           ""
+  //         )}
+  //       </div>
+  //       <div className="input60">
+  //         {getColorField(
+  //           "Left",
+  //           value.left.color,
+  //           (color: RGBColor) => {
+  //             onChange({ ...value, top: { ...value.top, color } });
+  //           },
+  //           ""
+  //         )}
+  //       </div>
+  //       <div className="input60">
+  //         {getColorField(
+  //           "Right",
+  //           value.right.color,
+  //           (color: RGBColor) => {
+  //             onChange({ ...value, right: { ...value.right, color } });
+  //           },
+  //           ""
+  //         )}
+  //       </div>
+  //     </div>
+  //   );
+  // };
+
+  const renderForm2 = (oneValue: IBorderValue) => {
     return (
       <div className={classnames(css.inlineRow)}>
         {/* <Label>{Common}</Label> */}
         {getUnitNumericFiled(
           "",
-          value.commonBorder.width,
+          oneValue.width,
           (width: string) => {
             onChange({
-              ...value,
-              commonBorder: { ...value.commonBorder, width },
+              ...oneValue,
+              width,
             });
           },
           "",
@@ -89,11 +93,11 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
 
         {getColorField(
           "",
-          value.commonBorder.color,
+          oneValue.color,
           (color: any) => {
             onChange({
-              ...value,
-              commonBorder: { ...value.commonBorder, color },
+              ...oneValue,
+              color,
             });
           },
           ""
@@ -101,12 +105,12 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
 
         {getSelectField(
           "",
-          value.commonBorder.style,
+          oneValue.style,
           getBorderOptions(),
           (style: any) => {
             onChange({
-              ...value,
-              commonBorder: { ...value.commonBorder, style },
+              ...oneValue,
+              style,
             });
           }
         )}
@@ -115,19 +119,20 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
   };
 
   const renderRow = (
+    sidesValue: IBorderSidesValue,
     label: string,
-    propertyName: "commonBorder" | "top" | "bottom" | "left" | "right"
+    propertyName: "top" | "bottom" | "left" | "right"
   ) => {
     return (
       <div className={classnames(css.inlineRow)}>
         <Label>{label}</Label>
         {getUnitNumericFiled(
           "",
-          value[propertyName].width,
+          sidesValue[propertyName].width,
           (width: string) => {
             onChange({
-              ...value,
-              [propertyName]: { ...value[propertyName], width },
+              ...sidesValue,
+              [propertyName]: { ...sidesValue[propertyName], width },
             });
           },
           "",
@@ -136,11 +141,11 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
 
         {getColorField(
           "",
-          value[propertyName].color,
+          sidesValue[propertyName].color,
           (color: any) => {
             onChange({
-              ...value,
-              [propertyName]: { ...value[propertyName], color },
+              ...sidesValue,
+              [propertyName]: { ...sidesValue[propertyName], color },
             });
           },
           ""
@@ -148,12 +153,12 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
 
         {getSelectField(
           "",
-          value[propertyName].style,
+          sidesValue[propertyName].style,
           getBorderOptions(),
           (style: any) => {
             onChange({
-              ...value,
-              [propertyName]: { ...value[propertyName], style },
+              ...sidesValue,
+              [propertyName]: { ...sidesValue[propertyName], style },
             });
           }
         )}
@@ -166,11 +171,24 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
       <div>
         {getButtonGroupField(
           createInputLabel(displayName, propertyName),
-          value.useCommonValue ? "common" : "sides",
+          isIBorderValue(value) ? "common" : "sides",
           (useCommonValueStr: string) => {
-            const valueClone = cloneDeep(value);
-            valueClone.useCommonValue = useCommonValueStr === "common";
-            onChange(valueClone);
+            const current = isIBorderValue(value) ? "common" : "sides";
+            if (useCommonValueStr === current) return;
+
+            if (useCommonValueStr === "common") {
+              const valueClone = { ...(value as IBorderSidesValue).top };
+              onChange(valueClone);
+            } else {
+              const valueClone = {
+                top: { ...(value as IBorderValue) },
+                bottom: { ...(value as IBorderValue) },
+                left: { ...(value as IBorderValue) },
+                right: { ...(value as IBorderValue) },
+              };
+
+              onChange(valueClone);
+            }
           },
           [
             { value: "common", label: "Common" },
@@ -190,21 +208,21 @@ export const BorderInputForm: React.FC<IBorderInput & IUpdateInput> = (
     );
   };
 
-  return (
-    <>
-      {value.useCommonValue ? (
-        <div>
-          {renderCB()} {renderForm2()}
-        </div>
-      ) : (
-        <div>
-          {renderCB()}
-          {renderRow("T", "top")}
-          {renderRow("R", "right")}
-          {renderRow("B", "bottom")}
-          {renderRow("L", "left")}
-        </div>
-      )}
-    </>
-  );
+  if (isIBorderValue(value)) {
+    return (
+      <div>
+        {renderCB()} {renderForm2(value)}
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        {renderCB()}
+        {renderRow(value, "T", "top")}
+        {renderRow(value, "R", "right")}
+        {renderRow(value, "B", "bottom")}
+        {renderRow(value, "L", "left")}
+      </div>
+    );
+  }
 };

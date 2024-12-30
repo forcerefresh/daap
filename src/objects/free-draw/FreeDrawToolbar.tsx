@@ -26,6 +26,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
     mode,
     object,
     updateObject,
+    updateObjectForPreview,
     deleteObject,
     toolConfig,
     setToolConfig,
@@ -34,7 +35,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
   const freeDrawToolState = toolConfig as IToolConfig<IFreeDrawToolConfig>;
   const currentStroke = freeDrawToolState.strokeWidth ?? "5";
 
-  const values = object?.definition.values as FreeDrawValues | undefined;
+  const values = object?.properties as FreeDrawValues | undefined;
 
   return (
     <div className={css.inputsHolder}>
@@ -45,7 +46,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
             values.lines[0].strokeWidth + "px",
             (v: string) => {
               const newObject = cloneDeep(object);
-              newObject.definition.values.lines[0].strokeWidth =
+              newObject.properties.lines[0].strokeWidth =
                 parseInt(v).toString();
               updateObject(newObject);
             },
@@ -67,8 +68,15 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
               onChange={(value: any) => {
                 if (object) {
                   const newObject = cloneDeep(object);
-                  newObject.definition.values.lines[0].color = value;
+                  newObject.properties.lines[0].color = value;
                   updateObject(newObject);
+                }
+              }}
+              onPreview={(value: any) => {
+                if (object) {
+                  const newObject = cloneDeep(object);
+                  newObject.properties.lines[0].color = value;
+                  updateObjectForPreview(newObject);
                 }
               }}
               inputProps={{

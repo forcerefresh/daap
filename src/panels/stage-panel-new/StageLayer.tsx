@@ -3,7 +3,7 @@ import cx from "classnames";
 import { includes } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { ISlide } from "../../store/reducers/i-slides";
+import { IPage } from "../../store/reducers/i-pages";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
@@ -145,17 +145,17 @@ export function StageLayer(props: IStageLayer) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { slides, layers, objects, selection, document, settings } =
+  const { pages, layers, objects, selection, document, settings } =
     state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
-  let slide: ISlide | null = null;
+  let slide: IPage | null = null;
 
   if (selection.activeSlideId) {
-    const layerIds = slides.slideById[selection.activeSlideId].layerIds;
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = slides.slideById[selection.activeSlideId];
+    slide = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined =
@@ -179,10 +179,10 @@ const mapStateToProps = (state: IStore) => {
   // }
 
   return {
-    slides,
+    pages,
     layers,
     objects,
-    stageSize: document.documentSize,
+    // stageSize: document.documentSize,
     stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,

@@ -1,21 +1,21 @@
-import { ITransitions } from "webslider-sdk/lib/objects/i-object";
-import { ISlideDuration } from "webslider-sdk/lib/common/i-slider-duration";
+// import { ITransitions } from "webslider-sdk/lib/objects/i-object";
+// import { ISlideDuration } from "webslider-sdk/lib/common/i-slider-duration";
 
-export enum SlideType {
+export enum PageType {
   Normal = "normal",
   Front = "front",
   Back = "back",
   Load = "load",
 }
 
-export interface ISlide {
+export interface IPage {
   id: string;
-  customId: string;
+  customId?: string;
   name?: string;
   description?: string;
   layerIds: string[];
-  nextLayerIdCounter: number;
-  slideType: SlideType;
+  nextLayerNameNumber: number;
+  type?: PageType;
   // transitionEnabled: boolean;
   // transitionOverlapTime: string;
   // transitionDurationTime: string;
@@ -29,14 +29,14 @@ export interface ISlide {
   // moveToTop: boolean;
 }
 
-export interface ISlides {
-  slideById: { [id: string]: ISlide };
-  allSlides: string[];
-  nextSlideIdCounter: number;
-  normalSlides: string[];
-  loadSlides: string[];
-  frontSlides: string[];
-  backSlides: string[];
+export interface IPages {
+  pageById: { [id: string]: IPage };
+  // allPages: string[];
+  nextPageNameNumber: number;
+  pages: string[];
+  loadPages?: string[];
+  frontPages?: string[];
+  backPages?: string[];
 }
 
 /*

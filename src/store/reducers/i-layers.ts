@@ -22,7 +22,7 @@ export interface ILayer extends ILayout {
   id: string;
   customId?: string;
   type: "layer";
-  slideId: string;
+  pageId: string;
   name?: string;
   // title?: string;
   description?: string;
