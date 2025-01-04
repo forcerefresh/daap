@@ -62,7 +62,7 @@
 }
 
 .imageListTitle {
-  max-width: 150px;
+  max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -108,7 +108,7 @@
   right: 20px;
 }
 
-.imageListTabs {
+.imageListTags {
   :global {
     .bp5-tag {
       cursor: default;

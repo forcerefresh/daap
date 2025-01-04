@@ -231,6 +231,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
             return;
           }
           e.preventDefault();
+          console.log(selectedObjectIds);
+
           _deleteObjects(selectedObjectIds);
         },
       },
@@ -936,9 +938,7 @@ const mapDispatchToProps = {
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
   _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
-  _deleteObjects: (objectIds: string[]) => {
-    deleteObjects(objectIds);
-  },
+  _deleteObjects: (ids: string[]): any => deleteObjects(ids),
   _cutToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">
   ): any => cutToClipboard(payload),

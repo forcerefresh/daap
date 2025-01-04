@@ -8,8 +8,18 @@ import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop } from "lodash-es";
 import { IntegrationContext } from "../../integration";
-import { ImageData, VectorData } from "webslider-sdk/lib/common/i-media-types";
-import { fetchMock } from "../vector-library-panel/mock";
+import {
+  ImageData,
+  MediaType,
+  SaaSMediaData,
+  VectorData,
+} from "webslider-sdk/lib/common/i-media-types";
+import MediaManagementPanel from "../images-library-panel/MediaManagementPanel";
+import { Pagination } from "../../types/pagination";
+import { addNewObject } from "../../store/actions/actions";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { getNewMediaObjectBounds } from "./add-object-utils";
 
 export enum Panels {
   MyImages = "myImages",
@@ -32,14 +42,8 @@ interface IMediaLibraryPanelProps {
   addObject?: boolean;
   instaSelect?: boolean;
   showRemoveItem?: boolean;
-  onSelect?: (
-    item:
-      | {
-          type: string;
-          initialValues: { [key: string]: any }[];
-        }
-      | any
-  ) => void;
+  onSelect?: (mediaItem: { media: SaaSMediaData }) => void;
+  onAdd?: (mediaItem: { media: SaaSMediaData }) => void;
   onRequestClose: () => void;
   className?: string;
 }
@@ -50,6 +54,7 @@ export type IMediaLibraryPanelMergedProps = typeof mapDispatchToProps &
 
 const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const {
+    breakpointConfig,
     selectionType = SelectionType.Single,
     addObject = true,
     instaSelect = false,
@@ -60,19 +65,21 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     panelsToShow = [
       Panels.MyImages,
       Panels.MyVideos,
-      Panels.MyAudios,
+      // Panels.MyAudios,
       Panels.MyVectors,
       Panels.MyFonts,
-      Panels.Images,
-      Panels.Vectors,
+      // Panels.Images,
+      // Panels.Vectors,
     ],
     themeClass,
+    _addNewObject,
+    activeLayerId,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
   const UploadComponent = globalContext?.getMyUploadComponent;
   const { getLicenseDetails } = globalContext.useLicenseHook();
-  const { fetchImages, deleteImages } = globalContext.useMyMediaHook();
+  const { fetchMedias, deleteMedias } = globalContext.useMyMediaHook();
 
   const [forceUpdate, setForceUpdate] = useState(0);
   const [apiKey, setApiKey] = useState<string | null>(null);
@@ -96,12 +103,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               id="myImages"
               title="Images"
               panel={
-                <ImagesLibraryPanel
-                  hasApiKey={true}
+                <MediaManagementPanel
                   type="image"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteImages}
-                  fetchImagesFunc={fetchImages}
+                  deleteMediaFunc={deleteMedias}
+                  fetchMediasFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="image"
@@ -115,9 +121,49 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   }
                   selectionType={selectionType}
                   onRequestClose={onRequestClose}
-                  addObject={addObject}
+                  isAddObject={addObject}
                   onSelect={onSelect}
+                  onAdd={(mediaItem) => {
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
+
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        "image",
+                        { ...sizeRect },
+                        {
+                          image: mediaItem.media,
+                        }
+                      );
+                    }
+                  }}
                 />
+
+                // <ImagesLibraryPanel
+                //   hasApiKey={true}
+                //   type="image"
+                //   key={forceUpdate}
+                //   deleteImagesFunc={deleteMedias}
+                //   fetchImagesFunc={fetchMedias}
+                //   uploadComponent={
+                //     <UploadComponent
+                //       type="image"
+                //       onComplete={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //       onStop={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //     />
+                //   }
+                //   selectionType={selectionType}
+                //   onRequestClose={onRequestClose}
+                //   addObject={addObject}
+                //   onSelect={onSelect}
+                // />
               }
             />
           )}
@@ -126,12 +172,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               id="myVideos"
               title="Videos"
               panel={
-                <ImagesLibraryPanel
-                  hasApiKey={true}
+                <MediaManagementPanel
                   type="video"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteImages}
-                  fetchImagesFunc={fetchImages}
+                  deleteMediaFunc={deleteMedias}
+                  fetchMediasFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="video"
@@ -145,9 +190,48 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   }
                   selectionType={selectionType}
                   onRequestClose={onRequestClose}
-                  addObject={addObject}
+                  isAddObject={addObject}
                   onSelect={onSelect}
+                  onAdd={(mediaItem) => {
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
+
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        "video",
+                        { ...sizeRect },
+                        {
+                          image: mediaItem.media,
+                        }
+                      );
+                    }
+                  }}
                 />
+                // <ImagesLibraryPanel
+                //   hasApiKey={true}
+                //   type="video"
+                //   key={forceUpdate}
+                //   deleteImagesFunc={deleteMedias}
+                //   fetchImagesFunc={fetchMedias}
+                //   uploadComponent={
+                //     <UploadComponent
+                //       type="video"
+                //       onComplete={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //       onStop={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //     />
+                //   }
+                //   selectionType={selectionType}
+                //   onRequestClose={onRequestClose}
+                //   addObject={addObject}
+                //   onSelect={onSelect}
+                // />
               }
             />
           )}
@@ -160,8 +244,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   hasApiKey={true}
                   type="audio"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteImages}
-                  fetchImagesFunc={fetchImages}
+                  deleteImagesFunc={deleteMedias}
+                  fetchImagesFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="audio"
@@ -186,11 +270,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               id="myVectors"
               title="Vectors"
               panel={
-                <VectorsLibraryPanel
-                  hasApiKey={true}
+                <MediaManagementPanel
+                  type="vector"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteImages}
-                  fetchImagesFunc={fetchImages}
+                  deleteMediaFunc={deleteMedias}
+                  fetchMediasFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="vector"
@@ -202,12 +286,51 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                       }}
                     />
                   }
+                  selectionType={selectionType}
                   onRequestClose={onRequestClose}
-                  addObject={addObject}
+                  isAddObject={addObject}
                   onSelect={onSelect}
-                  instaSelect={instaSelect}
-                  showRemoveItem={showRemoveItem}
+                  onAdd={(mediaItem) => {
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
+
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        "vector",
+                        { ...sizeRect },
+                        {
+                          image: mediaItem.media,
+                        }
+                      );
+                    }
+                  }}
                 />
+
+                // <VectorsLibraryPanel
+                //   hasApiKey={true}
+                //   key={forceUpdate}
+                //   deleteImagesFunc={deleteMedias}
+                //   fetchMediasFunc={fetchMedias}
+                //   uploadComponent={
+                //     <UploadComponent
+                //       type="vector"
+                //       onComplete={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //       onStop={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //     />
+                //   }
+                //   onRequestClose={onRequestClose}
+                //   addObject={addObject}
+                //   onSelect={onSelect}
+                //   instaSelect={instaSelect}
+                //   showRemoveItem={showRemoveItem}
+                // />
               }
             />
           )}
@@ -220,8 +343,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   hasApiKey={true}
                   type="font"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteImages}
-                  fetchImagesFunc={fetchImages}
+                  deleteImagesFunc={deleteMedias}
+                  fetchImagesFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="font"
@@ -251,10 +374,12 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   type="image"
                   key={forceUpdate}
                   fetchImagesFunc={(props: {
+                    type: MediaType;
                     from: number;
                     tags?: string[];
                     search?: string;
-                  }): Promise<{ data: ImageData[]; hasMore: boolean }> => {
+                    perPage?: number;
+                  }): Promise<{ pagination: Pagination; data: any[] }> => {
                     const { from, tags = [], search } = props;
                     let url = `${apiUrl}&from=${from}`;
                     if (search) {
@@ -282,11 +407,13 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               panel={
                 <VectorsLibraryPanel
                   hasApiKey={!!apiKey}
-                  fetchImagesFunc={(props: {
+                  fetchMediasFunc={(props: {
+                    type: MediaType;
                     from: number;
                     tags?: string[];
                     search?: string;
-                  }): Promise<{ data: VectorData[]; hasMore: boolean }> => {
+                    perPage?: number;
+                  }): Promise<{ pagination: Pagination; data: any[] }> => {
                     const { from, tags = [], search } = props;
                     let url = `${apiUrl}&from=${from}&type=vectors`;
                     if (search) {
@@ -318,10 +445,31 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  themeClass: state.project.settings.themeClass,
-});
+const mapStateToProps = (state: IStore) => {
+  const {
+    project: { settings },
+  } = state;
 
-const mapDispatchToProps = {};
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
+    );
+
+  return {
+    breakpointConfig,
+    themeClass: state.project.settings.themeClass,
+    activeLayerId: state.project.selection.activeLayerId,
+  };
+};
+
+const mapDispatchToProps = {
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MediaLibraryPanel);

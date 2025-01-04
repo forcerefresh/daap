@@ -211,6 +211,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "bp5-overlay-scroll-container", // alert
     "bp5-toast",
     "multiselect-tags",
+    "confirm-button-dialog",
+    "bp5-dialog",
+    "bp5-popover",
   ]);
 
   // const displayZoom = Number.isInteger(zoom * 100)
@@ -262,7 +265,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.MediaLibrary && (
               <div ref={sharedRef}>
                 <MediaLibraryPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}

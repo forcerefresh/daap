@@ -21,10 +21,19 @@
   }
   :global {
     .infinite-scroll-component {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: start;
+      align-content: start;
       padding-bottom: 100px;
       min-height: 80vh; // DO no remove this!  scrollbar iz visible to load next page
     }
   }
+}
+
+.breakLine {
+  flex-basis: 100%;
+  height: 0;
 }
 
 .selectionSectionHolder {
@@ -77,7 +86,7 @@
 }
 
 .imageListTitle {
-  max-width: 150px;
+  max-width: 140px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -91,6 +100,10 @@
 .imageItemHolder {
   position: relative;
   border: 8px solid transparent;
+  display: flex;
+  flex-direction: column;
+  row-gap: 6px;
+
   &:hover {
     background: rgba(99, 99, 99, 0.5);
     //border: 8px solid rgba(99, 99, 99, 0.5);
@@ -140,11 +153,13 @@
   right: 20px;
 }
 
-.imageListTabs {
+.imageListTags {
+  max-width: 140px;
+
   :global {
     .bp5-tag {
       cursor: default;
-      margin-top: 5px;
+      // margin-top: 5px;
       margin-right: 5px;
     }
   }
@@ -169,7 +184,9 @@
 }
 
 .imageHolder {
-  width: 140px;
+  width: 136px;
+  max-width: 136px;
+
   height: 150px;
   display: flex;
   align-items: center;
@@ -239,4 +256,31 @@
       display: block;
     }
   }
+}
+
+.allItemsLoaded {
+  background: rgba(150, 150, 150, 0.1);
+  padding: 35px;
+  text-align: center;
+}
+
+.floatingActionBar {
+  display: none;
+  position: absolute;
+  height: 30px;
+  right: 0px;
+  top: 0px;
+  left: 0px;
+  justify-content: end;
+  column-gap: 10px;
+}
+
+.itemHolder:hover .floatingActionBar,
+.floatingActionBar:hover {
+  display: flex;
+}
+
+.rightInputElements {
+  display: flex;
+  align-items: center;
 }

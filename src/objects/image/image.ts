@@ -79,7 +79,7 @@ export function createImageObject(
 
   const values: ImageValues = {
     fit: {
-      size: "fill",
+      size: "cover",
       positionHorizontal: "center",
       positionVertical: "center",
     },
@@ -113,8 +113,8 @@ export function getImageObjectForm(): ImagePropertiesTuple {
       displayName: "Image",
       propertyName: "image",
       inputType: InputType.IMAGE,
-      value: { image: { sourceType: "local" } },
-      defaultValue: { image: { sourceType: "local" } },
+      value: undefined,
+      defaultValue: undefined,
     },
 
     // {
@@ -133,15 +133,14 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, isSave, isForThumbnail, deviceType } = props;
   const imageValues = object.properties as ImageValues;
 
+  console.log(imageValues);
+
   if (!isPlayer) {
     if (
-      !imageValues.image.image.sourceType ||
-      (imageValues.image.image.sourceType === "url" &&
-        !imageValues.image.image.url) ||
-      (imageValues.image.image.sourceType === "local" &&
-        !imageValues.image.image.id) ||
-      (imageValues.image.image.sourceType === "library" &&
-        !imageValues.image.image.url)
+      !imageValues.image.sourceType ||
+      (imageValues.image.sourceType === "url" && !imageValues.image.url) ||
+      (imageValues.image.sourceType === "local" && !imageValues.image.id) ||
+      (imageValues.image.sourceType === "library" && !imageValues.image.url)
     ) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
     }
@@ -160,10 +159,15 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   const aH = coverPlacementValue.positionHorizontal;
   const aV = coverPlacementValue.positionVertical;
 
-  const imageItem = getMediaSrc("image", imageValues.image.image, {
-    useId: isSave,
-    filename: imageValues.image.filename,
-  });
+  // const imageItem = getMediaSrc("image", imageValues.image, {
+  //   useId: isSave,
+  //   filename: imageValues.image.filename,
+  // });
+
+  const fileName = imageValues.image.mediaSizes.find(
+    (size) => size.sizeType === imageValues.image.sizeType
+  )?.sourceFilename;
+  const imageUrl = `/api/v1/media/${fileName}`;
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
@@ -171,7 +175,7 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   style += "width: 100%;";
   style += "height: 100%;";
   if (!imageValues.preload || !isPlayer || isForThumbnail) {
-    style += `background-image:url('${imageItem.src}');`;
+    style += `background-image:url('${imageUrl}');`; //imageItem.src
   }
   style += `background-repeat:no-repeat;`;
   style += `background-size: ${backgroundSize};`;
@@ -228,16 +232,16 @@ export async function preloadImage(props: {
 
   let imageSrc: ImageItem = {} as ImageItem;
 
-  if (
-    imageValues.image.image.baseUrl &&
-    imageValues.image.image.baseUrl.startsWith("http")
-  ) {
-    imageSrc = {
-      src: imageValues.image.image.baseUrl + imageValues.image.image.filename,
-    };
-  } else {
-    imageSrc = getMediaSrc("image", imageValues.image.image) as ImageItem;
-  }
+  // if (
+  //   imageValues.image.image.baseUrl &&
+  //   imageValues.image.image.baseUrl.startsWith("http")
+  // ) {
+  //   imageSrc = {
+  //     src: imageValues.image.image.baseUrl + imageValues.image.image.filename,
+  //   };
+  // } else {
+  imageSrc = getMediaSrc("image", imageValues.image);
+  // }
 
   // if there are no image to preload return instantly
   if (!imageSrc.src) {
@@ -282,16 +286,14 @@ export function imagePostProcess(
   const prevValues = prevObject.properties as ImageValues;
   const newValues = newObj.properties as ImageValues;
 
-  if (prevValues.image.image.sourceType !== newValues.image.image.sourceType) {
-    newValues.image = getDefaultValuesForSourceType(
-      newValues.image.image.sourceType
-    );
-  }
+  // if (prevValues.image.sourceType !== newValues.image.sourceType) {
+  //   newValues.image = getDefaultValuesForSourceType(newValues.image.sourceType);
+  // }
 
-  // we are adding this so we can replace it with real base url
-  if (prevValues.image.image.sourceType === "local") {
-    newValues.image.image.baseUrl = `{MEDIA_ITEM_LOCAL}`;
-  }
+  // // we are adding this so we can replace it with real base url
+  // if (prevValues.image.sourceType === "local") {
+  //   newValues.image.baseUrl = `{MEDIA_ITEM_LOCAL}`;
+  // }
 
   return newObj;
 }
@@ -307,19 +309,19 @@ export const getAssetsUrls = (
 ): GetAssetsUrlFuncReturnType => {
   const imageValues = props.values as ImageValues;
 
-  if (!imageValues.image.image.sourceType) {
+  if (!imageValues.image.sourceType) {
     return [];
   }
 
   return [
     {
-      id: imageValues.image.image.id,
-      url: imageValues.image.image.url,
+      id: imageValues.image.id,
+      url: imageValues.image.url,
       filename: imageValues.image.filename,
-      localFilename: imageValues.image.image.filename,
-      sourceType: imageValues.image.image.sourceType,
+      localFilename: imageValues.image.filename,
+      sourceType: imageValues.image.sourceType,
       mediaType: "image",
-      baseUrl: imageValues.image.image.baseUrl,
+      // baseUrl: imageValues.image.baseUrl,
     },
   ];
 };

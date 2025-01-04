@@ -1256,6 +1256,8 @@ export function addNewObject(
       parentId: layerId,
     };
 
+    console.log(object);
+
     const nextNameIdx =
       getState().project.objects.nextObjectNameNumber[type] || 1;
     object.name = humanizeSting(type, true) + " " + nextNameIdx;

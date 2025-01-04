@@ -11,7 +11,10 @@ import {
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { v4 as uuid } from "uuid";
 import { remove } from "lodash-es";
-import { file2Base64, getImageFromFile } from "../../../utils/doom-utils/video";
+import {
+  file2Base64,
+  getImageVideoFromFile,
+} from "../../../utils/doom-utils/video";
 import { appendToFileName } from "../../../utils/file/file-utils";
 
 type AudioItem = {
@@ -103,7 +106,7 @@ export const useMyMediaHook = () => {
         }
         case "video": {
           // TODO: filename
-          const { blob, videoItem } = await getImageFromFile(file);
+          const { blob, videoItem } = await getImageVideoFromFile(file);
           const originalFile = await resizeFile(blob!, 80, 80, 70);
           const thumbFile = await resizeFile(blob!, 80, 80, 70);
           const smallFile = await resizeFile(blob!, 120, 120, 70);

@@ -51,6 +51,13 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
     setShowEditor(true);
   };
 
+  const [renderSite, setRenderSite] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setRenderSite(false);
+    }, 500);
+  }, [showEditor]);
+
   // useEffect(() => {
   //   const tourData = [
   //     {
@@ -114,82 +121,88 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
         <DevelopmentManager />
         <PreviewTimelineContextProvider>
           <div className={css.main}>
-            <div className={cx(css.siteHolder, { [css.hideSite]: showEditor })}>
-              <div className={css.bg}></div>
-              <div className={css.siteLogoHolder}>
-                <DaapLogo className={css.logo} id="element1" />
-              </div>
-              <div className={css.siteTitleHolder}>
-                Turn your ideas into{" "}
-                <span
-                  style={{
-                    color: "#f74680",
-                    display: "inline-block",
-                    textAlign: "center",
-                    width: "250px",
-                    fontWeight: "300",
-                    height: "35px",
-                    overflow: "hidden",
-                    position: "relative",
-                    top: "5px",
-                  }}
-                >
-                  <span className={css.textScroler}>
-                    instagram post
-                    <br />
-                    facebook post
-                    <br />
-                    youtube cover
-                    <br />
-                    pinterest post
-                    <br />
-                    twitter header
-                    <br />
-                    business card
-                    <br />
-                    infographic
-                    <br />
-                    awesome designs
-                    <br />
+            {renderSite && (
+              <div
+                className={cx(css.siteHolder, { [css.hideSite]: showEditor })}
+              >
+                <div className={css.bg}></div>
+                <div className={css.siteLogoHolder}>
+                  <DaapLogo className={css.logo} id="element1" />
+                </div>
+                <div className={css.siteTitleHolder}>
+                  Turn your ideas into{" "}
+                  <span
+                    style={{
+                      color: "#f74680",
+                      display: "inline-block",
+                      textAlign: "center",
+                      width: "250px",
+                      fontWeight: "300",
+                      height: "35px",
+                      overflow: "hidden",
+                      position: "relative",
+                      top: "5px",
+                    }}
+                  >
+                    <span className={css.textScroler}>
+                      instagram post
+                      <br />
+                      facebook post
+                      <br />
+                      youtube cover
+                      <br />
+                      pinterest post
+                      <br />
+                      twitter header
+                      <br />
+                      business card
+                      <br />
+                      infographic
+                      <br />
+                      awesome designs
+                      <br />
+                    </span>
                   </span>
-                </span>
-                with no experience required.
-              </div>
-              <div className={css.siteButtonsHolder}>
-                <Button
-                  large
-                  className={css.button}
-                  intent="success"
-                  onClick={() => {
-                    focusApp("button-click");
-                  }}
-                  id="element2"
-                >
-                  Start Creating Now
-                </Button>
-                {/* <Button large className={css.button} intent="success">
+                  with no experience required.
+                </div>
+                <div className={css.siteButtonsHolder}>
+                  <Button
+                    large
+                    className={css.button}
+                    intent="success"
+                    onClick={() => {
+                      focusApp("button-click");
+                    }}
+                    id="element2"
+                  >
+                    Start Creating Now
+                  </Button>
+                  {/* <Button large className={css.button} intent="success">
                 Create from wizard
               </Button> */}
+                </div>
               </div>
-            </div>
+            )}
             <div
               className={cx(css.editorHolder, { [css.showEditor]: showEditor })}
             >
               <MainHeader className={css.saasHeader} />
               <App className={css.editor} />
             </div>
-            <div
-              className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
-              onClick={() => {
-                focusApp("app-click");
-              }}
-            >
-              <div className={css.exploreDapBtnHolder}>
-                <Button large className={css.exploreDapBtn} intent="primary">
-                  Take an Interactive Tour of <strong>daap</strong>
-                </Button>
+            {renderSite && (
+              <div
+                className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
+                onClick={() => {
+                  focusApp("app-click");
+                }}
+              >
+                <div className={css.exploreDapBtnHolder}>
+                  <Button large className={css.exploreDapBtn} intent="primary">
+                    Take an Interactive Tour of <strong>daap</strong>
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           <div ref={overlayRef} />
         </PreviewTimelineContextProvider>

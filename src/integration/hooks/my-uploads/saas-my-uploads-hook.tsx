@@ -7,10 +7,13 @@ import {
 import {
   blobToBase64,
   file2Base64,
-  getImageFromFile,
+  getImageVideoFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import axios from "axios";
+import { isEmpty } from "lodash-es";
+import { Pagination } from "../../../types/pagination";
 
 export const useMyMediaHook = () => {
   const upload = async (
@@ -20,32 +23,59 @@ export const useMyMediaHook = () => {
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     logger.app.log(type, fileMetadata);
 
-    let previewImageBase64: string | undefined;
-    let previewImageItem: VideoItem | undefined;
+    // let previewImageBase64: string | undefined;
+    // let previewImageItem: VideoItem | undefined;
 
-    if (type === "image") {
-    }
+    // if (type === "video") {
+    //   const { blob, videoItem } = await getImageFromFile(file);
+    //   previewImageItem = videoItem;
+    //   previewImageBase64 =
+    //     "data:image/jpg;base64," +
+    //     (await resizeFile(blob!, 10000, 10000, 70, "jpg"));
+    // }
+
+    let previewImageBase64: string | undefined;
+
+    let videoSize: { width: number; height: number } | undefined = undefined;
 
     if (type === "video") {
-      const { blob, videoItem } = await getImageFromFile(file);
-      previewImageItem = videoItem;
-      previewImageBase64 =
-        "data:image/jpg;base64," +
-        (await resizeFile(blob!, 10000, 10000, 70, "jpg"));
+      const { blob, size } = await getImageVideoFromFile(file);
+      const blobBase64 = await blobToBase64(blob!);
+      console.log(blobBase64);
+
+      videoSize = size;
+      previewImageBase64 = "data:image/jpeg;base64," + blobBase64;
+      //"data:image/jpeg;base64," + (await resizeFile(blob!, 10000, 10000, 75));
     }
 
     // base64
     const fileBase64 = await file2Base64(file);
 
     console.log({
-      fileBase64,
+      // fileBase64,
       fileMetadata,
       type,
-      previewImageBase64,
-      previewImageItem,
+      // previewImageBase64,
+      // previewImageItem,
     });
 
+    const json = {
+      previewImageBase64,
+      fileBase64,
+      name: fileMetadata.name,
+      description: fileMetadata.description,
+      tags: fileMetadata.tags,
+      filename: fileMetadata.filename,
+      size: videoSize,
+    };
+
+    const response = await axios.post(`/api/v1/medias/${type}`, json);
+    console.log(response);
+
     return { status: "OK" };
+
+    // return { status: "OK" };
+
     // return new Promise((resolve, reject) => {
     //   ipcRenderer
     //     .invoke(
@@ -102,38 +132,48 @@ export const useMyMediaHook = () => {
     });*/
   };
 
-  const fetchImages = async (props: {
+  const fetchMedias = async (props: {
     type: MediaType;
     from: number;
     tag?: string;
     search?: string;
     perPage?: number;
-  }): Promise<ImageData[]> => {
-    const { ipcRenderer } = window.require("electron");
+  }): Promise<{ pagination: Pagination; data: ImageData[] }> => {
+    const { type, from, tag, search, perPage } = props;
 
-    return new Promise((resolve, reject) => {
-      ipcRenderer
-        .invoke("MyUploads::Fetch", JSON.stringify(props))
-        .then((result: any) => {
-          resolve(result);
-        });
-    });
+    return axios
+      .get(`/api/v1/medias/${type}`, {
+        params: {
+          page: from,
+          limit: perPage,
+          ...(!isEmpty(search) ? { search } : {}),
+        },
+      })
+      .then((response) => response.data);
+
+    // const { ipcRenderer } = window.require("electron");
+
+    // return new Promise((resolve, reject) => {
+    //   ipcRenderer
+    //     .invoke("MyUploads::Fetch", JSON.stringify(props))
+    //     .then((result: any) => {
+    //       resolve(result);
+    //     });
+    // });
   };
 
-  const deleteImages = async (
+  const deleteMedias = async (
     type: MediaType,
     ids: string[]
   ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
-    const { ipcRenderer } = window.require("electron");
+    try {
+      await axios.delete(`/api/v1/media/${ids[0]}`);
 
-    return new Promise((resolve, reject) => {
-      ipcRenderer
-        .invoke("MyUploads::Delete", JSON.stringify({ type, ids }))
-        .then((result: any) => {
-          resolve(result);
-        });
-    });
+      return { response: [{ status: "SUCCESS", id: ids[0] }] };
+    } catch (ex) {}
+
+    return { response: [{ status: "ERROR", id: ids[0] }] };
   };
 
-  return { upload, fetchImages, deleteImages };
+  return { upload, fetchMedias, deleteMedias };
 };

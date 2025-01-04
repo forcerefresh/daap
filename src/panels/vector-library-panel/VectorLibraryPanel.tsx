@@ -28,17 +28,23 @@ import { SVG } from "../../objects/svg/svg";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 import { ReactComponent as NoSelection } from "../media-library/assets/no-selection.svg";
+import { Pagination } from "../../types/pagination";
 
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
   uploadComponent?: ReactNode;
-  fetchImagesFunc: (props: {
+
+  fetchMediasFunc: (props: {
     type: MediaType;
     from: number;
     tags?: string[];
     search?: string;
     perPage?: number;
-  }) => Promise<{ data: VectorData[]; hasMore: boolean }>;
+  }) => Promise<{
+    data: /*ImageData[] | VectorData[] |*/ any[];
+    pagination: Pagination;
+  }>;
+
   deleteImagesFunc?: (
     type: MediaType,
     ids: string[]
@@ -63,7 +69,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
   const {
     hasApiKey,
     uploadComponent,
-    fetchImagesFunc,
+    fetchMediasFunc,
     deleteImagesFunc,
     //
     activeLayerId,
@@ -104,7 +110,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
 
     from = from === -1 ? images?.length || 0 : from;
 
-    fetchImagesFunc({
+    fetchMediasFunc({
       type: "vector",
       from,
       search: searchValue,
@@ -254,7 +260,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                 display: loading ? "none" : "block",
               }}
             >
-              <b>All items are loaded for the selected criteria.</b>
+              <b>For the selected criteria, all items have been loaded.</b>
             </p>
           }
         >
@@ -373,7 +379,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                       <div className={css.imageListTitle}>{image.title}</div>
                     )}
                     {image.tags && (
-                      <div className={css.imageListTabs}>
+                      <div className={css.imageListTags}>
                         <TagsView tags={image?.tags || []} />
                       </div>
                     )}
@@ -414,7 +420,7 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
                     <div className={css.imageListTitle}>{image.title}</div>
                   )}
                   {image.tags && (
-                    <div className={css.imageListTabs}>
+                    <div className={css.imageListTags}>
                       <TagsView tags={image?.tags || []} />
                     </div>
                   )}

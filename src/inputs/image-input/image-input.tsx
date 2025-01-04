@@ -12,22 +12,39 @@ import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
-import { IImageInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  IImageInput,
+  IImageInputValue,
+  IUpdateInput,
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import css from "./image-input.module.scss";
-import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
-import { getButtonGroupField, getTextArea, getTextField } from "../input-utils";
+import {
+  ImageItem,
+  SaaSMediaData,
+} from "webslider-sdk/lib/common/i-media-types";
+import {
+  getButtonGroupField,
+  getSelectField,
+  getTextArea,
+  getTextField,
+} from "../input-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
-  const sourceType = value.image.sourceType || "local";
+  const sourceType = value?.sourceType || "local";
 
   logger.app.log(value);
   const [libraryOpen, setLibraryOpen] = useState(false);
   // const [previewSrc, setPreviewSrc] = useState("");
 
-  const previewSrc = getMediaSrc("image", value.image || {})?.src;
+  const fileName = value?.mediaSizes.find(
+    (size) => size.sizeType === "original"
+  )?.sourceFilename;
+  const imageUrl = `/api/v1/media/${fileName}`;
+
+  // getMediaSrc("image", value || {})?.src;
 
   // logic for handling click outside
   const sharedRef = useRef(null);
@@ -40,22 +57,22 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
     "bp5-overlay-scroll-container", // alert
   ]);
 
-  const onFileNameChange = (filename: string) => {
-    const newValue = cloneDeep(value);
-    newValue.filename = filename;
-    onChange(newValue);
-  };
+  // const onFileNameChange = (filename: string) => {
+  //   const newValue = cloneDeep(value);
+  //   newValue.filename = filename;
+  //   onChange(newValue);
+  // };
 
-  const onUrlChange = (url: string) => {
-    const newValue = cloneDeep(value);
-    newValue.image.url = url;
-    onChange(newValue);
-  };
+  // const onUrlChange = (url: string) => {
+  //   const newValue = cloneDeep(value);
+  //   newValue.image.url = url;
+  //   onChange(newValue);
+  // };
 
-  const filename =
-    value.filename === undefined
-      ? extractFileName(value.image.filename!)
-      : value.filename;
+  // const filename =
+  //   value.filename === undefined
+  //     ? extractFileName(value.image.filename!)
+  //     : value.filename;
 
   return (
     <>
@@ -79,20 +96,20 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             { value: "url", label: "Url" },
           ]
         )} */}
-        {previewSrc ? (
+        {imageUrl ? (
           <>
             <div
               className={css.previewHolder}
-              style={{ backgroundImage: `url('${previewSrc}'` }}
+              style={{ backgroundImage: `url('${imageUrl}'` }}
             ></div>
-            {value.image.size && (
+            {value?.width && value?.height ? (
               <div>
-                {value.image.size?.width}px X {value.image.size?.height}px
+                {value.width} x {value.height}
               </div>
-            )}
+            ) : null}
           </>
         ) : null}
-        {sourceType === "library" ? (
+        {/* {sourceType === "library" ? (
           <div
             className="bp5-text-small"
             style={{ maxWidth: "250px", wordBreak: "break-all" }}
@@ -103,9 +120,9 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
               </a>
             ) : null}
           </div>
-        ) : null}
+        ) : null} */}
 
-        {sourceType === "url"
+        {/* {sourceType === "url"
           ? getTextArea(
               "",
               value.image.url,
@@ -117,7 +134,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                 disabledDebounce: true,
               }
             )
-          : null}
+          : null} */}
 
         {sourceType === "local" || sourceType === "library" ? (
           <Popover
@@ -136,12 +153,9 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                   }}
                   className={css.mediaLibraryPanel}
                   addObject={false}
-                  onSelect={(imageItem: { image: ImageItem }) => {
-                    const newValue = cloneDeep(value);
-                    newValue.image = { ...imageItem.image };
-                    newValue.filename = extractFileName(
-                      imageItem.image.filename!
-                    );
+                  onSelect={(mediaItem: { media: SaaSMediaData }) => {
+                    const newValue = cloneDeep(mediaItem.media);
+                    newValue.sizeType = value?.sizeType; // keep existing size
                     onChange(newValue);
                     setLibraryOpen(false);
                   }}
@@ -162,11 +176,23 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                 setLibraryOpen(true);
               }}
             >
-              Browse
+              Browse images
             </Button>
           </Popover>
         ) : null}
       </FormGroup>
+
+      {value &&
+        getSelectField(
+          "Size",
+          value?.sizeType ?? "original",
+          getSizeOptions(value.mediaSizes),
+          (size: string) => {
+            const valueClone = cloneDeep(value);
+            valueClone.sizeType = size;
+            onChange(valueClone);
+          }
+        )}
 
       {/* {sourceType === "local" || sourceType === "library" ? (
         <div className={css.fileNameHolder}>
@@ -191,4 +217,19 @@ function extractFileName(filename: string) {
   } catch (ex: any) {
     return "";
   }
+}
+
+function getSizeOptions(mediaSizes: IImageInputValue["mediaSizes"]) {
+  return mediaSizes.map((imageSize) => {
+    return {
+      label:
+        imageSize.sizeType +
+        " - " +
+        imageSize.width +
+        "x" +
+        imageSize.height +
+        "",
+      value: imageSize.sizeType,
+    };
+  });
 }

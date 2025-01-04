@@ -118,11 +118,11 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         <div>
           {getTextField("Name", formData[idx]?.name, (value: string) => {
             const newArr = [...formData];
-            newArr[idx].filename = value;
+            newArr[idx].name = value;
             setFormData(newArr);
           })}
         </div>
-        <div>
+        {/* <div>
           {getTextField(
             "Description",
             formData[idx]?.description,
@@ -132,7 +132,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
               setFormData(newArr);
             }
           )}
-        </div>
+        </div> */}
 
         <div>
           {getTagsField(
@@ -172,36 +172,19 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         <div {...getRootProps({ style: style as any })}>
           <input {...getInputProps()} />
           {type === "image" ? (
-            <p>
-              Drag 'n' drop some Images here, or click to open select dialog.
-            </p>
+            <p>Drop some Images here, or click to open select dialog.</p>
           ) : type === "video" ? (
-            <p>
-              Drag 'n' drop some Videos here, or click to open select dialog.
-            </p>
+            <p>Drop some MP4 videos here, or click to open select dialog.</p>
           ) : type === "audio" ? (
-            <p>
-              Drag 'n' drop some Audios here, or click to open select dialog.
-            </p>
+            <p>Drop some Audios here, or click to open select dialog.</p>
           ) : type === "vector" ? (
-            <p>
-              Drag 'n' drop some SVG files here, or click to open select dialog.
-            </p>
+            <p>Drop some SVG files here, or click to open select dialog.</p>
           ) : type === "font" ? (
-            <p>
-              Drag 'n' drop some Font files here, or click to open select
-              dialog.
-            </p>
+            <p>Drop some Font files here, or click to open select dialog.</p>
           ) : type === "extension" ? (
-            <p>
-              Drag 'n' drop Extension ZIP file here, or click to open select
-              dialog.
-            </p>
+            <p>Drop Extension ZIP file here, or click to open select dialog.</p>
           ) : type === "template" ? (
-            <p>
-              Drag 'n' drop Template ZIP file here, or click to open select
-              dialog.
-            </p>
+            <p>Drop Template ZIP file here, or click to open select dialog.</p>
           ) : null}
         </div>
         {acceptedFiles.length > 0 && (
@@ -331,7 +314,7 @@ function UploadDialog(props: UploadDialogProps) {
       tags: filesInfo.tags,
       name: filesInfo.name,
       // title: filesInfo.name, // TODO remove
-      description: filesInfo.description,
+      // description: filesInfo.description,
       filename: filesInfo.filename,
     }).then((status) => {
       statusesArrRef.current.push(status);

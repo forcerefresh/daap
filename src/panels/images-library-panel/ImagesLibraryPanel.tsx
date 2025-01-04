@@ -1,4 +1,10 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import cx from "classnames";
@@ -23,16 +29,32 @@ import { MultiSelect } from "@blueprintjs/select";
 import { addNewObject } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, forOwn, last, noop, remove } from "lodash-es";
+import { debounce, filter, forOwn, isNil, last, noop, remove } from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
-import { ImageData, MediaType } from "webslider-sdk/lib/common/i-media-types";
+import {
+  ImageData,
+  MediaType,
+  SaaSMediaData,
+} from "webslider-sdk/lib/common/i-media-types";
 import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 import { forceDownload } from "../../utils/utils";
 import { ReactComponent as MP3Icon } from "./assets/mp3.svg";
+import { Pagination } from "../../types/pagination";
+import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
+import axios from "axios";
+
+// console.log(process.env.REACT_API_URL);
+// console.log(process.env);
+
+async function deleteImage(image: SaaSMediaData): Promise<{ id: string }> {
+  await axios.delete(`/api/v1/media/${image.id}`);
+  return { id: image.id! };
+}
+
 interface IMediaLibraryPanelProps {
   hasApiKey: boolean;
   type: "image" | "video" | "audio" | "font";
@@ -43,7 +65,7 @@ interface IMediaLibraryPanelProps {
     tags?: string[];
     search?: string;
     perPage?: number;
-  }) => Promise<{ data: ImageData[]; hasMore: boolean }>;
+  }) => Promise<{ pagination: Pagination; data: any[] }>;
   deleteImagesFunc?: (
     type: MediaType,
     ids: string[]
@@ -78,7 +100,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     onSelect = noop,
   } = props;
 
-  const [images, setImages] = useState<ImageData[]>([]);
+  const [images, setImages] = useState<SaaSMediaData[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -88,19 +110,23 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [requestReload, setRequestReload] = useState<number>(0);
 
   const [imagesForDelete, setImagesForDelete] = useState<
-    ImageData[] | undefined
+    SaaSMediaData[] | undefined
   >(undefined);
   const [isDeleting, setIsDeleting] = useState<boolean>(false);
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const reload = () => {
-    setRequestReload(requestReload + 1);
-  };
+  const [latestPagination, setLatestPagination] = useState<Pagination | null>(
+    null
+  );
 
-  const resetImages = () => {
+  const reload = useCallback(() => {
+    setRequestReload(requestReload + 1);
+  }, [setRequestReload, requestReload]);
+
+  const resetImages = useCallback(() => {
     setImages([]);
-  };
+  }, [setImages]);
 
   /*
   // note: mutate existing data
@@ -121,56 +147,69 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   const popoverRef = useRef<Popover>();
 
-  const fetchData = (from = -1) => {
+  const fetchData = (fromPage?: number) => {
     // CHANGE123: if (!hasApiKey) return;
 
     setLoading(true);
 
-    from = from === -1 ? images?.length || 0 : from;
+    let from: number | null = null;
+
+    if (isNil(fromPage)) {
+      if (isNil(latestPagination)) {
+        // load first page
+        from = 1;
+      } else {
+        // load next page
+        if (!isNil(latestPagination.nextPage)) {
+          from = latestPagination.nextPage;
+        }
+      }
+    } else {
+      from = fromPage;
+    }
 
     const tags: string[] = selectedTags;
-    // forOwn(selectedTags, (val, key) => {
-    //   if (val) tags.push(key);
-    // });
 
-    fetchImagesFunc({
-      type: type,
-      from,
-      search: searchValue,
-      tags,
-      perPage: 20,
-    }).then(
-      async (result) => {
-        const err = checkIfAssetsServiceHasError(result);
-        if (err) {
-          setErrorMessage(err);
-          return;
+    if (!isNil(from)) {
+      fetchImagesFunc({
+        type: type,
+        from,
+        search: searchValue,
+        tags,
+        perPage: 20,
+      }).then(
+        (result) => {
+          console.log(result);
+          if (from === 1) {
+            console.log([...result.data]);
+            setImages([...result.data]);
+          } else {
+            console.log([...images, ...result.data]);
+
+            setImages([...images, ...result.data]);
+          }
+
+          setLatestPagination(result.pagination);
+          setLoading(false);
+          setHasMore(!!result.pagination.nextPage);
+        },
+
+        (error) => {
+          // logger.app.error(error);
         }
-
-        const data = result.data || (result as any).photos;
-
-        //await postProcessData(data);
-
-        setImages([...images, ...data]);
-        setLoading(false);
-        setHasMore(result.hasMore);
-      },
-
-      (error) => {
-        /*this.setState({
-            isLoaded: true,
-            error,
-          });*/
-      }
-    );
+      );
+    }
   };
 
   useEffect(() => {
     // CHANGE123: if (hasApiKey) debounceFetchData();
-    debounceFetchData();
+    debounceFetchData(1);
   }, [hasApiKey]);
 
-  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
+  const debounceFetchData = debounce(
+    (fromPage?: number) => fetchData(fromPage),
+    100
+  );
 
   const tags = getImageTags();
 
@@ -193,10 +232,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
   useEffect(() => {
     //if (hasApiKey) debounceFetchData(0);
-    debounceFetchData(0);
+    debounceFetchData(1);
   }, [requestReload]);
 
   const [selectedImage, setSelectedImage] = useState<number>(-1);
+
+  const [pressEnter, setPressEnter] = useState(false);
 
   const [selection, setSelection] = useState<any[]>([]);
   const addToSelection = (data: any) => {
@@ -233,6 +274,17 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     );
   };
 
+  const debounceSearchReload = useCallback(
+    debounce(() => {
+      setSelectedImage(-1);
+      setPressEnter(false);
+
+      resetImages();
+      reload();
+    }, 500),
+    [setSelectedImage, setPressEnter, resetImages, reload]
+  );
+
   const getOneImageSize = (
     images?: { [key: string]: any },
     defaultSize = "small"
@@ -254,30 +306,37 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           leftIcon="search"
           placeholder="Find photo..."
           rightElement={
-            <Button
-              large
-              icon="arrow-right"
-              onClick={() => {
-                setSelectedImage(-1);
-                resetImages();
-                reload();
-              }}
-            />
+            <div className={css.rightInputElements}>
+              <>{pressEnter ? <>Press "Enter"</> : null}</>
+              <Button
+                large
+                icon="arrow-right"
+                onClick={() => {
+                  // setSelectedImage(-1);
+                  // setPressEnter(false);
+                  // resetImages();
+                  // reload();
+                }}
+              />
+            </div>
           }
           value={searchValue}
           onChange={(event: any) => {
+            setPressEnter(true);
             setSearchValue((event.currentTarget as HTMLInputElement).value);
+            debounceSearchReload();
           }}
           onKeyPress={(event) => {
             if (event.key === "Enter") {
-              setSelectedImage(-1);
-              resetImages();
-              reload();
+              // setSelectedImage(-1);
+              // setPressEnter(false);
+              // resetImages();
+              // reload();
             }
           }}
         ></InputGroup>
       </div>
-      <div className={css.headerSection}>
+      {/* <div className={css.headerSection}>
         <MultiSelect
           placeholder="Click to select tags..."
           items={tags}
@@ -316,7 +375,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           }}
           tagRenderer={(tag) => tag}
         />
-        {/* {tags.map((tag) => (
+        {tags.map((tag) => (
           <Tag
             key={tag}
             large
@@ -328,8 +387,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           >
             {tag}
           </Tag>
-        ))} */}
-      </div>
+        ))}
+      </div> */}
       {selectionType === SelectionType.Multiple && (
         <div className={css.selectionSectionHolder}>
           <div className={css.selectionSection}>
@@ -416,29 +475,34 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           scrollableTarget="mediaHolder"
           scrollThreshold="5px"
           endMessage={
-            <p
-              style={{
-                textAlign: "center",
-                display: loading ? "none" : "block",
-              }}
-            >
-              {hasApiKey && (
-                <b>All items are loaded for the selected criteria.</b>
-              )}
-            </p>
+            <>
+              <div className={css.breakLine}></div>
+              <p
+                className={css.allItemsLoaded}
+                style={{
+                  display: loading ? "none" : "block",
+                }}
+              >
+                {hasApiKey && (
+                  <b>For the selected criteria, all items have been loaded.</b>
+                )}
+              </p>
+            </>
           }
         >
           {images?.map((image, idx) => {
             if (!image) return null;
 
-            const resolutionObject =
-              ((image as any).videos as any) ||
-              image.images ||
-              ((image as any).font as any);
-            const resolutionImages = Object.entries<any>(resolutionObject);
-            const originalResolution = resolutionObject["original"]
-              ? "original"
-              : last(resolutionImages)?.[0];
+            console.log(image);
+            // TODO
+            // const resolutionObject =
+            //   ((image as any).videos as any) ||
+            //   image.images ||
+            //   ((image as any).font as any);
+            // const resolutionImages = Object.entries<any>(resolutionObject);
+            // const originalResolution = resolutionObject["original"]
+            //   ? "original"
+            //   : last(resolutionImages)?.[0];
 
             const isAudio = !!(image as any)?.audio;
             const isFont = !!(image as any)?.font;
@@ -457,8 +521,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                   <div className={css.imageListTitle222}>
                     {prepareText(image.filename || "")}
                   </div>
-                  <div className={css.imageListTitle}>{image.title}</div>
-                  <div className={css.imageListTabs}>
+                  <div className={css.imageListTitle}>{image.name}</div>
+                  <div className={css.imageListTags}>
                     <TagsView tags={image?.tags || []} />
                   </div>
                 </div>
@@ -532,20 +596,146 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     )}
                   </div>
 
-                  <div className={css.imageListTitle}>{image.title}</div>
-                  <div className={css.imageListTabs}>
+                  <div className={css.imageListTitle}>{image.name}</div>
+                  <div className={css.imageListTags}>
                     <TagsView tags={image?.tags || []} />
                   </div>
                 </div>
               );
             }
 
-            const imageOneSize = getOneImageSize(image?.images);
+            const imageOneSize = image; //getOneImageSize(image?.images);
+
+            const fileName = image.mediaSizes.find(
+              (size) => size.sizeType === "small"
+            )?.sourceFilename;
+            const previewImageUrl = `/api/v1/media/${fileName}`;
+
             return (
               <div
-                key={image.id + "_" + image.title + "_" + image.filename}
+                className={classnames(css.itemHolder)}
+                key={image.id + "_" + image.name + "_" + image.filename}
                 style={{ display: "inline-block" }}
+                onClick={() => {
+                  if (activeLayerId) {
+                    if (addObject) {
+                      _addNewObject(
+                        activeLayerId,
+                        "image",
+                        {},
+                        {
+                          image,
+                        }
+                      );
+                    } else {
+                      onSelect?.({
+                        image,
+                      });
+                    }
+
+                    // if (conf.close) {
+                    onRequestClose();
+                    // } else {
+                    // setSelectedImage(-1);
+                    // }
+                  }
+                }}
               >
+                <div
+                  className={classnames(css.imageItemHolder, {
+                    [css.selectedImage]: selectedImage === idx,
+                  })}
+                >
+                  <div
+                    className={css.imageHolder}
+                    onMouseDown={(e) => {
+                      // e.stopPropagation();
+                    }}
+                    onClick={(e) => {
+                      //e.stopPropagation();
+                      // TODO duplicated code
+                      // if (activeLayerId) {
+                      //   if (addObject) {
+                      //     _addNewObject(
+                      //       activeLayerId,
+                      //       "image", //cover
+                      //       {},
+                      //       {
+                      //         image: {
+                      //           image: (image?.images as any)[
+                      //             originalResolution!
+                      //           ],
+                      //           filename: "",
+                      //         },
+                      //       }
+                      //     );
+                      //   }
+                      //   onRequestClose();
+                      // }
+                    }}
+                  >
+                    <div
+                      className={css.floatingActionBar}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ConfirmButton
+                        onConfirm={async () => {
+                          const { id: deletedId } = await deleteImage(image);
+                          const newImages = images.filter(
+                            (image) => image.id !== deletedId
+                          );
+                          setImages(newImages);
+                          // deleteStorageObject({ id: selectedId! }).then(
+                          //   (result) => {
+                          //     setSelectedId(undefined);
+                          //     AppToaster.show({
+                          //       intent: "success",
+                          //       message: "Bucket is successfully deleted.",
+                          //     });
+                          //     reload();
+                          //   }
+                          // );
+                        }}
+                        buttonProps={{
+                          icon: "trash",
+                          // intent: "danger",
+                          small: true,
+                          //minimal: true,
+                        }}
+                        dialogProps={{}}
+                        title={"Delete image"}
+                      >
+                        Confirm image {image.name} delete?
+                      </ConfirmButton>
+
+                      {/* <Button icon={"more"}></Button> */}
+                    </div>
+                    <img
+                      key={idx}
+                      src={
+                        previewImageUrl
+                        // image.fileBase64
+                        // getMediaSrc(type, imageOneSize || {}).src
+                      }
+                      alt=""
+                    />
+                  </div>
+
+                  <div className={css.imageListTitle}>{image.name}</div>
+                  <div className={css.imageListTags}>
+                    <TagsView tags={image?.tags || []} />
+                  </div>
+                  {/* <div
+                        className={css.openPreview}
+                        onMouseEnter={(e) => {
+                          e.stopPropagation();
+                          setSelectedImage(idx);
+                        }}
+                      >
+                        <Button intent="primary">Resolutions</Button>
+                      </div> */}
+                </div>
+
                 {/*qwe(image, idx)   // TODO: remove this in the future*/}
                 {imageOneSize || (image as any)?.videos ? (
                   <Popover
@@ -571,10 +761,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                               style={{ maxHeight: "400px", maxWidth: "400px" }}
                               key={idx}
                               src={
-                                getMediaSrc(
-                                  "image",
-                                  getOneImageSize(image.images, "medium") || {}
-                                ).src
+                                image.fileBase64
+                                // getMediaSrc(
+                                //   "image",
+                                //   getOneImageSize(image.images, "medium") || {}
+                                // ).src
                               }
                               alt=""
                             />
@@ -595,7 +786,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                           )}
                         </div>
                         <div style={{ paddingBottom: "40px" }}>
-                          {!!image.images && (
+                          {/* {!!image.images && (
                             <>
                               <Text className={css.previewTitle}>
                                 Chose resolution
@@ -616,7 +807,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                 </p>
                               ))}
                             </>
-                          )}
+                          )} */}
 
                           {/* Create new object*/}
                           {addObject &&
@@ -637,12 +828,13 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                           "image", //cover
                                           {},
                                           {
-                                            image: {
-                                              image: (image?.images as any)[
-                                                selectedResolution
-                                              ],
-                                              filename: "",
-                                            },
+                                            image,
+                                            // : {
+                                            //   image: (image?.images as any)[
+                                            //     selectedResolution
+                                            //   ],
+                                            //   filename: "",
+                                            // },
                                           }
                                         );
                                       }
@@ -775,61 +967,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                       </div>
                     }
                   >
-                    <div
-                      className={classnames(css.imageItemHolder, {
-                        [css.selectedImage]: selectedImage === idx,
-                      })}
-                    >
-                      <div
-                        className={css.imageHolder}
-                        onMouseDown={(e) => {
-                          e.stopPropagation();
-                        }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // TODO duplicated code
-                          // if (activeLayerId) {
-                          //   if (addObject) {
-                          //     _addNewObject(
-                          //       activeLayerId,
-                          //       "image", //cover
-                          //       {},
-                          //       {
-                          //         image: {
-                          //           image: (image?.images as any)[
-                          //             originalResolution!
-                          //           ],
-                          //           filename: "",
-                          //         },
-                          //       }
-                          //     );
-                          //   }
-
-                          //   onRequestClose();
-                          // }
-                        }}
-                      >
-                        <img
-                          key={idx}
-                          src={getMediaSrc(type, imageOneSize || {}).src}
-                          alt=""
-                        />
-                      </div>
-
-                      <div className={css.imageListTitle}>{image.title}</div>
-                      <div className={css.imageListTabs}>
-                        <TagsView tags={image?.tags || []} />
-                      </div>
-                      {/* <div
-                        className={css.openPreview}
-                        onMouseEnter={(e) => {
-                          e.stopPropagation();
-                          setSelectedImage(idx);
-                        }}
-                      >
-                        <Button intent="primary">Resolutions</Button>
-                      </div> */}
-                    </div>
+                    <></>
                   </Popover>
                 ) : null}
               </div>
@@ -881,7 +1019,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 
         <p>
           Are you sure you want to delete "
-          {imagesForDelete?.[0].title || imagesForDelete?.[0].filename}" image?
+          {imagesForDelete?.[0].name || imagesForDelete?.[0].filename}" image?
         </p>
       </Alert>
     </div>

@@ -14,8 +14,8 @@ import css from "./confirm-button.module.scss";
 export interface ConfirmButtonProps {
   children: React.ReactNode;
   buttonProps: ButtonProps;
-  dialogProps: Omit<DialogProps, "isOpen">;
-  text: string;
+  dialogProps?: Omit<DialogProps, "isOpen">;
+  text?: string;
   confirm?: string;
   close?: string;
   disabled?: boolean;
@@ -38,7 +38,7 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
     intent,
     children,
     buttonProps,
-    dialogProps,
+    dialogProps = {},
     text,
     confirm = "Confirm",
     close = "Close",
@@ -60,14 +60,26 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
 
   const [enteredText, setEnteredText] = React.useState("");
 
-  const handleButtonClick = React.useCallback(() => setIsOpen(!isOpen), []);
-  const handleClose = React.useCallback(() => {
-    setIsOpen(false);
-    setLoading(false);
-    setDone(false);
+  const handleButtonClick = React.useCallback(
+    (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      e.stopPropagation();
+      setIsOpen(!isOpen);
+    },
+    []
+  );
 
-    onClose?.();
-  }, []);
+  const handleClose = React.useCallback(
+    (e: React.SyntheticEvent<HTMLElement>) => {
+      e.stopPropagation();
+
+      setIsOpen(false);
+      setLoading(false);
+      setDone(false);
+
+      onClose?.();
+    },
+    []
+  );
 
   const logString = logs.map((log, idx) => (
     <div className={css.logItem}>
@@ -91,9 +103,14 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
         {...buttonProps}
       />
       <Dialog
-        className={classnames("bp5-dark", css.dialog, {
-          [css.logsView]: loading,
-        })}
+        className={classnames(
+          "bp5-dark",
+          css.dialog,
+          {
+            [css.logsView]: loading,
+          },
+          "confirm-button-dialog"
+        )}
         isOpen={isOpen}
         onClose={handleClose}
         {...dialogProps}
@@ -131,19 +148,13 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
                 <strong style={{ color: "#00ff4e", lineHeight: "28px" }}>
                   {successMsg}
                 </strong>
-                <Button
-                  onClick={() => {
-                    handleClose();
-                  }}
-                >
-                  Close
-                </Button>
+                <Button onClick={handleClose}>Close</Button>
               </>
             ) : (
               <>
                 <Button
                   loading={loading}
-                  onClick={() => {
+                  onClick={(e) => {
                     if (hasActionOnConfirm) {
                       setLoading(true);
                       onConfirm(() => {
@@ -151,7 +162,7 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
                       });
                     } else {
                       onConfirm();
-                      handleClose();
+                      handleClose(e);
                     }
                   }}
                   disabled={!!confirmText && confirmText !== enteredText}

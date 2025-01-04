@@ -1,4 +1,7 @@
-import { VideoItem } from "webslider-sdk/lib/common/i-media-types";
+import {
+  SaaSMediaData,
+  VideoItem,
+} from "webslider-sdk/lib/common/i-media-types";
 
 function createCanvas(w: number, h: number) {
   const canvas = document.createElement("canvas");
@@ -20,42 +23,30 @@ function createVideo(src: string) {
   return video;
 }
 
-export async function getImageFromFile(
+export async function getImageVideoFromFile(
   file: File
-): Promise<{ blob: Blob | null; videoItem: VideoItem }> {
+): Promise<{ blob: Blob | null; size: { width: number; height: number } }> {
   return new Promise((resolve, reject) => {
     const video = createVideo(URL.createObjectURL(file));
     video.load();
 
-    const videoItem: VideoItem = {
-      size: { width: 0, height: 0, type: "jpg" },
-      url: "",
-    };
+    const size = { width: 0, height: 0 };
 
     video.addEventListener("loadedmetadata", function () {
       // Set canvas dimensions same as video dimensions
-      videoItem.size!.width = video.videoWidth;
-      videoItem.size!.height = video.videoHeight;
+      size.width = video.videoWidth;
+      size.height = video.videoHeight;
     });
 
     video.addEventListener("seeked", function () {
-      const canvas = createCanvas(
-        videoItem.size!.width,
-        videoItem.size!.height
-      );
+      const canvas = createCanvas(size!.width, size!.height);
       const ctx = canvas.getContext("2d");
-      ctx?.drawImage(
-        video,
-        0,
-        0,
-        videoItem.size!.width,
-        videoItem.size!.height
-      );
+      ctx?.drawImage(video, 0, 0, size.width, size.height);
 
       //const image = canvas.toDataURL("image/jpeg", 0.9);
       canvas.toBlob(
         function (blob) {
-          resolve({ blob, videoItem });
+          resolve({ blob, size });
         },
         "image/jpeg",
         1

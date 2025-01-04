@@ -4,9 +4,12 @@ import { getUnderFieldText } from "../input-utils";
 import { ISelectInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { createInputLabel } from "../input-helpers";
 
-export const TagsInputForm: React.FC<ISelectInput & IUpdateInput> = (props) => {
+export const SelectInputForm: React.FC<ISelectInput & IUpdateInput> = (
+  props
+) => {
   const {
     displayName,
+    options,
     value,
     onChange,
     helperText,

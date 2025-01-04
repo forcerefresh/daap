@@ -7,7 +7,7 @@ import {
 import {
   blobToBase64,
   file2Base64,
-  getImageFromFile,
+  getImageVideoFromFile,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
@@ -29,7 +29,7 @@ export const useMyMediaHook = () => {
     }
 
     if (type === "video") {
-      const { blob, videoItem } = await getImageFromFile(file);
+      const { blob, videoItem } = await getImageVideoFromFile(file);
       previewImageItem = videoItem;
       previewImageBase64 =
         "data:image/jpg;base64," +

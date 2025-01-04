@@ -116,7 +116,7 @@ export const IntegrationContext = React.createContext({
         status: "OK",
       }),
 
-    fetchImages: (props: {
+    fetchMedias: (props: {
       type: MediaType;
       from: number;
       tags?: string[];
@@ -124,12 +124,12 @@ export const IntegrationContext = React.createContext({
       perPage?: number;
     }): Promise<{
       data: /*ImageData[] | VectorData[] |*/ any[];
-      hasMore: boolean;
+      pagination: Pagination;
     }> => {
-      return Promise.resolve({ data: [], hasMore: false });
+      return Promise.resolve({ data: [], pagination: {} as Pagination });
     },
 
-    deleteImages: (
+    deleteMedias: (
       type: MediaType,
       ids: string[]
     ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {

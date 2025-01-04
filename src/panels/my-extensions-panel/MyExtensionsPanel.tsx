@@ -47,7 +47,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     getInstalledExtensions,
   } = globalContext.useExtensionsHook();
   const UploadComponent = globalContext?.getMyUploadComponent;
-  const { fetchImages, deleteImages } = globalContext.useMyMediaHook();
+  const { fetchMedias, deleteMedias } = globalContext.useMyMediaHook();
 
   useEffect(() => {
     getInstalledExtensions().then((res: { items: IExtensionItem[] }) => {
@@ -60,7 +60,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     from = from === -1 ? extensions?.length || 0 : from;
 
-    fetchImages({
+    fetchMedias({
       type: "extension",
       tags: [],
       from: 0,
@@ -140,7 +140,7 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     if (!uninstallOrDelIdRef.current?.id) return;
 
-    deleteImages("extension", [`${uninstallOrDelIdRef.current.id}`]).then(
+    deleteMedias("extension", [`${uninstallOrDelIdRef.current.id}`]).then(
       (resp) => {
         debounceFetchData(0);
 
