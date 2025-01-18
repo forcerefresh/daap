@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { cloneDeep, includes, isEmpty } from "lodash-es";
+import { cloneDeep, first, includes, isEmpty, last } from "lodash-es";
 import React from "react";
 import { connect } from "react-redux";
 import { InfoInputForm } from "../../inputs/info-input/info-input";
@@ -11,6 +11,15 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
+  activateLayer,
+  deleteLayersThree,
+  deleteSlideThree,
+  duplicateLayers,
+  duplicateSlides,
+  moveLayers,
+  selectForProperties,
+  selectForPropertiesProps,
+  selectLayers,
   updateLayer,
   updateObject,
   updateObjectForPreview,
@@ -28,6 +37,8 @@ import css from "./PropertiesPanel.module.scss";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import { createObject } from "../../objects/create-object-factory";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { Button, Divider } from "@blueprintjs/core";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 type IObjectOrLayer = any; // IObject | ILayer;
 
@@ -38,6 +49,8 @@ type IPropertiesPanel = typeof mapDispatchToProps &
 
 export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   const {
+    pageIds,
+    layerArr,
     object,
     objectLayer,
     layer,
@@ -49,7 +62,14 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     _updateObjectForPreview,
     _updateObject,
     _updateLayer,
+    _deleteSlideThree,
     _updateSlide,
+    _deleteLayersThree,
+    _activateLayer,
+    _selectForProperties,
+    _selectLayers,
+    _duplicateSlides,
+    _moveLayers,
     className,
     objects,
   } = props;
@@ -58,6 +78,47 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     if (!slide.type || slide.type === PageType.Normal) {
       return (
         <>
+          <div className={css.actionHolder}>
+            <Button
+              onClick={() => {
+                _duplicateSlides([slide.id]);
+              }}
+              icon={"duplicate"}
+            >
+              Duplicate
+            </Button>
+          </div>
+          <div className={css.actionHolder}>
+            <Button
+              style={{ alignSelf: "end" }}
+              icon={"trash"}
+              disabled={pageIds.length === 1}
+              minimal
+              intent={"danger"}
+              onClick={() => {
+                // let layerIdToSelect: ILayer | undefined = undefined;
+
+                // if (layerArr.length > 1) {
+                //   if (layerArr[0].id === slide.id) {
+                //     layerIdToSelect = layerArr[1];
+                //   } else {
+                //     const idx = layerArr.findIndex(
+                //       (layerItem) => layerItem.id === slide.id
+                //     );
+
+                //     layerIdToSelect = layerArr[idx - 1];
+                //   }
+                // }
+
+                _deleteSlideThree(slide.id);
+
+                AppToaster.show({
+                  intent: "warning",
+                  message: "Page has been deleted.",
+                });
+              }}
+            ></Button>
+          </div>
           {/* {getInheritTimeField(
             "Duration",
             slide.duration,
@@ -102,6 +163,81 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
   };
 
   const renderLayerProperties = (layer: ILayer) => {
+    const isFirst = first(layerArr)?.id === layer.id;
+    const isLast = last(layerArr)?.id === layer.id;
+
+    const idx = layerArr.findIndex((layerItem) => layerItem.id === layer.id);
+
+    return (
+      <>
+        <div className={css.actionHolder}>
+          <Button
+            disabled={isFirst}
+            onClick={() => {
+              _moveLayers(layerArr[idx - 1].id, "above", [layer.id]);
+            }}
+            icon="arrow-up"
+          >
+            Move up
+          </Button>
+          <Button
+            disabled={isLast}
+            onClick={() => {
+              _moveLayers(layerArr[idx + 1].id, "below", [layer.id]);
+            }}
+            icon="arrow-down"
+          >
+            Move down
+          </Button>
+        </div>
+        <div className={css.actionHolder}>
+          <Button
+            onClick={() => {
+              _duplicateLayers([layer.id]);
+            }}
+            icon={"duplicate"}
+          >
+            Duplicate
+          </Button>
+        </div>
+        <div className={css.actionHolder}>
+          <Button
+            style={{ alignSelf: "end" }}
+            icon={"trash"}
+            minimal
+            intent={"danger"}
+            onClick={() => {
+              let layerIdToSelect: ILayer | undefined = undefined;
+
+              if (layerArr.length > 1) {
+                if (layerArr[0].id === layer.id) {
+                  layerIdToSelect = layerArr[1];
+                } else {
+                  const idx = layerArr.findIndex(
+                    (layerItem) => layerItem.id === layer.id
+                  );
+
+                  layerIdToSelect = layerArr[idx - 1];
+                }
+              }
+
+              _deleteLayersThree([layer.id]);
+              AppToaster.show({
+                intent: "warning",
+                message: "Layer '" + layer.name + "' has been deleted.",
+              });
+
+              if (layerIdToSelect) {
+                _activateLayer(layerIdToSelect.id);
+                _selectLayers([layerIdToSelect.id]);
+                _selectForProperties({ type: "layer", id: layerIdToSelect.id });
+              }
+            }}
+          ></Button>
+        </div>
+      </>
+    );
+
     return null; //"Layer does not have properties.";
 
     // return (
@@ -322,7 +458,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     }
 
     if (selectionForProperties?.type === "slide" && slide) {
-      return null; //renderSlideProperties(slide);
+      return renderSlideProperties(slide);
     }
   };
 
@@ -369,8 +505,16 @@ const mapStateToProps = (state: IStore) => {
     panelName = { name: slide.name, type: "slide" };
   }
 
+  let layerArr: ILayer[] = [];
+  if (selection.activeSlideId) {
+    const layerIds = pages.pageById[selection.activeSlideId].layerIds;
+    layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
+  }
+
   return {
-    // activeObjectId,
+    pageIds: pages.pages,
+    pageById: pages.pageById,
+    layerArr,
     objects,
     object,
     objectLayer,
@@ -388,6 +532,18 @@ const mapDispatchToProps = {
   _updateObjectForPreview: (object: IObject) => updateObjectForPreview(object),
   _updateLayer: (layer: ILayer) => updateLayer(layer),
   _updateSlide: (slide: IPage) => updateSlide(slide),
+  _deleteLayersThree: (layerIds: string[]): any => deleteLayersThree(layerIds),
+  _activateLayer: (layerId: string) => activateLayer(layerId),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
+  _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
+  _duplicateSlides: (ids: string[]): any => duplicateSlides(ids),
+  _moveLayers: (
+    refId: string,
+    where: "above" | "below" | "layer" | "slide" | "bottom",
+    moveIds: string[]
+  ) => moveLayers(refId, where, moveIds),
+  _deleteSlideThree: (id: string): any => deleteSlideThree(id),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);

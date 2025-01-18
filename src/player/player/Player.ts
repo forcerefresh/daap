@@ -1675,6 +1675,7 @@ export class Player {
     const slideTimeline = new RootTimeline({
       name: "RootSlideTimeline-id:" + slideIdx,
       duration: 10000, //convertTimeUnitToMs(data.slide.duration.customValue),
+      oneFrame: true,
     }); // gsap.timeline({ paused: true });
     this.timelines[slideIdx] = slideTimeline;
 

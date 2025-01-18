@@ -40,11 +40,12 @@ export class Ticker {
     this.emitter = new EventEmitter();
 
     this.fps = 1000 / (config.framerate || 60);
-    this.raf = !!raf
-      ? raf
-      : (fn: FrameRequestCallback) => {
-          return setTimeout(fn, this.fps);
-        };
+    // this.raf = !!raf
+    //   ? raf
+    //   :
+    this.raf = (fn: FrameRequestCallback) => {
+      return setTimeout(fn, this.fps);
+    };
   }
 
   start() {
@@ -72,7 +73,7 @@ export class Ticker {
   loop() {
     if (this.requestStop) return;
 
-    raf(this.loop.bind(this));
+    this.raf(this.loop.bind(this));
 
     var now = currentTime();
     var dt = now - this.lastTime;

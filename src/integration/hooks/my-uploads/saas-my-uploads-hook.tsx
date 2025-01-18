@@ -8,12 +8,16 @@ import {
   blobToBase64,
   file2Base64,
   getImageVideoFromFile,
+  textFile2Text,
 } from "../../../utils/doom-utils/video";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import axios from "axios";
 import { isEmpty } from "lodash-es";
 import { Pagination } from "../../../types/pagination";
+import { addStyle } from "../../../utils/doom-utils/css-utils";
+import { createFontPreviewImage } from "../../../utils/doom-utils/font-utils";
+import { delayPromise } from "../../../utils/common/delay-utils";
 
 export const useMyMediaHook = () => {
   const upload = async (
@@ -34,11 +38,18 @@ export const useMyMediaHook = () => {
     //     (await resizeFile(blob!, 10000, 10000, 70, "jpg"));
     // }
 
+    let fileBase64: string = "";
+
     let previewImageBase64: string | undefined;
 
     let videoSize: { width: number; height: number } | undefined = undefined;
 
-    if (type === "video") {
+    if (type === "image") {
+      fileBase64 = await file2Base64(file);
+    } else if (type === "font") {
+      fileBase64 = await file2Base64(file);
+    } else if (type === "video") {
+      fileBase64 = await file2Base64(file);
       const { blob, size } = await getImageVideoFromFile(file);
       const blobBase64 = await blobToBase64(blob!);
       console.log(blobBase64);
@@ -46,10 +57,31 @@ export const useMyMediaHook = () => {
       videoSize = size;
       previewImageBase64 = "data:image/jpeg;base64," + blobBase64;
       //"data:image/jpeg;base64," + (await resizeFile(blob!, 10000, 10000, 75));
-    }
+    } else if (type === "vector") {
+      videoSize = { width: 100, height: 100 };
+      let svgString = await textFile2Text(file);
 
-    // base64
-    const fileBase64 = await file2Base64(file);
+      console.log(svgString);
+      console.log(fileMetadata);
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(svgString, "text/html");
+
+      const viewBox = doc.querySelector("svg")?.getAttribute("viewBox");
+      console.log(viewBox);
+      if (viewBox) {
+        const rect = viewBox.split(" ");
+        videoSize = { width: parseInt(rect[2]), height: parseInt(rect[3]) };
+      }
+
+      // if (fileMetadata.doNotPreserveAspectRatio) {
+      //   svgString = svgString.replace(
+      //     "<svg ",
+      //     '<svg preserveAspectRatio="none" '
+      //   );
+      // }
+      fileBase64 = btoa(svgString);
+    }
 
     console.log({
       // fileBase64,
@@ -69,9 +101,50 @@ export const useMyMediaHook = () => {
       size: videoSize,
     };
 
-    const response = await axios.post(`/api/v1/medias/${type}`, json);
+    let response: any;
+    try {
+      response = await axios.post(`/api/v1/medias/${type}`, json);
+    } catch (ex: any) {
+      return { status: "ERROR", errorMessage: ex?.response?.data?.message };
+    }
+
     console.log(response);
 
+    if (type === "font") {
+      const mediaSizes = JSON.parse(response.data.data.addedMedia.mediaSizes);
+      const fontFilename = mediaSizes.find(
+        (item: any) => item.sizeType === "original"
+      ).sourceFilename;
+      const fontUrl = `/api/v1/media/${fontFilename}`;
+
+      addStyle(`
+        @font-face{
+          font-family: "${response.data.data.addedMedia.name}";
+          src: url("${fontUrl}");
+        }
+      `);
+
+      await delayPromise(200);
+      await delayPromise(200);
+      await delayPromise(200);
+      await delayPromise(200);
+      await delayPromise(200);
+
+      const imageBlob = await createFontPreviewImage({
+        url: fontUrl,
+        name: response.data.data.addedMedia.name,
+        type: response.data.data.addedMedia.format,
+      });
+
+      if (imageBlob) {
+        const previewImageBase64 = await blobToBase64(imageBlob);
+        const previevJson = { previewImageBase64 };
+        const responsePreviewImage = await axios.patch(
+          `/api/v1/medias/${type}/${response.data.data.addedMedia.id}`,
+          previevJson
+        );
+      }
+    }
     return { status: "OK" };
 
     // return { status: "OK" };

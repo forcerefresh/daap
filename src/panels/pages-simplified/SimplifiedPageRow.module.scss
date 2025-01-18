@@ -1,0 +1,29 @@
+.objectItem {
+  width: 140px;
+  height: 140px;
+  padding: 2px;
+  border: 1px solid #5c5c5c;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  position: relative;
+
+  // cursor: pointer;
+  display: flex;
+
+  &.selected {
+    border: 1px solid #48aff0;
+    border-radius: 4px;
+  }
+}
+
+.pageImage {
+  max-width: 100%;
+  max-height: 100%;
+}
+.groupObjectsCounter {
+  background-color: #125078 !important;
+  position: absolute;
+  top: -0px;
+  right: -0px;
+}

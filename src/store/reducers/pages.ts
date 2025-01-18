@@ -140,9 +140,9 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
     }
     case MOVE_LAYERS: {
       const payload = action.payload;
-      const slideById = cloneDeep(state.pageById);
+      const pageById = cloneDeep(state.pageById);
 
-      forIn(slideById, function (slide, _pageId) {
+      forIn(pageById, function (slide, _pageId) {
         remove(slide.layerIds, (id) => {
           return payload.moveIds.indexOf(id) !== -1;
         });
@@ -150,24 +150,33 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
 
       // add layers above layer id
       if (payload.where === "above") {
-        forIn(slideById, function (slide, _pageId) {
+        forIn(pageById, function (slide, _pageId) {
           const idx = slide.layerIds.indexOf(payload.refId);
           if (idx !== -1) {
             slide.layerIds.splice(idx, 0, ...payload.moveIds);
           }
         });
       }
+      // add layers above layer id
+      if (payload.where === "below") {
+        forIn(pageById, function (slide, _pageId) {
+          const idx = slide.layerIds.indexOf(payload.refId);
+          if (idx !== -1) {
+            slide.layerIds.splice(idx + 1, 0, ...payload.moveIds);
+          }
+        });
+      }
 
       // add object in layer (at bottom)
       if (payload.where === "slide") {
-        slideById[payload.refId].layerIds.splice(
-          slideById[payload.refId].layerIds.length,
+        pageById[payload.refId].layerIds.splice(
+          pageById[payload.refId].layerIds.length,
           0,
           ...payload.moveIds
         );
       }
 
-      return { ...state, slideById };
+      return { ...state, pageById };
     }
 
     case MOVE_SLIDES: {

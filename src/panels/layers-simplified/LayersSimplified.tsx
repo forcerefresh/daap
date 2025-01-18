@@ -43,7 +43,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { ObjectRow } from "./ObjectRow";
 import { cloneDeep, last } from "lodash-es";
-import { Button } from "@blueprintjs/core";
+import { Button, Text } from "@blueprintjs/core";
 import withScrolling, {
   createVerticalStrength,
   useDndScrolling,
@@ -67,6 +67,8 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     breakpointConfig,
     selectedObjectIds,
     selectionPath,
+    activeSlideId,
+    selectionForProperties,
     _addObjectsToSelection,
     _removeObjectsFromSelection,
     _deactivateObject,
@@ -78,6 +80,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     _activateSlide,
     _selectSlides,
     _updateLayer,
+    _addNewLayer,
   } = props;
 
   // const objectsHolderRef = useRef<HTMLDivElement | null>(null);
@@ -208,7 +211,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   // console.log(objectIds);
 
   // console.log(selectionPathWithoutLayer);
-  if (!parentLayerId) return null;
+  // if (!parentLayerId) return null;
 
   console.log("LAYERS_S");
 
@@ -227,7 +230,9 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
             <>
               <div style={{ display: "flex" }}>
                 <Button
+                  className={css.pageLabel}
                   intent={"primary"}
+                  active={selectionForProperties?.id === slide?.id}
                   minimal
                   small
                   onClick={() => {
@@ -238,25 +243,60 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                     }
                   }}
                 >
+                  {/* <span className={css.pageLabel}> */}
                   {slide?.name}
+                  {/* </span> */}
                 </Button>
                 {/* <Button small icon="caret-down" minimal></Button> */}
               </div>
-              <div style={{ display: "flex" }}>
+
+              {/* {layerArr?.length === 0 ? ( */}
+
+              {/* ) : null} */}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "start",
+                }}
+              >
+                {layerArr?.map((layer) => {
+                  return (
+                    <Button
+                      className={css.smallButton}
+                      intent={"primary"}
+                      active={layer.id === activeLayerId}
+                      minimal
+                      small
+                      onClick={() => {
+                        _activateLayer(layer.id);
+                        _selectLayers([layer.id]);
+                        _selectForProperties({ type: "layer", id: layer.id });
+                      }}
+                    >
+                      {layer.name}
+                    </Button>
+                  );
+                })}
+
+                {/* <Button small icon="caret-down" minimal></Button> */}
+              </div>
+              <div style={{ display: "flex", marginTop: "5px" }}>
                 <Button
-                  intent={"primary"}
-                  minimal
+                  className={css.smallButton}
+                  // intent={"primary"}
+                  // minimal
+                  disabled={!activeSlideId}
                   small
                   onClick={() => {
-                    _activateLayer(parentLayerId);
-                    _selectLayers([parentLayerId]);
-                    _selectForProperties({ type: "layer", id: parentLayerId });
+                    _addNewLayer(activeSlideId!);
                   }}
+                  icon="add"
                 >
-                  {layerById[parentLayerId]?.name}{" "}
+                  Layer
                 </Button>
-                {/* <Button small icon="caret-down" minimal></Button> */}
               </div>
+
               {selectionPathWithoutLayer.map((pathObjectId) => (
                 <div style={{ display: "flex" }}>
                   <Button
@@ -276,6 +316,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                   </Button>
                 </div>
               ))}
+
               {/* key={layer.id} */}
               <ScrollingComponent className={cx(css.objectsHolder, {})}>
                 {(sortedObjectIds ?? objectIds)?.length > 0 ? (
@@ -322,7 +363,9 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                     })}
                   </>
                 ) : (
-                  "No objects found"
+                  <span className="bp5-text-disabled">
+                    No {layerArr?.length === 0 ? "layers" : "objects"} found
+                  </span>
                 )}
               </ScrollingComponent>
             </>

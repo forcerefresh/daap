@@ -80,6 +80,9 @@ import {
 } from "./actions-utils";
 import { IClipboard } from "../reducers/i-clipboard";
 import { clipboard } from "../reducers/clipboard";
+import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
+import { addStyle } from "../../utils/doom-utils/css-utils";
+import { getGlobals } from "../../globals";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1985,9 +1988,35 @@ function handleTextUpdate(
       -1
   ) {
     delay(updateObjectOnce, 500);
+
     // load font
+    if (newObjectValues.font.source === "my-fonts") {
+      const fontObj = getGlobals()
+        .getMyFonts()
+        .find((font) => font.name === newObjectValues.font.fontFamily);
+
+      if (fontObj) {
+        const fontFileName = fontObj.mediaSizes.find(
+          (size) => size.sizeType === "original"
+        )?.sourceFilename;
+
+        const fontUrl = `/api/v1/media/${fontFileName}`;
+
+        // add css first
+        addStyle(`
+        @font-face{
+          font-family: "${newObjectValues.font.fontFamily}";
+          src: url("${fontUrl}");
+        }
+      `);
+      }
+    }
+
+    const loadSource =
+      newObjectValues.font.source === "my-fonts" ? "custom" : "google";
+
     load({
-      google: {
+      [loadSource]: {
         families: [newFont + ":" + newObjectValues.font.weight],
       },
       classes: false,
@@ -2182,6 +2211,24 @@ export function showSimplifiedLayers(
 ): ShowSimplifiedLayersAction {
   return {
     type: SHOW_SIMPLIFIED_LAYERS,
+    payload: show,
+    isUndoable: false,
+  };
+}
+// ******
+
+// ******
+
+export const SHOW_SIMPLIFIED_PAGES = "Show simplified pages";
+
+export interface ShowSimplifiedPagesAction extends IUndoableAction<false> {
+  type: typeof SHOW_SIMPLIFIED_PAGES;
+  payload: boolean;
+}
+
+export function showSimplifiedPages(show: boolean): ShowSimplifiedPagesAction {
+  return {
+    type: SHOW_SIMPLIFIED_PAGES,
     payload: show,
     isUndoable: false,
   };
@@ -2705,6 +2752,23 @@ export function setExternalFontLoaded(
 
 // ***
 
+export const SET_MY_FONTS = "Set my fonts";
+
+export interface SetMyFontsAction extends IUndoableAction<false> {
+  type: typeof SET_MY_FONTS;
+  payload: SaaSMediaData[];
+}
+
+export function setMyFonts(myFonts: SaaSMediaData[]): SetMyFontsAction {
+  return {
+    type: SET_MY_FONTS,
+    payload: myFonts,
+    isUndoable: false,
+  };
+}
+
+// ***
+
 export const UPDATE_PROJECT_META = "Update project meta";
 
 export interface UpdateProjectMetaAction extends IUndoableAction<false> {
@@ -2904,6 +2968,7 @@ export type ActionTypes =
 
   //external fonts
   | ExternalFontLoadedAction
+  | SetMyFontsAction
 
   // project metadata
   | UpdateProjectMetaAction
@@ -2930,4 +2995,5 @@ export type ActionTypes =
   | CopyToClipboardAction
   | PasteObjectsFromClipboardAction
   | UpdateUserDataAction
-  | ShowSimplifiedLayersAction;
+  | ShowSimplifiedLayersAction
+  | ShowSimplifiedPagesAction;

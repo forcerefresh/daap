@@ -1,0 +1,53 @@
+@import "/src/theme";
+
+.pagePanel {
+  padding: 6px 0 6px 6px;
+  background: $pt-app-background-color;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  input,
+  button,
+  textarea,
+  :focus {
+    outline: none;
+  }
+}
+.layersHeader {
+  flex-grow: 0;
+}
+.layersHolder {
+  flex-grow: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.objectsHolder {
+  overflow: auto;
+  padding: 5px;
+}
+
+:global(.bp5-dark) {
+  .pagePanel {
+    background: $pt-dark-app-background-color !important;
+  }
+}
+
+.smallButton > span {
+  max-width: 75px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.pageLabel {
+  padding: 2px 7px;
+  width: 90px;
+  background: blueviolet;
+  margin-bottom: 5px;
+  background-color: #444;
+  justify-content: normal;
+}

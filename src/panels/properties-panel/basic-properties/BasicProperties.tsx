@@ -48,8 +48,8 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
             retObj.name = name;
             _updateSlide(retObj);
           },
-          undefined,
-          { disabled: !slide.type || slide.type !== PageType.Normal }
+          undefined
+          // { disabled: !slide.type || slide.type !== PageType.Normal }
         )}
         {/* {getTextField("ID", slide.customId, (customId: string) => {
           const retObj = cloneDeep(slide);

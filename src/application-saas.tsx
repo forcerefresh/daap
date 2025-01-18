@@ -34,29 +34,29 @@ const global = window as any;
 
 const Editor = (props: ReturnType<typeof mapStateToProps>) => {
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const { userData } = props;
-  const siteHolderRef = useRef<HTMLDivElement | null>(null);
-  const [showEditor, setShowEditor] = useState(false);
+  // const { userData } = props;
+  // const siteHolderRef = useRef<HTMLDivElement | null>(null);
+  // const [showEditor, setShowEditor] = useState(false);
 
-  useLayoutEffect(() => {
-    setShowEditor(!!userData);
-  }, [userData]);
+  // useLayoutEffect(() => {
+  //   setShowEditor(!!userData);
+  // }, [userData]);
 
-  useLayoutEffect(() => {
-    setShowEditor(!!userData);
-  }, [userData]);
+  // useLayoutEffect(() => {
+  //   setShowEditor(!!userData);
+  // }, [userData]);
 
-  const focusApp = (initiarot: string) => {
-    // siteHolderRef.current!.style.display = "none";
-    setShowEditor(true);
-  };
+  // const focusApp = (initiarot: string) => {
+  //   // siteHolderRef.current!.style.display = "none";
+  //   setShowEditor(true);
+  // };
 
-  const [renderSite, setRenderSite] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setRenderSite(false);
-    }, 500);
-  }, [showEditor]);
+  // const [renderSite, setRenderSite] = useState(true);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setRenderSite(false);
+  //   }, 500);
+  // }, [showEditor]);
 
   // useEffect(() => {
   //   const tourData = [
@@ -121,7 +121,7 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
         <DevelopmentManager />
         <PreviewTimelineContextProvider>
           <div className={css.main}>
-            {renderSite && (
+            {/* {renderSite && (
               <div
                 className={cx(css.siteHolder, { [css.hideSite]: showEditor })}
               >
@@ -177,19 +177,17 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                   >
                     Start Creating Now
                   </Button>
-                  {/* <Button large className={css.button} intent="success">
-                Create from wizard
-              </Button> */}
+                 
                 </div>
               </div>
-            )}
+            )} */}
             <div
-              className={cx(css.editorHolder, { [css.showEditor]: showEditor })}
+              className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
             >
               <MainHeader className={css.saasHeader} />
               <App className={css.editor} />
             </div>
-            {renderSite && (
+            {/* {renderSite && (
               <div
                 className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
                 onClick={() => {
@@ -202,7 +200,7 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                   </Button>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
           <div ref={overlayRef} />
         </PreviewTimelineContextProvider>

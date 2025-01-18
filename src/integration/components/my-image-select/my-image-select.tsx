@@ -4,6 +4,7 @@ import { stringify } from "querystring";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import Dropzone, { useDropzone } from "react-dropzone";
 import {
+  getCheckboxField,
   getSelectField,
   getTagsField,
   getTextField,
@@ -38,6 +39,7 @@ export interface UploadFileInfo {
   name: string;
   description: string;
   uploaded?: boolean;
+  // doNotPreserveAspectRatio?: boolean;
 }
 /*
 interface MyImageSelectProps {
@@ -91,7 +93,13 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
     const arr: UploadFileInfo[] = [];
     acceptedFiles.forEach((file) => {
       const name = getNameFromFilename(file.name);
-      arr.push({ tags: [], name: name, description: "", filename: file.name });
+      arr.push({
+        tags: [],
+        name: name,
+        description: "",
+        filename: file.name,
+        // doNotPreserveAspectRatio: true,
+      });
     });
     setFormData(arr);
   }, [acceptedFiles]);
@@ -158,6 +166,21 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
             "Override original filename"
           )}
         </div>
+
+        {/* {type === "vector" && (
+          <div>
+            {getCheckboxField(
+              "Do not preserve aspect ratio",
+              !!formData[idx]?.doNotPreserveAspectRatio,
+              (value: boolean) => {
+                const newArr = [...formData];
+                // newArr[idx].doNotPreserveAspectRatio = value;
+                setFormData(newArr);
+              },
+              "Allow SVG to be scaled non-uniformly (recommended).",
+              { alignIndicator: "left" }
+            )}
+          </div> */}
       </div>
     );
   });
@@ -316,6 +339,7 @@ function UploadDialog(props: UploadDialogProps) {
       // title: filesInfo.name, // TODO remove
       // description: filesInfo.description,
       filename: filesInfo.filename,
+      // doNotPreserveAspectRatio: filesInfo.doNotPreserveAspectRatio,
     }).then((status) => {
       statusesArrRef.current.push(status);
       logger.app.debug(

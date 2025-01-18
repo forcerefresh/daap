@@ -304,7 +304,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find photo..."
+          placeholder={`Find ${type}...`}
           rightElement={
             <div className={css.rightInputElements}>
               <>{pressEnter ? <>Press "Enter"</> : null}</>

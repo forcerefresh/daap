@@ -134,14 +134,42 @@
   }
 }
 
-.layersSimplified {
+.simplifiedFloatingPanelHolder {
   position: absolute;
   right: 10px;
   top: 10px;
   bottom: 10px;
-  width: 103px;
+  width: 500px;
+  pointer-events: none;
+  display: flex;
+  // align-content: stretch;
+  justify-content: end;
   overflow: hidden;
   z-index: 2001;
+  column-gap: 10px;
+}
+
+.layersSimplified {
+  pointer-events: all;
+  // position: absolute;
+  // right: 10px;
+  // top: 10px;
+  // bottom: 10px;
+  width: 103px;
+  // overflow: hidden;
+  // z-index: 2001;
+}
+
+.pagesSimplified {
+  pointer-events: all;
+
+  // position: absolute;
+  // right: 10px;
+  // top: 10px;
+  // bottom: 10px;
+  width: 160px;
+  // overflow: hidden;
+  // z-index: 2001;
 }
 
 :global(.bp5-dark) {

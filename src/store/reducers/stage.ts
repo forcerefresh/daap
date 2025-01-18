@@ -15,6 +15,7 @@ import {
   OVERRIDE_STAGE_TOOL,
   CANCEL_OVERRIDE_STAGE_TOOL,
   SHOW_SIMPLIFIED_LAYERS,
+  SHOW_SIMPLIFIED_PAGES,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -51,6 +52,7 @@ export interface IStage {
   // text position
   nextTextPositionY: number;
   showSimplifiedLayerPanel: boolean;
+  showSimplifiedPagesPanel: boolean;
 }
 
 const getStageDefault = (): IStage => ({
@@ -71,6 +73,7 @@ const getStageDefault = (): IStage => ({
   forceRefreshRand: 0,
   nextTextPositionY: 100,
   showSimplifiedLayerPanel: true,
+  showSimplifiedPagesPanel: true,
 });
 
 export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
@@ -144,6 +147,9 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
     }
     case SHOW_SIMPLIFIED_LAYERS: {
       return { ...state, showSimplifiedLayerPanel: action.payload };
+    }
+    case SHOW_SIMPLIFIED_PAGES: {
+      return { ...state, showSimplifiedPagesPanel: action.payload };
     }
     default:
       return state;

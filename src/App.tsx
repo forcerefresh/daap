@@ -9,6 +9,7 @@ import {
   doClearHistory,
   initializeSlideAndLayer,
   loadUserData,
+  setMyFonts,
   updateGlobalConfiguration,
 } from "./store/actions/actions";
 import { IStore } from "./store/store";
@@ -16,6 +17,8 @@ import { IStore } from "./store/store";
 import gsap from "gsap";
 import animejs from "animejs";
 import { AppToaster } from "./utils/components/app-toaster/AppToaster";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -29,6 +32,7 @@ function App(props: IAppProps) {
     _updateGlobalConfiguration,
     _doClearHistory,
     _loadUserData,
+    _setMyFonts,
     theme,
     className,
   } = props;
@@ -37,6 +41,26 @@ function App(props: IAppProps) {
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
   const { getSettings, scaleUI } = globalContext.useAppSettingsHook();
+
+  const { fetchMedias } = globalContext.useMyMediaHook();
+
+  const loadMyFonts = () => {
+    fetchMedias({
+      type: "font",
+      tags: [],
+      from: 1,
+      perPage: 200,
+    }).then(
+      (result) => {
+        console.log(result.data);
+        _setMyFonts(result.data);
+      },
+
+      (error) => {
+        logger.app.error(error);
+      }
+    );
+  };
 
   useEffect(() => {
     // **
@@ -62,6 +86,8 @@ function App(props: IAppProps) {
     });
 
     _loadUserData();
+
+    loadMyFonts();
   }, []);
 
   // disable pinch
@@ -119,6 +145,7 @@ const mapDispatchToProps = {
   _updateGlobalConfiguration: updateGlobalConfiguration,
   _doClearHistory: () => doClearHistory(),
   _loadUserData: () => loadUserData(),
+  _setMyFonts: (myFonts: SaaSMediaData[]) => setMyFonts(myFonts),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -1,5 +1,12 @@
 import { Button, Card, Elevation, Icon, Spinner } from "@blueprintjs/core";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -12,22 +19,30 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 
 import { load } from "webfontloader";
 import { getGlobals } from "../../globals";
-import { TEXT } from "../../objects/text/text";
+import { TEXT, TextType } from "../../objects/text/text";
 
 import FontsPreview from "../../utils/fonts2/google-font-image.png";
 import { getTextField } from "../../inputs/input-utils";
 
 import { Virtuoso } from "react-virtuoso";
 import { settings } from "../../store/reducers/settings";
+import { IntegrationContext } from "../../integration";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
+import { addStyle } from "../../utils/doom-utils/css-utils";
+import { debounce, isArray } from "lodash-es";
 
 enum FontSections {
+  MyFonts = "my-fonts",
   SystemFonts = "system-fonts",
   GoogleFonts = "google-fonts",
 }
 
 interface IFontPreview {
   fontFamily: string;
-  source: "system-fonts" | "google-fonts" | string;
+  source: "system-fonts" | "google-fonts" | "my-fonts";
+  mediaId?: string; // TODO: make union
+  fontUrl?: string; // TODO: make union
 }
 
 interface IFontPreviewPanelProps {
@@ -51,6 +66,41 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
     themeClass,
   } = props;
 
+  const [myFonts, setMyFonts] = useState<SaaSMediaData[]>([]);
+
+  const globalContext = useContext(IntegrationContext);
+
+  const { fetchMedias } = globalContext.useMyMediaHook();
+
+  const fetchData = useCallback(
+    (searchString?: string) => {
+      fetchMedias({
+        type: "font",
+        tags: [],
+        from: 1,
+        perPage: 200,
+        search: searchString,
+      }).then(
+        (result) => {
+          console.log(result.data);
+          // TODO: response can be error, like AUTH.
+          if (isArray(result.data)) {
+            setMyFonts(result.data);
+          }
+        },
+
+        (error) => {
+          logger.app.error(error);
+        }
+      );
+    },
+    [fetchMedias]
+  );
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   //const inputRef = useRef<HTMLInputElement>(null);
 
   // useEffect(() => {
@@ -70,7 +120,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
     [key: string]: boolean;
   }>({
     [FontSections.GoogleFonts]: true,
-    [FontSections.SystemFonts]: false,
+    [FontSections.MyFonts]: true,
   });
 
   const toggleSection = (section: string) => {
@@ -135,8 +185,21 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
 
     // load font closure
     function loadFont(_selectedFont: IFontPreview) {
+      const source = _selectedFont.source; //=== "google-fonts" ? "google" : "custom";
+
+      if (source === "my-fonts") {
+        // add css first
+        addStyle(`
+          @font-face{
+            font-family: "${_selectedFont.fontFamily}";
+            src: url("${_selectedFont.fontUrl}");
+          }
+        `);
+      }
+
+      const loadSource = source === "my-fonts" ? "custom" : "google";
       load({
-        google: {
+        [loadSource]: {
           families: [_selectedFont?.fontFamily],
         },
         classes: false,
@@ -158,6 +221,15 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
   const [googleFonts, setGoogleFonts] = useState<IFontPreview[]>([]);
   const [visibleFontsInx, setVisibleFontsIdx] = useState<boolean[]>([]);
   const [searchString, setSearchString] = useState<string>("");
+
+  const debounceFetchData = debounce(
+    (searchString?: string) => fetchData(searchString),
+    200
+  );
+
+  useEffect(() => {
+    debounceFetchData(searchString);
+  }, [searchString]);
 
   useEffect(() => {
     const gFonts: IFontPreview[] = getGlobals()
@@ -181,20 +253,28 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
     setVisibleFontsIdx(visIdx);
   };
 
-  const systemFonts: IFontPreview[] = getGlobals()
-    .getFonts()
-    .filter((font) => font.source === "system-fonts")
-    .sort();
+  // const systemFonts: IFontPreview[] = getGlobals()
+  //   .getFonts()
+  //   .filter((font) => font.source === "system-fonts")
+  //   .sort();
 
   const previewSizes = [
-    { size: 45 },
-    { size: 40 },
-    { size: 35 },
-    { size: 30 },
-    { size: 25 },
-    { size: 20 },
-    { size: 15 },
-    { size: 10 },
+    { previewText: "Heading XL", size: 49, textType: TextType.H1 },
+    { previewText: "Heading L", size: 39, textType: TextType.H2 },
+    { previewText: "Heading", size: 31, textType: TextType.H3 },
+    { previewText: "Heading S", size: 25, textType: TextType.H4 },
+    { previewText: "Heading XS", size: 20, textType: TextType.H5 },
+    { previewText: "Body", size: 16, textType: TextType.Body },
+    { previewText: "Caption", size: 13, textType: TextType.Caption },
+    { previewText: "Tiny", size: 11, textType: TextType.Tiny },
+
+    // { size: 40 },
+    // { size: 35 },
+    // { size: 30 },
+    // { size: 25 },
+    // { size: 20 },
+    // { size: 15 },
+    // { size: 10 },
   ];
 
   const filteredFonts = useMemo(
@@ -222,9 +302,15 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
           },
           css.fontsSprite
         )}
-        onClick={() => {
-          setSelectedFont({ font, add: true });
+        // onClick={() => {
+        //   setSelectedFont({ font, add: true });
+        // }}
+        onClick={(e) => {
+          e.stopPropagation();
+          setSelectedFont({ font });
+          setPreview(true);
         }}
+
         // onClick={() => {
 
         // }}
@@ -234,15 +320,20 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
       loadedFontFamilies.indexOf(font.fontFamily) !== -1 ? (
         <Icon icon="tick" />
       ) : null} */}
-        <Icon
+        {/* <Button
+          small
+          minimal
+          outlined
+          rightIcon={"play"}
           className={css.previewFontBtn}
-          icon="play"
           onClick={(e) => {
             e.stopPropagation();
             setSelectedFont({ font });
             setPreview(true);
           }}
-        ></Icon>
+        >
+          Size
+        </Button> */}
         {loadingFont === font.fontFamily ? <Spinner size={16} /> : null}
       </div>
     );
@@ -250,8 +341,116 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
   return (
     <div className={cx(themeClass, css.fontPreviewPanel)}>
       <div className={css.fontList}>
+        <div className={css.searchFontHolder}>
+          {getTextField("", searchString, filterFonts, "", {
+            placeholder: "Search fonts",
+            autoFocus: true,
+          })}
+        </div>
+
         <section
+          style={{ flexGrow: 0, minHeight: "10%" }}
           className={cx({
+            [css.open]: visibleSectionIds[FontSections.MyFonts],
+          })}
+        >
+          <div
+            className={css.sectionHeader}
+            onClick={() => toggleSection(FontSections.MyFonts)}
+          >
+            <Button
+              minimal
+              small={true}
+              icon={
+                visibleSectionIds[FontSections.MyFonts]
+                  ? "caret-down"
+                  : "caret-right"
+              }
+            ></Button>
+            <span>My Fonts</span>
+
+            <div style={{ float: "right" }}>
+              <Button
+                // minimal
+                small={true}
+                icon={"add"}
+                onClick={() => {
+                  const event = new CustomEvent("OPEN_MEDIA_FONTS");
+                  window.dispatchEvent(event);
+                }}
+              >
+                Upload font
+              </Button>
+            </div>
+          </div>
+
+          {visibleSectionIds[FontSections.MyFonts] && (
+            <div className={cx(css.panel, css.myFontsPanel)}>
+              {myFonts.map((font) => {
+                const previewFileName = font.previewSizes.find(
+                  (size) => size.sizeType === "original"
+                )?.sourceFilename;
+                const previewImageUrl = `/api/v1/media/${previewFileName}`;
+
+                const fontFileName = font.mediaSizes.find(
+                  (size) => size.sizeType === "original"
+                )?.sourceFilename;
+
+                const fontUrl = `/api/v1/media/${fontFileName}`;
+
+                return (
+                  <div
+                    key={font.id}
+                    className={cx(css.fontListItem, css.myFontListItem, {
+                      [css.active]:
+                        font.name === selectedFontObj?.font.fontFamily,
+                    })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedFont({
+                        font: {
+                          fontFamily: font.name,
+                          source: "my-fonts",
+                          mediaId: font.id,
+                          fontUrl,
+                        },
+                      });
+                      setPreview(true);
+                    }}
+                  >
+                    <img src={previewImageUrl} alt={font.name}></img>
+                    {loadingFont === font.name ? <Spinner size={16} /> : null}
+
+                    {/* <Button
+                      small
+                      minimal
+                      outlined
+                      rightIcon={"play"}
+                      className={css.previewFontBtn}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFont({
+                          font: {
+                            fontFamily: font.name,
+                            source: "my-fonts",
+                            mediaId: font.id,
+                            fontUrl,
+                          },
+                        });
+                        setPreview(true);
+                      }}
+                    >
+                      Size
+                    </Button> */}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        <section
+          className={cx(css.googleFontsSection, {
             [css.open]: visibleSectionIds[FontSections.GoogleFonts],
           })}
         >
@@ -270,12 +469,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
             ></Button>
             Google fonts
           </div>
-          <div className={css.searchFontHolder}>
-            {getTextField("", searchString, filterFonts, "", {
-              placeholder: "Find google fonts",
-              autoFocus: true,
-            })}
-          </div>
+
           {visibleSectionIds[FontSections.GoogleFonts] && (
             <div className={css.panel}>
               {/* <img src={FontsPreview} /> */}
@@ -289,6 +483,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                 }}
               >
                 <Virtuoso
+                  className={css.virtuoso}
                   data={filteredFonts}
                   style={{ flexGrow: "1", overflowX: "hidden" }}
                   //totalCount={200}
@@ -305,7 +500,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
           )}
         </section>
 
-        <section
+        {/* <section
           className={cx({
             [css.open]: visibleSectionIds[FontSections.SystemFonts],
           })}
@@ -343,7 +538,9 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
               ))}
             </div>
           )}
-        </section>
+
+         
+        </section> */}
       </div>
       {preview && (
         <div className={css.fontPreview}>
@@ -368,6 +565,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                       autoHeight: true,
                       initialAutoWidth: true,
                       fontSize: previewSize.size.toString() + "px",
+                      type: previewSize.textType,
                       text: "Sample text",
                     }
                   );
@@ -381,7 +579,7 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
                   fontFamily: previewFont?.fontFamily,
                 }}
               >
-                Preview text
+                {previewSize.previewText}
               </p>
             </Card>
           ))}

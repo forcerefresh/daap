@@ -35,3 +35,20 @@
     background: $pt-dark-app-background-color !important;
   }
 }
+
+.smallButton > span {
+  max-width: 75px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.pageLabel {
+  font-weight: bold;
+  padding: 2px 7px;
+  width: 90px;
+  background: blueviolet;
+  margin-bottom: 5px;
+  background-color: #444;
+  justify-content: normal;
+}

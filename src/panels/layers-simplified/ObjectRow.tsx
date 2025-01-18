@@ -8,7 +8,6 @@ import { getObjectHtml } from "../../export/export-html";
 import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { Icon, Tag } from "@blueprintjs/core";
-import { ReactComponent as ObjectsGroup } from "./assets/objects-group.svg";
 import StageObjectMinimap from "../stage-panel-new/StageObjectMinimap";
 import type { Identifier, XYCoord } from "dnd-core";
 import type { CSSProperties, FC } from "react";

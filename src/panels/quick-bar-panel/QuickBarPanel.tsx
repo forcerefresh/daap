@@ -21,6 +21,7 @@ import {
   deleteObjects,
   groupObjects,
   showSimplifiedLayers,
+  showSimplifiedPages,
   ungroupObject,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
@@ -54,6 +55,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     _deleteObjects,
     _showSimplifiedLayers,
     showSimplifiedLayers,
+    _showSimplifiedPages,
+    showSimplifiedPagesPanel,
   } = props;
   const {
     toolConfig,
@@ -354,6 +357,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           ></Button>
         </div>
 
+        <div>
+          <Button
+            active={showSimplifiedPagesPanel}
+            className={cx(css.button, css.squareButton)}
+            minimal
+            onClick={() => {
+              _showSimplifiedPages(!showSimplifiedPagesPanel);
+            }}
+            //disabled={selectedObjectIds.length < 1}
+            icon={"applications"}
+          ></Button>
+        </div>
+
         {/* <div className={css.panelButtons}>
           <Button
             minimal
@@ -411,6 +427,7 @@ const mapStateToProps = (state: IStore) => {
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
     showSimplifiedLayers: state.stage.showSimplifiedLayerPanel,
+    showSimplifiedPagesPanel: state.stage.showSimplifiedPagesPanel,
   };
 };
 
@@ -426,6 +443,7 @@ const mapDispatchToProps = {
   _ungroupObject: (groupId: string) => ungroupObject(groupId),
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
   _showSimplifiedLayers: (show: boolean) => showSimplifiedLayers(show),
+  _showSimplifiedPages: (show: boolean) => showSimplifiedPages(show),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);

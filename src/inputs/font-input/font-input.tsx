@@ -60,22 +60,39 @@ export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
       value: item.fontFamily + DELIMITER + item.source,
     }));
 
-  const systemFonts = getGlobals()
-    .getFonts()
-    .filter((font) => font.source === "system-fonts")
+  const myFonts = (getGlobals().getMyFonts() ?? [])
+    .map((font) => font.name)
     .sort()
-    .map((item) => ({
-      label: item.fontFamily,
-      value: item.fontFamily + DELIMITER + item.source,
+    .map((name) => ({
+      label: name,
+      value: name + DELIMITER + "my-fonts",
     }));
 
-  const isSystem = !!systemFonts.find(
+  // const systemFonts = getGlobals()
+  //   .getFonts()
+  //   .filter((font) => font.source === "system-fonts")
+  //   .sort()
+  //   .map((item) => ({
+  //     label: item.fontFamily,
+  //     value: item.fontFamily + DELIMITER + item.source,
+  //   }));
+
+  // const myFonts = getGlobals()
+  //   .getFonts()
+  //   .filter((font) => font.source === "system-fonts")
+  //   .sort()
+  //   .map((item) => ({
+  //     label: item.fontFamily,
+  //     value: item.fontFamily + DELIMITER + item.source,
+  //   }));
+
+  const isGoogleFont = !!googleFonts.find(
     (font) => font.label === value.fontFamily
   );
 
   let weightOptions = [...SYSTEM_WEIGHT];
 
-  if (!isSystem) {
+  if (isGoogleFont) {
     weightOptions = getGoogleVariantsNice(value.fontFamily).map((w) => ({
       label: (W_MAP as any)[w],
       value: w,
@@ -88,11 +105,11 @@ export const FontSelectInputForm: React.FC<IFontSelectInput & IUpdateInput> = (
     disabled?: boolean;
   }[] = [
     {
-      label: "System fonts",
+      label: "My fonts",
       value: "Disabled1",
       disabled: true,
     },
-    ...systemFonts,
+    ...myFonts,
     {
       label: "Google fonts",
       value: "Disabled2",

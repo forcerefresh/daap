@@ -101,6 +101,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const [defaultSettingsSelectedTabId, setDefaultSettingsSelectedTabId] =
     useState<string | undefined>();
 
+  const [
+    defaultSettingsMediaLibraryTabId,
+    setDefaultSettingsMediaLibraryTabId,
+  ] = useState<"myFonts" | undefined>();
+
   useEffect(() => {
     const openAccountCallback = () => {
       setDefaultSettingsSelectedTabId("account");
@@ -114,12 +119,21 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       );
     };
 
+    const openMediaFontsCallback = () => {
+      setDefaultSettingsMediaLibraryTabId("myFonts");
+      // setTimeout(() => {
+      setShowPanel(VisiblePanel.MediaLibrary);
+      // }, 100);
+    };
+
     window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
+    window.addEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
       window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
+      window.removeEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
     };
   }, []);
 
@@ -265,6 +279,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.MediaLibrary && (
               <div ref={sharedRef}>
                 <MediaLibraryPanel
+                  defaultSelectedTabId={defaultSettingsMediaLibraryTabId}
                   onRequestClose={() => {
                     setShowPanel(VisiblePanel.None);
                   }}

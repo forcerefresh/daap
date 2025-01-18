@@ -15,6 +15,7 @@ import { ToolsProvider } from "../../utils/tools/ToolsProvider";
 import LayersSimplified from "../../panels/layers-simplified/LayersSimplified";
 import { StagePanelNewWrapper } from "../../panels/stage-panel-new/StagePanelNewWrapper";
 import FloatingPointerPanel from "../../panels/floating-pointer-panel/FloatingPointerPanel";
+import PagesSimplified from "../../panels/pages-simplified/PagesSimplified";
 
 function Editor() {
   return (
@@ -24,6 +25,7 @@ function Editor() {
           slides={<SlidesPanel />}
           layers={<LayersPanel />}
           layersSimplified={<LayersSimplified />}
+          pagesSimplified={<PagesSimplified />}
           properties={
             <PropertiesPanelContextProvider>
               <PropertiesPanelAll />

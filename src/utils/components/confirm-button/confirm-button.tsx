@@ -153,6 +153,7 @@ export default function ConfirmButton(props: ConfirmButtonProps) {
             ) : (
               <>
                 <Button
+                  autoFocus
                   loading={loading}
                   onClick={(e) => {
                     if (hasActionOnConfirm) {

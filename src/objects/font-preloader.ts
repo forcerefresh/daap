@@ -1,4 +1,6 @@
 import { load } from "webfontloader";
+import { getGlobals } from "../globals";
+import { addStyle } from "../utils/doom-utils/css-utils";
 
 type LoadState = "notloaded" | "loading" | "loaded";
 
@@ -26,8 +28,30 @@ export class FontPreloader {
   }
 
   private loadFont(fontFamily: string) {
+    const fontObj = getGlobals()
+      .getMyFonts()
+      .find((font) => font.name === fontFamily);
+
+    if (fontObj) {
+      const fontFileName = fontObj.mediaSizes.find(
+        (size) => size.sizeType === "original"
+      )?.sourceFilename;
+
+      const fontUrl = `/api/v1/media/${fontFileName}`;
+
+      // add css first
+      addStyle(`
+        @font-face{
+          font-family: "${fontFamily}";
+          src: url("${fontUrl}");
+        }
+      `);
+    }
+
+    const source = fontObj ? "custom" : "google";
+
     load({
-      google: {
+      [source]: {
         families: [fontFamily],
       },
       classes: false,

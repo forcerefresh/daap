@@ -46,6 +46,7 @@ interface IMediaLibraryPanelProps {
   onAdd?: (mediaItem: { media: SaaSMediaData }) => void;
   onRequestClose: () => void;
   className?: string;
+  defaultSelectedTabId?: "myFonts";
 }
 
 export type IMediaLibraryPanelMergedProps = typeof mapDispatchToProps &
@@ -74,6 +75,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     themeClass,
     _addNewObject,
     activeLayerId,
+    defaultSelectedTabId,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -97,7 +99,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   return (
     <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
       <div style={{ overflow: "hidden" }}>
-        <Tabs className={css.tabs} renderActiveTabPanelOnly={true}>
+        <Tabs
+          className={css.tabs}
+          renderActiveTabPanelOnly={true}
+          defaultSelectedTabId={defaultSelectedTabId}
+        >
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
               id="myImages"
@@ -299,7 +305,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
-                        "vector",
+                        "image",
                         { ...sizeRect },
                         {
                           image: mediaItem.media,
@@ -339,12 +345,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               id="myFonts"
               title="Fonts"
               panel={
-                <ImagesLibraryPanel
-                  hasApiKey={true}
+                <MediaManagementPanel
                   type="font"
                   key={forceUpdate}
-                  deleteImagesFunc={deleteMedias}
-                  fetchImagesFunc={fetchMedias}
+                  deleteMediaFunc={deleteMedias}
+                  fetchMediasFunc={fetchMedias}
                   uploadComponent={
                     <UploadComponent
                       type="font"
@@ -361,6 +366,29 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   // addObject={addObject}
                   // onSelect={onSelect}
                 />
+
+                // <ImagesLibraryPanel
+                //   hasApiKey={true}
+                //   type="font"
+                //   key={forceUpdate}
+                //   deleteImagesFunc={deleteMedias}
+                //   fetchImagesFunc={fetchMedias}
+                //   uploadComponent={
+                //     <UploadComponent
+                //       type="font"
+                //       onComplete={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //       onStop={() => {
+                //         setForceUpdate(Math.random());
+                //       }}
+                //     />
+                //   }
+                //   //selectionType={selectionType}
+                //   onRequestClose={onRequestClose}
+                //   // addObject={addObject}
+                //   // onSelect={onSelect}
+                // />
               }
             />
           )}

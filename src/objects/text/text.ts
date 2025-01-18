@@ -47,8 +47,20 @@ import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils
 
 export const TEXT = "text";
 
+export enum TextType {
+  H1 = "H1",
+  H2 = "H2",
+  H3 = "H3",
+  H4 = "H4",
+  H5 = "H5",
+  Body = "Body",
+  Caption = "Caption",
+  Tiny = "Tiny",
+}
+
 export interface TextValues {
   text: string;
+  type: TextType;
   autoHeight: boolean;
   initialAutoWidth: boolean;
   font: IFontSelectInputValue;
@@ -66,6 +78,7 @@ export interface TextValues {
 
 export type TextPropertiesTuple = [
   ITextAreaInput<"text">,
+  ISelectInput<"type">,
   ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
@@ -88,6 +101,7 @@ export function createTextObject(
 
   const values: TextValues = {
     text: (initialValue?.text as string) || "",
+    type: initialValue?.type || TextType.Body,
     autoHeight: initialValue?.autoHeight ?? true,
     initialAutoWidth: initialValue?.initialAutoWidth ?? false,
     font: (initialValue?.font as IFontSelectInputValue) || {
@@ -109,6 +123,8 @@ export function createTextObject(
 
   object.properties = values;
 
+  console.log(values);
+
   return object;
 }
 
@@ -122,6 +138,24 @@ export function getTextObjectForm(): TextPropertiesTuple {
       defaultValue: "",
       // extraOptions: { devices: true, exportForWizard: true },
     },
+    {
+      displayName: "Type",
+      propertyName: "type",
+      inputType: InputType.SELECT,
+      value: "Body",
+      defaultValue: "Body",
+      options: [
+        { value: "H1", label: "H1" },
+        { value: "H2", label: "H2" },
+        { value: "H3", label: "H3" },
+        { value: "H4", label: "H4" },
+        { value: "H5", label: "H5" },
+        { value: "Body", label: "Body" },
+        { value: "Caption", label: "Caption" },
+        { value: "Tiny", label: "Tiny" },
+      ],
+    },
+
     {
       displayName: "Auto height",
       propertyName: "autoHeight",
@@ -412,7 +446,9 @@ export const getFonts = (
 ): GetFontsFuncReturnType => {
   const textValues = props.values as TextValues;
 
-  if (textValues.font?.source === "google-fonts") {
+  const source = textValues.font?.source;
+
+  if (source === "google-fonts" || source === "my-fonts") {
     return [{ ...textValues.font }];
   }
   return [];

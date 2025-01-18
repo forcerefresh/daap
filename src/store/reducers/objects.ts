@@ -103,7 +103,7 @@ export function objects(
       // collect children objects id (e.g. for group))
       let childObjectIds: string[] = [];
       objectIds.forEach((objectId) => {
-        const childObjIds = state.objectById[objectId].objectIds;
+        const childObjIds = state.objectById[objectId]?.objectIds;
         if (childObjIds && childObjIds.length > 0) {
           childObjectIds = [...childObjectIds, ...childObjIds];
         }

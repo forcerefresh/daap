@@ -65,6 +65,16 @@ export const file2Base64 = (file: File): Promise<string> => {
     reader.onerror = (error) => reject(error);
   });
 };
+
+export const textFile2Text = (file: File): Promise<string> => {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = () => resolve(reader.result?.toString() || "");
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 /*
 var _CANVAS = document.querySelector("#video-canvas");
 var _CTX = _CANVAS.getContext("2d");

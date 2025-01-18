@@ -133,6 +133,8 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, isSave, isForThumbnail, deviceType } = props;
   const imageValues = object.properties as ImageValues;
 
+  console.log("imageValues");
+
   console.log(imageValues);
 
   if (!isPlayer) {
@@ -181,7 +183,10 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   style += `background-size: ${backgroundSize};`;
   style += `background-position: ${aH} ${aV};`;
 
-  return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
+  return `
+  <style></style>
+  
+  <div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
 
 export async function imageSizeUpdate(

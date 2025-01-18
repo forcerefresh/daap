@@ -18,6 +18,7 @@ import { getMediaSrc } from "../../integration/utils/local-media";
 import { Pagination } from "../../types/pagination";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import cx from "classnames";
 
 import css from "./MediaManagementPanel.module.scss";
 
@@ -150,6 +151,10 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
     [resetImages, reload]
   );
 
+  const renderPreviewImage = (url: string, type: string) => {
+    return <img src={url} alt="" />;
+  };
+
   return (
     <div className={css.imageLibraryPanel}>
       {uploadComponent}
@@ -157,7 +162,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
         <InputGroup
           large
           leftIcon="search"
-          placeholder="Find photo..."
+          placeholder={`Find ${type}...`}
           value={searchValue}
           onChange={(event: any) => {
             setSearchValue((event.currentTarget as HTMLInputElement).value);
@@ -276,10 +281,15 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
               >
                 <div
                   className={classnames(css.imageItemHolder, {
+                    [css.fontImageItemHolder]: type === "font",
                     // [css.selectedImage]: selectedImage === idx,
                   })}
                 >
-                  <div className={css.imageHolder}>
+                  <div
+                    className={cx(css.imageHolder, {
+                      [css.fontImageHolder]: type === "font",
+                    })}
+                  >
                     <div
                       className={css.floatingActionBar}
                       onClick={(e) => e.stopPropagation()}
@@ -326,7 +336,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
                         src={originalImageUrl}
                       />
                     ) : (
-                      <img src={previewImageUrl} alt="" />
+                      renderPreviewImage(previewImageUrl, type)
                     )}
                   </div>
 
