@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import cx from "classnames";
 import { base64ToBlob, downloadBlob } from "../../utils/file/file-utils";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, remove, round } from "lodash-es";
+import { debounce, isNil, remove, round } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
@@ -32,6 +32,8 @@ import {
   preloadFonts,
   updateProjectWithNewIds,
 } from "../../utils/project/project-utils";
+import { Pagination } from "../../types/pagination";
+import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 
 interface ITemplatesPanelProps {
   onRequestClose: () => void;
@@ -66,26 +68,50 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
   const { getTemplate, getTemplates, deleteTemplate, downloadTemplate } =
     globalContext.useTemplateHook();
 
-  const fetchData = (from = -1) => {
+  const [latestPagination, setLatestPagination] = useState<Pagination | null>(
+    null
+  );
+
+  const fetchData = (fromPage?: number) => {
     setLoading(true);
 
-    from = from === -1 ? templates?.length || 0 : from;
+    let from: number | null = null;
 
-    getTemplates(from, searchValue).then(
-      (result) => {
-        if (from === 0) {
-          setTemplates([...result.templates]);
-        } else {
-          setTemplates([...templates, ...result.templates]);
+    if (isNil(fromPage)) {
+      if (isNil(latestPagination)) {
+        // load first page
+        from = 1;
+      } else {
+        // load next page
+        if (!isNil(latestPagination.nextPage)) {
+          from = latestPagination.nextPage;
         }
-        setLoading(false);
-        setHasMore(result.templates.length > 0);
-      },
-
-      (error) => {
-        logger.app.error(error);
       }
-    );
+    } else {
+      from = fromPage;
+    }
+
+    // from = from === -1 ? projects?.length || 0 : from;
+
+    if (!isNil(from)) {
+      getTemplates(from, searchValue).then(
+        (result) => {
+          if (from === 1) {
+            setTemplates([...result.data]);
+          } else {
+            setTemplates([...templates, ...result.data]);
+          }
+
+          setLatestPagination(result.pagination);
+          setLoading(false);
+          setHasMore(!!result.pagination.nextPage);
+        },
+
+        (error) => {
+          logger.app.error(error);
+        }
+      );
+    }
   };
 
   useEffect(() => {
@@ -96,7 +122,10 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
     return templates?.find((tl) => tl.id === id);
   };
 
-  const debounceFetchData = debounce((from = -1) => fetchData(from), 100);
+  const debounceFetchData = debounce(
+    (fromPage?: number) => fetchData(fromPage),
+    100
+  );
 
   const deleteIdRef = useRef("");
   const onDeleteTemplate = (id: string) => {
@@ -136,10 +165,10 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
     getTemplate(id).then((response: any) => {
       const meta: IMeta = {
         id: undefined, //response.project.id,
-        name: response.template.name,
-        description: response.template.description,
-        // modified: response.template.modified,
-        // created: response.template.created,
+        name: response.name,
+        description: response.description,
+        // modified: response.modified,
+        // created: response.created,
         saveRevision: 0,
         //publishRevision: response.project.publishRevision,
       };
@@ -149,7 +178,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
         slides: IPages;
-      } = response.template.project;
+      } = response.project;
 
       const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
 
@@ -158,12 +187,12 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       _setDevice(
         [...updatedProject.settings.breakpoints.breakpointsConfiguration]
           .reverse()
-          .find((bc) => bc.enabled)?.type || "large-1"
+          .find((bc) => bc.enabled)?.type || "device-independent"
       );
 
       // missing extensions >>>
       const missingExtensions = getMissingExtensionsFromProject(
-        response.template.extensions
+        response.extensions
       );
       _updateEditor({ missingExtensions });
       if (missingExtensions.length > 0) {
@@ -177,7 +206,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      const slideIdToSelect = updatedProject.slides.pages[0];
+      const slideIdToSelect = updatedProject.pages.pages[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);
@@ -188,7 +217,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      preloadFonts(response.template?.fonts ?? []);
+      preloadFonts(response?.fonts ?? []);
 
       onRequestClose();
 
@@ -217,15 +246,19 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
   };
 
   return (
-    <div className={css.projectsPanel}>
+    <div className={cx("bp5-dark", css.projectsPanel)}>
+      <RightPanelHeader>
+        <div>TEMPLATES</div>
+      </RightPanelHeader>
+
       <UploadComponent
         type="template"
         onComplete={() => {
-          debounceFetchData(0);
+          debounceFetchData(1);
           //setForceUpdate(Math.random());
         }}
         onStop={() => {
-          debounceFetchData(0);
+          debounceFetchData(1);
           //setForceUpdate(Math.random());
         }}
       />
@@ -240,7 +273,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
               icon="arrow-right"
               onClick={() => {
                 setTemplates(() => []);
-                debounceFetchData(0);
+                debounceFetchData(1);
               }}
             />
           }
@@ -251,15 +284,15 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
           onKeyPress={(event) => {
             if (event.key === "Enter") {
               setTemplates(() => []);
-              debounceFetchData(0);
+              debounceFetchData(1);
             }
           }}
         ></InputGroup>
       </div>
 
       <div className={cx(css.headerSection, css.tableHeader)}>
-        <div className={css.thumb}>Thumbnail</div>
-        <div className={css.name}>Name, Id, Description</div>
+        <div className={css.thumb}>Preview</div>
+        <div className={css.name}>Name &amp; Description</div>
         <div className={css.slides}>Slides</div>
         <div className={css.created}>Created</div>
         <div className={css.action}>Action</div>
@@ -315,7 +348,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   </div>
                 </div>
                 <div className={css.name}>
-                  <strong>{template.name}</strong> [{template.id}]
+                  {template.name}
                   <br />
                   <span className={css.description}>
                     {template.description}
@@ -337,7 +370,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   <a
                     href={`webslider-fp://my-uploads/my-templates/${template.id}.zip`}
                   >
-                    <Button
+                    {/* <Button
                       intent="none"
                       // onClick={async () => {
                       //   const base64Zip = await downloadTemplate({
@@ -349,7 +382,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                       // }}
                     >
                       Download template
-                    </Button>
+                    </Button> */}
                   </a>
 
                   {/*<Button intent="primary">Integration</Button>*/}

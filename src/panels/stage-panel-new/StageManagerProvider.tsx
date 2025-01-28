@@ -288,6 +288,12 @@ export const StageManagerProviderInternal = (
     _deactivateObject,
     stagePan,
     _setStagePan,
+    selectionPath,
+    _selectForProperties,
+    layerById,
+    breakpointConfig,
+    activateTool,
+    selectedObjectIds, // NOTE:  this do not remove it
   ]);
 
   return (
@@ -872,7 +878,10 @@ function processMoveStopEvent(
   let calc: ReturnType<typeof getUngroupObjectsCalculation> = {};
 
   objectToUpdate.forEach((object) => _updateObject(cloneDeep(object)));
-  _updateObject(cloneDeep(parentGroup));
+
+  if (parentGroup) {
+    _updateObject(cloneDeep(parentGroup));
+  }
   // return;
 
   // if (parentGroup) {

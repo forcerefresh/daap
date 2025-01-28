@@ -14,7 +14,7 @@ import {
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
-import { IPages, PageType } from "./i-pages";
+import { IPage, IPages, PageType } from "./i-pages";
 import { applyNewAnimationIdsToTransitionAbleElement } from "./objects";
 
 const getPagesDefault = () => ({
@@ -30,7 +30,8 @@ const getPagesDefault = () => ({
 export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
   switch (action.type) {
     case ADD_SLIDE: {
-      const page = action.payload;
+      const page = action.payload.slide;
+      const position = action.payload.position;
 
       // const allPages = [...state.allPages, page.id];
 
@@ -49,10 +50,11 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
           ? [...(state.backPages ?? []), page.id]
           : state.backPages;
 
-      const pages =
-        !page.type || page.type === PageType.Normal
-          ? [...state.pages, page.id]
-          : state.pages;
+      let pages = cloneDeep(state.pages);
+      if (!page.type || page.type === PageType.Normal) {
+        if (!position) pages.push(page.id);
+        else pages.splice(position, 0, page.id);
+      }
 
       return Object.assign({}, state, {
         pageById: {

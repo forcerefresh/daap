@@ -41,6 +41,7 @@ import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 import { object } from "yup";
 import { ToolbarMode } from "../../utils/tools/types";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
+import { StageTools } from "../../store/reducers/stage";
 
 enum MultiSelectionType {
   None = "None",
@@ -62,6 +63,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     _duplicateObjects,
     _normalizeObjectGroups,
     _deleteObjects,
+    stageTool,
     zoom,
     pan,
   } = props;
@@ -160,6 +162,11 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     };
   }, [selectedObjectIds, objectById, zoom, pan]);
 
+  // const toolEditingMode = useMemo(
+  //   () => stageTool.tool !== StageTools.SELECT || !!activeTool,
+  //   [stageTool.tool, activeTool]
+  // );
+
   return (
     <>
       {mSelectionType !== MultiSelectionType.None && (
@@ -255,6 +262,7 @@ const mapStateToProps = (state: IStore) => {
     selectedObjectIds: selection.selectedObjectIds,
     zoom: state.stage.zoom,
     pan: state.stage.pan,
+    stageTool: state.stage.stageTool,
   };
 };
 

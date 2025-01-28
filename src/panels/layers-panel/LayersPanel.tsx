@@ -161,7 +161,7 @@ const LayersPanel: React.FC<ISlidesPanel> = (props) => {
     "color-picker-holder",
   ]);
 
-  /*const iconName = getIconByType("large-1");
+  /*const iconName = getIconByType("device-independent");
   const size = getIconSize(iconName);
   const icon = getResponsiveIcon(iconName, size.w, size.h, "lightgray", false);*/
 

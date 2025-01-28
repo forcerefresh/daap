@@ -327,8 +327,7 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                           const newSelectedDevice =
                             breakpointConfiguration.breakpointsConfiguration.find(
                               (bp) => bp.enabled
-                            )?.type ?? "large-1";
-                          _setDevice(newSelectedDevice);
+                            )?.type ?? _setDevice(newSelectedDevice);
                         }
                       }}
                     />

@@ -20,7 +20,7 @@ export interface IMeta {
 const getMetaDefault = () => ({
   saveRevision: 0,
   publishRevision: 0,
-  name: "Untitled - " + new Date().toDateString(),
+  name: "Custom - " + new Date().toDateString(),
 });
 
 export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
@@ -32,7 +32,7 @@ export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
       };
     }
     case CREATE_NEW_PROJECT: {
-      return getMetaDefault();
+      return { ...getMetaDefault(), name: action.payload.name };
     }
     default:
       return state;

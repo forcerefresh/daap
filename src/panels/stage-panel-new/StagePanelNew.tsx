@@ -148,6 +148,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     forceShowLayerId,
     selectedDevice,
     breakpoints,
+    showSimplifiedLayerPanel,
+    showSimplifiedPagesPanel,
     forceRefreshRand: _forceRefreshRand, // NOTE: check this
     _forceRefresh,
     enableDeveloper,
@@ -179,11 +181,13 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     const newTransform = getInitialStageTransform(
       viewPortSize,
       breakpointConfig,
-      113
+      showSimplifiedLayerPanel,
+      showSimplifiedPagesPanel
     );
 
     if (newTransform.scale > 0) {
       setTransform(newTransform);
+      setZoomFit(false);
     }
   }, [viewPortSize, breakpointConfig]);
 
@@ -344,7 +348,15 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
   useEffect(() => {
     if (zoomFit) {
-      setTransform(getInitialStageTransform(viewPortSize, breakpointConfig));
+      setTransform(
+        getInitialStageTransform(
+          viewPortSize,
+          breakpointConfig,
+          showSimplifiedLayerPanel,
+          showSimplifiedPagesPanel
+        )
+      );
+      setZoomFit(false);
     }
   }, [zoomFit, viewPortSize, breakpointConfig]);
 
@@ -906,6 +918,8 @@ const mapStateToProps = (state: IStore) => {
     showGrid: state.globals.showGrid,
     clipboard,
     zoomFit: stage.zoomFit,
+    showSimplifiedLayerPanel: stage.showSimplifiedLayerPanel,
+    showSimplifiedPagesPanel: stage.showSimplifiedPagesPanel,
   };
 };
 

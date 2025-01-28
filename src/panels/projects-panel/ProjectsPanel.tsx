@@ -28,6 +28,7 @@ import { getMissingExtensionsFromProject } from "../../utils/extensions/extensio
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 import { preloadFonts } from "../../utils/project/project-utils";
 import { Pagination } from "../../types/pagination";
+import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -182,7 +183,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       _setDevice(
         [...project.settings.breakpoints.breakpointsConfiguration]
           .reverse()
-          .find((bc) => bc.enabled)?.type || "large-1"
+          .find((bc) => bc.enabled)?.type || "device-independent"
       );
 
       // NOTE: Backward compatibility: Front slide is added on 1st February 2023
@@ -219,7 +220,11 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     });
   };
   return (
-    <div className={css.projectsPanel}>
+    <div className={cx("bp5-dark", css.projectsPanel)}>
+      <RightPanelHeader>
+        <div>DOCUMENTS</div>
+      </RightPanelHeader>
+
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -250,7 +255,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       <div className={cx(css.headerSection, css.tableHeader)}>
         {/* <div className={css.id}>ID</div> */}
-        <div className={css.thumb}>Thumbnail</div>
+        <div className={css.thumb}>Preview</div>
         <div className={css.name}>Name &amp; Description</div>
         <div className={css.slides}>Slides</div>
         <div className={css.created}>Created</div>

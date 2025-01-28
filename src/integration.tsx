@@ -492,7 +492,10 @@ function useProjectHookFactory() {
 }
 
 function useTemplateHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (process.env.REACT_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/template-hook/saas-use-template-hook")
+      .useTemplateHook;
+  } else if (process.env.REACT_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/template-hook/electron-use-template-hook")
       .useTemplateHook;
   } else {

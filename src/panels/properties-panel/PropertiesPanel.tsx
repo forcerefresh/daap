@@ -92,7 +92,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
             <Button
               style={{ alignSelf: "end" }}
               icon={"trash"}
-              disabled={pageIds.length === 1}
+              // disabled={pageIds.length === 1}
               minimal
               intent={"danger"}
               onClick={() => {
@@ -112,10 +112,10 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
 
                 _deleteSlideThree(slide.id);
 
-                AppToaster.show({
-                  intent: "warning",
-                  message: "Page has been deleted.",
-                });
+                // AppToaster.show({
+                //   intent: "warning",
+                //   message: "Page has been deleted.",
+                // });
               }}
             ></Button>
           </div>

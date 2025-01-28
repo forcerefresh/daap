@@ -6,12 +6,17 @@ export function getInitialStageTransform(
   // zoomFit: boolean,
   viewportSize: { w: number; h: number },
   breakpointConfig: BreakpointConfiguration | undefined,
-  rightAdjustment = 0
+  showLayerSimplifiedPanel = true,
+  showPagesSimplifiedPanel = true
 ) {
   // const breakpointConfig: BreakpointConfiguration | undefined =
   //   settings.breakpoints.breakpointsConfiguration.find(
   //     (breakpointConfig) => breakpointConfig.type === stage.selectedDevice
   //   );
+
+  let rightAdjustment = 0;
+  rightAdjustment += showLayerSimplifiedPanel ? 113 : 0;
+  rightAdjustment += showPagesSimplifiedPanel ? 170 : 0;
 
   const vWidth = viewportSize.w - rightAdjustment;
   const vHeight = viewportSize.h;

@@ -132,7 +132,7 @@ export const ToolsProvider = (
       // console.log(params);
       dispatch(
         addNewObject(
-          activeLayerId!,
+          storeRef.current.activeLayerId!,
           activeToolRef.current!,
           {
             left: params.bounds?.x ?? 100,

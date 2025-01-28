@@ -173,7 +173,8 @@
 :global(.bp5-dark) {
   &.fontPreviewPanel {
     background: $pt-dark-app-background-color !important;
-    box-shadow: $pt-dark-elevation-shadow-1 !important;
+    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    border-right: 1px solid #555;
   }
   .fontsSprite {
     background: url("../../utils/fonts2/google-font-image-dark.png");

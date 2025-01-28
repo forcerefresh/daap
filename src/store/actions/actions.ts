@@ -108,7 +108,7 @@ export interface AddSlideActionPayload {
 
 export interface AddSlideAction extends IUndoableAction<true> {
   type: typeof ADD_SLIDE;
-  payload: IPage;
+  payload: { slide: IPage; position?: number };
 }
 
 export function initializeSlideAndLayer(): any {
@@ -142,7 +142,11 @@ export function initializeSlideAndLayer(): any {
   };
 }
 
-export function addNewPage(pageType = PageType.Normal, addLayer = false): any {
+export function addNewPage(
+  pageType = PageType.Normal,
+  addLayer = false,
+  position?: number
+): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: IPage = {
       id: uuid(),
@@ -165,7 +169,7 @@ export function addNewPage(pageType = PageType.Normal, addLayer = false): any {
       // transitionDurationTime: "1000ms",
       // transitions: getDefaultTransitionsForSlide(),
     };
-    dispatch(addSlide(slide));
+    dispatch(addSlide(slide, position));
     dispatch(activateSlide(slide.id));
     dispatch(selectSlides([slide.id]));
     if (addLayer) {
@@ -174,10 +178,10 @@ export function addNewPage(pageType = PageType.Normal, addLayer = false): any {
   };
 }
 
-export function addSlide(slide: IPage): AddSlideAction {
+export function addSlide(slide: IPage, position?: number): AddSlideAction {
   return {
     type: ADD_SLIDE,
-    payload: slide,
+    payload: { slide, position },
     isUndoable: true,
   };
 }
@@ -359,7 +363,7 @@ export function addNewLayer(pageId: string): any {
     const breakpointsConfiguration =
       getState().project.settings.breakpoints.breakpointsConfiguration;
     const breakpointConfig = breakpointsConfiguration.find(
-      (p: any) => p.type === "large-1"
+      (p: any) => p.type === "device-independent"
     );
     const absoluteSize = breakpointConfig?.normal.maxSliderSize;
     const gridSize = breakpointConfig?.normal.grid;
@@ -1699,7 +1703,13 @@ function handleObjectUpdate(
   getState: () => IStore,
   isPreview = false
 ) {
-  const prevObject = getState().project.objects.objectById[object.id];
+  const state = getState();
+  console.log("!@!@!@!@");
+  if (!object) debugger;
+  console.log(object);
+  console.log(object.id);
+
+  const prevObject = state.project.objects.objectById[object.id];
 
   // round to max two decimals
   object.left = roundNumber(object.left!, 2);
@@ -2548,16 +2558,26 @@ export function openProject(project: {
 
 // ***
 
+export interface CreateNewProjectActionPayload {
+  width: string;
+  height: string;
+  name: string;
+}
+
 export const CREATE_NEW_PROJECT = "Create new project";
 
 export interface CreateNewProjectAction extends IUndoableAction<false> {
   type: typeof CREATE_NEW_PROJECT;
+  payload: CreateNewProjectActionPayload;
 }
 
-export function createNewProject(): CreateNewProjectAction {
+export function createNewProject(
+  payload: CreateNewProjectActionPayload
+): CreateNewProjectAction {
   return {
     type: CREATE_NEW_PROJECT,
     isUndoable: false,
+    payload,
   };
 }
 

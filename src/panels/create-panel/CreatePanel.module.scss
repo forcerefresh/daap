@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   width: 730px;
-  height: 100vh;
+  height: calc(100vh - 52px);
 
   background: $pt-app-background-color;
   box-shadow: $pt-elevation-shadow-0;
@@ -16,6 +16,14 @@
   flex-direction: column;
 
   overflow: auto;
+
+  :global {
+    *,
+    *:hover,
+    *:active {
+      outline: none;
+    }
+  }
 
   > * {
     display: flex;
@@ -33,6 +41,7 @@
 
   h1 {
     margin-top: 20px;
+    margin-left: 0px;
   }
 }
 
@@ -44,24 +53,41 @@
   margin: 10px;
   width: 200px;
   max-width: 200px;
+
+  &:not(:hover) {
+    box-shadow: none !important;
+    border: none !important;
+  }
   // height: 150px;
   &.disabled {
     opacity: 0.3;
   }
 
+  .docPreview {
+    border: 1px solid gray;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
+  }
   .svgHolder {
-    width: 40px;
-    height: 40px;
+    width: 100px;
+    height: 100px;
     margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: small;
 
     svg {
-      width: 40px;
-      height: 40px;
+      width: 100px;
+      height: 100px;
     }
   }
 
   h3 {
     text-transform: uppercase;
+    margin-bottom: 0px;
   }
 }
 
@@ -115,8 +141,47 @@
 }
 
 :global(.bp5-dark) {
-  &.addPanel {
+  &.createPanel {
     background: $pt-dark-app-background-color !important;
-    box-shadow: $pt-dark-elevation-shadow-1 !important;
+    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    border-right: 1px solid #555;
+    border-left: 1px solid #111;
   }
+}
+
+.sectionHeader {
+  cursor: pointer;
+  font-weight: bold;
+  color: #808080;
+  padding: 15px 10px 15px 0px;
+}
+
+.createNewButton {
+  background: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.divider {
+  // font-size: 30px;
+  margin: 16px 0 0 0;
+
+  display: flex;
+  align-items: center;
+}
+
+.divider::before,
+.divider::after {
+  flex: 1;
+  content: "";
+  padding: 0.5px;
+  background-color: rgba(255, 255, 255, 0.2);
+  margin: 5px 0;
+}
+
+.divider::before {
+  margin-right: 10px;
+}
+.divider::after {
+  margin-left: 10px;
 }

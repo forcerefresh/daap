@@ -11,3 +11,13 @@ export const PanelHeader: React.FC<IPanelHeader> = (props) => {
 
   return <div className={cx(css.panelHeader, className)}>{children}</div>;
 };
+
+export const RightPanelHeader: React.FC<IPanelHeader> = (props) => {
+  const { children, className } = props;
+
+  return (
+    <div className={cx(css.panelHeader, css.rightPanelHeader, className)}>
+      {children}
+    </div>
+  );
+};

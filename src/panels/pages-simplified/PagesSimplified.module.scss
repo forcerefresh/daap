@@ -51,3 +51,21 @@
   background-color: #444;
   justify-content: normal;
 }
+
+.objectItem {
+  height: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemHolder {
+  .addPageSmall {
+    display: none;
+  }
+}
+.itemHolder:hover {
+  .addPageSmall {
+    display: block;
+  }
+}

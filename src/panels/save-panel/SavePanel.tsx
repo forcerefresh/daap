@@ -22,13 +22,15 @@ import {
   updateObjectWithNewIds,
   updateProjectWithNewIds,
 } from "../../utils/project/project-utils";
-import { PanelHeader } from "../common/panel-header/PanelHeader";
+import {
+  PanelHeader,
+  RightPanelHeader,
+} from "../common/panel-header/PanelHeader";
 
 export const THUMB_WIDTH = 200;
 
 interface ISavePanelProps {
   onRequestClose: () => void;
-  isSaveAs?: boolean;
 }
 
 export type ISavePanelMergedProps = typeof mapDispatchToProps &
@@ -37,7 +39,6 @@ export type ISavePanelMergedProps = typeof mapDispatchToProps &
 
 const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const {
-    isSaveAs = false,
     project,
     meta,
     slides,
@@ -76,12 +77,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   // local state
   const [localMeta, setLocalMeta] = useState({
     ...meta,
-    ...(isSaveAs ? { name: "", id: undefined } : {}),
   });
 
   useEffect(() => {
     const metaClone = cloneDeep(meta);
-    if (!metaClone.id || isSaveAs) {
+    if (!metaClone.id) {
       //setLocalMeta(metaClone);
       //} else if (!metaClone.id || isSaveAs) {
       // todo: loader
@@ -115,6 +115,13 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const onClickSave = async (saveAs?: boolean) => {
     _updateProjectMeta({ inSaving: true });
 
+    // metaClone.id = undefined;
+    // metaClone.name = "";
+
+    // metaClone.name = `Slider`;
+    // metaClone.description = "";
+    // setLocalMeta(metaClone);
+
     const installedExtensions = await getInstalledExtensions();
 
     const playerData = generatePlayerData(
@@ -131,9 +138,10 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     let updatedPlayerData = playerData;
     // replace ids is saveAs
     if (saveAs) {
-      const updated = updateProjectWithNewIds(project);
-      updatedProject = updated.updatedProject;
-      updatedPlayerData = updateObjectWithNewIds(playerData, updated.fromToIds);
+      const updated = project;
+      // const updated = updateProjectWithNewIds(project);
+      // updatedProject = updated.updatedProject;
+      // updatedPlayerData = updateObjectWithNewIds(playerData, updated.fromToIds);
     }
 
     const assetsUrls = getAllAssetsUrls(objects);
@@ -260,7 +268,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   const onSaveTemplate = async () => {
     _updateProjectMeta({ inSaving: true });
 
-    const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+    //const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+    const updatedProject = project;
 
     const installedExtensions = await getInstalledExtensions();
 
@@ -277,7 +286,9 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const assetsUrls = getAllAssetsUrls(objects);
     const fonts = getAllFonts(objects);
 
-    const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
+    // TODO check updateObjectWithNewIds
+    // const updatedPlayerData = updateObjectWithNewIds(playerData, fromToIds);
+    const updatedPlayerData = playerData;
 
     saveTemplate({
       name: templateDialogData.name,
@@ -316,7 +327,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   return (
     <div className={cx(themeClass, css.savePanel)}>
       <div className={cx("bp5-label", css.thumbTitle)}>
-        Thumbnail
+        Preview
         {/*getSelectField(
           "Thumbnail",
           "",
@@ -341,8 +352,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           }}
         ></div>
       </div>
-      <PanelHeader>
-        <div>{isSaveAs ? "SAVE AS..." : "SAVE PANEL"}</div>
+      <RightPanelHeader>
+        <div>SAVE DOCUMENT</div>
         <div className={css.saving}>
           {meta.inSaving && (
             <>
@@ -350,15 +361,13 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             </>
           )}
         </div>
-      </PanelHeader>
+      </RightPanelHeader>
 
       <div className={css.saveHolder}>
         {/*<Label>Align</Label>*/}
-        <div className={cx("input330", css.inputHolder)}>
+        {/* <div className={cx("input400-force", css.inputHolder)}>
           {getTextField(
-            "ID" +
-              (isSaveAs ? " [From project ID: " + meta.id + "]" : "") +
-              " (readonly)",
+            "ID" + " (readonly)",
             localMeta.id,
             (id: any) => {},
             "",
@@ -369,12 +378,11 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
                 : "",
             }
           )}
-        </div>
+        </div> */}
 
-        <div className={cx("input330", css.inputHolder)}>
+        <div className={cx("input400-force", css.inputHolder)}>
           {getTextField(
-            "Name" +
-              (isSaveAs ? " [From project name: " + meta.name + "]" : ""),
+            "Name",
             localMeta.name,
             (name: any) => {
               setLocalMeta({ ...localMeta, name });
@@ -383,7 +391,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           )}
         </div>
 
-        <div className={cx("input330", css.inputHolder)}>
+        <div className={cx("input400-force", css.inputHolder)}>
           {getTextArea(
             "Description",
             localMeta.description,
@@ -395,41 +403,73 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           )}
         </div>
         <div className={css.actionRow}>
-          <Button
-            disabled={meta.inSaving}
-            intent="primary"
-            icon="floppy-disk"
-            onClick={() => onClickSave(isSaveAs)}
-          >
-            {"Save"}
-          </Button>
-          <Button
-            disabled={meta.inSaving}
-            intent="none"
-            onClick={() => {
-              onRequestClose();
-            }}
-          >
-            {"Cancel"}
-          </Button>
-          {!isSaveAs && (
-            <div className={css.saveAsTemplateBtnHolder}>
-              <Button
-                className={css.saveAsTemplateBtn}
-                disabled={meta.inSaving || !meta.id || meta.id === "-1"}
-                intent="none"
-                onClick={() => {
-                  setSaveTemplateDialogOpen(true);
-                  setTemplateDialogData({
-                    name: meta.name ?? "",
-                    description: "",
-                  });
-                }}
-              >
-                {"Save as Template"}
-              </Button>
-            </div>
-          )}
+          <div>
+            <Button
+              disabled={meta.inSaving}
+              intent="primary"
+              icon="floppy-disk"
+              onClick={() => onClickSave(false)}
+            >
+              {"Save"}
+            </Button>
+
+            <Button
+              disabled={meta.inSaving}
+              // intent="primary"
+              // icon="floppy-disk"
+              onClick={() => onClickSave(true)}
+            >
+              {"Save as new document"}
+            </Button>
+            <Button
+              className={css.saveAsTemplateBtn}
+              disabled={meta.inSaving} //|| !meta.id || meta.id === "-1"}
+              intent="none"
+              onClick={() => {
+                setSaveTemplateDialogOpen(true);
+                setTemplateDialogData({
+                  name: meta.name ?? "",
+                  description: "",
+                });
+              }}
+            >
+              {"Save as Template"}
+            </Button>
+          </div>
+          <div>
+            {/* <Button
+              disabled={meta.inSaving}
+              // intent="primary"
+              // icon="floppy-disk"
+              onClick={() => onClickSave(true)}
+            >
+              {"Save as new document"}
+            </Button>
+            <Button
+              className={css.saveAsTemplateBtn}
+              disabled={meta.inSaving} //|| !meta.id || meta.id === "-1"}
+              intent="none"
+              onClick={() => {
+                setSaveTemplateDialogOpen(true);
+                setTemplateDialogData({
+                  name: meta.name ?? "",
+                  description: "",
+                });
+              }}
+            >
+              {"Save as Template"}
+            </Button> */}
+            {/* 
+            <Button
+              disabled={meta.inSaving}
+              intent="none"
+              onClick={() => {
+                onRequestClose();
+              }}
+            >
+              {"Cancel"}
+            </Button> */}
+          </div>
 
           {/* <div className={css.saveAsTemplateBtnHolder}>
             <Button
@@ -463,7 +503,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         canOutsideClickClose={false}
       >
         <div style={{ margin: "20px" }}>
-          <div className={cx("input330", css.inputHolder)}>
+          <div className={cx("input400-force", css.inputHolder)}>
             {getTextField(
               "Template Name",
               templateDialogData.name,

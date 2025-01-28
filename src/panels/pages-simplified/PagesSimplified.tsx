@@ -204,21 +204,6 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
               >
                 {/* <Button small icon="caret-down" minimal></Button> */}
               </div>
-              <div style={{ display: "flex", marginTop: "5px" }}>
-                <Button
-                  className={css.smallButton}
-                  // intent={"primary"}
-                  // minimal
-                  disabled={!activeSlideId}
-                  small
-                  onClick={() => {
-                    _addNewPage(PageType.Normal, true);
-                  }}
-                  icon="add"
-                >
-                  Page
-                </Button>
-              </div>
 
               {/* key={layer.id} */}
               <ScrollingComponent className={cx(css.objectsHolder, {})}>
@@ -228,7 +213,10 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                       const page = pageById[pageId];
 
                       return (
-                        <React.Fragment key={`object-${pageId}`}>
+                        <div
+                          className={css.itemHolder}
+                          key={`object-${pageId}`}
+                        >
                           {/* <SimplifiedObjectRow
                             moveObject={movePage}
                             dropCancel={() => {
@@ -257,7 +245,21 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                               [css.selected]: page.id === activeObjectId,
                             })}
                           >
-                            {page.name}
+                            <div>{page.name}</div>
+                            <div>
+                              <Button
+                                className={cx(
+                                  css.smallButton,
+                                  css.addPageSmall
+                                )}
+                                small
+                                minimal
+                                onClick={() => {
+                                  _addNewPage(PageType.Normal, true, idx);
+                                }}
+                                icon="add"
+                              ></Button>
+                            </div>
                           </div>
                           <SimplifiedPageRow
                             forceUpdatePreviewIdx={forceUpdatePreviewIdx}
@@ -281,7 +283,7 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                             selectedPageIds={selectedSlideIds}
                             rowIndex={idx}
                           />
-                        </React.Fragment>
+                        </div>
                       );
                     })}
                   </>
@@ -289,6 +291,28 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                   <span className="bp5-text-disabled">No pages found</span>
                 )}
               </ScrollingComponent>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row-reverse",
+                  marginTop: "5px",
+                  marginRight: "5px",
+                }}
+              >
+                <Button
+                  className={css.smallButton}
+                  // intent={"primary"}
+                  // minimal
+                  small
+                  minimal
+                  onClick={() => {
+                    _addNewPage(PageType.Normal, true);
+                  }}
+                  icon="add"
+                >
+                  Add Page
+                </Button>
+              </div>
             </>
             {/* ); */}
             {/* })} */}

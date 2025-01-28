@@ -12,6 +12,10 @@ export default function EditableText(props: IEditableText) {
   const [isEdit, setIsEdit] = useState(false);
   const [currentValue, setCurrentValue] = useState(value);
 
+  useEffect(() => {
+    setCurrentValue(value);
+  }, [value]);
+
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {

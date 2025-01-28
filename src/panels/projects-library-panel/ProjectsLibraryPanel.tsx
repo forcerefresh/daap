@@ -33,17 +33,17 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
             title="Projects"
             panel={<ProjectsPanel onRequestClose={props.onRequestClose} />}
           />
-          <Tab
+          {/* <Tab
             id="templates"
             title="Templates"
             panel={<TemplatesPanel onRequestClose={props.onRequestClose} />}
-          />
+          /> */}
           <Tab
             id="myTemplates"
-            title="Local Templates"
+            title="Templates"
             panel={<MyTemplatesPanel onRequestClose={props.onRequestClose} />}
           />
-          <Tab
+          {/* <Tab
             id="extensions"
             title={
               <>
@@ -56,19 +56,19 @@ const ProjectsLibraryPanel: React.FC<IProjectsLibraryPanelMergedProps> = (
               </>
             }
             panel={<ExtensionsPanel onRequestClose={props.onRequestClose} />}
-          />
-          <Tab
+          /> */}
+          {/* <Tab
             id="myExtensions"
             title="Local Extensions"
             panel={<MyExtensionsPanel onRequestClose={props.onRequestClose} />}
-          />
-          {enableDeveloper && (
+          /> */}
+          {/* {enableDeveloper && (
             <Tab
               id="development"
               title="Development"
               panel={<DevelopmentPanel onRequestClose={props.onRequestClose} />}
             />
-          )}
+          )} */}
         </Tabs>
       </div>
     </div>

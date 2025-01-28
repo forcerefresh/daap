@@ -57,7 +57,7 @@ export interface IStage {
 
 const getStageDefault = (): IStage => ({
   stageViewportSize: { w: 0, h: 0 },
-  zoomFit: false,
+  zoomFit: true,
   zoom: 1,
   pan: { x: 0, y: 0, currentX: 0, currentY: 0 },
   previewState: {
@@ -69,7 +69,7 @@ const getStageDefault = (): IStage => ({
   },
   stageTool: { tool: StageTools.SELECT },
   activeStageTool: { tool: StageTools.SELECT },
-  selectedDevice: "small-1",
+  selectedDevice: "device-independent",
   forceRefreshRand: 0,
   nextTextPositionY: 100,
   showSimplifiedLayerPanel: true,

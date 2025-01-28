@@ -2,6 +2,7 @@ import { cloneDeep } from "lodash-es";
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,
+  CreateNewProjectActionPayload,
   OPEN_PROJECT,
   SET_THEME,
   UPDATE_PROJECT_SETTINGS,
@@ -42,18 +43,127 @@ export function getIconByType(type: DeviceType): string {
   return mapSizeIcon[size];
 }
 
-function getDefaultBreakpointConfiguration(): Breakpoints {
+// function getDefaultBreakpointConfiguration(): Breakpoints {
+//   return {
+//     breakpointsConfiguration: [
+//       {
+//         type: "small-1",
+//         name: "Small devices",
+//         enabled: true,
+//         layout: "normal",
+//         normal: {
+//           breakpoint: { width: { from: 320, fromMin: true, to: 320 } },
+//           page: { width: 480, height: 500 },
+//           maxSliderSize: { width: 480, height: 500 },
+//           heightBehavior: { type: "keepAspectRatio" },
+//           widthBehavior: { type: "useMaxWidth" },
+//           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
+//           grid: {
+//             vertical: 24,
+//             horizontal: 24,
+//           },
+//           //keepProportion: false,
+//           horizontalFitTo: "viewport",
+//           verticalFitTo: "viewport",
+//         },
+//         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
+//       },
+//       {
+//         type: "medium-1",
+//         name: "Medium devices",
+//         enabled: true,
+//         layout: "normal",
+//         normal: {
+//           breakpoint: { width: { from: 481, to: 768 } },
+//           page: { width: 768, height: 1366 },
+//           maxSliderSize: { width: 768, height: 1366 },
+//           heightBehavior: { type: "keepAspectRatio" },
+//           widthBehavior: { type: "useMaxWidth" },
+//           guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
+//           grid: {
+//             vertical: 24,
+//             horizontal: 24,
+//           },
+//           //keepProportion: false,
+//           horizontalFitTo: "viewport",
+//           verticalFitTo: "viewport",
+//         },
+//         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
+//       },
+//       {
+//         type: "large-1",
+//         name: "Large devices",
+//         enabled: true,
+//         layout: "normal",
+//         normal: {
+//           breakpoint: { width: { from: 769, to: 1024 } },
+//           page: { width: 1024, height: 576 },
+//           maxSliderSize: { width: 1024, height: 576 },
+//           heightBehavior: { type: "keepAspectRatio" },
+//           widthBehavior: { type: "useMaxWidth" },
+//           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
+//           grid: {
+//             vertical: 24,
+//             horizontal: 24,
+//           },
+//           //keepProportion: false,
+//           horizontalFitTo: "viewport",
+//           verticalFitTo: "viewport",
+//         },
+//         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
+//       },
+//       {
+//         type: "xlarge-1",
+//         name: "Extra large devices",
+//         enabled: true,
+//         layout: "normal",
+//         normal: {
+//           breakpoint: { width: { from: 1025, to: 1240, toMax: true } },
+//           page: { width: 1240, height: 720 },
+//           maxSliderSize: { width: 1100, height: 720 },
+//           heightBehavior: { type: "keepAspectRatio" },
+//           widthBehavior: { type: "useMaxWidth" },
+//           guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
+//           grid: {
+//             vertical: 24,
+//             horizontal: 24,
+//           },
+//           //keepProportion: false,
+//           horizontalFitTo: "viewport",
+//           verticalFitTo: "viewport",
+//         },
+//         fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
+//       },
+//     ],
+//   };
+// }
+
+function getDefaultBreakpointConfiguration(props: {
+  width: string;
+  height: string;
+}): Breakpoints {
+  const { height, width } = props;
+
+  const heightInt = parseInt(height);
+  const widthInt = parseInt(width);
+
   return {
     breakpointsConfiguration: [
       {
-        type: "small-1",
-        name: "Small devices",
+        type: "device-independent",
+        name: "Device independent",
         enabled: true,
         layout: "normal",
         normal: {
-          breakpoint: { width: { from: 320, fromMin: true, to: 320 } },
-          page: { width: 480, height: 500 },
-          maxSliderSize: { width: 480, height: 500 },
+          breakpoint: {
+            width: {
+              from: widthInt,
+              fromMin: true,
+              to: widthInt,
+            },
+          },
+          page: { width: widthInt, height: heightInt },
+          maxSliderSize: { width: widthInt, height: heightInt },
           heightBehavior: { type: "keepAspectRatio" },
           widthBehavior: { type: "useMaxWidth" },
           guidelinesPadding: { left: 30, right: 30, top: 30, bottom: 30 },
@@ -61,73 +171,6 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
             vertical: 24,
             horizontal: 24,
           },
-          //keepProportion: false,
-          horizontalFitTo: "viewport",
-          verticalFitTo: "viewport",
-        },
-        fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
-      },
-      {
-        type: "medium-1",
-        name: "Medium devices",
-        enabled: true,
-        layout: "normal",
-        normal: {
-          breakpoint: { width: { from: 481, to: 768 } },
-          page: { width: 768, height: 1366 },
-          maxSliderSize: { width: 768, height: 1366 },
-          heightBehavior: { type: "keepAspectRatio" },
-          widthBehavior: { type: "useMaxWidth" },
-          guidelinesPadding: { left: 40, right: 40, top: 40, bottom: 40 },
-          grid: {
-            vertical: 24,
-            horizontal: 24,
-          },
-          //keepProportion: false,
-          horizontalFitTo: "viewport",
-          verticalFitTo: "viewport",
-        },
-        fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
-      },
-      {
-        type: "large-1",
-        name: "Large devices",
-        enabled: true,
-        layout: "normal",
-        normal: {
-          breakpoint: { width: { from: 769, to: 1024 } },
-          page: { width: 1024, height: 576 },
-          maxSliderSize: { width: 1024, height: 576 },
-          heightBehavior: { type: "keepAspectRatio" },
-          widthBehavior: { type: "useMaxWidth" },
-          guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
-          grid: {
-            vertical: 24,
-            horizontal: 24,
-          },
-          //keepProportion: false,
-          horizontalFitTo: "viewport",
-          verticalFitTo: "viewport",
-        },
-        fullViewport: { padding: { top: 0, bottom: 0, left: 0, right: 0 } },
-      },
-      {
-        type: "xlarge-1",
-        name: "Extra large devices",
-        enabled: true,
-        layout: "normal",
-        normal: {
-          breakpoint: { width: { from: 1025, to: 1240, toMax: true } },
-          page: { width: 1240, height: 720 },
-          maxSliderSize: { width: 1100, height: 720 },
-          heightBehavior: { type: "keepAspectRatio" },
-          widthBehavior: { type: "useMaxWidth" },
-          guidelinesPadding: { left: 50, right: 50, top: 50, bottom: 50 },
-          grid: {
-            vertical: 24,
-            horizontal: 24,
-          },
-          //keepProportion: false,
           horizontalFitTo: "viewport",
           verticalFitTo: "viewport",
         },
@@ -137,7 +180,10 @@ function getDefaultBreakpointConfiguration(): Breakpoints {
   };
 }
 
-const getSettingsDefault = (): ISettings => ({
+const getSettingsDefault = (props?: {
+  width: string;
+  height: string;
+}): ISettings => ({
   // slide
   slideDuration: "10s",
   exitSlideDuration: "1s",
@@ -151,7 +197,9 @@ const getSettingsDefault = (): ISettings => ({
   layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },
   transparentHeader: false,
   // breakpoints
-  breakpoints: getDefaultBreakpointConfiguration(),
+  breakpoints: getDefaultBreakpointConfiguration(
+    props ?? { width: "1080px", height: "1080px" }
+  ),
   //theme
   theme: "dark",
   themeClass: "bp5-dark",
@@ -186,7 +234,10 @@ export function settings(
       };
     }
     case CREATE_NEW_PROJECT: {
-      return getSettingsDefault();
+      return getSettingsDefault({
+        width: action.payload.width,
+        height: action.payload.height,
+      });
     }
     case SET_THEME: {
       return {

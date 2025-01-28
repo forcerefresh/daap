@@ -28,6 +28,9 @@ import { AUTH_LOGOUT } from "../../../pages/login/constants";
 import css from "./SassMainHeader.module.scss";
 import { ReactComponent as LibraryIcon } from "../../../panels/toolbar-panel/assets/library-icon.svg";
 import { ReactComponent as AddObjectIcon } from "../../../panels/toolbar-panel/assets/add-object-icon.svg";
+import ChangeCheckerButton from "../../../utils/components/change-checker-button/ChangeCheckerButton";
+import { Breakpoint } from "../../../panels/project-settings-panel/breakpoint-component/Breakpoint";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 type IMainHeader = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -35,8 +38,15 @@ type IMainHeader = typeof mapDispatchToProps &
   };
 
 const MainHeader = (props: IMainHeader) => {
-  const { className, _setTheme, meta, _updateProjectMeta, theme, account } =
-    props;
+  const {
+    className,
+    _setTheme,
+    meta,
+    _updateProjectMeta,
+    breakpointConfig,
+    theme,
+    account,
+  } = props;
 
   // const [meData, setMeData] = useState<{
   //   loading?: boolean;
@@ -71,7 +81,28 @@ const MainHeader = (props: IMainHeader) => {
                     {missingExtensions.length}
                   </Tag>
                 )} */}
-                  Projects
+                  Documents
+                </Button>
+
+                <Divider dir="horizontal" />
+
+                <Button
+                  minimal
+                  large
+                  className={css.largeButton}
+                  icon={<Icon icon="applications" size={25} />}
+                  //active={showPanel === VisiblePanel.ProjectsLibrary}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_TEMPLATES");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  {/* {missingExtensions?.length > 0 && (
+                  <Tag intent={"danger"} round className={css.buttonTag}>
+                    {missingExtensions.length}
+                  </Tag>
+                )} */}
+                  Templates
                 </Button>
 
                 <Divider dir="horizontal" />
@@ -93,11 +124,49 @@ const MainHeader = (props: IMainHeader) => {
               minimal
               large
               // rightIcon="caret-down"
-              style={{ marginRight: "20px" }}
+              // style={{ marginRight: "20px" }}
               icon={<AddObjectIcon width={25} height={25} />}
+              onClick={() => {
+                const event = new CustomEvent("OPEN_CREATE_NEW");
+                window.dispatchEvent(event);
+              }}
             >
               Create
             </Button>
+
+            <Divider dir="horizontal" />
+
+            <Button
+              minimal
+              large
+              // rightIcon="caret-down"
+              // style={{ marginRight: "20px" }}
+              icon={<Icon icon="floppy-disk" size={25} />}
+              onClick={() => {
+                const event = new CustomEvent("OPEN_SAVE");
+                window.dispatchEvent(event);
+              }}
+            >
+              Save
+            </Button>
+
+            <Divider dir="horizontal" />
+
+            <ButtonGroup minimal={true}>
+              {/* <Divider /> */}
+              <Button
+                large
+                minimal
+                // className={css.downloadBtn}
+                icon={<Icon icon="export" size={25} />}
+                onClick={() => {
+                  const event = new CustomEvent("OPEN_EXPORT");
+                  window.dispatchEvent(event);
+                }}
+              >
+                Export
+              </Button>
+            </ButtonGroup>
           </div>
         </div>
         <div className={css.center}>
@@ -109,21 +178,37 @@ const MainHeader = (props: IMainHeader) => {
           />
           <Icon icon="cloud-tick" className={css.title} /> */}
         </div>
+        <div className={css.projectNameHolder}>
+          {meta.name}{" "}
+          <span
+            style={{
+              fontFamily: "monospace",
+              marginLeft: "10px",
+            }}
+          >
+            {breakpointConfig?.normal.page.width}x
+            {breakpointConfig?.normal.page.height}
+          </span>
+          {/* <EditableText
+            value={meta.name ?? ""}
+            onChange={(value) => {
+              _updateProjectMeta({ ...meta, name: value });
+            }}
+          /> */}
+          {/* <Icon icon="cloud-tick" className={css.inlineIcon} /> */}
+          {/* cloud-upload / cloud */}
+        </div>
+
         <div className={css.right}>
           <div className={css.rightActionsHolder}>
             <ButtonGroup minimal={true}>
-              <div className={css.projectNameHolder}>
-                <EditableText
-                  value={meta.name ?? ""}
-                  onChange={(value) => {
-                    _updateProjectMeta({ ...meta, name: value });
-                  }}
-                />
-                <Icon icon="cloud-tick" className={css.inlineIcon} />
-                {/* cloud-upload / cloud */}
-              </div>
               {/* <Divider /> */}
-              <Button large intent="none" className={css.downloadBtn}>
+              <Button
+                large
+                minimal
+                // className={css.downloadBtn}
+                icon={"download"}
+              >
                 Download
               </Button>
             </ButtonGroup>
@@ -249,12 +334,21 @@ const MainHeader = (props: IMainHeader) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  settings: state.project.settings,
-  meta: state.meta,
-  theme: state.project.settings.theme,
-  account: state.account,
-});
+const mapStateToProps = (state: IStore) => {
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    state.project.settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
+    );
+
+  return {
+    settings: state.project.settings,
+    meta: state.meta,
+    theme: state.project.settings.theme,
+    account: state.account,
+    breakpointConfig,
+  };
+};
 
 const mapDispatchToProps = {
   _setTheme: (theme: ITheme) => setTheme(theme),

@@ -6,10 +6,11 @@ export const dzBaseStyle = {
   padding: "20px 10px 10px 10px",
   borderWidth: 1,
   borderRadius: 6,
-  borderColor: "#eeeeee",
+  borderColor: "#888",
   borderStyle: "dashed",
   //color: "#bdbdbd",
   outline: "none",
+  marginTop: "10px",
   transition: "border .24s ease-in-out",
 };
 

@@ -184,7 +184,7 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       _setDevice(
         [...updatedProject.settings.breakpoints.breakpointsConfiguration]
           .reverse()
-          .find((bc) => bc.enabled)?.type || "large-1"
+          .find((bc) => bc.enabled)?.type || "device-independent"
       );
 
       // missing extensions >>>
@@ -203,7 +203,7 @@ const TemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
 
       _doClearHistory();
 
-      const slideIdToSelect = updatedProject.slides.pages[0];
+      const slideIdToSelect = updatedProject.pages.pages[0];
       if (slideIdToSelect) {
         _activateSlide(slideIdToSelect);
         _selectSlides([slideIdToSelect]);

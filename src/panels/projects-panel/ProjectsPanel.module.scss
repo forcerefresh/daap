@@ -1,8 +1,18 @@
+@import "/src/theme";
+
 .projectsPanel {
-  height: calc(100vh - 110px);
-  padding: 3px;
-  padding-right: 30px;
-  position: relative;
+  z-index: 100;
+  position: absolute;
+  top: 0px;
+  left: 68px;
+  width: 830px;
+  height: calc(100vh - 52px);
+
+  background: $pt-app-background-color;
+  box-shadow: $pt-elevation-shadow-0;
+
+  padding: 0 30px 30px 30px;
+  overflow: auto;
 
   :global {
     .bp5-popover-target {
@@ -12,6 +22,7 @@
 }
 
 .headerSection {
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -143,4 +154,13 @@
   width: 400px;
   text-align: right;
   color: gray;
+}
+
+:global(.bp5-dark) {
+  &.projectsPanel {
+    background: $pt-dark-app-background-color !important;
+    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    border-right: 1px solid #555;
+    border-left: 1px solid #111;
+  }
 }

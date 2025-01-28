@@ -47,6 +47,8 @@ export class StageManager extends EventTarget {
   }
 
   stop(internalCall = false) {
+    console.log("StageManager:STOP " + this.currentTool);
+
     this.currentTool?.removeEventListener(
       "change",
       this.changeHandlerBind as any
@@ -72,6 +74,7 @@ export class StageManager extends EventTarget {
   }
 
   stopHandler(e: StageToolEvent) {
+    console.log("STOP1234");
     this.dispatchEvent(new StageToolEvent("stop", { detail: e.detail }));
     this.stop(true);
   }

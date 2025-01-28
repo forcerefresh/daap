@@ -221,18 +221,18 @@ function application(): {
 } {
   return {
     component: (
-      <React.StrictMode>
-        <Provider store={store}>
-          <HotkeysProvider>
-            <BrowserRouter>
-              <Routes>
-                <Route path="login" element={<Login />} />
-                <Route index element={<EditorConnected />} />
-              </Routes>
-            </BrowserRouter>
-          </HotkeysProvider>
-        </Provider>
-      </React.StrictMode>
+      // <React.StrictMode>
+      <Provider store={store}>
+        <HotkeysProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="login" element={<Login />} />
+              <Route index element={<EditorConnected />} />
+            </Routes>
+          </BrowserRouter>
+        </HotkeysProvider>
+      </Provider>
+      // </React.StrictMode>
     ),
     useAppRootSelector: useAppRootSelector,
   };

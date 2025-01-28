@@ -57,15 +57,25 @@ import { ReactComponent as SettingsIcon } from "./assets/settings-icon.svg";
 import css from "./ToolbarPanel.module.scss";
 import { round } from "lodash-es";
 import { BLOB } from "../../objects/blob/blob";
+import CreatePanel from "../create-panel/CreatePanel";
+import SavePanel from "../save-panel/SavePanel";
+import ProjectsPanel from "../projects-panel/ProjectsPanel";
+import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
+import ExportPanel from "../export-panel/ExportPanel";
 enum VisiblePanel {
   None = "none",
+  Create = "create",
+  Save = "save",
   Add = "add",
   Settings = "settings",
   Draw = "draw",
   History = "history",
   FontPreview = "font-preview",
   MediaLibrary = "media-library",
-  ProjectsLibrary = "projects-library",
+  // ProjectsLibrary = "projects-library",
+  Projects = "projects",
+  Templates = "templates",
+  Export = "export",
 }
 
 const ICON_SIZE = 32;
@@ -112,11 +122,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Settings);
     };
     const openProjectsCallback = () => {
-      setShowPanel(
-        showPanel === VisiblePanel.ProjectsLibrary
-          ? VisiblePanel.None
-          : VisiblePanel.ProjectsLibrary
-      );
+      setShowPanel(VisiblePanel.Projects);
+    };
+
+    const openTemplatesCallback = () => {
+      setShowPanel(VisiblePanel.Templates);
     };
 
     const openMediaFontsCallback = () => {
@@ -126,14 +136,38 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       // }, 100);
     };
 
+    const openCreateNewCallback = () => {
+      setShowPanel(VisiblePanel.Create);
+    };
+
+    const openSaveCallback = () => {
+      setShowPanel(VisiblePanel.Save);
+    };
+
+    const openExportCallback = () => {
+      setShowPanel(VisiblePanel.Export);
+    };
+
     window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
+    window.addEventListener("OPEN_TEMPLATES", openTemplatesCallback);
+
     window.addEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
+    window.addEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
+    window.addEventListener("OPEN_SAVE", openSaveCallback);
+
+    window.addEventListener("OPEN_EXPORT", openExportCallback);
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
       window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
+      window.removeEventListener("OPEN_TEMPLATES", openTemplatesCallback);
+
       window.removeEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
+      window.removeEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
+      window.removeEventListener("OPEN_SAVE", openSaveCallback);
+
+      window.removeEventListener("OPEN_SAVE", openExportCallback);
     };
   }, []);
 
@@ -244,6 +278,17 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           {/* <Button
             className={css.largeButton}
             minimal
+            active={showPanel === VisiblePanel.Create}
+            onClick={() => {
+              setShowPanel(VisiblePanel.Create);
+            }}
+          >
+            <AddObjectIcon />
+          </Button> */}
+
+          {/* <Button
+            className={css.largeButton}
+            minimal
             active={showPanel === VisiblePanel.Add}
             onClick={() => {
               setShowPanel(VisiblePanel.Add);
@@ -263,6 +308,29 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               </div>
             )}
           </Portal> */}
+
+          <Portal>
+            {showPanel === VisiblePanel.Create && (
+              <div ref={sharedRef}>
+                <CreatePanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
+        <div>
+          <Portal>
+            {showPanel === VisiblePanel.Save && (
+              <div ref={sharedRef}>
+                <SavePanel
+                  // isSaveAs={false} //showPanel === VisiblePanel.SaveAs
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
         </div>
         <div>
           <Button
@@ -482,9 +550,29 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Button> */}
 
           <Portal>
-            {showPanel === VisiblePanel.ProjectsLibrary && (
+            {showPanel === VisiblePanel.Projects && (
               <div ref={sharedRef}>
-                <ProjectsLibraryPanel
+                <ProjectsPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Templates && (
+              <div ref={sharedRef}>
+                <MyTemplatesPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Export && (
+              <div ref={sharedRef}>
+                <ExportPanel
                   onRequestClose={() => setShowPanel(VisiblePanel.None)}
                 />
               </div>
