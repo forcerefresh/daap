@@ -502,6 +502,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     left: 0 + "px",
     width: stageSize.width + "px",
     height: stageSize.height + "px",
+    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
+
     // transform: "scale(" + stageZoom + ")",
     // transformOrigin: "left top",
     // ...(isPreview

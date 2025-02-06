@@ -245,7 +245,13 @@ export async function preloadImage(props: {
   //     src: imageValues.image.image.baseUrl + imageValues.image.image.filename,
   //   };
   // } else {
-  imageSrc = getMediaSrc("image", imageValues.image);
+  //imageSrc = getMediaSrc("image", imageValues.image);
+
+  const fileName = imageValues.image.mediaSizes.find(
+    (size) => size.sizeType === imageValues.image.sizeType
+  )?.sourceFilename;
+  imageSrc = { src: `/api/v1/media/${fileName}` };
+
   // }
 
   // if there are no image to preload return instantly
@@ -258,7 +264,9 @@ export async function preloadImage(props: {
     img.onload = function () {
       // resolve the promise with our url so it is
       // returned in the result of Promise.all
+      // setTimeout(() => {
       resolve(id);
+      // }, 1000);
     };
     img.onerror = function (err) {
       reject(err);

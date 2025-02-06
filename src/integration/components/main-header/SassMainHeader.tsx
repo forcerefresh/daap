@@ -68,6 +68,40 @@ const MainHeader = (props: IMainHeader) => {
                 <Button
                   minimal
                   large
+                  // rightIcon="caret-down"
+                  // style={{ marginRight: "20px" }}
+                  icon={<Icon icon="floppy-disk" size={25} />}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_SAVE");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  Save
+                </Button>
+
+                {/* <Divider dir="horizontal" /> */}
+
+                <ButtonGroup minimal={true}>
+                  {/* <Divider /> */}
+                  <Button
+                    large
+                    minimal
+                    // className={css.downloadBtn}
+                    icon={<Icon icon="export" size={25} />}
+                    onClick={() => {
+                      const event = new CustomEvent("OPEN_EXPORT");
+                      window.dispatchEvent(event);
+                    }}
+                  >
+                    Export
+                  </Button>
+                </ButtonGroup>
+
+                <Divider dir="horizontal" />
+
+                <Button
+                  minimal
+                  large
                   className={css.largeButton}
                   icon={<LibraryIcon width={25} height={25} />}
                   //active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -82,6 +116,22 @@ const MainHeader = (props: IMainHeader) => {
                   </Tag>
                 )} */}
                   Documents
+                </Button>
+
+                <Divider dir="horizontal" />
+
+                <Button
+                  minimal
+                  large
+                  // rightIcon="caret-down"
+                  // style={{ marginRight: "20px" }}
+                  icon={<AddObjectIcon width={25} height={25} />}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_CREATE_NEW");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  Create
                 </Button>
 
                 <Divider dir="horizontal" />
@@ -119,54 +169,6 @@ const MainHeader = (props: IMainHeader) => {
                 </Portal>
               </ButtonGroup>
             </div>
-
-            <Button
-              minimal
-              large
-              // rightIcon="caret-down"
-              // style={{ marginRight: "20px" }}
-              icon={<AddObjectIcon width={25} height={25} />}
-              onClick={() => {
-                const event = new CustomEvent("OPEN_CREATE_NEW");
-                window.dispatchEvent(event);
-              }}
-            >
-              Create
-            </Button>
-
-            <Divider dir="horizontal" />
-
-            <Button
-              minimal
-              large
-              // rightIcon="caret-down"
-              // style={{ marginRight: "20px" }}
-              icon={<Icon icon="floppy-disk" size={25} />}
-              onClick={() => {
-                const event = new CustomEvent("OPEN_SAVE");
-                window.dispatchEvent(event);
-              }}
-            >
-              Save
-            </Button>
-
-            <Divider dir="horizontal" />
-
-            <ButtonGroup minimal={true}>
-              {/* <Divider /> */}
-              <Button
-                large
-                minimal
-                // className={css.downloadBtn}
-                icon={<Icon icon="export" size={25} />}
-                onClick={() => {
-                  const event = new CustomEvent("OPEN_EXPORT");
-                  window.dispatchEvent(event);
-                }}
-              >
-                Export
-              </Button>
-            </ButtonGroup>
           </div>
         </div>
         <div className={css.center}>
@@ -179,7 +181,7 @@ const MainHeader = (props: IMainHeader) => {
           <Icon icon="cloud-tick" className={css.title} /> */}
         </div>
         <div className={css.projectNameHolder}>
-          {meta.name}{" "}
+          {meta.name}
           <span
             style={{
               fontFamily: "monospace",
@@ -200,19 +202,17 @@ const MainHeader = (props: IMainHeader) => {
         </div>
 
         <div className={css.right}>
-          <div className={css.rightActionsHolder}>
+          {/* <div className={css.rightActionsHolder}>
             <ButtonGroup minimal={true}>
-              {/* <Divider /> */}
               <Button
                 large
                 minimal
-                // className={css.downloadBtn}
                 icon={"download"}
               >
                 Download
               </Button>
             </ButtonGroup>
-          </div>
+          </div> */}
           {account.userDataLoading ||
           typeof account.userData?.displayName === "undefined" ? (
             <Button

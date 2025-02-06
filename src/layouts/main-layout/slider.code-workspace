@@ -23,6 +23,12 @@
     },
     {
       "path": "../../../../GoogleFontSpriteImageGenerator"
+    },
+    {
+      "path": "../../../../ffmpeg.wasm"
+    },
+    {
+      "path": "../../../../react-vite-app"
     }
   ],
   "settings": {}

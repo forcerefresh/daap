@@ -1238,6 +1238,27 @@ export function moveSlides(
   };
 }
 
+// move slides
+export const REORDER_SLIDES = "Reorder slides";
+
+export interface ReorderSlidesActionPayload {
+  pageIds: string[];
+}
+
+export interface ReorderSlidesAction extends IUndoableAction<true, false> {
+  type: typeof REORDER_SLIDES;
+  payload: ReorderSlidesActionPayload;
+}
+
+export function reorderPages(pageIds: string[]): ReorderSlidesAction {
+  return {
+    type: REORDER_SLIDES,
+    payload: { pageIds },
+    isUndoable: true,
+    skipHistory: false,
+  };
+}
+
 // **** OBJECTS
 
 export const ADD_OBJECT = "Add object";
@@ -2942,6 +2963,7 @@ export type ActionTypes =
   | MoveObjectsAction
   | MoveLayersAction
   | MoveSlidesAction
+  | ReorderSlidesAction
   | GroupObjectsAction
   | UngroupObjectAction
 

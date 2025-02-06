@@ -15,6 +15,7 @@ export interface AppPlayerProps {
   manualProgress: number;
   // deprecated : onProgress?: (progress: number, time: number, slideIdx: number) => void;
   requestStop: () => void;
+  onSlideStarted?: () => void;
 }
 
 export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
@@ -25,6 +26,7 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
     requestStop,
     customBPWidth,
     selectedDevice,
+    onSlideStarted,
   } = props;
 
   const playerDataForComparation = omit(
@@ -130,6 +132,10 @@ export const AppPlayer: React.FC<AppPlayerProps> = (props) => {
             slideIdx: player.current?.getCurrentTimelineIdx() || 0,
           });
         });
+      });
+
+      pl.onSlideStarted(() => {
+        onSlideStarted?.();
       });
 
       pl.play();

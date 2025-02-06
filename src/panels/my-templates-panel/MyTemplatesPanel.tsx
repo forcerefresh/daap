@@ -180,7 +180,9 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         slides: IPages;
       } = response.project;
 
-      const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+      // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
+      const updatedProject = project;
 
       _openProject(updatedProject);
 
@@ -365,7 +367,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                     onDenied={() => {}}
                     confirmButtonText="Discard changes and Load template"
                   >
-                    Load template
+                    Use template
                   </ChangeCheckerButton>
                   <a
                     href={`webslider-fp://my-uploads/my-templates/${template.id}.zip`}

@@ -393,7 +393,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Button>
         </div>
 
-        <div>
+        {/* <div>
           <Button
             className={css.largeButton}
             minimal
@@ -410,8 +410,26 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           >
             BLOB
           </Button>
-        </div>
+        </div> */}
 
+        <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(activeLayerId, BLOB, {
+                  left: 100,
+                  top: 100,
+                  width: 400,
+                  height: 400,
+                });
+              }
+            }}
+          >
+            SHAPE
+          </Button>
+        </div>
         <div className={css.delimiter}></div>
         <div>
           <Button

@@ -176,7 +176,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
                     deff.type +
                     " " +
                     deff.name +
-                    " - " +
+                    " " +
                     new Date().toDateString(),
                 });
                 onRequestClose();
@@ -242,7 +242,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
   const [newProjectData, setNewProjectData] = useState({
     width: "1080px",
     height: "1080px",
-    name: "Custom - " + new Date().toDateString(),
+    name: "Custom " + new Date().toDateString(),
   });
 
   return (

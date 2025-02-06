@@ -20,7 +20,7 @@ export interface IMeta {
 const getMetaDefault = () => ({
   saveRevision: 0,
   publishRevision: 0,
-  name: "Custom - " + new Date().toDateString(),
+  name: "Custom " + new Date().toDateString(),
 });
 
 export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {

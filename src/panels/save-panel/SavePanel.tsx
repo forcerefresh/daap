@@ -86,9 +86,9 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       //} else if (!metaClone.id || isSaveAs) {
       // todo: loader
       metaClone.id = undefined;
-      metaClone.name = "";
+      // metaClone.name = "";
       //getNextProjectId().then((nextId) => {
-      metaClone.name = `Slider`; // ${nextId}`;
+      // metaClone.name = `Slider`; // ${nextId}`;
       metaClone.description = "";
       setLocalMeta(metaClone);
       //});

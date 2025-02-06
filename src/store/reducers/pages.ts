@@ -10,6 +10,7 @@ import {
   MOVE_LAYERS,
   MOVE_SLIDES,
   OPEN_PROJECT,
+  REORDER_SLIDES,
   UPDATE_SLIDE,
 } from "../actions/actions";
 import update from "immutability-helper";
@@ -181,6 +182,15 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
       return { ...state, pageById };
     }
 
+    case REORDER_SLIDES: {
+      const payload = action.payload;
+
+      const newState = cloneDeep(state);
+      newState.pages = [...payload.pageIds];
+
+      return newState;
+    }
+
     case MOVE_SLIDES: {
       const payload = action.payload;
       const pages = cloneDeep(state.pages);
@@ -218,7 +228,11 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
           toSlide.name += " (copy)";
           toSlide.layerIds = slideItem.childs.map((item) => item.toId!);
           // newState.allPages.push(toSlide.id);
-          newState.pages.push(toSlide.id);
+
+          // add duplicated slide after original one
+          const indexOfFromSlide = newState.pages.indexOf(slideItem.fromId);
+          newState.pages.splice(indexOfFromSlide + 1, 0, toSlide.id);
+
           newState.pageById[toSlide.id] = toSlide;
         } else {
           const toSlide = cloneDeep(fromSlide);

@@ -146,7 +146,8 @@ export function getTagsField<T>(
 export function getSelectSlider<T>(
   label: string,
   value: T,
-  inputProperties: {
+  inputProps: {
+    disabled?: boolean;
     min: number;
     max: number;
     suffix: string;
@@ -154,15 +155,21 @@ export function getSelectSlider<T>(
     labelStepSize: number;
     trackFill: boolean;
   },
+  // inputProperties: {
+  //   min: number;
+  //   max: number;
+  //   suffix: string;
+  //   stepSize: number;
+  //   labelStepSize: number;
+  //   trackFill: boolean;
+  // },
   onChange: (value: T) => void,
-  onPreview: (value: T) => void,
-  inputProps: { disabled?: boolean } = {}
+  onPreview: (value: T) => void
 ) {
   const objectDef = {
     displayName: label,
     inputType: InputType.SLIDER_INPUT,
     value: value,
-    inputProperties: inputProperties,
     inputProps,
   };
 

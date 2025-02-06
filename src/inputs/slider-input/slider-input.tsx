@@ -18,6 +18,7 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
     onPreview = () => undefined,
     inputProps = {},
   } = props;
+
   const {
     trackFill = false,
     thumbPosition = "bottom",

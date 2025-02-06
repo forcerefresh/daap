@@ -193,7 +193,7 @@ const getSettingsDefault = (props?: {
   sliderBackgroundColor: { r: 255, g: 255, b: 255, a: 0 },
   autoPlay: true,
   // preview
-  pageBackgroundColor: { r: 44, g: 44, b: 44, a: 1 },
+  pageBackgroundColor: { r: 0, g: 0, b: 0, a: 1 },
   layoutBoxBackgroundColor: { r: 20, g: 155, b: 70, a: 0.8 },
   transparentHeader: false,
   // breakpoints

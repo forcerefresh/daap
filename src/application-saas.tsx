@@ -27,6 +27,7 @@ import Login from "./pages/login/Login";
 import { Button, HotkeysProvider } from "@blueprintjs/core";
 import { ReactComponent as DaapLogo } from "./integration/components/main-header/daap-logo.svg";
 import "in-app-guide/src/style.css";
+import { ExportProvider } from "./utils/export-provider/ExportProvider";
 
 const inAppGuide = require("in-app-guide");
 
@@ -119,9 +120,10 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
     <DevelopmentContextProvider>
       <IntegrationContextProvider>
         <DevelopmentManager />
-        <PreviewTimelineContextProvider>
-          <div className={css.main}>
-            {/* {renderSite && (
+        <ExportProvider>
+          <PreviewTimelineContextProvider>
+            <div className={css.main}>
+              {/* {renderSite && (
               <div
                 className={cx(css.siteHolder, { [css.hideSite]: showEditor })}
               >
@@ -181,13 +183,13 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
-            <div
-              className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
-            >
-              <MainHeader className={css.saasHeader} />
-              <App className={css.editor} />
-            </div>
-            {/* {renderSite && (
+              <div
+                className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
+              >
+                <MainHeader className={css.saasHeader} />
+                <App className={css.editor} />
+              </div>
+              {/* {renderSite && (
               <div
                 className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
                 onClick={() => {
@@ -201,9 +203,10 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
-          </div>
-          <div ref={overlayRef} />
-        </PreviewTimelineContextProvider>
+            </div>
+            <div ref={overlayRef} />
+          </PreviewTimelineContextProvider>
+        </ExportProvider>
       </IntegrationContextProvider>
     </DevelopmentContextProvider>
   );

@@ -38,6 +38,7 @@ import {
   addNewPage,
   addSlidesToSelection,
   removeSlidesFromSelection,
+  reorderPages,
 } from "../../store/actions/actions";
 import { ILayer } from "../../store/reducers/i-layers";
 import css from "./PagesSimplified.module.scss";
@@ -83,6 +84,7 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     _activateSlide,
     _selectSlides,
     _updateLayer,
+    _reorderPages,
     _addNewLayer,
     _addSlidesToSelection,
     _removeSlidesFromSelection,
@@ -137,6 +139,10 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   const [sortedPageIds, setSortedPageIds] = useState<string[] | undefined>();
 
   //console.log(selectionPath, "selectionPath");
+
+  useEffect(() => {
+    setSortedPageIds(undefined);
+  }, [pagesIds]);
 
   const movePage = useCallback(
     (dragIndex: number, hoverIndex: number) => {
@@ -269,6 +275,14 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                               setSortedPageIds(undefined);
                             }}
                             dropDone={() => {
+                              _reorderPages(sortedPageIds ?? pagesIds);
+
+                              // _moveSlides(
+                              //   dropItem.id,
+                              //   dropItem.where,
+                              //   dropItem.idsToMove
+                              // );
+
                               // const newLayer = cloneDeep(
                               //   layerById[parentLayerId]
                               // );
@@ -402,6 +416,7 @@ const mapDispatchToProps = {
   _addNewPage: addNewPage,
   _addSlidesToSelection: addSlidesToSelection,
   _removeSlidesFromSelection: removeSlidesFromSelection,
+  _reorderPages: (pageIds: string[]) => reorderPages(pageIds),
 };
 
 export default connect(

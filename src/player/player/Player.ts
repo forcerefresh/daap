@@ -93,6 +93,8 @@ export class Player {
   private currentSlideEl?: HTMLDivElement;
 
   // used for app
+  private onSlideStartedCallback: any;
+
   private onUpdateCallback: any;
   private onCurrentTimelineChangeCallback: any;
 
@@ -847,6 +849,10 @@ export class Player {
     this.onUpdateCallback = onUpdateCallback;
   }
 
+  public onSlideStarted(onSlideStartedCallback: any) {
+    this.onSlideStartedCallback = onSlideStartedCallback;
+  }
+
   onCurrentTimelineChange(onCurrentTimelineChangeCallback: any) {
     this.onCurrentTimelineChangeCallback = onCurrentTimelineChangeCallback;
   }
@@ -1006,9 +1012,12 @@ export class Player {
     });
     const ctime = Date.now();
 
+    console.log("111111111111");
     await Promise.all(this.preloaders[PreloadOrder.FIRST]);
     await Promise.all(this.preloaders[PreloadOrder.MIDDLE]);
     await Promise.all(this.preloaders[PreloadOrder.LAST]);
+
+    console.log("2222222");
 
     this.pagePreloaderEls.forEach(function (item) {
       if (Date.now() - ctime < 50) {
@@ -1026,12 +1035,18 @@ export class Player {
       }
     });
 
+    console.log("33333");
+
     this.staticTimelines.forEach((tl) => {
+      console.log("44444");
+
       tl.init();
       tl.start();
     });
 
     if (this.playerData?.config.autoPlay === true) {
+      console.log("555555");
+
       this.playSlide(0);
     }
   }
@@ -1240,6 +1255,8 @@ export class Player {
     this.currentSlideTimeline.emitter.addListener("start", () => {
       // Note: showSlide
       slideEl.style.display = "block";
+
+      this.onSlideStartedCallback?.();
       // Note: show static slides
       this.showFrontBack();
     });

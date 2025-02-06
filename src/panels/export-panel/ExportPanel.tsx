@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { cloneDeep, last, omit, round } from "lodash-es";
 import { connect } from "react-redux";
-import { Button, Divider, Spinner } from "@blueprintjs/core";
+import { Button, Divider, Radio, RadioGroup, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./ExportPanel.module.scss";
 import { updateProjectMeta, updateEditor } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import {
   getNumericFiled,
+  getSelectSlider,
   getTextArea,
   getTextField,
 } from "../../inputs/input-utils";
@@ -18,6 +19,11 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { IEditor } from "../../store/reducers/editor";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
+import { ExportContext } from "../../utils/export-provider/ExportProvider";
+import { generateImages } from "../../player/image-generator-utils";
+import JSZip from "jszip";
+import FileSaver from "file-saver";
+import { SliderInputForm } from "../../inputs/slider-input/slider-input";
 
 export const THUMB_WIDTH = 200;
 
@@ -33,7 +39,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
   const {
     project,
     meta,
-    slides,
+    pages,
     layers,
     objects,
     breakpointConfig,
@@ -42,32 +48,31 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
     _updateProjectMeta,
     _updateEditor,
     onRequestClose,
+    selectedDevice,
     themeClass,
   } = props;
+
+  const { requestExport } = useContext(ExportContext);
+
+  const [exporting, setExporting] = useState(false);
 
   const [thumbnailHtml, setThumbnailHtml] = useState("");
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
 
   // local state
   const [formState, setFormState] = useState({
-    type: "jpg",
-    jpgQuality: 80,
-    width: 1,
-    height: 1,
+    imageType: "jpeg",
+    imageQuality: 85,
+    scale: 1,
+    width: breakpointConfig?.normal.page.width!,
+    height: breakpointConfig?.normal.page.height!,
     cropLeft: 0,
     cropRight: 0,
     cropTop: 0,
     cropBottom: 0,
+    zipFilename: meta.name?.replaceAll(" ", "-") + ".zip",
+    imageFilename: meta.name?.replaceAll(" ", "-") + "-{index}.{extension}",
   });
-
-  useEffect(() => {
-    const newPartialState = {
-      width: breakpointConfig?.normal.page.width!,
-      height: breakpointConfig?.normal.page.height!,
-    };
-
-    setFormState({ ...formState, ...newPartialState });
-  }, []);
 
   useEffect(() => {
     const scale = THUMB_WIDTH / breakpointConfig!.normal.maxSliderSize.width!;
@@ -75,8 +80,8 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
     setThumbSize({ width: THUMB_WIDTH, height: thumbHeight, scale: scale });
 
     const thumbnailPlayerData = generatePlayerData(
-      { slides, layers, objects },
-      { entityType: "slide", entityId: slides.pages[0] },
+      { slides: pages, layers, objects },
+      { entityType: "slide", entityId: pages.pages[0] },
       breakpointConfig!,
       breakpoints,
       settings,
@@ -107,7 +112,7 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
         ></div>
       </div>
       <RightPanelHeader>
-        <div>SAVE DOCUMENT</div>
+        <div>EXPORT DOCUMENT</div>
         <div className={css.saving}>
           {meta.inSaving && (
             <>
@@ -130,17 +135,33 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
                 "Width",
                 formState.width,
                 (width: number) => {
-                  setFormState({ ...formState, width });
+                  const scale = width / breakpointConfig?.normal.page.width!;
+                  const height = breakpointConfig?.normal.page.height! * scale;
+                  setFormState({
+                    ...formState,
+                    width,
+                    height: Math.ceil(height),
+                    scale: Math.round(scale * 1000) / 1000,
+                  });
                 },
-                ""
+                "",
+                { min: 1, max: 10000 } as any
               )}
               {getNumericFiled(
                 "Height",
                 formState.height,
                 (height: number) => {
-                  setFormState({ ...formState, height });
+                  const scale = height / breakpointConfig?.normal.page.height!;
+                  const width = breakpointConfig?.normal.page.width! * scale;
+                  setFormState({
+                    ...formState,
+                    height,
+                    width: Math.ceil(width),
+                    scale: Math.round(scale * 1000) / 1000,
+                  });
                 },
-                ""
+                "",
+                { min: 1, max: 10000 } as any
               )}
             </div>
 
@@ -150,6 +171,139 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
           </div>
         </section>
         <Divider />
+        <section>
+          <div>
+            <div className={css.sectionHeader}>Scale</div>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            <div
+              className={cx("input400-force", css.inputHolder)}
+              style={{ display: "flex" }}
+            >
+              {getNumericFiled(
+                "Scale",
+                formState.scale,
+                (scale: number) => {
+                  setFormState({
+                    ...formState,
+                    scale,
+                    width: Math.ceil(
+                      breakpointConfig?.normal.page.width! * scale
+                    ),
+                    height: Math.ceil(
+                      breakpointConfig?.normal.page.height! * scale
+                    ),
+                  });
+                },
+                "",
+                {
+                  stepSize: 0.1,
+                  majorStepSize: 1,
+                  max: 100,
+                  min: 0.0001,
+                } as any // missing min/max
+              )}
+            </div>
+
+            {/* {renderObjectsCards([
+            { name: "ss", type: "custom", size: { width: 1, height: 1 } },
+          ])} */}
+          </div>
+        </section>
+
+        <Divider />
+        <section>
+          <div>
+            <div className={css.sectionHeader}>Format</div>
+          </div>
+          <div style={{ paddingLeft: "5px" }}>
+            <div
+              className={cx("input400-force", css.inputHolder)}
+              style={{ display: "flex" }}
+            >
+              <RadioGroup
+                name="image-type"
+                onChange={(e: React.FormEvent<HTMLInputElement>) => {
+                  const imageType = e.currentTarget.value as any;
+                  setFormState({ ...formState, imageType });
+                }}
+                selectedValue={formState.imageType}
+              >
+                <Radio label="PNG" value="png" />
+                <Radio label="JPEG" value="jpeg" />
+                <Radio label="WEBP" value="webp" />
+              </RadioGroup>
+            </div>
+            {formState.imageType !== "png" && (
+              <div
+                className={cx("input400-force", css.inputHolder)}
+                style={{ display: "flex" }}
+              >
+                {getSelectSlider(
+                  "Quality",
+                  formState.imageQuality,
+                  {
+                    min: 1,
+                    max: 100,
+                    labelStepSize: 1,
+                    stepSize: 1,
+                    suffix: "",
+                    trackFill: false,
+                  },
+                  (imageQuality) => {
+                    setFormState({ ...formState, imageQuality });
+                  },
+                  (imageQuality) => {
+                    setFormState({ ...formState, imageQuality });
+                  }
+                )}
+              </div>
+            )}
+            {/* {renderObjectsCards([
+            { name: "ss", type: "custom", size: { width: 1, height: 1 } },
+          ])} */}
+          </div>
+        </section>
+
+        <section>
+          <div>
+            <div className={css.sectionHeader}>File names</div>
+          </div>
+          <div style={{ paddingLeft: "5px" }}>
+            <div
+              className={cx("input400-force", css.inputHolder)}
+              style={{ display: "flex" }}
+            >
+              {getTextField(
+                "ZIP filename",
+                formState.zipFilename,
+                (zipFilename) => {
+                  setFormState({ ...formState, zipFilename });
+                }
+              )}
+            </div>
+
+            <div
+              className={cx("input400-force", css.inputHolder)}
+              style={{ display: "flex" }}
+            >
+              {getTextField(
+                "Image filename",
+                formState.imageFilename,
+                (imageFilename) => {
+                  setFormState({ ...formState, imageFilename });
+                },
+                "Supported variables: {index} {extension}"
+              )}
+            </div>
+
+            {/* {renderObjectsCards([
+            { name: "ss", type: "custom", size: { width: 1, height: 1 } },
+          ])} */}
+          </div>
+        </section>
+
+        {/* <Divider />
 
         <section>
           <div>
@@ -161,17 +315,17 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
           >
             {getNumericFiled(
               "Left",
-              formState.height,
-              (height: number) => {
-                setFormState({ ...formState, height });
+              formState.cropLeft,
+              (cropLeft: number) => {
+                setFormState({ ...formState, cropLeft });
               },
               ""
             )}
             {getNumericFiled(
               "Right",
-              formState.height,
-              (height: number) => {
-                setFormState({ ...formState, height });
+              formState.cropRight,
+              (cropRight: number) => {
+                setFormState({ ...formState, cropRight });
               },
               ""
             )}
@@ -182,34 +336,80 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
           >
             {getNumericFiled(
               "Top",
-              formState.height,
-              (height: number) => {
-                setFormState({ ...formState, height });
+              formState.cropTop,
+              (cropTop: number) => {
+                setFormState({ ...formState, cropTop });
               },
               ""
             )}
             {getNumericFiled(
               "Bottom",
-              formState.height,
-              (height: number) => {
-                setFormState({ ...formState, height });
+              formState.cropBottom,
+              (cropBottom: number) => {
+                setFormState({ ...formState, cropBottom });
               },
               ""
             )}
           </div>
-        </section>
+        </section> */}
 
         <div className={css.actionRow}>
           <div>
             <Button
+              loading={exporting}
               disabled={meta.inSaving}
               intent="primary"
               icon="floppy-disk"
-              onClick={() => {
-                //TODO
+              onClick={async () => {
+                setExporting(true);
+                const blobImages = await generateImages({
+                  breakpointConfig: breakpointConfig!,
+                  breakpoints,
+                  layers,
+                  objects,
+                  pages,
+                  selectedDevice,
+                  settings,
+                  extensions: [],
+                  imageType: formState.imageType,
+                  imageQuality: formState.imageQuality,
+                  exportWidth: formState.width,
+                  exportHeight: formState.height,
+                });
+
+                const zip = new JSZip();
+
+                // const base64 = dataUrl.split("data:image/jpeg;base64,").pop();
+                blobImages.forEach((imageBlob, idx) => {
+                  let extension = "png";
+                  extension =
+                    imageBlob.type.indexOf("jpeg") !== -1 ? "jpeg" : extension;
+                  extension =
+                    imageBlob.type.indexOf("webp") !== -1 ? "webp" : extension;
+
+                  // zipFilename: formState.zipFilename,
+                  // imageFilename: formState.imageFilename,
+
+                  zip.file(
+                    formState.imageFilename
+                      .replace("{index}", idx.toString())
+                      .replace("{extension}", extension),
+                    imageBlob
+                  );
+                });
+
+                zip.generateAsync({ type: "blob" }).then(function (content) {
+                  FileSaver.saveAs(
+                    content,
+                    formState.zipFilename ?? "daap-document-export.zip"
+                  );
+                  setExporting(false);
+                });
+
+                //requestExport();
               }}
             >
-              {"Export"}
+              {"Export & Download"}
             </Button>
           </div>
         </div>
@@ -229,13 +429,14 @@ const mapStateToProps = (state: IStore) => {
   return {
     project: omit({ ...state.project }, "diff", "clipboard"), //, "selection"
     meta: state.meta,
-    slides: state.project.pages,
+    pages: state.project.pages,
     layers: state.project.layers,
     objects: state.project.objects,
     breakpointConfig,
     settings: state.project.settings,
     breakpoints: state.project.settings.breakpoints,
     themeClass: state.project.settings.themeClass,
+    selectedDevice: state.stage.selectedDevice,
   };
 };
 

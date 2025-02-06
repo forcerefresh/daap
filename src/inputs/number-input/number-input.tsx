@@ -48,10 +48,12 @@ export const NumberInputForm: React.FC<INumberInput & IUpdateInput> = (
 
     //validate is number
     if (isNumber && !isNaN(parseFloat(newValue))) {
+      isValidValue = true;
       if ((inputProps as any).min !== undefined) {
-        isValidValue = newValue >= (inputProps as any).min;
-      } else {
-        isValidValue = true;
+        isValidValue = newValue >= (inputProps as any).min && isValidValue;
+      }
+      if ((inputProps as any).max !== undefined) {
+        isValidValue = newValue <= (inputProps as any).max && isValidValue;
       }
 
       // validation for positive
