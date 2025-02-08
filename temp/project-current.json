@@ -3634,7 +3634,7 @@
               "properties": [
                 {
                   "inputType": "text",
-                  "displayName": "Strike width",
+                  "displayName": "Line",
                   "propertyName": "strokeWidth",
                   "value": "1",
                   "defaultValue": "1"

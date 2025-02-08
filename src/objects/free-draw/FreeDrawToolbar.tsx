@@ -43,11 +43,10 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
         <div className={css.inputHolder}>
           {getUnitNumericFiled(
             "",
-            values.lines[0].strokeWidth + "px",
+            values.strokeWidth + "px",
             (v: string) => {
               const newObject = cloneDeep(object);
-              newObject.properties.lines[0].strokeWidth =
-                parseInt(v).toString();
+              newObject.properties.strokeWidth = parseInt(v).toString();
               updateObject(newObject);
             },
             "",
@@ -63,19 +62,19 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
               inputType={InputType.COLOR}
               displayName={""}
               propertyName={""}
-              value={values.lines[0]?.color ?? { r: 255, g: 255, b: 255, a: 1 }}
+              value={values.color ?? { r: 255, g: 255, b: 255, a: 1 }}
               defaultValue={null}
               onChange={(value: any) => {
                 if (object) {
                   const newObject = cloneDeep(object);
-                  newObject.properties.lines[0].color = value;
+                  newObject.properties.color = value;
                   updateObject(newObject);
                 }
               }}
               onPreview={(value: any) => {
                 if (object) {
                   const newObject = cloneDeep(object);
-                  newObject.properties.lines[0].color = value;
+                  newObject.properties.color = value;
                   updateObjectForPreview(newObject);
                 }
               }}

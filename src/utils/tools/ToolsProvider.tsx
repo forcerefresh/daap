@@ -130,6 +130,7 @@ export const ToolsProvider = (
     // console.log(params);
     if (!params.isEdit) {
       // console.log(params);
+
       dispatch(
         addNewObject(
           storeRef.current.activeLayerId!,

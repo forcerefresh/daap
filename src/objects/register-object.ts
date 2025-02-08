@@ -149,6 +149,30 @@ import {
   getBlobHtml,
   getBlobObjectForm,
 } from "./blob/blob";
+import {
+  createRectangleObject,
+  getRectangleHtml,
+  getRectangleObjectForm,
+  RECTANGLE,
+  rectangleMeta,
+  rectangleSizeUpdate,
+} from "./rect/rectangle";
+import {
+  CIRCLE,
+  circleMeta,
+  circleSizeUpdate,
+  createCircleObject,
+  getCircleHtml,
+  getCircleObjectForm,
+} from "./circle/circle";
+import {
+  createStarObject,
+  getStarHtml,
+  getStarObjectForm,
+  STAR,
+  starMeta,
+  starSizeUpdate,
+} from "./star/star";
 
 // -------------------------
 
@@ -243,6 +267,50 @@ registerObject(
   undefined
 );
 
+registerObject(
+  RECTANGLE,
+  "media",
+  rectangleMeta,
+  createRectangleObject,
+  getRectangleObjectForm,
+  rectangleSizeUpdate,
+  getRectangleHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
+
+registerObject(
+  CIRCLE,
+  "media",
+  circleMeta,
+  createCircleObject,
+  getCircleObjectForm,
+  circleSizeUpdate,
+  getCircleHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
+
+registerObject(
+  STAR,
+  "media",
+  starMeta,
+  createStarObject,
+  getStarObjectForm,
+  starSizeUpdate,
+  getStarHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
 // -------------------------
 
 // registerObject(

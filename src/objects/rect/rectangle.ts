@@ -1,41 +1,19 @@
 import { RGBColor } from "react-color";
 import {
-  ICheckboxInput,
-  IColorArrayInput,
   IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
-  IFontSelectInput,
-  IFontSelectInputValue,
-  IInputMetadataValues,
   InputType,
   INumberInput,
-  ISelectInput,
-  ISliderInput,
-  ITextAreaInput,
-  ITextInput,
-  IUnitsNumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { nl2br } from "../../utils/doom-utils/common";
 import {
   ICommonObjectProperties,
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
-import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./rect-icon.svg";
-import {
-  getCommonObjectPropertiesDefinition,
-  getCommonPropertiesMetadataValues,
-  getCommonPropertiesValues,
-} from "webslider-sdk/lib/objects/common-properties";
+import svg from "./rectangle-icon.svg";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
-import {
-  addTransformPropertiesToStyle,
-  getTransformObjectPropertiesDefinition,
-  getTransformPropertiesValues,
-  TransformPropertiesValues,
-} from "webslider-sdk/lib/objects/transform-properties";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import {
   GetHtmlFuncPropsType,
   UpdateObjectSizeFuncPropsType,
@@ -49,32 +27,32 @@ import {
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 
-export const RECT = "io.forcerefresh.rect.object";
+export const RECTANGLE = "io.forcerefresh.rectangle.object";
 
-export interface RectValues {
+export interface RectangleValues {
   strokeWidth: string;
   strokeColor: RGBColor;
   fillColor?: RGBColor;
-  borderRadius?: ICornerRadiusValue | string;
+  cornerRadius?: ICornerRadiusValue | string;
 }
 
-export type RectPropertiesTuple = [
-  IUnitsNumberInput<"strokeWidth">,
+export type RectanglePropertiesTuple = [
+  INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
   IColorInput<"fillColor">,
-  ICornerRadiusInput<"borderRadius">
+  ICornerRadiusInput<"cornerRadius">
 ];
 
-export function createRectObject(
+export function createRectangleObject(
   initialValue?: Record<string, any>
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
-  const object = createCommonObject(RECT);
+  const object = createCommonObject(RECTANGLE);
 
-  const values: RectValues = {
-    strokeWidth: "5px",
-    strokeColor: { r: 255, g: 255, b: 255, a: 1 },
-    fillColor: undefined,
-    borderRadius: "0px",
+  const values: RectangleValues = {
+    strokeWidth: initialValue?.strokeWidth ?? "5",
+    strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
+    fillColor: initialValue?.fillColor ?? undefined,
+    cornerRadius: initialValue?.cornerRadius ?? "0px",
   };
 
   object.properties = values;
@@ -82,17 +60,17 @@ export function createRectObject(
   return object;
 }
 
-export function getRectObjectForm(): RectPropertiesTuple {
-  const form: RectPropertiesTuple = [
+export function getRectangleObjectForm(): RectanglePropertiesTuple {
+  const form: RectanglePropertiesTuple = [
     {
-      displayName: "Width",
+      displayName: "Line",
       propertyName: "strokeWidth",
-      inputType: InputType.UNITS_NUMBER,
-      value: "5px",
-      defaultValue: "5px",
+      inputType: InputType.NUMBER,
+      value: 5,
+      defaultValue: 5,
     },
     {
-      displayName: "Color",
+      displayName: "Line color",
       propertyName: "strokeColor",
       inputType: InputType.COLOR,
       value: { r: 255, g: 255, b: 255, a: 1 },
@@ -106,8 +84,8 @@ export function getRectObjectForm(): RectPropertiesTuple {
       defaultValue: { r: 255, g: 255, b: 255, a: 0.1 },
     },
     {
-      displayName: "Growth",
-      propertyName: "borderRadius",
+      displayName: "Corner",
+      propertyName: "cornerRadius",
       inputType: InputType.CORNER_RADIUS,
       value: "0px",
       defaultValue: "0px",
@@ -117,36 +95,36 @@ export function getRectObjectForm(): RectPropertiesTuple {
   return form;
 }
 
-export function getRectHtml(props: GetHtmlFuncPropsType) {
+export function getRectangleHtml(props: GetHtmlFuncPropsType) {
   const { object, calculatedObjectSize, deviceType } = props;
 
   const rectValues = getObjectValuesForDevice(
-    object.properties as RectValues,
+    object.properties as RectangleValues,
     deviceType
   );
 
   let r = { tl: 0, bl: 0, tr: 0, br: 0 };
 
-  if (typeof rectValues.borderRadius === "string") {
-    const commonRadius = rectValues.borderRadius
-      ? parseFloat(rectValues.borderRadius)
+  if (typeof rectValues.cornerRadius === "string") {
+    const commonRadius = rectValues.cornerRadius
+      ? parseFloat(rectValues.cornerRadius)
       : 0;
     r.bl = commonRadius;
     r.tl = commonRadius;
     r.br = commonRadius;
     r.tr = commonRadius;
-  } else if (typeof rectValues.borderRadius === "object") {
-    r.bl = parseFloat(rectValues.borderRadius.bl!);
-    r.tl = parseFloat(rectValues.borderRadius.bl!);
-    r.br = parseFloat(rectValues.borderRadius.bl!);
-    r.tr = parseFloat(rectValues.borderRadius.bl!);
+  } else if (typeof rectValues.cornerRadius === "object") {
+    r.bl = parseFloat(rectValues.cornerRadius.bl!);
+    r.tl = parseFloat(rectValues.cornerRadius.bl!);
+    r.br = parseFloat(rectValues.cornerRadius.bl!);
+    r.tr = parseFloat(rectValues.cornerRadius.bl!);
   }
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
   style = addTransformPropertiesToStyle(style, object, deviceType);
 
-  const path = svgRectWithBorderRadius(
+  const path = svgRectWithCornerRadius(
     0,
     0,
     object.width ?? 100,
@@ -161,8 +139,8 @@ export function getRectHtml(props: GetHtmlFuncPropsType) {
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
-    object.width
-  }" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    object.height
+  }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <path  d="${path}" stroke-width="${rectValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(rectValues.strokeColor).backgroundColor
   }" fill="${
@@ -172,7 +150,7 @@ export function getRectHtml(props: GetHtmlFuncPropsType) {
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }
 
-export async function rectSizeUpdate(
+export async function rectangleSizeUpdate(
   props: UpdateObjectSizeFuncPropsType
 ): Promise<void> {
   const {
@@ -186,8 +164,8 @@ export async function rectSizeUpdate(
     style,
     transform,
   } = props;
-  const textValues = getObjectValuesForDevice(
-    properties as RectValues,
+  const rectValues = getObjectValuesForDevice(
+    properties as RectangleValues,
     deviceType
   );
 
@@ -223,14 +201,15 @@ export async function rectSizeUpdate(
     }  ${transformProperties.transformOriginY ?? "top"}`;
   }
 }
-export const rectMeta = {
+export const rectangleMeta = {
   name: "Rectangle",
   description: "Add rectangle object",
   icon: svg,
   supportWidthResize: true,
+  supportHeightResize: true,
 };
 
-const svgRectWithBorderRadius = (
+const svgRectWithCornerRadius = (
   positionX: number,
   positionY: number,
   width: number,

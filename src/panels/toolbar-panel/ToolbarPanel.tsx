@@ -1,5 +1,6 @@
 import {
   Button,
+  Icon,
   Popover,
   PopoverInteractionKind,
   Portal,
@@ -62,6 +63,8 @@ import SavePanel from "../save-panel/SavePanel";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
 import ExportPanel from "../export-panel/ExportPanel";
+import { RECTANGLE } from "../../objects/rect/rectangle";
+import ShapePreviewPanel from "../shape-preview-panel/ShapePreviewPanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -76,6 +79,7 @@ enum VisiblePanel {
   Projects = "projects",
   Templates = "templates",
   Export = "export",
+  ShapePreview = "shape-preview",
 }
 
 const ICON_SIZE = 32;
@@ -427,9 +431,32 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               }
             }}
           >
-            SHAPE
+            BLOB
           </Button>
         </div>
+
+        <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            active={showPanel === VisiblePanel.ShapePreview}
+            onClick={() => {
+              setShowPanel(VisiblePanel.ShapePreview);
+            }}
+          >
+            <Icon icon="shapes" size={32} />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.ShapePreview && (
+              <div ref={sharedRef}>
+                <ShapePreviewPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
         <div className={css.delimiter}></div>
         <div>
           <Button

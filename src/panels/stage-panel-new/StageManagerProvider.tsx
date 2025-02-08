@@ -1233,9 +1233,14 @@ function processScaleChangeEvent(
           handleEL.style.scale = `${(getObjectScale(object) ?? 1) / scale}`;
         });
 
-        objectHolder.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
-          object.objectIds ? "#444444" : "#48aff0"
-        }`;
+        const selEl = objectHolder.getElementsByClassName(
+          "object-selection"
+        )?.[0] as HTMLDivElement | undefined;
+        if (selEl) {
+          selEl.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
+            object.objectIds ? "#444444" : "#48aff0"
+          }`;
+        }
       }
     }
   });

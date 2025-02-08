@@ -681,6 +681,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           // handleMouseWheel(e);
         }}
         onMouseDown={(e) => {
+          if (e.buttons !== 1) {
+            return;
+          }
+
           if (activeTool) {
             return;
           }

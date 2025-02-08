@@ -140,7 +140,11 @@ export default class FreeHandDrawTool implements IToolClass {
     if (!deactivationParams.delete && this.stack.length > 0) {
       const objProps = this.convertStackToPoints();
       this.requestObjectUpdate?.({
-        objectValues: { lines: objProps.lines },
+        objectValues: {
+          lines: objProps.lines,
+          color: objProps.color,
+          strokeWidth: objProps.strokeWidth,
+        },
         bounds: objProps.bounds,
         isEdit: this.isEdit,
         objectId: this.objectId!,
@@ -253,6 +257,8 @@ export default class FreeHandDrawTool implements IToolClass {
         width: maxPos.x - minPos.x,
         height: maxPos.y - minPos.y,
       },
+      color: normalizedBezier[0].color,
+      strokeWidth: normalizedBezier[0].strokeWidth,
     };
   }
 
@@ -318,7 +324,11 @@ export default class FreeHandDrawTool implements IToolClass {
     // TODO: NEW FOR INDIVIDUAL >>>
     const objProps = this.convertStackToPoints();
     this.requestObjectUpdate?.({
-      objectValues: { lines: objProps.lines },
+      objectValues: {
+        lines: objProps.lines,
+        color: objProps.color,
+        strokeWidth: objProps.strokeWidth,
+      },
       bounds: objProps.bounds,
       isEdit: false, // this.isEdit,
       // objectId: this.objectId!,

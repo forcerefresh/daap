@@ -1,4 +1,9 @@
-import { ITextInput, InputType } from "webslider-sdk/lib/inputs/i-inputs";
+import {
+  IColorInput,
+  INumberInput,
+  ITextInput,
+  InputType,
+} from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
 import {
   ICommonObjectProperties,
@@ -36,9 +41,14 @@ export interface FreeDrawValues {
     color: RGBColor;
     strokeWidth: string;
   }[];
+  strokeWidth: number;
+  color: RGBColor;
 }
 
-export type FreeDrawPropertiesTuple = [ITextInput<"strokeWidth">];
+export type FreeDrawPropertiesTuple = [
+  INumberInput<"strokeWidth">,
+  IColorInput<"color">
+];
 
 export function createFreeDrawObject(
   initialValue?: Record<string, any>
@@ -47,6 +57,8 @@ export function createFreeDrawObject(
 
   const values: FreeDrawValues = {
     lines: initialValue?.lines ?? [],
+    strokeWidth: initialValue?.strokeWidth ?? 5,
+    color: initialValue?.color ?? { r: 255, b: 255, g: 255, a: 1 },
   };
 
   object.properties = values;
@@ -57,11 +69,18 @@ export function createFreeDrawObject(
 export function getFreeDrawForm(): FreeDrawPropertiesTuple {
   const form: FreeDrawPropertiesTuple = [
     {
-      inputType: InputType.TEXT,
-      displayName: "Strike width",
+      inputType: InputType.NUMBER,
+      displayName: "Line",
       propertyName: "strokeWidth",
-      value: "1",
-      defaultValue: "1",
+      value: 1,
+      defaultValue: 1,
+    },
+    {
+      inputType: InputType.COLOR,
+      displayName: "Line color",
+      propertyName: "color",
+      value: { r: 255, b: 255, g: 255, a: 1 },
+      defaultValue: { r: 255, b: 255, g: 255, a: 1 },
     },
   ];
 
@@ -82,8 +101,10 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   let pathsHtml = "";
   freeDrawValues.lines.forEach((line) => {
     const d = bezierArr2Path(line.bezier);
-    pathsHtml += `<path stroke-width="${line.strokeWidth}px" stroke="${
-      convertRGBColor2CSSStyle(line.color).backgroundColor
+    pathsHtml += `<path stroke-width="${
+      freeDrawValues.strokeWidth
+    }px" stroke="${
+      convertRGBColor2CSSStyle(freeDrawValues.color).backgroundColor
     }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
   });
 

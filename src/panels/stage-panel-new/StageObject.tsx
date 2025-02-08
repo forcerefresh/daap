@@ -272,14 +272,21 @@ export function StageObjectInternal(props: IStageLayer) {
     ? "rgba(72, 175,240, 0.5)"
     : "rgba(72, 175,240, 1)";
 
-  // object holder
-  const objectHolderStyle: CSSProperties = {
-    zIndex: 100,
-    position: "absolute", //!layoutChildren ? "relative" : "static",
+  const commonObjectRect: CSSProperties = {
     left: !layoutChildren ? left : "0px",
     top: !layoutChildren ? top : "0px",
     width: calculatedObjectSize.width ?? "0px",
     height: calculatedObjectSize.height ?? "0px",
+  };
+
+  const selectionStyle: CSSProperties = {
+    ...commonObjectRect,
+    zIndex: 200,
+    left: "0px",
+    top: "0px",
+    position: "absolute",
+    pointerEvents: "none",
+    transformOrigin: "top left",
     ...((isSelected || (isInSelectionPath && !isSelected)) && !activeTool
       ? {
           boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
@@ -287,6 +294,13 @@ export function StageObjectInternal(props: IStageLayer) {
           }`,
         }
       : {}),
+  };
+
+  // object holder
+  const objectHolderStyle: CSSProperties = {
+    zIndex: 100,
+    position: "absolute", //!layoutChildren ? "relative" : "static",
+    ...commonObjectRect,
   };
   // console.log(objectHolderStyle, object.type);
 
@@ -415,6 +429,8 @@ export function StageObjectInternal(props: IStageLayer) {
             onMouseDown={
               allowObjectSelection
                 ? (e) => {
+                    if (e.buttons !== 1) return;
+
                     if (activeStageTool === StageTools.PAN) {
                       return;
                     }
@@ -578,6 +594,7 @@ export function StageObjectInternal(props: IStageLayer) {
                 left: "0px",
               }}
             ></div>
+            <div className="object-selection" style={selectionStyle} />
           </div>
         </WithRotationHandle>
       </WithResizeHandle>
