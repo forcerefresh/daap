@@ -14,6 +14,7 @@ import {
   getNumericFiled,
   getSelectSlider,
   getSizePosLayoutField,
+  getP1P2LayoutField,
 } from "../../../inputs/input-utils";
 import {
   ILayout,
@@ -52,6 +53,7 @@ import { layoutAdvancedDefinition } from "../../../objects/layout-advanced-form"
 import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { DeviceType } from "aws-sdk/clients/ec2";
 import { getAncestorLayer } from "../../../store/actions/actions-utils";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -313,25 +315,49 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
       objectLayer ?? (objectOrLayer as ILayer),
       breakpoints
     );
+
+    const objectMeta = getAppObjectDefinition(
+      (objectOrLayer as IObject)?.type
+    )?.meta;
+    const sizeType = objectMeta?.sizeType ?? "rect";
+
     return (
       <>
-        {getSizePosLayoutField(
-          "",
-          {
-            left: objectOrLayer.left + "px",
-            top: objectOrLayer.top + "px",
-            width: objectOrLayer.width + "px",
-            height: objectOrLayer.height + "px",
-          },
-          (v: any) => {
-            const retObj = cloneDeep(objectOrLayer);
-            retObj.left = parseFloat(v.left);
-            retObj.top = parseFloat(v.top);
-            retObj.width = parseFloat(v.width);
-            retObj.height = parseFloat(v.height);
-            updateFunction(retObj);
-          }
-        )}
+        {sizeType === "line"
+          ? getP1P2LayoutField(
+              "",
+              {
+                x1: objectOrLayer.x1 + "px",
+                y1: objectOrLayer.y1 + "px",
+                x2: objectOrLayer.x2 + "px",
+                y2: objectOrLayer.y2 + "px",
+              },
+              (v: any) => {
+                const retObj = cloneDeep(objectOrLayer);
+                retObj.x1 = parseFloat(v.x1);
+                retObj.y1 = parseFloat(v.y1);
+                retObj.x2 = parseFloat(v.x2);
+                retObj.y2 = parseFloat(v.y2);
+                updateFunction(retObj);
+              }
+            )
+          : getSizePosLayoutField(
+              "",
+              {
+                left: objectOrLayer.left + "px",
+                top: objectOrLayer.top + "px",
+                width: objectOrLayer.width + "px",
+                height: objectOrLayer.height + "px",
+              },
+              (v: any) => {
+                const retObj = cloneDeep(objectOrLayer);
+                retObj.left = parseFloat(v.left);
+                retObj.top = parseFloat(v.top);
+                retObj.width = parseFloat(v.width);
+                retObj.height = parseFloat(v.height);
+                updateFunction(retObj);
+              }
+            )}
 
         {/* {objectOrLayer.layout === "grid" &&
           getGridLayoutField(

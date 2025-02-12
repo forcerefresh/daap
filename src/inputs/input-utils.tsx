@@ -372,6 +372,22 @@ export function getSizeUnitLayoutField<T>(
   return getInputForm(InputType.SIZE_UNIT, objectDef, onChange);
 }
 
+export function getP1P2LayoutField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  inputProps?: { disabled?: boolean }
+) {
+  const objectDef = {
+    displayName: label,
+    inputType: InputType.P1_P2,
+    value: value,
+    inputProps,
+  };
+
+  return getInputForm(InputType.P1_P2, objectDef, onChange);
+}
+
 export function getSizePosLayoutField<T>(
   label: string,
   value: T,

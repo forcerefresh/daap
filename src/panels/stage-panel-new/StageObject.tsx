@@ -109,6 +109,9 @@ export function StageObjectInternal(props: IStageLayer) {
     clipboard,
   } = props;
 
+  const objectMeta = getAppObjectDefinition(object.type)?.meta;
+  const sizeType = objectMeta?.sizeType ?? "rect";
+
   // ++
   const groupsPath = [...selectionPath];
   groupsPath.shift();
@@ -192,6 +195,8 @@ export function StageObjectInternal(props: IStageLayer) {
       resetPosition: false,
     }
   );
+
+  console.log(calculatedObjectSize, "calculatedObjectSize2");
 
   //debug
   // useEffect(() => {
@@ -423,7 +428,7 @@ export function StageObjectInternal(props: IStageLayer) {
             ref={childRef}
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`, {
-              [css.layoutChildrenSelected]: isSelected && !activeTool,
+              // [css.layoutChildrenSelected]: isSelected && !activeTool,
               // [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
             })}
             onMouseDown={
@@ -493,7 +498,7 @@ export function StageObjectInternal(props: IStageLayer) {
                 top: -(35 / objectZoom / stageZoom) + "px",
               }}
             >
-              {!activeTool && !object.isLocked && (
+              {!activeTool && !object.isLocked && sizeType === "rect" && (
                 <div
                   className={cx(css.circle, "rotation-handle")}
                   style={{
@@ -508,7 +513,6 @@ export function StageObjectInternal(props: IStageLayer) {
                 />
               )}
             </div>
-
             {object.type === "group" ? (
               object.objectIds?.map((objectId) => {
                 const childObject = objectById[objectId]; //objectByIdLocalRef
@@ -564,6 +568,20 @@ export function StageObjectInternal(props: IStageLayer) {
                 //event.stopPropagation();
                 //onObjectClick(event, objectId);
               }}
+              dangerouslySetInnerHTML={{
+                __html:
+                  sizeType === "line"
+                    ? getObjectHtml(
+                        object,
+                        calculatedObjectSizeForObject,
+                        false,
+                        false,
+                        breakpointConfig?.type
+                        // thumbnailHtmlArr,
+                        // slidesCounter
+                      )
+                    : "",
+              }}
               key={object.id}
               className={cx(
                 css[object.type],
@@ -573,13 +591,13 @@ export function StageObjectInternal(props: IStageLayer) {
                 ...objectStyle,
                 position: "relative",
                 pointerEvents: "all",
+                opacity: 0,
                 //transform: "translateX(100) translateY(100)",
                 //left: "0px",
                 //top: "0px",
               }}
             />
             {/* )} */}
-
             <div
               className={cx(
                 css.resizeHandleHolder,

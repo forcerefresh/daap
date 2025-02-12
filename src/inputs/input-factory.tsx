@@ -57,6 +57,7 @@ import { AudioInputForm } from "./audio-input/audio-input";
 import ExtraOptionsInput from "./extra-options-optional/extra-options-input";
 import { ClipMaskInputForm } from "./clip-mask-input/clip-mask-input";
 import { TagsInputForm } from "./tags-input/tags-input";
+import { P1P2InputForm } from "./p1-p2-input/p1-p2-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -380,6 +381,9 @@ export function getInputForm<T>(
     }
     case InputType.SIZE_POS: {
       return <SizePosInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.P1_P2: {
+      return <P1P2InputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.SNAP: {
       return (

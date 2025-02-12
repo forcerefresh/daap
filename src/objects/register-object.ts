@@ -173,6 +173,24 @@ import {
   starMeta,
   starSizeUpdate,
 } from "./star/star";
+import {
+  createPolygonObject,
+  getPolygonHtml,
+  getPolygonObjectForm,
+  POLYGON,
+  polygonMeta,
+  polygonSizeUpdate,
+} from "./polygon/polygon";
+import {
+  createLineObject,
+  getLineForm,
+  getLineHtml,
+  LINE,
+  lineMeta,
+  linePostProcess,
+  lineSizeUpdate,
+} from "./line/line";
+import LineStageTool from "./line/line-stage-tool";
 
 // -------------------------
 
@@ -311,6 +329,42 @@ registerObject(
   undefined,
   undefined
 );
+
+registerObject(
+  POLYGON,
+  "media",
+  polygonMeta,
+  createPolygonObject,
+  getPolygonObjectForm,
+  polygonSizeUpdate,
+  getPolygonHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
+
+registerObject(
+  LINE,
+  "media",
+  lineMeta,
+  createLineObject,
+  getLineForm,
+  lineSizeUpdate,
+  getLineHtml,
+  undefined,
+  undefined,
+  undefined,
+  linePostProcess,
+  undefined
+);
+
+registerObjectTool({
+  type: LINE,
+  meta: lineMeta,
+  toolClass: LineStageTool,
+});
 // -------------------------
 
 // registerObject(

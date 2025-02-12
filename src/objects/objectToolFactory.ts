@@ -9,6 +9,7 @@ export interface IToolDefinition {
     icon?: string;
     supportWidthResize?: boolean;
     supportHeightResize?: boolean;
+    sizeType?: "line" | "rect"; // default "rect"
   };
   toolClass?: new () => IToolClass;
   toolBar?: (props: IToolbarProps) => React.ReactElement | null;

@@ -50,11 +50,17 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
 
   const { activeTool } = useContext(ToolsContext);
 
+  const objectMeta = getAppObjectDefinition(object.type)?.meta;
+  const sizeType = objectMeta?.sizeType ?? "rect";
   const showWidthResize =
-    getAppObjectDefinition(object.type)?.meta?.supportWidthResize ?? false;
+    (objectMeta?.supportWidthResize && sizeType === "rect") ?? false;
   const showHeightResize =
-    getAppObjectDefinition(object.type)?.meta?.supportHeightResize ?? false;
+    (objectMeta?.supportHeightResize && sizeType === "rect") ?? false;
 
+  const showScaleHandles = sizeType === "rect";
+  const showPointsHandles = false; //sizeType === "line";
+
+  console.log("sizeType", sizeType);
   // const initialRotationRef = useRef(initialRotation);
   // initialRotationRef.current = initialRotation;
 
@@ -71,6 +77,8 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     br?: HTMLElement;
     width?: HTMLElement;
     height?: HTMLElement;
+    p1?: HTMLElement;
+    p2?: HTMLElement;
   }>({});
 
   const handleMouseDown = useCallback(
@@ -137,116 +145,174 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
       const handleBoxShadow =
         "0 0 0 " + 1 / Math.abs(object.scale ?? 1) / stageZoom + "px white";
 
-      el = document.createElement("div");
-      el.style.left = "-" + scaledHandleSize + "px";
-      el.style.top = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.transformOrigin = "bottom right";
-      // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
+      if (showPointsHandles) {
+        el = document.createElement("div");
+        el.style.left = object.x1 + "px";
+        el.style.top = object.y1 + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "center center";
+        // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
 
-      // el.style.transform = "scale(" + stageZoom + ")";
+        // el.style.transform = "scale(" + stageZoom + ")";
 
-      el.style.background = `${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
-      el.style.boxShadow = handleBoxShadow;
-      el.style.borderRadius = borderRadius;
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
 
-      // el.style.border = `0.1px solid ${
-      //   object.objectIds ? groupSelectionColor : objectSelectionColor
-      // }`;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "tl");
-      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-      resizeHolderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.tl = el;
-      // ----
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "p1");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.p1 = el;
+        // ----
 
-      el = document.createElement("div");
-      el.style.right = "-" + scaledHandleSize + "px";
-      el.style.top = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.transformOrigin = "bottom left";
+        el = document.createElement("div");
+        el.style.left = object.x2 + "px";
+        el.style.top = object.y2 + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "bottom left";
 
-      el.style.background = `${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
-      el.style.boxShadow = handleBoxShadow;
-      el.style.borderRadius = borderRadius;
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
 
-      // el.style.border = `0.1px solid ${
-      //   object.objectIds ? groupSelectionColor : objectSelectionColor
-      // }`;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "tr");
-      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "tr");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
 
-      resizeHolderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.tr = el;
-      // ----
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.p2 = el;
+        // ----
+      }
+      if (showScaleHandles) {
+        el = document.createElement("div");
+        el.style.left = "-" + scaledHandleSize + "px";
+        el.style.top = "-" + scaledHandleSize + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "bottom right";
+        // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
 
-      el = document.createElement("div");
-      el.style.bottom = "-" + scaledHandleSize + "px";
-      el.style.left = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.transformOrigin = "top right";
+        // el.style.transform = "scale(" + stageZoom + ")";
 
-      el.style.background = `${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
-      el.style.boxShadow = handleBoxShadow;
-      el.style.borderRadius = borderRadius;
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
 
-      // el.style.border = `0.1px solid ${
-      //   object.objectIds ? groupSelectionColor : objectSelectionColor
-      // }`;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "bl");
-      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-      resizeHolderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.bl = el;
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "tl");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.tl = el;
+        // ----
 
-      // ----
+        el = document.createElement("div");
+        el.style.right = "-" + scaledHandleSize + "px";
+        el.style.top = "-" + scaledHandleSize + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "bottom left";
 
-      el = document.createElement("div");
-      el.style.bottom = "-" + scaledHandleSize + "px";
-      el.style.right = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.transformOrigin = "top left";
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
 
-      el.style.background = `${
-        object.objectIds ? groupSelectionColor : objectSelectionColor
-      }`;
-      // el.style.border =
-      //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
-      el.style.boxShadow = handleBoxShadow;
-      el.style.borderRadius = borderRadius;
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "tr");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
 
-      // el.style.border = `0.1px solid ${
-      //   object.objectIds ? groupSelectionColor : objectSelectionColor
-      // }`;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "br");
-      el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-      resizeHolderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.br = el;
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.tr = el;
+        // ----
 
+        el = document.createElement("div");
+        el.style.bottom = "-" + scaledHandleSize + "px";
+        el.style.left = "-" + scaledHandleSize + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "top right";
+
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
+
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "bl");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.bl = el;
+
+        // ----
+
+        el = document.createElement("div");
+        el.style.bottom = "-" + scaledHandleSize + "px";
+        el.style.right = "-" + scaledHandleSize + "px";
+        el.style.width = scaledHandleSize + "px";
+        el.style.height = scaledHandleSize + "px";
+        el.style.transformOrigin = "top left";
+
+        el.style.background = `${
+          object.objectIds ? groupSelectionColor : objectSelectionColor
+        }`;
+        // el.style.border =
+        //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
+        el.style.boxShadow = handleBoxShadow;
+        el.style.borderRadius = borderRadius;
+
+        // el.style.border = `0.1px solid ${
+        //   object.objectIds ? groupSelectionColor : objectSelectionColor
+        // }`;
+        el.style.position = "absolute";
+        el.style.pointerEvents = "all";
+        el.setAttribute("data-scale-handle", "br");
+        el.setAttribute("class", "resize-handle resize-handle-" + object.id);
+        resizeHolderRef.current.appendChild(el);
+        // el.removeEventListener("mousedown", handleMouseDown);
+        el.addEventListener("mousedown", handleMouseDown);
+        handlesRef.current.br = el;
+      }
       // ----
 
       if (showWidthResize) {
@@ -327,6 +393,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current.removeChild(handlesRef.current.br);
       }
+      //
       if (handlesRef.current?.width && resizeHolderRef.current) {
         handlesRef.current.width.removeEventListener(
           "mousedown",
@@ -340,6 +407,15 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
           handleMouseDown
         );
         resizeHolderRef.current.removeChild(handlesRef.current.height);
+      }
+      //
+      if (handlesRef.current?.p1 && resizeHolderRef.current) {
+        handlesRef.current.p1.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.p1);
+      }
+      if (handlesRef.current?.p2 && resizeHolderRef.current) {
+        handlesRef.current.p2.removeEventListener("mousedown", handleMouseDown);
+        resizeHolderRef.current.removeChild(handlesRef.current.p2);
       }
     };
     // if (childRef.current) {
@@ -369,7 +445,21 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     stageZoom,
     forceHide,
     showWidthResize,
+    object.isLocked,
+    object.scale,
+    object.objectIds,
+    object.id,
+    initialScale,
+    showHeightResize,
   ]);
+
+  // initialRotation,
+  // props.object.id,
+  // isSelected,
+  // handleMouseDown,
+  // stageZoom,
+  // forceHide,
+  // showWidthResize,
 
   const renderChildren = () => {
     return React.Children.map(props.children, (child) => {

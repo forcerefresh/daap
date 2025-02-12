@@ -21,6 +21,7 @@ import {
   getCircleHtml,
 } from "../../objects/circle/circle";
 import { createStarObject, getStarHtml, STAR } from "../../objects/star/star";
+import { getPolygonHtml, POLYGON } from "../../objects/polygon/polygon";
 
 enum ShapeSections {
   Rectangle = "rectangle",
@@ -84,6 +85,66 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
       preview: any;
     }[]
   >([]);
+
+  const [polyObjectsHtml, setPolyObjectsHtml] = useState<
+    {
+      html: string;
+      properties: CircleValues;
+      object: Partial<IObject>;
+      preview: any;
+    }[]
+  >([]);
+
+  const retPolyHtml = ({
+    w,
+    h,
+    sides = 5,
+    previewW = 80,
+    previewH = 80,
+    strokeWidth = "2",
+    paddingTop,
+  }: {
+    w: number;
+    h: number;
+    sides?: number;
+    previewW?: number;
+    previewH?: number;
+    strokeWidth?: string;
+    paddingTop?: string;
+  }) => {
+    const properties = {
+      strokeWidth: strokeWidth,
+      strokeColor: { r: 0, g: 0, b: 0, a: 1 },
+      fillColor: { r: 120, g: 120, b: 120, a: 1 },
+      sides,
+    };
+
+    let polyObj = createStarObject() as IObject;
+    polyObj.left = 0;
+    polyObj.top = 0;
+    polyObj.width = w;
+    polyObj.height = h;
+    polyObj.style = { overflow: "visible" };
+    polyObj.properties = {
+      strokeWidth: strokeWidth,
+      strokeColor: { r: 200, g: 200, b: 200, a: 1 },
+      fillColor: { r: 80, g: 80, b: 80, a: 1 },
+      sides,
+    };
+
+    const html = getPolygonHtml({
+      object: polyObj,
+      deviceType: "device-independent" as DeviceType,
+      calculatedObjectSize: { left: 0, top: 0, width: w, height: h },
+    });
+
+    return {
+      html,
+      properties,
+      object: { width: w * 4, height: h * 4 },
+      preview: { previewH, previewW, paddingTop },
+    };
+  };
 
   const retStarHtml = ({
     w,
@@ -249,6 +310,17 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     });
 
     setStarObjectsHtml([star1, star2, star3, star4]);
+
+    const poly1 = retPolyHtml({ w: 80, h: 80, sides: 3, paddingTop: "10px" });
+    const poly2 = retPolyHtml({ w: 80, h: 80, sides: 5 });
+    const poly3 = retPolyHtml({ w: 80, h: 80, sides: 8 });
+    const poly4 = retPolyHtml({
+      w: 80,
+      h: 80,
+      sides: 16,
+    });
+
+    setPolyObjectsHtml([poly1, poly2, poly3, poly4]);
   }, []);
 
   return (
@@ -427,6 +499,71 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                     style={{
                       maxWidth: obj.preview.previewW,
                       maxHeight: obj.preview.previewH,
+                    }}
+                    dangerouslySetInnerHTML={{ __html: obj.html ?? "" }}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        <section
+          style={{ flexGrow: 0, minHeight: "10%" }}
+          className={cx({
+            [css.open]: visibleSectionIds[ShapeSections.Polygon],
+          })}
+        >
+          <div
+            className={css.sectionHeader}
+            onClick={() => toggleSection(ShapeSections.Polygon)}
+          >
+            <Button
+              minimal
+              small={true}
+              icon={
+                visibleSectionIds[ShapeSections.Polygon]
+                  ? "caret-down"
+                  : "caret-right"
+              }
+            ></Button>
+            <span>Polygon</span>
+          </div>
+          <div
+            style={{
+              padding: "10px",
+              display: "flex",
+              columnGap: "20px",
+              alignItems: "center",
+            }}
+          >
+            {polyObjectsHtml.map((obj) => {
+              return (
+                <div
+                  className={css.objectHolder}
+                  onClick={() => {
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        POLYGON,
+                        {
+                          left: 100, //(documentSize.width - 960) / 2,
+                          top: 100, //(documentSize.height - 540) / 2,
+                          ...obj.object,
+                        },
+                        obj.properties
+                      );
+                      onRequestClose();
+                    }
+                  }}
+                >
+                  <div
+                    style={{
+                      maxWidth: obj.preview.previewW,
+                      maxHeight: obj.preview.previewH,
+                      ...(obj.preview.paddingTop
+                        ? { paddingTop: obj.preview.paddingTop }
+                        : {}),
                     }}
                     dangerouslySetInnerHTML={{ __html: obj.html ?? "" }}
                   ></div>

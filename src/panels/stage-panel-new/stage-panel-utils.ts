@@ -320,10 +320,17 @@ export function createTransformForPath(
   config?: {
     inverseRotation?: boolean;
     includeTranslate?: boolean;
+  },
+  overrideObjectSize?: {
+    [key: string]: Pick<IObject, "left" | "top" | "width" | "height">;
   }
 ) {
   return groupsPath.map((id: string) => {
-    const object = objectById[id];
+    let object = objectById[id];
+
+    if (overrideObjectSize && overrideObjectSize[id]) {
+      object = { ...object, ...overrideObjectSize[id] };
+    }
 
     const rotationSign = config?.inverseRotation ? "-" : "";
 
@@ -358,15 +365,23 @@ export function getGroupMatrixFromSelectionPath(
   objectById: {
     [id: string]: IObject<{}>;
   },
-  options?: { includeTranslate?: boolean }
+  options?: { includeTranslate?: boolean },
+  overrideObjectSize?: {
+    [key: string]: Pick<IObject, "left" | "top" | "width" | "height">;
+  }
 ) {
   const groupsPath = [...selectionPath];
   groupsPath.shift();
 
-  const transformArrayRef = createTransformForPath(groupsPath, objectById, {
-    inverseRotation: false,
-    includeTranslate: options?.includeTranslate,
-  });
+  const transformArrayRef = createTransformForPath(
+    groupsPath,
+    objectById,
+    {
+      inverseRotation: false,
+      includeTranslate: options?.includeTranslate,
+    },
+    overrideObjectSize
+  );
 
   const groupsMatrix = getFullMatrixFromTransformArr(transformArrayRef);
 

@@ -104,6 +104,32 @@ function getParentBounds(
   return parentBoundsNum;
 }
 
+export function lineObjectBounds(object: IObject) {
+  let hMin = 100000;
+  let hMax = -100000;
+  let vMin = 100000;
+  let vMax = -100000;
+
+  const points = [
+    { x: object.x1, y: object.y1 },
+    { x: object.x2, y: object.y2 },
+  ];
+
+  points.forEach((p) => {
+    hMin = Math.min(hMin, p.x);
+    hMax = Math.max(hMax, p.x);
+    vMin = Math.min(vMin, p.y);
+    vMax = Math.max(vMax, p.y);
+  });
+
+  return {
+    left: hMin + "px",
+    width: hMax - hMin + "px",
+    top: vMin + "px",
+    height: vMax - vMin + "px",
+  };
+}
+
 export function calculateObjectSize(
   object: ILayout,
   parentLayout: ILayout | undefined, // << this is layer ... ILayer | undefined,
@@ -113,6 +139,10 @@ export function calculateObjectSize(
   scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
   options?: { skipHeight: boolean }
 ): React.CSSProperties {
+  if (object.x1 || object.x2 || object.y1 || object.y2) {
+    return lineObjectBounds(object);
+  }
+
   return {
     left: object.left + "px",
     top: object.top + "px",

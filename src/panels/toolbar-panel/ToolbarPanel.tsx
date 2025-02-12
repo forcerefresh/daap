@@ -65,6 +65,7 @@ import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
 import ExportPanel from "../export-panel/ExportPanel";
 import { RECTANGLE } from "../../objects/rect/rectangle";
 import ShapePreviewPanel from "../shape-preview-panel/ShapePreviewPanel";
+import { LINE } from "../../objects/line/line";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -432,6 +433,65 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             }}
           >
             BLOB
+          </Button>
+        </div>
+        <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            onClick={() => {
+              if (activeLayerId) {
+                _addNewObject(
+                  activeLayerId,
+                  LINE,
+                  {
+                    x1: 100,
+                    y1: 100,
+                    x2: 400,
+                    y2: 100,
+                  },
+
+                  {
+                    strokeWidth: "10",
+                  }
+                );
+
+                _addNewObject(
+                  activeLayerId,
+                  LINE,
+                  {
+                    x1: 150,
+                    y1: 150,
+                    x2: 400,
+                    y2: 300,
+                  },
+
+                  {
+                    strokeWidth: "15",
+                    strokeColor: { r: 233, g: 224, b: 23, a: 0.5 },
+                  }
+                );
+
+                // _addNewObject(
+                //   activeLayerId,
+                //   LINE,
+                //   { x1: 200, y1: 200, x2: 300, y2: 400 }
+
+                // );
+
+                // _addNewObject(
+                //   activeLayerId,
+                //   LINE,
+                //   { x1: 50, y1: 50, x2: 300, y2: 50 },
+
+                //   {
+                //     strokeWidth: "10",
+                //   }
+                // );
+              }
+            }}
+          >
+            LINE
           </Button>
         </div>
 

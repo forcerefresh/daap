@@ -230,18 +230,19 @@ const svgStarPath = (
   numPoints: number,
   radius: number
 ) => {
-  var innerRadius = (w / 100) * radius;
-  var outerRadius = w;
-  var center = Math.max(innerRadius, outerRadius);
-  var angle = Math.PI / numPoints;
-  var points = [];
+  const innerRadius = (w / 100) * radius;
+  const outerRadius = w;
+  const center = Math.max(innerRadius, outerRadius);
+  const angle = Math.PI / numPoints;
+  const points = [];
 
-  for (var i = 0; i < numPoints * 2; i++) {
-    var radius = i & 1 ? innerRadius : outerRadius;
-    points.push(center + radius * Math.sin(i * angle));
-    points.push(center - radius * Math.cos(i * angle));
+  for (let i = 0; i < numPoints * 2; i++) {
+    const r = i & 1 ? innerRadius : outerRadius;
+    points.push(center + r * Math.sin(i * angle));
+    points.push(center - r * Math.cos(i * angle));
   }
 
   const pointsStr = "M" + points.join(" ") + "Z"; // + points[0] + " " + points[1];
+
   return pointsStr;
 };

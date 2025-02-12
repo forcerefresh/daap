@@ -1,6 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
-import { IToolClass, Rect } from "../../webslider-sdk/object/i-tool-class";
+import {
+  IToolClass,
+  Point,
+  Rect,
+} from "../../webslider-sdk/object/i-tool-class";
 import { getCanvas, getStage } from "./ToolsProviderUtils";
 import {
   updateObject as updateObjectAction,
@@ -124,6 +128,13 @@ export const ToolsProvider = (
     bounds?: Rect;
     isEdit?: boolean;
     objectId?: string;
+    points?: {
+      x1: number;
+      x2: number;
+      y1: number;
+      y2: number;
+    };
+    reactivate: boolean;
   }) => {
     //debugger;
     // console.log(params.objectValues);
@@ -160,13 +171,19 @@ export const ToolsProvider = (
         )
       );
     } else {
-      const newObj = cloneDeep(objectById[params.objectId!]);
+      const newObj = cloneDeep(storeRef.current.objectById[params.objectId!]);
       // NOTE maybe replace, rather that merge
       if (params.objectValues) {
         newObj.properties = {
           ...(newObj.properties ?? {}),
           ...(params.objectValues as any),
         };
+      }
+      if (params.points) {
+        newObj.x1 = params.points.x1;
+        newObj.x2 = params.points.x2;
+        newObj.y1 = params.points.y1;
+        newObj.y2 = params.points.y2;
       }
 
       if (params.bounds) {
@@ -178,6 +195,12 @@ export const ToolsProvider = (
       }
 
       dispatch(updateObjectAction(newObj));
+    }
+
+    if (params.reactivate) {
+      const tool = activeToolRef.current;
+      deactivateTool();
+      activateTool(tool!, params.objectId);
     }
     //deactivateTool();
   };
@@ -217,21 +240,30 @@ export const ToolsProvider = (
 
   const getObjectTransform = (
     objectId: string,
-    options?: { includeTranslate?: boolean; skipStageScale?: boolean }
+    options?: { includeTranslate?: boolean; skipStageScale?: boolean },
+    overrideObjectSize?: {
+      [key: string]: Pick<IObject, "left" | "top" | "width" | "height">;
+    }
   ): DOMMatrix => {
     // >>>>>>>>>>>>>>>>>>
     // duplicate 123
     const objectPath: string[] = [];
 
-    populateObjectThreeIds(objectPath, objectId, objectById, layerById);
+    populateObjectThreeIds(
+      objectPath,
+      objectId,
+      storeRef.current.objectById,
+      storeRef.current.layerById
+    );
 
     console.log(objectPath, "objectPath123");
     console.log([...objectPath, objectId], "objectPath123");
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
-      objectById,
-      options
+      storeRef.current.objectById,
+      options,
+      overrideObjectSize
     );
 
     //groupsMatrix.e = groupsMatrix.f = 0;
@@ -246,10 +278,61 @@ export const ToolsProvider = (
     /////
   };
 
+  const objectPointToStageSpace = (
+    objectId: string,
+    p: Point,
+    includeTranslate = true
+  ) => {
+    const objTransform = getObjectTransform(objectId, {
+      includeTranslate,
+      skipStageScale: true,
+    });
+
+    const pointMatrix = new DOMMatrix(
+      `translateX(${p.x}px) translateY(${p.y}px)`
+    );
+
+    // return objTransform.transformPoint(p);
+
+    objTransform.multiplySelf(pointMatrix);
+    const translateX = objTransform.e;
+    const translateY = objTransform.f;
+
+    return { x: translateX, y: translateY };
+  };
+
+  const stagePointToObjectSpace = (
+    objectId: string,
+    p: Point,
+    overrideObjectSize?: Pick<IObject, "left" | "top" | "width" | "height">,
+    includeTranslate: boolean = true
+  ) => {
+    const objTransform = getObjectTransform(
+      objectId,
+      {
+        includeTranslate,
+        skipStageScale: true,
+      },
+      overrideObjectSize ? { [objectId!]: overrideObjectSize } : {}
+    );
+
+    const pointMatrix = new DOMMatrix(
+      `translateX(${p.x}px) translateY(${p.y}px)`
+    );
+
+    // return objTransform.transformPoint(p);
+
+    objTransform.invertSelf().multiplySelf(pointMatrix);
+    const translateX = objTransform.e;
+    const translateY = objTransform.f;
+
+    return { x: translateX, y: translateY };
+  };
+
   const activateTool = (tool: string, objectId?: string) => {
     const toolDef = getObjectToolDefinitions(tool);
     if (toolDef) {
-      const object = objectId ? objectById[objectId] : null;
+      const object = objectId ? storeRef.current.objectById[objectId] : null;
       const values = object?.properties;
 
       // NOTE: LAYOUT CHANGE
@@ -268,6 +351,8 @@ export const ToolsProvider = (
           object,
           requestDeactivation,
           requestObjectUpdate,
+          objectPointToStageSpace,
+          stagePointToObjectSpace,
           getMousePoint,
           getObjectTransform,
           isEdit: !!objectId,
@@ -282,8 +367,8 @@ export const ToolsProvider = (
 
             const retObjs: IObject[] = [];
             allObjects.forEach((objectId) => {
-              if (objectById[objectId].type === type) {
-                retObjs.push(objectById[objectId]);
+              if (storeRef.current.objectById[objectId].type === type) {
+                retObjs.push(storeRef.current.objectById[objectId]);
               }
             });
             return retObjs;
