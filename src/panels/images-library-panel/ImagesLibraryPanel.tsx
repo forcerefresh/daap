@@ -29,7 +29,16 @@ import { MultiSelect } from "@blueprintjs/select";
 import { addNewObject } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, forOwn, isNil, last, noop, remove } from "lodash-es";
+import {
+  debounce,
+  filter,
+  forOwn,
+  isNil,
+  last,
+  noop,
+  pick,
+  remove,
+} from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
@@ -242,6 +251,18 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const [selection, setSelection] = useState<any[]>([]);
   const addToSelection = (data: any) => {
     setSelection([...selection, data]);
+  };
+
+  const includeMediaRequiredProps = (media: any) => {
+    return pick(
+      media,
+      "width",
+      "height",
+      "sourceType",
+      "sizeType",
+      "mediaSizes",
+      "id"
+    );
   };
 
   const renderSelectedImage = (image: any, idx: number) => {
@@ -624,7 +645,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                         "image",
                         {},
                         {
-                          image,
+                          image: includeMediaRequiredProps(image),
                         }
                       );
                     } else {

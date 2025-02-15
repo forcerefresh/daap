@@ -102,7 +102,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
 
       {mode === ToolbarMode.Edit && (
         <>
-          <div>
+          {/* <div>
             <Button
               minimal
               active={freeDrawToolState.eraser}
@@ -120,7 +120,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                 }}
               />
             </Button>
-          </div>
+          </div> */}
           <div>
             <Button
               minimal

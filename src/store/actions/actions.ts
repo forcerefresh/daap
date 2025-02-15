@@ -1979,7 +1979,7 @@ function handleTextUpdate(
     if (isAdd) {
       if (objectValues.initialAutoWidth === true) {
         object.width = pEl.offsetWidth + 5;
-        objectValues.initialAutoWidth = false;
+        delete objectValues.initialAutoWidth;
       }
 
       const nextTextPositionY = getState().stage.nextTextPositionY;

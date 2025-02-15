@@ -6,7 +6,7 @@ import css from "./MediaLibraryPanel.module.scss";
 import { Tab, Tabs } from "@blueprintjs/core";
 import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
-import { includes, noop } from "lodash-es";
+import { includes, noop, pick } from "lodash-es";
 import { IntegrationContext } from "../../integration";
 import {
   ImageData,
@@ -96,6 +96,17 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
 
   //if (apiKey === null) return null;
 
+  const includeMediaRequiredProps = (media: any) => {
+    return pick(
+      media,
+      "width",
+      "height",
+      "sourceType",
+      "sizeType",
+      "mediaSizes",
+      "id"
+    );
+  };
   return (
     <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
       <div style={{ overflow: "hidden" }}>
@@ -141,7 +152,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         "image",
                         { ...sizeRect },
                         {
-                          image: mediaItem.media,
+                          image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
                     }
@@ -210,7 +221,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         "video",
                         { ...sizeRect },
                         {
-                          image: mediaItem.media,
+                          image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
                     }
@@ -308,7 +319,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         "image",
                         { ...sizeRect },
                         {
-                          image: mediaItem.media,
+                          image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
                     }

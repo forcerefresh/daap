@@ -325,7 +325,7 @@ export default class FreeHandDrawTool implements IToolClass {
     const objProps = this.convertStackToPoints();
     this.requestObjectUpdate?.({
       objectValues: {
-        lines: objProps.lines,
+        beziers: objProps.lines[0].bezier,
         color: objProps.color,
         strokeWidth: objProps.strokeWidth,
       },
@@ -347,7 +347,7 @@ export default class FreeHandDrawTool implements IToolClass {
 
   removeIntersection(p1: Point, p2: Point) {
     this.objects.forEach((obj: IObject) => {
-      const lines = (obj.properties as FreeDrawValues).lines;
+      const beziers = (obj.properties as FreeDrawValues).beziers;
 
       // const pomX = parseInt(obj.absoluteLayout?.common.left!);
       // const pomY = parseInt(obj.absoluteLayout?.common.top!);
@@ -357,23 +357,23 @@ export default class FreeHandDrawTool implements IToolClass {
       const pomY = obj.top!;
 
       let removed = false;
-      lines.forEach((line) => {
-        for (let i = 1; i < line.points.length; i++) {
-          const lp1 = {
-            x: line.points[i - 1][0] + pomX,
-            y: line.points[i - 1][1] + pomY,
-          };
-          const lp2 = {
-            x: line.points[i][0] + pomX,
-            y: line.points[i][1] + pomY,
-          };
-          if (
-            lineIntersection(p1.x, p1.y, p2.x, p2.y, lp1.x, lp1.y, lp2.x, lp2.y)
-          ) {
-            removed = true;
-          }
+      // lines.forEach((line) => {
+      for (let i = 1; i < beziers.length; i++) {
+        const lp1 = {
+          x: beziers[i - 1][0] + pomX,
+          y: beziers[i - 1][1] + pomY,
+        };
+        const lp2 = {
+          x: beziers[i][0] + pomX,
+          y: beziers[i][1] + pomY,
+        };
+        if (
+          lineIntersection(p1.x, p1.y, p2.x, p2.y, lp1.x, lp1.y, lp2.x, lp2.y)
+        ) {
+          removed = true;
         }
-      });
+      }
+      // });
 
       if (removed && !obj.isLocked) {
         this.requestObjectDelete?.(obj.id);

@@ -62,7 +62,7 @@ export interface TextValues {
   text: string;
   type: TextType;
   autoHeight: boolean;
-  initialAutoWidth: boolean;
+  initialAutoWidth?: boolean;
   font: IFontSelectInputValue;
   color: RGBColor;
   fontSize: string;
@@ -90,8 +90,8 @@ export type TextPropertiesTuple = [
   // IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
   IUnitsNumberInput<"letterSpacing">,
-  ICheckboxInput<"fontKerning">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"fontKerning">
+  // ICheckboxInput<"preload">
 ];
 
 export function createTextObject(
@@ -261,13 +261,13 @@ export function getTextObjectForm(): TextPropertiesTuple {
       value: true,
       defaultValue: true,
     },
-    {
-      displayName: "Preload fonts",
-      propertyName: "preload",
-      inputType: InputType.CHECKBOX,
-      value: true,
-      defaultValue: true,
-    },
+    // {
+    //   displayName: "Preload fonts",
+    //   propertyName: "preload",
+    //   inputType: InputType.CHECKBOX,
+    //   value: true,
+    //   defaultValue: true,
+    // },
   ];
 
   return form;
@@ -365,7 +365,7 @@ export async function textSizeUpdate(
   if ("textAlign" in textValues)
     objectContentEl.style.textAlign = textValues.textAlign;
   if ("lineHeight" in textValues)
-    objectContentEl.style.lineHeight = textValues.lineHeight;
+    objectContentEl.style.lineHeight = textValues.lineHeight + "px";
   if ("letterSpacing" in textValues)
     objectContentEl.style.letterSpacing = textValues.letterSpacing;
 

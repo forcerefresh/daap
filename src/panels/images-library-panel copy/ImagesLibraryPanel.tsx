@@ -29,7 +29,16 @@ import { MultiSelect } from "@blueprintjs/select";
 import { addNewObject } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { debounce, filter, forOwn, isNil, last, noop, remove } from "lodash-es";
+import {
+  debounce,
+  filter,
+  forOwn,
+  isNil,
+  last,
+  noop,
+  pick,
+  remove,
+} from "lodash-es";
 import classnames from "classnames";
 import { SelectionType } from "../media-library/MediaLibraryPanel";
 import { getImageTags } from "../../utils/tags/tags";
@@ -292,6 +301,18 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
     return images?.[defaultSize] || images?.original;
   };
 
+  const includeMediaRequiredProps = (media: any) => {
+    return pick(
+      media,
+      "width",
+      "height",
+      "sourceType",
+      "sizeType",
+      "mediaSizes",
+      "id"
+    );
+  };
+
   return (
     <div
       className={css.imageLibraryPanel}
@@ -410,7 +431,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 disabled={selection.length === 0}
                 onClick={() => {
                   const retImages = selection.map((image) => ({
-                    image: image,
+                    image: includeMediaRequiredProps(image),
                     filename: image.filename,
                   }));
                   onSelect(retImages);
@@ -624,12 +645,12 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                         "image",
                         {},
                         {
-                          image,
+                          image: includeMediaRequiredProps(image),
                         }
                       );
                     } else {
                       onSelect?.({
-                        image,
+                        image: includeMediaRequiredProps(image),
                       });
                     }
 
@@ -828,7 +849,8 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                                           "image", //cover
                                           {},
                                           {
-                                            image,
+                                            image:
+                                              includeMediaRequiredProps(image),
                                             // : {
                                             //   image: (image?.images as any)[
                                             //     selectedResolution

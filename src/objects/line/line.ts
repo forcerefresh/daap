@@ -35,7 +35,7 @@ export interface LineValues {
   strokeLineCap?: "miter" | "round" | "bevel";
   strokeDashArray?: string;
 
-  fillColor?: RGBColor;
+  // fillColor?: RGBColor;
 }
 
 export type LinePropertiesTuple = [
@@ -43,8 +43,8 @@ export type LinePropertiesTuple = [
   IColorInput<"strokeColor">,
   // IButtonGroupInput<"strokeLineJoin">,
   IButtonGroupInput<"strokeLineCap">,
-  ITextInput<"strokeDashArray">,
-  IColorInput<"fillColor">
+  ITextInput<"strokeDashArray">
+  // IColorInput<"fillColor">
 ];
 
 export function createLineObject(
@@ -63,7 +63,7 @@ export function createLineObject(
     strokeLineCap: initialValue?.strokeLineCap ?? "miter",
     strokeDashArray: initialValue?.strokeDashArray ?? "",
 
-    fillColor: initialValue?.color ?? { r: 255, b: 255, g: 255, a: 1 },
+    // fillColor: initialValue?.color ?? { r: 255, b: 255, g: 255, a: 1 },
   };
 
   object.properties = values;
@@ -138,13 +138,13 @@ export function getLineForm(): LinePropertiesTuple {
       helperText: `Comma separated line length
        and white space (e.g 5,2)`,
     },
-    {
-      inputType: InputType.COLOR,
-      displayName: "Fill color",
-      propertyName: "fillColor",
-      value: { r: 255, b: 255, g: 255, a: 1 },
-      defaultValue: { r: 255, b: 255, g: 255, a: 1 },
-    },
+    // {
+    //   inputType: InputType.COLOR,
+    //   displayName: "Fill color",
+    //   propertyName: "fillColor",
+    //   value: { r: 255, b: 255, g: 255, a: 1 },
+    //   defaultValue: { r: 255, b: 255, g: 255, a: 1 },
+    // },
   ];
 
   return form;
@@ -196,11 +196,13 @@ export function getLineHtml(props: GetHtmlFuncPropsType) {
   }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <path  d="${path}" stroke-width="${lineValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(lineValues.strokeColor).backgroundColor
-  }" fill="${
-    convertRGBColor2CSSStyle(lineValues.fillColor).backgroundColor
   }" stroke-linecap="${lineValues.strokeLineCap}" ${dashattr}></path>
  </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
+
+  // fill="${
+  //   convertRGBColor2CSSStyle(lineValues.fillColor).backgroundColor
+  // }"
 }
 
 export async function lineSizeUpdate(

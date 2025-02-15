@@ -57,6 +57,18 @@ const MainHeader = (props: IMainHeader) => {
 
   const [loginOpen, setLoginOpen] = useState(false);
 
+  useEffect(() => {
+    if (typeof account.userData?.displayName !== "undefined") {
+      const intervalHandle = setInterval(() => {
+        //TODO: replace with keepalive/ping
+        axios.get("/api/v1/me").then(() => {});
+      }, 1 * 60 * 1000);
+      return () => {
+        clearInterval(intervalHandle);
+      };
+    }
+  }, [account]);
+
   return (
     <>
       <div className={cx(css.mainHeader, className)}>

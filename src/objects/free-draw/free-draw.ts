@@ -35,12 +35,13 @@ import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 export const FREE_DRAW = "free-draw";
 
 export interface FreeDrawValues {
-  lines: {
-    points: Points;
-    bezier: IBezier[];
-    color: RGBColor;
-    strokeWidth: string;
-  }[];
+  beziers: IBezier[];
+  // lines: {
+  //   points: Points;
+  //   bezier: IBezier[];
+  //   color: RGBColor;
+  //   strokeWidth: string;
+  // }[];
   strokeWidth: number;
   color: RGBColor;
 }
@@ -56,7 +57,8 @@ export function createFreeDrawObject(
   const object = createCommonObject(FREE_DRAW);
 
   const values: FreeDrawValues = {
-    lines: initialValue?.lines ?? [],
+    beziers: initialValue?.beziers ?? [],
+    // lines: initialValue?.lines ?? [],
     strokeWidth: initialValue?.strokeWidth ?? 5,
     color: initialValue?.color ?? { r: 255, b: 255, g: 255, a: 1 },
   };
@@ -91,22 +93,31 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, deviceType } = props;
   const freeDrawValues = object.properties as FreeDrawValues;
 
+  // backward compatibility
+  const beziers =
+    freeDrawValues.beziers ?? (freeDrawValues as any).lines?.[0].bezier;
+
   // console.log(freeDrawValues);
   if (!isPlayer) {
-    if (!freeDrawValues.lines || freeDrawValues.lines.length === 0) {
+    // if (!freeDrawValues.lines || freeDrawValues.lines.length === 0) {
+    if (!beziers || beziers.length === 0) {
       return getObjectPlaceholder(`FREE DRAW<br/>(placeholder)`);
     }
   }
 
   let pathsHtml = "";
-  freeDrawValues.lines.forEach((line) => {
-    const d = bezierArr2Path(line.bezier);
-    pathsHtml += `<path stroke-width="${
-      freeDrawValues.strokeWidth
-    }px" stroke="${
-      convertRGBColor2CSSStyle(freeDrawValues.color).backgroundColor
-    }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
-  });
+  // freeDrawValues.lines.forEach((line) => {
+  //   const d = bezierArr2Path(line.bezier);
+  //   pathsHtml += `<path stroke-width="${
+  //     freeDrawValues.strokeWidth
+  //   }px" stroke="${
+  //     convertRGBColor2CSSStyle(freeDrawValues.color).backgroundColor
+  //   }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
+  // });
+  const d = bezierArr2Path(beziers);
+  pathsHtml += `<path stroke-width="${freeDrawValues.strokeWidth}px" stroke="${
+    convertRGBColor2CSSStyle(freeDrawValues.color).backgroundColor
+  }" stroke-linejoin="round" stroke-linecap="round" d="${d}"/>`;
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
