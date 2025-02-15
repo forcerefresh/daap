@@ -13,6 +13,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import {
   activateLayer,
   deleteLayersThree,
+  deleteObjects,
   deleteSlideThree,
   duplicateLayers,
   duplicateSlides,
@@ -72,6 +73,8 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     _moveLayers,
     className,
     objects,
+    _deleteObjects,
+    _duplicateLayers,
   } = props;
 
   const renderSlideProperties = (slide: IPage) => {
@@ -282,6 +285,17 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
           _updateObject,
           _updateObjectForPreview
         )}
+        <div className={css.actionHolder}>
+          <Button
+            style={{ alignSelf: "end" }}
+            icon={"trash"}
+            minimal
+            intent={"danger"}
+            onClick={() => {
+              _deleteObjects([object.id]);
+            }}
+          ></Button>
+        </div>
       </>
     );
   };
@@ -538,12 +552,14 @@ const mapDispatchToProps = {
     selectForProperties(payload),
   _selectLayers: (layerIds: string[]) => selectLayers(layerIds),
   _duplicateSlides: (ids: string[]): any => duplicateSlides(ids),
+  _duplicateLayers: (ids: string[]): any => duplicateLayers(ids),
   _moveLayers: (
     refId: string,
     where: "above" | "below" | "layer" | "slide" | "bottom",
     moveIds: string[]
   ) => moveLayers(refId, where, moveIds),
   _deleteSlideThree: (id: string): any => deleteSlideThree(id),
+  _deleteObjects: (ids: string[]): any => deleteObjects(ids),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PropertiesPanel);

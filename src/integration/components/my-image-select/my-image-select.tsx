@@ -195,19 +195,40 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         <div {...getRootProps({ style: style as any })}>
           <input {...getInputProps()} />
           {type === "image" ? (
-            <p>Drop some Images here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>images</strong> here or click to open the selection
+              dialog.
+            </p>
           ) : type === "video" ? (
-            <p>Drop some MP4 videos here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>MP4 video</strong> here or click to open the
+              selection dialog.
+            </p>
           ) : type === "audio" ? (
-            <p>Drop some Audios here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>audios</strong> here or click to open the selection
+              dialog.
+            </p>
           ) : type === "vector" ? (
-            <p>Drop some SVG files here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>SVGs</strong> here or click to open the selection
+              dialog.
+            </p>
           ) : type === "font" ? (
-            <p>Drop some Font files here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>fonts</strong> here or click to open the selection
+              dialog.
+            </p>
           ) : type === "extension" ? (
-            <p>Drop Extension ZIP file here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>extension zip file</strong> here or click to open the
+              selection dialog.
+            </p>
           ) : type === "template" ? (
-            <p>Drop Template ZIP file here, or click to open select dialog.</p>
+            <p>
+              Drop <strong>template zip file</strong> here or click to open the
+              selection dialog.
+            </p>
           ) : null}
         </div>
         {acceptedFiles.length > 0 && (

@@ -54,6 +54,7 @@ import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration
 import { DeviceType } from "aws-sdk/clients/ec2";
 import { getAncestorLayer } from "../../../store/actions/actions-utils";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { getBounds } from "../../../objects/line/line";
 
 type ILayoutProperties = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -321,23 +322,72 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     )?.meta;
     const sizeType = objectMeta?.sizeType ?? "rect";
 
+    const getAbsolutePintsForLine = (props: {
+      x1: number;
+      x2: number;
+      y1: number;
+      y2: number;
+      top: number;
+      left: number;
+    }) => {
+      return {
+        x1: props.x1 + props.left,
+        x2: props.x2 + props.left,
+        y1: props.y1 + props.top,
+        y2: props.y2 + props.top,
+      };
+    };
+
+    const getLeftTopAndRelativePointsFromAbsolute = (props: {
+      x1: number;
+      x2: number;
+      y1: number;
+      y2: number;
+    }) => {
+      const numObj = {};
+      numObj.x1 = parseFloat(props.x1);
+      numObj.y1 = parseFloat(props.y1);
+      numObj.x2 = parseFloat(props.x2);
+      numObj.y2 = parseFloat(props.y2);
+
+      const b = getBounds(numObj);
+
+      return {
+        left: b.x,
+        top: b.y,
+        width: b.width,
+        height: b.height,
+
+        x1: numObj.x1 - b.x,
+        x2: numObj.x2 - b.x,
+        y1: numObj.y1 - b.y,
+        y2: numObj.y2 - b.y,
+      };
+    };
+
+    const absPoints = getAbsolutePintsForLine(objectOrLayer as any);
     return (
       <>
         {sizeType === "line"
           ? getP1P2LayoutField(
               "",
               {
-                x1: objectOrLayer.x1 + "px",
-                y1: objectOrLayer.y1 + "px",
-                x2: objectOrLayer.x2 + "px",
-                y2: objectOrLayer.y2 + "px",
+                x1: absPoints.x1 + "px",
+                y1: absPoints.y1 + "px",
+                x2: absPoints.x2 + "px",
+                y2: absPoints.y2 + "px",
               },
               (v: any) => {
+                const calcValue = getLeftTopAndRelativePointsFromAbsolute(v);
                 const retObj = cloneDeep(objectOrLayer);
-                retObj.x1 = parseFloat(v.x1);
-                retObj.y1 = parseFloat(v.y1);
-                retObj.x2 = parseFloat(v.x2);
-                retObj.y2 = parseFloat(v.y2);
+                retObj.x1 = calcValue.x1;
+                retObj.y1 = calcValue.y1;
+                retObj.x2 = calcValue.x2;
+                retObj.y2 = calcValue.y2;
+                retObj.left = calcValue.left;
+                retObj.top = calcValue.top;
+                retObj.width = calcValue.width;
+                retObj.height = calcValue.height;
                 updateFunction(retObj);
               }
             )

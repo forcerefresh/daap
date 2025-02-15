@@ -82,11 +82,11 @@ function MainLayout(props: IMainLayoutMergedProps) {
             <div>
               <div className={css.properties}>{properties}</div>
             </div>
-            <div>
+            {/* <div>
               <div className={css.action}>{action}</div>
               <div className={css.slides}>{slides}</div>
               <div className={css.layers}>{layers}</div>
-            </div>
+            </div> */}
           </div>
         </div>
       );
@@ -127,9 +127,9 @@ function MainLayout(props: IMainLayoutMergedProps) {
             </div>
           </div>
           <div className={css.right}>
-            <div className={css.action}>{action}</div>
+            {/* <div className={css.action}>{action}</div>
             <div className={css.slides}>{slides}</div>
-            <div className={css.layers}>{layers}</div>
+            <div className={css.layers}>{layers}</div> */}
             <div className={css.properties}>{properties}</div>
           </div>
         </div>

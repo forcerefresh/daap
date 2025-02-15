@@ -8,6 +8,7 @@
   min-width: 500px;
   height: calc(100vh - 52px);
 
+  overflow: auto;
   background: $pt-app-background-color;
   box-shadow: $pt-elevation-shadow-0;
   padding: 15px;
@@ -77,7 +78,7 @@
 }
 
 .shapesSectionHolder {
-  flex-grow: 1;
+  // flex-grow: 1;
 }
 
 .objectHolder {

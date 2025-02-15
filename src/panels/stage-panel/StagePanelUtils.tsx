@@ -139,9 +139,9 @@ export function calculateObjectSize(
   scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
   options?: { skipHeight: boolean }
 ): React.CSSProperties {
-  if (object.x1 || object.x2 || object.y1 || object.y2) {
-    return lineObjectBounds(object);
-  }
+  // if (object.x1 || object.x2 || object.y1 || object.y2) {
+  //   return lineObjectBounds(object);
+  // }
 
   return {
     left: object.left + "px",

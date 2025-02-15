@@ -261,9 +261,9 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
               }}
             >
               {extensions.length === 0 ? (
-                <b>There are no project for the selected criteria.</b>
+                <b>No extensions were found for the chosen criteria.</b>
               ) : (
-                <b>All projects are loaded for the selected criteria.</b>
+                <b>All extensions have been loaded for the chosen criteria.</b>
               )}
             </p>
           }

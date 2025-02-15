@@ -283,9 +283,9 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
               }}
             >
               {projects.length === 0 ? (
-                <b>There are no project for the selected criteria.</b>
+                <b>No projects were found for the chosen criteria.</b>
               ) : (
-                <b>All projects are loaded for the selected criteria.</b>
+                <b>All projects have been loaded for the chosen criteria.</b>
               )}
             </p>
           }

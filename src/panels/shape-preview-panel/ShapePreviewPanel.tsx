@@ -22,8 +22,15 @@ import {
 } from "../../objects/circle/circle";
 import { createStarObject, getStarHtml, STAR } from "../../objects/star/star";
 import { getPolygonHtml, POLYGON } from "../../objects/polygon/polygon";
+import {
+  createLineObject,
+  getLineHtml,
+  LINE,
+  LineValues,
+} from "../../objects/line/line";
 
 enum ShapeSections {
+  Line = "line",
   Rectangle = "rectangle",
   Circle = "circle",
   Polygon = "polygon",
@@ -46,6 +53,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
   }>({
+    [ShapeSections.Line]: true,
     [ShapeSections.Rectangle]: true,
     [ShapeSections.Circle]: true,
     [ShapeSections.Other]: true,
@@ -90,6 +98,15 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     {
       html: string;
       properties: CircleValues;
+      object: Partial<IObject>;
+      preview: any;
+    }[]
+  >([]);
+
+  const [lineObjectsHtml, setLineObjectsHtml] = useState<
+    {
+      html: string;
+      properties: LineValues;
       object: Partial<IObject>;
       preview: any;
     }[]
@@ -276,6 +293,57 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     return { html, properties, object: { width: w * 4, height: h * 4 } };
   };
 
+  const retLineHtml = ({
+    w,
+    stroke = 5,
+    previewW = 80,
+    previewH = 80,
+    dasharray = "",
+  }: {
+    w: number;
+    stroke: number;
+    previewW?: number;
+    previewH?: number;
+    dasharray: string;
+  }) => {
+    const properties: LineValues = {
+      strokeWidth: stroke,
+      strokeColor: { r: 255, g: 255, b: 255, a: 1 },
+      strokeLineCap: "miter",
+      strokeDashArray: dasharray,
+    };
+
+    let rectObj = createLineObject() as IObject;
+    rectObj.x1 = 0;
+    rectObj.y1 = 0;
+    rectObj.x2 = w;
+    rectObj.y2 = 0;
+    rectObj.left = 0;
+    rectObj.top = 0;
+    rectObj.width = w;
+    rectObj.height = stroke;
+    rectObj.style = { overflow: "visible" };
+    rectObj.properties = {
+      strokeWidth: stroke,
+      strokeColor: { r: 200, g: 200, b: 200, a: 1 },
+      strokeLineCap: "miter",
+      strokeDashArray: dasharray,
+    };
+
+    const html = getLineHtml({
+      object: rectObj,
+      deviceType: "device-independent" as DeviceType,
+      calculatedObjectSize: { left: 0, top: 0, width: w, height: stroke },
+    });
+
+    return {
+      html,
+      properties,
+      object: { width: w * 4, height: stroke, x1: 0, y1: 0, x2: w * 4, y2: 0 },
+      preview: { previewH, previewW },
+    };
+  };
+
   useEffect(() => {
     const rect1 = retRectHtml({ w: 80, h: 80, r: "0px" });
     const rect2 = retRectHtml({ w: 80, h: 80, r: "20px" });
@@ -321,11 +389,80 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     });
 
     setPolyObjectsHtml([poly1, poly2, poly3, poly4]);
+
+    const line1 = retLineHtml({ w: 80, stroke: 5 });
+    const line2 = retLineHtml({ w: 80, stroke: 10 });
+    const line3 = retLineHtml({ w: 80, stroke: 5, dasharray: "5,5" });
+    const line4 = retLineHtml({
+      w: 80,
+      stroke: 5,
+      dasharray: "10,10,3,3,3,3,3,10",
+    });
+
+    setLineObjectsHtml([line1, line2, line3, line4]);
   }, []);
 
   return (
     <div className={cx(themeClass, css.shapePreviewPanel)}>
       <div className={css.shapesSectionHolder}>
+        <section
+          style={{ flexGrow: 0, minHeight: "10%" }}
+          className={cx({
+            [css.open]: visibleSectionIds[ShapeSections.Line],
+          })}
+        >
+          <div
+            className={css.sectionHeader}
+            onClick={() => toggleSection(ShapeSections.Line)}
+          >
+            <Button
+              minimal
+              small={true}
+              icon={
+                visibleSectionIds[ShapeSections.Line]
+                  ? "caret-down"
+                  : "caret-right"
+              }
+            ></Button>
+            <span>Line</span>
+          </div>
+          <div
+            style={{
+              padding: "10px",
+              display: "flex",
+              columnGap: "20px",
+              alignItems: "center",
+            }}
+          >
+            {lineObjectsHtml.map((obj) => {
+              return (
+                <div
+                  className={css.objectHolder}
+                  onClick={() => {
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        LINE,
+                        {
+                          left: 100, //(documentSize.width - 960) / 2,
+                          top: 100, //(documentSize.height - 540) / 2,
+                          ...obj.object,
+                        },
+                        obj.properties
+                      );
+                      onRequestClose();
+                    }
+                  }}
+                >
+                  <div
+                    dangerouslySetInnerHTML={{ __html: obj.html ?? "" }}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
         <section
           style={{ flexGrow: 0, minHeight: "10%" }}
           className={cx({

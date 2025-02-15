@@ -27,7 +27,7 @@ type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
-  const { panelName, totalAnimationCounter } = props;
+  const { panelName, totalAnimationCounter, selectionForProperties } = props;
 
   const { activeSection } = useContext(PropertiesPanelContext);
 
@@ -164,6 +164,7 @@ const mapStateToProps = (state: IStore) => {
   return {
     panelName,
     totalAnimationCounter,
+    selectionForProperties: selection.selectionForProperties,
   };
 };
 

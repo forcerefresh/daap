@@ -498,7 +498,7 @@ export function StageObjectInternal(props: IStageLayer) {
                 top: -(35 / objectZoom / stageZoom) + "px",
               }}
             >
-              {!activeTool && !object.isLocked && sizeType === "rect" && (
+              {!activeTool && ( //&& !object.isLocked && sizeType === "rect"
                 <div
                   className={cx(css.circle, "rotation-handle")}
                   style={{

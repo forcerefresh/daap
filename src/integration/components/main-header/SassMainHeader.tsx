@@ -64,7 +64,7 @@ const MainHeader = (props: IMainHeader) => {
           <DaapLogo className={css.logo} />
           <div className={css.leftActionHolder}>
             <div>
-              <ButtonGroup minimal={true}>
+              <ButtonGroup minimal={true} className={css.mainButtons}>
                 <Button
                   minimal
                   large
@@ -115,7 +115,7 @@ const MainHeader = (props: IMainHeader) => {
                     {missingExtensions.length}
                   </Tag>
                 )} */}
-                  Documents
+                  Files
                 </Button>
 
                 <Divider dir="horizontal" />
@@ -155,7 +155,7 @@ const MainHeader = (props: IMainHeader) => {
                   Templates
                 </Button>
 
-                <Divider dir="horizontal" />
+                {/* <Divider dir="horizontal" /> */}
 
                 <Portal>
                   <></>

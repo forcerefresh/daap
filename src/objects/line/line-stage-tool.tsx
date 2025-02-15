@@ -7,6 +7,8 @@ import {
 } from "../../webslider-sdk/object/i-tool-class";
 import { LineValues } from "./line";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import { truncate } from "fs";
+import { getObjectTransform } from "../../panels/stage-panel-new/stage-panel-utils";
 
 type Point = { x: number; y: number };
 
@@ -239,17 +241,26 @@ export default class LineStageTool implements IToolClass {
       {
         includeTranslate: true,
         skipStageScale: true,
-      },
-      {
-        [this.objectId!]: {
-          left: bounds.x,
-          top: bounds.y,
-          width: bounds.width,
-          height: bounds.height,
-        },
       }
+      // {
+      //   [this.objectId!]: {
+      //     left: bounds.x,
+      //     top: bounds.y,
+      //     width: bounds.width,
+      //     height: bounds.height,
+      //   },
+      // }
     ).toString();
 
+    //- b.x;
+
+    // this.svgEl.style.left = this.object.left + "px";
+    // this.svgEl.style.top = this.object.top + "px";
+
+    // this.svgPreviewEl.style.left = this.object.left + "px";
+    // this.svgPreviewEl.style.top = this.object.top + "px";
+
+    console.log(transform, "transform1");
     this.svgEl.style.transform = transform;
     this.svgPreviewEl.style.transform = transform;
 
@@ -337,21 +348,30 @@ export default class LineStageTool implements IToolClass {
     this.isMouseDown = false;
 
     const lB = this.latestBounds;
-    const b = getBounds(this.currentPoints);
+    const bOriginal = getBounds(this.currentPoints);
 
-    const diffX = b.x - lB.x;
-    const diffY = b.y - lB.y;
+    // const diffX = b.x - lB.x;
+    // const diffY = b.y - lB.y;
 
-    // debugger;
+    const transform = getObjectTransform(this.object);
+    const m = new DOMMatrix(transform);
+    const bTran = m.transformPoint({ x: bOriginal.x, y: bOriginal.y });
 
     const points = {
-      x1: this.currentPoints[0].x, // + diffX,
-      y1: this.currentPoints[0].y, //+ diffY,
-      x2: this.currentPoints[1].x, //+ diffX,
-      y2: this.currentPoints[1].y, // + diffY,
+      x1: this.currentPoints[0].x - bOriginal.x, // + diffX,
+      y1: this.currentPoints[0].y - bOriginal.y, //+ diffY,
+      x2: this.currentPoints[1].x - bOriginal.x, //+ diffX,
+      y2: this.currentPoints[1].y - bOriginal.y, // + diffY,
     };
+
     this.requestObjectUpdate?.({
       points,
+      bounds: {
+        x: this.object.left + bTran.x,
+        y: this.object.top + bTran.y,
+        width: bOriginal.width,
+        height: bOriginal.height,
+      },
       isEdit: this.isEdit,
       objectId: this.objectId!,
       reactivate: true,
@@ -503,18 +523,18 @@ export default class LineStageTool implements IToolClass {
 
   private drawPoints() {
     // const b = getBounds(this.currentPoints);
-    const b = this.latestBounds ?? getBounds(this.currentPoints);
+    // const b = this.latestBounds ?? getBounds(this.currentPoints);
 
-    console.log(this.currentPoints[1].y, "BOUNDS123 P[1].y");
+    // console.log(this.currentPoints[1].y, "BOUNDS123 P[1].y");
 
-    console.log(b.y, "BOUNDS123 B.y");
+    // console.log(b.y, "BOUNDS123 B.y");
 
     const path =
       "M" +
       this.currentPoints
         .map((p) => {
-          const X = p.x - b.x;
-          const Y = p.y - b.y;
+          const X = p.x; //+ this.object.left; //- b.x;
+          const Y = p.y; //+ this.object.top; // - b.y;
 
           return X + " " + Y;
         })

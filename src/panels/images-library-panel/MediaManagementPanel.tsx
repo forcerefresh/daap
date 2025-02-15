@@ -205,7 +205,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
                   display: loading ? "none" : "block",
                 }}
               >
-                <b>For the selected criteria, all items have been loaded.</b>
+                <b>All items have been loaded for the chosen criteria.</b>
               </p>
             </>
           }

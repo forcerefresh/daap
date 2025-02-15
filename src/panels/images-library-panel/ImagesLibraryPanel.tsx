@@ -484,7 +484,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                 }}
               >
                 {hasApiKey && (
-                  <b>For the selected criteria, all items have been loaded.</b>
+                  <b>All items have been loaded for the chosen criteria.</b>
                 )}
               </p>
             </>

@@ -694,18 +694,18 @@ function processMoveChangeEvent(
       //   "translateX(" + x + "px) translateY(" + y + "px)";
 
       // NOTE: LAYOUT CHANGE
-      if (object.x1 || object.x2 || object.y1 || object.y2) {
-        const bounds = lineObjectBounds(object);
-        const left = parseFloat(bounds.left!) + realMove.x;
-        const top = parseFloat(bounds.top!) + realMove.y;
-        objectHolder.style.left = left + "px";
-        objectHolder.style.top = top + "px";
-      } else {
-        const left = object.left! + realMove.x;
-        const top = object.top! + realMove.y;
-        objectHolder.style.left = left + "px";
-        objectHolder.style.top = top + "px";
-      }
+      // if (object.x1 || object.x2 || object.y1 || object.y2) {
+      //   const bounds = lineObjectBounds(object);
+      //   const left = parseFloat(bounds.left!) + realMove.x;
+      //   const top = parseFloat(bounds.top!) + realMove.y;
+      //   objectHolder.style.left = left + "px";
+      //   objectHolder.style.top = top + "px";
+      // } else {
+      const left = object.left! + realMove.x;
+      const top = object.top! + realMove.y;
+      objectHolder.style.left = left + "px";
+      objectHolder.style.top = top + "px";
+      // }
 
       //   scale(" +
       //   initialScale +
@@ -864,17 +864,17 @@ function processMoveStopEvent(
 
     // NOTE: LAYOUT CHANGE
     const newObject = cloneDeep(object);
-    if (object.x1 || object.x2 || object.y1 || object.y2) {
-      // const bounds = lineObjectBounds(object);
+    // if (object.x1 || object.x2 || object.y1 || object.y2) {
+    //   // const bounds = lineObjectBounds(object);
 
-      newObject.x1 = newObject.x1! + realMove.x;
-      newObject.x2 = newObject.x2! + realMove.x;
-      newObject.y1 = newObject.y1! + realMove.y;
-      newObject.y2 = newObject.y2! + realMove.y;
-    } else {
-      newObject.left = newObject.left! + realMove.x;
-      newObject.top = newObject.top! + realMove.y;
-    }
+    //   newObject.x1 = newObject.x1! + realMove.x;
+    //   newObject.x2 = newObject.x2! + realMove.x;
+    //   newObject.y1 = newObject.y1! + realMove.y;
+    //   newObject.y2 = newObject.y2! + realMove.y;
+    // } else {
+    newObject.left = newObject.left! + realMove.x;
+    newObject.top = newObject.top! + realMove.y;
+    // }
 
     objectToUpdate.push(newObject);
 

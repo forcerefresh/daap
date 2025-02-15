@@ -417,7 +417,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           </Button>
         </div> */}
 
-        <div>
+        {/* <div>
           <Button
             className={css.largeButton}
             minimal
@@ -434,8 +434,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           >
             BLOB
           </Button>
-        </div>
-        <div>
+        </div> */}
+        {/* <div>
           <Button
             className={css.largeButton}
             minimal
@@ -445,14 +445,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                   activeLayerId,
                   LINE,
                   {
-                    x1: 100,
-                    y1: 100,
+                    x1: 0,
+                    y1: 0,
                     x2: 400,
-                    y2: 100,
+                    y2: 0,
+                    top: 100,
+                    left: 100,
+                    width: 400,
+                    height: 0,
                   },
 
                   {
-                    strokeWidth: "10",
+                    strokeWidth: "20",
                   }
                 );
 
@@ -460,10 +464,14 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                   activeLayerId,
                   LINE,
                   {
-                    x1: 150,
-                    y1: 150,
-                    x2: 400,
-                    y2: 300,
+                    x1: 0,
+                    y1: 0,
+                    x2: 250,
+                    y2: 150,
+                    top: 150,
+                    left: 150,
+                    width: 250,
+                    height: 150,
                   },
 
                   {
@@ -493,7 +501,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           >
             LINE
           </Button>
-        </div>
+        </div> */}
 
         <div>
           <Button

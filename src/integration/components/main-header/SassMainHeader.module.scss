@@ -26,15 +26,21 @@
 
   .mainHeader {
     :global {
-      span,
-      svg {
-        fill: #bbb !important;
-        color: #bbb !important;
-      }
     }
   }
 }
+:global(.bp5-dark) {
+  .mainButtons {
+    // button {
+    span,
+    svg {
+      fill: #bbb !important;
+      color: #bbb !important;
+    }
 
+    // }
+  }
+}
 .left {
   display: flex;
   align-items: center;

@@ -141,18 +141,27 @@ const BasicProperties: React.FC<IBasicProperties> = (props) => {
 
   const renderObjectOrLayerOrSlide = () => {
     if (!selectionForProperties) {
-      return null; // <div>No object selected</div>;
+      return null;
     }
 
     if (selectionForProperties?.type === "layer" && layer) {
+      if (!layer) {
+        return <div>No layer is selected.</div>;
+      }
       return renderLayerProperties(layer);
     }
 
-    if (selectionForProperties?.type === "object" && object) {
+    if (selectionForProperties?.type === "object") {
+      if (!object) {
+        return <div>No object is selected</div>;
+      }
       return renderObjectProperties(object, objectLayer);
     }
 
-    if (selectionForProperties?.type === "slide" && slide) {
+    if (selectionForProperties?.type === "slide") {
+      if (!slide) {
+        return <div>No page is selected</div>;
+      }
       return renderSlideProperties(slide);
     }
   };

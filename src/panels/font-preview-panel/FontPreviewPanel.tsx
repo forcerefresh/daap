@@ -1,4 +1,11 @@
-import { Button, Card, Elevation, Icon, Spinner } from "@blueprintjs/core";
+import {
+  Button,
+  Card,
+  Elevation,
+  Icon,
+  Label,
+  Spinner,
+} from "@blueprintjs/core";
 import React, {
   useCallback,
   useContext,
@@ -386,6 +393,15 @@ const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
 
           {visibleSectionIds[FontSections.MyFonts] && (
             <div className={cx(css.panel, css.myFontsPanel)}>
+              {myFonts.length === 0 && (
+                <>
+                  {/* <div>No custom fonts found.</div> */}
+                  <Label>
+                    It looks like you haven’t uploaded any custom fonts yet. To
+                    use custom fonts, please upload them.
+                  </Label>
+                </>
+              )}
               {myFonts.map((font) => {
                 const previewFileName = font.previewSizes.find(
                   (size) => size.sizeType === "original"
