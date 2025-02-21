@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { getUnitNumericFiled } from "../../inputs/input-utils";
 import { cloneDeep } from "lodash-es";
-import { Button, Icon, Popover } from "@blueprintjs/core";
+import { Button, Icon, Popover, Spinner } from "@blueprintjs/core";
 import { IToolbarProps } from "../../utils/tools/types";
-import { TextValues } from "./text";
+import { TEXT, TextValues } from "./text";
 
 import css from "./TextFloatingBar.module.scss";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";
@@ -30,18 +30,35 @@ import { ColorInputForm } from "../../inputs/color-input/color-input";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import ContextMenu from "../../panels/context-menu/ContextMenu";
 import AIContextMenu from "./AIContextMenu";
+import { connect } from "react-redux";
+import { IStore } from "../../store/store";
 
 const ICON_HEIGHT = 36;
 
-export function TextFloatingToolbar(
-  props: IToolbarProps
+type IToolbarMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  IToolbarProps;
+
+function TextFloatingToolbar(
+  props: IToolbarMergedProps
 ): React.ReactElement | null {
-  const { mode, object, updateObject, updateObjectForPreview, deleteObject } =
-    props;
+  const {
+    mode,
+    object,
+    updateObject,
+    updateObjectForPreview,
+    deleteObject,
+    aiLoading,
+    aiEnabled,
+  } = props;
 
   const values = object?.properties as TextValues | undefined;
 
   console.log(values);
+
+  const isAILoading = aiLoading?.[object?.id];
+  const isAIEnabled = aiEnabled?.[TEXT];
+
   return object && values ? (
     <div className={css.inputsHolder}>
       {/* {getFontFamilyField(
@@ -55,20 +72,38 @@ export function TextFloatingToolbar(
         { minimal: true }
       )} */}
 
-      <Popover
-        content={<AIContextMenu />}
-        placement="bottom-end"
-        // tslint:disable-next-line jsx-no-lambda
-        renderTarget={({ isOpen, ...p }) => (
-          <Button {...p} minimal style={{ color: "rgb(110 240 239)" }}>
-            <Icon
-              icon={"clean"}
-              style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
-            />
-            Assist
-          </Button>
-        )}
-      />
+      {isAIEnabled && (
+        <Popover
+          content={<AIContextMenu object={object} />}
+          placement="bottom-end"
+          // tslint:disable-next-line jsx-no-lambda
+          renderTarget={({ isOpen, ...p }) => (
+            <Button
+              {...p}
+              minimal
+              style={{ marginLeft: "0px", color: "rgb(110 240 239)" }}
+            >
+              {isAILoading ? (
+                <Spinner
+                  size={18}
+                  className={css.inlineSpinner}
+                  style={{
+                    marginLeft: "0px",
+                    marginRight: "15px",
+                    color: "rgb(110 240 239)",
+                  }}
+                />
+              ) : (
+                <Icon
+                  icon={"clean"}
+                  style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
+                />
+              )}
+              Assist
+            </Button>
+          )}
+        />
+      )}
 
       {getUnitNumericFiled(
         "",
@@ -126,3 +161,16 @@ export function TextFloatingToolbar(
     </div>
   ) : null;
 }
+
+const mapStateToProps = (state: IStore) => {
+  const { aiLoading, aiEnabled } = state.ai;
+
+  return { aiLoading, aiEnabled };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(TextFloatingToolbar);

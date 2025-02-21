@@ -58,6 +58,9 @@ import ExtraOptionsInput from "./extra-options-optional/extra-options-input";
 import { ClipMaskInputForm } from "./clip-mask-input/clip-mask-input";
 import { TagsInputForm } from "./tags-input/tags-input";
 import { P1P2InputForm } from "./p1-p2-input/p1-p2-input";
+import { PasswordInputForm } from "./password-input/password-input";
+import { LinearGradientInputForm } from "./linear-gradient-input/linear-gradient-input";
+import { ColorGradientInputForm } from "./color-gradient-input/color-gradient-input";
 
 export function getInputFormWithOptions<T>(
   inputType: InputType,
@@ -133,7 +136,7 @@ export function getInputForm<T>(
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
 
-  console.log(inputType);
+  console.log(inputType, "INPUTTYPE!@@");
 
   switch (inputType) {
     case InputType.NUMBER: {
@@ -193,6 +196,28 @@ export function getInputForm<T>(
           {...inputProps}
           onChange={onChange}
           onInput={onInput}
+        />
+      );
+    }
+    case InputType.LINEAR_GRADIENT: {
+      return (
+        <LinearGradientInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+          onPreview={onPreview}
+        />
+      );
+    }
+    case InputType.COLOR_GRADIENT: {
+      return (
+        <ColorGradientInputForm
+          key={key}
+          {...inputProps}
+          onChange={onChange}
+          onInput={onInput}
+          onPreview={onPreview}
         />
       );
     }
@@ -269,6 +294,10 @@ export function getInputForm<T>(
     // }
     case InputType.TEXT: {
       return <TextInputForm key={key} {...inputProps} onInput={onChange} />;
+    }
+
+    case InputType.PASSWORD: {
+      return <PasswordInputForm key={key} {...inputProps} onInput={onChange} />;
     }
     case InputType.TEXTAREA: {
       return <TextAreaInputForm key={key} {...inputProps} onInput={onChange} />;

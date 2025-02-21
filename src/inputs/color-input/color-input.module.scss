@@ -105,3 +105,10 @@
 .colorButton {
   display: flex;
 }
+
+.noColor {
+  > svg {
+    margin-left: 10px;
+    margin-top: 2px;
+  }
+}

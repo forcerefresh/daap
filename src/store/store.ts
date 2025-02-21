@@ -27,6 +27,7 @@ import { ISettings } from "./reducers/i-settings";
 import { IClipboard } from "./reducers/i-clipboard";
 import { clipboard } from "./reducers/clipboard";
 import { account, IAccount } from "./reducers/account";
+import { ai, IAI } from "./reducers/ai";
 
 export interface IStore {
   project: {
@@ -49,6 +50,7 @@ export interface IStore {
   globals: IAppSettings;
   uiforms: IUIForms;
   fonts: IFonts;
+  ai: IAI;
 }
 
 const project = diff(
@@ -84,6 +86,7 @@ const rootReducer = combineReducers({
   editor,
   account,
   uiforms,
+  ai,
 }) as any;
 
 const logger = (store: any) => (next: any) => (action: any) => {

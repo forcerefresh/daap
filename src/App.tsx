@@ -9,6 +9,7 @@ import {
   doClearHistory,
   initializeSlideAndLayer,
   loadUserData,
+  setAIEnabled,
   setMyFonts,
   updateGlobalConfiguration,
 } from "./store/actions/actions";
@@ -19,6 +20,7 @@ import animejs from "animejs";
 import { AppToaster } from "./utils/components/app-toaster/AppToaster";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
+import axios from "axios";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -33,6 +35,7 @@ function App(props: IAppProps) {
     _doClearHistory,
     _loadUserData,
     _setMyFonts,
+    _setAIEnabled,
     theme,
     className,
   } = props;
@@ -123,6 +126,16 @@ function App(props: IAppProps) {
     document.body.className = `bp5-${theme}`;
   }, [theme]);
 
+  // load ai info
+  useEffect(() => {
+    axios
+      .get("api/v1/ai/info")
+      .then((res) => {
+        _setAIEnabled(res.data.data);
+      })
+      .catch(() => void 0);
+  }, []);
+
   return (
     <div className={`${className}`}>
       <Editor />
@@ -146,6 +159,8 @@ const mapDispatchToProps = {
   _doClearHistory: () => doClearHistory(),
   _loadUserData: () => loadUserData(),
   _setMyFonts: (myFonts: SaaSMediaData[]) => setMyFonts(myFonts),
+  _setAIEnabled: (payload: { objectType: string; enabled: boolean }[]) =>
+    setAIEnabled(payload),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

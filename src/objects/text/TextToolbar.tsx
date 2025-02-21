@@ -4,7 +4,7 @@ import {
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
 import { cloneDeep } from "lodash-es";
-import { Button, Icon, Popover } from "@blueprintjs/core";
+import { Button, Icon, Popover, Spinner } from "@blueprintjs/core";
 import { IToolbarProps } from "../../utils/tools/types";
 import { TextValues } from "./text";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
@@ -18,23 +18,38 @@ import cx from "classnames";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";
 import { ColorInputForm } from "../../inputs/color-input/color-input";
 import AIContextMenu from "./AIContextMenu";
+import { connect } from "react-redux";
+import { IStore } from "../../store/store";
 
 const ICON_HEIGHT = 36;
 
 const alignArr = ["left", "center", "right", "justify"];
 
-export function TextToolbar(props: IToolbarProps): React.ReactElement {
-  const { mode, object, updateObject, updateObjectForPreview, deleteObject } =
-    props;
+type IToolbarMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  IToolbarProps;
+
+function TextToolbar(props: IToolbarMergedProps): React.ReactElement {
+  const {
+    mode,
+    object,
+    updateObject,
+    updateObjectForPreview,
+    deleteObject,
+    aiLoading,
+  } = props;
 
   const values = object?.properties as TextValues | undefined;
+  const isAILoading = aiLoading?.[object?.id];
 
   return (
     <>
       {object && values && (
         <div className={css.inputsHolder}>
           <Popover
-            content={<AIContextMenu />}
+            content={
+              <AIContextMenu onLoading={() => undefined} object={object} />
+            }
             placement="bottom-end"
             // tslint:disable-next-line jsx-no-lambda
             renderTarget={({ isOpen, ...p }) => (
@@ -44,10 +59,22 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
                 style={{ color: "rgb(110 240 239)" }}
                 className={cx(css.button, css.squareButton)}
                 icon={
-                  <Icon
-                    icon={"clean"}
-                    style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
-                  />
+                  isAILoading ? (
+                    <Spinner
+                      size={18}
+                      className={css.inlineSpinner}
+                      style={{
+                        marginLeft: "0px",
+                        marginRight: "15px",
+                        color: "rgb(110 240 239)",
+                      }}
+                    />
+                  ) : (
+                    <Icon
+                      icon={"clean"}
+                      style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
+                    />
+                  )
                 }
               ></Button>
             )}
@@ -201,3 +228,13 @@ export function TextToolbar(props: IToolbarProps): React.ReactElement {
     </>
   );
 }
+
+const mapStateToProps = (state: IStore) => {
+  const { aiLoading } = state.ai;
+
+  return { aiLoading };
+};
+
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TextToolbar);

@@ -1,6 +1,7 @@
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,
+  CREATE_NEW_PROJECT_FROM_EXISTING,
   UPDATE_PROJECT_META,
 } from "../actions/actions";
 
@@ -32,6 +33,9 @@ export function meta(state: IMeta = getMetaDefault(), action: ActionTypes) {
       };
     }
     case CREATE_NEW_PROJECT: {
+      return { ...getMetaDefault(), name: action.payload.name };
+    }
+    case CREATE_NEW_PROJECT_FROM_EXISTING: {
       return { ...getMetaDefault(), name: action.payload.name };
     }
     default:

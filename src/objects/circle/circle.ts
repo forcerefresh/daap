@@ -2,9 +2,11 @@ import { RGBColor } from "react-color";
 import {
   IButtonGroupInput,
   ICheckboxInput,
+  IColorGradientInput,
   IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
+  ILinearGradientValue,
   InputType,
   INumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
@@ -28,20 +30,21 @@ import {
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import { getSVGFill } from "../rectangle/shape-utils";
 
 export const CIRCLE = "io.forcerefresh.circle.object";
 
 export interface CircleValues {
   strokeWidth: string;
   strokeColor: RGBColor;
-  fillColor?: RGBColor;
+  fill: ILinearGradientValue | RGBColor;
   type?: "circle" | "ellipse";
 }
 
 export type CirclePropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
-  IColorInput<"fillColor">,
+  IColorGradientInput<"fill">,
   IButtonGroupInput<"type">
 ];
 
@@ -53,7 +56,7 @@ export function createCircleObject(
   const values: CircleValues = {
     strokeWidth: initialValue?.strokeWidth ?? "5",
     strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
-    fillColor: initialValue?.fillColor ?? undefined,
+    fill: initialValue?.fill ?? undefined,
     type: initialValue?.type ?? "ellipse",
   };
 
@@ -79,9 +82,9 @@ export function getCircleObjectForm(): CirclePropertiesTuple {
       defaultValue: { r: 255, g: 255, b: 255, a: 1 },
     },
     {
-      displayName: "Fill color",
-      propertyName: "fillColor",
-      inputType: InputType.COLOR,
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR_GRADIENT,
       value: { r: 255, g: 255, b: 255, a: 0.1 },
       defaultValue: { r: 255, g: 255, b: 255, a: 0.1 },
     },
@@ -115,6 +118,8 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
 
   let element = "";
 
+  const fillObj = getSVGFill(circleValues.fill, object.id);
+
   if (circleValues.type === "ellipse") {
     const cx = parseFloat(calculatedObjectSize.width) / 2;
     const cy = parseFloat(calculatedObjectSize.height) / 2;
@@ -124,9 +129,7 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
       circleValues.strokeWidth
     }" stroke="${
       convertRGBColor2CSSStyle(circleValues.strokeColor).backgroundColor
-    }" fill="${
-      convertRGBColor2CSSStyle(circleValues.fillColor).backgroundColor
-    }" />`;
+    }"  ${fillObj.fillAttr} />`;
   } else {
     const minSize = Math.min(
       parseFloat(calculatedObjectSize.width),
@@ -136,13 +139,12 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
       minSize / 2
     }" stroke-width="${circleValues.strokeWidth}" stroke="${
       convertRGBColor2CSSStyle(circleValues.strokeColor).backgroundColor
-    }" fill="${
-      convertRGBColor2CSSStyle(circleValues.fillColor).backgroundColor
-    }" />`;
+    }"  ${fillObj.fillAttr} />`;
   }
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${object.height}" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      ${fillObj.gradient}  
       ${element}
     </svg>`;
 

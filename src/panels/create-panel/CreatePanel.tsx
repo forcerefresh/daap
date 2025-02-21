@@ -1,12 +1,28 @@
-import { Button, Card, Divider, Elevation } from "@blueprintjs/core";
-import React, { useContext, useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  Divider,
+  Elevation,
+  Radio,
+  RadioGroup,
+} from "@blueprintjs/core";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./CreatePanel.module.scss";
 import {
+  activateSlide,
   addNewObject,
   CreateNewProjectActionPayload,
+  doClearHistory,
+  openProject,
+  selectForProperties,
+  selectForPropertiesProps,
+  selectSlides,
+  setDevice,
+  updateEditor,
+  updateProjectMeta,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getAppObjectDefinitionsByGroup } from "webslider-sdk/lib/objects/objects-register";
@@ -14,11 +30,24 @@ import SVG from "react-inlinesvg";
 import { IntegrationContext } from "../../integration";
 import { getTextField, getUnitNumericFiled } from "../../inputs/input-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
-import { setupNewProject } from "../../store/actions/multi-actions";
+import {
+  setupNewProject,
+  setupNewProjectFromExisting,
+} from "../../store/actions/multi-actions";
 import {
   PanelHeader,
   RightPanelHeader,
 } from "../common/panel-header/PanelHeader";
+import e from "express";
+import {
+  generatePlayerData,
+  getAllAssetsUrls,
+  getAllFonts,
+} from "../../export/export-html";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { IMeta } from "../../store/reducers/meta";
+import { ISettings } from "../../store/reducers/i-settings";
+import { cloneDeep, last } from "lodash-es";
 
 interface ICreatePanelProps {
   onRequestClose: () => void;
@@ -148,12 +177,79 @@ export type ICreatePanelMergedProps = typeof mapDispatchToProps &
   ICreatePanelProps;
 
 const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
-  const { onRequestClose, themeClass, _setupNewProject } = props;
+  const {
+    onRequestClose,
+    themeClass,
+    _setupNewProject,
+    project,
+    breakpointConfig,
+    settings,
+    breakpoints,
+    _updateProjectMeta,
+    _doClearHistory,
+    _openProject,
+    _setDevice,
+    _activateSlide,
+    _selectSlides,
+    _selectForProperties,
+    _updateEditor,
+    _setupNewProjectFromExisting,
+  } = props;
+
+  const globalContext = useContext(IntegrationContext);
+  const { getInstalledExtensions } = globalContext.useExtensionsHook();
+
+  const [content, setContent] = useState<"empty" | "copy">("empty");
 
   const renderObjectsCardsGroup = (group: string) => {
     const newDeffs = getDocuments(group);
     return renderObjectsCards(newDeffs);
   };
+
+  const createNewProject = useCallback(
+    async ({
+      width,
+      height,
+      name,
+    }: {
+      width: string;
+      height: string;
+      name: string;
+    }) => {
+      if (content === "empty") {
+        _setupNewProject({
+          width,
+          height,
+          name,
+        });
+        return;
+      }
+
+      _setupNewProjectFromExisting({
+        width,
+        height,
+        name,
+      });
+
+      const slideIdToSelect = project.pages.pages[0];
+      if (slideIdToSelect) {
+        _activateSlide(slideIdToSelect);
+        _selectSlides([slideIdToSelect]);
+        _selectForProperties({ id: slideIdToSelect, type: "slide" });
+      }
+
+      _doClearHistory();
+      _updateEditor({ sliderChanged: true, isExistingProject: false });
+      _doClearHistory();
+    },
+    [
+      _doClearHistory,
+      _setupNewProject,
+      _setupNewProjectFromExisting,
+      _updateEditor,
+      content,
+    ]
+  );
 
   const renderObjectsCards = (newDeffs: IDocumentDeff[]) => {
     return (
@@ -169,7 +265,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
             <ChangeCheckerButton
               minimal
               onAllow={() => {
-                _setupNewProject({
+                createNewProject({
                   height: (deff.size?.height ?? 1080) + "px",
                   width: (deff.size?.width ?? 1080) + "px",
                   name:
@@ -250,6 +346,39 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
       <RightPanelHeader>
         <div>CREATE DOCUMENT</div>
       </RightPanelHeader>
+
+      <section>
+        <div>
+          <div
+            className={css.sectionHeader}
+            // onClick={() => toggleSection(FontSections.GoogleFonts)}
+          >
+            {/* <Button
+              minimal
+              small={true}
+              icon={
+                // visibleSectionIds[FontSections.GoogleFonts]
+                // ?
+                "caret-down"
+                // : "caret-right"
+              }
+            ></Button> */}
+            Content
+          </div>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          <RadioGroup
+            onChange={(e) =>
+              setContent(e.currentTarget.value as "empty" | "copy")
+            }
+            selectedValue={content}
+          >
+            <Radio label="Empty document" value="empty" />
+            <Radio label="Copy current document" value="copy" />
+          </RadioGroup>
+        </div>
+      </section>
+
       <section>
         <div>
           <div
@@ -311,7 +440,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
             </div>
             <ChangeCheckerButton
               onAllow={() => {
-                _setupNewProject(newProjectData);
+                createNewProject(newProjectData);
                 onRequestClose();
               }}
               onDenied={() => {}}
@@ -414,7 +543,17 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
+  const breakpointConfig: BreakpointConfiguration | undefined = last(
+    state.project.settings.breakpoints.breakpointsConfiguration.filter(
+      (bc) => bc.enabled
+    )
+  );
+
   return {
+    settings: state.project.settings,
+    breakpoints: state.project.settings.breakpoints,
+    breakpointConfig,
+    project: state.project,
     themeClass: state.project.settings.themeClass,
   };
 };
@@ -422,6 +561,25 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _setupNewProject: (props: CreateNewProjectActionPayload) =>
     setupNewProject(props),
+
+  _setupNewProjectFromExisting: (props: CreateNewProjectActionPayload) =>
+    setupNewProjectFromExisting(props),
+
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
+  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _openProject: (project: any) => openProject(project),
+  _doClearHistory: () => doClearHistory(),
+  _activateSlide: (id: string): any => activateSlide(id),
+  _selectSlides: (ids: string[]): any => selectSlides(ids),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
+  _setDevice: setDevice,
+  _updateEditor: updateEditor,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreatePanel);

@@ -12,7 +12,7 @@ import {
   getRectangleHtml,
   RECTANGLE,
   RectangleValues,
-} from "../../objects/rect/rectangle";
+} from "../../objects/rectangle/rectangle";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import {
   CIRCLE,
@@ -132,7 +132,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     const properties = {
       strokeWidth: strokeWidth,
       strokeColor: { r: 0, g: 0, b: 0, a: 1 },
-      fillColor: { r: 120, g: 120, b: 120, a: 1 },
+      fill: { r: 120, g: 120, b: 120, a: 1 },
       sides,
     };
 
@@ -145,7 +145,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     polyObj.properties = {
       strokeWidth: strokeWidth,
       strokeColor: { r: 200, g: 200, b: 200, a: 1 },
-      fillColor: { r: 80, g: 80, b: 80, a: 1 },
+      fill: { r: 80, g: 80, b: 80, a: 1 },
       sides,
     };
 
@@ -183,7 +183,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     const properties = {
       strokeWidth: strokeWidth,
       strokeColor: { r: 0, g: 0, b: 0, a: 1 },
-      fillColor: { r: 120, g: 120, b: 120, a: 1 },
+      fill: { r: 120, g: 120, b: 120, a: 1 },
       points,
       radius,
     };
@@ -197,7 +197,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     rectObj.properties = {
       strokeWidth: strokeWidth,
       strokeColor: { r: 200, g: 200, b: 200, a: 1 },
-      fillColor: { r: 80, g: 80, b: 80, a: 1 },
+      fill: { r: 80, g: 80, b: 80, a: 1 },
       points,
       radius,
     };
@@ -232,7 +232,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     const properties = {
       strokeWidth: "5",
       strokeColor: { r: 0, g: 0, b: 0, a: 1 },
-      fillColor: { r: 120, g: 120, b: 120, a: 1 },
+      fill: { r: 120, g: 120, b: 120, a: 1 },
       type,
     };
 
@@ -245,7 +245,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     rectObj.properties = {
       strokeWidth: "2",
       strokeColor: { r: 200, g: 200, b: 200, a: 1 },
-      fillColor: { r: 80, g: 80, b: 80, a: 1 },
+      fill: { r: 80, g: 80, b: 80, a: 1 },
       type,
     };
 
@@ -280,7 +280,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
     rectObj.properties = {
       strokeWidth: "2",
       strokeColor: { r: 200, g: 200, b: 200, a: 1 },
-      fillColor: { r: 80, g: 80, b: 80, a: 1 },
+      fill: { r: 80, g: 80, b: 80, a: 1 },
       cornerRadius: r,
     };
 

@@ -1,20 +1,26 @@
 .main {
-  background: #222;
+  background: #eee;
   height: 100vh;
 }
-.bg {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  height: 450px;
-  top: 0px;
-  left: 0px;
-  z-index: -1000;
-  background-image: url("./bg-3.png");
-  background-size: 100%;
-  background-position: 0px -250px;
-  opacity: 0.3;
+:global(.bp5-dark) {
+  .main {
+    background: #222;
+  }
 }
+
+// .bg {
+//   position: absolute;
+//   left: 0px;
+//   right: 0px;
+//   height: 450px;
+//   top: 0px;
+//   left: 0px;
+//   z-index: -1000;
+//   background-image: url("./bg-3.png");
+//   background-size: 100%;
+//   background-position: 0px -250px;
+//   opacity: 0.3;
+// }
 .saasHeader {
   height: 52px;
   z-index: 1000;

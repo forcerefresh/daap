@@ -1745,7 +1745,7 @@ function handleObjectUpdate(
 
   // TODO: REMOVE TO POSTPROCESS
   switch (object.type) {
-    case "text":
+    case TEXT:
     case RICH_TEXT: {
       handleTextUpdate(object, dispatch, getState, undefined, !isPreview);
       break;
@@ -2214,6 +2214,48 @@ export function setStagePan(pan: { x: number; y: number }): SetPanFitAction {
 
 // ******
 
+export const AI_ENABLE = "AI enable";
+
+export interface AIEnableAction extends IUndoableAction<false> {
+  type: typeof AI_ENABLE;
+  payload: { objectType: string; enabled: boolean }[];
+}
+
+export function setAIEnabled(
+  payload: {
+    objectType: string;
+    enabled: boolean;
+  }[]
+): AIEnableAction {
+  return {
+    type: AI_ENABLE,
+    payload,
+    isUndoable: false,
+  };
+}
+// ******
+
+export const AI_REQUEST_LOADING = "AI request loading";
+
+export interface AIRequestLoadingAction extends IUndoableAction<false> {
+  type: typeof AI_REQUEST_LOADING;
+  payload: { objectId: string; loading: boolean };
+}
+
+export function setAIRequestLoading(payload: {
+  objectId: string;
+  loading: boolean;
+}): AIRequestLoadingAction {
+  return {
+    type: AI_REQUEST_LOADING,
+    payload,
+    isUndoable: false,
+  };
+}
+// ******
+
+// ******
+
 export const NEXT_TEXT_POSITION = "Next text position";
 
 export interface NextTextPositionAction extends IUndoableAction<false> {
@@ -2597,6 +2639,27 @@ export function createNewProject(
 ): CreateNewProjectAction {
   return {
     type: CREATE_NEW_PROJECT,
+    isUndoable: false,
+    payload,
+  };
+}
+
+// ***
+
+export const CREATE_NEW_PROJECT_FROM_EXISTING =
+  "Create new project from existing";
+
+export interface CreateNewProjectFromExistingAction
+  extends IUndoableAction<false> {
+  type: typeof CREATE_NEW_PROJECT_FROM_EXISTING;
+  payload: CreateNewProjectActionPayload;
+}
+
+export function createNewProjectFromExisting(
+  payload: CreateNewProjectActionPayload
+): CreateNewProjectFromExistingAction {
+  return {
+    type: CREATE_NEW_PROJECT_FROM_EXISTING,
     isUndoable: false,
     payload,
   };
@@ -3018,6 +3081,7 @@ export type ActionTypes =
   // open project
   | OpenProjectAction
   | CreateNewProjectAction
+  | CreateNewProjectFromExistingAction
 
   // editor related actions
   | UpdateEditorAction
@@ -3038,4 +3102,6 @@ export type ActionTypes =
   | PasteObjectsFromClipboardAction
   | UpdateUserDataAction
   | ShowSimplifiedLayersAction
-  | ShowSimplifiedPagesAction;
+  | ShowSimplifiedPagesAction
+  | AIRequestLoadingAction
+  | AIEnableAction;

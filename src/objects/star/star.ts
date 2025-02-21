@@ -1,9 +1,11 @@
 import { RGBColor } from "react-color";
 import {
   IButtonGroupInput,
+  IColorGradientInput,
   IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
+  ILinearGradientValue,
   InputType,
   INumberInput,
   ISliderInput,
@@ -28,6 +30,7 @@ import {
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import { getSVGFill } from "../rectangle/shape-utils";
 
 export const STAR = "io.forcerefresh.star.object";
 
@@ -35,7 +38,7 @@ export interface StarValues {
   strokeWidth: string;
   strokeColor: RGBColor;
   strokeLineJoin?: "miter" | "round" | "bevel";
-  fillColor?: RGBColor;
+  fill: ILinearGradientValue | RGBColor;
   points?: number;
   radius?: number;
 }
@@ -44,7 +47,7 @@ export type StarPropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
   IButtonGroupInput<"strokeLineJoin">,
-  IColorInput<"fillColor">,
+  IColorGradientInput<"fill">,
   INumberInput<"points">,
   ISliderInput<"radius">
 ];
@@ -57,7 +60,7 @@ export function createStarObject(
   const values: StarValues = {
     strokeWidth: initialValue?.strokeWidth ?? "5",
     strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
-    fillColor: initialValue?.fillColor ?? undefined,
+    fill: initialValue?.fill ?? undefined,
     points: initialValue?.points ?? 5,
     radius: initialValue?.radius ?? 50, // inner radius
     strokeLineJoin: initialValue?.strokeLineJoin ?? "miter", // inner radius
@@ -106,9 +109,9 @@ export function getStarObjectForm(): StarPropertiesTuple {
       ],
     },
     {
-      displayName: "Fill color",
-      propertyName: "fillColor",
-      inputType: InputType.COLOR,
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR_GRADIENT,
       value: { r: 255, g: 255, b: 255, a: 0.1 },
       defaultValue: { r: 255, g: 255, b: 255, a: 0.1 },
     },
@@ -150,17 +153,16 @@ export function getStarHtml(props: GetHtmlFuncPropsType) {
     starValues.radius ?? 50
   );
 
-  console.log(path);
+  const fillObj = getSVGFill(starValues.fill, object.id);
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
     object.height
   }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      ${fillObj.gradient}   
       <path  d="${path}" stroke-width="${starValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(starValues.strokeColor).backgroundColor
-  }" fill="${
-    convertRGBColor2CSSStyle(starValues.fillColor).backgroundColor
-  }" stroke-linejoin="${starValues.strokeLineJoin}"></path>
+  }" ${fillObj.fillAttr} stroke-linejoin="${starValues.strokeLineJoin}"></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }

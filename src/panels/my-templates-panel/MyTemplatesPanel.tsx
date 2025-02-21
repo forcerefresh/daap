@@ -177,7 +177,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       const project: {
         // NOTE: there are other props. We need only settings from project
         settings: ISettings;
-        slides: IPages;
+        pages: IPages;
       } = response.project;
 
       // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);

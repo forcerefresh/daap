@@ -1,8 +1,11 @@
 import { RGBColor } from "react-color";
 import {
+  IColorGradientInput,
   IColorInput,
   ICornerRadiusInput,
   ICornerRadiusValue,
+  IGradientInput,
+  ILinearGradientValue,
   InputType,
   INumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
@@ -26,20 +29,28 @@ import {
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import {
+  FormType,
+  IFormGroupItem,
+  IFormSwitchGroup,
+  IFormSwitchGroupItem,
+} from "webslider-sdk/lib/form/i-form-layout";
+import { values } from "lodash-es";
+import { getSVGFill } from "./shape-utils";
 
 export const RECTANGLE = "io.forcerefresh.rectangle.object";
 
 export interface RectangleValues {
   strokeWidth: string;
   strokeColor: RGBColor;
-  fillColor?: RGBColor;
+  fill: ILinearGradientValue | RGBColor;
   cornerRadius?: ICornerRadiusValue | string;
 }
 
 export type RectanglePropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
-  IColorInput<"fillColor">,
+  IColorGradientInput<"fill">,
   ICornerRadiusInput<"cornerRadius">
 ];
 
@@ -51,7 +62,7 @@ export function createRectangleObject(
   const values: RectangleValues = {
     strokeWidth: initialValue?.strokeWidth ?? "5",
     strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
-    fillColor: initialValue?.fillColor ?? undefined,
+    fill: { r: 99, g: 99, b: 99, a: 1 },
     cornerRadius: initialValue?.cornerRadius ?? "0px",
   };
 
@@ -77,11 +88,11 @@ export function getRectangleObjectForm(): RectanglePropertiesTuple {
       defaultValue: { r: 255, g: 255, b: 255, a: 1 },
     },
     {
-      displayName: "Fill color",
-      propertyName: "fillColor",
-      inputType: InputType.COLOR,
-      value: { r: 255, g: 255, b: 255, a: 0.1 },
-      defaultValue: { r: 255, g: 255, b: 255, a: 0.1 },
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR_GRADIENT,
+      value: { r: 99, g: 99, b: 99, a: 1 },
+      defaultValue: { r: 99, g: 99, b: 99, a: 1 },
     },
     {
       displayName: "Corner",
@@ -135,17 +146,16 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
     r.bl
   );
 
-  console.log(path);
+  const fillObj = getSVGFill(rectValues.fill, object.id);
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
     object.height
   }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  ${fillObj.gradient}
       <path  d="${path}" stroke-width="${rectValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(rectValues.strokeColor).backgroundColor
-  }" fill="${
-    convertRGBColor2CSSStyle(rectValues.fillColor).backgroundColor
-  }"></path>
+  }" ${fillObj.fillAttr}></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }

@@ -16,6 +16,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
     onInput = noop,
     inputProps = {},
     propertyName,
+    helperText,
   } = props;
   const { rows = 5 } = inputProps;
 
@@ -46,7 +47,11 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
   const inputLabel = createInputLabel(displayName, propertyName);
 
   return (
-    <FormGroup label={inputLabel} labelFor="textarea-input">
+    <FormGroup
+      label={inputLabel}
+      labelFor="textarea-input"
+      helperText={helperText}
+    >
       <TextArea
         id="textarea-input"
         growVertically={true}

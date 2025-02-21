@@ -20,6 +20,7 @@ import {
   SELECT_FOR_PROPERTIES,
   selectForPropertiesProps,
   UNGROUP_OBJECTS,
+  CREATE_NEW_PROJECT_FROM_EXISTING,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { cloneDeep, uniq } from "lodash-es";
@@ -285,7 +286,8 @@ export function selection(
         ...action.payload.selection,
       };
     }
-    case CREATE_NEW_PROJECT: {
+    case CREATE_NEW_PROJECT:
+    case CREATE_NEW_PROJECT_FROM_EXISTING: {
       return getSelectionDefault();
     }
     default:

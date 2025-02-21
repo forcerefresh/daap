@@ -2,7 +2,9 @@ import { RGBColor } from "react-color";
 import {
   IButtonGroupInput,
   ICheckboxInput,
+  IColorGradientInput,
   IColorInput,
+  ILinearGradientValue,
   InputType,
   INumberInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
@@ -26,6 +28,7 @@ import {
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
+import { getSVGFill } from "../rectangle/shape-utils";
 
 export const POLYGON = "io.forcerefresh.polygon.object";
 
@@ -33,7 +36,7 @@ export interface PolygonValues {
   strokeWidth: string;
   strokeColor: RGBColor;
   strokeLineJoin?: "miter" | "round" | "bevel";
-  fillColor?: RGBColor;
+  fill: ILinearGradientValue | RGBColor;
   sides?: number;
   shiftAngle?: boolean;
 }
@@ -42,7 +45,7 @@ export type PolygonPropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
   IButtonGroupInput<"strokeLineJoin">,
-  IColorInput<"fillColor">,
+  IColorGradientInput<"fill">,
   INumberInput<"sides">,
   ICheckboxInput<"shiftAngle">
 ];
@@ -55,7 +58,7 @@ export function createPolygonObject(
   const values: PolygonValues = {
     strokeWidth: initialValue?.strokeWidth ?? "5",
     strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
-    fillColor: initialValue?.fillColor ?? undefined,
+    fill: initialValue?.fill ?? undefined,
     strokeLineJoin: initialValue?.strokeLineJoin ?? "miter", // inner radius
     sides: initialValue?.sides ?? 6,
     shiftAngle: initialValue?.shiftAngle ?? false,
@@ -104,9 +107,9 @@ export function getPolygonObjectForm(): PolygonPropertiesTuple {
       ],
     },
     {
-      displayName: "Fill color",
-      propertyName: "fillColor",
-      inputType: InputType.COLOR,
+      displayName: "Fill",
+      propertyName: "fill",
+      inputType: InputType.COLOR_GRADIENT,
       value: { r: 255, g: 255, b: 255, a: 0.1 },
       defaultValue: { r: 255, g: 255, b: 255, a: 0.1 },
     },
@@ -148,17 +151,18 @@ export function getPolygonHtml(props: GetHtmlFuncPropsType) {
     polygonValues.shiftAngle
   );
 
-  console.log(path);
+  const fillObj = getSVGFill(polygonValues.fill, object.id);
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
     object.height
   }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      ${fillObj.gradient}   
       <path  d="${path}" stroke-width="${polygonValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(polygonValues.strokeColor).backgroundColor
-  }" fill="${
-    convertRGBColor2CSSStyle(polygonValues.fillColor).backgroundColor
-  }" stroke-linejoin="${polygonValues.strokeLineJoin}"></path>
+  }" ${fillObj.fillAttr}  stroke-linejoin="${
+    polygonValues.strokeLineJoin
+  }"></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }

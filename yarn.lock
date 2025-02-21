@@ -15859,10 +15859,10 @@ webslider-sdk@^1.1.144:
   resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.144.tgz#ff9a41bd09fc66ae2a9b4886092bb7d38709d6ee"
   integrity sha512-rrwOj+e90IkqxUIQylrOgOfDUcuKUhObgsHyJPxYuaN5jlBKdXpW51jfaM+OeWbJKj87J737Q2iQZoKrg2Gw/A==
 
-webslider-sdk@^1.1.163:
-  version "1.1.163"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.163.tgz#7fab8f8414c4d4ff27b62c61fdde720418d1fd17"
-  integrity sha512-BhBdb2ClqL6I1OFelltvpW6Z/hLMoX3uBb0W+AjSZ2RFkvVvSdPgl0EbLT1TofPqgCzOnZvIW8OVvJbInx8cNg==
+webslider-sdk@^1.1.167:
+  version "1.1.167"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.167.tgz#c4f25d86453477fe9af95fe3a61e213a67546175"
+  integrity sha512-Qjn3u1u4/8EDCCnG38Rrt08DQf+BXpp9EusOXcvQaWdU3mNH9+T6ysg02MbpM9tq76jel9hpGoQHSrpyqalPow==
   dependencies:
     "@types/lodash-es" "^4.17.12"
     lodash-es "^4.17.21"

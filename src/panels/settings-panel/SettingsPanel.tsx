@@ -10,6 +10,7 @@ import { IntegrationContext } from "../../integration";
 import AppSettingsPanel from "../app-settings-panel/AppSettingsPanel";
 import LicenseSettingsPanel from "../license-settings-panel/LicenseSettingsPanel";
 import AccountSettingsPanel from "../account-settings-panel/AccountSettingsPanel";
+import AITextSettingsPanel from "../ai-settings-panel/AITextSettingsPanel";
 
 interface ISettingsPanelProps {
   onRequestClose: () => void;
@@ -45,7 +46,11 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
   return (
     <div className={cx("bp5-dark", css.settingsPanel)}>
       <div>
-        <Tabs className={css.tabs} defaultSelectedTabId={defaultSelectedTabId}>
+        <Tabs
+          className={css.tabs}
+          defaultSelectedTabId={defaultSelectedTabId}
+          renderActiveTabPanelOnly={true}
+        >
           <Tab id="project" title="Project Settings" panel={<ProjectPanel />} />
           <Tab id="global" title="App Settings" panel={<AppSettingsPanel />} />
           {supportStorageObjects && (
@@ -57,6 +62,11 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
           )}
           <Tab id="license" title="License" panel={<LicenseSettingsPanel />} />
           <Tab id="account" title="Account" panel={<AccountSettingsPanel />} />
+          <Tab
+            id="ai"
+            title="AI Text Assistant"
+            panel={<AITextSettingsPanel />}
+          />
 
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}

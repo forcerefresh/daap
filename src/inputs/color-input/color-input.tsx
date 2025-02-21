@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { debounce, isEqual, throttle } from "lodash-es";
 import cx from "classnames";
-import { Button, FormGroup, Popover } from "@blueprintjs/core";
+import { Button, FormGroup, Icon, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
@@ -41,8 +41,8 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const [state, setState] = useState<{
     displayColorPicker: boolean;
-    initialColor: RGBColor;
-    color: RGBColor;
+    initialColor?: RGBColor;
+    color?: RGBColor;
   }>({
     displayColorPicker: false,
     color: colorFromProp,
@@ -63,7 +63,7 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     ) {
       setState({ ...state, initialColor: colorFromProp });
     }
-  }, [colorFromProp, state]); //
+  }, [colorFromProp, state]);
 
   const handleClick = () => {
     setState({
@@ -94,21 +94,27 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const { initialColor, color } = state;
   const style = {
-    background: `rgba(${initialColor.r}, ${initialColor.g}, ${initialColor.b}, ${initialColor.a})`,
+    background: initialColor
+      ? `rgba(${initialColor.r}, ${initialColor.g}, ${initialColor.b}, ${initialColor.a})`
+      : "transparent",
   };
 
   const styleCurrent = {
-    background: `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`,
+    background: color
+      ? `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`
+      : "transparent",
   };
 
   useEventListener("keydown", (event: any) => {
     if (event.keyCode === 27) {
+      // ESC
       setState({
         ...state,
         color: state.initialColor,
         displayColorPicker: false,
       });
     } else if (event.keyCode === 13) {
+      // ENTER
       setState({
         ...state,
         displayColorPicker: false,
@@ -135,77 +141,110 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
             className={cx("color-picker-holder", css.popoverContent)}
             ref={colorPickerHolderRef}
           >
-            <div>
-              <SketchPicker color={state.color} onChange={handleChange} />
-            </div>
-            <div className={css.actionHolder}>
-              <div className={css.buttonHolder}>
+            <section>[][][][]</section>
+            <section>
+              <div>
+                <SketchPicker color={state.color} onChange={handleChange} />
+              </div>
+              <div className={css.actionHolder}>
+                <div className={css.buttonHolder}>
+                  <Button
+                    className={cx(css.colorButton)}
+                    //  icon="tick"
+                    onClick={handleApply}
+                    icon={
+                      <div
+                        id="color-input"
+                        className={cx(css.swatch, css.squareSwatch)}
+                        tabIndex={1}
+                      >
+                        <BackgroundSVG style={{ position: "absolute" }} />
+                        <div className={css.color} style={styleCurrent} />
+                      </div>
+                    }
+                  >
+                    Apply
+                  </Button>
+                  <Button
+                    icon={
+                      <div
+                        id="color-input"
+                        className={cx(css.swatch, css.squareSwatch)}
+                        tabIndex={1}
+                      >
+                        <BackgroundSVG style={{ position: "absolute" }} />
+                        <div className={css.color} style={style} />
+                      </div>
+                    }
+                    className={css.colorButton}
+                    onClick={handleClose}
+                    intent="none"
+                    minimal
+                  >
+                    Cancel
+                  </Button>
+                </div>
+
                 <Button
                   className={cx(css.colorButton)}
                   //  icon="tick"
-                  onClick={handleApply}
-                  icon={
-                    <div
-                      id="color-input"
-                      className={cx(css.swatch, css.squareSwatch)}
-                      tabIndex={1}
-                    >
-                      <BackgroundSVG style={{ position: "absolute" }} />
-                      <div className={css.color} style={styleCurrent} />
-                    </div>
-                  }
-                >
-                  Apply
-                </Button>
-                <Button
-                  icon={
-                    <div
-                      id="color-input"
-                      className={cx(css.swatch, css.squareSwatch)}
-                      tabIndex={1}
-                    >
-                      <BackgroundSVG style={{ position: "absolute" }} />
-                      <div className={css.color} style={style} />
-                    </div>
-                  }
-                  className={css.colorButton}
-                  onClick={handleClose}
-                  intent="none"
                   minimal
-                >
-                  Cancel
-                </Button>
+                  onClick={() => {
+                    onChange(undefined);
+                    setState({
+                      color: undefined,
+                      initialColor: undefined,
+                      displayColorPicker: false,
+                    });
+                  }}
+                  icon={<Icon size={20} icon="disable" intent="danger" />}
+                />
+
+                <Button
+                  icon={<ColorPickerIcon style={{ width: "20px" }} />}
+                  minimal
+                  onClick={() => {
+                    if (!EyeDropperClass) {
+                      return;
+                    }
+
+                    const eyeDropper = new EyeDropperClass();
+
+                    eyeDropper
+                      .open()
+                      .then((result: any) => {
+                        handleChange({ rgb: hexToRGB(result.sRGBHex) });
+                      })
+                      .catch((_e: any) => {});
+                  }}
+                />
               </div>
-              <Button
-                icon={<ColorPickerIcon style={{ width: "20px" }} />}
-                minimal
-                onClick={() => {
-                  if (!EyeDropperClass) {
-                    return;
-                  }
-
-                  const eyeDropper = new EyeDropperClass();
-
-                  eyeDropper
-                    .open()
-                    .then((result: any) => {
-                      handleChange({ rgb: hexToRGB(result.sRGBHex) });
-                    })
-                    .catch((_e: any) => {});
-                }}
-              />
-            </div>
+            </section>
           </div>
         }
       >
         <div
           id="color-input"
-          className={cx(css.swatch, inputProps?.swatchClassName)}
+          className={cx({
+            [css.swatch]: true,
+            [inputProps?.swatchClassName!]: true,
+          })}
           onClick={handleClick}
           tabIndex={1}
         >
-          <BackgroundSVG style={{ position: "absolute" }} />
-          <div className={css.color} style={style} />
+          {color ? (
+            <>
+              <BackgroundSVG style={{ position: "absolute" }} />
+              <div className={css.color} style={style} />
+            </>
+          ) : (
+            <Icon
+              size={18}
+              icon="disable"
+              intent="danger"
+              className={css.noColor}
+            />
+          )}
         </div>
       </Popover>
     </FormGroup>

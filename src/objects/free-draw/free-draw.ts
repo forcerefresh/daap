@@ -32,7 +32,7 @@ import { bezierArr2Path } from "./utils";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import { convertRGBColor2CSSStyle } from "webslider-sdk/lib/utils/utils";
 
-export const FREE_DRAW = "free-draw";
+export const FREE_DRAW = "io.forcerefresh.free-draw.object";
 
 export interface FreeDrawValues {
   beziers: IBezier[];
@@ -122,11 +122,13 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
   style = addTransformPropertiesToStyle(style, object, deviceType);
-  style += "width: 100%;";
-  style += "height: 100%;";
+  // style += "width: 100%;";
+  // style += "height: 100%;";
   return `
 <div class="object-content object-content-${object.id}" style="${style}">
-  <svg fill="none"  style="width: 100%; height: 100%; overflow:visible;">
+  <svg fill="none"  viewBox="0 0 ${object.width! > 1 ? object.width : 1} ${
+    object.height! > 1 ? object.height : 1
+  }"  style="width: 100%; height: 100%; overflow:visible;">
   ${pathsHtml}
   </svg>
 </div>`;

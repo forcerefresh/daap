@@ -16,6 +16,7 @@ import {
   CANCEL_OVERRIDE_STAGE_TOOL,
   SHOW_SIMPLIFIED_LAYERS,
   SHOW_SIMPLIFIED_PAGES,
+  CREATE_NEW_PROJECT_FROM_EXISTING,
 } from "../actions/actions";
 
 export interface IPreviewScope {
@@ -139,7 +140,8 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
         selectedDevice: action.payload,
       };
     }
-    case CREATE_NEW_PROJECT: {
+    case CREATE_NEW_PROJECT:
+    case CREATE_NEW_PROJECT_FROM_EXISTING: {
       return { ...state, ...omit(getStageDefault(), "stageViewportSize") };
     }
     case NEXT_TEXT_POSITION: {

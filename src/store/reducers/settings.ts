@@ -2,6 +2,7 @@ import { cloneDeep } from "lodash-es";
 import {
   ActionTypes,
   CREATE_NEW_PROJECT,
+  CREATE_NEW_PROJECT_FROM_EXISTING,
   CreateNewProjectActionPayload,
   OPEN_PROJECT,
   SET_THEME,
@@ -233,7 +234,8 @@ export function settings(
         ...action.payload.settings,
       };
     }
-    case CREATE_NEW_PROJECT: {
+    case CREATE_NEW_PROJECT:
+    case CREATE_NEW_PROJECT_FROM_EXISTING: {
       return getSettingsDefault({
         width: action.payload.width,
         height: action.payload.height,

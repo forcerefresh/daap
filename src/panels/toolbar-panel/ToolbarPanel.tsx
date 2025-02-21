@@ -63,7 +63,7 @@ import SavePanel from "../save-panel/SavePanel";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
 import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
 import ExportPanel from "../export-panel/ExportPanel";
-import { RECTANGLE } from "../../objects/rect/rectangle";
+import { RECTANGLE } from "../../objects/rectangle/rectangle";
 import ShapePreviewPanel from "../shape-preview-panel/ShapePreviewPanel";
 import { LINE } from "../../objects/line/line";
 enum VisiblePanel {

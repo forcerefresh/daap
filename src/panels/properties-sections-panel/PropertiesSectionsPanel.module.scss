@@ -41,10 +41,16 @@
 
   .buttonGroupsHolder {
     display: flex;
+
     // justify-content: center;
     //flex-direction: row;
     > * {
       display: inline-block;
+    }
+    :global {
+      button {
+        color: #abb3bf !important;
+      }
     }
   }
   .buttonGroupsHolder > div:last-of-type {

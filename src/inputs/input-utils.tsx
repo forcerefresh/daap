@@ -63,7 +63,8 @@ export function getColorField<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {}
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
+  onPreview?: any
 ) {
   const objectDef = {
     displayName: label,
@@ -74,7 +75,41 @@ export function getColorField<T>(
     inputProps,
   };
 
-  return getInputForm(InputType.COLOR, objectDef, onChange);
+  return getInputForm(
+    InputType.COLOR,
+    objectDef,
+    onChange,
+    undefined,
+    undefined,
+    onPreview
+  );
+}
+
+export function getLinearGradientField<T>(
+  label: string,
+  value: T,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: { disabled?: boolean; style?: React.CSSProperties } = {},
+  onPreview?: any
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.LINEAR_GRADIENT,
+    value: value,
+    defaultValue: value,
+    inputProps,
+  };
+
+  return getInputForm(
+    InputType.LINEAR_GRADIENT,
+    objectDef,
+    onChange,
+    undefined,
+    undefined,
+    onPreview
+  );
 }
 
 export function getColorArrayField<T>(
@@ -243,6 +278,31 @@ export function getTextField<T>(
   };
 
   return getInputForm(InputType.TEXT, objectDef, onChange);
+}
+
+export function getPasswordField<T>(
+  label: string,
+  value: T | undefined,
+  onChange: (value: T) => void,
+  helperText?: string,
+  inputProps: {
+    disabled?: boolean;
+    readOnly?: boolean;
+    placeholder?: string;
+    style?: React.CSSProperties;
+    autoFocus?: boolean;
+  } = {}
+) {
+  const objectDef = {
+    displayName: label,
+    helperText: helperText,
+    inputType: InputType.PASSWORD,
+    value: value,
+    defaultValue: "",
+    inputProps,
+  };
+
+  return getInputForm(InputType.PASSWORD, objectDef, onChange);
 }
 
 export function getInheritTimeField<T>(

@@ -138,8 +138,8 @@ import { registerObjectTool } from "./objectToolFactory";
 import FreeHandDrawTool from "./free-draw/free-draw-stage-tool";
 import TextTool from "./text/text-tool";
 import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
-import { TextToolbar } from "./text/TextToolbar";
-import { TextFloatingToolbar } from "./text/TextFloatingBar";
+import TextToolbar from "./text/TextToolbar";
+import TextFloatingToolbar from "./text/TextFloatingBar";
 import { ImageToolbar } from "./image/ImageToolbar";
 import {
   BLOB,
@@ -156,7 +156,7 @@ import {
   RECTANGLE,
   rectangleMeta,
   rectangleSizeUpdate,
-} from "./rect/rectangle";
+} from "./rectangle/rectangle";
 import {
   CIRCLE,
   circleMeta,
@@ -219,6 +219,31 @@ registerObjectTool({
   floatingBar: TextFloatingToolbar,
 });
 
+// forward compatibility
+registerObject(
+  "text",
+  "text",
+  textMeta,
+  createTextObject,
+  getTextObjectForm,
+  textSizeUpdate,
+  getTextHtml,
+  preloadText,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  getFonts
+);
+
+registerObjectTool({
+  type: "text",
+  meta: textMeta,
+  toolClass: TextTool,
+  toolBar: TextToolbar,
+  floatingBar: TextFloatingToolbar,
+});
 // -------------------------
 
 registerObject(
@@ -244,6 +269,31 @@ registerObjectTool({
   // floatingBar: TextFloatingToolbar,
 });
 
+// backward compatibility
+
+registerObject(
+  "image",
+  "media",
+  imageMeta,
+  createImageObject,
+  getImageObjectForm,
+  imageSizeUpdate,
+  getImageHtml,
+  preloadImage,
+  undefined,
+  undefined,
+  imagePostProcess,
+  getAssetsUrls
+);
+
+registerObjectTool({
+  type: "image",
+  meta: imageMeta,
+  // toolClass: TextTool,
+  toolBar: ImageToolbar,
+  // floatingBar: TextFloatingToolbar,
+});
+
 // -------------------------
 
 registerObject(
@@ -263,6 +313,29 @@ registerObject(
 
 registerObjectTool({
   type: FREE_DRAW,
+  meta: freeDrawMeta,
+  toolClass: FreeHandDrawTool,
+  toolBar: FreeDrawToolbar,
+});
+
+// backward compatibility
+registerObject(
+  "free-draw",
+  "media",
+  freeDrawMeta,
+  createFreeDrawObject,
+  getFreeDrawForm,
+  freeDrawSizeUpdate,
+  getFreeDrawHtml,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined
+);
+
+registerObjectTool({
+  type: "free-draw",
   meta: freeDrawMeta,
   toolClass: FreeHandDrawTool,
   toolBar: FreeDrawToolbar,

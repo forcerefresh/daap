@@ -45,7 +45,7 @@ import {
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
 
-export const TEXT = "text";
+export const TEXT = "io.forcerefresh.text.object";
 
 export enum TextType {
   H1 = "H1",

@@ -56,7 +56,7 @@ import {
 } from "webslider-sdk/lib/objects/common-properties-player";
 import { nlRemove } from "webslider-sdk/lib/utils/utils";
 
-export const IMAGE = "image";
+export const IMAGE = "io.forcerefresh.image.object";
 
 export interface ImageValues {
   fit: ICoverPlacementValue;
