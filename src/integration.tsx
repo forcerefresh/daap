@@ -431,10 +431,10 @@ export const IntegrationContext = React.createContext({
 
 /** return selector for app holder */
 export function useAppRootSelector() {
-  if (process.env.REACT_APP_INTEGRATION === "wp") {
-    return "WebSlider-RootContainer";
+  if (process.env.REACT_APP_INTEGRATION === "saas") {
+    return "daap-forcerefresh-root";
   } else {
-    return "root";
+    return "daap-forcerefresh-root";
   }
 }
 

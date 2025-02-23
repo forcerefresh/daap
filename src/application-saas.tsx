@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import cx from "classnames";
 import ReactDOM from "react-dom";
@@ -24,7 +30,7 @@ import {
 import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
 import Login from "./pages/login/Login";
-import { Button, HotkeysProvider } from "@blueprintjs/core";
+import { Button, HotkeysProvider, PortalProvider } from "@blueprintjs/core";
 import { ReactComponent as DaapLogo } from "./integration/components/main-header/daap-logo.svg";
 import "in-app-guide/src/style.css";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
@@ -116,14 +122,23 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
   //   }, 1000);
   // }, []);
 
+  const [portalRoot, setPortalRoot] = useState<any>();
+
+  useEffect(() => {
+    setPortalRoot(
+      document.getElementsByClassName("daap-forcerefresh-app")?.[0]
+    );
+  });
+
   return (
-    <DevelopmentContextProvider>
-      <IntegrationContextProvider>
-        <DevelopmentManager />
-        <ExportProvider>
-          <PreviewTimelineContextProvider>
-            <div className={css.main}>
-              {/* {renderSite && (
+    <PortalProvider portalContainer={portalRoot}>
+      <DevelopmentContextProvider>
+        <IntegrationContextProvider>
+          <DevelopmentManager />
+          <ExportProvider>
+            <PreviewTimelineContextProvider>
+              <div className={cx(css.main, "daap-forcerefresh-app")}>
+                {/* {renderSite && (
               <div
                 className={cx(css.siteHolder, { [css.hideSite]: showEditor })}
               >
@@ -183,13 +198,13 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
-              <div
-                className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
-              >
-                <MainHeader className={css.saasHeader} />
-                <App className={css.editor} />
-              </div>
-              {/* {renderSite && (
+                <div
+                  className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
+                >
+                  <MainHeader className={css.saasHeader} />
+                  <App className={css.editor} />
+                </div>
+                {/* {renderSite && (
               <div
                 className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
                 onClick={() => {
@@ -203,12 +218,13 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
-            </div>
-            <div ref={overlayRef} />
-          </PreviewTimelineContextProvider>
-        </ExportProvider>
-      </IntegrationContextProvider>
-    </DevelopmentContextProvider>
+              </div>
+              <div ref={overlayRef} />
+            </PreviewTimelineContextProvider>
+          </ExportProvider>
+        </IntegrationContextProvider>
+      </DevelopmentContextProvider>
+    </PortalProvider>
   );
 };
 
@@ -227,12 +243,14 @@ function application(): {
       // <React.StrictMode>
       <Provider store={store}>
         <HotkeysProvider>
-          <BrowserRouter>
+          <EditorConnected />
+
+          {/* <BrowserRouter>
             <Routes>
               <Route path="login" element={<Login />} />
               <Route index element={<EditorConnected />} />
             </Routes>
-          </BrowserRouter>
+          </BrowserRouter> */}
         </HotkeysProvider>
       </Provider>
       // </React.StrictMode>

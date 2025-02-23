@@ -33,8 +33,6 @@ export type ILicenseSettingsPanelMergedProps = typeof mapDispatchToProps &
 const LicenseSettingsPanel: React.FC<ILicenseSettingsPanelMergedProps> = (
   props
 ) => {
-  //const { globals, _updateGlobalConfiguration } = props;
-
   const globalContext = useContext(IntegrationContext);
   const { saveSerial, getLicenseDetails } = globalContext.useLicenseHook();
 
@@ -283,8 +281,6 @@ const mapStateToProps = (state: IStore) => ({
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),
-  _updateGlobalConfiguration: (globals: Partial<IAppSettings>) =>
-    updateGlobalConfiguration(globals),
 };
 
 export default connect(

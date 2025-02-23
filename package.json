@@ -19,6 +19,7 @@
     "start:proxy-server": "node server/index.js",
     "build:app": "react-scripts build",
     "build:app:electron": "env-cmd -f env/electron.prod.env react-scripts build",
+    "build:app:saas": "env-cmd -f env/saas.env -f env/secret.env react-scripts build",
     "build:main:electron": "env-cmd -f env/electron.prod.env webpack --config=electron-config/electron.build.webpack.js --env=production",
     "build:player": "env-cmd -f env/player.env react-scripts build",
     "bundle:player_DEL": "webpack --config bundle-player.webpack.config.js",
@@ -144,18 +145,6 @@
     "gulp-count": "^1.0.0",
     "webpack": "^5.70.0"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "build": {
     "appId": "io.webslider",
     "artifactName": "Web-Slider-App-v${version}-${arch}.${ext}",
@@ -203,6 +192,18 @@
         "owner": "forcerefresh",
         "repo": "webslider-snap"
       }
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ]
   }
 }

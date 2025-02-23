@@ -13,7 +13,7 @@ export const HelpMenu: React.FC<IHelpMenu> = (props) => {
   return (
     <Menu className={css.helpMenu}>
       <MenuDivider title={`WebSlider v${appVersion}`} />
-      <MenuItem
+      {/* <MenuItem
         icon={<LinkOut style={{ opacity: 0, width: "15px", height: "19px" }} />}
         text="Documentation"
         onClick={() => {
@@ -21,27 +21,27 @@ export const HelpMenu: React.FC<IHelpMenu> = (props) => {
           const { ipcRenderer } = window.require("electron");
           ipcRenderer.invoke("System::OpenDocs").then(() => {});
         }}
-      />
+      /> */}
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="Live Documentation"
         onClick={() => {
-          openExternalLink("https://webslider.io/docs/introduction");
+          openExternalLink("https://docs.daap.forcerefresh.io/");
         }}
       />
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="Support Forum"
         onClick={() => {
-          openExternalLink("https://support.webslider.io");
+          openExternalLink("https://support.forcerefresh.io");
         }}
       />
       <MenuDivider />
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Leave a Feedback"
+        text="DAAP website"
         onClick={() => {
-          openExternalLink("https://support.webslider.io/viewforum.php?f=12");
+          openExternalLink("https://forcerefresh.io/");
         }}
       />
     </Menu>
