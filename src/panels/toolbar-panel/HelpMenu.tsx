@@ -1,6 +1,6 @@
 import React from "react";
 import { Menu, MenuDivider, MenuItem } from "@blueprintjs/core";
-import { ReactComponent as LinkOut } from "../../assets/icons/link-out.svg";
+import LinkOut from "../../assets/icons/link-out.svg?react";
 import css from "./ToolbarPanel.module.scss";
 
 type IHelpMenu = {

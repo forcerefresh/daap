@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import css from "./SlideSmallTimeline.module.scss";
 import { Button, HTMLSelect } from "@blueprintjs/core";
-import { ReactComponent as RepeatIcon } from "../../assets/icons/repeat.svg";
+import RepeatIcon from "../../assets/icons/repeat.svg?react";
 import { IStore } from "../../store/store";
 import { IPreviewState } from "../../store/reducers/stage";
 import { setStagePreview } from "../../store/actions/actions";

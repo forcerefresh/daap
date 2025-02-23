@@ -1,9 +1,9 @@
 import React from "react";
 
-import { ReactComponent as PhoneIcon } from "../../assets/icons/phone.svg";
-import { ReactComponent as TabletIcon } from "../../assets/icons/tablet.svg";
-import { ReactComponent as LaptopIcon } from "../../assets/icons/laptop.svg";
-import { ReactComponent as MonitorIcon } from "../../assets/icons/monitor.svg";
+import PhoneIcon from "../../assets/icons/phone.svg?react";
+import TabletIcon from "../../assets/icons/tablet.svg?react";
+import LaptopIcon from "../../assets/icons/laptop.svg?react";
+import MonitorIcon from "../../assets/icons/monitor.svg?react";
 import { Icon } from "@blueprintjs/core";
 
 export function getResponsiveIcon(

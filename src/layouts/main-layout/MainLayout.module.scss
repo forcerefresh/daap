@@ -117,7 +117,7 @@
 
         :global {
           .propertiesPanel {
-            //height: calc(100vh - 67px);
+            //height: calc(var(--daap-forcerefresh-app-height) - 67px);
           }
         }
       }

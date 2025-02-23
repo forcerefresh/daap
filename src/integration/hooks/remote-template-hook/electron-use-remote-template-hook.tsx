@@ -34,7 +34,9 @@ export const useRemoteTemplateHook = () => {
     tags?: string[],
     apiKey?: string
   ): Promise<{ items: any[] }> => {
-    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?kind=template&api-key=${apiKey}`;
+    const apiUrl = `${
+      import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
+    }/api/v1?kind=template&api-key=${apiKey}`;
     let url = `${apiUrl}&from=${from}`;
 
     if (search) {

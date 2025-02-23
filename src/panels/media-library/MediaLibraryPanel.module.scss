@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   width: 720px;
-  height: calc(100vh - 52px);
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
   overflow: hidden;
 
   background: $pt-app-background-color;
@@ -62,7 +62,7 @@
   section {
     //THEME
     //box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
-    border: 1px dashed gray;
+    // border: 1px dashed gray;
     display: flex;
     flex-direction: column;
     margin-bottom: 10px;

@@ -3,14 +3,14 @@ import React, { useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 
-import { ReactComponent as IdIcon } from "./icons/id.svg";
-import { ReactComponent as PropertiesIcon } from "./icons/properties.svg";
+import IdIcon from "./icons/id.svg?react";
+import PropertiesIcon from "./icons/properties.svg?react";
 
-import { ReactComponent as AnimationIcon } from "./icons/animation.svg";
-import { ReactComponent as LinkIcon } from "./icons/link.svg";
-import { ReactComponent as LayoutIcon } from "./icons/layout.svg";
-import { ReactComponent as TransformIcon } from "./icons/transform.svg";
-import { ReactComponent as CommonStyleIcon } from "./icons/common-style.svg";
+import AnimationIcon from "./icons/animation.svg?react";
+import LinkIcon from "./icons/link.svg?react";
+import LayoutIcon from "./icons/layout.svg?react";
+import TransformIcon from "./icons/transform.svg?react";
+import CommonStyleIcon from "./icons/common-style.svg?react";
 import {
   PropertiesPanelContext,
   PropertiesPanelSection,

@@ -12,7 +12,9 @@ export const useExtensionsHook = () => {
     missingExtensions?: string[],
     apiKey?: string
   ): Promise<{ items: IExtensionItem[] }> => {
-    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?api-key=${apiKey}`;
+    const apiUrl = `${
+      import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
+    }/api/v1?api-key=${apiKey}`;
     let url = `${apiUrl}&from=${from}`;
 
     if (search) {

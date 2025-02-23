@@ -11,11 +11,11 @@ import { Button, FormGroup, Icon, Popover } from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
 import { RGBColor, SketchPicker } from "react-color";
 import css from "./color-input.module.scss";
-import { ReactComponent as BackgroundSVG } from "./transparent-bg.svg";
+import BackgroundSVG from "./transparent-bg.svg?react";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { createInputLabel } from "../input-helpers";
 import { hexToRGB } from "../../utils/utils";
-import { ReactComponent as ColorPickerIcon } from "../../assets/icons/color-picker-icon.svg";
+import ColorPickerIcon from "../../assets/icons/color-picker-icon.svg?react";
 
 export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const {
@@ -141,7 +141,6 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
             className={cx("color-picker-holder", css.popoverContent)}
             ref={colorPickerHolderRef}
           >
-            <section>[][][][]</section>
             <section>
               <div>
                 <SketchPicker color={state.color} onChange={handleChange} />

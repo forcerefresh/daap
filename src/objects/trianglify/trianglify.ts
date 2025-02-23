@@ -13,7 +13,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./trianglify-icon.svg";
+import svg from "./trianglify-icon.svg?react";
 import trianglify from "trianglify";
 import {
   FormType,

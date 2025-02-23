@@ -19,7 +19,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
-import svg from "./spinner-icon.svg";
+import svg from "./spinner-icon.svg?react";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,

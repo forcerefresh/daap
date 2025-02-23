@@ -53,7 +53,7 @@ import {
   getGroupMatrixFromSelectionPath,
   getObjectTransform,
 } from "./stage-panel-utils";
-import { ReactComponent as RotateIcon } from "../../assets/icons/rotate-icon.svg";
+import RotateIcon from "../../assets/icons/rotate-icon.svg?react";
 import { setGlobalProp } from "./utils";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import useDeepCompareEffect from "use-deep-compare-effect";

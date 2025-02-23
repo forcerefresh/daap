@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   min-width: 500px;
-  height: calc(100vh - 52px);
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
 
   overflow: auto;
   background: $pt-app-background-color;

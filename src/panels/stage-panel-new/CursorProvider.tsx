@@ -24,7 +24,13 @@
 //   );
 // };
 
-import React, { CSSProperties, useContext, useEffect, useState } from "react";
+import React, {
+  CSSProperties,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import cx from "classnames";
 import css from "./CursorProvider.module.scss";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
@@ -50,7 +56,7 @@ const SUPPORTED_CURSORS = [false, "pointer", "right", "left"];
 export const CursorProvider = ({
   children,
 }: React.PropsWithChildren<React.ReactNode>) => {
-  const { cursorStyle } = useContext(ToolsContext);
+  const { cursorStyle, appZoom = 1 } = useContext(ToolsContext);
   const {
     stage,
     project: { settings },
@@ -96,6 +102,18 @@ export const CursorProvider = ({
   //     setCursorStyleInternal(cStyle);
   //   };
 
+  const [stageRect, setStageRect] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const stagePanelRect = document
+      .getElementsByClassName("StagePanel")?.[0]
+      ?.getBoundingClientRect();
+
+    if (stagePanelRect) {
+      setStageRect(stagePanelRect);
+    }
+  }, [cursorStyle]);
+
   return (
     <CursorContext.Provider value={{}}>
       <div
@@ -110,8 +128,8 @@ export const CursorProvider = ({
               //[`cursor-${cursor}`]: !!cursor,
             })}
             style={{
-              left: `${x - 68}px`,
-              top: `${y - 106}px`,
+              left: `${(x - stageRect.x) / appZoom}px`,
+              top: `${(y - stageRect.y) / appZoom}px`,
               ...cursorStyle.style,
               width: zoom * cursorStyle.size + "px",
               height: zoom * cursorStyle.size + "px",

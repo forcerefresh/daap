@@ -27,7 +27,7 @@ import { getImageTags } from "../../utils/tags/tags";
 import { SVG } from "../../objects/svg/svg";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
-import { ReactComponent as NoSelection } from "../media-library/assets/no-selection.svg";
+import NoSelection from "../media-library/assets/no-selection.svg?react";
 import { Pagination } from "../../types/pagination";
 
 interface IMediaLibraryPanelProps {

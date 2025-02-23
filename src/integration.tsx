@@ -431,7 +431,7 @@ export const IntegrationContext = React.createContext({
 
 /** return selector for app holder */
 export function useAppRootSelector() {
-  if (process.env.REACT_APP_INTEGRATION === "saas") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return "daap-forcerefresh-root";
   } else {
     return "daap-forcerefresh-root";
@@ -441,7 +441,7 @@ export function useAppRootSelector() {
 // *** PRIVATE INTEGRATION FACTORY FUNCTIONS ***
 
 function useObjectStorageFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/object-storage-hook/electron-object-storage-hook")
       .useObjectStorageHook;
   }
@@ -451,10 +451,10 @@ function useObjectStorageFactory() {
 }
 
 function useMyMediaHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "saas") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return require("./integration/hooks/my-uploads/saas-my-uploads-hook")
       .useMyMediaHook;
-  } else if (process.env.REACT_APP_INTEGRATION === "electron") {
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/my-uploads/electron-my-uploads-hook")
       .useMyMediaHook;
   } else {
@@ -464,7 +464,7 @@ function useMyMediaHookFactory() {
 }
 
 // function useMediaHookFactory() {
-//   if (process.env.REACT_APP_INTEGRATION === "wp") {
+//   if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
 //     return require("./integration/hooks/media-hook/wp-use-media-hook")
 //       .useMediaHook;
 //   } else {
@@ -474,15 +474,15 @@ function useMyMediaHookFactory() {
 // }
 
 function useProjectHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "saas") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return require("./integration/hooks/project-hook/saas-use-project-hook")
       .useProjectHook;
   }
-  if (process.env.REACT_APP_INTEGRATION === "wp") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
     return require("./integration/hooks/project-hook/wp-use-project-hook")
       .useProjectHook;
   }
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/project-hook/electron-use-project-hook")
       .useProjectHook;
   } else {
@@ -492,10 +492,10 @@ function useProjectHookFactory() {
 }
 
 function useTemplateHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "saas") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return require("./integration/hooks/template-hook/saas-use-template-hook")
       .useTemplateHook;
-  } else if (process.env.REACT_APP_INTEGRATION === "electron") {
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/template-hook/electron-use-template-hook")
       .useTemplateHook;
   } else {
@@ -505,7 +505,7 @@ function useTemplateHookFactory() {
 }
 
 function useRemoteTemplateHookFactory() {
-  //if (process.env.REACT_APP_INTEGRATION === "electron") {
+  //if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
   return require("./integration/hooks/remote-template-hook/electron-use-remote-template-hook")
     .useRemoteTemplateHook;
   // } else {
@@ -515,10 +515,10 @@ function useRemoteTemplateHookFactory() {
 }
 
 function getMyUploadComponentFactory() {
-  /*if (process.env.REACT_APP_INTEGRATION === "wp") {
+  /*if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
     return WPMyImageSelect;
   }
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return ElectronMyImageSelect;
   } else {*/
   return MyImageSelect;
@@ -526,7 +526,7 @@ function getMyUploadComponentFactory() {
 }
 
 function getCloseMonitorComponent() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/components/close-monitor/electron-close-monitor")
       .CloseMonitor;
   } else {
@@ -536,7 +536,7 @@ function getCloseMonitorComponent() {
 }
 
 function useAppSettingsHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/app-settings-hook/electron-use-app-settings-hook")
       .useAppSettingsHook;
   } else {
@@ -551,7 +551,7 @@ function useAppSettingsHookFactory() {
 // }
 
 function usePresetsHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/presets-hook/electron-use-presets-hook")
       .usePresets;
   } else {
@@ -561,7 +561,7 @@ function usePresetsHookFactory() {
 }
 
 function useExtensionsHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/extensions-hook/electron-use-extensions-hook")
       .useExtensionsHook;
   } else {
@@ -571,7 +571,7 @@ function useExtensionsHookFactory() {
 }
 
 function useLicenseHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/license-hook/electron-use-license-hook")
       .useLicenseHook;
   } else {
@@ -581,7 +581,7 @@ function useLicenseHookFactory() {
 }
 
 function useDevelopmentHookFactory() {
-  if (process.env.REACT_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/development-hook/electron-use-development-hook")
       .useDevelopmentHook;
   } else {

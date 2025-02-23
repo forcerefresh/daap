@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import cx from "classnames";
 import { IStore } from "../../store/store";
 import css from "./FloatingPointerPanel.module.scss";
-import { ReactComponent as SelectToolIcon } from "../toolbar-panel/assets/select-tool-icon.svg";
+import SelectToolIcon from "../toolbar-panel/assets/select-tool-icon.svg?react";
 import { StageTools } from "../../store/reducers/stage";
 import { setStageTool } from "../../store/actions/actions";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";

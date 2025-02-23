@@ -31,7 +31,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import bulletsIcon from "./bullets-icon.svg";
+import bulletsIcon from "./bullets-icon.svg?react";
 import { addBorderRadius } from "../../utils/utils";
 import {
   FormType,

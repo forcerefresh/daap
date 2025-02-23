@@ -31,7 +31,7 @@ import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
 import Login from "./pages/login/Login";
 import { Button, HotkeysProvider, PortalProvider } from "@blueprintjs/core";
-import { ReactComponent as DaapLogo } from "./integration/components/main-header/daap-logo.svg";
+import DaapLogo from "./integration/components/main-header/daap-logo.svg?react";
 import "in-app-guide/src/style.css";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
 

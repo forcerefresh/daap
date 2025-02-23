@@ -42,12 +42,12 @@ import TagsView from "../../utils/components/tags-view/TagsView";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { checkIfAssetsServiceHasError } from "../../utils/api-services/api-services-utils";
 import { forceDownload } from "../../utils/utils";
-import { ReactComponent as MP3Icon } from "./assets/mp3.svg";
+import MP3Icon from "./assets/mp3.svg?react";
 import { Pagination } from "../../types/pagination";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import axios from "axios";
 
-// console.log(process.env.REACT_API_URL);
+// console.log(import.meta.env.VITE_API_URL);
 // console.log(process.env);
 
 async function deleteImage(image: SaaSMediaData): Promise<{ id: string }> {

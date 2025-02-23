@@ -27,10 +27,10 @@ import {
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { isObjectGroup } from "../../store/actions/actions-utils";
 
-import { ReactComponent as PropertiesIcon } from "../../panels/properties-sections-panel/icons/properties.svg";
-import { ReactComponent as TransformIcon } from "../../panels/properties-sections-panel/icons/transform.svg";
+import PropertiesIcon from "../../panels/properties-sections-panel/icons/properties.svg?react";
+import TransformIcon from "../../panels/properties-sections-panel/icons/transform.svg?react";
 
-import { ReactComponent as OpacityIcon } from "../../assets/icons/opacity2.svg";
+import OpacityIcon from "../../assets/icons/opacity2.svg?react";
 
 import MediaLibraryPanel, { Panels } from "../media-library/MediaLibraryPanel";
 import { cloneDeep } from "lodash-es";

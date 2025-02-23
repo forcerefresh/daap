@@ -328,7 +328,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   // stageZoomRef.current = stageZoom;
 
   useEffect(() => {
-    if (stageZoom !== canvasTransform.scale) {
+    if (stageZoom !== canvasTransform.scale && canvasTransform.scale > 0) {
       _setStageZoom(canvasTransform.scale);
       _setZoomFit(false);
     }

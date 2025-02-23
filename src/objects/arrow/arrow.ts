@@ -15,7 +15,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import arrowIcon from "./arrow-icon.svg";
+import arrowIcon from "./arrow-icon.svg?react";
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { replaceColors } from "../../export/export-html";

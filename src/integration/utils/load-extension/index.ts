@@ -4,7 +4,7 @@ let ext: {
   addExtensionCode: (type: string) => Promise.resolve(),
 };
 
-if (process.env.REACT_APP_INTEGRATION === "electron") {
+if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
   ext = require("./electron-load-extension");
 } else {
   ext = require("./load-extension");

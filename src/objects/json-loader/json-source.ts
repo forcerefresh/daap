@@ -14,7 +14,7 @@ import {
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import { getOrCreateConnectorById } from "webslider-sdk/lib/connectors/connector-manager";
-import logo from "./json-source-logo.svg";
+import logo from "./json-source-logo.svg?react";
 import { JSONSourceConnector } from "./json-source-connector";
 
 export const JSON_SOURCE = "json_source";

@@ -18,7 +18,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./svg-icon.svg";
+import svg from "./svg-icon.svg?react";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import {

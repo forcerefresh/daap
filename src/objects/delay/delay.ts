@@ -9,7 +9,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./delay-icon.svg";
+import svg from "./delay-icon.svg?react";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 

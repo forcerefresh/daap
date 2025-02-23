@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   width: 830px;
-  height: calc(100vh - 52px);
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
 
   background: $pt-app-background-color;
   box-shadow: $pt-elevation-shadow-0;
@@ -29,7 +29,7 @@
 .mainSection {
   overflow-y: auto;
   overflow-x: hidden;
-  height: calc(100vh - 230px);
+  height: calc(var(--daap-forcerefresh-app-height) - 230px);
 
   :global {
     .infinite-scroll-component {

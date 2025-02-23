@@ -16,7 +16,7 @@ import {
   Portal,
   Tag,
 } from "@blueprintjs/core";
-import { ReactComponent as DaapLogo } from "./daap-logo.svg";
+import DaapLogo from "./daap-logo.svg?react";
 import { IStore } from "../../../store/store";
 import { ITheme } from "../../../store/reducers/i-settings";
 import { setTheme, updateProjectMeta } from "../../../store/actions/actions";
@@ -26,8 +26,8 @@ import EditableText from "../../../utils/components/editable-text/editable-text"
 import Login from "../../../pages/login/Login";
 import { AUTH_LOGOUT } from "../../../pages/login/constants";
 import css from "./SassMainHeader.module.scss";
-import { ReactComponent as LibraryIcon } from "../../../panels/toolbar-panel/assets/library-icon.svg";
-import { ReactComponent as AddObjectIcon } from "../../../panels/toolbar-panel/assets/add-object-icon.svg";
+import LibraryIcon from "../../../panels/toolbar-panel/assets/library-icon.svg?react";
+import AddObjectIcon from "../../../panels/toolbar-panel/assets/add-object-icon.svg?react";
 import ChangeCheckerButton from "../../../utils/components/change-checker-button/ChangeCheckerButton";
 import { Breakpoint } from "../../../panels/project-settings-panel/breakpoint-component/Breakpoint";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
@@ -328,7 +328,7 @@ const MainHeader = (props: IMainHeader) => {
         // }
         >
           <GoogleReCaptchaProvider
-            reCaptchaKey={process.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+            reCaptchaKey={import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY!}
           >
             <Login />
           </GoogleReCaptchaProvider>

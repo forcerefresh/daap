@@ -33,7 +33,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 
-import buttonIcon from "./button-icon.svg";
+import buttonIcon from "./button-icon.svg?react";
 
 export const BUTTON = "button";
 

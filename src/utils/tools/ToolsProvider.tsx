@@ -43,6 +43,8 @@ export interface ToolsContextInterface {
 
   //
   cursorStyle: ICursorStyle | undefined;
+  //
+  appZoom?: number;
 }
 
 export const ToolsContext = React.createContext<ToolsContextInterface>({
@@ -72,16 +74,23 @@ export const ToolsProvider = (
 
   const { dispatch } = useStore<IStore>();
 
-  const { stageZoom, activeLayerId, objectById, allObjects, layerById } =
-    useSelector((_state: IStore) => {
-      return {
-        stageZoom: getZoom(_state.stage, _state.project.settings),
-        activeLayerId: _state.project.selection.activeLayerId,
-        objectById: _state.project.objects.objectById,
-        allObjects: _state.project.objects.allObjects,
-        layerById: _state.project.layers.layerById,
-      };
-    });
+  const {
+    stageZoom,
+    activeLayerId,
+    objectById,
+    allObjects,
+    layerById,
+    appZoom,
+  } = useSelector((_state: IStore) => {
+    return {
+      appZoom: _state.globals.appZoom,
+      stageZoom: getZoom(_state.stage, _state.project.settings),
+      activeLayerId: _state.project.selection.activeLayerId,
+      objectById: _state.project.objects.objectById,
+      allObjects: _state.project.objects.allObjects,
+      layerById: _state.project.layers.layerById,
+    };
+  });
 
   const storeRef = useRef({
     stageZoom,
@@ -227,13 +236,26 @@ export const ToolsProvider = (
   // };
 
   const getMousePoint = (e: MouseEvent) => {
+    const appRootEl = document.getElementById(
+      "daap-forcerefresh-root"
+    ) as HTMLDivElement;
+
     const stageEl = getCanvas().getElementsByClassName(
       "MainToolStage"
     )[0] as HTMLDivElement;
 
-    const rect = stageEl?.getBoundingClientRect()!;
-    const x = (e.pageX - rect.left) / storeRef.current.stageZoom; //(e.currentTarget as HTMLElement).offsetLeft;
-    const y = (e.pageY - rect.top) / storeRef.current.stageZoom; //(e.currentTarget as HTMLElement).offsetTop;
+    const stageRect = stageEl?.getBoundingClientRect()!;
+    const appRect = appRootEl?.getBoundingClientRect() ?? { x: 0, y: 0 };
+
+    const xx = appRect.x + (appRect.x - stageRect.x) * appZoom;
+    const yy = appRect.y + (appRect.y - stageRect.y) * appZoom;
+    // console.log(rect);
+    console.log(e.pageX);
+    console.log(e.pageY);
+    console.log(appRect);
+
+    const x = (e.pageX - stageRect.x) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetLeft;
+    const y = (e.pageY - stageRect.y) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetTop;
 
     return { x, y };
   };
@@ -471,6 +493,8 @@ export const ToolsProvider = (
         updateObject,
         updateObjectForPreview,
         cursorStyle,
+        //
+        appZoom,
       }}
     >
       {children}

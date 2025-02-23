@@ -6,7 +6,7 @@
   top: 0px;
   left: 68px;
   width: 730px;
-  height: calc(100vh - 52px);
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
 
   background: $pt-app-background-color;
   box-shadow: $pt-elevation-shadow-0;

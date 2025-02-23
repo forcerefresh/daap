@@ -1,5 +1,5 @@
 .main {
-  height: calc(100vh - 110px);
+  height: calc(var(--daap-forcerefresh-app-height) - 110px);
   display: flex;
   flex-direction: column;
 

@@ -263,6 +263,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                 {layerArr?.map((layer) => {
                   return (
                     <Button
+                      key={layer.id}
                       className={css.smallButton}
                       intent={"primary"}
                       active={layer.id === activeLayerId}

@@ -11,10 +11,10 @@ import {
 } from "./constants";
 import css from "./Login.module.scss";
 import { IStore } from "../../store/store";
-import { ReactComponent as GoogleIcon } from "../assets/google-logo.svg";
-// import { ReactComponent as FacebookIcon } from "../assets/facebook-logo.svg";
-import { ReactComponent as EmailIcon } from "../assets/email-icon.svg";
-import { ReactComponent as AppleIcon } from "../assets/apple-logo.svg";
+import GoogleIcon from "../assets/google-logo.svg?react";
+// import  FacebookIcon } from "../assets/facebook-logo.svg?react";
+import EmailIcon from "../assets/email-icon.svg?react";
+import AppleIcon from "../assets/apple-logo.svg?react";
 
 interface ILoginProps {}
 

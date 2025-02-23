@@ -12,7 +12,9 @@ export const useExtensionsHook = () => {
   ): Promise<{ items: IExtensionItem[] }> => {
     logger.app.trace("Get extensions from directory (electron)");
 
-    const apiUrl = `${process.env.REACT_APP_EXTENSIONS_BASE_URL}/api/v1?api-key=${apiKey}`;
+    const apiUrl = `${
+      import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
+    }/api/v1?api-key=${apiKey}`;
     let url = `${apiUrl}&from=${from}`;
 
     if (search) {

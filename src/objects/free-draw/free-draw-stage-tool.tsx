@@ -323,6 +323,13 @@ export default class FreeHandDrawTool implements IToolClass {
 
     // TODO: NEW FOR INDIVIDUAL >>>
     const objProps = this.convertStackToPoints();
+
+    if (objProps.lines[0].bezier.length === 0) {
+      this.stack = [];
+
+      return;
+    }
+
     this.requestObjectUpdate?.({
       objectValues: {
         beziers: objProps.lines[0].bezier,

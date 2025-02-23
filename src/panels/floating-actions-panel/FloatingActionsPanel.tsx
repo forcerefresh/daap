@@ -66,6 +66,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     stageTool,
     zoom,
     pan,
+    appZoom,
   } = props;
   const mainRef = useRef<HTMLDivElement>(null);
   // const tmpRef = useRef<HTMLDivElement>(null);
@@ -128,7 +129,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
         // tmpRef.current.style.border = "1px solid red";
         // tmpRef.current.style.pointerEvents = "none";
 
-        let top = Math.max(10, rect.top - 85);
+        let top = Math.max(10, rect.top - 85 * appZoom);
         let left = Math.max(10, rect.left);
 
         if (stageEl) {
@@ -146,8 +147,8 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
           left = Math.min(left, maxLeft);
         }
 
-        mainRef.current.style.top = top + "px";
-        mainRef.current.style.left = left + "px";
+        mainRef.current.style.top = top / appZoom + "px";
+        mainRef.current.style.left = left / appZoom + "px";
 
         //mainRef.current.style.width = rect.width + "px";
         setFloatingActionPanelVisibility(true);
@@ -258,6 +259,7 @@ const mapStateToProps = (state: IStore) => {
   const { objects, selection } = state.project;
 
   return {
+    appZoom: state.globals.appZoom,
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
     zoom: state.stage.zoom,

@@ -1,5 +1,5 @@
 .imageLibraryPanel {
-  //height: calc(100vh - 110px);
+  //height: calc(var(--daap-forcerefresh-app-height) - 110px);
   padding: 3px;
   padding-right: 30px;
   position: relative;
@@ -16,7 +16,7 @@
 .mainSection {
   overflow-y: auto;
   overflow-x: hidden;
-  //height: calc(100vh - 310px);
+  //height: calc(var(--daap-forcerefresh-app-height) - 310px);
 
   img {
     margin: 8px;

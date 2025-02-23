@@ -40,6 +40,10 @@ function scaleApp(zoom: number) {
   if (appEl) {
     appEl.style.transformOrigin = "top left";
     appEl.style.zoom = `${zoom * 100}%`;
+
+    const appHeightCssProp = `calc((100vh - 36px) / ${zoom ?? 1})`;
+
+    appEl.style.setProperty("--daap-forcerefresh-app-height", appHeightCssProp);
   }
   // (document.firstElementChild! as any).style.transformOrigin = "top left";
   // // (document.firstElementChild! as any).style.zoom = zoom * 100 + "%";

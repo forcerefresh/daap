@@ -1,6 +1,6 @@
 .main {
   background: #eee;
-  height: 100vh;
+  height: var(--daap-forcerefresh-app-height);
 }
 :global(.bp5-dark) {
   .main {
@@ -29,7 +29,7 @@
 
 .editor {
   position: relative;
-  height: calc(100vh - 52px);
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
 }
 
 .editor100 {
@@ -119,7 +119,7 @@
 
 .appOverlap {
   z-index: 1004;
-  height: calc(100vh - 450px);
+  height: calc(var(--daap-forcerefresh-app-height) - 450px);
   position: absolute;
   top: 450px;
   left: 0px;

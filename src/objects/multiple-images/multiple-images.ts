@@ -11,7 +11,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import svg from "./multiple-images-icon.svg";
+import svg from "./multiple-images-icon.svg?react";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";

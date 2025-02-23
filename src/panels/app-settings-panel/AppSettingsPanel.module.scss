@@ -1,4 +1,8 @@
 .appSettingsPanel {
+  height: calc(var(--daap-forcerefresh-app-height) - 110px);
+  padding: 3px;
+  padding-right: 30px;
+
   section {
     box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
     display: flex;

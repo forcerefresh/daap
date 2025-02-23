@@ -98,7 +98,7 @@ export async function generateImages(
     }
   }
 
-  // document.removeChild(playerHolderEl);
+  document.body.removeChild(playerHolderEl);
 
   return blobImages;
 }

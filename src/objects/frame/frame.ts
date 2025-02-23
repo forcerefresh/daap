@@ -9,7 +9,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./frame-icon.svg";
+import svg from "./frame-icon.svg?react";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
