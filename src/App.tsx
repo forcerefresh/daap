@@ -43,7 +43,9 @@ function App(props: IAppProps) {
   const globalContext = useContext(IntegrationContext);
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
-  const { getSettings, scaleUI } = globalContext.useAppSettingsHook();
+  const { getSettings: getAppSettings, scaleUI } =
+    globalContext.useAppSettingsHook();
+  const { getSettings } = globalContext.useSettingsHook();
 
   const { fetchMedias } = globalContext.useMyMediaHook();
 
@@ -81,7 +83,7 @@ function App(props: IAppProps) {
     loadExternalComponents().then(() => {});
 
     //**
-    getSettings().then((settings) => {
+    getAppSettings().then((settings) => {
       if (settings) {
         _updateGlobalConfiguration(settings);
         scaleUI(settings.appZoom);
@@ -128,10 +130,12 @@ function App(props: IAppProps) {
 
   // load ai info
   useEffect(() => {
-    axios
-      .get("api/v1/ai/info")
-      .then((res) => {
-        _setAIEnabled(res.data.data);
+    getSettings()
+      .then(function (response) {
+        const textEnabled = (response.textAISettings ?? {}).enabled;
+        _setAIEnabled([
+          { enabled: textEnabled, objectType: "io.forcerefresh.text.object" },
+        ]);
       })
       .catch(() => void 0);
   }, []);

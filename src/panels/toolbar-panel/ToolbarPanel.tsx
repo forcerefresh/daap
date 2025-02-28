@@ -259,6 +259,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     setShowPanel(VisiblePanel.None);
   };
   useOnClickOutside(sharedRef, handleClickOutside, [
+    "media-modal",
     "image-preview-popover",
     "color-picker-holder",
     "bp5-overlay-scroll-container", // alert

@@ -4,3 +4,8 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
+
+// used in wp implementation
+declare var daapForcerefreshSettings: { root: string; nonce: string };
+declare var jQuery: any;
+declare var wp: any;

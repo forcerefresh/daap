@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AITextSettingsPanel.module.scss";
@@ -15,6 +15,7 @@ import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import { cloneDeep } from "lodash-es";
 import { setAIEnabled } from "../../store/actions/actions";
 import { TEXT } from "../../objects/text/text";
+import { IntegrationContext } from "../../integration";
 
 interface ITextAISettings {
   enabled: boolean;
@@ -83,29 +84,34 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
 ) => {
   const { _setAIEnabled } = props;
 
-  const [loading, setLoading] = useState<boolean>();
+  const globalContext = useContext(IntegrationContext);
+  const { useSettingsHook } = globalContext;
+  const { getSettings, patchSettings } = useSettingsHook();
+
+  const [formData, setFormData] = useState<ITextAISettings>({
+    ...formDefaults,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/api/v1/settings/ai-settings")
+    setLoading(true);
+
+    getSettings()
       .then(function (response) {
-        setFormData({ ...formData, ...response.data });
+        setLoading(false);
+        setFormData({ ...formData, ...(response.textAISettings ?? {}) });
       })
       .catch(function (error) {
+        setLoading(false);
         console.log(error);
         AppToaster.show({
           intent: "danger",
           message: "Something went wrong. Change is not saved.",
         });
       });
-  }, []);
-
-  const [showKey, setShowKey] = useState(false);
-
-  const [formData, setFormData] = useState<ITextAISettings>({
-    ...formDefaults,
-    key: "",
-  });
+  }, [setFormData]);
 
   // const [visibleSectionIds, _setVisibleSectionIds] = useState<{
   //   [key: string]: boolean;
@@ -120,10 +126,13 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
     //   delete formDataToSend.key;
     // }
 
-    axios
-      .patch("/api/v1/settings/ai-settings", formDataToSend)
+    setSaving(true);
+
+    patchSettings({ textAISettings: formDataToSend })
       .then(function (response) {
         //_ TODO: loadAiData();
+
+        setSaving(false);
 
         _setAIEnabled([{ objectType: TEXT, enabled: formDataToSend.enabled }]);
 
@@ -133,6 +142,8 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
         });
       })
       .catch(function (error) {
+        setSaving(false);
+
         console.log(error);
         AppToaster.show({
           intent: "danger",
@@ -140,6 +151,10 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
         });
       });
   }, [formData]);
+
+  if (loading) {
+    return <section>Loading...</section>;
+  }
 
   return (
     <div className={css.aiSettingsPanel}>
@@ -221,7 +236,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
             </div>
             <div>
               <Button
-                // loading={ai.dataLoading}
+                loading={saving}
                 intent={"primary"}
                 onClick={handleAIUpdate}
               >
@@ -325,7 +340,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
               </div>
               <div>
                 <Button
-                  // loading={ai.dataLoading}
+                  loading={saving}
                   intent={"primary"}
                   onClick={handleAIUpdate}
                 >

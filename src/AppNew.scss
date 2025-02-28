@@ -4,6 +4,18 @@
 
 @import "./theme";
 
+// TODO remove .>>>
+.media-frame,
+.attachments-browser,
+.media-toolbar,
+.media-sidebar {
+  background-color: black !important;
+}
+.media-modal.wp-core-ui {
+  width: 600px;
+}
+// TODO remove <<<
+
 #webpack-dev-server-client-overlay {
   display: none;
 }

@@ -7,7 +7,8 @@ export function getInitialStageTransform(
   viewportSize: { w: number; h: number },
   breakpointConfig: BreakpointConfiguration | undefined,
   showLayerSimplifiedPanel = true,
-  showPagesSimplifiedPanel = true
+  showPagesSimplifiedPanel = true,
+  appZoom = 1
 ) {
   // const breakpointConfig: BreakpointConfiguration | undefined =
   //   settings.breakpoints.breakpointsConfiguration.find(

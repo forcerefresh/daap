@@ -9,34 +9,10 @@ import axios from "axios";
 import { isEmpty } from "lodash-es";
 
 export const useTemplateHook = () => {
-  // const getNextProjectId = (): Promise<number> => {
-  //   return new Promise((resolve, reject) => {
-  //     const { ipcRenderer } = window.require("electron");
-
-  //     ipcRenderer.invoke("Projects::GetNextProjectId").then((result: any) => {
-  //       resolve(result);
-  //     });
-  //   });
-  // };
-
   const getTemplate = (id: string): Promise<any> => {
     return axios
       .get(`/api/v1/templates/${id}`)
       .then((response) => response.data);
-
-    // return new Promise((resolve, reject) => {
-    //   const { ipcRenderer } = window.require("electron");
-
-    //   const json = {
-    //     id,
-    //   };
-
-    //   ipcRenderer
-    //     .invoke("Projects::GetProject", JSON.stringify(json))
-    //     .then((result: any) => {
-    //       resolve(result);
-    //     });
-    // });
   };
 
   const getTemplates = (
@@ -53,22 +29,6 @@ export const useTemplateHook = () => {
         },
       })
       .then((response) => response.data);
-
-    // return new Promise((resolve, reject) => {
-    //   const { ipcRenderer } = window.require("electron");
-
-    //   const json = {
-    //     from,
-    //     search,
-    //     perPage,
-    //   };
-
-    //   ipcRenderer
-    //     .invoke("Projects::GetProjects", JSON.stringify(json))
-    //     .then((result: any) => {
-    //       resolve(result);
-    //     });
-    // });
   };
 
   const saveTemplate = async ({

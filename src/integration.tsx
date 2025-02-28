@@ -1,6 +1,8 @@
 import React from "react";
 import { IPlayerData } from "./export/i-export-html";
 import { MyImageSelect } from "./integration/components/my-image-select/my-image-select";
+import { WpMyImageSelect } from "./integration/components/my-image-select/wp-my-image-select";
+
 import { ObjectStorageItem } from "./integration/hooks/object-storage-hook/i-object-storage-hook";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import { IAppSettings } from "./store/reducers/globals";
@@ -134,6 +136,15 @@ export const IntegrationContext = React.createContext({
       ids: string[]
     ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
       return Promise.resolve({ response: [] });
+    },
+  }),
+
+  useAIHook: () => ({
+    textQuery: (props: {
+      query: string;
+      template: string;
+    }): Promise<{ output?: string; error?: string }> => {
+      return Promise.resolve({});
     },
   }),
 
@@ -294,6 +305,15 @@ export const IntegrationContext = React.createContext({
       }), // todo: add interface for api response
   }),
 
+  useSettingsHook: () => ({
+    getSettings: (): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+    patchSettings: ({
+      textAISettings,
+    }: {
+      textAISettings: any;
+    }): Promise<any> => Promise.resolve({}),
+  }),
+
   useProjectHook: () => ({
     /* returns project */
     getProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
@@ -452,13 +472,16 @@ function useObjectStorageFactory() {
 
 function useMyMediaHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
-    return require("./integration/hooks/my-uploads/saas-my-uploads-hook")
+    return require("./integration/hooks/my-medias/saas-my-medias-hook")
+      .useMyMediaHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/my-medias/wp-my-medias-hook")
       .useMyMediaHook;
   } else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/my-uploads/electron-my-uploads-hook")
+    return require("./integration/hooks/my-medias/electron-my-medias-hook")
       .useMyMediaHook;
   } else {
-    return require("./integration/hooks/my-uploads/my-uploads-hook")
+    return require("./integration/hooks/my-medias/my-medias-hook")
       .useMyMediaHook;
   }
 }
@@ -495,12 +518,30 @@ function useTemplateHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return require("./integration/hooks/template-hook/saas-use-template-hook")
       .useTemplateHook;
+  }
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/template-hook/wp-use-template-hook")
+      .useTemplateHook;
   } else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/template-hook/electron-use-template-hook")
       .useTemplateHook;
   } else {
     return require("./integration/hooks/template-hook/use-template-hook")
       .useTemplateHook;
+  }
+}
+
+function useSettingsHookFactory() {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/settings-hook/saas-use-settings-hook")
+      .useSettingsHook;
+  }
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/settings-hook/wp-use-settings-hook")
+      .useSettingsHook;
+  } else {
+    return require("./integration/hooks/settings-hook/saas-use-settings-hook")
+      .useSettingsHook;
   }
 }
 
@@ -515,10 +556,10 @@ function useRemoteTemplateHookFactory() {
 }
 
 function getMyUploadComponentFactory() {
-  /*if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
-    return WPMyImageSelect;
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return WpMyImageSelect;
   }
-  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
+  /*if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return ElectronMyImageSelect;
   } else {*/
   return MyImageSelect;
@@ -549,6 +590,16 @@ function useAppSettingsHookFactory() {
 //   return require("./integration/hooks/assets-hook/use-assets-hook")
 //     .useAssetsHook;
 // }
+
+function useAIHookFactory() {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/ai-hook/saas-ai-hook").useAIHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/ai-hook/wp-ai-hook").useAIHook;
+  } else {
+    return require("./integration/hooks/ai-hook/ai-hook").useAIHook;
+  }
+}
 
 function usePresetsHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
@@ -600,6 +651,7 @@ export const IntegrationContextProvider = (
         //useMediaHook: useMediaHookFactory(),
         useProjectHook: useProjectHookFactory(),
         useTemplateHook: useTemplateHookFactory(),
+        useSettingsHook: useSettingsHookFactory(),
         //useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
@@ -611,6 +663,7 @@ export const IntegrationContextProvider = (
         // components
         CloseMonitorComponent: getCloseMonitorComponent(),
         getMyUploadComponent: getMyUploadComponentFactory(),
+        useAIHook: useAIHookFactory(),
       }}
     >
       {props.children}

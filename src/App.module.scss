@@ -1,6 +1,7 @@
 .main {
   background: #eee;
   height: var(--daap-forcerefresh-app-height);
+  width: var(--daap-forcerefresh-app-width);
 }
 :global(.bp5-dark) {
   .main {

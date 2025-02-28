@@ -26,6 +26,7 @@ import css from "./AIContextMenu.module.scss";
 import axios, { AxiosResponse } from "axios";
 import { cloneDeep } from "lodash-es";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { IntegrationContext } from "../../integration";
 
 export interface MoreMenuProps extends Props {
   shouldDismissPopover?: boolean;
@@ -52,19 +53,22 @@ const AIContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
     _setAIRequestLoading,
   } = props;
 
+  const { useAIHook } = React.useContext(IntegrationContext);
+  const { textQuery } = useAIHook();
+
   const queryAI = async ({ template }: { template: string }) => {
     _setAIRequestLoading({ objectId: object.id, loading: true });
 
-    let response: AxiosResponse<any, any>;
+    let response: { output?: string; error?: string };
     try {
-      response = await axios.post("api/v1/ai", {
+      response = await textQuery({
         query: object.properties?.text,
         template,
       });
     } catch (ex: any) {
       AppToaster.show({
         intent: "danger",
-        message: ex?.response?.data?.error
+        message: ex?.response?.error
           ? "AI provider response: " + ex?.response?.data?.error
           : "Something went wrong. AI request is not executed.",
       });
@@ -75,7 +79,7 @@ const AIContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
     }
 
     const objectClone = cloneDeep(object);
-    objectClone.properties.text = response.data.output;
+    objectClone.properties.text = response.output;
     _updateObject(objectClone);
 
     _setAIRequestLoading({ objectId: object.id, loading: false });

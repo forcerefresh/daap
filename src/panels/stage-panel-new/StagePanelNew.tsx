@@ -112,6 +112,7 @@ type IStagePanel = typeof mapDispatchToProps &
 
 const StagePanelNew: React.FC<IStagePanel> = (props) => {
   const {
+    appZoom,
     pages,
     layers,
     objects,
@@ -182,14 +183,15 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       viewPortSize,
       breakpointConfig,
       showSimplifiedLayerPanel,
-      showSimplifiedPagesPanel
+      showSimplifiedPagesPanel,
+      appZoom
     );
 
     if (newTransform.scale > 0) {
       setTransform(newTransform);
       setZoomFit(false);
     }
-  }, [viewPortSize, breakpointConfig]);
+  }, [viewPortSize, breakpointConfig, appZoom]);
 
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
   const [manualProgress, setManualProgress] = useState(0);
@@ -353,12 +355,13 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           viewPortSize,
           breakpointConfig,
           showSimplifiedLayerPanel,
-          showSimplifiedPagesPanel
+          showSimplifiedPagesPanel,
+          appZoom
         )
       );
       setZoomFit(false);
     }
-  }, [zoomFit, viewPortSize, breakpointConfig]);
+  }, [zoomFit, appZoom, viewPortSize, breakpointConfig]);
 
   const stagePanelElementRef = useRef<HTMLDivElement | null>(null);
   const stageElementRef = useRef<HTMLDivElement | null>(null);
@@ -896,6 +899,7 @@ const mapStateToProps = (state: IStore) => {
       : undefined;
 
   return {
+    appZoom: state.globals.appZoom,
     pages,
     layers,
     objects,

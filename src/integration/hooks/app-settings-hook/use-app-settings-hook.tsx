@@ -38,12 +38,20 @@ function scaleApp(zoom: number) {
   )?.[0] as HTMLDivElement;
 
   if (appEl) {
+    const appElRect = appEl.getBoundingClientRect();
     appEl.style.transformOrigin = "top left";
-    appEl.style.zoom = `${zoom * 100}%`;
+    appEl.style.transform = `scale(${zoom})`;
 
-    const appHeightCssProp = `calc((100vh - 36px) / ${zoom ?? 1})`;
+    const appHeightCssProp = `calc((100vh - ${appElRect.top}px) / ${
+      zoom ?? 1
+    })`;
+
+    const appWidthCssProp = `calc((100vw - ${appElRect.left}px) / ${
+      zoom ?? 1
+    })`;
 
     appEl.style.setProperty("--daap-forcerefresh-app-height", appHeightCssProp);
+    appEl.style.setProperty("--daap-forcerefresh-app-width", appWidthCssProp);
   }
   // (document.firstElementChild! as any).style.transformOrigin = "top left";
   // // (document.firstElementChild! as any).style.zoom = zoom * 100 + "%";

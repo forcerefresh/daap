@@ -61,7 +61,7 @@ export type IFontPreviewPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   IFontPreviewPanelProps;
 
-const FontPreviewPanel: React.FC<IFontPreviewPanelMergedProps> = (props) => {
+const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
   const {
     onRequestClose,
     // documentSize,
