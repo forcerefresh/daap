@@ -52,7 +52,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
   return (
     <div className={css.appSettingsPanel}>
-      <section>
+      {/* <section>
         <div
           className={css.sectionHeader}
           onClick={() => toggleSection(GlobalPanelSections.Editor)}
@@ -90,9 +90,9 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             </div>
           </div>
         )}
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         <div
           className={css.sectionHeader}
           onClick={() => toggleSection(GlobalPanelSections.UiLayout)}
@@ -141,7 +141,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             </FormGroup>
           </div>
         )}
-      </section>
+      </section> */}
       <section>
         <div
           className={css.sectionHeader}
@@ -156,7 +156,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                 : "caret-right"
             }
           ></Button>
-          Other
+          General
         </div>
         {visibleSectionIds[GlobalPanelSections.OtherSettings] && (
           <div className={css.panel}>
@@ -211,7 +211,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
           </div>
         )}
       </section>
-
+      {/* 
       <section>
         <div
           className={css.sectionHeader}
@@ -307,7 +307,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             </FormGroup>
           </div>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };

@@ -39,7 +39,7 @@ export type IProjectPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>; /*&
   IProjectPanelProps;*/
 
-const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
+const ProjectPanel = (props: IProjectPanelMergedProps) => {
   const {
     settings,
     breakpointConfiguration,
@@ -327,7 +327,9 @@ const ProjectPanel: React.FC<IProjectPanelMergedProps> = (props) => {
                           const newSelectedDevice =
                             breakpointConfiguration.breakpointsConfiguration.find(
                               (bp) => bp.enabled
-                            )?.type ?? _setDevice(newSelectedDevice);
+                            )?.type;
+
+                          if (newSelectedDevice) _setDevice(newSelectedDevice);
                         }
                       }}
                     />

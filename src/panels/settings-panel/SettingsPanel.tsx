@@ -51,7 +51,11 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
           defaultSelectedTabId={defaultSelectedTabId}
           renderActiveTabPanelOnly={true}
         >
-          <Tab id="project" title="Project Settings" panel={<ProjectPanel />} />
+          <Tab
+            id="project"
+            title="Document Settings"
+            panel={<ProjectPanel />}
+          />
           <Tab id="global" title="App Settings" panel={<AppSettingsPanel />} />
           {supportStorageObjects && (
             <Tab
@@ -60,8 +64,14 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
               panel={<ObjectStorage />}
             />
           )}
-          <Tab id="license" title="License" panel={<LicenseSettingsPanel />} />
-          <Tab id="account" title="Account" panel={<AccountSettingsPanel />} />
+          {/* <Tab id="license" title="License" panel={<LicenseSettingsPanel />} /> */}
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <Tab
+              id="account"
+              title="Account"
+              panel={<AccountSettingsPanel />}
+            />
+          )}
           <Tab
             id="ai"
             title="AI Text Assistant"

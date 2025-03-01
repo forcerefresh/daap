@@ -18,6 +18,14 @@ import {
   GetFontsFuncReturnType,
 } from "webslider-sdk/lib/objects/objects-register";
 import { Pagination } from "./types/pagination";
+import { WpFullscreenButton } from "./integration/components/fullscreen-button/wp-fullscreen-button";
+import { FullscreenButton } from "./integration/components/fullscreen-button/fullscreen-button";
+
+export interface getFullscreenButtonComponentProps {
+  isFullscreen: boolean;
+  toggle: () => void;
+  className?: string;
+}
 
 export interface getMyUploadComponentProps {
   type: MediaType;
@@ -103,6 +111,10 @@ export const IntegrationContext = React.createContext({
   getMyUploadComponent: ((props) => {
     return <div></div>;
   }) as React.FC<getMyUploadComponentProps>,
+
+  getFullscreenButtonComponent: ((props) => {
+    return <div></div>;
+  }) as React.FC<getFullscreenButtonComponentProps>,
 
   CloseMonitorComponent: ((props) => {
     return <div></div>;
@@ -566,6 +578,17 @@ function getMyUploadComponentFactory() {
   /** }*/
 }
 
+function getFullscreenButtonComponentFactory() {
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return WpFullscreenButton;
+  }
+  /*if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
+    return ElectronMyImageSelect;
+  } else {*/
+  return FullscreenButton;
+  /** }*/
+}
+
 function getCloseMonitorComponent() {
   if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/components/close-monitor/electron-close-monitor")
@@ -664,6 +687,7 @@ export const IntegrationContextProvider = (
         CloseMonitorComponent: getCloseMonitorComponent(),
         getMyUploadComponent: getMyUploadComponentFactory(),
         useAIHook: useAIHookFactory(),
+        getFullscreenButtonComponent: getFullscreenButtonComponentFactory(),
       }}
     >
       {props.children}
