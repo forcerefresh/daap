@@ -16,7 +16,7 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import cx from "classnames";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";
-import { ColorInputForm } from "../../inputs/color-input/color-input";
+import ColorInputForm from "../../inputs/color-input/color-input";
 import AIContextMenu from "./AIContextMenu";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";

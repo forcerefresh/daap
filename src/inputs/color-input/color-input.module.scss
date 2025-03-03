@@ -112,3 +112,41 @@
     margin-top: 2px;
   }
 }
+
+.sectionHeader {
+  cursor: pointer;
+  font-weight: bold;
+  color: #808080;
+  padding: 15px 10px 15px 10px;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  padding: 0px 10px;
+}
+
+.sectionNoColor {
+  color: #808080;
+  font-size: 14px;
+}
+
+.sectionColor {
+  cursor: pointer;
+  width: 45px;
+  height: 25px;
+  border: 1px solid #ddd;
+}
+
+.sectionColorRow {
+  display: flex;
+  gap: 5px
+}
+
+.sectionWrapperDefaultColor {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+}

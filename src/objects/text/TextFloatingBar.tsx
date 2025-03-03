@@ -26,7 +26,7 @@ import {
   ITimelinesValue,
   InputType,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { ColorInputForm } from "../../inputs/color-input/color-input";
+import ColorInputForm from "../../inputs/color-input/color-input";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import ContextMenu from "../../panels/context-menu/ContextMenu";
 import AIContextMenu from "./AIContextMenu";
