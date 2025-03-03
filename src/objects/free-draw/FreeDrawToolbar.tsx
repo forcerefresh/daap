@@ -13,7 +13,7 @@ import {
   ToolbarMode,
 } from "../../utils/tools/types";
 import css from "./FreeDrawToolbar.module.scss";
-import { ColorInputForm } from "../../inputs/color-input/color-input";
+import ColorInputForm from "../../inputs/color-input/color-input";
 import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
 import { hexToRGB } from "../../utils/utils";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";

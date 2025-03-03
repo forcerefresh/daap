@@ -17,7 +17,7 @@ import {
 } from "webslider-sdk/lib/inputs/i-inputs";
 import cx from "classnames";
 import colorInputCss from "../../inputs/color-input/color-input.module.scss";
-import { ColorInputForm } from "../../inputs/color-input/color-input";
+import ColorInputForm from "../../inputs/color-input/color-input";
 
 const ICON_HEIGHT = 36;
 

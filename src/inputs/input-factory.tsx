@@ -3,7 +3,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BorderColorInputForm } from "./border-color-input/border-color-input";
 import { ILayer } from "../store/reducers/i-layers";
 import { CheckboxInputForm } from "./checkbox-input/checkbox-input";
-import { ColorInputForm } from "./color-input/color-input";
+import ColorInputForm from "./color-input/color-input";
 import { CornerRadiusInputForm } from "./corner-radius-input/corner-radius-input";
 import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { FontSelectInputForm } from "./font-input/font-input";

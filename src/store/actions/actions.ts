@@ -83,6 +83,7 @@ import { clipboard } from "../reducers/clipboard";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { addStyle } from "../../utils/doom-utils/css-utils";
 import { getGlobals } from "../../globals";
+import { RGBColor } from "react-color";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -2682,6 +2683,58 @@ export function setTheme(theme: ITheme): SetThemeAction {
   };
 }
 
+export const ADD_RECENT_COLOR = "Add recent color";
+
+export interface AddRecentColor extends IUndoableAction<false> {
+  type: typeof ADD_RECENT_COLOR;
+  payload: RGBColor;
+}
+
+export function addRecentColor(color: RGBColor): AddRecentColor {
+  return {
+    type: ADD_RECENT_COLOR,
+    payload: color,
+    isUndoable: false,
+  };
+}
+
+export const COLLECT_COLORS = "Collect Colors";
+
+export interface CollectColorsAction extends IUndoableAction<false> {
+  type: typeof COLLECT_COLORS;
+  payload: RGBColor[];
+}
+
+function _collectColors(colors: RGBColor[]): CollectColorsAction {
+  return {
+    type: COLLECT_COLORS,
+    payload: colors,
+    isUndoable: false, // Srki check should be false or what
+  };
+}
+
+export function collectColors(): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const colorsSet = new Set<string>();
+    const allObjectById = getState().project.objects.objectById;
+
+    Object.values(allObjectById).forEach((obj: IObject) => {
+      if (obj.properties) {
+        const { color, strokeColor, fill } = obj.properties;
+
+        if (color) colorsSet.add(JSON.stringify(color));
+        if (strokeColor) colorsSet.add(JSON.stringify(strokeColor));
+        if (fill) colorsSet.add(JSON.stringify(fill));
+      }
+    });
+
+    const uniqueColorsArray = Array.from(colorsSet)
+      .slice(-50)
+      .map((color) => JSON.parse(color) as RGBColor);
+    dispatch(_collectColors(uniqueColorsArray));
+  };
+}
+
 // *** UNDO - REDO
 /*
 const ignoreActions = [
@@ -3054,6 +3107,10 @@ export type ActionTypes =
   | UpdateSlideDurationAction
   | UpdateSlideBreakpointsAction
   | SetThemeAction
+
+  //colors
+  | AddRecentColor
+  | CollectColorsAction
 
   //stage
   | SetDocumentSizeAction

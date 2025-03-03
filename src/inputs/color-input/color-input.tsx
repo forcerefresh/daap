@@ -16,8 +16,23 @@ import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { createInputLabel } from "../input-helpers";
 import { hexToRGB } from "../../utils/utils";
 import { ReactComponent as ColorPickerIcon } from "../../assets/icons/color-picker-icon.svg";
+import { ReactComponent as CoulorPalette } from "../../assets/icons/colour-palette.svg";
+import { connect } from "react-redux";
+import { IStore } from "../../store/store";
+import { addRecentColor, collectColors } from "../../store/actions/actions";
 
-export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
+enum ColorsPopupSection {
+  RecentColors = "Recent Colors",
+  UsedInDocument = "Used In Document",
+  DefaultColors = "Default Colors",
+}
+
+type IColorInputForm = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  IColorInput &
+  IUpdateInput;
+
+const ColorInputForm: React.FC<IColorInputForm> = (props) => {
   const {
     value,
     defaultValue,
@@ -27,6 +42,10 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     onChange,
     onPreview,
     inputProps,
+    _addRecentColor,
+    recentColors,
+    collectColors, // TODO - move from here
+    usedInDocument,
   } = props;
 
   const onPreviewRef = useRef(onPreview);
@@ -48,6 +67,20 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
     color: colorFromProp,
     initialColor: colorFromProp,
   });
+
+  const [visibleColorsPopup, setVisibleColorsPopup] = useState<{
+    [key: string]: boolean;
+  }>({
+    [ColorsPopupSection.RecentColors]: true,
+    [ColorsPopupSection.UsedInDocument]: true,
+  });
+
+  const toggleSection = (section: string) => {
+    setVisibleColorsPopup({
+      ...visibleColorsPopup,
+      [section]: !visibleColorsPopup[section],
+    });
+  };
 
   const handleClickOutside = () => {
     handleClose();
@@ -85,11 +118,26 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
   const handleApply = () => {
     setState({ ...state, displayColorPicker: false });
     onChange(state.color);
+    if (state.color) {
+      _addRecentColor(state.color);
+    }
   };
 
   const handleChange = (color: { rgb: RGBColor }) => {
     setState({ ...state, color: color.rgb });
     debounceOnChange?.(color.rgb);
+  };
+
+  const handleRecentColor = (color: { rgb: RGBColor }) => {
+    setState({ ...state, displayColorPicker: false, color: color.rgb });
+    onChange(color.rgb);
+    _addRecentColor(color.rgb);
+  };
+
+  // TODO - how sure how to handle this at the end
+  const handleUsedInDoc = (color: { rgb: RGBColor }) => {
+    setState({ ...state, displayColorPicker: false, color: color.rgb });
+    onChange(color.rgb);
   };
 
   const { initialColor, color } = state;
@@ -124,6 +172,15 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
 
   const EyeDropperClass = (window as any).EyeDropper;
 
+  const lastColors = recentColors.slice(-20).reverse();
+  const rowsRecentColors = [lastColors.slice(0, 6), lastColors.slice(6, 12)];
+
+  const colorsFromObjects = usedInDocument.slice(-20).reverse();
+  const rowsColorsFromObj = [
+    colorsFromObjects.slice(0, 6),
+    colorsFromObjects.slice(6, 12),
+  ];
+
   return (
     <FormGroup
       className={cx(css.colorInput, inputProps?.className)}
@@ -141,53 +198,110 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
             className={cx("color-picker-holder", css.popoverContent)}
             ref={colorPickerHolderRef}
           >
-            <section>[][][][]</section>
             <section>
-              <div>
-                <SketchPicker color={state.color} onChange={handleChange} />
+              <div
+                className={css.sectionHeader}
+                onClick={() => toggleSection(ColorsPopupSection.RecentColors)}
+              >
+                <Button
+                  minimal
+                  small={true}
+                  icon={
+                    visibleColorsPopup[ColorsPopupSection.RecentColors]
+                      ? "caret-down"
+                      : "caret-right"
+                  }
+                ></Button>
+                Recent colors
               </div>
-              <div className={css.actionHolder}>
-                <div className={css.buttonHolder}>
-                  <Button
-                    className={cx(css.colorButton)}
-                    //  icon="tick"
-                    onClick={handleApply}
-                    icon={
-                      <div
-                        id="color-input"
-                        className={cx(css.swatch, css.squareSwatch)}
-                        tabIndex={1}
-                      >
-                        <BackgroundSVG style={{ position: "absolute" }} />
-                        <div className={css.color} style={styleCurrent} />
-                      </div>
-                    }
-                  >
-                    Apply
-                  </Button>
-                  <Button
-                    icon={
-                      <div
-                        id="color-input"
-                        className={cx(css.swatch, css.squareSwatch)}
-                        tabIndex={1}
-                      >
-                        <BackgroundSVG style={{ position: "absolute" }} />
-                        <div className={css.color} style={style} />
-                      </div>
-                    }
-                    className={css.colorButton}
-                    onClick={handleClose}
-                    intent="none"
-                    minimal
-                  >
-                    Cancel
-                  </Button>
-                </div>
+              {visibleColorsPopup[ColorsPopupSection.RecentColors] && (
+                <div className={css.sectionContent}>
+                  {recentColors.length === 0 ? (
+                    <div className={css.sectionNoColor}>
+                      No recent colors added yet.
+                    </div>
+                  ) : (
+                    rowsRecentColors.map((row, rowIndex) => (
+                      <div key={rowIndex} className={css.sectionColorRow}>
+                        {row.map((color, index) => {
+                          const colorStyle = {
+                            backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                          };
 
+                          return (
+                            <div
+                              key={index}
+                              className={css.sectionColor}
+                              style={colorStyle}
+                              onClick={() => handleRecentColor({ rgb: color })}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </section>
+
+            <section className={css.section}>
+              <div
+                className={css.sectionHeader}
+                onClick={() => toggleSection(ColorsPopupSection.UsedInDocument)}
+              >
+                <Button
+                  minimal
+                  small={true}
+                  icon={
+                    visibleColorsPopup[ColorsPopupSection.UsedInDocument]
+                      ? "caret-down"
+                      : "caret-right"
+                  }
+                ></Button>
+                Used in document
+              </div>
+              {visibleColorsPopup[ColorsPopupSection.UsedInDocument] && (
+                <div className={css.sectionContent}>
+                  {colorsFromObjects.length === 0 ? (
+                    <div className={css.sectionNoColor}>
+                      No colors used in document yet.
+                    </div>
+                  ) : (
+                    rowsColorsFromObj.map((row, rowIndex) => (
+                      <div key={rowIndex} className={css.sectionColorRow}>
+                        {row.map((color, index) => {
+                          const colorStyle = {
+                            backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                          };
+                          return (
+                            <div
+                              key={index}
+                              className={css.sectionColor}
+                              style={colorStyle}
+                              onClick={() => handleUsedInDoc({ rgb: color })}
+                            />
+                          );
+                        })}
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </section>
+            <section>
+              <div
+                className={cx(
+                  css.sectionHeader,
+                  css.sectionWrapperDefaultColor
+                )}
+                onClick={() => toggleSection(ColorsPopupSection.DefaultColors)}
+              >
+                <Button
+                  icon={<CoulorPalette style={{ width: "25px" }} />}
+                  minimal
+                />
                 <Button
                   className={cx(css.colorButton)}
-                  //  icon="tick"
                   minimal
                   onClick={() => {
                     onChange(undefined);
@@ -199,9 +313,8 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                   }}
                   icon={<Icon size={20} icon="disable" intent="danger" />}
                 />
-
                 <Button
-                  icon={<ColorPickerIcon style={{ width: "20px" }} />}
+                  icon={<ColorPickerIcon style={{ width: "25px" }} />}
                   minimal
                   onClick={() => {
                     if (!EyeDropperClass) {
@@ -219,6 +332,52 @@ export const ColorInputForm: React.FC<IColorInput & IUpdateInput> = (props) => {
                   }}
                 />
               </div>
+              {visibleColorsPopup[ColorsPopupSection.DefaultColors] && (
+                <>
+                  <div>
+                    <SketchPicker color={state.color} onChange={handleChange} />
+                  </div>
+                  <div className={css.actionHolder}>
+                    <div className={css.buttonHolder}>
+                      <Button
+                        className={cx(css.colorButton)}
+                        //  icon="tick"
+                        onClick={handleApply}
+                        icon={
+                          <div
+                            id="color-input"
+                            className={cx(css.swatch, css.squareSwatch)}
+                            tabIndex={1}
+                          >
+                            <BackgroundSVG style={{ position: "absolute" }} />
+                            <div className={css.color} style={styleCurrent} />
+                          </div>
+                        }
+                      >
+                        Apply
+                      </Button>
+                      <Button
+                        icon={
+                          <div
+                            id="color-input"
+                            className={cx(css.swatch, css.squareSwatch)}
+                            tabIndex={1}
+                          >
+                            <BackgroundSVG style={{ position: "absolute" }} />
+                            <div className={css.color} style={style} />
+                          </div>
+                        }
+                        className={css.colorButton}
+                        onClick={handleClose}
+                        intent="none"
+                        minimal
+                      >
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                </>
+              )}
             </section>
           </div>
         }
@@ -283,3 +442,15 @@ function useEventListener<T extends HTMLElement = HTMLDivElement>(
     };
   }, [eventName, element, handler]);
 }
+
+const mapStateToProps = (state: IStore) => ({
+  recentColors: state.project.colors.recentColors,
+  usedInDocument: state.project.colors.usedInDocument,
+});
+
+const mapDispatchToProps = {
+  _addRecentColor: (color: RGBColor) => addRecentColor(color),
+  collectColors: () => collectColors(),
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ColorInputForm);

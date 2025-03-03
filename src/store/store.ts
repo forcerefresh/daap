@@ -28,9 +28,12 @@ import { IClipboard } from "./reducers/i-clipboard";
 import { clipboard } from "./reducers/clipboard";
 import { account, IAccount } from "./reducers/account";
 import { ai, IAI } from "./reducers/ai";
+import { IColors } from "./reducers/i-colors";
+import { colors } from "./reducers/colors";
 
 export interface IStore {
   project: {
+    colors: IColors;
     clipboard: IClipboard;
     pages: IPages;
     layers: ILayers;
@@ -62,6 +65,7 @@ const project = diff(
     selection,
     // document,
     settings,
+    colors
   }),
   {
     skipAction: (action: { type: string; isUndoable: boolean }) => {
