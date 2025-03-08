@@ -12,7 +12,7 @@ export const HelpMenu: React.FC<IHelpMenu> = (props) => {
 
   return (
     <Menu className={css.helpMenu}>
-      <MenuDivider title={`WebSlider v${appVersion}`} />
+      {/* <MenuDivider title={`WebSlider v${appVersion}`} /> */}
       {/* <MenuItem
         icon={<LinkOut style={{ opacity: 0, width: "15px", height: "19px" }} />}
         text="Documentation"

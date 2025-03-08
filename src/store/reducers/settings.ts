@@ -191,7 +191,7 @@ const getSettingsDefault = (props?: {
   skipFirstSlideAnimation: false,
   breakpointReference: "viewport",
   // slider
-  sliderBackgroundColor: { r: 255, g: 255, b: 255, a: 0 },
+  sliderBackgroundColor: { r: 70, g: 70, b: 70, a: 1 },
   autoPlay: true,
   // preview
   pageBackgroundColor: { r: 70, g: 70, b: 70, a: 1 },

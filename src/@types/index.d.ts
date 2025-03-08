@@ -6,6 +6,10 @@ declare module "*.svg" {
 }
 
 // used in wp implementation
-declare var daapForcerefreshSettings: { root: string; nonce: string };
+declare var daapForcerefreshSettings: {
+  root: string;
+  nonce: string;
+  baseMediaUrl: string;
+};
 declare var jQuery: any;
 declare var wp: any;

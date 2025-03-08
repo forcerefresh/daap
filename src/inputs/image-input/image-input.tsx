@@ -7,7 +7,7 @@ import {
   Position,
 } from "@blueprintjs/core";
 import { cloneDeep, noop } from "lodash-es";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import MediaLibraryPanel, {
   Panels,
 } from "../../panels/media-library/MediaLibraryPanel";
@@ -30,6 +30,7 @@ import {
   getTextField,
 } from "../input-utils";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
+import { IntegrationContext } from "../../integration";
 
 export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const { displayName, value, onChange = noop } = props;
@@ -39,10 +40,11 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const [libraryOpen, setLibraryOpen] = useState(false);
   // const [previewSrc, setPreviewSrc] = useState("");
 
-  const fileName = value?.mediaSizes.find(
-    (size) => size.sizeType === "original"
-  )?.sourceFilename;
-  const imageUrl = `/api/v1/media/${fileName}`;
+  const imageUrl = getMediaSrc(value);
+  // const fileName = value?.mediaSizes.find(
+  //   (size) => size.sizeType === "original"
+  // )?.sourceFilename;
+  // const imageUrl = `/api/v1/media/${fileName}`;
 
   // getMediaSrc("image", value || {})?.src;
 
@@ -183,6 +185,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
       </FormGroup>
 
       {value &&
+        value.format !== "svg" &&
         getSelectField(
           "Size",
           value?.sizeType ?? "original",
@@ -221,14 +224,12 @@ function extractFileName(filename: string) {
 
 function getSizeOptions(mediaSizes: IImageInputValue["mediaSizes"]) {
   return mediaSizes.map((imageSize) => {
+    let size = "";
+    if (imageSize.width) {
+      size = " - " + imageSize.width + "x" + imageSize.height;
+    }
     return {
-      label:
-        imageSize.sizeType +
-        " - " +
-        imageSize.width +
-        "x" +
-        imageSize.height +
-        "",
+      label: imageSize.sizeType + size,
       value: imageSize.sizeType,
     };
   });

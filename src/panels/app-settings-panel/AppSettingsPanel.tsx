@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, SyntheticEvent } from "react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./AppSettingsPanel.module.scss";
@@ -8,6 +8,7 @@ import {
   HTMLSelect,
   Radio,
   RadioGroup,
+  Switch,
 } from "@blueprintjs/core";
 import {
   updateGlobalConfiguration,
@@ -32,7 +33,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
   const { globals, _updateGlobalConfiguration } = props;
 
   const globalContext = useContext(IntegrationContext);
-  const { saveSettings, scaleUI } = globalContext.useAppSettingsHook();
+  const { patchSettings, scaleUI } = globalContext.useSettingsHook();
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
@@ -76,7 +77,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                 globals.showGrid,
                 (showGrid: any) => {
                   // save settings
-                  saveSettings({
+                  patchSettings({
                     ...globals,
                     showGrid,
                   });
@@ -123,7 +124,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   const layoutType = e.currentTarget.value as any;
 
                   // save settings
-                  saveSettings({
+                  patchSettings({
                     ...globals,
                     layoutType: layoutType,
                   });
@@ -193,9 +194,11 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   const zoom = parseFloat(event.currentTarget.value);
                   // save settings
-                  saveSettings({
-                    ...globals,
-                    appZoom: zoom,
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      appZoom: zoom,
+                    },
                   });
 
                   //update store
@@ -208,6 +211,34 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                 }}
               ></HTMLSelect>
             </FormGroup>
+
+            {/* <FormGroup
+              label="Theme"
+              labelFor="theme"
+              //requiredLabel={true}
+            >
+              <Switch
+                name="theme"
+                // style={{ margin: "2px" }}
+                checked={globals.theme === "dark"}
+                onChange={(evt: SyntheticEvent<HTMLInputElement>) => {
+                  const theme = evt.currentTarget.checked ? "dark" : "light";
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      theme: theme,
+                    },
+                  });
+
+                  _updateGlobalConfiguration({
+                    theme,
+                  });
+
+                  // _setTheme(theme);
+                }}
+              />
+            </FormGroup> */}
           </div>
         )}
       </section>
@@ -251,7 +282,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   globals.enableDeveloper,
                   (enableDeveloper: any) => {
                     // save settings
-                    saveSettings({
+                    patchSettings({
                       ...globals,
                       enableDeveloper,
                     });
@@ -272,7 +303,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                       globals.allowPrerelease,
                       (allowPrerelease: any) => {
                         // save settings
-                        saveSettings({
+                        patchSettings({
                           ...globals,
                           allowPrerelease,
                         });
@@ -290,7 +321,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                       globals.devTools,
                       (devTools: any) => {
                         // save settings
-                        saveSettings({
+                        patchSettings({
                           ...globals,
                           devTools,
                         });

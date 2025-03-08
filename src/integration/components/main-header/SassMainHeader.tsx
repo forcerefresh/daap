@@ -54,10 +54,10 @@ const MainHeader = (props: IMainHeader) => {
 
   const {
     getFullscreenButtonComponent: FullscreenButtonComponent,
-    useAppSettingsHook,
+    useSettingsHook,
   } = useContext(IntegrationContext);
 
-  const { scaleUI } = useAppSettingsHook();
+  const { scaleUI } = useSettingsHook();
 
   // const [meData, setMeData] = useState<{
   //   loading?: boolean;

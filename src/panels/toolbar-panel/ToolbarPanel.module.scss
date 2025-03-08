@@ -5,6 +5,8 @@
     color: $pt-dark-text-color-muted;
     background: $pt-dark-app-background-color;
     border-right: none; // 1px solid $dark-gray5;
+
+    padding-bottom: 5px;
   }
   .largeButton,
   .smallButton {
@@ -60,7 +62,8 @@
 }
 
 .delimiter {
-  height: 20px;
+  margin: 10px;
+  border-bottom: 1px solid #8080809c;
 }
 
 .buttonTag {
@@ -107,6 +110,7 @@
 
 .helpMenu {
   background: $pt-app-background-color !important;
+  margin-bottom: 10px;
 }
 
 :global(.bp5-dark) {

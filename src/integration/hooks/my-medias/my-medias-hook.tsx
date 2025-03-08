@@ -7,6 +7,7 @@ import {
   VectorData,
   VideoData,
   ExtensionData,
+  SaaSMediaData,
 } from "webslider-sdk/lib/common/i-media-types";
 import { resizeFile } from "../../components/my-image-select/my-images-utils";
 import { v4 as uuid } from "uuid";

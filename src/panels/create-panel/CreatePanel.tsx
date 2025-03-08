@@ -312,14 +312,13 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
                       height: size.height + "px",
                     }}
                   >
-                    {" "}
                     {deff.ratio?.vertical}:{deff.ratio?.horizontal}
                   </div>
 
                   {/* <SVG src={deff.meta.icon || ""} /> */}
                 </div>
 
-                <h3>{deff.name}</h3>
+                <p className={css.name}>{deff.name}</p>
                 <p className={css.description}>
                   {deff.size?.width}x{deff.size?.height}
                 </p>

@@ -65,7 +65,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     className,
     panelsToShow = [
       Panels.MyImages,
-      Panels.MyVideos,
+      // Panels.MyVideos,
       // Panels.MyAudios,
       Panels.MyVectors,
       Panels.MyFonts,

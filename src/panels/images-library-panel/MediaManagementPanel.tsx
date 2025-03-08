@@ -213,26 +213,32 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
           {mediaItems?.map((mediaItem, idx) => {
             if (!mediaItem) return null;
 
+            // // TODO: move outsize (preview image url)
+            // let previewFileName = mediaItem.previewSizes.find(
+            //   (size) => size.sizeType === "small"
+            // )?.sourceFilename;
+
+            // if (!previewFileName) {
+            //   previewFileName = mediaItem.previewSizes.find(
+            //     (size) => size.sizeType === "original"
+            //   )?.sourceFilename;
+            // }
+
+            // const previewImageUrl = `/api/v1/media/${previewFileName}`;
+
+            const previewImageUrl = getMediaSrc(
+              mediaItem,
+              "small",
+              "previewSizes"
+            );
+
             let originalImageUrl: string | undefined;
-
-            // TODO: move outsize (preview image url)
-            let previewFileName = mediaItem.previewSizes.find(
-              (size) => size.sizeType === "small"
-            )?.sourceFilename;
-
-            if (!previewFileName) {
-              previewFileName = mediaItem.previewSizes.find(
-                (size) => size.sizeType === "original"
-              )?.sourceFilename;
-            }
-
-            const previewImageUrl = `/api/v1/media/${previewFileName}`;
-
             if (mediaItem.type === "video") {
-              const originalFileName = mediaItem.mediaSizes.find(
-                (size) => size.sizeType === "original"
-              )?.sourceFilename;
-              originalImageUrl = `/api/v1/media/${originalFileName}`;
+              originalImageUrl = getMediaSrc(mediaItem);
+              // const originalFileName = mediaItem.mediaSizes.find(
+              //   (size) => size.sizeType === "original"
+              // )?.sourceFilename;
+              // originalImageUrl = `/api/v1/media/${originalFileName}`;
             }
 
             return (

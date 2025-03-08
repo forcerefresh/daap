@@ -166,10 +166,14 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   //   filename: imageValues.image.filename,
   // });
 
-  const fileName = imageValues.image.mediaSizes.find(
-    (size) => size.sizeType === imageValues.image.sizeType
-  )?.sourceFilename;
-  const imageUrl = `/api/v1/media/${fileName}`;
+  const imageUrl = getMediaSrc(imageValues.image, imageValues.image.sizeType);
+
+  // const fileName = imageValues.image.mediaSizes.find(
+  //   (size) => size.sizeType === imageValues.image.sizeType
+  // )?.sourceFilename;
+
+  // // TODO: important
+  // const imageUrl = `/api/v1/media/${fileName}`;
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
@@ -235,8 +239,6 @@ export async function preloadImage(props: {
   const { id, values } = props;
   const imageValues = values as ImageValues;
 
-  let imageSrc: ImageItem = {} as ImageItem;
-
   // if (
   //   imageValues.image.image.baseUrl &&
   //   imageValues.image.image.baseUrl.startsWith("http")
@@ -245,17 +247,12 @@ export async function preloadImage(props: {
   //     src: imageValues.image.image.baseUrl + imageValues.image.image.filename,
   //   };
   // } else {
-  //imageSrc = getMediaSrc("image", imageValues.image);
-
-  const fileName = imageValues.image.mediaSizes.find(
-    (size) => size.sizeType === imageValues.image.sizeType
-  )?.sourceFilename;
-  imageSrc = { src: `/api/v1/media/${fileName}` };
+  const imageSrc = getMediaSrc(imageValues.image, imageValues.image.sizeType);
 
   // }
 
   // if there are no image to preload return instantly
-  if (!imageSrc.src) {
+  if (!imageSrc) {
     return id;
   }
 
@@ -271,7 +268,7 @@ export async function preloadImage(props: {
     img.onerror = function (err) {
       reject(err);
     };
-    img.src = imageSrc.src!;
+    img.src = imageSrc!;
   });
 
   try {
@@ -284,7 +281,7 @@ export async function preloadImage(props: {
     "object-content-" + id
   )[0] as HTMLDivElement;
 
-  el.style.backgroundImage = `url('${imageSrc.src}')`;
+  el.style.backgroundImage = `url('${imageSrc}')`;
 
   return id;
 }

@@ -45,3 +45,23 @@ export function appendToFileName(fileName: string, appendStr: string) {
   if (idx === -1) return fileName + appendStr;
   return fileName.substr(0, idx) + appendStr + fileName.substr(idx);
 }
+
+export async function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      // The result attribute contains the data as a base64 encoded string
+      const base64String = (reader.result as string).split(",")[1]; // Remove the data URL prefix
+      resolve(base64String);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+export function blobToFile(blob: Blob, filename: string, mime: string) {
+  return new File([blob], filename, {
+    type: mime,
+    lastModified: Date.now(),
+  });
+}

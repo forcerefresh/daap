@@ -63,7 +63,7 @@ export async function generateImages(
     width: stageSize.width + "px",
     height: stageSize.height + "px",
     // transform: "scale(" + exportWidth / stageSize.width + ")",
-    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
   };
 
   const playerHolderEl = document.createElement("div");

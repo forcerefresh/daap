@@ -37,7 +37,11 @@ export class FontPreloader {
         (size) => size.sizeType === "original"
       )?.sourceFilename;
 
-      const fontUrl = `/api/v1/media/${fontFileName}`;
+      let fontUrl = `/api/v1/media/${fontFileName}`;
+      // TODO
+      if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+        fontUrl = `${daapForcerefreshSettings.baseMediaUrl}/${fontFileName}`;
+      }
 
       // add css first
       addStyle(`

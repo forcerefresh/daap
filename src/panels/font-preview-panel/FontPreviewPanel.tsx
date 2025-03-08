@@ -38,6 +38,7 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { addStyle } from "../../utils/doom-utils/css-utils";
 import { debounce, isArray } from "lodash-es";
+import { getMediaSrc } from "../../integration/utils/local-media";
 
 enum FontSections {
   MyFonts = "my-fonts",
@@ -196,6 +197,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
 
       if (source === "my-fonts") {
         // add css first
+        // debugger;
         addStyle(`
           @font-face{
             font-family: "${_selectedFont.fontFamily}";
@@ -205,21 +207,33 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
       }
 
       const loadSource = source === "my-fonts" ? "custom" : "google";
-      load({
-        [loadSource]: {
-          families: [_selectedFont?.fontFamily],
-        },
-        classes: false,
-        fontloading: (familyName: string, fvd: string) => {},
-        fontactive: (familyName: string, fvd: string) => {
+
+      if (loadSource === "custom") {
+        setTimeout(() => {
           setPreviewFont(_selectedFont);
           _setExternalFontLoaded(_selectedFont.fontFamily);
 
           setLoadingFont(null);
 
           if (selectedFontObj?.add) addObjectToStage(_selectedFont);
-        },
-      });
+        }, 200);
+      } else {
+        load({
+          [loadSource]: {
+            families: [_selectedFont?.fontFamily],
+          },
+          classes: false,
+          fontloading: (familyName: string, fvd: string) => {},
+          fontactive: (familyName: string, fvd: string) => {
+            setPreviewFont(_selectedFont);
+            _setExternalFontLoaded(_selectedFont.fontFamily);
+
+            setLoadingFont(null);
+
+            if (selectedFontObj?.add) addObjectToStage(_selectedFont);
+          },
+        });
+      }
     }
 
     loadFont({ ...selectedFont });
@@ -406,13 +420,20 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                 const previewFileName = font.previewSizes.find(
                   (size) => size.sizeType === "original"
                 )?.sourceFilename;
-                const previewImageUrl = `/api/v1/media/${previewFileName}`;
+                const previewImageUrl = getMediaSrc(
+                  font,
+                  "original",
+                  "previewSizes"
+                );
+                // `/api/v1/media/${previewFileName}`;
 
-                const fontFileName = font.mediaSizes.find(
-                  (size) => size.sizeType === "original"
-                )?.sourceFilename;
+                // const fontFileName = font.mediaSizes.find(
+                //   (size) => size.sizeType === "original"
+                // )?.sourceFilename;
 
-                const fontUrl = `/api/v1/media/${fontFileName}`;
+                const fontUrl = getMediaSrc(font); //`/api/v1/media/${fontFileName}`;
+
+                // debugger;
 
                 return (
                   <div

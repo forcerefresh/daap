@@ -1,4 +1,5 @@
 import axios from "axios";
+import { scaleApp } from "./utils";
 
 export const useSettingsHook = () => {
   const getSettings = (id: string): Promise<any> => {
@@ -13,12 +14,14 @@ export const useSettingsHook = () => {
 
   const patchSettings = async ({
     textAISettings,
+    appSettings,
   }: {
-    textAISettings: any;
+    textAISettings?: any;
+    appSettings?: any;
   }): Promise<any> => {
     const response = await axios.patch(
       `${daapForcerefreshSettings.root}daap/v1/settings`,
-      { textAISettings },
+      { textAISettings, appSettings },
       {
         headers: {
           "X-WP-Nonce": daapForcerefreshSettings.nonce,
@@ -28,8 +31,15 @@ export const useSettingsHook = () => {
     return response.data.data;
   };
 
+  const scaleUI = (zoom: number): Promise<void> => {
+    scaleApp(zoom);
+
+    return Promise.resolve();
+  };
+
   return {
     getSettings,
     patchSettings,
+    scaleUI,
   };
 };

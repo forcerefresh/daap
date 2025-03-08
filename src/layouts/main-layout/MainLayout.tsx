@@ -33,7 +33,7 @@ function MainLayout(props: IMainLayoutMergedProps) {
     layers,
     action,
     animations,
-    layoutType,
+    // layoutType,
     quickBar,
     layersSimplified,
     floatingActions,
@@ -43,103 +43,143 @@ function MainLayout(props: IMainLayoutMergedProps) {
     showSimplifiedPagesPanel,
   } = props;
 
-  switch (layoutType) {
-    case "default-layers": {
-      return (
-        <div className={cx(css.mainLayout, css.defaultLayersStyle)}>
-          <div className={css.left}>{toolbar}</div>
-          <div className={cx(css.center, "layout-center-area")}>
-            <div className={css.quickBar}>{quickBar}</div>
-            <div className={cx(css.content, "layout-content-area")}>
-              {content}
-              {floatingActions}
-              {floatingPointer}
-              <div className={css.simplifiedFloatingPanelHolder}>
-                {showSimplifiedLayerPanel && (
-                  <div
-                    className={cx(
-                      css.layersSimplified,
-                      "layers-simplified-panel"
-                    )}
-                  >
-                    {layersSimplified}
-                  </div>
-                )}
-                {showSimplifiedPagesPanel && (
-                  <div
-                    className={cx(
-                      css.pagesSimplified,
-                      "pages-simplified-panel"
-                    )}
-                  >
-                    {pagesSimplified}
-                  </div>
-                )}
+  return (
+    <div className={cx(css.mainLayout, css.defaultLayersStyle)}>
+      <div className={css.left}>{toolbar}</div>
+      <div className={cx(css.center, "layout-center-area")}>
+        <div className={css.quickBar}>{quickBar}</div>
+        <div className={cx(css.content, "layout-content-area")}>
+          {content}
+          {floatingActions}
+          {floatingPointer}
+          <div className={css.simplifiedFloatingPanelHolder}>
+            {showSimplifiedLayerPanel && (
+              <div
+                className={cx(css.layersSimplified, "layers-simplified-panel")}
+              >
+                {layersSimplified}
               </div>
-            </div>
-          </div>
-          <div className={css.right}>
-            <div>
-              <div className={css.properties}>{properties}</div>
-            </div>
-            {/* <div>
-              <div className={css.action}>{action}</div>
-              <div className={css.slides}>{slides}</div>
-              <div className={css.layers}>{layers}</div>
-            </div> */}
+            )}
+            {showSimplifiedPagesPanel && (
+              <div
+                className={cx(css.pagesSimplified, "pages-simplified-panel")}
+              >
+                {pagesSimplified}
+              </div>
+            )}
           </div>
         </div>
-      );
-    }
-    // "case: "default"
-    default: {
-      return (
-        <div className={cx(css.mainLayout, css.defaultStyle)}>
-          <div className={css.left}>{toolbar}</div>
-          <div className={cx(css.center, "layout-center-area")}>
-            <div className={css.quickBar}>{quickBar}</div>
-            <div className={cx(css.content, "layout-content-area")}>
-              {content}
-              {floatingActions}
-              {floatingPointer}
-              <div className={css.simplifiedFloatingPanelHolder}>
-                {showSimplifiedLayerPanel && (
-                  <div
-                    className={cx(
-                      css.layersSimplified,
-                      "layers-simplified-panel"
-                    )}
-                  >
-                    {layersSimplified}
-                  </div>
-                )}
-                {showSimplifiedPagesPanel && (
-                  <div
-                    className={cx(
-                      css.pagesSimplified,
-                      "pages-simplified-panel"
-                    )}
-                  >
-                    {pagesSimplified}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-          <div className={css.right}>
-            {/* <div className={css.action}>{action}</div>
-            <div className={css.slides}>{slides}</div>
-            <div className={css.layers}>{layers}</div> */}
-            <div className={css.properties}>{properties}</div>
-          </div>
+      </div>
+      <div className={css.right}>
+        <div>
+          <div className={css.properties}>{properties}</div>
         </div>
-      );
-    }
-  }
+        {/* <div>
+          <div className={css.action}>{action}</div>
+          <div className={css.slides}>{slides}</div>
+          <div className={css.layers}>{layers}</div>
+        </div> */}
+      </div>
+    </div>
+  );
+
+  // switch (layoutType) {
+  //   case "default-layers": {
+  //     return (
+  //       <div className={cx(css.mainLayout, css.defaultLayersStyle)}>
+  //         <div className={css.left}>{toolbar}</div>
+  //         <div className={cx(css.center, "layout-center-area")}>
+  //           <div className={css.quickBar}>{quickBar}</div>
+  //           <div className={cx(css.content, "layout-content-area")}>
+  //             {content}
+  //             {floatingActions}
+  //             {floatingPointer}
+  //             <div className={css.simplifiedFloatingPanelHolder}>
+  //               {showSimplifiedLayerPanel && (
+  //                 <div
+  //                   className={cx(
+  //                     css.layersSimplified,
+  //                     "layers-simplified-panel"
+  //                   )}
+  //                 >
+  //                   {layersSimplified}
+  //                 </div>
+  //               )}
+  //               {showSimplifiedPagesPanel && (
+  //                 <div
+  //                   className={cx(
+  //                     css.pagesSimplified,
+  //                     "pages-simplified-panel"
+  //                   )}
+  //                 >
+  //                   {pagesSimplified}
+  //                 </div>
+  //               )}
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className={css.right}>
+  //           <div>
+  //             <div className={css.properties}>{properties}</div>
+  //           </div>
+  //           {/* <div>
+  //             <div className={css.action}>{action}</div>
+  //             <div className={css.slides}>{slides}</div>
+  //             <div className={css.layers}>{layers}</div>
+  //           </div> */}
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  //   // "case: "default"
+  //   default: {
+  //     return (
+  //       <div className={cx(css.mainLayout, css.defaultStyle)}>
+  //         <div className={css.left}>{toolbar}</div>
+  //         <div className={cx(css.center, "layout-center-area")}>
+  //           <div className={css.quickBar}>{quickBar}</div>
+  //           <div className={cx(css.content, "layout-content-area")}>
+  //             {content}
+  //             {floatingActions}
+  //             {floatingPointer}
+  //             <div className={css.simplifiedFloatingPanelHolder}>
+  //               {showSimplifiedLayerPanel && (
+  //                 <div
+  //                   className={cx(
+  //                     css.layersSimplified,
+  //                     "layers-simplified-panel"
+  //                   )}
+  //                 >
+  //                   {layersSimplified}
+  //                 </div>
+  //               )}
+  //               {showSimplifiedPagesPanel && (
+  //                 <div
+  //                   className={cx(
+  //                     css.pagesSimplified,
+  //                     "pages-simplified-panel"
+  //                   )}
+  //                 >
+  //                   {pagesSimplified}
+  //                 </div>
+  //               )}
+  //             </div>
+  //           </div>
+  //         </div>
+  //         <div className={css.right}>
+  //           {/* <div className={css.action}>{action}</div>
+  //           <div className={css.slides}>{slides}</div>
+  //           <div className={css.layers}>{layers}</div> */}
+  //           <div className={css.properties}>{properties}</div>
+  //         </div>
+  //       </div>
+  //     );
+  //   }
+  // }
 }
 
 const mapStateToProps = (state: IStore) => ({
-  layoutType: state.globals.layoutType,
+  // layoutType: state.globals.layoutType,
   showSimplifiedLayerPanel: state.stage.showSimplifiedLayerPanel,
   showSimplifiedPagesPanel: state.stage.showSimplifiedPagesPanel,
 });

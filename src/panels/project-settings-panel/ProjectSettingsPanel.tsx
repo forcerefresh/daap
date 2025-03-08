@@ -103,14 +103,14 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
                 : "caret-right"
             }
           ></Button>
-          Project
+          Document
         </div>
         {visibleSectionIds[ProjectPanelSections.Project] && (
           <div className={settingsCss.panel}>
             <FormGroup>
               <div className="input60">
                 {getColorField(
-                  "Slider background color",
+                  "Background color",
                   settings.sliderBackgroundColor,
                   (sliderBackgroundColor: any) => {
                     _updateProjectSettings({ sliderBackgroundColor });
@@ -118,7 +118,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
                   ""
                 )}
               </div>
-              {getCheckboxField(
+              {/* {getCheckboxField(
                 "Auto play",
                 settings.autoPlay,
                 (autoPlay: boolean) => {
@@ -139,13 +139,13 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
                 },
                 `Content outside the slider bounds will be hidden`,
                 { style: { width: "100px" } }
-              )}
+              )} */}
             </FormGroup>
           </div>
         )}
       </section>
 
-      <section>
+      {/* <section>
         <div
           className={settingsCss.sectionHeader}
           onClick={() => toggleSection(ProjectPanelSections.Page)}
@@ -217,9 +217,9 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             </FormGroup>
           </div>
         )}
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         <div
           className={settingsCss.sectionHeader}
           onClick={() => toggleSection(ProjectPanelSections.Preview)}
@@ -282,9 +282,9 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             </FormGroup>
           </div>
         )}
-      </section>
+      </section> */}
 
-      <section>
+      {/* <section>
         <div
           className={settingsCss.sectionHeader}
           onClick={() => toggleSection(ProjectPanelSections.Breakpoints)}
@@ -339,7 +339,7 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
             )}
           </div>
         )}
-      </section>
+      </section> */}
     </div>
   );
 };

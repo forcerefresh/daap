@@ -65,7 +65,7 @@ const ExportStage: React.FC<IStagePanel> = (
     left: 0 + "px",
     width: stageSize.width + "px",
     height: stageSize.height + "px",
-    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
   };
 
   return (

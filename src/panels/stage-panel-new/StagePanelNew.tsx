@@ -505,7 +505,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     left: 0 + "px",
     width: stageSize.width + "px",
     height: stageSize.height + "px",
-    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
 
     // transform: "scale(" + stageZoom + ")",
     // transformOrigin: "left top",
@@ -658,7 +658,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     // overflowY: isPreview ? "scroll" : "visible",
     // border: isPreview ? "1px solid #545454" : "1px solid transparent",
     // ...(isPreview
-    //   ? convertRGBColor2CSSProperties(settings.pageBackgroundColor)
+    //   ? convertRGBColor2CSSProperties(settings.sliderBackgroundColor)
     //   : {}),
   };
 

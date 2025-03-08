@@ -1,23 +1,25 @@
-import { MediaItem, MediaType } from "webslider-sdk/lib/common/i-media-types";
+import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 
 let localMedia: {
   getMediaSrc: (
-    type: MediaType,
-    mediaItem: MediaItem,
-    options?: { useId?: boolean; filename?: string }
-  ) => MediaItem;
+    mediaItem: SaaSMediaData,
+    preferredSize?: string,
+    propertyToUse?: "previewSizes" | "mediaSizes"
+  ) => string;
 } = {
   getMediaSrc: (
-    type: MediaType,
-    mediaItem: any,
-    options?: { useId?: boolean; filename?: string }
-  ) => ({}),
+    _mediaItem: SaaSMediaData,
+    _preferredSize?: string,
+    propertyToUse?: "previewSizes" | "mediaSizes"
+  ) => "",
 };
 
-if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
-  localMedia = require("./electron-local-media");
+if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+  localMedia = require("./saas-local-media");
+} else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+  localMedia = require("./wp-local-media");
 } else if (import.meta.env.VITE_APP_TYPE === "player") {
-  localMedia = require("./player-local-media");
+  localMedia = require("./local-media");
 } else {
   localMedia = require("./local-media");
 }

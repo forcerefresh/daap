@@ -527,7 +527,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         </div>
 
         <div className={css.delimiter}></div>
-        <div>
+        {/* <div>
           <Button
             className={css.smallButton}
             minimal
@@ -548,7 +548,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           >
             <HandToolIcon />
           </Button>
-        </div>
+        </div> */}
         <div>
           <Text>{displayZoom} %</Text>
           <div>
@@ -584,7 +584,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               FIT
             </Button>
           </div>
-          <Button
+          <div className={css.delimiter}></div>
+
+          {/* <Button
             className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.History}
@@ -602,7 +604,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-          </Portal>
+          </Portal> */}
         </div>
         <div>
           <Button
@@ -735,7 +737,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           )}
           <Popover
             content={<HelpMenu appVersion={appVersion} />}
-            placement="left-end"
+            // placement="left-end"
             interactionKind={PopoverInteractionKind.CLICK}
             hoverCloseDelay={100}
             hoverOpenDelay={150}

@@ -139,6 +139,9 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
+.name {
+  font-size: large;
+}
 
 :global(.bp5-dark) {
   &.createPanel {

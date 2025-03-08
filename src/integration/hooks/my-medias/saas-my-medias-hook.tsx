@@ -3,6 +3,7 @@ import {
   ImageData,
   MediaType,
   VideoItem,
+  SaaSMediaData,
 } from "webslider-sdk/lib/common/i-media-types";
 import {
   blobToBase64,

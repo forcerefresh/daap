@@ -3,6 +3,7 @@ import {
   ImageData,
   MediaType,
   VideoItem,
+  SaaSMediaData,
 } from "webslider-sdk/lib/common/i-media-types";
 import {
   blobToBase64,
@@ -20,6 +21,28 @@ import { createFontPreviewImage } from "../../../utils/doom-utils/font-utils";
 import { delayPromise } from "../../../utils/common/delay-utils";
 
 export const useMyMediaHook = () => {
+  const uploadToWP = async (
+    filename: string,
+    fileBase64: string ///File
+  ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
+    const json = {
+      fileBase64, //: file2Base64(file),
+      filename: filename,
+    };
+
+    const response = await axios.post(
+      `${daapForcerefreshSettings.root}daap/v1/medias/image/wp-media`,
+      json,
+      {
+        headers: {
+          "X-WP-Nonce": daapForcerefreshSettings.nonce,
+        },
+      }
+    );
+
+    return response.data;
+  };
+
   const upload = async (
     type: MediaType,
     file: File,
@@ -103,7 +126,15 @@ export const useMyMediaHook = () => {
 
     let response: any;
     try {
-      response = await axios.post(`/api/v1/medias/${type}`, json);
+      response = await axios.post(
+        `${daapForcerefreshSettings.root}daap/v1/medias/${type}`,
+        json,
+        {
+          headers: {
+            "X-WP-Nonce": daapForcerefreshSettings.nonce,
+          },
+        }
+      );
     } catch (ex: any) {
       return { status: "ERROR", errorMessage: ex?.response?.data?.message };
     }
@@ -115,7 +146,7 @@ export const useMyMediaHook = () => {
       const fontFilename = mediaSizes.find(
         (item: any) => item.sizeType === "original"
       ).sourceFilename;
-      const fontUrl = `/api/v1/media/${fontFilename}`;
+      const fontUrl = `${daapForcerefreshSettings.baseMediaUrl}/${fontFilename}`;
 
       addStyle(`
         @font-face{
@@ -124,11 +155,11 @@ export const useMyMediaHook = () => {
         }
       `);
 
-      await delayPromise(200);
-      await delayPromise(200);
-      await delayPromise(200);
-      await delayPromise(200);
-      await delayPromise(200);
+      await delayPromise(300);
+      await delayPromise(300);
+      await delayPromise(300);
+      await delayPromise(300);
+      await delayPromise(300);
 
       const imageBlob = await createFontPreviewImage({
         url: fontUrl,
@@ -139,10 +170,21 @@ export const useMyMediaHook = () => {
       if (imageBlob) {
         const previewImageBase64 = await blobToBase64(imageBlob);
         const previevJson = { previewImageBase64 };
-        const responsePreviewImage = await axios.patch(
-          `/api/v1/medias/${type}/${response.data.data.addedMedia.id}`,
-          previevJson
+
+        await axios.patch(
+          `${daapForcerefreshSettings.root}daap/v1/medias/${type}/${response.data.data.addedMedia.id}`,
+          previevJson,
+          {
+            headers: {
+              "X-WP-Nonce": daapForcerefreshSettings.nonce,
+            },
+          }
         );
+
+        // const responsePreviewImage = await axios.patch(
+        //   `/api/v1/medias/${type}/${response.data.data.addedMedia.id}`,
+        //   previevJson
+        // );
       }
     }
     return { status: "OK" };
@@ -248,5 +290,5 @@ export const useMyMediaHook = () => {
     return { response: [{ status: "ERROR", id: ids[0] }] };
   };
 
-  return { upload, fetchMedias, deleteMedias };
+  return { upload, uploadToWP, fetchMedias, deleteMedias };
 };

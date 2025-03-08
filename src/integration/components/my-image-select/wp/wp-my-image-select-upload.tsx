@@ -1,0 +1,414 @@
+import { Button, Dialog, Spinner, Text } from "@blueprintjs/core";
+import { remove } from "lodash-es";
+import { stringify } from "querystring";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
+import Dropzone, { useDropzone } from "react-dropzone";
+import {
+  getCheckboxField,
+  getSelectField,
+  getTagsField,
+  getTextField,
+} from "../../../../inputs/input-utils";
+import {
+  getMyUploadComponentProps,
+  IntegrationContext,
+} from "../../../../integration";
+import {
+  MediaDataInfo,
+  MediaType,
+} from "webslider-sdk/lib/common/i-media-types";
+import { AppToaster } from "../../../../utils/components/app-toaster/AppToaster";
+import { getImageTags } from "../../../../utils/tags/tags";
+import {
+  formatBytes,
+  getCroppedFileName,
+  getNameFromFilename,
+} from "../../../../utils/utils";
+import {
+  dzAcceptStyle,
+  dzBaseStyle,
+  dzFocusedStyle,
+  dzRejectStyle,
+} from "../common-styles";
+import css from "../my-image-select.module.scss";
+import { logger } from "webslider-sdk/lib/utils/logger/logger";
+
+export interface UploadFileInfo {
+  tags: string[];
+  filename: string;
+  name: string;
+  description: string;
+  uploaded?: boolean;
+  // doNotPreserveAspectRatio?: boolean;
+}
+/*
+interface MyImageSelectProps {
+  onComplete: () => void;
+  onStop: () => void;
+}
+*/
+export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
+  props
+) => {
+  const { onStop, onComplete, type } = props;
+
+  const accept =
+    type === "image"
+      ? "image/jpeg, image/png, image/gif"
+      : type === "video"
+      ? "video/mp4"
+      : type === "audio"
+      ? "audio/mp3, audio/mpeg"
+      : type === "vector"
+      ? "image/svg+xml"
+      : type === "font"
+      ? "font/otf, font/ttf, font/woff2"
+      : type === "extension"
+      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+      : type === "template"
+      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+      : undefined;
+
+  const {
+    acceptedFiles,
+    getRootProps,
+    getInputProps,
+    isFocused,
+    isDragAccept,
+    isDragReject,
+  } = useDropzone({
+    accept,
+  });
+  const [formData, setFormData] = useState<UploadFileInfo[]>([]);
+
+  const style = useMemo(
+    () => ({
+      ...dzBaseStyle,
+      ...(isFocused ? dzFocusedStyle : {}),
+      ...(isDragAccept ? dzAcceptStyle : {}),
+      ...(isDragReject ? dzRejectStyle : {}),
+    }),
+    [isFocused, isDragAccept, isDragReject]
+  );
+
+  useEffect(() => {
+    const arr: UploadFileInfo[] = [];
+    acceptedFiles.forEach((file) => {
+      const name = getNameFromFilename(file.name);
+      arr.push({
+        tags: [],
+        name: name,
+        description: "",
+        filename: file.name,
+        // doNotPreserveAspectRatio: true,
+      });
+    });
+    setFormData(arr);
+  }, [acceptedFiles]);
+
+  const tagOptions = getImageTags().map((item) => ({
+    label: item,
+    value: item,
+  }));
+  tagOptions.unshift({ label: "Select tag", value: "" });
+
+  const files = acceptedFiles.map((file, idx) => {
+    if (formData[idx]?.uploaded) {
+      return null;
+    }
+    return (
+      <div key={file.name} className={css.uploadFileRow}>
+        <div>
+          <strong>
+            {idx + 1}. {getCroppedFileName(file.name)} -{" "}
+            {formatBytes(file.size)}
+          </strong>
+        </div>
+
+        <div>
+          {getTextField("Name", formData[idx]?.name, (value: string) => {
+            const newArr = [...formData];
+            newArr[idx].name = value;
+            setFormData(newArr);
+          })}
+        </div>
+        {/* <div>
+          {getTextField(
+            "Description",
+            formData[idx]?.description,
+            (value: string) => {
+              const newArr = [...formData];
+              newArr[idx].description = value;
+              setFormData(newArr);
+            }
+          )}
+        </div> */}
+
+        <div>
+          {getTagsField(
+            "Tags",
+            formData[idx]?.tags ?? [],
+            (value: string[]) => {
+              const newArr = [...formData];
+              newArr[idx].tags = value;
+              setFormData(newArr);
+            }
+          )}
+        </div>
+
+        <div>
+          {getTextField(
+            "Filename",
+            formData[idx]?.filename,
+            (value: string) => {
+              const newArr = [...formData];
+              newArr[idx].filename = value;
+              setFormData(newArr);
+            },
+            "Override original filename"
+          )}
+        </div>
+
+        {/* {type === "vector" && (
+          <div>
+            {getCheckboxField(
+              "Do not preserve aspect ratio",
+              !!formData[idx]?.doNotPreserveAspectRatio,
+              (value: boolean) => {
+                const newArr = [...formData];
+                // newArr[idx].doNotPreserveAspectRatio = value;
+                setFormData(newArr);
+              },
+              "Allow SVG to be scaled non-uniformly (recommended).",
+              { alignIndicator: "left" }
+            )}
+          </div> */}
+      </div>
+    );
+  });
+  const [uploadInProgress, setUploadInProgress] = useState(false);
+  const uploadFiles = () => {
+    setUploadInProgress(true);
+  };
+
+  return (
+    <>
+      <section className={css.main}>
+        <div {...getRootProps({ style: style as any })}>
+          <input {...getInputProps()} />
+          {type === "image" ? (
+            <p>
+              Drop <strong>images</strong> here or click to open the selection
+              dialog.
+            </p>
+          ) : type === "video" ? (
+            <p>
+              Drop <strong>MP4 video</strong> here or click to open the
+              selection dialog.
+            </p>
+          ) : type === "audio" ? (
+            <p>
+              Drop <strong>audios</strong> here or click to open the selection
+              dialog.
+            </p>
+          ) : type === "vector" ? (
+            <p>
+              Drop <strong>SVGs</strong> here or click to open the selection
+              dialog.
+            </p>
+          ) : type === "font" ? (
+            <p>
+              Drop <strong>fonts</strong> here or click to open the selection
+              dialog.
+            </p>
+          ) : type === "extension" ? (
+            <p>
+              Drop <strong>extension zip file</strong> here or click to open the
+              selection dialog.
+            </p>
+          ) : type === "template" ? (
+            <p>
+              Drop <strong>template zip file</strong> here or click to open the
+              selection dialog.
+            </p>
+          ) : null}
+        </div>
+        {acceptedFiles.length > 0 && (
+          <div className={css.uploadFileHolder}>
+            {/* <div className={css.uploadFileRow}>
+              <div>File</div>
+              <div>Size</div>
+              <div>Filename</div>
+              <div>Title</div>
+              <div>Tag</div>
+            </div> */}
+            {files}
+          </div>
+        )}
+        {acceptedFiles.length > 0 && (
+          <div>
+            <Button
+              intent={"primary"}
+              className={css.uploadButton}
+              onClick={() => {
+                uploadFiles();
+              }}
+            >
+              Upload {acceptedFiles.length} files
+            </Button>
+            <Button
+              intent={"none"}
+              className={css.uploadButton}
+              onClick={() => {
+                acceptedFiles.splice(0, 1000);
+                setFormData([...formData]); //workaround to trigger render
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+      </section>
+
+      {uploadInProgress && (
+        <UploadDialog
+          type={type}
+          files={acceptedFiles}
+          filesInfoArr={formData}
+          onFile={(file: File) => {
+            const newFormData = [...formData];
+            const idx = acceptedFiles.indexOf(file);
+            newFormData[idx].uploaded = true;
+            setFormData([...formData]); //workaround to trigger render
+          }}
+          onCancel={() => {
+            acceptedFiles.splice(0, 1000);
+            setFormData([]);
+            setUploadInProgress(false);
+            AppToaster.show({
+              intent: "warning",
+              message: "File upload is stopped",
+            });
+            onStop();
+          }}
+          onAll={(statusArr) => {
+            acceptedFiles.splice(0, 1000);
+            setFormData([]);
+            setUploadInProgress(false);
+
+            const errorMessage = statusArr.find(
+              (s) => (s.status = "ERROR")
+            )?.errorMessage;
+
+            if (errorMessage) {
+              AppToaster.show({
+                intent: "warning",
+                message: "Some items are not processed. Error: " + errorMessage,
+              });
+            } else {
+              AppToaster.show({
+                intent: "success",
+                message: "File upload is done",
+              });
+            }
+            onComplete();
+          }}
+        />
+      )}
+    </>
+  );
+};
+
+/** UPLOAD DIALOG */
+interface UploadDialogProps {
+  type: MediaType;
+  files: File[];
+  filesInfoArr: UploadFileInfo[];
+  onFile: (file: File) => void;
+  onAll: (
+    statusArr: { status: "OK" | "ERROR"; errorMessage?: string }[]
+  ) => void;
+  onCancel: () => void;
+}
+function UploadDialog(props: UploadDialogProps) {
+  const { type, files, filesInfoArr, onFile, onAll, onCancel } = props;
+
+  const totalFiles = files.length;
+
+  const globalContext = useContext(IntegrationContext);
+  const { upload } = globalContext.useMyMediaHook();
+
+  const [currentUploadIndex, setCurrentUploadIndex] = useState(0);
+
+  const statusesArrRef = useRef<
+    { status: "OK" | "ERROR"; errorMessage?: string }[]
+  >([]);
+
+  // UNMOUNTED WORKAROUND
+  const isUnMounted = useRef(false);
+  useEffect(() => {
+    return () => {
+      isUnMounted.current = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const file = files[currentUploadIndex];
+    const filesInfo = filesInfoArr[currentUploadIndex];
+    //(file.name as any) = filesInfo.filename;
+    upload(type, file, {
+      tags: filesInfo.tags,
+      name: filesInfo.name,
+      // title: filesInfo.name, // TODO remove
+      // description: filesInfo.description,
+      filename: filesInfo.filename,
+      // doNotPreserveAspectRatio: filesInfo.doNotPreserveAspectRatio,
+    }).then((status) => {
+      statusesArrRef.current.push(status);
+      logger.app.debug(
+        `File has been uploaded (${filesInfo.filename} > ${filesInfo.filename})`
+      );
+
+      if (isUnMounted.current) return;
+
+      onFile(file);
+
+      if (currentUploadIndex + 1 === totalFiles) {
+        onAll(statusesArrRef.current);
+        statusesArrRef.current = [];
+      } else {
+        // THIS WILL START NEXT FILE UPLOAD
+        setCurrentUploadIndex(currentUploadIndex + 1);
+      }
+    });
+  }, [currentUploadIndex]);
+
+  return (
+    <Dialog isOpen={true} portalClassName={"bp5-dark"}>
+      <div className={css.uploadFilesHolder}>
+        <Text className={css.fileUploadTitle}>Upload files status</Text>
+
+        <div>
+          <Spinner size={18} className={css.inlineSpinner} />
+          Currently uploading <strong>{currentUploadIndex + 1}</strong> of{" "}
+          <strong>{totalFiles}</strong>
+        </div>
+
+        <div className="">
+          Uploaded: <strong>{currentUploadIndex}</strong>
+        </div>
+        <div className={css.fileUploadActionHolder}>
+          <Button
+            intent="danger"
+            onClick={() => {
+              onCancel();
+              //stop upload
+            }}
+          >
+            Stop upload
+          </Button>
+        </div>
+      </div>
+    </Dialog>
+  );
+}

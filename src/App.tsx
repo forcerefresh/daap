@@ -43,9 +43,10 @@ function App(props: IAppProps) {
   const globalContext = useContext(IntegrationContext);
 
   const { getInstalledExtensions } = globalContext.useExtensionsHook();
-  const { getSettings: getAppSettings, scaleUI } =
-    globalContext.useAppSettingsHook();
-  const { getSettings } = globalContext.useSettingsHook();
+  // const { getSettings: getAppSettings, scaleUI } =
+  //   globalContext.useAppSettingsHook();
+
+  const { getSettings, scaleUI } = globalContext.useSettingsHook();
 
   const { fetchMedias } = globalContext.useMyMediaHook();
 
@@ -83,12 +84,12 @@ function App(props: IAppProps) {
     loadExternalComponents().then(() => {});
 
     //**
-    getAppSettings().then((settings) => {
-      if (settings) {
-        _updateGlobalConfiguration(settings);
-        scaleUI(settings.appZoom);
-      }
-    });
+    // getAppSettings().then((settings) => {
+    //   if (settings) {
+    //     _updateGlobalConfiguration(settings);
+    //     scaleUI(settings.appZoom);
+    //   }
+    // });
 
     _loadUserData();
 
@@ -130,14 +131,17 @@ function App(props: IAppProps) {
 
   // load ai info
   useEffect(() => {
-    getSettings()
-      .then(function (response) {
-        const textEnabled = (response.textAISettings ?? {}).enabled;
-        _setAIEnabled([
-          { enabled: textEnabled, objectType: "io.forcerefresh.text.object" },
-        ]);
-      })
-      .catch(() => void 0);
+    getSettings().then(function (response) {
+      const textEnabled = (response.textAISettings ?? {}).enabled;
+      _setAIEnabled([
+        { enabled: textEnabled, objectType: "io.forcerefresh.text.object" },
+      ]);
+
+      if (response.appSettings) {
+        _updateGlobalConfiguration(response.appSettings);
+        scaleUI(response.appSettings.appZoom);
+      }
+    });
   }, []);
 
   return (
@@ -148,12 +152,12 @@ function App(props: IAppProps) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { pages, selection, settings } = state.project;
+  const { pages, selection } = state.project;
   return {
     pageById: pages.pageById,
     selectedSlideIds: selection.selectedSlideIds,
     activeSlideId: selection.activeSlideId,
-    theme: settings.theme,
+    theme: state.globals.theme,
   };
 };
 

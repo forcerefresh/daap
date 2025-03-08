@@ -9,6 +9,7 @@ import { IAppSettings } from "./store/reducers/globals";
 import {
   MediaDataInfo,
   MediaType,
+  SaaSMediaData,
 } from "webslider-sdk/lib/common/i-media-types";
 import { DevelopmentItem } from "./panels/development-panel/i-development-types";
 import { Preset, PresetGroup } from "./utils/presets/i-presets";
@@ -130,6 +131,14 @@ export const IntegrationContext = React.createContext({
         status: "OK",
       }),
 
+    uploadToWP: (
+      filename: string,
+      file: string //File
+    ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> =>
+      Promise.resolve({
+        status: "OK",
+      }),
+
     fetchMedias: (props: {
       type: MediaType;
       from: number;
@@ -160,17 +169,17 @@ export const IntegrationContext = React.createContext({
     },
   }),
 
-  useAppSettingsHook: () => ({
-    getSettings: (): Promise<IAppSettings | undefined> => {
-      return Promise.resolve({} as IAppSettings);
-    },
+  // useAppSettingsHook: () => ({
+  //   getSettings: (): Promise<IAppSettings | undefined> => {
+  //     return Promise.resolve({} as IAppSettings);
+  //   },
 
-    saveSettings: (settings: IAppSettings): Promise<IAppSettings> => {
-      return Promise.resolve({} as IAppSettings);
-    },
+  //   saveSettings: (settings: IAppSettings): Promise<IAppSettings> => {
+  //     return Promise.resolve({} as IAppSettings);
+  //   },
 
-    scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
-  }),
+  //   scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
+  // }),
 
   useLicenseHook: () => ({
     saveSerial: (props: {
@@ -318,12 +327,18 @@ export const IntegrationContext = React.createContext({
   }),
 
   useSettingsHook: () => ({
-    getSettings: (): Promise<any> => Promise.resolve({}), // todo: add interface for api response
+    getSettings: (): Promise<{
+      textAISettings: any;
+      appSettings: any;
+    }> => Promise.resolve({ textAISettings: {}, appSettings: {} }), // todo: add interface for api response
     patchSettings: ({
       textAISettings,
+      appSettings,
     }: {
-      textAISettings: any;
+      textAISettings?: any;
+      appSettings?: any;
     }): Promise<any> => Promise.resolve({}),
+    scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
   }),
 
   useProjectHook: () => ({
@@ -599,15 +614,15 @@ function getCloseMonitorComponent() {
   }
 }
 
-function useAppSettingsHookFactory() {
-  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
-    return require("./integration/hooks/app-settings-hook/electron-use-app-settings-hook")
-      .useAppSettingsHook;
-  } else {
-    return require("./integration/hooks/app-settings-hook/use-app-settings-hook")
-      .useAppSettingsHook;
-  }
-}
+// function useAppSettingsHookFactory() {
+//   if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
+//     return require("./integration/hooks/app-settings-hook/electron-use-app-settings-hook")
+//       .useAppSettingsHook;
+//   } else {
+//     return require("./integration/hooks/app-settings-hook/use-app-settings-hook")
+//       .useAppSettingsHook;
+//   }
+// }
 
 // function useAssetsHookFactory() {
 //   return require("./integration/hooks/assets-hook/use-assets-hook")
@@ -679,7 +694,7 @@ export const IntegrationContextProvider = (
         usePresets: usePresetsHookFactory(),
         useObjectStorageHook: useObjectStorageFactory(),
         useExtensionsHook: useExtensionsHookFactory(),
-        useAppSettingsHook: useAppSettingsHookFactory(),
+        // useAppSettingsHook: useAppSettingsHookFactory(),
         useDevelopmentHook: useDevelopmentHookFactory(),
         useLicenseHook: useLicenseHookFactory(),
         useRemoteTemplateHook: useRemoteTemplateHookFactory(),
