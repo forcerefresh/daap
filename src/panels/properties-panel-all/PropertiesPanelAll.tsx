@@ -22,6 +22,7 @@ import BasicProperties from "../properties-panel/basic-properties/BasicPropertie
 import CommonStyleProperties from "../properties-panel/common-style/CommonStyleProperties";
 import TransformProperties from "../properties-panel/transform-properties/TransformProperties";
 import { PanelHeader } from "../common/panel-header/PanelHeader";
+import AlignPanel from "../align-panel/AlignPanel";
 
 type ISlidesPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -78,6 +79,8 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
         {activeSection === PropertiesPanelSection.Linking && (
           <NavigationPanel />
         )}
+
+        {activeSection === PropertiesPanelSection.More && <AlignPanel />}
 
         {/*<Tabs className={css.tabs}>
         <Tab

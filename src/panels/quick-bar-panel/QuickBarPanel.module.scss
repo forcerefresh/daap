@@ -10,9 +10,19 @@
 }
 
 .sliderHolder {
+  padding: 10px 20px;
+
+  :global {
+    .bp5-label {
+      font-weight: bold;
+      color: #808080 !important;
+      margin-bottom: 10px;
+    }
+  }
+
   :global {
     .bp5-form-group {
-      padding: 5px 5px 5px 18px !important;
+      // padding: 5px 5px 5px 18px !important;
       margin-bottom: 0px;
     }
   }
@@ -20,6 +30,14 @@
 .button {
   height: 55px;
   align-items: center;
+}
+
+.toolButtonHolder {
+  :global {
+    .bp5-button:not(.bp5-disabled) {
+      color: rgb(171, 179, 191) !important;
+    }
+  }
 }
 
 .squareButton {

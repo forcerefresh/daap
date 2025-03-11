@@ -260,7 +260,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     //const tmpObj = createObject(object.type, {});
 
     if (isEmpty(object.properties)) {
-      return <div>Object '{object.type}' has no properties.</div>;
+      return <></>; //<div>Object '{object.type}' has no properties.</div>;
     }
 
     // check for forward compatibility

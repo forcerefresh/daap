@@ -12,6 +12,7 @@ import css from "./QuickBarPanel.module.scss";
 import {
   Button,
   Divider,
+  Label,
   Popover,
   PopoverInteractionKind,
   Position,
@@ -31,12 +32,14 @@ import PropertiesIcon from "../../panels/properties-sections-panel/icons/propert
 import TransformIcon from "../../panels/properties-sections-panel/icons/transform.svg?react";
 
 import OpacityIcon from "../../assets/icons/opacity2.svg?react";
+import ColorPaletteIcon from "./assets/color-palette.svg?react";
 
 import MediaLibraryPanel, { Panels } from "../media-library/MediaLibraryPanel";
 import { cloneDeep } from "lodash-es";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { object } from "yup";
 import { getSelectSlider } from "../../inputs/input-utils";
+import AlignPanel from "../align-panel/AlignPanel";
 
 const PANEL_ICON_SIZE = 22;
 
@@ -176,6 +179,52 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           </div>
         )}
 
+        <div className={css.toolButtonHolder}>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.BOTTOM}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            usePortal={true}
+            minimal
+            // isOpen={isMaskOpen}
+            content={<AlignPanel />}
+          >
+            <Button
+              icon={
+                <ColorPaletteIcon
+                  style={{
+                    width: "36px",
+                    height: PANEL_ICON_SIZE + "px",
+                    fill: "gray",
+                  }}
+                />
+              }
+              minimal
+              className={cx(css.button, css.squareButton)}
+              disabled={selectedObjectIds.length === 0}
+            ></Button>
+          </Popover>
+        </div>
+
+        <div>
+          <Popover
+            interactionKind={PopoverInteractionKind.CLICK}
+            position={Position.BOTTOM}
+            modifiers={{ preventOverflow: { enabled: true } }}
+            usePortal={true}
+            minimal
+            // isOpen={isMaskOpen}
+            content={<AlignPanel />}
+          >
+            <Button
+              icon={"alignment-left"}
+              minimal
+              className={cx(css.button, css.squareButton)}
+              disabled={selectedObjectIds.length === 0}
+            ></Button>
+          </Popover>
+        </div>
+
         <div>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
@@ -186,32 +235,35 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             // isOpen={isMaskOpen}
             content={
               <div className={css.sliderHolder}>
-                {getSelectSlider(
-                  "",
-                  activeObject?.style?.opacity ?? 100,
-                  {
-                    min: 0,
-                    max: 100,
-                    suffix: "",
-                    stepSize: 1,
-                    labelStepSize: 1,
-                    trackFill: false,
-                  },
-                  (opacity: string) => {
-                    if (!activeObject) return;
-                    const retObj = cloneDeep(activeObject);
-                    if (!retObj.style) retObj.style = {};
-                    retObj.style.opacity = parseInt(opacity);
-                    updateObject(retObj);
-                  },
-                  (opacity: string) => {
-                    if (!activeObject) return;
-                    const retObj = cloneDeep(activeObject);
-                    if (!retObj.style) retObj.style = {};
-                    retObj.style.opacity = parseInt(opacity);
-                    updateObjectForPreview(retObj);
-                  }
-                )}
+                <div>
+                  <Label>Opacity</Label>
+                  {getSelectSlider(
+                    "",
+                    activeObject?.style?.opacity ?? 100,
+                    {
+                      min: 0,
+                      max: 100,
+                      suffix: "",
+                      stepSize: 1,
+                      labelStepSize: 1,
+                      trackFill: false,
+                    },
+                    (opacity: string) => {
+                      if (!activeObject) return;
+                      const retObj = cloneDeep(activeObject);
+                      if (!retObj.style) retObj.style = {};
+                      retObj.style.opacity = parseInt(opacity);
+                      updateObject(retObj);
+                    },
+                    (opacity: string) => {
+                      if (!activeObject) return;
+                      const retObj = cloneDeep(activeObject);
+                      if (!retObj.style) retObj.style = {};
+                      retObj.style.opacity = parseInt(opacity);
+                      updateObjectForPreview(retObj);
+                    }
+                  )}
+                </div>
               </div>
             }
           >

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 export enum PropertiesPanelSection {
+  More = "more",
   Layout = "layout",
   Properties = "properties",
   Transform = "transform",

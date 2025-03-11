@@ -7,6 +7,7 @@ import { IStore } from "../../store/store";
 import css from "./AlignPanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { updateObject } from "../../store/actions/actions";
+import { getObjectBoundingBox } from "../../store/helpers/objectBoundingBox";
 
 interface IAlignPanelProps {
   onRequestClose: () => void;
@@ -24,102 +25,254 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
     objects.push(objectById[objectId]);
   });
 
-  const alignLeft = () => {
-    if (objects.length <= 1) return;
+  const calculateRightAlignment = (objects: IObject[]) => {
+    const topArr: { id: string; left: number }[] = [];
 
-    let min = 1000000;
+    let maxBB = -1000000;
+
     objects.forEach((object) => {
-      min = Math.min(min, object.left!);
+      const objBB = getObjectBoundingBox(object);
+      maxBB = Math.max(maxBB, Math.abs(objBB.x!) + objBB.width!);
     });
 
     objects.forEach((object) => {
-      const objectClone = cloneDeep(object);
-      objectClone.left = min;
-      _updateObject(objectClone);
-    });
-  };
-
-  const alignTop = () => {
-    if (objects.length <= 1) return;
-
-    let min = 1000000;
-    objects.forEach((object) => {
-      min = Math.min(min, object.top!);
+      const objBB = getObjectBoundingBox(object);
+      topArr.push({
+        id: object.id,
+        left: object.left! + maxBB - (Math.abs(objBB.x!) + objBB.width!),
+      });
     });
 
-    objects.forEach((object) => {
-      const objectClone = cloneDeep(object);
-      objectClone.top = min;
-      _updateObject(objectClone);
-    });
+    return topArr;
   };
 
   const alignRight = () => {
     if (objects.length <= 1) return;
 
-    let max = -1000000;
+    const topArr = calculateRightAlignment(objects);
+
+    topArr.forEach((item) => {
+      const object = objects.find((o) => o.id === item.id);
+      const objectClone = cloneDeep(object);
+      objectClone!.left = item.left;
+      _updateObject(objectClone!);
+    });
+  };
+
+  const calculateLeftAlignment = (objects: IObject[]) => {
+    const topArr: { id: string; left: number }[] = [];
+
+    let minBB = 1000000;
+    const objDiff: any = {};
+
     objects.forEach((object) => {
-      max = Math.max(max, object.left! + object.width!);
+      const objBB = getObjectBoundingBox(object);
+      minBB = Math.min(minBB, objBB.x!);
+      objDiff[object.id] = object.left! - objBB.x!;
     });
 
     objects.forEach((object) => {
+      topArr.push({ id: object.id, left: minBB + objDiff[object.id] });
+    });
+
+    return topArr;
+  };
+
+  const alignLeft = () => {
+    if (objects.length <= 1) return;
+
+    const topArr = calculateLeftAlignment(objects);
+
+    topArr.forEach((item) => {
+      const object = objects.find((o) => o.id === item.id);
       const objectClone = cloneDeep(object);
-      objectClone.left = max - objectClone.width!;
-      _updateObject(objectClone);
+      objectClone!.left = item.left;
+      _updateObject(objectClone!);
+    });
+  };
+
+  // const alignLeft = () => {
+  //   if (objects.length <= 1) return;
+
+  //   let minBB = 1000000;
+  //   const objDiff: any = {};
+
+  //   objects.forEach((object) => {
+  //     const objBB = getObjectBoundingBox(object);
+  //     minBB = Math.min(minBB, objBB.x!);
+  //     objDiff[object.id] = object.left! - objBB.x!;
+  //   });
+
+  //   objects.forEach((object) => {
+  //     const objectClone = cloneDeep(object);
+  //     objectClone.left = minBB + objDiff[object.id];
+  //     _updateObject(objectClone);
+  //   });
+  // };
+
+  const calculateTopAlignment = (objects: IObject[]) => {
+    const topArr: { id: string; top: number }[] = [];
+
+    let minBB = 1000000;
+    const objDiff: any = {};
+
+    objects.forEach((object) => {
+      const objBB = getObjectBoundingBox(object);
+      minBB = Math.min(minBB, objBB.y!);
+      objDiff[object.id] = object.top! - objBB.y!;
+    });
+
+    objects.forEach((object) => {
+      topArr.push({ id: object.id, top: minBB + objDiff[object.id] });
+    });
+
+    return topArr;
+  };
+
+  const calculateBottomAlignment = (objects: IObject[]) => {
+    const topArr: { id: string; top: number }[] = [];
+
+    let maxBB = -1000000;
+
+    objects.forEach((object) => {
+      const objBB = getObjectBoundingBox(object);
+      maxBB = Math.max(maxBB, Math.abs(objBB.y!) + objBB.height!);
+    });
+
+    objects.forEach((object) => {
+      const objBB = getObjectBoundingBox(object);
+      topArr.push({
+        id: object.id,
+        top: object.top! + maxBB - (Math.abs(objBB.y!) + objBB.height!),
+      });
+    });
+
+    return topArr;
+  };
+
+  const alignTop = () => {
+    if (objects.length <= 1) return;
+
+    const topArr = calculateTopAlignment(objects);
+
+    topArr.forEach((item) => {
+      const object = objects.find((o) => o.id === item.id);
+      const objectClone = cloneDeep(object);
+      objectClone!.top = item.top;
+      _updateObject(objectClone!);
     });
   };
 
   const alignBottom = () => {
     if (objects.length <= 1) return;
 
-    let max = -1000000;
-    objects.forEach((object) => {
-      max = Math.max(max, object.top! + object.height!);
-    });
+    const topArr = calculateBottomAlignment(objects);
 
-    objects.forEach((object) => {
+    topArr.forEach((item) => {
+      const object = objects.find((o) => o.id === item.id);
       const objectClone = cloneDeep(object);
-      objectClone.top = max - objectClone.height!;
-      _updateObject(objectClone);
+      objectClone!.top = item.top;
+      _updateObject(objectClone!);
     });
   };
+
+  // const alignRight = () => {
+  //   if (objects.length <= 1) return;
+
+  //   let maxBB = -1000000;
+
+  //   const objDiff: any = {};
+
+  //   objects.forEach((object) => {
+  //     const objBB = getObjectBoundingBox(object);
+  //     maxBB = Math.max(maxBB, Math.abs(objBB.x!) + objBB.width!);
+  //   });
+
+  //   objects.forEach((object) => {
+  //     const objectClone = cloneDeep(object);
+  //     const objBB = getObjectBoundingBox(object);
+
+  //     objectClone.left! += maxBB - (Math.abs(objBB.x!) + objBB.width!);
+  //     // maxBB - (object.left! - objBB.x!) + (objBB.width - object.width!);
+  //     _updateObject(objectClone);
+  //   });
+  // };
+
+  // const alignBottom = () => {
+  //   if (objects.length <= 1) return;
+
+  //   let maxBB = -1000000;
+
+  //   objects.forEach((object) => {
+  //     const objBB = getObjectBoundingBox(object);
+  //     maxBB = Math.max(maxBB, Math.abs(objBB.y!) + objBB.height!);
+  //   });
+
+  //   objects.forEach((object) => {
+  //     const objectClone = cloneDeep(object);
+  //     const objBB = getObjectBoundingBox(object);
+
+  //     objectClone.top! += maxBB - (Math.abs(objBB.y!) + objBB.height!);
+  //     // maxBB - (object.left! - objBB.x!) + (objBB.width - object.width!);
+  //     _updateObject(objectClone);
+  //   });
+  // };
 
   const alignHorizontalCenter = () => {
     if (objects.length <= 1) return;
 
-    let min = 1000000;
-    let max = -1000000;
-    objects.forEach((object) => {
-      max = Math.max(max, object.top! + object.height!);
-      min = Math.min(max, object.top!);
-    });
+    const topArr = calculateTopAlignment(objects);
+    const bottomArr = calculateBottomAlignment(objects);
 
-    const center = min + (max - min) / 2;
+    topArr.forEach((item, idx) => {
+      const bottomItem = bottomArr[idx];
 
-    objects.forEach((object) => {
+      const object = objects.find((o) => o.id === item.id);
       const objectClone = cloneDeep(object);
-      objectClone.top = center - objectClone.height! / 2;
-      _updateObject(objectClone);
+      objectClone!.top = (item.top + bottomItem.top) / 2;
+      _updateObject(objectClone!);
     });
   };
+
   const alignVerticalCenter = () => {
     if (objects.length <= 1) return;
 
-    let min = 1000000;
-    let max = -1000000;
-    objects.forEach((object) => {
-      max = Math.max(max, object.left! + object.width!);
-      min = Math.min(max, object.left!);
-    });
+    const topArr = calculateLeftAlignment(objects);
+    const bottomArr = calculateRightAlignment(objects);
 
-    const center = min + (max - min) / 2;
+    topArr.forEach((item, idx) => {
+      const bottomItem = bottomArr[idx];
 
-    objects.forEach((object) => {
+      const object = objects.find((o) => o.id === item.id);
       const objectClone = cloneDeep(object);
-      objectClone.left = center - objectClone.width! / 2;
-      _updateObject(objectClone);
+      objectClone!.left = (item.left + bottomItem.left) / 2;
+      _updateObject(objectClone!);
     });
   };
+
+  // const alignVerticalCenter = () => {
+  //   if (objects.length <= 1) return;
+
+  //   let min = 1000000;
+  //   let max = -1000000;
+  //   objects.forEach((object) => {
+  //     const objBB = getObjectBoundingBox(object);
+
+  //     max = Math.max(max, objBB.x! + objBB.width!);
+  //     min = Math.min(max, objBB.x!);
+  //   });
+
+  //   const center = min + (max - min) / 2;
+
+  //   objects.forEach((object) => {
+  //     const objectClone = cloneDeep(object);
+
+  //     const objBB = getObjectBoundingBox(object);
+
+  //     objectClone.left = center - objBB.width! / 2;
+  //     _updateObject(objectClone);
+  //   });
+  // };
 
   const distributeVerticalCenter = () => {
     //  ->|  |  |  |<- min and max objects center
@@ -179,40 +332,44 @@ const AlignPanel: React.FC<IAlignPanelMergedProps> = (props) => {
 
   return (
     <div className={cx("bp5-dark", css.alignPanel)}>
-      <div className={css.panelHeader}>
+      {/* <div className={css.panelHeader}>
         <div>ALIGN &amp; DISTRIBUTE PANEL</div>
-      </div>
+      </div> */}
       <div className={css.alignHolder}>
-        <Label>Align</Label>
         <div>
-          <Button minimal icon="alignment-left" onClick={alignLeft} />
-          <Button minimal icon="alignment-right" onClick={alignRight} />
-          <Button minimal icon="alignment-top" onClick={alignTop} />
-          <Button minimal icon="alignment-bottom" onClick={alignBottom} />
-          <Button
-            minimal
-            icon="alignment-horizontal-center"
-            onClick={alignHorizontalCenter}
-          />
-          <Button
-            minimal
-            icon="alignment-vertical-center"
-            onClick={alignVerticalCenter}
-          />
+          <Label>Align objects</Label>
+          <div className={css.alignButtonsHolder}>
+            <Button minimal icon="alignment-left" onClick={alignLeft} />
+            <Button minimal icon="alignment-right" onClick={alignRight} />
+            <Button minimal icon="alignment-top" onClick={alignTop} />
+            <Button minimal icon="alignment-bottom" onClick={alignBottom} />
+            <Button
+              minimal
+              icon="alignment-horizontal-center"
+              onClick={alignHorizontalCenter}
+            />
+            <Button
+              minimal
+              icon="alignment-vertical-center"
+              onClick={alignVerticalCenter}
+            />
+          </div>
         </div>
-        <Label>Distribute</Label>
-        <div>
-          <Button
-            minimal
-            icon="vertical-distribution"
-            onClick={distributeVerticalCenter}
-          />
-          <Button
-            minimal
-            icon="horizontal-distribution"
-            onClick={distributeHorizontalCenter}
-          />
-        </div>
+        {/* <div>
+          <Label>Distribute objects</Label>
+          <div className={css.alignButtonsHolder}>
+            <Button
+              minimal
+              icon="vertical-distribution"
+              onClick={distributeVerticalCenter}
+            />
+            <Button
+              minimal
+              icon="horizontal-distribution"
+              onClick={distributeHorizontalCenter}
+            />
+          </div>
+        </div> */}
       </div>
     </div>
   );

@@ -11,6 +11,8 @@ import LinkIcon from "./icons/link.svg?react";
 import LayoutIcon from "./icons/layout.svg?react";
 import TransformIcon from "./icons/transform.svg?react";
 import CommonStyleIcon from "./icons/common-style.svg?react";
+import MoreIcon from "./icons/more.svg?react";
+
 import {
   PropertiesPanelContext,
   PropertiesPanelSection,
@@ -163,6 +165,27 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
                 }}
               />
               Style
+            </Button>
+          )}
+        </div>
+
+        <div>
+          {selectionForProperties?.type === "object" && (
+            <Button
+              minimal
+              active={activeSection === PropertiesPanelSection.More}
+              onClick={() => {
+                setActiveSection(PropertiesPanelSection.More);
+              }}
+            >
+              <MoreIcon
+                style={{
+                  width: "36px",
+                  height: ICON_SIZE + "px",
+                  fill: "gray",
+                }}
+              />
+              More
             </Button>
           )}
         </div>
