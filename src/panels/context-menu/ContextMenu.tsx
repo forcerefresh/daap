@@ -9,11 +9,13 @@ import {
 } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import {
+  copyToClipboard,
   cutToClipboard,
   deleteObjects,
   duplicateObjects,
   groupObjects,
   normalizeObjectGroups,
+  pasteObjectsFromClipboard,
   ungroupObject,
   updateObject,
 } from "../../store/actions/actions";
@@ -38,11 +40,14 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
     hasClipboard,
     selectedObjectIds,
     objectById,
+    activeLayerId,
     _groupObjects,
     _ungroupObject,
     _duplicateObjects,
     _normalizeObjectGroups,
     _cutToClipboard,
+    _copyToClipboard,
+    _pasteObjectsFromClipboard,
     _deleteObjects,
     _updateObject,
   } = props;
@@ -52,12 +57,21 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
 
   const object = objectById[selectedObjectIds[0]];
 
+  // if (!object) {
+  //   return (
+  //     <Menu className={css.contextMenu}>
+  //       <MenuItem text="No object selected." disabled={true} />
+  //     </Menu>
+  //   );
+  // }
+
   return (
     <Menu className={css.contextMenu}>
       <MenuItem
         icon="cut"
         text="Cut"
         label="⌘X"
+        disabled={!object}
         onClick={() => {
           _cutToClipboard({
             entityIds: selectedObjectIds,
@@ -65,12 +79,28 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
           });
         }}
       />
-      <MenuItem icon="duplicate" text="Copy" label="⌘C" />
+      <MenuItem
+        icon="duplicate"
+        text="Copy"
+        label="⌘C"
+        disabled={!object}
+        onClick={() => {
+          _copyToClipboard({
+            entityIds: selectedObjectIds,
+            entityType: "object",
+          });
+        }}
+      />
       <MenuItem
         icon="clipboard"
         text="Paste"
         label="⌘V"
-        disabled={!hasClipboard}
+        disabled={!hasClipboard && !!activeLayerId}
+        onClick={() => {
+          if (activeLayerId) {
+            _pasteObjectsFromClipboard(activeLayerId);
+          }
+        }}
       />
       <MenuDivider />
 
@@ -128,8 +158,9 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
       )}
 
       <MenuItem
-        text={object.isLocked ? "Unlock" : "Lock"}
-        icon={object.isLocked ? "lock" : "unlock"}
+        text={object?.isLocked ? "Unlock" : "Lock"}
+        icon={object?.isLocked ? "lock" : "unlock"}
+        disabled={!object}
         // label={(<Icon icon="key-backspace" />) as unknown as string}
         onClick={(event: any) => {
           event.stopPropagation();
@@ -143,6 +174,7 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
 
       <MenuItem
         text="Delete"
+        disabled={!object}
         icon="delete"
         label={(<Icon icon="key-backspace" />) as unknown as string}
         onClick={() => {
@@ -160,6 +192,7 @@ const mapStateToProps = (state: IStore) => {
     hasClipboard: !!clipboard.entityType,
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
+    activeLayerId: selection.activeLayerId,
   };
 };
 
@@ -169,9 +202,19 @@ const mapDispatchToProps = {
   _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
   _normalizeObjectGroups: (objects: IObject[]): any =>
     normalizeObjectGroups(objects),
+
   _cutToClipboard: (
     payload: Pick<IClipboard, "entityType" | "entityIds">
   ): any => cutToClipboard(payload),
+  _copyToClipboard: (
+    payload: Pick<IClipboard, "entityType" | "entityIds">
+  ): any => copyToClipboard(payload),
+  _pasteObjectsFromClipboard: (toLayerId: string): any =>
+    pasteObjectsFromClipboard(toLayerId),
+  // _cutToClipboard: (
+  //   payload: Pick<IClipboard, "entityType" | "entityIds">
+  // ): any => cutToClipboard(payload),
+
   _deleteObjects: (objectIds: string[]) => deleteObjects(objectIds),
   _updateObject: (object: IObject) => updateObject(object),
 };

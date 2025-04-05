@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 import {
+  SnapBounds,
   IToolClass,
   Point,
   Rect,
@@ -15,7 +16,7 @@ import {
 import { IStore } from "../../store/store";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { useSelector, useStore } from "react-redux";
-import { cloneDeep } from "lodash-es";
+import { cloneDeep, forEach, forOwn } from "lodash-es";
 import { IToolConfig } from "./types";
 import {
   CursorContext,
@@ -23,8 +24,19 @@ import {
   ICursorStyle,
 } from "../../panels/stage-panel-new/CursorProvider";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { populateObjectThreeIds } from "../../store/actions/actions-utils";
+import {
+  isObjectGroup,
+  populateObjectThreeIds,
+} from "../../store/actions/actions-utils";
 import { getGroupMatrixFromSelectionPath } from "../../panels/stage-panel-new/stage-panel-utils";
+import {
+  getObjectBounds,
+  objectPointToStageSpace_New,
+  stagePointToObjectSpace_New,
+} from "../transform/transform-utils";
+import { globals } from "../../store/reducers/globals";
+import { ILayer } from "../../store/reducers/i-layers";
+import { IPage } from "../../store/reducers/i-pages";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -45,6 +57,8 @@ export interface ToolsContextInterface {
   cursorStyle: ICursorStyle | undefined;
   //
   appZoom?: number;
+  //
+  snapBounds: { bounds: SnapBounds; objectId: string }[];
 }
 
 export const ToolsContext = React.createContext<ToolsContextInterface>({
@@ -65,6 +79,8 @@ export const ToolsContext = React.createContext<ToolsContextInterface>({
 
   //
   cursorStyle: undefined,
+  //
+  snapBounds: [],
 });
 
 export const ToolsProvider = (
@@ -81,14 +97,24 @@ export const ToolsProvider = (
     allObjects,
     layerById,
     appZoom,
+    globals,
+    activePageId,
+    allLayers,
+    pageById,
   } = useSelector((_state: IStore) => {
     return {
       appZoom: _state.globals.appZoom,
       stageZoom: getZoom(_state.stage, _state.project.settings),
       activeLayerId: _state.project.selection.activeLayerId,
+      activePageId: _state.project.selection.activeSlideId,
+
       objectById: _state.project.objects.objectById,
       allObjects: _state.project.objects.allObjects,
       layerById: _state.project.layers.layerById,
+      allLayers: _state.project.layers.allLayers,
+      pageById: _state.project.pages.pageById,
+
+      globals: _state.globals,
     };
   });
 
@@ -98,6 +124,9 @@ export const ToolsProvider = (
     objectById,
     allObjects,
     layerById,
+    activePageId,
+    allLayers,
+    pageById,
   });
   storeRef.current = {
     stageZoom,
@@ -105,7 +134,56 @@ export const ToolsProvider = (
     objectById,
     allObjects,
     layerById,
+    activePageId,
+    allLayers,
+    pageById,
   };
+
+  const [snapBounds, setSnapBounds] = useState<
+    { bounds: SnapBounds; objectId: string; snapThreshold: number }[]
+  >([]);
+
+  useEffect(() => {
+    if (!globals.snapToObject) {
+      setSnapBounds([]);
+      return;
+    }
+
+    const allObjectBounds: {
+      bounds: SnapBounds;
+      objectId: string;
+      snapThreshold: number;
+    }[] = [];
+
+    const pageObjects = getPageObjects(storeRef.current);
+
+    pageObjects.forEach((object) => {
+      if (isObjectGroup(object)) {
+        return;
+      }
+
+      const objectPathArr = getObjectPath(object.id, objectById);
+
+      if (objectPathArr.length > 0) {
+        const bounds = getObjectBounds(objectPathArr);
+
+        allObjectBounds.push({
+          bounds,
+          objectId: object.id,
+          snapThreshold: globals.snapToObjectThreshold,
+        });
+      }
+    });
+
+    setSnapBounds(allObjectBounds);
+  }, [
+    objectById,
+    layerById,
+    activePageId,
+    pageById,
+    allLayers,
+    globals.snapToObject,
+  ]);
 
   console.log("INVESTIGATE");
   console.log(cloneDeep(allObjects));
@@ -305,22 +383,27 @@ export const ToolsProvider = (
     p: Point,
     includeTranslate = true
   ) => {
-    const objTransform = getObjectTransform(objectId, {
-      includeTranslate,
-      skipStageScale: true,
-    });
-
-    const pointMatrix = new DOMMatrix(
-      `translateX(${p.x}px) translateY(${p.y}px)`
+    return objectPointToStageSpace_New(
+      [storeRef.current.objectById[objectId]],
+      p,
+      1 // stageZoom - do not send stage zoom as we have same scale.
     );
+    // const objTransform = getObjectTransform(objectId, {
+    //   includeTranslate,
+    //   skipStageScale: true,
+    // });
 
-    // return objTransform.transformPoint(p);
+    // const pointMatrix = new DOMMatrix(
+    //   `translateX(${p.x}px) translateY(${p.y}px)`
+    // );
 
-    objTransform.multiplySelf(pointMatrix);
-    const translateX = objTransform.e;
-    const translateY = objTransform.f;
+    // // return objTransform.transformPoint(p);
 
-    return { x: translateX, y: translateY };
+    // objTransform.multiplySelf(pointMatrix);
+    // const translateX = objTransform.e;
+    // const translateY = objTransform.f;
+
+    // return { x: translateX, y: translateY };
   };
 
   const stagePointToObjectSpace = (
@@ -329,6 +412,12 @@ export const ToolsProvider = (
     overrideObjectSize?: Pick<IObject, "left" | "top" | "width" | "height">,
     includeTranslate: boolean = true
   ) => {
+    // return stagePointToObjectSpace_New(
+    //   [storeRef.current.objectById[objectId]],
+    //   p,
+    //   1
+    // );
+
     const objTransform = getObjectTransform(
       objectId,
       {
@@ -495,9 +584,61 @@ export const ToolsProvider = (
         cursorStyle,
         //
         appZoom,
+        //
+        snapBounds,
       }}
     >
       {children}
     </ToolsContext.Provider>
   );
 };
+
+export function getObjectPath(objectId: string, objectById: any) {
+  const objectPathArr: IObject[] = [];
+  populateObjectPathRec(objectPathArr, objectId, objectById);
+  return objectPathArr;
+}
+
+function populateObjectPathRec(
+  objectPathArr: IObject[],
+  objectId: string,
+  objectById: any
+) {
+  const object = objectById[objectId];
+
+  if (object) {
+    objectPathArr.unshift(object);
+    populateObjectPathRec(objectPathArr, object.parentId, objectById);
+  }
+}
+
+function getPageObjects(store: {
+  activeLayerId: string | null;
+  objectById: {
+    [id: string]: IObject<{}>;
+  };
+  allObjects: string[];
+  layerById: {
+    [id: string]: ILayer;
+  };
+  activePageId: string | null;
+  allLayers: string[];
+  pageById: {
+    [id: string]: IPage;
+  };
+}) {
+  const objects: IObject[] = [];
+
+  const pageLayerIds = store.allLayers.filter((layerId) => {
+    const layer = store.layerById[layerId];
+    return layer.pageId === store.activePageId;
+  });
+
+  forOwn(store.objectById, (obj, objId) => {
+    if (pageLayerIds.includes(obj.layerId)) {
+      objects.push(obj);
+    }
+  });
+
+  return objects;
+}

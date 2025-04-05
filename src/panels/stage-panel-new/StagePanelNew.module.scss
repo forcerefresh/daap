@@ -1,5 +1,13 @@
 @import "/src/theme";
 
+.stagePanel {
+  :global {
+    .snap-highlight-object {
+      border: 1px solid #ce58d1;
+      border-width: var(--snap-border-width);
+    }
+  }
+}
 :global(.bp5-dark) {
   .stagePanel {
     background-color: #232323;
@@ -338,4 +346,8 @@
 .resizeHandleHolder {
   pointer-events: none;
   //background-color: red;
+}
+
+.contextMenuPopover {
+  // background: none;
 }

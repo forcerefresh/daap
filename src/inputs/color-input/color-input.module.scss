@@ -33,6 +33,9 @@
 
 .popoverContent {
   padding: 10px;
+  min-width: 340px;
+  max-width: 340px;
+  min-height: 400px;
 }
 
 :global {
@@ -42,6 +45,12 @@
     height: fit-content;
 
     background-color: $pt-app-background-color !important;
+
+    *,
+    *:hover,
+    *:active {
+      outline: none !important;
+    }
   }
 
   .bp5-dark .color-picker-popover .bp5-popover-content {
@@ -142,7 +151,8 @@
 
 .sectionColorRow {
   display: flex;
-  gap: 5px
+  gap: 5px;
+  flex-wrap: wrap;
 }
 
 .sectionWrapperDefaultColor {

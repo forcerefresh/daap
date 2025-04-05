@@ -201,6 +201,10 @@ export function objects(
         const newObjectId = newObjectMapping[idx].newObjectId;
         const fromObject = state.objectById[fromObjectId];
         const toObject = cloneDeep(fromObject);
+        if (operation === "copy") {
+          toObject.left = toObject.left! + 20;
+          toObject.top = toObject.top! + 20;
+        }
         toObject.id = newObjectId;
         toObject.name =
           operation === "copy"
@@ -229,6 +233,10 @@ export function objects(
             const newObjectId = childItem.newObjectId;
             const fromObject = state.objectById[childItem.objectId];
             const toObject = cloneDeep(fromObject);
+            if (operation === "copy") {
+              toObject.left = toObject.left! + 20;
+              toObject.top = toObject.top! + 20;
+            }
             toObject.id = newObjectId;
             toObject.parentId = childItem.toParentId;
             toObject.layerId = childItem.toLayerId;

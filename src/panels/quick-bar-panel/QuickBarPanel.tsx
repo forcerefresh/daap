@@ -179,7 +179,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           </div>
         )}
 
-        <div className={css.toolButtonHolder}>
+        {/* <div className={css.toolButtonHolder}>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.BOTTOM}
@@ -204,7 +204,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               disabled={selectedObjectIds.length === 0}
             ></Button>
           </Popover>
-        </div>
+        </div> */}
 
         <div>
           <Popover
@@ -296,17 +296,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
           </Popover>
         </div>
 
-        <div>
-          {/* <Button
-            className={cx(css.button, css.squareButton)}
-            minimal
-            onClick={() => {
-              setIsMaskOpen(true);
-            }}
-            // disabled={selectedObjectIds.length !== 1}
-            icon={"mask"}
-          ></Button> */}
-
+        {/* <div>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.BOTTOM}
@@ -328,6 +318,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
                   onSelect={(item) => {
                     if (activeObject) {
                       const newObject = cloneDeep(activeObject);
+                      debugger;
                       if (item?.initialValues?.svg) {
                         newObject.mask = {
                           type: "svg",
@@ -360,7 +351,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
               disabled={selectedObjectIds.length !== 1}
             ></Button>
           </Popover>
-        </div>
+        </div> */}
 
         {/* <div>
           <Button

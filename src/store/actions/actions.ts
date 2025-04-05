@@ -1323,6 +1323,8 @@ export function addNewObject(
     if (object.type !== "text") {
       dispatch(setNextTextPosition(100));
     }
+
+    dispatch(collectColors());
   };
 }
 
@@ -2347,6 +2349,21 @@ export function forceRefresh(): ForceRefreshAction {
 
 // ******
 
+export const CLIPBOARD_CLEAR = "Clear clipboard";
+
+export interface ClearClipboardAction extends IUndoableAction<false> {
+  type: typeof CLIPBOARD_CLEAR;
+}
+
+export function clearClipboard(): ClearClipboardAction {
+  return {
+    type: CLIPBOARD_CLEAR,
+    isUndoable: false,
+  };
+}
+
+// *******
+
 export const CLIPBOARD_CUT = "Cut to clipboard";
 
 export interface CutToClipboardAction extends IUndoableAction<false> {
@@ -2606,6 +2623,20 @@ export interface OpenProjectAction extends IUndoableAction<false> {
 }
 
 export function openProject(project: {
+  pages: IPages;
+  layers: ILayers;
+  objects: IObjects;
+  selection: ISelection;
+  document: IDocument;
+  settings: ISettings;
+}): any {
+  return function (dispatch: Dispatch, _getState: () => IStore) {
+    dispatch(_openProject(project));
+    dispatch(collectColors());
+  };
+}
+
+export function _openProject(project: {
   pages: IPages;
   layers: ILayers;
   objects: IObjects;
@@ -3158,6 +3189,7 @@ export type ActionTypes =
   | CutToClipboardAction
   | CopyToClipboardAction
   | PasteObjectsFromClipboardAction
+  | ClearClipboardAction
   | UpdateUserDataAction
   | ShowSimplifiedLayersAction
   | ShowSimplifiedPagesAction

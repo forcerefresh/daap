@@ -18,7 +18,7 @@ import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import Login from "../../../pages/login/Login";
 import { AUTH_LOGOUT } from "../../../pages/login/constants";
 import css from "./SassMainHeader.module.scss";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type IAccountButtonProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -63,6 +63,29 @@ export function AccountButton(props: IAccountButtonProps) {
     );
   }, [setLoginOpen, loginOpen]);
 
+  const loginRef = useRef<any>(null);
+
+  // >>>>>
+  const accountRef = useRef<{
+    userDataLoading?: boolean;
+    displayName?: string;
+  }>();
+  accountRef.current = {
+    userDataLoading: account.userDataLoading,
+    displayName: account.userData?.displayName,
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        !accountRef.current?.userDataLoading &&
+        !accountRef.current?.userDataLoading
+      ) {
+        loginRef.current?.click?.();
+      }
+    }, 200);
+  }, [accountRef.current?.userDataLoading]);
+  // <<<<<
   if (
     account.userDataLoading ||
     typeof account.userData?.displayName === "undefined"
@@ -75,6 +98,7 @@ export function AccountButton(props: IAccountButtonProps) {
           icon="person"
           loading={account.userDataLoading}
           style={{ marginRight: "0px" }}
+          ref={loginRef}
           onClick={() => {
             setLoginOpen(true);
           }}

@@ -14,7 +14,11 @@ import {
   updateGlobalConfiguration,
   updateSlideDuration,
 } from "../../store/actions/actions";
-import { getCheckboxField } from "../../inputs/input-utils";
+import {
+  getCheckboxField,
+  getSelectField,
+  getUnitNumericFiled,
+} from "../../inputs/input-utils";
 
 import { IAppSettings } from "../../store/reducers/globals";
 import { IntegrationContext } from "../../integration";
@@ -53,7 +57,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
   return (
     <div className={css.appSettingsPanel}>
-      {/* <section>
+      <section>
         <div
           className={css.sectionHeader}
           onClick={() => toggleSection(GlobalPanelSections.Editor)}
@@ -67,31 +71,61 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                 : "caret-right"
             }
           ></Button>
-          Editor{" "}
+          Editor
         </div>
         {visibleSectionIds[GlobalPanelSections.UiLayout] && (
           <div className={css.panel}>
-            <div className="input60d">
+            <div className="input60">
               {getCheckboxField(
-                "Show grid",
-                globals.showGrid,
-                (showGrid: any) => {
+                "Snap to Object",
+                globals.snapToObject,
+                (snapToObject: any) => {
                   // save settings
                   patchSettings({
-                    ...globals,
-                    showGrid,
+                    appSettings: {
+                      ...globals,
+                      snapToObject,
+                    },
                   });
 
                   //update store
                   _updateGlobalConfiguration({
-                    showGrid,
+                    snapToObject,
                   });
                 }
               )}
             </div>
+
+            <div className="input60">
+              {getSelectField(
+                "Snap to Object threshold",
+                globals.snapToObjectThreshold,
+                Array(10)
+                  .fill({})
+                  .map((_, idx) => ({
+                    value: idx + 1,
+                    label: idx + 1 + "px",
+                  })),
+                (snapToObjectThreshold) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      snapToObjectThreshold: snapToObjectThreshold,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    snapToObjectThreshold: snapToObjectThreshold,
+                  });
+                },
+                { disabled: !globals.snapToObject }
+              )}
+            </div>
           </div>
         )}
-      </section> */}
+      </section>
 
       {/* <section>
         <div

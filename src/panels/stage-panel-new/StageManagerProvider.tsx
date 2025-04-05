@@ -30,6 +30,8 @@ import {
   decomposeMatrix2DW3,
   getBottomRightFromCorners,
   getCorners,
+  getElementByClass,
+  getElementBySelector,
   getGroupMatrixFromSelectionPath,
   getLeftTopFromCorners,
   getObjectBBoxRelativeToParent,
@@ -39,7 +41,7 @@ import {
   screenPointToLocal,
   tmpDrawNewGroup,
 } from "./stage-panel-utils";
-import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
+import { Bounds, Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import { selection } from "../../store/reducers/selection";
 import { populateObjectThreeIds } from "../../store/actions/actions-utils";
 import {
@@ -55,6 +57,10 @@ import { TextValues } from "../../objects/text/text";
 import { ILayer } from "../../store/reducers/i-layers";
 import { getObjectRotation, getObjectScale } from "../../objects/object-utils";
 import { lineObjectBounds } from "../stage-panel/StagePanelUtils";
+import {
+  getObjectBounds,
+  stagePointToObjectSpace_New,
+} from "../../utils/transform/transform-utils";
 
 type StageManagerProviderProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
@@ -93,7 +99,7 @@ export const StageManagerProviderInternal = (
     _selectForProperties,
   } = props;
 
-  const { activateTool } = useContext(ToolsContext);
+  const { activateTool, snapBounds } = useContext(ToolsContext);
 
   const selectedObjectIdsRef = useRef(selectedObjectIds);
   selectedObjectIdsRef.current = selectedObjectIds;
@@ -167,6 +173,7 @@ export const StageManagerProviderInternal = (
           processMoveChangeEvent(eData, objectById, layerById, {
             selectedObjectIdsRef,
             zoom,
+            snapBounds,
           });
           break;
         case StageToolEnum.SCALE:
@@ -225,6 +232,7 @@ export const StageManagerProviderInternal = (
               zoom,
               breakpointConfig,
               recentlySelectedRef,
+              snapBounds,
             },
             {
               _updateObject,
@@ -295,6 +303,7 @@ export const StageManagerProviderInternal = (
     breakpointConfig,
     activateTool,
     selectedObjectIds, // NOTE:  this do not remove it
+    snapBounds,
   ]);
 
   return (
@@ -626,11 +635,15 @@ function processMoveChangeEvent(
   storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
+    snapBounds: {
+      bounds: Bounds;
+      objectId: string;
+    }[];
   }
 ) {
   setFloatingActionPanelVisibility(false);
 
-  const { selectedObjectIdsRef, zoom } = storeProps;
+  const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
   //const objectId = eData.objectId;
 
@@ -701,10 +714,38 @@ function processMoveChangeEvent(
       //   objectHolder.style.left = left + "px";
       //   objectHolder.style.top = top + "px";
       // } else {
-      const left = object.left! + realMove.x;
-      const top = object.top! + realMove.y;
+
+      // >>>>>>>>>>>>>>>>>>>> +++++++
+      // NOTE: create object clone for transform calc
+      const objectClone = cloneDeep(object);
+      objectClone.left = object.left! + realMove.x;
+      objectClone.top = object.top! + realMove.y;
+
+      const newObjectBounds = getObjectBounds([objectClone]);
+
+      const snapDelta = renderSnapLines(
+        newObjectBounds,
+        snapBounds,
+        [objectId],
+        zoom,
+        object.scale ?? 1
+      );
+
+      let objSnapDelta = { x: 0, y: 0 };
+
+      if (snapDelta.x !== 0 || snapDelta.y !== 0) {
+        objSnapDelta = stagePointToObjectSpace_New([object], snapDelta, 1);
+        // if (snapDelta.y != objSnapDelta.y) debugger;
+      }
+
+      const left = objectClone.left! + objSnapDelta.x;
+      const top = objectClone.top! + objSnapDelta.y;
+
       objectHolder.style.left = left + "px";
       objectHolder.style.top = top + "px";
+
+      // <<<<<<<<<<<<<<<<<<<<<<<<<< +++++++
+
       // }
 
       //   scale(" +
@@ -759,6 +800,10 @@ function processMoveStopEvent(
     recentlySelectedRef: React.MutableRefObject<boolean>;
     zoom: number;
     breakpointConfig?: BreakpointConfiguration;
+    snapBounds: {
+      bounds: Bounds;
+      objectId: string;
+    }[];
   },
   storeActions: {
     _updateObject: any;
@@ -770,8 +815,13 @@ function processMoveStopEvent(
 ) {
   // setFloatingActionPanelVisibility(true);
 
-  const { selectedObjectIdsRef, zoom, breakpointConfig, recentlySelectedRef } =
-    storeProps;
+  const {
+    selectedObjectIdsRef,
+    zoom,
+    breakpointConfig,
+    recentlySelectedRef,
+    snapBounds,
+  } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
 
   const {
@@ -872,8 +922,39 @@ function processMoveStopEvent(
     //   newObject.y1 = newObject.y1! + realMove.y;
     //   newObject.y2 = newObject.y2! + realMove.y;
     // } else {
-    newObject.left = newObject.left! + realMove.x;
-    newObject.top = newObject.top! + realMove.y;
+
+    // >>>>>>>>>>>>>>>>>>>> +++++++
+    // NOTE: create object clone for transform calc
+    const objectClone = cloneDeep(object);
+    objectClone.left = object.left! + realMove.x;
+    objectClone.top = object.top! + realMove.y;
+
+    const newObjectBounds = getObjectBounds([objectClone]);
+
+    const snapDelta = renderSnapLines(
+      newObjectBounds,
+      snapBounds,
+      [objectId],
+      zoom,
+      object.scale ?? 1
+    );
+
+    let objSnapDelta = { x: 0, y: 0 };
+
+    if (snapDelta.x !== 0 || snapDelta.y !== 0) {
+      objSnapDelta = stagePointToObjectSpace_New([object], snapDelta, 1);
+      // if (snapDelta.y != objSnapDelta.y) debugger;
+    }
+
+    const left = objectClone.left! + objSnapDelta.x;
+    const top = objectClone.top! + objSnapDelta.y;
+
+    // objectHolder.style.left = left + "px";
+    // objectHolder.style.top = top + "px";
+
+    newObject.left = left; //newObject.left! + realMove.x;
+    newObject.top = top; //newObject.top! + realMove.y;
+    // <<<<<<<<<<<<<<<<<<<<<<<<<< +++++++
     // }
 
     objectToUpdate.push(newObject);
@@ -901,6 +982,14 @@ function processMoveStopEvent(
   if (parentGroup) {
     _updateObject(cloneDeep(parentGroup));
   }
+
+  clearSnapHolder();
+
+  const els = document.getElementsByClassName("snap-highlight-object");
+  Array.from(els).forEach((el) => {
+    el.classList.remove("snap-highlight-object");
+  });
+
   // return;
 
   // if (parentGroup) {
@@ -1565,4 +1654,222 @@ export function getLayerIdRec(objectsById: any, id: string): string {
   if (objectsById[id].layerId) return objectsById[id].layerId;
 
   return getLayerIdRec(objectsById, objectsById[id].parentId);
+}
+
+function clearSnapHolder() {
+  const snapHolderEl = getElementByClass("StagePanel-SnapHolder");
+  snapHolderEl.innerHTML = "";
+
+  return snapHolderEl;
+}
+
+function renderSnapLines(
+  newObjectBounds: Bounds,
+  snapBounds: {
+    bounds: Bounds;
+    objectId: string;
+  }[],
+  skipObjectIds: string[],
+  stageScale: number,
+  objectScale: number
+) {
+  //return { x: 0, y: 0 }; // TODO xx
+
+  const snapHolderEl = clearSnapHolder();
+
+  // // 1. HIDE ALL
+  // const snapLines = document.getElementsByClassName(
+  //   "snap-line"
+  // ) as HTMLCollectionOf<HTMLElement>;
+  // Array.from(snapLines).forEach((snapLine) => {
+  //   snapLine.style.opacity = "0";
+  // });
+
+  const snapDelta = { x: 0, y: 0 };
+  // 2. FIND AND SHOW
+  snapBounds.forEach((snapBound) => {
+    if (skipObjectIds.includes(snapBound.objectId)) return;
+
+    const objectSelectorEl = getElementBySelector(
+      ".object-holder-" + snapBound.objectId + " > .object-selection"
+    ) as HTMLDivElement;
+    if (objectSelectorEl) {
+      objectSelectorEl.style.setProperty(
+        "--snap-border-width",
+        `${1.2 / objectScale}px`
+      );
+
+      objectSelectorEl.classList.remove("snap-highlight-object");
+    }
+
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      true,
+      ["left", "right"],
+      "left",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      false,
+      ["top", "bottom"],
+      "top",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      true,
+      ["left", "right"],
+      "right",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      false,
+      ["top", "bottom"],
+      "bottom",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      true,
+      ["vcenter"],
+      "vcenter",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+    renderSnapLine(
+      newObjectBounds,
+      snapBound,
+      false,
+      ["hcenter"],
+      "hcenter",
+      snapDelta,
+      stageScale,
+      snapHolderEl
+    );
+  });
+
+  return snapDelta;
+}
+
+type SideType = "left" | "top" | "right" | "bottom" | "vcenter" | "hcenter";
+
+function renderSnapLine(
+  newObjectBounds: Bounds,
+  snapBounds: {
+    bounds: Bounds;
+    objectId: string;
+    snapThreshold: number;
+  },
+  isHorizontal: boolean,
+  sides: SideType[],
+  propertyName: SideType,
+  snapDelta: {
+    x: number;
+    y: number;
+  },
+  stageScale: number,
+  snapHolderEl: HTMLElement
+) {
+  // let sides: SideType[] = [];
+
+  // let isHorizontal = true;
+  // if (
+  //   propertyName === "left" ||
+  //   propertyName === "right" ||
+  //   propertyName === "vcenter"
+  // ) {
+  //   sides = ["left", "right", "vcenter"];
+  // } else {
+  //   sides = ["top", "bottom", "hcenter"];
+  //   isHorizontal = false;
+  // }
+
+  sides.forEach((side) => {
+    if (
+      isNear(
+        newObjectBounds[propertyName],
+        snapBounds.bounds[side],
+        snapBounds.snapThreshold / stageScale
+      )
+    ) {
+      //
+      // class={
+      //   "snap-line snap-line-bottom snap-line-bottom-" +
+      //   p.objectId
+      // }
+      if (isHorizontal) {
+        snapHolderEl.innerHTML += `
+          <div
+            style="
+              position: absolute;
+              top: -10000px;
+              left: ${snapBounds.bounds[side]}px;
+              bottom: -10000px;
+              width: 0px;
+              border-left: ${1 / stageScale}px solid #ce58d1;
+              overflow: visible;
+            "
+          ></div>
+        `;
+      } else {
+        snapHolderEl.innerHTML += `
+          <div
+            style="
+              position: absolute;
+              left: -10000px;
+              top: ${snapBounds.bounds[side]}px;
+              right: -10000px;
+              height: 0px;
+                border-top: ${1 / stageScale}px solid #ce58d1;
+              overflow: visible;
+            "
+          ></div>
+        `;
+      }
+
+      const objectSelectorEl = getElementBySelector(
+        ".object-holder-" + snapBounds.objectId + " > .object-selection"
+      );
+      objectSelectorEl?.classList.add("snap-highlight-object");
+
+      // const snapLines = document.getElementsByClassName(
+      //   "snap-line-" + side + "-" + snapBounds.objectId
+      // ) as HTMLCollectionOf<HTMLElement>;
+
+      const deltaProp =
+        side == "left" || side == "right" || side === "vcenter" ? "x" : "y";
+
+      snapDelta[deltaProp] =
+        snapBounds.bounds[side] - newObjectBounds[propertyName];
+
+      // Array.from(snapLines).forEach((snapLine) => {
+      //   snapLine.style.opacity = "1";
+      // });
+    }
+  });
+
+  console.log(snapDelta);
+
+  return snapDelta;
+}
+
+export function isNear(value: number, refValue: number, threshold: number) {
+  return value > refValue - threshold && value < refValue + threshold;
 }

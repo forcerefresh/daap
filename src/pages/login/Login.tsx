@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
 import {
   APPLE_AUTH_LINK,
+  GEST_AUTH_LINK,
   // FACEBOOK_AUTH_LINK,
   GOOGLE_AUTH_LINK,
 } from "./constants";
@@ -15,6 +16,7 @@ import GoogleIcon from "../assets/google-logo.svg?react";
 // import  FacebookIcon } from "../assets/facebook-logo.svg?react";
 import EmailIcon from "../assets/email-icon.svg?react";
 import AppleIcon from "../assets/apple-logo.svg?react";
+import GuestIcon from "../assets/guest-icon.svg?react";
 
 interface ILoginProps {}
 
@@ -109,12 +111,26 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
   return (
     <div className={css.login}>
       <div className={css.container}>
-        <h1>Log in</h1>
-        <p>Log in and start creating!</p>
+        <h1>Sign in</h1>
+        <p>Sign in and start creating today!</p>
         <form className={css.form}>
+          <a href={GEST_AUTH_LINK} className={css.buttonAnchor}>
+            <Button className={cx(css.whiteButton, css.btn)}>
+              <GuestIcon width={30} height={30} />
+              <div style={{ textAlign: "left" }}>
+                Continue as Guest
+                <br />
+                <span style={{ fontSize: "13px" }}>
+                  No registration required
+                </span>
+              </div>
+            </Button>
+          </a>
+          <p></p>
           <a href={GOOGLE_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.whiteButton, css.btn)}>
-              <GoogleIcon width={30} height={30} /> Continue with Google
+              <GoogleIcon width={30} height={30} />
+              Continue with Google
             </Button>
           </a>
 

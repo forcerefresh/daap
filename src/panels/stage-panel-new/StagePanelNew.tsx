@@ -19,7 +19,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Icon, useHotkeys } from "@blueprintjs/core";
+import {
+  ContextMenu as ContextMenuBP,
+  Icon,
+  Menu,
+  MenuItem,
+  useHotkeys,
+} from "@blueprintjs/core";
 import { connect } from "react-redux";
 import cx from "classnames";
 import { ILayer } from "../../store/reducers/i-layers";
@@ -57,6 +63,7 @@ import {
   pasteObjectsFromClipboard,
   setZoomFit,
   forceRefresh,
+  clearClipboard,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
@@ -106,6 +113,7 @@ import { Point } from "../../webslider-sdk/object/i-tool-class";
 import StageToolsCanvas from "./StageToolsCanvas";
 import { IClipboard } from "../../store/reducers/i-clipboard";
 import { useZoomPan } from "./zoom-pan/useZoomPan";
+import ContextMenu from "../context-menu/ContextMenu";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -167,6 +175,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     _setZoomFit,
     clipboard,
     _pasteObjectsFromClipboard,
+    _clearClipboard,
   } = props;
 
   const { spaceDown } = useKeyDown();
@@ -291,6 +300,17 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           }
         },
       },
+      {
+        combo: "esc",
+        global: true,
+        label: "Escape",
+        onKeyDown: (e) => {
+          console.log(e.target);
+          if (!!clipboard.entityIds) {
+            _clearClipboard();
+          }
+        },
+      },
     ],
     [
       _deleteObjects,
@@ -369,7 +389,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   useEffect(() => {
     setRefs(stagePanelElementRef, stageElementRef);
   }, [stagePanelElementRef, stageElementRef]);
-  const { activeTool } = useContext(ToolsContext);
+  const { activeTool, snapBounds } = useContext(ToolsContext);
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
   // const pageSize = breakpointConfig?.normal.page!;
@@ -670,184 +690,255 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
   return (
     <React.Fragment>
-      <div
-        ref={stagePanelElementRef}
-        className={cx("StagePanel", css.stagePanel, {
-          [css.panCursor]: activeStageTool === StageTools.PAN,
-          //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
-        })}
-        // style={{ background: "green" }}
-        onWheelCapture={(e) => {
-          // if (stageManager.hasCurrentToolActive()) {
-          //   return;
-          // }
-          // handleMouseWheel(e);
-        }}
-        onMouseDown={(e) => {
-          if (e.buttons !== 1) {
-            return;
-          }
-
-          if (activeTool) {
-            return;
-          }
-
-          e.persist();
-
-          console.log("ASDASDASDS");
-          if (activeStageTool === StageTools.PAN) {
-            stageManager.start(StageToolEnum.PAN, {
-              boundingClientRects: [], // Not needed
-              mousePosition: getMousePosition(e),
-              contextMatrix: new DOMMatrix(), // Not needed
-              objectRotation: 0, // Not needed
-              objectScale: 1, // Not needed
-              objectId: "", // Not needed
-              originalMouseEvent: e.nativeEvent,
-              handle: "", // TODO
-            });
-            return;
-          }
-
-          console.log("MOUSE UP 111");
-          //setSelectionStartPosition(null);
-          // select parent
-          if (selectionParentId) {
-            if (activeObjectId !== selectionParentId) {
-              _activateObject(selectionParentId);
-              _selectObjects([selectionParentId]);
-              _selectForProperties({ type: "object", id: selectionParentId });
-            }
-          } else {
-            console.log("uncomment 2");
-            _activateObject(null);
-            _selectObjects([]);
-          }
-
-          // const objectId = getGlobalProp("mouseDownObjectId");
-          // console.log("stage mouse down" + objectId);
-        }}
-        //   setDragStartPosition(getMousePosition(e));
-
-        //   //setSelectionStartPosition(getMousePosition(e));
-        // }}
-        // onMouseMove={(e) => {
-        // if (previewState.isPreview) return;
-        // //handleStageMouseMove(e);
-        // const data = getMousePosition(e);
-        // const diff = {
-        //   x: data.x - dragStartPosition.x,
-        //   y: data.y - dragStartPosition.y,
-        // };
-        // //console.log(diff);
-        // setDragDelta(diff);
-        // }}
-        // onMouseUp={() => {
-        // console.log("MOUSE UP 111");
-        // //setSelectionStartPosition(null);
-        // // select parent
-        // if (selectionParentId) {
-        //   _activateObject(selectionParentId);
-        //   _selectObjects([selectionParentId]);
-        //   _selectForProperties({ type: "object", id: selectionParentId });
-        // } else {
-        //   console.log("uncomment 2");
-        //   _selectObjects([]);
-        //   _activateObject(null);
-        // }
-        // }}
-        // onClick={(e) => {
-        //if (getGlobalProp("rotationInProgress")) return;
-        //   console.log(window.DAAP);
-        //   if (window.DAAP?.rotationInProgress) {
-        //     window.DAAP = window.DAAP
-        //       ? { ...window.DAAP, rotationInProgress: false }
-        //       : { rotationInProgress: false };
-        //     return;
-        //   }
-        // select parent
-        // if (selectionParentId) {
-        //   _activateObject(selectionParentId);
-        //   _selectObjects([selectionParentId]);
-        //   _selectForProperties({ type: "object", id: selectionParentId });
-        // } else {
-        //   console.log("uncomment 2");
-        //   //_selectObjects([]);
-        //   //_activateObject(null);
-        // }
-        //alert("a");
-        // }}
-      >
+      <ContextMenuBP content={<ContextMenu />}>
         <div
-          ref={stageElementRef}
-          style={stageStyle}
-          className={cx("pan-and-zoom", css.stage)}
+          ref={stagePanelElementRef}
+          className={cx("StagePanel", css.stagePanel, {
+            [css.panCursor]: activeStageTool === StageTools.PAN,
+            //[css.drawCursor]: stageToolInternal === StageTools.DRAW,
+          })}
+          // style={{ background: "green" }}
+          onWheelCapture={(e) => {
+            // if (stageManager.hasCurrentToolActive()) {
+            //   return;
+            // }
+            // handleMouseWheel(e);
+          }}
+          onMouseDown={(e) => {
+            if (e.buttons !== 1) {
+              return;
+            }
+
+            if (activeTool) {
+              return;
+            }
+
+            e.persist();
+
+            console.log("ASDASDASDS");
+            if (activeStageTool === StageTools.PAN) {
+              stageManager.start(StageToolEnum.PAN, {
+                boundingClientRects: [], // Not needed
+                mousePosition: getMousePosition(e),
+                contextMatrix: new DOMMatrix(), // Not needed
+                objectRotation: 0, // Not needed
+                objectScale: 1, // Not needed
+                objectId: "", // Not needed
+                originalMouseEvent: e.nativeEvent,
+                handle: "", // TODO
+              });
+              return;
+            }
+
+            console.log("MOUSE UP 111");
+            //setSelectionStartPosition(null);
+            // select parent
+            if (selectionParentId) {
+              if (activeObjectId !== selectionParentId) {
+                _activateObject(selectionParentId);
+                _selectObjects([selectionParentId]);
+                _selectForProperties({ type: "object", id: selectionParentId });
+              }
+            } else {
+              console.log("uncomment 2");
+              _activateObject(null);
+              _selectObjects([]);
+            }
+
+            // const objectId = getGlobalProp("mouseDownObjectId");
+            // console.log("stage mouse down" + objectId);
+          }}
+          //   setDragStartPosition(getMousePosition(e));
+
+          //   //setSelectionStartPosition(getMousePosition(e));
+          // }}
+          // onMouseMove={(e) => {
+          // if (previewState.isPreview) return;
+          // //handleStageMouseMove(e);
+          // const data = getMousePosition(e);
+          // const diff = {
+          //   x: data.x - dragStartPosition.x,
+          //   y: data.y - dragStartPosition.y,
+          // };
+          // //console.log(diff);
+          // setDragDelta(diff);
+          // }}
+          // onMouseUp={() => {
+          // console.log("MOUSE UP 111");
+          // //setSelectionStartPosition(null);
+          // // select parent
+          // if (selectionParentId) {
+          //   _activateObject(selectionParentId);
+          //   _selectObjects([selectionParentId]);
+          //   _selectForProperties({ type: "object", id: selectionParentId });
+          // } else {
+          //   console.log("uncomment 2");
+          //   _selectObjects([]);
+          //   _activateObject(null);
+          // }
+          // }}
+          // onClick={(e) => {
+          //if (getGlobalProp("rotationInProgress")) return;
+          //   console.log(window.DAAP);
+          //   if (window.DAAP?.rotationInProgress) {
+          //     window.DAAP = window.DAAP
+          //       ? { ...window.DAAP, rotationInProgress: false }
+          //       : { rotationInProgress: false };
+          //     return;
+          //   }
+          // select parent
+          // if (selectionParentId) {
+          //   _activateObject(selectionParentId);
+          //   _selectObjects([selectionParentId]);
+          //   _selectForProperties({ type: "object", id: selectionParentId });
+          // } else {
+          //   console.log("uncomment 2");
+          //   //_selectObjects([]);
+          //   //_activateObject(null);
+          // }
+          //alert("a");
+          // }}
         >
           <div
-            className={cx(css.scrollableHolder, "preview-scrollable-holder")}
-            style={scrollableDivStyle}
+            ref={stageElementRef}
+            style={stageStyle}
+            className={cx("pan-and-zoom", css.stage)}
           >
-            {/* <div> */}
-            {/* <div
+            <div
+              className={cx(css.scrollableHolder, "preview-scrollable-holder")}
+              style={scrollableDivStyle}
+            >
+              {/* <div> */}
+              {/* <div
                 className="scrollableDivInnerSlideBackground"
                 style={scrollableDivInnerSlideBackgroundStyle}
               ></div> */}
-            {/* class not set */}
-            <div style={canvasStyle} className={css.canvas}>
-              {isPreview && (
-                <AppPlayer
-                  selectedDevice={selectedDevice}
-                  customBPWidth={customBPWidth}
-                  playerData={exportData}
-                  previewState={previewState}
-                  manualProgress={manualProgress}
-                  requestStop={() => {
-                    _setStagePreview({ previewState: "stop", scope: null });
-                  }}
-                />
-              )}
+              {/* class not set */}
+              <div style={canvasStyle} className={css.canvas}>
+                {isPreview && (
+                  <AppPlayer
+                    selectedDevice={selectedDevice}
+                    customBPWidth={customBPWidth}
+                    playerData={exportData}
+                    previewState={previewState}
+                    manualProgress={manualProgress}
+                    requestStop={() => {
+                      _setStagePreview({ previewState: "stop", scope: null });
+                    }}
+                  />
+                )}
 
-              {!isPreview &&
-                layerArr?.map((layer) => (
-                  <StageLayer key={layer.id} layer={layer} />
-                ))}
+                {!isPreview &&
+                  layerArr?.map((layer) => (
+                    <StageLayer key={layer.id} layer={layer} />
+                  ))}
+              </div>
+
+              <div className="StagePanel-SnapHolder">
+                {/* {snapBounds.map((p) => {
+                return (
+                  <>
+                    <div
+                      className={
+                        "snap-line snap-line-left snap-line-left-" + p.objectId
+                      }
+                      style={{
+                        position: "absolute",
+                        left: p.bounds.left + "px",
+                        top: "0px",
+                        bottom: "0px",
+                        width: "2px",
+                        background: " red",
+                        overflow: "visible  ",
+                      }}
+                    ></div>
+                    <div
+                      className={
+                        "snap-line snap-line-right snap-line-right-" +
+                        p.objectId
+                      }
+                      style={{
+                        position: "absolute",
+                        left: p.bounds.right + "px",
+                        top: "0px",
+                        bottom: "0px",
+                        width: "2px",
+                        background: " red",
+                        overflow: "visible  ",
+                      }}
+                    ></div>
+
+                    <div
+                      className={
+                        "snap-line snap-line-top snap-line-top-" + p.objectId
+                      }
+                      style={{
+                        position: "absolute",
+                        left: "0px",
+                        top: p.bounds.top + "px",
+                        right: "0px",
+                        height: "2px",
+                        background: " red",
+                        overflow: "visible  ",
+                      }}
+                    ></div>
+                    <div
+                      className={
+                        "snap-line snap-line-bottom snap-line-bottom-" +
+                        p.objectId
+                      }
+                      style={{
+                        position: "absolute",
+                        left: "0px",
+                        top: p.bounds.bottom + "px",
+                        right: "0px",
+                        height: "2px",
+                        background: " red",
+                        overflow: "visible  ",
+                      }}
+                    ></div>
+                  </>
+                );
+              })} */}
+              </div>
+
+              {/* class not set */}
+              <div
+                style={{ ...toolsCanvasStyle, transform: "scale(" + 1 + ")" }}
+                className={cx("stage-tools-canvas", css.stageToolsCanvas)}
+              >
+                <StageToolsCanvas />
+                {/* //innerRef={stageToolCanvasRef} */}
+              </div>
             </div>
-            {/* class not set */}
+
+            {/* -- */}
+            {/* Canvas for editing */}
             <div
-              style={{ ...toolsCanvasStyle, transform: "scale(" + 1 + ")" }}
-              className={cx("stage-tools-canvas", css.stageToolsCanvas)}
+              style={{ ...toolsCanvasStyle, display: "none" }}
+              className={cx(css.toolCanvas, "MainToolCanvas")}
+              // onMouseDown={(e) => e.stopPropagation()}
             >
-              <StageToolsCanvas />
-              {/* //innerRef={stageToolCanvasRef} */}
-            </div>
-          </div>
-
-          {/* -- */}
-          {/* Canvas for editing */}
-          <div
-            style={{ ...toolsCanvasStyle, display: "none" }}
-            className={cx(css.toolCanvas, "MainToolCanvas")}
-            // onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div
-              className={"MainToolStage"}
-              // style={{ ...stageStyle, position: "absolute" }}
-            ></div>
-            {/* <svg className={css.previewSvg} width="100%" height="100%"> */}
-            {/* <path
+              <div
+                className={"MainToolStage"}
+                // style={{ ...stageStyle, position: "absolute" }}
+              ></div>
+              {/* <svg className={css.previewSvg} width="100%" height="100%"> */}
+              {/* <path
             fill="none"
             stroke="#d3d3d3"
             stroke-linejoin="round"
             stroke-linecap="round"
           ></path> */}
-            {/* </svg> */}
-          </div>
-          {/* -- */}
+              {/* </svg> */}
+            </div>
+            {/* -- */}
 
-          {/* {isPreview && previewLayout.body.component} */}
-          {/* </div> */}
+            {/* {isPreview && previewLayout.body.component} */}
+            {/* </div> */}
+          </div>
         </div>
-      </div>
+      </ContextMenuBP>
     </React.Fragment>
   );
 };
@@ -973,6 +1064,7 @@ const mapDispatchToProps = {
   _pasteObjectsFromClipboard: (toLayerId: string): any =>
     pasteObjectsFromClipboard(toLayerId),
 
+  _clearClipboard: () => clearClipboard(),
   _setZoomFit: (fit: boolean) => setZoomFit(fit),
   _forceRefresh: () => forceRefresh(),
   //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),

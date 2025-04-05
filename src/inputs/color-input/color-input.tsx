@@ -7,9 +7,18 @@ import React, {
 } from "react";
 import { debounce, isEqual, throttle } from "lodash-es";
 import cx from "classnames";
-import { Button, FormGroup, Icon, Popover } from "@blueprintjs/core";
+import {
+  Button,
+  FormGroup,
+  Icon,
+  Popover,
+  Tab,
+  Tabs,
+  TabsExpander,
+} from "@blueprintjs/core";
 import { IColorInput, IUpdateInput } from "webslider-sdk/lib/inputs/i-inputs";
-import { RGBColor, SketchPicker } from "react-color";
+import { RGBColor } from "react-color";
+import ColorPicker from "react-pick-color";
 import css from "./color-input.module.scss";
 import BackgroundSVG from "./transparent-bg.svg?react";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
@@ -20,11 +29,15 @@ import CoulorPalette from "../../assets/icons/colour-palette.svg?react";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import { addRecentColor, collectColors } from "../../store/actions/actions";
+import ColorPaletteIcon from "./assets/color-palette.svg?react";
+import { CustomColorPicker } from "./custom-color-picker";
+import { ColorPaletteRow } from "./color-palette-row";
 
 enum ColorsPopupSection {
   RecentColors = "Recent Colors",
   UsedInDocument = "Used In Document",
   DefaultColors = "Default Colors",
+  BaseColors = "Base colors",
 }
 
 type IColorInputForm = typeof mapDispatchToProps &
@@ -44,7 +57,7 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
     inputProps,
     _addRecentColor,
     recentColors,
-    collectColors, // TODO - move from here
+    _collectColors,
     usedInDocument,
   } = props;
 
@@ -118,27 +131,32 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
   const handleApply = () => {
     setState({ ...state, displayColorPicker: false });
     onChange(state.color);
+    _collectColors();
     if (state.color) {
       _addRecentColor(state.color);
     }
   };
 
-  const handleChange = (color: { rgb: RGBColor }) => {
-    setState({ ...state, color: color.rgb });
-    debounceOnChange?.(color.rgb);
+  const handleChange = (rgb: RGBColor) => {
+    setState({ ...state, color: rgb });
+    debounceOnChange?.(rgb);
+    // _addRecentColor(rgb);
+    // _collectColors();
   };
 
-  const handleRecentColor = (color: { rgb: RGBColor }) => {
+  const handlePaletteColor = (color: { rgb: RGBColor }) => {
     setState({ ...state, displayColorPicker: false, color: color.rgb });
     onChange(color.rgb);
     _addRecentColor(color.rgb);
+    _collectColors();
   };
 
   // TODO - how sure how to handle this at the end
-  const handleUsedInDoc = (color: { rgb: RGBColor }) => {
-    setState({ ...state, displayColorPicker: false, color: color.rgb });
-    onChange(color.rgb);
-  };
+  // const handleUsedInDoc = (color: { rgb: RGBColor }) => {
+  //   setState({ ...state, displayColorPicker: false, color: color.rgb });
+  //   onChange(color.rgb);
+  //   _addRecentColor(color.rgb);
+  // };
 
   const { initialColor, color } = state;
   const style = {
@@ -182,126 +200,226 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
   ];
 
   return (
-    <FormGroup
-      className={cx(css.colorInput, inputProps?.className)}
-      label={createInputLabel(displayName, propertyName)}
-      labelFor="color-input"
-      inline
-      helperText={!!helperText && helperText}
-    >
-      <Popover
-        isOpen={state.displayColorPicker}
-        portalClassName="color-picker-popover"
-        minimal
-        content={
-          <div
-            className={cx("color-picker-holder", css.popoverContent)}
-            ref={colorPickerHolderRef}
-          >
-            <section>
-              <div
-                className={css.sectionHeader}
-                onClick={() => toggleSection(ColorsPopupSection.RecentColors)}
+    <>
+      <FormGroup
+        className={cx(css.colorInput, inputProps?.className)}
+        label={createInputLabel(displayName, propertyName)}
+        labelFor="color-input"
+        inline
+        helperText={!!helperText && helperText}
+      >
+        <Popover
+          isOpen={state.displayColorPicker}
+          portalClassName="color-picker-popover"
+          minimal
+          content={
+            <div
+              className={cx("color-picker-holder", css.popoverContent)}
+              ref={colorPickerHolderRef}
+            >
+              <Tabs
+                className={css.tabs}
+                defaultSelectedTabId={"palette"}
+                // renderActiveTabPanelOnly={true}
               >
-                <Button
-                  minimal
-                  small={true}
+                <Tab
+                  className={css.tabContent}
+                  style={{ marginTop: "0px" }}
                   icon={
-                    visibleColorsPopup[ColorsPopupSection.RecentColors]
-                      ? "caret-down"
-                      : "caret-right"
+                    <ColorPaletteIcon
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        padding: "2px",
+                        marginRight: "3px",
+                      }}
+                    />
                   }
-                ></Button>
-                Recent colors
-              </div>
-              {visibleColorsPopup[ColorsPopupSection.RecentColors] && (
-                <div className={css.sectionContent}>
-                  {recentColors.length === 0 ? (
-                    <div className={css.sectionNoColor}>
-                      No recent colors added yet.
-                    </div>
-                  ) : (
-                    rowsRecentColors.map((row, rowIndex) => (
-                      <div key={rowIndex} className={css.sectionColorRow}>
-                        {row.map((color, index) => {
-                          const colorStyle = {
-                            backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
-                          };
+                  id="palette"
+                  title={"Palette"}
+                  panel={
+                    <>
+                      <section>
+                        <div
+                          className={css.sectionHeader}
+                          onClick={() =>
+                            toggleSection(ColorsPopupSection.RecentColors)
+                          }
+                        >
+                          <Button
+                            minimal
+                            small={true}
+                            icon={
+                              visibleColorsPopup[
+                                ColorsPopupSection.RecentColors
+                              ]
+                                ? "caret-down"
+                                : "caret-right"
+                            }
+                          ></Button>
+                          Recent colors
+                        </div>
+                        {visibleColorsPopup[
+                          ColorsPopupSection.RecentColors
+                        ] && (
+                          <div className={css.sectionContent}>
+                            {recentColors.length === 0 ? (
+                              <div className={css.sectionNoColor}>
+                                Your recent colors will appear here once added.
+                              </div>
+                            ) : (
+                              rowsRecentColors.map((row, rowIndex) => (
+                                <div
+                                  key={rowIndex}
+                                  className={css.sectionColorRow}
+                                >
+                                  {row.map((color, index) => {
+                                    const colorStyle = {
+                                      backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                                    };
 
-                          return (
-                            <div
-                              key={index}
-                              className={css.sectionColor}
-                              style={colorStyle}
-                              onClick={() => handleRecentColor({ rgb: color })}
-                            />
-                          );
-                        })}
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </section>
+                                    return (
+                                      <div
+                                        key={index}
+                                        className={css.sectionColor}
+                                        style={colorStyle}
+                                        onClick={() => {
+                                          handlePaletteColor({ rgb: color });
+                                        }}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </section>
 
-            <section className={css.section}>
-              <div
-                className={css.sectionHeader}
-                onClick={() => toggleSection(ColorsPopupSection.UsedInDocument)}
-              >
-                <Button
-                  minimal
-                  small={true}
-                  icon={
-                    visibleColorsPopup[ColorsPopupSection.UsedInDocument]
-                      ? "caret-down"
-                      : "caret-right"
+                      <section className={css.section}>
+                        <div
+                          className={css.sectionHeader}
+                          onClick={() =>
+                            toggleSection(ColorsPopupSection.UsedInDocument)
+                          }
+                        >
+                          <Button
+                            minimal
+                            small={true}
+                            icon={
+                              visibleColorsPopup[
+                                ColorsPopupSection.UsedInDocument
+                              ]
+                                ? "caret-down"
+                                : "caret-right"
+                            }
+                          ></Button>
+                          Used in document
+                        </div>
+                        {visibleColorsPopup[
+                          ColorsPopupSection.UsedInDocument
+                        ] && (
+                          <div className={css.sectionContent}>
+                            {colorsFromObjects.length === 0 ? (
+                              <div className={css.sectionNoColor}>
+                                Your document has no colors yet.
+                              </div>
+                            ) : (
+                              rowsColorsFromObj.map((row, rowIndex) => (
+                                <div
+                                  key={rowIndex}
+                                  className={css.sectionColorRow}
+                                >
+                                  {row.map((color, index) => {
+                                    const colorStyle = {
+                                      backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
+                                    };
+                                    return (
+                                      <div
+                                        key={index}
+                                        className={css.sectionColor}
+                                        style={colorStyle}
+                                        onClick={() =>
+                                          handlePaletteColor({ rgb: color })
+                                        }
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </section>
+
+                      <section className={css.section}>
+                        <div
+                          className={css.sectionHeader}
+                          onClick={() =>
+                            toggleSection(ColorsPopupSection.BaseColors)
+                          }
+                        >
+                          <Button
+                            minimal
+                            small={true}
+                            icon={
+                              visibleColorsPopup[ColorsPopupSection.BaseColors]
+                                ? "caret-down"
+                                : "caret-right"
+                            }
+                          ></Button>
+                          Base colors
+                        </div>
+
+                        <ColorPaletteRow
+                          colors={[
+                            "#FF0000",
+                            "#00FF00",
+                            "#0000FF",
+                            "#FFFF00",
+                            "#00FFFF",
+                            "#FF00FF",
+                            "#FFFFFF",
+                            "#000000",
+                          ]}
+                          onSelect={(color) => {
+                            handlePaletteColor({ rgb: color });
+                          }}
+                        />
+                      </section>
+                    </>
                   }
-                ></Button>
-                Used in document
-              </div>
-              {visibleColorsPopup[ColorsPopupSection.UsedInDocument] && (
-                <div className={css.sectionContent}>
-                  {colorsFromObjects.length === 0 ? (
-                    <div className={css.sectionNoColor}>
-                      No colors used in document yet.
-                    </div>
-                  ) : (
-                    rowsColorsFromObj.map((row, rowIndex) => (
-                      <div key={rowIndex} className={css.sectionColorRow}>
-                        {row.map((color, index) => {
-                          const colorStyle = {
-                            backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
-                          };
-                          return (
-                            <div
-                              key={index}
-                              className={css.sectionColor}
-                              style={colorStyle}
-                              onClick={() => handleUsedInDoc({ rgb: color })}
-                            />
-                          );
-                        })}
-                      </div>
-                    ))
-                  )}
-                </div>
-              )}
-            </section>
-            <section>
-              <div
-                className={cx(
-                  css.sectionHeader,
-                  css.sectionWrapperDefaultColor
-                )}
-                onClick={() => toggleSection(ColorsPopupSection.DefaultColors)}
-              >
-                <Button
-                  icon={<CoulorPalette style={{ width: "25px" }} />}
-                  minimal
                 />
+                <Tab
+                  style={{ marginTop: "0px" }}
+                  id="picker"
+                  icon={
+                    <ColorPickerIcon
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        padding: "2px",
+                        marginRight: "3px",
+                      }}
+                    />
+                  }
+                  title="Picker"
+                  panel={
+                    <>
+                      <CustomColorPicker
+                        color={state.color as Required<RGBColor>}
+                        initialColor={state.initialColor as Required<RGBColor>}
+                        onApply={handleApply}
+                        onCancel={handleClose}
+                        onChange={handleChange}
+                      />
+                    </>
+                  }
+                />
+                <TabsExpander />
                 <Button
-                  className={cx(css.colorButton)}
+                  // className={cx(css.colorButton)}
+                  style={{ marginRight: "5px" }}
                   minimal
                   onClick={() => {
                     onChange(undefined);
@@ -314,7 +432,8 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
                   icon={<Icon size={20} icon="disable" intent="danger" />}
                 />
                 <Button
-                  icon={<ColorPickerIcon style={{ width: "25px" }} />}
+                  style={{ marginRight: "5px" }}
+                  icon={<ColorPickerIcon style={{ width: "20px" }} />}
                   minimal
                   onClick={() => {
                     if (!EyeDropperClass) {
@@ -326,87 +445,41 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
                     eyeDropper
                       .open()
                       .then((result: any) => {
-                        handleChange({ rgb: hexToRGB(result.sRGBHex) });
+                        handleChange(hexToRGB(result.sRGBHex));
                       })
                       .catch((_e: any) => {});
                   }}
                 />
-              </div>
-              {visibleColorsPopup[ColorsPopupSection.DefaultColors] && (
-                <>
-                  <div>
-                    <SketchPicker color={state.color} onChange={handleChange} />
-                  </div>
-                  <div className={css.actionHolder}>
-                    <div className={css.buttonHolder}>
-                      <Button
-                        className={cx(css.colorButton)}
-                        //  icon="tick"
-                        onClick={handleApply}
-                        icon={
-                          <div
-                            id="color-input"
-                            className={cx(css.swatch, css.squareSwatch)}
-                            tabIndex={1}
-                          >
-                            <BackgroundSVG style={{ position: "absolute" }} />
-                            <div className={css.color} style={styleCurrent} />
-                          </div>
-                        }
-                      >
-                        Apply
-                      </Button>
-                      <Button
-                        icon={
-                          <div
-                            id="color-input"
-                            className={cx(css.swatch, css.squareSwatch)}
-                            tabIndex={1}
-                          >
-                            <BackgroundSVG style={{ position: "absolute" }} />
-                            <div className={css.color} style={style} />
-                          </div>
-                        }
-                        className={css.colorButton}
-                        onClick={handleClose}
-                        intent="none"
-                        minimal
-                      >
-                        Cancel
-                      </Button>
-                    </div>
-                  </div>
-                </>
-              )}
-            </section>
-          </div>
-        }
-      >
-        <div
-          id="color-input"
-          className={cx({
-            [css.swatch]: true,
-            [inputProps?.swatchClassName!]: true,
-          })}
-          onClick={handleClick}
-          tabIndex={1}
+              </Tabs>
+            </div>
+          }
         >
-          {color ? (
-            <>
-              <BackgroundSVG style={{ position: "absolute" }} />
-              <div className={css.color} style={style} />
-            </>
-          ) : (
-            <Icon
-              size={18}
-              icon="disable"
-              intent="danger"
-              className={css.noColor}
-            />
-          )}
-        </div>
-      </Popover>
-    </FormGroup>
+          <div
+            id="color-input"
+            className={cx({
+              [css.swatch]: true,
+              [inputProps?.swatchClassName!]: true,
+            })}
+            onClick={handleClick}
+            tabIndex={1}
+          >
+            {color ? (
+              <>
+                <BackgroundSVG style={{ position: "absolute" }} />
+                <div className={css.color} style={style} />
+              </>
+            ) : (
+              <Icon
+                size={18}
+                icon="disable"
+                intent="danger"
+                className={css.noColor}
+              />
+            )}
+          </div>
+        </Popover>
+      </FormGroup>
+    </>
   );
 };
 
@@ -450,7 +523,7 @@ const mapStateToProps = (state: IStore) => ({
 
 const mapDispatchToProps = {
   _addRecentColor: (color: RGBColor) => addRecentColor(color),
-  collectColors: () => collectColors(),
+  _collectColors: () => collectColors(),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ColorInputForm);

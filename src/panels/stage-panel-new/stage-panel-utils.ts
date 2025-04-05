@@ -700,6 +700,10 @@ export function getElementByClass(className: string) {
   return document.getElementsByClassName(className)[0];
 }
 
+export function getElementBySelector(selector: string) {
+  return document.querySelector(selector);
+}
+
 export function removeElementByClass(className: string) {
   const el = document.getElementsByClassName(className)[0];
   if (el) {

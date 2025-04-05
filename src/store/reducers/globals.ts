@@ -10,6 +10,8 @@ export interface IAppSettings {
   availableVersion?: string;
   showGrid?: boolean;
   theme: "dark" | "light";
+  snapToObject: boolean;
+  snapToObjectThreshold: number;
 }
 
 export function globals(
@@ -19,6 +21,8 @@ export function globals(
     enableDeveloper: false,
     devTools: false,
     theme: "dark",
+    snapToObject: true,
+    snapToObjectThreshold: 5,
   },
   action: ActionTypes
 ) {

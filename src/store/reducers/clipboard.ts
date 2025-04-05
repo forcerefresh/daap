@@ -1,6 +1,7 @@
 import { cloneDeep } from "lodash-es";
 import {
   ActionTypes,
+  CLIPBOARD_CLEAR,
   CLIPBOARD_COPY,
   CLIPBOARD_CUT,
   CLIPBOARD_PASTE_OBJECTS,
@@ -35,6 +36,8 @@ export function clipboard(
         return getSettingsDefault();
       }
       return state;
+    case CLIPBOARD_CLEAR:
+      return getSettingsDefault();
     default:
       return state;
   }

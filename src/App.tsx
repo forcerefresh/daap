@@ -144,6 +144,12 @@ function App(props: IAppProps) {
     });
   }, []);
 
+  useEffect(() => {
+    document.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+    });
+  }, []);
+
   return (
     <div className={`${className}`}>
       <Editor />

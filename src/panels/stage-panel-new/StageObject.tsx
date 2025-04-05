@@ -506,6 +506,7 @@ export function StageObjectInternal(props: IStageLayer) {
                     transform: `scale(${1 / objectZoom / stageZoom})`,
                     display: isOnlyThisObjectSelected ? "block" : "none",
                     pointerEvents: "all",
+                    boxShadow: "0 0 0 " + 1 + "px white",
                     background: object.objectIds
                       ? groupSelectionColor
                       : objectSelectionColor,
