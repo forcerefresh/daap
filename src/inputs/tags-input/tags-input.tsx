@@ -85,7 +85,6 @@ export const TagsInputForm: React.FC<ITagsInput & IUpdateInput> = (props) => {
         items={[]}
         itemRenderer={renderTag}
         onItemSelect={(newTag, e) => {
-          console.log(value, newTag);
           onChange([...value, ...[newTag]]);
         }}
         createNewItemFromQuery={createTags}

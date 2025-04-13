@@ -109,10 +109,6 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     const layoutedByParent = false; // objectLayer.definition.values.hasLayoutChildren;
     const parentHasLayout = false; // objectLayer.layout !== "none";
 
-    console.log("VAZNO123");
-
-    console.log(obj);
-
     return (
       <>
         {/* {renderLayoutOptions(
@@ -600,9 +596,6 @@ const mapStateToProps = (state: IStore) => {
   const { breakpoints } = settings;
 
   const object = activeObjectId ? objects.objectById[activeObjectId] : null;
-
-  // console.log(activeObjectId);
-  // console.log(object);
 
   const objectLayer = object
     ? getAncestorLayer(object, layers.layerById, objects.objectById)

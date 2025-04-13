@@ -116,7 +116,6 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
         perPage: 20,
       }).then(
         (result) => {
-          console.log(result);
           if (from === 1) {
             setMediaItems([...result.data]);
           } else {

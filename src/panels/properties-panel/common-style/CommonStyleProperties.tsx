@@ -70,8 +70,6 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
     //   ...(object.commonStyleDefinition?.valuesMetadata ?? {}),
     // };
 
-    console.log(commonStyleDefinitionValues);
-
     return (
       <>
         {renderProperties(
@@ -129,9 +127,6 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
   ) => {
     let flatForm = flattenForm(properties as IFormLayoutItem[]);
 
-    console.log("VALUES--");
-
-    console.log(values);
     // add devices inputs
     flatForm = flatForm.reduce((acc, curr, idx) => {
       acc.push(curr);
@@ -186,7 +181,6 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
           }
           // >>> exception for image
 
-          console.log(retObj);
           updateFunction(retObj);
         }
       }
@@ -211,7 +205,6 @@ const CommonStyleProperties: React.FC<IPropertiesPanel> = (props) => {
         metadata: valuesMetadata[propertyName],
       };
 
-      console.log(inputProps);
       return {
         input: getInputFormWithOptions(
           property.inputType,

@@ -100,9 +100,6 @@ export function ObjectRow(props: IObjectRowProps) {
 
       const dragIndex = item.index;
       const hoverIndex = rowIndex;
-      console.log(dragIndex);
-
-      console.log(hoverIndex);
 
       // Don't replace items with themselves
       if (dragIndex === hoverIndex) {
@@ -200,18 +197,12 @@ export function ObjectRow(props: IObjectRowProps) {
       true
     );
 
-    //console.log(calculatedObjectSize);
     const scaleX = 76 / parseInt(calculatedObjectSize?.width as string);
     const scaleY = 61 / parseInt(calculatedObjectSize?.height as string);
     const scale = Math.min(scaleX, !isNaN(scaleY) ? scaleY : scaleX);
 
     setObjectHtml({ scale, html, calculatedObjectSize });
   }, [breakpointConfig, layer, object]);
-
-  //   console.log({
-  //     transform: `scale(${objectHtml.scale})`,
-  //     transformOrigin: "0 0",
-  //   });
 
   const isGroup = !!(object?.objectIds && object?.objectIds?.length > 0);
 

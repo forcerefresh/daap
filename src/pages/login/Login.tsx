@@ -69,7 +69,6 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log(json);
         if (json.success) {
           setShowMagicLoginEmailSent(true);
           // The request successfully completed and the email to the user with the
@@ -126,7 +125,6 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
               </div>
             </Button>
           </a>
-          <p></p>
           <a href={GOOGLE_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.whiteButton, css.btn)}>
               <GoogleIcon width={30} height={30} />

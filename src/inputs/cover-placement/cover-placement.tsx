@@ -32,8 +32,6 @@ export const CoverPlacementInputForm: React.FC<
 > = (props) => {
   const { displayName, value, onChange, inputProps } = props;
 
-  console.log(value);
-
   return (
     <>
       <div className="input60">

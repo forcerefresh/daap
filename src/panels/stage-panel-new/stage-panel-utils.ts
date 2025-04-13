@@ -50,8 +50,6 @@ export function getUngroupObjectsCalculation(
     height: group.height,
   };
 
-  console.log(groupObjectSize);
-
   const getGroupMatrix = () => {
     const m = new DOMMatrix();
     m.translateSelf(groupObjectSize.x, groupObjectSize.y);
@@ -140,11 +138,8 @@ export function getUngroupObjectsCalculationOld(
   const groupEl = addElement("group", rootEl, { style: objectHolderStyle });
 
   const groupMatrix = new DOMMatrix(objectHolderStyle.transform);
-  //console.log(objectHolderStyle.transform);
 
   const decMatrix = decomposeMatrix2DW3(groupMatrix);
-
-  //  console.log(decMatrix);
 
   //
   // OBJECT
@@ -345,7 +340,6 @@ export function createTransformForPath(
     let left = "",
       right = "";
     isObjectGroup(object) ? (right = translate) : (left = translate);
-    if (translate) console.log(translate, "translate");
 
     return `${translate} rotate(${rotationSign}${
       object.rotation ?? 0
@@ -416,7 +410,6 @@ export function getObjectBBoxRelativeToParent(
   left: number,
   top: number
 ): Point {
-  console.log(arguments);
   //TODO return Rect
   const pointMatrix = new DOMMatrix(
     `translateX(${left}px) translateY(${top}px)`
@@ -440,7 +433,6 @@ export function getObjectTransform(
   object: IObject,
   override?: Partial<Pick<IObject, "scale" | "rotation">>
 ): string {
-  console.log(override?.rotation);
   return (
     "rotate(" +
     (override?.rotation ?? object.rotation ?? 0) +
@@ -664,9 +656,6 @@ export function tmpDrawNewGroup(
   const resultMatrix = pointMatrix.inverse().multiply(newGroupMatrix);
   const resultDecMatrix = decomposeMatrix2DW3(resultMatrix);
 
-  console.log(" resultDecMatrix.translateX:" + resultDecMatrix.translateX);
-  console.log(" resultDecMatrix.translateY:" + resultDecMatrix.translateY);
-
   const diff2 = {
     x: resultDecMatrix.translateX,
     y: resultDecMatrix.translateY,
@@ -678,8 +667,6 @@ export function tmpDrawNewGroup(
   diffGroupEl.className = "diff-el";
   layerEl.appendChild(diffGroupEl);
   // <<
-
-  console.log(diff2, "diff2");
 
   const className = "group-new-" + parentGroup.id;
   removeElementByClass(className);

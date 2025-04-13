@@ -54,15 +54,11 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
   };
 
   useEffect(() => {
-    console.log("ADD EVENT HANDLERS");
-
     if (
       parentElementRefRef.current?.current &&
       targetElementRefRef.current?.current
     ) {
       const handler = (e: WheelEvent) => {
-        console.log(e.deltaX, e.deltaY);
-
         const parentEl = parentElementRefRef.current?.current;
         const targetEl = targetElementRefRef.current?.current;
 
@@ -126,7 +122,7 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       };
     }
 
-    return () => console.log("REMOVE EVENT HANDLER");
+    // return () => console.log("REMOVE EVENT HANDLER");
   }, [parentElement]);
 
   const panPointRef = useRef<{ clientX: number; clientY: number } | null>(null);
@@ -163,7 +159,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
         const x = prevPoint.clientX - targetElRect.left;
         const y = prevPoint.clientY - targetElRect.top;
 
-        console.log(x, y);
         const newTransform = calculateNewTransform({
           x,
           y,
@@ -234,8 +229,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
 
     setCanvasTransformInternal(newTransform);
     transformRef.current = newTransform;
-
-    console.log({ ...newTransform });
   };
   return {
     setRefs,

@@ -32,12 +32,10 @@ export const ExportProvider = (
   };
 
   // useEffect(() => {
-  //   console.log(request);
 
   //   if (!request) return;
 
   //   setTimeout(() => {
-  //     console.log(rootRef.current);
 
   //     //   if (!rootRef.current) return;
 
@@ -97,7 +95,6 @@ export const ExportProvider = (
         AppToaster.show({ message: err?.toString?.(), intent: "danger" });
       });
   };
-  console.log(rootRef.current);
   return (
     <ExportContext.Provider value={{ requestExport }}>
       {props.children}

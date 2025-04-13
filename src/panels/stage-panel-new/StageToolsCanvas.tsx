@@ -169,9 +169,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   //     .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
   //     .toString();
   //   holderRef.current.style.transform = transform;
-  //   console.log(transform);
   // }
-  // console.log(stageScale);
   // },
   // }));
 
@@ -200,8 +198,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       // if (handle === "width") {
       //   return;
       // }
-
-      console.log(selectionPath);
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         selectionPath,
@@ -239,7 +235,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   const style: CSSProperties = useMemo(() => {
     if (selectedObjectId) {
-      // console.log(stageZoom);
       // >>>>>>>>>>>>>>>>>>
       // duplicate 123
       const objectPath: string[] = [];
@@ -261,7 +256,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       const transform = groupsMatrix
         .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
         .toString();
-      console.log(transform);
 
       /////
 
@@ -415,7 +409,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log("!!!!!!!!!QQQQQQ QQQQQ QQQQQ ");
     handleRef.current?.addEventListener("mousedown", handleMouseDown);
 
     return () => {
@@ -664,7 +657,6 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = getZoom(stage, settings);
 
-  ////console.log(zoom);
   const forceShowLayerId =
     selection.selectionForProperties?.type === "layer"
       ? selection.selectionForProperties?.id

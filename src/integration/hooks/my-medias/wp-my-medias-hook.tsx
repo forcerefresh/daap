@@ -75,7 +75,6 @@ export const useMyMediaHook = () => {
       fileBase64 = await file2Base64(file);
       const { blob, size } = await getImageVideoFromFile(file);
       const blobBase64 = await blobToBase64(blob!);
-      console.log(blobBase64);
 
       videoSize = size;
       previewImageBase64 = "data:image/jpeg;base64," + blobBase64;
@@ -84,14 +83,10 @@ export const useMyMediaHook = () => {
       videoSize = { width: 100, height: 100 };
       let svgString = await textFile2Text(file);
 
-      console.log(svgString);
-      console.log(fileMetadata);
-
       const parser = new DOMParser();
       const doc = parser.parseFromString(svgString, "text/html");
 
       const viewBox = doc.querySelector("svg")?.getAttribute("viewBox");
-      console.log(viewBox);
       if (viewBox) {
         const rect = viewBox.split(" ");
         videoSize = { width: parseInt(rect[2]), height: parseInt(rect[3]) };
@@ -105,14 +100,6 @@ export const useMyMediaHook = () => {
       // }
       fileBase64 = btoa(svgString);
     }
-
-    console.log({
-      // fileBase64,
-      fileMetadata,
-      type,
-      // previewImageBase64,
-      // previewImageItem,
-    });
 
     const json = {
       previewImageBase64,
@@ -138,8 +125,6 @@ export const useMyMediaHook = () => {
     } catch (ex: any) {
       return { status: "ERROR", errorMessage: ex?.response?.data?.message };
     }
-
-    console.log(response);
 
     if (type === "font") {
       const mediaSizes = JSON.parse(response.data.data.addedMedia.mediaSizes);

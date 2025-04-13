@@ -90,7 +90,6 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
         search: searchString,
       }).then(
         (result) => {
-          console.log(result.data);
           // TODO: response can be error, like AUTH.
           if (isArray(result.data)) {
             setMyFonts(result.data);
@@ -112,7 +111,6 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
   //const inputRef = useRef<HTMLInputElement>(null);
 
   // useEffect(() => {
-  //   console.log(inputRef.current);
   //   inputRef.current?.focus?.();
   // }, [inputRef.current]);
 

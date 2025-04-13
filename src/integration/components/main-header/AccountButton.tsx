@@ -46,7 +46,7 @@ export function AccountButton(props: IAccountButtonProps) {
         // }
         >
           <GoogleReCaptchaProvider
-            reCaptchaKey={import.meta.env.REACT_APP_RECAPTCHA_SITE_KEY!}
+            reCaptchaKey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY!}
           >
             <Login />
           </GoogleReCaptchaProvider>

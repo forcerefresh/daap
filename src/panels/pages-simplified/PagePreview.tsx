@@ -55,7 +55,6 @@ function PagePreview(props: IPagePreviewMerged) {
     []
   );
 
-  console.log("RERENDER");
   return (
     <div
       style={{
@@ -104,7 +103,6 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = stage.zoom; //getZoom(stage, settings);
 
-  ////console.log(zoom);
   const forceShowLayerId =
     selection.selectionForProperties?.type === "layer"
       ? selection.selectionForProperties?.id

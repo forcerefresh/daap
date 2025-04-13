@@ -105,7 +105,6 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
       })
       .catch(function (error) {
         setLoading(false);
-        console.log(error);
         AppToaster.show({
           intent: "danger",
           message: "Something went wrong. Change is not saved.",
@@ -144,7 +143,6 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
       .catch(function (error) {
         setSaving(false);
 
-        console.log(error);
         AppToaster.show({
           intent: "danger",
           message: "Something went wrong. Change is not saved.",

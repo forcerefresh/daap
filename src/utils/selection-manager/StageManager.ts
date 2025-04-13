@@ -26,7 +26,6 @@ export class StageManager extends EventTarget {
     stageTool: StageToolEnum,
     data: IStageToolData & { originalMouseEvent: MouseEvent }
   ) {
-    console.log("StageManager:START > " + stageTool);
     this.currentTool = createStageTool(stageTool, data);
     this.currentTool.addEventListener("change", this.changeHandlerBind as any);
     this.currentTool.addEventListener("stop", this.stopHandlerBind as any);
@@ -47,8 +46,6 @@ export class StageManager extends EventTarget {
   }
 
   stop(internalCall = false) {
-    console.log("StageManager:STOP " + this.currentTool);
-
     this.currentTool?.removeEventListener(
       "change",
       this.changeHandlerBind as any
@@ -69,12 +66,10 @@ export class StageManager extends EventTarget {
   }
 
   changeHandler(e: StageToolEvent) {
-    console.log("Sdsdsd");
     this.dispatchEvent(new StageToolEvent("change", { detail: e.detail }));
   }
 
   stopHandler(e: StageToolEvent) {
-    console.log("STOP1234");
     this.dispatchEvent(new StageToolEvent("stop", { detail: e.detail }));
     this.stop(true);
   }

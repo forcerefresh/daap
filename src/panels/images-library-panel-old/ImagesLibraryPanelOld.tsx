@@ -47,9 +47,6 @@ import { Pagination } from "../../types/pagination";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import axios from "axios";
 
-// console.log(import.meta.env.VITE_API_URL);
-// console.log(process.env);
-
 async function deleteImage(image: SaaSMediaData): Promise<{ id: string }> {
   await axios.delete(`/api/v1/media/${image.id}`);
   return { id: image.id! };
@@ -179,13 +176,9 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
         perPage: 20,
       }).then(
         (result) => {
-          console.log(result);
           if (from === 1) {
-            console.log([...result.data]);
             setImages([...result.data]);
           } else {
-            console.log([...images, ...result.data]);
-
             setImages([...images, ...result.data]);
           }
 
@@ -214,7 +207,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
   const tags = getImageTags();
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  console.log(selectedTags);
   // const toggleTag = (tag: string) => {
   // setSelectedImage(-1);
   // //setSearchValue("");
@@ -493,7 +485,6 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
           {images?.map((image, idx) => {
             if (!image) return null;
 
-            console.log(image);
             // TODO
             // const resolutionObject =
             //   ((image as any).videos as any) ||

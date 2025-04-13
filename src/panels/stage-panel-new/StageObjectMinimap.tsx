@@ -89,11 +89,8 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
     isRoot,
   } = props;
 
-  console.log("OBJECT_ID");
-
   if (!object) return <>qwe</>;
 
-  console.log(object.id);
   // // ++
   // const groupsPath = [...selectionPath];
   // groupsPath.shift();
@@ -109,12 +106,9 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   //   const ta = createTransformForPath(groupsPath, objectById, {
   //     inverseRotation: false,
   //   });
-  //   //console.log(ta);
   //   transformArrayRef.current = ta;
   //   setTransformArray(ta);
   // }, [groupsPath, objectById]);
-
-  // //console.log(groupsPath);
 
   // // ++++
 
@@ -132,11 +126,6 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   // const objectRef = useRef(object);
   // objectRef.current = object;
 
-  // //console.log("AAAAA");
-
-  // // console.log(object?.absoluteLayout?.common?.left);
-  // // console.log(object2?.absoluteLayout?.common?.left);
-
   // const {
   //   activeTool,
   //   activateTool,
@@ -149,12 +138,10 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   // // };
   // // const handleRotationDone = (rotation: number) => {
   // //   isRotationInProgress.current = false;
-  // //   //console.log(objectRef.current?.absoluteLayout?.common?.left);
 
   // //   // not using object as there is a caching
   // //   const obj = cloneDeep(objectRef.current); //(objectByIdRef.current[object.id]);
   // //   //obj.absoluteLayout!.common!.top = "300px"; //TODO
-  // //   //console.log(rotation, "ROTATION");
   // //   obj.rotation = rotation;
   // //   _updateObject(obj);
   // // };
@@ -254,9 +241,6 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   //   selectedObjectIds.length === 1 &&
   //   selectedObjectIds[0] === objectRef.current.id;
 
-  // console.log(
-  //   "Obj:" + objectRef.current?.name + " :  sel: " + isOnlyThisObjectSelected
-  // );
   // const onObjectClick = (
   //   event: React.MouseEvent<HTMLDivElement>,
   //   objectId: string
@@ -276,7 +260,6 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   //       const deff = getAppObjectDefinition(objectById[objectId].type);
   //       if (deff?.meta.isEditable) {
   //         // TODO>TODO>>
-  //         console.log("Uncomment");
   //         //activateTool(objectById[objectId].type, objectId);
   //       }
   //     }
@@ -310,7 +293,6 @@ export function StageObjectMinimap(props: IStageObjectMinimap) {
   //   childObjectInGroupSelection ||
   //   siblingObjectSelection;
 
-  // console.log(objectHolderStyle);
   return (
     <div
       style={{

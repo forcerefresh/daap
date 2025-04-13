@@ -160,8 +160,6 @@ export function getBlobHtml(props: GetHtmlFuncPropsType) {
     seed: blobValues.seed,
   });
 
-  console.log(path);
-
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
     object.width

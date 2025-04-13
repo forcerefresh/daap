@@ -150,8 +150,6 @@ async function generateImage(args: {
         } else {
           blobImage = await htmlToImage.toBlob(playerHolderEl);
         }
-
-        console.log(blobImage);
       } catch (ex) {
         reject(
           "Something went wrong. Image creation has failed (2). Please try again."

@@ -184,10 +184,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     useZoomPan({ spaceDown });
 
   useEffect(() => {
-    console.log("++++++++++++++++");
-    console.log(viewPortSize);
-    console.log(breakpointConfig);
-
     const newTransform = getInitialStageTransform(
       viewPortSize,
       breakpointConfig,
@@ -241,12 +237,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         global: true,
         label: "Delete objects",
         onKeyDown: (e: Event) => {
-          console.log(e.target);
           if ((e.target as Element).closest("input")) {
             return;
           }
           e.preventDefault();
-          console.log(selectedObjectIds);
 
           _deleteObjects(selectedObjectIds);
         },
@@ -288,7 +282,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         global: true,
         label: "Delete",
         onKeyDown: (e) => {
-          console.log(e.target);
           if (
             (e.target as Element).closest("input") ||
             (e.target as Element).closest(".MainToolCanvas")
@@ -305,7 +298,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
         global: true,
         label: "Escape",
         onKeyDown: (e) => {
-          console.log(e.target);
           if (!!clipboard.entityIds) {
             _clearClipboard();
           }
@@ -715,7 +707,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
             e.persist();
 
-            console.log("ASDASDASDS");
             if (activeStageTool === StageTools.PAN) {
               stageManager.start(StageToolEnum.PAN, {
                 boundingClientRects: [], // Not needed
@@ -730,7 +721,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
               return;
             }
 
-            console.log("MOUSE UP 111");
             //setSelectionStartPosition(null);
             // select parent
             if (selectionParentId) {
@@ -740,13 +730,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
                 _selectForProperties({ type: "object", id: selectionParentId });
               }
             } else {
-              console.log("uncomment 2");
               _activateObject(null);
               _selectObjects([]);
             }
 
             // const objectId = getGlobalProp("mouseDownObjectId");
-            // console.log("stage mouse down" + objectId);
           }}
           //   setDragStartPosition(getMousePosition(e));
 
@@ -760,11 +748,9 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           //   x: data.x - dragStartPosition.x,
           //   y: data.y - dragStartPosition.y,
           // };
-          // //console.log(diff);
           // setDragDelta(diff);
           // }}
           // onMouseUp={() => {
-          // console.log("MOUSE UP 111");
           // //setSelectionStartPosition(null);
           // // select parent
           // if (selectionParentId) {
@@ -772,14 +758,12 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           //   _selectObjects([selectionParentId]);
           //   _selectForProperties({ type: "object", id: selectionParentId });
           // } else {
-          //   console.log("uncomment 2");
           //   _selectObjects([]);
           //   _activateObject(null);
           // }
           // }}
           // onClick={(e) => {
           //if (getGlobalProp("rotationInProgress")) return;
-          //   console.log(window.DAAP);
           //   if (window.DAAP?.rotationInProgress) {
           //     window.DAAP = window.DAAP
           //       ? { ...window.DAAP, rotationInProgress: false }
@@ -792,7 +776,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           //   _selectObjects([selectionParentId]);
           //   _selectForProperties({ type: "object", id: selectionParentId });
           // } else {
-          //   console.log("uncomment 2");
           //   //_selectObjects([]);
           //   //_activateObject(null);
           // }
@@ -971,7 +954,6 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = stage.zoom; //getZoom(stage, settings);
 
-  ////console.log(zoom);
   const forceShowLayerId =
     selection.selectionForProperties?.type === "layer"
       ? selection.selectionForProperties?.id

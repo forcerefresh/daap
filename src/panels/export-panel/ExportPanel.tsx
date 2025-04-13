@@ -362,69 +362,75 @@ const ExportPanel: React.FC<IExportPanelMergedProps> = (props) => {
         </section> */}
 
         <div className={css.actionRow}>
-          <div>
-            <Button
-              loading={exporting}
-              disabled={meta.inSaving}
-              intent="primary"
-              icon="floppy-disk"
-              onClick={async () => {
-                setExporting(true);
-                const blobImages = await generateImages({
-                  breakpointConfig: breakpointConfig!,
-                  breakpoints,
-                  layers,
-                  objects,
-                  pages,
-                  selectedDevice,
-                  settings,
-                  extensions: [],
-                  imageType: formState.imageType,
-                  imageQuality: formState.imageQuality,
-                  exportWidth: formState.width,
-                  exportHeight: formState.height,
-                });
+          {import.meta.env.VITE_APP_INTEGRATION === "wp" && (
+            <div>
+              <Button
+                loading={exporting}
+                disabled={meta.inSaving}
+                intent="primary"
+                icon="floppy-disk"
+                onClick={async () => {
+                  setExporting(true);
+                  const blobImages = await generateImages({
+                    breakpointConfig: breakpointConfig!,
+                    breakpoints,
+                    layers,
+                    objects,
+                    pages,
+                    selectedDevice,
+                    settings,
+                    extensions: [],
+                    imageType: formState.imageType,
+                    imageQuality: formState.imageQuality,
+                    exportWidth: formState.width,
+                    exportHeight: formState.height,
+                  });
 
-                // const base64 = dataUrl.split("data:image/jpeg;base64,").pop();
-                for (let idx = 0; idx < blobImages.length; idx++) {
-                  const imageBlob = blobImages[idx];
-                  let extension = "png";
+                  // const base64 = dataUrl.split("data:image/jpeg;base64,").pop();
+                  for (let idx = 0; idx < blobImages.length; idx++) {
+                    const imageBlob = blobImages[idx];
+                    let extension = "png";
 
-                  extension =
-                    imageBlob.type.indexOf("jpeg") !== -1 ? "jpeg" : extension;
-                  extension =
-                    imageBlob.type.indexOf("webp") !== -1 ? "webp" : extension;
+                    extension =
+                      imageBlob.type.indexOf("jpeg") !== -1
+                        ? "jpeg"
+                        : extension;
+                    extension =
+                      imageBlob.type.indexOf("webp") !== -1
+                        ? "webp"
+                        : extension;
 
-                  // zipFilename: formState.zipFilename,
-                  // imageFilename: formState.imageFilename,
+                    // zipFilename: formState.zipFilename,
+                    // imageFilename: formState.imageFilename,
 
-                  const filename = formState.imageFilename
-                    .replace("{index}", idx.toString())
-                    .replace("{extension}", extension);
+                    const filename = formState.imageFilename
+                      .replace("{index}", idx.toString())
+                      .replace("{extension}", extension);
 
-                  const imageBase64 = await blobToBase64(imageBlob);
+                    const imageBase64 = await blobToBase64(imageBlob);
 
-                  // const file = blobToFile(
-                  //   imageBlob,
-                  //   filename,
-                  //   "image/" + extension
-                  // );
+                    // const file = blobToFile(
+                    //   imageBlob,
+                    //   filename,
+                    //   "image/" + extension
+                    // );
 
-                  await uploadToWP(filename, imageBase64);
-                }
+                    await uploadToWP(filename, imageBase64);
+                  }
 
-                setExporting(false);
+                  setExporting(false);
 
-                AppToaster.show({
-                  intent: "success",
-                  message:
-                    "The file has been successfully uploaded to the WordPress media library.",
-                });
-              }}
-            >
-              {"Save images to WP media"}
-            </Button>
-          </div>
+                  AppToaster.show({
+                    intent: "success",
+                    message:
+                      "The file has been successfully uploaded to the WordPress media library.",
+                  });
+                }}
+              >
+                {"Save images to WP media"}
+              </Button>
+            </div>
+          )}
 
           <div>
             <Button

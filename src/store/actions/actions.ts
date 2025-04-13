@@ -765,8 +765,6 @@ export function activateObject(objectId: string | null): any {
       return;
     }
 
-    console.log(cloneDeep(getState().project.objects.objectById));
-
     dispatch(_activateObject(objectId));
 
     setTimeout(() => {
@@ -1055,7 +1053,6 @@ export function selectObjects(selectedObjectIds: string[]): any {
     //   prevSelectedObjectIds,
     //   selectedObjectIds
     // );
-    // console.log(unselectedObjectIds, "unselectedObjectIds");
     // const unselectedObject = unselectedObjectIds.map((id) => {
     //   return objectById[id];
     // });
@@ -1063,7 +1060,6 @@ export function selectObjects(selectedObjectIds: string[]): any {
     // const unselectedObjectGroup = unselectedObject.filter((object) => {
     //   return isObjectGroup(object);
     // });
-    // console.log(unselectedObjectGroup, "unselectedObjectGroup");
 
     // dispatch(normalizeObjectGroups(unselectedObjectGroup));
     // // >>> Normalize group on unselect - END
@@ -1285,8 +1281,6 @@ export function addNewObject(
       parentId: layerId,
     };
 
-    console.log(object);
-
     const nextNameIdx =
       getState().project.objects.nextObjectNameNumber[type] || 1;
     object.name = humanizeSting(type, true) + " " + nextNameIdx;
@@ -1457,8 +1451,6 @@ export function duplicateObjects(objectIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
-
-    console.log(cloneDeep(duplicateSlidesSchema));
 
     dispatch(activateObject(newObjectIds[0]));
     dispatch(selectObjects(newObjectIds));
@@ -1728,10 +1720,6 @@ function handleObjectUpdate(
   isPreview = false
 ) {
   const state = getState();
-  console.log("!@!@!@!@");
-  if (!object) debugger;
-  console.log(object);
-  console.log(object.id);
 
   const prevObject = state.project.objects.objectById[object.id];
 
@@ -3072,7 +3060,6 @@ export function loadUserData(): any {
         }
       })
       .catch(function (error) {
-        console.log();
         dispatch(
           updateUserDataError({
             error: "USER_DATA_ERROR_1",

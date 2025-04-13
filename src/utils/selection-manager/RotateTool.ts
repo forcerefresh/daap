@@ -54,9 +54,6 @@ export class RotateTool extends EventTarget implements IStageTool {
     const mousePosition = getMousePosition(e);
     const angle = this.getAngle(mousePosition);
 
-    console.log(mousePosition);
-    console.log(angle);
-
     this.dispatchEvent(
       new StageToolEvent<StageToolRotateEventData>("change", {
         detail: {
@@ -70,15 +67,12 @@ export class RotateTool extends EventTarget implements IStageTool {
   }
 
   handleMouseUp(e: MouseEvent) {
-    console.log("MOUSE UP handleMouseUp");
-
     e.stopPropagation();
     e.stopImmediatePropagation();
     e.preventDefault();
 
     const mousePosition = getMousePosition(e);
     const angle = this.getAngle(mousePosition);
-    console.log(angle);
 
     this.dispatchEvent(
       new StageToolEvent<StageToolRotateEventData>("stop", {

@@ -93,34 +93,33 @@ const MainHeader = (props: IMainHeader) => {
                   large
                   // rightIcon="caret-down"
                   // style={{ marginRight: "20px" }}
-                  icon={<Icon icon="floppy-disk" size={25} />}
+                  icon={<AddObjectIcon width={25} height={25} />}
                   onClick={() => {
-                    const event = new CustomEvent("OPEN_SAVE");
+                    const event = new CustomEvent("OPEN_CREATE_NEW");
                     window.dispatchEvent(event);
                   }}
                 >
-                  Save
+                  Create
                 </Button>
 
-                {/* <Divider dir="horizontal" /> */}
-
-                <ButtonGroup minimal={true}>
-                  {/* <Divider /> */}
-                  <Button
-                    large
-                    minimal
-                    // className={css.downloadBtn}
-                    icon={<Icon icon="export" size={25} />}
-                    onClick={() => {
-                      const event = new CustomEvent("OPEN_EXPORT");
-                      window.dispatchEvent(event);
-                    }}
-                  >
-                    Export
-                  </Button>
-                </ButtonGroup>
-
-                <Divider dir="horizontal" />
+                <Button
+                  minimal
+                  large
+                  className={css.largeButton}
+                  icon={<Icon icon="applications" size={25} />}
+                  //active={showPanel === VisiblePanel.ProjectsLibrary}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_TEMPLATES");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  {/* {missingExtensions?.length > 0 && (
+                  <Tag intent={"danger"} round className={css.buttonTag}>
+                    {missingExtensions.length}
+                  </Tag>
+                )} */}
+                  Templates
+                </Button>
 
                 <Button
                   minimal
@@ -148,35 +147,32 @@ const MainHeader = (props: IMainHeader) => {
                   large
                   // rightIcon="caret-down"
                   // style={{ marginRight: "20px" }}
-                  icon={<AddObjectIcon width={25} height={25} />}
+                  icon={<Icon icon="floppy-disk" size={25} />}
                   onClick={() => {
-                    const event = new CustomEvent("OPEN_CREATE_NEW");
+                    const event = new CustomEvent("OPEN_SAVE");
                     window.dispatchEvent(event);
                   }}
                 >
-                  Create
+                  Save
                 </Button>
 
-                <Divider dir="horizontal" />
+                {/* <Divider dir="horizontal" /> */}
 
-                <Button
-                  minimal
-                  large
-                  className={css.largeButton}
-                  icon={<Icon icon="applications" size={25} />}
-                  //active={showPanel === VisiblePanel.ProjectsLibrary}
-                  onClick={() => {
-                    const event = new CustomEvent("OPEN_TEMPLATES");
-                    window.dispatchEvent(event);
-                  }}
-                >
-                  {/* {missingExtensions?.length > 0 && (
-                  <Tag intent={"danger"} round className={css.buttonTag}>
-                    {missingExtensions.length}
-                  </Tag>
-                )} */}
-                  Templates
-                </Button>
+                <ButtonGroup minimal={true}>
+                  {/* <Divider /> */}
+                  <Button
+                    large
+                    minimal
+                    // className={css.downloadBtn}
+                    icon={<Icon icon="export" size={25} />}
+                    onClick={() => {
+                      const event = new CustomEvent("OPEN_EXPORT");
+                      window.dispatchEvent(event);
+                    }}
+                  >
+                    Export
+                  </Button>
+                </ButtonGroup>
 
                 {/* <Divider dir="horizontal" /> */}
 

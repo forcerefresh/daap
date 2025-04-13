@@ -185,17 +185,12 @@ export const ToolsProvider = (
     globals.snapToObject,
   ]);
 
-  console.log("INVESTIGATE");
-  console.log(cloneDeep(allObjects));
-  console.log(cloneDeep(objectById));
-
   const [cursorStyle, setCursorStyle] = useState<ICursorStyle | undefined>();
   // const { setCursorStyle } = useContext(CursorContext);
   // const state = getState();
   // const activeLayerId = state.project.selection.activeLayerId;
   //const stageZoom = state.stage.zoom;
 
-  //console.log(stageZoom);
   const [toolConfig, setToolConfigState] = useState<IToolConfig>({});
   const [activeTool, setActiveTool] = useState<string | null>(null);
   const [activeObjectId, setActiveObjectId] = useState<
@@ -223,12 +218,7 @@ export const ToolsProvider = (
     };
     reactivate: boolean;
   }) => {
-    //debugger;
-    // console.log(params.objectValues);
-    // console.log(params);
     if (!params.isEdit) {
-      // console.log(params);
-
       dispatch(
         addNewObject(
           storeRef.current.activeLayerId!,
@@ -327,10 +317,6 @@ export const ToolsProvider = (
 
     const xx = appRect.x + (appRect.x - stageRect.x) * appZoom;
     const yy = appRect.y + (appRect.y - stageRect.y) * appZoom;
-    // console.log(rect);
-    console.log(e.pageX);
-    console.log(e.pageY);
-    console.log(appRect);
 
     const x = (e.pageX - stageRect.x) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetLeft;
     const y = (e.pageY - stageRect.y) / storeRef.current.stageZoom / appZoom; //(e.currentTarget as HTMLElement).offsetTop;
@@ -356,9 +342,6 @@ export const ToolsProvider = (
       storeRef.current.layerById
     );
 
-    console.log(objectPath, "objectPath123");
-    console.log([...objectPath, objectId], "objectPath123");
-
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
       storeRef.current.objectById,
@@ -371,8 +354,6 @@ export const ToolsProvider = (
     const transform = options?.skipStageScale
       ? groupsMatrix
       : groupsMatrix.multiply(new DOMMatrix("scale(" + stageZoom + ")"));
-
-    console.log(transform);
 
     return transform;
     /////
@@ -472,10 +453,6 @@ export const ToolsProvider = (
           objectId,
           position: object ? { x: x ?? 0, y: y ?? 0 } : { x: 0, y: 0 },
           getObjects: (type: string): IObject[] => {
-            // console.log(type);
-            // console.log(allObjects);
-            // console.log(objectById);
-
             const retObjs: IObject[] = [];
             allObjects.forEach((objectId) => {
               if (storeRef.current.objectById[objectId].type === type) {
@@ -488,7 +465,6 @@ export const ToolsProvider = (
             dispatch(deleteObjects([objectId]));
           },
           requestCursorChange: (cursor) => {
-            console.log(cursor);
             setCursorStyle(cursor);
           },
         });
@@ -549,10 +525,6 @@ export const ToolsProvider = (
 
   useEffect(() => {
     if (!activeTool) return;
-
-    console.log("INVEST");
-    console.log(cloneDeep(objectById));
-    console.log(cloneDeep(allObjects));
 
     const retObjs: IObject[] = [];
     allObjects.forEach((objectId) => {

@@ -15,13 +15,9 @@ export default defineConfig({
 
       transform(code, id) {
         // if (id.endsWith("PreviewPanel.module.scss")) {
-        //   console.log("_+++++");
-        //   console.log(code);
         //   // Find all image URLs in the CSS file
         //   const regex = /url\("([^"]+\.(png|jpg|jpeg|gif|svg))"\)/g;
         //   return code.replace(regex, (match, imagePath) => {
-        //     console.log(id);
-        //     console.log("_+++++++++++++++");
         //     const fullPath = path.resolve(path.dirname(id), imagePath);
         //     const file = fs.readFileSync(fullPath);
         //     const base64 = file.toString("base64");
@@ -43,9 +39,10 @@ export default defineConfig({
   build: {
     outDir: "dist",
     rollupOptions: {
-      input: "src/index.tsx", // Entry point
+      input: "index.html", // Entry point
       output: {
         entryFileNames: "[name].js",
+
         format: "iife", // Immediately Invoked Function Expression
         name: "DaapForcerefresh",
       },

@@ -54,8 +54,6 @@ function TextFloatingToolbar(
 
   const values = object?.properties as TextValues | undefined;
 
-  console.log(values);
-
   const isAILoading = aiLoading?.[object?.id];
   const isAIEnabled = aiEnabled?.[TEXT];
 

@@ -28,7 +28,6 @@ export class ScaleTool extends EventTarget implements IStageTool {
   private mouseUp;
 
   constructor(data: IStageToolData) {
-    console.log("Sadasdsa");
     super();
     this.initialMousePosition = data.mousePosition;
     this.contextMatrix = data.contextMatrix;

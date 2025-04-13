@@ -64,10 +64,6 @@ export const stagePointToObjectSpace_New = (
   const translateX = finalTransform.e;
   const translateY = finalTransform.f;
 
-  console.log(p);
-
-  console.log({ x: translateX, y: translateY });
-
   return { x: translateX, y: translateY };
 
   return p;
@@ -87,7 +83,6 @@ export const objectPointToStageSpace_New = (
     objTransform
   );
 
-  console.log("scale(" + stageZoom + ")");
   const pointMatrix = new DOMMatrix(
     `translateX(${p.x}px) translateY(${p.y}px)`
   );

@@ -187,8 +187,6 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     string[] | undefined
   >();
 
-  //console.log(selectionPath, "selectionPath");
-
   const [parentLayerIdFromSelection, ...selectionPathWithoutLayer] =
     selectionPath;
   const parentLayerId = parentLayerIdFromSelection ?? activeLayerId;
@@ -207,16 +205,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     [objectIds, setSortedObjectIds]
   );
 
-  // console.log(sortedObjectIds);
-  // console.log(objectIds);
-
-  // console.log(selectionPathWithoutLayer);
   // if (!parentLayerId) return null;
-
-  console.log("LAYERS_S");
-
-  console.log([...(sortedObjectIds ?? [])]);
-  console.log([...objectIds]);
 
   return (
     <>

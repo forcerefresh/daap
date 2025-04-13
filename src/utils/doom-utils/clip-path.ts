@@ -11,14 +11,6 @@ export function getClipMaskFromSvg(
 
   const svgEl = createElementFromHTML(svg) as SVGElement;
 
-  console.log(svgInput);
-
-  console.log(svg);
-
-  console.log(svgEl);
-
-  console.log(svgEl.childNodes);
-
   const svgWidth = parseInt(svgEl.getAttribute("width") ?? "0");
   const svgHeight = parseInt(svgEl.getAttribute("height") ?? "0");
 
@@ -40,7 +32,6 @@ export function getClipMaskFromSvg(
   svgClipMask.appendChild(clipRect);
 
   Array.from(svgEl.childNodes).forEach((child) => {
-    console.log(child, "CHILD");
     if ("setAttribute" in child) {
       (child as SVGElement).setAttribute(
         "transform",
@@ -49,8 +40,6 @@ export function getClipMaskFromSvg(
     }
     clipRect.append(child);
   });
-
-  console.log(svgClipMask.outerHTML);
 
   return svgClipMask.outerHTML;
 

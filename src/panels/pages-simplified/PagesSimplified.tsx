@@ -138,8 +138,6 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
 
   const [sortedPageIds, setSortedPageIds] = useState<string[] | undefined>();
 
-  //console.log(selectionPath, "selectionPath");
-
   useEffect(() => {
     setSortedPageIds(undefined);
   }, [pagesIds]);
@@ -158,16 +156,7 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     [pagesIds, setSortedPageIds]
   );
 
-  // console.log(sortedObjectIds);
-  // console.log(objectIds);
-
-  // console.log(selectionPathWithoutLayer);
   // if (!parentLayerId) return null;
-
-  console.log("LAYERS_S");
-
-  console.log([...(sortedPageIds ?? [])]);
-  console.log([...pagesIds]);
 
   return (
     <>

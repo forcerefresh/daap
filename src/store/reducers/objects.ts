@@ -64,8 +64,6 @@ export function objects(
       //   ? newState.nextObjectNameNumber[object.type]+1
       //   : 2;
 
-      //console.log(newState);
-
       // add to parent object parentObject.objectIds
       if (object.parentId && newState.objectById[object.parentId]) {
         if (!newState.objectById[object.parentId].objectIds) {
@@ -96,8 +94,6 @@ export function objects(
       // });
     }
     case DELETE_OBJECTS: {
-      console.log("DELETE_OBJECTS REDUCER");
-
       const objectIds = action.payload;
 
       // collect children objects id (e.g. for group))
@@ -173,8 +169,6 @@ export function objects(
       newState.allObjects = newState.allObjects.filter(
         (id) => !groupIdsForRemoval.includes(id)
       );
-
-      // console.log(newState);
 
       objectIds.forEach((objectId) => {
         newState.objectById[objectId] = updatedObjectsById[objectId];
@@ -383,11 +377,8 @@ export function objects(
       // ]);
 
       // remove group id from allObjects
-      console.log("UNGROUP123");
-      console.log([...newState.allObjects]);
 
       newState.allObjects = newState.allObjects.filter((id) => id !== groupId);
-      console.log([...newState.allObjects]);
 
       if (newState.objectById[parentId!]) {
         newState.objectById[parentId!].objectIds?.splice(
@@ -496,7 +487,6 @@ export function objects(
     //   // }
     //   // <<< NORMALIZE GROUP ON UNSELECT - END
 
-    //   //console.log(selectionPath);
     //   return { ...state, selectedObjectIds, selectionPath };
     // }
 

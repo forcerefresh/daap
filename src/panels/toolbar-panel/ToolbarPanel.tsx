@@ -192,10 +192,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const [showPanel, setShowPanel] = useState<VisiblePanel>(VisiblePanel.None);
   // const latestShowPanel = useRef<VisiblePanel>();
 
-  // console.log(showPanel);
   // let inst = useRef<FreeHandDrawTool>();
   const { activateTool, deactivateTool, activeTool } = useContext(ToolsContext);
-  //console.log(activeTool);
   // useEffect(() => {
   //   inst.current?.setToolState(toolState as any);
   // }, [toolState]);
@@ -242,7 +240,6 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   //           }
   //         );
 
-  //         console.log(values);
   //       },
   //       values: { paths: [], strokeWidth: "5", color: "black" } as any,
   //     });

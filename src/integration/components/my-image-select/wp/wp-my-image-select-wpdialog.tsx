@@ -69,7 +69,6 @@ export const WpMyImageSelect_WpDialog: React.FC<getMyUploadComponentProps> = (
 
   const onSelect = useCallback(
     async (attachments: any) => {
-      console.log(attachments, "ovde123");
       const images = await processImages(attachments, type);
       await uploadImages(images, type);
 
@@ -130,8 +129,6 @@ function initWP(onSelect: (attachments: any) => void, wpType?: string[]) {
           .toJSON();
 
         onSelect(attachment);
-
-        console.log(attachment); // You can see all the attachment details in the console
       });
 
       imageUploader.open();

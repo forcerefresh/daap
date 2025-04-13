@@ -58,7 +58,6 @@ function App(props: IAppProps) {
       perPage: 200,
     }).then(
       (result) => {
-        console.log(result.data);
         _setMyFonts(result.data);
       },
 
@@ -140,6 +139,8 @@ function App(props: IAppProps) {
       if (response.appSettings) {
         _updateGlobalConfiguration(response.appSettings);
         scaleUI(response.appSettings.appZoom);
+      } else {
+        scaleUI(1);
       }
     });
   }, []);

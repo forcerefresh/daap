@@ -26,9 +26,6 @@ export function getMediaSrc(
     return originalFileName;
   }
 
-  console.log(daapForcerefreshSettings.baseMediaUrl);
-  console.log(originalFileName);
-
   // debugger;
 
   return `${daapForcerefreshSettings.baseMediaUrl}/${originalFileName}`;

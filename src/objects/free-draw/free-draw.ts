@@ -97,7 +97,6 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
   const beziers =
     freeDrawValues.beziers ?? (freeDrawValues as any).lines?.[0].bezier;
 
-  // console.log(freeDrawValues);
   if (!isPlayer) {
     // if (!freeDrawValues.lines || freeDrawValues.lines.length === 0) {
     if (!beziers || beziers.length === 0) {

@@ -106,7 +106,6 @@ export const StageManagerProviderInternal = (
 
   const recentlySelectedRef = useRef(false);
 
-  //console.log(objectById);
   const [stageManager] = useState(new StageManager());
 
   useEffect(() => {
@@ -159,8 +158,6 @@ export const StageManagerProviderInternal = (
           );
           break;
       }
-      // console.log("CHANGE");
-      // console.log(e);
     };
 
     const changeHandler = (e: StageToolEvent) => {
@@ -196,8 +193,6 @@ export const StageManagerProviderInternal = (
           );
           break;
       }
-      // console.log("CHANGE");
-      // console.log(e);
     };
 
     const stopHandler = (e: StageToolEvent) => {
@@ -271,8 +266,6 @@ export const StageManagerProviderInternal = (
           );
           break;
       }
-      console.log("STOP");
-      console.log(e);
     };
 
     stageManager.addEventListener("start", startHandler as any);
@@ -577,7 +570,6 @@ function processMoveStartEvent(
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
 
-  console.log(selectedObjectIds);
   if (
     selectedObjectIdsRef.current.length > 0 &&
     eData.originalMouseEvent.shiftKey
@@ -610,13 +602,6 @@ function processMoveStartEvent(
     hasSelectedParent = selectedObjectIds.includes(object.parentId);
   }
 
-  // console.log(selectionPath);
-  // console.log(selectionPathWithoutLayerId);
-  // console.log(object.parentId);
-  // console.log(object.id);
-
-  console.log(hasSelectedParent);
-
   recentlySelectedRef.current = false;
   if (!selectedObjectIds.includes(objectId) && !hasSelectedParent) {
     selectedObjectIdsRef.current = [objectId];
@@ -646,8 +631,6 @@ function processMoveChangeEvent(
   const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
   //const objectId = eData.objectId;
-
-  console.log(zoom);
 
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
@@ -701,7 +684,6 @@ function processMoveChangeEvent(
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      console.log(eData, "updateObject");
       //    const currentAngle = getObjectRotation(object) + angle;
       // objectHolder.style.transform =
       //   "translateX(" + x + "px) translateY(" + y + "px)";
@@ -766,7 +748,6 @@ function processMoveChangeEvent(
       );
 
       // addCornerMarkers(object.parentId!, corners);
-      // console.log(corners);
 
       // const newLeftTop = getLeftTopFromCorners(corners);
       // const newBottomRight = getBottomRightFromCorners(corners);
@@ -910,8 +891,6 @@ function processMoveStopEvent(
     );
     // <<<<<<<<<<<<<<<<
 
-    console.log(realMove);
-
     // NOTE: LAYOUT CHANGE
     const newObject = cloneDeep(object);
     // if (object.x1 || object.x2 || object.y1 || object.y2) {
@@ -1033,9 +1012,6 @@ function processMoveStopEvent(
   //     groupBounds = boundsUnion(groupBounds, bounds);
   //   });
 
-  //   console.log(prevBounds);
-  //   console.log(groupBounds);
-
   //   //const objects: IObject[] = [];
   //   //  normalize object pos
   //   groupObjectsToUpdate.forEach((object) => {
@@ -1109,11 +1085,6 @@ function processScaleStartEvent(
   // if (object.parentId && selectedObjectIds.length > 0) {
   //   hasSelectedParent = selectedObjectIds.includes(object.parentId);
   // }
-
-  // console.log(selectionPath);
-  // console.log(selectionPathWithoutLayerId);
-  // console.log(object.parentId);
-  // console.log(object.id);
 }
 
 function processScaleChangeEvent(
@@ -1128,8 +1099,6 @@ function processScaleChangeEvent(
   const { selectedObjectIdsRef, zoom } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
   //const objectId = eData.objectId;
-
-  console.log(zoom);
 
   // asd
   // // const x = eData.x! / zoom;
@@ -1172,7 +1141,6 @@ function processScaleChangeEvent(
       0, //getObjectRotation(object),
       getObjectScale(object)
     );
-    console.log(realMove);
     // <<<<<<<<<<<<<<<<
 
     const objectHolder = document.getElementsByClassName(
@@ -1180,7 +1148,6 @@ function processScaleChangeEvent(
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      console.log(eData);
       //       //    const currentAngle = getObjectRotation(object) + angle;
       //       // objectHolder.style.transform =
       //       //   "translateX(" + x + "px) translateY(" + y + "px)";
@@ -1372,8 +1339,6 @@ function processScaleStopEvent(
   const selectedObjectIds = selectedObjectIdsRef.current;
   //const objectId = eData.objectId;
 
-  console.log(zoom);
-
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
 
@@ -1419,7 +1384,6 @@ function processScaleStopEvent(
     //   `object-holder-${objectId}`
     // )[0] as HTMLDivElement;
 
-    console.log(eData);
     //    const currentAngle = getObjectRotation(object) + angle;
     // objectHolder.style.transform =
     //   "translateX(" + x + "px) translateY(" + y + "px)";
@@ -1467,7 +1431,6 @@ function processScaleStopEvent(
     // //     y: scaledBB.height - bb.height,
     // //   };
 
-    // //   console.log(diff);
     // //   left = objectSize.x + diff.x; //(scale * hDif) / 2; //
     // //   // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
     // //   top = objectSize.y + diff.y;
@@ -1608,7 +1571,6 @@ function processPanChangeEvent(
 ) {
   const { zoom } = storeProps;
   const { _setStagePan } = storeActions;
-  console.log(zoom);
 
   const x = eData.x!; //* zoom;
   const y = eData.y!; //* zoom;
@@ -1630,7 +1592,6 @@ function processPanStopEvent(
 ) {
   const { zoom, stagePan } = storeProps;
   const { _setStagePan } = storeActions;
-  console.log(zoom);
 
   const x = eData.x!; //* zoom;
   const y = eData.y!; //* zoom;
@@ -1864,8 +1825,6 @@ function renderSnapLine(
       // });
     }
   });
-
-  console.log(snapDelta);
 
   return snapDelta;
 }

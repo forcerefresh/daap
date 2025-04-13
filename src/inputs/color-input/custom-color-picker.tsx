@@ -24,8 +24,6 @@ export const CustomColorPicker = (props: CustomColorPickerProps) => {
     onChange,
   } = props;
 
-  console.log(color, "color123");
-
   const styleCurrent = {
     background: color
       ? `rgba(${color.r}, ${color.g}, ${color.b}, ${color.a})`

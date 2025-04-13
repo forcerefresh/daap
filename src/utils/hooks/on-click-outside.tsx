@@ -26,13 +26,10 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
         return;
       }
 
-      console.log(skipClassNames);
       if (skipClassNames) {
         const foundSkip = skipClassNames.find((skipClassName) => {
           return !!(event?.target as HTMLElement)?.closest("." + skipClassName);
         });
-
-        console.log(foundSkip);
 
         if (foundSkip) return;
       }

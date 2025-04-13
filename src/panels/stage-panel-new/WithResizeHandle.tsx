@@ -60,7 +60,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   const showScaleHandles = sizeType === "rect";
   const showPointsHandles = false; //sizeType === "line";
 
-  console.log("sizeType", sizeType);
   // const initialRotationRef = useRef(initialRotation);
   // initialRotationRef.current = initialRotation;
 
@@ -89,8 +88,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         "data-scale-handle"
       );
 
-      console.log(selectionPath);
-
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         selectionPath,
         objectById
@@ -118,8 +115,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   );
 
   useLayoutEffect(() => {
-    console.log(isSelected);
-
     if (!isSelected || forceHide) return;
     if (object.isLocked) return;
     // if (isObjectInGroup(object, objectById)) {

@@ -133,10 +133,6 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
   const { object, isPlayer, isSave, isForThumbnail, deviceType } = props;
   const imageValues = object.properties as ImageValues;
 
-  console.log("imageValues");
-
-  console.log(imageValues);
-
   if (!isPlayer) {
     if (
       !imageValues.image.sourceType ||

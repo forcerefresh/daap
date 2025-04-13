@@ -3,10 +3,6 @@ import {
   LoggerDomain,
   showLoggerUsage,
 } from "webslider-sdk/lib/utils/logger/logger";
-console.log("asdsad");
-
-console.log(import.meta.env.VITE_APP_TYPE);
-console.log(import.meta.env);
 
 function importBuildTarget() {
   if (import.meta.env.VITE_APP_TYPE === "player") {

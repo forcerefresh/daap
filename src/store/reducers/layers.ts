@@ -102,9 +102,6 @@ export function layers(
 
       // add group
 
-      console.log(group.parentId);
-      //console.log(newState.layerById[group.parentId]);
-
       // only if parentId is layer (exist)
       newState.layerById[group.parentId!].objectIds.splice(
         firstIndex,
@@ -112,7 +109,6 @@ export function layers(
         group.id
       );
 
-      console.log(cloneDeep(newState));
       return newState;
     }
     case UNGROUP_OBJECTS: {
@@ -337,8 +333,6 @@ export function ungroupTransformCalc(gropupId: string, objectIds: string[]) {
     "object-holder-" + objectIds[0]
   )[0] as HTMLElement;
 
-  console.log("object-holder-" + objectIds[0]);
-  console.log(objectEl.style.transform);
   // const newObjectEl = getAbsEl("new-object-el");
   // newObjectEl.style.border = "1px solid green";
   // newObjectEl.style.background = "none";
@@ -359,7 +353,6 @@ export function ungroupTransformCalc(gropupId: string, objectIds: string[]) {
 
   // And finally, compute the total rotation, strip
   // the translation, and apply that total rotation to "d".
-  console.log(objectEl.style.transform);
 
   const fullMatrix = getFullMatrix(objectEl);
   fullMatrix.e = fullMatrix.f = 0;
@@ -368,7 +361,6 @@ export function ungroupTransformCalc(gropupId: string, objectIds: string[]) {
   function getFullMatrix(element: HTMLElement): DOMMatrix {
     if (!element) return new DOMMatrix();
     const css = getComputedStyle(element).transform;
-    console.log(css);
     const matrix = new DOMMatrix(css);
     return getFullMatrix(element.offsetParent as HTMLElement).multiply(matrix);
   }
@@ -388,8 +380,6 @@ export function ungroupTransformCalc(gropupId: string, objectIds: string[]) {
 //     `object-bounds-${props.object.id}`
 //   )[0] as HTMLDivElement;
 
-//   //////////console.log(rect);
-
 //   const fullRotation = initialRotationRef.current + rotation;
 //   const H =
 //     w * Math.abs(Math.sin(fullRotation)) + h * Math.abs(Math.cos(fullRotation));
@@ -398,10 +388,6 @@ export function ungroupTransformCalc(gropupId: string, objectIds: string[]) {
 
 //   const X = rXCenter - W / 2;
 //   const Y = rYCenter - H / 2;
-
-//   ////////console.log({ X, Y });
-//   ////////console.log({ H, W });
-//   ////////console.log({ rXCenter, rYCenter });
 
 //   if (boundsEl) {
 //     boundsEl.style.position = "absolute";

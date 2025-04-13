@@ -125,7 +125,6 @@ export function selection(
     case SELECT_OBJECTS: {
       const { selectedObjectIds, selectionPath } = action.payload;
 
-      //console.log(selectionPath);
       return { ...state, selectedObjectIds, selectionPath };
     }
 
@@ -243,12 +242,9 @@ export function selection(
 
       newState.selectionPath = [];
 
-      //console.log(newState);
       return newState;
     }
     case DELETE_OBJECTS: {
-      console.log("DELETE_OBJECTS REDUCER");
-
       const deletedObjectIds = action.payload;
 
       return {

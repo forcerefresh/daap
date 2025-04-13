@@ -127,12 +127,9 @@ export function StageObjectInternal(props: IStageLayer) {
     const ta = createTransformForPath(groupsPath, objectById, {
       inverseRotation: false,
     });
-    //console.log(ta);
     transformArrayRef.current = ta;
     setTransformArray(ta);
   }, [groupsPath, objectById]);
-
-  //console.log(groupsPath);
 
   // ++++
 
@@ -150,11 +147,6 @@ export function StageObjectInternal(props: IStageLayer) {
   const objectRef = useRef(object);
   objectRef.current = object;
 
-  //console.log("AAAAA");
-
-  // console.log(object?.absoluteLayout?.common?.left);
-  // console.log(object2?.absoluteLayout?.common?.left);
-
   const { activeTool, activeObjectId: activeEditObjectId } =
     useContext(ToolsContext);
 
@@ -164,12 +156,10 @@ export function StageObjectInternal(props: IStageLayer) {
   // };
   // const handleRotationDone = (rotation: number) => {
   //   isRotationInProgress.current = false;
-  //   //console.log(objectRef.current?.absoluteLayout?.common?.left);
 
   //   // not using object as there is a caching
   //   const obj = cloneDeep(objectRef.current); //(objectByIdRef.current[object.id]);
   //   //obj.absoluteLayout!.common!.top = "300px"; //TODO
-  //   //console.log(rotation, "ROTATION");
   //   obj.rotation = rotation;
   //   _updateObject(obj);
   // };
@@ -195,8 +185,6 @@ export function StageObjectInternal(props: IStageLayer) {
       resetPosition: false,
     }
   );
-
-  console.log(calculatedObjectSize, "calculatedObjectSize2");
 
   //debug
   // useEffect(() => {
@@ -277,6 +265,8 @@ export function StageObjectInternal(props: IStageLayer) {
     ? "rgba(72, 175,240, 0.5)"
     : "rgba(72, 175,240, 1)";
 
+  const hoverColor = "rgba(72, 175,240, 0.5)";
+
   const commonObjectRect: CSSProperties = {
     left: !layoutChildren ? left : "0px",
     top: !layoutChildren ? top : "0px",
@@ -301,13 +291,20 @@ export function StageObjectInternal(props: IStageLayer) {
       : {}),
   };
 
+  const [isHover, setIsHover] = useState(false);
+
+  if (isHover && !activeTool && !isSelected) {
+    selectionStyle.boxShadow = `0 0 0 ${
+      1 / objectZoom / stageZoom
+    }px ${hoverColor}`;
+  }
+
   // object holder
   const objectHolderStyle: CSSProperties = {
     zIndex: 100,
     position: "absolute", //!layoutChildren ? "relative" : "static",
     ...commonObjectRect,
   };
-  // console.log(objectHolderStyle, object.type);
 
   if (layoutChildren?.type === "inline") {
     objectHolderStyle.display = "inline-block";
@@ -337,9 +334,6 @@ export function StageObjectInternal(props: IStageLayer) {
     selectedObjectIds.length === 1 &&
     selectedObjectIds[0] === objectRef.current.id;
 
-  // console.log(
-  //   "Obj:" + objectRef.current?.name + " :  sel: " + isOnlyThisObjectSelected
-  // );
   // const onObjectClick = (
   //   event: React.MouseEvent<HTMLDivElement>,
   //   objectId: string
@@ -359,7 +353,6 @@ export function StageObjectInternal(props: IStageLayer) {
   //       const deff = getAppObjectDefinition(objectById[objectId].type);
   //       if (deff?.meta.isEditable) {
   //         // TODO>TODO>>
-  //         console.log("Uncomment");
   //         //activateTool(objectById[objectId].type, objectId);
   //       }
   //     }
@@ -392,8 +385,6 @@ export function StageObjectInternal(props: IStageLayer) {
     rootObjectSelection ||
     childObjectInGroupSelection ||
     siblingObjectSelection;
-
-  // console.log(objectHolderStyle);
 
   const objectInGroup = isObjectInGroup(object, objectById);
 
@@ -431,6 +422,12 @@ export function StageObjectInternal(props: IStageLayer) {
               // [css.layoutChildrenSelected]: isSelected && !activeTool,
               // [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
             })}
+            onMouseEnter={() => {
+              !activeTool && !isSelected && setIsHover(true);
+            }}
+            onMouseLeave={() => {
+              if (isHover) setIsHover(false);
+            }}
             onMouseDown={
               allowObjectSelection
                 ? (e) => {
@@ -643,7 +640,6 @@ const mapStateToProps = (state: IStore) => {
 
   const zoom = getZoom(stage, settings);
 
-  ////console.log(zoom);
   const forceShowLayerId =
     selection.selectionForProperties?.type === "layer"
       ? selection.selectionForProperties?.id
@@ -738,8 +734,7 @@ function calculateBounds(
         const bounds = getObjectBoundingBox(object);
         groupBounds = boundsUnion(groupBounds, bounds);
       });
-      // console.log("BOUNDS");
-      // console.log(groupBounds);
+
       return groupBounds;
     }
   }

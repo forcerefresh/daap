@@ -47,8 +47,6 @@ export function WithRotationHandle(
     (e: MouseEvent) => {
       e.stopPropagation();
 
-      console.log(selectionPath);
-
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         selectionPath,
         objectById

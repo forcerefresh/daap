@@ -350,17 +350,11 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   const panDelta = useRef({ x: 0, y: 0 });
 
   function handleWheel(e: WheelEvent) {
-    //console.log(e);
     e.preventDefault();
     var target = panAndZoomTargetRef.current!;
-    //console.log(target);
     if (e.ctrlKey) {
-      console.log("pinch", e.deltaY);
       pinchDelta.current += e.deltaY;
       //var width = getStyleInt(target, "width");
-      console.log(initialWidthRef.current);
-      console.log(e.deltaY);
-      console.log(pinchDelta.current);
 
       var newWidth = initialWidthRef.current - pinchDelta.current;
       //setStyleInt(target, "width", newWidth);
@@ -370,7 +364,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
         initialStageZoom.current * (newWidth / initialWidthRef.current)
       );
     } else {
-      console.log("pan", e.deltaX, e.deltaY);
       var x = getStyleInt(target, "left");
       setStyleInt(target, "left", x - e.deltaX);
       var y = getStyleInt(target, "top");
@@ -396,7 +389,6 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
   }
 
   useEffect(() => {
-    console.log("AAAAAAA");
     initialStageZoom.current = stageZoom;
     initialPanRef.current = { x: 0, y: 0 };
 

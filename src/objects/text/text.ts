@@ -123,8 +123,6 @@ export function createTextObject(
 
   object.properties = values;
 
-  console.log(values);
-
   return object;
 }
 

@@ -447,7 +447,6 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       };
     });
 
-    console.log(inputs);
     return (
       <FormWithLayout
         values={values}

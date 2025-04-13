@@ -260,7 +260,6 @@ export default class LineStageTool implements IToolClass {
     // this.svgPreviewEl.style.left = this.object.left + "px";
     // this.svgPreviewEl.style.top = this.object.top + "px";
 
-    console.log(transform, "transform1");
     this.svgEl.style.transform = transform;
     this.svgPreviewEl.style.transform = transform;
 
@@ -314,9 +313,6 @@ export default class LineStageTool implements IToolClass {
 
     const X = p.x + latestB.x!;
     const Y = p.y + latestB.y!;
-
-    console.log(latestB.y, "BOUNDS123 latest");
-    console.log(p.y, "BOUNDS123 curr");
 
     this.updateHandle(this["point" + this.activePoint], p.x + b.x!, p.y + b.y!);
 
@@ -524,10 +520,6 @@ export default class LineStageTool implements IToolClass {
   private drawPoints() {
     // const b = getBounds(this.currentPoints);
     // const b = this.latestBounds ?? getBounds(this.currentPoints);
-
-    // console.log(this.currentPoints[1].y, "BOUNDS123 P[1].y");
-
-    // console.log(b.y, "BOUNDS123 B.y");
 
     const path =
       "M" +

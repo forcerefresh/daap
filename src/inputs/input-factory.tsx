@@ -136,8 +136,6 @@ export function getInputForm<T>(
 ): React.ReactElement | undefined {
   const key = inputProps.propertyName || inputProps.id;
 
-  console.log(inputType, "INPUTTYPE!@@");
-
   switch (inputType) {
     case InputType.NUMBER: {
       return (
