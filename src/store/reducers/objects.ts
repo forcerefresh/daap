@@ -322,6 +322,7 @@ export function objects(
         forIn(objectById, function (object, _objectId) {
           if (payload.moveIds.indexOf(object.id) !== -1) {
             object.layerId = payload.refId;
+            object.parentId = payload.refId;
           }
         });
       } else if (payload.where === "above") {
@@ -329,6 +330,7 @@ export function objects(
         forIn(objectById, function (object, _objectId) {
           if (payload.moveIds.indexOf(object.id) !== -1) {
             object.layerId = toLayerId;
+            object.parentId = toLayerId;
           }
         });
       }

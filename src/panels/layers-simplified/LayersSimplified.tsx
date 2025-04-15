@@ -48,6 +48,16 @@ import withScrolling, {
   createVerticalStrength,
   useDndScrolling,
 } from "react-dnd-scrolling";
+import { LayerButton } from "./LayerButton";
+
+type ObjectForDND = {
+  parentType: "layer" | "type";
+  parentId: string;
+  parentName?: string;
+  layerId: string;
+  layerName?: string;
+  objectId: string;
+};
 
 const ScrollingComponent = withScrolling("div");
 
@@ -58,7 +68,7 @@ type ISlidesPanel = typeof mapDispatchToProps &
 
 const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   const {
-    slide,
+    page,
     layerArr,
     objectById,
     activeObjectId,
@@ -69,6 +79,8 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
     selectionPath,
     activeSlideId,
     selectionForProperties,
+    pageById,
+    _moveObjects,
     _addObjectsToSelection,
     _removeObjectsFromSelection,
     _deactivateObject,
@@ -166,46 +178,106 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   //   setObjectIds(objectIds);
   // }, [objectById, layerById, selectedObjectIds]);
 
-  const objectIds = useMemo(() => {
-    let objectIdsInternal: string[] = [];
-    const firstSelectedObject = objectById[selectedObjectIds[0]];
-
-    if (firstSelectedObject) {
-      if (layerById[firstSelectedObject.parentId!]) {
-        objectIdsInternal = layerById[firstSelectedObject.parentId!].objectIds;
-      } else if (objectById[firstSelectedObject.id].parentId) {
-        objectIdsInternal =
-          objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
-      }
-    } else if (activeLayerId) {
-      objectIdsInternal = layerById[activeLayerId].objectIds!;
-    }
-    return objectIdsInternal;
-  }, [objectById, layerById, selectedObjectIds]);
-
   const [sortedObjectIds, setSortedObjectIds] = useState<
-    string[] | undefined
+    ObjectForDND[] | undefined
   >();
+
+  const objectsForDnd = useMemo(() => {
+    const objectsForDndInternal: ObjectForDND[] = [];
+
+    page?.layerIds.forEach((layerId) => {
+      layerById[layerId].objectIds.forEach((objectId) => {
+        objectsForDndInternal.push({
+          parentType: "layer",
+          parentId: layerId,
+          parentName: layerById[layerId].name,
+          layerId: layerId,
+          layerName: layerById[layerId].name,
+
+          objectId: objectById[objectId].id,
+        });
+      });
+    }) ?? [];
+
+    return objectsForDndInternal;
+
+    // let objectIdsInternal: string[] = [];
+    // const firstSelectedObject = objectById[selectedObjectIds[0]];
+
+    // if (firstSelectedObject) {
+    //   if (layerById[firstSelectedObject.parentId!]) {
+    //     objectIdsInternal = layerById[firstSelectedObject.parentId!].objectIds;
+    //   } else if (objectById[firstSelectedObject.id].parentId) {
+    //     objectIdsInternal =
+    //       objectById[objectById[firstSelectedObject.id].parentId!].objectIds!;
+    //   }
+    // } else if (activeLayerId) {
+    //   objectIdsInternal = layerById[activeLayerId].objectIds!;
+    // }
+    // return objectIdsInternal;
+  }, [objectById, layerById, selectedObjectIds, page, sortedObjectIds]);
 
   const [parentLayerIdFromSelection, ...selectionPathWithoutLayer] =
     selectionPath;
   const parentLayerId = parentLayerIdFromSelection ?? activeLayerId;
 
+  const [hoverIndex, setHoverIndex] = useState(-1);
+  const [fromLayerId, setFromLayerId] = useState<string | null>(null);
+  const [toLayerId, setToLayerId] = useState<string | null>(null);
+
   const moveObject = useCallback(
     (dragIndex: number, hoverIndex: number) => {
-      setSortedObjectIds((prev) =>
-        update(prev ?? objectIds, {
+      if (!fromLayerId) {
+        setFromLayerId(objectsForDnd[dragIndex].layerId);
+      }
+
+      setToLayerId(objectsForDnd[hoverIndex].layerId);
+
+      setHoverIndex(hoverIndex);
+
+      setSortedObjectIds((prev) => {
+        const target = prev ?? objectsForDnd;
+        target[dragIndex].layerId = target[hoverIndex].layerId;
+        target[dragIndex].layerName = target[hoverIndex].layerName;
+
+        return update(target, {
           $splice: [
             [dragIndex, 1],
-            [hoverIndex, 0, (prev ?? objectIds)[dragIndex] as string],
+            [hoverIndex, 0, (prev ?? objectsForDnd)[dragIndex]],
           ],
-        })
-      );
+        });
+      });
     },
-    [objectIds, setSortedObjectIds]
+    [
+      objectsForDnd,
+      setSortedObjectIds,
+      fromLayerId,
+      setFromLayerId,
+      toLayerId,
+      setToLayerId,
+      setHoverIndex,
+      sortedObjectIds,
+    ]
   );
 
   // if (!parentLayerId) return null;
+
+  const prevLayerIdRef = useRef<string>(undefined);
+  prevLayerIdRef.current = undefined;
+
+  useEffect(() => {
+    const el = document.getElementsByClassName(
+      "layers-simplified-object-item-" + selectedObjectIds[0]
+    )[0];
+
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "nearest",
+      });
+    }
+  }, [selectedObjectIds]);
 
   return (
     <>
@@ -217,32 +289,29 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
 
             {/* return ( */}
             <>
-              <div style={{ display: "flex" }}>
+              {/* <div style={{ display: "flex" }}>
                 <Button
                   className={css.pageLabel}
                   intent={"primary"}
-                  active={selectionForProperties?.id === slide?.id}
+                  active={selectionForProperties?.id === page?.id}
                   minimal
                   small
                   onClick={() => {
-                    if (slide?.id) {
-                      _activateSlide(slide.id);
-                      _selectSlides([slide.id]);
-                      _selectForProperties({ id: slide.id, type: "slide" });
+                    if (page?.id) {
+                      _activateSlide(page.id);
+                      _selectSlides([page.id]);
+                      _selectForProperties({ id: page.id, type: "slide" });
                     }
                   }}
                 >
-                  {/* <span className={css.pageLabel}> */}
-                  {slide?.name}
-                  {/* </span> */}
+                  {page?.name}
                 </Button>
-                {/* <Button small icon="caret-down" minimal></Button> */}
-              </div>
+              </div> */}
 
               {/* {layerArr?.length === 0 ? ( */}
 
               {/* ) : null} */}
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -269,23 +338,7 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                   );
                 })}
 
-                {/* <Button small icon="caret-down" minimal></Button> */}
-              </div>
-              <div style={{ display: "flex", marginTop: "5px" }}>
-                <Button
-                  className={css.smallButton}
-                  // intent={"primary"}
-                  // minimal
-                  disabled={!activeSlideId}
-                  small
-                  onClick={() => {
-                    _addNewLayer(activeSlideId!);
-                  }}
-                  icon="add"
-                >
-                  Layer
-                </Button>
-              </div>
+              </div> */}
 
               {selectionPathWithoutLayer.map((pathObjectId) => (
                 <div style={{ display: "flex" }}>
@@ -309,55 +362,180 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
 
               {/* key={layer.id} */}
               <ScrollingComponent className={cx(css.objectsHolder, {})}>
-                {(sortedObjectIds ?? objectIds)?.length > 0 ? (
-                  <>
-                    {(sortedObjectIds ?? objectIds)?.map((objectId, idx) => {
-                      const object = objectById[objectId];
+                {/* {(sortedObjectIds ?? objectsForDnd)?.length > 0 ? ( */}
+                <>
+                  {page?.layerIds.map((layerId) => {
+                    return (
+                      <React.Fragment key={`layer-${layerId}`}>
+                        <LayerButton
+                          layerId={layerId}
+                          activeLayerId={activeLayerId}
+                          layerName={layerById[layerId].name}
+                          onSelect={(layerId) => {
+                            _activateLayer(layerId);
+                            _selectLayers([layerId]);
+                            _selectForProperties({
+                              type: "layer",
+                              id: layerId,
+                            });
+                          }}
+                          onDrop={(layerId, item) => {
+                            _moveObjects(layerId, "layer", [item.id]);
+                            setSortedObjectIds(undefined);
+                            setToLayerId(null);
+                            setFromLayerId(null);
+                            setHoverIndex(-1);
+                          }}
+                        />
+                        {/* {layerById[layerId].objectIds?.length === 0 && (
+                          <span className="bp5-text-disabled">
+                            No objects found
+                          </span>
+                        )} */}
 
-                      return (
-                        <React.Fragment key={`object-${objectId}`}>
-                          <ObjectRow
-                            moveObject={moveObject}
-                            dropCancel={() => {
-                              setSortedObjectIds(undefined);
-                            }}
-                            dropDone={() => {
-                              const newLayer = cloneDeep(
-                                layerById[parentLayerId]
-                              );
-                              if (sortedObjectIds)
-                                newLayer.objectIds = sortedObjectIds;
+                        {(sortedObjectIds ?? objectsForDnd)?.map(
+                          (objectForDnd, idx) => {
+                            if (objectForDnd.layerId !== layerId) {
+                              return;
+                            }
 
-                              _updateLayer(newLayer);
+                            const objectId = objectForDnd.objectId;
 
-                              setSortedObjectIds(undefined);
-                            }}
-                            objectById={objectById}
-                            onObjectClick={onObjectClick}
-                            onObjectDblClick={onObjectDblClick}
-                            breakpointConfig={breakpointConfig}
-                            selectedObjectIds={selectedObjectIds}
-                            object={object}
-                            layer={layerById[activeLayerId!]} // todo
-                            rowIndex={idx}
-                          />
-                          {/* <div
-                            className={cx(css.objectItem, {
-                              [css.selected]: object.id === activeObjectId,
-                            })}
-                          >
-                            {object.name}
-                          </div> */}
-                        </React.Fragment>
-                      );
-                    })}
-                  </>
-                ) : (
-                  <span className="bp5-text-disabled">
-                    No {layerArr?.length === 0 ? "layers" : "objects"} found
-                  </span>
-                )}
+                            //sortedObjectIds
+                            const object = objectById[objectForDnd.objectId];
+
+                            // let layerName: JSX.Element | null = null;
+                            // if (
+                            //   prevLayerIdRef.current !== objectForDnd.layerId
+                            // ) {
+                            //   layerName = (
+                            //     <Button
+                            //       // key={layerId}
+                            //       className={css.smallButton}
+                            //       intent={"primary"}
+                            //       active={layerId === activeLayerId}
+                            //       minimal
+                            //       small
+                            //       onClick={() => {
+                            //         _activateLayer(layerId);
+                            //         _selectLayers([layerId]);
+                            //         _selectForProperties({
+                            //           type: "layer",
+                            //           id: layerId,
+                            //         });
+                            //       }}
+                            //     >
+                            //       {objectForDnd.layerName}
+                            //     </Button>
+                            //   );
+                            // }
+
+                            // prevLayerIdRef.current = objectForDnd.layerId;
+
+                            return (
+                              <React.Fragment key={`object-${objectId}`}>
+                                {/* <div>{layerName}</div> */}
+                                <ObjectRow
+                                  isHovered={hoverIndex === idx}
+                                  moveObject={moveObject}
+                                  dropCancel={() => {
+                                    setSortedObjectIds(undefined);
+                                    setToLayerId(null);
+                                    setFromLayerId(null);
+                                    setHoverIndex(-1);
+                                  }}
+                                  dropDone={() => {
+                                    const toLayer = cloneDeep(
+                                      layerById[toLayerId!]
+                                    );
+                                    toLayer.objectIds = sortedObjectIds!
+                                      .filter((id) => id.layerId === toLayerId)
+                                      .map((id) => id.objectId);
+                                    _updateLayer(toLayer);
+
+                                    toLayer.objectIds.map((objectId) => {
+                                      if (
+                                        objectById[objectId].layerId !==
+                                        toLayer.id
+                                      ) {
+                                        const objectClone = cloneDeep(
+                                          objectById[objectId]
+                                        );
+                                        objectClone.layerId = toLayer.id;
+                                        _updateObject(objectClone);
+                                      }
+                                    });
+
+                                    const fromLayer = cloneDeep(
+                                      layerById[fromLayerId!]
+                                    );
+                                    fromLayer.objectIds = sortedObjectIds!
+                                      .filter(
+                                        (id) => id.layerId === fromLayerId
+                                      )
+                                      .map((id) => id.objectId);
+                                    _updateLayer(fromLayer);
+
+                                    fromLayer.objectIds.map((objectId) => {
+                                      if (
+                                        objectById[objectId].layerId !==
+                                        fromLayer.id
+                                      ) {
+                                        const objectClone = cloneDeep(
+                                          objectById[objectId]
+                                        );
+                                        objectClone.layerId = fromLayer.id;
+                                        _updateObject(objectClone);
+                                      }
+                                    });
+
+                                    setSortedObjectIds(undefined);
+                                    setToLayerId(null);
+                                    setFromLayerId(null);
+                                    setHoverIndex(-1);
+                                  }}
+                                  objectById={objectById}
+                                  onObjectClick={onObjectClick}
+                                  onObjectDblClick={onObjectDblClick}
+                                  breakpointConfig={breakpointConfig}
+                                  selectedObjectIds={selectedObjectIds}
+                                  object={object}
+                                  layer={layerById[objectForDnd.layerId]} // TODO
+                                  rowIndex={idx}
+                                />
+                                {/* <div
+                                                  className={cx(css.objectItem, {
+                                                    [css.selected]: object.id === activeObjectId,
+                                                  })}
+                                                >
+                                                  {object.name}
+                                                </div> */}
+                              </React.Fragment>
+                            );
+
+                            // ---
+                          }
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </>
               </ScrollingComponent>
+              <div style={{ display: "flex", marginTop: "10px" }}>
+                <Button
+                  className={css.smallButton}
+                  // intent={"primary"}
+                  // minimal
+                  disabled={!activeSlideId}
+                  small
+                  onClick={() => {
+                    _addNewLayer(activeSlideId!);
+                  }}
+                  icon="add"
+                >
+                  Add Layer
+                </Button>
+              </div>
             </>
             {/* ); */}
             {/* })} */}
@@ -372,12 +550,12 @@ const mapStateToProps = (state: IStore) => {
   const { pages, layers, objects, selection } = state.project;
   //const { layoutType } = state.globals;
   let layerArr: ILayer[] | null = null;
-  let slide: IPage | null = null;
+  let page: IPage | null = null;
 
   if (selection.activeSlideId) {
     const layerIds = pages.pageById[selection.activeSlideId].layerIds;
     layerArr = layerIds.map((layerId: string) => layers.layerById[layerId]);
-    slide = pages.pageById[selection.activeSlideId];
+    page = pages.pageById[selection.activeSlideId];
   }
 
   const breakpointConfig: BreakpointConfiguration | undefined = last(
@@ -388,9 +566,10 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     layerArr,
-    slide,
+    page,
     objectById: objects.objectById,
     layerById: layers.layerById,
+    pageById: pages.pageById,
     activeSlideId: selection.activeSlideId,
     activeLayerId: selection.activeLayerId,
     activeObjectId: selection.activeObjectId,

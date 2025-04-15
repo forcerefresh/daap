@@ -372,7 +372,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
             }
             selectedValue={content}
           >
-            <Radio label="Empty document" value="empty" />
+            <Radio label="New document" value="empty" />
             <Radio label="Copy current document" value="copy" />
           </RadioGroup>
         </div>

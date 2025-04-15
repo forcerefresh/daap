@@ -225,10 +225,10 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
               }
 
               _deleteLayersThree([layer.id]);
-              AppToaster.show({
-                intent: "warning",
-                message: "Layer '" + layer.name + "' has been deleted.",
-              });
+              // AppToaster.show({
+              //   intent: "warning",
+              //   message: "Layer '" + layer.name + "' has been deleted.",
+              // });
 
               if (layerIdToSelect) {
                 _activateLayer(layerIdToSelect.id);

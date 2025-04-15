@@ -14,16 +14,9 @@ import type { CSSProperties, FC } from "react";
 import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ILayer } from "../../store/reducers/i-layers";
+import { DragItem, ItemTypes } from "./types";
 
-interface DragItem {
-  index: number;
-  id: string;
-  type: string;
-}
-
-const ItemTypes = {
-  CARD: "card",
-};
+const ITEM_WIDTH = 86;
 
 export interface IObjectRowProps {
   object: IObject;
@@ -52,11 +45,13 @@ export interface IObjectRowProps {
   moveObject: (dragIndex: number, hoverIndex: number) => void;
   dropDone: () => void;
   dropCancel: () => void;
+  isHovered?: boolean;
 }
 
 export function ObjectRow(props: IObjectRowProps) {
   const {
     object,
+    isHovered,
     layer,
     onObjectClick,
     onObjectDblClick,
@@ -82,17 +77,19 @@ export function ObjectRow(props: IObjectRowProps) {
 
   // DND >>>>
   const ref = useRef<HTMLDivElement>(null);
-  const [{ handlerId }, drop] = useDrop<
+  const [{ handlerId, isOver }, drop] = useDrop<
     DragItem,
     void,
     { handlerId: Identifier | null }
   >({
-    accept: ItemTypes.CARD,
+    accept: ItemTypes.OBJECT,
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
+        isOver: monitor.isOver(),
       };
     },
+
     hover(item: DragItem, monitor) {
       if (!ref.current) {
         return;
@@ -148,7 +145,7 @@ export function ObjectRow(props: IObjectRowProps) {
   });
 
   const [{ isDragging }, drag] = useDrag({
-    type: ItemTypes.CARD,
+    type: ItemTypes.OBJECT,
     item: () => {
       return { id: object.id, index: rowIndex };
     },
@@ -164,8 +161,11 @@ export function ObjectRow(props: IObjectRowProps) {
     },
   });
 
-  const opacity = isDragging ? 0 : 1;
+  const opacity = isHovered ? 0 : 1;
+  // const opacity = isDragging ? 0 : 1;
+
   drag(drop(ref));
+
   // DND <<<<
 
   const [objectHtml, setObjectHtml] = useState<{
@@ -197,7 +197,7 @@ export function ObjectRow(props: IObjectRowProps) {
       true
     );
 
-    const scaleX = 76 / parseInt(calculatedObjectSize?.width as string);
+    const scaleX = ITEM_WIDTH / parseInt(calculatedObjectSize?.width as string);
     const scaleY = 61 / parseInt(calculatedObjectSize?.height as string);
     const scale = Math.min(scaleX, !isNaN(scaleY) ? scaleY : scaleX);
 
@@ -209,29 +209,36 @@ export function ObjectRow(props: IObjectRowProps) {
   return (
     <div
       ref={ref}
-      className={cx(css.objectItem, {
-        [css.selected]:
-          selectedObjectIds.length > 0 &&
-          selectedObjectIds.indexOf(object.id) !== -1,
-      })}
+      className={cx(
+        css.objectItem,
+        {
+          [css.selected]:
+            selectedObjectIds.length > 0 &&
+            selectedObjectIds.indexOf(object.id) !== -1,
+        },
+        "layers-simplified-object-item-" + object.id
+      )}
       onClick={(event) => {
         onObjectClick(event, object.id);
       }}
       onDoubleClick={(event) => {
         onObjectDblClick(event, isGroup, object.id);
       }}
-      style={{ opacity }}
+      style={{
+        ...(isOver && isHovered ? { border: "1px dashed green" } : { opacity }),
+      }}
       data-handler-id={handlerId}
     >
       <div
         style={{
           transform: `scale(${objectHtml.scale})`,
           transformOrigin: "0 0",
-          width: 76 / objectHtml.scale,
+          width: ITEM_WIDTH / objectHtml.scale,
           height: 61 / objectHtml.scale,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          opacity,
         }}
       >
         <StageObjectMinimap
