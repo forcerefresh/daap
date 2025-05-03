@@ -16,6 +16,7 @@ import {
 } from "../../store/actions/actions";
 import {
   getCheckboxField,
+  getColorField,
   getSelectField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
@@ -121,6 +122,28 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   });
                 },
                 { disabled: !globals.snapToObject }
+              )}
+            </div>
+
+            <div className="input60">
+              {getColorField(
+                "Outline color",
+                globals.outlineColor,
+                (outlineColor: any) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      outlineColor,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    outlineColor,
+                  });
+                },
+                ""
               )}
             </div>
           </div>

@@ -1,3 +1,4 @@
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import { ActionTypes, SET_GLOBALS } from "../actions/actions";
 
 export interface IAppSettings {
@@ -12,6 +13,7 @@ export interface IAppSettings {
   theme: "dark" | "light";
   snapToObject: boolean;
   snapToObjectThreshold: number;
+  outlineColor: RGBColor;
 }
 
 export function globals(
@@ -23,6 +25,7 @@ export function globals(
     theme: "dark",
     snapToObject: true,
     snapToObjectThreshold: 5,
+    outlineColor: { r: 0, g: 0, b: 0, a: 1 },
   },
   action: ActionTypes
 ) {

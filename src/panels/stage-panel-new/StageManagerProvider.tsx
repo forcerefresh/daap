@@ -630,38 +630,23 @@ function processMoveChangeEvent(
 
   const { selectedObjectIdsRef, zoom, snapBounds } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
-  //const objectId = eData.objectId;
 
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
 
-  // // >>>>>>>>>>>>>>>>>>
-  // const objectPath: string[] = [];
-  // const firstObjectId = selectedObjectIdsRef.current![0];
-  // populateObjectThreeIds(objectPath, firstObjectId, objectById, layerById);
+  let selectedObjectIdsClone = [...selectedObjectIds];
 
-  // const groupsMatrix = getGroupMatrixFromSelectionPath(
-  //   [...objectPath, firstObjectId],
-  //   objectById
-  // );
-  // // <<<<<<<<<<<<<<<<
+  let snapDeltaGlobal = { x: 0, y: 0 };
+  const objectByIdClone: any = {};
 
-  removeCornerMarkers(objectById[selectedObjectIds[0]]?.parentId ?? ""); // TODO: check ""
-
-  let parentGroup: IObject;
-  let parentLayer: ILayer;
-
-  selectedObjectIds.forEach((objectId) => {
+  while (selectedObjectIdsClone.length > 0) {
+    const objectId = selectedObjectIdsClone.shift()!;
     const object = objectById[objectId];
 
     if (object.isLocked) return;
 
-    parentGroup = objectById[object.parentId!];
-    parentLayer = layerById[parentGroup?.layerId ?? object.layerId ?? ""];
-
-    // >>>>>>>>>>>>>>>>>>
+    // >>>>>>>>>>>>>>>>
     const objectPath: string[] = [];
-
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
@@ -669,7 +654,6 @@ function processMoveChangeEvent(
       objectById
     );
     // <<<<<<<<<<<<<<<<
-
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
@@ -679,95 +663,54 @@ function processMoveChangeEvent(
     );
     // <<<<<<<<<<<<<<<<
 
+    // NOTE: create object clone for transform calc
+    const objectClone = cloneDeep(object);
+    objectClone.left = object.left! + realMove.x;
+    objectClone.top = object.top! + realMove.y;
+
+    objectByIdClone[objectClone.id] = objectClone;
+
+    const newObjectBounds = getObjectBounds([objectClone]);
+
+    if (objectId === eData.objectId) {
+      if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
+        const snapDelta = renderSnapLines(
+          newObjectBounds,
+          snapBounds,
+          selectedObjectIds,
+          zoom,
+          object.scale ?? 1
+        );
+
+        if (snapDelta.x !== 0 || snapDelta.y !== 0) {
+          snapDeltaGlobal = snapDelta;
+        }
+      }
+    }
+  }
+
+  // if (snapDeltaGlobal.x !== 0 || snapDeltaGlobal.y !== 0) {
+  selectedObjectIds.map((objectId) => {
+    const object = objectById[objectId];
+
+    if (object.isLocked) return;
+
     const objectHolder = document.getElementsByClassName(
       `object-holder-${objectId}`
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      //    const currentAngle = getObjectRotation(object) + angle;
-      // objectHolder.style.transform =
-      //   "translateX(" + x + "px) translateY(" + y + "px)";
-
-      // NOTE: LAYOUT CHANGE
-      // if (object.x1 || object.x2 || object.y1 || object.y2) {
-      //   const bounds = lineObjectBounds(object);
-      //   const left = parseFloat(bounds.left!) + realMove.x;
-      //   const top = parseFloat(bounds.top!) + realMove.y;
-      //   objectHolder.style.left = left + "px";
-      //   objectHolder.style.top = top + "px";
-      // } else {
-
-      // >>>>>>>>>>>>>>>>>>>> +++++++
-      // NOTE: create object clone for transform calc
-      const objectClone = cloneDeep(object);
-      objectClone.left = object.left! + realMove.x;
-      objectClone.top = object.top! + realMove.y;
-
-      const newObjectBounds = getObjectBounds([objectClone]);
-
-      const snapDelta = renderSnapLines(
-        newObjectBounds,
-        snapBounds,
-        [objectId],
-        zoom,
-        object.scale ?? 1
+      const objSnapDelta = stagePointToObjectSpace_New(
+        [object],
+        snapDeltaGlobal,
+        1
       );
 
-      let objSnapDelta = { x: 0, y: 0 };
-
-      if (snapDelta.x !== 0 || snapDelta.y !== 0) {
-        objSnapDelta = stagePointToObjectSpace_New([object], snapDelta, 1);
-        // if (snapDelta.y != objSnapDelta.y) debugger;
-      }
-
-      const left = objectClone.left! + objSnapDelta.x;
-      const top = objectClone.top! + objSnapDelta.y;
+      const left = objectByIdClone[objectId].left! + objSnapDelta.x;
+      const top = objectByIdClone[objectId].top! + objSnapDelta.y;
 
       objectHolder.style.left = left + "px";
       objectHolder.style.top = top + "px";
-
-      // <<<<<<<<<<<<<<<<<<<<<<<<<< +++++++
-
-      // }
-
-      //   scale(" +
-      //   initialScale +
-      //   ") translateX(" +
-      //   translateX +
-      //   "px) translateY(" +
-      //   translateY +
-      //   "px)";
-
-      const corners = getCorners(
-        left,
-        top,
-        object.width!,
-        object.height!,
-        getObjectRotation(object) ?? 0,
-        getObjectScale(object) ?? 1
-      );
-
-      // addCornerMarkers(object.parentId!, corners);
-
-      // const newLeftTop = getLeftTopFromCorners(corners);
-      // const newBottomRight = getBottomRightFromCorners(corners);
-
-      // addCornerMarkers(
-      //   object.parentId!,
-      //   { tl: newLeftTop } as ICorners,
-      //   "yellow"
-      // );
-
-      // const rect = tmpDrawNewGroup(
-      //   parentGroup,
-      //   parentLayer,
-      //   object,
-      //   newLeftTop,
-      //   newBottomRight.x - newLeftTop.x,
-      //   newBottomRight.y - newLeftTop.y
-      // );
-
-      //latestRect = rect;
     }
   });
 }
@@ -862,18 +805,19 @@ function processMoveStopEvent(
     // _updateObject(newParentGroup);
   }
 
-  const objectToUpdate: IObject[] = [];
+  const selectedObjectIdsClone = [...selectedObjectIds];
 
-  const objectToUpdateById: { [key: string]: IObject } = {};
+  let snapDeltaGlobal = { x: 0, y: 0 };
+  const objectByIdClone: any = {};
 
-  selectedObjectIds.forEach((objectId) => {
+  while (selectedObjectIdsClone.length > 0) {
+    const objectId = selectedObjectIdsClone.shift()!;
     const object = objectById[objectId];
 
     if (object.isLocked) return;
 
     // >>>>>>>>>>>>>>>>>>
     const objectPath: string[] = [];
-
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
@@ -881,7 +825,6 @@ function processMoveStopEvent(
       objectById
     );
     // <<<<<<<<<<<<<<<<
-
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
@@ -891,70 +834,59 @@ function processMoveStopEvent(
     );
     // <<<<<<<<<<<<<<<<
 
-    // NOTE: LAYOUT CHANGE
-    const newObject = cloneDeep(object);
-    // if (object.x1 || object.x2 || object.y1 || object.y2) {
-    //   // const bounds = lineObjectBounds(object);
-
-    //   newObject.x1 = newObject.x1! + realMove.x;
-    //   newObject.x2 = newObject.x2! + realMove.x;
-    //   newObject.y1 = newObject.y1! + realMove.y;
-    //   newObject.y2 = newObject.y2! + realMove.y;
-    // } else {
-
-    // >>>>>>>>>>>>>>>>>>>> +++++++
     // NOTE: create object clone for transform calc
     const objectClone = cloneDeep(object);
     objectClone.left = object.left! + realMove.x;
     objectClone.top = object.top! + realMove.y;
 
+    objectByIdClone[objectClone.id] = objectClone;
+
     const newObjectBounds = getObjectBounds([objectClone]);
 
-    const snapDelta = renderSnapLines(
-      newObjectBounds,
-      snapBounds,
-      [objectId],
-      zoom,
-      object.scale ?? 1
+    if (objectId === eData.objectId) {
+      if (snapDeltaGlobal.x === 0 && snapDeltaGlobal.y === 0) {
+        const snapDelta = renderSnapLines(
+          newObjectBounds,
+          snapBounds,
+          selectedObjectIds,
+          zoom,
+          object.scale ?? 1
+        );
+
+        if (snapDelta.x !== 0 || snapDelta.y !== 0) {
+          snapDeltaGlobal = snapDelta;
+        }
+      }
+    }
+  }
+
+  const objectToUpdate: IObject[] = [];
+  const objectToUpdateById: { [key: string]: IObject } = {};
+
+  selectedObjectIds.map((objectId) => {
+    console.log(objectId);
+    const object = objectById[objectId];
+
+    if (object.isLocked) return;
+
+    const objSnapDelta = stagePointToObjectSpace_New(
+      [object],
+      snapDeltaGlobal,
+      1
     );
 
-    let objSnapDelta = { x: 0, y: 0 };
+    const left = objectByIdClone[objectId].left! + objSnapDelta.x;
+    const top = objectByIdClone[objectId].top! + objSnapDelta.y;
 
-    if (snapDelta.x !== 0 || snapDelta.y !== 0) {
-      objSnapDelta = stagePointToObjectSpace_New([object], snapDelta, 1);
-      // if (snapDelta.y != objSnapDelta.y) debugger;
-    }
-
-    const left = objectClone.left! + objSnapDelta.x;
-    const top = objectClone.top! + objSnapDelta.y;
-
-    // objectHolder.style.left = left + "px";
-    // objectHolder.style.top = top + "px";
-
-    newObject.left = left; //newObject.left! + realMove.x;
-    newObject.top = top; //newObject.top! + realMove.y;
-    // <<<<<<<<<<<<<<<<<<<<<<<<<< +++++++
-    // }
+    const newObject = cloneDeep(object);
+    newObject.left = left;
+    newObject.top = top;
 
     objectToUpdate.push(newObject);
-
     objectToUpdateById[newObject.id] = newObject;
   });
 
   if (objectToUpdate.length === 0) return;
-
-  // objectToUpdate.forEach((object) => {
-  //   _updateObject(object);
-  // });
-
-  //return;
-
-  // if parent is a group
-  // const parentGroup = objectToUpdate[0].parentId
-  //   ? objectById[objectToUpdate[0].parentId]
-  //   : undefined;
-
-  let calc: ReturnType<typeof getUngroupObjectsCalculation> = {};
 
   objectToUpdate.forEach((object) => _updateObject(cloneDeep(object)));
 
@@ -968,82 +900,7 @@ function processMoveStopEvent(
   Array.from(els).forEach((el) => {
     el.classList.remove("snap-highlight-object");
   });
-
-  // return;
-
-  // if (parentGroup) {
-  //   const { group, objects } = normalizeGroup(parentGroup, objectToUpdateById, {
-  //     breakpointConfig,
-  //     objectById,
-  //   });
-
-  //   objects.forEach((object) => _updateObject(cloneDeep(object)));
-  //   _updateObject(cloneDeep(group));
-
-  //   return;
-  //   const groupRotation = parentGroup.rotation;
-
-  //   const groupObjectsToUpdate =
-  //     parentGroup.objectIds?.map((objectId) => {
-  //       return objectToUpdateById[objectId] ?? cloneDeep(objectById[objectId]);
-  //     }) ?? [];
-  //   //1. "UNGROUP"
-  //   calc = getUngroupObjectsCalculation({
-  //     group: { ...parentGroup }, //, rotation: 0 },
-  //     objects: groupObjectsToUpdate,
-  //     breakpointConfig: breakpointConfig!,
-  //     parentLayer: getLayerIdRec(objectById, parentGroup.id),
-  //   });
-
-  //   groupObjectsToUpdate.forEach((object: IObject) => {
-  //     object.absoluteLayout!.common.left = calc[object.id].left + "px";
-  //     object.absoluteLayout!.common.top = calc[object.id].top + "px";
-  //     getObjectRotation(object) = calc[object.id].rotation;
-  //     getObjectScale(object) = calc[object.id].scale;
-  //   });
-
-  //   //2. "GROUP"
-  //   const firstObject = groupObjectsToUpdate[0];
-
-  //   // get group bounds (TODO: duplicate)
-  //   let groupBounds = getObjectBoundingBox(firstObject);
-  //   groupObjectsToUpdate.forEach((object) => {
-  //     const bounds = getObjectBoundingBox(object);
-  //     groupBounds = boundsUnion(groupBounds, bounds);
-  //   });
-
-  //   //const objects: IObject[] = [];
-  //   //  normalize object pos
-  //   groupObjectsToUpdate.forEach((object) => {
-  //     object.absoluteLayout!.common.top =
-  //       parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
-  //     object.absoluteLayout!.common.left =
-  //       parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
-
-  //     _updateObject(object);
-  //   });
-
-  //   const parentGroupClone = cloneDeep(parentGroup);
-
-  //   parentGroupClone.absoluteLayout!.common.left = groupBounds.x + "px";
-  //   parentGroupClone.absoluteLayout!.common.top = groupBounds.y + "px";
-  //   parentGroupClone.absoluteLayout!.common.width = groupBounds.width + "px";
-  //   parentGroupClone.absoluteLayout!.common.height = groupBounds.height + "px";
-  //   parentGroupClone.rotation = 0; //groupRotation;
-  //   parentGroupClone.scale = 1; //groupRotation;
-
-  //   //parentGroupClone.rotation = groupRotation;
-  //   _updateObject(parentGroupClone);
-
-  //   // +++++
-  // } else {
-  //   objectToUpdate.forEach((object) => {
-  //     _updateObject(object);
-  //   });
-  // }
 }
-
-// ++++++++++++++++++=
 
 function processScaleStartEvent(
   eData: StageToolScaleEventData,
@@ -1556,8 +1413,6 @@ function processScaleStopEvent(
   });
 }
 
-// ++++++++++++++++++
-
 function processPanChangeEvent(
   eData: StageToolPanEventData,
   objectById: { [key: string]: IObject },
@@ -1633,6 +1488,8 @@ function renderSnapLines(
   skipObjectIds: string[],
   stageScale: number,
   objectScale: number
+  // skipX: boolean,
+  // skipY: boolean
 ) {
   //return { x: 0, y: 0 }; // TODO xx
 
@@ -1763,6 +1620,21 @@ function renderSnapLine(
   // }
 
   sides.forEach((side) => {
+    // TODO
+    if (
+      snapDelta.x &&
+      (side === "left" || side === "right" || side === "vcenter")
+    ) {
+      return;
+    }
+    // TODO
+    if (
+      snapDelta.y &&
+      (side === "top" || side === "bottom" || side === "hcenter")
+    ) {
+      return;
+    }
+
     if (
       isNear(
         newObjectBounds[propertyName],

@@ -114,6 +114,7 @@ import StageToolsCanvas from "./StageToolsCanvas";
 import { IClipboard } from "../../store/reducers/i-clipboard";
 import { useZoomPan } from "./zoom-pan/useZoomPan";
 import ContextMenu from "../context-menu/ContextMenu";
+import { zIndex } from "html2canvas/dist/types/css/property-descriptors/z-index";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
@@ -176,6 +177,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     clipboard,
     _pasteObjectsFromClipboard,
     _clearClipboard,
+    outlineColor,
   } = props;
 
   const { spaceDown } = useKeyDown();
@@ -525,6 +527,19 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     //   ? { overflow: settings.hideOutsideContent ? "hidden" : "visibile" }
     //   : {}),
   };
+
+  const outlineStyle = {
+    position: "absolute",
+    zIndex: 10000,
+    top: -1 + "px",
+    left: -1 + "px",
+    width: stageSize.width + 2 + "px",
+    height: stageSize.height + 2 + "px",
+    border:
+      "1px solid " +
+      convertRGBColor2CSSProperties(outlineColor).backgroundColor,
+    pointerEvents: "none",
+  };
   // const toolsCanvasStyle = { ...canvasStyle };
 
   if (showGrid) {
@@ -660,7 +675,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     height: (breakpointConfig?.normal?.page.height || 0) + "px",
     overflowX: "visible",
     overflowY: "visible",
-    border: "1px solid transparent",
+    // border: "1px solid transparent",
 
     //   height:
     //   parseInt(pageBorderStyle.height, 10) +
@@ -816,6 +831,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
                     <StageLayer key={layer.id} layer={layer} />
                   ))}
               </div>
+
+              <div style={outlineStyle}></div>
 
               <div className="StagePanel-SnapHolder">
                 {/* {snapBounds.map((p) => {
@@ -973,6 +990,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     appZoom: state.globals.appZoom,
+    outlineColor: state.globals.outlineColor,
     pages,
     layers,
     objects,

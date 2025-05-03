@@ -17,6 +17,8 @@ export interface ISettings {
   autoPlay: boolean;
 
   //preview
+  outlineColor: RGBColor;
+
   pageBackgroundColor: RGBColor;
   layoutBoxBackgroundColor: RGBColor;
   transparentHeader: boolean;
