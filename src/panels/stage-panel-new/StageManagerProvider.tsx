@@ -737,6 +737,8 @@ function processMoveStopEvent(
     activateTool: (tool: string, objectId?: string | undefined) => void;
   }
 ) {
+  clearSnapHolder();
+
   // setFloatingActionPanelVisibility(true);
 
   const {
@@ -1472,7 +1474,7 @@ export function getLayerIdRec(objectsById: any, id: string): string {
   return getLayerIdRec(objectsById, objectsById[id].parentId);
 }
 
-function clearSnapHolder() {
+export function clearSnapHolder() {
   const snapHolderEl = getElementByClass("StagePanel-SnapHolder");
   snapHolderEl.innerHTML = "";
 

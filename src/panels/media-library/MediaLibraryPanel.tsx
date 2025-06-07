@@ -372,6 +372,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                       onStop={() => {
                         setForceUpdate(Math.random());
                       }}
+                      inputs={{
+                        name: { label: "Preview" },
+                        tags: { hide: true },
+                        filename: { hide: true },
+                      }}
                     />
                   }
                   //selectionType={selectionType}

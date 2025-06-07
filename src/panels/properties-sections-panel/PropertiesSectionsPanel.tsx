@@ -169,7 +169,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
           )}
         </div>
 
-        <div>
+        {/* <div>
           {selectionForProperties?.type === "object" && (
             <Button
               minimal
@@ -188,7 +188,7 @@ const PropertiesSectionsPanel: React.FC<IPropertiesSectionsPanel> = (props) => {
               More
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
     </div>
   );

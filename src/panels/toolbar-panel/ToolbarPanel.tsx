@@ -119,7 +119,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
   const [
     defaultSettingsMediaLibraryTabId,
     setDefaultSettingsMediaLibraryTabId,
-  ] = useState<"myFonts" | undefined>();
+  ] = useState<"myFonts" | "myImages" | undefined>();
 
   useEffect(() => {
     const openAccountCallback = () => {
@@ -266,6 +266,12 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "bp5-dialog",
     "bp5-popover",
   ]);
+
+  useEffect(() => {
+    if (showPanel === VisiblePanel.None) {
+      setDefaultSettingsMediaLibraryTabId("myImages");
+    }
+  }, [showPanel]);
 
   // const displayZoom = Number.isInteger(zoom * 100)
   //   ? zoom * 100

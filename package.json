@@ -4,7 +4,7 @@
   "author": {
     "name": "Force Refresh doo",
     "email": "support@forcerefresh.io",
-    "url": "https://webslider.io"
+    "url": "https://forcerefresh.io"
   },
   "private": true,
   "homepage": "./",
@@ -13,6 +13,7 @@
     "start:app:saas": "vite --mode saas",
     "build:app:saas": "vite build --mode saas",
     "build:app:wp": "vite build --mode wp",
+    "start:wp-dist-server": "npx http-server ./dist",
     "delimiter---": "---",
     "start:app": "env-cmd -f env/.env react-scripts start",
     "start-old:app:saas": "env-cmd -f env/saas.env env-cmd -f env/secret.env react-scripts start",

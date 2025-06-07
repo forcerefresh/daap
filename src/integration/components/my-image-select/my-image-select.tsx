@@ -48,7 +48,7 @@ interface MyImageSelectProps {
 }
 */
 export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
-  const { onStop, onComplete, type } = props;
+  const { onStop, onComplete, type, inputs = {} } = props;
 
   const accept =
     type === "image"
@@ -123,13 +123,19 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
           </strong>
         </div>
 
-        <div>
-          {getTextField("Name", formData[idx]?.name, (value: string) => {
-            const newArr = [...formData];
-            newArr[idx].name = value;
-            setFormData(newArr);
-          })}
-        </div>
+        {!inputs.name?.hide && (
+          <div>
+            {getTextField(
+              inputs.name?.label ?? "Name",
+              formData[idx]?.name,
+              (value: string) => {
+                const newArr = [...formData];
+                newArr[idx].name = value;
+                setFormData(newArr);
+              }
+            )}
+          </div>
+        )}
         {/* <div>
           {getTextField(
             "Description",
@@ -142,30 +148,34 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
           )}
         </div> */}
 
-        <div>
-          {getTagsField(
-            "Tags",
-            formData[idx]?.tags ?? [],
-            (value: string[]) => {
-              const newArr = [...formData];
-              newArr[idx].tags = value;
-              setFormData(newArr);
-            }
-          )}
-        </div>
+        {!inputs.tags?.hide && (
+          <div>
+            {getTagsField(
+              inputs.tags?.label ?? "Tags",
+              formData[idx]?.tags ?? [],
+              (value: string[]) => {
+                const newArr = [...formData];
+                newArr[idx].tags = value;
+                setFormData(newArr);
+              }
+            )}
+          </div>
+        )}
 
-        <div>
-          {getTextField(
-            "Filename",
-            formData[idx]?.filename,
-            (value: string) => {
-              const newArr = [...formData];
-              newArr[idx].filename = value;
-              setFormData(newArr);
-            },
-            "Override original filename"
-          )}
-        </div>
+        {!inputs.filename?.hide && (
+          <div>
+            {getTextField(
+              inputs.filename?.label ?? "Filename",
+              formData[idx]?.filename,
+              (value: string) => {
+                const newArr = [...formData];
+                newArr[idx].filename = value;
+                setFormData(newArr);
+              },
+              "Override original filename"
+            )}
+          </div>
+        )}
 
         {/* {type === "vector" && (
           <div>

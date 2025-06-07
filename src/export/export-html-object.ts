@@ -14,6 +14,8 @@ import { getObjectTransform } from "../panels/stage-panel-new/stage-panel-utils"
 import { getCustomIdClass, getObjectArr, getObjectHtml } from "./export-html";
 import { IItemsData } from "./i-export-html";
 import { IObjects } from "../store/reducers/i-objects";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 
 export function generateObjectData(
   objects: IObjects,
@@ -71,8 +73,9 @@ export function generateObjectData(
 
   // >> "left", "top", "width", "height"
   const sizeObj = pick(object, "left", "top", "width", "height");
-  const objectStyle = mapValues(sizeObj, (size) => `${size}px`);
-
+  // TODO: check this
+  // const objectSizePxObj = mapValues(sizeObj, (size) => `${size}px`);
+  // const objectSizeStyle = objectSizePxObj.height + "".join(";");
   // TODO: IMPORTANT (size issue)
   const calculatedObjectSize = calculateObjectSize(
     object,
@@ -159,6 +162,7 @@ export function generateObjectData(
   if (object.type === "group") {
     const innerObjectArr = getObjectArr(objects, object.objectIds ?? []);
 
+    let innerObjectsHtml = "";
     innerObjectArr.forEach((innerObject) => {
       const objectData = generateObjectData(
         objects,
@@ -173,8 +177,21 @@ export function generateObjectData(
         options
       );
 
-      objectHtml += objectData.html;
+      innerObjectsHtml += objectData.html;
     });
+
+    let groupStyle = "";
+    groupStyle = addCommonPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig.type
+    );
+    groupStyle = addTransformPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig.type
+    );
+    objectHtml += `<div style="${groupStyle}">${innerObjectsHtml}</div>`;
   } else {
     objectHtml = getObjectHtml(
       object,

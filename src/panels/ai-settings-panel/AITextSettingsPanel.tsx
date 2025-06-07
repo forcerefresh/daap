@@ -326,7 +326,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
                   "Rewrite text in formal style."
                 )}
               </div>
-              <div>
+              {/* <div>
                 {getTextArea(
                   "Custom request",
                   formData.promptCustom,
@@ -335,7 +335,7 @@ const AITextSettingsPanel: React.FC<IAITextSettingsPanelMergedProps> = (
                   },
                   "Default prompt fo for custom request"
                 )}
-              </div>
+              </div> */}
               <div>
                 <Button
                   loading={saving}

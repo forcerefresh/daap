@@ -131,7 +131,7 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
     r.tr = parseFloat(rectValues.cornerRadius.bl!);
   }
 
-  let style = "";
+  let style = "font-size: 0px;";
   style = addCommonPropertiesToStyle(style, object, deviceType);
   style = addTransformPropertiesToStyle(style, object, deviceType);
 

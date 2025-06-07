@@ -388,6 +388,20 @@ export function StageObjectInternal(props: IStageLayer) {
 
   const objectInGroup = isObjectInGroup(object, objectById);
 
+  let groupStyle = "";
+  if (object.type === "group") {
+    groupStyle = addCommonPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig?.type
+    );
+    groupStyle = addTransformPropertiesToStyle(
+      groupStyle,
+      object,
+      breakpointConfig?.type
+    );
+  }
+
   return (
     <>
       {/* NOTE: FOR DEBUGING */}
@@ -512,23 +526,41 @@ export function StageObjectInternal(props: IStageLayer) {
               )}
             </div>
             {object.type === "group" ? (
-              object.objectIds?.map((objectId) => {
-                const childObject = objectById[objectId]; //objectByIdLocalRef
-                const layoutChildren = parentLayer.properties?.hasLayoutChildren
-                  ? parentLayer.properties.layoutChildren
-                  : undefined;
-                return (
-                  <StageObject
-                    key={objectId}
-                    object={childObject}
-                    parentGroup={object}
-                    layer={parentLayer}
-                    layoutChildren={layoutChildren}
-                    objectZoom={objectZoom * (childObject.scale ?? 1)}
-                    //stageZoom={stageZoom}
-                  />
-                );
-              })
+              <>
+                <style
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      ".group-object-" + object.id + "{" + groupStyle + "}",
+                  }}
+                ></style>
+                <div
+                  className={"group-object-" + object.id}
+                  style={{
+                    ...objectStyle,
+                    ...maskStyle,
+                    overflow: object.style?.overflow ?? "visible",
+                  }}
+                >
+                  {object.objectIds?.map((objectId) => {
+                    const childObject = objectById[objectId]; //objectByIdLocalRef
+                    const layoutChildren = parentLayer.properties
+                      ?.hasLayoutChildren
+                      ? parentLayer.properties.layoutChildren
+                      : undefined;
+                    return (
+                      <StageObject
+                        key={objectId}
+                        object={childObject}
+                        parentGroup={object}
+                        layer={parentLayer}
+                        layoutChildren={layoutChildren}
+                        objectZoom={objectZoom * (childObject.scale ?? 1)}
+                        //stageZoom={stageZoom}
+                      />
+                    );
+                  })}
+                </div>
+              </>
             ) : (
               <>
                 <div
@@ -753,3 +785,18 @@ export function setRectangleOrigin(elem: HTMLDivElement, newOrigin: string) {
   elem.style.left = prevML + (r1.x - r2.x) + "px";
   elem.style.top = prevMT + (r1.y - r2.y) + "px";
 }
+
+const styleStringToObject = (styleString: string) => {
+  const styleObject: CSSProperties = {};
+  styleString.split(";").forEach((style) => {
+    const [key, value] = style.split(":");
+    if (key && value) {
+      const trimmedKey = key.trim();
+      const camelCaseKey = trimmedKey.replace(/-([a-z])/g, (g) =>
+        g[1].toUpperCase()
+      );
+      (styleObject as any)[camelCaseKey] = value.trim();
+    }
+  });
+  return styleObject;
+};

@@ -18,6 +18,7 @@ import FileSaver from "file-saver";
 import * as htmlToImage from "html-to-image";
 import { AppToaster } from "../utils/components/app-toaster/AppToaster";
 import { convertRGBColor2CSSProperties } from "../utils/utils";
+import { delayPromise } from "../utils/common/delay-utils";
 
 export interface IGenerateImagesArgs {
   pages: IPages;
@@ -82,6 +83,10 @@ export async function generateImages(
       { isSave: false, isForThumbnail: true }
     );
 
+    await delayPromise(200);
+    await delayPromise(200);
+    await delayPromise(200);
+
     try {
       const blobImage = await generateImage({
         playerData,
@@ -122,6 +127,8 @@ async function generateImage(args: {
     exportWidth,
   } = args;
 
+  // const fontEmbedCSS = await htmlToImage.getFontEmbedCSS(playerHolderEl);
+
   return new Promise((resolve, reject) => {
     const pl = new Player(playerData, playerHolderEl, {
       isApp: true,
@@ -130,25 +137,32 @@ async function generateImage(args: {
 
     pl.onSlideStarted(async () => {
       let blobImage: Blob | null = null;
+
+      await delayPromise(200);
+
       try {
         if (imageType === "jpeg") {
           const imageBase64 = await htmlToImage.toJpeg(playerHolderEl, {
             quality: imageQuality / 100,
             canvasHeight: exportHeight,
             canvasWidth: exportWidth,
+            // fontEmbedCSS,
           });
           blobImage = convertBase64ToBlob(imageBase64);
         } else if (imageType === "webp") {
           const canvas = await htmlToImage.toCanvas(playerHolderEl, {
             canvasHeight: exportHeight,
             canvasWidth: exportWidth,
+            // fontEmbedCSS,
           });
 
           blobImage = await new Promise((resolve) => {
             canvas.toBlob(resolve, "image/webp", imageQuality / 100);
           });
         } else {
-          blobImage = await htmlToImage.toBlob(playerHolderEl);
+          blobImage = await htmlToImage.toBlob(playerHolderEl, {
+            // fontEmbedCSS,
+          });
         }
       } catch (ex) {
         reject(

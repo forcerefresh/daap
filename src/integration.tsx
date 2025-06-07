@@ -32,6 +32,11 @@ export interface getMyUploadComponentProps {
   type: MediaType;
   onComplete: () => void;
   onStop: () => void;
+  inputs: {
+    name?: { label?: string; hide?: boolean };
+    tags?: { label?: string; hide?: boolean };
+    filename?: { label?: string; hide?: boolean };
+  };
 }
 
 export interface getLicenseDetailsResponse {
