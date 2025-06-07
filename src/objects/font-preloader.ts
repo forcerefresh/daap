@@ -54,16 +54,69 @@ export class FontPreloader {
 
     const source = fontObj ? "custom" : "google";
 
-    load({
-      [source]: {
-        families: [fontFamily],
-      },
-      classes: false,
-      fontloading: (familyName: string, fvd: string) => {},
-      fontactive: (familyName: string, fvd: string) => {
-        this.onLoaded(fontFamily);
-      },
-    });
+    if (source === "google") {
+      loadCSSContent(
+        "https://fonts.googleapis.com/css?family=" +
+          fontFamily.replace(" ", "+"),
+        fontFamily
+      ).then((loadedFontFamily) => {
+        this.onLoaded(loadedFontFamily);
+      });
+      // const f = async function () {
+
+      // const url =
+      //   "https://fonts.googleapis.com/css?family=" +
+      //   fontFamily.replace(" ", "+");
+      // const response = await fetch(url);
+      // const fontArrayBuffer = await response.arrayBuffer();
+      // console.log(fontArrayBuffer);
+      // console.log(ab2str(fontArrayBuffer));
+      // debugger;
+      // const style = document.createElement("style");
+      // style.textContent = `
+      //       @font-face {
+      //         font-family: '${fontFamily}';
+      //         src: url(${url});
+      //       }
+      //     `;
+      // document.head.appendChild(style);
+      // };
+
+      // f();
+    } else {
+      load({
+        [source]: {
+          families: [fontFamily],
+        },
+        classes: false,
+        fontloading: (familyName: string, fvd: string) => {},
+        fontactive: (familyName: string, fvd: string) => {
+          this.onLoaded(fontFamily);
+          // const links = document.querySelectorAll("link");
+          // console.log(links);
+
+          // const styleLink = links[0];
+          // if (styleLink) {
+          //   fetch(styleLink.href)
+          //     .then((response) => {
+          //       if (!response.ok) {
+          //         throw new Error("Network response was not ok");
+          //       }
+          //       return response.text();
+          //     })
+          //     .then((cssText) => {
+          //       addStyle(cssText); // OVDE
+
+          //       console.log("CSS Content:", cssText);
+          //       // Do something with the CSS content
+          //     })
+          //     .catch((error) => {
+          //       console.error("Error fetching CSS:", error);
+          //     });
+          // }
+        },
+      });
+    }
   }
 
   private onLoaded(fontFamily: string) {
@@ -73,3 +126,21 @@ export class FontPreloader {
 }
 
 (window as any).WSFontPreloader = new FontPreloader();
+
+// function ab2str(ab: ArrayBuffer) {
+//   return String.fromCharCode.apply(null, new Uint16Array(ab));
+// }
+
+function loadCSSContent(url: string, fontFamily: string) {
+  return new Promise<string>((resolve, reject) => {
+    fetch(url)
+      .then((response) => response.text())
+      .then((css) => {
+        const style = document.createElement("style");
+        style.textContent = css;
+        document.head.appendChild(style);
+        resolve(fontFamily);
+      })
+      .catch(reject);
+  });
+}
