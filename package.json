@@ -1,8 +1,8 @@
 {
-  "name": "web-slider",
-  "version": "2.0.0",
+  "name": "daap",
+  "version": "1.0.1",
   "author": {
-    "name": "Force Refresh doo",
+    "name": "Force Refresh",
     "email": "support@forcerefresh.io",
     "url": "https://forcerefresh.io"
   },
