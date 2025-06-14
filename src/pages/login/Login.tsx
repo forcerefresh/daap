@@ -110,8 +110,11 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
   return (
     <div className={css.login}>
       <div className={css.container}>
-        <h1>Sign in</h1>
-        <p>Sign in and start creating today!</p>
+        <h1>Welcome to DAAP Demo</h1>
+        <p>
+          Note: Uploaded files and fonts are stored temporarily and may be
+          deleted after your session.
+        </p>
         <form className={css.form}>
           <a href={GEST_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.whiteButton, css.btn)}>

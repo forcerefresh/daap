@@ -129,7 +129,7 @@ export function AccountButton(props: IAccountButtonProps) {
                 window.dispatchEvent(event);
               }}
             />
-            <MenuDivider title="Theme" />
+            {/* <MenuDivider title="Theme" />
             <MenuItem
               text="Dark"
               icon="moon"
@@ -149,7 +149,7 @@ export function AccountButton(props: IAccountButtonProps) {
               onClick={() => {
                 _setTheme("light");
               }}
-            />
+            /> */}
             {/* </MenuItem> */}
 
             <MenuDivider />

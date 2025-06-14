@@ -648,8 +648,6 @@ export function getObjectHtml(
   // thumbnailHtmlArr: (string | undefined)[],
   // slidesCounter = 3
 ) {
-  console.log(object.type, "objectType");
-
   switch (object.type) {
     //case ObjectType.YOUTUBE_VIDEO:
     //return getYoutubeVideoHtml(object, calculatedObjectSize, isPlayer);
