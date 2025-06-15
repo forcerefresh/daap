@@ -126,6 +126,8 @@ export const IntegrationContext = React.createContext({
     return <div></div>;
   }) as React.FC,
 
+  useExitHook: () => undefined,
+
   useMyMediaHook: () => ({
     upload: (
       type: MediaType,
@@ -644,6 +646,14 @@ function useAIHookFactory() {
   }
 }
 
+function useExitHookFactory() {
+  // if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+  // return require("./integration/hooks/exit-hook/exit-hook-wp").useAIHook;
+  // } else {
+  return require("./integration/hooks/exit-hook/exit-hook").useExitHook;
+  // }
+}
+
 function usePresetsHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/presets-hook/electron-use-presets-hook")
@@ -690,6 +700,7 @@ export const IntegrationContextProvider = (
   return (
     <IntegrationContext.Provider
       value={{
+        useExitHook: useExitHookFactory(),
         useMyMediaHook: useMyMediaHookFactory(),
         //useMediaHook: useMediaHookFactory(),
         useProjectHook: useProjectHookFactory(),

@@ -50,6 +50,8 @@ function App(props: IAppProps) {
 
   const { fetchMedias } = globalContext.useMyMediaHook();
 
+  globalContext.useExitHook();
+
   const loadMyFonts = () => {
     fetchMedias({
       type: "font",
