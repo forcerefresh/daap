@@ -29,7 +29,7 @@ function value2UnitValue(
   inputValue: string,
   allowedUnits: UnitType[]
 ): UnitValue {
-  const inputValueStr = inputValue.toString();
+  const inputValueStr = inputValue?.toString(); // ?? "";
   let unit: UnitType = null;
   let value = "";
 

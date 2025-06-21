@@ -28,7 +28,11 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getAppObjectDefinitionsByGroup } from "webslider-sdk/lib/objects/objects-register";
 import SVG from "react-inlinesvg";
 import { IntegrationContext } from "../../integration";
-import { getTextField, getUnitNumericFiled } from "../../inputs/input-utils";
+import {
+  getCheckboxField,
+  getTextField,
+  getUnitNumericFiled,
+} from "../../inputs/input-utils";
 import ChangeCheckerButton from "../../utils/components/change-checker-button/ChangeCheckerButton";
 import {
   setupNewProject,
@@ -48,6 +52,9 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { IMeta } from "../../store/reducers/meta";
 import { ISettings } from "../../store/reducers/i-settings";
 import { cloneDeep, last } from "lodash-es";
+
+import { documents } from "./documents";
+import { calculateAspectRatio } from "./utils";
 
 interface ICreatePanelProps {
   onRequestClose: () => void;
@@ -251,29 +258,30 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
     ]
   );
 
-  const renderObjectsCards = (newDeffs: IDocumentDeff[]) => {
+  const renderObjectsCards = (newDeffs: DocumentItem[], docType: string) => {
     return (
       <>
         {newDeffs.map((deff) => {
-          const size = { width: 100, height: 100 };
-          if (deff.size) {
-            const max = Math.max(deff.size.width, deff.size.height);
-            size.width = (deff.size.width / max) * 100;
-            size.height = (deff.size.height / max) * 100;
-          }
+          const docSize = deff?.dimensions?.px ??
+            deff?.dimensions?.mm ??
+            deff?.dimensions?.inch ?? { width: 100, height: 100 };
+
+          const size = { ...docSize };
+          const max = Math.max(docSize.width, docSize.height);
+          size.width = (docSize.width / max) * 100;
+          size.height = (docSize.height / max) * 100;
+
+          const ratio = calculateAspectRatio(size.width, size.height);
+
           return (
             <ChangeCheckerButton
               minimal
               onAllow={() => {
                 createNewProject({
-                  height: (deff.size?.height ?? 1080) + "px",
-                  width: (deff.size?.width ?? 1080) + "px",
+                  height: (docSize?.height ?? 1080) + "px",
+                  width: (docSize?.width ?? 1080) + "px",
                   name:
-                    deff.type +
-                    " " +
-                    deff.name +
-                    " " +
-                    new Date().toDateString(),
+                    docType + " " + deff.name + " " + new Date().toDateString(),
                 });
                 onRequestClose();
               }}
@@ -284,7 +292,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
             >
               <Card
                 className={css.card}
-                key={"create_new_card_" + deff.type}
+                key={"create_new_card_" + docType}
                 interactive={true}
                 elevation={Elevation.ONE}
                 onClick={() => {
@@ -312,7 +320,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
                       height: size.height + "px",
                     }}
                   >
-                    {deff.ratio?.vertical}:{deff.ratio?.horizontal}
+                    {ratio?.vertical}:{ratio?.horizontal}
                   </div>
 
                   {/* <SVG src={deff.meta.icon || ""} /> */}
@@ -320,10 +328,10 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
 
                 <p className={css.name}>{deff.name}</p>
                 <p className={css.description}>
-                  {deff.size?.width}x{deff.size?.height}
+                  {docSize?.width}x{docSize?.height}
                 </p>
 
-                <p className={css.description}>{deff.description}</p>
+                {/* <p className={css.description}>{deff.description}</p> */}
                 {/* {deff.external && <div className={css.external}>EXT</div>}
             {deff.development && <div className={css.development}>DEV</div>} */}
               </Card>
@@ -346,22 +354,12 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
         <div>CREATE DOCUMENT</div>
       </RightPanelHeader>
 
-      <section>
+      {/* <section>
         <div>
           <div
             className={css.sectionHeader}
-            // onClick={() => toggleSection(FontSections.GoogleFonts)}
           >
-            {/* <Button
-              minimal
-              small={true}
-              icon={
-                // visibleSectionIds[FontSections.GoogleFonts]
-                // ?
-                "caret-down"
-                // : "caret-right"
-              }
-            ></Button> */}
+          
             Content
           </div>
         </div>
@@ -376,30 +374,9 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
             <Radio label="Copy current document" value="copy" />
           </RadioGroup>
         </div>
-      </section>
+      </section> */}
 
       <section>
-        <div>
-          <div
-            className={css.sectionHeader}
-            // onClick={() => toggleSection(FontSections.GoogleFonts)}
-          >
-            {/* <Button
-              minimal
-              small={true}
-              icon={
-                // visibleSectionIds[FontSections.GoogleFonts]
-                // ?
-                "caret-down"
-                // : "caret-right"
-              }
-            ></Button> */}
-            Custom size
-          </div>
-          {/* <h1>Custom</h1> */}
-          {/* <Divider /> */}
-          {/* <p>Create Feed posts, Reels, Stories ...</p> */}
-        </div>
         <div style={{ display: "flex", flexWrap: "wrap" }}>
           <div style={{ width: "100%" }}>
             <div className={cx("input400-force", css.inputHolder)}>
@@ -413,30 +390,45 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
               )}
             </div>
 
+            <div style={{ display: "flex", gap: "20px" }}>
+              <div className="">
+                {getUnitNumericFiled(
+                  "Width",
+                  newProjectData.width,
+                  (value: string) => {
+                    setNewProjectData({ ...newProjectData, width: value });
+                  },
+                  undefined,
+                  { style: { width: "100px" } },
+                  ["px"]
+                )}
+              </div>
+              <div className="">
+                {getUnitNumericFiled(
+                  "Height",
+                  newProjectData.height,
+                  (value: string) => {
+                    setNewProjectData({ ...newProjectData, height: value });
+                  },
+                  undefined,
+                  { style: { width: "100px" } },
+                  ["px"]
+                )}
+              </div>
+            </div>
+
             <div className="">
-              {getUnitNumericFiled(
-                "Width",
-                newProjectData.width,
-                (value: string) => {
-                  setNewProjectData({ ...newProjectData, width: value });
+              {getCheckboxField(
+                "Copy content from current document",
+                content === "copy",
+                (value: boolean) => {
+                  setContent(value ? "copy" : "empty");
                 },
                 undefined,
-                { style: { width: "100px" } },
-                ["px"]
+                { alignIndicator: "left" }
               )}
             </div>
-            <div className="">
-              {getUnitNumericFiled(
-                "Height",
-                newProjectData.height,
-                (value: string) => {
-                  setNewProjectData({ ...newProjectData, height: value });
-                },
-                undefined,
-                { style: { width: "100px" } },
-                ["px"]
-              )}
-            </div>
+
             <ChangeCheckerButton
               onAllow={() => {
                 createNewProject(newProjectData);
@@ -457,86 +449,25 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
         </div>
       </section>
 
-      <section>
-        <div>
-          <div
-            className={css.sectionHeader}
-            // onClick={() => toggleSection(FontSections.GoogleFonts)}
-          >
-            {/* <Button
-              minimal
-              small={true}
-              icon={
-                // visibleSectionIds[FontSections.GoogleFonts]
-                // ?
-                "caret-down"
-                // : "caret-right"
-              }
-            ></Button> */}
-            Instagram
-          </div>
-          {/* <Divider /> */}
-          {/* <p>Create Feed posts, Reels, Stories ...</p> */}
-        </div>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
-          {renderObjectsCardsGroup("Instagram")}
-        </div>
-      </section>
-      <section>
-        <div>
-          <div
-            className={css.sectionHeader}
-            // onClick={() => toggleSection(FontSections.GoogleFonts)}
-          >
-            {/* <Button
-              minimal
-              small={true}
-              icon={
-                // visibleSectionIds[FontSections.GoogleFonts]
-                // ?
-                "caret-down"
-                // : "caret-right"
-              }
-            ></Button> */}
-            Facebook
-          </div>{" "}
-          {/* <p>Create Story post, Profile, vertical, horizontal ...</p> */}
-        </div>
-        <div>{renderObjectsCardsGroup("Facebook")}</div>
-      </section>
-      <section>
-        <div>
-          <div
-            className={css.sectionHeader}
-            // onClick={() => toggleSection(FontSections.GoogleFonts)}
-          >
-            {/* <Button
-              minimal
-              small={true}
-              icon={
-                // visibleSectionIds[FontSections.GoogleFonts]
-                // ?
-                "caret-down"
-                // : "caret-right"
-              }
-            ></Button> */}
-            Pinterest
-          </div>
-          {/* <Divider /> */}
-
-          {/* <p>Create Square, Tall pin, Profile Cover ...</p> */}
-        </div>
-        <div>{renderObjectsCardsGroup("Pinterest")}</div>
-      </section>
-
-      {/* <section>
-        <div>
-          <h1>Custom</h1>
-          <p>Choose custom size.</p>
-        </div>
-
-        <div>{renderObjectsCards("custom")}</div>
-      </section> */}
+      {documents.map((rootCat) => {
+        return (
+          <section key={rootCat.category}>
+            <h3 style={{ marginBottom: "0px" }}>{rootCat.category}</h3>
+            {rootCat.items.map((cat) => {
+              return (
+                <React.Fragment key={rootCat.category + cat.category}>
+                  <div>
+                    <div className={css.sectionHeader}>{cat.category}</div>
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap" }}>
+                    {renderObjectsCards(cat.items, cat.category)}
+                  </div>
+                </React.Fragment>
+              );
+            })}
+          </section>
+        );
+      })}
     </div>
   );
 };

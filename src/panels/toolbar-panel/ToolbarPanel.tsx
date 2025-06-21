@@ -295,7 +295,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             <AddObjectIcon />
           </Button> */}
 
-          {/* <Button
+          <Button
             className={css.largeButton}
             minimal
             active={showPanel === VisiblePanel.Add}
@@ -316,7 +316,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 />
               </div>
             )}
-          </Portal> */}
+          </Portal>
 
           <Portal>
             {showPanel === VisiblePanel.Create && (

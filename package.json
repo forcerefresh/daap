@@ -108,7 +108,7 @@
     "react-google-recaptcha-v3": "^1.10.1",
     "react-image-file-resizer": "^0.4.7",
     "react-infinite-scroll-component": "^6.1.0",
-    "react-inlinesvg": "^2.3.0",
+    "react-inlinesvg": "^4.2.0",
     "react-pick-color": "^2.0.0",
     "react-redux": "^7.2.1",
     "react-router": "^6.21.1",

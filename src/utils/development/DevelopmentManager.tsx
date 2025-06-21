@@ -13,6 +13,7 @@ export type IDevelopmentManagerProps = typeof mapDispatchToProps &
 const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   const { globals } = props;
 
+  console.log(DevelopmentManager);
   const globalContext = useContext(IntegrationContext);
   const { getAll, updateDevelopmentItem } = globalContext.useDevelopmentHook();
 
@@ -39,6 +40,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
   const importAll = async () => {
     const devItems = developmentItemsRef.current;
 
+    console.log(devItems);
     let hasUpdate = false;
     for (let i = 0; i < devItems.length; i++) {
       const devItem = devItems[i];
@@ -54,7 +56,9 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
       let hashJson = { hash: "" };
       try {
         hashJson = await (await fetch(hashUrl)).json();
+        console.log(hashJson);
       } catch (err: any) {
+        console.log(err);
         logger.app.error(err);
         const devItemUpdate: Partial<DevelopmentItem> = {
           id: devItem.id,

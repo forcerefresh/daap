@@ -186,6 +186,29 @@ const MainHeader = (props: IMainHeader) => {
                   </div>
                 )} */}
                 </Portal>
+
+                <Divider dir="horizontal" />
+
+                <div className={css.projectNameHolder}>
+                  <div>{meta.name}</div>
+                  <div
+                    style={{
+                      fontFamily: "monospace",
+                      // marginLeft: "10px",
+                    }}
+                  >
+                    {breakpointConfig?.normal.page.width}x
+                    {breakpointConfig?.normal.page.height}
+                  </div>
+                  {/* <EditableText
+            value={meta.name ?? ""}
+            onChange={(value) => {
+              _updateProjectMeta({ ...meta, name: value });
+            }}
+          /> */}
+                  {/* <Icon icon="cloud-tick" className={css.inlineIcon} /> */}
+                  {/* cloud-upload / cloud */}
+                </div>
               </ButtonGroup>
             </div>
           </div>
@@ -198,26 +221,6 @@ const MainHeader = (props: IMainHeader) => {
             }}
           />
           <Icon icon="cloud-tick" className={css.title} /> */}
-        </div>
-        <div className={css.projectNameHolder}>
-          {meta.name}
-          <span
-            style={{
-              fontFamily: "monospace",
-              marginLeft: "10px",
-            }}
-          >
-            {breakpointConfig?.normal.page.width}x
-            {breakpointConfig?.normal.page.height}
-          </span>
-          {/* <EditableText
-            value={meta.name ?? ""}
-            onChange={(value) => {
-              _updateProjectMeta({ ...meta, name: value });
-            }}
-          /> */}
-          {/* <Icon icon="cloud-tick" className={css.inlineIcon} /> */}
-          {/* cloud-upload / cloud */}
         </div>
 
         <div className={css.right}>

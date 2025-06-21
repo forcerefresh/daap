@@ -11,6 +11,7 @@ import AppSettingsPanel from "../app-settings-panel/AppSettingsPanel";
 import LicenseSettingsPanel from "../license-settings-panel/LicenseSettingsPanel";
 import AccountSettingsPanel from "../account-settings-panel/AccountSettingsPanel";
 import AITextSettingsPanel from "../ai-settings-panel/AITextSettingsPanel";
+import DevelopmentPanel from "../development-panel/DevelopmentPanel";
 
 interface ISettingsPanelProps {
   onRequestClose: () => void;
@@ -76,6 +77,12 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
             id="ai"
             title="AI Text Assistant"
             panel={<AITextSettingsPanel />}
+          />
+
+          <Tab
+            id="development"
+            title="Development"
+            panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
           />
 
           {/*<Tabs.Expander />

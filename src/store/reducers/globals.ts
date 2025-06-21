@@ -20,7 +20,7 @@ export function globals(
   state: IAppSettings = {
     // layoutType: "default-layers",
     appZoom: 1,
-    enableDeveloper: false,
+    enableDeveloper: true,
     devTools: false,
     theme: "dark",
     snapToObject: true,

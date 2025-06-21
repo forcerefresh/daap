@@ -89,7 +89,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
             }}
           >
             <div className={css.svgHolder}>
-              <SVG src={deff.meta.icon || ""} />
+              <SVG src={deff?.meta?.icon || ""} />
             </div>
 
             <h3>{deff.meta.name}</h3>
