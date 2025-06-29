@@ -54,7 +54,7 @@ export const OpacityInputForm: React.FC<IOpacityInput & IUpdateInput> = (
 
   return (
     <Popover
-      className={css.popover}
+      className={cx(css.popover)}
       interactionKind={PopoverInteractionKind.CLICK}
       position={Position.BOTTOM}
       modifiers={{ preventOverflow: { enabled: true } }}
@@ -62,7 +62,7 @@ export const OpacityInputForm: React.FC<IOpacityInput & IUpdateInput> = (
       minimal
       // isOpen={isMaskOpen}
       content={
-        <div className={css.sliderHolder}>
+        <div className={cx(css.sliderHolder, "opacity-popover")}>
           <div>
             <Label>Opacity</Label>
             {getSelectSlider(

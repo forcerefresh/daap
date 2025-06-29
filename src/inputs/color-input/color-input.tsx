@@ -83,7 +83,10 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
     setOpen(false);
   };
   const colorPickerHolderRef = useRef<HTMLElement>(null);
-  useOnClickOutside(colorPickerHolderRef, handleClickOutside);
+  useOnClickOutside(colorPickerHolderRef, handleClickOutside, [
+    "opacity-popover",
+    "color-picker",
+  ]);
 
   // update state when props.value is changed
   useEffect(() => {
@@ -167,7 +170,7 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
           )}
         </div>
         {open && (
-          <div ref={colorPickerHolderRef} className="QWEQWE">
+          <div ref={colorPickerHolderRef} className="color-picker">
             <ColorPanel
               onRequestClose={() => {
                 _collectColors();

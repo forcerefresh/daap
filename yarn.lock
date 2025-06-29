@@ -11017,19 +11017,19 @@ webpack@^5.70.0:
     watchpack "^2.4.0"
     webpack-sources "^3.2.3"
 
-webslider-sdk@^1.1.144:
-  version "1.1.144"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.144.tgz#ff9a41bd09fc66ae2a9b4886092bb7d38709d6ee"
-  integrity sha512-rrwOj+e90IkqxUIQylrOgOfDUcuKUhObgsHyJPxYuaN5jlBKdXpW51jfaM+OeWbJKj87J737Q2iQZoKrg2Gw/A==
-
-webslider-sdk@^1.1.168:
-  version "1.1.168"
-  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.168.tgz#1021a2e34ae205ac245655ac02e79ced943e7be8"
-  integrity sha512-lrX+Glkx3yV3TbqIRgMsHIoYD5D5lQp21j/BgVMuUyoFrKh6qAkhwQksBC3Hkuut9dvpFzJRz+fXzfdcOTMqwQ==
+webslider-sdk@1.1.169:
+  version "1.1.169"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.169.tgz#aea32d9a78e6dc12935d32cdf66d27c0c2fa3724"
+  integrity sha512-nLFRk5/E/ui7d+/uR1QTZ9Bv5SbOgv+apFZudzCAQIhuWU9ZfG6I0OS+iuaYdCbyH2o6Ie9cHMZtIJUv4i3TMQ==
   dependencies:
     "@types/lodash-es" "^4.17.12"
     lodash-es "^4.17.21"
     webslider-sdk "^1.1.144"
+
+webslider-sdk@^1.1.144:
+  version "1.1.144"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.144.tgz#ff9a41bd09fc66ae2a9b4886092bb7d38709d6ee"
+  integrity sha512-rrwOj+e90IkqxUIQylrOgOfDUcuKUhObgsHyJPxYuaN5jlBKdXpW51jfaM+OeWbJKj87J737Q2iQZoKrg2Gw/A==
 
 whatwg-encoding@^3.1.1:
   version "3.1.1"

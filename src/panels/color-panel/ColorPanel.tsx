@@ -287,7 +287,47 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
     );
   }, []);
 
+  const generateBtn = useMemo(() => {});
+
   const [refreshColorScheme, setRefreshColorScheme] = useState(1);
+
+  const colorSchemeRenderTitle = useMemo(() => {
+    const schemes = getRelatedColors(initialColorRef.current!);
+
+    return (
+      <>
+        {schemes.length ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <h3 style={{ marginBottom: "10px" }}>Color schemes</h3>
+              <div>
+                {!isEqual(
+                  omit(currentColor, "a"),
+                  omit(initialColorRef.current, "a")
+                ) && (
+                  <Button
+                    onClick={() => {
+                      initialColorRef.current = currentColor;
+                      setRefreshColorScheme(refreshColorScheme + 1);
+                    }}
+                  >
+                    Generate for current color
+                  </Button>
+                )}
+              </div>
+            </div>
+          </>
+        ) : null}
+      </>
+    );
+  }, [initialColorRef, refreshColorScheme, currentColor]);
+
   const colorSchemeRender = useMemo(() => {
     const schemes = getRelatedColors(initialColorRef.current!);
 
@@ -295,10 +335,6 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
       <>
         {schemes.length ? (
           <>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <h3 style={{ marginBottom: "10px" }}>Color schemes</h3>
-              <Button>Refenerate for {`${omit(currentColor, "a")}`}</Button>
-            </div>
             {schemes.map((related) => {
               return (
                 <ColorPanelSection
@@ -525,6 +561,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
           </div>
         </section>
 
+        {colorSchemeRenderTitle}
         {colorSchemeRender}
 
         {colorPalettesRender}
