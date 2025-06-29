@@ -359,6 +359,9 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
   };
   return (
     <div className={cx(themeClass, css.fontPreviewPanel)}>
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <Button icon="cross" minimal onClick={onRequestClose} />
+      </div>
       <div className={css.fontList}>
         <div className={css.searchFontHolder}>
           {getTextField("", searchString, filterFonts, "", {

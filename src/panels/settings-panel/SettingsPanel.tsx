@@ -3,7 +3,7 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./SettingsPanel.module.scss";
-import { Tab, Tabs } from "@blueprintjs/core";
+import { Button, Tab, Tabs } from "@blueprintjs/core";
 import ProjectPanel from "../project-settings-panel/ProjectSettingsPanel";
 import { ObjectStorage } from "../object-storage/ObjectStorage";
 import { IntegrationContext } from "../../integration";
@@ -22,6 +22,7 @@ export type ISettingsPanelMergedProps = typeof mapDispatchToProps &
   ISettingsPanelProps & { defaultSelectedTabId?: string };
 
 const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
+  onRequestClose,
   defaultSelectedTabId = "project",
 }) => {
   const globalContext = useContext(IntegrationContext);
@@ -46,7 +47,10 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
 
   return (
     <div className={cx("bp5-dark", css.settingsPanel)}>
-      <div>
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <Button icon="cross" minimal onClick={onRequestClose} />
+      </div>
+      <div style={{ display: "flex", height: "100%" }}>
         <Tabs
           className={css.tabs}
           defaultSelectedTabId={defaultSelectedTabId}

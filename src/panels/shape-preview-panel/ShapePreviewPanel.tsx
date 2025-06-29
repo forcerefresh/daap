@@ -404,6 +404,9 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
 
   return (
     <div className={cx(themeClass, css.shapePreviewPanel)}>
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <Button icon="cross" minimal onClick={onRequestClose} />
+      </div>
       <div className={css.shapesSectionHolder}>
         <section
           style={{ flexGrow: 0, minHeight: "10%" }}
@@ -415,7 +418,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             className={css.sectionHeader}
             onClick={() => toggleSection(ShapeSections.Line)}
           >
-            <Button
+            {/* <Button
               minimal
               small={true}
               icon={
@@ -423,7 +426,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                   ? "caret-down"
                   : "caret-right"
               }
-            ></Button>
+            ></Button> */}
             <span>Line</span>
           </div>
           <div
@@ -473,7 +476,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             className={css.sectionHeader}
             onClick={() => toggleSection(ShapeSections.Rectangle)}
           >
-            <Button
+            {/* <Button
               minimal
               small={true}
               icon={
@@ -481,7 +484,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                   ? "caret-down"
                   : "caret-right"
               }
-            ></Button>
+            ></Button> */}
             <span>Rectangle</span>
           </div>
           <div
@@ -531,7 +534,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             className={css.sectionHeader}
             onClick={() => toggleSection(ShapeSections.Circle)}
           >
-            <Button
+            {/* <Button
               minimal
               small={true}
               icon={
@@ -539,7 +542,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                   ? "caret-down"
                   : "caret-right"
               }
-            ></Button>
+            ></Button> */}
             <span>Circle</span>
           </div>
           <div
@@ -593,7 +596,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             className={css.sectionHeader}
             onClick={() => toggleSection(ShapeSections.Star)}
           >
-            <Button
+            {/* <Button
               minimal
               small={true}
               icon={
@@ -601,7 +604,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                   ? "caret-down"
                   : "caret-right"
               }
-            ></Button>
+            ></Button> */}
             <span>Star</span>
           </div>
           <div
@@ -655,7 +658,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
             className={css.sectionHeader}
             onClick={() => toggleSection(ShapeSections.Polygon)}
           >
-            <Button
+            {/* <Button
               minimal
               small={true}
               icon={
@@ -663,7 +666,7 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                   ? "caret-down"
                   : "caret-right"
               }
-            ></Button>
+            ></Button> */}
             <span>Polygon</span>
           </div>
           <div

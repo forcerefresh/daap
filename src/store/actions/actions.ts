@@ -8,6 +8,7 @@ import axios from "axios";
 
 import {
   cloneDeep,
+  concat,
   delay,
   difference,
   differenceWith,
@@ -15,7 +16,11 @@ import {
   isArray,
   isEqual,
   isUndefined,
+  merge,
   once,
+  uniq,
+  uniqBy,
+  uniqWith,
 } from "lodash-es";
 import { IObject, ItemType } from "webslider-sdk/lib/objects/i-object";
 import {
@@ -84,6 +89,7 @@ import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { addStyle } from "../../utils/doom-utils/css-utils";
 import { getGlobals } from "../../globals";
 import { RGBColor } from "react-color";
+import { IColors, ImageColors } from "../reducers/i-colors";
 
 export interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T): T | undefined;
@@ -1318,7 +1324,10 @@ export function addNewObject(
       dispatch(setNextTextPosition(100));
     }
 
-    dispatch(collectColors());
+    // if (object.type === "io.forcerefresh.image.object") {
+    //   dispatch(colorFromImages());
+    // }
+    // dispatch(collectColors());
   };
 }
 
@@ -1352,8 +1361,14 @@ export function deleteObjects(objectToDeleteIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const objectById = getState().project.objects.objectById;
 
+    let hasImage = false;
+
     const finalObjectToDeleteIds = objectToDeleteIds.map((objectToDeleteId) => {
       const objectToDelete = objectById[objectToDeleteId];
+
+      hasImage =
+        hasImage || objectToDelete.type === "io.forcerefresh.image.object";
+
       if (isObjectInGroup(objectToDelete, objectById)) {
         // check if after delete group will be empty
         const group = objectById[objectToDelete.parentId!];
@@ -1368,6 +1383,10 @@ export function deleteObjects(objectToDeleteIds: string[]) {
     });
 
     dispatch(_deleteObjects(finalObjectToDeleteIds));
+    // dispatch(collectColors());
+    // if (hasImage) {
+    //   dispatch(colorFromImages());
+    // }
   };
 }
 
@@ -1755,6 +1774,9 @@ function handleObjectUpdate(
     // }
     default: {
       dispatch(_updateObject(object, !isPreview));
+      if (object.type === "io.forcerefresh.image.object") {
+        dispatch(colorFromImages());
+      }
     }
   }
 }
@@ -2077,6 +2099,8 @@ export function updateObjectForPreview(object: IObject): any {
 export function updateObject(object: IObject): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     handleObjectUpdate(object, dispatch, getState);
+
+    // dispatch(collectColors());
 
     // const { objectById } = getState().project.objects;
     // const parent = objectById[object.parentId!];
@@ -2620,7 +2644,8 @@ export function openProject(project: {
 }): any {
   return function (dispatch: Dispatch, _getState: () => IStore) {
     dispatch(_openProject(project));
-    dispatch(collectColors());
+    // dispatch(collectColors());
+    // dispatch(colorFromImages());
   };
 }
 
@@ -2717,6 +2742,79 @@ export function addRecentColor(color: RGBColor): AddRecentColor {
   };
 }
 
+// ___
+
+export const UPDATE_COLORS_STATE = "Update colors store";
+
+export interface UpdateColorsStateAction extends IUndoableAction<false> {
+  type: typeof UPDATE_COLORS_STATE;
+  payload: Partial<IColors>;
+}
+
+export function updateColorsState(
+  colorsState: Partial<IColors>
+): UpdateColorsStateAction {
+  return {
+    type: UPDATE_COLORS_STATE,
+    payload: colorsState,
+    isUndoable: false,
+  };
+}
+// ++++
+
+// ___
+
+export const UPDATE_BRAND_COLORS = "Update brand colors";
+
+export interface UpdateBrandColorsAction extends IUndoableAction<false> {
+  type: typeof UPDATE_BRAND_COLORS;
+  payload: { name: string; colors: RGBColor[] }[];
+}
+
+export function _updateBrandColors(
+  brandColors: { name: string; colors: RGBColor[] }[]
+): UpdateBrandColorsAction {
+  return {
+    type: UPDATE_BRAND_COLORS,
+    payload: brandColors,
+    isUndoable: false,
+  };
+}
+
+export function updateBrandColors(
+  brandColors: { name: string; colors: RGBColor[] }[]
+): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    dispatch(_updateBrandColors(brandColors));
+    dispatch(updateEditor({ sliderChanged: true }));
+  };
+}
+
+// ++++
+
+export const COLORS_FROM_IMAGES = "Colors from images";
+
+export interface ColorsFromImagesAction extends IUndoableAction<false> {
+  type: typeof COLORS_FROM_IMAGES;
+  payload: ImageColors[];
+}
+
+function _colorFromImages(imagesColors: ImageColors[]): ColorsFromImagesAction {
+  return {
+    type: COLORS_FROM_IMAGES,
+    payload: imagesColors,
+    isUndoable: false,
+  };
+}
+
+export function colorFromImages(imagesColors: ImageColors[]): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    dispatch(_colorFromImages(imagesColors));
+  };
+}
+
+// ++++
+
 export const COLLECT_COLORS = "Collect Colors";
 
 export interface CollectColorsAction extends IUndoableAction<false> {
@@ -2732,26 +2830,44 @@ function _collectColors(colors: RGBColor[]): CollectColorsAction {
   };
 }
 
+function getColorFromColorOrGradient(
+  color: RGBColor | { points: { color: RGBColor }[] }
+) {
+  const colorPoints: { points: { color: RGBColor }[] } = color as any;
+  const colorRGB: RGBColor = color as any;
+
+  if (colorPoints.points) {
+    return [colorPoints.points[0].color, colorPoints.points[0].color];
+  }
+  if (typeof colorRGB.r === "number") {
+    return [colorRGB];
+  }
+
+  return [];
+}
+
 export function collectColors(): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const colorsSet = new Set<string>();
+    let colors: RGBColor[] = [];
     const allObjectById = getState().project.objects.objectById;
 
     Object.values(allObjectById).forEach((obj: IObject) => {
       if (obj.properties) {
         const { color, strokeColor, fill } = obj.properties;
 
-        if (color) colorsSet.add(JSON.stringify(color));
-        if (strokeColor) colorsSet.add(JSON.stringify(strokeColor));
-        if (fill) colorsSet.add(JSON.stringify(fill));
+        if (color) {
+          colors = concat(colors, getColorFromColorOrGradient(color));
+        }
+        if (strokeColor) {
+          colors = concat(colors, getColorFromColorOrGradient(strokeColor));
+        }
+        if (fill) {
+          colors = concat(colors, getColorFromColorOrGradient(fill));
+        }
       }
     });
 
-    const uniqueColorsArray = Array.from(colorsSet)
-      .slice(-50)
-      .map((color) => JSON.parse(color) as RGBColor);
-
-    dispatch(_collectColors(uniqueColorsArray));
+    dispatch(_collectColors(uniqWith(colors, isEqual)));
   };
 }
 
@@ -3130,6 +3246,9 @@ export type ActionTypes =
   //colors
   | AddRecentColor
   | CollectColorsAction
+  | ColorsFromImagesAction
+  | UpdateColorsStateAction
+  | UpdateBrandColorsAction
 
   //stage
   | SetDocumentSizeAction

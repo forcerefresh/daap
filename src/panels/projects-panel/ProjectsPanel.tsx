@@ -10,6 +10,7 @@ import {
   doClearHistory,
   openProject,
   setDevice,
+  updateColorsState,
   updateEditor,
   updateProjectMeta,
 } from "../../store/actions/actions";
@@ -29,6 +30,7 @@ import ChangeCheckerButton from "../../utils/components/change-checker-button/Ch
 import { preloadFonts } from "../../utils/project/project-utils";
 import { Pagination } from "../../types/pagination";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
+import { IColors } from "../../store/reducers/i-colors";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -48,6 +50,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     _resetChangedState,
     _setDevice,
     _setupNewProject,
+    _updateColorsState,
     _updateEditor,
   } = props;
 
@@ -176,6 +179,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         settings: ISettings;
         diff: any;
         fonts: any[];
+        colors: any;
       } = responseProject.project;
 
       delete project.diff;
@@ -217,6 +221,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       preloadFonts(responseProject?.fonts ?? []);
 
       onRequestClose();
+
+      _updateColorsState(project.colors);
     });
   };
   return (
@@ -394,6 +400,8 @@ const mapDispatchToProps = {
   _setDevice: setDevice,
   _setupNewProject: () => setupNewProject(),
   _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
+  _updateColorsState: (colorsState: Partial<IColors>) =>
+    updateColorsState(colorsState),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProjectsPanel);

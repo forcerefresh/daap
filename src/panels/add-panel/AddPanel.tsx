@@ -1,4 +1,4 @@
-import { Card, Elevation } from "@blueprintjs/core";
+import { Button, Card, Elevation } from "@blueprintjs/core";
 import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
@@ -107,6 +107,9 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 
   return (
     <div className={cx(themeClass, css.addPanel)}>
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <Button icon="cross" minimal onClick={onRequestClose} />
+      </div>
       {/* {disabled && (
         <div className="warning">
           Action panel is disabled. Goto "Settings &gt; License" and enter

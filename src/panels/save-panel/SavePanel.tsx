@@ -164,6 +164,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         assetsUrls,
         fonts,
         extensions: playerData.extensions,
+        colors: project.colors.documentColorPalettes,
       })
         .then(
           ({
@@ -221,6 +222,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         assetsUrls,
         fonts,
         extensions: playerData.extensions,
+        colors: project.colors.documentColorPalettes,
       })
         .then(
           ({
@@ -295,6 +297,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       description: templateDialogData.description,
       project: updatedProject,
       slides: project.pages.pages.length,
+      colors: project.colors.documentColorPalettes,
       preview: {
         width: thumbSize.width,
         height: thumbSize.height,

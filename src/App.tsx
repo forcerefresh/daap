@@ -150,7 +150,8 @@ function App(props: IAppProps) {
   useEffect(() => {
     document.addEventListener("contextmenu", function (e) {
       if ((e.target as HTMLElement).closest(".daap-forcerefresh-app")) {
-        e.preventDefault();
+        // TODO: enable this
+        // e.preventDefault();
       }
     });
   }, []);

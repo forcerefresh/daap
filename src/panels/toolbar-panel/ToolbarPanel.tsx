@@ -81,6 +81,7 @@ enum VisiblePanel {
   Templates = "templates",
   Export = "export",
   ShapePreview = "shape-preview",
+  ColorPanel = "color-preview",
 }
 
 const ICON_SIZE = 32;
@@ -387,6 +388,28 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             )}
           </Portal>
         </div>
+
+        {/* <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            active={showPanel === VisiblePanel.ColorPanel}
+            onClick={() => {
+              setShowPanel(VisiblePanel.ColorPanel);
+            }}
+          >
+            CP
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.ColorPanel && (
+              <div ref={sharedRef}>
+                <ColorPanel
+                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                />
+              </div>
+            )}
+          </Portal>
+        </div> */}
 
         <div>
           <Button

@@ -3,7 +3,7 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./MediaLibraryPanel.module.scss";
-import { Tab, Tabs } from "@blueprintjs/core";
+import { Button, Tab, Tabs } from "@blueprintjs/core";
 import ImagesLibraryPanel from "../images-library-panel/ImagesLibraryPanel";
 import VectorsLibraryPanel from "../vector-library-panel/VectorLibraryPanel";
 import { includes, noop, pick } from "lodash-es";
@@ -111,6 +111,9 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   };
   return (
     <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
+      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+        <Button icon="cross" minimal onClick={onRequestClose} />
+      </div>
       <div style={{ overflow: "hidden" }}>
         <Tabs
           className={css.tabs}

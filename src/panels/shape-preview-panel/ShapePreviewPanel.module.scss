@@ -3,10 +3,13 @@
 .shapePreviewPanel {
   z-index: 100;
   position: absolute;
-  top: 0px;
-  left: 68px;
+  top: 65px;
+  left: 78px;
+  height: calc(var(--daap-forcerefresh-app-height) - 127px);
+  // top: 0px;
+  // left: 68px;
   min-width: 500px;
-  height: calc(var(--daap-forcerefresh-app-height) - 52px);
+  // height: calc(var(--daap-forcerefresh-app-height) - 52px);
 
   overflow: auto;
   background: $pt-app-background-color;

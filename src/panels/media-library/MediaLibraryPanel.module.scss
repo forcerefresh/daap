@@ -3,10 +3,14 @@
 .mediaLibraryPanel {
   z-index: 170;
   position: absolute;
-  top: 0px;
-  left: 68px;
+  // top: 0px;// NOTE: update 3
+  // left: 68px;// NOTE: update 3
+  top: 65px;
+  left: 78px;
+  height: calc(
+    var(--daap-forcerefresh-app-height) - 127px
+  ); // - 52px // NOTE: update 3
   width: 720px;
-  height: calc(var(--daap-forcerefresh-app-height) - 52px);
   overflow: hidden;
 
   background: $pt-app-background-color;
@@ -99,7 +103,7 @@
 :global(.bp5-dark) {
   &.mediaLibraryPanel {
     background: $pt-dark-app-background-color !important;
-    border-right: 1px solid #555;
+    // border-right: 1px solid #555; // NOTE: update 3
 
     // box-shadow: $pt-dark-elevation-shadow-1 !important;
   }

@@ -29,13 +29,11 @@ export const ColorGradientInputForm: React.FC<
   } = props;
 
   const type = useMemo(() => {
-    if ((value as RGBColor)?.r) {
-      return "solid";
-    }
     if ((value as ILinearGradientValue)?.points) {
       return "gradient";
     }
-    return "none";
+
+    return "solid";
   }, [value]);
 
   const [prevColor, setPrevColor] = useState<RGBColor | undefined>();
@@ -52,6 +50,9 @@ export const ColorGradientInputForm: React.FC<
     }
   }, [value, setPrevColor, setPrevLinearGradient]);
 
+  console.log("value: " + value);
+  console.log(value);
+
   return (
     <FormGroup label={displayName} inline helperText={helperText}>
       {getButtonGroupField(
@@ -60,22 +61,22 @@ export const ColorGradientInputForm: React.FC<
         (val) => {
           updatePrevState();
 
-          if (val === "none") {
-            onChange(undefined);
-          } else {
-            if (val === "solid") {
-              const colorValue = prevColor ?? pickColorFromValue(value);
-              onChange(colorValue);
-            }
-            if (val === "gradient") {
-              const colorValue =
-                prevLinearGradient ?? pickGradientFromValue(value);
-              onChange(colorValue);
-            }
+          // if (val === "none") {
+          //   onChange(undefined);
+          // } else {
+          if (val === "solid") {
+            const colorValue = prevColor ?? pickColorFromValue(value);
+            onChange(colorValue);
           }
+          if (val === "gradient") {
+            const colorValue =
+              prevLinearGradient ?? pickGradientFromValue(value);
+            onChange(colorValue);
+          }
+          // }
         },
         [
-          { label: "None", value: "none" },
+          // { label: "None", value: "none" },
           { label: "Solid", value: "solid" },
           { label: "Gradient", value: "gradient" },
         ]

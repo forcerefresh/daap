@@ -8,6 +8,7 @@ function useOnClickOutside<T extends HTMLElement = HTMLElement>(
   handler: (event: Event) => void,
   skipClassName?: string | string[]
 ) {
+  console.log(ref.current?.className);
   const skipClassNames = useMemo(
     () =>
       isArray(skipClassName)

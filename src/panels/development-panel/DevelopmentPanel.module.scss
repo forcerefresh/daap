@@ -8,6 +8,11 @@
   overflow-x: hidden;
   margin-right: 30px;
 
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
   :global {
     .bp5-popover-target {
       display: block;

@@ -51,6 +51,8 @@ body {
 
 .bp5-dark .bp5-card {
   background-color: #363636;
+  box-shadow: 0 0 0 1px rgba(17, 20, 24, 0.1), 0 1px 1px rgba(17, 20, 24, 0.2),
+    0 2px 6px rgba(17, 20, 24, 0.2);
 }
 
 .bp5-portal {
@@ -153,4 +155,8 @@ body {
 
 .bp5-divider {
   margin-left: 0px !important;
+}
+
+.bp5-dark .bp5-button:not([class*="bp5-intent-"]) {
+  // background: #2e2e2f;
 }

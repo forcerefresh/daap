@@ -1,12 +1,22 @@
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import {
   ActionTypes,
   ADD_RECENT_COLOR,
   COLLECT_COLORS,
+  COLORS_FROM_IMAGES,
+  UPDATE_BRAND_COLORS,
+  UPDATE_COLORS_STATE,
 } from "../actions/actions";
 import { IColors } from "./i-colors";
 
 export function colors(
-  state: IColors = { recentColors: [], usedInDocument: [] },
+  state: IColors = {
+    recentColors: [],
+    usedInDocument: [],
+    imagesColors: [],
+    documentColorPalettes: [],
+    myColorPalettes: [],
+  },
   action: ActionTypes
 ) {
   switch (action.type) {
@@ -44,6 +54,28 @@ export function colors(
         usedInDocument: payload,
       };
     }
+    case UPDATE_COLORS_STATE: {
+      const { payload } = action;
+      return {
+        ...state,
+        ...payload,
+      };
+    }
+    case COLORS_FROM_IMAGES: {
+      const { payload } = action;
+      return {
+        ...state,
+        imagesColors: payload,
+      };
+    }
+    case UPDATE_BRAND_COLORS: {
+      const { payload } = action;
+      return {
+        ...state,
+        documentColorPalettes: payload,
+      };
+    }
+
     default:
       return state;
   }

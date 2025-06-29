@@ -21,6 +21,7 @@ import {
 import { Pagination } from "./types/pagination";
 import { WpFullscreenButton } from "./integration/components/fullscreen-button/wp-fullscreen-button";
 import { FullscreenButton } from "./integration/components/fullscreen-button/fullscreen-button";
+import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 
 export interface getFullscreenButtonComponentProps {
   isFullscreen: boolean;
@@ -315,6 +316,7 @@ export const IntegrationContext = React.createContext({
       assetsUrls: GetAssetsUrlFuncReturnType;
       fonts: GetFontsFuncReturnType;
       extensions: any[];
+      colors: { name: string; colors: RGBColor[] }[];
     }): Promise<{
       id: string;
       name: string;
@@ -647,11 +649,11 @@ function useAIHookFactory() {
 }
 
 function useExitHookFactory() {
-  // if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
-  // return require("./integration/hooks/exit-hook/exit-hook-wp").useAIHook;
-  // } else {
-  return require("./integration/hooks/exit-hook/exit-hook").useExitHook;
-  // }
+  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/exit-hook/wp-exit-hook").useExitHook;
+  } else {
+    return require("./integration/hooks/exit-hook/exit-hook").useExitHook;
+  }
 }
 
 function usePresetsHookFactory() {
