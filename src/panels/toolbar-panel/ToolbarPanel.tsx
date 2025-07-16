@@ -142,6 +142,17 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       // }, 100);
     };
 
+    const openMediaImagesCallback = () => {
+      setDefaultSettingsMediaLibraryTabId("myImages");
+      // setTimeout(() => {
+      setShowPanel(VisiblePanel.MediaLibrary);
+      // }, 100);
+    };
+
+    const openShapesPanelCallback = () => {
+      setShowPanel(VisiblePanel.ShapePreview);
+    };
+
     const openCreateNewCallback = () => {
       setShowPanel(VisiblePanel.Create);
     };
@@ -158,6 +169,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
     window.addEventListener("OPEN_TEMPLATES", openTemplatesCallback);
 
+    window.addEventListener("OPEN_MEDIA_IMAGES_PANEL", openMediaImagesCallback);
+    window.addEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
+
     window.addEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
     window.addEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
     window.addEventListener("OPEN_SAVE", openSaveCallback);
@@ -169,11 +183,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
       window.removeEventListener("OPEN_TEMPLATES", openTemplatesCallback);
 
+      window.removeEventListener(
+        "OPEN_MEDIA_IMAGES_PANEL",
+        openMediaImagesCallback
+      );
+
       window.removeEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
       window.removeEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
       window.removeEventListener("OPEN_SAVE", openSaveCallback);
 
       window.removeEventListener("OPEN_SAVE", openExportCallback);
+
+      window.removeEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
     };
   }, []);
 

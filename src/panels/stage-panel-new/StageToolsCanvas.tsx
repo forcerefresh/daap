@@ -105,7 +105,6 @@ import {
   getGroupMatrixFromSelectionPath,
   screenPointToLocal,
 } from "./stage-panel-utils";
-import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;

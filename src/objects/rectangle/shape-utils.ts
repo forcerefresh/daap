@@ -8,7 +8,7 @@ export function getSVGFill(
 ) {
   let fill: string | undefined = "transparent";
   let gradient: string | undefined;
-  if ((colorOrGradient as RGBColor)?.r) {
+  if (typeof (colorOrGradient as RGBColor)?.r !== "undefined") {
     fill = convertRGBColor2CSSStyle(
       colorOrGradient as RGBColor
     ).backgroundColor;

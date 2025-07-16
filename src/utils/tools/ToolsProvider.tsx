@@ -37,6 +37,7 @@ import {
 import { globals } from "../../store/reducers/globals";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IPage } from "../../store/reducers/i-pages";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -422,8 +423,11 @@ export const ToolsProvider = (
   };
 
   const activateTool = (tool: string, objectId?: string) => {
-    const toolDef = getObjectToolDefinitions(tool);
-    if (toolDef) {
+    const toolDef =
+      getObjectToolDefinitions(tool) ?? getAppObjectDefinition(tool);
+
+    console.log(toolDef);
+    if (toolDef?.toolClass) {
       const object = objectId ? storeRef.current.objectById[objectId] : null;
       const values = object?.properties;
 
@@ -527,6 +531,8 @@ export const ToolsProvider = (
     if (!activeTool) return;
 
     const retObjs: IObject[] = [];
+
+    console.log(allObjects);
     allObjects.forEach((objectId) => {
       if (objectById[objectId].type === activeTool) {
         retObjs.push(objectById[objectId]);

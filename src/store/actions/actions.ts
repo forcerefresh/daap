@@ -1340,6 +1340,88 @@ export function addObject(object: IObject): AddObjectAction {
 }
 
 // ***
+
+export const REPLACE_OBJECT = "Replace object";
+
+export interface ReplaceObjectAction extends IUndoableAction<true> {
+  type: typeof REPLACE_OBJECT;
+  payload: { replaceObjectId: string; object: IObject };
+}
+
+export function replaceObject(
+  replaceObjectId: string,
+  type: string,
+  objectProps: Partial<IObject>,
+  values?: { [key: string]: any }
+): any {
+  return function (dispatch: Dispatch, getState: () => IStore) {
+    const layerId =
+      getState().project.objects.objectById[replaceObjectId].layerId;
+
+    let object: IObject = {
+      ...createObject(type, objectProps, {
+        ...values,
+        //text: "Sample test",
+      }),
+      layerId,
+      parentId: layerId,
+    };
+
+    const nextNameIdx =
+      getState().project.objects.nextObjectNameNumber[type] || 1;
+    object.name = humanizeSting(type, true) + " " + nextNameIdx;
+
+    switch (object.type) {
+      case TEXT:
+      case RICH_TEXT: {
+        handleTextUpdate(object, dispatch, getState, true);
+        break;
+      }
+      case BUTTON: {
+        postProcessButton(object, getState);
+        break;
+      }
+      // case BULLETS: {
+      //   postProcessBullet(object, getState);
+      //   break;
+      // }
+      default: {
+        const objDeff = getAppObjectDefinition(object.type);
+        object = !!objDeff?.postProcess
+          ? objDeff.postProcess({ prevObject: object, object })
+          : object;
+        break;
+      }
+    }
+
+    if (!object.parentId) object.parentId = object.layerId;
+
+    dispatch(_replaceObject(replaceObjectId, object));
+    dispatch(activateObject(object.id));
+    dispatch(selectObjects([object.id]));
+    dispatch(selectForProperties({ id: object.id, type: "object" }));
+    if (object.type !== "text") {
+      dispatch(setNextTextPosition(100));
+    }
+
+    // if (object.type === "io.forcerefresh.image.object") {
+    //   dispatch(colorFromImages());
+    // }
+    // dispatch(collectColors());
+  };
+}
+
+export function _replaceObject(
+  replaceObjectId: string,
+  object: IObject
+): ReplaceObjectAction {
+  return {
+    type: REPLACE_OBJECT,
+    payload: { replaceObjectId, object },
+    isUndoable: true,
+  };
+}
+
 // ******
 
 export const DELETE_OBJECTS = "Delete objects";
@@ -3206,6 +3288,7 @@ export type ActionTypes =
 
   // object
   | AddObjectAction
+  | ReplaceObjectAction
   | SelectObjectAction
   | UpdateObjectAction
   | DeleteObjectsAction

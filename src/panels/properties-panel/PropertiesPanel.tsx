@@ -453,6 +453,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
         inputs={inputs}
         form={properties as IFormLayoutItem[]}
         formId={objectOrLayer?.type as string}
+        skipOpeningGroupByDefault={true}
       />
     );
   };

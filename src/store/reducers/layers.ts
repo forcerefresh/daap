@@ -15,6 +15,7 @@ import {
   GROUP_OBJECTS,
   UNGROUP_OBJECTS,
   CLIPBOARD_PASTE_OBJECTS,
+  REPLACE_OBJECT,
 } from "../actions/actions";
 import update from "immutability-helper";
 import { EmptyID } from "../types";
@@ -69,6 +70,24 @@ export function layers(
       }
 
       return state;
+    }
+
+    // TODO: this does not work when object is in the group
+    case REPLACE_OBJECT: {
+      const { replaceObjectId, object } = action.payload;
+
+      const newState = cloneDeep(state);
+      const layer = newState.layerById[object.layerId];
+
+      const idx = layer.objectIds.findIndex((value) => {
+        return value === replaceObjectId;
+      });
+
+      if (idx !== -1) {
+        newState.layerById[object.layerId].objectIds[idx] = object.id;
+      }
+
+      return newState;
     }
 
     case GROUP_OBJECTS: {

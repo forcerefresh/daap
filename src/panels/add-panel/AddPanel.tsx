@@ -9,6 +9,8 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getAppObjectDefinitionsByGroup } from "webslider-sdk/lib/objects/objects-register";
 import SVG from "react-inlinesvg";
 import { IntegrationContext } from "../../integration";
+import { getObjectSizeFromMeta } from "./add-object-utils";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 interface IAddPanelProps {
   onRequestClose: () => void;
@@ -27,6 +29,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     activeLayerId,
     onRequestClose,
     onRequestFontPreview,
+    breakpointConfig,
     themeClass,
   } = props;
 
@@ -75,10 +78,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               if (isObjectDisabledForFree(deff.type)) return;
               if (activeLayerId) {
                 _addNewObject(activeLayerId, deff.type, {
-                  left: 100, //(documentSize.width - 960) / 2,
-                  top: 100, //(documentSize.height - 540) / 2,
-                  width: 960,
-                  height: 540,
+                  ...getObjectSizeFromMeta(deff.meta, breakpointConfig),
                   parentId:
                     activeObject?.type === "group"
                       ? activeObject.id
@@ -163,11 +163,18 @@ const mapStateToProps = (state: IStore) => {
       state.project.selection.activeObjectId as string
     ];
 
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    state.project.settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
+    );
+
   return {
     activeLayerId: state.project.selection.activeLayerId,
     activeObject: activeObject,
     // documentSize: state.project.document.documentSize,
     themeClass: state.project.settings.themeClass,
+    breakpointConfig,
   };
 };
 

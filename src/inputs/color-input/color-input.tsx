@@ -86,6 +86,7 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
   useOnClickOutside(colorPickerHolderRef, handleClickOutside, [
     "opacity-popover",
     "color-picker",
+    "bp5-popover-content",
   ]);
 
   // update state when props.value is changed

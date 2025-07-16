@@ -13,7 +13,6 @@ import { StageToolEnum } from "../../utils/selection-manager/types";
 import { isObjectInGroup } from "../../store/actions/actions-utils";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
-import { getObjectToolDefinitions } from "../../objects/objectToolFactory";
 
 export const HANDLE_SIZE = 16;
 

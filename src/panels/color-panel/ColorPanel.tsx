@@ -313,7 +313,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
                 ) && (
                   <Button
                     onClick={() => {
-                      initialColorRef.current = currentColor;
+                      initialColorRef.current = omit(currentColor, "a");
                       setRefreshColorScheme(refreshColorScheme + 1);
                     }}
                   >

@@ -16,10 +16,11 @@ import {
 } from "webslider-sdk/lib/common/i-media-types";
 import MediaManagementPanel from "../images-library-panel/MediaManagementPanel";
 import { Pagination } from "../../types/pagination";
-import { addNewObject } from "../../store/actions/actions";
+import { addNewObject, replaceObject } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { getNewMediaObjectBounds } from "./add-object-utils";
+import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 
 export enum Panels {
   MyImages = "myImages",
@@ -76,6 +77,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
     _addNewObject,
     activeLayerId,
     defaultSelectedTabId,
+    _replaceObject,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
@@ -109,6 +111,9 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       "id"
     );
   };
+
+  const { replaceItem } = useContext(GlobalEventsContext);
+
   return (
     <div className={cx(themeClass, css.mediaLibraryPanel, className)}>
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>
@@ -146,6 +151,19 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   isAddObject={addObject}
                   onSelect={onSelect}
                   onAdd={(mediaItem) => {
+                    if (replaceItem?.type === "image") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        "image",
+                        replaceItem.objectProps,
+                        {
+                          ...replaceItem.values,
+                          image: includeMediaRequiredProps(mediaItem.media),
+                        }
+                      );
+                      return;
+                    }
+
                     const sizeRect = getNewMediaObjectBounds({
                       media: mediaItem.media,
                       breakpointConfig,
@@ -158,7 +176,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
-                        }
+                        },
+                        replacePayload
                       );
                     }
                   }}
@@ -519,6 +538,8 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>,
     values?: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
+
+  _replaceObject: replaceObject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MediaLibraryPanel);

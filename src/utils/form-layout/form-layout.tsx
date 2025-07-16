@@ -194,12 +194,13 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
         )}
 
         {isOpen && isDisabled && (
-          <div className={css.elementsHolder}>
-            <i>
-              Group is disabled.
-              <br /> To activate options enable group.
-            </i>
-          </div>
+          <></>
+          // <div className={css.elementsHolder}>
+          //   <i>
+          //     Group is disabled.
+          //     <br /> To activate options enable group.
+          //   </i>
+          // </div>
         )}
       </section>
     );
@@ -309,7 +310,10 @@ export function flattenFormRec(
         itemsArr.push({
           displayName: formItem.displayName,
           propertyName: formItem.propertyName,
-          inputType: InputType.BUTTON_GROUP_INPUT,
+          inputType:
+            formItem.inputType === "select"
+              ? InputType.SELECT
+              : InputType.BUTTON_GROUP_INPUT,
           options: formItem.groups?.map((group) => ({
             value: group.groupValue,
             label: group.groupName,

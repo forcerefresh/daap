@@ -110,7 +110,7 @@ export const ColorGradientInputForm: React.FC<
 function pickColorFromValue(
   value: RGBColor | ILinearGradientValue | undefined
 ): RGBColor {
-  if (value?.r) {
+  if (typeof value?.r !== "undefined") {
     return value as RGBColor;
   }
 
@@ -124,7 +124,7 @@ function pickColorFromValue(
 function pickGradientFromValue(
   value: RGBColor | ILinearGradientValue | undefined
 ): ILinearGradientValue {
-  if ((value as RGBColor)?.r) {
+  if (typeof (value as RGBColor)?.r !== "undefined") {
     return {
       points: [
         { color: { ...(value as RGBColor) }, stop: 0 },

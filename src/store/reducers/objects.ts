@@ -18,6 +18,7 @@ import {
   SELECT_OBJECTS,
   NORMALIZE_OBJECT_GROUP,
   CLIPBOARD_PASTE_OBJECTS,
+  REPLACE_OBJECT,
 } from "../actions/actions";
 import { IObjects } from "./i-objects";
 import {
@@ -75,6 +76,23 @@ export function objects(
 
       return newState;
     }
+    case REPLACE_OBJECT: {
+      const { replaceObjectId, object } = action.payload;
+      const newState = cloneDeep(state);
+
+      // remove
+      newState.allObjects = newState.allObjects.filter(
+        (value) => value !== replaceObjectId
+      );
+      delete newState.objectById[replaceObjectId];
+
+      // add
+      newState.objectById[object.id] = object;
+      newState.allObjects.push(object.id);
+
+      return newState;
+    }
+
     case UPDATE_OBJECT: {
       const object = action.payload;
 

@@ -21,6 +21,7 @@ import { AppToaster } from "./utils/components/app-toaster/AppToaster";
 import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import axios from "axios";
+import { GlobalEventsProvider } from "./utils/global-events/GlobalEvents";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -158,7 +159,9 @@ function App(props: IAppProps) {
 
   return (
     <div className={`${className}`}>
-      <Editor />
+      <GlobalEventsProvider>
+        <Editor />
+      </GlobalEventsProvider>
     </div>
   );
 }
