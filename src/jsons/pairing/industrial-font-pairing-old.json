@@ -1,0 +1,366 @@
+{
+  "industrial_pairings": [
+    {
+      "name": "Steel Grit",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bebas Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Oswald",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Oswald",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto Condensed",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto Condensed",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 2, "recommend": 100, "subsector": "Automotive Manufacturing" },
+        { "id": 5, "recommend": 98, "subsector": "Heavy Construction" },
+        { "id": 12, "recommend": 97, "subsector": "Industrial Machinery" }
+      ]
+    },
+    {
+      "name": "Blueprint",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Archivo Black",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Archivo Narrow",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fira Sans Condensed",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fira Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fira Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 5, "recommend": 100, "subsector": "Architectural Engineering" },
+        { "id": 12, "recommend": 95, "subsector": "Precision Tooling" },
+        { "id": 47, "recommend": 85, "subsector": "Industrial Design" }
+      ]
+    },
+    {
+      "name": "Rustbelt",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Changa One",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Changa",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Exo 2",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Exo 2",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Exo 2",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 30, "recommend": 100, "subsector": "Steel Mills" },
+        { "id": 19, "recommend": 95, "subsector": "Chemical Plants" },
+        { "id": 42, "recommend": 90, "subsector": "Scrap Metal" }
+      ]
+    },
+    {
+      "name": "Heavy Duty",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rajdhani",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Titillium Web",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Titillium Web",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Titillium Web",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 12, "recommend": 100, "subsector": "Hydraulic Systems" },
+        { "id": 15, "recommend": 95, "subsector": "Freight Logistics" },
+        { "id": 2, "recommend": 90, "subsector": "Truck Manufacturing" }
+      ]
+    },
+    {
+      "name": "Factory Floor",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Quantico",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Quantico",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Share Tech",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Share Tech",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 12, "recommend": 100, "subsector": "Assembly Lines" },
+        { "id": 32, "recommend": 95, "subsector": "Industrial Packaging" },
+        { "id": 45, "recommend": 85, "subsector": "Warehousing" }
+      ]
+    },
+    {
+      "name": "Industrial Strength",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Black Ops One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Orbitron",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Rajdhani",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Rajdhani",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Rajdhani",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 12, "recommend": 100, "subsector": "Robotic Arms" },
+        { "id": 16, "recommend": 95, "subsector": "Aerospace Manufacturing" },
+        { "id": 2, "recommend": 90, "subsector": "Vehicle Assembly" }
+      ]
+    },
+    {
+      "name": "Machinist",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Michroma",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Wallpoet",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Nova Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Nova Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 12, "recommend": 100, "subsector": "CNC Machinery" },
+        { "id": 30, "recommend": 95, "subsector": "Metal Fabrication" },
+        { "id": 47, "recommend": 85, "subsector": "Tool & Die" }
+      ]
+    },
+    {
+      "name": "Concrete",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Barlow Semi Condensed",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 5, "recommend": 100, "subsector": "Civil Engineering" },
+        { "id": 37, "recommend": 95, "subsector": "Commercial Construction" },
+        { "id": 42, "recommend": 85, "subsector": "Demolition" }
+      ]
+    },
+    {
+      "name": "Power Grid",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Audiowide",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rationale",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Geo",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Geo",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Geo",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 7, "recommend": 100, "subsector": "Power Plants" },
+        { "id": 39, "recommend": 95, "subsector": "Utility Infrastructure" },
+        { "id": 15, "recommend": 85, "subsector": "Transportation Grids" }
+      ]
+    },
+    {
+      "name": "Welded Steel",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Iceland",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Iceberg",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Iceberg",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Share",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Share",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 30, "recommend": 100, "subsector": "Structural Steel" },
+        { "id": 19, "recommend": 95, "subsector": "Industrial Coatings" },
+        { "id": 12, "recommend": 90, "subsector": "Metalworks" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 10,
+    "primary_industries": [
+      "Manufacturing (12)",
+      "Construction (5)",
+      "Metals/Mining (30)",
+      "Transportation (15)"
+    ],
+    "most_used_font": "Roboto Condensed (3 pairings)",
+    "condensed_fonts": 7,
+    "bold_weight_usage": "100% of H1s use 700+ weight"
+  }
+}

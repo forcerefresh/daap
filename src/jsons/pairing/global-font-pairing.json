@@ -1,0 +1,343 @@
+{
+  "global_pairings": [
+    {
+      "name": "World Citizen",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Noto Sans JP",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h3", "body"]
+        },
+        "accent": {
+          "font_family": "Noto Sans Arabic",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 41,
+          "name": "Travel & Tourism (Expanded)",
+          "subsector": "International Tour Packages",
+          "recommend": 100
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Global Relief Organizations",
+          "recommend": 98
+        },
+        {
+          "id": 13,
+          "name": "Retail & E-Commerce",
+          "subsector": "Multilingual E-Commerce",
+          "recommend": 95
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Diplomatic Communications",
+          "recommend": 90
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Language Learning Platforms",
+          "recommend": 85
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "International SIM Cards",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Cultural Harmony",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Almarai",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Noto Sans Devanagari",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "International Festivals",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Ethnic Textile Brands",
+          "recommend": 98
+        },
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Global Fusion Restaurants",
+          "recommend": 95
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "UNESCO Cultural Heritage",
+          "recommend": 90
+        },
+        {
+          "id": 11,
+          "name": "Hospitality & Tourism",
+          "subsector": "Luxury Global Resorts",
+          "recommend": 85
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Multilingual Literature",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Global Sans",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Noto Sans Hebrew",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Work Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Noto Sans Thai",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Localization Software",
+          "recommend": 100
+        },
+        {
+          "id": 26,
+          "name": "Human Resources (HR)",
+          "subsector": "Multinational Employee Portals",
+          "recommend": 98
+        },
+        {
+          "id": 20,
+          "name": "Consulting",
+          "subsector": "Cross-Cultural Training",
+          "recommend": 95
+        },
+        {
+          "id": 3,
+          "name": "Banking & Finance",
+          "subsector": "International Banking",
+          "recommend": 90
+        },
+        {
+          "id": 15,
+          "name": "Transportation & Logistics",
+          "subsector": "Global Shipping",
+          "recommend": 85
+        },
+        {
+          "id": 28,
+          "name": "Legal Services",
+          "subsector": "International Trade Law",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Script Fusion",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Noto Naskh Arabic",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Noto Serif",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Noto Sans Bengali",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Sacred Text Translations",
+          "recommend": 100
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Language Preservation",
+          "recommend": 98
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Calligraphy Exhibitions",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Cultural Ceremonies",
+          "recommend": 90
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Indigenous Rights",
+          "recommend": 85
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Diplomatic Correspondence",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Universal Geometric",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Noto Sans TC",
+          "font_weight": "800",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Noto Sans Armenian",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 50,
+          "name": "Emerging Industries (Future Trends)",
+          "subsector": "Global UI Systems",
+          "recommend": 100
+        },
+        {
+          "id": 21,
+          "name": "Consumer Electronics",
+          "subsector": "Universal Icon Design",
+          "recommend": 98
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "International Branding",
+          "recommend": 95
+        },
+        {
+          "id": 16,
+          "name": "Aerospace & Defense",
+          "subsector": "In-Flight Interfaces",
+          "recommend": 90
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Open-Source Localization",
+          "recommend": 85
+        },
+        {
+          "id": 7,
+          "name": "Energy & Utilities",
+          "subsector": "Global Sustainability Reports",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      { "id": 41, "name": "Travel & Tourism (Expanded)" },
+      { "id": 14, "name": "Technology & IT" },
+      { "id": 35, "name": "Printing & Publishing" },
+      { "id": 25, "name": "Government & Public Sector" }
+    ],
+    "most_used_font": "Noto Sans (8 variants)",
+    "script_coverage": {
+      "Cyrillic": 100,
+      "Arabic": 100,
+      "Hanzi/Kanji": 100,
+      "Devanagari": 80,
+      "Hebrew": 60
+    },
+    "language_support": {
+      "UN_Official_Languages": 100,
+      "Top_20_Most_Spoken": 95,
+      "Endangered_Scripts": 40
+    },
+    "accessibility_features": {
+      "multi_script_support": 100,
+      "screen_reader_optimized": 80,
+      "high_contrast_options": 60
+    },
+    "regional_coverage": {
+      "Asia_Pacific": 100,
+      "Middle_East": 100,
+      "Europe": 100,
+      "Africa": 80,
+      "Americas": 100
+    }
+  }
+}

@@ -1,10 +1,10 @@
 import { Button } from "@blueprintjs/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ShapePreviewPanel.module.scss";
-import { addNewObject } from "../../store/actions/actions";
+import { addNewObject, replaceObject } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getObjectHtml } from "../../export/export-html";
 import {
@@ -28,6 +28,7 @@ import {
   LINE,
   LineValues,
 } from "../../objects/line/line";
+import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 
 enum ShapeSections {
   Line = "line",
@@ -48,7 +49,15 @@ export type IShapePreviewPanelMergedProps = typeof mapDispatchToProps &
   IShapePreviewPanelProps;
 
 const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
-  const { themeClass, _addNewObject, activeLayerId, onRequestClose } = props;
+  const {
+    themeClass,
+    _addNewObject,
+    activeLayerId,
+    onRequestClose,
+    _replaceObject,
+  } = props;
+
+  const { replaceItem } = useContext(GlobalEventsContext);
 
   const [visibleSectionIds, setVisibleSectionIds] = useState<{
     [key: string]: boolean;
@@ -442,6 +451,26 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                 <div
                   className={css.objectHolder}
                   onClick={() => {
+                    if (replaceItem?.type === "shape") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        LINE,
+                        {
+                          ...replaceItem.objectProps,
+                          x1: 0,
+                          y1: 0,
+                          x2: replaceItem.objectProps.width,
+                          y2: 0,
+                        },
+                        {
+                          ...obj.properties,
+                          ...replaceItem.values,
+                        }
+                      );
+                      onRequestClose();
+                      return;
+                    }
+
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
@@ -500,6 +529,22 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                 <div
                   className={css.objectHolder}
                   onClick={() => {
+                    if (replaceItem?.type === "shape") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        RECTANGLE,
+                        {
+                          ...replaceItem.objectProps,
+                        },
+                        {
+                          ...obj.properties,
+                          ...replaceItem.values,
+                        }
+                      );
+                      onRequestClose();
+                      return;
+                    }
+
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
@@ -558,6 +603,22 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                 <div
                   className={css.objectHolder}
                   onClick={() => {
+                    if (replaceItem?.type === "shape") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        CIRCLE,
+                        {
+                          ...replaceItem.objectProps,
+                        },
+                        {
+                          ...obj.properties,
+                          ...replaceItem.values,
+                        }
+                      );
+                      onRequestClose();
+                      return;
+                    }
+
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
@@ -620,6 +681,22 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                 <div
                   className={css.objectHolder}
                   onClick={() => {
+                    if (replaceItem?.type === "shape") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        STAR,
+                        {
+                          ...replaceItem.objectProps,
+                        },
+                        {
+                          ...obj.properties,
+                          ...replaceItem.values,
+                        }
+                      );
+                      onRequestClose();
+                      return;
+                    }
+
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
@@ -682,6 +759,22 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                 <div
                   className={css.objectHolder}
                   onClick={() => {
+                    if (replaceItem?.type === "shape") {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        POLYGON,
+                        {
+                          ...replaceItem.objectProps,
+                        },
+                        {
+                          ...obj.properties,
+                          ...replaceItem.values,
+                        }
+                      );
+                      onRequestClose();
+                      return;
+                    }
+
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
@@ -729,6 +822,7 @@ const mapDispatchToProps = {
     objectProps: Partial<IObject>,
     values: { [key: string]: any }
   ) => addNewObject(layerId, type, objectProps, values),
+  _replaceObject: replaceObject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShapePreviewPanel);

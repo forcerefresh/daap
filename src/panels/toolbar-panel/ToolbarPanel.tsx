@@ -42,6 +42,8 @@ import { ITheme } from "../../store/reducers/i-settings";
 import AddObjectIcon from "./assets/add-object-icon.svg?react";
 import MediaLibraryIcon from "./assets/media-library-icon.svg?react";
 import TextIcon from "./assets/text-icon.svg?react";
+import FontPairingIcon from "./assets/font-pairing-icon.svg?react";
+
 import FreeDrawIcon from "./assets/free-draw-icon.svg?react";
 import SelectToolIcon from "./assets/select-tool-icon.svg?react";
 import HandToolIcon from "./assets/hand-tool-icon.svg?react";
@@ -66,6 +68,8 @@ import ExportPanel from "../export-panel/ExportPanel";
 import { RECTANGLE } from "../../objects/rectangle/rectangle";
 import ShapePreviewPanel from "../shape-preview-panel/ShapePreviewPanel";
 import { LINE } from "../../objects/line/line";
+import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
+import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -75,6 +79,8 @@ enum VisiblePanel {
   Draw = "draw",
   History = "history",
   FontPreview = "font-preview",
+  FontPairing = "font-pairing",
+
   MediaLibrary = "media-library",
   // ProjectsLibrary = "projects-library",
   Projects = "projects",
@@ -111,6 +117,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     _setTheme,
     theme,
   } = props;
+
+  const { setReplaceItem } = useContext(GlobalEventsContext);
+
   const globalContext = useContext(IntegrationContext);
   const { getLicenseDetails } = globalContext.useLicenseHook();
 
@@ -165,6 +174,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Export);
     };
 
+    const openTextCallback = () => {
+      setShowPanel(VisiblePanel.FontPreview);
+    };
+
     window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
     window.addEventListener("OPEN_TEMPLATES", openTemplatesCallback);
@@ -172,7 +185,9 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_MEDIA_IMAGES_PANEL", openMediaImagesCallback);
     window.addEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
 
-    window.addEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
+    window.addEventListener("OPEN_TEXT_PANEL", openTextCallback);
+
+    window.addEventListener("OPEN_MEDIA_FONTS_PANEL", openMediaFontsCallback);
     window.addEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
     window.addEventListener("OPEN_SAVE", openSaveCallback);
 
@@ -188,13 +203,18 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
         openMediaImagesCallback
       );
 
-      window.removeEventListener("OPEN_MEDIA_FONTS", openMediaFontsCallback);
+      window.removeEventListener(
+        "OPEN_MEDIA_FONTS_PANEL",
+        openMediaFontsCallback
+      );
       window.removeEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
       window.removeEventListener("OPEN_SAVE", openSaveCallback);
 
       window.removeEventListener("OPEN_SAVE", openExportCallback);
 
       window.removeEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
+
+      window.removeEventListener("OPEN_TEXT_PANEL", openTextCallback);
     };
   }, []);
 
@@ -380,6 +400,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
                 <MediaLibraryPanel
                   defaultSelectedTabId={defaultSettingsMediaLibraryTabId}
                   onRequestClose={() => {
+                    setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);
                   }}
                 />
@@ -403,7 +424,35 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.FontPreview && (
               <div ref={sharedRef}>
                 <FontPreviewPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+        </div>
+
+        <div>
+          <Button
+            className={css.largeButton}
+            minimal
+            active={showPanel === VisiblePanel.FontPairing}
+            onClick={() => {
+              setShowPanel(VisiblePanel.FontPairing);
+            }}
+          >
+            <FontPairingIcon />
+          </Button>
+          <Portal>
+            {showPanel === VisiblePanel.FontPairing && (
+              <div ref={sharedRef}>
+                <FontPairingPanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}
@@ -566,7 +615,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.ShapePreview && (
               <div ref={sharedRef}>
                 <ShapePreviewPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}
@@ -688,7 +740,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
               <div ref={sharedRef}>
                 <SettingsPanel
                   defaultSelectedTabId={defaultSettingsSelectedTabId}
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}
@@ -716,7 +771,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Projects && (
               <div ref={sharedRef}>
                 <ProjectsPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}
@@ -726,7 +784,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Templates && (
               <div ref={sharedRef}>
                 <MyTemplatesPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}
@@ -736,7 +797,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Export && (
               <div ref={sharedRef}>
                 <ExportPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
                 />
               </div>
             )}

@@ -1,0 +1,425 @@
+{
+  "artistic_pairings": [
+    {
+      "name": "Brushstroke Bold",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Dancing Script",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Pacifico",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Handlee",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Handlee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Handlee",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Watercolor Studios" },
+        { "id": 34, "recommend": 98, "subsector": "Calligraphy Photography" },
+        { "id": 44, "recommend": 95, "subsector": "Artist Workshop Branding" },
+        { "id": 23, "recommend": 90, "subsector": "Hand-Painted Textiles" },
+        {
+          "id": 29,
+          "recommend": 85,
+          "subsector": "Creative Director Portfolios"
+        },
+        { "id": 8, "recommend": 80, "subsector": "Indie Film Titles" }
+      ]
+    },
+    {
+      "name": "Avant-Garde Edge",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bauhaus Modern",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Futura Now",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "ITC Avant Garde",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "ITC Avant Garde",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "ITC Avant Garde",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "recommend": 100,
+          "subsector": "Conceptual Art Collectives"
+        },
+        { "id": 23, "recommend": 98, "subsector": "Deconstructed Fashion" },
+        { "id": 35, "recommend": 95, "subsector": "Experimental Zines" },
+        { "id": 44, "recommend": 90, "subsector": "Art Biennale Branding" },
+        { "id": 8, "recommend": 85, "subsector": "Avant-Garde Cinema" },
+        { "id": 29, "recommend": 80, "subsector": "Radical Ad Campaigns" }
+      ]
+    },
+    {
+      "name": "Ink & Texture",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rochester",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "IM Fell English",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Old Standard TT",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Old Standard TT",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "caption": {
+          "font_family": "Old Standard TT",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 35, "recommend": 100, "subsector": "Letterpress Studios" },
+        { "id": 17, "recommend": 98, "subsector": "Etching Workshops" },
+        { "id": 44, "recommend": 95, "subsector": "Vintage Art Fairs" },
+        { "id": 23, "recommend": 90, "subsector": "Handmade Paper Goods" },
+        { "id": 9, "recommend": 85, "subsector": "Artisanal Coffee Packaging" },
+        { "id": 46, "recommend": 80, "subsector": "Small-Batch Wine Labels" }
+      ]
+    },
+    {
+      "name": "Street Art Raw",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bangers",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Permanent Marker",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Urbanist",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Urbanist",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Urbanist",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Graffiti Collectives" },
+        { "id": 23, "recommend": 98, "subsector": "Streetwear Brands" },
+        { "id": 44, "recommend": 95, "subsector": "Urban Art Festivals" },
+        { "id": 8, "recommend": 90, "subsector": "Hip-Hop Album Art" },
+        { "id": 11, "recommend": 85, "subsector": "Hostel Murals" },
+        { "id": 13, "recommend": 80, "subsector": "Skate Shop Branding" }
+      ]
+    },
+    {
+      "name": "Surrealist Dream",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Dalek",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Suranna",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fira Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fira Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fira Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Surrealist Galleries" },
+        { "id": 8, "recommend": 98, "subsector": "Experimental Animation" },
+        { "id": 35, "recommend": 95, "subsector": "Art Book Publishing" },
+        { "id": 29, "recommend": 90, "subsector": "Psychedelic Ad Campaigns" },
+        { "id": 44, "recommend": 85, "subsector": "Immersive Art Experiences" },
+        { "id": 23, "recommend": 80, "subsector": "Avant-Garde Costume Design" }
+      ]
+    },
+    {
+      "name": "Art Nouveau Flow",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Lavanderia",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Monsieur La Doulaise",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 44, "recommend": 100, "subsector": "Vintage Wedding Design" },
+        { "id": 23, "recommend": 98, "subsector": "Decadent Lingerie" },
+        { "id": 37, "recommend": 95, "subsector": "Heritage Hotel Branding" },
+        { "id": 46, "recommend": 90, "subsector": "Absinthe Packaging" },
+        { "id": 17, "recommend": 85, "subsector": "Stained Glass Studios" },
+        {
+          "id": 9,
+          "recommend": 80,
+          "subsector": "Artisanal Chocolate Wrapping"
+        }
+      ]
+    },
+    {
+      "name": "Pop Art Punch",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rubik Glitch",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Luckiest Guy",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fredoka One",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Silkscreen Studios" },
+        { "id": 23, "recommend": 98, "subsector": "Retro Swimwear Lines" },
+        { "id": 13, "recommend": 95, "subsector": "Vinyl Toy Packaging" },
+        { "id": 44, "recommend": 90, "subsector": "Bubblegum-Themed Events" },
+        { "id": 8, "recommend": 85, "subsector": "Animation Studios" },
+        { "id": 29, "recommend": 80, "subsector": "Youth Marketing Campaigns" }
+      ]
+    },
+    {
+      "name": "Gothic Romance",
+      "fontPairing": {
+        "h1": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "EB Garamond",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "EB Garamond",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "EB Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 44,
+          "recommend": 100,
+          "subsector": "Victorian Mourning Events"
+        },
+        { "id": 23, "recommend": 98, "subsector": "Vampire Couture" },
+        { "id": 8, "recommend": 95, "subsector": "Gothic Film Titles" },
+        { "id": 46, "recommend": 90, "subsector": "Dark Spirits Branding" },
+        { "id": 17, "recommend": 85, "subsector": "Occult Art Collectives" },
+        { "id": 35, "recommend": 80, "subsector": "Macabre Poetry Books" }
+      ]
+    },
+    {
+      "name": "Dadaist Chaos",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Comic Neue",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "caption": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Anti-Art Movements" },
+        { "id": 35, "recommend": 98, "subsector": "Zine Culture" },
+        { "id": 29, "recommend": 95, "subsector": "Absurdist Advertising" },
+        { "id": 8, "recommend": 90, "subsector": "Experimental Theater" },
+        { "id": 23, "recommend": 85, "subsector": "Deconstructed Fashion" },
+        { "id": 44, "recommend": 80, "subsector": "Nonsense Poetry Slams" }
+      ]
+    },
+    {
+      "name": "Digital Glitch",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cyberpunk",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Share Tech Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Share Tech Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Glitch Art Collectives" },
+        { "id": 8, "recommend": 98, "subsector": "VR Art Exhibitions" },
+        { "id": 23, "recommend": 95, "subsector": "Neon Cyber Fashion" },
+        { "id": 44, "recommend": 90, "subsector": "Digital Art Festivals" },
+        { "id": 14, "recommend": 85, "subsector": "Generative Art Tools" },
+        { "id": 29, "recommend": 80, "subsector": "Hacker Culture Branding" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 10,
+    "primary_industries": [
+      "Arts & Crafts (17)",
+      "Fashion & Apparel (23)",
+      "Entertainment & Media (8)",
+      "Wedding & Events (44)"
+    ],
+    "most_used_font": "Comic Neue (3 pairings)",
+    "art_movement_distribution": {
+      "Surrealism": 2,
+      "Street Art": 2,
+      "Art Nouveau": 1,
+      "Pop Art": 1,
+      "Gothic": 1,
+      "Dada": 1,
+      "Digital": 1,
+      "Traditional": 1
+    },
+    "expressiveness_scale": {
+      "Subtle": 2,
+      "Moderate": 3,
+      "High": 5
+    }
+  }
+}

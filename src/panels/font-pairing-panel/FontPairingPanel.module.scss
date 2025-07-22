@@ -1,0 +1,164 @@
+@import "/src/theme";
+
+.fontPairingPanel {
+  z-index: 100;
+  position: absolute;
+  top: 65px;
+  left: 78px;
+  height: calc(var(--daap-forcerefresh-app-height) - 127px);
+  // top: 0px;
+  // left: 68px;
+  min-width: 340px;
+  // height: calc(var(--daap-forcerefresh-app-height) - 52px);
+
+  background: $pt-app-background-color;
+  box-shadow: $pt-elevation-shadow-0;
+  padding: 15px;
+  display: flex;
+  flex-direction: row;
+
+  section {
+    //box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    flex-grow: 1;
+    flex-shrink: 1;
+
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    // max-height: 40%;
+
+    overflow: auto;
+
+    .sectionHeader {
+      cursor: pointer;
+      font-weight: bold;
+      color: #808080;
+      padding: 15px 10px 15px 10px;
+    }
+  }
+  .virtuoso {
+    margin-right: -25px;
+  }
+  .panel {
+    padding: 20px;
+    padding-top: 5px;
+    overflow: auto;
+    position: relative;
+    overflow-x: hidden;
+    // height: 80vh;
+    display: flex;
+    flex-grow: 1;
+
+    :global {
+      .bp5-form-group .bp5-control {
+        margin-bottom: 5px;
+      }
+      .bp5-label {
+        margin-bottom: 0px;
+        color: #b5b5b5;
+        font-weight: bold;
+      }
+      .virtuoso-scroller {
+        flex-grow: 1;
+      }
+    }
+
+    > div {
+      padding: 5px;
+    }
+  }
+
+  .fontList {
+    display: flex;
+    flex-direction: column;
+    width: 310px;
+
+    .myFontListItem {
+      width: 280px !important;
+      height: 30px !important;
+      padding: 0 !important;
+      padding-left: 5px !important;
+      padding-right: 5px !important;
+
+      img {
+        width: 250px;
+        height: 30px;
+      }
+    }
+
+    .fontListItem {
+      position: relative;
+      cursor: pointer;
+      height: 28px;
+      width: 270px;
+
+      .previewFontBtn {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        margin: 0px;
+        display: none;
+        float: right;
+      }
+      &:hover .previewFontBtn {
+        display: block;
+        cursor: pointer;
+        // margin: 2px;
+      }
+
+      &.active {
+        margin: 0px;
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+
+      &:hover {
+        margin: 0px;
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      > span {
+        float: right;
+      }
+    }
+  }
+}
+
+.card {
+  display: inline-block;
+  //background: rgb(51, 51, 51) !important;
+  margin: 10px;
+
+  cursor: pointer;
+  &.disabled {
+    opacity: 0.3;
+  }
+
+  &:first-child {
+    margin-top: 0px;
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.searchFontHolder {
+  margin: 16px 16px 0px 16px;
+}
+
+.fontsSprite {
+  background: url("../../utils/fonts2/google-font-image.png");
+  width: 300px;
+  height: 28px;
+}
+
+:global(.bp5-dark) {
+  &.fontPairingPanel {
+    background: $pt-dark-app-background-color !important;
+    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    // border-right: 1px solid #555;
+  }
+  .fontsSprite {
+    background: url("../../utils/fonts2/google-font-image-dark.png");
+  }
+}

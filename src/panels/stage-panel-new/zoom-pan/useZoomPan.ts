@@ -59,12 +59,15 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       targetElementRefRef.current?.current
     ) {
       const handler = (e: WheelEvent) => {
+        console.log("asasasas");
         const parentEl = parentElementRefRef.current?.current;
         const targetEl = targetElementRefRef.current?.current;
 
         if (!targetEl || !parentEl) return;
 
+        console.log("AA");
         e.preventDefault();
+        // e.stopPropagation();
 
         if (!e.ctrlKey) {
           const newTransform = calculateNewTransform({
@@ -114,11 +117,52 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
 
       parentElementRefRef.current?.current.addEventListener("wheel", handler);
 
+      const canvas = document.getElementById("yourCanvas"); // or your container element
+
+      let isTwoFingerGesture = false;
+
+      function touchstartHandler(e) {
+        console.log("AAAAAAAAAAA");
+        if (e.touches.length === 2) {
+          isTwoFingerGesture = true;
+          e.preventDefault(); // Prevent default two-finger behavior
+        }
+      }
+
+      function touchMoveHandler(e) {
+        console.log(isTwoFingerGesture);
+        if (isTwoFingerGesture) {
+          e.preventDefault(); // Prevent default scroll/back/forward behavior
+
+          // Your custom two-finger panning logic here
+          // (e.g., calculate movement based on touch points)
+        }
+      }
+
+      function touchEndHandler(e) {
+        if (e.touches.length < 2) {
+          isTwoFingerGesture = false;
+        }
+      }
+      window.document.addEventListener("touchstart", touchstartHandler, {
+        passive: false,
+      });
+      window.document.addEventListener("touchmove", touchMoveHandler, {
+        passive: false,
+      });
+      window.document.addEventListener("touchend", touchEndHandler, {
+        passive: false,
+      });
+
       return () => {
         parentElementRefRef.current?.current?.removeEventListener(
           "wheel",
           handler
         );
+
+        window.document.removeEventListener("touchstart", touchstartHandler);
+        window.document.removeEventListener("touchmove", touchMoveHandler);
+        window.document.removeEventListener("touchend", touchEndHandler);
       };
     }
 

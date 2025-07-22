@@ -1,0 +1,323 @@
+{
+  "education_pairings": [
+    {
+      "name": "Academic Classic",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Alegreya",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Alegreya",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Higher Education" },
+        { "id": 20, "recommend": 98, "subsector": "Academic Publishing" },
+        { "id": 25, "recommend": 97, "subsector": "Government Education" },
+        { "id": 26, "recommend": 96, "subsector": "Professional Training" },
+        { "id": 31, "recommend": 95, "subsector": "Non-Profit Education" },
+        { "id": 35, "recommend": 90, "subsector": "Textbook Printing" }
+      ]
+    },
+    {
+      "name": "Youthful Learning",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Fredoka One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Nunito",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Nunito Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Nunito Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Nunito Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Elementary Schools" },
+        { "id": 33, "recommend": 98, "subsector": "Children's Museums" },
+        { "id": 49, "recommend": 97, "subsector": "Zoo Education" },
+        { "id": 17, "recommend": 96, "subsector": "Art Classes" },
+        { "id": 24, "recommend": 95, "subsector": "Youth Sports" },
+        { "id": 44, "recommend": 90, "subsector": "Family Workshops" }
+      ]
+    },
+    {
+      "name": "Modern Campus",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Raleway",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Raleway",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Open Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Open Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "University Branding" },
+        { "id": 14, "recommend": 98, "subsector": "STEM Programs" },
+        { "id": 20, "recommend": 97, "subsector": "Corporate Training" },
+        { "id": 26, "recommend": 96, "subsector": "Online Learning" },
+        { "id": 39, "recommend": 95, "subsector": "Tech Certifications" },
+        { "id": 50, "recommend": 90, "subsector": "Future Skills" }
+      ]
+    },
+    {
+      "name": "Literary Tradition",
+      "fontPairing": {
+        "h1": {
+          "font_family": "EB Garamond",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "EB Garamond",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Crimson Pro",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Crimson Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Crimson Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Liberal Arts Colleges" },
+        { "id": 35, "recommend": 98, "subsector": "Literary Journals" },
+        { "id": 20, "recommend": 97, "subsector": "Writing Workshops" },
+        { "id": 28, "recommend": 96, "subsector": "Law Schools" },
+        { "id": 31, "recommend": 95, "subsector": "Library Systems" },
+        { "id": 25, "recommend": 90, "subsector": "Cultural Education" }
+      ]
+    },
+    {
+      "name": "STEM Ready",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Roboto Slab",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Roboto",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Roboto Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Engineering Schools" },
+        { "id": 14, "recommend": 98, "subsector": "Coding Bootcamps" },
+        { "id": 18, "recommend": 97, "subsector": "Biotech Programs" },
+        { "id": 16, "recommend": 96, "subsector": "Aerospace Education" },
+        { "id": 22, "recommend": 95, "subsector": "Environmental Science" },
+        { "id": 50, "recommend": 90, "subsector": "Emerging Tech Training" }
+      ]
+    },
+    {
+      "name": "Inclusive Learning",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Lexend Deca",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Lexend",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Lexend",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Lexend",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lexend",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Special Education" },
+        { "id": 31, "recommend": 98, "subsector": "Community Literacy" },
+        { "id": 26, "recommend": 97, "subsector": "Accessibility Training" },
+        { "id": 48, "recommend": 96, "subsector": "Mindfulness Education" },
+        { "id": 10, "recommend": 95, "subsector": "Therapy Resources" },
+        { "id": 33, "recommend": 90, "subsector": "Animal-Assisted Learning" }
+      ]
+    },
+    {
+      "name": "Creative Workshop",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bungee Shade",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Quicksand",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Quicksand",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Quicksand",
+          "font_weight": "400",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Art Schools" },
+        { "id": 8, "recommend": 98, "subsector": "Film Academies" },
+        { "id": 34, "recommend": 97, "subsector": "Photography Courses" },
+        { "id": 35, "recommend": 96, "subsector": "Creative Writing" },
+        { "id": 29, "recommend": 95, "subsector": "Design Thinking" },
+        { "id": 44, "recommend": 90, "subsector": "Event Planning Classes" }
+      ]
+    },
+    {
+      "name": "Global Classroom",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Serif",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Noto Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "International Schools" },
+        { "id": 41, "recommend": 98, "subsector": "Language Institutes" },
+        { "id": 25, "recommend": 97, "subsector": "Diplomatic Training" },
+        { "id": 31, "recommend": 96, "subsector": "Cross-Cultural Programs" },
+        { "id": 20, "recommend": 95, "subsector": "Global Business Courses" },
+        { "id": 50, "recommend": 90, "subsector": "UN SDG Education" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 8,
+    "education_subsectors": [
+      "K-12 (6)",
+      "Higher Ed (6)",
+      "Vocational (26)",
+      "Special Needs (6)"
+    ],
+    "most_used_font": "Noto Sans (3 pairings)",
+    "accessibility_features": {
+      "dyslexia_friendly": 5,
+      "high_contrast": 7,
+      "multi_script": 2
+    }
+  }
+}

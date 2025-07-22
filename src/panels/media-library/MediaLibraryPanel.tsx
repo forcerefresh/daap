@@ -81,6 +81,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   } = props;
 
   const globalContext = useContext(IntegrationContext);
+
   const UploadComponent = globalContext?.getMyUploadComponent;
   const { getLicenseDetails } = globalContext.useLicenseHook();
   const { fetchMedias, deleteMedias } = globalContext.useMyMediaHook();
@@ -151,7 +152,10 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                   isAddObject={addObject}
                   onSelect={onSelect}
                   onAdd={(mediaItem) => {
-                    if (replaceItem?.type === "image") {
+                    if (
+                      replaceItem?.type === "image" ||
+                      replaceItem?.type === "background"
+                    ) {
                       _replaceObject(
                         replaceItem.objectId!,
                         "image",
@@ -176,8 +180,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
-                        },
-                        replacePayload
+                        }
                       );
                     }
                   }}

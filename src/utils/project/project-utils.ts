@@ -40,6 +40,7 @@ const fontPreloader = new FontPreloader();
 
 export function preloadFonts(fonts: GetFontsFuncReturnType) {
   fonts.forEach((font) => {
+    // console.log(font.fontFamily);
     fontPreloader.subscribe(font.fontFamily).then(() => {});
   });
 }

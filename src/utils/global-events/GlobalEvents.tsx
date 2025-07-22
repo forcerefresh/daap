@@ -27,12 +27,17 @@ export const GlobalEventsProvider = (
       setReplaceItem(payload);
 
       switch (payload.type) {
-        case "image": {
+        case "image":
+        case "background": {
           window.dispatchEvent(new CustomEvent("OPEN_MEDIA_IMAGES_PANEL"));
           return;
         }
         case "shape": {
           window.dispatchEvent(new CustomEvent("OPEN_SHAPES_PANEL"));
+          return;
+        }
+        case "text": {
+          window.dispatchEvent(new CustomEvent("OPEN_TEXT_PANEL"));
           return;
         }
       }

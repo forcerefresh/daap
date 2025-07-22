@@ -1,0 +1,474 @@
+{
+  "creative_pairings": [
+    {
+      "name": "Artistic Flow",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Prata",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Libre Baskerville",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Work Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Work Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Work Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Fine Art Galleries" },
+        { "id": 8, "recommend": 98, "subsector": "Independent Film" },
+        { "id": 23, "recommend": 97, "subsector": "Avant-Garde Fashion" },
+        { "id": 34, "recommend": 95, "subsector": "Conceptual Photography" },
+        { "id": 35, "recommend": 90, "subsector": "Art Book Publishing" },
+        { "id": 44, "recommend": 85, "subsector": "Creative Wedding Design" },
+        { "id": 29, "recommend": 80, "subsector": "Art Direction" },
+        { "id": 48, "recommend": 75, "subsector": "Experimental Wellness" }
+      ]
+    },
+    {
+      "name": "Brushstroke",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Dancing Script",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Pacifico",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Handlee",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Handlee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Handlee",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Calligraphy Studios" },
+        { "id": 34, "recommend": 98, "subsector": "Painted Photography" },
+        { "id": 23, "recommend": 97, "subsector": "Hand-Painted Textiles" },
+        { "id": 44, "recommend": 95, "subsector": "Artisan Invitations" },
+        { "id": 35, "recommend": 90, "subsector": "Illustrated Books" },
+        { "id": 8, "recommend": 85, "subsector": "Animated Shorts" }
+      ]
+    },
+    {
+      "name": "Avant-Garde",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Playfair Display SC",
+          "font_weight": "900",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Montserrat Alternates",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 8, "recommend": 100, "subsector": "Experimental Film" },
+        { "id": 23, "recommend": 98, "subsector": "High Fashion" },
+        { "id": 17, "recommend": 97, "subsector": "Modern Art" },
+        { "id": 29, "recommend": 95, "subsector": "Cutting-Edge Advertising" },
+        { "id": 34, "recommend": 90, "subsector": "Surreal Photography" },
+        { "id": 35, "recommend": 85, "subsector": "Literary Magazines" }
+      ]
+    },
+    {
+      "name": "Bohemian",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee Shade",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bungee Hairline",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Comic Neue",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Street Art" },
+        { "id": 8, "recommend": 98, "subsector": "Indie Music Videos" },
+        { "id": 44, "recommend": 97, "subsector": "Festival Branding" },
+        { "id": 23, "recommend": 95, "subsector": "Vintage Clothing" },
+        { "id": 35, "recommend": 90, "subsector": "Zine Publishing" },
+        { "id": 48, "recommend": 85, "subsector": "Holistic Retreats" }
+      ]
+    },
+    {
+      "name": "Minimalist Art",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Montserrat",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Contemporary Art" },
+        { "id": 23, "recommend": 98, "subsector": "Scandinavian Design" },
+        { "id": 35, "recommend": 97, "subsector": "Art Catalogs" },
+        { "id": 8, "recommend": 95, "subsector": "Art House Cinema" },
+        { "id": 44, "recommend": 90, "subsector": "Modern Weddings" },
+        { "id": 34, "recommend": 85, "subsector": "Architectural Photography" }
+      ]
+    },
+    {
+      "name": "Watercolor",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Parisienne",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Petit Formal Script",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Illustration Studios" },
+        { "id": 35, "recommend": 98, "subsector": "Children's Books" },
+        { "id": 44, "recommend": 97, "subsector": "Romantic Invitations" },
+        { "id": 23, "recommend": 95, "subsector": "Boho Fashion" },
+        { "id": 48, "recommend": 90, "subsector": "Spa Branding" },
+        { "id": 8, "recommend": 85, "subsector": "Animated Features" }
+      ]
+    },
+    {
+      "name": "Typewriter",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Special Elite",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Courier Prime",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Courier Prime",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cutive Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cutive Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 35, "recommend": 100, "subsector": "Literary Journals" },
+        { "id": 8, "recommend": 98, "subsector": "Indie Film Titles" },
+        { "id": 17, "recommend": 97, "subsector": "Vintage Art" },
+        { "id": 29, "recommend": 95, "subsector": "Retro Advertising" },
+        { "id": 23, "recommend": 90, "subsector": "Heritage Brands" },
+        { "id": 44, "recommend": 85, "subsector": "Nostalgic Events" }
+      ]
+    },
+    {
+      "name": "Street Art",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rubik Mono One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rubik Glitch",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Rubik Broken Fax",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Rubik",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Rubik",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Urban Murals" },
+        { "id": 8, "recommend": 98, "subsector": "Music Video Graphics" },
+        { "id": 23, "recommend": 97, "subsector": "Streetwear" },
+        { "id": 44, "recommend": 95, "subsector": "Pop-Up Events" },
+        { "id": 29, "recommend": 90, "subsector": "Youth Marketing" },
+        { "id": 35, "recommend": 85, "subsector": "Zine Culture" }
+      ]
+    },
+    {
+      "name": "Art Deco",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Cinzel",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fauna One",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fauna One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fauna One",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Vintage Art Galleries" },
+        { "id": 23, "recommend": 98, "subsector": "Luxury Fashion" },
+        { "id": 44, "recommend": 97, "subsector": "Gatsby Events" },
+        { "id": 8, "recommend": 95, "subsector": "Period Films" },
+        { "id": 35, "recommend": 90, "subsector": "Collector Books" },
+        { "id": 37, "recommend": 85, "subsector": "Historic Architecture" }
+      ]
+    },
+    {
+      "name": "Collage",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bungee Shade",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Bungee Hairline",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Bungee Outline",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Bungee",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Mixed Media Art" },
+        { "id": 8, "recommend": 98, "subsector": "Experimental Animation" },
+        { "id": 23, "recommend": 97, "subsector": "Avant-Garde Fashion" },
+        { "id": 29, "recommend": 95, "subsector": "Creative Campaigns" },
+        { "id": 35, "recommend": 90, "subsector": "Art Publications" },
+        { "id": 44, "recommend": 85, "subsector": "Interactive Installations" }
+      ]
+    },
+    {
+      "name": "Surreal",
+      "fontPairing": {
+        "h1": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "UnifrakturCook",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Surrealist Art" },
+        { "id": 8, "recommend": 98, "subsector": "Psychedelic Film" },
+        { "id": 34, "recommend": 97, "subsector": "Dream Photography" },
+        { "id": 23, "recommend": 95, "subsector": "Conceptual Fashion" },
+        { "id": 35, "recommend": 90, "subsector": "Art Theory Books" },
+        { "id": 48, "recommend": 85, "subsector": "Mindfulness Art" }
+      ]
+    },
+    {
+      "name": "Pop Art",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Modak",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Londrina Solid",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Londrina Shadow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Londrina Sketch",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Londrina Outline",
+          "font_weight": "300",
+          "font_style": "normal"
+        }
+      },
+      "industries": [
+        { "id": 17, "recommend": 100, "subsector": "Contemporary Pop Art" },
+        { "id": 8, "recommend": 98, "subsector": "Music Video Graphics" },
+        { "id": 23, "recommend": 97, "subsector": "Streetwear Brands" },
+        { "id": 29, "recommend": 95, "subsector": "Youth Advertising" },
+        { "id": 44, "recommend": 90, "subsector": "Festival Design" },
+        { "id": 35, "recommend": 85, "subsector": "Art Magazines" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 12,
+    "primary_industries": [
+      "Arts & Crafts (17)",
+      "Entertainment (8)",
+      "Fashion (23)",
+      "Photography (34)"
+    ],
+    "most_used_font": "Montserrat (3 pairings)",
+    "script_fonts": 5,
+    "eclectic_styles": ["Art Deco", "Surreal", "Street Art", "Watercolor"]
+  }
+}

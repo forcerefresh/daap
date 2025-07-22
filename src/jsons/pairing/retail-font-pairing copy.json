@@ -1,0 +1,404 @@
+{
+  "retail_pairings": [
+    {
+      "name": "Friendly Commerce",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Fredoka One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Nunito",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Nunito Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Nunito Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Nunito Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 13, "recommend": 100, "subsector": "Boutique E-Commerce" },
+        { "id": 4, "recommend": 98, "subsector": "Beauty Retailers" },
+        { "id": 9, "recommend": 97, "subsector": "Gourmet Grocers" },
+        { "id": 23, "recommend": 96, "subsector": "Casual Apparel" },
+        { "id": 33, "recommend": 95, "subsector": "Pet Supplies" },
+        { "id": 46, "recommend": 90, "subsector": "Wine Merchants" },
+        { "id": 48, "recommend": 85, "subsector": "Wellness Stores" }
+      ]
+    },
+    {
+      "name": "Luxury Showcase",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Playfair Display",
+          "font_weight": "900",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "High-End Fashion" },
+        { "id": 4, "recommend": 98, "subsector": "Luxury Cosmetics" },
+        { "id": 46, "recommend": 97, "subsector": "Fine Spirits" },
+        { "id": 13, "recommend": 96, "subsector": "Designer E-Commerce" },
+        { "id": 47, "recommend": 95, "subsector": "Artisan Furniture" },
+        { "id": 9, "recommend": 90, "subsector": "Gourmet Delicacies" }
+      ]
+    },
+    {
+      "name": "Urban Marketplace",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rubik Mono One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rubik",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Rubik",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 13, "recommend": 100, "subsector": "Streetwear Brands" },
+        { "id": 21, "recommend": 98, "subsector": "Tech Gadgets" },
+        { "id": 24, "recommend": 97, "subsector": "Sneaker Retail" },
+        { "id": 9, "recommend": 96, "subsector": "Craft Breweries" },
+        { "id": 23, "recommend": 95, "subsector": "Urban Fashion" },
+        { "id": 44, "recommend": 90, "subsector": "Pop-Up Shops" }
+      ]
+    },
+    {
+      "name": "Vintage Finds",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Alfa Slab One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rubik",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Rubik",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Retro Clothing" },
+        { "id": 47, "recommend": 98, "subsector": "Antique Dealers" },
+        { "id": 13, "recommend": 97, "subsector": "Vintage E-Commerce" },
+        { "id": 35, "recommend": 96, "subsector": "Rare Books" },
+        { "id": 9, "recommend": 95, "subsector": "Artisanal Foods" },
+        { "id": 44, "recommend": 90, "subsector": "Nostalgic Gift Shops" }
+      ]
+    },
+    {
+      "name": "Minimalist Retail",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Raleway",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Raleway",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Raleway",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Lato",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lato",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 13,
+          "recommend": 100,
+          "subsector": "Direct-to-Consumer Brands"
+        },
+        { "id": 23, "recommend": 98, "subsector": "Scandinavian Design" },
+        { "id": 4, "recommend": 97, "subsector": "Skincare Essentials" },
+        { "id": 47, "recommend": 96, "subsector": "Modern Furniture" },
+        { "id": 21, "recommend": 95, "subsector": "Tech Accessories" },
+        { "id": 48, "recommend": 90, "subsector": "Wellness Essentials" }
+      ]
+    },
+    {
+      "name": "Playful Pop",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bungee Shade",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Comic Neue",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 13, "recommend": 100, "subsector": "Toy Stores" },
+        { "id": 33, "recommend": 98, "subsector": "Pet Boutiques" },
+        { "id": 24, "recommend": 97, "subsector": "Athletic Gear" },
+        { "id": 9, "recommend": 96, "subsector": "Candy Shops" },
+        { "id": 44, "recommend": 95, "subsector": "Party Supplies" },
+        { "id": 6, "recommend": 90, "subsector": "Children's Stores" }
+      ]
+    },
+    {
+      "name": "Organic Market",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Hind",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Hind",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Hind",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 9, "recommend": 100, "subsector": "Farmers' Markets" },
+        { "id": 1, "recommend": 98, "subsector": "Organic Produce" },
+        { "id": 48, "recommend": 97, "subsector": "Wellness Shops" },
+        { "id": 33, "recommend": 96, "subsector": "Natural Pet Food" },
+        { "id": 4, "recommend": 95, "subsector": "Clean Beauty" },
+        { "id": 46, "recommend": 90, "subsector": "Biodynamic Wines" }
+      ]
+    },
+    {
+      "name": "Tech Retail",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Orbitron",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Rajdhani",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "DM Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "DM Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 21, "recommend": 100, "subsector": "Electronics Retail" },
+        { "id": 13, "recommend": 98, "subsector": "Gadget E-Commerce" },
+        { "id": 24, "recommend": 97, "subsector": "Smart Fitness Gear" },
+        { "id": 14, "recommend": 96, "subsector": "Software Stores" },
+        { "id": 8, "recommend": 95, "subsector": "Gaming Merchandise" },
+        { "id": 39, "recommend": 90, "subsector": "Smart Home Devices" }
+      ]
+    },
+    {
+      "name": "Global Bazaar",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Montserrat",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 13, "recommend": 100, "subsector": "Import/Export Goods" },
+        { "id": 23, "recommend": 98, "subsector": "Ethnic Textiles" },
+        { "id": 9, "recommend": 97, "subsector": "International Grocers" },
+        { "id": 47, "recommend": 96, "subsector": "Global Crafts" },
+        { "id": 41, "recommend": 95, "subsector": "Travel Retail" },
+        { "id": 44, "recommend": 90, "subsector": "Cultural Events" }
+      ]
+    },
+    {
+      "name": "Fast Fashion",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bebas Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Oswald",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Oswald",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto Condensed",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto Condensed",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Trend Apparel" },
+        { "id": 13, "recommend": 98, "subsector": "Flash Sale Sites" },
+        { "id": 40, "recommend": 97, "subsector": "Textile Chains" },
+        { "id": 45, "recommend": 96, "subsector": "Wholesale Fashion" },
+        { "id": 32, "recommend": 95, "subsector": "Packaging Design" },
+        { "id": 24, "recommend": 90, "subsector": "Athleisure Brands" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 10,
+    "primary_retail_subsectors": [
+      "E-Commerce (13)",
+      "Fashion (23)",
+      "Food/Beverage (9)",
+      "Lifestyle (48)"
+    ],
+    "most_used_font": "Montserrat (3 pairings)",
+    "font_style_distribution": {
+      "bold_display": 9,
+      "rounded_friendly": 6,
+      "luxury_serif": 4
+    }
+  }
+}

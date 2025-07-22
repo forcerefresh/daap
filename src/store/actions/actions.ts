@@ -1374,7 +1374,7 @@ export function replaceObject(
     switch (object.type) {
       case TEXT:
       case RICH_TEXT: {
-        handleTextUpdate(object, dispatch, getState, true);
+        handleTextUpdate(object, dispatch, getState, true, false, false);
         break;
       }
       case BUTTON: {
@@ -2015,16 +2015,12 @@ function handleButtonUpdate(
   dispatch(forceRefresh());
 }
 
-function handleTextUpdate(
+function processTextObjectAutoSize(
   object: IObject,
-  dispatch: Dispatch,
-  getState: () => IStore,
-  isAdd = false,
-  isUndoable = true
-): void {
-  // * handle auto height
-  const objectValues = object.properties as TextValues;
-
+  isAdd: boolean,
+  getState: any
+) {
+  const objectValues = object.properties as any;
   if (objectValues.autoHeight === true) {
     // TODO: IMPORTANT hardcoded
     const breakpointConfig: BreakpointConfiguration | undefined =
@@ -2058,6 +2054,7 @@ function handleTextUpdate(
 
     const holder = document.createElement("div");
     holder.innerHTML = html;
+    console.log(html);
     const pEl = holder.firstChild! as HTMLElement;
     pEl.style.position = "relative";
     pEl.style.display = "inline-block";
@@ -2073,19 +2070,98 @@ function handleTextUpdate(
 
     if (isAdd) {
       if (objectValues.initialAutoWidth === true) {
+        // autoWidthValue = pEl.offsetWidth + 5;
         object.width = pEl.offsetWidth + 5;
-        delete objectValues.initialAutoWidth;
+        // delete objectValues.initialAutoWidth;
       }
 
-      const nextTextPositionY = getState().stage.nextTextPositionY;
-      object.top = nextTextPositionY;
+      // if (reposition) {
+      //   const nextTextPositionY = getState().stage.nextTextPositionY;
+      //   object.top = nextTextPositionY;
 
-      dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
+      //   dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
+      // }
     }
     //}
 
     document.body.removeChild(holder);
   }
+}
+
+function handleTextUpdate(
+  object: IObject,
+  dispatch: Dispatch,
+  getState: () => IStore,
+  isAdd = false,
+  isUndoable = true,
+  reposition = true
+): void {
+  // * handle auto height
+  const objectValues = object.properties as TextValues;
+
+  // if (objectValues.autoHeight === true) {
+  //   // TODO: IMPORTANT hardcoded
+  //   const breakpointConfig: BreakpointConfiguration | undefined =
+  //     getState().project.settings.breakpoints.breakpointsConfiguration.find(
+  //       (breakpointConfig: any) =>
+  //         breakpointConfig.type === getState().stage.selectedDevice
+  //     );
+  //   // todo: calculate for all not only for one
+  //   const calculatedObjectSize = calculateObjectSize(
+  //     object,
+  //     getState().project.layers.layerById[object.layerId],
+  //     breakpointConfig!,
+  //     {
+  //       resetPosition: false,
+  //     }
+  //   );
+
+  //   // Note: We are using getPlayerObjectDefinition in order to get html form player object
+  //   const objDeff = getPlayerObjectDefinition(object.type);
+  //   let html = "";
+  //   if (!!objDeff?.getHtml) {
+  //     html = objDeff?.getHtml({
+  //       object,
+  //       calculatedObjectSize,
+  //       isPlayer: true,
+  //       //calculateSize: () => 0,
+  //     });
+  //   } else if (object.type === RICH_TEXT) {
+  //     html = getRichTextHtml({ object, calculatedObjectSize });
+  //   }
+
+  //   const holder = document.createElement("div");
+  //   holder.innerHTML = html;
+  //   const pEl = holder.firstChild! as HTMLElement;
+  //   pEl.style.position = "relative";
+  //   pEl.style.display = "inline-block";
+  //   pEl.style.width = objectValues.initialAutoWidth
+  //     ? "auto"
+  //     : `${calculatedObjectSize.width}`;
+  //   pEl.style.height = `auto`;
+  //   document.body.appendChild(holder);
+  //   object.height = pEl.offsetHeight;
+  //   // NOTE: LAYOUT CHANGE
+  //   //if (object.absoluteLayout) {
+  //   object.height = pEl.offsetHeight;
+
+  //   if (isAdd) {
+  //     if (objectValues.initialAutoWidth === true) {
+  //       object.width = pEl.offsetWidth + 5;
+  //       delete objectValues.initialAutoWidth;
+  //     }
+
+  //     // if (reposition) {
+  //     //   const nextTextPositionY = getState().stage.nextTextPositionY;
+  //     //   object.top = nextTextPositionY;
+
+  //     //   dispatch(setNextTextPosition(nextTextPositionY + pEl.offsetHeight));
+  //     // }
+  //   }
+  //   //}
+
+  //   document.body.removeChild(holder);
+  // }
 
   // * handle font loading
   const objectPrevState = getState().project.objects.objectById[object.id];
@@ -2101,8 +2177,9 @@ function handleTextUpdate(
 
   // NOTE: update object once. update either after font is loaded or after 500ms
   const updateObjectOnce = once(() => {
+    processTextObjectAutoSize(object, isAdd, getState);
     dispatch(_updateObject(object, isUndoable));
-    dispatch(forceRefresh());
+    // dispatch(forceRefresh());
   });
 
   // NOTE: check if we need to load fonts
@@ -2113,7 +2190,7 @@ function handleTextUpdate(
     loadedFontFamilies.indexOf(newFont + ":" + newObjectValues.font.weight) ===
       -1
   ) {
-    delay(updateObjectOnce, 500);
+    delay(updateObjectOnce, 1500);
 
     // load font
     if (newObjectValues.font.source === "my-fonts") {

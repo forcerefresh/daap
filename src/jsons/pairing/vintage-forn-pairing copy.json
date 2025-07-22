@@ -1,0 +1,407 @@
+{
+  "vintage_pairings": [
+    {
+      "name": "Retro Americana",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Alfa Slab One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rubik",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Rubik",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 9, "recommend": 100, "subsector": "Classic Diners" },
+        { "id": 11, "recommend": 98, "subsector": "Vintage Motels" },
+        { "id": 23, "recommend": 95, "subsector": "50s Fashion" },
+        { "id": 46, "recommend": 90, "subsector": "Craft Whiskey" },
+        { "id": 41, "recommend": 85, "subsector": "Route 66 Tourism" },
+        { "id": 44, "recommend": 80, "subsector": "Rockabilly Weddings" }
+      ]
+    },
+    {
+      "name": "Victorian Elegance",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Playfair Display SC",
+          "font_weight": "900",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Crimson Text",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Crimson Text",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Crimson Text",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 44, "recommend": 100, "subsector": "Steampunk Events" },
+        { "id": 37, "recommend": 98, "subsector": "Heritage Homes" },
+        { "id": 23, "recommend": 95, "subsector": "Corset Boutiques" },
+        { "id": 46, "recommend": 90, "subsector": "Absinthe Bars" },
+        { "id": 17, "recommend": 85, "subsector": "Calligraphy Studios" },
+        { "id": 35, "recommend": 80, "subsector": "Letterpress Printing" }
+      ]
+    },
+    {
+      "name": "Mid-Century Modern",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 47, "recommend": 100, "subsector": "Eames-Style Furniture" },
+        { "id": 5, "recommend": 98, "subsector": "Atomic Ranch Homes" },
+        { "id": 21, "recommend": 95, "subsector": "Retro Electronics" },
+        { "id": 23, "recommend": 90, "subsector": "Mod Fashion" },
+        { "id": 13, "recommend": 85, "subsector": "Vintage Housewares" },
+        { "id": 44, "recommend": 80, "subsector": "Mad Men-Themed Events" }
+      ]
+    },
+    {
+      "name": "Prohibition Era",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Old Standard TT",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Old Standard TT",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "Lora",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lora",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 46, "recommend": 100, "subsector": "Speakeasy Bars" },
+        { "id": 23, "recommend": 98, "subsector": "Flapper Dresses" },
+        { "id": 11, "recommend": 95, "subsector": "Jazz Age Hotels" },
+        { "id": 44, "recommend": 90, "subsector": "Great Gatsby Parties" },
+        { "id": 9, "recommend": 85, "subsector": "Artisanal Moonshine" },
+        { "id": 17, "recommend": 80, "subsector": "Vintage Poster Art" }
+      ]
+    },
+    {
+      "name": "Wild West",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Black Ops One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Special Elite",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "IM Fell English",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "IM Fell English",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "IM Fell English",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 11, "recommend": 100, "subsector": "Dude Ranches" },
+        { "id": 46, "recommend": 98, "subsector": "Saloon Whiskey" },
+        { "id": 23, "recommend": 95, "subsector": "Western Wear" },
+        { "id": 41, "recommend": 90, "subsector": "Frontier Tourism" },
+        { "id": 44, "recommend": 85, "subsector": "Cowboy Weddings" },
+        { "id": 17, "recommend": 80, "subsector": "Wanted Poster Art" }
+      ]
+    },
+    {
+      "name": "Art Deco Glam",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bodoni Moda",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bodoni Moda",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Montserrat",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Montserrat",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 37, "recommend": 100, "subsector": "Skyscraper Lobbies" },
+        { "id": 44, "recommend": 98, "subsector": "Great Gatsby Balls" },
+        { "id": 23, "recommend": 95, "subsector": "Beaded Evening Gowns" },
+        { "id": 11, "recommend": 90, "subsector": "Luxury Ocean Liners" },
+        { "id": 46, "recommend": 85, "subsector": "Champagne Lounges" },
+        { "id": 47, "recommend": 80, "subsector": "Streamline Furniture" }
+      ]
+    },
+    {
+      "name": "70s Groovy",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Permanent Marker",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Chewy",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fredoka One",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Comic Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Disco Fashion" },
+        { "id": 13, "recommend": 98, "subsector": "Record Stores" },
+        { "id": 44, "recommend": 95, "subsector": "Psychedelic Parties" },
+        { "id": 11, "recommend": 90, "subsector": "Retro Hostels" },
+        { "id": 47, "recommend": 85, "subsector": "Shag Carpet Showrooms" },
+        { "id": 21, "recommend": 80, "subsector": "Vintage Audio Gear" }
+      ]
+    },
+    {
+      "name": "Old World Charm",
+      "fontPairing": {
+        "h1": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "IM Fell DW Pica",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "IM Fell DW Pica",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "EB Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 46, "recommend": 100, "subsector": "Medieval Meadery" },
+        { "id": 37, "recommend": 98, "subsector": "Castle Hotels" },
+        { "id": 44, "recommend": 95, "subsector": "Renaissance Faires" },
+        { "id": 23, "recommend": 90, "subsector": "Period Costuming" },
+        { "id": 17, "recommend": 85, "subsector": "Illuminated Manuscripts" },
+        { "id": 9, "recommend": 80, "subsector": "Artisanal Cheese" }
+      ]
+    },
+    {
+      "name": "Retro Futurism",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Orbitron",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Quantico",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Quantico",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 21, "recommend": 100, "subsector": "Space Age Gadgets" },
+        { "id": 23, "recommend": 98, "subsector": "Jetsons Fashion" },
+        { "id": 47, "recommend": 95, "subsector": "Atomic Age Furniture" },
+        { "id": 44, "recommend": 90, "subsector": "Sci-Fi Conventions" },
+        { "id": 11, "recommend": 85, "subsector": "Googie Motels" },
+        { "id": 13, "recommend": 80, "subsector": "Vintage Toy Stores" }
+      ]
+    },
+    {
+      "name": "Grandma's Kitchen",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Lobster",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Dancing Script",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cookie",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Handlee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Handlee",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 9, "recommend": 100, "subsector": "Homestyle Bakeries" },
+        { "id": 13, "recommend": 98, "subsector": "Farmers' Markets" },
+        { "id": 44, "recommend": 95, "subsector": "Vintage Tea Parties" },
+        { "id": 11, "recommend": 90, "subsector": "Bed & Breakfasts" },
+        { "id": 23, "recommend": 85, "subsector": "Apron Boutiques" },
+        { "id": 33, "recommend": 80, "subsector": "Homemade Pet Treats" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 10,
+    "primary_industries": [
+      "Food & Beverage (9)",
+      "Hospitality & Tourism (11)",
+      "Fashion & Apparel (23)",
+      "Wedding & Events (44)"
+    ],
+    "most_used_font": "Barlow (3 pairings)",
+    "decade_distribution": {
+      "1920s-30s": 3,
+      "1950s-60s": 3,
+      "1970s": 1,
+      "Pre-1900s": 1,
+      "Futuristic": 1,
+      "Timeless": 1
+    },
+    "typography_trends": {
+      "script_fonts": 4,
+      "slab_serifs": 3,
+      "display_fonts": 3
+    }
+  }
+}

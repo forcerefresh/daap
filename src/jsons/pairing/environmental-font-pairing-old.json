@@ -1,0 +1,323 @@
+{
+  "environmental_pairings": [
+    {
+      "name": "Eco Serenity",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Hind",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Hind",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Hind",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 1, "recommend": 100, "subsector": "Organic Farming" },
+        { "id": 22, "recommend": 98, "subsector": "Carbon Offset Services" },
+        { "id": 42, "recommend": 95, "subsector": "Recycling Innovation" },
+        { "id": 43, "recommend": 90, "subsector": "Watershed Management" },
+        { "id": 31, "recommend": 85, "subsector": "Conservation NGOs" },
+        { "id": 48, "recommend": 80, "subsector": "Eco-Spas" }
+      ]
+    },
+    {
+      "name": "Sustainable Geometric",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Montserrat",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Open Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Open Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 7, "recommend": 100, "subsector": "Solar Energy Providers" },
+        { "id": 22, "recommend": 98, "subsector": "LEED Certification" },
+        { "id": 1, "recommend": 95, "subsector": "Vertical Farming" },
+        { "id": 42, "recommend": 90, "subsector": "Zero-Waste Consulting" },
+        { "id": 25, "recommend": 85, "subsector": "Urban Planning" },
+        { "id": 49, "recommend": 80, "subsector": "Green Zoos" }
+      ]
+    },
+    {
+      "name": "Wilderness Bold",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Barlow",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 42, "recommend": 100, "subsector": "National Parks" },
+        { "id": 48, "recommend": 98, "subsector": "Adventure Eco-Tours" },
+        { "id": 11, "recommend": 95, "subsector": "Sustainable Lodges" },
+        { "id": 33, "recommend": 90, "subsector": "Wildlife Sanctuaries" },
+        { "id": 22, "recommend": 85, "subsector": "Conservation Tech" },
+        { "id": 53, "recommend": 80, "subsector": "Outdoor Apparel" }
+      ]
+    },
+    {
+      "name": "Clean Water",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Public Sans",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Public Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Public Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Public Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Public Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 43, "recommend": 100, "subsector": "Desalination Plants" },
+        { "id": 22, "recommend": 98, "subsector": "River Restoration" },
+        { "id": 31, "recommend": 95, "subsector": "Water Access NGOs" },
+        { "id": 25, "recommend": 90, "subsector": "EPA Compliance" },
+        { "id": 7, "recommend": 85, "subsector": "Hydroelectric Power" },
+        { "id": 1, "recommend": 80, "subsector": "Irrigation Tech" }
+      ]
+    },
+    {
+      "name": "Organic Minimal",
+      "fontPairing": {
+        "h1": {
+          "font_family": "DM Serif Display",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "DM Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "DM Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "DM Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "DM Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 9, "recommend": 100, "subsector": "Farm-to-Table Brands" },
+        { "id": 33, "recommend": 98, "subsector": "Vegan Pet Food" },
+        { "id": 44, "recommend": 95, "subsector": "Eco-Weddings" },
+        { "id": 48, "recommend": 90, "subsector": "Holistic Retreats" },
+        { "id": 23, "recommend": 85, "subsector": "Sustainable Fashion" },
+        { "id": 13, "recommend": 80, "subsector": "Green E-Commerce" }
+      ]
+    },
+    {
+      "name": "Renewable Edge",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Orbitron",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Karla",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 7, "recommend": 100, "subsector": "Wind Turbine Tech" },
+        { "id": 14, "recommend": 98, "subsector": "Smart Grid Software" },
+        { "id": 22, "recommend": 95, "subsector": "Carbon Capture" },
+        { "id": 39, "recommend": 90, "subsector": "Green Telecom" },
+        { "id": 16, "recommend": 85, "subsector": "Eco-Defense" },
+        { "id": 50, "recommend": 80, "subsector": "Battery Recycling" }
+      ]
+    },
+    {
+      "name": "Earth Notes",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Alegreya",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 6, "recommend": 100, "subsector": "Environmental Science" },
+        { "id": 35, "recommend": 98, "subsector": "Eco-Publishing" },
+        { "id": 31, "recommend": 95, "subsector": "Climate Reports" },
+        { "id": 25, "recommend": 90, "subsector": "Policy White Papers" },
+        { "id": 22, "recommend": 85, "subsector": "Research Journals" },
+        { "id": 48, "recommend": 80, "subsector": "Wellness Blogs" }
+      ]
+    },
+    {
+      "name": "Bio Harmony",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Libre Baskerville",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Libre Franklin",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Libre Franklin",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Libre Franklin",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Libre Franklin",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 18, "recommend": 100, "subsector": "Biofuel Research" },
+        { "id": 1, "recommend": 98, "subsector": "GMO-Free Farming" },
+        { "id": 10, "recommend": 95, "subsector": "Eco-Pharmaceuticals" },
+        { "id": 33, "recommend": 90, "subsector": "Animal Genomics" },
+        { "id": 22, "recommend": 85, "subsector": "Bioremediation" },
+        { "id": 49, "recommend": 80, "subsector": "Zoonotic Disease" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 8,
+    "primary_industries": [
+      "Environmental Services (22)",
+      "Agriculture (1)",
+      "Waste Management (42)",
+      "Water Treatment (43)"
+    ],
+    "most_used_font": "Barlow (3 pairings)",
+    "serif_sans_combos": 6,
+    "organic_style_distribution": {
+      "h1": "700+ weight in 100% of pairings",
+      "body": "400 weight in 100% of pairings"
+    }
+  }
+}

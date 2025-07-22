@@ -1,0 +1,464 @@
+{
+  "minimalist_pairings": [
+    {
+      "name": "Airy Simplicity",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Inter",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Inter",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Inter",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Inter",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "UI/UX Design Studios" },
+        { "id": 20, "recommend": 98, "subsector": "Management Consultancies" },
+        { "id": 25, "recommend": 95, "subsector": "Policy White Papers" },
+        { "id": 26, "recommend": 90, "subsector": "HR Tech Platforms" },
+        { "id": 28, "recommend": 85, "subsector": "Legal Documentation" },
+        {
+          "id": 37,
+          "recommend": 80,
+          "subsector": "Luxury Real Estate Listings"
+        }
+      ]
+    },
+    {
+      "name": "Swiss Precision",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Helvetica Neue",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Helvetica Neue",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Helvetica Neue",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Helvetica Neue Light",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Helvetica Neue Light",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Product Design Firms" },
+        { "id": 3, "recommend": 98, "subsector": "Investment Banking Reports" },
+        {
+          "id": 23,
+          "recommend": 95,
+          "subsector": "High-End Fashion Lookbooks"
+        },
+        { "id": 35, "recommend": 90, "subsector": "Art Gallery Publications" },
+        {
+          "id": 36,
+          "recommend": 85,
+          "subsector": "Corporate Brand Guidelines"
+        },
+        { "id": 28, "recommend": 80, "subsector": "Contract Templates" }
+      ]
+    },
+    {
+      "name": "Monochrome Master",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Barlow Semi Condensed",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 34,
+          "recommend": 100,
+          "subsector": "Architectural Photography"
+        },
+        {
+          "id": 29,
+          "recommend": 98,
+          "subsector": "Minimalist Branding Agencies"
+        },
+        { "id": 23, "recommend": 95, "subsector": "Monochrome Apparel" },
+        { "id": 14, "recommend": 90, "subsector": "App Interface Design" },
+        { "id": 35, "recommend": 85, "subsector": "Art Book Publishing" },
+        { "id": 5, "recommend": 80, "subsector": "Luxury Condo Marketing" }
+      ]
+    },
+    {
+      "name": "Neutral Space",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Public Sans",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Public Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Public Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Public Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Public Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 25, "recommend": 100, "subsector": "Government Web Portals" },
+        { "id": 31, "recommend": 98, "subsector": "Non-Profit Annual Reports" },
+        { "id": 6, "recommend": 95, "subsector": "University Research Papers" },
+        { "id": 10, "recommend": 90, "subsector": "Medical Journals" },
+        {
+          "id": 43,
+          "recommend": 85,
+          "subsector": "Public Utility Documentation"
+        },
+        { "id": 22, "recommend": 80, "subsector": "Sustainability Reports" }
+      ]
+    },
+    {
+      "name": "Micro Typography",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Aktiv Grotesk",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Aktiv Grotesk",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Aktiv Grotesk",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Aktiv Grotesk Light",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Aktiv Grotesk Light",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Microinteraction Design" },
+        {
+          "id": 21,
+          "recommend": 98,
+          "subsector": "Consumer Electronics Packaging"
+        },
+        { "id": 39, "recommend": 95, "subsector": "Mobile UI Systems" },
+        { "id": 26, "recommend": 90, "subsector": "Employee Portal Design" },
+        { "id": 28, "recommend": 85, "subsector": "Legal Disclaimers" },
+        { "id": 50, "recommend": 80, "subsector": "IoT Interface Design" }
+      ]
+    },
+    {
+      "name": "Weightless",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Neue Haas Unica",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Neue Haas Unica",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Neue Haas Unica",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Neue Haas Unica Light",
+          "font_weight": "100",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Neue Haas Unica Light",
+          "font_weight": "100",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 35, "recommend": 100, "subsector": "Art Exhibition Catalogs" },
+        {
+          "id": 44,
+          "recommend": 98,
+          "subsector": "Avant-Garde Event Branding"
+        },
+        { "id": 23, "recommend": 95, "subsector": "Conceptual Fashion Labels" },
+        {
+          "id": 17,
+          "recommend": 90,
+          "subsector": "Minimalist Sculpture Studios"
+        },
+        { "id": 4, "recommend": 85, "subsector": "Gender-Neutral Skincare" },
+        {
+          "id": 37,
+          "recommend": 80,
+          "subsector": "Gallery-Like Property Listings"
+        }
+      ]
+    },
+    {
+      "name": "Grid System",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Univers",
+          "font_weight": "700",
+          "font_style": "condensed"
+        },
+        "h2": {
+          "font_family": "Univers",
+          "font_weight": "600",
+          "font_style": "condensed"
+        },
+        "h3": {
+          "font_family": "Univers",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Univers Light",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Univers Light",
+          "font_weight": "200",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Data Visualization Tools" },
+        { "id": 12, "recommend": 98, "subsector": "Industrial Design Manuals" },
+        { "id": 15, "recommend": 95, "subsector": "Logistics Dashboards" },
+        { "id": 20, "recommend": 90, "subsector": "Consulting Frameworks" },
+        { "id": 26, "recommend": 85, "subsector": "Org Chart Design" },
+        { "id": 39, "recommend": 80, "subsector": "Network Topology Maps" }
+      ]
+    },
+    {
+      "name": "Invisible Ink",
+      "fontPairing": {
+        "h1": {
+          "font_family": "GT Walsheim",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "GT Walsheim",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "GT Walsheim",
+          "font_weight": "200",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "GT Walsheim Ultra Light",
+          "font_weight": "100",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "GT Walsheim Ultra Light",
+          "font_weight": "100",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 29, "recommend": 100, "subsector": "Anti-Branding Campaigns" },
+        {
+          "id": 35,
+          "recommend": 98,
+          "subsector": "Conceptual Art Publications"
+        },
+        { "id": 23, "recommend": 95, "subsector": "Deconstructed Fashion" },
+        { "id": 4, "recommend": 90, "subsector": "No-Makeup Beauty Lines" },
+        { "id": 17, "recommend": 85, "subsector": "Negative Space Art" },
+        { "id": 44, "recommend": 80, "subsector": "Silent Retreat Branding" }
+      ]
+    },
+    {
+      "name": "Pixel Perfect",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Suisse Int'l",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Suisse Int'l",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Suisse Int'l",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Suisse Int'l",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Suisse Int'l",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "8K Display Interfaces" },
+        { "id": 21, "recommend": 98, "subsector": "High-Res Product Demos" },
+        {
+          "id": 34,
+          "recommend": 95,
+          "subsector": "Digital Photography Portfolios"
+        },
+        {
+          "id": 39,
+          "recommend": 90,
+          "subsector": "Fiber Optic Network Branding"
+        },
+        { "id": 16, "recommend": 85, "subsector": "Aerospace Instrumentation" },
+        { "id": 50, "recommend": 80, "subsector": "Nanotech Documentation" }
+      ]
+    },
+    {
+      "name": "White Canvas",
+      "fontPairing": {
+        "h1": {
+          "font_family": "ABC Diatype",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "ABC Diatype",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "ABC Diatype",
+          "font_weight": "200",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "ABC Diatype Light",
+          "font_weight": "100",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "ABC Diatype Light",
+          "font_weight": "100",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 35,
+          "recommend": 100,
+          "subsector": "Contemporary Art Catalogs"
+        },
+        { "id": 37, "recommend": 98, "subsector": "Gallery-Worthy Homes" },
+        { "id": 23, "recommend": 95, "subsector": "Architectural Fashion" },
+        { "id": 4, "recommend": 90, "subsector": "Clinical Skincare" },
+        { "id": 10, "recommend": 85, "subsector": "Medical Research Papers" },
+        {
+          "id": 44,
+          "recommend": 80,
+          "subsector": "Minimalist Wedding Stationery"
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 10,
+    "primary_industries": [
+      "Technology & IT (14)",
+      "Arts & Crafts (17)",
+      "Fashion & Apparel (23)",
+      "Printing & Publishing (35)"
+    ],
+    "most_used_font": "Helvetica Neue (3 pairings)",
+    "weight_distribution": {
+      "ultra_light": 4,
+      "regular": 10,
+      "bold": 6
+    },
+    "negative_space_usage": "All pairings utilize generous whitespace",
+    "color_palette_trends": {
+      "monochrome": 8,
+      "single_accent": 2
+    }
+  }
+}

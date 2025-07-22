@@ -1,0 +1,365 @@
+{
+  "brutalist_pairings": [
+    {
+      "name": "Concrete Poetry",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Basteleur",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Whyte Inktrap",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Neue Montreal",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "ABC Monument",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "ABC Monument",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Conceptual Typography Exhibits",
+          "recommend": 100
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Experimental Zines",
+          "recommend": 98
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Radical UI Design",
+          "recommend": 95
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Anti-Ad Campaigns",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Deconstructed Clothing Labels",
+          "recommend": 85
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Avant-Garde Film Titles",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Broken Grid",
+      "fontPairing": {
+        "h1": {
+          "font_family": "GT Alpina",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Tiny",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Pixelify Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Courier Prime",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Courier Prime",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Glitch Art Interfaces",
+          "recommend": 100
+        },
+        {
+          "id": 20,
+          "name": "Consulting",
+          "subsector": "Disruptive Strategy Reports",
+          "recommend": 98
+        },
+        {
+          "id": 28,
+          "name": "Legal Services",
+          "subsector": "Anti-Establishment Law Firms",
+          "recommend": 95
+        },
+        {
+          "id": 5,
+          "name": "Construction & Real Estate",
+          "subsector": "Brutalist Architecture Firms",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Post-Digital Magazines",
+          "recommend": 85
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Anti-Fashion Manifestos",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Typewriter Anarchy",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Major Mono Display",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Space Mono",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "IBM Plex Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "IBM Plex Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "IBM Plex Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 38,
+          "name": "Security Services",
+          "subsector": "Hacker Collective Comms",
+          "recommend": 100
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Activist Zine Production",
+          "recommend": 98
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Open Source Documentation",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Underground Press",
+          "recommend": 90
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Whistleblower Reports",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Subversive Street Campaigns",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Digital Decay",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Dystopian",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Neue Machina",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "HK Grotesk",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "HK Grotesk",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "HK Grotesk",
+          "font_weight": "200",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 50,
+          "name": "Emerging Industries",
+          "subsector": "Post-Cyberpunk Startups",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Dystopian Film Titles",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Techwear Branding",
+          "recommend": 95
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Glitch Art Platforms",
+          "recommend": 90
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Digital Archaeology Exhibits",
+          "recommend": 85
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "Dead Media Archives",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Chaos Theory",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Ginto Nord",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Ginto Normal",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Ginto Normal",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Supreme",
+          "font_weight": "300",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Supreme",
+          "font_weight": "200",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Anti-Branding Campaigns",
+          "recommend": 100
+        },
+        {
+          "id": 20,
+          "name": "Consulting",
+          "subsector": "Disruptive Innovation Frameworks",
+          "recommend": 98
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Generative Design Systems",
+          "recommend": 95
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Algorithmic Art Collectives",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Stochastic Poetry Journals",
+          "recommend": 85
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Experimental Design Pedagogy",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Technology & IT (14)",
+      "Arts & Crafts (17)",
+      "Printing & Publishing (35)",
+      "Marketing & Advertising (29)"
+    ],
+    "most_used_font": "IBM Plex Mono (3 pairings)",
+    "design_principles": {
+      "Deconstruction": 80,
+      "Glitch Aesthetics": 70,
+      "Anti-Design": 90,
+      "Post-Digital": 60
+    },
+    "audience_rebellion": {
+      "Design Anarchists": 95,
+      "Academic Deconstructivists": 85,
+      "Corporate Saboteurs": 75
+    }
+  }
+}

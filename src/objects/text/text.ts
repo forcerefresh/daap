@@ -48,14 +48,14 @@ import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils
 export const TEXT = "io.forcerefresh.text.object";
 
 export enum TextType {
-  H1 = "H1",
-  H2 = "H2",
-  H3 = "H3",
-  H4 = "H4",
-  H5 = "H5",
-  Body = "Body",
-  Caption = "Caption",
-  Tiny = "Tiny",
+  H1 = "h1",
+  H2 = "h2",
+  H3 = "h3",
+  H4 = "h4",
+  H5 = "h5",
+  Body = "body",
+  Caption = "caption",
+  Tiny = "tiny",
 }
 
 export interface TextValues {
@@ -143,14 +143,14 @@ export function getTextObjectForm(): TextPropertiesTuple {
       value: "Body",
       defaultValue: "Body",
       options: [
-        { value: "H1", label: "H1" },
-        { value: "H2", label: "H2" },
-        { value: "H3", label: "H3" },
-        { value: "H4", label: "H4" },
-        { value: "H5", label: "H5" },
-        { value: "Body", label: "Body" },
-        { value: "Caption", label: "Caption" },
-        { value: "Tiny", label: "Tiny" },
+        { value: "h1", label: "H1" },
+        { value: "h2", label: "H2" },
+        { value: "h3", label: "H3" },
+        { value: "h4", label: "H4" },
+        { value: "h5", label: "H5" },
+        { value: "body", label: "Body" },
+        { value: "caption", label: "Caption" },
+        { value: "tiny", label: "Tiny" },
       ],
     },
 
@@ -293,7 +293,7 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
   style = addTransformPropertiesToStyle(style, object, deviceType);
-  style += "font-family: " + textValues.font.fontFamily + ";";
+  style += "font-family: '" + textValues.font.fontFamily + "';";
   style += "font-size: " + textValues.fontSize + ";";
   const c = textValues.color;
   style += `color: rgba(${c?.r},${c?.g},${c?.b},${c?.a});`;

@@ -1,0 +1,466 @@
+{
+  "luxury_pairings": [
+    {
+      "name": "Royal Gold",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Cormorant",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Lora",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lora",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Private Banking" },
+        { "id": 4, "recommend": 98, "subsector": "Luxury Cosmetics" },
+        { "id": 23, "recommend": 97, "subsector": "High Fashion" },
+        { "id": 46, "recommend": 96, "subsector": "Fine Wines" },
+        { "id": 44, "recommend": 95, "subsector": "Luxury Weddings" },
+        { "id": 9, "recommend": 90, "subsector": "Gourmet Food" },
+        { "id": 29, "recommend": 85, "subsector": "Premium Marketing" },
+        { "id": 48, "recommend": 75, "subsector": "Exclusive Spas" }
+      ]
+    },
+    {
+      "name": "Platinum Serif",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Playfair Display",
+          "font_weight": "900",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "EB Garamond",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cardo",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 28, "recommend": 100, "subsector": "Law Firms" },
+        { "id": 37, "recommend": 98, "subsector": "Luxury Real Estate" },
+        { "id": 3, "recommend": 97, "subsector": "Wealth Management" },
+        { "id": 20, "recommend": 90, "subsector": "Executive Consulting" },
+        { "id": 25, "recommend": 85, "subsector": "Government (Formal)" },
+        { "id": 36, "recommend": 80, "subsector": "Corporate PR" }
+      ]
+    },
+    {
+      "name": "Gilded Age",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cinzel",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Cinzel Decorative",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fauna One",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fauna One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fauna One",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 46, "recommend": 100, "subsector": "Distilled Spirits" },
+        { "id": 23, "recommend": 98, "subsector": "Haute Couture" },
+        { "id": 4, "recommend": 97, "subsector": "Perfume Brands" },
+        { "id": 29, "recommend": 95, "subsector": "Luxury Advertising" },
+        { "id": 44, "recommend": 90, "subsector": "VIP Events" },
+        { "id": 9, "recommend": 85, "subsector": "Michelin Restaurants" }
+      ]
+    },
+    {
+      "name": "Regal Crest",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bodoni Moda",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Bodoni Moda",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Cormorant Infant",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant Infant",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant Infant",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 37, "recommend": 100, "subsector": "Historic Estates" },
+        { "id": 28, "recommend": 98, "subsector": "Royal Family Law" },
+        { "id": 3, "recommend": 95, "subsector": "Private Equity" },
+        { "id": 46, "recommend": 90, "subsector": "Vintage Wines" },
+        { "id": 17, "recommend": 85, "subsector": "Fine Art Galleries" }
+      ]
+    },
+    {
+      "name": "Velvet & Silk",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Italiana",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Taviraj",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Taviraj",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Marcellus",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Marcellus",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Silk Fashion" },
+        { "id": 44, "recommend": 98, "subsector": "Bridal Couture" },
+        { "id": 4, "recommend": 95, "subsector": "Skincare Luxury" },
+        { "id": 48, "recommend": 90, "subsector": "Five-Star Spas" },
+        { "id": 9, "recommend": 85, "subsector": "Chocolate Artisans" }
+      ]
+    },
+    {
+      "name": "Black Tie",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Unna",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Unna",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cardo",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cardo",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cardo",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 28, "recommend": 100, "subsector": "Corporate Law" },
+        { "id": 3, "recommend": 98, "subsector": "Investment Banking" },
+        { "id": 25, "recommend": 95, "subsector": "Diplomatic Services" },
+        { "id": 36, "recommend": 90, "subsector": "Crisis PR" },
+        { "id": 44, "recommend": 85, "subsector": "Gala Events" }
+      ]
+    },
+    {
+      "name": "Champagne Bubbles",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Petit Formal Script",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Parisienne",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant Upright",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant Upright",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant Upright",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 46, "recommend": 100, "subsector": "Champagne Houses" },
+        { "id": 44, "recommend": 98, "subsector": "Celebrity Weddings" },
+        { "id": 9, "recommend": 95, "subsector": "Patisserie" },
+        { "id": 4, "recommend": 90, "subsector": "Beauty (Glamour)" },
+        { "id": 48, "recommend": 85, "subsector": "Resort Spas" }
+      ]
+    },
+    {
+      "name": "Tiffany Blue",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Cormorant",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Josefin Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Josefin Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 4, "recommend": 100, "subsector": "Jewelry Brands" },
+        { "id": 23, "recommend": 98, "subsector": "Boutique Fashion" },
+        { "id": 44, "recommend": 95, "subsector": "Engagement Rings" },
+        { "id": 37, "recommend": 90, "subsector": "Penthouse Sales" },
+        { "id": 9, "recommend": 85, "subsector": "Artisan Chocolates" }
+      ]
+    },
+    {
+      "name": "Savile Row",
+      "fontPairing": {
+        "h1": {
+          "font_family": "IM Fell English",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "IM Fell English",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "EB Garamond",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "EB Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Bespoke Tailoring" },
+        { "id": 3, "recommend": 98, "subsector": "Private Banking" },
+        { "id": 28, "recommend": 95, "subsector": "Barristers" },
+        { "id": 37, "recommend": 90, "subsector": "Heritage Properties" },
+        { "id": 44, "recommend": 85, "subsector": "Gentlemen's Clubs" }
+      ]
+    },
+    {
+      "name": "Haute Couture",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Marcellus SC",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Marcellus",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 23, "recommend": 100, "subsector": "Runway Fashion" },
+        { "id": 4, "recommend": 98, "subsector": "Beauty (Luxury)" },
+        { "id": 44, "recommend": 95, "subsector": "Fashion Shows" },
+        { "id": 29, "recommend": 90, "subsector": "Luxury Marketing" },
+        { "id": 9, "recommend": 85, "subsector": "Caviar Brands" }
+      ]
+    },
+    {
+      "name": "Old Money",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Gilda Display",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Gilda Display",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant SC",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant SC",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant SC",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Family Offices" },
+        { "id": 37, "recommend": 98, "subsector": "Vintage Estates" },
+        { "id": 28, "recommend": 95, "subsector": "Trust Funds" },
+        { "id": 46, "recommend": 90, "subsector": "Vineyard Owners" },
+        { "id": 25, "recommend": 85, "subsector": "Diplomatic Circles" }
+      ]
+    },
+    {
+      "name": "Gatsby Glam",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Great Vibes",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Playfair Display",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Cormorant",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 44, "recommend": 100, "subsector": "Roaring 20s Events" },
+        { "id": 46, "recommend": 98, "subsector": "Speakeasy Bars" },
+        { "id": 23, "recommend": 95, "subsector": "Vintage Fashion" },
+        { "id": 9, "recommend": 90, "subsector": "Classic Cocktails" },
+        { "id": 48, "recommend": 85, "subsector": "Historic Hotels" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 12,
+    "primary_industries": [3, 4, 23, 28, 37, 44, 46],
+    "most_used_font": "Cormorant (8 pairings)",
+    "luxury_subsectors": [
+      "Private Banking",
+      "Haute Couture",
+      "Luxury Real Estate",
+      "Fine Wines",
+      "Gala Events",
+      "Bespoke Tailoring"
+    ]
+  }
+}

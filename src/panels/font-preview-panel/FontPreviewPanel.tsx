@@ -20,6 +20,7 @@ import { IStore } from "../../store/store";
 import css from "./FontPreviewPanel.module.scss";
 import {
   addNewObject,
+  replaceObject,
   setExternalFontLoaded,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
@@ -39,6 +40,7 @@ import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { addStyle } from "../../utils/doom-utils/css-utils";
 import { debounce, isArray } from "lodash-es";
 import { getMediaSrc } from "../../integration/utils/local-media";
+import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 
 enum FontSections {
   MyFonts = "my-fonts",
@@ -72,7 +74,10 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
     _addNewObject,
     _setExternalFontLoaded,
     themeClass,
+    _replaceObject,
   } = props;
+
+  const { replaceItem } = useContext(GlobalEventsContext);
 
   const [myFonts, setMyFonts] = useState<SaaSMediaData[]>([]);
 
@@ -397,7 +402,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                 small={true}
                 icon={"add"}
                 onClick={() => {
-                  const event = new CustomEvent("OPEN_MEDIA_FONTS");
+                  const event = new CustomEvent("OPEN_MEDIA_FONTS_PANEL");
                   window.dispatchEvent(event);
                 }}
               >
@@ -588,6 +593,28 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
               elevation={Elevation.TWO}
               className={cx(css.card)}
               onClick={() => {
+                debugger;
+                if (replaceItem?.type === "text") {
+                  _replaceObject(
+                    replaceItem.objectId!,
+                    TEXT,
+                    {
+                      ...replaceItem.objectProps,
+                    },
+                    {
+                      font: previewFont!,
+                      autoHeight: true,
+                      initialAutoWidth: true,
+                      fontSize: previewSize.size.toString() + "px",
+                      type: previewSize.textType,
+                      text: "Sample text",
+                      ...replaceItem.values,
+                    }
+                  );
+                  onRequestClose();
+                  return;
+                }
+
                 if (activeLayerId) {
                   _addNewObject(
                     activeLayerId,
@@ -643,6 +670,7 @@ const mapDispatchToProps = {
   ) => addNewObject(layerId, type, objectProps, values),
   _setExternalFontLoaded: (fontFamilyName: string) =>
     setExternalFontLoaded(fontFamilyName),
+  _replaceObject: replaceObject,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(FontPreviewPanel);

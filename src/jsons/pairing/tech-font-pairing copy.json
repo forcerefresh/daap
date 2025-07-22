@@ -1,0 +1,547 @@
+{
+  "tech_pairings": [
+    {
+      "name": "Cyber Terminal",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Orbitron",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "AI/ML Development" },
+        { "id": 16, "recommend": 98, "subsector": "Aerospace Tech" },
+        { "id": 18, "recommend": 95, "subsector": "Biotech Hardware" },
+        { "id": 21, "recommend": 94, "subsector": "Smart Devices" },
+        { "id": 39, "recommend": 92, "subsector": "5G Networks" },
+        { "id": 50, "recommend": 90, "subsector": "Quantum Computing" }
+      ]
+    },
+    {
+      "name": "Neon Grid",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Chivo Mono",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Space Grotesk",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Space Mono",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "DM Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "DM Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Cybersecurity" },
+        { "id": 21, "recommend": 99, "subsector": "Wearable Tech" },
+        { "id": 24, "recommend": 90, "subsector": "Fitness Trackers" },
+        { "id": 15, "recommend": 88, "subsector": "Autonomous Vehicles" }
+      ]
+    },
+    {
+      "name": "Data Stream",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Major Mono Display",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Syne Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Red Hat Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Red Hat Text",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Red Hat Text",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Big Data" },
+        { "id": 39, "recommend": 95, "subsector": "Cloud Infrastructure" },
+        { "id": 50, "recommend": 90, "subsector": "Blockchain" }
+      ]
+    },
+    {
+      "name": "HUD Interface",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Russo One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Quantico",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Teko",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Electrolize",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Electrolize",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 16, "recommend": 100, "subsector": "Avionics" },
+        { "id": 2, "recommend": 95, "subsector": "Car HUDs" },
+        { "id": 24, "recommend": 90, "subsector": "AR Fitness" }
+      ]
+    },
+    {
+      "name": "Deep Learning",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Michroma",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Wallpoet",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Nova Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Nova Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Neural Networks" },
+        { "id": 18, "recommend": 95, "subsector": "Bioinformatics" },
+        { "id": 50, "recommend": 90, "subsector": "AI Ethics" }
+      ]
+    },
+    {
+      "name": "Cyberpunk",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Press Start 2P",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "VT323",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Silkscreen",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Silkscreen",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Silkscreen",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 8, "recommend": 100, "subsector": "Game Development" },
+        { "id": 21, "recommend": 95, "subsector": "Retro Gadgets" },
+        { "id": 29, "recommend": 90, "subsector": "Tech Marketing" }
+      ]
+    },
+    {
+      "name": "Quantum Matrix",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Audiowide",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rationale",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Geo",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Geo",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Geo",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 50, "recommend": 100, "subsector": "Quantum Computing" },
+        { "id": 14, "recommend": 98, "subsector": "Cryptography" },
+        { "id": 7, "recommend": 90, "subsector": "Smart Grids" }
+      ]
+    },
+    {
+      "name": "Nanotech",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Iceland",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Iceberg",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Iceberg",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Share",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Share",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 18, "recommend": 100, "subsector": "Nanomedicine" },
+        { "id": 19, "recommend": 95, "subsector": "Advanced Materials" },
+        { "id": 14, "recommend": 90, "subsector": "Semiconductors" }
+      ]
+    },
+    {
+      "name": "Neural Network",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Aldrich",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Sarpanch",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Sarpanch",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Homenaje",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Homenaje",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Machine Learning" },
+        { "id": 21, "recommend": 95, "subsector": "Neural Interfaces" },
+        { "id": 38, "recommend": 90, "subsector": "Biometric Security" }
+      ]
+    },
+    {
+      "name": "Robotics",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Black Ops One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Orbitron",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Rajdhani",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Rajdhani",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Rajdhani",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 12, "recommend": 100, "subsector": "Industrial Robots" },
+        { "id": 16, "recommend": 95, "subsector": "Space Drones" },
+        { "id": 2, "recommend": 90, "subsector": "Self-Driving Cars" }
+      ]
+    },
+    {
+      "name": "Crypto Core",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Monoton",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Russo One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Rationale",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Rationale",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Rationale",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 50, "recommend": 100, "subsector": "Blockchain" },
+        { "id": 3, "recommend": 95, "subsector": "Fintech" },
+        { "id": 14, "recommend": 90, "subsector": "Decentralized Apps" }
+      ]
+    },
+    {
+      "name": "VR Vision",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Russo One",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Iceberg",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Iceberg",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Electrolize",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Electrolize",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 8, "recommend": 100, "subsector": "Virtual Reality" },
+        { "id": 21, "recommend": 95, "subsector": "AR Glasses" },
+        { "id": 14, "recommend": 90, "subsector": "Metaverse Platforms" }
+      ]
+    },
+    {
+      "name": "IoT Network",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Share Tech",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Share Tech Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fira Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fira Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fira Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 39, "recommend": 100, "subsector": "Smart Cities" },
+        { "id": 21, "recommend": 95, "subsector": "Connected Devices" },
+        { "id": 7, "recommend": 90, "subsector": "Energy Monitoring" }
+      ]
+    },
+    {
+      "name": "Biochip",
+      "fontPairing": {
+        "h1": {
+          "font_family": "BioRhyme",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "BioRhyme",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Space Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Space Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Space Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 18, "recommend": 100, "subsector": "Medical Implants" },
+        { "id": 38, "recommend": 95, "subsector": "Security Chips" },
+        { "id": 21, "recommend": 90, "subsector": "Wearable Tech" }
+      ]
+    },
+    {
+      "name": "Dark Web",
+      "fontPairing": {
+        "h1": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "UnifrakturCook",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 38, "recommend": 100, "subsector": "Cybersecurity" },
+        { "id": 14, "recommend": 95, "subsector": "Encryption" },
+        { "id": 28, "recommend": 90, "subsector": "Digital Forensics" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 15,
+    "primary_tech_subsectors": [
+      "AI/ML",
+      "Cybersecurity",
+      "Quantum Computing",
+      "IoT",
+      "VR/AR",
+      "Biotech",
+      "Robotics"
+    ],
+    "most_used_font": "Orbitron (4 pairings)",
+    "unique_fonts": 42
+  }
+}

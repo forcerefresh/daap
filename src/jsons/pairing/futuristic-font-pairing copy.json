@@ -1,0 +1,370 @@
+{
+  "futuristic_pairings": [
+    {
+      "name": "Neon Grid",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Orbitron",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Share Tech",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Quantum Computing",
+          "recommend": 100
+        },
+        {
+          "id": 50,
+          "name": "Emerging Industries",
+          "subsector": "Holographic UI Design",
+          "recommend": 98
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Sci-Fi Film Titles",
+          "recommend": 95
+        },
+        {
+          "id": 16,
+          "name": "Aerospace & Defense",
+          "subsector": "Space Tourism",
+          "recommend": 90
+        },
+        {
+          "id": 21,
+          "name": "Consumer Electronics",
+          "subsector": "VR Headset Interfaces",
+          "recommend": 85
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "6G Network Branding",
+          "recommend": 80
+        },
+        {
+          "id": 18,
+          "name": "Biotechnology",
+          "subsector": "Neural Implant Documentation",
+          "recommend": 75
+        }
+      ]
+    },
+    {
+      "name": "Cyber Terminal",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Press Start 2P",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Quantico",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "VT323",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 38,
+          "name": "Security Services",
+          "subsector": "Cybersecurity Dashboards",
+          "recommend": 100
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Blockchain Interfaces",
+          "recommend": 98
+        },
+        {
+          "id": 50,
+          "name": "Emerging Industries",
+          "subsector": "Metaverse Architecture",
+          "recommend": 95
+        },
+        {
+          "id": 21,
+          "name": "Consumer Electronics",
+          "subsector": "Smart Glace UIs",
+          "recommend": 90
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "Dark Web Tools",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "AI-Generated Campaigns",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Holographic Pulse",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Audiowide",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Wallpoet",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Electrolize",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Electrolize",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Holographic Concert Branding",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "LED-Embedded Clothing",
+          "recommend": 98
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "AR Gaming Interfaces",
+          "recommend": 95
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "HUD Design Systems",
+          "recommend": 90
+        },
+        {
+          "id": 50,
+          "name": "Emerging Industries",
+          "subsector": "Nanotech Packaging",
+          "recommend": 85
+        },
+        {
+          "id": 4,
+          "name": "Beauty & Personal Care",
+          "subsector": "Digital Makeup Apps",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Data Core",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rationale",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Geo",
+          "font_weight": "400",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Monofett",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Source Code Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Source Code Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Big Data Visualization",
+          "recommend": 100
+        },
+        {
+          "id": 26,
+          "name": "Human Resources",
+          "subsector": "AI Recruitment Platforms",
+          "recommend": 98
+        },
+        {
+          "id": 20,
+          "name": "Consulting",
+          "subsector": "Predictive Analytics Reports",
+          "recommend": 95
+        },
+        {
+          "id": 27,
+          "name": "Insurance",
+          "subsector": "Algorithmic Risk Modeling",
+          "recommend": 90
+        },
+        {
+          "id": 10,
+          "name": "Healthcare",
+          "subsector": "Genome Sequencing Interfaces",
+          "recommend": 85
+        },
+        {
+          "id": 16,
+          "name": "Aerospace",
+          "subsector": "Satellite Telemetry",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Synthwave Glow",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Teko",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rajdhani",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Orbitron",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Rajdhani",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Rajdhani",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 8,
+          "name": "Entertainment",
+          "subsector": "Retro-Futuristic Album Art",
+          "recommend": 100
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Laser Tag Arenas",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Cyberpunk Streetwear",
+          "recommend": 95
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Neon Sign Shops",
+          "recommend": 90
+        },
+        {
+          "id": 11,
+          "name": "Hospitality",
+          "subsector": "Arcade Bars",
+          "recommend": 85
+        },
+        {
+          "id": 4,
+          "name": "Beauty",
+          "subsector": "UV Makeup Brands",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Technology & IT (14)",
+      "Entertainment & Media (8)",
+      "Emerging Industries (50)"
+    ],
+    "most_used_font": "Rajdhani (3 pairings)",
+    "tech_trend_coverage": {
+      "AI Interfaces": 4,
+      "VR/AR": 5,
+      "Quantum Computing": 2,
+      "Holography": 3
+    },
+    "color_palette_dominance": {
+      "Neon": 100,
+      "Monochrome": 20,
+      "Dark Mode": 80
+    }
+  }
+}

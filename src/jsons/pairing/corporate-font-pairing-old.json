@@ -1,0 +1,594 @@
+{
+  "corporate_pairings": [
+    {
+      "name": "Boardroom Pro",
+      "fontPairing": {
+        "h1": {
+          "font_family": "IBM Plex Serif",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Investment Banking" },
+        { "id": 20, "recommend": 98, "subsector": "Management Consulting" },
+        { "id": 25, "recommend": 97, "subsector": "Government Relations" },
+        { "id": 26, "recommend": 96, "subsector": "HR Solutions" },
+        { "id": 27, "recommend": 95, "subsector": "Insurance Underwriting" },
+        { "id": 28, "recommend": 94, "subsector": "Corporate Law" },
+        { "id": 36, "recommend": 90, "subsector": "Crisis Communications" }
+      ]
+    },
+    {
+      "name": "Global Enterprise",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Roboto Slab",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Roboto",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Roboto",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Tech Conglomerates" },
+        { "id": 15, "recommend": 98, "subsector": "Logistics Multinationals" },
+        { "id": 39, "recommend": 97, "subsector": "Telecom Giants" },
+        { "id": 12, "recommend": 96, "subsector": "Manufacturing HQs" },
+        { "id": 5, "recommend": 95, "subsector": "Commercial Real Estate" },
+        { "id": 37, "recommend": 90, "subsector": "Property Development" }
+      ]
+    },
+    {
+      "name": "Executive Suite",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Playfair Display",
+          "font_weight": "900",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Playfair Display",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Lato",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Lato",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lato",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Private Equity" },
+        { "id": 20, "recommend": 98, "subsector": "Strategy Consulting" },
+        { "id": 25, "recommend": 97, "subsector": "Diplomatic Services" },
+        { "id": 28, "recommend": 96, "subsector": "M&A Law" },
+        {
+          "id": 37,
+          "recommend": 95,
+          "subsector": "Luxury Commercial Properties"
+        },
+        { "id": 29, "recommend": 90, "subsector": "Executive Branding" }
+      ]
+    },
+    {
+      "name": "Institutional Trust",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Alegreya",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 25, "recommend": 100, "subsector": "Federal Agencies" },
+        { "id": 27, "recommend": 98, "subsector": "Insurance Regulation" },
+        { "id": 10, "recommend": 97, "subsector": "Hospital Accreditation" },
+        { "id": 6, "recommend": 96, "subsector": "Higher Education Admin" },
+        { "id": 31, "recommend": 95, "subsector": "Non-Profit Governance" },
+        { "id": 43, "recommend": 90, "subsector": "Public Water Authorities" }
+      ]
+    },
+    {
+      "name": "Precision Metrics",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Raleway",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Raleway",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Open Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Open Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Quantitative Finance" },
+        { "id": 14, "recommend": 98, "subsector": "Data Analytics Firms" },
+        { "id": 26, "recommend": 97, "subsector": "HR Tech Platforms" },
+        { "id": 27, "recommend": 96, "subsector": "Actuarial Services" },
+        { "id": 20, "recommend": 95, "subsector": "Management Analytics" },
+        { "id": 39, "recommend": 90, "subsector": "Telecom Infrastructure" }
+      ]
+    },
+    {
+      "name": "Legal Authority",
+      "fontPairing": {
+        "h1": {
+          "font_family": "EB Garamond",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "EB Garamond",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Crimson Pro",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Crimson Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Crimson Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 28, "recommend": 100, "subsector": "Corporate Law Firms" },
+        { "id": 3, "recommend": 98, "subsector": "Securities Compliance" },
+        { "id": 25, "recommend": 97, "subsector": "Legislative Affairs" },
+        { "id": 37, "recommend": 96, "subsector": "Real Estate Law" },
+        { "id": 27, "recommend": 95, "subsector": "Insurance Litigation" },
+        { "id": 20, "recommend": 90, "subsector": "Regulatory Consulting" }
+      ]
+    },
+    {
+      "name": "Financial Times",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Charter",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Charter",
+          "font_weight": "600",
+          "font_style": "italic"
+        },
+        "h3": {
+          "font_family": "Franklin Gothic Medium",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Franklin Gothic Book",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Franklin Gothic Book",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 3, "recommend": 100, "subsector": "Investment Reporting" },
+        { "id": 35, "recommend": 98, "subsector": "Financial Publishing" },
+        { "id": 27, "recommend": 97, "subsector": "Insurance Whitepapers" },
+        { "id": 14, "recommend": 96, "subsector": "Tech Prospectuses" },
+        { "id": 25, "recommend": 95, "subsector": "Policy Briefings" },
+        { "id": 20, "recommend": 90, "subsector": "Consulting Reports" }
+      ]
+    },
+    {
+      "name": "Civic Professional",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Public Sans",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Public Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Public Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Public Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Public Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 25, "recommend": 100, "subsector": "Municipal Government" },
+        { "id": 31, "recommend": 98, "subsector": "Non-Profit Management" },
+        { "id": 10, "recommend": 97, "subsector": "Public Health Admin" },
+        { "id": 6, "recommend": 96, "subsector": "Education Boards" },
+        { "id": 22, "recommend": 95, "subsector": "Environmental Policy" },
+        { "id": 43, "recommend": 90, "subsector": "Water Districts" }
+      ]
+    },
+    {
+      "name": "Modern Conglomerate",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Inter Tight",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Inter",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Inter",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Inter",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Tech Holding Companies" },
+        { "id": 12, "recommend": 98, "subsector": "Industrial Conglomerates" },
+        { "id": 39, "recommend": 97, "subsector": "Telecom Portfolios" },
+        { "id": 15, "recommend": 96, "subsector": "Transportation Groups" },
+        { "id": 5, "recommend": 95, "subsector": "Development Corporations" },
+        { "id": 45, "recommend": 90, "subsector": "Distribution Networks" }
+      ]
+    },
+    {
+      "name": "Crisis Ready",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Source Serif Pro",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 36, "recommend": 100, "subsector": "PR Crisis Firms" },
+        { "id": 28, "recommend": 98, "subsector": "Litigation Support" },
+        { "id": 25, "recommend": 97, "subsector": "Emergency Management" },
+        { "id": 27, "recommend": 96, "subsector": "Insurance Disasters" },
+        { "id": 10, "recommend": 95, "subsector": "Hospital Emergency Plans" },
+        { "id": 38, "recommend": 90, "subsector": "Security Consulting" }
+      ]
+    },
+    {
+      "name": "Global Standard",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Serif",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Noto Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 39, "recommend": 100, "subsector": "International Telecom" },
+        { "id": 15, "recommend": 98, "subsector": "Global Logistics" },
+        { "id": 14, "recommend": 97, "subsector": "Multinational Tech" },
+        { "id": 3, "recommend": 96, "subsector": "Cross-Border Finance" },
+        { "id": 25, "recommend": 95, "subsector": "Diplomatic Services" },
+        { "id": 31, "recommend": 90, "subsector": "NGOs with Int'l Presence" }
+      ]
+    },
+    {
+      "name": "Data-Driven",
+      "fontPairing": {
+        "h1": {
+          "font_family": "DM Serif Display",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "DM Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "DM Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "DM Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "DM Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 14, "recommend": 100, "subsector": "Business Intelligence" },
+        { "id": 26, "recommend": 98, "subsector": "HR Analytics" },
+        { "id": 20, "recommend": 97, "subsector": "Consulting Dashboards" },
+        { "id": 27, "recommend": 96, "subsector": "Risk Modeling" },
+        { "id": 3, "recommend": 95, "subsector": "Investment Analytics" },
+        { "id": 39, "recommend": 90, "subsector": "Network Optimization" }
+      ]
+    },
+    {
+      "name": "Institutional Blue",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Libre Franklin",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Libre Franklin",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Libre Franklin",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Libre Franklin",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Libre Franklin",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 25, "recommend": 100, "subsector": "Federal Contractors" },
+        { "id": 27, "recommend": 98, "subsector": "Insurance Carriers" },
+        { "id": 10, "recommend": 97, "subsector": "Hospital Systems" },
+        { "id": 6, "recommend": 96, "subsector": "University Administration" },
+        { "id": 31, "recommend": 95, "subsector": "Foundation Management" },
+        { "id": 43, "recommend": 90, "subsector": "Public Utilities" }
+      ]
+    },
+    {
+      "name": "Compact Efficiency",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Barlow Semi Condensed",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Barlow",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 15, "recommend": 100, "subsector": "Supply Chain Mgmt" },
+        { "id": 26, "recommend": 98, "subsector": "Talent Acquisition" },
+        { "id": 45, "recommend": 97, "subsector": "Wholesale Distribution" },
+        { "id": 12, "recommend": 96, "subsector": "Lean Manufacturing" },
+        { "id": 39, "recommend": 95, "subsector": "Network Operations" },
+        { "id": 5, "recommend": 90, "subsector": "Commercial Construction" }
+      ]
+    },
+    {
+      "name": "Regal Authority",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Lato",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Lato",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lato",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 28, "recommend": 100, "subsector": "Supreme Court Practices" },
+        { "id": 3, "recommend": 98, "subsector": "Century-Old Banks" },
+        { "id": 25, "recommend": 97, "subsector": "Diplomatic Corps" },
+        { "id": 37, "recommend": 96, "subsector": "Heritage Properties" },
+        { "id": 10, "recommend": 95, "subsector": "Teaching Hospitals" },
+        { "id": 6, "recommend": 90, "subsector": "Ivy League Institutions" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 15,
+    "primary_industries": [
+      "Banking & Finance (3)",
+      "Government (25)",
+      "Legal (28)",
+      "Consulting (20)"
+    ],
+    "most_used_font": "Roboto (4 pairings)",
+    "serif_sans_combos": 12,
+    "formal_weight_distribution": {
+      "h1": "700+ weight in 100% of pairings",
+      "body": "400 weight in 100% of pairings"
+    }
+  }
+}

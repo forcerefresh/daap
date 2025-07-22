@@ -1,0 +1,437 @@
+{
+  "healthcare_pairings": [
+    {
+      "name": "Clinical Precision",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Roboto Slab",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Roboto",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Roboto",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Roboto",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Roboto",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 100, "subsector": "Hospital Systems" },
+        { "id": 18, "recommend": 95, "subsector": "Medical Research" },
+        { "id": 38, "recommend": 90, "subsector": "Surgical Equipment" }
+      ]
+    },
+    {
+      "name": "Modern Healthcare",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Raleway",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Raleway",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Open Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Open Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 98, "subsector": "Telemedicine" },
+        { "id": 43, "recommend": 92, "subsector": "Water Treatment" },
+        { "id": 22, "recommend": 85, "subsector": "Environmental Health" }
+      ]
+    },
+    {
+      "name": "Gentle Healing",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Lora",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Lora",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Nunito Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Nunito Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Nunito Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 97, "subsector": "Pediatrics" },
+        { "id": 48, "recommend": 95, "subsector": "Holistic Medicine" },
+        { "id": 31, "recommend": 88, "subsector": "Non-Profit Clinics" }
+      ]
+    },
+    {
+      "name": "Medical Authority",
+      "fontPairing": {
+        "h1": {
+          "font_family": "IBM Plex Serif",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 100, "subsector": "Pharmaceuticals" },
+        { "id": 28, "recommend": 95, "subsector": "Medical Law" },
+        { "id": 25, "recommend": 85, "subsector": "Public Health" }
+      ]
+    },
+    {
+      "name": "Clean Lab",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Archivo Narrow",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Archivo",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Fira Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Fira Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Fira Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 18, "recommend": 100, "subsector": "Diagnostic Labs" },
+        { "id": 10, "recommend": 95, "subsector": "Hospital Sanitation" },
+        { "id": 38, "recommend": 90, "subsector": "Medical Devices" }
+      ]
+    },
+    {
+      "name": "Biological",
+      "fontPairing": {
+        "h1": {
+          "font_family": "BioRhyme",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "BioRhyme",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Space Mono",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Space Mono",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Space Mono",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 18, "recommend": 100, "subsector": "Genomics" },
+        { "id": 10, "recommend": 95, "subsector": "Medical Research" },
+        { "id": 22, "recommend": 85, "subsector": "Epidemiology" }
+      ]
+    },
+    {
+      "name": "Accessible Care",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Literata",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Literata",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Noto Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 98, "subsector": "Public Clinics" },
+        { "id": 31, "recommend": 95, "subsector": "Community Health" },
+        { "id": 6, "recommend": 90, "subsector": "Medical Education" }
+      ]
+    },
+    {
+      "name": "Mental Wellness",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Merriweather",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Merriweather",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 95, "subsector": "Psychiatry" },
+        { "id": 48, "recommend": 92, "subsector": "Mindfulness Apps" },
+        { "id": 33, "recommend": 85, "subsector": "Therapy Animals" }
+      ]
+    },
+    {
+      "name": "Crisp Sanitation",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Inter Tight",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Inter",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Inter",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Inter",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 100, "subsector": "Hospital Hygiene" },
+        { "id": 43, "recommend": 98, "subsector": "Sterilization Tech" },
+        { "id": 22, "recommend": 90, "subsector": "Clean Water Initiatives" }
+      ]
+    },
+    {
+      "name": "Vital Signs",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Red Hat Display",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Red Hat Text",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Red Hat Text",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Red Hat Text",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Red Hat Text",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 98, "subsector": "Emergency Medicine" },
+        { "id": 38, "recommend": 95, "subsector": "Patient Monitoring" },
+        { "id": 24, "recommend": 85, "subsector": "Fitness Tracking" }
+      ]
+    },
+    {
+      "name": "Organic Healing",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "italic"
+        },
+        "h2": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Hind",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Hind",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Hind",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 48, "recommend": 100, "subsector": "Naturopathy" },
+        { "id": 10, "recommend": 90, "subsector": "Integrative Medicine" },
+        { "id": 1, "recommend": 85, "subsector": "Herbal Remedies" }
+      ]
+    },
+    {
+      "name": "Pediatric Comfort",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Fredoka",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Quicksand",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Quicksand",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Quicksand",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Quicksand",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        { "id": 10, "recommend": 97, "subsector": "Children's Hospitals" },
+        { "id": 33, "recommend": 95, "subsector": "Pediatric Therapy" },
+        { "id": 6, "recommend": 90, "subsector": "School Nurses" }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 12,
+    "healthcare_subsectors": [
+      "Hospital Systems",
+      "Telemedicine",
+      "Pediatrics",
+      "Pharmaceuticals",
+      "Mental Health",
+      "Preventive Care"
+    ],
+    "most_used_font": "Roboto (4 pairings)",
+    "accessibility_focused": 8
+  }
+}

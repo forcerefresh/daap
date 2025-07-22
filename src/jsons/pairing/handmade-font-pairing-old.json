@@ -1,0 +1,366 @@
+{
+  "handmade_pairings": [
+    {
+      "name": "Rustic Charm",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Homemade Apple",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Caveat",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Nanum Pen Script",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Courier Prime",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Courier Prime",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Small-Batch Jam Labels",
+          "recommend": 100
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Pottery Studios",
+          "recommend": 98
+        },
+        {
+          "id": 47,
+          "name": "Wood & Furniture",
+          "subsector": "Hand-Carved Furniture",
+          "recommend": 95
+        },
+        {
+          "id": 46,
+          "name": "Wine & Spirits",
+          "subsector": "Artisanal Winemakers",
+          "recommend": 90
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Handmade Pet Accessories",
+          "recommend": 85
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Handcrafted Invitations",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Farmhouse Elegance",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Buttermilk",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Rochester",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Playfair Display",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "Lora",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Lora",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 1,
+          "name": "Agriculture",
+          "subsector": "Farmers' Market Brands",
+          "recommend": 100
+        },
+        {
+          "id": 37,
+          "name": "Real Estate",
+          "subsector": "Countryside B&B Branding",
+          "recommend": 98
+        },
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Organic Dairy Packaging",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Barn Wedding Stationery",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Linen Clothing Labels",
+          "recommend": 85
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Quilting Circles",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Artisan Script",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Mr De Haviland",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Petit Formal Script",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "500",
+          "font_style": "italic"
+        },
+        "body": {
+          "font_family": "Cormorant",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Cormorant",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 46,
+          "name": "Wine & Spirits",
+          "subsector": "Calligraphy Wine Labels",
+          "recommend": 100
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Luxury Calligraphy Services",
+          "recommend": 98
+        },
+        {
+          "id": 35,
+          "name": "Printing",
+          "subsector": "Letterpress Studios",
+          "recommend": 95
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Illuminated Manuscripts",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Bespoke Tailoring Labels",
+          "recommend": 85
+        },
+        {
+          "id": 9,
+          "name": "Food",
+          "subsector": "Artisan Chocolate Packaging",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Craftsperson's Touch",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Rock Salt",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Nothing You Could Do",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Cabin Sketch",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Architects Daughter",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Architects Daughter",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 47,
+          "name": "Woodworking",
+          "subsector": "Hand-Tooled Furniture",
+          "recommend": 100
+        },
+        {
+          "id": 17,
+          "name": "Crafts",
+          "subsector": "Leatherworking Workshops",
+          "recommend": 98
+        },
+        {
+          "id": 40,
+          "name": "Textiles",
+          "subsector": "Hand-Loomed Fabrics",
+          "recommend": 95
+        },
+        {
+          "id": 5,
+          "name": "Construction",
+          "subsector": "Timber Frame Builders",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Artisan Shoemakers",
+          "recommend": 85
+        },
+        {
+          "id": 9,
+          "name": "Food",
+          "subsector": "Hand-Forged Cutlery",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Heritage Maker",
+      "fontPairing": {
+        "h1": {
+          "font_family": "IM Fell DW Pica",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "IM Fell English",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "EB Garamond",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "EB Garamond",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 46,
+          "name": "Spirits",
+          "subsector": "Century-Old Distilleries",
+          "recommend": 100
+        },
+        {
+          "id": 9,
+          "name": "Food",
+          "subsector": "Family Recipe Books",
+          "recommend": 98
+        },
+        {
+          "id": 37,
+          "name": "Real Estate",
+          "subsector": "Historic Property Listings",
+          "recommend": 95
+        },
+        {
+          "id": 47,
+          "name": "Woodworking",
+          "subsector": "Antique Restoration",
+          "recommend": 90
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Traditional Gilding",
+          "recommend": 85
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Historical Reenactments",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Food & Beverage (9)",
+      "Arts & Crafts (17)",
+      "Wood & Furniture (47)",
+      "Wedding & Events (44)"
+    ],
+    "most_used_font": "Cormorant (3 pairings)",
+    "craft_techniques": {
+      "Calligraphy": 4,
+      "Letterpress": 3,
+      "Hand-Carving": 5,
+      "Weaving": 2
+    },
+    "material_dominance": {
+      "Natural Fibers": 80,
+      "Wood": 90,
+      "Metal": 60,
+      "Paper": 100
+    }
+  }
+}

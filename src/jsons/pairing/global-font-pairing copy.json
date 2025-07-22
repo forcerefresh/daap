@@ -1,0 +1,366 @@
+{
+  "global_pairings": [
+    {
+      "name": "World Citizen",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Sans JP",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans Arabic",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Noto Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 41,
+          "name": "Travel & Tourism",
+          "subsector": "International Tour Packages",
+          "recommend": 100
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit",
+          "subsector": "Global Relief Organizations",
+          "recommend": 98
+        },
+        {
+          "id": 13,
+          "name": "Retail",
+          "subsector": "Multilingual E-Commerce",
+          "recommend": 95
+        },
+        {
+          "id": 25,
+          "name": "Government",
+          "subsector": "Diplomatic Communications",
+          "recommend": 90
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Language Learning Platforms",
+          "recommend": 85
+        },
+        {
+          "id": 39,
+          "name": "Telecom",
+          "subsector": "International SIM Cards",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Cultural Harmony",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Almarai",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans Devanagari",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans SC",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "International Festivals",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion",
+          "subsector": "Ethnic Textile Brands",
+          "recommend": 98
+        },
+        {
+          "id": 9,
+          "name": "Food",
+          "subsector": "Global Fusion Restaurants",
+          "recommend": 95
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "UNESCO Cultural Heritage",
+          "recommend": 90
+        },
+        {
+          "id": 11,
+          "name": "Hospitality",
+          "subsector": "Luxury Global Resorts",
+          "recommend": 85
+        },
+        {
+          "id": 35,
+          "name": "Publishing",
+          "subsector": "Multilingual Literature",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Global Sans",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Sans Hebrew",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans Thai",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans KR",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Work Sans",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Work Sans",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 14,
+          "name": "Tech",
+          "subsector": "Localization Software",
+          "recommend": 100
+        },
+        {
+          "id": 26,
+          "name": "HR",
+          "subsector": "Multinational Employee Portals",
+          "recommend": 98
+        },
+        {
+          "id": 20,
+          "name": "Consulting",
+          "subsector": "Cross-Cultural Training",
+          "recommend": 95
+        },
+        {
+          "id": 3,
+          "name": "Finance",
+          "subsector": "International Banking",
+          "recommend": 90
+        },
+        {
+          "id": 15,
+          "name": "Logistics",
+          "subsector": "Global Shipping",
+          "recommend": 85
+        },
+        {
+          "id": 28,
+          "name": "Legal",
+          "subsector": "International Trade Law",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Script Fusion",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Naskh Arabic",
+          "font_weight": "700",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans Bengali",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Serif JP",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Noto Serif",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Noto Serif",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 35,
+          "name": "Publishing",
+          "subsector": "Sacred Text Translations",
+          "recommend": 100
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Language Preservation",
+          "recommend": 98
+        },
+        {
+          "id": 17,
+          "name": "Arts",
+          "subsector": "Calligraphy Exhibitions",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Events",
+          "subsector": "Cultural Ceremonies",
+          "recommend": 90
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit",
+          "subsector": "Indigenous Rights",
+          "recommend": 85
+        },
+        {
+          "id": 25,
+          "name": "Government",
+          "subsector": "Diplomatic Correspondence",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Universal Geometric",
+      "fontPairing": {
+        "h1": {
+          "font_family": "Noto Sans TC",
+          "font_weight": "800",
+          "font_style": "normal"
+        },
+        "h2": {
+          "font_family": "Noto Sans Armenian",
+          "font_weight": "600",
+          "font_style": "normal"
+        },
+        "h3": {
+          "font_family": "Noto Sans Georgian",
+          "font_weight": "500",
+          "font_style": "normal"
+        },
+        "body": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal"
+        },
+        "caption": {
+          "font_family": "Inter",
+          "font_weight": "300",
+          "font_style": "italic"
+        }
+      },
+      "industries": [
+        {
+          "id": 50,
+          "name": "Emerging Tech",
+          "subsector": "Global UI Systems",
+          "recommend": 100
+        },
+        {
+          "id": 21,
+          "name": "Electronics",
+          "subsector": "Universal Icon Design",
+          "recommend": 98
+        },
+        {
+          "id": 39,
+          "name": "Telecom",
+          "subsector": "International Branding",
+          "recommend": 95
+        },
+        {
+          "id": 16,
+          "name": "Aerospace",
+          "subsector": "In-Flight Interfaces",
+          "recommend": 90
+        },
+        {
+          "id": 14,
+          "name": "Tech",
+          "subsector": "Open-Source Localization",
+          "recommend": 85
+        },
+        {
+          "id": 7,
+          "name": "Energy",
+          "subsector": "Global Sustainability Reports",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Travel & Tourism (41)",
+      "Technology (14)",
+      "Publishing (35)",
+      "Government (25)"
+    ],
+    "most_used_font": "Noto Sans (8 variants)",
+    "script_coverage": {
+      "Cyrillic": 100,
+      "Arabic": 100,
+      "Hanzi/Kanji": 100,
+      "Devanagari": 80,
+      "Hebrew": 60
+    },
+    "language_support": {
+      "UN Official Languages": 100,
+      "Top 20 Most Spoken": 95,
+      "Endangered Scripts": 40
+    }
+  }
+}
