@@ -1,0 +1,545 @@
+{
+  "healthcare_pairings": [
+    {
+      "name": "Clinical Precision",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Roboto Slab",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Roboto",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h3", "body"]
+        },
+        "accent": {
+          "font_family": "Roboto",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Hospital Systems",
+          "recommend": 100
+        },
+        {
+          "id": 18,
+          "name": "Biotechnology",
+          "subsector": "Medical Research",
+          "recommend": 95
+        },
+        {
+          "id": 38,
+          "name": "Security Services",
+          "subsector": "Surgical Equipment",
+          "recommend": 90
+        }
+      ]
+    },
+    {
+      "name": "Modern Healthcare",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Raleway",
+          "font_weight": "800",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Raleway",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Telemedicine",
+          "recommend": 98
+        },
+        {
+          "id": 43,
+          "name": "Water Treatment",
+          "subsector": "Water Treatment",
+          "recommend": 92
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Environmental Health",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Gentle Healing",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Lora",
+          "font_weight": "700",
+          "font_style": "italic",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Nunito Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Lora",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Pediatrics",
+          "recommend": 97
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Holistic Medicine",
+          "recommend": 95
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Non-Profit Clinics",
+          "recommend": 88
+        }
+      ]
+    },
+    {
+      "name": "Medical Authority",
+      "fontPairing": {
+        "primary": {
+          "font_family": "IBM Plex Serif",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "IBM Plex Sans",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Pharmaceuticals",
+          "recommend": 100
+        },
+        {
+          "id": 28,
+          "name": "Legal Services",
+          "subsector": "Medical Law",
+          "recommend": 95
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Public Health",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Clean Lab",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Archivo Narrow",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Fira Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Archivo",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 18,
+          "name": "Biotechnology",
+          "subsector": "Diagnostic Labs",
+          "recommend": 100
+        },
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Hospital Sanitation",
+          "recommend": 95
+        },
+        {
+          "id": 38,
+          "name": "Security Services",
+          "subsector": "Medical Devices",
+          "recommend": 90
+        }
+      ]
+    },
+    {
+      "name": "Biological",
+      "fontPairing": {
+        "primary": {
+          "font_family": "BioRhyme",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Space Mono",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "BioRhyme",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 18,
+          "name": "Biotechnology",
+          "subsector": "Genomics",
+          "recommend": 100
+        },
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Medical Research",
+          "recommend": 95
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Epidemiology",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Accessible Care",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Literata",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Noto Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Literata",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Public Clinics",
+          "recommend": 98
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Community Health",
+          "recommend": 95
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Medical Education",
+          "recommend": 90
+        }
+      ]
+    },
+    {
+      "name": "Mental Wellness",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Merriweather",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Source Sans Pro",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Merriweather",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Psychiatry",
+          "recommend": 95
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Mindfulness Apps",
+          "recommend": 92
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Therapy Animals",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Crisp Sanitation",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Inter Tight",
+          "font_weight": "800",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Inter",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Inter",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Hospital Hygiene",
+          "recommend": 100
+        },
+        {
+          "id": 43,
+          "name": "Water Treatment",
+          "subsector": "Sterilization Tech",
+          "recommend": 98
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Clean Water Initiatives",
+          "recommend": 90
+        }
+      ]
+    },
+    {
+      "name": "Vital Signs",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Red Hat Display",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Red Hat Text",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Red Hat Text",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Emergency Medicine",
+          "recommend": 98
+        },
+        {
+          "id": 38,
+          "name": "Security Services",
+          "subsector": "Patient Monitoring",
+          "recommend": 95
+        },
+        {
+          "id": 24,
+          "name": "Fitness & Sports",
+          "subsector": "Fitness Tracking",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Organic Healing",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "italic",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Hind",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Naturopathy",
+          "recommend": 100
+        },
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Integrative Medicine",
+          "recommend": 90
+        },
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "Herbal Remedies",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Pediatric Comfort",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Fredoka",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Quicksand",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body"]
+        },
+        "accent": {
+          "font_family": "Quicksand",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Children's Hospitals",
+          "recommend": 97
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Pediatric Therapy",
+          "recommend": 95
+        },
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "School Nurses",
+          "recommend": 90
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 12,
+    "primary_industries": [
+      { "id": 10, "name": "Healthcare & Pharmaceuticals" },
+      { "id": 18, "name": "Biotechnology" },
+      { "id": 48, "name": "Yoga & Wellness" }
+    ],
+    "most_used_font": "Roboto (4 pairings)",
+    "healthcare_specialties": {
+      "Clinical": 5,
+      "Preventive": 4,
+      "Rehabilitative": 3,
+      "Palliative": 2
+    },
+    "accessibility_features": {
+      "high_contrast": 8,
+      "dyslexia_friendly": 5,
+      "screen_reader_optimized": 7
+    },
+    "design_characteristics": {
+      "Clean_Lines": 9,
+      "Warm_Tones": 4,
+      "Technical_Precision": 7
+    }
+  }
+}

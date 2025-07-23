@@ -1,0 +1,755 @@
+{
+  "creative_pairings": [
+    {
+      "name": "Artistic Flow",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Prata",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Libre Baskerville",
+          "font_weight": "400",
+          "font_style": "italic",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Work Sans",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Fine Art Galleries",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Independent Film",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Avant-Garde Fashion",
+          "recommend": 97
+        },
+        {
+          "id": 34,
+          "name": "Photography",
+          "subsector": "Conceptual Photography",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Art Book Publishing",
+          "recommend": 90
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Creative Wedding Design",
+          "recommend": 85
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Art Direction",
+          "recommend": 80
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Experimental Wellness",
+          "recommend": 75
+        }
+      ]
+    },
+    {
+      "name": "Brushstroke",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Dancing Script",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Handlee",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Handlee",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Calligraphy Studios",
+          "recommend": 100
+        },
+        {
+          "id": 34,
+          "name": "Photography",
+          "subsector": "Painted Photography",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Hand-Painted Textiles",
+          "recommend": 97
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Artisan Invitations",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Illustrated Books",
+          "recommend": 90
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Animated Shorts",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Avant-Garde",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Playfair Display SC",
+          "font_weight": "900",
+          "font_style": "italic",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Experimental Film",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "High Fashion",
+          "recommend": 98
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Modern Art",
+          "recommend": 97
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Cutting-Edge Advertising",
+          "recommend": 95
+        },
+        {
+          "id": 34,
+          "name": "Photography",
+          "subsector": "Surreal Photography",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Literary Magazines",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Bohemian",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Comic Neue",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Street Art",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Indie Music Videos",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Festival Branding",
+          "recommend": 97
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Vintage Clothing",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Zine Publishing",
+          "recommend": 90
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Holistic Retreats",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Minimalist Art",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Montserrat",
+          "font_weight": "500",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Montserrat",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Contemporary Art",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Scandinavian Design",
+          "recommend": 98
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Art Catalogs",
+          "recommend": 97
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Art House Cinema",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Modern Weddings",
+          "recommend": 90
+        },
+        {
+          "id": 34,
+          "name": "Photography",
+          "subsector": "Architectural Photography",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Watercolor",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Parisienne",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "500",
+          "font_style": "italic",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Illustration Studios",
+          "recommend": 100
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Children's Books",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Romantic Invitations",
+          "recommend": 97
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Boho Fashion",
+          "recommend": 95
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Spa Branding",
+          "recommend": 90
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Animated Features",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Typewriter",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Special Elite",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Courier Prime",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Courier Prime",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Literary Journals",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Indie Film Titles",
+          "recommend": 98
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Vintage Art",
+          "recommend": 97
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Retro Advertising",
+          "recommend": 95
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Heritage Brands",
+          "recommend": 90
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Nostalgic Events",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Street Art",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Rubik Mono One",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Rubik",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Rubik",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Urban Murals",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Music Video Graphics",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Streetwear",
+          "recommend": 97
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Pop-Up Events",
+          "recommend": 95
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Youth Marketing",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Zine Culture",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Art Deco",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Abril Fatface",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Cinzel",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Cormorant",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Vintage Art Galleries",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Luxury Fashion",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Gatsby Events",
+          "recommend": 97
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Period Films",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Collector Books",
+          "recommend": 90
+        },
+        {
+          "id": 37,
+          "name": "Real Estate (Expanded)",
+          "subsector": "Historic Architecture",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Collage",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Bungee",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Comic Neue",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Comic Neue",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Mixed Media Art",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Experimental Animation",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Avant-Garde Fashion",
+          "recommend": 97
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Creative Campaigns",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Art Publications",
+          "recommend": 90
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Interactive Installations",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Surreal",
+      "fontPairing": {
+        "primary": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Anonymous Pro",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Surrealist Art",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Psychedelic Film",
+          "recommend": 98
+        },
+        {
+          "id": 34,
+          "name": "Photography",
+          "subsector": "Dream Photography",
+          "recommend": 97
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Conceptual Fashion",
+          "recommend": 95
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Art Theory Books",
+          "recommend": 90
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Mindfulness Art",
+          "recommend": 85
+        }
+      ]
+    },
+    {
+      "name": "Pop Art",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Londrina Solid",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Londrina Sketch",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "body"]
+        },
+        "accent": {
+          "font_family": "Londrina Outline",
+          "font_weight": "300",
+          "font_style": "normal",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Contemporary Pop Art",
+          "recommend": 100
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Music Video Graphics",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Streetwear Brands",
+          "recommend": 97
+        },
+        {
+          "id": 29,
+          "name": "Marketing & Advertising",
+          "subsector": "Youth Advertising",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Festival Design",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Art Magazines",
+          "recommend": 85
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 12,
+    "primary_industries": [17, 8, 23, 34],
+    "most_used_font": "Montserrat (3 pairings)",
+    "script_fonts": 5,
+    "eclectic_styles": ["Art Deco", "Surreal", "Street Art", "Watercolor"]
+  }
+}

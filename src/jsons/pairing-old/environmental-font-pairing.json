@@ -1,0 +1,514 @@
+{
+  "environmental_pairings": [
+    {
+      "name": "Eco Serenity",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Cormorant Garamond",
+          "font_weight": "700",
+          "font_style": "italic",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Hind",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Cormorant",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "Organic Farming",
+          "recommend": 100
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Carbon Offset Services",
+          "recommend": 98
+        },
+        {
+          "id": 42,
+          "name": "Waste Management",
+          "subsector": "Recycling Innovation",
+          "recommend": 95
+        },
+        {
+          "id": 43,
+          "name": "Water Treatment",
+          "subsector": "Watershed Management",
+          "recommend": 90
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Conservation NGOs",
+          "recommend": 85
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Eco-Spas",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Sustainable Geometric",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Montserrat",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Open Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Montserrat",
+          "font_weight": "600",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 7,
+          "name": "Energy & Utilities",
+          "subsector": "Solar Energy Providers",
+          "recommend": 100
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "LEED Certification",
+          "recommend": 98
+        },
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "Vertical Farming",
+          "recommend": 95
+        },
+        {
+          "id": 42,
+          "name": "Waste Management",
+          "subsector": "Zero-Waste Consulting",
+          "recommend": 90
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Urban Planning",
+          "recommend": 85
+        },
+        {
+          "id": 49,
+          "name": "Zoos & Aquariums",
+          "subsector": "Green Zoos",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Wilderness Bold",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Barlow Condensed",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Barlow",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Barlow",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 42,
+          "name": "Waste Management",
+          "subsector": "National Parks",
+          "recommend": 100
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Adventure Eco-Tours",
+          "recommend": 98
+        },
+        {
+          "id": 11,
+          "name": "Hospitality & Tourism",
+          "subsector": "Sustainable Lodges",
+          "recommend": 95
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Wildlife Sanctuaries",
+          "recommend": 90
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Conservation Tech",
+          "recommend": 85
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Outdoor Apparel",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Clean Water",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Public Sans",
+          "font_weight": "800",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Public Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Public Sans",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 43,
+          "name": "Water Treatment",
+          "subsector": "Desalination Plants",
+          "recommend": 100
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "River Restoration",
+          "recommend": 98
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Water Access NGOs",
+          "recommend": 95
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "EPA Compliance",
+          "recommend": 90
+        },
+        {
+          "id": 7,
+          "name": "Energy & Utilities",
+          "subsector": "Hydroelectric Power",
+          "recommend": 85
+        },
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "Irrigation Tech",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Organic Minimal",
+      "fontPairing": {
+        "primary": {
+          "font_family": "DM Serif Display",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "DM Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "DM Sans",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Farm-to-Table Brands",
+          "recommend": 100
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Vegan Pet Food",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Eco-Weddings",
+          "recommend": 95
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Holistic Retreats",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Sustainable Fashion",
+          "recommend": 85
+        },
+        {
+          "id": 13,
+          "name": "Retail & E-Commerce",
+          "subsector": "Green E-Commerce",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Renewable Edge",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Orbitron",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Karla",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Karla",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 7,
+          "name": "Energy & Utilities",
+          "subsector": "Wind Turbine Tech",
+          "recommend": 100
+        },
+        {
+          "id": 14,
+          "name": "Technology & IT",
+          "subsector": "Smart Grid Software",
+          "recommend": 98
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Carbon Capture",
+          "recommend": 95
+        },
+        {
+          "id": 39,
+          "name": "Telecommunications",
+          "subsector": "Green Telecom",
+          "recommend": 90
+        },
+        {
+          "id": 16,
+          "name": "Aerospace & Defense",
+          "subsector": "Eco-Defense",
+          "recommend": 85
+        },
+        {
+          "id": 50,
+          "name": "Emerging Industries",
+          "subsector": "Battery Recycling",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Earth Notes",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Alegreya",
+          "font_weight": "700",
+          "font_style": "italic",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Alegreya Sans",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 6,
+          "name": "Education",
+          "subsector": "Environmental Science",
+          "recommend": 100
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Eco-Publishing",
+          "recommend": 98
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Climate Reports",
+          "recommend": 95
+        },
+        {
+          "id": 25,
+          "name": "Government & Public Sector",
+          "subsector": "Policy White Papers",
+          "recommend": 90
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Research Journals",
+          "recommend": 85
+        },
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Wellness Blogs",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Bio Harmony",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Libre Baskerville",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Libre Franklin",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3", "body"]
+        },
+        "accent": {
+          "font_family": "Libre Franklin",
+          "font_weight": "300",
+          "font_style": "italic",
+          "usage": ["caption"]
+        }
+      },
+      "industries": [
+        {
+          "id": 18,
+          "name": "Biotechnology",
+          "subsector": "Biofuel Research",
+          "recommend": 100
+        },
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "GMO-Free Farming",
+          "recommend": 98
+        },
+        {
+          "id": 10,
+          "name": "Healthcare & Pharmaceuticals",
+          "subsector": "Eco-Pharmaceuticals",
+          "recommend": 95
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Animal Genomics",
+          "recommend": 90
+        },
+        {
+          "id": 22,
+          "name": "Environmental Services",
+          "subsector": "Bioremediation",
+          "recommend": 85
+        },
+        {
+          "id": 49,
+          "name": "Zoos & Aquariums",
+          "subsector": "Zoonotic Disease",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 8,
+    "primary_industries": [
+      { "id": 22, "name": "Environmental Services" },
+      { "id": 1, "name": "Agriculture & Farming" },
+      { "id": 42, "name": "Waste Management" },
+      { "id": 43, "name": "Water Treatment" }
+    ],
+    "most_used_font": "Barlow (3 pairings)",
+    "serif_sans_combos": 6,
+    "accessibility_features": {
+      "dyslexia_friendly": 4,
+      "high_contrast": 7,
+      "multi_script": 3
+    },
+    "environmental_focus": {
+      "conservation": 5,
+      "renewable_energy": 3,
+      "sustainable_living": 6,
+      "water_management": 4
+    }
+  }
+}

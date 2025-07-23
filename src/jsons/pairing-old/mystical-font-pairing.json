@@ -1,0 +1,338 @@
+{
+  "mystical_pairings": [
+    {
+      "name": "Celestial Oracle",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Amita",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Cormorant",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body", "caption"]
+        },
+        "accent": {
+          "font_family": "Cinzel Decorative",
+          "font_weight": "600",
+          "font_style": "normal",
+          "usage": ["h2", "h3"]
+        }
+      },
+      "industries": [
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Astrology Apps",
+          "recommend": 100
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Tarot Deck Design",
+          "recommend": 98
+        },
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Moon Phase Tea Packaging",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Celestial Wedding Stationery",
+          "recommend": 90
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Constellation Jewelry Brands",
+          "recommend": 85
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Esoteric Grimoires",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Alchemist's Script",
+      "fontPairing": {
+        "primary": {
+          "font_family": "UnifrakturMaguntia",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "EB Garamond",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body", "caption"]
+        },
+        "accent": {
+          "font_family": "IM Fell English SC",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3"]
+        }
+      },
+      "industries": [
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Ancient Spellbook Reproduction",
+          "recommend": 100
+        },
+        {
+          "id": 46,
+          "name": "Wine & Spirits",
+          "subsector": "Artisanal Absinthe Labels",
+          "recommend": 98
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Potion Bottle Calligraphy",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Gothic Wedding Invitations",
+          "recommend": 90
+        },
+        {
+          "id": 37,
+          "name": "Real Estate",
+          "subsector": "Historic Apothecary Shops",
+          "recommend": 85
+        },
+        {
+          "id": 9,
+          "name": "Food & Beverage",
+          "subsector": "Herbal Remedy Packaging",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Witchcraft Modern",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Metamorphous",
+          "font_weight": "700",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Cardo",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body", "caption"]
+        },
+        "accent": {
+          "font_family": "Eagle Lake",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3"]
+        }
+      },
+      "industries": [
+        {
+          "id": 48,
+          "name": "Yoga & Wellness",
+          "subsector": "Wiccan Supply Stores",
+          "recommend": 100
+        },
+        {
+          "id": 13,
+          "name": "Retail & E-Commerce",
+          "subsector": "Crystal Shops",
+          "recommend": 98
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Pagan Jewelry Lines",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Handfasting Ceremonies",
+          "recommend": 90
+        },
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Occult Podcast Branding",
+          "recommend": 85
+        },
+        {
+          "id": 31,
+          "name": "Non-Profit & NGOs",
+          "subsector": "Pagan Community Centers",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Enchanted Forest",
+      "fontPairing": {
+        "primary": {
+          "font_family": "MedievalSharp",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Macondo",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body", "caption"]
+        },
+        "accent": {
+          "font_family": "Uncial Antiqua",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3"]
+        }
+      },
+      "industries": [
+        {
+          "id": 1,
+          "name": "Agriculture & Farming",
+          "subsector": "Herbology Gardens",
+          "recommend": 100
+        },
+        {
+          "id": 33,
+          "name": "Pets & Animal Care",
+          "subsector": "Familiar Pet Accessories",
+          "recommend": 98
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Fairy Tale Weddings",
+          "recommend": 95
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Fantasy Book Illustration",
+          "recommend": 90
+        },
+        {
+          "id": 11,
+          "name": "Hospitality & Tourism",
+          "subsector": "Enchanted Forest Retreats",
+          "recommend": 85
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "D&D Campaign Guides",
+          "recommend": 80
+        }
+      ]
+    },
+    {
+      "name": "Dark Arts",
+      "fontPairing": {
+        "primary": {
+          "font_family": "Diplomata SC",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h1"]
+        },
+        "secondary": {
+          "font_family": "Crimson Text",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["body", "caption"]
+        },
+        "accent": {
+          "font_family": "IM Fell English",
+          "font_weight": "400",
+          "font_style": "normal",
+          "usage": ["h2", "h3"]
+        }
+      },
+      "industries": [
+        {
+          "id": 8,
+          "name": "Entertainment & Media",
+          "subsector": "Gothic Horror Films",
+          "recommend": 100
+        },
+        {
+          "id": 23,
+          "name": "Fashion & Apparel",
+          "subsector": "Vampire Couture",
+          "recommend": 98
+        },
+        {
+          "id": 46,
+          "name": "Wine & Spirits",
+          "subsector": "Dark Ritual Mead Labels",
+          "recommend": 95
+        },
+        {
+          "id": 44,
+          "name": "Wedding & Events",
+          "subsector": "Victorian Mourning Events",
+          "recommend": 90
+        },
+        {
+          "id": 35,
+          "name": "Printing & Publishing",
+          "subsector": "Occult Mystery Novels",
+          "recommend": 85
+        },
+        {
+          "id": 17,
+          "name": "Arts & Crafts",
+          "subsector": "Macabre Shadow Boxes",
+          "recommend": 80
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "total_pairings": 5,
+    "primary_industries": [
+      "Arts & Crafts (17)",
+      "Printing & Publishing (35)",
+      "Wedding & Events (44)",
+      "Fashion & Apparel (23)"
+    ],
+    "most_used_font": "EB Garamond (2 pairings)",
+    "mystical_themes": {
+      "Celestial": 40,
+      "Alchemy": 30,
+      "Witchcraft": 50,
+      "Gothic": 40,
+      "Fantasy": 30
+    },
+    "audience_engagement": {
+      "Spiritual Seekers": 90,
+      "Fantasy Enthusiasts": 85,
+      "History Buffs": 75
+    },
+    "usage_patterns": {
+      "h1": "Decorative display fonts (100%)",
+      "h2": "Stylized serifs (80%)",
+      "h3": "Complementary display (60%)",
+      "body": "Readable serifs (100%)",
+      "caption": "Light italic variants (100%)"
+    }
+  }
+}
