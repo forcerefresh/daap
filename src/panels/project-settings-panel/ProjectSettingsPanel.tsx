@@ -3,7 +3,14 @@ import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ProjectSettingsPanel.module.scss";
-import { Button, Card, Colors, Elevation, FormGroup } from "@blueprintjs/core";
+import {
+  Button,
+  Card,
+  Colors,
+  Elevation,
+  FormGroup,
+  Text,
+} from "@blueprintjs/core";
 import {
   setDevice,
   updateProjectSettings,
@@ -13,6 +20,7 @@ import {
 import {
   getCheckboxField,
   getColorField,
+  getNumericFiled,
   getSelectField,
   getUnitNumericFiled,
 } from "../../inputs/input-utils";
@@ -141,6 +149,57 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
                 { style: { width: "100px" } }
               )} */}
             </FormGroup>
+
+            <div className={css.inlineRow}>
+              <Text className={"bp5-label"} style={{ marginBottom: "10px" }}>
+                Margins
+              </Text>
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <div className="input60 labelOneLetter">
+                  {getNumericFiled("Left", 2, (value: number) => {
+                    // set(
+                    //   breakpointConfiguration,
+                    //   "normal.guidelinesPadding.left",
+                    //   value
+                    // );
+                    // onChange({ ...breakpointConfiguration });
+                  })}
+                </div>
+                <div className="input60 labelOneLetter">
+                  {getNumericFiled("Right", 1, (value: number) => {
+                    // set(
+                    //   breakpointConfiguration,
+                    //   "normal.guidelinesPadding.right",
+                    //   value
+                    // );
+                    // onChange({ ...breakpointConfiguration });
+                  })}
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "10px" }}>
+                <div className="input60">
+                  {getNumericFiled("Top", 34, (value: number) => {
+                    // set(
+                    //   breakpointConfiguration,
+                    //   "normal.guidelinesPadding.top",
+                    //   value
+                    // );
+                    // onChange({ ...breakpointConfiguration });
+                  })}
+                </div>
+                <div className="input60">
+                  {getNumericFiled("Bottom", 123, (value: number) => {
+                    // set(
+                    //   breakpointConfiguration,
+                    //   "normal.guidelinesPadding.bottom",
+                    //   value
+                    // );
+                    // onChange({ ...breakpointConfiguration });
+                  })}
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </section>

@@ -362,6 +362,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
       </div>
     );
   };
+
   return (
     <div className={cx(themeClass, css.fontPreviewPanel)}>
       <div style={{ position: "absolute", top: "10px", right: "10px" }}>

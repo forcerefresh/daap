@@ -62,6 +62,8 @@ import mysticalFontPairing from "../../jsons/pairing/mystical-font-pairing.json"
 
 import { FontPreloader } from "../../objects/font-preloader";
 
+import allFontsPairings from "../../utils/fonts/all-fonts-pairings.json";
+
 // const fontPairing = urbanFontPairing.futuristic_pairings[0].fontPairing;
 
 // const pairings = urbanFontPairing.urban_pairings
@@ -187,6 +189,8 @@ export type IFontPairingPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   IFontPairingPanelProps;
 
+const GAP = 14;
+
 const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
   const {
     onRequestClose,
@@ -199,29 +203,6 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
     themeClass,
     _replaceObject,
   } = props;
-
-  const { replaceItem } = useContext(GlobalEventsContext);
-
-  const loadGoogleFont = (fontFamily: string) => {
-    const loadSource = "google";
-
-    const fontPreloader = new FontPreloader();
-
-    fontPreloader.subscribe(fontFamily).then(() => {});
-
-    // load({
-    //   [loadSource]: {
-    //     families: [fontFamily],
-    //   },
-    //   classes: false,
-    //   fontloading: (familyName: string, fvd: string) => {
-    //     console.log("loading");
-    //   },
-    //   fontactive: (familyName: string, fvd: string) => {
-    //     console.log("fontactive: " + familyName);
-    //   },
-    // });
-  };
 
   const addObjectsToStage = async (
     fontPairing: Record<
@@ -247,7 +228,8 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
 
       const baseValues = defaultStyle[tag as keyof typeof defaultStyle];
 
-      loadGoogleFont(pairing.font_family);
+      // TODO???
+      // loadGoogleFont(pairing.font_family);
 
       async function addObject(topInternal: any) {
         await _addNewObject(
@@ -270,7 +252,7 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
             autoHeight: true,
             initialAutoWidth: true,
             //fontSize: previewSize.size.toString() + "px",
-            text: "Sample text (" + usageType + ")",
+            text: pairing.font_family, //"Sample text (" + usageType + ")",
             italic: pairing.font_style === "italic",
           }
         );
@@ -311,7 +293,79 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
     }
   };
 
+  const renderFont = (font: any & { idx: number }) => {
+    console.log(font);
+    return (
+      <div
+        key={font.fontFamily}
+        style={{
+          position: "relative",
+          backgroundPositionY: (-103 - GAP) * font.idx + "px",
+          height: "117px",
+        }}
+        className={cx(css.fontListItem, css.googleFontsItem, css.fontsSprite)}
+      >
+        <div
+          className={css.fontsSpriteInner}
+          onClick={(e) => {
+            e.stopPropagation();
+            addObjectsToStage(font.fontPairing);
+
+            // setSelectedFont({ font });
+            // setPreview(true);
+          }}
+        ></div>
+      </div>
+    );
+  };
+
+  useEffect(() => {
+    setVisibleFontsIdx(allFontsPairings.font_pairings.map(() => true));
+  }, []);
+
   const [searchString, setSearchString] = useState<string>("");
+  const [googleFontsPairing, setGoogleFontsPAiring] = useState(
+    allFontsPairings.font_pairings
+  );
+  const [visibleFontsInx, setVisibleFontsIdx] = useState<boolean[]>([]);
+
+  const handleSearch = (searchQuery: string) => {
+    const str = searchQuery.trim().toLowerCase();
+
+    setSearchString(str);
+
+    const visIdx = allFontsPairings.font_pairings.map((fontPairing) => {
+      if (!str) return true;
+
+      if (fontPairing.name.toLowerCase().startsWith(str)) {
+        return true;
+      }
+
+      if (
+        fontPairing.fontPairing.primary.font_family
+          .toLowerCase()
+          .startsWith(str)
+      ) {
+        return true;
+      }
+      if (
+        fontPairing.fontPairing.secondary.font_family
+          .toLowerCase()
+          .startsWith(str)
+      ) {
+        return true;
+      }
+      if (
+        fontPairing.fontPairing.accent.font_family.toLowerCase().startsWith(str)
+      ) {
+        return true;
+      }
+
+      return false;
+    });
+
+    setVisibleFontsIdx(visIdx);
+  };
 
   // const filterFonts = (userStr: string) => {
   //   const str = userStr.trim().toLowerCase();
@@ -337,26 +391,61 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
   //   { previewText: "Tiny", size: 11, textType: TextType.Tiny },
   // ];
 
-  const handleSearchInputChange = () => {};
+  console.log(googleFontsPairing);
+
+  const filteredFonts = useMemo(
+    () =>
+      googleFontsPairing
+        .map((item, idx) => ({ ...item, idx: idx }))
+        .filter((font, idx) => {
+          return visibleFontsInx[idx];
+        }),
+    [googleFontsPairing, visibleFontsInx]
+  );
 
   return (
     <div className={cx(themeClass, css.fontPairingPanel)}>
-      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+      <div style={{ position: "absolute", top: "2px", right: "2px" }}>
         <Button icon="cross" minimal onClick={onRequestClose} />
       </div>
       <div className={css.fontList}>
         <div className={css.searchFontHolder}>
-          {getTextField("", searchString, handleSearchInputChange, "", {
+          {getTextField("", searchString, handleSearch, "", {
             placeholder: "Search fonts",
             autoFocus: true,
+            style: { width: "100%" },
           })}
         </div>
 
-        <section style={{ flexGrow: 0, minHeight: "10%" }}>
+        <section style={{ flexGrow: 0, minHeight: "10%", height: "100%" }}>
           <div className={css.sectionHeader}>
             <span>Font pairings</span>
           </div>
 
+          <div className={css.panel}>
+            <div
+              key={searchString}
+              style={{
+                overflow: "visible",
+                top: "0px",
+                display: "flex",
+                flexGrow: "1",
+              }}
+            >
+              <Virtuoso
+                className={css.virtuoso}
+                data={filteredFonts}
+                style={{ flexGrow: "1", overflowX: "hidden" }}
+                //totalCount={200}
+                itemContent={(index: number, font) => renderFont(font)}
+              />
+              {googleFontsPairing.map((_, idx) => {
+                if (!visibleFontsInx[idx]) return null;
+              })}
+            </div>
+          </div>
+
+          {/* 
           {fontsPairings.map((pairingItem) => {
             return getSelectField(
               pairingItem.name,
@@ -366,66 +455,7 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
                 addObjectsToStage(pairingItem.pairing[idx].fontPairing);
               }
             );
-          })}
-
-          {/* 
-          {getSelectField("Luxury", -1, luxurySelectOptions, (idx: number) => {
-            addObjectsToStage(
-              luxuryFontPairing.luxury_pairings[idx].fontPairing
-            );
-          })}
-
-          {getSelectField(
-            "Artistic",
-            -1,
-            artisticSelectOptions,
-            (idx: number) => {
-              addObjectsToStage(
-                artistFontPairing.artistic_pairings[idx].fontPairing
-              );
-            }
-          )}
-
-          {getSelectField(
-            "Brutalist",
-            -1,
-            brutalistSelectOptions,
-            (idx: number) => {
-              addObjectsToStage(
-                brutalistFontPairing.brutalist_pairings[idx].fontPairing
-              );
-            }
-          )}
-
-          {getSelectField(
-            "Corporate",
-            -1,
-            corporateSelectOptions,
-            (idx: number) => {
-              addObjectsToStage(
-                corporateFontPairing.corporate_pairings[idx].fontPairing
-              );
-            }
-          )}
-
-          {getSelectField(
-            "Creative",
-            -1,
-            creativeSelectOptions,
-            (idx: number) => {
-              addObjectsToStage(
-                creativeFontPairing.creative_pairings[idx].fontPairing
-              );
-            }
-          )} */}
-          {/* <div
-            className={cx(css.panel)}
-            onClick={() => {
-              addObjectsToStage();
-            }}
-          >
-            ADD FONT PAIRING
-          </div> */}
+          })} */}
         </section>
       </div>
     </div>

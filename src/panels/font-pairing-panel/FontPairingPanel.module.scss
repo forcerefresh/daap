@@ -13,7 +13,7 @@
 
   background: $pt-app-background-color;
   box-shadow: $pt-elevation-shadow-0;
-  padding: 15px;
+  padding: 20px;
   display: flex;
   flex-direction: row;
 
@@ -33,14 +33,15 @@
       cursor: pointer;
       font-weight: bold;
       color: #808080;
-      padding: 15px 10px 15px 10px;
+      padding: 15px 10px 15px 0px;
     }
   }
-  .virtuoso {
-    margin-right: -25px;
-  }
+  // .virtuoso {
+  //   margin-right: -25px;
+  // }
   .panel {
-    padding: 20px;
+    padding: 0px;
+    // padding-right: 18px;
     padding-top: 5px;
     overflow: auto;
     position: relative;
@@ -63,9 +64,9 @@
       }
     }
 
-    > div {
-      padding: 5px;
-    }
+    // > div {
+    //   padding: 5px;
+    // }
   }
 
   .fontList {
@@ -89,8 +90,8 @@
     .fontListItem {
       position: relative;
       cursor: pointer;
-      height: 28px;
-      width: 270px;
+      height: 103px;
+      width: 100%;
 
       .previewFontBtn {
         position: absolute;
@@ -109,11 +110,6 @@
       &.active {
         margin: 0px;
         background-color: rgba(255, 255, 255, 0.2);
-      }
-
-      &:hover {
-        margin: 0px;
-        background-color: rgba(255, 255, 255, 0.1);
       }
 
       > span {
@@ -143,13 +139,29 @@
 }
 
 .searchFontHolder {
-  margin: 16px 16px 0px 16px;
+  margin: 16px 0px 0px 0px;
+
+  :global {
+    .bp5-form-content {
+      width: 100%;
+    }
+  }
 }
 
 .fontsSprite {
-  background: url("../../utils/fonts2/google-font-image.png");
+  background: url("../../utils/fonts2/google-font-pairing-image.png");
   width: 300px;
-  height: 28px;
+  height: 103px;
+  margin-left: 5px;
+}
+.fontsSpriteInner {
+  position: absolute;
+  inset: -4px -4px 10px -4px;
+
+  &:hover {
+    // margin: 0px;
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
 :global(.bp5-dark) {
@@ -159,6 +171,6 @@
     // border-right: 1px solid #555;
   }
   .fontsSprite {
-    background: url("../../utils/fonts2/google-font-image-dark.png");
+    background: url("../../utils/fonts2/google-font-pairing-image-dark.png");
   }
 }
