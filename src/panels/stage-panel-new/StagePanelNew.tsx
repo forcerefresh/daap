@@ -519,7 +519,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     left: 0 + "px",
     width: stageSize.width + "px",
     height: stageSize.height + "px",
-    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
 
     // transform: "scale(" + stageZoom + ")",
     // transformOrigin: "left top",
@@ -649,7 +649,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   //   left: -pageColumnWidth * stageZoom + "px",
   //   height: breakpointConfig?.normal?.page.height! * stageZoom + "px",
   //   width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
-  //   ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
+  //   ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
   // };
 
   // const pageBorderStyle = {
@@ -685,7 +685,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     // overflowY: isPreview ? "scroll" : "visible",
     // border: isPreview ? "1px solid #545454" : "1px solid transparent",
     // ...(isPreview
-    //   ? convertRGBColor2CSSProperties(settings.sliderBackgroundColor)
+    //   ? convertRGBColor2CSSProperties(settings.pageBackgroundColor)
     //   : {}),
   };
 

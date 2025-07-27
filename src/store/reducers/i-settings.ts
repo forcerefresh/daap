@@ -13,13 +13,13 @@ export interface ISettings {
   hideOutsideContent?: boolean;
 
   // slider config
-  sliderBackgroundColor: RGBColor;
+  pageBackgroundColor: RGBColor;
   autoPlay: boolean;
 
   //preview
   outlineColor: RGBColor;
 
-  pageBackgroundColor: RGBColor;
+  // pageBackgroundColor: RGBColor;
   layoutBoxBackgroundColor: RGBColor;
   transparentHeader: boolean;
 

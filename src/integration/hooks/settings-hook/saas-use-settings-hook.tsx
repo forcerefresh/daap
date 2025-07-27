@@ -13,6 +13,10 @@ export const useSettingsHook = () => {
     textAISettings: any;
     appSettings: any;
   }): Promise<any> => {
+    if (appSettings.appZoom) {
+      localStorage.setItem("appZoom", appSettings.appZoom);
+    }
+
     const response = await axios.patch(`/api/v1/settings`, {
       textAISettings,
       appSettings,

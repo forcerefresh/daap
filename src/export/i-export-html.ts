@@ -74,7 +74,7 @@ export interface IPlayerData {
   backSlides: ISlideData[];
   itemsVisibility: ItemVisibility[];
   config: {
-    sliderBackgroundColor: RGBColor;
+    pageBackgroundColor: RGBColor;
     skipFirstSlideAnimation: boolean;
     breakpointReference: "viewport" | "parent";
     autoPlay?: boolean;

@@ -29,8 +29,12 @@ import settingsCss from "../settings-panel/SettingsPanel.module.scss";
 import { Breakpoint } from "./breakpoint-component/Breakpoint";
 import { PREVIEW_SIZE } from "./breakpoint-preview/BreakpointPreview";
 import { ISettings } from "../../store/reducers/i-settings";
-import { Breakpoints } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import {
+  BreakpointConfiguration,
+  Breakpoints,
+} from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
+import { cloneDeep } from "lodash-es";
 
 enum ProjectPanelSections {
   Project = "Project",
@@ -51,9 +55,11 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
   const {
     settings,
     breakpointConfiguration,
+    breakpointConfig,
     _updateSlideDuration,
     _updateSlideBreakpoints,
     _updateProjectSettings,
+    selectedDeviceIdx,
     _setDevice,
     selectedDevice,
   } = props;
@@ -95,6 +101,39 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
       (bp) => bp.enabled
     ).length;
 
+  const updateMargin = (
+    propName: "left" | "top" | "right" | "bottom",
+    value: number
+  ) => {
+    const newBreakpointConfiguration = cloneDeep(breakpointConfig);
+
+    if (!newBreakpointConfiguration!.normal.margins) {
+      newBreakpointConfiguration!.normal.margins = {
+        left: 0,
+        top: 0,
+        bottom: 0,
+        right: 0,
+      };
+    }
+
+    newBreakpointConfiguration!.normal.margins[propName] = value;
+
+    breakpointConfiguration.breakpointsConfiguration[selectedDeviceIdx] =
+      newBreakpointConfiguration!;
+    _updateSlideBreakpoints(breakpointConfiguration);
+  };
+
+  const updateSize = (propName: "width" | "height", value: number) => {
+    const newBreakpointConfiguration = cloneDeep(breakpointConfig);
+
+    newBreakpointConfiguration!.normal.page[propName] = value;
+    newBreakpointConfiguration!.normal.maxSliderSize[propName] = value;
+
+    breakpointConfiguration.breakpointsConfiguration[selectedDeviceIdx] =
+      newBreakpointConfiguration!;
+    _updateSlideBreakpoints(breakpointConfiguration);
+  };
+
   return (
     <div className={css.projectPanel}>
       <section>
@@ -119,9 +158,9 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
               <div className="input60">
                 {getColorField(
                   "Background color",
-                  settings.sliderBackgroundColor,
-                  (sliderBackgroundColor: any) => {
-                    _updateProjectSettings({ sliderBackgroundColor });
+                  settings.pageBackgroundColor,
+                  (pageBackgroundColor: any) => {
+                    _updateProjectSettings({ pageBackgroundColor });
                   },
                   ""
                 )}
@@ -152,51 +191,74 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
 
             <div className={css.inlineRow}>
               <Text className={"bp5-label"} style={{ marginBottom: "10px" }}>
+                Size
+              </Text>
+
+              <div style={{ display: "flex", gap: "10px" }}>
+                <div className="input60">
+                  {getNumericFiled(
+                    "W",
+                    breakpointConfig?.normal.page.width ?? 0,
+                    (value: number) => {
+                      updateSize("width", value);
+                    }
+                  )}
+                </div>
+                <div className="input60">
+                  {getNumericFiled(
+                    "H",
+                    breakpointConfig?.normal.page.height ?? 0,
+                    (value: number) => {
+                      updateSize("height", value);
+                    }
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className={css.inlineRow}>
+              <Text className={"bp5-label"} style={{ marginBottom: "10px" }}>
                 Margins
               </Text>
 
               <div style={{ display: "flex", gap: "10px" }}>
                 <div className="input60 labelOneLetter">
-                  {getNumericFiled("Left", 2, (value: number) => {
-                    // set(
-                    //   breakpointConfiguration,
-                    //   "normal.guidelinesPadding.left",
-                    //   value
-                    // );
-                    // onChange({ ...breakpointConfiguration });
-                  })}
+                  {getNumericFiled(
+                    "L",
+                    breakpointConfig?.normal.margins?.left ?? 0,
+                    (value: number) => {
+                      updateMargin("left", value);
+                    }
+                  )}
                 </div>
                 <div className="input60 labelOneLetter">
-                  {getNumericFiled("Right", 1, (value: number) => {
-                    // set(
-                    //   breakpointConfiguration,
-                    //   "normal.guidelinesPadding.right",
-                    //   value
-                    // );
-                    // onChange({ ...breakpointConfiguration });
-                  })}
+                  {getNumericFiled(
+                    "R",
+                    breakpointConfig?.normal.margins?.right ?? 0,
+                    (value: number) => {
+                      updateMargin("right", value);
+                    }
+                  )}
                 </div>
               </div>
               <div style={{ display: "flex", gap: "10px" }}>
                 <div className="input60">
-                  {getNumericFiled("Top", 34, (value: number) => {
-                    // set(
-                    //   breakpointConfiguration,
-                    //   "normal.guidelinesPadding.top",
-                    //   value
-                    // );
-                    // onChange({ ...breakpointConfiguration });
-                  })}
+                  {getNumericFiled(
+                    "T",
+                    breakpointConfig?.normal.margins?.top ?? 0,
+                    (value: number) => {
+                      updateMargin("top", value);
+                    }
+                  )}
                 </div>
                 <div className="input60">
-                  {getNumericFiled("Bottom", 123, (value: number) => {
-                    // set(
-                    //   breakpointConfiguration,
-                    //   "normal.guidelinesPadding.bottom",
-                    //   value
-                    // );
-                    // onChange({ ...breakpointConfiguration });
-                  })}
+                  {getNumericFiled(
+                    "B",
+                    breakpointConfig?.normal.margins?.bottom ?? 0,
+                    (value: number) => {
+                      updateMargin("bottom", value);
+                    }
+                  )}
                 </div>
               </div>
             </div>
@@ -403,11 +465,28 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  settings: state.project.settings,
-  breakpointConfiguration: state.project.settings.breakpoints,
-  selectedDevice: state.stage.selectedDevice,
-});
+const mapStateToProps = (state: IStore) => {
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    state.project.settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
+    );
+
+  const selectedDeviceIdx =
+    state.project.settings.breakpoints.breakpointsConfiguration.findIndex(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice
+    );
+
+  return {
+    // selectedDevice: state.stage.selectedDevice,
+    selectedDeviceIdx,
+    breakpointConfig,
+    settings: state.project.settings,
+    breakpointConfiguration: state.project.settings.breakpoints,
+    selectedDevice: state.stage.selectedDevice,
+  };
+};
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),

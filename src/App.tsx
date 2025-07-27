@@ -133,6 +133,11 @@ function App(props: IAppProps) {
 
   // load ai info
   useEffect(() => {
+    const appZoom = localStorage.getItem(`appZoom`);
+    if (appZoom) {
+      scaleUI(Number(appZoom));
+    }
+
     getSettings().then(function (response) {
       const textEnabled = (response.textAISettings ?? {}).enabled;
       _setAIEnabled([

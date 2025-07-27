@@ -209,7 +209,7 @@ export function generatePlayerData(
     config: {
       skipFirstSlideAnimation: settings.skipFirstSlideAnimation,
       breakpointReference: settings.breakpointReference,
-      sliderBackgroundColor: settings.sliderBackgroundColor,
+      pageBackgroundColor: settings.pageBackgroundColor,
       autoPlay: settings.autoPlay,
       hideOutsideContent: settings.hideOutsideContent,
     },

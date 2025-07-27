@@ -1359,7 +1359,7 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     left: -pageColumnWidth * stageZoom + "px",
     height: breakpointConfig?.normal?.page.height! * stageZoom + "px",
     width: breakpointConfig?.normal?.page.width! * stageZoom + "px",
-    ...convertRGBColor2CSSProperties(settings.sliderBackgroundColor),
+    ...convertRGBColor2CSSProperties(settings.pageBackgroundColor),
   };
 
   const renderResizerWithLayer = (layer: ILayer) => {

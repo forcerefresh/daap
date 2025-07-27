@@ -189,7 +189,7 @@ export class Player {
 
     this.bgEl.style.position = "absolute";
     this.bgEl.style.background = convertRGBColor2CSSProperties(
-      this.playerData?.config.sliderBackgroundColor
+      this.playerData?.config.pageBackgroundColor
     ).backgroundColor as string;
 
     this.createNavigationEvents(rootDiv);
