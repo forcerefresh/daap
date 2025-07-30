@@ -310,11 +310,16 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                   >
                     <div
                       className={css.thumbHolderInner}
-                      dangerouslySetInnerHTML={{
-                        __html: project.preview.html,
-                      }}
+                      // dangerouslySetInnerHTML={{
+                      //   __html: project.preview.html,
+                      // }}
+                      // style={{
+                      //   transform: `scale(${round(project.preview.scale, 2)})`,
+                      // }}
                       style={{
-                        transform: `scale(${round(project.preview.scale, 2)})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundImage: `url('${project.preview.base64}')`,
+                        height: "100%",
                       }}
                     ></div>
                   </div>

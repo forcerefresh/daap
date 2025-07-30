@@ -15,9 +15,23 @@ interface DimensionSet {
   px?: Dimensions;
 }
 
+interface ValueSet {
+  mm?: number;
+  inch?: number;
+  px?: number;
+}
+interface Margin {
+  common?: ValueSet;
+  left?: ValueSet;
+  top?: ValueSet;
+  bottom?: ValueSet;
+  right?: ValueSet;
+}
+
 interface DocumentItem {
   name: string;
   dimensions: DimensionSet;
+  margin: Margin;
 }
 
 interface Category {

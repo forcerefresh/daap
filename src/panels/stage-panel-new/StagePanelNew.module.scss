@@ -236,6 +236,12 @@
   pointer-events: none;
 }
 
+.marginBorder {
+  position: absolute;
+  border: $pt-stage-stage-guidelines-border;
+  pointer-events: none;
+}
+
 :global(.bp5-dark) {
   .guidelinesBorder {
     border: 1px dotted $pt-dark-stage-guidebox-guidelines-border;
@@ -246,6 +252,10 @@
   }
 
   .stageBorder {
+    border: $pt-dark-stage-stage-guidelines-border;
+  }
+
+  .marginBorder {
     border: $pt-dark-stage-stage-guidelines-border;
   }
 }

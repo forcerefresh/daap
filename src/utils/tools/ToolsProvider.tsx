@@ -38,6 +38,7 @@ import { globals } from "../../store/reducers/globals";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IPage } from "../../store/reducers/i-pages";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -102,7 +103,15 @@ export const ToolsProvider = (
     activePageId,
     allLayers,
     pageById,
+    margins,
+    pageSize,
   } = useSelector((_state: IStore) => {
+    const breakpointConfig: BreakpointConfiguration | undefined =
+      _state.project.settings.breakpoints.breakpointsConfiguration.find(
+        (breakpointConfig: any) =>
+          breakpointConfig.type === _state.stage.selectedDevice
+      );
+
     return {
       appZoom: _state.globals.appZoom,
       stageZoom: getZoom(_state.stage, _state.project.settings),
@@ -114,6 +123,9 @@ export const ToolsProvider = (
       layerById: _state.project.layers.layerById,
       allLayers: _state.project.layers.allLayers,
       pageById: _state.project.pages.pageById,
+
+      margins: breakpointConfig?.normal.margins!,
+      pageSize: breakpointConfig?.normal.maxSliderSize!,
 
       globals: _state.globals,
     };
@@ -175,6 +187,25 @@ export const ToolsProvider = (
         });
       }
     });
+
+    // NOTE: append margins
+    if (globals.snapToMargin) {
+      const bounds = {
+        ...margins,
+        right: pageSize.width - margins.right,
+        bottom: pageSize.height - margins.bottom,
+      };
+
+      allObjectBounds.push({
+        objectId: "",
+        bounds: {
+          ...bounds,
+          vcenter: bounds.left + (bounds.right - bounds.left) / 2,
+          hcenter: bounds.top + (bounds.bottom - bounds.top) / 2,
+        },
+        snapThreshold: globals.snapToMarginThreshold,
+      });
+    }
 
     setSnapBounds(allObjectBounds);
   }, [

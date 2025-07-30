@@ -234,18 +234,18 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
   };
 
   // NOTE: replace urls to point assets to template asset directory
-  const getTemplatePreviewHtml = (template: any) => {
-    const htmlStr = template.preview.html;
-    return htmlStr
-      .replace(
-        "webslider-fp://my-uploads/my-images/",
-        `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
-      )
-      .replace(
-        "webslider-fp://my-uploads/my-videos/",
-        `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
-      );
-  };
+  // const getTemplatePreviewHtml = (template: any) => {
+  //   const htmlStr = template.preview.html;
+  //   return htmlStr
+  //     .replace(
+  //       "webslider-fp://my-uploads/my-images/",
+  //       `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
+  //     )
+  //     .replace(
+  //       "webslider-fp://my-uploads/my-videos/",
+  //       `webslider-fp://my-uploads/my-templates/${template.id}/assets/`
+  //     );
+  // };
 
   return (
     <div className={cx("bp5-dark", css.projectsPanel)}>
@@ -340,11 +340,16 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
                   >
                     <div
                       className={css.thumbHolderInner}
-                      dangerouslySetInnerHTML={{
-                        __html: getTemplatePreviewHtml(template),
-                      }}
+                      // dangerouslySetInnerHTML={{
+                      //   __html: getTemplatePreviewHtml(template),
+                      // }}
+                      // style={{
+                      //   transform: `scale(${round(template.preview.scale, 2)})`,
+                      // }}
                       style={{
-                        transform: `scale(${round(template.preview.scale, 2)})`,
+                        backgroundRepeat: "no-repeat",
+                        backgroundImage: `url('${template.preview.base64}')`,
+                        height: "100%",
                       }}
                     ></div>
                   </div>

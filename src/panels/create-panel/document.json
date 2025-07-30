@@ -1,0 +1,795 @@
+[
+  {
+    "category": "Print Materials",
+    "items": [
+      {
+        "category": "Business Cards",
+        "items": [
+          {
+            "name": "Standard (US)",
+            "dimensions": {
+              "mm": { "width": 89, "height": 51 },
+              "inch": { "width": 3.5, "height": 2.0 }
+            },
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            }
+          },
+          {
+            "name": "Square",
+            "dimensions": {
+              "mm": { "width": 64, "height": 64 },
+              "inch": { "width": 2.5, "height": 2.5 }
+            },
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            }
+          },
+          {
+            "name": "European (A8)",
+            "dimensions": {
+              "mm": { "width": 52, "height": 74 },
+              "inch": { "width": 2.04, "height": 2.91 }
+            },
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Flyers & Posters",
+        "items": [
+          {
+            "name": "A4",
+            "dimensions": {
+              "mm": { "width": 210, "height": 297 },
+              "inch": { "width": 8.27, "height": 11.69 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "A5",
+            "dimensions": {
+              "mm": { "width": 148, "height": 210 },
+              "inch": { "width": 5.83, "height": 8.27 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "Letter (US)",
+            "dimensions": {
+              "mm": { "width": 216, "height": 279 },
+              "inch": { "width": 8.5, "height": 11.0 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "Tabloid",
+            "dimensions": {
+              "mm": { "width": 279, "height": 432 },
+              "inch": { "width": 11.0, "height": 17.0 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "Square Poster",
+            "dimensions": {
+              "mm": { "width": 305, "height": 305 },
+              "inch": { "width": 12.0, "height": 12.0 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Brochures",
+        "items": [
+          {
+            "name": "DL (Folded)",
+            "dimensions": {
+              "mm": { "width": 98, "height": 210 },
+              "inch": { "width": 3.86, "height": 8.66 }
+            },
+            "margin": {
+              "left": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "right": {
+                "mm": 5,
+                "inch": 0.2
+              },
+              "top": {
+                "mm": 5,
+                "inch": 0.2
+              },
+              "bottom": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "A4 Tri-Fold",
+            "dimensions": {
+              "mm": { "width": 210, "height": 297 },
+              "inch": { "width": 8.27, "height": 11.69 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          },
+          {
+            "name": "Square Brochure",
+            "dimensions": {
+              "mm": { "width": 216, "height": 216 },
+              "inch": { "width": 8.5, "height": 8.5 }
+            },
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Books & Magazines",
+        "items": [
+          {
+            "name": "Digest",
+            "dimensions": {
+              "mm": { "width": 140, "height": 216 },
+              "inch": { "width": 5.5, "height": 8.5 }
+            },
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            }
+          },
+          {
+            "name": "A5",
+            "dimensions": {
+              "mm": { "width": 148, "height": 210 },
+              "inch": { "width": 5.83, "height": 8.27 }
+            },
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            }
+          },
+          {
+            "name": "US Trade Paperback",
+            "dimensions": {
+              "mm": { "width": 152, "height": 229 },
+              "inch": { "width": 6.0, "height": 9.0 }
+            },
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Social Media",
+    "items": [
+      {
+        "category": "Facebook",
+        "items": [
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 180, "height": 180 }
+            },
+            "margin": {
+              "common": {
+                "px": 15
+              }
+            }
+          },
+          {
+            "name": "Cover Photo",
+            "dimensions": {
+              "px": { "width": 820, "height": 312 }
+            },
+            "margin": {
+              "left": {
+                "px": 100
+              },
+              "right": {
+                "px": 100
+              },
+              "top": {
+                "px": 30
+              },
+              "bottom": {
+                "px": 30
+              }
+            }
+          },
+          {
+            "name": "Post Image",
+            "dimensions": {
+              "px": { "width": 1200, "height": 630 }
+            },
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            }
+          },
+          {
+            "name": "Story/Reel",
+            "dimensions": {
+              "px": { "width": 1080, "height": 1920 }
+            },
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Instagram",
+        "items": [
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 110, "height": 110 }
+            },
+            "margin": {
+              "common": {
+                "px": 10
+              }
+            }
+          },
+          {
+            "name": "Square Post",
+            "dimensions": {
+              "px": { "width": 1080, "height": 1080 }
+            },
+            "margin": {
+              "common": {
+                "px": 80
+              }
+            }
+          },
+          {
+            "name": "Portrait Post",
+            "dimensions": {
+              "px": { "width": 1080, "height": 1350 }
+            },
+            "margin": {
+              "left": {
+                "px": 80
+              },
+              "right": {
+                "px": 80
+              },
+              "top": {
+                "px": 120
+              },
+              "bottom": {
+                "px": 120
+              }
+            }
+          },
+          {
+            "name": "Story/Reel",
+            "dimensions": {
+              "px": { "width": 1080, "height": 1920 }
+            },
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Twitter/X",
+        "items": [
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 400, "height": 400 }
+            },
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            }
+          },
+          {
+            "name": "Header",
+            "dimensions": {
+              "px": { "width": 1500, "height": 500 }
+            },
+            "margin": {
+              "common": {
+                "px": 50
+              }
+            }
+          },
+          {
+            "name": "Post Image",
+            "dimensions": {
+              "px": { "width": 1200, "height": 675 }
+            },
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "LinkedIn",
+        "items": [
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 400, "height": 400 }
+            },
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            }
+          },
+          {
+            "name": "Cover Photo",
+            "dimensions": {
+              "px": { "width": 1584, "height": 396 }
+            },
+            "margin": {
+              "left": {
+                "px": 100
+              },
+              "right": {
+                "px": 100
+              },
+              "top": {
+                "px": 30
+              },
+              "bottom": {
+                "px": 30
+              }
+            }
+          },
+          {
+            "name": "Post Image",
+            "dimensions": {
+              "px": { "width": 1200, "height": 627 }
+            },
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Pinterest",
+        "items": [
+          {
+            "name": "Pin",
+            "dimensions": {
+              "px": { "width": 1000, "height": 1500 }
+            },
+            "margin": {
+              "left": {
+                "px": 50
+              },
+              "right": {
+                "px": 50
+              },
+              "top": {
+                "px": 100
+              },
+              "bottom": {
+                "px": 100
+              }
+            }
+          },
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 165, "height": 165 }
+            },
+            "margin": {
+              "common": {
+                "px": 15
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "YouTube",
+        "items": [
+          {
+            "name": "Thumbnail",
+            "dimensions": {
+              "px": { "width": 1280, "height": 720 }
+            },
+            "margin": {
+              "common": {
+                "px": 60
+              }
+            }
+          },
+          {
+            "name": "Channel Cover",
+            "dimensions": {
+              "px": { "width": 2560, "height": 1440 }
+            },
+            "margin": {
+              "left": {
+                "px": 400
+              },
+              "right": {
+                "px": 400
+              },
+              "top": {
+                "px": 200
+              },
+              "bottom": {
+                "px": 200
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "TikTok",
+        "items": [
+          {
+            "name": "Profile Photo",
+            "dimensions": {
+              "px": { "width": 200, "height": 200 }
+            },
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            }
+          },
+          {
+            "name": "Video/Story",
+            "dimensions": {
+              "px": { "width": 1080, "height": 1920 }
+            },
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Digital & Web",
+    "items": [
+      {
+        "category": "Website Banners",
+        "items": [
+          {
+            "name": "Leaderboard",
+            "dimensions": {
+              "px": { "width": 728, "height": 90 }
+            },
+            "margin": {
+              "left": {
+                "px": 20
+              },
+              "right": {
+                "px": 20
+              },
+              "top": {
+                "px": 10
+              },
+              "bottom": {
+                "px": 10
+              }
+            }
+          },
+          {
+            "name": "Billboard",
+            "dimensions": {
+              "px": { "width": 970, "height": 250 }
+            },
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            }
+          },
+          {
+            "name": "Skyscraper",
+            "dimensions": {
+              "px": { "width": 160, "height": 600 }
+            },
+            "margin": {
+              "left": {
+                "px": 15
+              },
+              "right": {
+                "px": 15
+              },
+              "top": {
+                "px": 40
+              },
+              "bottom": {
+                "px": 40
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Email Headers",
+        "items": [
+          {
+            "name": "Standard",
+            "dimensions": {
+              "px": { "width": 600, "height": 200 }
+            },
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            }
+          },
+          {
+            "name": "Full-Width",
+            "dimensions": {
+              "px": { "width": 1200, "height": 400 }
+            },
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Blog Graphics",
+        "items": [
+          {
+            "name": "Featured Image",
+            "dimensions": {
+              "px": { "width": 1200, "height": 630 }
+            },
+            "margin": {
+              "common": {
+                "px": 60
+              }
+            }
+          },
+          {
+            "name": "Thumbnail",
+            "dimensions": {
+              "px": { "width": 300, "height": 300 }
+            },
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "category": "Signage & Large Format",
+    "items": [
+      {
+        "category": "Billboards",
+        "items": [
+          {
+            "name": "Bulletin (Large)",
+            "dimensions": {
+              "inch": { "width": 168, "height": 576 },
+              "mm": { "width": 4267, "height": 14630 }
+            },
+            "margin": {
+              "left": {
+                "inch": 12,
+                "mm": 305
+              },
+              "right": {
+                "inch": 12,
+                "mm": 305
+              },
+              "top": {
+                "inch": 24,
+                "mm": 610
+              },
+              "bottom": {
+                "inch": 24,
+                "mm": 610
+              }
+            }
+          },
+          {
+            "name": "Poster (Small)",
+            "dimensions": {
+              "inch": { "width": 144, "height": 288 },
+              "mm": { "width": 3658, "height": 7315 }
+            },
+            "margin": {
+              "common": {
+                "inch": 6,
+                "mm": 152
+              }
+            }
+          }
+        ]
+      },
+      {
+        "category": "Banners",
+        "items": [
+          {
+            "name": "Retractable (Conference)",
+            "dimensions": {
+              "inch": { "width": 33, "height": 80 },
+              "mm": { "width": 838, "height": 2032 }
+            },
+            "margin": {
+              "left": {
+                "inch": 2,
+                "mm": 51
+              },
+              "right": {
+                "inch": 2,
+                "mm": 51
+              },
+              "top": {
+                "inch": 3,
+                "mm": 76
+              },
+              "bottom": {
+                "inch": 3,
+                "mm": 76
+              }
+            }
+          },
+          {
+            "name": "Vinyl (Street)",
+            "dimensions": {
+              "inch": { "width": 36, "height": 96 },
+              "mm": { "width": 914, "height": 2438 }
+            },
+            "margin": {
+              "common": {
+                "inch": 3,
+                "mm": 76
+              }
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

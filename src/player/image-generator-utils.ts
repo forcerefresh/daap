@@ -83,9 +83,9 @@ export async function generateImages(
       { isSave: false, isForThumbnail: true }
     );
 
-    await delayPromise(200);
-    await delayPromise(200);
-    await delayPromise(200);
+    // await delayPromise(200);
+    // await delayPromise(200);
+    // await delayPromise(200);
 
     try {
       const blobImage = await generateImage({
@@ -94,8 +94,8 @@ export async function generateImages(
         selectedDevice,
         imageType,
         imageQuality,
-        exportWidth,
-        exportHeight,
+        exportWidth: exportWidth / 2,
+        exportHeight: exportHeight / 2,
       });
       blobImages.push(blobImage);
     } catch (ex) {
@@ -138,7 +138,7 @@ async function generateImage(args: {
     pl.onSlideStarted(async () => {
       let blobImage: Blob | null = null;
 
-      await delayPromise(200);
+      // await delayPromise(200);
 
       try {
         if (imageType === "jpeg") {

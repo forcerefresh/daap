@@ -26,6 +26,9 @@ import {
   PanelHeader,
   RightPanelHeader,
 } from "../common/panel-header/PanelHeader";
+import { resizeProportionally } from "../../utils/common-calculation/common-calculation";
+import { generateImages } from "../../player/image-generator-utils";
+import { blobToBase64 } from "../../utils/file/file-utils";
 
 export const THUMB_WIDTH = 200;
 
@@ -50,7 +53,9 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     _updateProjectMeta,
     _updateEditor,
     onRequestClose,
+    selectedDevice,
     themeClass,
+    pages,
   } = props;
 
   const isEdit = !!meta.id;
@@ -65,8 +70,10 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   // spinner
   //const [showSpinner, setShowSpinner] = useState(false);
 
-  const [thumbnailHtml, setThumbnailHtml] = useState("");
-  const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 0 });
+  // const [thumbnailHtml, setThumbnailHtml] = useState("");
+  const [thumbnailBase64, setThumbnailBase64] = useState<string>();
+
+  const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 1 });
 
   const [saveTemplateDialogOpen, setSaveTemplateDialogOpen] = useState(false);
   const [templateDialogData, setTemplateDialogData] = useState<{
@@ -96,20 +103,48 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    const scale = THUMB_WIDTH / breakpointConfig!.normal.maxSliderSize.width!;
-    const thumbHeight = scale * breakpointConfig!.normal.maxSliderSize.height!;
-    setThumbSize({ width: THUMB_WIDTH, height: thumbHeight, scale: scale });
+    const exec = async () => {
+      const exportSize = resizeProportionally(
+        {
+          width: breakpointConfig!.normal.maxSliderSize.width,
+          height: breakpointConfig!.normal.maxSliderSize.height,
+        },
+        THUMB_WIDTH
+      );
 
-    const thumbnailPlayerData = generatePlayerData(
-      { slides, layers, objects },
-      { entityType: "slide", entityId: slides.pages[0] },
-      breakpointConfig!,
-      breakpoints,
-      settings,
-      undefined,
-      { isSave: false, isForThumbnail: true }
-    );
-    setThumbnailHtml(thumbnailPlayerData.html);
+      // const scale =
+      //   exportSize.width < exportSize.height
+      //     ? exportSize.height / breakpointConfig!.normal.maxSliderSize.height
+      //     : exportSize.width / breakpointConfig!.normal.maxSliderSize.width;
+
+      setThumbSize({ ...exportSize, scale: 1 });
+
+      const blobImages = await generateImages({
+        breakpointConfig: breakpointConfig!,
+        breakpoints,
+        layers,
+        objects,
+        pages,
+        selectedDevice,
+        settings,
+        extensions: [],
+        imageType: "jpeg",
+        imageQuality: 90,
+        exportWidth: exportSize.width,
+        exportHeight: exportSize.height,
+      });
+
+      const imageBlob = blobImages[0];
+      let extension = "png";
+      extension = imageBlob.type.indexOf("jpeg") !== -1 ? "jpeg" : extension;
+      extension = imageBlob.type.indexOf("webp") !== -1 ? "webp" : extension;
+
+      const imageBase64 = await blobToBase64(imageBlob);
+
+      setThumbnailBase64(`data:image/${extension};base64,${imageBase64}`);
+    };
+
+    exec().then();
   }, []);
 
   const onClickSave = async (saveAs?: boolean) => {
@@ -158,7 +193,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           width: thumbSize.width,
           height: thumbSize.height,
           scale: thumbSize.scale,
-          html: thumbnailHtml,
+          base64: thumbnailBase64 ?? "",
+          // html: thumbnailHtml,
         },
         playerData: updatedPlayerData,
         assetsUrls,
@@ -216,7 +252,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           width: thumbSize.width,
           height: thumbSize.height,
           scale: thumbSize.scale,
-          html: thumbnailHtml,
+          // html: thumbnailHtml,
+          base64: thumbnailBase64 ?? "",
         },
         playerData: updatedPlayerData,
         assetsUrls,
@@ -302,7 +339,8 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         width: thumbSize.width,
         height: thumbSize.height,
         scale: thumbSize.scale,
-        html: thumbnailHtml,
+        // html: thumbnailHtml,
+        base64: thumbnailBase64,
       },
       playerData: updatedPlayerData,
       assetsUrls,
@@ -347,11 +385,13 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       >
         <div
           className={css.thumbHolderInner}
-          dangerouslySetInnerHTML={{
-            __html: thumbnailHtml,
-          }}
+          // dangerouslySetInnerHTML={{
+          //   __html: thumbnailHtml,
+          // }}
           style={{
-            transform: `scale(${round(thumbSize.scale, 2)})`,
+            backgroundRepeat: "no-repeat",
+            backgroundImage: `url('${thumbnailBase64}')`,
+            height: "100%",
           }}
         ></div>
       </div>
@@ -580,6 +620,8 @@ const mapStateToProps = (state: IStore) => {
     settings: state.project.settings,
     breakpoints: state.project.settings.breakpoints,
     themeClass: state.project.settings.themeClass,
+    selectedDevice: state.stage.selectedDevice,
+    pages: state.project.pages,
   };
 };
 

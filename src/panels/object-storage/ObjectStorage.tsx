@@ -40,9 +40,9 @@ export const ObjectStorage: React.FC<ObjectStorageProps> = (props) => {
   }, []);
 
   const reload = () => {
-    listStorageObjects({}).then((result) => {
-      setList(result);
-    });
+    // listStorageObjects({}).then((result) => {
+    //   setList(result);
+    // });
   };
 
   const bucketToDeleteName = list.find(

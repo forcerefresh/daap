@@ -53,7 +53,7 @@ import { IMeta } from "../../store/reducers/meta";
 import { ISettings } from "../../store/reducers/i-settings";
 import { cloneDeep, last } from "lodash-es";
 
-import { documents } from "./documents";
+import documents from "./document.json";
 import { calculateAspectRatio } from "./utils";
 
 interface ICreatePanelProps {
@@ -218,16 +218,19 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
       width,
       height,
       name,
+      margins,
     }: {
       width: string;
       height: string;
       name: string;
+      margins: { left: number; top: number; bottom: number; right: number };
     }) => {
       if (content === "empty") {
         _setupNewProject({
           width,
           height,
           name,
+          margins,
         });
         return;
       }
@@ -236,6 +239,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
         width,
         height,
         name,
+        margins,
       });
 
       const slideIdToSelect = project.pages.pages[0];
@@ -258,13 +262,43 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
     ]
   );
 
+  const dimensionSetToValue = (value?: DimensionSet) => {
+    return value?.px ?? value?.mm ?? value?.inch;
+  };
+
+  const valueSetToValue = (value?: ValueSet) => {
+    return value?.px ?? value?.mm ?? value?.inch ?? 0;
+  };
+
   const renderObjectsCards = (newDeffs: DocumentItem[], docType: string) => {
     return (
       <>
         {newDeffs.map((deff) => {
-          const docSize = deff?.dimensions?.px ??
-            deff?.dimensions?.mm ??
-            deff?.dimensions?.inch ?? { width: 100, height: 100 };
+          const docSize = dimensionSetToValue(deff?.dimensions) ?? {
+            width: 100,
+            height: 100,
+          };
+
+          const margins = deff.margin.common
+            ? {
+                left: valueSetToValue(deff.margin.common),
+                top: valueSetToValue(deff.margin.common),
+                bottom: valueSetToValue(deff.margin.common),
+                right: valueSetToValue(deff.margin.common),
+              }
+            : deff.margin.left
+            ? {
+                left: valueSetToValue(deff.margin.left),
+                top: valueSetToValue(deff.margin.top),
+                bottom: valueSetToValue(deff.margin.bottom),
+                right: valueSetToValue(deff.margin.right),
+              }
+            : {
+                left: 0,
+                top: 0,
+                bottom: 0,
+                right: 0,
+              };
 
           const size = { ...docSize };
           const max = Math.max(docSize.width, docSize.height);
@@ -280,6 +314,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
                 createNewProject({
                   height: (docSize?.height ?? 1080) + "px",
                   width: (docSize?.width ?? 1080) + "px",
+                  margins,
                   name:
                     docType + " " + deff.name + " " + new Date().toDateString(),
                 });

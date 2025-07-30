@@ -2829,6 +2829,7 @@ export interface CreateNewProjectActionPayload {
   width: string;
   height: string;
   name: string;
+  margins: { left: number; top: number; right: number; bottom: number };
 }
 
 export const CREATE_NEW_PROJECT = "Create new project";

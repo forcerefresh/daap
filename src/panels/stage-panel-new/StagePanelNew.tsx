@@ -386,6 +386,13 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   const { activeTool, snapBounds } = useContext(ToolsContext);
 
   const stageSize = breakpointConfig?.normal.maxSliderSize!;
+  const margins = breakpointConfig?.normal.margins ?? {
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+  };
+
   // const pageSize = breakpointConfig?.normal.page!;
 
   // const onObjectClick = (
@@ -540,6 +547,15 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       convertRGBColor2CSSProperties(outlineColor).backgroundColor,
     pointerEvents: "none",
   };
+
+  const marginBorderStyle: CSSProperties = {
+    top: margins.top + "px",
+    left: margins.left + "px",
+    width: stageSize.width - (margins.right + margins.left) + "px",
+    height: stageSize.height - (margins.top + margins.bottom) + "px",
+    borderWidth: stageZoom < 1 ? 1 / stageZoom : 1,
+  };
+
   // const toolsCanvasStyle = { ...canvasStyle };
 
   if (showGrid) {
@@ -833,6 +849,11 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
               </div>
 
               <div style={outlineStyle}></div>
+
+              <div
+                style={marginBorderStyle}
+                className={cx(css.borderBase, css.marginBorder)}
+              ></div>
 
               <div className="StagePanel-SnapHolder">
                 {/* {snapBounds.map((p) => {

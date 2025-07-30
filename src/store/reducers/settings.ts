@@ -142,8 +142,13 @@ export function getIconByType(type: DeviceType): string {
 function getDefaultBreakpointConfiguration(props: {
   width: string;
   height: string;
+  margins?: { left: number; top: number; right: number; bottom: number };
 }): Breakpoints {
-  const { height, width } = props;
+  const {
+    height,
+    width,
+    margins = { left: 0, top: 0, bottom: 0, right: 0 },
+  } = props;
 
   const heightInt = parseInt(height);
   const widthInt = parseInt(width);
@@ -164,6 +169,7 @@ function getDefaultBreakpointConfiguration(props: {
             },
           },
           page: { width: widthInt, height: heightInt },
+          margins,
           maxSliderSize: { width: widthInt, height: heightInt },
           heightBehavior: { type: "keepAspectRatio" },
           widthBehavior: { type: "useMaxWidth" },
@@ -184,6 +190,7 @@ function getDefaultBreakpointConfiguration(props: {
 const getSettingsDefault = (props?: {
   width: string;
   height: string;
+  margins?: { left: number; top: number; right: number; bottom: number };
 }): ISettings => ({
   // slide
   slideDuration: "10s",
@@ -199,7 +206,11 @@ const getSettingsDefault = (props?: {
   transparentHeader: false,
   // breakpoints
   breakpoints: getDefaultBreakpointConfiguration(
-    props ?? { width: "1080px", height: "1080px" }
+    props ?? {
+      width: "1080px",
+      height: "1080px",
+      margins: { left: 80, top: 80, bottom: 80, right: 80 },
+    }
   ),
   //theme
   theme: "dark",
@@ -230,8 +241,27 @@ export function settings(
       };
     }
     case OPEN_PROJECT: {
+      const settings = action.payload.settings;
+
+      // backward compatibility
+      settings.breakpoints.breakpointsConfiguration =
+        settings.breakpoints.breakpointsConfiguration.map((bc) => {
+          return {
+            ...bc,
+            normal: {
+              ...bc.normal,
+              margins: bc.normal.margins ?? {
+                left: 0,
+                top: 0,
+                bottom: 0,
+                right: 0,
+              },
+            },
+          };
+        });
+
       return {
-        ...action.payload.settings,
+        ...settings,
       };
     }
     case CREATE_NEW_PROJECT:
@@ -239,6 +269,7 @@ export function settings(
       return getSettingsDefault({
         width: action.payload.width,
         height: action.payload.height,
+        margins: action.payload.margins,
       });
     }
     case SET_THEME: {

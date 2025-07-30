@@ -126,6 +126,55 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
             </div>
 
             <div className="input60">
+              {getCheckboxField(
+                "Snap to Object",
+                globals.snapToMargin,
+                (snapToMargin: any) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      snapToMargin,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    snapToMargin,
+                  });
+                }
+              )}
+            </div>
+
+            <div className="input60">
+              {getSelectField(
+                "Snap to Object threshold",
+                globals.snapToMarginThreshold,
+                Array(10)
+                  .fill({})
+                  .map((_, idx) => ({
+                    value: idx + 1,
+                    label: idx + 1 + "px",
+                  })),
+                (snapToMarginThreshold) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      snapToMarginThreshold: snapToMarginThreshold,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    snapToObjectThreshold: snapToMarginThreshold,
+                  });
+                },
+                { disabled: !globals.snapToObject }
+              )}
+            </div>
+
+            <div className="input60">
               {getColorField(
                 "Outline color",
                 globals.outlineColor,

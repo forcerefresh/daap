@@ -13,6 +13,8 @@ export interface IAppSettings {
   theme: "dark" | "light";
   snapToObject: boolean;
   snapToObjectThreshold: number;
+  snapToMargin: boolean;
+  snapToMarginThreshold: number;
   outlineColor: RGBColor;
 }
 
@@ -25,6 +27,8 @@ export function globals(
     theme: "dark",
     snapToObject: true,
     snapToObjectThreshold: 5,
+    snapToMargin: true,
+    snapToMarginThreshold: 5,
     outlineColor: { r: 0, g: 0, b: 0, a: 1 },
   },
   action: ActionTypes

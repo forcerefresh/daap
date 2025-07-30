@@ -92,7 +92,7 @@ export const useProjectHook = () => {
       width: number;
       height: number;
       scale: number;
-      html: string;
+      base64: string;
     };
     playerData: IPlayerData;
     assetsUrls: GetAssetsUrlFuncReturnType;
@@ -147,7 +147,7 @@ export const useProjectHook = () => {
         width: number;
         height: number;
         scale: number;
-        html: string;
+        base64: string;
       };
       playerData: IPlayerData;
       assetsUrls: GetAssetsUrlFuncReturnType;
