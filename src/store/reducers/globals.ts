@@ -16,6 +16,13 @@ export interface IAppSettings {
   snapToMargin: boolean;
   snapToMarginThreshold: number;
   outlineColor: RGBColor;
+  publishSettings?: {
+    enabled: boolean;
+    name?: string;
+    endpoint?: string;
+    key?: string;
+    secretKey?: string;
+  };
 }
 
 export function globals(

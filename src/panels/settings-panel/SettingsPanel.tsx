@@ -12,6 +12,7 @@ import LicenseSettingsPanel from "../license-settings-panel/LicenseSettingsPanel
 import AccountSettingsPanel from "../account-settings-panel/AccountSettingsPanel";
 import AITextSettingsPanel from "../ai-settings-panel/AITextSettingsPanel";
 import DevelopmentPanel from "../development-panel/DevelopmentPanel";
+import PublishSettingsPanel from "../publish-settings-panel/PublishSettingsPanel";
 
 interface ISettingsPanelProps {
   onRequestClose: () => void;
@@ -87,6 +88,12 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
             id="development"
             title="Development"
             panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
+          />
+
+          <Tab
+            id="publish-dev"
+            title="Publish"
+            panel={<PublishSettingsPanel />} //onRequestClose={props.onRequestClose}
           />
 
           {/*<Tabs.Expander />

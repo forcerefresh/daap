@@ -31,6 +31,7 @@ import { preloadFonts } from "../../utils/project/project-utils";
 import { Pagination } from "../../types/pagination";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 import { IColors } from "../../store/reducers/i-colors";
+import axios from "axios";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -52,6 +53,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     _setupNewProject,
     _updateColorsState,
     _updateEditor,
+    publishSettings,
   } = props;
 
   const [projects, setProjects] = useState<any[]>([]);
@@ -161,6 +163,23 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     setDeleteLoading(false);
   };
 
+  const onPublishProject = (id: string) => {
+    return axios
+      .post(`/api/v1/publish/${id}`, props)
+      .then(() => {
+        AppToaster.show({
+          intent: "success",
+          message: "Document is successfully published.",
+        });
+      })
+      .catch((ex) => {
+        console.log(ex);
+        AppToaster.show({
+          intent: "danger",
+          message: "Something went wrong. Document is not saved.",
+        });
+      });
+  };
   const onOpenProject = (id: string) => {
     getProject(id).then((responseProject: any) => {
       const meta: IMeta = {
@@ -349,6 +368,16 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                   >
                     Open
                   </ChangeCheckerButton>
+
+                  {publishSettings?.enabled ? (
+                    <Button
+                      intent="none"
+                      onClick={() => onPublishProject(project.id)}
+                    >
+                      Publish
+                    </Button>
+                  ) : null}
+
                   {/*<Button intent="primary">Integration</Button>*/}
                   <Button
                     intent="danger"
@@ -388,6 +417,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({
   meta: state.meta,
   activeLayerId: state.project.selection.activeLayerId,
+  publishSettings: state.globals.publishSettings,
 });
 
 const mapDispatchToProps = {

@@ -145,7 +145,11 @@ function App(props: IAppProps) {
       ]);
 
       if (response.appSettings) {
-        _updateGlobalConfiguration(response.appSettings);
+        _updateGlobalConfiguration({
+          ...response.appSettings,
+          publishSettings: response.publishSettings,
+        });
+
         scaleUI(response.appSettings.appZoom);
       } else {
         scaleUI(1);

@@ -9,17 +9,20 @@ export const useSettingsHook = () => {
   const patchSettings = async ({
     textAISettings,
     appSettings,
+    publishSettings,
   }: {
     textAISettings: any;
     appSettings: any;
+    publishSettings: any;
   }): Promise<any> => {
-    if (appSettings.appZoom) {
+    if (appSettings?.appZoom) {
       localStorage.setItem("appZoom", appSettings.appZoom);
     }
 
     const response = await axios.patch(`/api/v1/settings`, {
       textAISettings,
       appSettings,
+      publishSettings,
     });
     return response.data.data;
   };

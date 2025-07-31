@@ -339,13 +339,21 @@ export const IntegrationContext = React.createContext({
     getSettings: (): Promise<{
       textAISettings: any;
       appSettings: any;
-    }> => Promise.resolve({ textAISettings: {}, appSettings: {} }), // todo: add interface for api response
+      publishSettings: any;
+    }> =>
+      Promise.resolve({
+        textAISettings: {},
+        appSettings: {},
+        publishSettings: {},
+      }), // todo: add interface for api response
     patchSettings: ({
       textAISettings,
       appSettings,
+      publishSettings,
     }: {
       textAISettings?: any;
       appSettings?: any;
+      publishSettings?: any;
     }): Promise<any> => Promise.resolve({}),
     scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
   }),
