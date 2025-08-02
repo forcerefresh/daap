@@ -1,0 +1,3511 @@
+{
+  "industries": [
+    {
+      "id": 1,
+      "name": "Agriculture & Farming",
+      "subsectors": [
+        {
+          "id": "1.1",
+          "name": "Crop Production",
+          "subsubsectors": [
+            { "id": "1.1.1", "name": "Grains & Cereals" },
+            { "id": "1.1.2", "name": "Fruits & Vegetables" },
+            { "id": "1.1.3", "name": "Oilseeds & Pulses" },
+            { "id": "1.1.4", "name": "Organic Farming" },
+            { "id": "1.1.5", "name": "Hydroponics" },
+            { "id": "1.1.6", "name": "Greenhouse Production" },
+            { "id": "1.1.7", "name": "Seed Production" },
+            { "id": "1.1.8", "name": "Cover Cropping" },
+            { "id": "1.1.9", "name": "Precision Agriculture" },
+            { "id": "1.1.10", "name": "Vertical Farming" }
+          ]
+        },
+        {
+          "id": "1.2",
+          "name": "Livestock",
+          "subsubsectors": [
+            { "id": "1.2.1", "name": "Dairy Farming" },
+            { "id": "1.2.2", "name": "Poultry" },
+            { "id": "1.2.3", "name": "Cattle Ranching" },
+            { "id": "1.2.4", "name": "Swine Production" },
+            { "id": "1.2.5", "name": "Sheep & Goats" },
+            { "id": "1.2.6", "name": "Aquaculture" },
+            { "id": "1.2.7", "name": "Beekeeping" },
+            { "id": "1.2.8", "name": "Exotic Animals" },
+            { "id": "1.2.9", "name": "Animal Genetics" },
+            { "id": "1.2.10", "name": "Free-Range Systems" }
+          ]
+        },
+        {
+          "id": "1.3",
+          "name": "Agricultural Services",
+          "subsubsectors": [
+            { "id": "1.3.1", "name": "Farm Equipment" },
+            { "id": "1.3.2", "name": "Agrochemicals" },
+            { "id": "1.3.3", "name": "Irrigation Systems" },
+            { "id": "1.3.4", "name": "Soil Testing" },
+            { "id": "1.3.5", "name": "Crop Consulting" },
+            { "id": "1.3.6", "name": "Veterinary Services" },
+            { "id": "1.3.7", "name": "Harvesting Services" },
+            { "id": "1.3.8", "name": "Storage Solutions" },
+            { "id": "1.3.9", "name": "Transportation" },
+            { "id": "1.3.10", "name": "Farm Management Software" }
+          ]
+        },
+        {
+          "id": "1.4",
+          "name": "Agricultural Technology",
+          "subsubsectors": [
+            { "id": "1.4.1", "name": "Precision Farming" },
+            { "id": "1.4.2", "name": "Drones in Agriculture" },
+            { "id": "1.4.3", "name": "Automated Harvesting" },
+            { "id": "1.4.4", "name": "Smart Irrigation" },
+            { "id": "1.4.5", "name": "Agricultural Robotics" },
+            { "id": "1.4.6", "name": "Gene Editing" },
+            { "id": "1.4.7", "name": "Blockchain in Agriculture" },
+            { "id": "1.4.8", "name": "AI in Farming" },
+            { "id": "1.4.9", "name": "Weather Prediction" },
+            { "id": "1.4.10", "name": "Farm-to-Table Tech" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Automotive",
+      "subsectors": [
+        {
+          "id": "2.1",
+          "name": "Vehicle Manufacturing",
+          "subsubsectors": [
+            { "id": "2.1.1", "name": "Passenger Vehicles" },
+            { "id": "2.1.2", "name": "Commercial Vehicles" },
+            { "id": "2.1.3", "name": "Electric Vehicles" },
+            { "id": "2.1.4", "name": "Autonomous Vehicles" },
+            { "id": "2.1.5", "name": "Hybrid Vehicles" },
+            { "id": "2.1.6", "name": "Luxury Vehicles" },
+            { "id": "2.1.7", "name": "Performance Vehicles" },
+            { "id": "2.1.8", "name": "Military Vehicles" },
+            { "id": "2.1.9", "name": "Concept Cars" },
+            { "id": "2.1.10", "name": "Custom Builds" }
+          ]
+        },
+        {
+          "id": "2.2",
+          "name": "Auto Parts & Components",
+          "subsubsectors": [
+            { "id": "2.2.1", "name": "Engine Components" },
+            { "id": "2.2.2", "name": "Electrical Systems" },
+            { "id": "2.2.3", "name": "Braking Systems" },
+            { "id": "2.2.4", "name": "Suspension Systems" },
+            { "id": "2.2.5", "name": "Transmission Systems" },
+            { "id": "2.2.6", "name": "Exhaust Systems" },
+            { "id": "2.2.7", "name": "Interior Components" },
+            { "id": "2.2.8", "name": "Exterior Components" },
+            { "id": "2.2.9", "name": "Aftermarket Parts" },
+            { "id": "2.2.10", "name": "OEM Parts" }
+          ]
+        },
+        {
+          "id": "2.3",
+          "name": "Automotive Services",
+          "subsubsectors": [
+            { "id": "2.3.1", "name": "Vehicle Maintenance & Repair" },
+            { "id": "2.3.2", "name": "Car Rental & Leasing" },
+            { "id": "2.3.3", "name": "Auto Dealerships" },
+            { "id": "2.3.4", "name": "Car Wash & Detailing" },
+            { "id": "2.3.5", "name": "Towing Services" },
+            { "id": "2.3.6", "name": "Vehicle Inspection" },
+            { "id": "2.3.7", "name": "Auto Insurance" },
+            { "id": "2.3.8", "name": "Fleet Management" },
+            { "id": "2.3.9", "name": "Vehicle Customization" },
+            { "id": "2.3.10", "name": "Scrap & Salvage" }
+          ]
+        },
+        {
+          "id": "2.4",
+          "name": "Automotive Technology",
+          "subsubsectors": [
+            { "id": "2.4.1", "name": "Connected Car Technologies" },
+            { "id": "2.4.2", "name": "Advanced Driver Assistance Systems" },
+            {
+              "id": "2.4.3",
+              "name": "Vehicle-to-Everything (V2X) Communication"
+            },
+            { "id": "2.4.4", "name": "In-Vehicle Infotainment" },
+            { "id": "2.4.5", "name": "Battery Technology" },
+            { "id": "2.4.6", "name": "Charging Infrastructure" },
+            { "id": "2.4.7", "name": "Autonomous Driving Software" },
+            { "id": "2.4.8", "name": "Vehicle Cybersecurity" },
+            { "id": "2.4.9", "name": "Predictive Maintenance" },
+            { "id": "2.4.10", "name": "Digital Showrooms" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Banking & Finance",
+      "subsectors": [
+        {
+          "id": "3.1",
+          "name": "Retail Banking",
+          "subsubsectors": [
+            { "id": "3.1.1", "name": "Personal Banking" },
+            { "id": "3.1.2", "name": "Mortgages" },
+            { "id": "3.1.3", "name": "Credit Cards" },
+            { "id": "3.1.4", "name": "Personal Loans" },
+            { "id": "3.1.5", "name": "Savings Accounts" },
+            { "id": "3.1.6", "name": "Checking Accounts" },
+            { "id": "3.1.7", "name": "Online Banking" },
+            { "id": "3.1.8", "name": "Mobile Banking" },
+            { "id": "3.1.9", "name": "ATM Services" },
+            { "id": "3.1.10", "name": "Financial Counseling" }
+          ]
+        },
+        {
+          "id": "3.2",
+          "name": "Investment Services",
+          "subsubsectors": [
+            { "id": "3.2.1", "name": "Asset Management" },
+            { "id": "3.2.2", "name": "Brokerage Services" },
+            { "id": "3.2.3", "name": "Wealth Management" },
+            { "id": "3.2.4", "name": "Retirement Planning" },
+            { "id": "3.2.5", "name": "Mutual Funds" },
+            { "id": "3.2.6", "name": "Exchange-Traded Funds" },
+            { "id": "3.2.7", "name": "Hedge Funds" },
+            { "id": "3.2.8", "name": "Private Equity" },
+            { "id": "3.2.9", "name": "Venture Capital" },
+            { "id": "3.2.10", "name": "Robo-Advisors" }
+          ]
+        },
+        {
+          "id": "3.3",
+          "name": "Corporate Finance",
+          "subsubsectors": [
+            { "id": "3.3.1", "name": "Investment Banking" },
+            { "id": "3.3.2", "name": "Mergers & Acquisitions" },
+            { "id": "3.3.3", "name": "Corporate Lending" },
+            { "id": "3.3.4", "name": "Trade Finance" },
+            { "id": "3.3.5", "name": "Treasury Services" },
+            { "id": "3.3.6", "name": "Capital Markets" },
+            { "id": "3.3.7", "name": "Debt Financing" },
+            { "id": "3.3.8", "name": "Equity Financing" },
+            { "id": "3.3.9", "name": "Structured Finance" },
+            { "id": "3.3.10", "name": "Project Finance" }
+          ]
+        },
+        {
+          "id": "3.4",
+          "name": "Financial Technology",
+          "subsubsectors": [
+            { "id": "3.4.1", "name": "Digital Payments" },
+            { "id": "3.4.2", "name": "Blockchain & Cryptocurrency" },
+            { "id": "3.4.3", "name": "Peer-to-Peer Lending" },
+            { "id": "3.4.4", "name": "InsurTech" },
+            { "id": "3.4.5", "name": "RegTech" },
+            { "id": "3.4.6", "name": "Open Banking" },
+            { "id": "3.4.7", "name": "Neobanks" },
+            { "id": "3.4.8", "name": "AI in Finance" },
+            { "id": "3.4.9", "name": "Biometric Authentication" },
+            { "id": "3.4.10", "name": "Quantum Computing in Finance" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Beauty & Personal Care",
+      "subsectors": [
+        {
+          "id": "4.1",
+          "name": "Skincare",
+          "subsubsectors": [
+            { "id": "4.1.1", "name": "Facial Care" },
+            { "id": "4.1.2", "name": "Body Care" },
+            { "id": "4.1.3", "name": "Anti-Aging Products" },
+            { "id": "4.1.4", "name": "Acne Treatments" },
+            { "id": "4.1.5", "name": "Sunscreen & Protection" },
+            { "id": "4.1.6", "name": "Natural & Organic Skincare" },
+            { "id": "4.1.7", "name": "Medical Skincare" },
+            { "id": "4.1.8", "name": "Men's Skincare" },
+            { "id": "4.1.9", "name": "Baby Skincare" },
+            { "id": "4.1.10", "name": "Ethnic Skincare" }
+          ]
+        },
+        {
+          "id": "4.2",
+          "name": "Cosmetics",
+          "subsubsectors": [
+            { "id": "4.2.1", "name": "Makeup" },
+            { "id": "4.2.2", "name": "Nail Care" },
+            { "id": "4.2.3", "name": "Lip Products" },
+            { "id": "4.2.4", "name": "Eye Makeup" },
+            { "id": "4.2.5", "name": "Face Makeup" },
+            { "id": "4.2.6", "name": "Mineral Cosmetics" },
+            { "id": "4.2.7", "name": "Vegan Cosmetics" },
+            { "id": "4.2.8", "name": "Professional Makeup" },
+            { "id": "4.2.9", "name": "Special Effects Makeup" },
+            { "id": "4.2.10", "name": "Cosmetic Tools" }
+          ]
+        },
+        {
+          "id": "4.3",
+          "name": "Hair Care",
+          "subsubsectors": [
+            { "id": "4.3.1", "name": "Shampoos & Conditioners" },
+            { "id": "4.3.2", "name": "Hair Styling Products" },
+            { "id": "4.3.3", "name": "Hair Color" },
+            { "id": "4.3.4", "name": "Hair Treatments" },
+            { "id": "4.3.5", "name": "Ethnic Hair Care" },
+            { "id": "4.3.6", "name": "Men's Hair Care" },
+            { "id": "4.3.7", "name": "Salon Products" },
+            { "id": "4.3.8", "name": "Hair Extensions" },
+            { "id": "4.3.9", "name": "Hair Accessories" },
+            { "id": "4.3.10", "name": "Hair Removal" }
+          ]
+        },
+        {
+          "id": "4.4",
+          "name": "Personal Care Services",
+          "subsubsectors": [
+            { "id": "4.4.1", "name": "Hair Salons" },
+            { "id": "4.4.2", "name": "Nail Salons" },
+            { "id": "4.4.3", "name": "Spas" },
+            { "id": "4.4.4", "name": "Esthetician Services" },
+            { "id": "4.4.5", "name": "Massage Therapy" },
+            { "id": "4.4.6", "name": "Waxing Services" },
+            { "id": "4.4.7", "name": "Makeup Services" },
+            { "id": "4.4.8", "name": "Barber Shops" },
+            { "id": "4.4.9", "name": "Medical Aesthetics" },
+            { "id": "4.4.10", "name": "Holistic Beauty" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Construction & Real Estate",
+      "subsectors": [
+        {
+          "id": "5.1",
+          "name": "Residential Construction",
+          "subsubsectors": [
+            { "id": "5.1.1", "name": "Single-Family Homes" },
+            { "id": "5.1.2", "name": "Multi-Family Housing" },
+            { "id": "5.1.3", "name": "Condominiums" },
+            { "id": "5.1.4", "name": "Townhouses" },
+            { "id": "5.1.5", "name": "Custom Homes" },
+            { "id": "5.1.6", "name": "Modular Construction" },
+            { "id": "5.1.7", "name": "Tiny Homes" },
+            { "id": "5.1.8", "name": "Senior Housing" },
+            { "id": "5.1.9", "name": "Student Housing" },
+            { "id": "5.1.10", "name": "Vacation Homes" }
+          ]
+        },
+        {
+          "id": "5.2",
+          "name": "Commercial Construction",
+          "subsubsectors": [
+            { "id": "5.2.1", "name": "Office Buildings" },
+            { "id": "5.2.2", "name": "Retail Spaces" },
+            { "id": "5.2.3", "name": "Industrial Facilities" },
+            { "id": "5.2.4", "name": "Hospitality Construction" },
+            { "id": "5.2.5", "name": "Healthcare Facilities" },
+            { "id": "5.2.6", "name": "Educational Facilities" },
+            { "id": "5.2.7", "name": "Sports Facilities" },
+            { "id": "5.2.8", "name": "Religious Buildings" },
+            { "id": "5.2.9", "name": "Government Buildings" },
+            { "id": "5.2.10", "name": "Mixed-Use Developments" }
+          ]
+        },
+        {
+          "id": "5.3",
+          "name": "Construction Services",
+          "subsubsectors": [
+            { "id": "5.3.1", "name": "General Contracting" },
+            { "id": "5.3.2", "name": "Electrical Contracting" },
+            { "id": "5.3.3", "name": "Plumbing Contracting" },
+            { "id": "5.3.4", "name": "HVAC Contracting" },
+            { "id": "5.3.5", "name": "Concrete Services" },
+            { "id": "5.3.6", "name": "Roofing Services" },
+            { "id": "5.3.7", "name": "Landscaping Services" },
+            { "id": "5.3.8", "name": "Demolition Services" },
+            { "id": "5.3.9", "name": "Remodeling Services" },
+            { "id": "5.3.10", "name": "Paving Services" }
+          ]
+        },
+        {
+          "id": "5.4",
+          "name": "Construction Technology",
+          "subsubsectors": [
+            { "id": "5.4.1", "name": "Building Information Modeling (BIM)" },
+            { "id": "5.4.2", "name": "3D Printing in Construction" },
+            { "id": "5.4.3", "name": "Drones in Construction" },
+            { "id": "5.4.4", "name": "Augmented Reality" },
+            { "id": "5.4.5", "name": "Construction Robotics" },
+            { "id": "5.4.6", "name": "Smart Materials" },
+            { "id": "5.4.7", "name": "Project Management Software" },
+            { "id": "5.4.8", "name": "Sustainable Construction Tech" },
+            { "id": "5.4.9", "name": "Wearable Tech on Sites" },
+            { "id": "5.4.10", "name": "AI in Construction" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Education",
+      "subsectors": [
+        {
+          "id": "6.1",
+          "name": "K-12 Education",
+          "subsubsectors": [
+            { "id": "6.1.1", "name": "Public Schools" },
+            { "id": "6.1.2", "name": "Private Schools" },
+            { "id": "6.1.3", "name": "Charter Schools" },
+            { "id": "6.1.4", "name": "Montessori Schools" },
+            { "id": "6.1.5", "name": "International Schools" },
+            { "id": "6.1.6", "name": "Special Education" },
+            { "id": "6.1.7", "name": "Online K-12 Schools" },
+            { "id": "6.1.8", "name": "Homeschooling Resources" },
+            { "id": "6.1.9", "name": "Gifted Education" },
+            { "id": "6.1.10", "name": "Alternative Education" }
+          ]
+        },
+        {
+          "id": "6.2",
+          "name": "Higher Education",
+          "subsubsectors": [
+            { "id": "6.2.1", "name": "Universities" },
+            { "id": "6.2.2", "name": "Community Colleges" },
+            { "id": "6.2.3", "name": "Vocational Schools" },
+            { "id": "6.2.4", "name": "Graduate Schools" },
+            { "id": "6.2.5", "name": "Online Universities" },
+            { "id": "6.2.6", "name": "Business Schools" },
+            { "id": "6.2.7", "name": "Law Schools" },
+            { "id": "6.2.8", "name": "Medical Schools" },
+            { "id": "6.2.9", "name": "Art Schools" },
+            { "id": "6.2.10", "name": "Military Academies" }
+          ]
+        },
+        {
+          "id": "6.3",
+          "name": "Educational Services",
+          "subsubsectors": [
+            { "id": "6.3.1", "name": "Tutoring Services" },
+            { "id": "6.3.2", "name": "Test Preparation" },
+            { "id": "6.3.3", "name": "Educational Consulting" },
+            { "id": "6.3.4", "name": "Curriculum Development" },
+            { "id": "6.3.5", "name": "Educational Publishing" },
+            { "id": "6.3.6", "name": "School Administration" },
+            { "id": "6.3.7", "name": "Special Needs Services" },
+            { "id": "6.3.8", "name": "College Admissions Counseling" },
+            { "id": "6.3.9", "name": "Career Counseling" },
+            { "id": "6.3.10", "name": "Language Instruction" }
+          ]
+        },
+        {
+          "id": "6.4",
+          "name": "Educational Technology",
+          "subsubsectors": [
+            { "id": "6.4.1", "name": "Learning Management Systems" },
+            { "id": "6.4.2", "name": "Educational Apps" },
+            { "id": "6.4.3", "name": "Virtual Classrooms" },
+            { "id": "6.4.4", "name": "Adaptive Learning" },
+            { "id": "6.4.5", "name": "Gamification in Education" },
+            { "id": "6.4.6", "name": "AR/VR in Education" },
+            { "id": "6.4.7", "name": "AI in Education" },
+            { "id": "6.4.8", "name": "Digital Textbooks" },
+            { "id": "6.4.9", "name": "Student Information Systems" },
+            { "id": "6.4.10", "name": "Remote Proctoring" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Energy & Utilities",
+      "subsectors": [
+        {
+          "id": "7.1",
+          "name": "Electric Power",
+          "subsubsectors": [
+            { "id": "7.1.1", "name": "Renewable Energy" },
+            { "id": "7.1.2", "name": "Nuclear Power" },
+            { "id": "7.1.3", "name": "Coal Power" },
+            { "id": "7.1.4", "name": "Natural Gas Power" },
+            { "id": "7.1.5", "name": "Hydropower" },
+            { "id": "7.1.6", "name": "Grid Management" },
+            { "id": "7.1.7", "name": "Distributed Generation" },
+            { "id": "7.1.8", "name": "Energy Storage" },
+            { "id": "7.1.9", "name": "Microgrids" },
+            { "id": "7.1.10", "name": "Power Plant Services" }
+          ]
+        },
+        {
+          "id": "7.2",
+          "name": "Oil & Gas",
+          "subsubsectors": [
+            { "id": "7.2.1", "name": "Exploration & Production" },
+            { "id": "7.2.2", "name": "Refining" },
+            { "id": "7.2.3", "name": "Pipeline Transportation" },
+            { "id": "7.2.4", "name": "LNG Terminals" },
+            { "id": "7.2.5", "name": "Oilfield Services" },
+            { "id": "7.2.6", "name": "Petrochemicals" },
+            { "id": "7.2.7", "name": "Retail Fueling" },
+            { "id": "7.2.8", "name": "Offshore Drilling" },
+            { "id": "7.2.9", "name": "Energy Trading" },
+            { "id": "7.2.10", "name": "Carbon Capture" }
+          ]
+        },
+        {
+          "id": "7.3",
+          "name": "Water Utilities",
+          "subsubsectors": [
+            { "id": "7.3.1", "name": "Water Treatment" },
+            { "id": "7.3.2", "name": "Wastewater Management" },
+            { "id": "7.3.3", "name": "Water Distribution" },
+            { "id": "7.3.4", "name": "Stormwater Management" },
+            { "id": "7.3.5", "name": "Desalination" },
+            { "id": "7.3.6", "name": "Water Conservation" },
+            { "id": "7.3.7", "name": "Water Quality Testing" },
+            { "id": "7.3.8", "name": "Smart Water Meters" },
+            { "id": "7.3.9", "name": "Infrastructure Maintenance" },
+            { "id": "7.3.10", "name": "Bottled Water" }
+          ]
+        },
+        {
+          "id": "7.4",
+          "name": "Energy Services",
+          "subsubsectors": [
+            { "id": "7.4.1", "name": "Energy Efficiency Consulting" },
+            { "id": "7.4.2", "name": "Demand Response" },
+            { "id": "7.4.3", "name": "Energy Audits" },
+            { "id": "7.4.4", "name": "Utility Billing" },
+            { "id": "7.4.5", "name": "Energy Procurement" },
+            { "id": "7.4.6", "name": "Smart Home Energy" },
+            { "id": "7.4.7", "name": "Carbon Management" },
+            { "id": "7.4.8", "name": "Energy Market Analysis" },
+            { "id": "7.4.9", "name": "Microgeneration" },
+            { "id": "7.4.10", "name": "Energy-as-a-Service" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Entertainment & Media",
+      "subsectors": [
+        {
+          "id": "8.1",
+          "name": "Film & Television",
+          "subsubsectors": [
+            { "id": "8.1.1", "name": "Production" },
+            { "id": "8.1.2", "name": "Streaming Services" },
+            { "id": "8.1.3", "name": "Broadcast Television" },
+            { "id": "8.1.4", "name": "Cable Networks" },
+            { "id": "8.1.5", "name": "Film Distribution" },
+            { "id": "8.1.6", "name": "Animation" },
+            { "id": "8.1.7", "name": "Documentary" },
+            { "id": "8.1.8", "name": "Reality TV" },
+            { "id": "8.1.9", "name": "Post-Production" },
+            { "id": "8.1.10", "name": "Film Festivals" }
+          ]
+        },
+        {
+          "id": "8.2",
+          "name": "Music",
+          "subsubsectors": [
+            { "id": "8.2.1", "name": "Recording Industry" },
+            { "id": "8.2.2", "name": "Live Performances" },
+            { "id": "8.2.3", "name": "Music Publishing" },
+            { "id": "8.2.4", "name": "Digital Music Platforms" },
+            { "id": "8.2.5", "name": "Music Licensing" },
+            { "id": "8.2.6", "name": "Artist Management" },
+            { "id": "8.2.7", "name": "Music Education" },
+            { "id": "8.2.8", "name": "Instrument Manufacturing" },
+            { "id": "8.2.9", "name": "Music Festivals" },
+            { "id": "8.2.10", "name": "Audio Equipment" }
+          ]
+        },
+        {
+          "id": "8.3",
+          "name": "Publishing",
+          "subsubsectors": [
+            { "id": "8.3.1", "name": "Books" },
+            { "id": "8.3.2", "name": "Magazines" },
+            { "id": "8.3.3", "name": "Newspapers" },
+            { "id": "8.3.4", "name": "Academic Publishing" },
+            { "id": "8.3.5", "name": "Digital Publishing" },
+            { "id": "8.3.6", "name": "Audiobooks" },
+            { "id": "8.3.7", "name": "Comics & Graphic Novels" },
+            { "id": "8.3.8", "name": "Self-Publishing" },
+            { "id": "8.3.9", "name": "Educational Materials" },
+            { "id": "8.3.10", "name": "Literary Agencies" }
+          ]
+        },
+        {
+          "id": "8.4",
+          "name": "Digital Media",
+          "subsubsectors": [
+            { "id": "8.4.1", "name": "Social Media Platforms" },
+            { "id": "8.4.2", "name": "Content Creation" },
+            { "id": "8.4.3", "name": "Influencer Marketing" },
+            { "id": "8.4.4", "name": "Podcasting" },
+            { "id": "8.4.5", "name": "Online Video" },
+            { "id": "8.4.6", "name": "Gaming Content" },
+            { "id": "8.4.7", "name": "Digital Advertising" },
+            { "id": "8.4.8", "name": "VR/AR Content" },
+            { "id": "8.4.9", "name": "Web Series" },
+            { "id": "8.4.10", "name": "User-Generated Content" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Food & Beverage",
+      "subsectors": [
+        {
+          "id": "9.1",
+          "name": "Food Production",
+          "subsubsectors": [
+            { "id": "9.1.1", "name": "Packaged Foods" },
+            { "id": "9.1.2", "name": "Dairy Products" },
+            { "id": "9.1.3", "name": "Bakery Products" },
+            { "id": "9.1.4", "name": "Meat Processing" },
+            { "id": "9.1.5", "name": "Snack Foods" },
+            { "id": "9.1.6", "name": "Frozen Foods" },
+            { "id": "9.1.7", "name": "Canned Goods" },
+            { "id": "9.1.8", "name": "Organic Foods" },
+            { "id": "9.1.9", "name": "Plant-Based Foods" },
+            { "id": "9.1.10", "name": "Baby Food" }
+          ]
+        },
+        {
+          "id": "9.2",
+          "name": "Beverages",
+          "subsubsectors": [
+            { "id": "9.2.1", "name": "Soft Drinks" },
+            { "id": "9.2.2", "name": "Alcoholic Beverages" },
+            { "id": "9.2.3", "name": "Bottled Water" },
+            { "id": "9.2.4", "name": "Juices" },
+            { "id": "9.2.5", "name": "Coffee & Tea" },
+            { "id": "9.2.6", "name": "Energy Drinks" },
+            { "id": "9.2.7", "name": "Dairy Beverages" },
+            { "id": "9.2.8", "name": "Functional Beverages" },
+            { "id": "9.2.9", "name": "Kombucha" },
+            { "id": "9.2.10", "name": "Craft Beverages" }
+          ]
+        },
+        {
+          "id": "9.3",
+          "name": "Food Services",
+          "subsubsectors": [
+            { "id": "9.3.1", "name": "Restaurants" },
+            { "id": "9.3.2", "name": "Catering" },
+            { "id": "9.3.3", "name": "Food Trucks" },
+            { "id": "9.3.4", "name": "Institutional Food Service" },
+            { "id": "9.3.5", "name": "Meal Delivery" },
+            { "id": "9.3.6", "name": "Ghost Kitchens" },
+            { "id": "9.3.7", "name": "Fine Dining" },
+            { "id": "9.3.8", "name": "Quick Service" },
+            { "id": "9.3.9", "name": "Cafés & Bistros" },
+            { "id": "9.3.10", "name": "Food Halls" }
+          ]
+        },
+        {
+          "id": "9.4",
+          "name": "Food Technology",
+          "subsubsectors": [
+            { "id": "9.4.1", "name": "Food Safety Technology" },
+            { "id": "9.4.2", "name": "Supply Chain Tracking" },
+            { "id": "9.4.3", "name": "Alternative Proteins" },
+            { "id": "9.4.4", "name": "Food Processing Equipment" },
+            { "id": "9.4.5", "name": "Packaging Innovations" },
+            { "id": "9.4.6", "name": "Precision Fermentation" },
+            { "id": "9.4.7", "name": "Vertical Farming" },
+            { "id": "9.4.8", "name": "AI in Food Production" },
+            { "id": "9.4.9", "name": "Nutrition Technology" },
+            { "id": "9.4.10", "name": "Smart Kitchen Appliances" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Healthcare & Pharmaceuticals",
+      "subsectors": [
+        {
+          "id": "10.1",
+          "name": "Healthcare Services",
+          "subsubsectors": [
+            { "id": "10.1.1", "name": "Hospitals" },
+            { "id": "10.1.2", "name": "Clinics" },
+            { "id": "10.1.3", "name": "Primary Care" },
+            { "id": "10.1.4", "name": "Specialty Care" },
+            { "id": "10.1.5", "name": "Emergency Services" },
+            { "id": "10.1.6", "name": "Diagnostic Services" },
+            { "id": "10.1.7", "name": "Rehabilitation Services" },
+            { "id": "10.1.8", "name": "Mental Health Services" },
+            { "id": "10.1.9", "name": "Home Healthcare" },
+            { "id": "10.1.10", "name": "Telemedicine" }
+          ]
+        },
+        {
+          "id": "10.2",
+          "name": "Pharmaceuticals",
+          "subsubsectors": [
+            { "id": "10.2.1", "name": "Drug Development" },
+            { "id": "10.2.2", "name": "Generic Medicines" },
+            { "id": "10.2.3", "name": "Biologics" },
+            { "id": "10.2.4", "name": "Vaccines" },
+            { "id": "10.2.5", "name": "Over-the-Counter Drugs" },
+            { "id": "10.2.6", "name": "Clinical Trials" },
+            { "id": "10.2.7", "name": "Pharmaceutical Manufacturing" },
+            { "id": "10.2.8", "name": "Pharmacy Services" },
+            { "id": "10.2.9", "name": "Drug Delivery Systems" },
+            { "id": "10.2.10", "name": "Personalized Medicine" }
+          ]
+        },
+        {
+          "id": "10.3",
+          "name": "Medical Devices",
+          "subsubsectors": [
+            { "id": "10.3.1", "name": "Diagnostic Equipment" },
+            { "id": "10.3.2", "name": "Surgical Instruments" },
+            { "id": "10.3.3", "name": "Implants" },
+            { "id": "10.3.4", "name": "Prosthetics" },
+            { "id": "10.3.5", "name": "Monitoring Devices" },
+            { "id": "10.3.6", "name": "Therapeutic Devices" },
+            { "id": "10.3.7", "name": "Dental Equipment" },
+            { "id": "10.3.8", "name": "Home Medical Equipment" },
+            { "id": "10.3.9", "name": "Wearable Health Tech" },
+            { "id": "10.3.10", "name": "Robotic Surgery" }
+          ]
+        },
+        {
+          "id": "10.4",
+          "name": "Healthcare Support",
+          "subsubsectors": [
+            { "id": "10.4.1", "name": "Medical Billing" },
+            { "id": "10.4.2", "name": "Healthcare IT" },
+            { "id": "10.4.3", "name": "Medical Staffing" },
+            { "id": "10.4.4", "name": "Healthcare Consulting" },
+            { "id": "10.4.5", "name": "Medical Transcription" },
+            { "id": "10.4.6", "name": "Patient Advocacy" },
+            { "id": "10.4.7", "name": "Medical Waste Management" },
+            { "id": "10.4.8", "name": "Healthcare Facilities Management" },
+            { "id": "10.4.9", "name": "Medical Education" },
+            { "id": "10.4.10", "name": "Healthcare Marketing" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Hospitality & Tourism",
+      "subsectors": [
+        {
+          "id": "11.1",
+          "name": "Accommodation",
+          "subsubsectors": [
+            { "id": "11.1.1", "name": "Hotels & Resorts" },
+            { "id": "11.1.2", "name": "Vacation Rentals" },
+            { "id": "11.1.3", "name": "Hostels" },
+            { "id": "11.1.4", "name": "Bed & Breakfasts" },
+            { "id": "11.1.5", "name": "Luxury Hotels" },
+            { "id": "11.1.6", "name": "Boutique Hotels" },
+            { "id": "11.1.7", "name": "Eco-Lodges" },
+            { "id": "11.1.8", "name": "Casino Hotels" },
+            { "id": "11.1.9", "name": "Extended Stay Hotels" },
+            { "id": "11.1.10", "name": "Serviced Apartments" }
+          ]
+        },
+        {
+          "id": "11.2",
+          "name": "Food Service",
+          "subsubsectors": [
+            { "id": "11.2.1", "name": "Restaurants" },
+            { "id": "11.2.2", "name": "Bars & Pubs" },
+            { "id": "11.2.3", "name": "Room Service" },
+            { "id": "11.2.4", "name": "Catering" },
+            { "id": "11.2.5", "name": "Banquet Services" },
+            { "id": "11.2.6", "name": "Fine Dining" },
+            { "id": "11.2.7", "name": "Fast Casual" },
+            { "id": "11.2.8", "name": "Buffet Services" },
+            { "id": "11.2.9", "name": "Food Courts" },
+            { "id": "11.2.10", "name": "Theme Restaurants" }
+          ]
+        },
+        {
+          "id": "11.3",
+          "name": "Travel & Tourism",
+          "subsubsectors": [
+            { "id": "11.3.1", "name": "Tour Operators" },
+            { "id": "11.3.2", "name": "Travel Agencies" },
+            { "id": "11.3.3", "name": "Cruise Lines" },
+            { "id": "11.3.4", "name": "Adventure Tourism" },
+            { "id": "11.3.5", "name": "Eco-Tourism" },
+            { "id": "11.3.6", "name": "Cultural Tourism" },
+            { "id": "11.3.7", "name": "Business Travel" },
+            { "id": "11.3.8", "name": "Medical Tourism" },
+            { "id": "11.3.9", "name": "Luxury Travel" },
+            { "id": "11.3.10", "name": "Group Tours" }
+          ]
+        },
+        {
+          "id": "11.4",
+          "name": "Event Management",
+          "subsubsectors": [
+            { "id": "11.4.1", "name": "Conferences" },
+            { "id": "11.4.2", "name": "Conventions" },
+            { "id": "11.4.3", "name": "Weddings" },
+            { "id": "11.4.4", "name": "Corporate Events" },
+            { "id": "11.4.5", "name": "Exhibitions" },
+            { "id": "11.4.6", "name": "Trade Shows" },
+            { "id": "11.4.7", "name": "Music Festivals" },
+            { "id": "11.4.8", "name": "Sporting Events" },
+            { "id": "11.4.9", "name": "Charity Galas" },
+            { "id": "11.4.10", "name": "Product Launches" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Manufacturing",
+      "subsectors": [
+        {
+          "id": "12.1",
+          "name": "Industrial Manufacturing",
+          "subsubsectors": [
+            { "id": "12.1.1", "name": "Heavy Machinery" },
+            { "id": "12.1.2", "name": "Industrial Equipment" },
+            { "id": "12.1.3", "name": "Machine Tools" },
+            { "id": "12.1.4", "name": "Hydraulic Systems" },
+            { "id": "12.1.5", "name": "Pneumatic Systems" },
+            { "id": "12.1.6", "name": "Robotics" },
+            { "id": "12.1.7", "name": "3D Printing" },
+            { "id": "12.1.8", "name": "CNC Machining" },
+            { "id": "12.1.9", "name": "Metal Fabrication" },
+            { "id": "12.1.10", "name": "Assembly Lines" }
+          ]
+        },
+        {
+          "id": "12.2",
+          "name": "Consumer Goods Manufacturing",
+          "subsubsectors": [
+            { "id": "12.2.1", "name": "Appliances" },
+            { "id": "12.2.2", "name": "Furniture" },
+            { "id": "12.2.3", "name": "Textiles" },
+            { "id": "12.2.4", "name": "Footwear" },
+            { "id": "12.2.5", "name": "Sporting Goods" },
+            { "id": "12.2.6", "name": "Toys" },
+            { "id": "12.2.7", "name": "Jewelry" },
+            { "id": "12.2.8", "name": "Eyewear" },
+            { "id": "12.2.9", "name": "Watches" },
+            { "id": "12.2.10", "name": "Luggage" }
+          ]
+        },
+        {
+          "id": "12.3",
+          "name": "Food Processing",
+          "subsubsectors": [
+            { "id": "12.3.1", "name": "Beverage Production" },
+            { "id": "12.3.2", "name": "Bakery Products" },
+            { "id": "12.3.3", "name": "Dairy Processing" },
+            { "id": "12.3.4", "name": "Meat Processing" },
+            { "id": "12.3.5", "name": "Snack Foods" },
+            { "id": "12.3.6", "name": "Frozen Foods" },
+            { "id": "12.3.7", "name": "Canned Goods" },
+            { "id": "12.3.8", "name": "Confectionery" },
+            { "id": "12.3.9", "name": "Organic Foods" },
+            { "id": "12.3.10", "name": "Functional Foods" }
+          ]
+        },
+        {
+          "id": "12.4",
+          "name": "Pharmaceutical Manufacturing",
+          "subsubsectors": [
+            { "id": "12.4.1", "name": "Drug Formulation" },
+            { "id": "12.4.2", "name": "Vaccine Production" },
+            { "id": "12.4.3", "name": "Biologics" },
+            { "id": "12.4.4", "name": "Generic Drugs" },
+            { "id": "12.4.5", "name": "Over-the-Counter Medicines" },
+            { "id": "12.4.6", "name": "Medical Devices" },
+            { "id": "12.4.7", "name": "Diagnostic Equipment" },
+            { "id": "12.4.8", "name": "Surgical Instruments" },
+            { "id": "12.4.9", "name": "Dental Products" },
+            { "id": "12.4.10", "name": "Veterinary Medicines" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Retail & E-Commerce",
+      "subsectors": [
+        {
+          "id": "13.1",
+          "name": "Brick-and-Mortar Retail",
+          "subsubsectors": [
+            { "id": "13.1.1", "name": "Department Stores" },
+            { "id": "13.1.2", "name": "Specialty Stores" },
+            { "id": "13.1.3", "name": "Supermarkets" },
+            { "id": "13.1.4", "name": "Convenience Stores" },
+            { "id": "13.1.5", "name": "Discount Stores" },
+            { "id": "13.1.6", "name": "Outlet Malls" },
+            { "id": "13.1.7", "name": "Bookstores" },
+            { "id": "13.1.8", "name": "Electronics Retailers" },
+            { "id": "13.1.9", "name": "Home Improvement Stores" },
+            { "id": "13.1.10", "name": "Pharmacies" }
+          ]
+        },
+        {
+          "id": "13.2",
+          "name": "E-Commerce",
+          "subsubsectors": [
+            { "id": "13.2.1", "name": "Online Marketplaces" },
+            { "id": "13.2.2", "name": "Direct-to-Consumer" },
+            { "id": "13.2.3", "name": "Subscription Services" },
+            { "id": "13.2.4", "name": "Mobile Commerce" },
+            { "id": "13.2.5", "name": "Social Commerce" },
+            { "id": "13.2.6", "name": "Flash Sales" },
+            { "id": "13.2.7", "name": "Cross-border E-commerce" },
+            { "id": "13.2.8", "name": "B2B E-commerce" },
+            { "id": "13.2.9", "name": "Augmented Reality Shopping" },
+            { "id": "13.2.10", "name": "Voice Commerce" }
+          ]
+        },
+        {
+          "id": "13.3",
+          "name": "Omnichannel Retail",
+          "subsubsectors": [
+            { "id": "13.3.1", "name": "Click-and-Collect" },
+            { "id": "13.3.2", "name": "Curbside Pickup" },
+            { "id": "13.3.3", "name": "Ship-from-Store" },
+            { "id": "13.3.4", "name": "Endless Aisle" },
+            { "id": "13.3.5", "name": "Mobile Point-of-Sale" },
+            { "id": "13.3.6", "name": "Virtual Fitting Rooms" },
+            { "id": "13.3.7", "name": "Personalized Recommendations" },
+            { "id": "13.3.8", "name": "Loyalty Programs" },
+            { "id": "13.3.9", "name": "Inventory Visibility" },
+            { "id": "13.3.10", "name": "Unified Commerce" }
+          ]
+        },
+        {
+          "id": "13.4",
+          "name": "Retail Technology",
+          "subsubsectors": [
+            { "id": "13.4.1", "name": "Point-of-Sale Systems" },
+            { "id": "13.4.2", "name": "Inventory Management" },
+            { "id": "13.4.3", "name": "Customer Analytics" },
+            { "id": "13.4.4", "name": "RFID Solutions" },
+            { "id": "13.4.5", "name": "Self-Checkout" },
+            { "id": "13.4.6", "name": "Cashierless Stores" },
+            { "id": "13.4.7", "name": "Digital Signage" },
+            { "id": "13.4.8", "name": "Smart Shelves" },
+            { "id": "13.4.9", "name": "Visual Search" },
+            { "id": "13.4.10", "name": "AI-Powered Merchandising" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Technology & IT",
+      "subsectors": [
+        {
+          "id": "14.1",
+          "name": "Software Development",
+          "subsubsectors": [
+            { "id": "14.1.1", "name": "Enterprise Software" },
+            { "id": "14.1.2", "name": "Consumer Applications" },
+            { "id": "14.1.3", "name": "Mobile Apps" },
+            { "id": "14.1.4", "name": "Cloud Computing" },
+            { "id": "14.1.5", "name": "Artificial Intelligence" },
+            { "id": "14.1.6", "name": "Blockchain Solutions" },
+            { "id": "14.1.7", "name": "Game Development" },
+            { "id": "14.1.8", "name": "Embedded Systems" },
+            { "id": "14.1.9", "name": "Open Source Projects" },
+            { "id": "14.1.10", "name": "DevOps Solutions" }
+          ]
+        },
+        {
+          "id": "14.2",
+          "name": "Hardware Manufacturing",
+          "subsubsectors": [
+            { "id": "14.2.1", "name": "Computer Systems" },
+            { "id": "14.2.2", "name": "Semiconductors" },
+            { "id": "14.2.3", "name": "Networking Equipment" },
+            { "id": "14.2.4", "name": "Storage Devices" },
+            { "id": "14.2.5", "name": "Peripherals" },
+            { "id": "14.2.6", "name": "Wearable Technology" },
+            { "id": "14.2.7", "name": "IoT Devices" },
+            { "id": "14.2.8", "name": "Robotics Hardware" },
+            { "id": "14.2.9", "name": "Data Center Infrastructure" },
+            { "id": "14.2.10", "name": "Quantum Computing Hardware" }
+          ]
+        },
+        {
+          "id": "14.3",
+          "name": "IT Services",
+          "subsubsectors": [
+            { "id": "14.3.1", "name": "Managed Services" },
+            { "id": "14.3.2", "name": "Cloud Services" },
+            { "id": "14.3.3", "name": "Cybersecurity" },
+            { "id": "14.3.4", "name": "Data Analytics" },
+            { "id": "14.3.5", "name": "IT Consulting" },
+            { "id": "14.3.6", "name": "System Integration" },
+            { "id": "14.3.7", "name": "Technical Support" },
+            { "id": "14.3.8", "name": "Disaster Recovery" },
+            { "id": "14.3.9", "name": "Network Management" },
+            { "id": "14.3.10", "name": "IT Outsourcing" }
+          ]
+        },
+        {
+          "id": "14.4",
+          "name": "Emerging Technologies",
+          "subsubsectors": [
+            { "id": "14.4.1", "name": "Quantum Computing" },
+            { "id": "14.4.2", "name": "Augmented Reality" },
+            { "id": "14.4.3", "name": "Virtual Reality" },
+            { "id": "14.4.4", "name": "Computer Vision" },
+            { "id": "14.4.5", "name": "Natural Language Processing" },
+            { "id": "14.4.6", "name": "Autonomous Systems" },
+            { "id": "14.4.7", "name": "Edge Computing" },
+            { "id": "14.4.8", "name": "5G Technologies" },
+            { "id": "14.4.9", "name": "Digital Twins" },
+            { "id": "14.4.10", "name": "Neuromorphic Computing" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Transportation & Logistics",
+      "subsectors": [
+        {
+          "id": "15.1",
+          "name": "Freight Transportation",
+          "subsubsectors": [
+            { "id": "15.1.1", "name": "Trucking" },
+            { "id": "15.1.2", "name": "Rail Freight" },
+            { "id": "15.1.3", "name": "Air Cargo" },
+            { "id": "15.1.4", "name": "Maritime Shipping" },
+            { "id": "15.1.5", "name": "Pipelines" },
+            { "id": "15.1.6", "name": "Intermodal" },
+            { "id": "15.1.7", "name": "Last-Mile Delivery" },
+            { "id": "15.1.8", "name": "Bulk Shipping" },
+            { "id": "15.1.9", "name": "Refrigerated Transport" },
+            { "id": "15.1.10", "name": "Dangerous Goods Transport" }
+          ]
+        },
+        {
+          "id": "15.2",
+          "name": "Passenger Transportation",
+          "subsubsectors": [
+            { "id": "15.2.1", "name": "Airlines" },
+            { "id": "15.2.2", "name": "Rail Passenger" },
+            { "id": "15.2.3", "name": "Bus Services" },
+            { "id": "15.2.4", "name": "Taxi Services" },
+            { "id": "15.2.5", "name": "Ride-Sharing" },
+            { "id": "15.2.6", "name": "Ferries" },
+            { "id": "15.2.7", "name": "Charter Services" },
+            { "id": "15.2.8", "name": "Public Transit" },
+            { "id": "15.2.9", "name": "Micro-Mobility" },
+            { "id": "15.2.10", "name": "Space Tourism" }
+          ]
+        },
+        {
+          "id": "15.3",
+          "name": "Logistics Services",
+          "subsubsectors": [
+            { "id": "15.3.1", "name": "Warehousing" },
+            { "id": "15.3.2", "name": "Distribution" },
+            { "id": "15.3.3", "name": "Supply Chain Management" },
+            { "id": "15.3.4", "name": "Freight Forwarding" },
+            { "id": "15.3.5", "name": "Customs Brokerage" },
+            { "id": "15.3.6", "name": "Third-Party Logistics" },
+            { "id": "15.3.7", "name": "Fourth-Party Logistics" },
+            { "id": "15.3.8", "name": "Reverse Logistics" },
+            { "id": "15.3.9", "name": "Cold Chain Logistics" },
+            { "id": "15.3.10", "name": "E-commerce Fulfillment" }
+          ]
+        },
+        {
+          "id": "15.4",
+          "name": "Transportation Technology",
+          "subsubsectors": [
+            { "id": "15.4.1", "name": "Fleet Management" },
+            { "id": "15.4.2", "name": "Route Optimization" },
+            { "id": "15.4.3", "name": "Telematics" },
+            { "id": "15.4.4", "name": "Autonomous Vehicles" },
+            { "id": "15.4.5", "name": "Drone Delivery" },
+            { "id": "15.4.6", "name": "Mobility-as-a-Service" },
+            { "id": "15.4.7", "name": "Smart Traffic Systems" },
+            { "id": "15.4.8", "name": "Digital Freight Platforms" },
+            { "id": "15.4.9", "name": "Blockchain in Logistics" },
+            { "id": "15.4.10", "name": "Hyperloop Systems" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Aerospace & Defense",
+      "subsectors": [
+        {
+          "id": "16.1",
+          "name": "Aircraft Manufacturing",
+          "subsubsectors": [
+            { "id": "16.1.1", "name": "Commercial Aircraft" },
+            { "id": "16.1.2", "name": "Business Jets" },
+            { "id": "16.1.3", "name": "Military Aircraft" },
+            { "id": "16.1.4", "name": "Helicopters" },
+            { "id": "16.1.5", "name": "Drones/UAVs" },
+            { "id": "16.1.6", "name": "Light Aircraft" },
+            { "id": "16.1.7", "name": "Aircraft Engines" },
+            { "id": "16.1.8", "name": "Aircraft Interiors" },
+            { "id": "16.1.9", "name": "Aircraft Maintenance" },
+            { "id": "16.1.10", "name": "Aircraft Components" }
+          ]
+        },
+        {
+          "id": "16.2",
+          "name": "Space Systems",
+          "subsubsectors": [
+            { "id": "16.2.1", "name": "Satellites" },
+            { "id": "16.2.2", "name": "Launch Vehicles" },
+            { "id": "16.2.3", "name": "Spacecraft" },
+            { "id": "16.2.4", "name": "Space Stations" },
+            { "id": "16.2.5", "name": "Space Tourism" },
+            { "id": "16.2.6", "name": "Space Exploration" },
+            { "id": "16.2.7", "name": "Earth Observation" },
+            { "id": "16.2.8", "name": "Space Communications" },
+            { "id": "16.2.9", "name": "Space Mining" },
+            { "id": "16.2.10", "name": "Space Debris Management" }
+          ]
+        },
+        {
+          "id": "16.3",
+          "name": "Defense Systems",
+          "subsubsectors": [
+            { "id": "16.3.1", "name": "Missile Systems" },
+            { "id": "16.3.2", "name": "Radar Systems" },
+            { "id": "16.3.3", "name": "Electronic Warfare" },
+            { "id": "16.3.4", "name": "Military Vehicles" },
+            { "id": "16.3.5", "name": "Naval Systems" },
+            { "id": "16.3.6", "name": "Cyber Warfare" },
+            { "id": "16.3.7", "name": "Surveillance Systems" },
+            { "id": "16.3.8", "name": "Ballistic Protection" },
+            { "id": "16.3.9", "name": "Military Communications" },
+            { "id": "16.3.10", "name": "Autonomous Weapons" }
+          ]
+        },
+        {
+          "id": "16.4",
+          "name": "Aviation Services",
+          "subsubsectors": [
+            { "id": "16.4.1", "name": "Airlines" },
+            { "id": "16.4.2", "name": "Air Traffic Control" },
+            { "id": "16.4.3", "name": "Airport Operations" },
+            { "id": "16.4.4", "name": "Flight Training" },
+            { "id": "16.4.5", "name": "Aircraft Leasing" },
+            { "id": "16.4.6", "name": "MRO Services" },
+            { "id": "16.4.7", "name": "Avionics" },
+            { "id": "16.4.8", "name": "Ground Handling" },
+            { "id": "16.4.9", "name": "In-Flight Services" },
+            { "id": "16.4.10", "name": "Aviation Security" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": 17,
+      "name": "Arts & Crafts",
+      "subsectors": [
+        {
+          "id": "17.1",
+          "name": "Fine Arts",
+          "subsubsectors": [
+            { "id": "17.1.1", "name": "Painting" },
+            { "id": "17.1.2", "name": "Sculpture" },
+            { "id": "17.1.3", "name": "Printmaking" },
+            { "id": "17.1.4", "name": "Drawing" },
+            { "id": "17.1.5", "name": "Photography" },
+            { "id": "17.1.6", "name": "Mixed Media" },
+            { "id": "17.1.7", "name": "Digital Art" },
+            { "id": "17.1.8", "name": "Conceptual Art" },
+            { "id": "17.1.9", "name": "Installation Art" },
+            { "id": "17.1.10", "name": "Performance Art" }
+          ]
+        },
+        {
+          "id": "17.2",
+          "name": "Crafts & Artisanal",
+          "subsubsectors": [
+            { "id": "17.2.1", "name": "Pottery & Ceramics" },
+            { "id": "17.2.2", "name": "Textile Arts" },
+            { "id": "17.2.3", "name": "Woodworking" },
+            { "id": "17.2.4", "name": "Glass Art" },
+            { "id": "17.2.5", "name": "Jewelry Making" },
+            { "id": "17.2.6", "name": "Metal Crafts" },
+            { "id": "17.2.7", "name": "Paper Crafts" },
+            { "id": "17.2.8", "name": "Leatherworking" },
+            { "id": "17.2.9", "name": "Candle Making" },
+            { "id": "17.2.10", "name": "Soap Making" }
+          ]
+        },
+        {
+          "id": "17.3",
+          "name": "Art Services",
+          "subsubsectors": [
+            { "id": "17.3.1", "name": "Art Galleries" },
+            { "id": "17.3.2", "name": "Art Dealership" },
+            { "id": "17.3.3", "name": "Art Restoration" },
+            { "id": "17.3.4", "name": "Art Appraisal" },
+            { "id": "17.3.5", "name": "Art Framing" },
+            { "id": "17.3.6", "name": "Art Instruction" },
+            { "id": "17.3.7", "name": "Art Consulting" },
+            { "id": "17.3.8", "name": "Public Art" },
+            { "id": "17.3.9", "name": "Art Licensing" },
+            { "id": "17.3.10", "name": "Art Shipping" }
+          ]
+        },
+        {
+          "id": "17.4",
+          "name": "Digital Arts",
+          "subsubsectors": [
+            { "id": "17.4.1", "name": "3D Modeling" },
+            { "id": "17.4.2", "name": "Digital Illustration" },
+            { "id": "17.4.3", "name": "Motion Graphics" },
+            { "id": "17.4.4", "name": "NFT Art" },
+            { "id": "17.4.5", "name": "VR Art" },
+            { "id": "17.4.6", "name": "Game Art" },
+            { "id": "17.4.7", "name": "Concept Art" },
+            { "id": "17.4.8", "name": "Digital Sculpting" },
+            { "id": "17.4.9", "name": "Pixel Art" },
+            { "id": "17.4.10", "name": "Generative Art" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Biotechnology",
+      "subsectors": [
+        {
+          "id": "18.1",
+          "name": "Medical Biotechnology",
+          "subsubsectors": [
+            { "id": "18.1.1", "name": "Pharmaceutical Development" },
+            { "id": "18.1.2", "name": "Gene Therapy" },
+            { "id": "18.1.3", "name": "Stem Cell Research" },
+            { "id": "18.1.4", "name": "Diagnostic Tools" },
+            { "id": "18.1.5", "name": "Tissue Engineering" },
+            { "id": "18.1.6", "name": "Vaccine Development" },
+            { "id": "18.1.7", "name": "Personalized Medicine" },
+            { "id": "18.1.8", "name": "Biosimilars" },
+            { "id": "18.1.9", "name": "Antibody Development" },
+            { "id": "18.1.10", "name": "Microbiome Therapeutics" }
+          ]
+        },
+        {
+          "id": "18.2",
+          "name": "Agricultural Biotechnology",
+          "subsubsectors": [
+            { "id": "18.2.1", "name": "GMO Crops" },
+            { "id": "18.2.2", "name": "Biofertilizers" },
+            { "id": "18.2.3", "name": "Biopesticides" },
+            { "id": "18.2.4", "name": "Plant Breeding" },
+            { "id": "18.2.5", "name": "Animal Biotechnology" },
+            { "id": "18.2.6", "name": "Aquaculture Biotechnology" },
+            { "id": "18.2.7", "name": "Biofortification" },
+            { "id": "18.2.8", "name": "Soil Microbiome" },
+            { "id": "18.2.9", "name": "Alternative Proteins" },
+            { "id": "18.2.10", "name": "Vertical Farming Tech" }
+          ]
+        },
+        {
+          "id": "18.3",
+          "name": "Industrial Biotechnology",
+          "subsubsectors": [
+            { "id": "18.3.1", "name": "Biofuels" },
+            { "id": "18.3.2", "name": "Bioplastics" },
+            { "id": "18.3.3", "name": "Enzyme Engineering" },
+            { "id": "18.3.4", "name": "Bioremediation" },
+            { "id": "18.3.5", "name": "Biosensors" },
+            { "id": "18.3.6", "name": "Fermentation Technology" },
+            { "id": "18.3.7", "name": "White Biotechnology" },
+            { "id": "18.3.8", "name": "Bio-based Chemicals" },
+            { "id": "18.3.9", "name": "Synthetic Biology" },
+            { "id": "18.3.10", "name": "Biomanufacturing" }
+          ]
+        },
+        {
+          "id": "18.4",
+          "name": "Bioinformatics",
+          "subsubsectors": [
+            { "id": "18.4.1", "name": "Genomic Data Analysis" },
+            { "id": "18.4.2", "name": "Protein Structure Prediction" },
+            { "id": "18.4.3", "name": "Drug Discovery Platforms" },
+            { "id": "18.4.4", "name": "Biomarker Identification" },
+            { "id": "18.4.5", "name": "Population Genetics" },
+            { "id": "18.4.6", "name": "Microbiome Analysis" },
+            { "id": "18.4.7", "name": "Clinical Trial Analytics" },
+            { "id": "18.4.8", "name": "AI in Biology" },
+            { "id": "18.4.9", "name": "Systems Biology" },
+            { "id": "18.4.10", "name": "Precision Medicine Tools" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Chemicals",
+      "subsectors": [
+        {
+          "id": "19.1",
+          "name": "Basic Chemicals",
+          "subsubsectors": [
+            { "id": "19.1.1", "name": "Petrochemicals" },
+            { "id": "19.1.2", "name": "Industrial Gases" },
+            { "id": "19.1.3", "name": "Fertilizers" },
+            { "id": "19.1.4", "name": "Inorganic Chemicals" },
+            { "id": "19.1.5", "name": "Acids & Alkalis" },
+            { "id": "19.1.6", "name": "Solvents" },
+            { "id": "19.1.7", "name": "Catalysts" },
+            { "id": "19.1.8", "name": "Dyes & Pigments" },
+            { "id": "19.1.9", "name": "Synthetic Rubbers" },
+            { "id": "19.1.10", "name": "Plastic Resins" }
+          ]
+        },
+        {
+          "id": "19.2",
+          "name": "Specialty Chemicals",
+          "subsubsectors": [
+            { "id": "19.2.1", "name": "Adhesives" },
+            { "id": "19.2.2", "name": "Coatings" },
+            { "id": "19.2.3", "name": "Electronic Chemicals" },
+            { "id": "19.2.4", "name": "Flavors & Fragrances" },
+            { "id": "19.2.5", "name": "Lubricants" },
+            { "id": "19.2.6", "name": "Water Treatment Chemicals" },
+            { "id": "19.2.7", "name": "Construction Chemicals" },
+            { "id": "19.2.8", "name": "Mining Chemicals" },
+            { "id": "19.2.9", "name": "Textile Chemicals" },
+            { "id": "19.2.10", "name": "Oilfield Chemicals" }
+          ]
+        },
+        {
+          "id": "19.3",
+          "name": "Consumer Chemicals",
+          "subsubsectors": [
+            { "id": "19.3.1", "name": "Cleaning Products" },
+            { "id": "19.3.2", "name": "Cosmetic Ingredients" },
+            { "id": "19.3.3", "name": "Personal Care Formulations" },
+            { "id": "19.3.4", "name": "Household Chemicals" },
+            { "id": "19.3.5", "name": "Laundry Products" },
+            { "id": "19.3.6", "name": "Air Fresheners" },
+            { "id": "19.3.7", "name": "Disinfectants" },
+            { "id": "19.3.8", "name": "Pest Control" },
+            { "id": "19.3.9", "name": "Automotive Care Products" },
+            { "id": "19.3.10", "name": "Pool & Spa Chemicals" }
+          ]
+        },
+        {
+          "id": "19.4",
+          "name": "Advanced Materials",
+          "subsubsectors": [
+            { "id": "19.4.1", "name": "Nanomaterials" },
+            { "id": "19.4.2", "name": "Smart Materials" },
+            { "id": "19.4.3", "name": "Biodegradable Polymers" },
+            { "id": "19.4.4", "name": "Conductive Polymers" },
+            { "id": "19.4.5", "name": "Aerogels" },
+            { "id": "19.4.6", "name": "Metamaterials" },
+            { "id": "19.4.7", "name": "Self-Healing Materials" },
+            { "id": "19.4.8", "name": "Shape Memory Alloys" },
+            { "id": "19.4.9", "name": "Carbon Nanotubes" },
+            { "id": "19.4.10", "name": "Graphene-Based Materials" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Consulting",
+      "subsectors": [
+        {
+          "id": "20.1",
+          "name": "Management Consulting",
+          "subsubsectors": [
+            { "id": "20.1.1", "name": "Strategy Consulting" },
+            { "id": "20.1.2", "name": "Operations Consulting" },
+            { "id": "20.1.3", "name": "Financial Advisory" },
+            { "id": "20.1.4", "name": "HR Consulting" },
+            { "id": "20.1.5", "name": "Risk Management" },
+            { "id": "20.1.6", "name": "Organizational Design" },
+            { "id": "20.1.7", "name": "Change Management" },
+            { "id": "20.1.8", "name": "M&A Advisory" },
+            { "id": "20.1.9", "name": "Digital Transformation" },
+            { "id": "20.1.10", "name": "Sustainability Consulting" }
+          ]
+        },
+        {
+          "id": "20.2",
+          "name": "IT Consulting",
+          "subsubsectors": [
+            { "id": "20.2.1", "name": "Systems Integration" },
+            { "id": "20.2.2", "name": "Cloud Strategy" },
+            { "id": "20.2.3", "name": "Cybersecurity Consulting" },
+            { "id": "20.2.4", "name": "Data Analytics Advisory" },
+            { "id": "20.2.5", "name": "ERP Implementation" },
+            { "id": "20.2.6", "name": "IT Governance" },
+            { "id": "20.2.7", "name": "Digital Strategy" },
+            { "id": "20.2.8", "name": "Software Selection" },
+            { "id": "20.2.9", "name": "IT Infrastructure" },
+            { "id": "20.2.10", "name": "Emerging Tech Advisory" }
+          ]
+        },
+        {
+          "id": "20.3",
+          "name": "Specialized Consulting",
+          "subsubsectors": [
+            { "id": "20.3.1", "name": "Healthcare Consulting" },
+            { "id": "20.3.2", "name": "Financial Services Consulting" },
+            { "id": "20.3.3", "name": "Public Sector Consulting" },
+            { "id": "20.3.4", "name": "Education Consulting" },
+            { "id": "20.3.5", "name": "Retail Consulting" },
+            { "id": "20.3.6", "name": "Manufacturing Consulting" },
+            { "id": "20.3.7", "name": "Energy Consulting" },
+            { "id": "20.3.8", "name": "Telecom Consulting" },
+            { "id": "20.3.9", "name": "Legal Consulting" },
+            { "id": "20.3.10", "name": "Non-Profit Consulting" }
+          ]
+        },
+        {
+          "id": "20.4",
+          "name": "Technical Consulting",
+          "subsubsectors": [
+            { "id": "20.4.1", "name": "Engineering Consulting" },
+            { "id": "20.4.2", "name": "Scientific Consulting" },
+            { "id": "20.4.3", "name": "Environmental Consulting" },
+            { "id": "20.4.4", "name": "Construction Consulting" },
+            { "id": "20.4.5", "name": "Biotech Consulting" },
+            { "id": "20.4.6", "name": "Chemical Consulting" },
+            { "id": "20.4.7", "name": "Materials Science Consulting" },
+            { "id": "20.4.8", "name": "Pharma Regulatory Consulting" },
+            { "id": "20.4.9", "name": "Aerospace Consulting" },
+            { "id": "20.4.10", "name": "Automotive Tech Consulting" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Consumer Electronics",
+      "subsectors": [
+        {
+          "id": "21.1",
+          "name": "Home Electronics",
+          "subsubsectors": [
+            { "id": "21.1.1", "name": "Televisions" },
+            { "id": "21.1.2", "name": "Audio Systems" },
+            { "id": "21.1.3", "name": "Home Theater" },
+            { "id": "21.1.4", "name": "Smart Home Devices" },
+            { "id": "21.1.5", "name": "Gaming Consoles" },
+            { "id": "21.1.6", "name": "Streaming Devices" },
+            { "id": "21.1.7", "name": "Home Appliances" },
+            { "id": "21.1.8", "name": "Security Systems" },
+            { "id": "21.1.9", "name": "Climate Control" },
+            { "id": "21.1.10", "name": "Kitchen Electronics" }
+          ]
+        },
+        {
+          "id": "21.2",
+          "name": "Personal Electronics",
+          "subsubsectors": [
+            { "id": "21.2.1", "name": "Smartphones" },
+            { "id": "21.2.2", "name": "Tablets" },
+            { "id": "21.2.3", "name": "Laptops" },
+            { "id": "21.2.4", "name": "Wearables" },
+            { "id": "21.2.5", "name": "Digital Cameras" },
+            { "id": "21.2.6", "name": "E-Readers" },
+            { "id": "21.2.7", "name": "Headphones" },
+            { "id": "21.2.8", "name": "Smart Watches" },
+            { "id": "21.2.9", "name": "Fitness Trackers" },
+            { "id": "21.2.10", "name": "Portable Speakers" }
+          ]
+        },
+        {
+          "id": "21.3",
+          "name": "Office Electronics",
+          "subsubsectors": [
+            { "id": "21.3.1", "name": "Printers" },
+            { "id": "21.3.2", "name": "Scanners" },
+            { "id": "21.3.3", "name": "Projectors" },
+            { "id": "21.3.4", "name": "Monitors" },
+            { "id": "21.3.5", "name": "Networking Equipment" },
+            { "id": "21.3.6", "name": "Point-of-Sale Systems" },
+            { "id": "21.3.7", "name": "Conference Systems" },
+            { "id": "21.3.8", "name": "Digital Signage" },
+            { "id": "21.3.9", "name": "Storage Devices" },
+            { "id": "21.3.10", "name": "Barcode Scanners" }
+          ]
+        },
+        {
+          "id": "21.4",
+          "name": "Emerging Consumer Tech",
+          "subsubsectors": [
+            { "id": "21.4.1", "name": "VR/AR Devices" },
+            { "id": "21.4.2", "name": "Drones" },
+            { "id": "21.4.3", "name": "Smart Glasses" },
+            { "id": "21.4.4", "name": "Robotic Assistants" },
+            { "id": "21.4.5", "name": "3D Printers" },
+            { "id": "21.4.6", "name": "Biometric Devices" },
+            { "id": "21.4.7", "name": "AI Assistants" },
+            { "id": "21.4.8", "name": "Haptic Technology" },
+            { "id": "21.4.9", "name": "Foldable Devices" },
+            { "id": "21.4.10", "name": "Quantum Computing Devices" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Environmental Services",
+      "subsectors": [
+        {
+          "id": "22.1",
+          "name": "Waste Management",
+          "subsubsectors": [
+            { "id": "22.1.1", "name": "Solid Waste Collection" },
+            { "id": "22.1.2", "name": "Recycling Services" },
+            { "id": "22.1.3", "name": "Hazardous Waste Disposal" },
+            { "id": "22.1.4", "name": "Organic Waste Processing" },
+            { "id": "22.1.5", "name": "E-Waste Recycling" },
+            { "id": "22.1.6", "name": "Landfill Operations" },
+            { "id": "22.1.7", "name": "Waste-to-Energy" },
+            { "id": "22.1.8", "name": "Medical Waste Disposal" },
+            { "id": "22.1.9", "name": "Construction Waste Management" },
+            { "id": "22.1.10", "name": "Industrial Waste Solutions" }
+          ]
+        },
+        {
+          "id": "22.2",
+          "name": "Environmental Consulting",
+          "subsubsectors": [
+            { "id": "22.2.1", "name": "Environmental Impact Assessments" },
+            { "id": "22.2.2", "name": "Remediation Planning" },
+            { "id": "22.2.3", "name": "Sustainability Consulting" },
+            { "id": "22.2.4", "name": "Regulatory Compliance" },
+            { "id": "22.2.5", "name": "Carbon Footprint Analysis" },
+            { "id": "22.2.6", "name": "Ecological Surveys" },
+            { "id": "22.2.7", "name": "Environmental Auditing" },
+            { "id": "22.2.8", "name": "Climate Risk Assessment" },
+            { "id": "22.2.9", "name": "Green Building Certification" },
+            { "id": "22.2.10", "name": "Environmental Management Systems" }
+          ]
+        },
+        {
+          "id": "22.3",
+          "name": "Pollution Control",
+          "subsubsectors": [
+            { "id": "22.3.1", "name": "Air Quality Management" },
+            { "id": "22.3.2", "name": "Water Pollution Control" },
+            { "id": "22.3.3", "name": "Soil Remediation" },
+            { "id": "22.3.4", "name": "Noise Control Solutions" },
+            { "id": "22.3.5", "name": "Industrial Emission Control" },
+            { "id": "22.3.6", "name": "Odor Control Systems" },
+            { "id": "22.3.7", "name": "Spill Response Services" },
+            { "id": "22.3.8", "name": "Asbestos Abatement" },
+            { "id": "22.3.9", "name": "Radon Mitigation" },
+            { "id": "22.3.10", "name": "Plastic Pollution Solutions" }
+          ]
+        },
+        {
+          "id": "22.4",
+          "name": "Conservation Services",
+          "subsubsectors": [
+            { "id": "22.4.1", "name": "Wildlife Protection" },
+            { "id": "22.4.2", "name": "Habitat Restoration" },
+            { "id": "22.4.3", "name": "Forest Conservation" },
+            { "id": "22.4.4", "name": "Water Resource Management" },
+            { "id": "22.4.5", "name": "Coastal Protection" },
+            { "id": "22.4.6", "name": "Endangered Species Programs" },
+            { "id": "22.4.7", "name": "Sustainable Agriculture Support" },
+            { "id": "22.4.8", "name": "Urban Greening Initiatives" },
+            { "id": "22.4.9", "name": "Marine Conservation" },
+            { "id": "22.4.10", "name": "Biodiversity Monitoring" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Fashion & Apparel",
+      "subsectors": [
+        {
+          "id": "23.1",
+          "name": "Clothing Manufacturing",
+          "subsubsectors": [
+            { "id": "23.1.1", "name": "Menswear" },
+            { "id": "23.1.2", "name": "Womenswear" },
+            { "id": "23.1.3", "name": "Childrenswear" },
+            { "id": "23.1.4", "name": "Sportswear" },
+            { "id": "23.1.5", "name": "Outerwear" },
+            { "id": "23.1.6", "name": "Intimate Apparel" },
+            { "id": "23.1.7", "name": "Workwear" },
+            { "id": "23.1.8", "name": "Uniforms" },
+            { "id": "23.1.9", "name": "Bridal Wear" },
+            { "id": "23.1.10", "name": "Ethnic Clothing" }
+          ]
+        },
+        {
+          "id": "23.2",
+          "name": "Footwear",
+          "subsubsectors": [
+            { "id": "23.2.1", "name": "Athletic Shoes" },
+            { "id": "23.2.2", "name": "Casual Footwear" },
+            { "id": "23.2.3", "name": "Dress Shoes" },
+            { "id": "23.2.4", "name": "Boots" },
+            { "id": "23.2.5", "name": "Sandals" },
+            { "id": "23.2.6", "name": "Slippers" },
+            { "id": "23.2.7", "name": "Safety Footwear" },
+            { "id": "23.2.8", "name": "Orthopedic Shoes" },
+            { "id": "23.2.9", "name": "Luxury Footwear" },
+            { "id": "23.2.10", "name": "Sustainable Footwear" }
+          ]
+        },
+        {
+          "id": "23.3",
+          "name": "Accessories",
+          "subsubsectors": [
+            { "id": "23.3.1", "name": "Handbags" },
+            { "id": "23.3.2", "name": "Jewelry" },
+            { "id": "23.3.3", "name": "Watches" },
+            { "id": "23.3.4", "name": "Eyewear" },
+            { "id": "23.3.5", "name": "Belts" },
+            { "id": "23.3.6", "name": "Scarves" },
+            { "id": "23.3.7", "name": "Hats" },
+            { "id": "23.3.8", "name": "Gloves" },
+            { "id": "23.3.9", "name": "Ties" },
+            { "id": "23.3.10", "name": "Tech Accessories" }
+          ]
+        },
+        {
+          "id": "23.4",
+          "name": "Fashion Services",
+          "subsubsectors": [
+            { "id": "23.4.1", "name": "Fashion Design" },
+            { "id": "23.4.2", "name": "Textile Design" },
+            { "id": "23.4.3", "name": "Retail Buying" },
+            { "id": "23.4.4", "name": "Fashion Marketing" },
+            { "id": "23.4.5", "name": "Modeling Agencies" },
+            { "id": "23.4.6", "name": "Fashion Photography" },
+            { "id": "23.4.7", "name": "Styling Services" },
+            { "id": "23.4.8", "name": "Fashion Education" },
+            { "id": "23.4.9", "name": "Trend Forecasting" },
+            { "id": "23.4.10", "name": "Sustainable Fashion Consulting" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Fitness & Sports",
+      "subsectors": [
+        {
+          "id": "24.1",
+          "name": "Fitness Facilities",
+          "subsubsectors": [
+            { "id": "24.1.1", "name": "Gyms & Health Clubs" },
+            { "id": "24.1.2", "name": "Yoga Studios" },
+            { "id": "24.1.3", "name": "Pilates Studios" },
+            { "id": "24.1.4", "name": "CrossFit Boxes" },
+            { "id": "24.1.5", "name": "Martial Arts Dojos" },
+            { "id": "24.1.6", "name": "Dance Studios" },
+            { "id": "24.1.7", "name": "Swimming Pools" },
+            { "id": "24.1.8", "name": "Climbing Gyms" },
+            { "id": "24.1.9", "name": "Bootcamp Facilities" },
+            { "id": "24.1.10", "name": "Corporate Wellness Centers" }
+          ]
+        },
+        {
+          "id": "24.2",
+          "name": "Sports Equipment",
+          "subsubsectors": [
+            { "id": "24.2.1", "name": "Team Sports Equipment" },
+            { "id": "24.2.2", "name": "Fitness Equipment" },
+            { "id": "24.2.3", "name": "Outdoor Gear" },
+            { "id": "24.2.4", "name": "Water Sports Equipment" },
+            { "id": "24.2.5", "name": "Winter Sports Gear" },
+            { "id": "24.2.6", "name": "Cycling Equipment" },
+            { "id": "24.2.7", "name": "Golf Equipment" },
+            { "id": "24.2.8", "name": "Combat Sports Gear" },
+            { "id": "24.2.9", "name": "Racket Sports Equipment" },
+            { "id": "24.2.10", "name": "Extreme Sports Gear" }
+          ]
+        },
+        {
+          "id": "24.3",
+          "name": "Sports Organizations",
+          "subsubsectors": [
+            { "id": "24.3.1", "name": "Professional Leagues" },
+            { "id": "24.3.2", "name": "Amateur Sports" },
+            { "id": "24.3.3", "name": "Sports Clubs" },
+            { "id": "24.3.4", "name": "Youth Sports" },
+            { "id": "24.3.5", "name": "College Athletics" },
+            { "id": "24.3.6", "name": "Sports Associations" },
+            { "id": "24.3.7", "name": "Olympic Committees" },
+            { "id": "24.3.8", "name": "Esports Organizations" },
+            { "id": "24.3.9", "name": "Sports Media" },
+            { "id": "24.3.10", "name": "Sports Marketing Agencies" }
+          ]
+        },
+        {
+          "id": "24.4",
+          "name": "Fitness Technology",
+          "subsubsectors": [
+            { "id": "24.4.1", "name": "Wearable Fitness Tech" },
+            { "id": "24.4.2", "name": "Fitness Apps" },
+            { "id": "24.4.3", "name": "Smart Gym Equipment" },
+            { "id": "24.4.4", "name": "Virtual Training Platforms" },
+            { "id": "24.4.5", "name": "Biometric Tracking" },
+            { "id": "24.4.6", "name": "AI Coaching" },
+            { "id": "24.4.7", "name": "Recovery Technology" },
+            { "id": "24.4.8", "name": "Nutrition Tech" },
+            { "id": "24.4.9", "name": "VR Fitness" },
+            { "id": "24.4.10", "name": "Sports Analytics Software" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Government & Public Sector",
+      "subsectors": [
+        {
+          "id": "25.1",
+          "name": "Federal Government",
+          "subsubsectors": [
+            { "id": "25.1.1", "name": "Defense" },
+            { "id": "25.1.2", "name": "Taxation" },
+            { "id": "25.1.3", "name": "Foreign Affairs" },
+            { "id": "25.1.4", "name": "Justice System" },
+            { "id": "25.1.5", "name": "Transportation" },
+            { "id": "25.1.6", "name": "Health Services" },
+            { "id": "25.1.7", "name": "Education" },
+            { "id": "25.1.8", "name": "Environmental Protection" },
+            { "id": "25.1.9", "name": "Social Services" },
+            { "id": "25.1.10", "name": "Public Safety" }
+          ]
+        },
+        {
+          "id": "25.2",
+          "name": "State/Provincial Government",
+          "subsubsectors": [
+            { "id": "25.2.1", "name": "Infrastructure" },
+            { "id": "25.2.2", "name": "Public Health" },
+            { "id": "25.2.3", "name": "Education" },
+            { "id": "25.2.4", "name": "Transportation" },
+            { "id": "25.2.5", "name": "Economic Development" },
+            { "id": "25.2.6", "name": "Natural Resources" },
+            { "id": "25.2.7", "name": "Public Safety" },
+            { "id": "25.2.8", "name": "Social Services" },
+            { "id": "25.2.9", "name": "Tourism" },
+            { "id": "25.2.10", "name": "Housing" }
+          ]
+        },
+        {
+          "id": "25.3",
+          "name": "Local Government",
+          "subsubsectors": [
+            { "id": "25.3.1", "name": "Municipal Services" },
+            { "id": "25.3.2", "name": "Public Works" },
+            { "id": "25.3.3", "name": "Parks & Recreation" },
+            { "id": "25.3.4", "name": "Zoning & Planning" },
+            { "id": "25.3.5", "name": "Public Safety" },
+            { "id": "25.3.6", "name": "Utilities" },
+            { "id": "25.3.7", "name": "Education" },
+            { "id": "25.3.8", "name": "Social Services" },
+            { "id": "25.3.9", "name": "Economic Development" },
+            { "id": "25.3.10", "name": "Community Development" }
+          ]
+        },
+        {
+          "id": "25.4",
+          "name": "Public Services",
+          "subsubsectors": [
+            { "id": "25.4.1", "name": "Healthcare" },
+            { "id": "25.4.2", "name": "Education" },
+            { "id": "25.4.3", "name": "Public Transportation" },
+            { "id": "25.4.4", "name": "Social Welfare" },
+            { "id": "25.4.5", "name": "Emergency Services" },
+            { "id": "25.4.6", "name": "Public Housing" },
+            { "id": "25.4.7", "name": "Cultural Services" },
+            { "id": "25.4.8", "name": "Environmental Services" },
+            { "id": "25.4.9", "name": "Public Utilities" },
+            { "id": "25.4.10", "name": "Infrastructure Maintenance" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Human Resources (HR)",
+      "subsectors": [
+        {
+          "id": "26.1",
+          "name": "HR Services",
+          "subsubsectors": [
+            { "id": "26.1.1", "name": "Recruitment" },
+            { "id": "26.1.2", "name": "Staffing Agencies" },
+            { "id": "26.1.3", "name": "Executive Search" },
+            { "id": "26.1.4", "name": "Temporary Staffing" },
+            { "id": "26.1.5", "name": "Outplacement Services" },
+            { "id": "26.1.6", "name": "Background Screening" },
+            { "id": "26.1.7", "name": "Payroll Processing" },
+            { "id": "26.1.8", "name": "Benefits Administration" },
+            { "id": "26.1.9", "name": "HR Consulting" },
+            { "id": "26.1.10", "name": "Employer of Record Services" }
+          ]
+        },
+        {
+          "id": "26.2",
+          "name": "HR Technology",
+          "subsubsectors": [
+            { "id": "26.2.1", "name": "HR Information Systems" },
+            { "id": "26.2.2", "name": "Applicant Tracking Systems" },
+            { "id": "26.2.3", "name": "Learning Management Systems" },
+            { "id": "26.2.4", "name": "Performance Management Software" },
+            { "id": "26.2.5", "name": "Workforce Analytics" },
+            { "id": "26.2.6", "name": "Employee Engagement Platforms" },
+            { "id": "26.2.7", "name": "Recruitment Marketing" },
+            { "id": "26.2.8", "name": "Video Interviewing" },
+            { "id": "26.2.9", "name": "AI in Recruitment" },
+            { "id": "26.2.10", "name": "Workforce Planning Tools" }
+          ]
+        },
+        {
+          "id": "26.3",
+          "name": "Talent Development",
+          "subsubsectors": [
+            { "id": "26.3.1", "name": "Corporate Training" },
+            { "id": "26.3.2", "name": "Leadership Development" },
+            { "id": "26.3.3", "name": "Coaching & Mentoring" },
+            { "id": "26.3.4", "name": "Succession Planning" },
+            { "id": "26.3.5", "name": "Competency Development" },
+            { "id": "26.3.6", "name": "E-Learning" },
+            { "id": "26.3.7", "name": "Diversity Training" },
+            { "id": "26.3.8", "name": "Technical Skills Training" },
+            { "id": "26.3.9", "name": "Soft Skills Training" },
+            { "id": "26.3.10", "name": "Change Management Training" }
+          ]
+        },
+        {
+          "id": "26.4",
+          "name": "Workplace Solutions",
+          "subsubsectors": [
+            { "id": "26.4.1", "name": "Employee Benefits" },
+            { "id": "26.4.2", "name": "Compensation Strategies" },
+            { "id": "26.4.3", "name": "Workplace Safety" },
+            { "id": "26.4.4", "name": "Labor Relations" },
+            { "id": "26.4.5", "name": "Diversity & Inclusion" },
+            { "id": "26.4.6", "name": "Remote Work Solutions" },
+            { "id": "26.4.7", "name": "Employee Wellness Programs" },
+            { "id": "26.4.8", "name": "Workplace Investigations" },
+            { "id": "26.4.9", "name": "HR Compliance" },
+            { "id": "26.4.10", "name": "Organizational Development" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": 27,
+      "name": "Insurance",
+      "subsectors": [
+        {
+          "id": "27.1",
+          "name": "Life Insurance",
+          "subsubsectors": [
+            { "id": "27.1.1", "name": "Term Life" },
+            { "id": "27.1.2", "name": "Whole Life" },
+            { "id": "27.1.3", "name": "Universal Life" },
+            { "id": "27.1.4", "name": "Variable Life" },
+            { "id": "27.1.5", "name": "Annuities" },
+            { "id": "27.1.6", "name": "Endowment Policies" },
+            { "id": "27.1.7", "name": "Group Life" },
+            { "id": "27.1.8", "name": "Final Expense" },
+            { "id": "27.1.9", "name": "Survivorship Life" },
+            { "id": "27.1.10", "name": "Indexed Universal Life" }
+          ]
+        },
+        {
+          "id": "27.2",
+          "name": "Health Insurance",
+          "subsubsectors": [
+            { "id": "27.2.1", "name": "Individual Health" },
+            { "id": "27.2.2", "name": "Group Health" },
+            { "id": "27.2.3", "name": "Medicare Advantage" },
+            { "id": "27.2.4", "name": "Medicaid" },
+            { "id": "27.2.5", "name": "Dental Insurance" },
+            { "id": "27.2.6", "name": "Vision Insurance" },
+            { "id": "27.2.7", "name": "Disability Insurance" },
+            { "id": "27.2.8", "name": "Long-Term Care" },
+            { "id": "27.2.9", "name": "Critical Illness" },
+            { "id": "27.2.10", "name": "Supplemental Health" }
+          ]
+        },
+        {
+          "id": "27.3",
+          "name": "Property & Casualty",
+          "subsubsectors": [
+            { "id": "27.3.1", "name": "Homeowners Insurance" },
+            { "id": "27.3.2", "name": "Auto Insurance" },
+            { "id": "27.3.3", "name": "Renters Insurance" },
+            { "id": "27.3.4", "name": "Commercial Property" },
+            { "id": "27.3.5", "name": "Liability Insurance" },
+            { "id": "27.3.6", "name": "Flood Insurance" },
+            { "id": "27.3.7", "name": "Earthquake Insurance" },
+            { "id": "27.3.8", "name": "Umbrella Policies" },
+            { "id": "27.3.9", "name": "Professional Liability" },
+            { "id": "27.3.10", "name": "Cyber Insurance" }
+          ]
+        },
+        {
+          "id": "27.4",
+          "name": "Specialty Insurance",
+          "subsubsectors": [
+            { "id": "27.4.1", "name": "Marine Insurance" },
+            { "id": "27.4.2", "name": "Aviation Insurance" },
+            { "id": "27.4.3", "name": "Crop Insurance" },
+            { "id": "27.4.4", "name": "Pet Insurance" },
+            { "id": "27.4.5", "name": "Event Insurance" },
+            { "id": "27.4.6", "name": "Travel Insurance" },
+            { "id": "27.4.7", "name": "Collectibles Insurance" },
+            { "id": "27.4.8", "name": "Title Insurance" },
+            { "id": "27.4.9", "name": "Bond Insurance" },
+            { "id": "27.4.10", "name": "Reinsurance" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Legal Services",
+      "subsectors": [
+        {
+          "id": "28.1",
+          "name": "Corporate Law",
+          "subsubsectors": [
+            { "id": "28.1.1", "name": "Mergers & Acquisitions" },
+            { "id": "28.1.2", "name": "Corporate Governance" },
+            { "id": "28.1.3", "name": "Securities Law" },
+            { "id": "28.1.4", "name": "Private Equity" },
+            { "id": "28.1.5", "name": "Venture Capital" },
+            { "id": "28.1.6", "name": "Corporate Compliance" },
+            { "id": "28.1.7", "name": "Bankruptcy" },
+            { "id": "28.1.8", "name": "Tax Law" },
+            { "id": "28.1.9", "name": "Intellectual Property" },
+            { "id": "28.1.10", "name": "International Business Law" }
+          ]
+        },
+        {
+          "id": "28.2",
+          "name": "Litigation",
+          "subsubsectors": [
+            { "id": "28.2.1", "name": "Civil Litigation" },
+            { "id": "28.2.2", "name": "Commercial Litigation" },
+            { "id": "28.2.3", "name": "Class Action" },
+            { "id": "28.2.4", "name": "Appellate Practice" },
+            { "id": "28.2.5", "name": "Arbitration" },
+            { "id": "28.2.6", "name": "Mediation" },
+            { "id": "28.2.7", "name": "White Collar Defense" },
+            { "id": "28.2.8", "name": "Product Liability" },
+            { "id": "28.2.9", "name": "Employment Litigation" },
+            { "id": "28.2.10", "name": "Insurance Defense" }
+          ]
+        },
+        {
+          "id": "28.3",
+          "name": "Family & Personal Law",
+          "subsubsectors": [
+            { "id": "28.3.1", "name": "Divorce" },
+            { "id": "28.3.2", "name": "Child Custody" },
+            { "id": "28.3.3", "name": "Adoption" },
+            { "id": "28.3.4", "name": "Estate Planning" },
+            { "id": "28.3.5", "name": "Probate" },
+            { "id": "28.3.6", "name": "Guardianship" },
+            { "id": "28.3.7", "name": "Prenuptial Agreements" },
+            { "id": "28.3.8", "name": "Domestic Violence" },
+            { "id": "28.3.9", "name": "Elder Law" },
+            { "id": "28.3.10", "name": "Personal Injury" }
+          ]
+        },
+        {
+          "id": "28.4",
+          "name": "Specialized Legal Services",
+          "subsubsectors": [
+            { "id": "28.4.1", "name": "Immigration Law" },
+            { "id": "28.4.2", "name": "Environmental Law" },
+            { "id": "28.4.3", "name": "Real Estate Law" },
+            { "id": "28.4.4", "name": "Healthcare Law" },
+            { "id": "28.4.5", "name": "Entertainment Law" },
+            { "id": "28.4.6", "name": "Sports Law" },
+            { "id": "28.4.7", "name": "Technology Law" },
+            { "id": "28.4.8", "name": "Aviation Law" },
+            { "id": "28.4.9", "name": "Maritime Law" },
+            { "id": "28.4.10", "name": "Space Law" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Marketing & Advertising",
+      "subsectors": [
+        {
+          "id": "29.1",
+          "name": "Digital Marketing",
+          "subsubsectors": [
+            { "id": "29.1.1", "name": "Search Engine Marketing" },
+            { "id": "29.1.2", "name": "Social Media Marketing" },
+            { "id": "29.1.3", "name": "Content Marketing" },
+            { "id": "29.1.4", "name": "Email Marketing" },
+            { "id": "29.1.5", "name": "Influencer Marketing" },
+            { "id": "29.1.6", "name": "Affiliate Marketing" },
+            { "id": "29.1.7", "name": "Mobile Marketing" },
+            { "id": "29.1.8", "name": "Video Marketing" },
+            { "id": "29.1.9", "name": "Programmatic Advertising" },
+            { "id": "29.1.10", "name": "Marketing Automation" }
+          ]
+        },
+        {
+          "id": "29.2",
+          "name": "Traditional Advertising",
+          "subsubsectors": [
+            { "id": "29.2.1", "name": "Television Advertising" },
+            { "id": "29.2.2", "name": "Print Advertising" },
+            { "id": "29.2.3", "name": "Radio Advertising" },
+            { "id": "29.2.4", "name": "Outdoor Advertising" },
+            { "id": "29.2.5", "name": "Direct Mail" },
+            { "id": "29.2.6", "name": "Point-of-Sale Marketing" },
+            { "id": "29.2.7", "name": "Product Placement" },
+            { "id": "29.2.8", "name": "Guerrilla Marketing" },
+            { "id": "29.2.9", "name": "Sponsorships" },
+            { "id": "29.2.10", "name": "Trade Shows" }
+          ]
+        },
+        {
+          "id": "29.3",
+          "name": "Market Research",
+          "subsubsectors": [
+            { "id": "29.3.1", "name": "Consumer Insights" },
+            { "id": "29.3.2", "name": "Brand Tracking" },
+            { "id": "29.3.3", "name": "Competitive Analysis" },
+            { "id": "29.3.4", "name": "Focus Groups" },
+            { "id": "29.3.5", "name": "Surveys" },
+            { "id": "29.3.6", "name": "Data Analytics" },
+            { "id": "29.3.7", "name": "Market Segmentation" },
+            { "id": "29.3.8", "name": "Pricing Research" },
+            { "id": "29.3.9", "name": "Product Testing" },
+            { "id": "29.3.10", "name": "Customer Satisfaction" }
+          ]
+        },
+        {
+          "id": "29.4",
+          "name": "Creative Services",
+          "subsubsectors": [
+            { "id": "29.4.1", "name": "Graphic Design" },
+            { "id": "29.4.2", "name": "Copywriting" },
+            { "id": "29.4.3", "name": "Video Production" },
+            { "id": "29.4.4", "name": "Photography" },
+            { "id": "29.4.5", "name": "Brand Identity" },
+            { "id": "29.4.6", "name": "Packaging Design" },
+            { "id": "29.4.7", "name": "Web Design" },
+            { "id": "29.4.8", "name": "Animation" },
+            { "id": "29.4.9", "name": "UX/UI Design" },
+            { "id": "29.4.10", "name": "Creative Strategy" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Mining & Metals",
+      "subsectors": [
+        {
+          "id": "30.1",
+          "name": "Metal Mining",
+          "subsubsectors": [
+            { "id": "30.1.1", "name": "Gold Mining" },
+            { "id": "30.1.2", "name": "Silver Mining" },
+            { "id": "30.1.3", "name": "Copper Mining" },
+            { "id": "30.1.4", "name": "Iron Ore Mining" },
+            { "id": "30.1.5", "name": "Aluminum Mining" },
+            { "id": "30.1.6", "name": "Nickel Mining" },
+            { "id": "30.1.7", "name": "Zinc Mining" },
+            { "id": "30.1.8", "name": "Platinum Group Metals" },
+            { "id": "30.1.9", "name": "Rare Earth Elements" },
+            { "id": "30.1.10", "name": "Uranium Mining" }
+          ]
+        },
+        {
+          "id": "30.2",
+          "name": "Mineral Mining",
+          "subsubsectors": [
+            { "id": "30.2.1", "name": "Coal Mining" },
+            { "id": "30.2.2", "name": "Diamond Mining" },
+            { "id": "30.2.3", "name": "Salt Mining" },
+            { "id": "30.2.4", "name": "Phosphate Mining" },
+            { "id": "30.2.5", "name": "Potash Mining" },
+            { "id": "30.2.6", "name": "Gypsum Mining" },
+            { "id": "30.2.7", "name": "Quartz Mining" },
+            { "id": "30.2.8", "name": "Limestone Mining" },
+            { "id": "30.2.9", "name": "Sand & Gravel" },
+            { "id": "30.2.10", "name": "Gemstone Mining" }
+          ]
+        },
+        {
+          "id": "30.3",
+          "name": "Metal Processing",
+          "subsubsectors": [
+            { "id": "30.3.1", "name": "Smelting" },
+            { "id": "30.3.2", "name": "Refining" },
+            { "id": "30.3.3", "name": "Alloy Production" },
+            { "id": "30.3.4", "name": "Foundries" },
+            { "id": "30.3.5", "name": "Rolling Mills" },
+            { "id": "30.3.6", "name": "Extrusion" },
+            { "id": "30.3.7", "name": "Forging" },
+            { "id": "30.3.8", "name": "Metal Fabrication" },
+            { "id": "30.3.9", "name": "Wire Drawing" },
+            { "id": "30.3.10", "name": "Metal Recycling" }
+          ]
+        },
+        {
+          "id": "30.4",
+          "name": "Mining Services",
+          "subsubsectors": [
+            { "id": "30.4.1", "name": "Exploration Services" },
+            { "id": "30.4.2", "name": "Drilling Services" },
+            { "id": "30.4.3", "name": "Mining Equipment" },
+            { "id": "30.4.4", "name": "Mine Safety" },
+            { "id": "30.4.5", "name": "Environmental Remediation" },
+            { "id": "30.4.6", "name": "Mineral Processing" },
+            { "id": "30.4.7", "name": "Mine Planning" },
+            { "id": "30.4.8", "name": "Geological Services" },
+            { "id": "30.4.9", "name": "Mine Closure" },
+            { "id": "30.4.10", "name": "Mining Software" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Non-Profit & NGOs",
+      "subsectors": [
+        {
+          "id": "31.1",
+          "name": "Humanitarian Organizations",
+          "subsubsectors": [
+            { "id": "31.1.1", "name": "Disaster Relief" },
+            { "id": "31.1.2", "name": "Refugee Assistance" },
+            { "id": "31.1.3", "name": "Food Security" },
+            { "id": "31.1.4", "name": "Water & Sanitation" },
+            { "id": "31.1.5", "name": "Emergency Response" },
+            { "id": "31.1.6", "name": "Shelter Provision" },
+            { "id": "31.1.7", "name": "Medical Aid" },
+            { "id": "31.1.8", "name": "Child Protection" },
+            { "id": "31.1.9", "name": "Human Rights" },
+            { "id": "31.1.10", "name": "Conflict Resolution" }
+          ]
+        },
+        {
+          "id": "31.2",
+          "name": "Development Organizations",
+          "subsubsectors": [
+            { "id": "31.2.1", "name": "Economic Development" },
+            { "id": "31.2.2", "name": "Education Programs" },
+            { "id": "31.2.3", "name": "Healthcare Initiatives" },
+            { "id": "31.2.4", "name": "Agricultural Development" },
+            { "id": "31.2.5", "name": "Microfinance" },
+            { "id": "31.2.6", "name": "Women's Empowerment" },
+            { "id": "31.2.7", "name": "Community Development" },
+            { "id": "31.2.8", "name": "Infrastructure Projects" },
+            { "id": "31.2.9", "name": "Vocational Training" },
+            { "id": "31.2.10", "name": "Technology for Development" }
+          ]
+        },
+        {
+          "id": "31.3",
+          "name": "Environmental NGOs",
+          "subsubsectors": [
+            { "id": "31.3.1", "name": "Wildlife Conservation" },
+            { "id": "31.3.2", "name": "Forest Protection" },
+            { "id": "31.3.3", "name": "Marine Conservation" },
+            { "id": "31.3.4", "name": "Climate Change" },
+            { "id": "31.3.5", "name": "Sustainable Agriculture" },
+            { "id": "31.3.6", "name": "Renewable Energy Advocacy" },
+            { "id": "31.3.7", "name": "Pollution Control" },
+            { "id": "31.3.8", "name": "Environmental Education" },
+            { "id": "31.3.9", "name": "Urban Sustainability" },
+            { "id": "31.3.10", "name": "Biodiversity Protection" }
+          ]
+        },
+        {
+          "id": "31.4",
+          "name": "Advocacy Groups",
+          "subsubsectors": [
+            { "id": "31.4.1", "name": "Policy Research" },
+            { "id": "31.4.2", "name": "Lobbying Organizations" },
+            { "id": "31.4.3", "name": "Public Awareness Campaigns" },
+            { "id": "31.4.4", "name": "Grassroots Movements" },
+            { "id": "31.4.5", "name": "Legal Advocacy" },
+            { "id": "31.4.6", "name": "Consumer Rights" },
+            { "id": "31.4.7", "name": "Labor Rights" },
+            { "id": "31.4.8", "name": "Animal Welfare" },
+            { "id": "31.4.9", "name": "Education Reform" },
+            { "id": "31.4.10", "name": "Health Advocacy" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Packaging",
+      "subsectors": [
+        {
+          "id": "32.1",
+          "name": "Primary Packaging",
+          "subsubsectors": [
+            { "id": "32.1.1", "name": "Bottles & Jars" },
+            { "id": "32.1.2", "name": "Cans" },
+            { "id": "32.1.3", "name": "Pouches" },
+            { "id": "32.1.4", "name": "Blister Packs" },
+            { "id": "32.1.5", "name": "Tubes" },
+            { "id": "32.1.6", "name": "Aerosol Cans" },
+            { "id": "32.1.7", "name": "Flexible Packaging" },
+            { "id": "32.1.8", "name": "Clamshells" },
+            { "id": "32.1.9", "name": "Sachets" },
+            { "id": "32.1.10", "name": "Aseptic Packaging" }
+          ]
+        },
+        {
+          "id": "32.2",
+          "name": "Secondary Packaging",
+          "subsubsectors": [
+            { "id": "32.2.1", "name": "Cartons" },
+            { "id": "32.2.2", "name": "Boxes" },
+            { "id": "32.2.3", "name": "Corrugated Containers" },
+            { "id": "32.2.4", "name": "Shrink Wrap" },
+            { "id": "32.2.5", "name": "Stretch Film" },
+            { "id": "32.2.6", "name": "Bubble Wrap" },
+            { "id": "32.2.7", "name": "Foam Packaging" },
+            { "id": "32.2.8", "name": "Dividers & Inserts" },
+            { "id": "32.2.9", "name": "Multi-Packs" },
+            { "id": "32.2.10", "name": "Display Packaging" }
+          ]
+        },
+        {
+          "id": "32.3",
+          "name": "Packaging Materials",
+          "subsubsectors": [
+            { "id": "32.3.1", "name": "Plastic Packaging" },
+            { "id": "32.3.2", "name": "Glass Packaging" },
+            { "id": "32.3.3", "name": "Metal Packaging" },
+            { "id": "32.3.4", "name": "Paper Packaging" },
+            { "id": "32.3.5", "name": "Biodegradable Materials" },
+            { "id": "32.3.6", "name": "Composite Materials" },
+            { "id": "32.3.7", "name": "Edible Packaging" },
+            { "id": "32.3.8", "name": "Recycled Materials" },
+            { "id": "32.3.9", "name": "Smart Materials" },
+            { "id": "32.3.10", "name": "Nanomaterials" }
+          ]
+        },
+        {
+          "id": "32.4",
+          "name": "Packaging Machinery",
+          "subsubsectors": [
+            { "id": "32.4.1", "name": "Filling Machines" },
+            { "id": "32.4.2", "name": "Labeling Machines" },
+            { "id": "32.4.3", "name": "Sealing Machines" },
+            { "id": "32.4.4", "name": "Wrapping Machines" },
+            { "id": "32.4.5", "name": "Palletizing Systems" },
+            { "id": "32.4.6", "name": "Coding & Marking" },
+            { "id": "32.4.7", "name": "Inspection Systems" },
+            { "id": "32.4.8", "name": "Robotic Packaging" },
+            { "id": "32.4.9", "name": "Form-Fill-Seal" },
+            { "id": "32.4.10", "name": "Smart Packaging Systems" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Pets & Animal Care",
+      "subsectors": [
+        {
+          "id": "33.1",
+          "name": "Pet Food",
+          "subsubsectors": [
+            { "id": "33.1.1", "name": "Dry Food" },
+            { "id": "33.1.2", "name": "Wet Food" },
+            { "id": "33.1.3", "name": "Treats & Snacks" },
+            { "id": "33.1.4", "name": "Specialty Diets" },
+            { "id": "33.1.5", "name": "Organic Food" },
+            { "id": "33.1.6", "name": "Veterinary Diets" },
+            { "id": "33.1.7", "name": "Raw Food" },
+            { "id": "33.1.8", "name": "Freeze-Dried Food" },
+            { "id": "33.1.9", "name": "Supplemental Feed" },
+            { "id": "33.1.10", "name": "Breed-Specific Formulas" }
+          ]
+        },
+        {
+          "id": "33.2",
+          "name": "Pet Healthcare",
+          "subsubsectors": [
+            { "id": "33.2.1", "name": "Veterinary Services" },
+            { "id": "33.2.2", "name": "Pet Medications" },
+            { "id": "33.2.3", "name": "Pet Insurance" },
+            { "id": "33.2.4", "name": "Preventive Care" },
+            { "id": "33.2.5", "name": "Dental Care" },
+            { "id": "33.2.6", "name": "Surgical Services" },
+            { "id": "33.2.7", "name": "Diagnostic Services" },
+            { "id": "33.2.8", "name": "Alternative Therapies" },
+            { "id": "33.2.9", "name": "Emergency Care" },
+            { "id": "33.2.10", "name": "Mobile Veterinary Services" }
+          ]
+        },
+        {
+          "id": "33.3",
+          "name": "Pet Products",
+          "subsubsectors": [
+            { "id": "33.3.1", "name": "Toys" },
+            { "id": "33.3.2", "name": "Grooming Products" },
+            { "id": "33.3.3", "name": "Bedding & Furniture" },
+            { "id": "33.3.4", "name": "Collars & Leashes" },
+            { "id": "33.3.5", "name": "Carriers & Crates" },
+            { "id": "33.3.6", "name": "Litter & Waste Management" },
+            { "id": "33.3.7", "name": "Feeding Accessories" },
+            { "id": "33.3.8", "name": "Training Aids" },
+            { "id": "33.3.9", "name": "Pet Tech Devices" },
+            { "id": "33.3.10", "name": "Fashion Accessories" }
+          ]
+        },
+        {
+          "id": "33.4",
+          "name": "Pet Services",
+          "subsubsectors": [
+            { "id": "33.4.1", "name": "Grooming Services" },
+            { "id": "33.4.2", "name": "Boarding & Daycare" },
+            { "id": "33.4.3", "name": "Training Services" },
+            { "id": "33.4.4", "name": "Pet Sitting" },
+            { "id": "33.4.5", "name": "Dog Walking" },
+            { "id": "33.4.6", "name": "Pet Transportation" },
+            { "id": "33.4.7", "name": "Breeding Services" },
+            { "id": "33.4.8", "name": "Pet Adoption" },
+            { "id": "33.4.9", "name": "Pet Photography" },
+            { "id": "33.4.10", "name": "Pet Cremation Services" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Photography",
+      "subsectors": [
+        {
+          "id": "34.1",
+          "name": "Professional Photography",
+          "subsubsectors": [
+            { "id": "34.1.1", "name": "Portrait Photography" },
+            { "id": "34.1.2", "name": "Wedding Photography" },
+            { "id": "34.1.3", "name": "Commercial Photography" },
+            { "id": "34.1.4", "name": "Fashion Photography" },
+            { "id": "34.1.5", "name": "Product Photography" },
+            { "id": "34.1.6", "name": "Real Estate Photography" },
+            { "id": "34.1.7", "name": "Event Photography" },
+            { "id": "34.1.8", "name": "Food Photography" },
+            { "id": "34.1.9", "name": "Sports Photography" },
+            { "id": "34.1.10", "name": "Aerial Photography" }
+          ]
+        },
+        {
+          "id": "34.2",
+          "name": "Photography Equipment",
+          "subsubsectors": [
+            { "id": "34.2.1", "name": "Cameras" },
+            { "id": "34.2.2", "name": "Lenses" },
+            { "id": "34.2.3", "name": "Lighting Equipment" },
+            { "id": "34.2.4", "name": "Tripods & Supports" },
+            { "id": "34.2.5", "name": "Camera Bags" },
+            { "id": "34.2.6", "name": "Filters" },
+            { "id": "34.2.7", "name": "Drones" },
+            { "id": "34.2.8", "name": "Studio Equipment" },
+            { "id": "34.2.9", "name": "Memory Cards" },
+            { "id": "34.2.10", "name": "Batteries & Power" }
+          ]
+        },
+        {
+          "id": "34.3",
+          "name": "Photo Processing",
+          "subsubsectors": [
+            { "id": "34.3.1", "name": "Photo Printing" },
+            { "id": "34.3.2", "name": "Photo Restoration" },
+            { "id": "34.3.3", "name": "Film Development" },
+            { "id": "34.3.4", "name": "Photo Books" },
+            { "id": "34.3.5", "name": "Canvas Prints" },
+            { "id": "34.3.6", "name": "Framing Services" },
+            { "id": "34.3.7", "name": "Digital Asset Management" },
+            { "id": "34.3.8", "name": "Photo Scanning" },
+            { "id": "34.3.9", "name": "Large Format Printing" },
+            { "id": "34.3.10", "name": "Album Design" }
+          ]
+        },
+        {
+          "id": "34.4",
+          "name": "Photography Software",
+          "subsubsectors": [
+            { "id": "34.4.1", "name": "Photo Editing" },
+            { "id": "34.4.2", "name": "RAW Processing" },
+            { "id": "34.4.3", "name": "Digital Asset Management" },
+            { "id": "34.4.4", "name": "AI Photo Enhancement" },
+            { "id": "34.4.5", "name": "Color Grading" },
+            { "id": "34.4.6", "name": "Photo Organization" },
+            { "id": "34.4.7", "name": "HDR Software" },
+            { "id": "34.4.8", "name": "Focus Stacking" },
+            { "id": "34.4.9", "name": "Panorama Stitching" },
+            { "id": "34.4.10", "name": "Mobile Photo Apps" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Printing & Publishing",
+      "subsectors": [
+        {
+          "id": "35.1",
+          "name": "Commercial Printing",
+          "subsubsectors": [
+            { "id": "35.1.1", "name": "Offset Printing" },
+            { "id": "35.1.2", "name": "Digital Printing" },
+            { "id": "35.1.3", "name": "Large Format Printing" },
+            { "id": "35.1.4", "name": "Screen Printing" },
+            { "id": "35.1.5", "name": "3D Printing" },
+            { "id": "35.1.6", "name": "Packaging Printing" },
+            { "id": "35.1.7", "name": "Label Printing" },
+            { "id": "35.1.8", "name": "Variable Data Printing" },
+            { "id": "35.1.9", "name": "Security Printing" },
+            { "id": "35.1.10", "name": "Flexographic Printing" }
+          ]
+        },
+        {
+          "id": "35.2",
+          "name": "Publishing",
+          "subsubsectors": [
+            { "id": "35.2.1", "name": "Book Publishing" },
+            { "id": "35.2.2", "name": "Magazine Publishing" },
+            { "id": "35.2.3", "name": "Newspaper Publishing" },
+            { "id": "35.2.4", "name": "Academic Publishing" },
+            { "id": "35.2.5", "name": "Digital Publishing" },
+            { "id": "35.2.6", "name": "Self-Publishing" },
+            { "id": "35.2.7", "name": "Educational Materials" },
+            { "id": "35.2.8", "name": "Technical Documentation" },
+            { "id": "35.2.9", "name": "Catalog Publishing" },
+            { "id": "35.2.10", "name": "Government Publishing" }
+          ]
+        },
+        {
+          "id": "35.3",
+          "name": "Print Finishing",
+          "subsubsectors": [
+            { "id": "35.3.1", "name": "Binding" },
+            { "id": "35.3.2", "name": "Laminating" },
+            { "id": "35.3.3", "name": "Die Cutting" },
+            { "id": "35.3.4", "name": "Embossing" },
+            { "id": "35.3.5", "name": "Foil Stamping" },
+            { "id": "35.3.6", "name": "Folding" },
+            { "id": "35.3.7", "name": "Collating" },
+            { "id": "35.3.8", "name": "Perforating" },
+            { "id": "35.3.9", "name": "Gluing" },
+            { "id": "35.3.10", "name": "Creasing" }
+          ]
+        },
+        {
+          "id": "35.4",
+          "name": "Print Management",
+          "subsubsectors": [
+            { "id": "35.4.1", "name": "Print Procurement" },
+            { "id": "35.4.2", "name": "Workflow Automation" },
+            { "id": "35.4.3", "name": "Color Management" },
+            { "id": "35.4.4", "name": "Inventory Management" },
+            { "id": "35.4.5", "name": "Print MIS Systems" },
+            { "id": "35.4.6", "name": "Web-to-Print" },
+            { "id": "35.4.7", "name": "Cross-Media Marketing" },
+            { "id": "35.4.8", "name": "Variable Data Solutions" },
+            { "id": "35.4.9", "name": "Print Analytics" },
+            { "id": "35.4.10", "name": "Sustainable Printing" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Public Relations (PR)",
+      "subsectors": [
+        {
+          "id": "36.1",
+          "name": "Corporate Communications",
+          "subsubsectors": [
+            { "id": "36.1.1", "name": "Executive Positioning" },
+            { "id": "36.1.2", "name": "Crisis Communications" },
+            { "id": "36.1.3", "name": "Internal Communications" },
+            { "id": "36.1.4", "name": "Investor Relations" },
+            { "id": "36.1.5", "name": "Reputation Management" },
+            { "id": "36.1.6", "name": "Corporate Social Responsibility" },
+            { "id": "36.1.7", "name": "Change Communications" },
+            { "id": "36.1.8", "name": "M&A Communications" },
+            { "id": "36.1.9", "name": "Thought Leadership" },
+            { "id": "36.1.10", "name": "Stakeholder Engagement" }
+          ]
+        },
+        {
+          "id": "36.2",
+          "name": "Media Relations",
+          "subsubsectors": [
+            { "id": "36.2.1", "name": "Press Releases" },
+            { "id": "36.2.2", "name": "Media Pitching" },
+            { "id": "36.2.3", "name": "Press Conferences" },
+            { "id": "36.2.4", "name": "Media Training" },
+            { "id": "36.2.5", "name": "Journalist Relations" },
+            { "id": "36.2.6", "name": "Press Kit Development" },
+            { "id": "36.2.7", "name": "News Monitoring" },
+            { "id": "36.2.8", "name": "Influencer Relations" },
+            { "id": "36.2.9", "name": "Op-Ed Placement" },
+            { "id": "36.2.10", "name": "Crisis Response" }
+          ]
+        },
+        {
+          "id": "36.3",
+          "name": "Public Affairs",
+          "subsubsectors": [
+            { "id": "36.3.1", "name": "Government Relations" },
+            { "id": "36.3.2", "name": "Policy Advocacy" },
+            { "id": "36.3.3", "name": "Community Relations" },
+            { "id": "36.3.4", "name": "Grassroots Campaigns" },
+            { "id": "36.3.5", "name": "Regulatory Communications" },
+            { "id": "36.3.6", "name": "Issues Management" },
+            { "id": "36.3.7", "name": "Political Communications" },
+            { "id": "36.3.8", "name": "Nonprofit Communications" },
+            { "id": "36.3.9", "name": "Public Education Campaigns" },
+            { "id": "36.3.10", "name": "Civic Engagement" }
+          ]
+        },
+        {
+          "id": "36.4",
+          "name": "Digital PR",
+          "subsubsectors": [
+            { "id": "36.4.1", "name": "Online Reputation Management" },
+            { "id": "36.4.2", "name": "Social Media PR" },
+            { "id": "36.4.3", "name": "Content Marketing PR" },
+            { "id": "36.4.4", "name": "Influencer Marketing" },
+            { "id": "36.4.5", "name": "SEO PR" },
+            { "id": "36.4.6", "name": "Crisis Monitoring" },
+            { "id": "36.4.7", "name": "Digital Storytelling" },
+            { "id": "36.4.8", "name": "Online Community Building" },
+            { "id": "36.4.9", "name": "Brand Journalism" },
+            { "id": "36.4.10", "name": "Podcast PR" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": 37,
+      "name": "Real Estate (Expanded)",
+      "subsectors": [
+        {
+          "id": "37.1",
+          "name": "Residential Real Estate",
+          "subsubsectors": [
+            { "id": "37.1.1", "name": "Single-Family Homes" },
+            { "id": "37.1.2", "name": "Multi-Family Housing" },
+            { "id": "37.1.3", "name": "Condominiums" },
+            { "id": "37.1.4", "name": "Townhouses" },
+            { "id": "37.1.5", "name": "Luxury Homes" },
+            { "id": "37.1.6", "name": "Vacation Homes" },
+            { "id": "37.1.7", "name": "Senior Housing" },
+            { "id": "37.1.8", "name": "Student Housing" },
+            { "id": "37.1.9", "name": "Co-Op Housing" },
+            { "id": "37.1.10", "name": "Tiny Homes" }
+          ]
+        },
+        {
+          "id": "37.2",
+          "name": "Commercial Real Estate",
+          "subsubsectors": [
+            { "id": "37.2.1", "name": "Office Buildings" },
+            { "id": "37.2.2", "name": "Retail Spaces" },
+            { "id": "37.2.3", "name": "Industrial Properties" },
+            { "id": "37.2.4", "name": "Warehouses" },
+            { "id": "37.2.5", "name": "Mixed-Use Developments" },
+            { "id": "37.2.6", "name": "Hotels & Hospitality" },
+            { "id": "37.2.7", "name": "Medical Offices" },
+            { "id": "37.2.8", "name": "Data Centers" },
+            { "id": "37.2.9", "name": "Self-Storage Facilities" },
+            { "id": "37.2.10", "name": "Special Purpose Properties" }
+          ]
+        },
+        {
+          "id": "37.3",
+          "name": "Real Estate Services",
+          "subsubsectors": [
+            { "id": "37.3.1", "name": "Brokerage Services" },
+            { "id": "37.3.2", "name": "Property Management" },
+            { "id": "37.3.3", "name": "Real Estate Appraisal" },
+            { "id": "37.3.4", "name": "Title Services" },
+            { "id": "37.3.5", "name": "Escrow Services" },
+            { "id": "37.3.6", "name": "Home Inspection" },
+            { "id": "37.3.7", "name": "Mortgage Services" },
+            { "id": "37.3.8", "name": "Real Estate Photography" },
+            { "id": "37.3.9", "name": "Staging Services" },
+            { "id": "37.3.10", "name": "Relocation Services" }
+          ]
+        },
+        {
+          "id": "37.4",
+          "name": "Real Estate Technology",
+          "subsubsectors": [
+            { "id": "37.4.1", "name": "Property Listings Platforms" },
+            { "id": "37.4.2", "name": "Virtual Tours" },
+            { "id": "37.4.3", "name": "AI Valuation Tools" },
+            { "id": "37.4.4", "name": "Blockchain in Real Estate" },
+            { "id": "37.4.5", "name": "Smart Home Technology" },
+            { "id": "37.4.6", "name": "Property Management Software" },
+            { "id": "37.4.7", "name": "Crowdfunding Platforms" },
+            { "id": "37.4.8", "name": "3D Property Modeling" },
+            { "id": "37.4.9", "name": "Digital Transaction Management" },
+            { "id": "37.4.10", "name": "Predictive Analytics" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Security Services",
+      "subsectors": [
+        {
+          "id": "38.1",
+          "name": "Physical Security",
+          "subsubsectors": [
+            { "id": "38.1.1", "name": "Guarding Services" },
+            { "id": "38.1.2", "name": "Event Security" },
+            { "id": "38.1.3", "name": "Executive Protection" },
+            { "id": "38.1.4", "name": "Retail Security" },
+            { "id": "38.1.5", "name": "Bank Security" },
+            { "id": "38.1.6", "name": "Hospital Security" },
+            { "id": "38.1.7", "name": "School Security" },
+            { "id": "38.1.8", "name": "Airport Security" },
+            { "id": "38.1.9", "name": "Maritime Security" },
+            { "id": "38.1.10", "name": "Construction Site Security" }
+          ]
+        },
+        {
+          "id": "38.2",
+          "name": "Electronic Security",
+          "subsubsectors": [
+            { "id": "38.2.1", "name": "Surveillance Systems" },
+            { "id": "38.2.2", "name": "Access Control" },
+            { "id": "38.2.3", "name": "Alarm Systems" },
+            { "id": "38.2.4", "name": "CCTV Monitoring" },
+            { "id": "38.2.5", "name": "Biometric Systems" },
+            { "id": "38.2.6", "name": "Fire Detection" },
+            { "id": "38.2.7", "name": "Perimeter Protection" },
+            { "id": "38.2.8", "name": "Smart Locks" },
+            { "id": "38.2.9", "name": "Vehicle Security" },
+            { "id": "38.2.10", "name": "Integrated Security Systems" }
+          ]
+        },
+        {
+          "id": "38.3",
+          "name": "Cybersecurity",
+          "subsubsectors": [
+            { "id": "38.3.1", "name": "Network Security" },
+            { "id": "38.3.2", "name": "Endpoint Protection" },
+            { "id": "38.3.3", "name": "Cloud Security" },
+            { "id": "38.3.4", "name": "Data Protection" },
+            { "id": "38.3.5", "name": "Identity Management" },
+            { "id": "38.3.6", "name": "Penetration Testing" },
+            { "id": "38.3.7", "name": "Security Operations Centers" },
+            { "id": "38.3.8", "name": "Threat Intelligence" },
+            { "id": "38.3.9", "name": "Incident Response" },
+            { "id": "38.3.10", "name": "Compliance Management" }
+          ]
+        },
+        {
+          "id": "38.4",
+          "name": "Risk Management",
+          "subsubsectors": [
+            { "id": "38.4.1", "name": "Security Consulting" },
+            { "id": "38.4.2", "name": "Risk Assessment" },
+            { "id": "38.4.3", "name": "Business Continuity" },
+            { "id": "38.4.4", "name": "Disaster Recovery" },
+            { "id": "38.4.5", "name": "Crisis Management" },
+            { "id": "38.4.6", "name": "Fraud Prevention" },
+            { "id": "38.4.7", "name": "Workplace Violence Prevention" },
+            { "id": "38.4.8", "name": "Travel Risk Management" },
+            { "id": "38.4.9", "name": "Supply Chain Security" },
+            { "id": "38.4.10", "name": "Executive Risk Advisory" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Telecommunications",
+      "subsectors": [
+        {
+          "id": "39.1",
+          "name": "Wireless Services",
+          "subsubsectors": [
+            { "id": "39.1.1", "name": "Mobile Network Operators" },
+            { "id": "39.1.2", "name": "Cellular Services" },
+            { "id": "39.1.3", "name": "Mobile Virtual Network Operators" },
+            { "id": "39.1.4", "name": "Satellite Communications" },
+            { "id": "39.1.5", "name": "Wireless Broadband" },
+            { "id": "39.1.6", "name": "IoT Connectivity" },
+            { "id": "39.1.7", "name": "5G Services" },
+            { "id": "39.1.8", "name": "Push-to-Talk Services" },
+            { "id": "39.1.9", "name": "Mobile Payment Systems" },
+            { "id": "39.1.10", "name": "Emergency Communications" }
+          ]
+        },
+        {
+          "id": "39.2",
+          "name": "Wired Services",
+          "subsubsectors": [
+            { "id": "39.2.1", "name": "Landline Telephone" },
+            { "id": "39.2.2", "name": "Broadband Internet" },
+            { "id": "39.2.3", "name": "Fiber Optic Networks" },
+            { "id": "39.2.4", "name": "Cable Television" },
+            { "id": "39.2.5", "name": "DSL Services" },
+            { "id": "39.2.6", "name": "Leased Lines" },
+            { "id": "39.2.7", "name": "VoIP Services" },
+            { "id": "39.2.8", "name": "Data Center Connectivity" },
+            { "id": "39.2.9", "name": "Undersea Cables" },
+            { "id": "39.2.10", "name": "Enterprise Networks" }
+          ]
+        },
+        {
+          "id": "39.3",
+          "name": "Telecom Equipment",
+          "subsubsectors": [
+            { "id": "39.3.1", "name": "Networking Hardware" },
+            { "id": "39.3.2", "name": "Mobile Devices" },
+            { "id": "39.3.3", "name": "Base Stations" },
+            { "id": "39.3.4", "name": "Switching Equipment" },
+            { "id": "39.3.5", "name": "Fiber Optic Cables" },
+            { "id": "39.3.6", "name": "Satellite Equipment" },
+            { "id": "39.3.7", "name": "Antennas" },
+            { "id": "39.3.8", "name": "Routers & Modems" },
+            { "id": "39.3.9", "name": "PBX Systems" },
+            { "id": "39.3.10", "name": "Test Equipment" }
+          ]
+        },
+        {
+          "id": "39.4",
+          "name": "Telecom Services",
+          "subsubsectors": [
+            { "id": "39.4.1", "name": "Cloud Communications" },
+            { "id": "39.4.2", "name": "Unified Communications" },
+            { "id": "39.4.3", "name": "Contact Center Solutions" },
+            { "id": "39.4.4", "name": "Telecom Consulting" },
+            { "id": "39.4.5", "name": "Number Portability" },
+            { "id": "39.4.6", "name": "Caller ID Services" },
+            { "id": "39.4.7", "name": "Teleconferencing" },
+            { "id": "39.4.8", "name": "Emergency Alert Systems" },
+            { "id": "39.4.9", "name": "Telecom Billing Services" },
+            { "id": "39.4.10", "name": "Regulatory Compliance" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Textiles & Apparel (Expanded)",
+      "subsectors": [
+        {
+          "id": "40.1",
+          "name": "Textile Manufacturing",
+          "subsubsectors": [
+            { "id": "40.1.1", "name": "Natural Fibers" },
+            { "id": "40.1.2", "name": "Synthetic Fibers" },
+            { "id": "40.1.3", "name": "Fabric Weaving" },
+            { "id": "40.1.4", "name": "Fabric Knitting" },
+            { "id": "40.1.5", "name": "Non-Woven Fabrics" },
+            { "id": "40.1.6", "name": "Technical Textiles" },
+            { "id": "40.1.7", "name": "Home Textiles" },
+            { "id": "40.1.8", "name": "Industrial Textiles" },
+            { "id": "40.1.9", "name": "Smart Textiles" },
+            { "id": "40.1.10", "name": "Sustainable Textiles" }
+          ]
+        },
+        {
+          "id": "40.2",
+          "name": "Apparel Production",
+          "subsubsectors": [
+            { "id": "40.2.1", "name": "Cut & Sew Apparel" },
+            { "id": "40.2.2", "name": "Knitwear" },
+            { "id": "40.2.3", "name": "Outerwear" },
+            { "id": "40.2.4", "name": "Activewear" },
+            { "id": "40.2.5", "name": "Lingerie" },
+            { "id": "40.2.6", "name": "Workwear" },
+            { "id": "40.2.7", "name": "Uniforms" },
+            { "id": "40.2.8", "name": "Bridal Wear" },
+            { "id": "40.2.9", "name": "Children's Clothing" },
+            { "id": "40.2.10", "name": "Custom Tailoring" }
+          ]
+        },
+        {
+          "id": "40.3",
+          "name": "Textile Finishing",
+          "subsubsectors": [
+            { "id": "40.3.1", "name": "Dyeing" },
+            { "id": "40.3.2", "name": "Printing" },
+            { "id": "40.3.3", "name": "Coating" },
+            { "id": "40.3.4", "name": "Embroidery" },
+            { "id": "40.3.5", "name": "Waterproofing" },
+            { "id": "40.3.6", "name": "Anti-Microbial Treatment" },
+            { "id": "40.3.7", "name": "Flame Retardant Treatment" },
+            { "id": "40.3.8", "name": "Wrinkle Resistance" },
+            { "id": "40.3.9", "name": "UV Protection" },
+            { "id": "40.3.10", "name": "Digital Textile Printing" }
+          ]
+        },
+        {
+          "id": "40.4",
+          "name": "Fashion Technology",
+          "subsubsectors": [
+            { "id": "40.4.1", "name": "3D Fashion Design" },
+            { "id": "40.4.2", "name": "Virtual Fitting Rooms" },
+            { "id": "40.4.3", "name": "Smart Clothing" },
+            { "id": "40.4.4", "name": "Wearable Tech Integration" },
+            { "id": "40.4.5", "name": "Sustainable Production Tech" },
+            { "id": "40.4.6", "name": "AI in Fashion Design" },
+            { "id": "40.4.7", "name": "Blockchain in Supply Chain" },
+            { "id": "40.4.8", "name": "Digital Pattern Making" },
+            { "id": "40.4.9", "name": "On-Demand Manufacturing" },
+            { "id": "40.4.10", "name": "Augmented Reality Fashion" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Travel & Tourism (Expanded)",
+      "subsectors": [
+        {
+          "id": "41.1",
+          "name": "Transportation Services",
+          "subsubsectors": [
+            { "id": "41.1.1", "name": "Airlines" },
+            { "id": "41.1.2", "name": "Cruise Lines" },
+            { "id": "41.1.3", "name": "Rail Travel" },
+            { "id": "41.1.4", "name": "Car Rentals" },
+            { "id": "41.1.5", "name": "Bus Services" },
+            { "id": "41.1.6", "name": "Bike Sharing" },
+            { "id": "41.1.7", "name": "Ferry Services" },
+            { "id": "41.1.8", "name": "Private Jet Charter" },
+            { "id": "41.1.9", "name": "RV Rentals" },
+            { "id": "41.1.10", "name": "Adventure Transport" }
+          ]
+        },
+        {
+          "id": "41.2",
+          "name": "Accommodation Services",
+          "subsubsectors": [
+            { "id": "41.2.1", "name": "Hotels" },
+            { "id": "41.2.2", "name": "Resorts" },
+            { "id": "41.2.3", "name": "Vacation Rentals" },
+            { "id": "41.2.4", "name": "Hostels" },
+            { "id": "41.2.5", "name": "Bed & Breakfasts" },
+            { "id": "41.2.6", "name": "Eco-Lodges" },
+            { "id": "41.2.7", "name": "Campgrounds" },
+            { "id": "41.2.8", "name": "Timeshares" },
+            { "id": "41.2.9", "name": "Capsule Hotels" },
+            { "id": "41.2.10", "name": "Luxury Villas" }
+          ]
+        },
+        {
+          "id": "41.3",
+          "name": "Tourism Services",
+          "subsubsectors": [
+            { "id": "41.3.1", "name": "Tour Operators" },
+            { "id": "41.3.2", "name": "Travel Agencies" },
+            { "id": "41.3.3", "name": "Destination Management" },
+            { "id": "41.3.4", "name": "Guided Tours" },
+            { "id": "41.3.5", "name": "Adventure Tourism" },
+            { "id": "41.3.6", "name": "Cultural Tourism" },
+            { "id": "41.3.7", "name": "Medical Tourism" },
+            { "id": "41.3.8", "name": "Eco-Tourism" },
+            { "id": "41.3.9", "name": "Food Tourism" },
+            { "id": "41.3.10", "name": "Religious Tourism" }
+          ]
+        },
+        {
+          "id": "41.4",
+          "name": "Travel Technology",
+          "subsubsectors": [
+            { "id": "41.4.1", "name": "Online Travel Agencies" },
+            { "id": "41.4.2", "name": "Booking Engines" },
+            { "id": "41.4.3", "name": "Revenue Management Systems" },
+            { "id": "41.4.4", "name": "Travel Apps" },
+            { "id": "41.4.5", "name": "Virtual Reality Travel" },
+            { "id": "41.4.6", "name": "AI Travel Assistants" },
+            { "id": "41.4.7", "name": "Blockchain in Travel" },
+            { "id": "41.4.8", "name": "Biometric Travel Solutions" },
+            { "id": "41.4.9", "name": "Dynamic Pricing Tools" },
+            { "id": "41.4.10", "name": "Smart Luggage" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Waste Management",
+      "subsectors": [
+        {
+          "id": "42.1",
+          "name": "Collection Services",
+          "subsubsectors": [
+            { "id": "42.1.1", "name": "Residential Waste Collection" },
+            { "id": "42.1.2", "name": "Commercial Waste Collection" },
+            { "id": "42.1.3", "name": "Industrial Waste Collection" },
+            { "id": "42.1.4", "name": "Hazardous Waste Collection" },
+            { "id": "42.1.5", "name": "Construction Debris Removal" },
+            { "id": "42.1.6", "name": "Medical Waste Collection" },
+            { "id": "42.1.7", "name": "Electronic Waste Collection" },
+            { "id": "42.1.8", "name": "Organic Waste Collection" },
+            { "id": "42.1.9", "name": "Recycling Collection" },
+            { "id": "42.1.10", "name": "Specialty Waste Pickup" }
+          ]
+        },
+        {
+          "id": "42.2",
+          "name": "Processing & Disposal",
+          "subsubsectors": [
+            { "id": "42.2.1", "name": "Landfill Operations" },
+            { "id": "42.2.2", "name": "Waste-to-Energy Plants" },
+            { "id": "42.2.3", "name": "Composting Facilities" },
+            { "id": "42.2.4", "name": "Material Recovery Facilities" },
+            { "id": "42.2.5", "name": "Incineration" },
+            { "id": "42.2.6", "name": "Anaerobic Digestion" },
+            { "id": "42.2.7", "name": "Hazardous Waste Treatment" },
+            { "id": "42.2.8", "name": "Medical Waste Sterilization" },
+            { "id": "42.2.9", "name": "Construction Waste Recycling" },
+            { "id": "42.2.10", "name": "Advanced Sorting Technologies" }
+          ]
+        },
+        {
+          "id": "42.3",
+          "name": "Recycling Services",
+          "subsubsectors": [
+            { "id": "42.3.1", "name": "Single-Stream Recycling" },
+            { "id": "42.3.2", "name": "Plastic Recycling" },
+            { "id": "42.3.3", "name": "Metal Recycling" },
+            { "id": "42.3.4", "name": "Paper Recycling" },
+            { "id": "42.3.5", "name": "Glass Recycling" },
+            { "id": "42.3.6", "name": "Textile Recycling" },
+            { "id": "42.3.7", "name": "Battery Recycling" },
+            { "id": "42.3.8", "name": "Tire Recycling" },
+            { "id": "42.3.9", "name": "Food Waste Recycling" },
+            { "id": "42.3.10", "name": "Industrial Byproduct Recovery" }
+          ]
+        },
+        {
+          "id": "42.4",
+          "name": "Waste Management Technology",
+          "subsubsectors": [
+            { "id": "42.4.1", "name": "Smart Waste Bins" },
+            { "id": "42.4.2", "name": "Route Optimization Software" },
+            { "id": "42.4.3", "name": "Waste Composition Sensors" },
+            { "id": "42.4.4", "name": "Landfill Gas Capture" },
+            { "id": "42.4.5", "name": "Plastic-to-Fuel Conversion" },
+            { "id": "42.4.6", "name": "AI Sorting Systems" },
+            { "id": "42.4.7", "name": "Waste Tracking Systems" },
+            { "id": "42.4.8", "name": "Blockchain for Waste Tracking" },
+            { "id": "42.4.9", "name": "Zero Waste Solutions" },
+            { "id": "42.4.10", "name": "Circular Economy Platforms" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Water Treatment",
+      "subsectors": [
+        {
+          "id": "43.1",
+          "name": "Water Purification",
+          "subsubsectors": [
+            { "id": "43.1.1", "name": "Municipal Water Treatment" },
+            { "id": "43.1.2", "name": "Industrial Water Treatment" },
+            { "id": "43.1.3", "name": "Desalination Plants" },
+            { "id": "43.1.4", "name": "Bottled Water Production" },
+            { "id": "43.1.5", "name": "Point-of-Use Filtration" },
+            { "id": "43.1.6", "name": "Membrane Filtration" },
+            { "id": "43.1.7", "name": "UV Disinfection" },
+            { "id": "43.1.8", "name": "Reverse Osmosis" },
+            { "id": "43.1.9", "name": "Electrodialysis" },
+            { "id": "43.1.10", "name": "Advanced Oxidation" }
+          ]
+        },
+        {
+          "id": "43.2",
+          "name": "Wastewater Treatment",
+          "subsubsectors": [
+            { "id": "43.2.1", "name": "Sewage Treatment Plants" },
+            { "id": "43.2.2", "name": "Industrial Effluent Treatment" },
+            { "id": "43.2.3", "name": "Sludge Management" },
+            { "id": "43.2.4", "name": "Water Reclamation" },
+            { "id": "43.2.5", "name": "Decentralized Treatment Systems" },
+            { "id": "43.2.6", "name": "Nutrient Recovery" },
+            { "id": "43.2.7", "name": "Constructed Wetlands" },
+            { "id": "43.2.8", "name": "Membrane Bioreactors" },
+            { "id": "43.2.9", "name": "Anaerobic Digestion" },
+            { "id": "43.2.10", "name": "Advanced Biological Treatment" }
+          ]
+        },
+        {
+          "id": "43.3",
+          "name": "Water Infrastructure",
+          "subsubsectors": [
+            { "id": "43.3.1", "name": "Water Distribution Systems" },
+            { "id": "43.3.2", "name": "Pipeline Rehabilitation" },
+            { "id": "43.3.3", "name": "Pumping Stations" },
+            { "id": "43.3.4", "name": "Water Storage Tanks" },
+            { "id": "43.3.5", "name": "Stormwater Management" },
+            { "id": "43.3.6", "name": "Flood Control Systems" },
+            { "id": "43.3.7", "name": "Leak Detection Systems" },
+            { "id": "43.3.8", "name": "Smart Water Networks" },
+            { "id": "43.3.9", "name": "Water Metering Systems" },
+            { "id": "43.3.10", "name": "Hydropower Infrastructure" }
+          ]
+        },
+        {
+          "id": "43.4",
+          "name": "Water Quality Management",
+          "subsubsectors": [
+            { "id": "43.4.1", "name": "Water Testing Services" },
+            { "id": "43.4.2", "name": "Contaminant Removal" },
+            { "id": "43.4.3", "name": "Disinfection Byproduct Control" },
+            { "id": "43.4.4", "name": "Corrosion Control" },
+            { "id": "43.4.5", "name": "Scale Prevention" },
+            { "id": "43.4.6", "name": "Water Softening" },
+            { "id": "43.4.7", "name": "pH Adjustment" },
+            { "id": "43.4.8", "name": "Taste & Odor Control" },
+            { "id": "43.4.9", "name": "Microbial Risk Management" },
+            { "id": "43.4.10", "name": "Emerging Contaminant Treatment" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Wedding & Events",
+      "subsectors": [
+        {
+          "id": "44.1",
+          "name": "Wedding Planning",
+          "subsubsectors": [
+            { "id": "44.1.1", "name": "Full-Service Planning" },
+            { "id": "44.1.2", "name": "Day-of Coordination" },
+            { "id": "44.1.3", "name": "Destination Weddings" },
+            { "id": "44.1.4", "name": "Cultural Wedding Specialists" },
+            { "id": "44.1.5", "name": "Budget Planning" },
+            { "id": "44.1.6", "name": "Vendor Management" },
+            { "id": "44.1.7", "name": "Wedding Design" },
+            { "id": "44.1.8", "name": "Timeline Creation" },
+            { "id": "44.1.9", "name": "Wedding Website Services" },
+            { "id": "44.1.10", "name": "RSVP Management" }
+          ]
+        },
+        {
+          "id": "44.2",
+          "name": "Event Venues",
+          "subsubsectors": [
+            { "id": "44.2.1", "name": "Wedding Venues" },
+            { "id": "44.2.2", "name": "Hotel Event Spaces" },
+            { "id": "44.2.3", "name": "Banquet Halls" },
+            { "id": "44.2.4", "name": "Outdoor Event Spaces" },
+            { "id": "44.2.5", "name": "Historic Venues" },
+            { "id": "44.2.6", "name": "Rooftop Venues" },
+            { "id": "44.2.7", "name": "Beachfront Locations" },
+            { "id": "44.2.8", "name": "Vineyard Weddings" },
+            { "id": "44.2.9", "name": "Museum Venues" },
+            { "id": "44.2.10", "name": "Private Estate Rentals" }
+          ]
+        },
+        {
+          "id": "44.3",
+          "name": "Event Services",
+          "subsubsectors": [
+            { "id": "44.3.1", "name": "Catering Services" },
+            { "id": "44.3.2", "name": "Event Decor" },
+            { "id": "44.3.3", "name": "Audio-Visual Production" },
+            { "id": "44.3.4", "name": "Event Lighting" },
+            { "id": "44.3.5", "name": "Photography & Videography" },
+            { "id": "44.3.6", "name": "Entertainment Booking" },
+            { "id": "44.3.7", "name": "Transportation Services" },
+            { "id": "44.3.8", "name": "Event Security" },
+            { "id": "44.3.9", "name": "Guest Accommodations" },
+            { "id": "44.3.10", "name": "Valet Parking" }
+          ]
+        },
+        {
+          "id": "44.4",
+          "name": "Specialty Events",
+          "subsubsectors": [
+            { "id": "44.4.1", "name": "Corporate Events" },
+            { "id": "44.4.2", "name": "Charity Galas" },
+            { "id": "44.4.3", "name": "Product Launches" },
+            { "id": "44.4.4", "name": "Conferences" },
+            { "id": "44.4.5", "name": "Trade Shows" },
+            { "id": "44.4.6", "name": "Festivals" },
+            { "id": "44.4.7", "name": "Award Ceremonies" },
+            { "id": "44.4.8", "name": "Themed Parties" },
+            { "id": "44.4.9", "name": "Virtual Events" },
+            { "id": "44.4.10", "name": "Hybrid Events" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Wholesale & Distribution",
+      "subsectors": [
+        {
+          "id": "45.1",
+          "name": "Consumer Goods",
+          "subsubsectors": [
+            { "id": "45.1.1", "name": "Apparel Wholesale" },
+            { "id": "45.1.2", "name": "Electronics Distribution" },
+            { "id": "45.1.3", "name": "Home Goods Wholesale" },
+            { "id": "45.1.4", "name": "Grocery Distribution" },
+            { "id": "45.1.5", "name": "Beauty Products Wholesale" },
+            { "id": "45.1.6", "name": "Toy & Game Distribution" },
+            { "id": "45.1.7", "name": "Sporting Goods Wholesale" },
+            { "id": "45.1.8", "name": "Jewelry Wholesale" },
+            { "id": "45.1.9", "name": "Book Distribution" },
+            { "id": "45.1.10", "name": "Pet Supplies Wholesale" }
+          ]
+        },
+        {
+          "id": "45.2",
+          "name": "Industrial Distribution",
+          "subsubsectors": [
+            { "id": "45.2.1", "name": "MRO Supplies" },
+            { "id": "45.2.2", "name": "Electrical Components" },
+            { "id": "45.2.3", "name": "Plumbing Supplies" },
+            { "id": "45.2.4", "name": "HVAC Equipment" },
+            { "id": "45.2.5", "name": "Safety Equipment" },
+            { "id": "45.2.6", "name": "Fasteners & Hardware" },
+            { "id": "45.2.7", "name": "Bearings & Power Transmission" },
+            { "id": "45.2.8", "name": "Industrial Chemicals" },
+            { "id": "45.2.9", "name": "Material Handling Equipment" },
+            { "id": "45.2.10", "name": "Pneumatic Components" }
+          ]
+        },
+        {
+          "id": "45.3",
+          "name": "Food Service Distribution",
+          "subsubsectors": [
+            { "id": "45.3.1", "name": "Restaurant Supply" },
+            { "id": "45.3.2", "name": "Beverage Distribution" },
+            { "id": "45.3.3", "name": "Meat & Seafood Wholesale" },
+            { "id": "45.3.4", "name": "Produce Distribution" },
+            { "id": "45.3.5", "name": "Dairy Distribution" },
+            { "id": "45.3.6", "name": "Bakery Ingredients" },
+            { "id": "45.3.7", "name": "Frozen Foods Distribution" },
+            { "id": "45.3.8", "name": "Organic Foods Wholesale" },
+            { "id": "45.3.9", "name": "Specialty Foods" },
+            { "id": "45.3.10", "name": "Foodservice Packaging" }
+          ]
+        },
+        {
+          "id": "45.4",
+          "name": "Logistics & Fulfillment",
+          "subsubsectors": [
+            { "id": "45.4.1", "name": "Warehousing Services" },
+            { "id": "45.4.2", "name": "Order Fulfillment" },
+            { "id": "45.4.3", "name": "Cross-Docking" },
+            { "id": "45.4.4", "name": "Inventory Management" },
+            { "id": "45.4.5", "name": "Third-Party Logistics" },
+            { "id": "45.4.6", "name": "Dropshipping" },
+            { "id": "45.4.7", "name": "Cold Chain Logistics" },
+            { "id": "45.4.8", "name": "Last-Mile Delivery" },
+            { "id": "45.4.9", "name": "Freight Forwarding" },
+            { "id": "45.4.10", "name": "Supply Chain Optimization" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Wine & Spirits",
+      "subsectors": [
+        {
+          "id": "46.1",
+          "name": "Wine Production",
+          "subsubsectors": [
+            { "id": "46.1.1", "name": "Vineyards" },
+            { "id": "46.1.2", "name": "Wineries" },
+            { "id": "46.1.3", "name": "Sparkling Wine Production" },
+            { "id": "46.1.4", "name": "Organic Wine Making" },
+            { "id": "46.1.5", "name": "Boutique Wineries" },
+            { "id": "46.1.6", "name": "Private Label Wines" },
+            { "id": "46.1.7", "name": "Wine Blending" },
+            { "id": "46.1.8", "name": "Barrel Aging" },
+            { "id": "46.1.9", "name": "Harvesting Services" },
+            { "id": "46.1.10", "name": "Crush Facilities" }
+          ]
+        },
+        {
+          "id": "46.2",
+          "name": "Distilled Spirits",
+          "subsubsectors": [
+            { "id": "46.2.1", "name": "Whiskey Distilleries" },
+            { "id": "46.2.2", "name": "Vodka Production" },
+            { "id": "46.2.3", "name": "Gin Distilleries" },
+            { "id": "46.2.4", "name": "Rum Production" },
+            { "id": "46.2.5", "name": "Tequila & Mezcal" },
+            { "id": "46.2.6", "name": "Brandy Production" },
+            { "id": "46.2.7", "name": "Liqueur Manufacturing" },
+            { "id": "46.2.8", "name": "Craft Distilleries" },
+            { "id": "46.2.9", "name": "Moonshine Production" },
+            { "id": "46.2.10", "name": "Experimental Spirits" }
+          ]
+        },
+        {
+          "id": "46.3",
+          "name": "Distribution & Retail",
+          "subsubsectors": [
+            { "id": "46.3.1", "name": "Wine Wholesale" },
+            { "id": "46.3.2", "name": "Liquor Distribution" },
+            { "id": "46.3.3", "name": "Specialty Wine Shops" },
+            { "id": "46.3.4", "name": "Online Alcohol Retail" },
+            { "id": "46.3.5", "name": "Beverage Alcohol Import/Export" },
+            { "id": "46.3.6", "name": "Direct-to-Consumer Shipping" },
+            { "id": "46.3.7", "name": "Wine Clubs" },
+            { "id": "46.3.8", "name": "Duty-Free Sales" },
+            { "id": "46.3.9", "name": "Auction Houses" },
+            { "id": "46.3.10", "name": "Vintage Collections" }
+          ]
+        },
+        {
+          "id": "46.4",
+          "name": "Hospitality Services",
+          "subsubsectors": [
+            { "id": "46.4.1", "name": "Wine Bars" },
+            { "id": "46.4.2", "name": "Cocktail Lounges" },
+            { "id": "46.4.3", "name": "Tasting Rooms" },
+            { "id": "46.4.4", "name": "Wine Tourism" },
+            { "id": "46.4.5", "name": "Distillery Tours" },
+            { "id": "46.4.6", "name": "Sommelier Services" },
+            { "id": "46.4.7", "name": "Beverage Consulting" },
+            { "id": "46.4.8", "name": "Pairing Dinners" },
+            { "id": "46.4.9", "name": "Mixology Classes" },
+            { "id": "46.4.10", "name": "Corporate Beverage Programs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Wood & Furniture",
+      "subsectors": [
+        {
+          "id": "47.1",
+          "name": "Furniture Manufacturing",
+          "subsubsectors": [
+            { "id": "47.1.1", "name": "Residential Furniture" },
+            { "id": "47.1.2", "name": "Office Furniture" },
+            { "id": "47.1.3", "name": "Outdoor Furniture" },
+            { "id": "47.1.4", "name": "Kitchen Cabinetry" },
+            { "id": "47.1.5", "name": "Custom Furniture" },
+            { "id": "47.1.6", "name": "Upholstered Furniture" },
+            { "id": "47.1.7", "name": "Institutional Furniture" },
+            { "id": "47.1.8", "name": "Furniture Components" },
+            { "id": "47.1.9", "name": "Flat-Pack Furniture" },
+            { "id": "47.1.10", "name": "Luxury Furniture" }
+          ]
+        },
+        {
+          "id": "47.2",
+          "name": "Wood Products",
+          "subsubsectors": [
+            { "id": "47.2.1", "name": "Lumber Production" },
+            { "id": "47.2.2", "name": "Plywood Manufacturing" },
+            { "id": "47.2.3", "name": "Engineered Wood" },
+            { "id": "47.2.4", "name": "Millwork" },
+            { "id": "47.2.5", "name": "Wood Paneling" },
+            { "id": "47.2.6", "name": "Wood Flooring" },
+            { "id": "47.2.7", "name": "Wood Pallets" },
+            { "id": "47.2.8", "name": "Wooden Containers" },
+            { "id": "47.2.9", "name": "Wooden Toys" },
+            { "id": "47.2.10", "name": "Wooden Utensils" }
+          ]
+        },
+        {
+          "id": "47.3",
+          "name": "Wood Processing",
+          "subsubsectors": [
+            { "id": "47.3.1", "name": "Sawmills" },
+            { "id": "47.3.2", "name": "Wood Treatment" },
+            { "id": "47.3.3", "name": "Wood Drying" },
+            { "id": "47.3.4", "name": "Wood Preservation" },
+            { "id": "47.3.5", "name": "Veneer Production" },
+            { "id": "47.3.6", "name": "Wood Recycling" },
+            { "id": "47.3.7", "name": "Wood Finishing" },
+            { "id": "47.3.8", "name": "CNC Woodworking" },
+            { "id": "47.3.9", "name": "Wood Carving" },
+            { "id": "47.3.10", "name": "Wood Joinery" }
+          ]
+        },
+        {
+          "id": "47.4",
+          "name": "Sustainable Forestry",
+          "subsubsectors": [
+            { "id": "47.4.1", "name": "Timber Harvesting" },
+            { "id": "47.4.2", "name": "Forest Management" },
+            { "id": "47.4.3", "name": "Reforestation Services" },
+            { "id": "47.4.4", "name": "Certified Wood Products" },
+            { "id": "47.4.5", "name": "Bamboo Products" },
+            { "id": "47.4.6", "name": "Cork Products" },
+            { "id": "47.4.7", "name": "Carbon Offset Forestry" },
+            { "id": "47.4.8", "name": "Urban Forestry" },
+            { "id": "47.4.9", "name": "Forest Conservation" },
+            { "id": "47.4.10", "name": "Agroforestry" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Yoga & Wellness",
+      "subsectors": [
+        {
+          "id": "48.1",
+          "name": "Yoga Instruction",
+          "subsubsectors": [
+            { "id": "48.1.1", "name": "Hatha Yoga" },
+            { "id": "48.1.2", "name": "Vinyasa Yoga" },
+            { "id": "48.1.3", "name": "Ashtanga Yoga" },
+            { "id": "48.1.4", "name": "Iyengar Yoga" },
+            { "id": "48.1.5", "name": "Kundalini Yoga" },
+            { "id": "48.1.6", "name": "Yin Yoga" },
+            { "id": "48.1.7", "name": "Restorative Yoga" },
+            { "id": "48.1.8", "name": "Prenatal Yoga" },
+            { "id": "48.1.9", "name": "Aerial Yoga" },
+            { "id": "48.1.10", "name": "Corporate Yoga" }
+          ]
+        },
+        {
+          "id": "48.2",
+          "name": "Wellness Retreats",
+          "subsubsectors": [
+            { "id": "48.2.1", "name": "Destination Retreats" },
+            { "id": "48.2.2", "name": "Meditation Retreats" },
+            { "id": "48.2.3", "name": "Detox Programs" },
+            { "id": "48.2.4", "name": "Ayurvedic Retreats" },
+            { "id": "48.2.5", "name": "Spa Retreats" },
+            { "id": "48.2.6", "name": "Digital Detox Retreats" },
+            { "id": "48.2.7", "name": "Silent Retreats" },
+            { "id": "48.2.8", "name": "Adventure Wellness" },
+            { "id": "48.2.9", "name": "Healing Retreats" },
+            { "id": "48.2.10", "name": "Luxury Wellness" }
+          ]
+        },
+        {
+          "id": "48.3",
+          "name": "Wellness Products",
+          "subsubsectors": [
+            { "id": "48.3.1", "name": "Yoga Mats" },
+            { "id": "48.3.2", "name": "Meditation Cushions" },
+            { "id": "48.3.3", "name": "Essential Oils" },
+            { "id": "48.3.4", "name": "Herbal Supplements" },
+            { "id": "48.3.5", "name": "Wellness Apparel" },
+            { "id": "48.3.6", "name": "Aromatherapy Products" },
+            { "id": "48.3.7", "name": "Massage Tools" },
+            { "id": "48.3.8", "name": "Sound Healing Instruments" },
+            { "id": "48.3.9", "name": "Sleep Aids" },
+            { "id": "48.3.10", "name": "Wellness Tech Devices" }
+          ]
+        },
+        {
+          "id": "48.4",
+          "name": "Holistic Health",
+          "subsubsectors": [
+            { "id": "48.4.1", "name": "Ayurveda" },
+            { "id": "48.4.2", "name": "Traditional Chinese Medicine" },
+            { "id": "48.4.3", "name": "Naturopathy" },
+            { "id": "48.4.4", "name": "Energy Healing" },
+            { "id": "48.4.5", "name": "Sound Therapy" },
+            { "id": "48.4.6", "name": "Crystal Healing" },
+            { "id": "48.4.7", "name": "Reiki" },
+            { "id": "48.4.8", "name": "Acupuncture" },
+            { "id": "48.4.9", "name": "Reflexology" },
+            { "id": "48.4.10", "name": "Breathwork" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Zoos & Aquariums",
+      "subsectors": [
+        {
+          "id": "49.1",
+          "name": "Animal Exhibits",
+          "subsubsectors": [
+            { "id": "49.1.1", "name": "Mammal Exhibits" },
+            { "id": "49.1.2", "name": "Avian Exhibits" },
+            { "id": "49.1.3", "name": "Reptile Houses" },
+            { "id": "49.1.4", "name": "Aquatic Exhibits" },
+            { "id": "49.1.5", "name": "Insectariums" },
+            { "id": "49.1.6", "name": "Nocturnal Animal Exhibits" },
+            { "id": "49.1.7", "name": "Children's Zoos" },
+            { "id": "49.1.8", "name": "Safari Parks" },
+            { "id": "49.1.9", "name": "Petting Zoos" },
+            { "id": "49.1.10", "name": "Specialty Animal Exhibits" }
+          ]
+        },
+        {
+          "id": "49.2",
+          "name": "Conservation Programs",
+          "subsubsectors": [
+            { "id": "49.2.1", "name": "Breeding Programs" },
+            { "id": "49.2.2", "name": "Species Reintroduction" },
+            { "id": "49.2.3", "name": "Habitat Conservation" },
+            { "id": "49.2.4", "name": "Wildlife Research" },
+            { "id": "49.2.5", "name": "Endangered Species Protection" },
+            { "id": "49.2.6", "name": "Genetic Diversity Management" },
+            { "id": "49.2.7", "name": "Field Conservation" },
+            { "id": "49.2.8", "name": "Community Education" },
+            { "id": "49.2.9", "name": "Anti-Poaching Initiatives" },
+            { "id": "49.2.10", "name": "Sustainable Practices" }
+          ]
+        },
+        {
+          "id": "49.3",
+          "name": "Visitor Experiences",
+          "subsubsectors": [
+            { "id": "49.3.1", "name": "Animal Encounters" },
+            { "id": "49.3.2", "name": "Behind-the-Scenes Tours" },
+            { "id": "49.3.3", "name": "Educational Programs" },
+            { "id": "49.3.4", "name": "Zoo Camps" },
+            { "id": "49.3.5", "name": "Interactive Exhibits" },
+            { "id": "49.3.6", "name": "Feeding Demonstrations" },
+            { "id": "49.3.7", "name": "Virtual Reality Experiences" },
+            { "id": "49.3.8", "name": "Nighttime Events" },
+            { "id": "49.3.9", "name": "Animal Shows" },
+            { "id": "49.3.10", "name": "Conservation Workshops" }
+          ]
+        },
+        {
+          "id": "49.4",
+          "name": "Facility Operations",
+          "subsubsectors": [
+            { "id": "49.4.1", "name": "Animal Care" },
+            { "id": "49.4.2", "name": "Veterinary Services" },
+            { "id": "49.4.3", "name": "Exhibit Design" },
+            { "id": "49.4.4", "name": "Water Quality Management" },
+            { "id": "49.4.5", "name": "Life Support Systems" },
+            { "id": "49.4.6", "name": "Food Preparation" },
+            { "id": "49.4.7", "name": "Safety Protocols" },
+            { "id": "49.4.8", "name": "Visitor Services" },
+            { "id": "49.4.9", "name": "Membership Programs" },
+            { "id": "49.4.10", "name": "Facility Maintenance" }
+          ]
+        }
+      ]
+    },
+
+    {
+      "id": 50,
+      "name": "Emerging Industries (Future Trends)",
+      "subsectors": [
+        {
+          "id": "50.1",
+          "name": "Space Economy",
+          "subsubsectors": [
+            { "id": "50.1.1", "name": "Space Tourism" },
+            { "id": "50.1.2", "name": "Satellite Services" },
+            { "id": "50.1.3", "name": "Asteroid Mining" },
+            { "id": "50.1.4", "name": "Space Manufacturing" },
+            { "id": "50.1.5", "name": "Space Agriculture" },
+            { "id": "50.1.6", "name": "Space Habitats" },
+            { "id": "50.1.7", "name": "Space Medicine" },
+            { "id": "50.1.8", "name": "Space Energy" },
+            { "id": "50.1.9", "name": "Space Transportation" },
+            { "id": "50.1.10", "name": "Space Law & Policy" }
+          ]
+        },
+        {
+          "id": "50.2",
+          "name": "Biotechnology Frontiers",
+          "subsubsectors": [
+            { "id": "50.2.1", "name": "Synthetic Biology" },
+            { "id": "50.2.2", "name": "Gene Editing" },
+            { "id": "50.2.3", "name": "Biofabrication" },
+            { "id": "50.2.4", "name": "Neurotechnology" },
+            { "id": "50.2.5", "name": "Longevity Science" },
+            { "id": "50.2.6", "name": "Bioprinting" },
+            { "id": "50.2.7", "name": "Microbiome Engineering" },
+            { "id": "50.2.8", "name": "Biohybrid Devices" },
+            { "id": "50.2.9", "name": "Plant-Based Meat Tech" },
+            { "id": "50.2.10", "name": "Biological Computing" }
+          ]
+        },
+        {
+          "id": "50.3",
+          "name": "Advanced Digital",
+          "subsubsectors": [
+            { "id": "50.3.1", "name": "Metaverse Development" },
+            { "id": "50.3.2", "name": "Quantum Computing" },
+            { "id": "50.3.3", "name": "Web3 Technologies" },
+            { "id": "50.3.4", "name": "Digital Twins" },
+            { "id": "50.3.5", "name": "AI Ethics & Governance" },
+            { "id": "50.3.6", "name": "Edge Computing" },
+            { "id": "50.3.7", "name": "Neuromorphic Computing" },
+            { "id": "50.3.8", "name": "Holographic Technology" },
+            { "id": "50.3.9", "name": "Ambient Computing" },
+            { "id": "50.3.10", "name": "Cognitive Automation" }
+          ]
+        },
+        {
+          "id": "50.4",
+          "name": "Sustainable Innovations",
+          "subsubsectors": [
+            { "id": "50.4.1", "name": "Carbon Capture Tech" },
+            { "id": "50.4.2", "name": "Circular Economy Solutions" },
+            { "id": "50.4.3", "name": "Green Hydrogen" },
+            { "id": "50.4.4", "name": "Vertical Farming Tech" },
+            { "id": "50.4.5", "name": "Biodegradable Materials" },
+            { "id": "50.4.6", "name": "Energy Storage Breakthroughs" },
+            { "id": "50.4.7", "name": "Smart Grid Technologies" },
+            { "id": "50.4.8", "name": "Water-from-Air Tech" },
+            { "id": "50.4.9", "name": "Plastic Alternatives" },
+            { "id": "50.4.10", "name": "Regenerative Agriculture Tech" }
+          ]
+        }
+      ]
+    }
+  ]
+}
