@@ -1,4 +1,4 @@
-import { Tab, Tabs, Tag } from "@blueprintjs/core";
+import { Divider, Tab, Tabs, Tag } from "@blueprintjs/core";
 import classnames from "classnames";
 import React, { useContext } from "react";
 import { connect } from "react-redux";
@@ -63,6 +63,7 @@ export const PropertiesPanelAll: React.FC<ISlidesPanel> = (props) => {
           <>
             <BasicProperties />
             <LayoutProperties />
+            <div className={css.delimiter} />
             <PropertiesPanel
               className={"propertiesPanel " + css.propertiesPanel}
             />
