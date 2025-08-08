@@ -535,7 +535,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     //   : {}),
   };
 
-  const outlineStyle = {
+  const outlineStyle: CSSProperties = {
     position: "absolute",
     zIndex: 10000,
     top: -1 + "px",
@@ -969,7 +969,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { pages, layers, objects, selection, document, settings, clipboard } =
+  const { pages, layers, objects, selection, settings, clipboard } =
     state.project;
   const { stage } = state;
 
