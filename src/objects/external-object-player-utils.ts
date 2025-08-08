@@ -17,7 +17,12 @@ export async function loadAndRegisterExternalComponentForPlayer(
       : "./extensions/" + extensionFileName;
 
   try {
-    await import(/* @ts-ignore */ /* webpackIgnore: true */ extensionUrl);
+    await import(
+      /* @ts-ignore */
+      /* webpackIgnore: true */
+      /* @vite-ignore */
+      extensionUrl
+    );
   } catch (ex) {
     console.error(
       `Cannot load external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}. Exception: ${ex}`

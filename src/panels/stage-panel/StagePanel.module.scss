@@ -12,16 +12,16 @@
     $dot-size: 1px;
     $dot-space: 22px;
 
-    background: linear-gradient(
-          90deg,
-          $bg-color ($dot-space - $dot-size),
-          transparent 1%
-        )
-        center,
-      linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-      $dot-color;
+    // background: linear-gradient(
+    //       90deg,
+    //       $bg-color ($dot-space - $dot-size),
+    //       transparent 1%
+    //     )
+    //     center,
+    //   linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+    //   $dot-color;
 
-    background-size: $dot-space $dot-space;
+    // background-size: $dot-space $dot-space;
   }
 }
 
@@ -43,16 +43,16 @@
   $dot-size: 1px;
   $dot-space: 22px;
 
-  background: linear-gradient(
-        90deg,
-        $bg-color ($dot-space - $dot-size),
-        transparent 1%
-      )
-      center,
-    linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
-    $dot-color;
+  // background: linear-gradient(
+  //       90deg,
+  //       $bg-color ($dot-space - $dot-size),
+  //       transparent 1%
+  //     )
+  //     center,
+  //   linear-gradient($bg-color ($dot-space - $dot-size), transparent 1%) center,
+  //   $dot-color;
 
-  background-size: $dot-space $dot-space;
+  // background-size: $dot-space $dot-space;
 }
 
 .stage {

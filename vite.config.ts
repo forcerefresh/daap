@@ -48,6 +48,14 @@ export default defineConfig({
       },
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: ["import"],
+        // quietDeps: true,
+      },
+    },
+  },
 });
 
 function getMimeType(filePath) {

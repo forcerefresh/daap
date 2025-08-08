@@ -89,14 +89,16 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
       try {
         await import(
-          /* @ts-ignore */ /* webpackIgnore: true */ devItem.appDevUrl +
-            "?" +
-            Math.random()
+          /* @ts-ignore */
+          /* webpackIgnore: true */
+          /* @vite-ignore */
+          devItem.appDevUrl + "?" + Math.random()
         );
         await import(
-          /* @ts-ignore */ /* webpackIgnore: true */ devItem.playerDevUrl +
-            "?" +
-            Math.random()
+          /* @ts-ignore */
+          /* @vite-ignore */ /* webpackIgnore: true */
+          /* @vite-ignore */
+          devItem.playerDevUrl + "?" + Math.random()
         );
 
         const devItemUpdate: Partial<DevelopmentItem> = {
