@@ -44,8 +44,9 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
             const p: string[] = val.split(":");
 
             const itemPartial: Partial<DevelopmentItem> = {
-              componentType: p[3],
+              extensionType: p[3],
               type: p[4],
+              version: p[5],
               appDevUrl:
                 p[0] + "://" + p[1] + ":" + p[2] + "/" + p[4] + "-app.js",
               playerDevUrl:
@@ -63,13 +64,19 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
             <tr>
               <td>Extension: </td>{" "}
               <td>
-                <strong>{item.componentType}</strong>
+                <strong>{item.extensionType}</strong>
               </td>
             </tr>
             <tr>
-              <td>Uid: </td>{" "}
+              <td>Type: </td>{" "}
               <td>
                 <strong>{item.type}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td>Version: </td>{" "}
+              <td>
+                <strong>{item.version}</strong>
               </td>
             </tr>
             <tr>
@@ -88,12 +95,12 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
         )}
         {/* {getSelectField(
           "Type",
-          item.componentType,
+          item.extensionType,
           [
             { label: "Object", value: "object" },
             { label: "Animation", value: "animation" },
           ],
-          (val) => updateItem(item.id, "componentType", val),
+          (val) => updateItem(item.id, "extensionType", val),
           { disabled: item.monitoringEnabled }
         )}
         {getTextField(

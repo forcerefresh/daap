@@ -20,7 +20,7 @@ export async function loadAndRegisterExternalComponentForPlayer(
     await import(/* @ts-ignore */ /* webpackIgnore: true */ extensionUrl);
   } catch (ex) {
     console.error(
-      `Cannot load external component type: ${extension.componentType}; name: ${extension.name}. Exception: ${ex}`
+      `Cannot load external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}. Exception: ${ex}`
     );
   }
 
@@ -28,7 +28,7 @@ export async function loadAndRegisterExternalComponentForPlayer(
 }
 
 function registerExternalExtensionForPlayer(extension: IExtensionItem) {
-  if (extension.componentType === "object") {
+  if (extension.extensionType === "object") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
       extension.type
     ];
@@ -36,7 +36,7 @@ function registerExternalExtensionForPlayer(extension: IExtensionItem) {
     registerExternalObject(undefined, playerObj);
 
     logger.object.info(`Object '${extension.type}' has been registered`);
-  } else if (extension.componentType === "animation") {
+  } else if (extension.extensionType === "animation") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];
@@ -46,7 +46,7 @@ function registerExternalExtensionForPlayer(extension: IExtensionItem) {
     logger.object.info(`Animation '${extension.type}' has been registered`);
   } else {
     console.warn(
-      `Unsuported external component type: ${extension.componentType}; name: ${extension.name}`
+      `Unsuported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
     );
   }
 }

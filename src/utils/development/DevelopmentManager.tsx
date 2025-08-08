@@ -108,22 +108,22 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
 
         const global = (window as any).WebSlider_GlobalScope;
 
-        if (devItem.componentType === "object") {
+        if (devItem.extensionType === "object") {
           logger.app.debug(`Register external object (${devItem.type})`);
           global.registerExternalObject(
             {
-              ...global.appObjects[devItem.type],
+              ...global.appObjects[devItem.type + "-" + devItem.version],
               development: true,
             },
             {
-              ...global.playerObjects[devItems[i].type],
+              ...global.playerObjects[devItem.type + "-" + devItem.version],
               development: true,
             },
             true
           );
         }
 
-        if (devItem.componentType === "animation") {
+        if (devItem.extensionType === "animation") {
           logger.app.debug(`Register external animation (${devItem.type})`);
           global.registerExternalAnimation(
             {
@@ -139,7 +139,7 @@ const DevelopmentManager = (props: IDevelopmentManagerProps) => {
         }
 
         logger.app.info(
-          `Development component (${devItem.componentType}:${devItems[i].type}) has been loaded.`
+          `Development component (${devItem.extensionType}:${devItems[i].type}:v{${devItems[i].version}) has been loaded.`
         );
       } catch (err: any) {
         logger.app.error(err);

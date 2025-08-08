@@ -17,6 +17,7 @@ import { unregisterAnimation } from "webslider-sdk/lib/animations/animations-reg
 import { IEditor } from "../../store/reducers/editor";
 import { updateEditor } from "../../store/actions/actions";
 import { removeExtensionFromMissing } from "../../utils/extensions/extensions-utils";
+import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -65,8 +66,8 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    getInstalledExtensions().then((res: { items: IExtensionItem[] }) => {
-      setInstalledExtensions(res.items);
+    getInstalledExtensions().then((res: { data: IExtensionItem[] }) => {
+      setInstalledExtensions(res.data);
     });
   }, []);
 
@@ -96,12 +97,12 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           return;
         }
         if (from === 0) {
-          setExtensions([...result.items]);
+          setExtensions([...result.data]);
         } else {
-          setExtensions([...extensions, ...result.items]);
+          setExtensions([...extensions, ...result.data]);
         }
         setLoading(false);
-        setHasMore(result.items.length > 0);
+        setHasMore(result.data.length > 0);
       },
 
       (error) => {
@@ -128,17 +129,17 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     if (!uninstallIdRef.current?.id) return;
 
     uninstallExtension({
-      id: uninstallIdRef.current.id,
+      type: uninstallIdRef.current.type,
       source: "marketplace",
     }).then((mItem?: Partial<IExtensionItem>) => {
       getInstalledExtensions().then((res) => {
-        setInstalledExtensions(res.items);
+        setInstalledExtensions(res.data);
       });
 
-      if (mItem?.componentType === "object") {
+      if (mItem?.extensionType === "object") {
         unregisterObject(mItem.type!);
       }
-      if (mItem?.componentType === "animation") {
+      if (mItem?.extensionType === "animation") {
         unregisterAnimation(mItem.type!);
       }
 
@@ -158,6 +159,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   };
 
   const onInstall = (item: IExtensionItem) => {
+    console.log(item);
     setCurrentlyInstallingExtensions({
       ...currentlyInstallingExtensions,
       [item.type]: true,
@@ -176,7 +178,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
       });
 
       getInstalledExtensions().then((res) => {
-        setInstalledExtensions(res.items);
+        setInstalledExtensions(res.data);
       });
 
       const newMissingExtensions = removeExtensionFromMissing(
@@ -187,27 +189,31 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
     });
   };
 
-  if (!installedExtensions) {
-    return null;
-  }
+  // if (!installedExtensions) {
+  //   return null;
+  // }
 
   return (
-    <div className={css.extensionsPanel}>
+    <div className={cx("bp5-dark", css.extensionsPanel)}>
+      <RightPanelHeader>
+        <div>EXTENSIONS</div>
+      </RightPanelHeader>
+
       <div className={css.headerSection}>
         <InputGroup
           large
           leftIcon="search"
           placeholder="Extend your app..."
-          rightElement={
-            <Button
-              large
-              icon="arrow-right"
-              onClick={() => {
-                setExtensions(() => []);
-                debounceFetchData(0);
-              }}
-            />
-          }
+          // rightElement={
+          //   <Button
+          //     large
+          //     icon="arrow-right"
+          //     onClick={() => {
+          //       setExtensions(() => []);
+          //       debounceFetchData(0);
+          //     }}
+          //   />
+          // }
           value={searchValue}
           onChange={(event: any) => {
             setSearchValue((event.currentTarget as HTMLInputElement).value);
@@ -221,14 +227,14 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         ></InputGroup>
       </div>
 
-      <div className={cx(css.headerSection, css.tableHeader)}>
-        {/*<div className={css.id}>ID</div>*/}
+      {/* <div className={cx(css.headerSection, css.tableHeader)}>
+        <div className={css.id}>ID</div>
         <div className={css.thumb}></div>
         <div className={css.nameAndDesc}>Name &amp; Description</div>
-        <div className={css.created}>Created</div>
-        <div className={css.modified}>Modified</div>
+         <div className={css.created}>Created</div>
+        <div className={css.modified}>Modified</div> 
         <div className={css.action}>Action</div>
-      </div>
+      </div> */}
 
       <div className={css.mainSection} id="mediaHolder">
         {/* {!apiKey && (
@@ -242,7 +248,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         <InfiniteScroll
           dataLength={extensions?.length || -1} //This is important field to render the next data
           next={debounceFetchData}
-          hasMore={hasMore}
+          hasMore={false} //{hasMore}
           loader={
             apiKey &&
             !errorMessage && (
@@ -284,13 +290,18 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                   </div>
                 </div>
                 <div className={css.nameAndDesc}>
-                  <div className={css.name}> {extension.name}</div>
+                  <div>
+                    <div className={css.name}>{extension.name}</div>
+                    <div className={css.version}>
+                      <strong>{extension.version}</strong>
+                    </div>
+                  </div>
                   <div className={css.description}>{extension.description}</div>
-                  <div className={css["type-" + extension.componentType]}>
-                    {extension.componentType.toUpperCase()}
+                  <div className={css["type-" + extension.extensionType]}>
+                    {extension.extensionType.toUpperCase()}
                   </div>
                 </div>
-                <div className={css.created}>
+                {/* <div className={css.created}>
                   {new Date(extension.created).toLocaleDateString()}
                   <br />
                   {new Date(extension.created).toLocaleTimeString()}
@@ -299,7 +310,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                   {new Date(extension.modified).toLocaleDateString()}
                   <br />
                   {new Date(extension.modified).toLocaleTimeString()}
-                </div>
+                </div> */}
                 <div className={css.action}>
                   {installedExtensions &&
                     !installedExtensions?.find(
@@ -324,9 +335,9 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                       (item) => item.id === extension.id
                     ) && (
                       <>
-                        <p className={css.installedMessage}>
+                        {/* <p className={css.installedMessage}>
                           Component is installed.
-                        </p>
+                        </p> */}
                         <Button
                           intent="none"
                           onClick={() => onUninstall(extension)}

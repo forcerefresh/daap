@@ -21,6 +21,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { getNewMediaObjectBounds } from "./add-object-utils";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
+import { IMAGE } from "../../objects/image/image";
 
 export enum Panels {
   MyImages = "myImages",
@@ -176,7 +177,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
-                        "image",
+                        IMAGE,
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
@@ -343,7 +344,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     if (activeLayerId) {
                       _addNewObject(
                         activeLayerId,
-                        "image",
+                        IMAGE,
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),

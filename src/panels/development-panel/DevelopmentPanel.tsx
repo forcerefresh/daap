@@ -55,11 +55,11 @@ const DevelopmentPanel: React.FC<IDevelopmentMergedProps> = (props) => {
     }
   };
 
-  const addItem = async (componentType: string) => {
+  const addItem = async (extensionType: string) => {
     await addDevelopmentItem({
       id: uuid(),
       token: "",
-      componentType,
+      extensionType,
       type: "",
       playerDevUrl: "",
       appDevUrl: "",

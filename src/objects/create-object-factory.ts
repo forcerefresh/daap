@@ -66,7 +66,7 @@ export function createObject(
       };
     }
     default: {
-      const objDeff = getAppObjectDefinition(type);
+      const objDeff = getAppObjectDefinition(type, "latest");
 
       return {
         ...objDeff!.createObject({
@@ -76,6 +76,7 @@ export function createObject(
           },
         }),
         ...objectProps,
+        version: objDeff?.version,
       };
     }
   }

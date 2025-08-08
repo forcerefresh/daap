@@ -165,7 +165,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpointConfig!,
       breakpoints,
       settings,
-      installedExtensions.items,
+      installedExtensions.data,
       { isSave: true }
     );
 
@@ -318,7 +318,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpointConfig!,
       breakpoints,
       settings,
-      installedExtensions.items,
+      installedExtensions.data,
       { isSave: true }
     );
 

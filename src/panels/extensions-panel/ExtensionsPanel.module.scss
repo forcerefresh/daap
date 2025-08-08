@@ -1,8 +1,18 @@
+@import "/src/theme";
+
 .extensionsPanel {
-  height: calc(var(--daap-forcerefresh-app-height) - 110px);
-  padding: 3px;
-  padding-right: 30px;
-  position: relative;
+  z-index: 100;
+  position: absolute;
+  top: 0px;
+  left: 68px;
+  width: 830px;
+  height: calc(var(--daap-forcerefresh-app-height) - 52px);
+
+  background: $pt-app-background-color;
+  box-shadow: $pt-elevation-shadow-0;
+
+  padding: 0 30px 30px 30px;
+  overflow: auto;
 
   :global {
     .bp5-popover-target {
@@ -47,7 +57,7 @@
 
 .tableHeader {
   display: flex;
-  padding-right: 13px; // scrollbar width
+  // padding-right: 13px; // scrollbar width
 
   > * {
     background: rgba(255, 255, 255, 0.04);
@@ -88,8 +98,12 @@
 }
 
 .nameAndDesc {
-  max-width: 400px;
-  width: 400px;
+  // max-width: 400px;
+  // width: 400px;
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .id {
@@ -104,7 +118,8 @@
   width: 12%;
 }
 .action {
-  width: 20%;
+  width: 120px;
+  min-width: 120px;
   //display: flex;
   // flex-direction: column;
   row-gap: 30px;
@@ -138,4 +153,13 @@
 
 .missingExtension {
   border: 1px solid #555;
+}
+
+:global(.bp5-dark) {
+  &.extensionsPanel {
+    background: $pt-dark-app-background-color !important;
+    // box-shadow: $pt-dark-elevation-shadow-1 !important;
+    border-right: 1px solid #555;
+    border-left: 1px solid #111;
+  }
 }

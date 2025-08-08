@@ -98,13 +98,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
   let mode: ToolbarMode | undefined;
 
   if (activeTool) {
-    toolBarComponent = getObjectToolDefinitions(activeTool);
+    toolBarComponent = getObjectToolDefinitions(
+      activeTool.tool,
+      activeTool.version
+    );
     mode = ToolbarMode.Edit;
   } else if (
     selectedObjectIds.length === 1 &&
     activeObject?.id === selectedObjectIds[0]
   ) {
-    toolBarComponent = getObjectToolDefinitions(activeObject.type);
+    toolBarComponent = getObjectToolDefinitions(
+      activeObject.type,
+      activeObject.version
+    );
     mode = ToolbarMode.Selection;
   } else {
     mode = undefined;

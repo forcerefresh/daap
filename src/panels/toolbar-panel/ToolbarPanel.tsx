@@ -70,6 +70,7 @@ import ShapePreviewPanel from "../shape-preview-panel/ShapePreviewPanel";
 import { LINE } from "../../objects/line/line";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
+import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -85,6 +86,8 @@ enum VisiblePanel {
   // ProjectsLibrary = "projects-library",
   Projects = "projects",
   Templates = "templates",
+  Extensions = "extensions",
+
   Export = "export",
   ShapePreview = "shape-preview",
   ColorPanel = "color-preview",
@@ -144,6 +147,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Templates);
     };
 
+    const openExtensionsCallback = () => {
+      setShowPanel(VisiblePanel.Extensions);
+    };
+
     const openMediaFontsCallback = () => {
       setDefaultSettingsMediaLibraryTabId("myFonts");
       // setTimeout(() => {
@@ -178,6 +185,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.FontPreview);
     };
 
+    // panel={<ExtensionsPanel onRequestClose={props.onRequestClose} />}
+
     window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
     window.addEventListener("OPEN_TEMPLATES", openTemplatesCallback);
@@ -192,6 +201,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_SAVE", openSaveCallback);
 
     window.addEventListener("OPEN_EXPORT", openExportCallback);
+
+    window.addEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
@@ -215,6 +226,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
 
       window.removeEventListener("OPEN_TEXT_PANEL", openTextCallback);
+
+      window.removeEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
     };
   }, []);
 
@@ -485,7 +498,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
           <Button
             className={css.largeButton}
             minimal
-            active={activeTool === FREE_DRAW}
+            active={activeTool?.tool === FREE_DRAW}
             onClick={() => {
               setShowPanel(VisiblePanel.None);
               activateTool(FREE_DRAW);
@@ -784,6 +797,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Templates && (
               <div ref={sharedRef}>
                 <MyTemplatesPanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Extensions && (
+              <div ref={sharedRef}>
+                <ExtensionsPanel
                   onRequestClose={() => {
                     setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);

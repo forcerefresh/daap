@@ -609,9 +609,16 @@ const StagePanel: React.FC<IStagePanel> = (props) => {
     } else {
       if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
         // NOTE: activate tool editor
-        const deff = getAppObjectDefinition(objectById[objectId].type);
+        const deff = getAppObjectDefinition(
+          objectById[objectId].type,
+          objectById[objectId].version
+        );
         if (deff?.meta.isEditable) {
-          activateTool(objectById[objectId].type, objectId);
+          activateTool(
+            objectById[objectId].type,
+            objectById[objectId].version,
+            objectId
+          );
         }
       }
       _activateObject(objectId);

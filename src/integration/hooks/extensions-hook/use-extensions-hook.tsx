@@ -11,35 +11,40 @@ export const useExtensionsHook = () => {
     tags?: string[],
     missingExtensions?: string[],
     apiKey?: string
-  ): Promise<{ items: IExtensionItem[] }> => {
-    const apiUrl = `${
-      import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
-    }/api/v1?api-key=${apiKey}`;
-    let url = `${apiUrl}&from=${from}`;
+  ): Promise<{ data: IExtensionItem[] }> => {
+    // const apiUrl = `${
+    //   import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
+    // }/api/v1?api-key=${apiKey}`;
+    // let url = `${apiUrl}&from=${from}`;
 
-    if (search) {
-      url += `&search=${encodeURIComponent(search)}`;
-    }
-    if (tags && tags.length > 0) {
-      url += `&tags=${tags.map((tag) => encodeURIComponent(tag)).join(",")}`;
-    }
-    if (missingExtensions && missingExtensions.length > 0) {
-      url += `&missingExtensions=${missingExtensions
-        .map((ext) => encodeURIComponent(ext))
-        .join(",")}`;
-    }
+    // if (search) {
+    //   url += `&search=${encodeURIComponent(search)}`;
+    // }
+    // if (tags && tags.length > 0) {
+    //   url += `&tags=${tags.map((tag) => encodeURIComponent(tag)).join(",")}`;
+    // }
+    // if (missingExtensions && missingExtensions.length > 0) {
+    //   url += `&missingExtensions=${missingExtensions
+    //     .map((ext) => encodeURIComponent(ext))
+    //     .join(",")}`;
+    // }
 
-    return fetch(url).then((res) => res.json());
+    const url =
+      "http://daap.extensions-dev.eu-central-1.linodeobjects.com/extensions.json";
+
+    return fetch(url).then(async (res) => ({
+      data: await res.json(),
+    }));
   };
 
   /* returns installed extensions */
-  const getInstalledExtensions = (): Promise<{ items: IExtensionItem[] }> => {
+  const getInstalledExtensions = (): Promise<{ data: IExtensionItem[] }> => {
     const extensions: IExtensionItem[] = JSON.parse(
       localStorage.getItem("extensions") || "[]"
     );
 
     return new Promise((resolve) => {
-      resolve({ items: extensions });
+      resolve({ data: extensions });
     });
   };
 

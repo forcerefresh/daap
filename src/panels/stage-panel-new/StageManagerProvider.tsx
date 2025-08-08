@@ -734,7 +734,11 @@ function processMoveStopEvent(
     _activateObject: any;
     _selectObjects: any;
     _selectForProperties: any;
-    activateTool: (tool: string, objectId?: string | undefined) => void;
+    activateTool: (
+      tool: string,
+      version?: string,
+      objectId?: string | undefined
+    ) => void;
   }
 ) {
   clearSnapHolder();
@@ -772,7 +776,11 @@ function processMoveStopEvent(
           objectById[objectId].type === "io.forcerefresh.line.object") &&
         !recentlySelectedRef.current
       ) {
-        activateTool(objectById[objectId].type, objectId);
+        activateTool(
+          objectById[objectId].type,
+          objectById[objectId].version,
+          objectId
+        );
       }
     }
 

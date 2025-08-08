@@ -3,6 +3,7 @@ import { IToolClass } from "../webslider-sdk/object/i-tool-class";
 
 export interface IToolDefinition {
   type: string;
+  version?: string;
   meta: {
     name: string;
     description?: string;
@@ -22,6 +23,13 @@ export function registerObjectTool(toolDefinition: IToolDefinition): void {
   toolsBank.push(toolDefinition);
 }
 
-export function getObjectToolDefinitions(type: string): IToolDefinition | null {
-  return toolsBank.find((toolItem) => toolItem.type === type) ?? null;
+export function getObjectToolDefinitions(
+  type: string,
+  version?: string
+): IToolDefinition | null {
+  return (
+    toolsBank.find(
+      (toolItem) => toolItem.type === type && toolItem.version === version
+    ) ?? null
+  );
 }

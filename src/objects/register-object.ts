@@ -141,14 +141,14 @@ import { FreeDrawToolbar } from "./free-draw/FreeDrawToolbar";
 import TextToolbar from "./text/TextToolbar";
 import TextFloatingToolbar from "./text/TextFloatingBar";
 import { ImageToolbar } from "./image/ImageToolbar";
-import {
-  BLOB,
-  blobMeta,
-  blobSizeUpdate,
-  createBlobObject,
-  getBlobHtml,
-  getBlobObjectForm,
-} from "./blob/blob";
+// import {
+//   BLOB,
+//   blobMeta,
+//   blobSizeUpdate,
+//   createBlobObject,
+//   getBlobHtml,
+//   getBlobObjectForm,
+// } from "./blob/blob";
 import {
   createRectangleObject,
   getRectangleHtml,
@@ -196,6 +196,7 @@ import LineStageTool from "./line/line-stage-tool";
 
 registerObject(
   TEXT,
+  "1.0.0",
   "text",
   textMeta,
   createTextObject,
@@ -220,22 +221,23 @@ registerObjectTool({
 });
 
 // forward compatibility
-registerObject(
-  "text",
-  "text",
-  textMeta,
-  createTextObject,
-  getTextObjectForm,
-  textSizeUpdate,
-  getTextHtml,
-  preloadText,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  getFonts
-);
+// registerObject(
+//   "text",
+//   "1.0.0",
+//   "text",
+//   textMeta,
+//   createTextObject,
+//   getTextObjectForm,
+//   textSizeUpdate,
+//   getTextHtml,
+//   preloadText,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   getFonts
+// );
 
 registerObjectTool({
   type: "text",
@@ -248,6 +250,7 @@ registerObjectTool({
 
 registerObject(
   IMAGE,
+  "1.0.0",
   "media",
   imageMeta,
   createImageObject,
@@ -270,21 +273,20 @@ registerObjectTool({
 });
 
 // backward compatibility
-
-registerObject(
-  "image",
-  "media",
-  imageMeta,
-  createImageObject,
-  getImageObjectForm,
-  imageSizeUpdate,
-  getImageHtml,
-  preloadImage,
-  undefined,
-  undefined,
-  imagePostProcess,
-  getAssetsUrls
-);
+// registerObject(
+//   "image",
+//   "media",
+//   imageMeta,
+//   createImageObject,
+//   getImageObjectForm,
+//   imageSizeUpdate,
+//   getImageHtml,
+//   preloadImage,
+//   undefined,
+//   undefined,
+//   imagePostProcess,
+//   getAssetsUrls
+// );
 
 registerObjectTool({
   type: "image",
@@ -298,6 +300,7 @@ registerObjectTool({
 
 registerObject(
   FREE_DRAW,
+  "1.0.0",
   "media",
   freeDrawMeta,
   createFreeDrawObject,
@@ -319,20 +322,20 @@ registerObjectTool({
 });
 
 // backward compatibility
-registerObject(
-  "free-draw",
-  "media",
-  freeDrawMeta,
-  createFreeDrawObject,
-  getFreeDrawForm,
-  freeDrawSizeUpdate,
-  getFreeDrawHtml,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined
-);
+// registerObject(
+//   "free-draw",
+//   "media",
+//   freeDrawMeta,
+//   createFreeDrawObject,
+//   getFreeDrawForm,
+//   freeDrawSizeUpdate,
+//   getFreeDrawHtml,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined
+// );
 
 registerObjectTool({
   type: "free-draw",
@@ -343,23 +346,25 @@ registerObjectTool({
 
 // -------------------------
 
-registerObject(
-  BLOB,
-  "media",
-  blobMeta,
-  createBlobObject,
-  getBlobObjectForm,
-  blobSizeUpdate,
-  getBlobHtml,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined
-);
+// registerObject(
+//   BLOB,
+//   "1.0.0",
+//   "media",
+//   blobMeta,
+//   createBlobObject,
+//   getBlobObjectForm,
+//   blobSizeUpdate,
+//   getBlobHtml,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined,
+//   undefined
+// );
 
 registerObject(
   RECTANGLE,
+  "1.0.0",
   "media",
   rectangleMeta,
   createRectangleObject,
@@ -375,6 +380,7 @@ registerObject(
 
 registerObject(
   CIRCLE,
+  "1.0.0",
   "media",
   circleMeta,
   createCircleObject,
@@ -390,6 +396,7 @@ registerObject(
 
 registerObject(
   STAR,
+  "1.0.0",
   "media",
   starMeta,
   createStarObject,
@@ -405,6 +412,7 @@ registerObject(
 
 registerObject(
   POLYGON,
+  "1.0.0",
   "media",
   polygonMeta,
   createPolygonObject,
@@ -420,6 +428,7 @@ registerObject(
 
 registerObject(
   LINE,
+  "1.0.0",
   "media",
   lineMeta,
   createLineObject,

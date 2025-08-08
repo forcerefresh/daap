@@ -14,37 +14,41 @@ export async function loadAndRegisterExternalComponent(
   extension: IExtensionItem
 ) {
   if (
-    extension.componentType === "object" &&
-    isObjectRegistered(extension.type)
+    extension.extensionType === "object" &&
+    isObjectRegistered(extension.type, extension.version)
   ) {
     console.warn(`Object ${extension.type} is already registered`);
     return;
   }
   if (
-    extension.componentType === "animation" &&
-    isAnimationRegistered(extension.type)
+    extension.extensionType === "animation" &&
+    isAnimationRegistered(extension.type, extension.version)
   ) {
-    console.warn(`Animation ${extension.type} is already registered`);
+    console.warn(
+      `Animation ${extension.type} - ${extension.version} is already registered`
+    );
     return;
   }
 
-  await addExtensionCode(extension.type);
+  await addExtensionCode(extension.type, extension.version);
 
+  console.log("------");
+  console.log((window as any).WebSlider_GlobalScope.playerObjects);
   registerExternalExtension(extension);
 }
 
 function registerExternalExtension(extension: IExtensionItem) {
-  if (extension.componentType === "object") {
+  if (extension.extensionType === "object") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerObjects[
-      extension.type
+      extension.type + "-" + extension.version
     ];
     const appObj = (window as any).WebSlider_GlobalScope.appObjects[
-      extension.type
+      extension.type + "-" + extension.version
     ];
 
     registerExternalObject(appObj, playerObj);
     logger.object.info(`Object '${appObj.type}' has been registered`);
-  } else if (extension.componentType === "animation") {
+  } else if (extension.extensionType === "animation") {
     const playerObj = (window as any).WebSlider_GlobalScope.playerAnimations[
       extension.type
     ];
@@ -55,7 +59,7 @@ function registerExternalExtension(extension: IExtensionItem) {
     registerExternalAnimation(appObj, playerObj, true);
   } else {
     console.warn(
-      `Unsuported external component type: ${extension.componentType}; name: ${extension.name}`
+      `Unsuported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
     );
   }
 }

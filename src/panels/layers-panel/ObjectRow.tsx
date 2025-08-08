@@ -76,7 +76,7 @@ export function ObjectRow(props: IObjectRowProps) {
     onDragingChange(isDragging);
   }, [isDragging]);
 
-  const deff = getAppObjectDefinition(object.type);
+  const deff = getAppObjectDefinition(object.type, object.version);
 
   return (
     <div className={css.objectGroup}>

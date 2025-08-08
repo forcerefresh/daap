@@ -79,8 +79,8 @@ function App(props: IAppProps) {
     const loadExternalComponents = async () => {
       const installedExtensions = await getInstalledExtensions();
 
-      for (let i = 0; i < installedExtensions.items.length; i++) {
-        await loadAndRegisterExternalComponent(installedExtensions.items[i]);
+      for (let i = 0; i < installedExtensions.data.length; i++) {
+        await loadAndRegisterExternalComponent(installedExtensions.data[i]);
       }
     };
     loadExternalComponents().then(() => {});

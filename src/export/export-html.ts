@@ -193,10 +193,18 @@ export function generatePlayerData(
   html += "</div>"; //slides holder close
   html += "</div>"; //slider root close
 
+  console.log(extensionTypes);
   const playerExtensions = extensions
     .filter((item) => extensionTypes.indexOf(item.type) !== -1)
     .map((extension) =>
-      pick(extension, "name", "type", "componentType", "packageFiles")
+      pick(
+        extension,
+        "name",
+        "type",
+        "extensionType",
+        "version",
+        "packageFiles"
+      )
     );
 
   return {
@@ -657,8 +665,8 @@ export function getObjectHtml(
       return getSourceImageHtml(object, calculatedObjectSize, isPlayer);
     default:
       const objDeff = isPlayer
-        ? getPlayerObjectDefinition(object.type)
-        : getAppObjectDefinition(object.type);
+        ? getPlayerObjectDefinition(object.type, "latest" /*object.version*/)
+        : getAppObjectDefinition(object.type, "latest" /*object.version*/);
       //logger.app.trace(isPlayer);
       //logger.app.trace(object.type);
       //logger.app.log(objDeff);
@@ -893,7 +901,7 @@ export function getAllAssetsUrls(objects: IObjects): any {
   return flatten(
     objects.allObjects.map((objectId) => {
       const object = objects.objectById[objectId];
-      const deff = getAppObjectDefinition(object.type);
+      const deff = getAppObjectDefinition(object.type, object.version);
 
       // const transitionTypes = Object.keys(object.transitions);
       // const arr = flatten(
@@ -922,7 +930,7 @@ export function getAllFonts(objects: IObjects): any {
   const fonts = flatten(
     objects.allObjects.map((objectId) => {
       const object = objects.objectById[objectId];
-      const deff = getAppObjectDefinition(object.type);
+      const deff = getAppObjectDefinition(object.type, object.version);
 
       // const transitionTypes = Object.keys(object.transitions);
       // const arr = flatten(

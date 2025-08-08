@@ -108,10 +108,10 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         setInstalledExtensions(res.items);
       });
 
-      if (mItem?.componentType === "object") {
+      if (mItem?.extensionType === "object") {
         unregisterObject(mItem.type!);
       }
-      if (mItem?.componentType === "animation") {
+      if (mItem?.extensionType === "animation") {
         unregisterAnimation(mItem.type!);
       }
 
@@ -279,11 +279,11 @@ const MyExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                   ></div>
                 </div>
                 <div className={css.name}>
-                  <span className={css["type-" + extension.componentType]}>
-                    {extension.componentType.toUpperCase()}
+                  <span className={css["type-" + extension.extensionType]}>
+                    {extension.extensionType.toUpperCase()}
                   </span>
                   <br />
-                  {extension.name}
+                  {extension.name} - {extension.version}
                   <br />
                   <span className={css.description}>
                     {extension.description}

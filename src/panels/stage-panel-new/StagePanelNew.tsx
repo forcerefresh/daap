@@ -548,6 +548,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     pointerEvents: "none",
   };
 
+  const showMarginsDiv =
+    margins.top || margins.bottom || margins.left || margins.right;
   const marginBorderStyle: CSSProperties = {
     top: margins.top + "px",
     left: margins.left + "px",
@@ -850,10 +852,12 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
               <div style={outlineStyle}></div>
 
-              <div
-                style={marginBorderStyle}
-                className={cx(css.borderBase, css.marginBorder)}
-              ></div>
+              {showMarginsDiv ? (
+                <div
+                  style={marginBorderStyle}
+                  className={cx(css.borderBase, css.marginBorder)}
+                ></div>
+              ) : null}
 
               <div className="StagePanel-SnapHolder">
                 {/* {snapBounds.map((p) => {

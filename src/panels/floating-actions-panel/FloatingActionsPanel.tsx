@@ -92,7 +92,8 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
   const activeObject = objectById[selectedObjectIds[0]];
   const FloatingBarComponent =
     mSelectionType === MultiSelectionType.Single &&
-    getObjectToolDefinitions(activeObject?.type)?.floatingBar;
+    getObjectToolDefinitions(activeObject?.type, activeObject.version)
+      ?.floatingBar;
 
   // const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(1);

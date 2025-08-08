@@ -607,7 +607,10 @@ export class Player {
           this.currentDeviceType
         ] || transitionData.calculatedObjectSize;*/
 
-      let objDef = getPlayerObjectDefinition(transitionData.itemType);
+      let objDef = getPlayerObjectDefinition(
+        transitionData.itemType,
+        transitionData.itemVersion
+      ); // TODO VERSION
 
       if (transitionData.itemType === "layer") {
         // NOTE: be cerful as we set only sizeUpdate
@@ -1559,7 +1562,10 @@ export class Player {
       ];
 
       // Note: create logic for objects (start, stop, preloaders, ....)
-      const objDef = getPlayerObjectDefinition(itemData.itemType);
+      const objDef = getPlayerObjectDefinition(
+        itemData.itemType,
+        itemData.itemVersion
+      ); // TODO VERSION
 
       /*
       objDef?.sizeUpdate(
@@ -1729,7 +1735,10 @@ export class Player {
       ];
 
       // Note: create logic for objects (start, stop, preloaders, ....)
-      const objDef = getPlayerObjectDefinition(itemData.itemType);
+      const objDef = getPlayerObjectDefinition(
+        itemData.itemType,
+        itemData.itemVersion
+      ); // TODO VERSION
 
       /*
       objDef?.sizeUpdate(

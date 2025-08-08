@@ -27,6 +27,7 @@ import Login from "../../../pages/login/Login";
 import { AUTH_LOGOUT } from "../../../pages/login/constants";
 import css from "./SassMainHeader.module.scss";
 import LibraryIcon from "../../../panels/toolbar-panel/assets/library-icon.svg?react";
+import ExtensionsIcon from "../../../panels/toolbar-panel/assets/extensions-icon.svg?react";
 import AddObjectIcon from "../../../panels/toolbar-panel/assets/add-object-icon.svg?react";
 import ChangeCheckerButton from "../../../utils/components/change-checker-button/ChangeCheckerButton";
 import { Breakpoint } from "../../../panels/project-settings-panel/breakpoint-component/Breakpoint";
@@ -50,6 +51,7 @@ const MainHeader = (props: IMainHeader) => {
     theme,
     account,
     appZoom,
+    missingExtensions,
   } = props;
 
   const {
@@ -106,25 +108,6 @@ const MainHeader = (props: IMainHeader) => {
                   minimal
                   large
                   className={css.largeButton}
-                  icon={<Icon icon="applications" size={25} />}
-                  //active={showPanel === VisiblePanel.ProjectsLibrary}
-                  onClick={() => {
-                    const event = new CustomEvent("OPEN_TEMPLATES");
-                    window.dispatchEvent(event);
-                  }}
-                >
-                  {/* {missingExtensions?.length > 0 && (
-                  <Tag intent={"danger"} round className={css.buttonTag}>
-                    {missingExtensions.length}
-                  </Tag>
-                )} */}
-                  Templates
-                </Button>
-
-                <Button
-                  minimal
-                  large
-                  className={css.largeButton}
                   icon={<LibraryIcon width={25} height={25} />}
                   //active={showPanel === VisiblePanel.ProjectsLibrary}
                   onClick={() => {
@@ -138,6 +121,48 @@ const MainHeader = (props: IMainHeader) => {
                   </Tag>
                 )} */}
                   Files
+                </Button>
+
+                <Divider dir="horizontal" />
+
+                <Button
+                  minimal
+                  large
+                  className={css.largeButton}
+                  icon={<Icon icon="applications" size={25} />}
+                  //active={showPanel === VisiblePanel.ProjectsLibrary}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_TEMPLATES");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  {/* {missingExtensions?.length > 0 && (
+                    <Tag intent={"danger"} round className={css.buttonTag}>
+                      {missingExtensions.length}
+                    </Tag>
+                  )} */}
+                  Templates
+                </Button>
+
+                <Divider dir="horizontal" />
+
+                <Button
+                  minimal
+                  large
+                  className={css.largeButton}
+                  icon={<ExtensionsIcon width={25} height={25} />} //
+                  //active={showPanel === VisiblePanel.ProjectsLibrary}
+                  onClick={() => {
+                    const event = new CustomEvent("OPEN_EXTENSIONS");
+                    window.dispatchEvent(event);
+                  }}
+                >
+                  {missingExtensions?.length > 0 && (
+                    <Tag intent={"danger"} round className={css.buttonTag}>
+                      {missingExtensions.length}
+                    </Tag>
+                  )}
+                  Extensions
                 </Button>
 
                 <Divider dir="horizontal" />
@@ -267,6 +292,8 @@ const mapStateToProps = (state: IStore) => {
     theme: state.project.settings.theme,
     account: state.account,
     breakpointConfig,
+
+    missingExtensions: state.editor.missingExtensions,
   };
 };
 

@@ -16,7 +16,7 @@ import {
   PostProcessFuncReturnType,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./line.svg?react";
+import svg from "./line.svg?raw";
 
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";

@@ -1,10 +1,11 @@
 let ext: {
-  addExtensionCode: (type: string) => Promise<void>;
+  addExtensionCode: (type: string, version?: string) => Promise<void>;
 } = {
-  addExtensionCode: (type: string) => Promise.resolve(),
+  addExtensionCode: (type: string, version?: string) => Promise.resolve(),
 };
-
-if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
+if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+  ext = require("./saas-load-extension");
+} else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
   ext = require("./electron-load-extension");
 } else {
   ext = require("./load-extension");

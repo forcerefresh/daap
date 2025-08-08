@@ -15,7 +15,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./circle-icon.svg?react";
+import svg from "./circle-icon.svg?raw";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import {

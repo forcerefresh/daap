@@ -237,8 +237,8 @@ export const IntegrationContext = React.createContext({
 
   useExtensionsHook: () => ({
     /* get installed extensions */
-    getInstalledExtensions: (): Promise<{ items: IExtensionItem[] }> =>
-      Promise.resolve({ items: [] as IExtensionItem[] }),
+    getInstalledExtensions: (): Promise<{ data: IExtensionItem[] }> =>
+      Promise.resolve({ data: [] as IExtensionItem[] }),
 
     /* get extensions  from server */
     getExtensions: (
@@ -247,8 +247,8 @@ export const IntegrationContext = React.createContext({
       tags?: string[],
       missingExtensions?: string[],
       apiKey?: string
-    ): Promise<{ items: IExtensionItem[] }> =>
-      Promise.resolve({ items: [] as IExtensionItem[] }),
+    ): Promise<{ data: IExtensionItem[] }> =>
+      Promise.resolve({ data: [] as IExtensionItem[] }),
 
     /* install extension */
     installExtension: (extension: IExtensionItem): Promise<any> =>
@@ -256,7 +256,7 @@ export const IntegrationContext = React.createContext({
 
     /* uninstall extension */
     uninstallExtension: (props: {
-      id: number;
+      type: string;
       source?: "marketplace" | "local";
     }): Promise<any> => Promise.resolve({} as IExtensionItem),
   }),
@@ -675,7 +675,13 @@ function usePresetsHookFactory() {
 }
 
 function useExtensionsHookFactory() {
-  if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/extensions-hook/saas-use-extensions-hook")
+      .useExtensionsHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/extensions-hook/wp-use-extensions-hook")
+      .useExtensionsHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "electron") {
     return require("./integration/hooks/extensions-hook/electron-use-extensions-hook")
       .useExtensionsHook;
   } else {

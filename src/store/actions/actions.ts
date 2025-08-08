@@ -1306,7 +1306,7 @@ export function addNewObject(
       //   break;
       // }
       default: {
-        const objDeff = getAppObjectDefinition(object.type);
+        const objDeff = getAppObjectDefinition(object.type, object.version);
         object = !!objDeff?.postProcess
           ? objDeff.postProcess({ prevObject: object, object })
           : object;
@@ -1386,7 +1386,7 @@ export function replaceObject(
       //   break;
       // }
       default: {
-        const objDeff = getAppObjectDefinition(object.type);
+        const objDeff = getAppObjectDefinition(object.type, object.version);
         object = !!objDeff?.postProcess
           ? objDeff.postProcess({ prevObject: object, object })
           : object;
@@ -1830,7 +1830,7 @@ function handleObjectUpdate(
   object.top = roundNumber(object.top!, 2);
   object.height = roundNumber(object.height!, 2);
 
-  const objDeff = getAppObjectDefinition(object.type);
+  const objDeff = getAppObjectDefinition(object.type, object.version);
   object = !!objDeff?.postProcess
     ? objDeff.postProcess({ prevObject, object })
     : object;
@@ -2039,7 +2039,10 @@ function processTextObjectAutoSize(
     );
 
     // Note: We are using getPlayerObjectDefinition in order to get html form player object
-    const objDeff = getPlayerObjectDefinition(object.type);
+    const objDeff = getPlayerObjectDefinition(
+      object.type,
+      "latest" /* object.version*/
+    );
     let html = "";
     if (!!objDeff?.getHtml) {
       html = objDeff?.getHtml({

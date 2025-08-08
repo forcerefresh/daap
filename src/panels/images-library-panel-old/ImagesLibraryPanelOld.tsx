@@ -46,6 +46,7 @@ import MP3Icon from "./assets/mp3.svg?react";
 import { Pagination } from "../../types/pagination";
 import ConfirmButton from "../../utils/components/confirm-button/confirm-button";
 import axios from "axios";
+import { IMAGE } from "../../objects/image/image";
 
 async function deleteImage(image: SaaSMediaData): Promise<{ id: string }> {
   await axios.delete(`/api/v1/media/${image.id}`);
@@ -612,7 +613,7 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
                     if (addObject) {
                       _addNewObject(
                         activeLayerId,
-                        "image",
+                        IMAGE,
                         {},
                         {
                           image,

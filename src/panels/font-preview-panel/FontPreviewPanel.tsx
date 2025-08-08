@@ -594,7 +594,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
               elevation={Elevation.TWO}
               className={cx(css.card)}
               onClick={() => {
-                debugger;
+                // debugger;
                 if (replaceItem?.type === "text") {
                   _replaceObject(
                     replaceItem.objectId!,

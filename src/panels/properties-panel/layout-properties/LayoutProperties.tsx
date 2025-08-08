@@ -314,7 +314,8 @@ export const LayoutProperties: React.FC<ILayoutProperties> = (props) => {
     );
 
     const objectMeta = getAppObjectDefinition(
-      (objectOrLayer as IObject)?.type
+      (objectOrLayer as IObject)?.type,
+      (objectOrLayer as IObject)?.version
     )?.meta;
     const sizeType = objectMeta?.sizeType ?? "rect";
 

@@ -127,7 +127,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
             <div className="input60">
               {getCheckboxField(
-                "Snap to Object",
+                "Snap to margin",
                 globals.snapToMargin,
                 (snapToMargin: any) => {
                   // save settings
@@ -148,7 +148,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
             <div className="input60">
               {getSelectField(
-                "Snap to Object threshold",
+                "Snap to margin threshold",
                 globals.snapToMarginThreshold,
                 Array(10)
                   .fill({})
@@ -168,6 +168,55 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   //update store
                   _updateGlobalConfiguration({
                     snapToObjectThreshold: snapToMarginThreshold,
+                  });
+                },
+                { disabled: !globals.snapToObject }
+              )}
+            </div>
+
+            <div className="input60">
+              {getCheckboxField(
+                "Snap to document",
+                globals.snapToDocument,
+                (snapToDocument: any) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      snapToDocument,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    snapToDocument,
+                  });
+                }
+              )}
+            </div>
+
+            <div className="input60">
+              {getSelectField(
+                "Snap to document threshold",
+                globals.snapToDocumentThreshold,
+                Array(10)
+                  .fill({})
+                  .map((_, idx) => ({
+                    value: idx + 1,
+                    label: idx + 1 + "px",
+                  })),
+                (snapToDocumentThreshold) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      snapToDocumentThreshold,
+                    },
+                  });
+
+                  //update store
+                  _updateGlobalConfiguration({
+                    snapToDocumentThreshold,
                   });
                 },
                 { disabled: !globals.snapToObject }

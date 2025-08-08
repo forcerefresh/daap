@@ -9,7 +9,7 @@ export const useExtensionsHook = () => {
     tags?: string[],
     missingExtensions?: string[],
     apiKey?: string
-  ): Promise<{ items: IExtensionItem[] }> => {
+  ): Promise<{ data: IExtensionItem[] }> => {
     logger.app.trace("Get extensions from directory (electron)");
 
     const apiUrl = `${
@@ -35,7 +35,7 @@ export const useExtensionsHook = () => {
   };
 
   /* returns installed extensions */
-  const getInstalledExtensions = (): Promise<{ items: IExtensionItem[] }> => {
+  const getInstalledExtensions = (): Promise<{ data: IExtensionItem[] }> => {
     return new Promise((resolve, reject) => {
       const { ipcRenderer } = window.require("electron");
 

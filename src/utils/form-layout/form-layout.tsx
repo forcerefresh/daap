@@ -36,6 +36,10 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     skipOpeningGroupByDefault,
   } = props;
 
+  if (!form) {
+    return null;
+  }
+
   const visibleSectionIds = uiFormSate[formId] ?? {};
 
   const setVisibleSectionIds = (formState: IFormState) => {
@@ -284,6 +288,8 @@ export function flattenFormRec(
   itemsArr: IFormLayoutItem[],
   form: IFormLayoutItem[]
 ): void {
+  if (!form) return;
+
   form.forEach((formItem) => {
     // set default type if not set
     if (!formItem.type) formItem.type = FormType.INPUT;

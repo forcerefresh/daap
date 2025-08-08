@@ -109,7 +109,10 @@ export function StageObjectInternal(props: IStageLayer) {
     clipboard,
   } = props;
 
-  const objectMeta = getAppObjectDefinition(object.type)?.meta;
+  const objectMeta = getAppObjectDefinition(
+    object.type,
+    "latest" /*object.version*/
+  )?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
   // ++

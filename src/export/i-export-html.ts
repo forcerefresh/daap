@@ -26,6 +26,7 @@ export interface IItemsData {
   itemId: string;
   parentItemId?: string;
   itemType: "layer" | "stage" | string; // stage, layer, or object type text, image, video...
+  itemVersion?: string;
   // itemValues: { [key: string]: any };
   // itemValuesMetadata: { [key: string]: IInputMetadataValues };
   // commonStyleDefinition?: IDefinition;

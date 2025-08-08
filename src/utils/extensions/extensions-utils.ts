@@ -8,14 +8,14 @@ export function getMissingExtensionsFromProject(
   const retExtensions: IExtensionItem[] = [];
 
   extensions?.forEach((ext) => {
-    switch (ext.componentType) {
+    switch (ext.extensionType) {
       case "animation": {
         const animDef = getAppAnimationDefinition(ext.type);
         if (!animDef) retExtensions.push(ext);
         break;
       }
       case "object": {
-        const objDef = getAppObjectDefinition(ext.type);
+        const objDef = getAppObjectDefinition(ext.type, ext.version);
         if (!objDef) retExtensions.push(ext);
       }
     }

@@ -40,7 +40,7 @@ export function generateObjectData(
   // }
 
   //part for externals
-  const objDeff = getAppObjectDefinition(object.type);
+  const objDeff = getAppObjectDefinition(object.type, object.version);
   if (objDeff?.external) {
     extensionTypes.push(object.type);
   }
@@ -208,11 +208,13 @@ export function generateObjectData(
     parentItemId: layer.id,
     // customId: object.customId,
     itemType: object.type,
+    itemVersion: object.version,
     properties: object.properties,
     // itemValuesMetadata: object.definition.valuesMetadata,
     style: object.style ?? {},
     transform: object.transform ?? {},
-    itemSystemType: getAppObjectDefinition(object.type)?.meta?.coreType,
+    itemSystemType: getAppObjectDefinition(object.type, object.version)?.meta
+      ?.coreType,
     calculatedObjectSize,
     calculatedObjectSizePerDevice,
     objectClass: objectClass,

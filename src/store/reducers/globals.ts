@@ -15,6 +15,8 @@ export interface IAppSettings {
   snapToObjectThreshold: number;
   snapToMargin: boolean;
   snapToMarginThreshold: number;
+  snapToDocument: boolean;
+  snapToDocumentThreshold: number;
   outlineColor: RGBColor;
   publishSettings?: {
     enabled: boolean;
@@ -36,6 +38,8 @@ export function globals(
     snapToObjectThreshold: 5,
     snapToMargin: true,
     snapToMarginThreshold: 5,
+    snapToDocument: true,
+    snapToDocumentThreshold: 5,
     outlineColor: { r: 0, g: 0, b: 0, a: 1 },
   },
   action: ActionTypes

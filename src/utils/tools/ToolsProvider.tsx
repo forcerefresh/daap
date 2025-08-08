@@ -42,7 +42,7 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
-  activeTool: string | null;
+  activeTool: { tool: string; version?: string } | null;
   activeObjectId?: string | null;
   activateTool: (tool: string, objectId?: string) => void;
   deactivateTool: () => void;
@@ -207,6 +207,25 @@ export const ToolsProvider = (
       });
     }
 
+    if (globals.snapToDocument) {
+      const bounds = {
+        left: 0,
+        top: 0,
+        right: pageSize.width,
+        bottom: pageSize.height,
+      };
+
+      allObjectBounds.push({
+        objectId: "",
+        bounds: {
+          ...bounds,
+          vcenter: bounds.right / 2,
+          hcenter: bounds.bottom / 2,
+        },
+        snapThreshold: globals.snapToMarginThreshold,
+      });
+    }
+
     setSnapBounds(allObjectBounds);
   }, [
     objectById,
@@ -224,12 +243,15 @@ export const ToolsProvider = (
   //const stageZoom = state.stage.zoom;
 
   const [toolConfig, setToolConfigState] = useState<IToolConfig>({});
-  const [activeTool, setActiveTool] = useState<string | null>(null);
+  const [activeTool, setActiveTool] = useState<{
+    tool: string;
+    version?: string;
+  } | null>(null);
   const [activeObjectId, setActiveObjectId] = useState<
     string | null | undefined
   >(null);
 
-  const activeToolRef = useRef<string | null>(null);
+  const activeToolRef = useRef<{ tool: string; version?: string } | null>(null);
 
   const activeToolInst = useRef<IToolClass | null>(null);
 
@@ -254,7 +276,7 @@ export const ToolsProvider = (
       dispatch(
         addNewObject(
           storeRef.current.activeLayerId!,
-          activeToolRef.current!,
+          activeToolRef.current!.tool, // TODO VERSION
           {
             left: params.bounds?.x ?? 100,
             top: params.bounds?.y ?? 100,
@@ -309,7 +331,7 @@ export const ToolsProvider = (
     if (params.reactivate) {
       const tool = activeToolRef.current;
       deactivateTool();
-      activateTool(tool!, params.objectId);
+      activateTool(tool!.tool, tool?.version, params.objectId);
     }
     //deactivateTool();
   };
@@ -453,9 +475,10 @@ export const ToolsProvider = (
     return { x: translateX, y: translateY };
   };
 
-  const activateTool = (tool: string, objectId?: string) => {
+  const activateTool = (tool: string, version?: string, objectId?: string) => {
     const toolDef =
-      getObjectToolDefinitions(tool) ?? getAppObjectDefinition(tool);
+      getObjectToolDefinitions(tool, version) ??
+      getAppObjectDefinition(tool, version);
 
     console.log(toolDef);
     if (toolDef?.toolClass) {
@@ -506,9 +529,9 @@ export const ToolsProvider = (
         activeToolInst.current = inst;
       }
 
-      setActiveTool(tool);
+      setActiveTool({ tool, version });
       setActiveObjectId(objectId);
-      activeToolRef.current = tool;
+      activeToolRef.current = { tool, version };
     } else {
       console.error(`Tool ${tool} is not registered.`);
     }
@@ -565,7 +588,10 @@ export const ToolsProvider = (
 
     console.log(allObjects);
     allObjects.forEach((objectId) => {
-      if (objectById[objectId].type === activeTool) {
+      if (
+        objectById[objectId].type === activeTool.tool &&
+        objectById[objectId].version === activeTool.version
+      ) {
         retObjs.push(objectById[objectId]);
       }
     });
