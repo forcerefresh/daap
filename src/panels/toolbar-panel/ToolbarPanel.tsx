@@ -501,7 +501,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             active={activeTool?.tool === FREE_DRAW}
             onClick={() => {
               setShowPanel(VisiblePanel.None);
-              activateTool(FREE_DRAW);
+              activateTool(FREE_DRAW, "latest");
             }}
           >
             <FreeDrawIcon />

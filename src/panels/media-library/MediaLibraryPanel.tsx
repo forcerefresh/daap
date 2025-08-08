@@ -159,7 +159,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     ) {
                       _replaceObject(
                         replaceItem.objectId!,
-                        "image",
+                        IMAGE,
                         replaceItem.objectProps,
                         {
                           ...replaceItem.values,

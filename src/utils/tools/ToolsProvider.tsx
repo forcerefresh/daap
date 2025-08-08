@@ -331,7 +331,7 @@ export const ToolsProvider = (
     if (params.reactivate) {
       const tool = activeToolRef.current;
       deactivateTool();
-      activateTool(tool!.tool, tool?.version, params.objectId);
+      activateTool(tool!.tool, "latest" /*tool?.version*/, params.objectId);
     }
     //deactivateTool();
   };

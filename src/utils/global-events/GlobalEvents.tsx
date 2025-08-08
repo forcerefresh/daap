@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 
 export type ReplaceEventPayload = {
@@ -8,14 +8,19 @@ export type ReplaceEventPayload = {
   values: Record<string, unknown>;
 };
 
-export const GlobalEventsContext = React.createContext({
-  replaceItem: {} as ReplaceEventPayload | undefined,
-  setReplaceItem: (item: ReplaceEventPayload | undefined) => undefined,
-});
+interface GlobalEventsContextProps {
+  replaceItem: ReplaceEventPayload | undefined;
+  setReplaceItem: React.Dispatch<
+    React.SetStateAction<ReplaceEventPayload | undefined>
+  >;
+}
+export const GlobalEventsContext =
+  React.createContext<GlobalEventsContextProps>({
+    replaceItem: {} as ReplaceEventPayload | undefined,
+    setReplaceItem: () => undefined,
+  });
 
-export const GlobalEventsProvider = (
-  props: React.PropsWithChildren<React.ReactNode>
-) => {
+export const GlobalEventsProvider: FC<React.PropsWithChildren> = (props) => {
   const [replaceItem, setReplaceItem] = useState<
     ReplaceEventPayload | undefined
   >(undefined);

@@ -778,7 +778,7 @@ function processMoveStopEvent(
       ) {
         activateTool(
           objectById[objectId].type,
-          objectById[objectId].version,
+          "latest", // objectById[objectId].version,
           objectId
         );
       }
