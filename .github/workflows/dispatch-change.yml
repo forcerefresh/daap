@@ -1,4 +1,4 @@
-name: Dispatch change on main branch
+name: Dispatch change
 
 on:
   push:
