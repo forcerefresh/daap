@@ -31,7 +31,7 @@ export const useExtensionsHook = () => {
     // }
 
     const url =
-      "http://daap.extensions-dev.eu-central-1.linodeobjects.com/extensions.json";
+      "https://daap.extensions-dev.eu-central-1.linodeobjects.com/extensions.json";
 
     return fetch(url).then(async (res) => ({
       data: await res.json(),
