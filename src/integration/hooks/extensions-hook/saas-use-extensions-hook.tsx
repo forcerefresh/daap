@@ -47,7 +47,7 @@ export const useExtensionsHook = () => {
   ): Promise<IExtensionItem> => {
     const response = await axios.post(`/api/v1/extensions`, extension);
 
-    return response.data.data;
+    return extension;
 
     // // 1. add script
     // const extensionsStorage = JSON.parse(
