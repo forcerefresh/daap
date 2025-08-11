@@ -113,7 +113,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     _setStageTool,
     setZoomFit,
     missingExtensions,
-    appVersion,
+    appVersion = "1.0.2",
     availableVersion,
     activeLayerId,
     _addNewObject,
