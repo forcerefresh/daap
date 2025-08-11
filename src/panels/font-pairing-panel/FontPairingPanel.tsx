@@ -307,10 +307,11 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
       >
         <div
           className={css.fontsSpriteInner}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.stopPropagation();
-            addObjectsToStage(font.fontPairing);
+            await addObjectsToStage(font.fontPairing);
 
+            onRequestClose();
             // setSelectedFont({ font });
             // setPreview(true);
           }}

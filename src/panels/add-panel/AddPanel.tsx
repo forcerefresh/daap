@@ -58,8 +58,23 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     );
   };
 
+  const hideObjects = [
+    "io.forcerefresh.image.object",
+    "io.forcerefresh.vector.object",
+    "io.forcerefresh.free-draw.object",
+    "io.forcerefresh.text.object",
+    "io.forcerefresh.rectangle.object",
+    "io.forcerefresh.polygon.object",
+  ];
+
   const renderObjectsCards = (group: string) => {
-    const objDeffs = getAppObjectDefinitionsByGroup(group);
+    const objDeffsAll = getAppObjectDefinitionsByGroup(group);
+
+    console.log(objDeffsAll);
+
+    const objDeffs = objDeffsAll.filter(
+      (objDeff) => hideObjects.indexOf(objDeff.type) === -1
+    );
 
     return (
       <>
@@ -130,20 +145,20 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
           {renderObjectsCards("media")}
         </div>
       </section>
-      <section>
+      {/* <section>
         <div>
           <h1>Text</h1>
           <p>Add text content</p>
         </div>
         <div>{renderObjectsCards("text")}</div>{" "}
-      </section>
-      <section>
+      </section> */}
+      {/* <section>
         <div>
           <h1>Navigation</h1>
           <p>Navigate bettwen slides or point to extenal page</p>
         </div>
         <div>{renderObjectsCards("navigation")}</div>
-      </section>
+      </section> */}
 
       <section>
         <div>
