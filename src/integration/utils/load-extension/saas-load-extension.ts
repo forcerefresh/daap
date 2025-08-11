@@ -2,8 +2,8 @@
  * used for dev mode only, returns code from local storage
  */
 export function addExtensionCode(type: string, version: string): Promise<void> {
-  const playerUrl = `https://daap.extensions-dev.eu-central-1.linodeobjects.com/${type}/${version}/${type}-player.js`;
-  const appUrl = `https://daap.extensions-dev.eu-central-1.linodeobjects.com/${type}/${version}/${type}-app.js`;
+  const playerUrl = `https://extensions.bucket.forcerefresh.io/${type}/${version}/${type}-player.js`;
+  const appUrl = `https://extensions.bucket.forcerefresh.io/${type}/${version}/${type}-app.js`;
 
   return new Promise((resolve) => {
     let count = 0;

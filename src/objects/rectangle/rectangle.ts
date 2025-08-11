@@ -109,6 +109,9 @@ export function getRectangleObjectForm(): RectanglePropertiesTuple {
 export function getRectangleHtml(props: GetHtmlFuncPropsType) {
   const { object, calculatedObjectSize, deviceType } = props;
 
+  const width = parseInt(calculatedObjectSize.width);
+  const height = parseInt(calculatedObjectSize.height);
+
   const rectValues = getObjectValuesForDevice(
     object.properties as RectangleValues,
     deviceType
@@ -138,8 +141,8 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
   const path = svgRectWithCornerRadius(
     0,
     0,
-    object.width ?? 100,
-    object.height ?? 100,
+    width ?? 100,
+    height ?? 100,
     r.tl,
     r.tr,
     r.br,
@@ -149,9 +152,7 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
   const fillObj = getSVGFill(rectValues.fill, object.id);
 
   const svg = `
-    <svg viewBox="0 0 ${object.width} ${
-    object.height
-  }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg viewBox="0 0 ${width} ${height}" height="${height}"  width="${width}" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   ${fillObj.gradient}
       <path  d="${path}" stroke-width="${rectValues.strokeWidth}" stroke="${
     convertRGBColor2CSSStyle(rectValues.strokeColor).backgroundColor

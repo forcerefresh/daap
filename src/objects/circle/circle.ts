@@ -142,8 +142,11 @@ export function getCircleHtml(props: GetHtmlFuncPropsType) {
     }"  ${fillObj.fillAttr} />`;
   }
 
+  const width = parseFloat(calculatedObjectSize.width);
+  const height = parseFloat(calculatedObjectSize.height);
+
   const svg = `
-    <svg viewBox="0 0 ${object.width} ${object.height}" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <svg viewBox="0 0 ${width} ${height}" height="${height}"  width="${width}" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       ${fillObj.gradient}  
       ${element}
     </svg>`;

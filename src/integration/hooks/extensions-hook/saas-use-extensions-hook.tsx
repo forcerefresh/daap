@@ -29,8 +29,7 @@ export const useExtensionsHook = () => {
     //     .join(",")}`;
     // }
 
-    const url =
-      "https://daap.extensions-dev.eu-central-1.linodeobjects.com/extensions.json";
+    const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
     return fetch(url).then(async (res) => ({
       data: await res.json(),

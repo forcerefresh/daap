@@ -61,6 +61,7 @@ import {
   getObjectBounds,
   stagePointToObjectSpace_New,
 } from "../../utils/transform/transform-utils";
+import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 type StageManagerProviderProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
@@ -1016,6 +1017,8 @@ function processScaleChangeEvent(
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
+      let newWidth: string | undefined = undefined;
+      let newHeight: string | undefined = undefined;
       //       //    const currentAngle = getObjectRotation(object) + angle;
       //       // objectHolder.style.transform =
       //       //   "translateX(" + x + "px) translateY(" + y + "px)";
@@ -1127,7 +1130,7 @@ function processScaleChangeEvent(
 
       // WIDTH
       if (eData.handle === "width") {
-        const newWidth =
+        newWidth =
           objectSize.width + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
         objectHolder.style.width = newWidth;
 
@@ -1145,7 +1148,7 @@ function processScaleChangeEvent(
         //   object.objectIds ? "#444444" : "#48aff0"
         // }`;
       } else if (eData.handle === "height") {
-        const newHeight =
+        newHeight =
           objectSize.height + mouseMoveY / (getObjectScale(object) ?? 1) + "px";
         objectHolder.style.height = newHeight;
 
@@ -1183,6 +1186,36 @@ function processScaleChangeEvent(
           selEl.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
             object.objectIds ? "#444444" : "#48aff0"
           }`;
+        }
+      }
+
+      const html = getAppObjectDefinition(object.type, "latest")?.getHtml?.({
+        calculatedObjectSize: {
+          width: newWidth ?? object.width,
+          height: newHeight ?? object.height,
+        },
+        object: {
+          ...object,
+          width: newWidth ? parseInt(newWidth) : object.width,
+          height: newHeight ? parseInt(newHeight) : object.height,
+        },
+        deviceType: "device-independent",
+      });
+
+      const el = objectHolder.querySelector(`.object-content-${object.id}`);
+
+      if (el?.parentElement && html) {
+        el.parentElement.style.height = newHeight ?? object.height + "px";
+        el.parentElement.style.width = newWidth ?? object.width + "px";
+        el.parentElement.innerHTML = html;
+
+        const objectSelectorEl = getElementBySelector(
+          ".object-holder-" + object.id + " > .object-selection"
+        ) as HTMLElement;
+
+        if (objectSelectorEl) {
+          objectSelectorEl.style.width = newWidth ?? object.width + "px";
+          objectSelectorEl.style.height = newHeight ?? object.height + "px";
         }
       }
     }
