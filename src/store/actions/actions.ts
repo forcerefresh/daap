@@ -1856,9 +1856,9 @@ function handleObjectUpdate(
     // }
     default: {
       dispatch(_updateObject(object, !isPreview));
-      if (object.type === "io.forcerefresh.image.object") {
-        dispatch(colorFromImages());
-      }
+      // if (object.type === "io.forcerefresh.image.object") {
+      //   dispatch(colorFromImages());
+      // }
     }
   }
 }
