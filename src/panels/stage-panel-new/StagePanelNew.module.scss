@@ -240,6 +240,10 @@
   position: absolute;
   border: $pt-stage-stage-guidelines-border;
   pointer-events: none;
+
+  transform-origin: top left;
+  transform: translate(var(--translateX), var(--translateY));
+  will-change: transform;
 }
 
 :global(.bp5-dark) {

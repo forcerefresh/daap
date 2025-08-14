@@ -38,10 +38,17 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
     skipStateUpdate = false
   ) => {
     const targetEl = targetElementRefRef.current?.current;
-    if (targetEl) {
-      targetEl.style.setProperty("--scale", `${transform.scale}`);
-      targetEl.style.setProperty("--translateX", `${transform.translateX}px`);
-      targetEl.style.setProperty("--translateY", `${transform.translateY}px`);
+    if (targetEl && targetEl.parentNode) {
+      const targetElParent = targetEl.parentNode as HTMLDivElement;
+      targetElParent.style.setProperty("--scale", `${transform.scale}`);
+      targetElParent.style.setProperty(
+        "--translateX",
+        `${transform.translateX}px`
+      );
+      targetElParent.style.setProperty(
+        "--translateY",
+        `${transform.translateY}px`
+      );
     }
 
     // if (!skipStateUpdate)

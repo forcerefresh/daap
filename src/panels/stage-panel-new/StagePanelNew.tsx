@@ -550,12 +550,15 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
   const showMarginsDiv =
     margins.top || margins.bottom || margins.left || margins.right;
+
   const marginBorderStyle: CSSProperties = {
-    top: margins.top + "px",
-    left: margins.left + "px",
-    width: stageSize.width - (margins.right + margins.left) + "px",
-    height: stageSize.height - (margins.top + margins.bottom) + "px",
-    borderWidth: stageZoom < 1 ? 1 / stageZoom : 1,
+    top: margins.top * stageZoom + "px",
+    left: margins.left * stageZoom + "px",
+    width:
+      (stageSize.width - (margins.right + margins.left)) * stageZoom + "px",
+    height:
+      (stageSize.height - (margins.top + margins.bottom)) * stageZoom + "px",
+    borderWidth: 1,
   };
 
   // const toolsCanvasStyle = { ...canvasStyle };
@@ -852,13 +855,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
               <div style={outlineStyle}></div>
 
-              {showMarginsDiv ? (
-                <div
-                  style={marginBorderStyle}
-                  className={cx(css.borderBase, css.marginBorder)}
-                ></div>
-              ) : null}
-
               <div className="StagePanel-SnapHolder">
                 {/* {snapBounds.map((p) => {
                 return (
@@ -962,6 +958,12 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
             {/* {isPreview && previewLayout.body.component} */}
             {/* </div> */}
           </div>
+          {showMarginsDiv ? (
+            <div
+              style={marginBorderStyle}
+              className={cx(css.borderBase, css.marginBorder)}
+            ></div>
+          ) : null}
         </div>
       </ContextMenuBP>
     </React.Fragment>
