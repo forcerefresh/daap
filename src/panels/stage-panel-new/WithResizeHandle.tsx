@@ -51,6 +51,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
 
   const objectMeta = getAppObjectDefinition(object.type, object.version)?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
+
   const showWidthResize =
     (objectMeta?.supportWidthResize && sizeType === "rect") ?? false;
   const showHeightResize =
