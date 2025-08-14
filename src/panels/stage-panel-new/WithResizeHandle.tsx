@@ -56,7 +56,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   const showHeightResize =
     (objectMeta?.supportHeightResize && sizeType === "rect") ?? false;
 
-  const showScaleHandles = sizeType === "rect";
+  const showScaleHandles = sizeType === "rect" && !objectMeta?.disableScale;
   const showPointsHandles = false; //sizeType === "line";
 
   // const initialRotationRef = useRef(initialRotation);
