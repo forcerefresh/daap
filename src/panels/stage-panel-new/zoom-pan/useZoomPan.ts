@@ -38,8 +38,9 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
     skipStateUpdate = false
   ) => {
     const targetEl = targetElementRefRef.current?.current;
-    if (targetEl && targetEl.parentNode) {
-      const targetElParent = targetEl.parentNode as HTMLDivElement;
+    const targetElParent = (targetEl?.parentNode as HTMLDivElement) ?? targetEl;
+
+    if (targetElParent) {
       targetElParent.style.setProperty("--scale", `${transform.scale}`);
       targetElParent.style.setProperty(
         "--translateX",
