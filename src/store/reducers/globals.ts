@@ -41,6 +41,7 @@ export function globals(
     snapToDocument: true,
     snapToDocumentThreshold: 5,
     outlineColor: { r: 0, g: 0, b: 0, a: 1 },
+    appVersion: __APP_VERSION__,
   },
   action: ActionTypes
 ) {

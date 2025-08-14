@@ -18,6 +18,7 @@ import { IEditor } from "../../store/reducers/editor";
 import { updateEditor } from "../../store/actions/actions";
 import { removeExtensionFromMissing } from "../../utils/extensions/extensions-utils";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
+import { ExternalSVG } from "./external-svg";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -126,7 +127,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   const uninstallConfirm = () => {
     setUninstallLoading(true);
 
-    if (!uninstallIdRef.current?.id) return;
+    if (!uninstallIdRef.current?.type) return;
 
     uninstallExtension({
       type: uninstallIdRef.current.type,
@@ -286,7 +287,10 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                 {/*<div className={css.id}>{extension.id}</div>*/}
                 <div className={css.thumb}>
                   <div className={css.thumbHolder}>
-                    <img src={`${extension.logoUrl}`}></img>
+                    <ExternalSVG
+                      fallbackSrc=""
+                      src={`https://extensions.bucket.forcerefresh.io/${extension.type}/${extension.version}/icon.svg`}
+                    />
                   </div>
                 </div>
                 <div className={css.nameAndDesc}>
@@ -314,7 +318,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                 <div className={css.action}>
                   {installedExtensions &&
                     !installedExtensions?.find(
-                      (item) => item.id === extension.id
+                      (item) => item.type === extension.type
                     ) && (
                       <Button
                         disabled={
@@ -332,7 +336,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
                   {installedExtensions &&
                     !!installedExtensions?.find(
-                      (item) => item.id === extension.id
+                      (item) => item.type === extension.type
                     ) && (
                       <>
                         {/* <p className={css.installedMessage}>

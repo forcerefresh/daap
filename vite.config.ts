@@ -4,6 +4,7 @@ import commonjs from "vite-plugin-commonjs";
 import svgr from "vite-plugin-svgr";
 import path from "path";
 import fs from "fs";
+import pkg from "./package.json";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -32,7 +33,10 @@ export default defineConfig({
     svgr(),
   ],
   envDir: "env",
-  define: { global: "window" },
+  define: {
+    global: "window",
+    __APP_VERSION__: JSON.stringify(pkg.version),
+  },
   server: {
     port: 3001,
   },
