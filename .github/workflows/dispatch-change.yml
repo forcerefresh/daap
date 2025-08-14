@@ -12,12 +12,11 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.DAAP_EXTENSION_REPOS_TOKEN }} 
       - name:  'Automated Version Bump'
         uses:  'phips28/gh-action-bump-version@master'
         with:
           version-type:  'patch'
-          
+
       - name: Trigger Repo daap-server build and deploy
         run: |
           curl -X POST \
