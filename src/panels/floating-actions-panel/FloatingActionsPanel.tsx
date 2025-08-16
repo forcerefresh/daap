@@ -240,6 +240,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
                 ></Button>
 
                 <Popover
+                  hasBackdrop={true}
                   content={<ContextMenu />}
                   placement="bottom-end"
                   // tslint:disable-next-line jsx-no-lambda

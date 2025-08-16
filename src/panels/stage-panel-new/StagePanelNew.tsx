@@ -718,7 +718,16 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
 
   return (
     <React.Fragment>
-      <ContextMenuBP content={<ContextMenu />}>
+      <ContextMenuBP
+        onContextMenu={(e) => {
+          if (e.ctrlKey) {
+            e.stopPropagation();
+            e.preventDefault();
+            return;
+          }
+        }}
+        content={<ContextMenu />}
+      >
         <div
           ref={stagePanelElementRef}
           className={cx("StagePanel", css.stagePanel, {

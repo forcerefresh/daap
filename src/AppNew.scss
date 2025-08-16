@@ -160,3 +160,7 @@ body {
 .bp5-dark .bp5-button:not([class*="bp5-intent-"]) {
   // background: #2e2e2f;
 }
+
+.bp5-dark .bp5-overlay-backdrop {
+  opacity: 0 !important;
+}

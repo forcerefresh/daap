@@ -1018,6 +1018,9 @@ function processScaleChangeEvent(
 
     if (objectHolder) {
       let newWidth: string | undefined = undefined;
+      let newLeft: string | undefined = undefined;
+      let newTop: string | undefined = undefined;
+
       let newHeight: string | undefined = undefined;
       //       //    const currentAngle = getObjectRotation(object) + angle;
       //       // objectHolder.style.transform =
@@ -1129,9 +1132,19 @@ function processScaleChangeEvent(
       }
 
       // WIDTH
-      if (eData.handle === "width") {
+      if (eData.handle === "left" || eData.handle === "width") {
+        if (eData.handle === "left") {
+          newLeft =
+            objectSize.x + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
+          objectHolder.style.left = newLeft;
+        }
+
+        const widthDirection = eData.handle === "left" ? -1 : 1;
+
         newWidth =
-          objectSize.width + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
+          objectSize.width +
+          widthDirection * (mouseMoveX / (getObjectScale(object) ?? 1)) +
+          "px";
         objectHolder.style.width = newWidth;
 
         const contentEl = objectHolder.getElementsByClassName(
@@ -1147,9 +1160,39 @@ function processScaleChangeEvent(
         // objectHolder.style.boxShadow = `0 0 0 ${1 / getObjectScale(object) / zoom}px ${
         //   object.objectIds ? "#444444" : "#48aff0"
         // }`;
-      } else if (eData.handle === "height") {
+      }
+      // else if (eData.handle === "left") {
+      //   newLeft =
+      //     objectSize.x + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
+      //   objectHolder.style.left = newLeft;
+
+      // const contentEl = objectHolder.getElementsByClassName(
+      //   "object-content"
+      // )[0] as HTMLElement;
+      // if (contentEl) contentEl.style.left = newLeft;
+
+      // const resizeHolderEl = objectHolder.getElementsByClassName(
+      //   "resize-handle-holder-" + objectId
+      // )[0] as HTMLElement;
+      // if (resizeHolderEl) resizeHolderEl.style.left = newLeft; //+ 0.001; // NOTE:  0.001 is to trigger change
+
+      // objectHolder.style.boxShadow = `0 0 0 ${1 / getObjectScale(object) / zoom}px ${
+      //   object.objectIds ? "#444444" : "#48aff0"
+      // }`;
+      // }
+      else if (eData.handle === "top" || eData.handle === "height") {
+        if (eData.handle === "top") {
+          newTop =
+            objectSize.y + mouseMoveY / (getObjectScale(object) ?? 1) + "px";
+          objectHolder.style.top = newTop;
+        }
+
+        const widthDirection = eData.handle === "top" ? -1 : 1;
+
         newHeight =
-          objectSize.height + mouseMoveY / (getObjectScale(object) ?? 1) + "px";
+          objectSize.height +
+          widthDirection * (mouseMoveY / (getObjectScale(object) ?? 1)) +
+          "px";
         objectHolder.style.height = newHeight;
 
         const contentEl = objectHolder.getElementsByClassName(
@@ -1207,6 +1250,8 @@ function processScaleChangeEvent(
       if (el?.parentElement && html) {
         el.parentElement.style.height = newHeight ?? object.height + "px";
         el.parentElement.style.width = newWidth ?? object.width + "px";
+        // el.parentElement.style.left = newLeft ?? object.left + "px";
+
         el.parentElement.innerHTML = html;
 
         const objectSelectorEl = getElementBySelector(
@@ -1215,6 +1260,7 @@ function processScaleChangeEvent(
 
         if (objectSelectorEl) {
           objectSelectorEl.style.width = newWidth ?? object.width + "px";
+          // objectSelectorEl.style.left = newLeft ?? object.left + "px";
           objectSelectorEl.style.height = newHeight ?? object.height + "px";
         }
       }
@@ -1441,12 +1487,28 @@ function processScaleStopEvent(
     }
 
     // NOTE: LAYOUT CHANGE
-    if (eData.handle === "width") {
+    if (eData.handle === "left" || eData.handle === "width") {
+      if (eData.handle === "left") {
+        objectClone.left =
+          objectSize.x + realMoveX / (getObjectScale(object) ?? 1);
+      }
+
+      const widthDirection = eData.handle === "left" ? -1 : 1;
+
       objectClone.width =
-        objectSize.width + realMoveX / (getObjectScale(object) ?? 1);
-    } else if (eData.handle === "height") {
+        objectSize.width +
+        widthDirection * (realMoveX / (getObjectScale(object) ?? 1));
+    } else if (eData.handle === "top" || eData.handle === "height") {
+      if (eData.handle === "top") {
+        objectClone.top =
+          objectSize.y + realMoveY / (getObjectScale(object) ?? 1);
+      }
+
+      const widthDirection = eData.handle === "top" ? -1 : 1;
+
       objectClone.height =
-        objectSize.height + realMoveY / (getObjectScale(object) ?? 1);
+        objectSize.height +
+        widthDirection * (realMoveY / (getObjectScale(object) ?? 1));
     } else {
       objectClone.left = left;
       objectClone.top = top;
