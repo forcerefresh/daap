@@ -11,6 +11,7 @@ import {
   loadUserData,
   setAIEnabled,
   setMyFonts,
+  updateEditor,
   updateGlobalConfiguration,
 } from "./store/actions/actions";
 import { IStore } from "./store/store";
@@ -22,6 +23,8 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import axios from "axios";
 import { GlobalEventsProvider } from "./utils/global-events/GlobalEvents";
+import { getOutdatedExtensions } from "./utils/extensions/extensions-utils";
+import { IEditor } from "./store/reducers/editor";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -37,13 +40,15 @@ function App(props: IAppProps) {
     _loadUserData,
     _setMyFonts,
     _setAIEnabled,
+    _updateEditor,
     theme,
     className,
   } = props;
 
   const globalContext = useContext(IntegrationContext);
 
-  const { getInstalledExtensions } = globalContext.useExtensionsHook();
+  const { getInstalledExtensions, getExtensions } =
+    globalContext.useExtensionsHook();
   // const { getSettings: getAppSettings, scaleUI } =
   //   globalContext.useAppSettingsHook();
 
@@ -79,8 +84,25 @@ function App(props: IAppProps) {
     const loadExternalComponents = async () => {
       const installedExtensions = await getInstalledExtensions();
 
+      getExtensions(0).then((extensionsRest) => {
+        const extensions = extensionsRest.data;
+
+        const outdatedExtensions = getOutdatedExtensions(
+          extensions,
+          installedExtensions.data
+        );
+
+        console.log("outdatedExtensions");
+        console.log(outdatedExtensions);
+        _updateEditor({ outdatedExtensions });
+      });
+
       for (let i = 0; i < installedExtensions.data.length; i++) {
-        await loadAndRegisterExternalComponent(installedExtensions.data[i]);
+        try {
+          await loadAndRegisterExternalComponent(installedExtensions.data[i]);
+        } catch (ex) {
+          console.error(ex);
+        }
       }
     };
     loadExternalComponents().then(() => {});
@@ -193,6 +215,8 @@ const mapDispatchToProps = {
   _setMyFonts: (myFonts: SaaSMediaData[]) => setMyFonts(myFonts),
   _setAIEnabled: (payload: { objectType: string; enabled: boolean }[]) =>
     setAIEnabled(payload),
+
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

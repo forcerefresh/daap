@@ -122,7 +122,9 @@
   min-width: 120px;
   //display: flex;
   // flex-direction: column;
-  row-gap: 30px;
+  row-gap: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 .description {
@@ -143,6 +145,11 @@
 
 .installedMessage {
   color: chartreuse;
+}
+
+.newVersionAvailable {
+  color: rgb(0, 245, 69);
+  font-weight: bold;
 }
 
 .licenseRequired {

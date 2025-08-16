@@ -39,16 +39,18 @@ export function getObjectToolDefinitions(
   );
 }
 
-function getLatestVersionsMap(data: { type: string; version?: string }[]) {
+export function getLatestVersionsMap<T>(
+  data: (T & { type: string; version?: string })[]
+) {
   // Create a map to store the latest version of each type
-  const latestVersionMap = new Map();
+  const latestVersionMap = new Map<string, (typeof data)[0]>();
 
   for (const item of data) {
     if (!latestVersionMap.has(item.type)) {
       latestVersionMap.set(item.type, item);
     } else {
       const existing = latestVersionMap.get(item.type);
-      if (semver.gt(item.version ?? "", existing.version)) {
+      if (semver.gt(item.version ?? "", existing?.version ?? "")) {
         latestVersionMap.set(item.type, item);
       }
     }

@@ -5,6 +5,7 @@ export interface IEditor {
   sliderChanged: boolean;
   isExistingProject: boolean;
   missingExtensions: IExtensionItem[];
+  outdatedExtensions: IExtensionItem[];
 }
 
 export function editor(
@@ -12,6 +13,7 @@ export function editor(
     sliderChanged: false,
     isExistingProject: false,
     missingExtensions: [],
+    outdatedExtensions: [],
   },
   action: ActionTypes
 ) {

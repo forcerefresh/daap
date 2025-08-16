@@ -13,6 +13,22 @@
   }
 }
 
+.buttonTag {
+  position: absolute;
+  transform-origin: left top;
+  left: 5px;
+  top: 0px;
+  font-weight: bold;
+  line-height: 10px !important;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  padding: 4px !important;
+  padding-right: 5px !important;
+
+  text-align: center;
+  font-size: 13px !important;
+}
+
 :global(.bp5-dark) {
   .mainHeader {
     background-color: #252526;

@@ -52,6 +52,7 @@ const MainHeader = (props: IMainHeader) => {
     account,
     appZoom,
     missingExtensions,
+    outdatedExtensions,
   } = props;
 
   const {
@@ -157,9 +158,14 @@ const MainHeader = (props: IMainHeader) => {
                     window.dispatchEvent(event);
                   }}
                 >
-                  {missingExtensions?.length > 0 && (
-                    <Tag intent={"danger"} round className={css.buttonTag}>
-                      {missingExtensions.length}
+                  {outdatedExtensions?.length > 0 && (
+                    <Tag
+                      intent={"danger"}
+                      round
+                      className={css.buttonTag}
+                      large={false}
+                    >
+                      {outdatedExtensions.length}
                     </Tag>
                   )}
                   Extensions
@@ -294,6 +300,7 @@ const mapStateToProps = (state: IStore) => {
     breakpointConfig,
 
     missingExtensions: state.editor.missingExtensions,
+    outdatedExtensions: state.editor.outdatedExtensions,
   };
 };
 

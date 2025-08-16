@@ -4,7 +4,15 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { debounce } from "lodash-es";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
-import { Alert, Button, InputGroup, Intent, Spinner } from "@blueprintjs/core";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  FormGroup,
+  InputGroup,
+  Intent,
+  Spinner,
+} from "@blueprintjs/core";
 import { IntegrationContext } from "../../integration";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 import css from "./ExtensionsPanel.module.scss";
@@ -19,6 +27,8 @@ import { updateEditor } from "../../store/actions/actions";
 import { removeExtensionFromMissing } from "../../utils/extensions/extensions-utils";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 import { ExternalSVG } from "./external-svg";
+import { getLatestVersionsMap } from "../../objects/objectToolFactory";
+import { getCheckboxField } from "../../inputs/input-utils";
 
 interface IExtensionsPanelProps {
   onRequestClose: () => void;
@@ -29,11 +39,19 @@ export type IExtensionsPanelMergedProps = typeof mapDispatchToProps &
   IExtensionsPanelProps;
 
 const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
-  const { _updateEditor, missingExtensions } = props;
+  const { _updateEditor, missingExtensions, outdatedExtensions } = props;
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [extensions, setExtensions] = useState<IExtensionItem[]>([]);
+  const [extensionsMerged, setExtensionsMerged] = useState<
+    (IExtensionItem & {
+      installedExtension: IExtensionItem;
+      installed: boolean;
+      upToDate: boolean;
+    })[]
+  >([]);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>("");
@@ -160,11 +178,11 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
   };
 
   const onInstall = (item: IExtensionItem) => {
-    console.log(item);
     setCurrentlyInstallingExtensions({
       ...currentlyInstallingExtensions,
       [item.type]: true,
     });
+
     installExtension({ ...item, source: "marketplace" }).then((mItem) => {
       loadAndRegisterExternalComponent(mItem).then(() => {});
 
@@ -186,13 +204,44 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
         missingExtensions,
         mItem.type
       );
-      _updateEditor({ missingExtensions: newMissingExtensions });
+      _updateEditor({
+        missingExtensions: newMissingExtensions,
+        outdatedExtensions: outdatedExtensions.filter(
+          (ext) => ext.type !== item.type
+        ),
+      });
     });
   };
 
   // if (!installedExtensions) {
   //   return null;
   // }
+
+  const [filter, setFilter] = useState({ onlyInstalled: false });
+
+  useEffect(() => {
+    if (!extensions) return;
+
+    const installedExtensionsMap = installedExtensions
+      ? getLatestVersionsMap(installedExtensions)
+      : new Map();
+
+    const merged = extensions.map((extension) => {
+      const installedExtension = installedExtensionsMap.get(extension.type);
+      return {
+        ...extension,
+        installedExtension,
+        installed: !!installedExtension,
+        upToDate: extension.version === installedExtension?.version,
+      };
+    });
+
+    const filtered = merged
+      .filter((ext) => !filter.onlyInstalled || ext.installed)
+      .sort((a, b) => (a.installed && !a.upToDate ? -1 : 1));
+
+    setExtensionsMerged(filtered);
+  }, [extensions, installedExtensions, filter]);
 
   return (
     <div className={cx("bp5-dark", css.extensionsPanel)}>
@@ -202,6 +251,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
       <div className={css.headerSection}>
         <InputGroup
+          style={{ marginBottom: "10px" }}
           large
           leftIcon="search"
           placeholder="Extend your app..."
@@ -226,6 +276,27 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
             }
           }}
         ></InputGroup>
+
+        <div className="input60">
+          {getCheckboxField(
+            "Only installed",
+            filter.onlyInstalled,
+            (onlyInstalled: any) => {
+              setFilter((prev) => ({
+                ...prev,
+                onlyInstalled: onlyInstalled,
+              }));
+            },
+            "",
+            { alignIndicator: "left" }
+          )}
+        </div>
+        {/* <Checkbox
+          alignIndicator=""
+          label="Only installed"
+          checked={filter.onlyInstalled}
+          onChange={() => {}}
+        /> */}
       </div>
 
       {/* <div className={cx(css.headerSection, css.tableHeader)}>
@@ -275,7 +346,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
             </p>
           }
         >
-          {extensions?.map((extension, idx) => (
+          {extensionsMerged?.map((extension, idx) => (
             <div key={extension.type}>
               <div
                 className={cx(css.headerSection, css.tableRow, {
@@ -297,7 +368,13 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                   <div>
                     <div className={css.name}>{extension.name}</div>
                     <div className={css.version}>
-                      <strong>{extension.version}</strong>
+                      {extension.installed && !extension.upToDate ? (
+                        <div className={css.newVersionAvailable}>
+                          Version {extension.version} is available{" "}
+                        </div>
+                      ) : (
+                        <strong> {extension.version}</strong>
+                      )}
                     </div>
                   </div>
                   <div className={css.description}>{extension.description}</div>
@@ -316,23 +393,22 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
                   {new Date(extension.modified).toLocaleTimeString()}
                 </div> */}
                 <div className={css.action}>
-                  {installedExtensions &&
-                    !installedExtensions?.find(
-                      (item) => item.type === extension.type
-                    ) && (
-                      <Button
-                        disabled={
-                          extension.licenseDisabled ||
-                          currentlyInstallingExtensions[extension.type]
-                        }
-                        intent="primary"
-                        onClick={() => onInstall(extension)}
-                      >
-                        {currentlyInstallingExtensions[extension.type]
-                          ? "Installing..."
-                          : "Install"}
-                      </Button>
-                    )}
+                  {(!extension.installed || !extension.upToDate) && (
+                    <Button
+                      disabled={
+                        extension.licenseDisabled ||
+                        currentlyInstallingExtensions[extension.type]
+                      }
+                      intent="primary"
+                      onClick={() => onInstall(extension)}
+                    >
+                      {currentlyInstallingExtensions[extension.type]
+                        ? "Installing..."
+                        : extension.installed && !extension.upToDate
+                        ? "Upgrade"
+                        : "Install"}
+                    </Button>
+                  )}
 
                   {installedExtensions &&
                     !!installedExtensions?.find(
@@ -382,6 +458,7 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
 const mapStateToProps = (state: IStore) => ({
   missingExtensions: state.editor.missingExtensions,
+  outdatedExtensions: state.editor.outdatedExtensions,
 });
 
 const mapDispatchToProps = {
