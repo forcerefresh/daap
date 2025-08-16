@@ -478,7 +478,7 @@ export const ToolsProvider = (
   const activateTool = (tool: string, version?: string, objectId?: string) => {
     const toolDef =
       getObjectToolDefinitions(tool, version) ??
-      getAppObjectDefinition(tool, version);
+      getAppObjectDefinition(tool, "latest");
 
     console.log(toolDef);
     if (toolDef?.toolClass) {

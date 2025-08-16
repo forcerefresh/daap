@@ -518,7 +518,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
       // width resize
       const object = objectById[selectedObjectIds[0]];
-      const toolDef = getAppObjectDefinition(object.type, object.version);
+      const toolDef = getAppObjectDefinition(object.type, "latest");
 
       if (toolDef?.meta.supportWidthResize) {
         el = document.createElement("div");

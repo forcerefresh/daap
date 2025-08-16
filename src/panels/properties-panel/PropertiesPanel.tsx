@@ -266,7 +266,7 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
     // check for forward compatibility
     const definitionProperties = getAppObjectDefinition(
       object.type,
-      object.version
+      "latest"
     )?.getObjectForm();
     const definitionValues = {
       ...object.properties,

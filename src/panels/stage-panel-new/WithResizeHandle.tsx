@@ -49,7 +49,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
 
   const { activeTool } = useContext(ToolsContext);
 
-  const objectMeta = getAppObjectDefinition(object.type, object.version)?.meta;
+  const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
   const showWidthResize =

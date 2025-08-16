@@ -1306,7 +1306,7 @@ export function addNewObject(
       //   break;
       // }
       default: {
-        const objDeff = getAppObjectDefinition(object.type, object.version);
+        const objDeff = getAppObjectDefinition(object.type, "latest");
         object = !!objDeff?.postProcess
           ? objDeff.postProcess({ prevObject: object, object })
           : object;
@@ -1386,7 +1386,7 @@ export function replaceObject(
       //   break;
       // }
       default: {
-        const objDeff = getAppObjectDefinition(object.type, object.version);
+        const objDeff = getAppObjectDefinition(object.type, "latest");
         object = !!objDeff?.postProcess
           ? objDeff.postProcess({ prevObject: object, object })
           : object;
@@ -1830,7 +1830,7 @@ function handleObjectUpdate(
   object.top = roundNumber(object.top!, 2);
   object.height = roundNumber(object.height!, 2);
 
-  const objDeff = getAppObjectDefinition(object.type, object.version);
+  const objDeff = getAppObjectDefinition(object.type, "latest");
   object = !!objDeff?.postProcess
     ? objDeff.postProcess({ prevObject, object })
     : object;
