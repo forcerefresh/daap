@@ -25,6 +25,7 @@ import axios from "axios";
 import { GlobalEventsProvider } from "./utils/global-events/GlobalEvents";
 import { getOutdatedExtensions } from "./utils/extensions/extensions-utils";
 import { IEditor } from "./store/reducers/editor";
+import { omit } from "lodash-es";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -168,7 +169,7 @@ function App(props: IAppProps) {
 
       if (response.appSettings) {
         _updateGlobalConfiguration({
-          ...response.appSettings,
+          ...omit(response.appSettings, "appVersion"), // TODO: this is a quick fix
           publishSettings: response.publishSettings,
         });
 
