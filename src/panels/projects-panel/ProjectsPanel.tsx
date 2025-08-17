@@ -167,6 +167,18 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     return axios
       .post(`/api/v1/publish/${id}`, props)
       .then(() => {
+        const updatedProjects = projects.map((project) => {
+          return {
+            ...project,
+            publishRevision:
+              project.id === id
+                ? project.saveRevision
+                : project.publishRevision,
+          };
+        });
+
+        setProjects(updatedProjects);
+
         AppToaster.show({
           intent: "success",
           message: "Document is successfully published.",
@@ -360,6 +372,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                   {new Date(project.modified).toLocaleTimeString()}
                 </div>
                 <div className={css.action}>
+                  {/* <div>Save revision: {project.saveRevision}</div>
+                  <div>Publish revision: {project.publishRevision}</div> */}
                   <ChangeCheckerButton
                     intent="primary"
                     onAllow={() => onOpenProject(project.id)}
@@ -369,12 +383,18 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                     Open
                   </ChangeCheckerButton>
 
-                  {publishSettings?.enabled ? (
+                  {publishSettings?.enabled &&
+                  project.saveRevision === project.publishRevision ? (
+                    <div className={css.publishedMessage}>Published</div>
+                  ) : null}
+
+                  {publishSettings?.enabled &&
+                  project.saveRevision !== project.publishRevision ? (
                     <Button
                       intent="none"
                       onClick={() => onPublishProject(project.id)}
                     >
-                      Publish
+                      {project.publishRevision === -1 ? "Publish" : "Republish"}
                     </Button>
                   ) : null}
 
