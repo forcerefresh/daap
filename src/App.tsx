@@ -26,6 +26,7 @@ import { GlobalEventsProvider } from "./utils/global-events/GlobalEvents";
 import { getOutdatedExtensions } from "./utils/extensions/extensions-utils";
 import { IEditor } from "./store/reducers/editor";
 import { omit } from "lodash-es";
+import { getLatestVersionsMap } from "./objects/objectToolFactory";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -85,6 +86,10 @@ function App(props: IAppProps) {
     const loadExternalComponents = async () => {
       const installedExtensions = await getInstalledExtensions();
 
+      const latestInstalledExtensions = Array.from(
+        getLatestVersionsMap(installedExtensions.data).values()
+      );
+
       getExtensions(0).then((extensionsRest) => {
         const extensions = extensionsRest.data;
 
@@ -98,7 +103,7 @@ function App(props: IAppProps) {
         _updateEditor({ outdatedExtensions });
       });
 
-      for (let i = 0; i < installedExtensions.data.length; i++) {
+      for (let i = 0; i < latestInstalledExtensions.length; i++) {
         try {
           await loadAndRegisterExternalComponent(installedExtensions.data[i]);
         } catch (ex) {

@@ -238,10 +238,15 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
 
     const filtered = merged
       .filter((ext) => !filter.onlyInstalled || ext.installed)
+      .filter((ext) => {
+        if (searchValue === "") return true;
+        if (new RegExp(searchValue, "i").test(ext.name)) return true;
+        return false;
+      })
       .sort((a, b) => (a.installed && !a.upToDate ? -1 : 1));
 
     setExtensionsMerged(filtered);
-  }, [extensions, installedExtensions, filter]);
+  }, [extensions, installedExtensions, filter, searchValue]);
 
   return (
     <div className={cx("bp5-dark", css.extensionsPanel)}>
@@ -269,12 +274,12 @@ const ExtensionsPanel: React.FC<IExtensionsPanelMergedProps> = (props) => {
           onChange={(event: any) => {
             setSearchValue((event.currentTarget as HTMLInputElement).value);
           }}
-          onKeyPress={(event) => {
-            if (event.key === "Enter") {
-              setExtensions(() => []);
-              debounceFetchData(0);
-            }
-          }}
+          // onKeyPress={(event) => {
+          //   if (event.key === "Enter") {
+          //     setExtensions(() => []);
+          //     debounceFetchData(0);
+          //   }
+          // }}
         ></InputGroup>
 
         <div className="input60">

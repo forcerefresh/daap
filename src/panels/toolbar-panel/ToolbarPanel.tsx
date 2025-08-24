@@ -71,6 +71,7 @@ import { LINE } from "../../objects/line/line";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
+import LayoutToTemplatePanel from "../layout-to-template-panel/LayoutToTemplatePanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -81,6 +82,7 @@ enum VisiblePanel {
   History = "history",
   FontPreview = "font-preview",
   FontPairing = "font-pairing",
+  Layout2Template = "layout-to-template",
 
   MediaLibrary = "media-library",
   // ProjectsLibrary = "projects-library",
@@ -151,6 +153,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Extensions);
     };
 
+    const openLayoutToTemplateCallback = () => {
+      setShowPanel(VisiblePanel.Layout2Template);
+    };
+
     const openMediaFontsCallback = () => {
       setDefaultSettingsMediaLibraryTabId("myFonts");
       // setTimeout(() => {
@@ -203,6 +209,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_EXPORT", openExportCallback);
 
     window.addEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
+    window.addEventListener(
+      "OPEN_LAYOUT2TEMPLATE",
+      openLayoutToTemplateCallback
+    );
 
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
@@ -228,6 +238,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_TEXT_PANEL", openTextCallback);
 
       window.removeEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
+
+      window.removeEventListener(
+        "OPEN_LAYOUT2TEMPLATE",
+        openLayoutToTemplateCallback
+      );
     };
   }, []);
 
@@ -810,6 +825,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Extensions && (
               <div ref={sharedRef}>
                 <ExtensionsPanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Layout2Template && (
+              <div ref={sharedRef}>
+                <LayoutToTemplatePanel
                   onRequestClose={() => {
                     setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);

@@ -1354,6 +1354,10 @@ export function replaceObject(
   objectProps: Partial<IObject>,
   values?: { [key: string]: any }
 ): any {
+  console.log("values-------");
+
+  console.log(values);
+
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerId =
       getState().project.objects.objectById[replaceObjectId].layerId;

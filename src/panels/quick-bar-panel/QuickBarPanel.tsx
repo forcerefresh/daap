@@ -12,6 +12,7 @@ import css from "./QuickBarPanel.module.scss";
 import {
   Button,
   Divider,
+  Icon,
   Label,
   Popover,
   PopoverInteractionKind,
@@ -40,13 +41,14 @@ import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { object } from "yup";
 import { getSelectSlider } from "../../inputs/input-utils";
 import AlignPanel from "../align-panel/AlignPanel";
+import LayoutToTemplatePanel from "../layout-to-template-panel/LayoutToTemplatePanel";
 
 const PANEL_ICON_SIZE = 22;
 
-type IToolbarPanel = typeof mapDispatchToProps &
+type IQuickBarPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
-const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
+const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
   const {
     selectedObjectIds,
     activeObject,
@@ -60,6 +62,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
     showSimplifiedLayers,
     _showSimplifiedPages,
     showSimplifiedPagesPanel,
+    layout2TemplateEnabled,
   } = props;
   const {
     toolConfig,
@@ -109,7 +112,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
   ) {
     toolBarComponent = getObjectToolDefinitions(
       activeObject.type,
-      activeObject.version
+      "latest"
+      // activeObject.version
     );
     mode = ToolbarMode.Selection;
   } else {
@@ -211,6 +215,25 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
             ></Button>
           </Popover>
         </div> */}
+
+        {layout2TemplateEnabled ? (
+          <div>
+            <Button
+              style={{ color: "rgb(110 240 239)" }}
+              icon={
+                <Icon icon={"clean"} style={{ color: "rgb(110 240 239)" }} />
+              }
+              minimal
+              className={cx(css.button)}
+              onClick={() => {
+                const event = new CustomEvent("OPEN_LAYOUT2TEMPLATE");
+                window.dispatchEvent(event);
+              }}
+            >
+              Generate
+            </Button>
+          </div>
+        ) : null}
 
         <div>
           <Popover
@@ -462,6 +485,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props: IToolbarPanel) => {
 };
 
 const mapStateToProps = (state: IStore) => {
+  const { globals } = state;
   const { objects, selection } = state.project;
 
   const { activeObjectId, activeLayerId } = selection;
@@ -471,6 +495,7 @@ const mapStateToProps = (state: IStore) => {
     : null;
 
   return {
+    layout2TemplateEnabled: globals.publishSettings?.enabled,
     activeLayerId,
     activeObject,
     objectById: objects.objectById,
@@ -495,4 +520,4 @@ const mapDispatchToProps = {
   _showSimplifiedPages: (show: boolean) => showSimplifiedPages(show),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ToolbarPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(QuickBarPanel);

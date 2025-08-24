@@ -772,7 +772,7 @@ function processMoveStopEvent(
     if (selectedObjectIds.length === 1 && selectedObjectIds[0] === objectId) {
       // TODO
       if (
-        (objectById[objectId].type === "io.forcerefresh.layout-object" ||
+        (objectById[objectId].type === "io.forcerefresh.layout.object" ||
           objectById[objectId].type === "io.forcerefresh.text.object" ||
           objectById[objectId].type === "io.forcerefresh.line.object") &&
         !recentlySelectedRef.current

@@ -52,7 +52,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
 
   const accept =
     type === "image"
-      ? "image/jpeg, image/png, image/gif"
+      ? "image/jpeg, image/png, image/gif, image/webp"
       : type === "video"
       ? "video/mp4"
       : type === "audio"

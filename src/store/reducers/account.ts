@@ -2,7 +2,11 @@ import { ActionTypes, UPDATE_USER_DATA } from "../actions/actions";
 
 export interface IAccount {
   userDataLoading: boolean;
-  userData?: { displayName: string; profilePicture?: string };
+  userData?: {
+    displayName: string;
+    profilePicture?: string;
+    enableAIGenerator?: boolean;
+  };
 }
 
 export function account(

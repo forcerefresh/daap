@@ -61,123 +61,15 @@ interface ICreatePanelProps {
   // onRequestFontPreview: () => void;
 }
 
-type DocumentType = "instagram" | "facebook" | "pinterest" | string;
+// type DocumentType = "instagram" | "facebook" | "pinterest" | string;
 
-export interface IDocumentDeff {
-  type: DocumentType;
-  name: string;
-  description?: string;
-  size?: { width: number; height: number };
-  ratio?: { vertical: number; horizontal: number; approximate?: boolean };
-}
-
-const documentsDefs: IDocumentDeff[] = [
-  // PINTEREST
-  {
-    type: "Pinterest",
-    name: "Standard Pin",
-    size: { width: 1000, height: 1500 },
-    ratio: { vertical: 2, horizontal: 3 },
-  },
-  {
-    type: "Pinterest",
-    name: "Square Pin",
-    size: { width: 1000, height: 1000 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-  {
-    type: "Pinterest",
-    name: "Tall Pin",
-    size: { width: 1000, height: 2100 },
-    ratio: { vertical: 1, horizontal: 2.6 },
-  },
-  {
-    type: "Pinterest",
-    name: "Profile photo",
-    size: { width: 280, height: 280 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-  {
-    type: "Pinterest",
-    name: "Profile cover",
-    size: { width: 800, height: 450 },
-    ratio: { vertical: 16, horizontal: 9 },
-  },
-
-  // INSTAGRAM
-  {
-    type: "Instagram",
-    name: "Square post",
-    size: { width: 1080, height: 1080 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-  {
-    type: "Instagram",
-    name: "Landscape post",
-    size: { width: 1080, height: 566 },
-    ratio: { vertical: 1.91, horizontal: 1 },
-  },
-  {
-    type: "Instagram",
-    name: "Portrait post",
-    size: { width: 1080, height: 1350 },
-    ratio: { vertical: 4, horizontal: 5 },
-  },
-
-  // FACEBOOK
-  {
-    type: "Facebook",
-    name: "Story",
-    size: { width: 1080, height: 1920 },
-    ratio: { vertical: 9, horizontal: 16 },
-  },
-
-  {
-    type: "Facebook",
-    name: "Feed post",
-    size: { width: 1200, height: 630 },
-    ratio: { vertical: 2, horizontal: 1, approximate: true },
-  },
-
-  {
-    type: "Facebook",
-    name: "Carousel",
-    size: { width: 1200, height: 1200 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-
-  {
-    type: "Facebook",
-    name: "Ad",
-    size: { width: 1080, height: 1080 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-
-  {
-    type: "Facebook",
-    name: "Fundraiser",
-    size: { width: 800, height: 300 },
-    ratio: { vertical: 8, horizontal: 3 },
-  },
-  {
-    type: "Facebook",
-    name: "Cover photo",
-    size: { width: 851, height: 315 },
-    ratio: { vertical: 2.7, horizontal: 1, approximate: true },
-  },
-  {
-    type: "Facebook",
-    name: "Profile photo",
-    size: { width: 180, height: 180 },
-    ratio: { vertical: 1, horizontal: 1 },
-  },
-];
-
-function getDocuments(documentType: DocumentType) {
-  return documentsDefs.filter(
-    (documentsDef) => documentsDef.type === documentType
-  );
-}
+// export interface IDocumentDeff {
+//   type: DocumentType;
+//   name: string;
+//   description?: string;
+//   size?: { width: number; height: number };
+//   ratio?: { vertical: number; horizontal: number; approximate?: boolean };
+// }
 
 export type ICreatePanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
@@ -203,15 +95,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
     _setupNewProjectFromExisting,
   } = props;
 
-  const globalContext = useContext(IntegrationContext);
-  const { getInstalledExtensions } = globalContext.useExtensionsHook();
-
   const [content, setContent] = useState<"empty" | "copy">("empty");
-
-  const renderObjectsCardsGroup = (group: string) => {
-    const newDeffs = getDocuments(group);
-    return renderObjectsCards(newDeffs);
-  };
 
   const createNewProject = useCallback(
     async ({

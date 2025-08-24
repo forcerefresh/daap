@@ -62,7 +62,7 @@ export function createRectangleObject(
   const values: RectangleValues = {
     strokeWidth: initialValue?.strokeWidth ?? "5",
     strokeColor: initialValue?.strokeColor ?? { r: 255, g: 255, b: 255, a: 1 },
-    fill: { r: 99, g: 99, b: 99, a: 1 },
+    fill: initialValue?.fill ?? { r: 99, g: 99, b: 99, a: 1 },
     cornerRadius: initialValue?.cornerRadius ?? "0px",
   };
 

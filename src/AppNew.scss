@@ -144,12 +144,15 @@ body {
   }
 }
 
-.input400-force {
+.input100percent-force {
+  .bp5-form-group {
+    width: 100%;
+  }
   .bp5-input-group input {
-    width: 400px !important;
+    width: 100% !important;
   }
   textarea {
-    width: 400px !important;
+    width: 100% !important;
   }
 }
 
