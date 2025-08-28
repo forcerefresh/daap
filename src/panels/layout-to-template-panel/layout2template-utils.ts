@@ -9,7 +9,12 @@ export function collectLayoutObjectsPrompts(
   objectIds.forEach((objectId) => {
     const object = objectById[objectId];
 
+    console.log(object);
+    console.log(object.type);
+
     const objectDeff = getAppObjectDefinition(object.type, "latest");
+
+    console.log(objectDeff);
 
     const tmpObj = objectDeff?.postProcess?.({
       object: {
@@ -18,6 +23,8 @@ export function collectLayoutObjectsPrompts(
       },
       prevObject: object,
     });
+
+    console.log(tmpObj);
 
     ret.push({ prompt: tmpObj?.properties.aiPrompt, objectId: object.id });
   });
