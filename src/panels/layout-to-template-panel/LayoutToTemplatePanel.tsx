@@ -474,7 +474,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                     try {
                       const obj = JSON.parse(iaResponse);
                       obj.objects.forEach((obj) => {
-                        if (obj.type === "image") {
+                        if (obj.type === "image" || obj.subType === "image") {
                           const objectId = obj.objectId;
                           const prompt = obj.aiPrompt;
                           iaImagesRequest.push({ objectId, prompt });
