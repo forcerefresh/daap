@@ -1,15 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
 import css from "./ProjectsLibraryPanel.module.scss";
 import { Tab, Tabs, Tag } from "@blueprintjs/core";
 import ProjectsPanel from "../projects-panel/ProjectsPanel";
-import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
-import DevelopmentPanel from "../development-panel/DevelopmentPanel";
-import MyExtensionsPanel from "../my-extensions-panel/MyExtensionsPanel";
 import MyTemplatesPanel from "../my-templates-panel/MyTemplatesPanel";
-import TemplatesPanel from "../templates-panel/TemplatesPanel";
 
 interface IProjectsLibraryPanelProps {
   onRequestClose: () => void;

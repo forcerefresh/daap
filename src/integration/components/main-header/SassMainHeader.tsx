@@ -145,6 +145,30 @@ const MainHeader = (props: IMainHeader) => {
                   Templates
                 </Button>
 
+                {account.userData?.enableLayouts && (
+                  <>
+                    <Divider dir="horizontal" />
+                    <Button
+                      minimal
+                      large
+                      className={css.largeButton}
+                      icon={<Icon icon="page-layout" size={25} />}
+                      //active={showPanel === VisiblePanel.ProjectsLibrary}
+                      onClick={() => {
+                        const event = new CustomEvent("OPEN_LAYOUTS");
+                        window.dispatchEvent(event);
+                      }}
+                    >
+                      {/* {missingExtensions?.length > 0 && (
+                    <Tag intent={"danger"} round className={css.buttonTag}>
+                      {missingExtensions.length}
+                    </Tag>
+                  )} */}
+                      Layouts
+                    </Button>
+                  </>
+                )}
+
                 <Divider dir="horizontal" />
 
                 <Button

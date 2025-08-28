@@ -6,6 +6,7 @@ export interface IAccount {
     displayName: string;
     profilePicture?: string;
     enableAIGenerator?: boolean;
+    enableLayouts?: boolean;
   };
 }
 

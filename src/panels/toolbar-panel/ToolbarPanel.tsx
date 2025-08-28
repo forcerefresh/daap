@@ -72,6 +72,7 @@ import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import LayoutToTemplatePanel from "../layout-to-template-panel/LayoutToTemplatePanel";
+import LayoutsPanel from "../layouts-panel/LayoutsPanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -88,6 +89,7 @@ enum VisiblePanel {
   // ProjectsLibrary = "projects-library",
   Projects = "projects",
   Templates = "templates",
+  Layouts = "layouts",
   Extensions = "extensions",
 
   Export = "export",
@@ -149,6 +151,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Templates);
     };
 
+    const openLayoutsCallback = () => {
+      setShowPanel(VisiblePanel.Layouts);
+    };
+
     const openExtensionsCallback = () => {
       setShowPanel(VisiblePanel.Extensions);
     };
@@ -196,6 +202,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
     window.addEventListener("OPEN_PROJECTS", openProjectsCallback);
     window.addEventListener("OPEN_TEMPLATES", openTemplatesCallback);
+    window.addEventListener("OPEN_LAYOUTS", openLayoutsCallback);
 
     window.addEventListener("OPEN_MEDIA_IMAGES_PANEL", openMediaImagesCallback);
     window.addEventListener("OPEN_SHAPES_PANEL", openShapesPanelCallback);
@@ -218,6 +225,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
       window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
       window.removeEventListener("OPEN_TEMPLATES", openTemplatesCallback);
+      window.removeEventListener("OPEN_LAYOUTS", openLayoutsCallback);
 
       window.removeEventListener(
         "OPEN_MEDIA_IMAGES_PANEL",
@@ -812,6 +820,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Templates && (
               <div ref={sharedRef}>
                 <MyTemplatesPanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Layouts && (
+              <div ref={sharedRef}>
+                <LayoutsPanel
                   onRequestClose={() => {
                     setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);

@@ -46,6 +46,7 @@ export type ITemplatesMergedProps = typeof mapDispatchToProps &
 const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
   const {
     onRequestClose,
+    _resetChangedState,
     _updateProjectMeta,
     _openProject,
     _doClearHistory,
@@ -218,6 +219,8 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       _updateEditor({ sliderChanged: true, isExistingProject: false });
 
       _doClearHistory();
+
+      _resetChangedState();
 
       preloadFonts(response?.fonts ?? []);
 
@@ -432,6 +435,8 @@ const mapStateToProps = (state: IStore) => ({
 });
 
 const mapDispatchToProps = {
+  _resetChangedState: () =>
+    updateEditor({ sliderChanged: false, isExistingProject: true }),
   _addNewObject: (
     layerId: string,
     type: string,

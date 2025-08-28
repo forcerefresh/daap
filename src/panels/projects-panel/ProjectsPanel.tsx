@@ -32,6 +32,8 @@ import { Pagination } from "../../types/pagination";
 import { RightPanelHeader } from "../common/panel-header/PanelHeader";
 import { IColors } from "../../store/reducers/i-colors";
 import axios from "axios";
+import { account } from "../../store/reducers/account";
+import { useLayoutHook } from "../layouts-panel/useLayoutHook";
 
 interface IProjectsPanelProps {
   onRequestClose: () => void;
@@ -44,6 +46,7 @@ export type IProjectsMergedProps = typeof mapDispatchToProps &
 const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const {
     meta,
+    account,
     onRequestClose,
     _updateProjectMeta,
     _openProject,
@@ -62,6 +65,8 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const [searchValue, setSearchValue] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleteLoading, setDeleteLoading] = useState(false);
+
+  const { getLayout, updateLayout, saveLayout } = useLayoutHook();
 
   const [latestPagination, setLatestPagination] = useState<Pagination | null>(
     null
@@ -163,8 +168,22 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
     setDeleteLoading(false);
   };
 
-  const onPublishProject = (id: string) => {
-    return axios
+  const onPublishProject = async (id: string) => {
+    const project = await getProject(id);
+
+    let layout: any;
+    try {
+      layout = await getLayout(id);
+    } catch (ex) {}
+
+    debugger;
+    if (layout) {
+      updateLayout(id, project);
+    } else {
+      saveLayout(project);
+    }
+
+    axios
       .post(`/api/v1/publish/${id}`, props)
       .then(() => {
         const updatedProjects = projects.map((project) => {
@@ -388,8 +407,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                     <div className={css.publishedMessage}>Published</div>
                   ) : null}
 
-                  {publishSettings?.enabled &&
-                  project.saveRevision !== project.publishRevision ? (
+                  {publishSettings?.enabled ? (
                     <Button
                       intent="none"
                       onClick={() => onPublishProject(project.id)}
@@ -397,6 +415,16 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                       {project.publishRevision === -1 ? "Publish" : "Republish"}
                     </Button>
                   ) : null}
+
+                  {/* {account?.userData?.enableLayouts &&
+                  project.saveRevision !== project.publishRevision ? (
+                    <Button
+                      intent="none"
+                      onClick={() => onPublishProject(project.id)}
+                    >
+                      {project.publishRevision === -1 ? "Publish" : "Republish"}
+                    </Button>
+                  ) : null} */}
 
                   {/*<Button intent="primary">Integration</Button>*/}
                   <Button
@@ -438,6 +466,7 @@ const mapStateToProps = (state: IStore) => ({
   meta: state.meta,
   activeLayerId: state.project.selection.activeLayerId,
   publishSettings: state.globals.publishSettings,
+  account: state.account,
 });
 
 const mapDispatchToProps = {

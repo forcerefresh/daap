@@ -9,14 +9,16 @@ import { IPreviewState } from "../../store/reducers/stage";
 
 interface IPagePreview {
   page: IPage;
+  width?: number;
 }
 
 type IPagePreviewMerged = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   IPagePreview;
 
-function PagePreview(props: IPagePreviewMerged) {
+export function PagePreviewInternal(props: IPagePreviewMerged) {
   const {
+    width = 140,
     page,
     pages,
     layers,
@@ -33,7 +35,7 @@ function PagePreview(props: IPagePreviewMerged) {
 
   const pageWH = Math.max(pageW, pageH);
 
-  const scale = 140 / pageWH;
+  const scale = width / pageWH;
 
   const exportData = generatePlayerData(
     { slides: pages, layers, objects },
@@ -154,4 +156,7 @@ const mapStateToProps = (state: IStore) => {
 
 const mapDispatchToProps = {};
 
-export default connect(mapStateToProps, mapDispatchToProps)(PagePreview);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(PagePreviewInternal);

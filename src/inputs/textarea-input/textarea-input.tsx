@@ -1,4 +1,4 @@
-import { FormGroup, TextArea } from "@blueprintjs/core";
+import { Button, FormGroup, TextArea } from "@blueprintjs/core";
 import { debounce, noop } from "lodash-es";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -44,7 +44,12 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
     }
   };
 
-  const inputLabel = createInputLabel(displayName, propertyName);
+  const inputLabel = (
+    <>
+      {createInputLabel(displayName, propertyName)}{" "}
+      <Button small minimal icon="duplicate" intent="none"></Button>
+    </>
+  );
 
   return (
     <FormGroup
@@ -54,7 +59,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
     >
       <TextArea
         id="textarea-input"
-        growVertically={true}
+        // growVertically={true}
         rows={rows}
         fill
         value={localValue}
