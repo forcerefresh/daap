@@ -420,7 +420,14 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                             existingObj,
                             TEXT,
 
-                            pick(existingObj, "left", "top", "width", "height"),
+                            pick(
+                              existingObj,
+                              "left",
+                              "top",
+                              "width",
+                              "height",
+                              "rotation"
+                            ),
 
                             {
                               ...obj.properties,
@@ -444,7 +451,8 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                                 "left",
                                 "top",
                                 "width",
-                                "height"
+                                "height",
+                                "rotation"
                               ),
 
                               {
@@ -495,7 +503,14 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                         existingObj,
                         IMAGE,
 
-                        pick(existingObj, "left", "top", "width", "height"),
+                        pick(
+                          existingObj,
+                          "left",
+                          "top",
+                          "width",
+                          "height",
+                          "rotation"
+                        ),
 
                         {
                           image: getImageProperties(mediaId!),
