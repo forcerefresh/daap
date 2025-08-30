@@ -84,7 +84,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   const { getLayouts, getLayout } = useLayoutHook();
 
   const { generateTemplate } = useTemplateGenerator(); // <<< here
-  const { generateImages } = useImagesGenerator(); // <<< here
+  const { generateImages, generateVectors } = useImagesGenerator(); // <<< here
 
   const [layoutOptions, setLayoutOptions] = useState<
     { label: string; value: string }[]
@@ -478,14 +478,22 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                   onClick={async () => {
                     setLoading(true);
 
-                    const iaImagesRequest: any[] = [];
+                    const iaImagesRequest: {
+                      objectId: string;
+                      prompt: string;
+                      type: "image";
+                    }[] = [];
                     try {
                       const obj = JSON.parse(iaResponse);
                       obj.objects.forEach((obj) => {
                         if (obj.type === "image" || obj.subType === "image") {
                           const objectId = obj.objectId;
                           const prompt = obj.aiPrompt;
-                          iaImagesRequest.push({ objectId, prompt });
+                          iaImagesRequest.push({
+                            objectId,
+                            prompt,
+                            type: "image",
+                          });
                         }
                       });
                     } catch (ex) {
@@ -522,6 +530,63 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                   }}
                 >
                   Generate images
+                </Button>
+                <Button
+                  onClick={async () => {
+                    setLoading(true);
+
+                    const iaVectorRequest: {
+                      objectId: string;
+                      prompt: string;
+                      type: "vector";
+                    }[] = [];
+                    try {
+                      const obj = JSON.parse(iaResponse);
+                      obj.objects.forEach((obj) => {
+                        if (obj.type === "vector" || obj.subType === "vector") {
+                          const objectId = obj.objectId;
+                          const prompt = obj.aiPrompt;
+                          iaVectorRequest.push({
+                            objectId,
+                            prompt,
+                            type: "vector",
+                          });
+                        }
+                      });
+                    } catch (ex) {
+                      debugger;
+                    }
+
+                    const response = await generateVectors(iaVectorRequest);
+
+                    response.data?.forEach(({ objectId, mediaId }) => {
+                      const existingObj =
+                        currentTemplate.project.objects.objectById[objectId!];
+
+                      replaceLayoutObject(
+                        currentTemplate.project,
+                        existingObj,
+                        IMAGE,
+
+                        pick(
+                          existingObj,
+                          "left",
+                          "top",
+                          "width",
+                          "height",
+                          "rotation"
+                        ),
+
+                        {
+                          image: getVectorProperties(mediaId!),
+                        }
+                      );
+                    });
+
+                    setCurrentTemplate(cloneDeep(currentTemplate));
+                  }}
+                >
+                  Generate vectors
                 </Button>
               </div>
             </div>
@@ -617,7 +682,7 @@ function replaceLayoutObject(
   project.objects.objectById[object.id] = object;
 }
 
-function getImageProperties(objectId: string, mediaId: string) {
+function getImageProperties(mediaId: string) {
   return {
     width: 1024,
     height: 1024,
@@ -628,45 +693,63 @@ function getImageProperties(objectId: string, mediaId: string) {
         sizeType: "thumbnail",
         width: 80,
         height: 80,
-        sourceFilename: objectId + "-thumbnail.webp",
+        sourceFilename: mediaId + "-thumbnail.webp",
       },
       {
         sizeType: "small",
         width: 150,
         height: 150,
-        sourceFilename: objectId + "-small.webp",
+        sourceFilename: mediaId + "-small.webp",
       },
       {
         sizeType: "medium",
         width: 300,
         height: 300,
-        sourceFilename: objectId + "-medium.webp",
+        sourceFilename: mediaId + "-medium.webp",
       },
       {
         sizeType: "large",
         width: 600,
         height: 600,
-        sourceFilename: objectId + "-large.webp",
+        sourceFilename: mediaId + "-large.webp",
       },
       {
         sizeType: "xlarge",
         width: 900,
         height: 900,
-        sourceFilename: objectId + "-xlarge.webp",
+        sourceFilename: mediaId + "-xlarge.webp",
       },
       {
         sizeType: "xxlarge",
         width: 1200,
         height: 1200,
-        sourceFilename: objectId + "-xxlarge.webp",
+        sourceFilename: mediaId + "-xxlarge.webp",
       },
       {
         sizeType: "original",
         width: 1024,
         height: 1024,
-        sourceFilename: objectId + ".webp",
+        sourceFilename: mediaId + ".webp",
       },
     ],
-    id: objectId,
+    id: mediaId,
+  };
+}
+
+function getVectorProperties(mediaId: string) {
+  return {
+    width: 1024,
+    height: 1024,
+    sourceType: "local",
+    sizeType: "original",
+    mediaSizes: [
+      {
+        sizeType: "original",
+        width: 1024,
+        height: 1024,
+        sourceFilename: mediaId + ".svg",
+      },
+    ],
+    id: mediaId,
   };
 }
