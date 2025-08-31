@@ -1,12 +1,23 @@
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import cx from "classnames";
-import { cloneDeep, last, noop, omit, round, uniq, pick } from "lodash-es";
+import {
+  cloneDeep,
+  last,
+  noop,
+  omit,
+  round,
+  uniq,
+  pick,
+  isEmpty,
+  isEqual,
+  forOwn,
+} from "lodash-es";
 import { connect } from "react-redux";
 import { Button, Classes, Dialog, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./LayoutToTemplatePanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import industries from "../../jsons/industries-with-sub-sub.json";
+// import industries from "../../jsons/industries-with-sub-sub.json";
 import documents from "../../panels/create-panel/document.json";
 
 import {
@@ -51,6 +62,11 @@ import { PagePreviewInternal } from "../pages-simplified/PagePreview";
 import { createObject } from "../../objects/create-object-factory";
 import { useImagesGenerator } from "./useImagesGenerator";
 import { IMAGE } from "../../objects/image/image";
+import { useIndustry } from "./useIndustry";
+import { getIndustriesOptionFromThree } from "./industry-utils";
+import { useColorSetsGenerator } from "./useColorSetsGenerator";
+import { ColorPaletteRow } from "../../inputs/color-input/color-palette-row";
+import { hexToRGB } from "../../utils/utils";
 
 export const THUMB_WIDTH = 200;
 
@@ -82,13 +98,31 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   } = props;
 
   const { getLayouts, getLayout } = useLayoutHook();
-
+  const { getIndustryTree } = useIndustry();
   const { generateTemplate } = useTemplateGenerator(); // <<< here
   const { generateImages, generateVectors } = useImagesGenerator(); // <<< here
+  const { generateColorSets } = useColorSetsGenerator();
 
   const [layoutOptions, setLayoutOptions] = useState<
     { label: string; value: string }[]
   >([]);
+
+  const [industriesOptions, setIndustriesOptions] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  const [selectedColorSetIdx, setSelectedColorSetIdx] = useState(-1);
+  const [selectedColorSet, setSelectedColorSet] = useState({});
+
+  useEffect(() => {
+    const load = async () => {
+      const industryThree = await getIndustryTree();
+      const options = getIndustriesOptionFromThree(industryThree.industries);
+      setIndustriesOptions(options);
+    };
+
+    load();
+  }, []);
 
   useEffect(() => {
     getLayouts(1, "", 10000).then((response) => {
@@ -106,54 +140,19 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   }, []);
 
   const [iaResponse, setIaResponse] = useState("");
+  const [iaColorSetResponse, setColorSetResponse] = useState("");
+  const [colorSets, setColorSets] = useState<{
+    colors?: Record<string, string>[];
+  }>({ colors: [] });
 
-  const industriesOptions = industries.industries.reduce<
-    {
-      label: string;
-      value: string;
-    }[]
-  >((acc, cur, idx) => {
-    acc.push({ label: idx + 1 + ". " + cur.name, value: cur.name });
-
-    return cur.subsectors.reduce((acc2, cur2, idx2) => {
-      acc2.push({
-        label:
-          "  " +
-          (idx + 1) +
-          "." +
-          (idx2 + 1) +
-          ". " +
-          // cur.name +
-          // " - " +
-          cur2.name,
-        value: cur.name + " - " + cur2.name,
-      });
-
-      return cur2.subsubsectors.reduce((acc3, cur3, idx3) => {
-        acc2.push({
-          label:
-            "    " +
-            (idx + 1) +
-            "." +
-            (idx2 + 1) +
-            "." +
-            (idx3 + 1) +
-            ". " +
-            //+ cur.name + " - " + cur2.name + " - "
-            cur3.name,
-          value: cur.name + " - " + cur2.name + " - " + cur3.name,
-        });
-        return acc3;
-      }, acc2);
-
-      // return acc2;
-    }, acc);
-  }, []);
-
-  industriesOptions.unshift({ label: "Select industry...", value: "" });
-
-  // -----
-
+  useEffect(() => {
+    try {
+      const parsed = JSON.parse(iaColorSetResponse);
+      setColorSets(parsed);
+    } catch (ex) {
+      console.log(ex);
+    }
+  }, [iaColorSetResponse]);
   const documentsOptions = documents.reduce<
     {
       label: string;
@@ -205,13 +204,14 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
     document?: string;
     layout?: string;
     prompt?: string;
+    promptForColorScheme?: string;
   }>({
     document: "Social Media - Instagram - Square Post",
     industry: "Banking & Finance - Retail Banking - Personal Banking",
     layout: "layout-1000",
   });
 
-  const generatePrompt = (formState: any) => {
+  const generatePromptForTemplate = (formState: any) => {
     const prompt =
       "Generate a complete, stylistically cohesive '" +
       formState.document +
@@ -223,16 +223,31 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
     return prompt;
   };
+
+  const generatePromptForColorSets = (formState: any) => {
+    const prompt =
+      "Generate 10 color schemes, that are stylistically cohesive for '" +
+      formState.document +
+      "'" +
+      " for " +
+      "'" +
+      formState.industry +
+      "' based on a provided layout JSON.";
+
+    return prompt;
+  };
+
   useEffect(() => {
     if (!formState.document || !formState.industry) {
       setFormState({ ...formState, prompt: "" });
       return;
     }
 
-    const prompt = generatePrompt(formState);
+    const prompt = generatePromptForTemplate(formState);
+    const promptForColorScheme = generatePromptForTemplate(formState);
 
     console.log(formState);
-    setFormState({ ...formState, prompt });
+    setFormState({ ...formState, prompt, promptForColorScheme });
   }, [formState.document, formState.industry]);
 
   const [layoutJsonRequest, setLayoutJsonRequest] = useState("");
@@ -360,7 +375,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                   intent="primary"
                   icon="floppy-disk"
                   onClick={async () => {
-                    const prompt = generatePrompt(formState);
+                    const prompt = generatePromptForTemplate(formState);
                     setLoading(true);
                     const response = await generateTemplate({
                       whatToCreate: prompt!,
@@ -401,10 +416,30 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                   intent="primary"
                   icon="floppy-disk"
                   onClick={() => {
-                    const newCurrentTemplate = cloneDeep(currentLayout);
+                    const newCurrentTemplate = cloneDeep(
+                      !isEmpty(currentTemplate)
+                        ? currentTemplate
+                        : currentLayout
+                    );
 
+                    let colors = JSON.parse(iaResponse).brandColors[0];
+
+                    if (selectedColorSet) {
+                      colors = selectedColorSet;
+                    }
+
+                    let aiResponseUpdated = iaResponse;
+                    forOwn(colors, (color, alias) => {
+                      console.log(`{COLOR_${alias.toUpperCase()}}`);
+                      aiResponseUpdated = aiResponseUpdated.replaceAll(
+                        `"{COLOR_${alias.toUpperCase()}}"`,
+                        JSON.stringify(hexToRGB(color))
+                      );
+                    });
+
+                    console.log(aiResponseUpdated);
                     try {
-                      const obj = JSON.parse(iaResponse);
+                      const obj = JSON.parse(aiResponseUpdated);
                       obj.objects.forEach((obj) => {
                         const objectId = obj.id;
                         //   const layoutObj = JSON.parse(formState.layout!)
@@ -469,7 +504,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                       //asd
                     }
 
-                    setCurrentTemplate(newCurrentTemplate);
+                    setCurrentTemplate(cloneDeep(newCurrentTemplate));
                   }}
                 >
                   {"Apply"}
@@ -622,7 +657,81 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
           ) : null}
         </section>
 
-        <section> {loading ? "Loading ..." : null}</section>
+        <section style={{ width: "500px" }}>
+          {loading ? "Loading ..." : null}
+          <div className={cx("input100percent-force", css.inputHolder)}>
+            {getTextArea(
+              "Prompt for ColorsSet base on Document and Industry",
+              formState.promptForColorScheme,
+              (promptForColorScheme) => {
+                setFormState({ ...formState, promptForColorScheme });
+              },
+              "",
+              { rows: 3 }
+            )}
+          </div>
+
+          <div className={css.actionRow}>
+            <div>
+              <Button
+                disabled={meta.inSaving}
+                intent="primary"
+                icon="floppy-disk"
+                onClick={async () => {
+                  const prompt = generatePromptForColorSets(formState);
+                  setLoading(true);
+                  const response = await generateColorSets({
+                    whatToCreate: prompt!,
+                    layout: layoutJsonRequest!,
+                  });
+
+                  setLoading(false);
+
+                  setColorSetResponse(
+                    JSON.stringify(response.output!, undefined, 2)
+                  );
+                }}
+              >
+                {"Generate"}
+              </Button>
+            </div>
+          </div>
+          <div className={cx("input100percent-force", css.inputHolder)}>
+            {getTextArea(
+              "AI Response",
+              iaColorSetResponse,
+              (resp: any) => {
+                setColorSetResponse(resp);
+              },
+              "",
+              {
+                disabledDebounce: true,
+                rows: 3,
+              }
+            )}
+          </div>
+          <div>
+            {!isEmpty(colorSets)
+              ? colorSets?.colors?.map((colorSet, idx) => (
+                  <ColorPaletteRow
+                    onClick={() => {
+                      setSelectedColorSetIdx(idx);
+                      setSelectedColorSet(colorSet);
+                    }}
+                    selected={isEqual(colorSet, selectedColorSet)}
+                    colors={[
+                      colorSet.primary,
+                      colorSet.secondary,
+                      colorSet.background,
+                      colorSet.text,
+                      colorSet.accent,
+                      colorSet.secondary,
+                    ]}
+                  />
+                ))
+              : null}
+          </div>
+        </section>
       </div>
     </div>
   );

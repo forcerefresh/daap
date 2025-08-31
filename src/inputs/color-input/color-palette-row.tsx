@@ -1,4 +1,6 @@
+import { noop } from "lodash-es";
 import { hexToRGB } from "../../utils/utils";
+import { ColorButtonWithTooltip } from "./color-button-with-tooltip";
 import css from "./color-input.module.scss";
 import BackgroundSVG from "./transparent-bg.svg?react";
 import cx from "classnames";
@@ -7,32 +9,31 @@ type RGBAType = { r: number; g: number; b: number; a: number };
 
 export interface ColorPaletteProps {
   colors: string[];
-  onSelect: (color: RGBAType) => void;
+  onColorClick?: (color: RGBAType) => void;
+  onClick?: () => void;
+  selected?: boolean;
 }
 
 export const ColorPaletteRow = (props: ColorPaletteProps) => {
-  const { colors, onSelect } = props;
+  const { colors, onColorClick, onClick, selected } = props;
 
-  const colorsRgb = colors.map(hexToRGB);
+  const colorsRgb = colors.map((c) => hexToRGB(c));
 
   return (
-    <div className={css.sectionColorRow}>
-      {colorsRgb.map((color, idx) => {
-        const colorStyle = {
-          backgroundColor: `rgb(${color.r}, ${color.g}, ${color.b})`,
-        };
+    <div
+      className={cx(css.sectionColorRow, {
+        [css.sectionColorRowSelected]: selected,
+      })}
+      onClick={onClick}
+    >
+      {colorsRgb.map((color, index) => {
+        if (!color) return null;
         return (
-          <div
-            id="color-input"
-            className={cx({
-              [css.swatch]: true,
-            })}
-            onClick={() => onSelect(color)}
-            tabIndex={1}
-          >
-            <BackgroundSVG style={{ position: "absolute" }} />
-            <div key={idx} className={css.color} style={colorStyle} />
-          </div>
+          <ColorButtonWithTooltip
+            color={color}
+            onClick={onColorClick ?? noop}
+            // onAddToBrand={() => {}}
+          />
         );
       })}
     </div>

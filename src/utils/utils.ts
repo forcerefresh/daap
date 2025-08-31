@@ -196,18 +196,38 @@ export function getBooleanValue(
 }
 
 export function hexToRGB(hex: string, a?: number): RGBColor | null {
-  try {
-    var r = parseInt(hex.slice(1, 3), 16),
-      g = parseInt(hex.slice(3, 5), 16),
-      b = parseInt(hex.slice(5, 7), 16);
-  } catch (ex) {
+  // Remove the # if present
+  let hexValue = hex.startsWith("#") ? hex.slice(1) : hex;
+
+  // Expand short hex format (e.g., #fff becomes #ffffff)
+  if (hexValue.length === 3) {
+    hexValue = hexValue
+      .split("")
+      .map((char) => char + char)
+      .join("");
+  }
+
+  // Validate hex length
+  if (hexValue.length !== 6) {
     return null;
   }
 
-  if (a) {
-    return { r, g, b, a };
-  } else {
-    return { r, g, b, a: 1 };
+  try {
+    const r = parseInt(hexValue.slice(0, 2), 16);
+    const g = parseInt(hexValue.slice(2, 4), 16);
+    const b = parseInt(hexValue.slice(4, 6), 16);
+
+    if (isNaN(r) || isNaN(g) || isNaN(b)) {
+      return null;
+    }
+
+    if (a !== undefined) {
+      return { r, g, b, a };
+    } else {
+      return { r, g, b, a: 1 };
+    }
+  } catch (ex) {
+    return null;
   }
 }
 

@@ -155,6 +155,10 @@
   flex-wrap: wrap;
 }
 
+.sectionColorRowSelected {
+  background-color: rgba(127, 127, 127, 0.5);
+}
+
 .sectionWrapperDefaultColor {
   display: flex;
   justify-content: space-between;
