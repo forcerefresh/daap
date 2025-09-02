@@ -27,6 +27,7 @@ import {
 } from "../../store/actions/actions";
 import { IntegrationContext } from "../../integration";
 import {
+  getCheckboxField,
   getSelectField,
   getTextArea,
   getTextField,
@@ -67,6 +68,7 @@ import { getIndustriesOptionFromThree } from "./industry-utils";
 import { useColorSetsGenerator } from "./useColorSetsGenerator";
 import { ColorPaletteRow } from "../../inputs/color-input/color-palette-row";
 import { hexToRGB } from "../../utils/utils";
+import { useLayoutGenerator } from "./useLayoutGenerator";
 
 export const THUMB_WIDTH = 200;
 
@@ -102,6 +104,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   const { generateTemplate } = useTemplateGenerator(); // <<< here
   const { generateImages, generateVectors } = useImagesGenerator(); // <<< here
   const { generateColorSets } = useColorSetsGenerator();
+  const { generateLayout } = useLayoutGenerator();
 
   const [layoutOptions, setLayoutOptions] = useState<
     { label: string; value: string }[]
@@ -113,6 +116,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
   const [selectedColorSetIdx, setSelectedColorSetIdx] = useState(-1);
   const [selectedColorSet, setSelectedColorSet] = useState({});
+  const [neutralColor, setNeutralColor] = useState(false);
 
   useEffect(() => {
     const load = async () => {
@@ -205,6 +209,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
     layout?: string;
     prompt?: string;
     promptForColorScheme?: string;
+    neutralColors?: boolean;
   }>({
     document: "Social Media - Instagram - Square Post",
     industry: "Banking & Finance - Retail Banking - Personal Banking",
@@ -253,6 +258,8 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   const [layoutJsonRequest, setLayoutJsonRequest] = useState("");
   const [currentLayout, setCurrentLayout] = useState<any>({});
   const [currentTemplate, setCurrentTemplate] = useState<any>({});
+
+  const [generatedLayout, setGeneratedLayout] = useState<any>({});
 
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -368,6 +375,17 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 }
               )}
             </div>
+
+            <div className={cx("input100percent-force", css.inputHolder)}>
+              {getCheckboxField(
+                "Use neutral colors",
+                formState.neutralColors,
+                (neutralColors) => {
+                  setFormState({ ...formState, neutralColors });
+                }
+              )}
+            </div>
+
             <div className={css.actionRow}>
               <div>
                 <Button
@@ -380,6 +398,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                     const response = await generateTemplate({
                       whatToCreate: prompt!,
                       layout: layoutJsonRequest!,
+                      neutralColors: formState.neutralColors ? "true" : "false",
                     });
 
                     setLoading(false);
@@ -424,13 +443,14 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
                     let colors = JSON.parse(iaResponse).brandColors[0];
 
-                    if (selectedColorSet) {
+                    if (!isEmpty(selectedColorSet)) {
                       colors = selectedColorSet;
                     }
 
                     let aiResponseUpdated = iaResponse;
                     forOwn(colors, (color, alias) => {
                       console.log(`{COLOR_${alias.toUpperCase()}}`);
+
                       aiResponseUpdated = aiResponseUpdated.replaceAll(
                         `"{COLOR_${alias.toUpperCase()}}"`,
                         JSON.stringify(hexToRGB(color))
@@ -630,9 +650,9 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
         <section style={{ width: "500px" }}>
           {currentTemplate.project ? (
-            <>
+            <div style={{ height: "360px" }}>
               <PagePreviewInternal
-                width={450}
+                width={350}
                 {...currentTemplate.project}
                 page={
                   currentTemplate.project!.pages.pageById[
@@ -653,8 +673,66 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                     .breakpointsConfiguration[0]
                 }
               />
-            </>
+            </div>
           ) : null}
+          <div>
+            <Button
+              onClick={async () => {
+                const response = await generateLayout({
+                  project: JSON.stringify(currentLayout.project, undefined, 2),
+                });
+
+                const newLayout = cloneDeep(currentLayout);
+                newLayout.project = response.output;
+
+                setGeneratedLayout(newLayout);
+              }}
+            >
+              Generate similar layout
+            </Button>
+          </div>
+          <div>
+            {getTextArea(
+              "Layout generated",
+              JSON.stringify(generatedLayout?.project, undefined, 2),
+              (resp: any) => {
+                setColorSetResponse(resp);
+              },
+              "",
+              {
+                disabledDebounce: true,
+                rows: 3,
+              }
+            )}
+          </div>
+          <div>
+            {generatedLayout.project ? (
+              <div style={{ height: "400px" }}>
+                <PagePreviewInternal
+                  width={350}
+                  {...generatedLayout.project}
+                  page={
+                    generatedLayout.project!.pages.pageById[
+                      generatedLayout.project!.pages.pages[0]
+                    ]
+                  }
+                  // layers,
+                  // objects,
+
+                  // breakpointConfig,
+                  // breakpoints,
+                  // settings,
+
+                  selectedDevice={"device-independent"}
+                  breakpoints={generatedLayout.project.settings.breakpoints}
+                  breakpointConfig={
+                    generatedLayout.project.settings.breakpoints
+                      .breakpointsConfiguration[0]
+                  }
+                />
+              </div>
+            ) : null}
+          </div>
         </section>
 
         <section style={{ width: "500px" }}>
