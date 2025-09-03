@@ -516,6 +516,29 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                                 fill: obj.properties.color,
                               }
                             );
+                          } else if (obj.subType === "gradient") {
+                            replaceLayoutObject(
+                              newCurrentTemplate.project,
+                              existingObj,
+                              RECTANGLE,
+                              pick(
+                                existingObj,
+                                "left",
+                                "top",
+                                "width",
+                                "height",
+                                "rotation"
+                              ),
+
+                              {
+                                strokeWidth: 0,
+                                strokeColor: undefined,
+                                fill: {
+                                  points: obj.properties.gradient.points,
+                                  angle: 0,
+                                },
+                              }
+                            );
                           }
                         }
                       });

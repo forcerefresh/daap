@@ -239,7 +239,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
                       height: size.height + "px",
                     }}
                   >
-                    {ratio?.vertical}:{ratio?.horizontal}
+                    {ratio?.horizontal}:{ratio?.vertical}
                   </div>
 
                   {/* <SVG src={deff.meta.icon || ""} /> */}
