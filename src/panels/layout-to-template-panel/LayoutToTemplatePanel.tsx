@@ -332,7 +332,10 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
       !isEmpty(currentTemplate) ? currentTemplate : currentLayout
     );
 
-    let colors = JSON.parse(iaResponse).brandColors;
+    // TODO brandColors?.[0]
+    let colors =
+      JSON.parse(iaResponse).brandColors?.[0] ??
+      JSON.parse(iaResponse).brandColors;
 
     if (!isEmpty(selectedColorSet)) {
       colors = selectedColorSet;
@@ -559,7 +562,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
             </div>
           </div>
 
-          {brandColors ? (
+          {brandColors && !isEmpty(brandColors) ? (
             <div>
               <ColorPaletteRow
                 small
