@@ -340,6 +340,11 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
     let aiResponseUpdated = iaResponse;
     forOwn(colors, (color, alias) => {
+      if (!color) {
+        console.log(color);
+        console.log(colors);
+        console.log(iaResponse);
+      }
       console.log(`{COLOR_${alias.toUpperCase()}}`);
 
       aiResponseUpdated = aiResponseUpdated.replaceAll(
