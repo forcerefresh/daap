@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import cx from "classnames";
 import {
   cloneDeep,
@@ -13,11 +19,10 @@ import {
   forOwn,
 } from "lodash-es";
 import { connect } from "react-redux";
-import { Button, Classes, Dialog, Spinner } from "@blueprintjs/core";
+import { Alert, Button, Classes, Dialog, Spinner } from "@blueprintjs/core";
 import { IStore } from "../../store/store";
 import css from "./LayoutToTemplatePanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-// import industries from "../../jsons/industries-with-sub-sub.json";
 import documents from "../../panels/create-panel/document.json";
 
 import {
@@ -116,7 +121,8 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
   const [selectedColorSetIdx, setSelectedColorSetIdx] = useState(-1);
   const [selectedColorSet, setSelectedColorSet] = useState({});
-  const [neutralColor, setNeutralColor] = useState(false);
+
+  const [brandColors, setBrandColors] = useState<any>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -135,10 +141,13 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
         value: item.id,
       }));
 
+      options.unshift({ label: "Select layout...", value: "" });
+
       setLayoutOptions(options);
       setFormState({
         ...formState,
-        layout: options.find((o) => o.label === "layout-1000").value,
+        layout:
+          localStorage.getItem("ai-generator-layout") ?? options[0]?.value, //.find((o) => o.label === "layout-1000").value,
       });
     });
   }, []);
@@ -211,9 +220,13 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
     promptForColorScheme?: string;
     neutralColors?: boolean;
   }>({
-    document: "Social Media - Instagram - Square Post",
-    industry: "Banking & Finance - Retail Banking - Personal Banking",
-    layout: "layout-1000",
+    document:
+      localStorage.getItem("ai-generator-document") ??
+      "Social Media - Instagram - Square Post",
+    industry:
+      localStorage.getItem("ai-generator-industry") ??
+      "Banking & Finance - Retail Banking - Personal Banking",
+    layout: localStorage.getItem("ai-generator-layout") ?? "layout-1000",
   });
 
   const generatePromptForTemplate = (formState: any) => {
@@ -261,7 +274,14 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
 
   const [generatedLayout, setGeneratedLayout] = useState<any>({});
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [generateTemplateLoading, setGenerateTemplateLoading] =
+    useState<boolean>(false);
+  const [generateColorsLoading, setGenerateColorsLoading] =
+    useState<boolean>(false);
+  const [generateImagesLoading, setGenerateImagesLoading] =
+    useState<boolean>(false);
+  const [generateVectorsLoading, setGenerateVectorsLoading] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (!formState.layout) return;
@@ -298,6 +318,112 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
     // return;
   }, [formState.layout]);
 
+  useEffect(() => {
+    if (
+      !isEmpty(selectedColorSet) ||
+      (iaResponse && JSON.parse(iaResponse)?.brandColors)
+    ) {
+      apply();
+    }
+  }, [selectedColorSet, iaResponse]);
+
+  const apply = useCallback(() => {
+    const newCurrentTemplate = cloneDeep(
+      !isEmpty(currentTemplate) ? currentTemplate : currentLayout
+    );
+
+    let colors = JSON.parse(iaResponse).brandColors;
+
+    if (!isEmpty(selectedColorSet)) {
+      colors = selectedColorSet;
+    }
+
+    let aiResponseUpdated = iaResponse;
+    forOwn(colors, (color, alias) => {
+      console.log(`{COLOR_${alias.toUpperCase()}}`);
+
+      aiResponseUpdated = aiResponseUpdated.replaceAll(
+        `"{COLOR_${alias.toUpperCase()}}"`,
+        JSON.stringify(hexToRGB(color))
+      );
+    });
+
+    console.log(aiResponseUpdated);
+    try {
+      const obj = JSON.parse(aiResponseUpdated);
+      obj.objects.forEach((obj) => {
+        const objectId = obj.id;
+        //   const layoutObj = JSON.parse(formState.layout!)
+        //  const objectId = layoutObj[idx].objectId
+        const existingObj =
+          newCurrentTemplate.project.objects.objectById[obj.objectId];
+
+        if (obj.type === "text") {
+          replaceLayoutObject(
+            newCurrentTemplate.project,
+            existingObj,
+            TEXT,
+
+            pick(existingObj, "left", "top", "width", "height", "rotation"),
+
+            {
+              ...obj.properties,
+              // font: previewFont!,
+              // autoHeight: true,
+              // initialAutoWidth: true,
+              // fontSize: previewSize.size.toString() + "px",
+              // type: previewSize.textType,
+              // text: "Sample text",
+              // ...replaceItem.values,
+            }
+          );
+        } else if (obj.type === "background") {
+          if (obj.subType === "solid") {
+            replaceLayoutObject(
+              newCurrentTemplate.project,
+              existingObj,
+              RECTANGLE,
+              pick(existingObj, "left", "top", "width", "height", "rotation"),
+
+              {
+                strokeWidth: 0,
+                strokeColor: undefined,
+                fill: obj.properties.color,
+              }
+            );
+          } else if (obj.subType === "gradient") {
+            replaceLayoutObject(
+              newCurrentTemplate.project,
+              existingObj,
+              RECTANGLE,
+              pick(existingObj, "left", "top", "width", "height", "rotation"),
+
+              {
+                strokeWidth: 0,
+                strokeColor: undefined,
+                fill: {
+                  points: obj.properties.gradient.points,
+                  angle: 0,
+                },
+              }
+            );
+          }
+        }
+      });
+    } catch (ex) {
+      debugger;
+      //asd
+    }
+
+    setCurrentTemplate(cloneDeep(newCurrentTemplate));
+  }, [
+    currentTemplate,
+    iaResponse,
+    selectedColorSet,
+    replaceLayoutObject,
+    setCurrentTemplate,
+  ]);
+
   return (
     <div className={cx(themeClass, css.layout2TemplatePanel)}>
       <RightPanelHeader>
@@ -312,7 +438,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
       </RightPanelHeader>
 
       <div style={{ display: "flex", gap: "30px" }}>
-        <section style={{ width: "500px" }}>
+        <section style={{ width: "300px" }}>
           <div className={css.layout2TemplateHolder}>
             <div className={cx("input100percent-force", css.inputHolder)}>
               {getSelectField(
@@ -321,6 +447,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 documentsOptions,
                 (document) => {
                   setFormState({ ...formState, document });
+                  localStorage.setItem("ai-generator-document", document!);
                 },
                 { placeholder: "Select industry" }
               )}
@@ -333,6 +460,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 industriesOptions,
                 (industry) => {
                   setFormState({ ...formState, industry });
+                  localStorage.setItem("ai-generator-industry", industry!);
                 },
                 { placeholder: "Select industry" }
               )}
@@ -345,225 +473,170 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 layoutOptions,
                 (layout) => {
                   setFormState({ ...formState, layout });
+                  localStorage.setItem("ai-generator-layout", layout!);
                 },
                 { placeholder: "Select layout" }
               )}
             </div>
 
-            <div className={cx("input100percent-force", css.inputHolder)}>
-              {getTextArea(
-                "Prompt base on Document and Industry",
-                formState.prompt,
-                (prompt) => {
-                  setFormState({ ...formState, prompt });
-                },
-                "",
-                { rows: 3 }
-              )}
-            </div>
-
-            <div className={cx("input100percent-force", css.inputHolder)}>
-              {getTextArea(
-                "Simplified Layout for AI",
-                layoutJsonRequest,
-                () => {},
-                "",
-                {
-                  disabledDebounce: true,
-                  rows: 3,
-                  readOnly: true,
-                }
-              )}
-            </div>
-
-            <div className={cx("input100percent-force", css.inputHolder)}>
+            <div className={cx("input60", css.inputHolder)}>
               {getCheckboxField(
                 "Use neutral colors",
                 formState.neutralColors,
                 (neutralColors) => {
                   setFormState({ ...formState, neutralColors });
-                }
-              )}
-            </div>
-
-            <div className={css.actionRow}>
-              <div>
-                <Button
-                  disabled={meta.inSaving}
-                  intent="primary"
-                  icon="floppy-disk"
-                  onClick={async () => {
-                    const prompt = generatePromptForTemplate(formState);
-                    setLoading(true);
-                    const response = await generateTemplate({
-                      whatToCreate: prompt!,
-                      layout: layoutJsonRequest!,
-                      neutralColors: formState.neutralColors ? "true" : "false",
-                    });
-
-                    setLoading(false);
-
-                    setIaResponse(
-                      JSON.stringify(response.output!, undefined, 2)
-                    );
-                  }}
-                >
-                  {"Generate"}
-                </Button>
-              </div>
-            </div>
-          </div>
-          <div className={css.layout2TemplateHolder}>
-            <div className={cx("input100percent-force", css.inputHolder)}>
-              {getTextArea(
-                "AI Response",
-                iaResponse,
-                (resp: any) => {
-                  setIaResponse(resp);
                 },
                 "",
-                {
-                  disabledDebounce: true,
-                  rows: 3,
-                }
+                { alignIndicator: "left" }
               )}
             </div>
+          </div>
+
+          <div className={css.actionRow}>
+            <div>
+              <Button
+                disabled={meta.inSaving}
+                intent="primary"
+                icon="floppy-disk"
+                onClick={async () => {
+                  const prompt = generatePromptForTemplate(formState);
+                  setGenerateTemplateLoading(true);
+
+                  generateTemplate({
+                    whatToCreate: prompt!,
+                    layout: layoutJsonRequest!,
+                    neutralColors: formState.neutralColors ? "true" : "false",
+                  })
+                    .then((response) => {
+                      setIaResponse(
+                        JSON.stringify(response.output!, undefined, 2)
+                      );
+                      debugger;
+                      setBrandColors(response.output!.brandColors);
+                    })
+                    .catch((ex) => {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: "Template generate has fail.",
+                      });
+                      console.error(ex);
+                    })
+                    .finally(() => {
+                      setGenerateTemplateLoading(false);
+                    });
+
+                  const promptColors = generatePromptForColorSets(formState);
+                  setGenerateColorsLoading(true);
+
+                  generateColorSets({
+                    whatToCreate: promptColors!,
+                    layout: layoutJsonRequest!,
+                  })
+                    .then((response) => {
+                      setColorSetResponse(
+                        JSON.stringify(response.output!, undefined, 2)
+                      );
+                    })
+                    .catch((ex) => {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: "Color set generate has fail.",
+                      });
+                      console.error(ex);
+                    })
+                    .finally(() => {
+                      setGenerateColorsLoading(false);
+                    });
+                }}
+              >
+                {"Generate"}
+              </Button>
+            </div>
+          </div>
+
+          {brandColors ? (
+            <div>
+              <ColorPaletteRow
+                small
+                onClick={() => {
+                  setSelectedColorSetIdx(-1);
+                  setSelectedColorSet({});
+
+                  // setTimeout(() => apply(), 500);
+                }}
+                selected={selectedColorSetIdx === -1}
+                colors={[
+                  brandColors.primary,
+                  brandColors.secondary,
+                  brandColors.background,
+                  brandColors.text,
+                  brandColors.accent,
+                  brandColors.attention,
+                ]}
+              />
+            </div>
+          ) : null}
+          <div>
+            {!isEmpty(colorSets)
+              ? colorSets?.colors?.map((colorSet, idx) => (
+                  <ColorPaletteRow
+                    small
+                    onClick={() => {
+                      if (selectedColorSetIdx === idx) {
+                        setSelectedColorSetIdx(-1);
+                        setSelectedColorSet({});
+                      } else {
+                        setSelectedColorSetIdx(idx);
+                        setSelectedColorSet(colorSet);
+                      }
+
+                      // setTimeout(() => apply(), 500);
+                    }}
+                    selected={isEqual(colorSet, selectedColorSet)}
+                    colors={[
+                      colorSet.primary,
+                      colorSet.secondary,
+                      colorSet.background,
+                      colorSet.text,
+                      colorSet.accent,
+                      colorSet.attention,
+                    ]}
+                  />
+                ))
+              : null}
+          </div>
+
+          <div className={css.layout2TemplateHolder}>
             <div className={css.actionRow}>
               <div>
                 <Button
                   disabled={meta.inSaving || !iaResponse}
                   intent="primary"
                   icon="floppy-disk"
-                  onClick={() => {
-                    const newCurrentTemplate = cloneDeep(
-                      !isEmpty(currentTemplate)
-                        ? currentTemplate
-                        : currentLayout
-                    );
-
-                    let colors = JSON.parse(iaResponse).brandColors[0];
-
-                    if (!isEmpty(selectedColorSet)) {
-                      colors = selectedColorSet;
-                    }
-
-                    let aiResponseUpdated = iaResponse;
-                    forOwn(colors, (color, alias) => {
-                      console.log(`{COLOR_${alias.toUpperCase()}}`);
-
-                      aiResponseUpdated = aiResponseUpdated.replaceAll(
-                        `"{COLOR_${alias.toUpperCase()}}"`,
-                        JSON.stringify(hexToRGB(color))
-                      );
-                    });
-
-                    console.log(aiResponseUpdated);
-                    try {
-                      const obj = JSON.parse(aiResponseUpdated);
-                      obj.objects.forEach((obj) => {
-                        const objectId = obj.id;
-                        //   const layoutObj = JSON.parse(formState.layout!)
-                        //  const objectId = layoutObj[idx].objectId
-                        const existingObj =
-                          newCurrentTemplate.project.objects.objectById[
-                            obj.objectId
-                          ];
-
-                        if (obj.type === "text") {
-                          replaceLayoutObject(
-                            newCurrentTemplate.project,
-                            existingObj,
-                            TEXT,
-
-                            pick(
-                              existingObj,
-                              "left",
-                              "top",
-                              "width",
-                              "height",
-                              "rotation"
-                            ),
-
-                            {
-                              ...obj.properties,
-                              // font: previewFont!,
-                              // autoHeight: true,
-                              // initialAutoWidth: true,
-                              // fontSize: previewSize.size.toString() + "px",
-                              // type: previewSize.textType,
-                              // text: "Sample text",
-                              // ...replaceItem.values,
-                            }
-                          );
-                        } else if (obj.type === "background") {
-                          if (obj.subType === "solid") {
-                            replaceLayoutObject(
-                              newCurrentTemplate.project,
-                              existingObj,
-                              RECTANGLE,
-                              pick(
-                                existingObj,
-                                "left",
-                                "top",
-                                "width",
-                                "height",
-                                "rotation"
-                              ),
-
-                              {
-                                strokeWidth: 0,
-                                strokeColor: undefined,
-                                fill: obj.properties.color,
-                              }
-                            );
-                          } else if (obj.subType === "gradient") {
-                            replaceLayoutObject(
-                              newCurrentTemplate.project,
-                              existingObj,
-                              RECTANGLE,
-                              pick(
-                                existingObj,
-                                "left",
-                                "top",
-                                "width",
-                                "height",
-                                "rotation"
-                              ),
-
-                              {
-                                strokeWidth: 0,
-                                strokeColor: undefined,
-                                fill: {
-                                  points: obj.properties.gradient.points,
-                                  angle: 0,
-                                },
-                              }
-                            );
-                          }
-                        }
-                      });
-                    } catch (ex) {
-                      debugger;
-                      //asd
-                    }
-
-                    setCurrentTemplate(cloneDeep(newCurrentTemplate));
-                  }}
+                  onClick={() => apply()}
                 >
                   {"Apply"}
                 </Button>
                 <Button
                   onClick={async () => {
-                    setLoading(true);
+                    setGenerateImagesLoading(true);
 
                     const iaImagesRequest: {
                       objectId: string;
                       prompt: string;
                       type: "image";
+                      width: string;
+                      height: string;
                     }[] = [];
                     try {
                       const obj = JSON.parse(iaResponse);
+
                       obj.objects.forEach((obj) => {
+                        const existingObj: IObject =
+                          currentLayout.project.objects.objectById[
+                            obj.objectId!
+                          ];
+
                         if (obj.type === "image" || obj.subType === "image") {
                           const objectId = obj.objectId;
                           const prompt = obj.aiPrompt;
@@ -571,6 +644,8 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                             objectId,
                             prompt,
                             type: "image",
+                            width: existingObj.width?.toString()!,
+                            height: existingObj.height?.toString()!,
                           });
                         }
                       });
@@ -611,7 +686,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 </Button>
                 <Button
                   onClick={async () => {
-                    setLoading(true);
+                    setGenerateVectorsLoading(true);
 
                     const iaVectorRequest: {
                       objectId: string;
@@ -759,7 +834,11 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
         </section>
 
         <section style={{ width: "500px" }}>
-          {loading ? "Loading ..." : null}
+          {generateImagesLoading ? <p>Generate images ...</p> : null}
+          {generateColorsLoading ? <p>Generate colors ...</p> : null}
+          {generateTemplateLoading ? <p>Generate template ...</p> : null}
+          {generateVectorsLoading ? <p>Generate vectors ...</p> : null}
+
           <div className={cx("input100percent-force", css.inputHolder)}>
             {getTextArea(
               "Prompt for ColorsSet base on Document and Industry",
@@ -772,7 +851,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
             )}
           </div>
 
-          <div className={css.actionRow}>
+          {/* <div className={css.actionRow}>
             <div>
               <Button
                 disabled={meta.inSaving}
@@ -796,7 +875,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                 {"Generate"}
               </Button>
             </div>
-          </div>
+          </div> */}
           <div className={cx("input100percent-force", css.inputHolder)}>
             {getTextArea(
               "AI Response",
@@ -811,26 +890,47 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
               }
             )}
           </div>
-          <div>
-            {!isEmpty(colorSets)
-              ? colorSets?.colors?.map((colorSet, idx) => (
-                  <ColorPaletteRow
-                    onClick={() => {
-                      setSelectedColorSetIdx(idx);
-                      setSelectedColorSet(colorSet);
-                    }}
-                    selected={isEqual(colorSet, selectedColorSet)}
-                    colors={[
-                      colorSet.primary,
-                      colorSet.secondary,
-                      colorSet.background,
-                      colorSet.text,
-                      colorSet.accent,
-                      colorSet.secondary,
-                    ]}
-                  />
-                ))
-              : null}
+        </section>
+        <section style={{ width: "300px" }}>
+          <div className={cx("input100percent-force", css.inputHolder)}>
+            {getTextArea(
+              "Prompt base on Document and Industry",
+              formState.prompt,
+              (prompt) => {
+                setFormState({ ...formState, prompt });
+              },
+              "",
+              { rows: 3 }
+            )}
+          </div>
+
+          <div className={cx("input100percent-force", css.inputHolder)}>
+            {getTextArea(
+              "Simplified Layout for AI",
+              layoutJsonRequest,
+              () => {},
+              "",
+              {
+                disabledDebounce: true,
+                rows: 3,
+                readOnly: true,
+              }
+            )}
+          </div>
+
+          <div className={cx("input100percent-force", css.inputHolder)}>
+            {getTextArea(
+              "AI Response",
+              iaResponse,
+              (resp: any) => {
+                setIaResponse(resp);
+              },
+              "",
+              {
+                disabledDebounce: true,
+                rows: 3,
+              }
+            )}
           </div>
         </section>
       </div>

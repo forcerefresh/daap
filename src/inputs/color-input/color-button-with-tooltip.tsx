@@ -18,12 +18,13 @@ export interface ColorButtonWithTooltipProps {
   className?: string;
   onDelete?: () => void;
   onAddToBrand?: () => void;
+  small?: boolean;
 }
 
 export const ColorButtonWithTooltip: React.FC<ColorButtonWithTooltipProps> = (
   props
 ) => {
-  const { color, onClick, className, onDelete, onAddToBrand } = props;
+  const { color, onClick, className, onDelete, onAddToBrand, small } = props;
 
   return (
     <Popover
@@ -64,7 +65,12 @@ export const ColorButtonWithTooltip: React.FC<ColorButtonWithTooltipProps> = (
         </div>
       }
     >
-      <ColorButton color={color} onClick={onClick} className={className} />
+      <ColorButton
+        color={color}
+        onClick={onClick}
+        className={className}
+        small={small}
+      />
     </Popover>
   );
 };

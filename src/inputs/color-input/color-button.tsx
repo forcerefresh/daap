@@ -10,10 +10,11 @@ export interface ColorButtonProps {
   color: RGBColor | undefined;
   onClick: () => void;
   className?: string;
+  small?: boolean;
 }
 
 export const ColorButton: React.FC<ColorButtonProps> = (props) => {
-  const { color, onClick, className } = props;
+  const { color, onClick, className, small } = props;
 
   let background = "transparent";
 
@@ -31,7 +32,11 @@ export const ColorButton: React.FC<ColorButtonProps> = (props) => {
   return (
     <div
       id="color-input"
-      className={cx(css.colorButton, className)}
+      className={cx(
+        css.colorButton,
+        { [css.colorButtonSmall]: small },
+        className
+      )}
       onClick={onClick}
       // tabIndex={1}
     >

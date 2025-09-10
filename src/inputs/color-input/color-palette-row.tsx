@@ -12,10 +12,11 @@ export interface ColorPaletteProps {
   onColorClick?: (color: RGBAType) => void;
   onClick?: () => void;
   selected?: boolean;
+  small?: boolean;
 }
 
 export const ColorPaletteRow = (props: ColorPaletteProps) => {
-  const { colors, onColorClick, onClick, selected } = props;
+  const { colors, onColorClick, onClick, selected, small } = props;
 
   const colorsRgb = colors.map((c) => hexToRGB(c));
 
@@ -30,6 +31,7 @@ export const ColorPaletteRow = (props: ColorPaletteProps) => {
         if (!color) return null;
         return (
           <ColorButtonWithTooltip
+            small
             color={color}
             onClick={onColorClick ?? noop}
             // onAddToBrand={() => {}}

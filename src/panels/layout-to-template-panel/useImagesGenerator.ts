@@ -4,6 +4,8 @@ export const useImagesGenerator = () => {
   const generateImages = (
     props: {
       type: "image";
+      width: string;
+      height: string;
       objectId: string;
       prompt: string;
     }[]
