@@ -519,8 +519,8 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                       setIaResponse(
                         JSON.stringify(response.output!, undefined, 2)
                       );
-                      debugger;
-                      setBrandColors(response.output!.brandColors);
+
+                      setBrandColors(response.output!.brandColors?.[0] ?? {});
                     })
                     .catch((ex) => {
                       AppToaster.show({
