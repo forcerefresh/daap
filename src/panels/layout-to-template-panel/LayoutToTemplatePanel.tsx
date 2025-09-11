@@ -520,7 +520,7 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                         JSON.stringify(response.output!, undefined, 2)
                       );
 
-                      setBrandColors(response.output!.brandColors?.[0] ?? {});
+                      setBrandColors(response.output?.brandColors?.[0] ?? {});
                     })
                     .catch((ex) => {
                       AppToaster.show({
