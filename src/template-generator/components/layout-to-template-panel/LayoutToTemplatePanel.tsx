@@ -1,4 +1,6 @@
 import React, {
+  PropsWithChildren,
+  ReactElement,
   useCallback,
   useContext,
   useEffect,
@@ -20,60 +22,51 @@ import {
 } from "lodash-es";
 import { connect } from "react-redux";
 import { Alert, Button, Classes, Dialog, Spinner } from "@blueprintjs/core";
-import { IStore } from "../../store/store";
+import { IStore } from "../../../store/store";
 import css from "./LayoutToTemplatePanel.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import documents from "../../panels/create-panel/document.json";
+import documents from "../../../panels/create-panel/document.json";
 
 import {
   updateProjectMeta,
   updateEditor,
   replaceObject,
-} from "../../store/actions/actions";
-import { IntegrationContext } from "../../integration";
+} from "../../../store/actions/actions";
 import {
   getCheckboxField,
   getSelectField,
   getTextArea,
   getTextField,
-} from "../../inputs/input-utils";
-import { IMeta } from "../../store/reducers/meta";
-import {
-  generatePlayerData,
-  getAllAssetsUrls,
-  getAllFonts,
-} from "../../export/export-html";
+} from "../../../inputs/input-utils";
+import { IMeta } from "../../../store/reducers/meta";
+
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
-import { IEditor } from "../../store/reducers/editor";
-import {
-  updateObjectWithNewIds,
-  updateProjectWithNewIds,
-} from "../../utils/project/project-utils";
+import { AppToaster } from "../../../utils/components/app-toaster/AppToaster";
+import { IEditor } from "../../../store/reducers/editor";
 import {
   PanelHeader,
   RightPanelHeader,
-} from "../common/panel-header/PanelHeader";
-import { resizeProportionally } from "../../utils/common-calculation/common-calculation";
-import { blobToBase64 } from "../../utils/file/file-utils";
+} from "../../../panels/common/panel-header/PanelHeader";
+
 import {
   collectLayoutObjectsPrompts,
   createLayout2TemplateAIPrompt,
 } from "./layout2template-utils";
-import { TEXT } from "../../objects/text/text";
-import { RECTANGLE } from "../../objects/rectangle/rectangle";
-import { useLayoutHook } from "../layouts-panel/useLayoutHook";
-import { useTemplateGenerator } from "./useTemplateGenerator";
-import { PagePreviewInternal } from "../pages-simplified/PagePreview";
-import { createObject } from "../../objects/create-object-factory";
-import { useImagesGenerator } from "./useImagesGenerator";
-import { IMAGE } from "../../objects/image/image";
-import { useIndustry } from "./useIndustry";
+import { TEXT } from "../../../objects/text/text";
+import { RECTANGLE } from "../../../objects/rectangle/rectangle";
+import { useTemplateGenerator } from "../../hooks/useTemplateGenerator";
+import { createObject } from "../../../objects/create-object-factory";
+import { useImagesGenerator } from "../../hooks/useImagesGenerator";
+import { IMAGE } from "../../../objects/image/image";
+import { useIndustry } from "../../hooks/useIndustry";
 import { getIndustriesOptionFromThree } from "./industry-utils";
 import { useColorSetsGenerator } from "./useColorSetsGenerator";
-import { ColorPaletteRow } from "../../inputs/color-input/color-palette-row";
-import { hexToRGB } from "../../utils/utils";
-import { useLayoutGenerator } from "./useLayoutGenerator";
+import { ColorPaletteRow } from "../../../inputs/color-input/color-palette-row";
+import { hexToRGB } from "../../../utils/utils";
+import { useLayoutGenerator } from "../../hooks/useLayoutGenerator";
+import { useLayoutHook } from "../../../panels/layouts-panel/useLayoutHook";
+import { PagePreviewInternal } from "../../../panels/pages-simplified/PagePreview";
+import { useVectorsGenerator } from "../../hooks/useVectorsGenerator";
 
 export const THUMB_WIDTH = 200;
 
@@ -85,7 +78,9 @@ export type ILayout2TemplateMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   ILayout2TemplateProps;
 
-const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
+const LayoutToTemplate = (
+  props: PropsWithChildren<ILayout2TemplateMergedProps>
+): ReactElement | null => {
   const {
     project,
     meta,
@@ -107,7 +102,9 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
   const { getLayouts, getLayout } = useLayoutHook();
   const { getIndustryTree } = useIndustry();
   const { generateTemplate } = useTemplateGenerator(); // <<< here
-  const { generateImages, generateVectors } = useImagesGenerator(); // <<< here
+  const { generateImages } = useImagesGenerator(); // <<< here
+  const { generateVectors } = useVectorsGenerator(); // <<< here
+
   const { generateColorSets } = useColorSetsGenerator();
   const { generateLayout } = useLayoutGenerator();
 
@@ -699,18 +696,27 @@ const LayoutToTemplate: React.FC<ILayout2TemplateMergedProps> = (props) => {
                     const iaVectorRequest: {
                       objectId: string;
                       prompt: string;
+                      width: string;
+                      height: string;
                       type: "vector";
                     }[] = [];
                     try {
                       const obj = JSON.parse(iaResponse);
                       obj.objects.forEach((obj) => {
                         if (obj.type === "vector" || obj.subType === "vector") {
+                          const existingObj =
+                            currentTemplate.project.objects.objectById[
+                              obj.objectId!
+                            ];
+
                           const objectId = obj.objectId;
                           const prompt = obj.aiPrompt;
                           iaVectorRequest.push({
                             objectId,
                             prompt,
                             type: "vector",
+                            width: existingObj.width?.toString()!,
+                            height: existingObj.height?.toString()!,
                           });
                         }
                       });
@@ -985,7 +991,7 @@ function replaceLayoutObject(
   values?: {
     [key: string]: any;
   }
-): IObject {
+) {
   let object: IObject = {
     ...createObject(type, objectProps, {
       ...values,

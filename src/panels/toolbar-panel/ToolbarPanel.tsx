@@ -71,8 +71,8 @@ import { LINE } from "../../objects/line/line";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
-import LayoutToTemplatePanel from "../layout-to-template-panel/LayoutToTemplatePanel";
 import LayoutsPanel from "../layouts-panel/LayoutsPanel";
+import LayoutToTemplatePanel from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanel";
 enum VisiblePanel {
   None = "none",
   Create = "create",

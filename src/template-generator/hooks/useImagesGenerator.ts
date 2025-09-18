@@ -16,21 +16,7 @@ export const useImagesGenerator = () => {
       .catch(console.log);
   };
 
-  const generateVectors = (
-    props: {
-      type: "vector";
-      objectId: string;
-      prompt: string;
-    }[]
-  ): Promise<{ data?: { objectId?: string; mediaId: string }[] }> => {
-    return axios
-      .post(`/api/v1/image-generator`, props)
-      .then((response) => response.data)
-      .catch(console.log);
-  };
-
   return {
     generateImages,
-    generateVectors,
   };
 };

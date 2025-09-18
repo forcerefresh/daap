@@ -168,6 +168,28 @@ export const IntegrationContext = React.createContext({
     },
   }),
 
+  useLibraryMediaHook: () => ({
+    fetchLibraryMedias: (props: {
+      type: MediaType;
+      from: number;
+      tags?: string[];
+      search?: string;
+      perPage?: number;
+    }): Promise<{
+      data: /*ImageData[] | VectorData[] |*/ any[];
+      pagination: Pagination;
+    }> => {
+      return Promise.resolve({ data: [], pagination: {} as Pagination });
+    },
+
+    deleteLibraryMedias: (
+      type: MediaType,
+      ids: string[]
+    ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
+      return Promise.resolve({ response: [] });
+    },
+  }),
+
   useAIHook: () => ({
     textQuery: (props: {
       query: string;
@@ -529,6 +551,10 @@ function useMyMediaHookFactory() {
       .useMyMediaHook;
   }
 }
+function useLibraryMediaHookFactory() {
+  return require("./integration/hooks/library-media-hook/saas-library-medias-hook")
+    .useLibraryMediaHook;
+}
 
 // function useMediaHookFactory() {
 //   if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
@@ -735,6 +761,7 @@ export const IntegrationContextProvider = (
         getMyUploadComponent: getMyUploadComponentFactory(),
         useAIHook: useAIHookFactory(),
         getFullscreenButtonComponent: getFullscreenButtonComponentFactory(),
+        useLibraryMediaHook: useLibraryMediaHookFactory(),
       }}
     >
       {props.children}

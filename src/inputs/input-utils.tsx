@@ -241,7 +241,11 @@ export function getTextArea<T>(
   value: T,
   onChange: (value: T) => void,
   helperText?: string,
-  inputProps: { disabledDebounce?: boolean } = {}
+  inputProps: {
+    disabledDebounce?: boolean;
+    rows?: number;
+    readOnly?: boolean;
+  } = {}
 ) {
   const objectDef = {
     displayName: label,

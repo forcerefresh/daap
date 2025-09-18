@@ -1,4 +1,4 @@
-import { Industry } from "./useIndustry";
+import { Industry } from "../../hooks/useIndustry";
 
 export function getIndustriesOptionFromThree(industries: Industry[]) {
   const industriesOptions = industries.reduce<

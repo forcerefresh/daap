@@ -71,8 +71,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       // Panels.MyAudios,
       Panels.MyVectors,
       Panels.MyFonts,
-      // Panels.Images,
-      // Panels.Vectors,
+      Panels.Images,
+      Panels.Vectors,
     ],
     themeClass,
     _addNewObject,
@@ -86,6 +86,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   const UploadComponent = globalContext?.getMyUploadComponent;
   const { getLicenseDetails } = globalContext.useLicenseHook();
   const { fetchMedias, deleteMedias } = globalContext.useMyMediaHook();
+  const { fetchLibraryMedias, deleteLibraryMedias } =
+    globalContext.useLibraryMediaHook();
 
   const [forceUpdate, setForceUpdate] = useState(0);
   const [apiKey, setApiKey] = useState<string | null>(null);
@@ -130,7 +132,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
           {includes(panelsToShow, Panels.MyImages) && (
             <Tab
               id="myImages"
-              title="Images"
+              title="My Images"
               panel={
                 <MediaManagementPanel
                   type="image"
@@ -186,32 +188,63 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     }
                   }}
                 />
-
-                // <ImagesLibraryPanel
-                //   hasApiKey={true}
-                //   type="image"
-                //   key={forceUpdate}
-                //   deleteImagesFunc={deleteMedias}
-                //   fetchImagesFunc={fetchMedias}
-                //   uploadComponent={
-                //     <UploadComponent
-                //       type="image"
-                //       onComplete={() => {
-                //         setForceUpdate(Math.random());
-                //       }}
-                //       onStop={() => {
-                //         setForceUpdate(Math.random());
-                //       }}
-                //     />
-                //   }
-                //   selectionType={selectionType}
-                //   onRequestClose={onRequestClose}
-                //   addObject={addObject}
-                //   onSelect={onSelect}
-                // />
               }
             />
           )}
+
+          {includes(panelsToShow, Panels.MyImages) && (
+            <Tab
+              id="images"
+              title="Library Images"
+              panel={
+                <MediaManagementPanel
+                  type="image"
+                  key={forceUpdate}
+                  deleteMediaFunc={deleteLibraryMedias}
+                  fetchMediasFunc={fetchLibraryMedias}
+                  uploadComponent={<></>}
+                  selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  isAddObject={addObject}
+                  onSelect={onSelect}
+                  onAdd={(mediaItem) => {
+                    if (
+                      replaceItem?.type === "image" ||
+                      replaceItem?.type === "background"
+                    ) {
+                      _replaceObject(
+                        replaceItem.objectId!,
+                        IMAGE,
+                        replaceItem.objectProps,
+                        {
+                          ...replaceItem.values,
+                          image: includeMediaRequiredProps(mediaItem.media),
+                        }
+                      );
+                      return;
+                    }
+
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
+
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        IMAGE,
+                        { ...sizeRect },
+                        {
+                          image: includeMediaRequiredProps(mediaItem.media),
+                        }
+                      );
+                    }
+                  }}
+                />
+              }
+            />
+          )}
+
           {includes(panelsToShow, Panels.MyVideos) && (
             <Tab
               id="myVideos"
@@ -313,7 +346,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
           {includes(panelsToShow, Panels.MyVectors) && (
             <Tab
               id="myVectors"
-              title="Vectors"
+              title="My Vectors"
               panel={
                 <MediaManagementPanel
                   type="vector"
@@ -353,36 +386,51 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                     }
                   }}
                 />
-
-                // <VectorsLibraryPanel
-                //   hasApiKey={true}
-                //   key={forceUpdate}
-                //   deleteImagesFunc={deleteMedias}
-                //   fetchMediasFunc={fetchMedias}
-                //   uploadComponent={
-                //     <UploadComponent
-                //       type="vector"
-                //       onComplete={() => {
-                //         setForceUpdate(Math.random());
-                //       }}
-                //       onStop={() => {
-                //         setForceUpdate(Math.random());
-                //       }}
-                //     />
-                //   }
-                //   onRequestClose={onRequestClose}
-                //   addObject={addObject}
-                //   onSelect={onSelect}
-                //   instaSelect={instaSelect}
-                //   showRemoveItem={showRemoveItem}
-                // />
               }
             />
           )}
+
+          {includes(panelsToShow, Panels.Vectors) && (
+            <Tab
+              id="vectors"
+              title="Vectors"
+              panel={
+                <MediaManagementPanel
+                  type="vector"
+                  key={forceUpdate}
+                  deleteMediaFunc={deleteLibraryMedias}
+                  fetchMediasFunc={fetchLibraryMedias}
+                  uploadComponent={<></>}
+                  selectionType={selectionType}
+                  onRequestClose={onRequestClose}
+                  isAddObject={addObject}
+                  onSelect={onSelect}
+                  onAdd={(mediaItem) => {
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
+
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        IMAGE,
+                        { ...sizeRect },
+                        {
+                          image: includeMediaRequiredProps(mediaItem.media),
+                        }
+                      );
+                    }
+                  }}
+                />
+              }
+            />
+          )}
+
           {includes(panelsToShow, Panels.MyFonts) && (
             <Tab
               id="myFonts"
-              title="Fonts"
+              title="My Fonts"
               panel={
                 <MediaManagementPanel
                   type="font"
@@ -436,7 +484,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
               }
             />
           )}
-          {includes(panelsToShow, Panels.Images) && (
+          {/* {includes(panelsToShow, Panels.Images) && (
             <Tab
               id="images"
               title="Image library"
@@ -471,8 +519,8 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                 />
               }
             />
-          )}
-          {includes(panelsToShow, Panels.Vectors) && (
+          )} */}
+          {/* {includes(panelsToShow, Panels.Vectors) && (
             <Tab
               id="Vector"
               title="Vector library"
@@ -507,7 +555,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                 />
               }
             />
-          )}
+          )} */}
 
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}
