@@ -191,6 +191,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         name: localMeta.name!,
         description: localMeta.description!,
         slides: project.pages.pages.length,
+        documentTypeId: project.settings.documentTypeId,
         project: updatedProject,
         preview: {
           width: thumbSize.width,
@@ -249,6 +250,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       createProject({
         name: localMeta.name!,
         description: localMeta.description!,
+        documentTypeId: project.settings.documentTypeId,
         slides: project.pages.pages.length,
         project: updatedProject,
         preview: {
@@ -337,6 +339,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       description: templateDialogData.description,
       project: updatedProject,
       slides: project.pages.pages.length,
+      documentTypeId: project.settings.documentTypeId,
       colors: project.colors.documentColorPalettes,
       preview: {
         width: thumbSize.width,

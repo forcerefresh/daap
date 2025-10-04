@@ -420,7 +420,7 @@ export const IntegrationContext = React.createContext({
       playerData: IPlayerData;
       assetsUrls: GetAssetsUrlFuncReturnType;
       fonts: GetFontsFuncReturnType;
-      extensions: IExtensionItem[];
+      documentTypeId?: string;
     }): Promise<{
       id: string;
       name: string;
@@ -430,6 +430,7 @@ export const IntegrationContext = React.createContext({
       modified: string;
       saveRevision: number;
       assetsUrls: { url: string; type: "url" | string }[];
+      documentTypeId?: string;
     }> =>
       Promise.resolve({
         id: "",

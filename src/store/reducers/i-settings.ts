@@ -5,6 +5,9 @@ import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-durat
 export type ITheme = "light" | "dark" | string;
 
 export interface ISettings {
+  // document
+  documentTypeId?: string;
+
   // slide config
   slideDuration: string;
   exitSlideDuration: string;

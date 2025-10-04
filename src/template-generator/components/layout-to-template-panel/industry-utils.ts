@@ -7,7 +7,7 @@ export function getIndustriesOptionFromThree(industries: Industry[]) {
       value: string;
     }[]
   >((acc, cur, idx) => {
-    acc.push({ label: idx + 1 + ". " + cur.name, value: cur.name });
+    acc.push({ label: idx + 1 + ". " + cur.name, value: cur.id });
 
     return cur.children.reduce((acc2, cur2, idx2) => {
       acc2.push({
@@ -20,7 +20,7 @@ export function getIndustriesOptionFromThree(industries: Industry[]) {
           // cur.name +
           // " - " +
           cur2.name,
-        value: cur.name + " - " + cur2.name,
+        value: cur2.id,
       });
 
       return cur2.children.reduce((acc3, cur3, idx3) => {
@@ -35,7 +35,7 @@ export function getIndustriesOptionFromThree(industries: Industry[]) {
             ". " +
             //+ cur.name + " - " + cur2.name + " - "
             cur3.name,
-          value: cur.name + " - " + cur2.name + " - " + cur3.name,
+          value: cur3.id,
         });
         return acc3;
       }, acc2);

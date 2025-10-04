@@ -176,7 +176,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       layout = await getLayout(id);
     } catch (ex) {}
 
-    debugger;
+    // debugger;
     if (layout) {
       updateLayout(id, project);
     } else {

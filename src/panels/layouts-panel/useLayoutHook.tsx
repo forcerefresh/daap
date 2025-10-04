@@ -33,6 +33,7 @@ export const useLayoutHook = () => {
     id,
     name,
     description,
+    documentTypeId,
     slides,
     project,
     preview,
@@ -44,6 +45,7 @@ export const useLayoutHook = () => {
     id: string;
     name: string;
     description?: string;
+    documentTypeId?: string;
     slides?: number;
     created?: string;
     modified?: string;
@@ -62,6 +64,7 @@ export const useLayoutHook = () => {
     id: string;
     name: string;
     description: string;
+    documentTypeId?: string;
     slides: number;
     created: string;
     modified: string;
@@ -71,6 +74,7 @@ export const useLayoutHook = () => {
       id,
       name,
       description,
+      documentTypeId,
       slides,
       project,
       preview,
@@ -90,6 +94,7 @@ export const useLayoutHook = () => {
     {
       name,
       description,
+      documentTypeId,
       slides,
       project,
       preview,
@@ -100,6 +105,7 @@ export const useLayoutHook = () => {
     }: {
       name: string;
       description?: string;
+      documentTypeId?: string;
       slides?: number;
       created?: string;
       modified?: string;
@@ -119,6 +125,7 @@ export const useLayoutHook = () => {
     id: string;
     name: string;
     description: string;
+    documentTypeId?: string;
     slides: number;
     created: string;
     modified: string;
@@ -127,6 +134,7 @@ export const useLayoutHook = () => {
     const json = {
       name,
       description,
+      documentTypeId,
       slides,
       project,
       preview,

@@ -1,17 +1,12 @@
 import axios from "axios";
-
-export interface Industry {
-  id: string;
-  parentId: string;
-  level: string;
-  name: string;
-  children: Industry[];
-}
+import { IndustryWithChildren } from "../types/industry";
 
 export const useIndustry = () => {
-  const getIndustryTree = (): Promise<{ industries: Industry[] }> => {
+  const getIndustryTree = (): Promise<{
+    industries: IndustryWithChildren[];
+  }> => {
     return axios
-      .get(`/api/v1/industry-tree`)
+      .get(`/api/v1/generator/industry-tree`)
       .then((response) => response.data)
       .catch(console.log);
   };

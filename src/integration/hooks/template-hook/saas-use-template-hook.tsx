@@ -34,6 +34,7 @@ export const useTemplateHook = () => {
   const saveTemplate = async ({
     name,
     description,
+    documentTypeId,
     slides,
     project,
     preview,
@@ -44,6 +45,7 @@ export const useTemplateHook = () => {
   }: {
     name: string;
     description?: string;
+    documentTypeId?: string;
     slides?: number;
     created?: string;
     modified?: string;
@@ -62,6 +64,7 @@ export const useTemplateHook = () => {
     id: string;
     name: string;
     description: string;
+    documentTypeId?: string;
     slides: number;
     created: string;
     modified: string;
@@ -70,6 +73,7 @@ export const useTemplateHook = () => {
     const json = {
       name,
       description,
+      documentTypeId,
       slides,
       project,
       preview,

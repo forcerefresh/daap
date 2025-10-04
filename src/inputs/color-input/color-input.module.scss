@@ -151,11 +151,17 @@
 
 .sectionColorRow {
   display: flex;
+  flex-wrap: nowrap;
   gap: 5px;
-  flex-wrap: wrap;
+  // padding-top: 2px;
+  // padding-left: 5px;
+  // padding-right: 5px;
+  border: 1px solid transparent;
+  padding: 4px 4px 0px 4px;
 }
 
 .sectionColorRowSelected {
+  border: 1px solid gray;
   background-color: rgba(127, 127, 127, 0.5);
 }
 

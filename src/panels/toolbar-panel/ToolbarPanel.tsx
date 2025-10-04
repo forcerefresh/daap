@@ -73,6 +73,8 @@ import FontPairingPanel from "../font-pairing-panel/FontPairingPanel";
 import ExtensionsPanel from "../extensions-panel/ExtensionsPanel";
 import LayoutsPanel from "../layouts-panel/LayoutsPanel";
 import LayoutToTemplatePanel from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanel";
+import LayoutToTemplatePanelOld from "../../template-generator/components/layout-to-template-panel/LayoutToTemplatePanelOld";
+
 enum VisiblePanel {
   None = "none",
   Create = "create",
@@ -84,6 +86,7 @@ enum VisiblePanel {
   FontPreview = "font-preview",
   FontPairing = "font-pairing",
   Layout2Template = "layout-to-template",
+  Layout2TemplateOld = "layout-to-template-old",
 
   MediaLibrary = "media-library",
   // ProjectsLibrary = "projects-library",
@@ -163,6 +166,10 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       setShowPanel(VisiblePanel.Layout2Template);
     };
 
+    const openLayoutToTemplateOldCallback = () => {
+      setShowPanel(VisiblePanel.Layout2TemplateOld);
+    };
+
     const openMediaFontsCallback = () => {
       setDefaultSettingsMediaLibraryTabId("myFonts");
       // setTimeout(() => {
@@ -221,6 +228,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       openLayoutToTemplateCallback
     );
 
+    window.addEventListener(
+      "OPEN_LAYOUT2TEMPLATE_OLD",
+      openLayoutToTemplateOldCallback
+    );
+
     return () => {
       window.removeEventListener("OPEN_ACCOUNT_SETTINGS", openAccountCallback);
       window.removeEventListener("OPEN_PROJECTS", openProjectsCallback);
@@ -250,6 +262,11 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
       window.removeEventListener(
         "OPEN_LAYOUT2TEMPLATE",
         openLayoutToTemplateCallback
+      );
+
+      window.removeEventListener(
+        "OPEN_LAYOUT2TEMPLATE_OLD",
+        openLayoutToTemplateOldCallback
       );
     };
   }, []);
@@ -343,6 +360,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     "confirm-button-dialog",
     "bp5-dialog",
     "bp5-popover",
+    "image-review-panel",
   ]);
 
   useEffect(() => {
@@ -859,6 +877,19 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             {showPanel === VisiblePanel.Layout2Template && (
               <div ref={sharedRef}>
                 <LayoutToTemplatePanel
+                  onRequestClose={() => {
+                    setReplaceItem(undefined);
+                    setShowPanel(VisiblePanel.None);
+                  }}
+                />
+              </div>
+            )}
+          </Portal>
+
+          <Portal>
+            {showPanel === VisiblePanel.Layout2TemplateOld && (
+              <div ref={sharedRef}>
+                <LayoutToTemplatePanelOld
                   onRequestClose={() => {
                     setReplaceItem(undefined);
                     setShowPanel(VisiblePanel.None);

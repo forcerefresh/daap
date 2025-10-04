@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -35,6 +35,8 @@ import {
 } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 import { cloneDeep } from "lodash-es";
+import { useDocumentsType } from "../../template-generator/hooks/useDocumentType";
+import { getDocumentsOptionFromThree } from "../../template-generator/components/layout-to-template-panel/documents-type-utils";
 
 enum ProjectPanelSections {
   Project = "Project",
@@ -79,6 +81,22 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
       [section]: !visibleSectionIds[section],
     });
   };
+
+  const [documentsOptions, setDocumentsOptions] = useState<
+    { label: string; value: string }[]
+  >([]);
+
+  const { getDocumentTypeTree } = useDocumentsType();
+  useEffect(() => {
+    const load = async () => {
+      const documentsThree = await getDocumentTypeTree();
+      console.log(documentsThree);
+      const options = getDocumentsOptionFromThree(documentsThree.documents);
+      setDocumentsOptions(options);
+    };
+
+    load();
+  }, []);
 
   let pixelMultiplier = 1;
   breakpointConfiguration.breakpointsConfiguration.forEach((item) => {
@@ -154,6 +172,20 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
         </div>
         {visibleSectionIds[ProjectPanelSections.Project] && (
           <div className={settingsCss.panel}>
+            <FormGroup>
+              <div className="input60">
+                {getSelectField(
+                  "Document type",
+                  settings.documentTypeId,
+                  documentsOptions,
+                  (documentTypeId: any) => {
+                    _updateProjectSettings({ documentTypeId });
+                  },
+                  ""
+                )}
+              </div>
+            </FormGroup>
+
             <FormGroup>
               <div className="input60">
                 {getColorField(
