@@ -25,6 +25,7 @@ export const useAiPrompt = () => {
     simplifiedLayout: string;
     neutralColors: string; // "true" : "false",
     uncrowdedImages: string; // "true" : "false",
+    noAnyWritingsInImages: string; // "true" : "false",
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator-prompt`, props)
@@ -56,6 +57,9 @@ export const useAiPrompt = () => {
     imagePrompt: string;
     vectorPrompt: string;
     metadata: Record<string, any>;
+    neutralColors: string; // "true" : "false",
+    uncrowdedImages: string; // "true" : "false",
+    noAnyWritingsInImages: string; // "true" : "false",
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator-prompt`, props)

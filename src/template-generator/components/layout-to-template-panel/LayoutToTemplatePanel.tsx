@@ -156,6 +156,7 @@ const LayoutToTemplate = (
     promptForColorScheme?: string;
     neutralColors?: boolean;
     uncrowdedImages?: boolean;
+    noAnyWritingsInImages?: boolean;
   }>({
     documentTypeId:
       localStorage.getItem("ai-generator-document") ??
@@ -366,6 +367,11 @@ const LayoutToTemplate = (
             industryId: industry.id,
             layoutId: layout.id,
             simplifiedLayout: aiPrompt.simplifiedLayout,
+            neutralColors: aiPrompt.neutralColors ? "true" : "false",
+            noAnyWritingsInImages: aiPrompt.noAnyWritingsInImages
+              ? "true"
+              : "false",
+            uncrowdedImages: aiPrompt.uncrowdedImages ? "true" : "false",
             imagePrompt: iPrompt.prompt,
             vectorPrompt: iPrompt.prompt,
             metadata: {
@@ -456,6 +462,17 @@ const LayoutToTemplate = (
                 { alignIndicator: "left" }
               )}
             </div>
+            <div className={cx("input60", css.inputHolder)}>
+              {getCheckboxField(
+                "No writings (text, numbers, etc.)",
+                formState.noAnyWritingsInImages,
+                (noAnyWritingsInImages) => {
+                  setFormState({ ...formState, noAnyWritingsInImages });
+                },
+                "",
+                { alignIndicator: "left" }
+              )}
+            </div>
           </div>
 
           <div>
@@ -502,6 +519,7 @@ const LayoutToTemplate = (
                     layoutId,
                     neutralColors,
                     uncrowdedImages,
+                    noAnyWritingsInImages,
                   } = formState;
                   if (documentTypeId && industryId && layoutId) {
                     addTemplatePrompt({
@@ -511,6 +529,9 @@ const LayoutToTemplate = (
                       layoutId: layoutId,
                       neutralColors: neutralColors ? "true" : "false",
                       uncrowdedImages: uncrowdedImages ? "true" : "false",
+                      noAnyWritingsInImages: noAnyWritingsInImages
+                        ? "true"
+                        : "false",
                       simplifiedLayout:
                         layoutDataById[formState?.layoutId!].simplifiedLayout,
                     })

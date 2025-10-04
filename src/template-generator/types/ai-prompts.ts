@@ -54,4 +54,6 @@ export interface AiPrompt {
   childPrompts: AiPrompt[];
   simplifiedLayout: string;
   metadata: Record<string, any>;
+  noAnyWritingsInImages: boolean;
+  uncrowdedImages: boolean;
 }

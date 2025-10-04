@@ -273,7 +273,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 style={{ marginRight: 8 }}
               />
               <strong>{prompt.promptKind}:</strong>{" "}
-              {prompt.layout?.name || "Unnamed Layout"}{" "}
+              {prompt.layout?.name || "Unnamed Layout"} {prompt.id}
               {/* <H5 style={{ margin: 0 }}>Prompt: {prompt.id}</H5> */}
             </H5>
           </div>
@@ -309,6 +309,28 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   intent={prompt.neutralColors ? Intent.PRIMARY : Intent.NONE}
                 >
                   {prompt.neutralColors ? "Yes" : "No"}
+                </Tag>
+              </FormGroup>
+
+              <FormGroup label="Uncrowded" style={{ margin: 0 }}>
+                <Tag
+                  large
+                  minimal
+                  intent={prompt.uncrowdedImages ? Intent.PRIMARY : Intent.NONE}
+                >
+                  {prompt.uncrowdedImages ? "Yes" : "No"}
+                </Tag>
+              </FormGroup>
+
+              <FormGroup label="No writings" style={{ margin: 0 }}>
+                <Tag
+                  large
+                  minimal
+                  intent={
+                    prompt.noAnyWritingsInImages ? Intent.PRIMARY : Intent.NONE
+                  }
+                >
+                  {prompt.noAnyWritingsInImages ? "Yes" : "No"}
                 </Tag>
               </FormGroup>
             </ControlGroup>
