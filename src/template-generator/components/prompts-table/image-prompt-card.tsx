@@ -1,19 +1,28 @@
 import { Button, Checkbox, Classes, Dialog, Overlay } from "@blueprintjs/core";
-import { AiPrompt, AiPromptStatus } from "../../types/ai-prompts";
+import {
+  AiProcessingStatus,
+  AiPrompt,
+  AiPromptStatus,
+} from "../../types/ai-prompts";
 import { useEffect, useState } from "react";
 import { isEqual } from "lodash-es";
 
 export const ImagePromptListView = ({
   prompts,
   title,
-  approvedImages,
-  setImageStatus,
+  // approvedImages,
+  allowInstantReview,
+  setImageProcessingStatus,
 }: // onApply,
 {
   title: string;
   prompts: AiPrompt[];
-  approvedImages: { [promptId: string]: boolean };
-  setImageStatus: (promptId: string, status: boolean | undefined) => void;
+  allowInstantReview?: boolean;
+  // approvedImages: { [promptId: string]: boolean };
+  setImageProcessingStatus: (
+    promptId: string,
+    status: AiProcessingStatus
+  ) => void;
   // onApply: () => void;
 }) => {
   useEffect(() => {
@@ -41,9 +50,21 @@ export const ImagePromptListView = ({
             <ImageWithReview
               promptId={prompt.id}
               key={prompt.id}
+              allowInstantReview={allowInstantReview}
               src={"/api/v1/generator/image-review/image/" + prompt.id}
-              setImageStatus={(status) => setImageStatus(prompt.id, status)}
-              imageStatus={approvedImages[prompt.id]}
+              setImageStatus={(status) => {
+                setImageProcessingStatus(
+                  prompt.id,
+                  status
+                    ? AiProcessingStatus.APPROVED
+                    : AiProcessingStatus.REJECTED
+                );
+              }}
+              imageStatus={
+                prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED
+                  ? undefined
+                  : prompt.processingStatus === AiProcessingStatus.APPROVED
+              }
             />
           );
         })}
@@ -57,11 +78,13 @@ function ImageWithReview({
   promptId,
   imageStatus,
   setImageStatus,
+  allowInstantReview,
 }: {
   src: string;
   promptId?: string;
   imageStatus: boolean | undefined;
   setImageStatus: (status: boolean | undefined) => void;
+  allowInstantReview?: boolean;
 }) {
   const [enabled, setEnabled] = useState(false);
 
@@ -71,19 +94,20 @@ function ImageWithReview({
       : imageStatus === true
       ? "green"
       : "red";
+
+  const disabled = !enabled && imageStatus === undefined && !allowInstantReview;
+
   return (
     <div style={{ display: "flex", padding: "5px" }}>
       <div>
         <Checkbox
           style={{ borderLeft: "10px solid green" }}
-          disabled={!enabled}
+          disabled={disabled}
           large
           checked={imageStatus === true}
           onChange={(e) => {
             if (e.target.checked) {
               setImageStatus(true);
-            } else {
-              setImageStatus(undefined);
             }
           }}
 
@@ -102,15 +126,13 @@ function ImageWithReview({
           // }}
         />
         <Checkbox
-          disabled={!enabled}
+          disabled={disabled}
           large
           style={{ borderLeft: "10px solid red" }}
           checked={imageStatus === false}
           onChange={(e) => {
             if (e.target.checked) {
               setImageStatus(false);
-            } else {
-              setImageStatus(undefined);
             }
           }}
 
@@ -130,8 +152,8 @@ function ImageWithReview({
         />
       </div>
       <div>
-        {promptId}
-
+        {/* {promptId} */}
+        {disabled && <div>Open to enable review</div>}
         <a href={src} target="_blank">
           <img
             onClick={() => {

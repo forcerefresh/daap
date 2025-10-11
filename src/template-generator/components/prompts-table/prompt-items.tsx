@@ -1,5 +1,5 @@
 import { AiPrompt } from "../../types/ai-prompts";
-import PromptCard from "./prompt-card";
+import PromptCard, { PromptCardProps } from "./prompt-card";
 
 export const PromptItems = ({
   aiPrompts,
@@ -7,12 +7,14 @@ export const PromptItems = ({
   onGenerateColors,
   onGenerateImages,
   onGenerateVectors,
+  updatePrompt,
 }: {
   aiPrompts: AiPrompt[];
   onGenerateAll: (id: string) => void;
   onGenerateColors?: (id: string) => void;
   onGenerateImages?: (id: string) => void;
   onGenerateVectors?: (id: string) => void;
+  updatePrompt: PromptCardProps["updatePrompt"];
 }) => {
   return (
     <div
@@ -33,6 +35,7 @@ export const PromptItems = ({
           onGenerateColors={onGenerateColors}
           onGenerateImages={onGenerateImages}
           onGenerateVectors={onGenerateVectors}
+          updatePrompt={updatePrompt}
         />
       ))}
     </div>

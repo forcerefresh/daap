@@ -15,6 +15,8 @@ export function updateTemplate(
   imageMeta?: { mediaId: string; objectId: string }[],
   vectorMeta?: { mediaId: string; objectId: string }[]
 ) {
+  if (!iaResponseJson) return;
+
   const newTemplate = cloneDeep(layout);
 
   // TODO brandColors?.[0]
@@ -30,6 +32,7 @@ export function updateTemplate(
       console.log(color);
       console.log(colors);
       console.log(iaResponseJson);
+      console.log("ERROR A7");
       debugger;
     }
     console.log(`{COLOR_${alias.toUpperCase()}}`);
@@ -135,8 +138,8 @@ export function updateTemplate(
       );
     });
   } catch (ex) {
-    debugger;
-    //asd
+    console.log("ERROR A8");
+    debugger; //asd
   }
 
   return newTemplate;

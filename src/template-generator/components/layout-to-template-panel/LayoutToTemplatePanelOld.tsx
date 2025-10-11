@@ -440,8 +440,8 @@ const LayoutToTemplateOld = (
         }
       });
     } catch (ex) {
+      console.log("ERROR A2");
       debugger;
-      //asd
     }
 
     setCurrentTemplate(cloneDeep(newCurrentTemplate));
@@ -681,6 +681,7 @@ const LayoutToTemplateOld = (
                         }
                       });
                     } catch (ex) {
+                      console.log("ERROR A3");
                       debugger;
                     }
 
@@ -747,6 +748,7 @@ const LayoutToTemplateOld = (
                         }
                       });
                     } catch (ex) {
+                      console.log("ERROR A3");
                       debugger;
                     }
 

@@ -1,21 +1,36 @@
 import axios from "axios";
-import { AiPrompt, AiPromptKind } from "../types/ai-prompts";
+import {
+  AiProcessingStatus,
+  AiPrompt,
+  AiPromptKind,
+} from "../types/ai-prompts";
 import { useCallback } from "react";
 
 export const useAiPrompt = () => {
   const getTemplateGeneratorPrompts = useCallback(
     (
-      props: {} = {}
+      props: { processingStatus?: AiProcessingStatus } = {}
     ): Promise<{
       prompts: AiPrompt[];
     }> => {
       return axios
-        .get(`/api/v1/generator/template-generator-prompt`)
+        .get(`/api/v1/generator/template-generator-prompt`, {
+          params: {
+            ...props,
+          },
+        })
         .then((response) => response.data)
         .catch(console.log);
     },
     []
   );
+
+  const updatePrompt = (id: string, prompt: Partial<AiPrompt>) => {
+    return axios
+      .patch(`/api/v1/generator/template-generator-prompt/${id}`, prompt)
+      .then((response) => response.data)
+      .catch(console.log);
+  };
 
   const addTemplatePrompt = (props: {
     promptKind: AiPromptKind.TEMPLATE;
@@ -26,6 +41,7 @@ export const useAiPrompt = () => {
     neutralColors: string; // "true" : "false",
     uncrowdedImages: string; // "true" : "false",
     noAnyWritingsInImages: string; // "true" : "false",
+    noHandsInImages: string; // "true" : "false",
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator-prompt`, props)
@@ -60,6 +76,7 @@ export const useAiPrompt = () => {
     neutralColors: string; // "true" : "false",
     uncrowdedImages: string; // "true" : "false",
     noAnyWritingsInImages: string; // "true" : "false",
+    noHandsInImages: string; // "true" : "false",
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator-prompt`, props)
@@ -94,5 +111,6 @@ export const useAiPrompt = () => {
     addImagePrompt,
     getTemplateGeneratorPrompts,
     generateImageOrVector,
+    updatePrompt,
   };
 };

@@ -19,7 +19,7 @@ export enum AiPromptStatus {
 
 export enum AiProcessingStatus {
   NOT_PROCESSED = "NOT_PROCESSED",
-  PROCESSED = "PROCESSED",
+  APPROVED = "APPROVED",
   REJECTED = "REJECTED",
   IN_PROGRESS = "IN_PROGRESS",
 }
@@ -39,6 +39,7 @@ export interface AiPrompt {
   errorMessage: string | null;
   status: AiPromptStatus;
   processingStatus: AiProcessingStatus;
+  processingComplete: boolean;
   provider: string;
   model: string;
   cost: number | null;
@@ -55,5 +56,6 @@ export interface AiPrompt {
   simplifiedLayout: string;
   metadata: Record<string, any>;
   noAnyWritingsInImages: boolean;
+  noHandsInImages: boolean;
   uncrowdedImages: boolean;
 }

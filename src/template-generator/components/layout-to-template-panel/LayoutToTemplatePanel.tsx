@@ -77,7 +77,12 @@ import { useVectorsGenerator } from "../../hooks/useVectorsGenerator";
 import { useGeneratorHook } from "../../../panels/layouts-panel/useGeneratorHook";
 import { useDocumentsType } from "../../hooks/useDocumentType";
 import { getDocumentsOptionFromThree } from "./documents-type-utils";
-import { AiPrompt, AiPromptKind, AiPromptStatus } from "../../types/ai-prompts";
+import {
+  AiProcessingStatus,
+  AiPrompt,
+  AiPromptKind,
+  AiPromptStatus,
+} from "../../types/ai-prompts";
 import { PromptItems } from "../prompts-table/prompt-items";
 import { usePolling } from "../../hooks/usePolling";
 import { convertLayout2SimplifiedLayout } from "../../utils/simplified-layout-utils";
@@ -87,6 +92,7 @@ import {
   collectImagesFromIaResponse,
   collectVectorFromIaResponse,
 } from "../../utils/update-layout-utils";
+import { IndustrySelect } from "./industry-select/industry-select";
 
 export const THUMB_WIDTH = 200;
 
@@ -129,6 +135,7 @@ const LayoutToTemplate = (
     getTemplateGeneratorPrompts,
     addColorSetPrompt,
     addImagePrompt,
+    updatePrompt,
     generateImageOrVector,
   } = useAiPrompt(); // <<< here
   // const { generateImages } = useImagesGenerator(); // <<< here
@@ -157,6 +164,7 @@ const LayoutToTemplate = (
     neutralColors?: boolean;
     uncrowdedImages?: boolean;
     noAnyWritingsInImages?: boolean;
+    noHandsInImages?: boolean;
   }>({
     documentTypeId:
       localStorage.getItem("ai-generator-document") ??
@@ -265,6 +273,25 @@ const LayoutToTemplate = (
   //   });
   // }, []);
 
+  const poolingFunc = useCallback(() => {
+    return getTemplateGeneratorPrompts({
+      ...(localStorage?.getItem("aiGenProcessingStatus")
+        ? {
+            processingStatus: localStorage?.getItem(
+              "aiGenProcessingStatus"
+            ) as AiProcessingStatus,
+          }
+        : {}),
+
+      ...(localStorage?.getItem("aiGenProcessingComplete")
+        ? {
+            processingComplete:
+              localStorage?.getItem("aiGenProcessingComplete") === "complete",
+          }
+        : {}),
+    });
+  }, []);
+
   const {
     data,
     isLoading,
@@ -276,7 +303,7 @@ const LayoutToTemplate = (
     restartWithNewParams,
     refetch,
     isPolling,
-  } = usePolling(getTemplateGeneratorPrompts);
+  } = usePolling(poolingFunc);
 
   const aiPrompts = useMemo(() => data?.prompts, [data]);
 
@@ -371,6 +398,7 @@ const LayoutToTemplate = (
             noAnyWritingsInImages: aiPrompt.noAnyWritingsInImages
               ? "true"
               : "false",
+            noHandsInImages: aiPrompt.noHandsInImages ? "true" : "false",
             uncrowdedImages: aiPrompt.uncrowdedImages ? "true" : "false",
             imagePrompt: iPrompt.prompt,
             vectorPrompt: iPrompt.prompt,
@@ -388,6 +416,12 @@ const LayoutToTemplate = (
     }
   };
 
+  const onUpdatePrompts = (id: string, prompt: Partial<AiPrompt>) => {
+    updatePrompt(id, prompt).then(() => {
+      restartPolling();
+    });
+  };
+
   return (
     <div className={cx(themeClass, css.layout2TemplatePanel)}>
       <RightPanelHeader>
@@ -399,6 +433,45 @@ const LayoutToTemplate = (
             </>
           )}
         </div>
+        <>
+          {getSelectField(
+            "",
+            localStorage?.getItem("aiGenProcessingComplete"),
+            [
+              {
+                label: "Completed",
+                value: "complete",
+              },
+              { label: "Not completed", value: "notcompleted" },
+            ],
+            (value) => {
+              localStorage?.setItem("aiGenProcessingComplete", value ?? "");
+              restartPolling();
+            }
+          )}
+        </>
+
+        <>
+          {getSelectField(
+            "",
+            localStorage?.getItem("aiGenProcessingStatus"),
+            [
+              { label: "All", value: "" },
+              {
+                label: "Not processed",
+                value: AiProcessingStatus.NOT_PROCESSED,
+              },
+              { label: "In progress", value: AiProcessingStatus.IN_PROGRESS },
+
+              { label: "Approved", value: AiProcessingStatus.APPROVED },
+              { label: "Rejected", value: AiProcessingStatus.REJECTED },
+            ],
+            (value) => {
+              localStorage?.setItem("aiGenProcessingStatus", value ?? "");
+              restartPolling();
+            }
+          )}
+        </>
       </RightPanelHeader>
 
       <div style={{ display: "flex", gap: "30px" }}>
@@ -440,6 +513,16 @@ const LayoutToTemplate = (
                 { placeholder: "Select industry" }
               )}
             </div>
+
+            <IndustrySelect
+              industriesOptions={industriesOptions}
+              value={formState.industryId}
+              onChange={(industryId: string) => {
+                setFormState({ ...formState, industryId });
+                localStorage.setItem("ai-generator-industry", industryId!);
+              }}
+            />
+
             <div className={cx("input60", css.inputHolder)}>
               {getCheckboxField(
                 "Use neutral colors",
@@ -468,6 +551,17 @@ const LayoutToTemplate = (
                 formState.noAnyWritingsInImages,
                 (noAnyWritingsInImages) => {
                   setFormState({ ...formState, noAnyWritingsInImages });
+                },
+                "",
+                { alignIndicator: "left" }
+              )}
+            </div>
+            <div className={cx("input60", css.inputHolder)}>
+              {getCheckboxField(
+                "No hands",
+                formState.noHandsInImages,
+                (noHandsInImages) => {
+                  setFormState({ ...formState, noHandsInImages });
                 },
                 "",
                 { alignIndicator: "left" }
@@ -520,6 +614,7 @@ const LayoutToTemplate = (
                     neutralColors,
                     uncrowdedImages,
                     noAnyWritingsInImages,
+                    noHandsInImages,
                   } = formState;
                   if (documentTypeId && industryId && layoutId) {
                     addTemplatePrompt({
@@ -532,6 +627,7 @@ const LayoutToTemplate = (
                       noAnyWritingsInImages: noAnyWritingsInImages
                         ? "true"
                         : "false",
+                      noHandsInImages: noHandsInImages ? "true" : "false",
                       simplifiedLayout:
                         layoutDataById[formState?.layoutId!].simplifiedLayout,
                     })
@@ -546,7 +642,7 @@ const LayoutToTemplate = (
 
                     return;
                   }
-                  console.log("ERROR");
+                  console.log("ERROR A1");
                   debugger;
                 }}
               >
@@ -572,6 +668,7 @@ const LayoutToTemplate = (
                 onGenerateImagesOrVectors(parentPromptId, AiPromptKind.VECTOR);
                 restartPolling();
               }}
+              updatePrompt={onUpdatePrompts}
             />
           ) : (
             "Loading prompts..."

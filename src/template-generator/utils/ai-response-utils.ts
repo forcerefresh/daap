@@ -28,6 +28,7 @@ export function createImageJsonRequest(aiResponse: any, layout: any) {
       }
     });
   } catch (ex) {
+    console.log("ERROR A5");
     debugger;
   }
 }

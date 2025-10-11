@@ -14,6 +14,9 @@ import {
   ControlGroup,
   IconProps,
   Divider,
+  Checkbox,
+  Spinner,
+  SpinnerSize,
 } from "@blueprintjs/core";
 import {
   AiProcessingStatus,
@@ -42,12 +45,20 @@ export type SelectedColorPaletteType = {
   idx: number;
 };
 
-interface PromptCardProps {
+export interface PromptCardProps {
   prompt: AiPrompt;
   onGenerateAll?: (id: string) => void;
   onGenerateColors?: (id: string) => void;
   onGenerateImages?: (id: string) => void;
   onGenerateVectors?: (id: string) => void;
+  updatePrompt?: (
+    id: string,
+    prompt: {
+      processingStatus?: AiProcessingStatus;
+      processingComplete?: boolean;
+      metadata?: { approved: ColorTheme[] };
+    }
+  ) => void;
   isChild?: boolean;
 }
 
@@ -57,6 +68,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onGenerateImages,
   onGenerateColors,
   onGenerateVectors,
+  updatePrompt,
   isChild,
 }) => {
   const [isExpanded, setIsExpanded] = useState(
@@ -80,10 +92,13 @@ const PromptCard: React.FC<PromptCardProps> = ({
     [promptId: string]: boolean;
   }>({});
 
+  const [approvedTemplate, setApprovedTemplate] = useState<boolean>(true);
+
   const setColorPaletteStatus = (
     promptId: string,
     idx: number,
-    status: boolean | undefined
+    status: boolean | undefined,
+    ct: ColorTheme[]
   ) => {
     const newApproved = set(
       cloneDeep(approvedColorPalette),
@@ -91,12 +106,22 @@ const PromptCard: React.FC<PromptCardProps> = ({
       status
     );
     setApprovedColorPalette(newApproved);
+    updatePrompt?.(promptId, {
+      metadata: { approved: ct },
+      processingStatus:
+        ct.length === 0
+          ? AiProcessingStatus.REJECTED
+          : AiProcessingStatus.APPROVED,
+    });
   };
 
-  const setImageStatus = (promptId: string, status: boolean | undefined) => {
-    const newApproved = set(cloneDeep(approvedImages), `${promptId}`, status);
-    setApproverImages(newApproved);
-    debugger;
+  const setImageProcessingStatus = (
+    promptId: string,
+    status: AiProcessingStatus | undefined
+  ) => {
+    updatePrompt?.(promptId, {
+      processingStatus: status,
+    });
   };
 
   // useEffect(() => {
@@ -136,31 +161,46 @@ const PromptCard: React.FC<PromptCardProps> = ({
   const [template, setTemplate] = useState<any | undefined>();
   const [texts, setTexts] = useState<{ text: string; tag: string }[]>([]);
 
+  const onLayoutReady = (layoutResponseProject) => {
+    if (!prompt.aiResponseJson) {
+      console.log("OVDE !@#");
+      return;
+    }
+    const newTemplate = updateTemplate(
+      layoutResponseProject,
+      layoutResponseProject,
+      prompt.aiResponseJson!,
+      selectedColorPalette,
+      imagePrompts.map((ip) => ip.metadata) as any,
+      vectorPrompts.map((ip) => ip.metadata) as any
+    );
+
+    console.log("update template");
+    setTemplate(newTemplate);
+
+    const textArr = collectTextFromIaResponse(prompt.aiResponseJson!);
+    // debugger;
+    setTexts(textArr);
+  };
+
   useEffect(() => {
     console.log("EXECUTE");
     // only if its template
-    if (prompt.promptKind === AiPromptKind.TEMPLATE)
-      getLayout(prompt.layoutId).then((layoutResponse) => {
-        console.log(layoutResponse);
-        // debugger;
-        setLayout(layoutResponse.project);
+    if (prompt.promptKind !== AiPromptKind.TEMPLATE) return;
 
-        const newTemplate = updateTemplate(
-          layoutResponse.project,
-          layoutResponse.project,
-          prompt.aiResponseJson!,
-          selectedColorPalette,
-          imagePrompts.map((ip) => ip.metadata) as any,
-          vectorPrompts.map((ip) => ip.metadata) as any
-        );
+    // fromcache
+    if (layout) {
+      onLayoutReady(layout);
+      return;
+    }
 
-        console.log("update template");
-        setTemplate(newTemplate);
+    getLayout(prompt.layoutId).then((layoutResponse) => {
+      console.log(layoutResponse);
+      // debugger;
+      setLayout(layoutResponse.project);
 
-        const textArr = collectTextFromIaResponse(prompt.aiResponseJson);
-        // debugger;
-        setTexts(textArr);
-      });
+      onLayoutReady(layoutResponse.project);
+    });
   }, [
     imagePrompts,
     prompt.layoutId,
@@ -198,6 +238,28 @@ const PromptCard: React.FC<PromptCardProps> = ({
   //   updateTemplate(cloneDeep(currentTemplate));
   // };
 
+  const remainingImageForReview = useMemo(() => {
+    let count = 0;
+    imagePrompts.forEach((prompt) => {
+      if (prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED) {
+        count++;
+      }
+    });
+
+    return count;
+  }, [imagePrompts]);
+
+  const remainingVectorsForReview = useMemo(() => {
+    let count = 0;
+    vectorPrompts.forEach((prompt) => {
+      if (prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED) {
+        count++;
+      }
+    });
+
+    return count;
+  }, [vectorPrompts]);
+
   // Get status badge intent
   const getStatusIntent = (status: AiPromptStatus): Intent => {
     switch (status) {
@@ -216,7 +278,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   // Get processing status badge intent
   const getProcessingStatusIntent = (status: AiProcessingStatus): Intent => {
     switch (status) {
-      case AiProcessingStatus.PROCESSED:
+      case AiProcessingStatus.APPROVED:
         return Intent.SUCCESS;
       case AiProcessingStatus.IN_PROGRESS:
         return Intent.PRIMARY;
@@ -266,16 +328,59 @@ const PromptCard: React.FC<PromptCardProps> = ({
               marginBottom: 8,
             }}
           >
-            <H5>
-              <Icon
-                icon={getPromptKindIcon(prompt.promptKind)}
-                size={16}
-                style={{ marginRight: 8 }}
-              />
-              <strong>{prompt.promptKind}:</strong>{" "}
-              {prompt.layout?.name || "Unnamed Layout"} {prompt.id}
-              {/* <H5 style={{ margin: 0 }}>Prompt: {prompt.id}</H5> */}
-            </H5>
+            <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+              <div style={{ fontSize: "16px" }}>
+                <Icon
+                  icon={getPromptKindIcon(prompt.promptKind)}
+                  size={16}
+                  style={{ marginRight: 8 }}
+                />
+                <strong>
+                  {prompt.promptKind !== AiPromptKind.TEMPLATE
+                    ? prompt.promptKind + ": "
+                    : ""}{" "}
+                  {prompt.layout?.name || "Unnamed Layout"}
+                </strong>
+              </div>
+              <div
+                style={{ display: "flex", gap: "10px", alignItems: "center" }}
+              >
+                {/* <Button large onClick={() => rejectPrompt?.(prompt.id)}>
+                  Reject
+                </Button> */}
+                {!isChild && (
+                  <Button
+                    large
+                    intent={prompt.processingComplete ? "warning" : "primary"}
+                    disabled={
+                      remainingImageForReview > 0 ||
+                      remainingVectorsForReview > 0 ||
+                      prompt.processingStatus ===
+                        AiProcessingStatus.NOT_PROCESSED
+                    }
+                    onClick={(e) => {
+                      updatePrompt?.(prompt.id, {
+                        processingComplete: prompt.processingComplete
+                          ? false
+                          : true,
+                      });
+                    }}
+                  >
+                    {prompt.processingComplete
+                      ? "Move to NOT completed"
+                      : "Complete"}
+                  </Button>
+                )}
+                {remainingImageForReview > 0 ? (
+                  <>{remainingImageForReview} image review missing</>
+                ) : null}
+
+                {prompt.status === AiPromptStatus.LOADING && (
+                  <Spinner size={SpinnerSize.SMALL} />
+                )}
+              </div>
+            </div>
+            {/* <H5 style={{ margin: 0 }}>Prompt: {prompt.id}</H5> */}
           </div>
 
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
@@ -333,6 +438,16 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   {prompt.noAnyWritingsInImages ? "Yes" : "No"}
                 </Tag>
               </FormGroup>
+
+              <FormGroup label="No hands" style={{ margin: 0 }}>
+                <Tag
+                  large
+                  minimal
+                  intent={prompt.noHandsInImages ? Intent.PRIMARY : Intent.NONE}
+                >
+                  {prompt.noHandsInImages ? "Yes" : "No"}
+                </Tag>
+              </FormGroup>
             </ControlGroup>
 
             <ControlGroup
@@ -353,55 +468,68 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   {prompt.processingStatus}
                 </Tag>
               </FormGroup>
-            </ControlGroup>
-            {!isChild && (
-              <div
-                style={{ display: "flex", gap: "10px", alignItems: "start" }}
-              >
-                <Button
-                  intent="primary"
-                  outlined
-                  //disabled={disableIndividual}
-                  onClick={() => {
-                    onGenerateColors?.(prompt.id);
-                  }}
-                >
-                  Colors
-                </Button>
-                <Button
-                  intent="primary"
-                  outlined
-                  //disabled={disableIndividual}
-                  onClick={() => {
-                    onGenerateImages?.(prompt.id);
-                  }}
-                >
-                  Images
-                </Button>
-                <Button
-                  intent="primary"
-                  outlined
-                  // disabled={disableIndividual}
-                  onClick={() => {
-                    onGenerateVectors?.(prompt.id);
-                  }}
-                >
-                  Vectors
-                </Button>
 
-                {showGenerateAll ? (
-                  <Button
-                    intent="primary"
-                    onClick={() => {
-                      onGenerateAll?.(prompt.id);
-                    }}
-                  >
-                    All
-                  </Button>
-                ) : null}
-              </div>
-            )}
+              <FormGroup label="Processed" style={{ margin: 0 }}>
+                <Tag intent={prompt.processingComplete ? "success" : undefined}>
+                  {prompt.processingComplete ? "Yes" : "No"}
+                </Tag>
+              </FormGroup>
+            </ControlGroup>
           </div>
+
+          {!isChild && prompt.status === AiPromptStatus.DONE && (
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                alignItems: "start",
+                marginTop: "10px",
+              }}
+            >
+              <Button
+                intent="primary"
+                outlined
+                //disabled={disableIndividual}
+                onClick={() => {
+                  onGenerateColors?.(prompt.id);
+                }}
+              >
+                Colors
+              </Button>
+              <Button
+                intent="primary"
+                outlined
+                //disabled={disableIndividual}
+                onClick={() => {
+                  onGenerateImages?.(prompt.id);
+                }}
+              >
+                Images
+              </Button>
+              <Button
+                intent="primary"
+                outlined
+                // disabled={disableIndividual}
+                onClick={() => {
+                  onGenerateVectors?.(prompt.id);
+                }}
+              >
+                Vectors
+              </Button>
+
+              {showGenerateAll ? (
+                <Button
+                  intent="primary"
+                  onClick={() => {
+                    onGenerateAll?.(prompt.id);
+                  }}
+                >
+                  Generate all
+                </Button>
+              ) : null}
+            </div>
+          )}
+
           {/* {prompt.layout && (
             <div style={{ marginTop: 12 }}>
               <Text>
@@ -438,6 +566,8 @@ const PromptCard: React.FC<PromptCardProps> = ({
             {prompt.childPrompts?.length !== 1 ? "s" : ""}
           </Button>
         }
+        <br />
+        {prompt.id}
       </div>
 
       {(prompt.status === AiPromptStatus.DONE ||
@@ -462,7 +592,65 @@ const PromptCard: React.FC<PromptCardProps> = ({
               }}
             >
               <section>
-                <h4>Preview</h4>
+                <h4>Text, colors, typography</h4>
+                <div style={{ display: "flex", gap: "16px" }}>
+                  <Checkbox
+                    style={{ borderLeft: "10px solid green" }}
+                    large
+                    checked={
+                      prompt.processingStatus === AiProcessingStatus.APPROVED
+                    }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        updatePrompt?.(prompt.id, {
+                          processingStatus: AiProcessingStatus.APPROVED,
+                        });
+                      }
+                    }}
+                  >
+                    Approve
+                  </Checkbox>
+                  <Checkbox
+                    style={{ borderLeft: "10px solid red" }}
+                    large
+                    checked={
+                      prompt.processingStatus === AiProcessingStatus.REJECTED
+                    }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        updatePrompt?.(prompt.id, {
+                          processingStatus: AiProcessingStatus.REJECTED,
+                        });
+                      }
+                    }}
+                  >
+                    Reject
+                  </Checkbox>
+                </div>
+                {prompt.processingStatus === AiProcessingStatus.REJECTED &&
+                  imagePrompts.length === 0 && (
+                    <Button
+                      intent="primary"
+                      onClick={(e) => {
+                        updatePrompt?.(prompt.id, {
+                          processingComplete: true,
+                        });
+                      }}
+                    >
+                      Complete
+                    </Button>
+                  )}
+                <ColorSetPromptCardView
+                  selectedColorPalette={selectedColorPalette}
+                  // title={"Additional colors"}
+                  colorPalettes={[prompt.aiResponseJson!.brandColors]}
+                  promptId={prompt.id}
+                  onSelect={(colorTheme) => {
+                    setSelectedColorPalette(colorTheme);
+                  }}
+                  //colorPaletteStatuses={approvedColorPalette[prompt.id] ?? {}}
+                  //setColorPaletteStatus={setColorPaletteStatus}
+                />
                 <div
                   style={{
                     height: "290px",
@@ -475,6 +663,23 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   )}
                 </div>
               </section>
+              <section>
+                {" "}
+                <div>
+                  <h4> &nbsp;</h4>
+
+                  {texts.map((text) => {
+                    return (
+                      <div style={{ margin: "4px" }}>
+                        <span>{text.text}</span>{" "}
+                        <Tag minimal large>
+                          {text.tag}
+                        </Tag>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
               <section
                 style={{
                   display: "flex",
@@ -484,17 +689,6 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 }}
               >
                 <div>
-                  <ColorSetPromptCardView
-                    selectedColorPalette={selectedColorPalette}
-                    title={"Template colors"}
-                    colorPalettes={[prompt.aiResponseJson!.brandColors]}
-                    promptId={prompt.id}
-                    onSelect={(colorTheme) => {
-                      setSelectedColorPalette(colorTheme);
-                    }}
-                    colorPaletteStatuses={approvedColorPalette[prompt.id] ?? {}}
-                    setColorPaletteStatus={setColorPaletteStatus}
-                  />
                   {colorSetPrompts.map((childPrompt, index) => (
                     <ColorSetPromptCard
                       selectedColorPalette={selectedColorPalette}
@@ -513,33 +707,19 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     />
                   ))}
                 </div>
-                <div>
-                  <h4>Texts</h4>
 
-                  {texts.map((text) => {
-                    return (
-                      <div style={{ margin: "4px" }}>
-                        <span>{text.text}</span>{" "}
-                        <Tag minimal large>
-                          {text.tag}
-                        </Tag>
-                      </div>
-                    );
-                  })}
-                </div>
                 <div>
                   <ImagePromptListView
                     title="Images"
                     prompts={imagePrompts}
-                    setImageStatus={setImageStatus}
-                    approvedImages={approvedImages}
+                    setImageProcessingStatus={setImageProcessingStatus}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
                   <ImagePromptListView
                     title="Vectors"
+                    allowInstantReview={true}
                     prompts={vectorPrompts}
-                    approvedImages={approvedImages}
-                    setImageStatus={setImageStatus}
+                    setImageProcessingStatus={setImageProcessingStatus}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
                 </div>
