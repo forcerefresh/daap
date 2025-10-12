@@ -7,6 +7,7 @@ export const PromptItems = ({
   onGenerateColors,
   onGenerateImages,
   onGenerateVectors,
+  onGenerateLayouts,
   updatePrompt,
 }: {
   aiPrompts: AiPrompt[];
@@ -14,6 +15,7 @@ export const PromptItems = ({
   onGenerateColors?: (id: string) => void;
   onGenerateImages?: (id: string) => void;
   onGenerateVectors?: (id: string) => void;
+  onGenerateLayouts?: (id: string) => void;
   updatePrompt: PromptCardProps["updatePrompt"];
 }) => {
   return (
@@ -35,6 +37,7 @@ export const PromptItems = ({
           onGenerateColors={onGenerateColors}
           onGenerateImages={onGenerateImages}
           onGenerateVectors={onGenerateVectors}
+          onGenerateLayouts={onGenerateLayouts}
           updatePrompt={updatePrompt}
         />
       ))}

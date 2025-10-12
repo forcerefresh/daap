@@ -39,6 +39,7 @@ import {
 import { ImagePromptListView } from "./image-prompt-card";
 import { after, cloneDeep, set } from "lodash-es";
 import { string } from "yup";
+import { LayoutPromptListView } from "./layout-prompt-card";
 
 export type SelectedColorPaletteType = {
   promptId: string;
@@ -51,6 +52,7 @@ export interface PromptCardProps {
   onGenerateColors?: (id: string) => void;
   onGenerateImages?: (id: string) => void;
   onGenerateVectors?: (id: string) => void;
+  onGenerateLayouts?: (id: string) => void;
   updatePrompt?: (
     id: string,
     prompt: {
@@ -68,6 +70,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onGenerateImages,
   onGenerateColors,
   onGenerateVectors,
+  onGenerateLayouts,
   updatePrompt,
   isChild,
 }) => {
@@ -151,6 +154,14 @@ const PromptCard: React.FC<PromptCardProps> = ({
     return (
       prompt.childPrompts?.filter((childPrompt) => {
         return childPrompt.promptKind === AiPromptKind.VECTOR;
+      }) ?? []
+    );
+  }, [prompt]);
+
+  const layoutPrompts = useMemo(() => {
+    return (
+      prompt.childPrompts?.filter((childPrompt) => {
+        return childPrompt.promptKind === AiPromptKind.LAYOUT;
       }) ?? []
     );
   }, [prompt]);
@@ -310,6 +321,10 @@ const PromptCard: React.FC<PromptCardProps> = ({
     !prompt.childPrompts || prompt.childPrompts.length === 0;
   const disableIndividual = showGenerateAll;
 
+  const completeDisabled =
+    remainingImageForReview > 0 ||
+    remainingVectorsForReview > 0 ||
+    prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED;
   return (
     <Card elevation={Elevation.TWO} style={{ position: "relative" }}>
       <div
@@ -352,12 +367,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   <Button
                     large
                     intent={prompt.processingComplete ? "warning" : "primary"}
-                    disabled={
-                      remainingImageForReview > 0 ||
-                      remainingVectorsForReview > 0 ||
-                      prompt.processingStatus ===
-                        AiProcessingStatus.NOT_PROCESSED
-                    }
+                    disabled={completeDisabled}
                     onClick={(e) => {
                       updatePrompt?.(prompt.id, {
                         processingComplete: prompt.processingComplete
@@ -377,6 +387,18 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
                 {prompt.status === AiPromptStatus.LOADING && (
                   <Spinner size={SpinnerSize.SMALL} />
+                )}
+
+                {!completeDisabled && (
+                  <Button
+                    large
+                    intent={"primary"}
+                    onClick={(e) => {
+                      onGenerateLayouts?.(prompt.id);
+                    }}
+                  >
+                    Create layout variation
+                  </Button>
                 )}
               </div>
             </div>
@@ -663,23 +685,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   )}
                 </div>
               </section>
-              <section>
-                {" "}
-                <div>
-                  <h4> &nbsp;</h4>
 
-                  {texts.map((text) => {
-                    return (
-                      <div style={{ margin: "4px" }}>
-                        <span>{text.text}</span>{" "}
-                        <Tag minimal large>
-                          {text.tag}
-                        </Tag>
-                      </div>
-                    );
-                  })}
-                </div>
-              </section>
               <section
                 style={{
                   display: "flex",
@@ -688,6 +694,35 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   width: "100%",
                 }}
               >
+                <section>
+                  <div>
+                    <h4> &nbsp;</h4>
+
+                    {texts.map((text) => {
+                      return (
+                        <div style={{ margin: "4px" }}>
+                          <span>{text.text}</span>{" "}
+                          <Tag minimal large>
+                            {text.tag}
+                          </Tag>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <LayoutPromptListView
+                    layout={template}
+                    title="Layouts"
+                    // allowInstantReview={true}
+                    prompts={layoutPrompts}
+                    parentPrompt={prompt}
+                    selectedColorPalette={selectedColorPalette}
+                    imagePrompts={imagePrompts ?? []}
+                    vectorPrompts={vectorPrompts ?? []}
+
+                    // setLayoutProcessingStatus={setImageProcessingStatus}
+                    // onApply={() => onApplyImages(imagePrompts)}
+                  />
+                </section>
                 <div>
                   {colorSetPrompts.map((childPrompt, index) => (
                     <ColorSetPromptCard

@@ -7,6 +7,30 @@ import { createObject } from "../../objects/create-object-factory";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { IMAGE } from "../../objects/image/image";
 
+export function updateLayout(layout: any, iaResponseJson: Record<string, any>) {
+  if (!iaResponseJson) return;
+
+  const newLayout = cloneDeep(layout);
+
+  try {
+    iaResponseJson.forEach((obj: any) => {
+      const objectId = obj.objectId;
+      //   const layoutObj = JSON.parse(formState.layout!)
+      //  const objectId = layoutObj[idx].objectId
+      const existingObj = newLayout.objects.objectById[objectId];
+
+      existingObj.left = obj.prompt.bounds.left;
+      existingObj.top = obj.prompt.bounds.top;
+      existingObj.width = obj.prompt.bounds.width;
+      existingObj.height = obj.prompt.bounds.height;
+    });
+  } catch (ex) {
+    debugger;
+  }
+
+  return newLayout;
+}
+
 export function updateTemplate(
   templateToUpdate: any,
   layout: any,
@@ -139,7 +163,7 @@ export function updateTemplate(
     });
   } catch (ex) {
     console.log("ERROR A8");
-    debugger; //asd
+    // debugger; //asd
   }
 
   return newTemplate;

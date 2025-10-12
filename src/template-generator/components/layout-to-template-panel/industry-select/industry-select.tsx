@@ -5,6 +5,8 @@ import * as ReactDOM from "react-dom/client";
 import { Industry } from "../../../types/industry";
 import { getIndustriesOptionFromThree } from "../industry-utils";
 
+import css from "./industry-select.module.scss";
+
 // export interface Film {
 //     title: string;
 //     year: number;
@@ -87,6 +89,14 @@ export const IndustrySelect = ({
       }
       onItemSelect={(item) => {
         onChange(item.value);
+      }}
+      popoverProps={{
+        popoverClassName: css.selectPopover,
+        minimal: true,
+        modifiers: {
+          preventOverflow: { enabled: true },
+          flip: { enabled: true },
+        },
       }}
     >
       <Button

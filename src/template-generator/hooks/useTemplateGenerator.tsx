@@ -84,6 +84,24 @@ export const useAiPrompt = () => {
       .catch(console.log);
   };
 
+  const addLayoutPrompt = (props: {
+    parentPromptId: string;
+    promptKind: AiPromptKind.LAYOUT;
+    documentTypeId: string;
+    industryId: string;
+    layoutId: string;
+    simplifiedLayout: string;
+    neutralColors: string; // "true" : "false",
+    uncrowdedImages: string; // "true" : "false",
+    noAnyWritingsInImages: string; // "true" : "false",
+    noHandsInImages: string; // "true" : "false",
+  }): Promise<{ output?: string; error?: string }> => {
+    return axios
+      .post(`/api/v1/generator/template-generator-prompt`, props)
+      .then((response) => response.data)
+      .catch(console.log);
+  };
+
   const generateTemplate = (
     iaPromptId: string
   ): Promise<{ output?: string; error?: string }> => {
@@ -104,6 +122,17 @@ export const useAiPrompt = () => {
       .catch(console.log);
   };
 
+  const generateLayout = (
+    iaPromptId: string
+  ): Promise<{ output?: string; error?: string }> => {
+    return axios
+      .post(`/api/v1/generator/layout-generator`, {
+        id: iaPromptId,
+      })
+      .then((response) => response.data)
+      .catch(console.log);
+  };
+
   return {
     generateTemplate,
     addTemplatePrompt,
@@ -112,5 +141,7 @@ export const useAiPrompt = () => {
     getTemplateGeneratorPrompts,
     generateImageOrVector,
     updatePrompt,
+    addLayoutPrompt,
+    generateLayout,
   };
 };

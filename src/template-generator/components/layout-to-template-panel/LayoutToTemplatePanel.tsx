@@ -135,8 +135,10 @@ const LayoutToTemplate = (
     getTemplateGeneratorPrompts,
     addColorSetPrompt,
     addImagePrompt,
+    addLayoutPrompt,
     updatePrompt,
     generateImageOrVector,
+    generateLayout,
   } = useAiPrompt(); // <<< here
   // const { generateImages } = useImagesGenerator(); // <<< here
   // const { generateVectors } = useVectorsGenerator(); // <<< here
@@ -416,6 +418,41 @@ const LayoutToTemplate = (
     }
   };
 
+  const onGenerateLayouts = async (parentPromptId: string) => {
+    const aiPrompt = aiPrompts?.find((p) => p.id === parentPromptId);
+    // debugger;
+
+    const howMany = 5;
+
+    // debugger;
+    if (aiPrompt) {
+      const { documentType, industry, layout } = aiPrompt;
+
+      if (documentType && industry && layout) {
+        const layoutResponse = await getLayout(layout.id);
+
+        for (let i = 0; i < howMany; i++) {
+          const response = await addLayoutPrompt({
+            parentPromptId: aiPrompt.id,
+            promptKind: AiPromptKind.LAYOUT,
+            documentTypeId: documentType.id,
+            industryId: industry.id,
+            layoutId: layout.id,
+            simplifiedLayout: aiPrompt.simplifiedLayout,
+            neutralColors: aiPrompt.neutralColors ? "true" : "false",
+            noAnyWritingsInImages: aiPrompt.noAnyWritingsInImages
+              ? "true"
+              : "false",
+            noHandsInImages: aiPrompt.noHandsInImages ? "true" : "false",
+            uncrowdedImages: aiPrompt.uncrowdedImages ? "true" : "false",
+          });
+
+          await generateLayout(response?.prompt?.id);
+        }
+      }
+    }
+  };
+
   const onUpdatePrompts = (id: string, prompt: Partial<AiPrompt>) => {
     updatePrompt(id, prompt).then(() => {
       restartPolling();
@@ -643,7 +680,7 @@ const LayoutToTemplate = (
                     return;
                   }
                   console.log("ERROR A1");
-                  debugger;
+                  // debugger;
                 }}
               >
                 {"Generate"}
@@ -666,6 +703,11 @@ const LayoutToTemplate = (
               onGenerateVectors={(parentPromptId: string) => {
                 stopPolling();
                 onGenerateImagesOrVectors(parentPromptId, AiPromptKind.VECTOR);
+                restartPolling();
+              }}
+              onGenerateLayouts={(parentPromptId: string) => {
+                stopPolling();
+                onGenerateLayouts(parentPromptId);
                 restartPolling();
               }}
               updatePrompt={onUpdatePrompts}

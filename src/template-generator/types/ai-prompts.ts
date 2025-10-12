@@ -7,6 +7,7 @@ export enum AiPromptKind {
   COLOR_PALETTE = "COLOR_PALETTE",
   IMAGE = "IMAGE",
   VECTOR = "VECTOR",
+  LAYOUT = "LAYOUT",
 }
 
 export enum AiPromptStatus {
