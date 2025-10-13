@@ -63,6 +63,6 @@ export function mergeAiTemplateAndSimplifiedLayout(
 }
 
 function getBounds(simplifiedLayout: any, objectId: string) {
-  return simplifiedLayout.find((item) => item.objectId === objectId).prompt
+  return simplifiedLayout.find((item) => item.objectId === objectId)?.prompt?
     .bounds;
 }

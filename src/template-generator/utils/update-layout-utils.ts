@@ -19,10 +19,12 @@ export function updateLayout(layout: any, iaResponseJson: Record<string, any>) {
       //  const objectId = layoutObj[idx].objectId
       const existingObj = newLayout.objects.objectById[objectId];
 
-      existingObj.left = obj.bounds.left;
-      existingObj.top = obj.bounds.top;
-      existingObj.width = obj.bounds.width;
-      existingObj.height = obj.bounds.height;
+      if (obj.bounds) {
+        existingObj.left = obj.bounds.left;
+        existingObj.top = obj.bounds.top;
+        existingObj.width = obj.bounds.width;
+        existingObj.height = obj.bounds.height;
+      }
     });
   } catch (ex) {
     debugger;
