@@ -58,6 +58,7 @@ import {
 import {
   collectLayoutObjectsPrompts,
   createLayout2TemplateAIPrompt,
+  mergeAiTemplateAndSimplifiedLayout,
 } from "./layout2template-utils";
 import { TEXT } from "../../../objects/text/text";
 import { RECTANGLE } from "../../../objects/rectangle/rectangle";
@@ -431,6 +432,12 @@ const LayoutToTemplate = (
       if (documentType && industry && layout) {
         const layoutResponse = await getLayout(layout.id);
 
+        const aiTemplateWithSimplifiedLayout =
+          mergeAiTemplateAndSimplifiedLayout(
+            JSON.parse(aiPrompt.simplifiedLayout),
+            aiPrompt.aiResponseJson
+          );
+
         for (let i = 0; i < howMany; i++) {
           const response = await addLayoutPrompt({
             parentPromptId: aiPrompt.id,
@@ -439,6 +446,7 @@ const LayoutToTemplate = (
             industryId: industry.id,
             layoutId: layout.id,
             simplifiedLayout: aiPrompt.simplifiedLayout,
+            aiTemplateWithSimplifiedLayout,
             neutralColors: aiPrompt.neutralColors ? "true" : "false",
             noAnyWritingsInImages: aiPrompt.noAnyWritingsInImages
               ? "true"

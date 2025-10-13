@@ -91,6 +91,7 @@ export const useAiPrompt = () => {
     industryId: string;
     layoutId: string;
     simplifiedLayout: string;
+    aiTemplateWithSimplifiedLayout: string;
     neutralColors: string; // "true" : "false",
     uncrowdedImages: string; // "true" : "false",
     noAnyWritingsInImages: string; // "true" : "false",

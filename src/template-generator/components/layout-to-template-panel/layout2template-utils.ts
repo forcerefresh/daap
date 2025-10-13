@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash-es";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 export function collectLayoutObjectsPrompts(
@@ -45,4 +46,23 @@ export function createLayout2TemplateAIPrompt(
 
   const promptStr = JSON.stringify(prompts, undefined, 2);
   return promptStr;
+}
+
+export function mergeAiTemplateAndSimplifiedLayout(
+  simplifiedLayout: any,
+  aiResponseJson: any
+) {
+  const aiResponseJsonClone = cloneDeep(aiResponseJson);
+
+  aiResponseJsonClone.objects.forEach((item) => {
+    item.bounds = getBounds(simplifiedLayout, item.objectId);
+  });
+
+  debugger;
+  return aiResponseJsonClone;
+}
+
+function getBounds(simplifiedLayout: any, objectId: string) {
+  return simplifiedLayout.find((item) => item.objectId === objectId).prompt
+    .bounds;
 }
