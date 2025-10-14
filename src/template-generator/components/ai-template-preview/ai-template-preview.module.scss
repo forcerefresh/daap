@@ -1,0 +1,7 @@
+.holder:hover {
+  :global {
+    .object-wrapper {
+      border: 5px solid #48aff0 !important;
+    }
+  }
+}

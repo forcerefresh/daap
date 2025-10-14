@@ -11,6 +11,7 @@ import {
 import { IEditor } from "../../../store/reducers/editor";
 import { connect } from "react-redux";
 import { PagePreviewInternal } from "../../../panels/pages-simplified/PagePreview";
+import css from "./ai-template-preview.module.scss";
 
 interface AITemplatePreviewProps {
   currentProject: any;
@@ -47,16 +48,18 @@ export const AITemplatePreview = (
   //currentProject = currentLayoutData.layout.project
 
   return (
-    <PagePreviewInternal
-      width={width}
-      {...currentProject}
-      page={currentProject.pages.pageById[currentProject.pages.pages[0]]}
-      selectedDevice={"device-independent"}
-      breakpoints={currentProject.settings.breakpoints}
-      breakpointConfig={
-        currentProject.settings.breakpoints.breakpointsConfiguration[0]
-      }
-    />
+    <div className={css.holder}>
+      <PagePreviewInternal
+        width={width}
+        {...currentProject}
+        page={currentProject.pages.pageById[currentProject.pages.pages[0]]}
+        selectedDevice={"device-independent"}
+        breakpoints={currentProject.settings.breakpoints}
+        breakpointConfig={
+          currentProject.settings.breakpoints.breakpointsConfiguration[0]
+        }
+      />
+    </div>
   );
 };
 
