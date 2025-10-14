@@ -25,6 +25,9 @@ export function updateLayout(layout: any, iaResponseJson: Record<string, any>) {
         existingObj.width = obj.bounds.width;
         existingObj.height = obj.bounds.height;
       }
+      if (obj.properties?.fontSize) {
+        existingObj.properties.fontSize = obj.properties.fontSize;
+      }
     });
   } catch (ex) {
     debugger;
