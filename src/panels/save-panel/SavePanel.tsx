@@ -186,12 +186,25 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
     const fonts = getAllFonts(objects);
 
     const id = saveAs ? undefined : localMeta.id;
+
+    const w =
+      project?.settings?.breakpoints?.breakpointsConfiguration?.[0]?.normal
+        ?.page?.width;
+    const h =
+      project?.settings?.breakpoints?.breakpointsConfiguration?.[0]?.normal
+        ?.page?.height;
+    let documentTypeId;
+    if (w === 1080 && h === 1080) {
+      documentTypeId = "SocialMedia:Instagram:SquarePost";
+    } else {
+      documentTypeId = project.settings.documentTypeId;
+    }
+
     if (id) {
       updateProject(id, {
         name: localMeta.name!,
         description: localMeta.description!,
         slides: project.pages.pages.length,
-        documentTypeId: project.settings.documentTypeId,
         project: updatedProject,
         preview: {
           width: thumbSize.width,
@@ -205,6 +218,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         fonts,
         extensions: playerData.extensions,
         colors: project.colors.documentColorPalettes,
+        documentTypeId,
       })
         .then(
           ({
@@ -250,7 +264,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       createProject({
         name: localMeta.name!,
         description: localMeta.description!,
-        documentTypeId: project.settings.documentTypeId,
         slides: project.pages.pages.length,
         project: updatedProject,
         preview: {
@@ -265,6 +278,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         fonts,
         extensions: playerData.extensions,
         colors: project.colors.documentColorPalettes,
+        documentTypeId,
       })
         .then(
           ({
