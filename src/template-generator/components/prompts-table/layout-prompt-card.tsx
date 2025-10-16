@@ -5,18 +5,20 @@ import {
   AiPromptStatus,
 } from "../../types/ai-prompts";
 import { useEffect, useState } from "react";
-import { isEqual } from "lodash-es";
+import { cloneDeep, isEqual } from "lodash-es";
 import { AITemplatePreview } from "../ai-template-preview/ai-template-preview";
 import { updateLayout, updateTemplate } from "../../utils/update-layout-utils";
 
 export const LayoutPromptListView = ({
   prompts,
+  originalLayoutResponse,
   layout,
   title,
   parentPrompt,
   selectedColorPalette,
   imagePrompts,
   vectorPrompts,
+  onEditNewLayout,
 }: // approvedImages,
 // allowInstantReview,
 // setImageProcessingStatus,
@@ -24,11 +26,13 @@ export const LayoutPromptListView = ({
 {
   title: string;
   layout: any;
+  originalLayoutResponse: any;
   prompts: AiPrompt[];
   parentPrompt?: any;
   selectedColorPalette?: any;
   imagePrompts: any[];
   vectorPrompts: any[];
+  onEditNewLayout: (response: any) => void;
   // allowInstantReview?: boolean;
   // approvedImages: { [promptId: string]: boolean };
   // setImageProcessingStatus: (
@@ -63,10 +67,21 @@ export const LayoutPromptListView = ({
               prompt={prompt}
               key={prompt.id}
               layout={layout}
+              originalLayout={originalLayoutResponse.project}
               parentPrompt={parentPrompt}
               selectedColorPalette={selectedColorPalette}
               imagePrompts={imagePrompts}
               vectorPrompts={vectorPrompts}
+              onEdit={() => {
+                const cloneLayoutResponse = cloneDeep(originalLayoutResponse);
+                const newLayout = updateLayout(
+                  cloneLayoutResponse.project,
+                  prompt.aiResponseJson
+                );
+
+                cloneLayoutResponse.project = newLayout;
+                onEditNewLayout(cloneLayoutResponse);
+              }}
               // allowInstantReview={allowInstantReview}
               // src={"/api/v1/generator/image-review/image/" + prompt.id}
               // setImageStatus={(status) => {
@@ -94,10 +109,12 @@ function LayoutWithReview({
   // src,
   prompt,
   layout,
+  originalLayout,
   parentPrompt,
   selectedColorPalette,
   imagePrompts,
   vectorPrompts,
+  onEdit,
 }: // imageStatus,
 // setImageStatus,
 // allowInstantReview,
@@ -106,9 +123,11 @@ function LayoutWithReview({
   parentPrompt?: any;
   prompt?: any;
   layout?: any;
+  originalLayout?: any;
   selectedColorPalette?: any;
   imagePrompts: any[];
   vectorPrompts: any[];
+  onEdit: () => void;
   // imageStatus: boolean | undefined;
   // setImageStatus: (status: boolean | undefined) => void;
   // allowInstantReview?: boolean;
@@ -116,7 +135,7 @@ function LayoutWithReview({
   const [enabled, setEnabled] = useState(false);
   // const [template, setTemplate] = useState();
 
-  const template = updateLayout(layout, prompt.aiResponseJson);
+  const template = updateLayout(originalLayout, prompt.aiResponseJson); // NOTE:  //layout | originalLayout.project
 
   // useEffect(() => {
   //   const newTemplate = updateTemplate(
@@ -172,6 +191,15 @@ function LayoutWithReview({
           }}
         />
       </div> */}
+      <div>
+        <Button
+          onClick={() => {
+            onEdit();
+          }}
+        >
+          Edit
+        </Button>
+      </div>
       <div style={{ minHeight: "370px" }}>
         {/* {promptId} */}
         {template && (

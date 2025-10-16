@@ -62,6 +62,7 @@ export interface PromptCardProps {
     }
   ) => void;
   isChild?: boolean;
+  onEditNewLayout: (response: any) => void;
 }
 
 const PromptCard: React.FC<PromptCardProps> = ({
@@ -72,6 +73,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onGenerateVectors,
   onGenerateLayouts,
   updatePrompt,
+  onEditNewLayout,
   isChild,
 }) => {
   const [isExpanded, setIsExpanded] = useState(
@@ -168,7 +170,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
   const { getLayout } = useLayoutHook();
 
-  const [layout, setLayout] = useState<any | undefined>();
+  const [layoutResponse, setLayoutResponse] = useState<any | undefined>();
   const [template, setTemplate] = useState<any | undefined>();
   const [texts, setTexts] = useState<{ text: string; tag: string }[]>([]);
 
@@ -200,15 +202,15 @@ const PromptCard: React.FC<PromptCardProps> = ({
     if (prompt.promptKind !== AiPromptKind.TEMPLATE) return;
 
     // fromcache
-    if (layout) {
-      onLayoutReady(layout);
+    if (layoutResponse) {
+      onLayoutReady(layoutResponse.project);
       return;
     }
 
     getLayout(prompt.layoutId).then((layoutResponse) => {
       console.log(layoutResponse);
       // debugger;
-      setLayout(layoutResponse.project);
+      setLayoutResponse(layoutResponse);
 
       onLayoutReady(layoutResponse.project);
     });
@@ -710,6 +712,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     })}
                   </div>
                   <LayoutPromptListView
+                    originalLayoutResponse={layoutResponse}
                     layout={template}
                     title="Layouts"
                     // allowInstantReview={true}
@@ -718,7 +721,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     selectedColorPalette={selectedColorPalette}
                     imagePrompts={imagePrompts ?? []}
                     vectorPrompts={vectorPrompts ?? []}
-
+                    onEditNewLayout={onEditNewLayout}
                     // setLayoutProcessingStatus={setImageProcessingStatus}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />

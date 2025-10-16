@@ -38,6 +38,14 @@ import {
   updateProjectMeta,
   updateEditor,
   replaceObject,
+  addNewObject,
+  openProject,
+  doClearHistory,
+  activateSlide,
+  selectSlides,
+  selectForPropertiesProps,
+  selectForProperties,
+  setDevice,
 } from "../../../store/actions/actions";
 import {
   getCheckboxField,
@@ -94,6 +102,10 @@ import {
   collectVectorFromIaResponse,
 } from "../../utils/update-layout-utils";
 import { IndustrySelect } from "./industry-select/industry-select";
+import { preloadFonts } from "../../../utils/project/project-utils";
+import { getMissingExtensionsFromProject } from "../../../utils/extensions/extensions-utils";
+import { ISettings } from "../../../store/reducers/i-settings";
+import { IPages } from "../../../store/reducers/i-pages";
 
 export const THUMB_WIDTH = 200;
 
@@ -124,6 +136,15 @@ const LayoutToTemplate = (
     themeClass,
     pages,
     // _replaceObject,
+    _activateSlide,
+    _addNewObject,
+    _doClearHistory,
+    _openProject,
+    _replaceObject,
+    _resetChangedState,
+    _selectForProperties,
+    _selectSlides,
+    _setDevice,
   } = props;
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
 
@@ -467,6 +488,78 @@ const LayoutToTemplate = (
     });
   };
 
+  const onEditNewLayout = (response: any) => {
+    const meta: IMeta = {
+      id: undefined, //response.project.id,
+      name: response.name,
+      description: response.description,
+      // modified: response.modified,
+      // created: response.created,
+      saveRevision: 0,
+      //publishRevision: response.project.publishRevision,
+    };
+    _updateProjectMeta(meta);
+
+    const project: {
+      // NOTE: there are other props. We need only settings from project
+      settings: ISettings;
+      pages: IPages;
+    } = response.project;
+
+    // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
+    const updatedProject = project;
+
+    _openProject(updatedProject);
+
+    _setDevice(
+      [...updatedProject.settings.breakpoints.breakpointsConfiguration]
+        .reverse()
+        .find((bc) => bc.enabled)?.type || "device-independent"
+    );
+
+    // missing extensions >>>
+    const missingExtensions = getMissingExtensionsFromProject(
+      response.extensions
+    );
+    _updateEditor({ missingExtensions });
+    if (missingExtensions.length > 0) {
+      AppToaster.show({
+        intent: "warning",
+        message:
+          "Missing Extension found! Go to Library > Extensions to install missing extensions.",
+      });
+    }
+    // missing extensions <<<
+
+    _doClearHistory();
+
+    const slideIdToSelect = updatedProject.pages.pages[0];
+    if (slideIdToSelect) {
+      _activateSlide(slideIdToSelect);
+      _selectSlides([slideIdToSelect]);
+      _selectForProperties({ id: slideIdToSelect, type: "slide" });
+    }
+
+    _updateEditor({ sliderChanged: true, isExistingProject: false });
+
+    _doClearHistory();
+
+    _resetChangedState();
+
+    preloadFonts(response?.fonts ?? []);
+
+    onRequestClose();
+
+    // _createNewProject();
+    // _doClearHistory();
+    // _initializeSlideAndLayer();
+    // _updateEditor({ isExistingProject: false, sliderChanged: false });
+    // if (isDiscartConfirmOpen) {
+    //   setIsDiscartConfirmOpen(false);
+    // }
+  };
+
   return (
     <div className={cx(themeClass, css.layout2TemplatePanel)}>
       <RightPanelHeader>
@@ -719,6 +812,7 @@ const LayoutToTemplate = (
                 restartPolling();
               }}
               updatePrompt={onUpdatePrompts}
+              onEditNewLayout={onEditNewLayout}
             />
           ) : (
             "Loading prompts..."
@@ -756,6 +850,21 @@ const mapDispatchToProps = {
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
   _replaceObject: replaceObject,
+  _resetChangedState: () =>
+    updateEditor({ sliderChanged: false, isExistingProject: true }),
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
+  _openProject: (project: any) => openProject(project),
+  _doClearHistory: () => doClearHistory(),
+  _activateSlide: (id: string): any => activateSlide(id),
+  _selectSlides: (ids: string[]): any => selectSlides(ids),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
+  _setDevice: setDevice,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayoutToTemplate);
