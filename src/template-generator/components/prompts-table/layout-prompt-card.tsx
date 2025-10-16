@@ -135,7 +135,8 @@ function LayoutWithReview({
   const [enabled, setEnabled] = useState(false);
   // const [template, setTemplate] = useState();
 
-  const template = updateLayout(originalLayout, prompt.aiResponseJson); // NOTE:  //layout | originalLayout.project
+  const newLayout = updateLayout(originalLayout, prompt.aiResponseJson); // NOTE:  //layout | originalLayout.project
+  const newTemplate = updateLayout(layout, prompt.aiResponseJson); // NOTE:  //layout | originalLayout.project
 
   // useEffect(() => {
   //   const newTemplate = updateTemplate(
@@ -164,6 +165,9 @@ function LayoutWithReview({
   //     : "red";
 
   // const disabled = !enabled && imageStatus === undefined && !allowInstantReview;
+
+  const [isOver, setIsOver] = useState(false);
+  const whatToShow = isOver ? newLayout : newTemplate;
 
   return (
     <div style={{ display: "flex", padding: "5px" }}>
@@ -200,10 +204,18 @@ function LayoutWithReview({
           Edit
         </Button>
       </div>
-      <div style={{ minHeight: "370px" }}>
+      <div
+        style={{ minHeight: "370px", minWidth: "350px" }}
+        onMouseEnter={() => {
+          setIsOver(true);
+        }}
+        onMouseLeave={() => {
+          setIsOver(false);
+        }}
+      >
         {/* {promptId} */}
-        {template && (
-          <AITemplatePreview currentProject={template} width={350} />
+        {whatToShow && (
+          <AITemplatePreview currentProject={whatToShow} width={350} />
         )}
       </div>
     </div>
