@@ -132,6 +132,20 @@ export function updateTemplate(
             }
           );
         }
+      } else if (obj.type === "shape") {
+        if (obj.subType === "rectangle") {
+          replaceLayoutObject(
+            newTemplate,
+            existingObj,
+            RECTANGLE,
+            pick(existingObj, "left", "top", "width", "height", "rotation"),
+            {
+              strokeWidth: 0,
+              strokeColor: undefined,
+              fill: obj.properties.color,
+            }
+          );
+        }
       }
     });
 
@@ -247,7 +261,7 @@ export function collectVectorFromIaResponse(iaResponseJson: any) {
   }[] = [];
 
   iaResponseJson.objects.forEach((object: any) => {
-    if (object.type === "vector") {
+    if (object.type === "vector" || object.subType === "vector") {
       retAtt.push({
         prompt: object.aiPrompt,
         vectorObjectType: object.subType,
