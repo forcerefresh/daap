@@ -329,7 +329,9 @@ const LayoutToTemplate = (
     isPolling,
   } = usePolling(poolingFunc);
 
-  const aiPrompts = useMemo(() => data?.prompts, [data]);
+  const aiPrompts = useMemo(() => {
+    return data?.prompts?.splice(0, 10);
+  }, [data]);
 
   // useEffect(() => {
   //   if (aiPrompts) {
@@ -570,6 +572,9 @@ const LayoutToTemplate = (
               <Spinner size={16} /> Saving...
             </>
           )}
+        </div>
+        <div style={{ margin: "10px" }}>
+          <p>Prompts: {data?.prompts?.length}</p>
         </div>
         <>
           {getSelectField(
