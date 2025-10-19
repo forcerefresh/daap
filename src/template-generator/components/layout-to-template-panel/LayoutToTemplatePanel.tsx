@@ -397,6 +397,7 @@ const LayoutToTemplate = (
     const aiPrompt = aiPrompts?.find((p) => p.id === parentPromptId);
     // debugger;
 
+    const simplifiedLayoutObj = JSON.parse(aiPrompt.simplifiedLayout);
     // debugger;
     const imagePrompts =
       promptKind === AiPromptKind.IMAGE
@@ -412,6 +413,10 @@ const LayoutToTemplate = (
         for (const iPrompt of imagePrompts) {
           const existingObj: IObject =
             layoutResponse.project.objects.objectById[iPrompt.objectId!];
+
+          const imageOnePerson = simplifiedLayoutObj.find(
+            (item) => item.objectId === iPrompt.objectId
+          )?.prompt?.imageOnePerson;
 
           const response = await addImagePrompt({
             parentPromptId: aiPrompt.id,
@@ -436,6 +441,7 @@ const LayoutToTemplate = (
               ...("vectorObjectType" in iPrompt
                 ? { vectorObjectType: iPrompt.vectorObjectType }
                 : {}),
+              ...(imageOnePerson ? { imageOnePerson: imageOnePerson } : {}),
             },
           });
 
