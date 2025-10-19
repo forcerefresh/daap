@@ -105,7 +105,7 @@ function App(props: IAppProps) {
 
       for (let i = 0; i < latestInstalledExtensions.length; i++) {
         try {
-          await loadAndRegisterExternalComponent(installedExtensions.data[i]);
+          await loadAndRegisterExternalComponent(latestInstalledExtensions[i]);
         } catch (ex) {
           console.error(ex);
         }
