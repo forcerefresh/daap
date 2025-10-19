@@ -184,8 +184,12 @@ const PromptCard: React.FC<PromptCardProps> = ({
       layoutResponseProject,
       prompt.aiResponseJson!,
       selectedColorPalette,
-      imagePrompts.map((ip) => ip.metadata) as any,
-      vectorPrompts.map((ip) => ip.metadata) as any
+      imagePrompts
+        .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
+        .map((ip) => ip.metadata) as any,
+      vectorPrompts
+        .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
+        .map((ip) => ip.metadata) as any
     );
 
     console.log("update template");

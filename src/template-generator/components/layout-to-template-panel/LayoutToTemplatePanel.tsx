@@ -433,6 +433,9 @@ const LayoutToTemplate = (
               objectHeight: existingObj.height!,
               objectId: iPrompt.objectId!,
               vectorColor: (iPrompt as any).color,
+              ...("vectorObjectType" in iPrompt
+                ? { vectorObjectType: iPrompt.vectorObjectType }
+                : {}),
             },
           });
 
