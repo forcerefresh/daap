@@ -1,14 +1,17 @@
-import { Industry } from "../../hooks/useIndustry";
+// import { Industry } from "../../hooks/useIndustry";
+
+import { Industry } from "../../types/industry";
 
 export function getIndustriesOptionFromThree(industries: Industry[]) {
   const industriesOptions = industries.reduce<
     {
       label: string;
       value: string;
+      fullPath: string;
     }[]
   >((acc, cur, idx) => {
     const label = idx + 1 + ". " + cur.name;
-    acc.push({ label, value: cur.id });
+    acc.push({ label, value: cur.id, fullPath: label });
 
     return cur.children.reduce((acc2, cur2, idx2) => {
       const label2 = idx + 1 + "." + (idx2 + 1) + ".";
@@ -53,7 +56,11 @@ export function getIndustriesOptionFromThree(industries: Industry[]) {
     }, acc);
   }, []);
 
-  industriesOptions.unshift({ label: "Select industry...", value: "" });
+  industriesOptions.unshift({
+    label: "Select industry...",
+    value: "",
+    fullPath: "",
+  });
 
   return industriesOptions;
 }
