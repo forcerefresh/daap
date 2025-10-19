@@ -348,15 +348,15 @@ const LayoutToTemplate = (
   //   }
   // }, [aiPrompts]);
 
-  useEffect(() => {
-    const load = async () => {
-      const industryThree = await getIndustryTree();
-      const options = getIndustriesOptionFromThree(industryThree.industries);
-      setIndustriesOptions(options);
-    };
+  // useEffect(() => {
+  //   const load = async () => {
+  //     const industryThree = await getIndustryTree();
+  //     const options = getIndustriesOptionFromThree(industryThree.industries);
+  //     setIndustriesOptions(options);
+  //   };
 
-    load();
-  }, []);
+  //   load();
+  // }, []);
 
   const currentLayoutData = layoutDataById[formState.layoutId!];
 

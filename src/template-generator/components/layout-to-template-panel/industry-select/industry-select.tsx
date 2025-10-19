@@ -100,9 +100,24 @@ export const IndustrySelect = ({
       }}
     >
       <Button
-        text={selectedOption?.label ?? "Select a industry"}
-        endIcon="double-caret-vertical"
-      />
+        // text={ ?? "Select a industry"}
+        rightIcon="double-caret-vertical"
+      >
+        {selectedOption?.fullPath.split(" > ").map((item, idx) => {
+          const isLast = idx === 2;
+          const ret = isLast ? (
+            <strong>{item}</strong>
+          ) : (
+            <span style={{ color: "#777777" }}>{item}</span>
+          );
+          return (
+            <>
+              {ret}
+              <br />
+            </>
+          );
+        })}
+      </Button>
     </Select>
   );
 };
