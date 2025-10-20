@@ -208,6 +208,13 @@ export function replaceLayoutObject(
 
   object.id = replaceObject.id;
 
+  // apply opacity
+  const oldObject = project.objects.objectById[object.id];
+  if (typeof oldObject.style?.opacity !== "undefined") {
+    if (!object.style) object.style = {};
+    object.style.opacity = oldObject.style.opacity;
+  }
+
   project.objects.objectById[object.id] = object;
 }
 

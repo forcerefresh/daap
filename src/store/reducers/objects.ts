@@ -80,6 +80,12 @@ export function objects(
       const { replaceObjectId, object } = action.payload;
       const newState = cloneDeep(state);
 
+      const oldObject = state.objectById[replaceObjectId];
+      if (typeof oldObject.style?.opacity !== "undefined") {
+        if (!object.style) object.style = {};
+        object.style.opacity = oldObject.style.opacity;
+      }
+
       // remove
       newState.allObjects = newState.allObjects.filter(
         (value) => value !== replaceObjectId
