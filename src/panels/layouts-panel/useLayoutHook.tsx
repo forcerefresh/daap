@@ -7,8 +7,18 @@ import axios from "axios";
 import { isEmpty } from "lodash-es";
 import { IPlayerData } from "../../export/i-export-html";
 import { IStore } from "../../store/store";
+import { LayoutReviewStatus } from "../../template-generator/types/layout";
 
 export const useLayoutHook = () => {
+  const patchLayout = (
+    id: string,
+    payload: { reviewState: LayoutReviewStatus }
+  ): Promise<any> => {
+    return axios
+      .patch(`/api/v1/layouts/${id}`, payload)
+      .then((response) => response.data);
+  };
+
   const getLayout = (id: string): Promise<any> => {
     return axios.get(`/api/v1/layouts/${id}`).then((response) => response.data);
   };
@@ -159,5 +169,6 @@ export const useLayoutHook = () => {
     saveLayout,
     updateLayout,
     deleteLayout,
+    patchLayout,
   };
 };

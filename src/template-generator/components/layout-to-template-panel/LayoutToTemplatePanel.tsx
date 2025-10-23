@@ -19,6 +19,7 @@ import {
   isEmpty,
   isEqual,
   forOwn,
+  set,
 } from "lodash-es";
 import { connect } from "react-redux";
 import {
@@ -48,6 +49,7 @@ import {
   setDevice,
 } from "../../../store/actions/actions";
 import {
+  getButtonGroupField,
   getCheckboxField,
   getSelectField,
   getTextArea,
@@ -106,6 +108,11 @@ import { preloadFonts } from "../../../utils/project/project-utils";
 import { getMissingExtensionsFromProject } from "../../../utils/extensions/extensions-utils";
 import { ISettings } from "../../../store/reducers/i-settings";
 import { IPages } from "../../../store/reducers/i-pages";
+import {
+  LayoutReviewStatus,
+  layoutReviewStatusOptions,
+} from "../../types/layout";
+import { LayoutSelect } from "./layout-select/layout-select";
 
 export const THUMB_WIDTH = 200;
 
@@ -148,7 +155,7 @@ const LayoutToTemplate = (
   } = props;
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
 
-  const { getLayouts, getLayout } = useLayoutHook();
+  const { getLayouts, getLayout, patchLayout } = useLayoutHook();
   const { getIndustryTree } = useIndustry();
   const { getDocumentTypeTree } = useDocumentsType();
   const {
@@ -205,9 +212,12 @@ const LayoutToTemplate = (
       : undefined;
 
     getLayoutSetsWithLayouts(filter).then((response) => {
-      const options: OptionProps[] = [
-        { label: "Select layout ....", value: "" },
-      ];
+      const options: {
+        disabled?: boolean;
+        label?: string;
+        value: string;
+        reviewState?: LayoutReviewStatus;
+      }[] = [{ label: "Select layout ....", value: "" }];
 
       response.forEach((layoutSet) => {
         options.push({
@@ -218,9 +228,10 @@ const LayoutToTemplate = (
 
         layoutSet.layouts.forEach((layout) => {
           options.push({
-            className: css.red,
+            // className: css.red,
             label: "    " + layout.name,
             value: layout.id,
+            reviewState: layout.reviewState,
           });
         });
       });
@@ -641,7 +652,7 @@ const LayoutToTemplate = (
                 { placeholder: "Select industry" }
               )}
             </div>
-            <div className={cx("input100percent-force", css.inputHolder)}>
+            {/* <div className={cx("input100percent-force", css.inputHolder)}>
               {getSelectField(
                 "Layout",
                 formState.layoutId,
@@ -652,8 +663,17 @@ const LayoutToTemplate = (
                 },
                 { placeholder: "Select layout" }
               )}
-            </div>
-            <div className={cx("input100percent-force", css.inputHolder)}>
+            </div> */}
+            <LayoutSelect
+              industriesOptions={layoutOptions}
+              value={formState.layoutId}
+              onChange={(layoutId: string) => {
+                setFormState({ ...formState, layoutId: layoutId });
+                localStorage.setItem("ai-generator-layout", layoutId!);
+              }}
+            />
+
+            {/* <div className={cx("input100percent-force", css.inputHolder)}>
               {getSelectField(
                 "Industry",
                 formState.industryId,
@@ -664,7 +684,7 @@ const LayoutToTemplate = (
                 },
                 { placeholder: "Select industry" }
               )}
-            </div>
+            </div> */}
 
             <IndustrySelect
               industriesOptions={industriesOptions}
@@ -746,6 +766,31 @@ const LayoutToTemplate = (
                 /> */}
               </div>
             ) : null}
+          </div>
+
+          {JSON.stringify(layoutDataById?.[formState.layoutId!]?.layout?.id)}
+          <div>
+            {getButtonGroupField(
+              "Layout review",
+              layoutDataById[formState.layoutId!]?.layout.reviewState,
+              (value) => {
+                if (!formState.layoutId) return;
+
+                patchLayout(formState.layoutId, { reviewState: value }).then(
+                  () => {
+                    const clone = cloneDeep(layoutDataById);
+                    set(
+                      clone,
+                      `${formState.layoutId}.layout.reviewState`,
+                      value
+                    );
+
+                    setLayoutDataById(clone);
+                  }
+                );
+              },
+              layoutReviewStatusOptions
+            )}
           </div>
           <div className={css.actionRow}>
             <div>

@@ -100,11 +100,14 @@ export const IndustrySelect = ({
       }}
     >
       <Button
+        style={{ marginTop: "10px", marginBottom: "10px" }}
         // text={ ?? "Select a industry"}
         rightIcon="double-caret-vertical"
       >
         {selectedOption?.fullPath.split(" > ").map((item, idx) => {
-          const isLast = idx === 2;
+          const isLast =
+            idx === selectedOption?.fullPath.split(" > ").length - 1;
+
           const ret = isLast ? (
             <strong>{item}</strong>
           ) : (

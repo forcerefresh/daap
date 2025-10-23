@@ -7,6 +7,7 @@ import axios from "axios";
 import { isEmpty } from "lodash-es";
 import { IPlayerData } from "../../export/i-export-html";
 import { IStore } from "../../store/store";
+import { LayoutReviewStatus } from "../../template-generator/types/layout";
 
 export interface LayoutSetsWithLayoutsType {
   id: string;
@@ -28,6 +29,7 @@ export interface LayoutSetsWithLayoutsType {
     fonts: string;
     userUid: string | null;
     layoutSetId: string | null;
+    reviewState: LayoutReviewStatus;
   }[];
 }
 
