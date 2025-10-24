@@ -1,6 +1,9 @@
 .holder:hover {
   :global {
-    .object-wrapper {
+    .object-wrapper::after {
+      content: " ";
+      position: absolute;
+      inset: 0;
       border: 5px solid #48aff0 !important;
     }
   }
