@@ -214,6 +214,12 @@ export function replaceLayoutObject(
     if (!object.style) object.style = {};
     object.style.opacity = oldObject.style.opacity;
   }
+  if (typeof oldObject.rotation) {
+    object.rotation = oldObject.rotation;
+  }
+  if (typeof oldObject.rotation) {
+    object.rotation = oldObject.rotation;
+  }
 
   project.objects.objectById[object.id] = object;
 }
