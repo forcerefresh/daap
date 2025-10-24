@@ -330,7 +330,8 @@ const PromptCard: React.FC<PromptCardProps> = ({
   const completeDisabled =
     remainingImageForReview > 0 ||
     remainingVectorsForReview > 0 ||
-    prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED;
+    (prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED &&
+      prompt.status !== AiPromptStatus.ERROR);
   return (
     <Card elevation={Elevation.TWO} style={{ position: "relative" }}>
       <div
