@@ -616,7 +616,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
             <div
               style={{
                 display: "flex",
-                height: "calc(100vh - 200px)",
+                height: "calc(100vh - 150px)",
                 gap: "20px",
               }}
             >
