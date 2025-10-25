@@ -235,7 +235,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               </Button>
             </div>
 
-            <div>
+            {/* <div>
               <Button
                 style={{ color: "rgb(110 240 239)" }}
                 icon={
@@ -250,7 +250,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               >
                 Generate OLD
               </Button>
-            </div>
+            </div> */}
           </>
         ) : null}
 

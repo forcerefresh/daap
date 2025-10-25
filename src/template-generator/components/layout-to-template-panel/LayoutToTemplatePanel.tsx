@@ -786,6 +786,20 @@ const LayoutToTemplate = (
                     );
 
                     setLayoutDataById(clone);
+
+                    //
+                    const newLayoutOptions = cloneDeep(layoutOptions);
+
+                    const opt = newLayoutOptions.find(
+                      (op) => op.value === formState.layoutId
+                    );
+                    if (opt) {
+                      opt.reviewState = value;
+                    }
+
+                    setLayoutOptions(newLayoutOptions);
+
+                    //
                   }
                 );
               },
