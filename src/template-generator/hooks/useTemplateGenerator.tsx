@@ -9,7 +9,7 @@ import { useCallback } from "react";
 export const useAiPrompt = () => {
   const getTemplateGeneratorPrompts = useCallback(
     (
-      props: { processingStatus?: AiProcessingStatus } = {}
+      props: { processingStatus?: AiProcessingStatus; forUserUID?: string } = {}
     ): Promise<{
       prompts: AiPrompt[];
     }> => {

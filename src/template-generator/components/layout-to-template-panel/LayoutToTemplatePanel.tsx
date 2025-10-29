@@ -324,6 +324,12 @@ const LayoutToTemplate = (
               localStorage?.getItem("aiGenProcessingComplete") === "complete",
           }
         : {}),
+
+      ...(localStorage?.getItem("aiGenCurrentUser")
+        ? {
+            forUserUID: localStorage?.getItem("aiGenCurrentUser") as string,
+          }
+        : {}),
     });
   }, []);
 
@@ -596,6 +602,34 @@ const LayoutToTemplate = (
         <div style={{ margin: "10px" }}>
           <p>Prompts: {data?.prompts?.length}</p>
         </div>
+
+        <>
+          {getSelectField(
+            "",
+            localStorage?.getItem("aiGenCurrentUser"),
+            [
+              {
+                label: "Current user",
+                value: "",
+              },
+
+              {
+                label: "Srdjan",
+                value: "cb43c3de-6418-4e29-8fa5-bbc5aed56c92",
+              },
+              { label: "Petar", value: "9e70f8e7-c2fa-441d-bc5f-4de37845e670" },
+              {
+                label: "Jelena",
+                value: "10dea6a6-5b21-4a9f-b946-d54f89f23af4",
+              },
+            ],
+            (value) => {
+              localStorage?.setItem("aiGenCurrentUser", value ?? "");
+              restartPolling();
+            }
+          )}
+        </>
+
         <>
           {getSelectField(
             "",
