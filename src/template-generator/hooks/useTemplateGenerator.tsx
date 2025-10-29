@@ -5,13 +5,31 @@ import {
   AiPromptKind,
 } from "../types/ai-prompts";
 import { useCallback } from "react";
+import { Pagination } from "../../types/pagination";
+
+// export type Pagination = {
+//   currentPage: number;
+//   isFirstPage: boolean;
+//   isLastPage: boolean;
+//   nextPage: number | null;
+//   pageCount: number;
+//   previousPage: number | null;
+//   totalCount: number;
+// };
 
 export const useAiPrompt = () => {
   const getTemplateGeneratorPrompts = useCallback(
     (
-      props: { processingStatus?: AiProcessingStatus; forUserUID?: string } = {}
+      props: {
+        processingStatus?: AiProcessingStatus;
+        forUserUID?: string;
+        perPage?: string;
+        page?: string;
+        limit?: string;
+      } = {}
     ): Promise<{
-      prompts: AiPrompt[];
+      data: AiPrompt[];
+      pagination: Pagination;
     }> => {
       return axios
         .get(`/api/v1/generator/template-generator-prompt`, {

@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import cx from "classnames";
@@ -113,6 +114,7 @@ import {
   layoutReviewStatusOptions,
 } from "../../types/layout";
 import { LayoutSelect } from "./layout-select/layout-select";
+import { AdvancedPagination } from "../pagination/pagination";
 
 export const THUMB_WIDTH = 200;
 
@@ -307,29 +309,37 @@ const LayoutToTemplate = (
   //     setAiPrompts(response.prompts);
   //   });
   // }, []);
+  const [filters, setFilters] = useState({
+    aiGenPerPage: localStorage?.getItem("aiGenPerPage") ?? "5",
+    aiGenCurrentUser: localStorage?.getItem("aiGenCurrentUser"),
+    aiGenProcessingComplete: localStorage?.getItem("aiGenProcessingComplete"),
+    aiGenProcessingStatus: localStorage?.getItem("aiGenProcessingStatus"),
+  });
 
   const poolingFunc = useCallback(() => {
     return getTemplateGeneratorPrompts({
-      ...(localStorage?.getItem("aiGenProcessingStatus")
+      ...(filtersRef.current.aiGenProcessingStatus
         ? {
-            processingStatus: localStorage?.getItem(
-              "aiGenProcessingStatus"
-            ) as AiProcessingStatus,
+            processingStatus: filtersRef.current
+              .aiGenProcessingStatus as AiProcessingStatus,
           }
         : {}),
 
-      ...(localStorage?.getItem("aiGenProcessingComplete")
+      ...(filtersRef.current.aiGenProcessingComplete
         ? {
             processingComplete:
-              localStorage?.getItem("aiGenProcessingComplete") === "complete",
+              filtersRef.current.aiGenProcessingComplete === "complete",
           }
         : {}),
 
-      ...(localStorage?.getItem("aiGenCurrentUser")
+      ...(filtersRef.current.aiGenCurrentUser
         ? {
-            forUserUID: localStorage?.getItem("aiGenCurrentUser") as string,
+            forUserUID: filtersRef.current.aiGenCurrentUser as string,
           }
         : {}),
+
+      limit: (filtersRef.current.aiGenPerPage as string) ?? "10",
+      page: (filtersRef.current.aiGenPage as string) ?? "1",
     });
   }, []);
 
@@ -340,14 +350,34 @@ const LayoutToTemplate = (
     pollCount,
     startPolling,
     stopPolling,
-    restartPolling,
+    restartPolling: restartPolingOriginal,
     restartWithNewParams,
     refetch,
     isPolling,
   } = usePolling(poolingFunc);
 
+  const filtersRef = useRef(filters);
+  filtersRef.current = filters;
+
+  const restartPolling = () => {
+    stopPolling();
+
+    setTimeout(() => {
+      const perPage = parseInt(filtersRef.current.aiGenPerPage ?? "5");
+      if (perPage <= 10) {
+        restartPolingOriginal();
+      } else {
+        refetch();
+      }
+    }, 50);
+  };
+
   const aiPrompts = useMemo(() => {
-    return data?.prompts?.splice(0, 10);
+    return data?.data?.splice(0, 10);
+  }, [data]);
+
+  const pagination = useMemo(() => {
+    return data?.pagination;
   }, [data]);
 
   // useEffect(() => {
@@ -599,9 +629,51 @@ const LayoutToTemplate = (
             </>
           )}
         </div>
-        <div style={{ margin: "10px" }}>
-          <p>Prompts: {data?.prompts?.length}</p>
+        <div>
+          <AdvancedPagination
+            {...pagination}
+            onPageChange={(page) => {
+              setFilters({ ...filters, aiGenPage: page });
+              restartPolling();
+            }}
+          />
         </div>
+        <div style={{ margin: "10px" }}>
+          <p>Total prompts: {pagination?.totalCount}</p>
+        </div>
+
+        <>
+          {getSelectField(
+            "",
+            filters.aiGenPerPage,
+            [
+              {
+                label: "5 - Recommended",
+                value: "5",
+              },
+
+              {
+                label: "10",
+                value: "10",
+              },
+
+              {
+                label: "50 - Disabled Auto Update",
+                value: "50",
+              },
+
+              {
+                label: "100 - Disabled Auto Update",
+                value: "100",
+              },
+            ],
+            (value) => {
+              localStorage?.setItem("aiGenPerPage", value);
+              setFilters({ ...filters, aiGenPerPage: value });
+              restartPolling();
+            }
+          )}
+        </>
 
         <>
           {getSelectField(
@@ -625,6 +697,7 @@ const LayoutToTemplate = (
             ],
             (value) => {
               localStorage?.setItem("aiGenCurrentUser", value ?? "");
+              setFilters({ ...filters, aiGenCurrentUser: value });
               restartPolling();
             }
           )}
@@ -642,7 +715,8 @@ const LayoutToTemplate = (
               { label: "Not completed", value: "notcompleted" },
             ],
             (value) => {
-              localStorage?.setItem("aiGenProcessingComplete", value ?? "");
+              localStorage?.setItem("aiGenProcessingComplete", value!);
+              setFilters({ ...filters, aiGenProcessingComplete: value });
               restartPolling();
             }
           )}
@@ -665,6 +739,7 @@ const LayoutToTemplate = (
             ],
             (value) => {
               localStorage?.setItem("aiGenProcessingStatus", value ?? "");
+              setFilters({ ...filters, aiGenProcessingStatus: value });
               restartPolling();
             }
           )}
