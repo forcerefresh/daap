@@ -373,7 +373,7 @@ const LayoutToTemplate = (
   };
 
   const aiPrompts = useMemo(() => {
-    return data?.data?.splice(0, 10);
+    return data?.data;
   }, [data]);
 
   const pagination = useMemo(() => {
