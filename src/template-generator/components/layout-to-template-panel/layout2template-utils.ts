@@ -58,7 +58,6 @@ export function mergeAiTemplateAndSimplifiedLayout(
     item.bounds = getBounds(simplifiedLayout, item.objectId);
   });
 
-  debugger;
   return aiResponseJsonClone;
 }
 
