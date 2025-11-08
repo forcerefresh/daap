@@ -1023,6 +1023,7 @@ const LayoutToTemplate = (
         </section>
       </div>
       <ProcessTemplates
+        forUserUid={filters.aiGenCurrentUser}
         open={processTemplatesOpen}
         onRequestClose={() => {
           setProcessTemplatesOpen(false);

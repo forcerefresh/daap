@@ -47,6 +47,7 @@ export const PREVIEW_WIDTH = 500;
 interface IProcessTemplatesProps {
   onRequestClose?: () => void;
   open?: boolean;
+  forUserUid?: string;
 }
 
 export type IProcessTemplatesMergedProps = typeof mapDispatchToProps &
@@ -59,7 +60,7 @@ const ProcessTemplates = (
   const {
     open,
     onRequestClose,
-
+    forUserUid,
     // layers,
     // objects,
     // breakpointConfig,
@@ -104,6 +105,7 @@ const ProcessTemplates = (
       processingComplete: true,
       promptKind: AiPromptKind.TEMPLATE,
       templateGenerated: false,
+      forUserUID: forUserUid,
     });
 
     if (aiPromptResponse.data.length === 0) return;
