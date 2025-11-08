@@ -149,7 +149,8 @@ const ProcessTemplates = (
       await addPublicTemplate({
         industryStr: oneIsResponse.industry.name,
         documentTypeStr: oneIsResponse.documentType.name,
-        promptStr: imagePrompts[0].prompt,
+        promptStr:
+          imagePrompts?.[0]?.prompt ?? vectorPrompts?.[0]?.prompt ?? "",
         aiPromptId: oneIsResponse.id,
         documentTypeId: oneIsResponse.documentTypeId,
         industryId: oneIsResponse.industryId,
