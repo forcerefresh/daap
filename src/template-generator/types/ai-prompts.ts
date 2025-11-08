@@ -41,6 +41,7 @@ export interface AiPrompt {
   status: AiPromptStatus;
   processingStatus: AiProcessingStatus;
   processingComplete: boolean;
+  templateGenerated: boolean;
   provider: string;
   model: string;
   cost: number | null;

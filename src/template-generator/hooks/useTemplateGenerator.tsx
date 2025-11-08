@@ -22,6 +22,9 @@ export const useAiPrompt = () => {
     (
       props: {
         processingStatus?: AiProcessingStatus;
+        promptKind?: AiPromptKind;
+        templateGenerated?: boolean;
+        processingComplete?: boolean;
         forUserUID?: string;
         perPage?: string;
         page?: string;

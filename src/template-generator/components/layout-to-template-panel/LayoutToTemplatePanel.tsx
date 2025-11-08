@@ -115,6 +115,7 @@ import {
 } from "../../types/layout";
 import { LayoutSelect } from "./layout-select/layout-select";
 import { AdvancedPagination } from "../pagination/pagination";
+import ProcessTemplates from "../process-templates/process-templates";
 
 export const THUMB_WIDTH = 200;
 
@@ -156,6 +157,8 @@ const LayoutToTemplate = (
     _setDevice,
   } = props;
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
+
+  const [processTemplatesOpen, setProcessTemplatesOpen] = useState(false);
 
   const { getLayouts, getLayout, patchLayout } = useLayoutHook();
   const { getIndustryTree } = useIndustry();
@@ -354,7 +357,11 @@ const LayoutToTemplate = (
     restartWithNewParams,
     refetch,
     isPolling,
-  } = usePolling(poolingFunc);
+  } = usePolling(poolingFunc, undefined, false);
+
+  useEffect(() => {
+    restartPolling();
+  }, []);
 
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
@@ -363,7 +370,11 @@ const LayoutToTemplate = (
     stopPolling();
 
     setTimeout(() => {
-      const perPage = parseInt(filtersRef.current.aiGenPerPage ?? "5");
+      const perPage = parseInt(
+        filtersRef.current.aiGenPerPage ??
+          localStorage?.getItem("aiGenPerPage") ??
+          "5"
+      );
       if (perPage <= 10) {
         restartPolingOriginal();
       } else {
@@ -621,7 +632,17 @@ const LayoutToTemplate = (
   return (
     <div className={cx(themeClass, css.layout2TemplatePanel)}>
       <RightPanelHeader>
-        <div>GENERATE AI TEMPLATE</div>
+        <div>
+          GENERATE AI TEMPLATE{" "}
+          <Button
+            small
+            onClick={() => {
+              setProcessTemplatesOpen(true);
+            }}
+          >
+            Process templates
+          </Button>
+        </div>
         <div className={css.saving}>
           {meta.inSaving && (
             <>
@@ -1001,6 +1022,12 @@ const LayoutToTemplate = (
           )}
         </section>
       </div>
+      <ProcessTemplates
+        open={processTemplatesOpen}
+        onRequestClose={() => {
+          setProcessTemplatesOpen(false);
+        }}
+      />
     </div>
   );
 };
