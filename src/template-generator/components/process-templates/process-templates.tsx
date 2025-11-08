@@ -231,8 +231,8 @@ const ProcessTemplates = (
       title="Process templates"
       canOutsideClickClose={false}
     >
-      <div style={{ width: "400px", height: "400px" }}>
-        <AITemplatePreview currentProject={template} width={350} />
+      <div style={{ width: "500px", height: "500px" }}>
+        <AITemplatePreview currentProject={template} width={PREVIEW_WIDTH} />
       </div>
     </Dialog>
   );
