@@ -116,6 +116,7 @@ import {
 import { LayoutSelect } from "./layout-select/layout-select";
 import { AdvancedPagination } from "../pagination/pagination";
 import ProcessTemplates from "../process-templates/process-templates";
+import SearchTemplates from "../search-templates/search-templates";
 
 export const THUMB_WIDTH = 200;
 
@@ -159,6 +160,7 @@ const LayoutToTemplate = (
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
 
   const [processTemplatesOpen, setProcessTemplatesOpen] = useState(false);
+  const [searchTemplatesOpen, setSearchTemplatesOpen] = useState(false);
 
   const { getLayouts, getLayout, patchLayout } = useLayoutHook();
   const { getIndustryTree } = useIndustry();
@@ -643,6 +645,17 @@ const LayoutToTemplate = (
             Process templates
           </Button>
         </div>
+
+        <div>
+          <Button
+            small
+            onClick={() => {
+              setSearchTemplatesOpen(true);
+            }}
+          >
+            Search templates
+          </Button>
+        </div>
         <div className={css.saving}>
           {meta.inSaving && (
             <>
@@ -1027,6 +1040,13 @@ const LayoutToTemplate = (
         open={processTemplatesOpen}
         onRequestClose={() => {
           setProcessTemplatesOpen(false);
+        }}
+      />
+
+      <SearchTemplates
+        open={searchTemplatesOpen}
+        onRequestClose={() => {
+          setSearchTemplatesOpen(false);
         }}
       />
     </div>
