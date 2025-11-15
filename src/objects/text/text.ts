@@ -114,7 +114,7 @@ export function createTextObject(
     bold: false,
     italic: false,
     underline: false,
-    lineHeight: 0,
+    lineHeight: initialValue?.lineHeight ?? 0,
     textAlign: initialValue?.textAlign ?? "left",
     letterSpacing: initialValue?.letterSpacing ?? "0px",
     fontKerning: true,

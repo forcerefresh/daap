@@ -122,7 +122,7 @@ const ProcessTemplates = (
         return childPrompt.promptKind === AiPromptKind.VECTOR;
       }) ?? [];
 
-    const oneIsResponse = aiPromptResponse.data[0];
+    const oneAiPrompt = aiPromptResponse.data[0];
 
     const layoutResponse = await getLayout(aiPromptResponse.data[0].layoutId);
     const layoutResponseProject = layoutResponse.project;
@@ -130,14 +130,17 @@ const ProcessTemplates = (
     const newTemplate = updateTemplate(
       layoutResponseProject,
       layoutResponseProject,
-      oneIsResponse.aiResponseJson!,
-      oneIsResponse.aiResponseJson!.brandColors, // color palette
+      oneAiPrompt.aiResponseJson!,
+      oneAiPrompt.aiResponseJson!.brandColors, // color palette
       imagePrompts
         .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
         .map((ip) => ip.metadata) as any,
       vectorPrompts
         .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
-        .map((ip) => ip.metadata) as any
+        .map((ip) => ip.metadata) as any,
+      oneAiPrompt.overrideObjectProperties
+        ? JSON.parse(oneAiPrompt.overrideObjectProperties)
+        : undefined
     );
 
     console.log("update template");
@@ -149,17 +152,17 @@ const ProcessTemplates = (
       const imageBase64Data = `data:image/${extension};base64,${imageBase64}`;
 
       await addPublicTemplate({
-        industryStr: oneIsResponse.industry.name,
-        documentTypeStr: oneIsResponse.documentType.name,
+        industryStr: oneAiPrompt.industry.name,
+        documentTypeStr: oneAiPrompt.documentType.name,
         promptStr:
           imagePrompts?.[0]?.prompt ?? vectorPrompts?.[0]?.prompt ?? "",
-        aiPromptId: oneIsResponse.id,
-        documentTypeId: oneIsResponse.documentTypeId,
-        industryId: oneIsResponse.industryId,
+        aiPromptId: oneAiPrompt.id,
+        documentTypeId: oneAiPrompt.documentTypeId,
+        industryId: oneAiPrompt.industryId,
         previewImageBase64: imageBase64Data,
       });
 
-      await updatePrompt(oneIsResponse.id, { templateGenerated: true });
+      await updatePrompt(oneAiPrompt.id, { templateGenerated: true });
 
       process().then();
     }, 1000);

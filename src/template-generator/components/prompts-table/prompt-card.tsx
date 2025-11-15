@@ -40,6 +40,14 @@ import { ImagePromptListView } from "./image-prompt-card";
 import { after, cloneDeep, set } from "lodash-es";
 import { string } from "yup";
 import { LayoutPromptListView } from "./layout-prompt-card";
+import {
+  getButtonGroupField,
+  getNumericFiled,
+  getTextArea,
+  getTextField,
+} from "../../../inputs/input-utils";
+import { get } from "http";
+import { useDebounce } from "../../../utils/hooks/use-debounce";
 
 export type SelectedColorPaletteType = {
   promptId: string;
@@ -59,6 +67,7 @@ export interface PromptCardProps {
       processingStatus?: AiProcessingStatus;
       processingComplete?: boolean;
       metadata?: { approved: ColorTheme[] };
+      overrideObjectProperties?: Record<string, any>;
     }
   ) => void;
   isChild?: boolean;
@@ -172,7 +181,26 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
   const [layoutResponse, setLayoutResponse] = useState<any | undefined>();
   const [template, setTemplate] = useState<any | undefined>();
-  const [texts, setTexts] = useState<{ text: string; tag: string }[]>([]);
+  const [texts, setTexts] = useState<
+    { text: string; tag: string; properties: any; objectId: string }[]
+  >([]);
+
+  const [overridesObjectProperties, setOverridesObjectProperties_State] =
+    useState<Record<string, any>>(
+      prompt.overrideObjectProperties
+        ? JSON.parse(prompt.overrideObjectProperties)
+        : {}
+    );
+
+  const debouncedUpdatePrompt = useDebounce(updatePrompt, 500);
+
+  const setOverridesObjectProperties = (overrides: Record<string, any>) => {
+    setOverridesObjectProperties_State(overrides);
+
+    debouncedUpdatePrompt?.(prompt.id, {
+      overrideObjectProperties: JSON.stringify(overrides),
+    });
+  };
 
   const onLayoutReady = (layoutResponseProject) => {
     if (!prompt.aiResponseJson) {
@@ -189,11 +217,14 @@ const PromptCard: React.FC<PromptCardProps> = ({
         .map((ip) => ip.metadata) as any,
       vectorPrompts
         .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
-        .map((ip) => ip.metadata) as any
+        .map((ip) => ip.metadata) as any,
+      overridesObjectProperties
     );
 
     console.log("update template");
     setTemplate(newTemplate);
+
+    console.log(prompt.aiResponseJson);
 
     const textArr = collectTextFromIaResponse(prompt.aiResponseJson!);
     // debugger;
@@ -225,6 +256,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
     prompt.promptKind,
     selectedColorPalette,
     setTexts,
+    overridesObjectProperties,
   ]);
 
   // const onApplyImages = (aiPrompts: AiPrompt[]) => {
@@ -709,9 +741,116 @@ const PromptCard: React.FC<PromptCardProps> = ({
                       return (
                         <div style={{ margin: "4px" }}>
                           <span>{text.text}</span>{" "}
+                          {getTextArea(
+                            "",
+                            overridesObjectProperties[text.objectId]?.text ??
+                              text.properties.text,
+                            (newText) => {
+                              const newState = cloneDeep(
+                                overridesObjectProperties
+                              );
+                              const prevProperties = newState[text.objectId]
+                                ? { ...newState[text.objectId] }
+                                : {};
+                              prevProperties.text = newText;
+
+                              newState[text.objectId] = prevProperties;
+
+                              setOverridesObjectProperties(newState);
+                            },
+                            "",
+                            { rows: 2 }
+                          )}
                           <Tag minimal large>
                             {text.tag}
                           </Tag>
+                          <div style={{ display: "flex" }}>
+                            {getNumericFiled(
+                              "FS",
+                              parseInt(
+                                overridesObjectProperties[text.objectId]
+                                  ?.fontSize ?? text.properties.fontSize
+                              ),
+                              (newFontSize) => {
+                                const newState = cloneDeep(
+                                  overridesObjectProperties
+                                );
+                                const prevProperties = newState[text.objectId]
+                                  ? { ...newState[text.objectId] }
+                                  : {};
+                                prevProperties.fontSize = newFontSize + "px";
+
+                                newState[text.objectId] = prevProperties;
+
+                                setOverridesObjectProperties(newState);
+                              }
+                            )}
+                            {getNumericFiled(
+                              "LH",
+                              parseInt(
+                                overridesObjectProperties[text.objectId]
+                                  ?.lineHeight ?? text.properties.lineHeight
+                              ),
+                              (newLineHeight) => {
+                                const newState = cloneDeep(
+                                  overridesObjectProperties
+                                );
+                                const prevProperties = newState[text.objectId]
+                                  ? { ...newState[text.objectId] }
+                                  : {};
+                                prevProperties.lineHeight = newLineHeight;
+
+                                newState[text.objectId] = prevProperties;
+
+                                setOverridesObjectProperties(newState);
+                              }
+                            )}
+
+                            {/* const alignArr = ["left", "center", "right", "justify"]; */}
+                          </div>
+                          <div>
+                            {getButtonGroupField(
+                              "",
+                              overridesObjectProperties[text.objectId]
+                                ?.textAlign ?? text.properties.textAlign,
+                              (newTextAlign) => {
+                                const newState = cloneDeep(
+                                  overridesObjectProperties
+                                );
+                                const prevProperties = newState[text.objectId]
+                                  ? { ...newState[text.objectId] }
+                                  : {};
+                                prevProperties.textAlign = newTextAlign;
+
+                                newState[text.objectId] = prevProperties;
+
+                                setOverridesObjectProperties(newState);
+                              },
+                              [
+                                { label: "L", value: "left" },
+                                { label: "R", value: "right" },
+                                { label: "C", value: "center" },
+                                { label: "J", value: "justify" },
+                              ]
+                            )}
+                          </div>
+                          {overridesObjectProperties?.[text.objectId] && (
+                            <Button
+                              small
+                              intent="primary"
+                              onClick={() => {
+                                const newState = cloneDeep(
+                                  overridesObjectProperties
+                                );
+                                delete newState[text.objectId];
+
+                                setOverridesObjectProperties(newState);
+                              }}
+                            >
+                              Reset
+                            </Button>
+                          )}
+                          <Divider />
                         </div>
                       );
                     })}

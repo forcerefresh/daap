@@ -60,4 +60,5 @@ export interface AiPrompt {
   noAnyWritingsInImages: boolean;
   noHandsInImages: boolean;
   uncrowdedImages: boolean;
+  overrideObjectProperties: string;
 }

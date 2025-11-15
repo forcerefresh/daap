@@ -28,6 +28,10 @@ export function updateLayout(layout: any, iaResponseJson: Record<string, any>) {
       if (obj.properties?.fontSize) {
         existingObj.properties.fontSize = obj.properties.fontSize;
       }
+
+      if (obj.properties?.lineHeight) {
+        existingObj.properties.lineHeight = obj.properties.lineHeight;
+      }
     });
   } catch (ex) {
     debugger;
@@ -42,7 +46,8 @@ export function updateTemplate(
   iaResponseJson: Record<string, any>,
   selectedColorSet: ColorTheme,
   imageMeta?: { mediaId: string; objectId: string }[],
-  vectorMeta?: { mediaId: string; objectId: string }[]
+  vectorMeta?: { mediaId: string; objectId: string }[],
+  overridesObjectProperties?: Record<string, any>
 ) {
   if (!iaResponseJson) return;
 
@@ -77,12 +82,19 @@ export function updateTemplate(
   try {
     const aiResponseObjectUpdated = JSON.parse(aiResponseStrUpdated);
     aiResponseObjectUpdated.objects.forEach((obj: any) => {
-      const objectId = obj.id;
+      const objectId = obj.objectId;
       //   const layoutObj = JSON.parse(formState.layout!)
       //  const objectId = layoutObj[idx].objectId
-      const existingObj = newTemplate.objects.objectById[obj.objectId];
+      const existingObj = newTemplate.objects.objectById[objectId];
 
       if (obj.type === "text") {
+        const mergedProperties = {
+          ...obj.properties,
+          ...(overridesObjectProperties?.[objectId]
+            ? overridesObjectProperties[objectId]
+            : {}),
+        };
+
         replaceLayoutObject(
           newTemplate,
           existingObj,
@@ -91,7 +103,7 @@ export function updateTemplate(
           pick(existingObj, "left", "top", "width", "height", "rotation"),
 
           {
-            ...obj.properties,
+            ...mergedProperties,
             // font: previewFont!,
             // autoHeight: true,
             // initialAutoWidth: true,
@@ -224,15 +236,22 @@ export function replaceLayoutObject(
   project.objects.objectById[object.id] = object;
 }
 
-export function collectTextFromIaResponse(iaResponseJson: Record<string, anu>) {
+export function collectTextFromIaResponse(iaResponseJson: Record<string, any>) {
   console.log(iaResponseJson);
 
-  const retAtt: { text: string; tag: string }[] = [];
+  const retAtt: {
+    text: string;
+    tag: string;
+    properties: any;
+    objectId: string;
+  }[] = [];
 
   iaResponseJson.objects.forEach((object: any) => {
     if (object.type !== "text") return;
 
     retAtt.push({
+      objectId: object.objectId,
+      properties: object.properties,
       text: object.properties.text,
       tag: object.subType,
     });
