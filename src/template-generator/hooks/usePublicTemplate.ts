@@ -9,6 +9,8 @@ export const usePublicTemplate = () => {
     documentTypeId: string;
     aiPromptId: string;
     previewImageBase64: string;
+    language: string;
+    previewUid?: string; //. only used when adding translation image
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/public-templates`, props)

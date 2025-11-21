@@ -43,6 +43,7 @@ import { blobToBase64 } from "../../../utils/file/file-utils";
 import { usePublicTemplate } from "../../hooks/usePublicTemplate";
 import { usePublicTemplateSearch } from "../../hooks/usePublicTemplateSearch";
 import TemplatesGrid from "./templates-grid";
+import TemplatesGridV2 from "./templates-grid-v2";
 
 export const PREVIEW_WIDTH = 500;
 
@@ -100,7 +101,7 @@ const SearchTemplates = (props: ISearchTemplatesMergedProps): ReactElement => {
           }}
         ></InputGroup>
       </div>
-      <TemplatesGrid searchQuery={search} baseUrl="/" />
+      <TemplatesGridV2 searchQuery={search} baseUrl="/" />
     </Dialog>
   );
 };

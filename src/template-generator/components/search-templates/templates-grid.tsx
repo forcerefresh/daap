@@ -4,6 +4,16 @@ import styles from "./templates-grid.module.scss";
 import { usePublicTemplateSearch } from "../../hooks/usePublicTemplateSearch";
 import { getMediaSrc } from "../../../integration/utils/local-media";
 
+const languageMappings = {
+  en: { name: "English", iso3: "eng" },
+  es: { name: "Spanish", iso3: "spa" },
+  fr: { name: "French", iso3: "fra" },
+  pt: { name: "Portuguese", iso3: "por" },
+  de: { name: "German", iso3: "deu" },
+  sr: { name: "Serbian", iso3: "srp" },
+  it: { name: "Italian", iso3: "ita" },
+};
+
 interface Industry {
   id: string;
   name: string;
@@ -55,6 +65,7 @@ interface TemplatesResponse {
     searchTime: number;
     strategy: string;
     totalResults: number;
+    language: string;
   };
   pagination: {
     page: number;
@@ -79,6 +90,8 @@ const TemplatesGrid: React.FC<TemplatesGridProps> = ({
 }) => {
   const { searchPublicTemplate } = usePublicTemplateSearch();
   const [templates, setTemplates] = useState<TemplateItem[]>([]);
+  const [metadata, setMetadata] = useState<TemplatesResponse["metadata"]>();
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -105,6 +118,7 @@ const TemplatesGrid: React.FC<TemplatesGridProps> = ({
           10
         );
         setTemplates(response.data);
+        setMetadata(response.metadata);
         setHasMore(response.pagination.hasNext);
         setCurrentPage(1);
       } catch (err) {
@@ -175,6 +189,9 @@ const TemplatesGrid: React.FC<TemplatesGridProps> = ({
 
   return (
     <div className={styles.container}>
+      {metadata?.language ?? (
+        <div> {languageMappings[metadata?.language]?.name}</div>
+      )}
       <div className={styles.header}>
         {/* <h1>Social Media Templates</h1> */}
         <p>
@@ -198,7 +215,7 @@ const TemplatesGrid: React.FC<TemplatesGridProps> = ({
           <div key={template.id} className={styles.card}>
             <div className={styles.imageContainer}>
               <img
-                src={`/api/v1/media/${template.template.previewUid}.jpeg`}
+                src={`/api/v1/media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
                 alt={template.promptStr}
                 className={styles.image}
               />

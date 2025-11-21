@@ -37,7 +37,7 @@ import {
   updateTemplate,
 } from "../../utils/update-layout-utils";
 import { ImagePromptListView } from "./image-prompt-card";
-import { after, cloneDeep, set } from "lodash-es";
+import { after, cloneDeep, pick, set } from "lodash-es";
 import { string } from "yup";
 import { LayoutPromptListView } from "./layout-prompt-card";
 import {
@@ -68,6 +68,7 @@ export interface PromptCardProps {
       processingComplete?: boolean;
       metadata?: { approved: ColorTheme[] };
       overrideObjectProperties?: Record<string, any>;
+      textTranslation?: string;
     }
   ) => void;
   isChild?: boolean;
@@ -227,7 +228,6 @@ const PromptCard: React.FC<PromptCardProps> = ({
     console.log(prompt.aiResponseJson);
 
     const textArr = collectTextFromIaResponse(prompt.aiResponseJson!);
-    // debugger;
     setTexts(textArr);
   };
 
@@ -408,10 +408,22 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     intent={prompt.processingComplete ? "warning" : "primary"}
                     disabled={completeDisabled}
                     onClick={(e) => {
+                      let partial = {};
+                      if (prompt.textTranslation === "{}") {
+                        partial = {
+                          textTranslation: JSON.stringify({
+                            en: texts.map((item) =>
+                              pick(item, "objectId", "properties")
+                            ),
+                          }),
+                        };
+                      }
+
                       updatePrompt?.(prompt.id, {
                         processingComplete: prompt.processingComplete
                           ? false
                           : true,
+                        ...partial,
                       });
                     }}
                   >

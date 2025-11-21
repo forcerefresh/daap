@@ -7,12 +7,22 @@ import React, {
   useState,
 } from "react";
 import cx from "classnames";
-import { last, omit } from "lodash-es";
+import { cloneDeep, forEach, last, omit } from "lodash-es";
 import { connect } from "react-redux";
 import { Dialog } from "@blueprintjs/core";
 import { IStore } from "../../../store/store";
 import css from "./process-template.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
+
+const supportedLanguages = {
+  eng: "en", // English
+  spa: "es", // Spanish
+  fra: "fr", // French
+  por: "pt", // Portuguese
+  deu: "de", // German
+  srp: "sr", // Serbian
+  ita: "it", // Italian
+};
 
 import {
   updateProjectMeta,
@@ -90,6 +100,7 @@ const ProcessTemplates = (
   const [thumbSize, setThumbSize] = useState({ width: 0, height: 0, scale: 1 });
   const [thumbnailBase64, setThumbnailBase64] = useState<string>();
 
+  const previewUIDRef = useRef();
   const [template, setTemplate] = useState<any>();
   const templateRef = useRef(template);
   templateRef.current = template;
@@ -127,45 +138,96 @@ const ProcessTemplates = (
     const layoutResponse = await getLayout(aiPromptResponse.data[0].layoutId);
     const layoutResponseProject = layoutResponse.project;
 
-    const newTemplate = updateTemplate(
-      layoutResponseProject,
-      layoutResponseProject,
-      oneAiPrompt.aiResponseJson!,
-      oneAiPrompt.aiResponseJson!.brandColors, // color palette
-      imagePrompts
-        .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
-        .map((ip) => ip.metadata) as any,
-      vectorPrompts
-        .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
-        .map((ip) => ip.metadata) as any,
-      oneAiPrompt.overrideObjectProperties
-        ? JSON.parse(oneAiPrompt.overrideObjectProperties)
-        : undefined
-    );
+    // OVDE ----
 
-    console.log("update template");
-    setTemplate(newTemplate);
+    previewUIDRef.current = "";
 
-    setTimeout(async () => {
-      const { imageBase64, extension } = await takeScreenShot();
+    for (const lang of Object.values(supportedLanguages)) {
+      await multiLanguageProcess({
+        layoutResponseProject,
+        oneAiPrompt: cloneDeep(oneAiPrompt),
+        imagePrompts,
+        vectorPrompts,
+        lang,
+      });
+    }
 
-      const imageBase64Data = `data:image/${extension};base64,${imageBase64}`;
+    process().then();
+  };
 
-      await addPublicTemplate({
-        industryStr: oneAiPrompt.industry.name,
-        documentTypeStr: oneAiPrompt.documentType.name,
-        promptStr:
-          imagePrompts?.[0]?.prompt ?? vectorPrompts?.[0]?.prompt ?? "",
-        aiPromptId: oneAiPrompt.id,
-        documentTypeId: oneAiPrompt.documentTypeId,
-        industryId: oneAiPrompt.industryId,
-        previewImageBase64: imageBase64Data,
+  const multiLanguageProcess = ({
+    layoutResponseProject,
+    oneAiPrompt,
+    imagePrompts,
+    vectorPrompts,
+    lang,
+  }: {
+    layoutResponseProject: any;
+    oneAiPrompt: any;
+    imagePrompts: any;
+    vectorPrompts: any;
+    lang: string;
+  }) => {
+    return new Promise<void>((resolve) => {
+      debugger;
+
+      const translation = JSON.parse(oneAiPrompt.textTranslation);
+
+      forEach(translation[lang] ?? [], (trans, index) => {
+        let obj = oneAiPrompt.aiResponseJson.objects.find(
+          (fObj) => fObj.objectId === trans.objectId
+        );
+        obj.properties.text = trans.properties.text;
       });
 
-      await updatePrompt(oneAiPrompt.id, { templateGenerated: true });
+      // debugger;
+      const newTemplate = updateTemplate(
+        layoutResponseProject,
+        layoutResponseProject,
+        oneAiPrompt.aiResponseJson!,
+        oneAiPrompt.aiResponseJson!.brandColors, // color palette
+        imagePrompts
+          .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
+          .map((ip) => ip.metadata) as any,
+        vectorPrompts
+          .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
+          .map((ip) => ip.metadata) as any,
+        oneAiPrompt.overrideObjectProperties
+          ? JSON.parse(oneAiPrompt.overrideObjectProperties)
+          : undefined
+      );
 
-      process().then();
-    }, 1000);
+      console.log("update template");
+      setTemplate(newTemplate);
+
+      setTimeout(async () => {
+        const { imageBase64, extension } = await takeScreenShot();
+
+        const imageBase64Data = `data:image/${extension};base64,${imageBase64}`;
+
+        const addedTemplateResp = await addPublicTemplate({
+          // industryStr: oneAiPrompt.industry.name,
+          // documentTypeStr: oneAiPrompt.documentType.name,
+          promptStr:
+            imagePrompts?.[0]?.prompt ?? vectorPrompts?.[0]?.prompt ?? "",
+          aiPromptId: oneAiPrompt.id,
+          documentTypeId: oneAiPrompt.documentTypeId,
+          industryId: oneAiPrompt.industryId,
+          previewImageBase64: imageBase64Data,
+          language: lang,
+          previewUid: previewUIDRef.current,
+        });
+
+        // debugger;
+        if (addedTemplateResp?.data?.previewUid) {
+          previewUIDRef.current = addedTemplateResp.data?.previewUid;
+        }
+
+        await updatePrompt(oneAiPrompt.id, { templateGenerated: true });
+
+        resolve();
+      }, 1000);
+    });
   };
 
   const takeScreenShot = async () => {
