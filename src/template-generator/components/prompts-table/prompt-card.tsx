@@ -432,6 +432,33 @@ const PromptCard: React.FC<PromptCardProps> = ({
                       : "Complete"}
                   </Button>
                 )}
+
+                {prompt.processingComplete && (
+                  <Button
+                    large
+                    intent={"primary"}
+                    disabled={completeDisabled}
+                    onClick={(e) => {
+                      let partial = {};
+                      if (prompt.textTranslation === "{}") {
+                        partial = {
+                          textTranslation: JSON.stringify({
+                            en: texts.map((item) =>
+                              pick(item, "objectId", "properties")
+                            ),
+                          }),
+                        };
+                      }
+
+                      updatePrompt?.(prompt.id, {
+                        processingComplete: true,
+                        ...partial,
+                      });
+                    }}
+                  >
+                    Complete again
+                  </Button>
+                )}
                 {remainingImageForReview > 0 ? (
                   <>{remainingImageForReview} image review missing</>
                 ) : null}

@@ -61,4 +61,6 @@ export interface AiPrompt {
   noHandsInImages: boolean;
   uncrowdedImages: boolean;
   overrideObjectProperties: string;
+  textTranslation: string;
+  hasTranslation: boolean;
 }
