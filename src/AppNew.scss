@@ -4,27 +4,9 @@
 
 @import "./theme";
 
-// TODO remove .>>>
-// .media-frame,
-// .attachments-browser,
-// .media-toolbar,
-// .media-sidebar {
-//   background-color: black !important;
-// }
-// .media-modal.wp-core-ui {
-//   width: 600px;
-// }
-// TODO remove <<<
-
 #webpack-dev-server-client-overlay {
   display: none;
 }
-// website pages
-// @import "./pages/css/demo.css";
-// @import "./pages/css/animate.css";
-// @import "./pages/css/magenta-theme.css";
-// @import "./pages/css/responsive.css";
-// @import "./pages//css//bootstrap.min.css";
 
 html {
   overflow: hidden;
@@ -64,24 +46,6 @@ body {
 .bp5-dark .bp5-select select {
   background: #282828;
 }
-
-// .bp5-button .bp5-icon:first-child:last-child {
-//   margin: inherit;
-// }
-
-// //rgba($black, 0.2),
-// $button-border-width: 1px;
-
-// $button-box-shadow: inset 0 0 0 $button-border-width red, 0 1px 2px red;
-// $button-box-shadow-active: inset 0 0 0 $button-border-width rgba($black, 0.2),
-//   0 1px 2px rgba($black, 0.2);
-
-// // rgba($white, 0.1),
-// $dark-button-box-shadow: inset 0 0 0 $button-border-width red,
-//   0 1px 2px rgba($black, 0.2);
-// $dark-button-box-shadow-active: inset 0 0 0 $button-border-width
-//     rgba($white, 0.1),
-//   0 1px 2px rgba($black, 0.4);
 
 .bp5-popover.bp5-dark .bp5-popover-content,
 .bp5-dark .bp5-popover .bp5-popover-content {

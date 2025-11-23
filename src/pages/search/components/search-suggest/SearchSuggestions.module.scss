@@ -1,0 +1,49 @@
+@import "@blueprintjs/core/lib/scss/variables";
+
+.suggestionsContainer {
+  width: 100%;
+  padding-left: 0.3rem;
+
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.buttonsContainer {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.suggestionsLabel {
+  font-size: 0.9rem;
+  color: $pt-text-color-muted;
+  margin-bottom: 0.5rem;
+  align-items: center;
+  // margin-left: 0.5rem;
+
+  :global(.bp5-dark) & {
+    color: $pt-dark-text-color-muted;
+  }
+}
+
+.suggestionButton {
+  font-size: 0.85rem;
+  color: $pt-text-color-muted;
+  // font-style: italic;
+
+  font-weight: 100;
+  &:hover {
+    background: rgba($pt-text-color-muted, 0.1);
+    color: $pt-text-color;
+  }
+
+  :global(.bp5-dark) & {
+    color: $pt-dark-text-color-muted !important;
+
+    &:hover {
+      background: rgba($pt-dark-text-color-muted, 0.1);
+      color: $pt-dark-text-color-muted;
+    }
+  }
+}

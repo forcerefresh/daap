@@ -206,21 +206,19 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
   return (
     <div className={styles.container}>
-      {metadata?.language && (
+      {/* {metadata?.language && (
         <div className={styles.languageIndicator}>
           Language: {languageMappings[metadata.language]?.name}
         </div>
-      )}
-      <div className={styles.header}>
-        <p>
-          Discover professionally designed templates for your social media posts
-        </p>
+      )} */}
+      {/* <div className={styles.header}>
+
         {searchQuery && (
           <p className={styles.searchInfo}>
             Showing results for: <strong>"{searchQuery}"</strong>
           </p>
         )}
-      </div>
+      </div> */}
 
       {error && (
         <div className={styles.inlineError}>

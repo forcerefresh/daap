@@ -34,6 +34,7 @@ import { Button, HotkeysProvider, PortalProvider } from "@blueprintjs/core";
 import DaapLogo from "./integration/components/main-header/daap-logo.svg?react";
 import "in-app-guide/src/style.css";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
+import Search from "./pages/search/search";
 
 const inAppGuide = require("in-app-guide");
 
@@ -198,12 +199,14 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
+                <Search />
                 <div
                   className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
                 >
                   <MainHeader className={css.saasHeader} />
                   <App className={css.editor} />
                 </div>
+
                 {/* {renderSite && (
               <div
                 className={cx(css.appOverlap, { [css.hideSite]: showEditor })}

@@ -1,0 +1,74 @@
+@import "../../../../theme"; // Adjust path to your theme file
+@import "@blueprintjs/core/lib/scss/variables";
+.languageSelector {
+  display: flex;
+  justify-content: center;
+}
+
+.splitBadge {
+  display: inline-flex;
+  border-radius: 4px; // Reduced from 6px
+  overflow: hidden;
+  border: 1px solid $pt-panel-border-color;
+  background-color: white;
+  height: 24px; // Reduced from 32px
+
+  :global(.bp5-dark) & {
+    border-color: $pt-dark-panel-border-color;
+    background-color: $pt-dark-app-background-color;
+  }
+}
+
+.badgeLeft {
+  padding: 0.25rem 0.5rem; // Reduced from 0.5rem 0.75rem
+  background-color: $pt-layer-header-color;
+  color: $pt-text-color-muted;
+  font-weight: 500;
+  font-size: 0.75rem; // Reduced from 0.85rem
+  display: flex;
+  align-items: center;
+  border-right: 1px solid $pt-panel-border-color;
+  white-space: nowrap;
+
+  :global(.bp5-dark) & {
+    background-color: $pt-dark-layer-header-color;
+    color: $pt-dark-text-color;
+    border-right-color: $pt-dark-panel-border-color;
+  }
+}
+
+.badgeRight {
+  :global(.bp5-html-select) {
+    height: 100%;
+
+    select {
+      border: none;
+      background: transparent;
+      padding: 0 0.5rem; // Reduced from 0.75rem
+      height: 100%;
+      outline: none;
+      font-size: 0.75rem; // Reduced from 0.85rem
+      min-width: 120px; // Reduced from 140px
+
+      :global(.bp5-dark) & {
+        color: $pt-dark-text-color;
+        background-color: $pt-dark-app-background-color;
+      }
+
+      &:focus {
+        background-color: rgba($pt-active-color, 0.1);
+      }
+      // Target the caret icon
+    }
+  }
+  :global(.bp5-icon-double-caret-vertical) {
+    height: 12px; // Reduce from 16px
+    width: 12px; // Reduce from 16px
+    margin-top: -2px;
+
+    svg {
+      height: 12px;
+      width: 12px;
+    }
+  }
+}

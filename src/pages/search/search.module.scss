@@ -1,0 +1,304 @@
+// SearchPage.module.scss
+@import "../../theme"; // Adjust path to your theme file
+
+$dark-border-color: #4f4f4f;
+
+.searchPageContainer {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: $pt-app-background-color;
+  overflow: auto;
+  // padding: 2rem;
+
+  :global(.bp5-dark) & {
+    background-color: $pt-dark-app-background-color;
+  }
+
+  &.expanded {
+    align-items: start;
+  }
+}
+
+.searchContent {
+  width: 100%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.searchHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  transition: all 0.3s ease;
+}
+
+.badgesContainer {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.searchInputContainer {
+  width: 100%;
+  border: 1px solid $pt-panel-border-color;
+  border-radius: 16px;
+  background-color: $pt-app-background-color-secondary;
+  // transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  //position: relative;
+  z-index: 100;
+
+  :global(.bp5-dark) & {
+    background-color: $pt-dark-app-background-color-secondary;
+    border-color: $dark-border-color;
+  }
+
+  &.focused {
+    border-color: $pt-active-color;
+    box-shadow: 0 4px 12px -1px rgba($pt-active-color, 0.15);
+  }
+
+  // Expanded state - moves to top
+  &.expanded {
+    // position: fixed;
+    margin-top: 1rem;
+    // left: 50%;
+    // transform: translateX(-50%);
+    width: 90%;
+    max-width: 800px;
+    z-index: 101;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+
+    // Scale up slightly when expanded
+    // transform: translateX(-50%) scale(1.02);
+
+    :global(.bp5-dark) & {
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+
+.searchTextArea {
+  width: 100%;
+  border: none !important;
+  background: transparent !important;
+  resize: none;
+  padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.5;
+  height: 50px !important;
+  outline: none;
+  box-shadow: none !important;
+
+  :global(.bp5-dark) & {
+    color: $pt-dark-text-color;
+  }
+
+  &::placeholder {
+    color: $pt-text-color-muted;
+
+    :global(.bp5-dark) & {
+      color: lighten($pt-dark-app-background-color, 40%);
+    }
+  }
+
+  // Override Blueprint v5 styles
+  :global(.bp5-input) {
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+
+    &:focus {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+.inputBottomControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0.5rem;
+  background-color: rgba($pt-layer-header-color, 0.5);
+  transition: all 0.3s ease;
+
+  :global(.bp5-dark) & {
+    background-color: rgba($pt-dark-layer-header-color, 0.5);
+  }
+}
+
+.languageSelector {
+  flex: 1;
+}
+
+.badgeLeft {
+  padding: 0.5rem 0.75rem;
+  background-color: $pt-layer-header-color;
+  color: $pt-text-color-muted;
+  font-weight: 500;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  border-right: 1px solid $pt-panel-border-color;
+  white-space: nowrap;
+
+  :global(.bp5-dark) & {
+    background-color: $pt-dark-layer-header-color;
+    color: $pt-dark-text-color;
+    border-right-color: $pt-dark-panel-border-color;
+  }
+}
+
+.badgeRight {
+  :global(.bp5-html-select) {
+    height: 100%;
+
+    select {
+      border: none;
+      background: transparent;
+      padding: 0 0.75rem;
+      height: 100%;
+      outline: none;
+      font-size: 0.85rem;
+      min-width: 140px;
+
+      :global(.bp5-dark) & {
+        color: $pt-dark-text-color;
+        background-color: $pt-dark-app-background-color;
+      }
+
+      &:focus {
+        background-color: rgba($pt-active-color, 0.1);
+      }
+    }
+  }
+}
+
+.languageSelect {
+  height: 100%;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.searchButtonContainer {
+  flex-shrink: 0;
+}
+
+.searchButton {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0.5rem 1.5rem;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &:not(:disabled) {
+    background-color: $pt-active-color;
+
+    &:hover {
+      background-color: darken($pt-active-color, 10%);
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.searchTips {
+  margin-top: 1.5rem;
+  text-align: center;
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: $pt-text-color-muted;
+
+    :global(.bp5-dark) & {
+      color: lighten($pt-dark-app-background-color, 40%);
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .searchPageContainer {
+    padding: 1rem;
+  }
+
+  // .searchInputContainer {
+  //   &.expanded {
+  //     top: 1rem;
+  //     width: 95%;
+  //     transform: translateX(-50%) scale(1.01);
+  //   }
+  // }
+
+  .searchTitle {
+    font-size: 1.75rem;
+  }
+
+  .inputBottomControls {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .searchButtonContainer {
+    display: flex;
+    justify-content: center;
+
+    .searchButton {
+      width: 100%;
+      max-width: 200px;
+      justify-content: center;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .searchTitle {
+    font-size: 1.5rem;
+  }
+
+  .searchTextArea {
+    padding: 1rem 1rem 0.5rem 1rem;
+    min-height: 100px;
+  }
+
+  .inputBottomControls {
+    padding: 0.75rem 1rem;
+  }
+
+  .splitBadge {
+    width: 100%;
+
+    .badgeLeft {
+      flex: 0 0 auto;
+    }
+
+    .badgeRight {
+      flex: 1;
+
+      :global(.bp5-html-select) {
+        width: 100%;
+
+        select {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
