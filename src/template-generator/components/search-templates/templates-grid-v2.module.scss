@@ -5,21 +5,27 @@
   overflow: auto;
 }
 
-// True Pinterest-style masonry layout with CSS Columns
+/* True Pinterest-style masonry layout with CSS Columns */
 .masonryGrid {
   column-count: 4;
   column-gap: 20px;
+}
 
-  @media (max-width: 1200px) {
+@media (max-width: 1200px) {
+  .masonryGrid {
     column-count: 3;
   }
+}
 
-  @media (max-width: 900px) {
+@media (max-width: 900px) {
+  .masonryGrid {
     column-count: 2;
     column-gap: 16px;
   }
+}
 
-  @media (max-width: 600px) {
+@media (max-width: 600px) {
+  .masonryGrid {
     column-count: 1;
     column-gap: 12px;
   }
@@ -28,56 +34,55 @@
 .masonryItem {
   break-inside: avoid;
   margin-bottom: 20px;
+}
 
-  @media (max-width: 900px) {
+@media (max-width: 900px) {
+  .masonryItem {
     margin-bottom: 16px;
   }
+}
 
-  @media (max-width: 600px) {
+@media (max-width: 600px) {
+  .masonryItem {
     margin-bottom: 12px;
   }
 }
 
 .card {
-  background: white;
+  // background: #394b59; /* Dark card background */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-
-    .image {
-      transform: scale(1.05);
-    }
-  }
+  // border: 1px solid #5c7080; /* Subtle border for dark theme */
 }
 
-// Aspect ratio specific styles
-.landscape {
-  .imageContainer {
-    aspect-ratio: 16/9;
-  }
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
-.portrait {
-  .imageContainer {
-    aspect-ratio: 9/16;
-  }
+.card:hover .image {
+  transform: scale(1.05);
 }
 
-.square {
-  .imageContainer {
-    aspect-ratio: 1;
-  }
+/* Aspect ratio specific styles */
+.landscape .imageContainer {
+  aspect-ratio: 16/9;
+}
+
+.portrait .imageContainer {
+  aspect-ratio: 9/16;
+}
+
+.square .imageContainer {
+  aspect-ratio: 1;
 }
 
 .imageContainer {
   position: relative;
   width: 100%;
-  background: #f8f9fa;
+  background: #293742; /* Darker background for image container */
   overflow: hidden;
 }
 
@@ -104,7 +109,7 @@
   color: white;
   backdrop-filter: blur(10px);
   background: rgba(0, 0, 0, 0.7);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .highSimilarity {
@@ -127,7 +132,7 @@
   font-size: 14px;
   line-height: 1.5;
   margin-bottom: 12px;
-  color: #333;
+  color: #e1e8ed; /* Light text for dark background */
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -142,26 +147,26 @@
 
 .tag {
   font-size: 12px;
-  color: #666;
+  color: #a7b6c2; /* Muted text color for dark theme */
   line-height: 1.4;
-
-  .tagLabel {
-    font-weight: 600;
-    margin-right: 6px;
-    color: #333;
-  }
 }
 
-// Language indicator
+.tagLabel {
+  font-weight: 600;
+  margin-right: 6px;
+  color: #bfccd6; /* Brighter color for labels */
+}
+
+/* Language indicator */
 .languageIndicator {
   text-align: center;
   margin-bottom: 16px;
-  color: #666;
+  color: #8a9ba8; /* Muted color for dark theme */
   font-size: 14px;
   font-style: italic;
 }
 
-// Loading states
+/* Loading states */
 .loadingContainer {
   display: flex;
   flex-direction: column;
@@ -169,15 +174,15 @@
   justify-content: center;
   padding: 80px 20px;
   text-align: center;
-
-  p {
-    margin-top: 16px;
-    color: #666;
-    font-size: 16px;
-  }
 }
 
-// Error states
+.loadingContainer p {
+  margin-top: 16px;
+  // color: #8a9ba8; /* Muted color for dark theme */
+  font-size: 16px;
+}
+
+/* Error states */
 .errorContainer {
   display: flex;
   flex-direction: column;
@@ -188,47 +193,47 @@
 }
 
 .errorText {
-  color: #db4437;
+  color: #ff7373; /* Softer red for dark theme */
   margin-bottom: 20px;
   font-size: 16px;
 }
 
 .inlineError {
-  background: #ffeaa7;
+  background: rgba(244, 180, 0, 0.2); /* Dark theme compatible */
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border-left: 4px solid #fdcb6e;
+  border-left: 4px solid #d99a0d; /* Dark theme yellow */
   text-align: center;
-
-  p {
-    margin: 0;
-    color: #e17055;
-  }
 }
 
-// Header
+.inlineError p {
+  margin: 0;
+  color: #f2b824; /* Yellow text for dark theme */
+}
+
+/* Header */
 .header {
   text-align: center;
   margin-bottom: 40px;
+}
 
-  p {
-    color: #666;
-    font-size: 16px;
-    max-width: 600px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
+.header p {
+  color: #8a9ba8; /* Muted color for dark theme */
+  font-size: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .searchInfo {
   margin-top: 20px;
   font-style: italic;
-  color: #888;
+  color: #738694; /* Even more muted for secondary info */
   font-size: 14px;
 }
 
-// Load more button
+/* Load more button */
 .loadMoreContainer {
   display: flex;
   justify-content: center;
@@ -242,33 +247,33 @@
   font-size: 16px;
 }
 
-// End message
+/* End message */
 .endMessage {
   text-align: center;
   padding: 40px 20px;
-  color: #666;
+  color: #8a9ba8; /* Muted color for dark theme */
   font-style: italic;
   font-size: 16px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid #5c7080; /* Dark border */
   margin-top: 40px;
 }
 
-// Empty state
+/* Empty state */
 .emptyState {
   text-align: center;
   padding: 80px 20px;
+}
 
-  h3 {
-    margin-bottom: 16px;
-    color: #333;
-    font-size: 24px;
-  }
+.emptyState h3 {
+  margin-bottom: 16px;
+  color: #e1e8ed; /* Light text for dark background */
+  font-size: 24px;
+}
 
-  p {
-    color: #666;
-    font-size: 16px;
-    max-width: 400px;
-    margin: 0 auto;
-    line-height: 1.6;
-  }
+.emptyState p {
+  // color: #8a9ba8; /* Muted color for dark theme */
+  font-size: 16px;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
