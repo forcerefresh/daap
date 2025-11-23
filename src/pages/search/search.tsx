@@ -29,7 +29,6 @@ const SearchPage = () => {
 
   const handleSearch = () => {
     setIsExpanded(true);
-
     console.log(
       "Searching for:",
       searchQuery,
@@ -47,13 +46,10 @@ const SearchPage = () => {
 
   const handleFocus = () => {
     setIsTextAreaFocused(true);
-    // setIsExpanded(true);
   };
 
   const handleBlur = () => {
     setIsTextAreaFocused(false);
-    // Delay collapsing to allow for button clicks
-    // setTimeout(() => setIsExpanded(false), 200);
   };
 
   return (
@@ -69,52 +65,55 @@ const SearchPage = () => {
           </div>
         )}
 
-        <div
-          className={`${styles.searchInputContainer} ${
-            isTextAreaFocused ? styles.focused : ""
-          } ${isExpanded ? styles.expanded : ""}`}
-        >
-          <TextArea
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={handleKeyPress}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            className={styles.searchTextArea}
-            placeholder="Describe what you want to search for..."
-            growVertically={false}
-            large
-          />
+        {/* Sticky container wrapper */}
+        <div className={styles.stickyContainer}>
+          <div
+            className={`${styles.searchInputContainer} ${
+              isTextAreaFocused ? styles.focused : ""
+            } ${isExpanded ? styles.expanded : ""}`}
+          >
+            <TextArea
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyPress}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className={styles.searchTextArea}
+              placeholder="Describe what you want to search for..."
+              growVertically={false}
+              large
+            />
 
-          <div className={styles.inputBottomControls}>
-            <div className={styles.badgesContainer}>
-              <SelectBadge
-                label="Language"
-                options={languages}
-                value={selectedLanguage}
-                onChange={setSelectedLanguage}
-                minimal={false}
-              />
+            <div className={styles.inputBottomControls}>
+              <div className={styles.badgesContainer}>
+                <SelectBadge
+                  label="Language"
+                  options={languages}
+                  value={selectedLanguage}
+                  onChange={setSelectedLanguage}
+                  minimal={false}
+                />
 
-              <SelectBadge
-                label="Document"
-                options={languages}
-                value={selectedLanguage}
-                onChange={setSelectedLanguage}
-                minimal={false}
-              />
-            </div>
+                <SelectBadge
+                  label="Document"
+                  options={documents} // Fixed: using documents array instead of languages
+                  value={selectedLanguage}
+                  onChange={setSelectedLanguage}
+                  minimal={false}
+                />
+              </div>
 
-            <div className={styles.searchButtonContainer}>
-              <Button
-                intent="primary"
-                onClick={handleSearch}
-                className={styles.searchButton}
-                disabled={!searchQuery.trim()}
-                rightIcon="arrow-right"
-              >
-                Search
-              </Button>
+              <div className={styles.searchButtonContainer}>
+                <Button
+                  intent="primary"
+                  onClick={handleSearch}
+                  className={styles.searchButton}
+                  disabled={!searchQuery.trim()}
+                  rightIcon="arrow-right"
+                >
+                  Search
+                </Button>
+              </div>
             </div>
           </div>
         </div>

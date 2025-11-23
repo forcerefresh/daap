@@ -13,7 +13,6 @@ $dark-border-color: #4f4f4f;
   min-height: 100vh;
   background-color: $pt-app-background-color;
   overflow: auto;
-  // padding: 2rem;
 
   :global(.bp5-dark) & {
     background-color: $pt-dark-app-background-color;
@@ -63,16 +62,52 @@ $dark-border-color: #4f4f4f;
   gap: 0.6rem;
 }
 
+// NEW: Sticky container wrapper
+.stickyContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  // When expanded, make it sticky
+  .searchPageContainer.expanded & {
+    position: sticky;
+    top: -1px; // Pull up by 1px to prevent gap
+    z-index: 1000;
+    background: linear-gradient(
+      to bottom,
+      $pt-app-background-color 0%,
+      $pt-app-background-color 80%,
+      transparent 100%
+    );
+    padding: 1rem 0;
+    margin-bottom: 0rem;
+
+    // Add these to stabilize:
+    transform: translateZ(0); // Force hardware acceleration
+    backface-visibility: hidden; // Prevent sub-pixel shaking
+    -webkit-backface-visibility: hidden; // Safari
+    contain: layout style; // Optimization
+
+    :global(.bp5-dark) & {
+      background: linear-gradient(
+        to bottom,
+        $pt-dark-app-background-color 0%,
+        $pt-dark-app-background-color 80%,
+        transparent 100%
+      );
+    }
+  }
+}
+
 .searchInputContainer {
   width: 100%;
   max-width: 800px;
   border: 1px solid $pt-panel-border-color;
   border-radius: 16px;
   background-color: $pt-app-background-color-secondary;
-  // transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  //position: relative;
   z-index: 100;
 
   :global(.bp5-dark) & {
@@ -85,21 +120,12 @@ $dark-border-color: #4f4f4f;
     box-shadow: 0 4px 12px -1px rgba($pt-active-color, 0.15);
   }
 
-  // Expanded state - moves to top
+  // Expanded state - now handled by sticky container
   &.expanded {
-    // position: fixed;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-
-    // left: 50%;
-    // transform: translateX(-50%);
     width: 90%;
     max-width: 800px;
     z-index: 101;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-
-    // Scale up slightly when expanded
-    // transform: translateX(-50%) scale(1.02);
 
     :global(.bp5-dark) & {
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
@@ -260,13 +286,17 @@ $dark-border-color: #4f4f4f;
     padding: 1rem;
   }
 
-  // .searchInputContainer {
-  //   &.expanded {
-  //     top: 1rem;
-  //     width: 95%;
-  //     transform: translateX(-50%) scale(1.01);
-  //   }
-  // }
+  .stickyContainer {
+    .searchPageContainer.expanded & {
+      padding: 0.5rem 0;
+    }
+  }
+
+  .searchInputContainer {
+    &.expanded {
+      width: 95%;
+    }
+  }
 
   .searchTitle {
     font-size: 1.75rem;
