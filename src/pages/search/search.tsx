@@ -13,12 +13,18 @@ const SearchPage = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const languages = [
-    { value: "english-auto", label: "English (auto)" },
+    { value: "auto", label: "English (auto)" },
     { value: "spanish", label: "Spanish" },
     { value: "french", label: "French" },
     { value: "german", label: "German" },
     { value: "chinese", label: "Chinese" },
     { value: "japanese", label: "Japanese" },
+  ];
+
+  const documents = [
+    { value: "auto", label: "English (auto)" },
+    { value: "SocialMedia:Instagram:SquarePost", label: "Square post" },
+    { value: "SocialMedia:Instagram:StoryReel", label: "Story/Reel" },
   ];
 
   const handleSearch = () => {
@@ -83,7 +89,7 @@ const SearchPage = () => {
           <div className={styles.inputBottomControls}>
             <div className={styles.badgesContainer}>
               <SelectBadge
-                label="Currency"
+                label="Language"
                 options={languages}
                 value={selectedLanguage}
                 onChange={setSelectedLanguage}
@@ -91,7 +97,7 @@ const SearchPage = () => {
               />
 
               <SelectBadge
-                label="Currency"
+                label="Document"
                 options={languages}
                 value={selectedLanguage}
                 onChange={setSelectedLanguage}

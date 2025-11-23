@@ -26,11 +26,30 @@ $dark-border-color: #4f4f4f;
 
 .searchContent {
   width: 100%;
-  max-width: 800px;
+  max-width: 800px; /* Default for smaller screens */
   display: flex;
   flex-direction: column;
   align-items: center;
   transition: all 0.3s ease;
+}
+
+/* CHANGED: Allow search content to expand on larger screens */
+@media (min-width: 1200px) {
+  .searchContent {
+    max-width: 1200px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .searchContent {
+    max-width: 1400px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .searchContent {
+    max-width: 1610px;
+  }
 }
 
 .searchHeader {
@@ -46,6 +65,7 @@ $dark-border-color: #4f4f4f;
 
 .searchInputContainer {
   width: 100%;
+  max-width: 800px;
   border: 1px solid $pt-panel-border-color;
   border-radius: 16px;
   background-color: $pt-app-background-color-secondary;
@@ -69,6 +89,8 @@ $dark-border-color: #4f4f4f;
   &.expanded {
     // position: fixed;
     margin-top: 1rem;
+    margin-bottom: 1rem;
+
     // left: 50%;
     // transform: translateX(-50%);
     width: 90%;
