@@ -6,7 +6,7 @@ import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
 import SelectBadge from "./components/select-badge/SelectBadge";
 import TemplatesGridV2 from "../../template-generator/components/search-templates/templates-grid-v2";
 
-const SearchPage = () => {
+const SearchPage = ({ onClose }: { onClose: () => void }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("english-auto");
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
@@ -58,6 +58,12 @@ const SearchPage = () => {
         isExpanded ? styles.expanded : ""
       }`}
     >
+      <Button
+        minimal
+        icon="cross"
+        style={{ position: "absolute", right: "10px", top: "10px" }}
+        onClick={onClose}
+      ></Button>
       <div className={styles.searchContent}>
         {!isExpanded && (
           <div className={styles.searchHeader}>

@@ -131,6 +131,8 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
     );
   });
 
+  const [searchVisible, setSearchVisible] = useState(true);
+
   return (
     <PortalProvider portalContainer={portalRoot}>
       <DevelopmentContextProvider>
@@ -199,7 +201,9 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
                 </div>
               </div>
             )} */}
-                <Search />
+                {searchVisible && (
+                  <Search onClose={() => setSearchVisible(false)} />
+                )}
                 <div
                   className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
                 >
