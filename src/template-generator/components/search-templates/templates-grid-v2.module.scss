@@ -6,28 +6,30 @@
   overflow: auto;
 }
 
-/* True Pinterest-style masonry layout with CSS Columns */
 .masonryGrid {
-  /* CHANGED: Increased from 4 to 5 columns for larger screens */
   column-count: 5;
   column-gap: 20px;
+  column-fill: balance;
+  min-height: 1px;
+  width: 100%;
 }
 
-/* NEW: Added extra breakpoint for 6 columns on very large screens */
+/* Keep all your existing breakpoints the same */
 @media (min-width: 1600px) {
   .masonryGrid {
-    /* CHANGED: Added 6-column layout for very large screens */
     column-count: 6;
+    column-fill: balance;
   }
 }
 
 @media (max-width: 1400px) {
   .masonryGrid {
-    /* CHANGED: Adjusted from 3 to 4 columns for this breakpoint */
     column-count: 4;
+    column-fill: balance;
   }
 }
 
+/* ... rest of your breakpoints remain the same */
 @media (max-width: 1200px) {
   .masonryGrid {
     column-count: 3;
@@ -51,6 +53,8 @@
 .masonryItem {
   break-inside: avoid;
   margin-bottom: 20px;
+  /* Ensure items have some content */
+  min-height: 1px;
 }
 
 @media (max-width: 900px) {
