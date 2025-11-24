@@ -22,7 +22,7 @@ const SearchPage = ({ onClose }: { onClose: () => void }) => {
   ];
 
   const documents = [
-    { value: "auto", label: "English (auto)" },
+    { value: "auto", label: "Square post (auto)" },
     { value: "SocialMedia:Instagram:SquarePost", label: "Square post" },
     { value: "SocialMedia:Instagram:StoryReel", label: "Story/Reel" },
   ];

@@ -34,7 +34,7 @@ import { Button, HotkeysProvider, PortalProvider } from "@blueprintjs/core";
 import DaapLogo from "./integration/components/main-header/daap-logo.svg?react";
 import "in-app-guide/src/style.css";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
-import Search from "./pages/search/search";
+import SearchPage from "./pages/search/search";
 
 const inAppGuide = require("in-app-guide");
 
@@ -202,7 +202,7 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
               </div>
             )} */}
                 {searchVisible && (
-                  <Search onClose={() => setSearchVisible(false)} />
+                  <SearchPage onClose={() => setSearchVisible(false)} />
                 )}
                 <div
                   className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
