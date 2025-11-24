@@ -9,27 +9,33 @@
 .masonryGrid {
   column-count: 5;
   column-gap: 20px;
-  column-fill: balance;
-  min-height: 1px;
+  /* Remove column-fill: balance as it can cause issues */
   width: 100%;
 }
 
-/* Keep all your existing breakpoints the same */
+/* Ensure masonry items work properly */
+.masonryItem {
+  break-inside: avoid;
+  page-break-inside: avoid; /* Fallback for older browsers */
+  -webkit-column-break-inside: avoid; /* Safari/Chrome */
+  margin-bottom: 20px;
+  display: inline-block; /* Important for column layout */
+  width: 100%; /* Ensure full width within column */
+}
+
+/* Update breakpoints for better 5-column support */
 @media (min-width: 1600px) {
   .masonryGrid {
     column-count: 6;
-    column-fill: balance;
   }
 }
 
 @media (max-width: 1400px) {
   .masonryGrid {
     column-count: 4;
-    column-fill: balance;
   }
 }
 
-/* ... rest of your breakpoints remain the same */
 @media (max-width: 1200px) {
   .masonryGrid {
     column-count: 3;
@@ -50,24 +56,17 @@
   }
 }
 
-.masonryItem {
-  break-inside: avoid;
-  margin-bottom: 20px;
-  /* Ensure items have some content */
-  min-height: 1px;
-}
+// @media (max-width: 900px) {
+//   .masonryItem {
+//     margin-bottom: 16px;
+//   }
+// }
 
-@media (max-width: 900px) {
-  .masonryItem {
-    margin-bottom: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .masonryItem {
-    margin-bottom: 12px;
-  }
-}
+// @media (max-width: 600px) {
+//   .masonryItem {
+//     margin-bottom: 12px;
+//   }
+// }
 
 .card {
   border-radius: 12px;
