@@ -452,7 +452,8 @@ const LayoutToTemplate = (
 
   const onGenerateImagesOrVectors = async (
     parentPromptId: string,
-    promptKind: AiPromptKind.IMAGE | AiPromptKind.VECTOR
+    promptKind: AiPromptKind.IMAGE | AiPromptKind.VECTOR,
+    onlyObjectId?: string
   ) => {
     const aiPrompt = aiPrompts?.find((p) => p.id === parentPromptId);
     // debugger;
@@ -471,6 +472,11 @@ const LayoutToTemplate = (
         const layoutResponse = await getLayout(layout.id);
 
         for (const iPrompt of imagePrompts) {
+          // if we gen only one image
+          if (onlyObjectId && onlyObjectId !== iPrompt.objectId) {
+            continue;
+          }
+
           const existingObj: IObject =
             layoutResponse.project.objects.objectById[iPrompt.objectId!];
 
@@ -1012,14 +1018,28 @@ const LayoutToTemplate = (
               aiPrompts={aiPrompts}
               onGenerateAll={onGenerateAll}
               onGenerateColors={onGenerateColors}
-              onGenerateImages={(parentPromptId: string) => {
+              onGenerateImages={(
+                parentPromptId: string,
+                onlyObjectId?: string
+              ) => {
                 stopPolling();
-                onGenerateImagesOrVectors(parentPromptId, AiPromptKind.IMAGE);
+                onGenerateImagesOrVectors(
+                  parentPromptId,
+                  AiPromptKind.IMAGE,
+                  onlyObjectId
+                );
                 restartPolling();
               }}
-              onGenerateVectors={(parentPromptId: string) => {
+              onGenerateVectors={(
+                parentPromptId: string,
+                onlyObjectId?: string
+              ) => {
                 stopPolling();
-                onGenerateImagesOrVectors(parentPromptId, AiPromptKind.VECTOR);
+                onGenerateImagesOrVectors(
+                  parentPromptId,
+                  AiPromptKind.VECTOR,
+                  onlyObjectId
+                );
                 restartPolling();
               }}
               onGenerateLayouts={(parentPromptId: string) => {

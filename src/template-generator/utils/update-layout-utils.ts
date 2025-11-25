@@ -193,8 +193,9 @@ export function updateTemplate(
       );
     });
   } catch (ex) {
-    console.log("ERROR A8");
-    // debugger; //asd
+    throw ex;
+    // console.log("ERROR A8");
+    // // debugger; //asd
   }
 
   return newTemplate;
@@ -209,6 +210,10 @@ export function replaceLayoutObject(
     [key: string]: any;
   }
 ) {
+  if (!replaceObject) {
+    return;
+  }
+
   let object: IObject = {
     ...createObject(type, objectProps, {
       ...values,

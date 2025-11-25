@@ -58,8 +58,8 @@ export interface PromptCardProps {
   prompt: AiPrompt;
   onGenerateAll?: (id: string) => void;
   onGenerateColors?: (id: string) => void;
-  onGenerateImages?: (id: string) => void;
-  onGenerateVectors?: (id: string) => void;
+  onGenerateImages?: (id: string, onlyObjectId?: string) => void;
+  onGenerateVectors?: (id: string, onlyObjectId?: string) => void;
   onGenerateLayouts?: (id: string) => void;
   updatePrompt?: (
     id: string,
@@ -934,6 +934,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     title="Images"
                     prompts={imagePrompts}
                     setImageProcessingStatus={setImageProcessingStatus}
+                    onGenerateImage={(objectId: string) => {
+                      onGenerateImages?.(prompt.id, objectId);
+                    }}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
                   <ImagePromptListView

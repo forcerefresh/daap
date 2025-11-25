@@ -13,6 +13,7 @@ export const ImagePromptListView = ({
   // approvedImages,
   allowInstantReview,
   setImageProcessingStatus,
+  onGenerateImage,
 }: // onApply,
 {
   title: string;
@@ -23,6 +24,7 @@ export const ImagePromptListView = ({
     promptId: string,
     status: AiProcessingStatus
   ) => void;
+  onGenerateImage: (objectId: string) => void;
   // onApply: () => void;
 }) => {
   useEffect(() => {
@@ -48,10 +50,12 @@ export const ImagePromptListView = ({
 
           return (
             <ImageWithReview
+              prompt={prompt}
               promptId={prompt.id}
               key={prompt.id}
               allowInstantReview={allowInstantReview}
               src={"/api/v1/generator/image-review/image/" + prompt.id}
+              onGenerateImage={onGenerateImage}
               setImageStatus={(status) => {
                 setImageProcessingStatus(
                   prompt.id,
@@ -79,12 +83,16 @@ function ImageWithReview({
   imageStatus,
   setImageStatus,
   allowInstantReview,
+  onGenerateImage,
+  prompt,
 }: {
+  prompt: AiPrompt;
   src: string;
   promptId?: string;
   imageStatus: boolean | undefined;
   setImageStatus: (status: boolean | undefined) => void;
   allowInstantReview?: boolean;
+  onGenerateImage: (objectId: string) => void;
 }) {
   const [enabled, setEnabled] = useState(false);
 
@@ -150,6 +158,18 @@ function ImageWithReview({
           //   }
           // }}
         />
+
+        {imageStatus === false && (
+          <Button
+            small
+            outlined
+            onClick={() => {
+              onGenerateImage(prompt.metadata.objectId);
+            }}
+          >
+            Gen.
+          </Button>
+        )}
       </div>
       <div>
         {/* {promptId} */}
