@@ -944,6 +944,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     allowInstantReview={true}
                     prompts={vectorPrompts}
                     setImageProcessingStatus={setImageProcessingStatus}
+                    onGenerateImage={(objectId: string) => {
+                      onGenerateVectors?.(prompt.id, objectId);
+                    }}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
                 </div>
