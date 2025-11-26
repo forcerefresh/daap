@@ -99,6 +99,8 @@ const PromptCard: React.FC<PromptCardProps> = ({
     prompt.aiResponseJson?.brandColors
   );
 
+  const [large, setLarge] = useState(false);
+
   const [approvedColorPalette, setApprovedColorPalette] = useState<{
     [promptId: string]: { [idx: string]: boolean };
   }>({ [prompt.id]: { 0: true } });
@@ -627,6 +629,16 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   Generate all
                 </Button>
               ) : null}
+
+              <div style={{ marginLeft: "50px" }}>
+                <Button
+                  onClick={() => {
+                    setLarge(!large);
+                  }}
+                >
+                  Toggle size
+                </Button>
+              </div>
             </div>
           )}
 
@@ -687,7 +699,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
             <div
               style={{
                 display: "flex",
-                height: "calc(100vh - 150px)",
+                // height: large ? undefined : "calc(100vh - 150px)",
                 gap: "20px",
               }}
             >
@@ -753,13 +765,16 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 />
                 <div
                   style={{
-                    height: "290px",
-                    width: "360px",
+                    height: large ? "600px" : "350px",
+                    width: large ? "610px" : "360px",
                     paddingTop: "20px",
                   }}
                 >
                   {template && (
-                    <AITemplatePreview currentProject={template} width={350} />
+                    <AITemplatePreview
+                      currentProject={template}
+                      width={large ? 600 : 350}
+                    />
                   )}
                 </div>
               </section>
@@ -909,47 +924,50 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
                 </section>
-                <div>
-                  {colorSetPrompts.map((childPrompt, index) => (
-                    <ColorSetPromptCard
-                      selectedColorPalette={selectedColorPalette}
-                      onSelect={(colorTheme) => {
-                        setSelectedColorPalette(colorTheme);
+                {!large && (
+                  <div>
+                    {colorSetPrompts.map((childPrompt, index) => (
+                      <ColorSetPromptCard
+                        selectedColorPalette={selectedColorPalette}
+                        onSelect={(colorTheme) => {
+                          setSelectedColorPalette(colorTheme);
+                        }}
+                        title={"Color sets " + (index + 1)}
+                        key={childPrompt.id}
+                        promptId={childPrompt.id}
+                        aiPrompt={childPrompt}
+                        colorPaletteStatuses={
+                          approvedColorPalette[childPrompt.id] ?? {}
+                        }
+                        setColorPaletteStatus={setColorPaletteStatus}
+                        // onGenerateAll={onGenerateAll}
+                      />
+                    ))}
+                  </div>
+                )}
+                {!large && (
+                  <div>
+                    <ImagePromptListView
+                      title="Images"
+                      prompts={imagePrompts}
+                      setImageProcessingStatus={setImageProcessingStatus}
+                      onGenerateImage={(objectId: string) => {
+                        onGenerateImages?.(prompt.id, objectId);
                       }}
-                      title={"Color sets " + (index + 1)}
-                      key={childPrompt.id}
-                      promptId={childPrompt.id}
-                      aiPrompt={childPrompt}
-                      colorPaletteStatuses={
-                        approvedColorPalette[childPrompt.id] ?? {}
-                      }
-                      setColorPaletteStatus={setColorPaletteStatus}
-                      // onGenerateAll={onGenerateAll}
+                      // onApply={() => onApplyImages(imagePrompts)}
                     />
-                  ))}
-                </div>
-
-                <div>
-                  <ImagePromptListView
-                    title="Images"
-                    prompts={imagePrompts}
-                    setImageProcessingStatus={setImageProcessingStatus}
-                    onGenerateImage={(objectId: string) => {
-                      onGenerateImages?.(prompt.id, objectId);
-                    }}
-                    // onApply={() => onApplyImages(imagePrompts)}
-                  />
-                  <ImagePromptListView
-                    title="Vectors"
-                    allowInstantReview={true}
-                    prompts={vectorPrompts}
-                    setImageProcessingStatus={setImageProcessingStatus}
-                    onGenerateImage={(objectId: string) => {
-                      onGenerateVectors?.(prompt.id, objectId);
-                    }}
-                    // onApply={() => onApplyImages(imagePrompts)}
-                  />
-                </div>
+                    <ImagePromptListView
+                      title="Vectors"
+                      allowInstantReview={true}
+                      prompts={vectorPrompts}
+                      setImageProcessingStatus={setImageProcessingStatus}
+                      onGenerateImage={(objectId: string) => {
+                        onGenerateVectors?.(prompt.id, objectId);
+                      }}
+                      // onApply={() => onApplyImages(imagePrompts)}
+                    />
+                  </div>
+                )}
               </section>
             </div>
             <section>
