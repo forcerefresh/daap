@@ -434,7 +434,6 @@ const PromptCard: React.FC<PromptCardProps> = ({
                       : "Complete"}
                   </Button>
                 )}
-
                 {prompt.processingComplete && (
                   <Button
                     large
@@ -464,11 +463,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 {remainingImageForReview > 0 ? (
                   <>{remainingImageForReview} image review missing</>
                 ) : null}
-
                 {prompt.status === AiPromptStatus.LOADING && (
                   <Spinner size={SpinnerSize.SMALL} />
                 )}
-
                 {!completeDisabled && (
                   <Button
                     large
@@ -479,6 +476,16 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   >
                     Create layout variation
                   </Button>
+                )}
+                {prompt.templateGenerated && (
+                  <Tag intent={"success"} round>
+                    Template generated
+                  </Tag>
+                )}
+                {prompt.hasTranslation && (
+                  <Tag intent={"success"} round>
+                    Translated
+                  </Tag>
                 )}
               </div>
             </div>

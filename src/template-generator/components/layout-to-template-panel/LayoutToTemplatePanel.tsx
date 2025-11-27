@@ -117,6 +117,7 @@ import { LayoutSelect } from "./layout-select/layout-select";
 import { AdvancedPagination } from "../pagination/pagination";
 import ProcessTemplates from "../process-templates/process-templates";
 import SearchTemplates from "../search-templates/search-templates";
+import { useTemplateTranslate } from "../../hooks/useTranslation";
 
 export const THUMB_WIDTH = 200;
 
@@ -181,6 +182,8 @@ const LayoutToTemplate = (
 
   // const { generateColorSets } = useColorSetsGenerator();
   // const { generateLayout } = useLayoutGenerator();
+
+  const { translateTemplates } = useTemplateTranslate();
 
   const [layoutOptions, setLayoutOptions] = useState<OptionProps[]>([]);
 
@@ -361,9 +364,28 @@ const LayoutToTemplate = (
     isPolling,
   } = usePolling(poolingFunc, undefined, false);
 
+  const [forTranslation, setForTranslation] = useState<{
+    count: number;
+    aiPromptIds: string[];
+  }>({
+    count: 0,
+    aiPromptIds: [],
+  });
+
   useEffect(() => {
     restartPolling();
   }, []);
+
+  useEffect(() => {
+    const aiPromptIds =
+      data?.data
+        .filter((item) => {
+          return !JSON.parse(item.textTranslation).sr;
+        })
+        .map((item) => item.id) ?? [];
+
+    setForTranslation({ aiPromptIds: aiPromptIds, count: aiPromptIds.length });
+  }, [data]);
 
   const filtersRef = useRef(filters);
   filtersRef.current = filters;
@@ -662,6 +684,19 @@ const LayoutToTemplate = (
             Search templates
           </Button>
         </div>
+        <div>
+          <Button
+            intent={forTranslation.count > 0 ? "primary" : "none"}
+            small
+            disabled={forTranslation.count === 0}
+            onClick={() => {
+              translateTemplates({ aiPromptIds: forTranslation.aiPromptIds });
+            }}
+          >
+            Translate({forTranslation.count})
+          </Button>
+        </div>
+
         <div className={css.saving}>
           {meta.inSaving && (
             <>
