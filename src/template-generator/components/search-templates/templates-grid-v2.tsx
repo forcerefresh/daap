@@ -364,7 +364,10 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                     </div>
 
                     <div className={styles.cardContent}>
-                      <p className={styles.prompt}>{template.promptStr}</p>
+                      <p className={styles.prompt}>
+                        {/* // TODO */}
+                        {template.promptStr ?? template.template?.promptStr}
+                      </p>
 
                       <div className={styles.tags}>
                         <span className={styles.tag}>
