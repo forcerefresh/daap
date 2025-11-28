@@ -112,7 +112,85 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const masonryRef = useRef<HTMLDivElement>(null);
+  const [columnCount, setColumnCount] = useState<number>(0); // Start with 0 to indicate not calculated
+  const containerRef = useRef<HTMLDivElement>(null);
+  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+
+  // Track which page each template belongs to
+  const templatePagesRef = useRef<Map<number, number>>(new Map());
+
+  // Calculate column count based on container width
+  const calculateColumnCount = () => {
+    if (!containerRef.current) return 4;
+
+    const containerWidth = containerRef.current.offsetWidth;
+
+    if (containerWidth >= 1601) return 6;
+    if (containerWidth >= 1401) return 5;
+    if (containerWidth >= 1201) return 4;
+    if (containerWidth >= 901) return 3;
+    if (containerWidth >= 601) return 2;
+    return 1;
+  };
+
+  // Update column count on resize and initial load
+  useEffect(() => {
+    const updateColumnCount = () => {
+      const newColumnCount = calculateColumnCount();
+      setColumnCount(newColumnCount);
+    };
+
+    // Initial calculation after a small delay to ensure DOM is ready
+    const timeoutId = setTimeout(updateColumnCount, 100);
+
+    // Set up resize observer for more reliable container measurement
+    if (containerRef.current) {
+      resizeObserverRef.current = new ResizeObserver(updateColumnCount);
+      resizeObserverRef.current.observe(containerRef.current);
+    }
+
+    // Also update on window resize as fallback
+    window.addEventListener("resize", updateColumnCount);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (resizeObserverRef.current) {
+        resizeObserverRef.current.disconnect();
+      }
+      window.removeEventListener("resize", updateColumnCount);
+    };
+  }, []);
+
+  // Recalculate columns when templates change (to handle initial load)
+  useEffect(() => {
+    if (templates.length > 0 && columnCount === 0) {
+      const timeoutId = setTimeout(() => {
+        setColumnCount(calculateColumnCount());
+      }, 150);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [templates.length, columnCount]);
+
+  // Distribute templates into columns based on their original page
+  const distributeTemplatesToColumns = (allTemplates: TemplateItem[]) => {
+    if (columnCount === 0) {
+      // Return single column while calculating
+      return [allTemplates];
+    }
+
+    const columns: TemplateItem[][] = Array.from(
+      { length: columnCount },
+      () => []
+    );
+
+    // Distribute templates to columns trying to maintain their original visual order
+    allTemplates.forEach((template, index) => {
+      const columnIndex = index % columnCount;
+      columns[columnIndex].push(template);
+    });
+
+    return columns;
+  };
 
   // Load initial templates when component mounts or search query changes
   useEffect(() => {
@@ -120,6 +198,9 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
     const loadInitialTemplates = async () => {
       if (initialTemplates && initialTemplates.length > 0) {
+        initialTemplates.forEach((template) => {
+          templatePagesRef.current.set(template.id, 1);
+        });
         setTemplates(initialTemplates);
         return;
       }
@@ -133,6 +214,12 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
           searchQuery,
           12
         );
+
+        // Track page for initial templates
+        response.data.forEach((template) => {
+          templatePagesRef.current.set(template.id, 1);
+        });
+
         setTemplates(response.data);
         setMetadata(response.metadata);
         setHasMore(response.pagination.hasNext);
@@ -162,6 +249,12 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         12
       );
 
+      // Track page for new templates
+      response.data.forEach((template) => {
+        templatePagesRef.current.set(template.id, nextPage);
+      });
+
+      // Append new templates - they will be distributed to columns without affecting existing ones
       setTemplates((prev) => {
         const newTemplates = response.data.filter(
           (newItem) =>
@@ -189,6 +282,9 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     return `${(similarity * 100).toFixed(1)}%`;
   };
 
+  // Distribute current templates to columns
+  const columns = distributeTemplatesToColumns(templates);
+
   if (isLoading) {
     return (
       <div className={styles.loadingContainer}>
@@ -210,62 +306,66 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   }
 
   return (
-    <div className={styles.container}>
+    <div ref={containerRef} className={styles.container}>
       {error && (
         <div className={styles.inlineError}>
           <p>{error}</p>
         </div>
       )}
 
-      <div ref={masonryRef} className={styles.masonryGrid}>
-        {templates?.map((template) => {
-          const aspectRatioClass = getAspectRatioClass(
-            template.template.documentType.widthPx,
-            template.template.documentType.heightPx
-          );
+      <div className={styles.masonryContainer}>
+        {columns.map((columnTemplates, columnIndex) => (
+          <div key={`column-${columnIndex}`} className={styles.masonryColumn}>
+            {columnTemplates.map((template) => {
+              const aspectRatioClass = getAspectRatioClass(
+                template.template.documentType.widthPx,
+                template.template.documentType.heightPx
+              );
 
-          return (
-            <div
-              key={template.id}
-              className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
-            >
-              <div className={styles.card}>
-                <div className={styles.imageContainer}>
-                  <img
-                    src={`/api/v1/media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
-                    alt={template.promptStr}
-                    className={styles.image}
-                    loading="lazy"
-                  />
-                  <div className={styles.similarityBadge}>
-                    <span
-                      className={`${styles.similarity} ${getSimilarityColor(
-                        template.similarity
-                      )}`}
-                    >
-                      {formatSimilarity(template.similarity)}
-                    </span>
+              return (
+                <div
+                  key={`template-${template.id}`}
+                  className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
+                >
+                  <div className={styles.card}>
+                    <div className={styles.imageContainer}>
+                      <img
+                        src={`/api/v1/media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
+                        alt={template.promptStr}
+                        className={styles.image}
+                        loading="lazy"
+                      />
+                      <div className={styles.similarityBadge}>
+                        <span
+                          className={`${styles.similarity} ${getSimilarityColor(
+                            template.similarity
+                          )}`}
+                        >
+                          {formatSimilarity(template.similarity)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={styles.cardContent}>
+                      <p className={styles.prompt}>{template.promptStr}</p>
+
+                      <div className={styles.tags}>
+                        <span className={styles.tag}>
+                          <span className={styles.tagLabel}>Industry:</span>
+                          {template.industryStr}
+                        </span>
+                        <span className={styles.tag}>
+                          <span className={styles.tagLabel}>Format:</span>
+                          {template.documentTypeStr}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                <div className={styles.cardContent}>
-                  <p className={styles.prompt}>{template.promptStr}</p>
-
-                  <div className={styles.tags}>
-                    <span className={styles.tag}>
-                      <span className={styles.tagLabel}>Industry:</span>
-                      {template.industryStr}
-                    </span>
-                    <span className={styles.tag}>
-                      <span className={styles.tagLabel}>Format:</span>
-                      {template.documentTypeStr}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              );
+            })}
+          </div>
+        ))}
       </div>
 
       {hasMore && templates && templates.length > 0 && (
