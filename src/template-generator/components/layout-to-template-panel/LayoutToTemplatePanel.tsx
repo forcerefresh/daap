@@ -380,7 +380,7 @@ const LayoutToTemplate = (
     const aiPromptIds =
       data?.data
         .filter((item) => {
-          return !JSON.parse(item.textTranslation).sr;
+          return !item.hasTranslation;
         })
         .map((item) => item.id) ?? [];
 
