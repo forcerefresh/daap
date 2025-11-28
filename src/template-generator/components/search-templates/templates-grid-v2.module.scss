@@ -3,13 +3,18 @@
   max-width: 1610px;
   margin: 0 auto;
   overflow: auto;
+  width: 100%;
+  box-sizing: border-box;
+  /* Ensure consistent sizing */
+  position: relative;
 }
 
-/* Multi-column masonry container */
 .masonryContainer {
   display: flex;
   gap: 20px;
   width: 100%;
+  /* Prevent flex container from affecting measurements */
+  min-width: 0;
 }
 
 .masonryColumn {
@@ -17,6 +22,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  min-width: 0; /* Critical for proper flex behavior */
 }
 
 .masonryItem {
@@ -71,6 +77,7 @@
 }
 
 /* Card styles */
+/* Ensure cards don't affect container measurements */
 .card {
   border-radius: 12px;
   overflow: hidden;
@@ -78,6 +85,8 @@
   transition: all 0.3s ease;
   width: 100%;
   background: #30404d;
+  /* Prevent card from affecting parent measurements */
+  box-sizing: border-box;
 }
 
 .card:hover {

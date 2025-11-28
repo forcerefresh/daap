@@ -112,78 +112,92 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [columnCount, setColumnCount] = useState<number>(0); // Start with 0 to indicate not calculated
+  const [columnCount, setColumnCount] = useState<number>(4);
   const containerRef = useRef<HTMLDivElement>(null);
-  const resizeObserverRef = useRef<ResizeObserver | null>(null);
+  const lastWidthRef = useRef<number>(0);
 
   // Track which page each template belongs to
   const templatePagesRef = useRef<Map<number, number>>(new Map());
 
-  // Calculate column count based on container width
-  const calculateColumnCount = () => {
-    if (!containerRef.current) return 4;
+  // Calculate column count based on container width with more precise breakpoints
+  const calculateColumnCount = (currentWidth: number) => {
+    // Use window.innerWidth as fallback for more consistent measurement
+    const containerWidth =
+      currentWidth || (containerRef.current?.offsetWidth ?? 0);
 
-    const containerWidth = containerRef.current.offsetWidth;
-
-    if (containerWidth >= 1601) return 6;
-    if (containerWidth >= 1401) return 5;
-    if (containerWidth >= 1201) return 4;
-    if (containerWidth >= 901) return 3;
-    if (containerWidth >= 601) return 2;
+    // More precise breakpoints with buffer to prevent flickering
+    if (containerWidth >= 1580) return 6; // 1601 - buffer
+    if (containerWidth >= 1380) return 5; // 1401 - buffer
+    if (containerWidth >= 1180) return 4; // 1201 - buffer
+    if (containerWidth >= 880) return 3; // 901 - buffer
+    if (containerWidth >= 580) return 2; // 601 - buffer
     return 1;
+  };
+
+  // Update column count with proper width measurement
+  const updateColumnCount = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Get the actual rendered width
+    const currentWidth = container.offsetWidth;
+
+    // Only update if width actually changed significantly (more than 10px)
+    if (Math.abs(currentWidth - lastWidthRef.current) < 10) return;
+
+    lastWidthRef.current = currentWidth;
+    const newColumnCount = calculateColumnCount(currentWidth);
+
+    // Force update even if count is the same to handle redistribution
+    setColumnCount(newColumnCount);
   };
 
   // Update column count on resize and initial load
   useEffect(() => {
-    const updateColumnCount = () => {
-      const newColumnCount = calculateColumnCount();
-      setColumnCount(newColumnCount);
+    // Initial calculation with multiple attempts to ensure accurate measurement
+    const attemptInitialCalculation = (attempt = 0) => {
+      updateColumnCount();
+
+      // Try up to 3 times with increasing delays to ensure DOM is ready
+      if (attempt < 3) {
+        setTimeout(
+          () => attemptInitialCalculation(attempt + 1),
+          100 * (attempt + 1)
+        );
+      }
     };
 
-    // Initial calculation after a small delay to ensure DOM is ready
-    const timeoutId = setTimeout(updateColumnCount, 100);
+    attemptInitialCalculation();
 
-    // Set up resize observer for more reliable container measurement
-    if (containerRef.current) {
-      resizeObserverRef.current = new ResizeObserver(updateColumnCount);
-      resizeObserverRef.current.observe(containerRef.current);
-    }
+    // Set up resize listener with proper debouncing
+    let resizeTimeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimeoutId);
+      resizeTimeoutId = setTimeout(updateColumnCount, 150);
+    };
 
-    // Also update on window resize as fallback
-    window.addEventListener("resize", updateColumnCount);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      clearTimeout(timeoutId);
-      if (resizeObserverRef.current) {
-        resizeObserverRef.current.disconnect();
-      }
-      window.removeEventListener("resize", updateColumnCount);
+      clearTimeout(resizeTimeoutId);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  // Recalculate columns when templates change (to handle initial load)
+  // Update when templates change (container might have resized)
   useEffect(() => {
-    if (templates.length > 0 && columnCount === 0) {
-      const timeoutId = setTimeout(() => {
-        setColumnCount(calculateColumnCount());
-      }, 150);
-      return () => clearTimeout(timeoutId);
-    }
-  }, [templates.length, columnCount]);
+    const timeoutId = setTimeout(updateColumnCount, 50);
+    return () => clearTimeout(timeoutId);
+  }, [templates.length]);
 
-  // Distribute templates into columns based on their original page
+  // Distribute templates into columns - this now handles redistribution properly
   const distributeTemplatesToColumns = (allTemplates: TemplateItem[]) => {
-    if (columnCount === 0) {
-      // Return single column while calculating
-      return [allTemplates];
-    }
-
     const columns: TemplateItem[][] = Array.from(
       { length: columnCount },
       () => []
     );
 
-    // Distribute templates to columns trying to maintain their original visual order
+    // Simple round-robin distribution that maintains order
     allTemplates.forEach((template, index) => {
       const columnIndex = index % columnCount;
       columns[columnIndex].push(template);
@@ -254,7 +268,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         templatePagesRef.current.set(template.id, nextPage);
       });
 
-      // Append new templates - they will be distributed to columns without affecting existing ones
+      // Append new templates
       setTemplates((prev) => {
         const newTemplates = response.data.filter(
           (newItem) =>
@@ -315,7 +329,10 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
       <div className={styles.masonryContainer}>
         {columns.map((columnTemplates, columnIndex) => (
-          <div key={`column-${columnIndex}`} className={styles.masonryColumn}>
+          <div
+            key={`column-${columnIndex}-${columnCount}`}
+            className={styles.masonryColumn}
+          >
             {columnTemplates.map((template) => {
               const aspectRatioClass = getAspectRatioClass(
                 template.template.documentType.widthPx,
