@@ -366,6 +366,12 @@ const PromptCard: React.FC<PromptCardProps> = ({
     remainingVectorsForReview > 0 ||
     (prompt.processingStatus === AiProcessingStatus.NOT_PROCESSED &&
       prompt.status !== AiPromptStatus.ERROR);
+
+  const translatedToArr = useMemo(() => {
+    const trObj = JSON.parse(prompt.textTranslation);
+    return Object.keys(trObj);
+  }, [prompt]);
+
   return (
     <Card elevation={Elevation.TWO} style={{ position: "relative" }}>
       <div
@@ -482,11 +488,12 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     Template generated
                   </Tag>
                 )}
-                {prompt.hasTranslation && (
-                  <Tag intent={"success"} round>
-                    Translated
-                  </Tag>
-                )}
+                {prompt.hasTranslation &&
+                  translatedToArr.map((lg) => (
+                    <Tag intent="primary" minimal round>
+                      {lg}
+                    </Tag>
+                  ))}
               </div>
             </div>
             {/* <H5 style={{ margin: 0 }}>Prompt: {prompt.id}</H5> */}
