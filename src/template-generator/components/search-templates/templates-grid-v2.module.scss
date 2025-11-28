@@ -1,51 +1,59 @@
 .container {
   padding: 20px;
-  /* CHANGED: Increased max-width by ~15% (from 1400px to 1610px) */
   max-width: 1610px;
   margin: 0 auto;
   overflow: auto;
 }
 
+/* Pinterest-style Masonry with CSS Columns */
 .masonryGrid {
   column-count: 6;
   column-gap: 20px;
-  /* Remove column-fill: balance as it can cause issues */
   width: 100%;
 }
 
-/* Ensure masonry items work properly */
 .masonryItem {
   break-inside: avoid;
-  page-break-inside: avoid; /* Fallback for older browsers */
-  -webkit-column-break-inside: avoid; /* Safari/Chrome */
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
   margin-bottom: 20px;
-  display: inline-block; /* Important for column layout */
-  width: 100%; /* Ensure full width within column */
+  display: inline-block;
+  width: 100%;
 }
 
-/* Update breakpoints for better 5-column support */
-@media (min-width: 1600px) {
+/* Enhanced responsive breakpoints for better column control */
+@media (min-width: 1601px) {
   .masonryGrid {
     column-count: 6;
   }
 }
 
-@media (max-width: 1400px) {
+@media (min-width: 1401px) and (max-width: 1600px) {
+  .masonryGrid {
+    column-count: 5;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1400px) {
   .masonryGrid {
     column-count: 4;
   }
 }
 
-@media (max-width: 1200px) {
+@media (min-width: 901px) and (max-width: 1200px) {
   .masonryGrid {
     column-count: 3;
   }
 }
 
-@media (max-width: 900px) {
+@media (min-width: 601px) and (max-width: 900px) {
   .masonryGrid {
     column-count: 2;
     column-gap: 16px;
+  }
+
+  .masonryItem {
+    margin-bottom: 16px;
   }
 }
 
@@ -54,25 +62,25 @@
     column-count: 1;
     column-gap: 12px;
   }
+
+  .masonryItem {
+    margin-bottom: 12px;
+  }
 }
 
-// @media (max-width: 900px) {
-//   .masonryItem {
-//     margin-bottom: 16px;
-//   }
-// }
+/* Fix for preventing layout shifts */
+.masonryItem {
+  transform: translateZ(0); /* Hardware acceleration */
+  backface-visibility: hidden;
+}
 
-// @media (max-width: 600px) {
-//   .masonryItem {
-//     margin-bottom: 12px;
-//   }
-// }
-
+/* Card styles with consistent sizing */
 .card {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
+  width: 100%;
 }
 
 .card:hover {
@@ -175,15 +183,6 @@
   color: #bfccd6;
 }
 
-/* Language indicator */
-.languageIndicator {
-  text-align: center;
-  margin-bottom: 16px;
-  color: #8a9ba8;
-  font-size: 14px;
-  font-style: italic;
-}
-
 /* Loading states */
 .loadingContainer {
   display: flex;
@@ -227,27 +226,6 @@
 .inlineError p {
   margin: 0;
   color: #f2b824;
-}
-
-/* Header */
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.header p {
-  color: #8a9ba8;
-  font-size: 16px;
-  max-width: 600px;
-  margin: 0 auto;
-  line-height: 1.6;
-}
-
-.searchInfo {
-  margin-top: 20px;
-  font-style: italic;
-  color: #738694;
-  font-size: 14px;
 }
 
 /* Load more button */

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Spinner } from "@blueprintjs/core";
 import styles from "./templates-grid-v2.module.scss";
 import { usePublicTemplateSearch } from "../../hooks/usePublicTemplateSearch";
-import { getMediaSrc } from "../../../integration/utils/local-media";
 
 const languageMappings = {
   en: { name: "English", iso3: "eng" },
@@ -108,12 +107,12 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const { searchPublicTemplate } = usePublicTemplateSearch();
   const [templates, setTemplates] = useState<TemplateItem[]>([]);
   const [metadata, setMetadata] = useState<TemplatesResponse["metadata"]>();
-
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const masonryRef = useRef<HTMLDivElement>(null);
 
   // Load initial templates when component mounts or search query changes
   useEffect(() => {
@@ -163,7 +162,13 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         12
       );
 
-      setTemplates((prev) => [...prev, ...response.data]);
+      setTemplates((prev) => {
+        const newTemplates = response.data.filter(
+          (newItem) =>
+            !prev.some((existingItem) => existingItem.id === newItem.id)
+        );
+        return [...prev, ...newTemplates];
+      });
       setHasMore(response.pagination.hasNext);
       setCurrentPage(nextPage);
     } catch (err) {
@@ -206,27 +211,13 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
   return (
     <div className={styles.container}>
-      {/* {metadata?.language && (
-        <div className={styles.languageIndicator}>
-          Language: {languageMappings[metadata.language]?.name}
-        </div>
-      )} */}
-      {/* <div className={styles.header}>
-
-        {searchQuery && (
-          <p className={styles.searchInfo}>
-            Showing results for: <strong>"{searchQuery}"</strong>
-          </p>
-        )}
-      </div> */}
-
       {error && (
         <div className={styles.inlineError}>
           <p>{error}</p>
         </div>
       )}
 
-      <div className={styles.masonryGrid}>
+      <div ref={masonryRef} className={styles.masonryGrid}>
         {templates?.map((template) => {
           const aspectRatioClass = getAspectRatioClass(
             template.template.documentType.widthPx,
@@ -314,4 +305,4 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   );
 };
 
-export default TemplatesGridV2;
+export default React.memo(TemplatesGridV2);
