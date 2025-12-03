@@ -200,6 +200,8 @@ const ProcessTemplates = (
       console.log("update template");
       setTemplate(newTemplate);
 
+      debugger;
+
       setTimeout(async () => {
         const { imageBase64, extension } = await takeScreenShot();
 
@@ -216,6 +218,7 @@ const ProcessTemplates = (
           previewImageBase64: imageBase64Data,
           language: lang,
           previewUid: previewUIDRef.current,
+          template: JSON.stringify(newTemplate),
         });
 
         // debugger;

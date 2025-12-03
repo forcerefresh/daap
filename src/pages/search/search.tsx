@@ -1,12 +1,56 @@
 import React, { useState } from "react";
-import { Button, HTMLSelect, TextArea } from "@blueprintjs/core";
+import { Alert, Button, HTMLSelect, TextArea } from "@blueprintjs/core";
 import styles from "./search.module.scss";
 import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
 import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
 import SelectBadge from "./components/select-badge/SelectBadge";
 import TemplatesGridV2 from "../../template-generator/components/search-templates/templates-grid-v2";
+import { usePublicTemplate } from "../../template-generator/hooks/usePublicTemplate";
+import { IDocument } from "../../store/reducers/document";
+import { IMeta } from "../../store/reducers/meta";
+import { connect } from "react-redux";
+import {
+  activateSlide,
+  addNewObject,
+  doClearHistory,
+  openProject,
+  selectForProperties,
+  selectForPropertiesProps,
+  selectSlides,
+  setDevice,
+  updateEditor,
+  updateProjectMeta,
+} from "../../store/actions/actions";
+import { IObject } from "webslider-sdk/lib/objects/i-object";
+import { IStore } from "../../store/store";
+import { ISettings } from "../../store/reducers/i-settings";
+import { IPages } from "../../store/reducers/i-pages";
+import {
+  preloadFonts,
+  updateProjectWithNewIds,
+} from "../../utils/project/project-utils";
+import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
-const SearchPage = ({ onClose }: { onClose: () => void }) => {
+interface ISearchProps {
+  onClose: () => void;
+}
+
+export type ISearchMergedProps = typeof mapDispatchToProps &
+  ReturnType<typeof mapStateToProps> &
+  ISearchProps;
+
+const SearchPage = ({
+  onClose,
+  _updateProjectMeta,
+  _openProject,
+  _setDevice,
+  _updateEditor,
+  _doClearHistory,
+  _activateSlide,
+  _selectSlides,
+  _selectForProperties,
+}: ISearchMergedProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("english-auto");
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
@@ -50,6 +94,89 @@ const SearchPage = ({ onClose }: { onClose: () => void }) => {
 
   const handleBlur = () => {
     setIsTextAreaFocused(false);
+  };
+
+  const applyTemplate = (templateProject: any) => {
+    debugger;
+
+    const meta: IMeta = {
+      id: undefined, //response.project.id,
+      name: "pr+" + Math.random(),
+      description: "",
+      // modified: response.template.modified,
+      // created: response.template.created,
+      saveRevision: 0,
+      //publishRevision: response.project.publishRevision,
+    };
+    _updateProjectMeta(meta);
+
+    const project: {
+      // NOTE: there are other props. We need only settings from project
+      settings: ISettings;
+      slides: IPages;
+    } = templateProject;
+
+    // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+
+    const updatedProject = templateProject;
+
+    _openProject(updatedProject);
+
+    _setDevice(
+      [...updatedProject.settings.breakpoints.breakpointsConfiguration]
+        .reverse()
+        .find((bc) => bc.enabled)?.type || "device-independent"
+    );
+
+    // missing extensions >>>
+    const missingExtensions = getMissingExtensionsFromProject(
+      templateProject.extensions
+    );
+    _updateEditor({ missingExtensions });
+    if (missingExtensions.length > 0) {
+      AppToaster.show({
+        intent: "warning",
+        message:
+          "Missing Extension found! Go to Library > Extensions to install missing extensions.",
+      });
+    }
+    // missing extensions <<<
+
+    _doClearHistory();
+
+    const slideIdToSelect = updatedProject.pages.pages[0];
+    if (slideIdToSelect) {
+      _activateSlide(slideIdToSelect);
+      _selectSlides([slideIdToSelect]);
+      _selectForProperties({ id: slideIdToSelect, type: "slide" });
+    }
+
+    _updateEditor({ sliderChanged: true, isExistingProject: false });
+
+    _doClearHistory();
+
+    preloadFonts(templateProject?.fonts ?? []);
+
+    onClose();
+
+    // _createNewProject();
+    // _doClearHistory();
+    // _initializeSlideAndLayer();
+    // _updateEditor({ isExistingProject: false, sliderChanged: false });
+    // if (isDiscartConfirmOpen) {
+    //   setIsDiscartConfirmOpen(false);
+    // }
+  };
+
+  const { getPublicTemplate } = usePublicTemplate();
+  const handleUseTemplate = (publicTemplateId: string, lang: string) => {
+    getPublicTemplate(publicTemplateId, lang).then((response) => {
+      if (response?.data?.template) {
+        applyTemplate(JSON.parse(response?.data?.template));
+      } else {
+        console.warn("Something went wrong!");
+      }
+    });
   };
 
   return (
@@ -134,11 +261,37 @@ const SearchPage = ({ onClose }: { onClose: () => void }) => {
         )}
 
         {isExpanded && (
-          <TemplatesGridV2 searchQuery={searchQuery} baseUrl="/" />
+          <TemplatesGridV2
+            searchQuery={searchQuery}
+            baseUrl="/"
+            onUseTemplate={handleUseTemplate}
+          />
         )}
       </div>
     </div>
   );
 };
 
-export default SearchPage;
+const mapStateToProps = (state: IStore) => ({
+  // activeLayerId: state.project.selection.activeLayerId,
+});
+
+const mapDispatchToProps = {
+  _addNewObject: (
+    layerId: string,
+    type: string,
+    objectProps: Partial<IObject>,
+    values?: { [key: string]: any }
+  ) => addNewObject(layerId, type, objectProps, values),
+  _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _openProject: (project: any) => openProject(project),
+  _doClearHistory: () => doClearHistory(),
+  _activateSlide: (id: string): any => activateSlide(id),
+  _selectSlides: (ids: string[]): any => selectSlides(ids),
+  _selectForProperties: (payload: selectForPropertiesProps) =>
+    selectForProperties(payload),
+  _setDevice: setDevice,
+  _updateEditor: updateEditor,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

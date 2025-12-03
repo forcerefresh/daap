@@ -2,8 +2,8 @@ import axios from "axios";
 
 export const usePublicTemplate = () => {
   const addPublicTemplate = (props: {
-    industryStr: string;
-    documentTypeStr: string;
+    // industryStr: string;
+    // documentTypeStr: string;
     promptStr: string;
     industryId: string;
     documentTypeId: string;
@@ -11,6 +11,7 @@ export const usePublicTemplate = () => {
     previewImageBase64: string;
     language: string;
     previewUid?: string; //. only used when adding translation image
+    template: string;
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/public-templates`, props)
@@ -18,7 +19,15 @@ export const usePublicTemplate = () => {
       .catch(console.log);
   };
 
+  const getPublicTemplate = (id: string, lang: string): Promise<any> => {
+    return axios
+      .get(`/api/v1/public-templates/${id}?language=${lang}`)
+      .then((response) => response.data)
+      .catch(console.log);
+  };
+
   return {
+    getPublicTemplate,
     addPublicTemplate,
   };
 };

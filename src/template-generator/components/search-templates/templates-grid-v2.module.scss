@@ -1,8 +1,9 @@
 .container {
+  overflow: visible;
   padding: 20px;
   max-width: 1610px;
   margin: 0 auto;
-  overflow: auto;
+  // overflow: auto;
   width: 100%;
   box-sizing: border-box;
   /* Ensure consistent sizing */
@@ -23,6 +24,7 @@
   flex-direction: column;
   gap: 20px;
   min-width: 0; /* Critical for proper flex behavior */
+  position: relative;
 }
 
 .masonryItem {
@@ -79,6 +81,7 @@
 /* Card styles */
 /* Ensure cards don't affect container measurements */
 .card {
+  // cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
@@ -96,6 +99,11 @@
 
 .card:hover .image {
   transform: scale(1.05);
+}
+.card:hover .templateActionsHolder {
+  visibility: visible;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* Aspect ratio specific styles */
@@ -118,6 +126,20 @@
   overflow: hidden;
 }
 
+.templateActionsHolder {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  top: 0px;
+  border-bottom: 5px solid rgba(45, 55, 65);
+  left: 0px;
+  right: 0px;
+  overflow: visible;
+  transform: translateY(-50px);
+  transition: 0.4s ease;
+  background: rgba(45, 55, 65, 0.9);
+  z-index: 100;
+}
 .image {
   width: 100%;
   height: 100%;
@@ -294,4 +316,98 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* -------------------- */
+/* Selected item styling */
+/* -------------------- */
+
+.masonryItem.selected {
+  position: relative;
+  z-index: 100;
+}
+
+.masonryItem.selected .card {
+  width: 160%;
+  transform: translateX(-20%);
+  // position: absolute;
+  z-index: 101;
+  cursor: default;
+}
+
+/* Override hover effects for selected items */
+.masonryItem.selected .card:hover {
+  transform: translateX(-20%); /* Keep the selection transform */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Keep hover shadow */
+}
+
+.masonryItem.selected .card:hover .image {
+  transform: scale(1.05); /* Keep image zoom on hover */
+}
+
+/* Button container */
+.buttonContainer {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  // background: rgba(45, 55, 65, 0.95);
+  // border-top: 1px solid #5c7080;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Button styles */
+.templateButton {
+  flex: 1;
+  justify-content: center;
+}
+
+.likeButton {
+  color: #15b371;
+}
+
+.dislikeButton {
+  color: #f55656;
+}
+
+.useTemplateButton {
+  flex: 2; /* Make Use Template button larger */
+}
+
+/* Animation for button container */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ------ addition
+// -------
+// -------
+
+/* Add this class to fade other items */
+.masonryContainer {
+  &.hasSelected {
+    .masonryItem:not(.selected) {
+      opacity: 0.4;
+      // filter: blur(1px);
+      filter: saturate(0.8);
+      pointer-events: none; /* Optional: prevent clicks on faded items */
+    }
+  }
+}
+/* Keep selected item fully visible */
+.masonryItem.selected {
+  opacity: 1 !important;
+  filter: none !important;
+  pointer-events: auto;
+}
+
+/* Add transition to all items */
+.masonryItem {
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
 }

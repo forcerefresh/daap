@@ -50,7 +50,7 @@ interface Template {
 }
 
 export interface TemplateItem {
-  id: number;
+  id: string;
   template: Template;
   industryStr: string;
   documentTypeStr: string;
@@ -80,6 +80,9 @@ interface TemplatesGridV2Props {
   baseUrl?: string;
   searchQuery?: string;
   initialTemplates?: TemplateItem[];
+  onLike: (templateId: string) => void;
+  onDislike: (templateId: string) => void;
+  onUseTemplate: (templateId: string, lang: string) => void;
 }
 
 // Helper function to determine aspect ratio class
@@ -103,6 +106,9 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   baseUrl = "",
   searchQuery = "",
   initialTemplates,
+  onLike,
+  onDislike,
+  onUseTemplate,
 }) => {
   const { searchPublicTemplate } = usePublicTemplateSearch();
   const [templates, setTemplates] = useState<TemplateItem[]>([]);
@@ -117,7 +123,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const lastWidthRef = useRef<number>(0);
 
   // Track which page each template belongs to
-  const templatePagesRef = useRef<Map<number, number>>(new Map());
+  const templatePagesRef = useRef<Map<string, number>>(new Map());
 
   // Calculate column count based on container width with more precise breakpoints
   const calculateColumnCount = (currentWidth: number) => {
@@ -226,7 +232,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         const response: TemplatesResponse = await searchPublicTemplate(
           1,
           searchQuery,
-          12
+          20
         );
 
         // Track page for initial templates
@@ -248,6 +254,37 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
     loadInitialTemplates();
   }, [searchQuery]);
+
+  // Add this state at the top of your component, after other useState declarations:
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Add this handler function:
+  const handleItemClick = (templateId: string, e: React.MouseEvent) => {
+    // Prevent event bubbling to parent elements
+    e.stopPropagation();
+
+    // // If clicking the same item, deselect it
+    // if (selectedId === templateId) {
+    //   setSelectedId(null);
+    // } else {
+    //   setSelectedId(templateId);
+    // }
+  };
+
+  // Add click handler to container to deselect when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (selectedId !== null) {
+        setSelectedId(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [selectedId]);
 
   const handleLoadMore = async (): Promise<void> => {
     if (isLoadingMore || !hasMore) return;
@@ -327,7 +364,11 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         </div>
       )}
 
-      <div className={styles.masonryContainer}>
+      <div
+        className={`${styles.masonryContainer} ${
+          selectedId ? styles.hasSelected : ""
+        }`}
+      >
         {columns.map((columnTemplates, columnIndex) => (
           <div
             key={`column-${columnIndex}-${columnCount}`}
@@ -342,7 +383,10 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
               return (
                 <div
                   key={`template-${template.id}`}
-                  className={`${styles.masonryItem} ${styles[aspectRatioClass]}`}
+                  className={`${styles.masonryItem} ${
+                    styles[aspectRatioClass]
+                  } ${selectedId === template.id ? styles.selected : ""}`}
+                  onClick={(e) => handleItemClick(template.id, e)}
                 >
                   <div className={styles.card}>
                     <div className={styles.imageContainer}>
@@ -361,11 +405,101 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                           {formatSimilarity(template.similarity)}
                         </span>
                       </div>
+
+                      <div className={styles.templateActionsHolder}>
+                        <div className={styles.buttonContainer}>
+                          <div>
+                            <Button
+                              icon="thumbs-up"
+                              className={styles.templateButton}
+                              minimal
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onLike(template.id);
+                              }}
+                            ></Button>
+                            <Button
+                              icon="thumbs-down"
+                              className={styles.templateButton}
+                              minimal
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDislike(template.id);
+                              }}
+                            ></Button>
+                          </div>
+                          <div style={{ flexGrow: "1" }}>
+                            <Button
+                              style={{ width: "100%" }}
+                              // icon="send-to"
+                              intent="primary"
+                              className={`${styles.templateButton} ${styles.useTemplateButton}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                debugger;
+                                onUseTemplate(
+                                  template.id,
+                                  template.template.language
+                                );
+                              }}
+                            >
+                              Use Template
+                            </Button>{" "}
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
+                    {/* Add buttons when selected */}
+                    {/* {selectedId === template.id && (
+                      <>
+                        <div className={styles.buttonContainer}>
+                          <div>
+                            <Button
+                              icon="thumbs-up"
+                              className={styles.templateButton}
+                              minimal
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onLike(template.id);
+                              }}
+                            >
+                              Like
+                            </Button>
+                            <Button
+                              icon="thumbs-down"
+                              className={styles.templateButton}
+                              minimal
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onDislike(template.id);
+                              }}
+                            >
+                              Dislike
+                            </Button>
+                          </div>
+                          <div style={{ flexGrow: "1" }}>
+                            <Button
+                              large
+                              style={{ width: "100%" }}
+                              // icon="send-to"
+                              intent="primary"
+                              className={`${styles.templateButton} ${styles.useTemplateButton}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onUseTemplate(template.id);
+                              }}
+                            >
+                              Use Template
+                            </Button>{" "}
+                          </div>
+                        </div>
+                      </>
+                    )} */}
+
+                    {/* {selectedId !== template.id && ( */}
                     <div className={styles.cardContent}>
                       <p className={styles.prompt}>
-                        {/* // TODO */}
                         {template.promptStr ?? template.template?.promptStr}
                       </p>
 
@@ -380,9 +514,11 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                         </span>
                       </div>
                     </div>
+                    {/* )} */}
                   </div>
                 </div>
               );
+              // ----
             })}
           </div>
         ))}

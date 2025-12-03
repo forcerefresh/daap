@@ -13,11 +13,17 @@ export const SliderInputForm: React.FC<ISliderInput & IUpdateInput> = (
     displayName,
     propertyName,
     helperText,
-    value,
+    value: valueFromProps,
     onChange,
     onPreview = () => undefined,
     inputProps = {},
   } = props;
+
+  // NOTE:
+  const value =
+    typeof valueFromProps === "string"
+      ? parseFloat(valueFromProps)
+      : valueFromProps;
 
   const {
     trackFill = false,
