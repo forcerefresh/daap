@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import cx from "classnames";
 import ReactDOM from "react-dom";
 import App from "./App";
@@ -29,14 +29,16 @@ import {
 } from "webslider-sdk/lib/animations/animations-register";
 import css from "./App.module.scss";
 import MainHeader from "./integration/components/main-header/SassMainHeader";
-import Login from "./pages/login/Login";
 import { Button, HotkeysProvider, PortalProvider } from "@blueprintjs/core";
 import DaapLogo from "./integration/components/main-header/daap-logo.svg?react";
-import "in-app-guide/src/style.css";
+// import "in-app-guide/src/style.css";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
 import SearchPage from "./pages/search/search";
+import AccountButton from "./integration/components/main-header/AccountButton";
+import { zIndex } from "html2canvas/dist/types/css/property-descriptors/z-index";
+import "./AppNew.scss";
 
-const inAppGuide = require("in-app-guide");
+// const inAppGuide = require("in-app-guide");
 
 const global = window as any;
 
@@ -141,90 +143,10 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
           <ExportProvider>
             <PreviewTimelineContextProvider>
               <div className={cx(css.main, "daap-forcerefresh-app")}>
-                {/* {renderSite && (
-              <div
-                className={cx(css.siteHolder, { [css.hideSite]: showEditor })}
-              >
-                <div className={css.bg}></div>
-                <div className={css.siteLogoHolder}>
-                  <DaapLogo className={css.logo} id="element1" />
-                </div>
-                <div className={css.siteTitleHolder}>
-                  Turn your ideas into{" "}
-                  <span
-                    style={{
-                      color: "#f74680",
-                      display: "inline-block",
-                      textAlign: "center",
-                      width: "250px",
-                      fontWeight: "300",
-                      height: "35px",
-                      overflow: "hidden",
-                      position: "relative",
-                      top: "5px",
-                    }}
-                  >
-                    <span className={css.textScroler}>
-                      instagram post
-                      <br />
-                      facebook post
-                      <br />
-                      youtube cover
-                      <br />
-                      pinterest post
-                      <br />
-                      twitter header
-                      <br />
-                      business card
-                      <br />
-                      infographic
-                      <br />
-                      awesome designs
-                      <br />
-                    </span>
-                  </span>
-                  with no experience required.
-                </div>
-                <div className={css.siteButtonsHolder}>
-                  <Button
-                    large
-                    className={css.button}
-                    intent="success"
-                    onClick={() => {
-                      focusApp("button-click");
-                    }}
-                    id="element2"
-                  >
-                    Start Creating Now
-                  </Button>
-                 
-                </div>
-              </div>
-            )} */}
-                {searchVisible && (
-                  <SearchPage onClose={() => setSearchVisible(false)} />
-                )}
-                <div
-                  className={cx(css.editorHolder)} // { [css.showEditor]: showEditor }
-                >
+                <div>
                   <MainHeader className={css.saasHeader} />
                   <App className={css.editor} />
                 </div>
-
-                {/* {renderSite && (
-              <div
-                className={cx(css.appOverlap, { [css.hideSite]: showEditor })}
-                onClick={() => {
-                  focusApp("app-click");
-                }}
-              >
-                <div className={css.exploreDapBtnHolder}>
-                  <Button large className={css.exploreDapBtn} intent="primary">
-                    Take an Interactive Tour of <strong>daap</strong>
-                  </Button>
-                </div>
-              </div>
-            )} */}
               </div>
               <div ref={overlayRef} />
             </PreviewTimelineContextProvider>
@@ -250,11 +172,20 @@ function application(): {
       // <React.StrictMode>
       <Provider store={store}>
         <HotkeysProvider>
-          <EditorConnected />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/search" />} />
+              <Route path="/editor" element={<EditorConnected />} />
+              <Route
+                path="/search"
+                element={<SearchPage onClose={() => setSearchVisible(false)} />}
+              />
+            </Routes>
+          </BrowserRouter>
 
           {/* <BrowserRouter>
             <Routes>
-              <Route path="login" element={<Login />} />
+              <Route path="search" element={<Login />} />
               <Route index element={<EditorConnected />} />
             </Routes>
           </BrowserRouter> */}

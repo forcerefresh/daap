@@ -560,33 +560,33 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     return () => {
       if (handlesRef.current?.tl && holderRef.current) {
         handlesRef.current.tl.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current.removeChild(handlesRef.current.tl);
+        holderRef.current?.removeChild(handlesRef.current.tl);
       }
       if (handlesRef.current?.tr && holderRef.current) {
         handlesRef.current.tr.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current.removeChild(handlesRef.current.tr);
+        holderRef.current?.removeChild(handlesRef.current.tr);
       }
       if (handlesRef.current?.bl && holderRef.current) {
         handlesRef.current.bl.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current.removeChild(handlesRef.current.bl);
+        holderRef.current?.removeChild(handlesRef.current.bl);
       }
       if (handlesRef.current?.br && holderRef.current) {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current.removeChild(handlesRef.current.br);
+        holderRef.current?.removeChild(handlesRef.current.br);
       }
       if (handlesRef.current?.width && holderRef.current) {
         handlesRef.current.width.removeEventListener(
           "mousedown",
           handleMouseDown
         );
-        holderRef.current.removeChild(handlesRef.current.width);
+        holderRef.current?.removeChild(handlesRef.current.width);
       }
       if (handlesRef.current?.height && holderRef.current) {
         handlesRef.current.height.removeEventListener(
           "mousedown",
           handleMouseDown
         );
-        holderRef.current.removeChild(handlesRef.current.height);
+        holderRef.current?.removeChild(handlesRef.current.height);
       }
     };
     // if (childRef.current) {

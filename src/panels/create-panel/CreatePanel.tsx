@@ -54,7 +54,7 @@ import { ISettings } from "../../store/reducers/i-settings";
 import { cloneDeep, last } from "lodash-es";
 
 import documents from "./document.json";
-import { calculateAspectRatio } from "./utils";
+import { calculateAspectRatio, generateFilename } from "./utils";
 
 interface ICreatePanelProps {
   onRequestClose: () => void;
@@ -264,7 +264,7 @@ const CreatePanel: React.FC<ICreatePanelMergedProps> = (props) => {
   const [newProjectData, setNewProjectData] = useState({
     width: "1080px",
     height: "1080px",
-    name: "Custom " + new Date().toDateString(),
+    name: generateFilename("Square Post"),
   });
 
   return (

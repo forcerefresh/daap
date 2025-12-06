@@ -82,6 +82,8 @@ $dark-border-color: #4f4f4f;
     padding: 1rem 0;
     margin-bottom: 0rem;
 
+    padding-top: 50px !important;
+
     // Add these to stabilize:
     transform: translateZ(0); // Force hardware acceleration
     backface-visibility: hidden; // Prevent sub-pixel shaking
@@ -352,5 +354,16 @@ $dark-border-color: #4f4f4f;
         }
       }
     }
+  }
+}
+
+.logo {
+  margin-left: 5px;
+}
+
+:global(.bp5-dark) {
+  .logo {
+    color: white;
+    fill: #ddd;
   }
 }

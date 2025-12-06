@@ -413,19 +413,19 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     return () => {
       if (handlesRef.current?.tl && resizeHolderRef.current) {
         handlesRef.current.tl.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.tl);
+        resizeHolderRef.current?.removeChild(handlesRef.current.tl);
       }
       if (handlesRef.current?.tr && resizeHolderRef.current) {
         handlesRef.current.tr.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.tr);
+        resizeHolderRef.current?.removeChild(handlesRef.current.tr);
       }
       if (handlesRef.current?.bl && resizeHolderRef.current) {
         handlesRef.current.bl.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.bl);
+        resizeHolderRef.current?.removeChild(handlesRef.current.bl);
       }
       if (handlesRef.current?.br && resizeHolderRef.current) {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.br);
+        resizeHolderRef.current?.removeChild(handlesRef.current.br);
       }
       //
       if (handlesRef.current?.width && resizeHolderRef.current) {
@@ -433,30 +433,30 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
           "mousedown",
           handleMouseDown
         );
-        resizeHolderRef.current.removeChild(handlesRef.current.width);
+        resizeHolderRef.current?.removeChild(handlesRef.current.width);
       }
       if (handlesRef.current?.left && resizeHolderRef.current) {
         handlesRef.current.left.removeEventListener(
           "mousedown",
           handleMouseDown
         );
-        resizeHolderRef.current.removeChild(handlesRef.current.left);
+        resizeHolderRef.current?.removeChild(handlesRef.current.left);
       }
       if (handlesRef.current?.height && resizeHolderRef.current) {
         handlesRef.current.height.removeEventListener(
           "mousedown",
           handleMouseDown
         );
-        resizeHolderRef.current.removeChild(handlesRef.current.height);
+        resizeHolderRef.current?.removeChild(handlesRef.current.height);
       }
       //
       if (handlesRef.current?.p1 && resizeHolderRef.current) {
         handlesRef.current.p1.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.p1);
+        resizeHolderRef.current?.removeChild(handlesRef.current.p1);
       }
       if (handlesRef.current?.p2 && resizeHolderRef.current) {
         handlesRef.current.p2.removeEventListener("mousedown", handleMouseDown);
-        resizeHolderRef.current.removeChild(handlesRef.current.p2);
+        resizeHolderRef.current?.removeChild(handlesRef.current.p2);
       }
     };
     // if (childRef.current) {

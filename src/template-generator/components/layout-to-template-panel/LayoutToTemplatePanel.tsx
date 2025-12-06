@@ -88,7 +88,7 @@ import { PagePreviewInternal } from "../../../panels/pages-simplified/PagePrevie
 import { useVectorsGenerator } from "../../hooks/useVectorsGenerator";
 import { useGeneratorHook } from "../../../panels/layouts-panel/useGeneratorHook";
 import { useDocumentsType } from "../../hooks/useDocumentType";
-import { getDocumentsOptionFromThree } from "./documents-type-utils";
+import { getDocumentsOptionFromThree } from "../../../utils/document/documents-type-utils";
 import {
   AiProcessingStatus,
   AiPrompt,

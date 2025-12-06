@@ -10,6 +10,19 @@ import pkg from "./package.json";
 export default defineConfig({
   //   base: "/",
   plugins: [
+    // {
+    //   name: "exclude-components",
+    //   transform(code, id) {
+    //     if (
+    //       id.includes(
+    //         "src/template-generator/components/layout-to-template-panel"
+    //       )
+    //     ) {
+    //       return { code: "export default null;" };
+    //     }
+    //     return null;
+    //   },
+    // },
     {
       enforce: "pre",
       name: "vite-plugin-css-base64",

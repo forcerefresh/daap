@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { Alert, Button, HTMLSelect, TextArea } from "@blueprintjs/core";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  Alert,
+  Button,
+  H4,
+  HTMLSelect,
+  Spinner,
+  TextArea,
+} from "@blueprintjs/core";
 import styles from "./search.module.scss";
 import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
 import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
@@ -13,6 +20,7 @@ import {
   activateSlide,
   addNewObject,
   doClearHistory,
+  loadUserData,
   openProject,
   selectForProperties,
   selectForPropertiesProps,
@@ -20,6 +28,7 @@ import {
   setDevice,
   updateEditor,
   updateProjectMeta,
+  updateUserData,
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { IStore } from "../../store/store";
@@ -31,6 +40,14 @@ import {
 } from "../../utils/project/project-utils";
 import { getMissingExtensionsFromProject } from "../../utils/extensions/extensions-utils";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import AccountButton from "../../integration/components/main-header/AccountButton";
+import DaapLogo from "../../integration/components/main-header/daap-logo.svg?react";
+import { account, IAccount } from "../../store/reducers/account";
+import { useNavigate } from "react-router";
+import { userInfo } from "os";
+import "../../AppNew.scss";
+import { identity } from "lodash-es";
+import { getPendingTemplate } from "./utils/pending-template";
 
 interface ISearchProps {
   onClose: () => void;
@@ -41,6 +58,7 @@ export type ISearchMergedProps = typeof mapDispatchToProps &
   ISearchProps;
 
 const SearchPage = ({
+  isAuthenticated,
   onClose,
   _updateProjectMeta,
   _openProject,
@@ -50,12 +68,52 @@ const SearchPage = ({
   _activateSlide,
   _selectSlides,
   _selectForProperties,
+  // _updateUserData,
+  _loadUserData,
+  account,
+  theme,
 }: ISearchMergedProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("english-auto");
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const navigate = useNavigate();
+
+  const [showRedirectMessage, setShowRedirectMessage] = useState(false);
+
+  useEffect(() => {
+    // Check for pending template
+    const pendingTemplate = getPendingTemplate();
+
+    if (account.userDataLoading && pendingTemplate) {
+      setShowRedirectMessage(true);
+    }
+
+    if (!account.userDataLoading) {
+      setShowRedirectMessage(false);
+    }
+  }, [account, navigate]);
+
+  const renderSpinner = () => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100vh",
+          backgroundColor: "white",
+        }}
+      >
+        <Spinner size={50} />
+        <H4 style={{ marginTop: 20 }}>
+          {showRedirectMessage ? "Loading and redirecting..." : "Loading..."}
+        </H4>
+      </div>
+    );
+  };
   const languages = [
     { value: "auto", label: "English (auto)" },
     { value: "spanish", label: "Spanish" },
@@ -70,6 +128,8 @@ const SearchPage = ({
     { value: "SocialMedia:Instagram:SquarePost", label: "Square post" },
     { value: "SocialMedia:Instagram:StoryReel", label: "Story/Reel" },
   ];
+
+  // const [autoOpenLogin, setAutoOpenLogin] = useState(false);
 
   const handleSearch = () => {
     setIsExpanded(true);
@@ -96,184 +156,264 @@ const SearchPage = ({
     setIsTextAreaFocused(false);
   };
 
-  const applyTemplate = (templateProject: any) => {
-    debugger;
+  // const applyTemplate = (templateProject: any) => {
+  //   // debugger;
 
-    const meta: IMeta = {
-      id: undefined, //response.project.id,
-      name: "pr+" + Math.random(),
-      description: "",
-      // modified: response.template.modified,
-      // created: response.template.created,
-      saveRevision: 0,
-      //publishRevision: response.project.publishRevision,
-    };
-    _updateProjectMeta(meta);
+  //   const meta: IMeta = {
+  //     id: undefined, //response.project.id,
+  //     name: "pr+" + Math.random(),
+  //     description: "",
+  //     // modified: response.template.modified,
+  //     // created: response.template.created,
+  //     saveRevision: 0,
+  //     //publishRevision: response.project.publishRevision,
+  //   };
+  //   _updateProjectMeta(meta);
 
-    const project: {
-      // NOTE: there are other props. We need only settings from project
-      settings: ISettings;
-      slides: IPages;
-    } = templateProject;
+  //   const project: {
+  //     // NOTE: there are other props. We need only settings from project
+  //     settings: ISettings;
+  //     slides: IPages;
+  //   } = templateProject;
 
-    // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
+  //   // const { updatedProject, fromToIds } = updateProjectWithNewIds(project);
 
-    const updatedProject = templateProject;
+  //   const updatedProject = templateProject;
 
-    _openProject(updatedProject);
+  //   _openProject(updatedProject);
 
-    _setDevice(
-      [...updatedProject.settings.breakpoints.breakpointsConfiguration]
-        .reverse()
-        .find((bc) => bc.enabled)?.type || "device-independent"
-    );
+  //   _setDevice(
+  //     [...updatedProject.settings.breakpoints.breakpointsConfiguration]
+  //       .reverse()
+  //       .find((bc) => bc.enabled)?.type || "device-independent"
+  //   );
 
-    // missing extensions >>>
-    const missingExtensions = getMissingExtensionsFromProject(
-      templateProject.extensions
-    );
-    _updateEditor({ missingExtensions });
-    if (missingExtensions.length > 0) {
-      AppToaster.show({
-        intent: "warning",
-        message:
-          "Missing Extension found! Go to Library > Extensions to install missing extensions.",
-      });
+  //   // missing extensions >>>
+  //   const missingExtensions = getMissingExtensionsFromProject(
+  //     templateProject.extensions
+  //   );
+  //   _updateEditor({ missingExtensions });
+  //   if (missingExtensions.length > 0) {
+  //     AppToaster.show({
+  //       intent: "warning",
+  //       message:
+  //         "Missing Extension found! Go to Library > Extensions to install missing extensions.",
+  //     });
+  //   }
+  //   // missing extensions <<<
+
+  //   _doClearHistory();
+
+  //   const slideIdToSelect = updatedProject.pages.pages[0];
+  //   if (slideIdToSelect) {
+  //     _activateSlide(slideIdToSelect);
+  //     _selectSlides([slideIdToSelect]);
+  //     _selectForProperties({ id: slideIdToSelect, type: "slide" });
+  //   }
+
+  //   _updateEditor({ sliderChanged: true, isExistingProject: false });
+
+  //   _doClearHistory();
+
+  //   preloadFonts(templateProject?.fonts ?? []);
+
+  //   onClose();
+
+  //   // _createNewProject();
+  //   // _doClearHistory();
+  //   // _initializeSlideAndLayer();
+  //   // _updateEditor({ isExistingProject: false, sliderChanged: false });
+  //   // if (isDiscartConfirmOpen) {
+  //   //   setIsDiscartConfirmOpen(false);
+  //   // }
+  // };
+
+  const handleUseTemplate = (
+    publicTemplateId: string,
+    lang: string,
+    previewUid: string,
+    documentType: string
+  ) => {
+    if (!isAuthenticated) {
+      localStorage.setItem(
+        "pendingTemplate",
+        JSON.stringify({
+          id: publicTemplateId,
+          language: lang,
+          previewUid,
+          documentType,
+        })
+      );
+    } else {
+      localStorage.removeItem("pendingTemplate");
     }
-    // missing extensions <<<
 
-    _doClearHistory();
-
-    const slideIdToSelect = updatedProject.pages.pages[0];
-    if (slideIdToSelect) {
-      _activateSlide(slideIdToSelect);
-      _selectSlides([slideIdToSelect]);
-      _selectForProperties({ id: slideIdToSelect, type: "slide" });
-    }
-
-    _updateEditor({ sliderChanged: true, isExistingProject: false });
-
-    _doClearHistory();
-
-    preloadFonts(templateProject?.fonts ?? []);
-
-    onClose();
-
-    // _createNewProject();
-    // _doClearHistory();
-    // _initializeSlideAndLayer();
-    // _updateEditor({ isExistingProject: false, sliderChanged: false });
-    // if (isDiscartConfirmOpen) {
-    //   setIsDiscartConfirmOpen(false);
-    // }
+    navigate(`/editor?template=${publicTemplateId}&language=${lang}`);
   };
 
-  const { getPublicTemplate } = usePublicTemplate();
-  const handleUseTemplate = (publicTemplateId: string, lang: string) => {
-    getPublicTemplate(publicTemplateId, lang).then((response) => {
-      if (response?.data?.template) {
-        applyTemplate(JSON.parse(response?.data?.template));
-      } else {
-        console.warn("Something went wrong!");
+  useEffect(() => {
+    _loadUserData();
+  }, []);
+
+  useLayoutEffect(() => {
+    document.body.className = `bp5-${theme}`;
+  }, [theme]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const template = getPendingTemplate();
+      if (template) {
+        localStorage.removeItem("pendingTemplate");
+        navigate(
+          `/editor?template=${template.id}&language=${template.language}`
+        );
       }
-    });
-  };
+    }
+  }, [isAuthenticated]);
 
   return (
-    <div
-      className={`${styles.searchPageContainer}  ${
-        isExpanded ? styles.expanded : ""
-      }`}
-    >
-      <Button
-        minimal
-        icon="cross"
-        style={{ position: "absolute", right: "10px", top: "10px" }}
-        onClick={onClose}
-      ></Button>
-      <div className={styles.searchContent}>
-        {!isExpanded && (
-          <div className={styles.searchHeader}>
-            <HeadlineRandomizer />
-          </div>
-        )}
-
-        {/* Sticky container wrapper */}
-        <div className={styles.stickyContainer}>
+    <>
+      {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+        <>
           <div
-            className={`${styles.searchInputContainer} ${
-              isTextAreaFocused ? styles.focused : ""
-            } ${isExpanded ? styles.expanded : ""}`}
-          >
-            <TextArea
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyPress}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              className={styles.searchTextArea}
-              placeholder="Describe what you want to search for..."
-              growVertically={false}
-              large
-            />
-
-            <div className={styles.inputBottomControls}>
-              <div className={styles.badgesContainer}>
-                <SelectBadge
-                  label="Language"
-                  options={languages}
-                  value={selectedLanguage}
-                  onChange={setSelectedLanguage}
-                  minimal={false}
-                />
-
-                <SelectBadge
-                  label="Document"
-                  options={documents} // Fixed: using documents array instead of languages
-                  value={selectedLanguage}
-                  onChange={setSelectedLanguage}
-                  minimal={false}
-                />
-              </div>
-
-              <div className={styles.searchButtonContainer}>
-                <Button
-                  intent="primary"
-                  onClick={handleSearch}
-                  className={styles.searchButton}
-                  disabled={!searchQuery.trim()}
-                  rightIcon="arrow-right"
-                >
-                  Search
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {!isExpanded && (
-          <SearchSuggestions
-            onSuggestionClick={(value) => {
-              setSearchQuery(value);
-              setIsExpanded(true);
+            style={{
+              position: "absolute",
+              left: "0px",
+              top: "0px",
+              height: "52px",
+              padding: "6px",
+              zIndex: 1000,
+              display: "flex",
+              gap: "10px",
             }}
-          />
-        )}
+          >
+            <DaapLogo className={styles.logo} />
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              top: "10px",
+              right: "10px",
+              zIndex: 1000,
+              display: "flex",
+              gap: "10px",
+            }}
+          >
+            <Button
+              onClick={() => {
+                localStorage.removeItem("pendingTemplate");
+                navigate(`/editor`);
+                // _updateUserData(undefined, { autoShowLoginPrompt: true });
+                // // setAutoOpenLogin(true);
+                // onClose();
+              }}
+            >
+              Go to editor
+            </Button>
+            <AccountButton />
+          </div>
+        </>
+      )}
 
-        {isExpanded && (
-          <TemplatesGridV2
-            searchQuery={searchQuery}
-            baseUrl="/"
-            onUseTemplate={handleUseTemplate}
-          />
+      <div
+        className={`${styles.searchPageContainer}  ${
+          isExpanded ? styles.expanded : ""
+        }`}
+      >
+        {!showRedirectMessage && (
+          <>
+            <div className={styles.searchContent}>
+              {!isExpanded && (
+                <div className={styles.searchHeader}>
+                  <HeadlineRandomizer />
+                </div>
+              )}
+
+              {/* Sticky container wrapper */}
+              <div className={styles.stickyContainer}>
+                <div
+                  className={`${styles.searchInputContainer} ${
+                    isTextAreaFocused ? styles.focused : ""
+                  } ${isExpanded ? styles.expanded : ""}`}
+                >
+                  <TextArea
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    className={styles.searchTextArea}
+                    placeholder="Describe what you want to search for..."
+                    growVertically={false}
+                    large
+                  />
+
+                  <div className={styles.inputBottomControls}>
+                    <div className={styles.badgesContainer}>
+                      <SelectBadge
+                        label="Language"
+                        options={languages}
+                        value={selectedLanguage}
+                        onChange={setSelectedLanguage}
+                        minimal={false}
+                      />
+
+                      <SelectBadge
+                        label="Document"
+                        options={documents} // Fixed: using documents array instead of languages
+                        value={selectedLanguage}
+                        onChange={setSelectedLanguage}
+                        minimal={false}
+                      />
+                    </div>
+
+                    <div className={styles.searchButtonContainer}>
+                      <Button
+                        intent="primary"
+                        onClick={handleSearch}
+                        className={styles.searchButton}
+                        disabled={!searchQuery.trim()}
+                        rightIcon="arrow-right"
+                      >
+                        Search
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {!isExpanded && (
+                <SearchSuggestions
+                  onSuggestionClick={(value) => {
+                    setSearchQuery(value);
+                    setIsExpanded(true);
+                  }}
+                />
+              )}
+
+              {isExpanded && (
+                <TemplatesGridV2
+                  searchQuery={searchQuery}
+                  baseUrl="/"
+                  onUseTemplate={handleUseTemplate}
+                />
+              )}
+            </div>
+          </>
         )}
       </div>
-    </div>
+
+      {showRedirectMessage && renderSpinner()}
+    </>
   );
 };
 
 const mapStateToProps = (state: IStore) => ({
   // activeLayerId: state.project.selection.activeLayerId,
+  theme: state.globals.theme,
+  isAuthenticated:
+    !!state.account.userData?.displayName && !state.account.userDataLoading,
+  account: state.account,
 });
 
 const mapDispatchToProps = {
@@ -292,6 +432,9 @@ const mapDispatchToProps = {
     selectForProperties(payload),
   _setDevice: setDevice,
   _updateEditor: updateEditor,
+  _loadUserData: () => loadUserData(),
+
+  // _updateUserData: (data: any, other: any) => updateUserData(data, other),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

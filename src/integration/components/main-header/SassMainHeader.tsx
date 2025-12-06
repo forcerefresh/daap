@@ -19,12 +19,13 @@ import {
 import DaapLogo from "./daap-logo.svg?react";
 import { IStore } from "../../../store/store";
 import { ITheme } from "../../../store/reducers/i-settings";
-import { setTheme, updateProjectMeta } from "../../../store/actions/actions";
+import {
+  setTheme,
+  updateEditor,
+  updateProjectMeta,
+} from "../../../store/actions/actions";
 import { connect } from "react-redux";
 import { IMeta } from "../../../store/reducers/meta";
-import EditableText from "../../../utils/components/editable-text/editable-text";
-import Login from "../../../pages/login/Login";
-import { AUTH_LOGOUT } from "../../../pages/login/constants";
 import css from "./SassMainHeader.module.scss";
 import LibraryIcon from "../../../panels/toolbar-panel/assets/library-icon.svg?react";
 import ExtensionsIcon from "../../../panels/toolbar-panel/assets/extensions-icon.svg?react";
@@ -34,6 +35,8 @@ import { Breakpoint } from "../../../panels/project-settings-panel/breakpoint-co
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IntegrationContext } from "../../../integration";
 import AccountButton from "./AccountButton";
+import { useNavigate } from "react-router";
+import { IEditor } from "../../../store/reducers/editor";
 // import { settings } from "../../../store/reducers/settings";
 
 type IMainHeader = typeof mapDispatchToProps &
@@ -53,7 +56,10 @@ const MainHeader = (props: IMainHeader) => {
     appZoom,
     missingExtensions,
     outdatedExtensions,
+    _updateEditor,
   } = props;
+
+  const navigate = useNavigate();
 
   const {
     getFullscreenButtonComponent: FullscreenButtonComponent,
@@ -299,7 +305,23 @@ const MainHeader = (props: IMainHeader) => {
             </ButtonGroup>
           </div> */}
 
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" && <AccountButton />}
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <>
+              <ChangeCheckerButton
+                onDenied={() => {}}
+                onAllow={() => {
+                  navigate(`/search`);
+                  // _updateUserData(undefined, { autoShowLoginPrompt: true });
+                  // // setAutoOpenLogin(true);
+                  // onClose();
+                }}
+                confirmButtonText="Discard & Go to Search"
+              >
+                Go to search
+              </ChangeCheckerButton>
+              <AccountButton autoShowPrompt={true} />
+            </>
+          )}
 
           {/* </Link> */}
         </div>
@@ -331,6 +353,7 @@ const mapStateToProps = (state: IStore) => {
 const mapDispatchToProps = {
   _setTheme: (theme: ITheme) => setTheme(theme),
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
+  _updateEditor: (editor: Partial<IEditor>) => updateEditor(editor),
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainHeader);

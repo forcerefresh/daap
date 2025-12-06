@@ -1,9 +1,14 @@
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import cx from "classnames";
 import * as yup from "yup";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { connect } from "react-redux";
-import { Button, FormGroup, InputGroup } from "@blueprintjs/core";
+import { Button, FormGroup, InputGroup, Text } from "@blueprintjs/core";
 import {
   APPLE_AUTH_LINK,
   GEST_AUTH_LINK,
@@ -17,15 +22,21 @@ import GoogleIcon from "../assets/google-logo.svg?react";
 import EmailIcon from "../assets/email-icon.svg?react";
 import AppleIcon from "../assets/apple-logo.svg?react";
 import GuestIcon from "../assets/guest-icon.svg?react";
+import { useNavigate } from "react-router-dom";
+import { getPendingTemplate } from "../search/utils/pending-template";
 
-interface ILoginProps {}
+interface ILoginProps {
+  requestClose?: () => void;
+}
 
 export type IAlignPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> &
   ILoginProps;
 
 const Login: React.FC<IAlignPanelMergedProps> = (props) => {
-  const { theme } = props;
+  const navigate = useNavigate();
+
+  const { theme, requestClose } = props;
   const [loading, setLoading] = useState(false);
   const [emailValidationError, setEmailValidationError] = useState(false);
   const [showMagicLoginEmailSent, setShowMagicLoginEmailSent] = useState(false);
@@ -93,6 +104,17 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
     document.body.className = `bp5-${theme}`;
   }, [theme]);
 
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    const template = getPendingTemplate();
+
+    if (template)
+      setPreviewUrl(
+        `/api/v1/public-media/${template.previewUid}.jpeg?language=${template?.language}`
+      );
+  }, []);
+
   if (showMagicLoginEmailSent) {
     return (
       <div className={css.login}>
@@ -107,16 +129,29 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
       </div>
     );
   }
+
   return (
     <div className={css.login}>
       <div className={css.container}>
-        <h1>Welcome to DAAP Demo</h1>
+        <h1>Welcome to DAAP</h1>
+        {previewUrl && (
+          <img
+            src={previewUrl}
+            loading="lazy"
+            style={{
+              maxWidth: "100px",
+              maxHeight: "100px",
+              marginBottom: "10px",
+            }}
+          />
+        )}
+        {/* <p>Log in to customize and save your documents.</p> */}
         <p>
-          Note: Uploaded files and fonts are stored temporarily and may be
-          deleted after your session.
+          Log in to unlock customization, save your progress, and download your
+          final design.
         </p>
         <form className={css.form}>
-          <a href={GEST_AUTH_LINK} className={css.buttonAnchor}>
+          {/* <a href={GEST_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.whiteButton, css.btn)}>
               <GuestIcon width={30} height={30} />
               <div style={{ textAlign: "left" }}>
@@ -127,7 +162,7 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
                 </span>
               </div>
             </Button>
-          </a>
+          </a> */}
           <a href={GOOGLE_AUTH_LINK} className={css.buttonAnchor}>
             <Button className={cx(css.whiteButton, css.btn)}>
               <GoogleIcon width={30} height={30} />
@@ -184,6 +219,28 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
               <EmailIcon width={28} height={28} />
               Send Me Login Link
             </Button>
+          </div>
+
+          <div className={css.backToTemplatesHolder}>
+            <Text>Don't want to login?</Text>
+            <Button
+              onClick={() => {
+                requestClose?.();
+                localStorage.removeItem("pendingTemplate");
+                navigate("/search");
+              }}
+            >
+              ← Back to templates search
+            </Button>
+
+            {/* <Button
+              style={{ display: "inline" }}
+              onClick={() => {
+                navigate("/search");
+              }}
+            >
+              Go to search
+            </Button> */}
           </div>
         </form>
       </div>

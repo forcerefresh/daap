@@ -169,10 +169,11 @@ const ProcessTemplates = (
     lang: string;
   }) => {
     return new Promise<void>((resolve) => {
-      debugger;
+      // debugger;
 
       const translation = JSON.parse(oneAiPrompt.textTranslation);
 
+      // apply translation
       forEach(translation[lang] ?? [], (trans, index) => {
         let obj = oneAiPrompt.aiResponseJson.objects.find(
           (fObj) => fObj.objectId === trans.objectId
@@ -200,7 +201,7 @@ const ProcessTemplates = (
       console.log("update template");
       setTemplate(newTemplate);
 
-      debugger;
+      // debugger;
 
       setTimeout(async () => {
         const { imageBase64, extension } = await takeScreenShot();

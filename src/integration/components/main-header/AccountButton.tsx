@@ -23,17 +23,20 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type IAccountButtonProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     className?: string;
+    buttonStyle?: any;
+    autoShowPrompt?: boolean;
   };
 
 export function AccountButton(props: IAccountButtonProps) {
-  const { account, theme, _setTheme } = props;
+  const { account, theme, _setTheme, buttonStyle, autoShowPrompt } = props;
 
   const [loginOpen, setLoginOpen] = useState(false);
 
   const dialog = useMemo(() => {
     return (
       <Dialog
-        isCloseButtonShown={true}
+        canOutsideClickClose={false}
+        isCloseButtonShown={false}
         // {...props}
         isOpen={loginOpen}
         onClose={() => {
@@ -48,7 +51,11 @@ export function AccountButton(props: IAccountButtonProps) {
           <GoogleReCaptchaProvider
             reCaptchaKey={import.meta.env.VITE_APP_RECAPTCHA_SITE_KEY!}
           >
-            <Login />
+            <Login
+              requestClose={() => {
+                setLoginOpen(false);
+              }}
+            />
           </GoogleReCaptchaProvider>
         </DialogBody>
 
@@ -76,16 +83,20 @@ export function AccountButton(props: IAccountButtonProps) {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      if (
-        !accountRef.current?.userDataLoading &&
-        !accountRef.current?.userDataLoading
-      ) {
-        loginRef.current?.click?.();
-      }
-    }, 200);
-  }, [accountRef.current?.userDataLoading]);
-  // <<<<<
+    if (autoShowPrompt) {
+      setTimeout(() => {
+        if (!account?.userDataLoading) {
+          if (!account?.userData?.displayName) {
+            loginRef.current?.click?.();
+          } else {
+            // const template = localStorage.get("pendingTemplate");
+            // TODO: load and apply
+          }
+        }
+      }, 200);
+    }
+  }, [account, autoShowPrompt]);
+
   if (
     account.userDataLoading ||
     typeof account.userData?.displayName === "undefined"
@@ -93,11 +104,10 @@ export function AccountButton(props: IAccountButtonProps) {
     return (
       <>
         <Button
-          large
           intent="primary"
           icon="person"
           loading={account.userDataLoading}
-          style={{ marginRight: "0px" }}
+          style={{ marginRight: "0px", ...buttonStyle }}
           ref={loginRef}
           onClick={() => {
             setLoginOpen(true);
@@ -161,10 +171,9 @@ export function AccountButton(props: IAccountButtonProps) {
         }
       >
         <Button
-          large
           minimal
           rightIcon="caret-down"
-          style={{ marginRight: "0px" }}
+          style={{ marginRight: "0px", ...buttonStyle }}
           icon={
             account.userData?.profilePicture ? (
               <img

@@ -8,6 +8,8 @@
 
   padding-bottom: 20px;
 
+  position: relative;
+
   :global {
     .bp5-form-group {
       width: 100%;
@@ -93,4 +95,12 @@
   color: #ff5555 !important;
   margin: 10px 0;
   text-align: left;
+}
+
+.backToTemplatesHolder {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
 }

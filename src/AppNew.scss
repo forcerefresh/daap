@@ -73,6 +73,9 @@ body {
 .bp5-menu {
   background: $pt-app-background-color-secondary;
 }
+.bp5-overlay-open {
+  overflow: visible !important;
+}
 
 .bp5-overlay-open,
 .bp5-overlay-start-focus-trap {

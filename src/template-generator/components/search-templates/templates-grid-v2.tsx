@@ -82,7 +82,12 @@ interface TemplatesGridV2Props {
   initialTemplates?: TemplateItem[];
   onLike: (templateId: string) => void;
   onDislike: (templateId: string) => void;
-  onUseTemplate: (templateId: string, lang: string) => void;
+  onUseTemplate: (
+    templateId: string,
+    lang: string,
+    previewUid: string,
+    documentType: string
+  ) => void;
 }
 
 // Helper function to determine aspect ratio class
@@ -391,7 +396,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                   <div className={styles.card}>
                     <div className={styles.imageContainer}>
                       <img
-                        src={`/api/v1/media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
+                        src={`/api/v1/public-media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
                         alt={template.promptStr}
                         className={styles.image}
                         loading="lazy"
@@ -436,15 +441,16 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                               className={`${styles.templateButton} ${styles.useTemplateButton}`}
                               onClick={(e) => {
                                 e.stopPropagation();
-                                debugger;
                                 onUseTemplate(
                                   template.id,
-                                  template.template.language
+                                  template.template.language,
+                                  template.template.previewUid,
+                                  template.template.documentTypeStr
                                 );
                               }}
                             >
                               Use Template
-                            </Button>{" "}
+                            </Button>
                           </div>
                         </div>
                       </div>

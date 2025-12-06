@@ -36,7 +36,7 @@ import {
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 import { cloneDeep } from "lodash-es";
 import { useDocumentsType } from "../../template-generator/hooks/useDocumentType";
-import { getDocumentsOptionFromThree } from "../../template-generator/components/layout-to-template-panel/documents-type-utils";
+import { getDocumentsOptionFromThree } from "../../utils/document/documents-type-utils";
 
 enum ProjectPanelSections {
   Project = "Project",
