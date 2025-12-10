@@ -77,6 +77,9 @@ function App(props: IAppProps) {
   const template = searchParams.get("template");
   const language = searchParams.get("language");
 
+  console.log(template);
+  console.log(language);
+
   const { getPublicTemplate } = usePublicTemplate();
   // Load post based on ID
 
@@ -156,7 +159,10 @@ function App(props: IAppProps) {
   };
 
   useEffect(() => {
-    if (!template || !isAuthenticated) {
+    if (
+      !template ||
+      (!isAuthenticated && import.meta.env.VITE_APP_INTEGRATION === "saas")
+    ) {
       return;
     }
 

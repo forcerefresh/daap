@@ -16,14 +16,28 @@ function importBuildTarget() {
   } else if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     logger.app.log("Module: Web Slider Application (application:saas)");
     showLoggerUsage(LoggerDomain.App);
-    return require("./application-saas.tsx");
-  } else {
+    // return require("./application-saas.tsx");
+    import("./application-saas.tsx").then((module) => {
+      //AppComponent = module.default;
+    });
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    console.log("456");
+    console.log(logger);
+    console.log(logger.app);
+
     logger.app.log("Module: Web Slider Application (application)");
     showLoggerUsage(LoggerDomain.App);
+
+    import("./application-wp.tsx").then((module) => {
+      // AppComponent = module.default;
+    });
+    // return require("./application-wp.tsx");
+
     // return require("./application.tsx");
   }
 }
 
+console.log("123");
 importBuildTarget();
 
 export {};

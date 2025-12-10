@@ -12,12 +12,12 @@
   "scripts": {
     "start:app:saas": "vite --mode saas",
     "build:app:saas": "vite build --mode saas",
+    "start:app:wp": "vite  --mode wp",
     "build:app:wp": "vite build --mode wp",
     "start:wp-dist-server": "npx http-server ./dist",
     "delimiter---": "---",
     "start:app": "env-cmd -f env/.env react-scripts start",
     "start-old:app:saas": "env-cmd -f env/saas.env env-cmd -f env/secret.env react-scripts start",
-    "start:app:wp": "env-cmd -f env/wp.env react-scripts start",
     "start:app:electron": "cross-env BROWSER=none env-cmd -f env/electron.env react-scripts start",
     "start:main:electron": "cross-env ELECTRON_ENV=development electron .",
     "start:player": "env-cmd -f env/player-dev.env react-scripts start",

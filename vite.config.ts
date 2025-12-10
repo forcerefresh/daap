@@ -54,6 +54,7 @@ export default defineConfig({
     port: 3001,
   },
   build: {
+    sourcemap: true,
     outDir: "dist",
     rollupOptions: {
       input: "index.html", // Entry point

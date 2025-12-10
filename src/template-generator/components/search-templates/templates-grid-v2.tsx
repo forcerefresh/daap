@@ -396,7 +396,11 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                   <div className={styles.card}>
                     <div className={styles.imageContainer}>
                       <img
-                        src={`/api/v1/public-media/${template.template.previewUid}.jpeg?language=${metadata?.language}`}
+                        src={`${
+                          import.meta.env.VITE_SAAS_API_URL
+                        }/api/v1/public-media/${
+                          template.template.previewUid
+                        }.jpeg?language=${metadata?.language}`}
                         alt={template.promptStr}
                         className={styles.image}
                         loading="lazy"

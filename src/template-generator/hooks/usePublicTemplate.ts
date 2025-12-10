@@ -14,14 +14,18 @@ export const usePublicTemplate = () => {
     template: string;
   }): Promise<{ output?: string; error?: string }> => {
     return axios
-      .post(`/api/v1/public-templates`, props)
+      .post(`/api/v1/public-templates-private`, props)
       .then((response) => response.data)
       .catch(console.log);
   };
 
   const getPublicTemplate = (id: string, lang: string): Promise<any> => {
     return axios
-      .get(`/api/v1/public-templates/${id}?language=${lang}`)
+      .get(
+        `${
+          import.meta.env.VITE_SAAS_API_URL
+        }/api/v1/public-templates/${id}?language=${lang}`
+      )
       .then((response) => response.data)
       .catch(console.log);
   };
