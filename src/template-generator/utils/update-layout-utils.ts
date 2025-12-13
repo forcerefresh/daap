@@ -315,7 +315,7 @@ export function getImageProperties(mediaId: string) {
   return {
     width: 1024,
     height: 1024,
-    sourceType: "local",
+    sourceType: "library",
     sizeType: "original",
     mediaSizes: [
       {

@@ -45,6 +45,7 @@ import { IPages } from "./store/reducers/i-pages";
 import { IMeta } from "./store/reducers/meta";
 import { preloadFonts } from "./utils/project/project-utils";
 import { generateFilename } from "./panels/create-panel/utils";
+import { useWPPublicTemplate } from "./template-generator/hooks/useWPPublicTemplate";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -80,7 +81,14 @@ function App(props: IAppProps) {
   console.log(template);
   console.log(language);
 
-  const { getPublicTemplate } = usePublicTemplate();
+  const { getPublicTemplate: getSaaSPublicTemplate } = usePublicTemplate();
+  const { getPublicTemplate: getWPPublicTemplate } = useWPPublicTemplate();
+
+  const getPublicTemplate =
+    import.meta.env.VITE_APP_INTEGRATION === "wp"
+      ? getWPPublicTemplate
+      : getSaaSPublicTemplate;
+
   // Load post based on ID
 
   const applyTemplate = (templateProject: any, documentTypeStr: string) => {

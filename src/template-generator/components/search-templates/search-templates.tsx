@@ -40,7 +40,6 @@ import { AITemplatePreview } from "../ai-template-preview/ai-template-preview";
 import { resizeProportionally } from "../../../utils/common-calculation/common-calculation";
 import { generateImages } from "../../../player/image-generator-utils";
 import { blobToBase64 } from "../../../utils/file/file-utils";
-import { usePublicTemplate } from "../../hooks/usePublicTemplate";
 import { usePublicTemplateSearch } from "../../hooks/usePublicTemplateSearch";
 import TemplatesGrid from "./templates-grid";
 import TemplatesGridV2 from "./templates-grid-v2";

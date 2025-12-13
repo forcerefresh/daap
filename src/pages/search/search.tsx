@@ -4,6 +4,7 @@ import {
   Button,
   H4,
   HTMLSelect,
+  Icon,
   Spinner,
   TextArea,
 } from "@blueprintjs/core";
@@ -12,7 +13,6 @@ import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
 import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
 import SelectBadge from "./components/select-badge/SelectBadge";
 import TemplatesGridV2 from "../../template-generator/components/search-templates/templates-grid-v2";
-import { usePublicTemplate } from "../../template-generator/hooks/usePublicTemplate";
 import { IDocument } from "../../store/reducers/document";
 import { IMeta } from "../../store/reducers/meta";
 import { connect } from "react-redux";
@@ -273,47 +273,58 @@ const SearchPage = ({
 
   return (
     <>
-      {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
-        <>
-          <div
-            style={{
-              position: "absolute",
-              left: "0px",
-              top: "0px",
-              height: "52px",
-              padding: "6px",
-              zIndex: 1000,
-              display: "flex",
-              gap: "10px",
+      <>
+        <div
+          style={{
+            position: "absolute",
+            left: "0px",
+            top: "0px",
+            height: "52px",
+            padding: "6px",
+            zIndex: 1000,
+            display: "flex",
+            gap: "10px",
+          }}
+        >
+          <DaapLogo className={styles.logo} />
+        </div>
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            zIndex: 1000,
+            display: "flex",
+            gap: "10px",
+            alignItems: "center",
+          }}
+        >
+          <Button
+            // className={css.largeButton}
+            // large
+            style={{ color: "rgb(110 240 239)" }}
+            minimal
+            icon={
+              <Icon
+                style={{ color: "rgb(110 240 239)" }}
+                icon="search"
+                size={20}
+              />
+            }
+            onClick={() => {
+              localStorage.removeItem("pendingTemplate");
+              navigate(`/editor`);
+              // _updateUserData(undefined, { autoShowLoginPrompt: true });
+              // // setAutoOpenLogin(true);
+              // onClose();
             }}
           >
-            <DaapLogo className={styles.logo} />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              top: "10px",
-              right: "10px",
-              zIndex: 1000,
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            <Button
-              onClick={() => {
-                localStorage.removeItem("pendingTemplate");
-                navigate(`/editor`);
-                // _updateUserData(undefined, { autoShowLoginPrompt: true });
-                // // setAutoOpenLogin(true);
-                // onClose();
-              }}
-            >
-              Go to editor
-            </Button>
-            <AccountButton />
-          </div>
-        </>
-      )}
+            Go to Editor
+          </Button>
+
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" && <AccountButton />}
+        </div>
+      </>
 
       <div
         className={`${styles.searchPageContainer}  ${

@@ -15,6 +15,7 @@ import {
   Popover,
   Portal,
   Tag,
+  Text,
 } from "@blueprintjs/core";
 import DaapLogo from "./daap-logo.svg?react";
 import { IStore } from "../../../store/store";
@@ -99,7 +100,7 @@ const MainHeader = (props: IMainHeader) => {
               <ButtonGroup minimal={true} className={css.mainButtons}>
                 <Button
                   minimal
-                  large
+                  // large
                   // rightIcon="caret-down"
                   // style={{ marginRight: "20px" }}
                   icon={<AddObjectIcon width={25} height={25} />}
@@ -113,7 +114,7 @@ const MainHeader = (props: IMainHeader) => {
 
                 <Button
                   minimal
-                  large
+                  // large
                   className={css.largeButton}
                   icon={<LibraryIcon width={25} height={25} />}
                   //active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -134,7 +135,7 @@ const MainHeader = (props: IMainHeader) => {
 
                 <Button
                   minimal
-                  large
+                  // large
                   className={css.largeButton}
                   icon={<Icon icon="applications" size={25} />}
                   //active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -156,7 +157,7 @@ const MainHeader = (props: IMainHeader) => {
                     <Divider dir="horizontal" />
                     <Button
                       minimal
-                      large
+                      // large
                       className={css.largeButton}
                       icon={<Icon icon="page-layout" size={25} />}
                       //active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -179,7 +180,7 @@ const MainHeader = (props: IMainHeader) => {
 
                 <Button
                   minimal
-                  large
+                  // large
                   className={css.largeButton}
                   icon={<ExtensionsIcon width={25} height={25} />} //
                   //active={showPanel === VisiblePanel.ProjectsLibrary}
@@ -205,7 +206,7 @@ const MainHeader = (props: IMainHeader) => {
 
                 <Button
                   minimal
-                  large
+                  // large
                   // rightIcon="caret-down"
                   // style={{ marginRight: "20px" }}
                   icon={<Icon icon="floppy-disk" size={25} />}
@@ -222,7 +223,7 @@ const MainHeader = (props: IMainHeader) => {
                 <ButtonGroup minimal={true}>
                   {/* <Divider /> */}
                   <Button
-                    large
+                    // large
                     minimal
                     // className={css.downloadBtn}
                     icon={<Icon icon="export" size={25} />}
@@ -251,7 +252,9 @@ const MainHeader = (props: IMainHeader) => {
                 <Divider dir="horizontal" />
 
                 <div className={css.projectNameHolder}>
-                  <div>{meta.name}</div>
+                  <Text ellipsize style={{ maxWidth: "200px" }}>
+                    {meta.name}
+                  </Text>
                   <div
                     style={{
                       fontFamily: "monospace",
@@ -285,18 +288,10 @@ const MainHeader = (props: IMainHeader) => {
         </div>
 
         <div className={css.right}>
-          <FullscreenButtonComponent
-            toggle={() => {
-              setIsFullscreen(!isFullscreen);
-              scaleUI(appZoom);
-            }}
-            isFullscreen={isFullscreen}
-            className={css.fullscreenButton}
-          />
           {/* <div className={css.rightActionsHolder}>
             <ButtonGroup minimal={true}>
               <Button
-                large
+                // large
                 minimal
                 icon={"download"}
               >
@@ -305,23 +300,44 @@ const MainHeader = (props: IMainHeader) => {
             </ButtonGroup>
           </div> */}
 
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
-            <>
-              <ChangeCheckerButton
-                onDenied={() => {}}
-                onAllow={() => {
-                  navigate(`/search`);
-                  // _updateUserData(undefined, { autoShowLoginPrompt: true });
-                  // // setAutoOpenLogin(true);
-                  // onClose();
-                }}
-                confirmButtonText="Discard & Go to Search"
-              >
-                Go to search
-              </ChangeCheckerButton>
+          <>
+            <ChangeCheckerButton
+              onDenied={() => {}}
+              className={css.largeButton}
+              // large
+              style={{ color: "rgb(110 240 239)" }}
+              minimal
+              icon={
+                <Icon
+                  style={{ color: "rgb(110 240 239)" }}
+                  icon="search"
+                  size={20}
+                />
+              }
+              onAllow={() => {
+                navigate(`/search`);
+                // _updateUserData(undefined, { autoShowLoginPrompt: true });
+                // // setAutoOpenLogin(true);
+                // onClose();
+              }}
+              confirmButtonText="Discard & Go to Search"
+            >
+              Search
+            </ChangeCheckerButton>
+
+            {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
               <AccountButton autoShowPrompt={true} />
-            </>
-          )}
+            )}
+
+            <FullscreenButtonComponent
+              toggle={() => {
+                setIsFullscreen(!isFullscreen);
+                scaleUI(appZoom);
+              }}
+              isFullscreen={isFullscreen}
+              className={css.fullscreenButton}
+            />
+          </>
 
           {/* </Link> */}
         </div>

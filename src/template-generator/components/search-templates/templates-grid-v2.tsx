@@ -398,7 +398,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                       <img
                         src={`${
                           import.meta.env.VITE_SAAS_API_URL
-                        }/api/v1/public-media/${
+                        }/api/v1/public/public-media/${
                           template.template.previewUid
                         }.jpeg?language=${metadata?.language}`}
                         alt={template.promptStr}

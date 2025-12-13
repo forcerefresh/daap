@@ -379,7 +379,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     <div className={css.toolbar}>
       <div>
         <div>
-          <div style={{ height: "54px" }}></div>
+          <div style={{ height: "0px" }}></div>
           {/* <Button
             className={css.largeButton}
             minimal

@@ -9,7 +9,9 @@ export const usePublicTemplateSearch = () => {
   ): Promise<any> => {
     return axios
       .get(
-        `${import.meta.env.VITE_SAAS_API_URL}/api/v1/public-templates-search`,
+        `${
+          import.meta.env.VITE_SAAS_API_URL
+        }/api/v1/public/public-templates-search`,
         {
           params: {
             page: from,
