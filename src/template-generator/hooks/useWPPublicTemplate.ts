@@ -6,7 +6,7 @@ export const useWPPublicTemplate = () => {
       .get(
         `${
           import.meta.env.VITE_SAAS_API_URL
-        }/api/v1/wp/public-templates/${id}?language=${lang}`
+        }/api/v1/public/public-templates/${id}?language=${lang}`
       )
       .then((response) => response.data)
       .catch(console.log);
