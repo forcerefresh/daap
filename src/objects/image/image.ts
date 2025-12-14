@@ -139,7 +139,8 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
       (imageValues.image.sourceType === "url" && !imageValues.image.url) ||
       (imageValues.image.sourceType === "local" && !imageValues.image.id) ||
       (imageValues.image.sourceType === "library" &&
-        (!imageValues.image.url || !imageValues.image.url))
+        !imageValues.image.url &&
+        !imageValues.image.id)
     ) {
       return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
     }

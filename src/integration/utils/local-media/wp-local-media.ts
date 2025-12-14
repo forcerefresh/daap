@@ -9,24 +9,33 @@ export function getMediaSrc(
   preferredSize = "original",
   propertyToUse: "previewSizes" | "mediaSizes" = "mediaSizes"
 ): string {
-  let originalFileName = mediaItem[propertyToUse].find(
+  let originalSize = mediaItem[propertyToUse].find(
     (size) => size.sizeType === preferredSize
-  )?.sourceFilename;
+  );
 
-  if (!originalFileName) {
-    originalFileName = mediaItem[propertyToUse].find(
+  if (!originalSize) {
+    originalSize = mediaItem[propertyToUse].find(
       (size) => size.sizeType === "original"
-    )?.sourceFilename;
+    );
   }
 
-  if (
-    originalFileName?.startsWith("http:") ||
-    originalFileName?.startsWith("https:")
-  ) {
-    return originalFileName;
+  if (originalSize?.sourceFilename) {
+    if (
+      originalSize.sourceFilename.startsWith("http:") ||
+      originalSize.sourceFilename.startsWith("https:")
+    ) {
+      return originalSize?.sourceFilename;
+    }
+
+    if (mediaItem.sourceType === "library") {
+      return (
+        "https://demo.daap.forcerefresh.io/api/v1/public/public-templates-media/" +
+        originalSize?.sourceFilename
+      );
+    }
   }
 
   // debugger;
 
-  return `${daapForcerefreshSettings.baseMediaUrl}/${originalFileName}`;
+  return `${daapForcerefreshSettings.baseMediaUrl}/${originalSize?.sourceFilename}`;
 }
