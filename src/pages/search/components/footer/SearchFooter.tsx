@@ -20,7 +20,7 @@ const SearchFooter = () => {
       </Link>
       <Link
         to={
-          "https://demo.daap.forcerefresh.io/public/documents/privacy-policy-v1.html"
+          "https://demo.daap.forcerefresh.io/documents/privacy-policy-v1.html"
         }
         target="_blank"
       >
@@ -28,7 +28,7 @@ const SearchFooter = () => {
       </Link>
       <Link
         to={
-          "https://demo.daap.forcerefresh.io/public/documents/terms-of-service-v1.html"
+          "https://demo.daap.forcerefresh.io/documents/terms-of-service-v1.html"
         }
         target="_blank"
       >
