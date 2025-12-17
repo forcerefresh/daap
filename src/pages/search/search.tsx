@@ -48,6 +48,7 @@ import { userInfo } from "os";
 import "../../AppNew.scss";
 import { identity } from "lodash-es";
 import { getPendingTemplate } from "./utils/pending-template";
+import SearchFooter from "./components/footer/SearchFooter";
 
 interface ISearchProps {
   onClose: () => void;
@@ -412,8 +413,8 @@ const SearchPage = ({
             </div>
           </>
         )}
+        <SearchFooter />
       </div>
-
       {showRedirectMessage && renderSpinner()}
     </>
   );

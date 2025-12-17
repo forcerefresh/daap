@@ -418,7 +418,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                       <div className={styles.templateActionsHolder}>
                         <div className={styles.buttonContainer}>
                           <div>
-                            <Button
+                            {/* <Button
                               icon="thumbs-up"
                               className={styles.templateButton}
                               minimal
@@ -435,7 +435,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                                 e.stopPropagation();
                                 onDislike(template.id);
                               }}
-                            ></Button>
+                            ></Button> */}
                           </div>
                           <div style={{ flexGrow: "1" }}>
                             <Button
