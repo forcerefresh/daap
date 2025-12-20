@@ -63,4 +63,5 @@ export interface AiPrompt {
   overrideObjectProperties: string;
   textTranslation: string;
   hasTranslation: boolean;
+  hasSearchKeywords: boolean;
 }

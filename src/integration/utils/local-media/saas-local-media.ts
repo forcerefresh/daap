@@ -29,7 +29,7 @@ export function getMediaSrc(
 
     if (mediaItem.sourceType === "library") {
       return (
-        "https://demo.daap.forcerefresh.io/api/v1/public/public-templates-media/" +
+        `${import.meta.env.VITE_SAAS_API_URL}/public/public-templates-media/` +
         originalSize?.sourceFilename
       );
     }

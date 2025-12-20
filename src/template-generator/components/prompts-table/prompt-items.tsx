@@ -10,6 +10,7 @@ export const PromptItems = ({
   onGenerateLayouts,
   updatePrompt,
   onEditNewLayout,
+  onCreateKeywords,
 }: {
   aiPrompts: AiPrompt[];
   onGenerateAll: (id: string) => void;
@@ -19,6 +20,7 @@ export const PromptItems = ({
   onGenerateLayouts?: (id: string) => void;
   updatePrompt: PromptCardProps["updatePrompt"];
   onEditNewLayout: (response: any) => void;
+  onCreateKeywords?: (id: string) => void;
 }) => {
   return (
     <div
@@ -42,6 +44,7 @@ export const PromptItems = ({
           onGenerateLayouts={onGenerateLayouts}
           updatePrompt={updatePrompt}
           onEditNewLayout={onEditNewLayout}
+          onCreateKeywords={onCreateKeywords}
         />
       ))}
     </div>

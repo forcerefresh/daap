@@ -73,6 +73,7 @@ export interface PromptCardProps {
   ) => void;
   isChild?: boolean;
   onEditNewLayout: (response: any) => void;
+  onCreateKeywords?: (id: string) => void;
 }
 
 const PromptCard: React.FC<PromptCardProps> = ({
@@ -84,6 +85,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   onGenerateLayouts,
   updatePrompt,
   onEditNewLayout,
+  onCreateKeywords,
   isChild,
 }) => {
   const [isExpanded, setIsExpanded] = useState(
@@ -483,20 +485,40 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     Create layout variation
                   </Button>
                 )}
-                {prompt.templateGenerated && (
-                  <Tag intent={"success"} round>
-                    Template generated
-                  </Tag>
-                )}
-                {prompt.hasTranslation &&
-                  translatedToArr.map((lg) => (
-                    <Tag intent="primary" minimal round>
-                      {lg}
-                    </Tag>
-                  ))}
               </div>
             </div>
             {/* <H5 style={{ margin: 0 }}>Prompt: {prompt.id}</H5> */}
+          </div>
+
+          <div>
+            {prompt.templateGenerated && (
+              <>
+                {prompt.hasSearchKeywords ? (
+                  <Tag intent={"success"} round>
+                    Keywords generated
+                  </Tag>
+                ) : (
+                  <Button
+                    large
+                    intent={"primary"}
+                    onClick={(e) => {
+                      onCreateKeywords?.(prompt.id);
+                    }}
+                  >
+                    Create keywords
+                  </Button>
+                )}
+                <Tag intent={"success"} round>
+                  Template generated
+                </Tag>
+              </>
+            )}
+            {prompt.hasTranslation &&
+              translatedToArr.map((lg) => (
+                <Tag intent="primary" minimal round>
+                  {lg}
+                </Tag>
+              ))}
           </div>
 
           <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>

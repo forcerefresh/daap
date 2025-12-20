@@ -24,7 +24,7 @@ export const usePublicTemplate = () => {
       .get(
         `${
           import.meta.env.VITE_SAAS_API_URL
-        }/api/v1/public-templates/${id}?language=${lang}`
+        }/public-templates/${id}?language=${lang}`
       )
       .then((response) => response.data)
       .catch(console.log);

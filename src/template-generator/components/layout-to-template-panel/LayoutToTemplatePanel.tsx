@@ -118,6 +118,7 @@ import { AdvancedPagination } from "../pagination/pagination";
 import ProcessTemplates from "../process-templates/process-templates";
 import SearchTemplates from "../search-templates/search-templates";
 import { useTemplateTranslate } from "../../hooks/useTranslation";
+import { useTemplateKeywords } from "../../hooks/useTemplateKeywords";
 
 export const THUMB_WIDTH = 200;
 
@@ -160,6 +161,7 @@ const LayoutToTemplate = (
   } = props;
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
 
+  const { templateKeywords } = useTemplateKeywords();
   const [processTemplatesOpen, setProcessTemplatesOpen] = useState(false);
   const [searchTemplatesOpen, setSearchTemplatesOpen] = useState(false);
 
@@ -674,7 +676,7 @@ const LayoutToTemplate = (
           </Button>
         </div>
 
-        <div>
+        {/* <div>
           <Button
             small
             onClick={() => {
@@ -683,7 +685,7 @@ const LayoutToTemplate = (
           >
             Search templates
           </Button>
-        </div>
+        </div> */}
         <div>
           <Button
             intent={forTranslation.count > 0 ? "primary" : "none"}
@@ -1084,6 +1086,9 @@ const LayoutToTemplate = (
               }}
               updatePrompt={onUpdatePrompts}
               onEditNewLayout={onEditNewLayout}
+              onCreateKeywords={(parentPromptId) => {
+                templateKeywords({ aiPromptId: parentPromptId });
+              }}
             />
           ) : (
             "Loading prompts..."
