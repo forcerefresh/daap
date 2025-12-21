@@ -26,6 +26,7 @@ export const useAiPrompt = () => {
         templateGenerated?: boolean;
         processingComplete?: boolean;
         forUserUID?: string;
+        layoutId?: string;
         perPage?: string;
         page?: string;
         limit?: string;

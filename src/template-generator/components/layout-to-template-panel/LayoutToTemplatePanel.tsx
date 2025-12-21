@@ -26,6 +26,7 @@ import { connect } from "react-redux";
 import {
   Alert,
   Button,
+  Checkbox,
   Classes,
   Dialog,
   OptionProps,
@@ -324,6 +325,7 @@ const LayoutToTemplate = (
     aiGenCurrentUser: localStorage?.getItem("aiGenCurrentUser"),
     aiGenProcessingComplete: localStorage?.getItem("aiGenProcessingComplete"),
     aiGenProcessingStatus: localStorage?.getItem("aiGenProcessingStatus"),
+    filterLayout: localStorage?.getItem("filterLayout") === "true",
   });
 
   const poolingFunc = useCallback(() => {
@@ -348,10 +350,16 @@ const LayoutToTemplate = (
           }
         : {}),
 
+      ...(filtersRef.current.filterLayout && formState.layoutId
+        ? {
+            layoutId: formState.layoutId,
+          }
+        : {}),
+
       limit: (filtersRef.current.aiGenPerPage as string) ?? "10",
       page: (filtersRef.current.aiGenPage as string) ?? "1",
     });
-  }, []);
+  }, [formState.layoutId]);
 
   const {
     data,
@@ -719,6 +727,16 @@ const LayoutToTemplate = (
           <p>Total prompts: {pagination?.totalCount}</p>
         </div>
 
+        <div>
+          {getCheckboxField(
+            "Layout",
+            filtersRef.current.filterLayout,
+            (filterLayout) => {
+              filtersRef.current.filterLayout = filterLayout;
+              restartPolling();
+            }
+          )}
+        </div>
         <>
           {getSelectField(
             "",
@@ -854,6 +872,7 @@ const LayoutToTemplate = (
               industriesOptions={layoutOptions}
               value={formState.layoutId}
               onChange={(layoutId: string) => {
+                restartPolling();
                 setFormState({ ...formState, layoutId: layoutId });
                 localStorage.setItem("ai-generator-layout", layoutId!);
               }}
