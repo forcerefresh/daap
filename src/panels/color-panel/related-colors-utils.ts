@@ -26,8 +26,6 @@ export function getRelatedColors(
   if (whiteDistance < 0.1) return [];
   if (blackDistance < 0.1) return [];
 
-  console.log({ blackDistance, whiteDistance });
-
   const retArr: { title: string; colors: RGBColor[][] }[] = [];
 
   relatedColors.forEach((value) => {

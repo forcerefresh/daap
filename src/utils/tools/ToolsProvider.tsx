@@ -480,7 +480,6 @@ export const ToolsProvider = (
       getObjectToolDefinitions(tool, version) ??
       getAppObjectDefinition(tool, "latest");
 
-    console.log(toolDef);
     if (toolDef?.toolClass) {
       const object = objectId ? storeRef.current.objectById[objectId] : null;
       const values = object?.properties;
@@ -586,7 +585,6 @@ export const ToolsProvider = (
 
     const retObjs: IObject[] = [];
 
-    console.log(allObjects);
     allObjects.forEach((objectId) => {
       if (
         objectById[objectId].type === activeTool.tool &&

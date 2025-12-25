@@ -209,7 +209,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
   const onLayoutReady = (layoutResponseProject) => {
     if (!prompt.aiResponseJson) {
-      console.log("OVDE !@#");
+      console.log("ERROR C3");
       return;
     }
     const newTemplate = updateTemplate(
@@ -226,17 +226,13 @@ const PromptCard: React.FC<PromptCardProps> = ({
       overridesObjectProperties
     );
 
-    console.log("update template");
     setTemplate(newTemplate);
-
-    console.log(prompt.aiResponseJson);
 
     const textArr = collectTextFromIaResponse(prompt.aiResponseJson!);
     setTexts(textArr);
   };
 
   useEffect(() => {
-    console.log("EXECUTE");
     // only if its template
     if (prompt.promptKind !== AiPromptKind.TEMPLATE) return;
 
@@ -247,7 +243,6 @@ const PromptCard: React.FC<PromptCardProps> = ({
     }
 
     getLayout(prompt.layoutId).then((layoutResponse) => {
-      console.log(layoutResponse);
       // debugger;
       setLayoutResponse(layoutResponse);
 

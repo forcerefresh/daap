@@ -23,7 +23,6 @@ export async function processImagesColors(props: {
       const src = getMediaSrc(
         objectById[imageColors.objectId].properties?.image
       );
-      console.log("src: " + src);
       imageColors.colors = await processImageColors(src);
     }
   }
@@ -51,7 +50,6 @@ async function getBlobFromImageUrl(imageUrl: string) {
 
     // Convert the response to a Blob
     const blob = await response.blob();
-    console.log("Blob:", blob);
     return blob;
   } catch (error) {
     console.error("Error fetching the image:", error);
@@ -77,7 +75,6 @@ async function extractColorsFromImageSrc(src: string) {
       b: color.blue,
     }));
 
-    console.log("Extracted colors:", rgbColors);
     return rgbColors;
   } catch (error) {
     console.error("Error extracting colors:", error);

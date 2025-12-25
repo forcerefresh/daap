@@ -1354,10 +1354,6 @@ export function replaceObject(
   objectProps: Partial<IObject>,
   values?: { [key: string]: any }
 ): any {
-  console.log("values-------");
-
-  console.log(values);
-
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerId =
       getState().project.objects.objectById[replaceObjectId].layerId;
@@ -2061,7 +2057,6 @@ function processTextObjectAutoSize(
 
     const holder = document.createElement("div");
     holder.innerHTML = html;
-    console.log(html);
     const pEl = holder.firstChild! as HTMLElement;
     pEl.style.position = "relative";
     pEl.style.display = "inline-block";

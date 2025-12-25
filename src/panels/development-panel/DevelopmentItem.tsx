@@ -24,8 +24,6 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
   const globalContext = useContext(IntegrationContext);
   const { updateDevelopmentItem } = globalContext.useDevelopmentHook();
 
-  console.log("updateDevelopmentItem");
-  console.log(updateDevelopmentItem);
   return (
     <Card
       key={item.id}
@@ -145,10 +143,8 @@ const DevelopmentItemComp = (props: IDevelopmentItemProps) => {
                   ...item,
                   monitoringEnabled: true,
                 };
-                console.log("updateDevelopmentItem 2");
 
                 await updateDevelopmentItem(obj);
-                console.log("updateDevelopmentItem 3");
 
                 //const newItems = await getAll();
                 //setItems(newItems);

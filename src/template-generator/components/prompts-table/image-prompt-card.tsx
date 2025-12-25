@@ -28,7 +28,6 @@ export const ImagePromptListView = ({
   // onApply: () => void;
 }) => {
   useEffect(() => {
-    console.log("onApply *********");
     // onApply();
   }, [prompts]);
 

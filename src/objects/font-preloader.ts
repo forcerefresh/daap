@@ -69,8 +69,7 @@ export class FontPreloader {
       //   fontFamily.replace(" ", "+");
       // const response = await fetch(url);
       // const fontArrayBuffer = await response.arrayBuffer();
-      // console.log(fontArrayBuffer);
-      // console.log(ab2str(fontArrayBuffer));
+
       // debugger;
       // const style = document.createElement("style");
       // style.textContent = `

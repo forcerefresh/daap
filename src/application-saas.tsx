@@ -45,8 +45,6 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
     );
   });
 
-  console.log("render editor");
-
   return (
     <PortalProvider portalContainer={portalRoot}>
       <DevelopmentContextProvider>

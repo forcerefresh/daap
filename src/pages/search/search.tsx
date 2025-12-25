@@ -134,12 +134,6 @@ const SearchPage = ({
 
   const handleSearch = () => {
     setIsExpanded(true);
-    console.log(
-      "Searching for:",
-      searchQuery,
-      "in language:",
-      selectedLanguage
-    );
     // Add your search logic here
   };
 

@@ -70,8 +70,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const renderObjectsCards = (group: string) => {
     const objDeffsAll = getAppObjectDefinitionsByGroup(group);
 
-    console.log(objDeffsAll);
-
     const objDeffs = objDeffsAll.filter(
       (objDeff) => hideObjects.indexOf(objDeff.type) === -1
     );

@@ -42,7 +42,6 @@ export const LayoutPromptListView = ({
   // onApply: () => void;
 }) => {
   useEffect(() => {
-    console.log("onApply *********");
     // onApply();
   }, [prompts]);
 

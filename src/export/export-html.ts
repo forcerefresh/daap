@@ -193,7 +193,6 @@ export function generatePlayerData(
   html += "</div>"; //slides holder close
   html += "</div>"; //slider root close
 
-  console.log(extensionTypes);
   const playerExtensions = extensions
     .filter((item) => extensionTypes.indexOf(item.type) !== -1)
     .map((extension) =>

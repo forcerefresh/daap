@@ -37,11 +37,11 @@ export function PagePreviewInternal(props: IPagePreviewMerged) {
 
   const scale = width / pageWH;
 
-  console.warn("scale123: " + scale);
-  console.warn("width123: " + width);
-  console.warn("pageWH123: " + pageWH);
-  console.warn("pageW: " + pageW);
-  console.warn("pageH: " + pageH);
+  // console.warn("scale123: " + scale);
+  // console.warn("width123: " + width);
+  // console.warn("pageWH123: " + pageWH);
+  // console.warn("pageW: " + pageW);
+  // console.warn("pageH: " + pageH);
 
   const exportData = generatePlayerData(
     { slides: pages, layers, objects },

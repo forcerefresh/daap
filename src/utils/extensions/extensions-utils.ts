@@ -50,7 +50,5 @@ export function getOutdatedExtensions(
     return extension.version !== installedExtension.version;
   });
 
-  console.log(ret);
-
   return ret;
 }

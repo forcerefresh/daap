@@ -67,13 +67,11 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       targetElementRefRef.current?.current
     ) {
       const handler = (e: WheelEvent) => {
-        console.log("asasasas");
         const parentEl = parentElementRefRef.current?.current;
         const targetEl = targetElementRefRef.current?.current;
 
         if (!targetEl || !parentEl) return;
 
-        console.log("AA");
         e.preventDefault();
         // e.stopPropagation();
 
@@ -130,7 +128,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       let isTwoFingerGesture = false;
 
       function touchstartHandler(e) {
-        console.log("AAAAAAAAAAA");
         if (e.touches.length === 2) {
           isTwoFingerGesture = true;
           e.preventDefault(); // Prevent default two-finger behavior
@@ -138,7 +135,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       }
 
       function touchMoveHandler(e) {
-        console.log(isTwoFingerGesture);
         if (isTwoFingerGesture) {
           e.preventDefault(); // Prevent default scroll/back/forward behavior
 

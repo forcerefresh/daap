@@ -32,8 +32,6 @@ export async function loadAndRegisterExternalComponent(
 
   await addExtensionCode(extension.type, extension.version);
 
-  console.log("------");
-  console.log((window as any).WebSlider_GlobalScope.playerObjects);
   registerExternalExtension(extension);
 }
 
@@ -59,7 +57,7 @@ function registerExternalExtension(extension: IExtensionItem) {
     registerExternalAnimation(appObj, playerObj, true);
   } else {
     console.warn(
-      `Unsuported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
+      `Unsupported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
     );
   }
 }

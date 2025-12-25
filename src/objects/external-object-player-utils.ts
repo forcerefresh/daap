@@ -51,7 +51,7 @@ function registerExternalExtensionForPlayer(extension: IExtensionItem) {
     logger.object.info(`Animation '${extension.type}' has been registered`);
   } else {
     console.warn(
-      `Unsuported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
+      `Unsupported external component type: ${extension.extensionType}; version: ${extension.version}; name: ${extension.name}`
     );
   }
 }

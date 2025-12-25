@@ -201,8 +201,7 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
             : {}),
         };
         // if (!lastColors.find((color) => isEqual(color, curFullColor))) {
-        console.log("UPDATEEEE");
-        console.log(curFullColor);
+
         _addRecentColor(curFullColor);
         // }
       }
@@ -473,9 +472,6 @@ const ColorPanel = (props: IColorPanelMergedProps) => {
                             const newColors =
                               newDocumentColorPalettes[0].colors?.filter(
                                 (col) => {
-                                  console.log(col);
-                                  console.log(color);
-
                                   return !isEqual(color, col);
                                 }
                               );

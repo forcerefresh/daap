@@ -77,9 +77,6 @@ export const OpacityInputForm: React.FC<IOpacityInput & IUpdateInput> = (
                 trackFill: false,
               },
               (opacity: number) => {
-                console.log("TYPE:");
-
-                console.log(typeof opacity);
                 onChange(opacity);
               },
               (opacity: number) => {

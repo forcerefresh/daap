@@ -257,7 +257,6 @@ const LayoutToTemplate = (
       if (!exist) {
         setFormState({ ...formState, layoutId: "" });
       }
-      console.log(response);
     });
   }, [formState?.documentTypeId]);
 
@@ -278,7 +277,6 @@ const LayoutToTemplate = (
   useEffect(() => {
     const load = async () => {
       const documentsThree = await getDocumentTypeTree();
-      console.log(documentsThree);
       const options = getDocumentsOptionFromThree(documentsThree.documents);
       setDocumentsOptions(options);
     };
@@ -289,8 +287,6 @@ const LayoutToTemplate = (
   const [layoutDataById, setLayoutDataById] = useState<
     Record<string, { layout: any; simplifiedLayout: any }>
   >({});
-
-  console.log(layoutDataById, "layoutDataById");
 
   useEffect(() => {
     if (!formState.layoutId) return;

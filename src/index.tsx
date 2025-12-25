@@ -21,23 +21,15 @@ function importBuildTarget() {
       //AppComponent = module.default;
     });
   } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
-    console.log("456");
-    console.log(logger);
-    console.log(logger.app);
-
-    logger.app.log("Module: Web Slider Application (application)");
+    logger.app.log("Module: Web Slider Application (application:wp)");
     showLoggerUsage(LoggerDomain.App);
 
     import("./application-wp.tsx").then((module) => {
       // AppComponent = module.default;
     });
-    // return require("./application-wp.tsx");
-
-    // return require("./application.tsx");
   }
 }
 
-console.log("123");
 importBuildTarget();
 
 export {};

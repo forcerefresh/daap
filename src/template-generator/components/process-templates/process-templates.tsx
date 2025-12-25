@@ -121,8 +121,6 @@ const ProcessTemplates = (
 
     if (aiPromptResponse.data.length === 0) return;
 
-    console.log("PROCESS _____");
-
     const imagePrompts =
       aiPromptResponse.data[0].childPrompts?.filter((childPrompt) => {
         return childPrompt.promptKind === AiPromptKind.IMAGE;
@@ -198,7 +196,6 @@ const ProcessTemplates = (
           : undefined
       );
 
-      console.log("update template");
       setTemplate(newTemplate);
 
       // debugger;
@@ -287,8 +284,6 @@ const ProcessTemplates = (
   }, [open]);
 
   if (!template) return null;
-
-  console.log(template, "-----template-----");
 
   return (
     <Dialog

@@ -116,10 +116,6 @@ function application(): {
 
 const data = application();
 
-console.log((data.useAppRootSelector as any)());
-
-console.log(document.getElementById((data.useAppRootSelector as any)()));
-
 const container = document.getElementById((data.useAppRootSelector as any)());
 const root = createRoot(container); // createRoot(container!) if you use TypeScript
 root.render(data.component);

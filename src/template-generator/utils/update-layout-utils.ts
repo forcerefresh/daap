@@ -69,15 +69,12 @@ export function updateTemplate(
       console.log("ERROR A7");
       debugger;
     }
-    console.log(`{COLOR_${alias.toUpperCase()}}`);
 
     aiResponseStrUpdated = aiResponseStrUpdated.replaceAll(
       `"{COLOR_${alias.toUpperCase()}}"`,
       JSON.stringify(hexToRGB(color))
     );
   });
-
-  console.log(aiResponseStrUpdated);
 
   try {
     const aiResponseObjectUpdated = JSON.parse(aiResponseStrUpdated);
@@ -194,7 +191,6 @@ export function updateTemplate(
     });
   } catch (ex) {
     throw ex;
-    // console.log("ERROR A8");
     // // debugger; //asd
   }
 
@@ -242,8 +238,6 @@ export function replaceLayoutObject(
 }
 
 export function collectTextFromIaResponse(iaResponseJson: Record<string, any>) {
-  console.log(iaResponseJson);
-
   const retAtt: {
     text: string;
     tag: string;
@@ -266,8 +260,6 @@ export function collectTextFromIaResponse(iaResponseJson: Record<string, any>) {
 }
 
 export function collectImagesFromIaResponse(iaResponseJson: any) {
-  console.log(iaResponseJson);
-
   const retAtt: {
     prompt: string;
     imageObjectType: string;
@@ -288,8 +280,6 @@ export function collectImagesFromIaResponse(iaResponseJson: any) {
 }
 
 export function collectVectorFromIaResponse(iaResponseJson: any) {
-  console.log(iaResponseJson);
-
   const retAtt: {
     prompt: string;
     vectorObjectType: string;

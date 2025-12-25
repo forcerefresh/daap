@@ -50,9 +50,6 @@ export const ColorGradientInputForm: React.FC<
     }
   }, [value, setPrevColor, setPrevLinearGradient]);
 
-  console.log("value: " + value);
-  console.log(value);
-
   return (
     <FormGroup label={displayName} inline helperText={helperText}>
       {getButtonGroupField(

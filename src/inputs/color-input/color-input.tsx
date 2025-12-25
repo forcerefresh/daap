@@ -135,9 +135,6 @@ const ColorInputForm: React.FC<IColorInputForm> = (props) => {
 
   const [open, setOpen] = useState(false);
 
-  console.log("value C");
-  console.log(value);
-
   return (
     <>
       <FormGroup

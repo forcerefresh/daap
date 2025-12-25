@@ -876,7 +876,6 @@ function processMoveStopEvent(
   const objectToUpdateById: { [key: string]: IObject } = {};
 
   selectedObjectIds.map((objectId) => {
-    console.log(objectId);
     const object = objectById[objectId];
 
     if (object.isLocked) return;

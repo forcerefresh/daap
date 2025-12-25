@@ -183,7 +183,6 @@ const LayoutToTemplateOld = (
       if (!exist) {
         setFormState({ ...formState, layoutId: "" });
       }
-      console.log(response);
     });
   }, [formState?.documentTypeId]);
 
@@ -204,7 +203,6 @@ const LayoutToTemplateOld = (
   useEffect(() => {
     const load = async () => {
       const documentsThree = await getDocumentTypeTree();
-      console.log(documentsThree);
       const options = getDocumentsOptionFromThree(documentsThree.documents);
       setDocumentsOptions(options);
     };
@@ -215,9 +213,6 @@ const LayoutToTemplateOld = (
   useEffect(() => {
     const load = async () => {
       const industryThree = await getIndustryTree();
-      console.log(industryThree);
-
-      // debugger
 
       const options = getIndustriesOptionFromThree(industryThree.industries);
       setIndustriesOptions(options);
@@ -285,7 +280,6 @@ const LayoutToTemplateOld = (
     const prompt = generatePromptForTemplate(formState);
     const promptForColorScheme = generatePromptForTemplate(formState);
 
-    console.log(formState);
     setFormState({ ...formState, prompt, promptForColorScheme });
   }, [formState.documentTypeId, formState.industryId]);
 
@@ -308,9 +302,6 @@ const LayoutToTemplateOld = (
     if (!formState.layoutId) return;
 
     getLayout(formState.layoutId).then((response) => {
-      console.log("---- resp");
-
-      console.log(response.project.pages);
       const page1Id = response.project.pages.pages[0];
       if (page1Id) {
         const page1 = response.project.pages.pageById[page1Id];
@@ -377,7 +368,6 @@ const LayoutToTemplateOld = (
       );
     });
 
-    console.log(aiResponseUpdated);
     try {
       const obj = JSON.parse(aiResponseUpdated);
       obj.objects.forEach((obj) => {

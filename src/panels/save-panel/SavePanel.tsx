@@ -169,9 +169,6 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       { isSave: true }
     );
 
-    console.log("------");
-
-    console.log(project);
     let updatedProject = project;
     let updatedPlayerData = playerData;
     // replace ids is saveAs

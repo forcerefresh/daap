@@ -198,8 +198,8 @@ export function getBooleanValue(
 export function hexToRGB(hex: string, a?: number): RGBColor | null {
   // Remove the # if present
   if (typeof hex !== "string") {
-    console.warn("Not a string.");
-    console.warn(hex);
+    // console.warn("Not a string.");
+    // console.warn(hex);
     return { r: 0, g: 0, b: 0, a: 1 };
   }
   let hexValue = hex.startsWith("#") ? hex.slice(1) : hex;

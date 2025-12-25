@@ -294,7 +294,6 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
   };
 
   const renderFont = (font: any & { idx: number }) => {
-    console.log(font);
     return (
       <div
         key={font.fontFamily}
@@ -391,8 +390,6 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
   //   { previewText: "Caption", size: 13, textType: TextType.Caption },
   //   { previewText: "Tiny", size: 11, textType: TextType.Tiny },
   // ];
-
-  console.log(googleFontsPairing);
 
   const filteredFonts = useMemo(
     () =>

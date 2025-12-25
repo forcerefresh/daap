@@ -90,7 +90,6 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
   useEffect(() => {
     const load = async () => {
       const documentsThree = await getDocumentTypeTree();
-      console.log(documentsThree);
       const options = getDocumentsOptionFromThree(documentsThree.documents);
       setDocumentsOptions(options);
     };

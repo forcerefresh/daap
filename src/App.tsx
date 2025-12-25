@@ -78,9 +78,6 @@ function App(props: IAppProps) {
   const template = searchParams.get("template");
   const language = searchParams.get("language");
 
-  console.log(template);
-  console.log(language);
-
   const { getPublicTemplate: getSaaSPublicTemplate } = usePublicTemplate();
   const { getPublicTemplate: getWPPublicTemplate } = useWPPublicTemplate();
 
@@ -239,8 +236,6 @@ function App(props: IAppProps) {
           installedExtensions.data
         );
 
-        console.log("outdatedExtensions");
-        console.log(outdatedExtensions);
         _updateEditor({ outdatedExtensions });
       });
 
