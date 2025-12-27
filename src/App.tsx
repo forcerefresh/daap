@@ -314,7 +314,7 @@ function App(props: IAppProps) {
           publishSettings: response.publishSettings,
         });
 
-        scaleUI(response.appSettings.appZoom);
+        scaleUI(response.appSettings.appZoom ?? 1);
       } else {
         scaleUI(1);
       }
