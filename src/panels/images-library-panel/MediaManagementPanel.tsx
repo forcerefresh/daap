@@ -260,7 +260,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
                     });
                   } else {
                     onSelect?.({
-                      image: mediaItem,
+                      media: mediaItem,
                     });
                   }
 

@@ -28,17 +28,20 @@ export default defineConfig({
       name: "vite-plugin-css-base64",
 
       transform(code, id) {
-        // if (id.endsWith("PreviewPanel.module.scss")) {
-        //   // Find all image URLs in the CSS file
-        //   const regex = /url\("([^"]+\.(png|jpg|jpeg|gif|svg))"\)/g;
-        //   return code.replace(regex, (match, imagePath) => {
-        //     const fullPath = path.resolve(path.dirname(id), imagePath);
-        //     const file = fs.readFileSync(fullPath);
-        //     const base64 = file.toString("base64");
-        //     const mimeType = getMimeType(imagePath); // Implement a function to get the MIME type
-        //     return `url('data:${mimeType};base64,${base64}')`;
-        //   });
-        // }
+        if (
+          id.endsWith("FontPreviewPanel.module.scss") ||
+          id.endsWith("FontPairingPanel.module.scss")
+        ) {
+          // Find all image URLs in the CSS file
+          const regex = /url\("([^"]+\.(png|jpg|jpeg|gif|svg))"\)/g;
+          return code.replace(regex, (match, imagePath) => {
+            const fullPath = path.resolve(path.dirname(id), imagePath);
+            const file = fs.readFileSync(fullPath);
+            const base64 = file.toString("base64");
+            const mimeType = getMimeType(imagePath); // Implement a function to get the MIME type
+            return `url('data:${mimeType};base64,${base64}')`;
+          });
+        }
       },
     },
     react(),
@@ -54,6 +57,8 @@ export default defineConfig({
     port: 3001,
   },
   build: {
+    // build assets inline
+    assetsInlineLimit: 0,
     sourcemap: true,
     outDir: "dist",
     rollupOptions: {

@@ -4,6 +4,7 @@ import {
   InputGroup,
   Popover,
   PopoverInteractionKind,
+  Portal,
   Position,
 } from "@blueprintjs/core";
 import { cloneDeep, noop } from "lodash-es";
@@ -40,6 +41,8 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   const [libraryOpen, setLibraryOpen] = useState(false);
   // const [previewSrc, setPreviewSrc] = useState("");
 
+  console.log("value---");
+  console.log(value);
   const imageUrl = getMediaSrc(value);
   // const fileName = value?.mediaSizes.find(
   //   (size) => size.sizeType === "original"
@@ -56,7 +59,9 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   useOnClickOutside(sharedRef, handleClickOutside, [
     "image-preview-popover",
     "color-picker-holder",
-    "bp5-overlay-scroll-container", // alert
+    "bp5-overlay-scroll-container",
+    "media-modal",
+    // alert
   ]);
 
   // const onFileNameChange = (filename: string) => {
@@ -75,6 +80,9 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
   //   value.filename === undefined
   //     ? extractFileName(value.image.filename!)
   //     : value.filename;
+
+  const isVector =
+    (value?.mediaSizes?.[0].sourceFilename ?? "").indexOf(".svg") !== -1;
 
   return (
     <>
@@ -139,36 +147,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
           : null} */}
 
         {sourceType === "local" || sourceType === "library" ? (
-          <Popover
-            interactionKind={PopoverInteractionKind.CLICK}
-            position={Position.LEFT}
-            modifiers={{ preventOverflow: { enabled: true } }}
-            usePortal={true}
-            minimal
-            popoverClassName={css.mediaLibraryPanelPopup}
-            isOpen={libraryOpen}
-            content={
-              <div ref={sharedRef}>
-                <MediaLibraryPanel
-                  onRequestClose={() => {
-                    setLibraryOpen(false);
-                  }}
-                  className={css.mediaLibraryPanel}
-                  addObject={false}
-                  onSelect={(mediaItem: { media: SaaSMediaData }) => {
-                    const newValue = cloneDeep(mediaItem.media);
-                    newValue.sizeType = value?.sizeType; // keep existing size
-                    onChange(newValue);
-                    setLibraryOpen(false);
-                  }}
-                  panelsToShow={[
-                    ...(sourceType === "local" ? [Panels.MyImages] : []),
-                    ...(sourceType === "library" ? [Panels.Images] : []),
-                  ]}
-                />
-              </div>
-            }
-          >
+          <div>
             <Button
               small
               minimal
@@ -180,8 +159,79 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             >
               Browse images
             </Button>
-          </Popover>
-        ) : null}
+            <Portal>
+              {libraryOpen && (
+                <div ref={sharedRef}>
+                  <MediaLibraryPanel
+                    onRequestClose={() => {
+                      setLibraryOpen(false);
+                    }}
+                    // className={css.mediaLibraryPanel}
+                    addObject={false}
+                    onSelect={(mediaItem: { media: SaaSMediaData }) => {
+                      const newValue = cloneDeep(mediaItem.media);
+                      newValue.sizeType = value?.sizeType; // keep existing size
+                      onChange(newValue);
+                      console.log("value---");
+                      console.log(value);
+                      console.log(newValue);
+                      setLibraryOpen(false);
+                    }}
+                    panelsToShow={
+                      isVector
+                        ? [Panels.MyVectors, [Panels.Vectors]]
+                        : [Panels.MyImages, [Panels.Images]]
+                      // ...(sourceType === "local" ? [Panels.MyImages] : []),
+                      // ...(sourceType === "library" ? [Panels.Images] : []),
+                    }
+                  />
+                </div>
+              )}
+            </Portal>
+          </div>
+        ) : // <Popover
+        //   interactionKind={PopoverInteractionKind.CLICK}
+        //   position={Position.LEFT}
+        //   modifiers={{ preventOverflow: { enabled: true } }}
+        //   usePortal={true}
+        //   minimal
+        //   popoverClassName={css.mediaLibraryPanelPopup}
+        //   isOpen={libraryOpen}
+        //   content={
+        //     <div ref={sharedRef}>
+        //       <MediaLibraryPanel
+        //         onRequestClose={() => {
+        //           setLibraryOpen(false);
+        //         }}
+        //         className={css.mediaLibraryPanel}
+        //         addObject={false}
+        //         onSelect={(mediaItem: { media: SaaSMediaData }) => {
+        //           const newValue = cloneDeep(mediaItem.media);
+        //           newValue.sizeType = value?.sizeType; // keep existing size
+        //           onChange(newValue);
+        //           setLibraryOpen(false);
+        //         }}
+        //         panelsToShow={[
+        //           ...(sourceType === "local" ? [Panels.MyImages] : []),
+        //           ...(sourceType === "library" ? [Panels.Images] : []),
+        //         ]}
+        //       />
+        //     </div>
+        //   }
+        // >
+        //   <Button
+        //     small
+        //     minimal
+        //     className={css.browseButton}
+        //     icon={"folder-open"}
+        //     onClick={() => {
+        //       setLibraryOpen(true);
+        //     }}
+        //   >
+        //     Browse images
+        //   </Button>
+        // </Popover>
+        null}
       </FormGroup>
 
       {value &&

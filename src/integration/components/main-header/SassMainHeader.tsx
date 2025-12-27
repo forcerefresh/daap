@@ -176,31 +176,35 @@ const MainHeader = (props: IMainHeader) => {
                   </>
                 )}
 
-                <Divider dir="horizontal" />
+                {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+                  <>
+                    <Divider dir="horizontal" />
 
-                <Button
-                  minimal
-                  // large
-                  className={css.largeButton}
-                  icon={<ExtensionsIcon width={25} height={25} />} //
-                  //active={showPanel === VisiblePanel.ProjectsLibrary}
-                  onClick={() => {
-                    const event = new CustomEvent("OPEN_EXTENSIONS");
-                    window.dispatchEvent(event);
-                  }}
-                >
-                  {outdatedExtensions?.length > 0 && (
-                    <Tag
-                      intent={"danger"}
-                      round
-                      className={css.buttonTag}
-                      large={false}
+                    <Button
+                      minimal
+                      // large
+                      className={css.largeButton}
+                      icon={<ExtensionsIcon width={25} height={25} />} //
+                      //active={showPanel === VisiblePanel.ProjectsLibrary}
+                      onClick={() => {
+                        const event = new CustomEvent("OPEN_EXTENSIONS");
+                        window.dispatchEvent(event);
+                      }}
                     >
-                      {outdatedExtensions.length}
-                    </Tag>
-                  )}
-                  Extensions
-                </Button>
+                      {outdatedExtensions?.length > 0 && (
+                        <Tag
+                          intent={"danger"}
+                          round
+                          className={css.buttonTag}
+                          large={false}
+                        >
+                          {outdatedExtensions.length}
+                        </Tag>
+                      )}
+                      Extensions
+                    </Button>
+                  </>
+                )}
 
                 <Divider dir="horizontal" />
 

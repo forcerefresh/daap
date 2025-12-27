@@ -370,7 +370,7 @@ export default class LineStageTool implements IToolClass {
       },
       isEdit: this.isEdit,
       objectId: this.objectId!,
-      reactivate: true,
+      // reactivate: true,
     });
 
     this.object!.x1 = points.x1;
@@ -560,17 +560,17 @@ export default class LineStageTool implements IToolClass {
   }
 
   private clickOutsideEventHandler(e: Event) {
-    if ((e?.target as Element)?.closest(".color-picker-holder")) {
-      return;
-    }
+    // if ((e?.target as Element)?.closest(".color-picker-holder")) {
+    //   return;
+    // }
 
-    if (
-      document
-        .getElementsByClassName("layers-simplified-panel")[0]
-        ?.contains(e?.target as Node)
-    ) {
-      this.requestDeactivation?.();
-    }
+    // if (
+    //   document
+    //     .getElementsByClassName("layers-simplified-panel")[0]
+    //     ?.contains(e?.target as Node)
+    // ) {
+    //   this.requestDeactivation?.();
+    // }
 
     const el = document.getElementsByClassName("layout-center-area")[0];
     // Do nothing if clicking ref's element or descendent elements

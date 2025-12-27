@@ -391,28 +391,34 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             <AddObjectIcon />
           </Button> */}
 
-          <Button
-            className={css.largeButton}
-            minimal
-            active={showPanel === VisiblePanel.Add}
-            onClick={() => {
-              setShowPanel(VisiblePanel.Add);
-            }}
-          >
-            <AddObjectIcon />
-          </Button>
-          <Portal>
-            {showPanel === VisiblePanel.Add && (
-              <div ref={sharedRef}>
-                <AddPanel
-                  onRequestClose={() => setShowPanel(VisiblePanel.None)}
-                  onRequestFontPreview={() =>
-                    setShowPanel(VisiblePanel.FontPreview)
-                  }
-                />
-              </div>
-            )}
-          </Portal>
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
+            <>
+              <Button
+                className={css.largeButton}
+                minimal
+                active={showPanel === VisiblePanel.Add}
+                onClick={() => {
+                  setShowPanel(VisiblePanel.Add);
+                }}
+              >
+                <AddObjectIcon />
+              </Button>
+              <Portal>
+                {showPanel === VisiblePanel.Add && (
+                  <div ref={sharedRef}>
+                    <AddPanel
+                      onRequestClose={() => setShowPanel(VisiblePanel.None)}
+                      onRequestFontPreview={() =>
+                        setShowPanel(VisiblePanel.FontPreview)
+                      }
+                    />
+                  </div>
+                )}
+              </Portal>
+            </>
+          ) : (
+            <div style={{ height: "55px" }}></div>
+          )}
 
           <Portal>
             {showPanel === VisiblePanel.Create && (

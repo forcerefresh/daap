@@ -78,23 +78,30 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
               panel={<AccountSettingsPanel />}
             />
           )}
-          <Tab
-            id="ai"
-            title="AI Text Assistant"
-            panel={<AITextSettingsPanel />}
-          />
 
-          <Tab
-            id="development"
-            title="Development"
-            panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
-          />
+          {/* {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <Tab
+              id="ai"
+              title="AI Text Assistant"
+              panel={<AITextSettingsPanel />}
+            />
+          )} */}
 
-          <Tab
-            id="publish-dev"
-            title="Publish"
-            panel={<PublishSettingsPanel />} //onRequestClose={props.onRequestClose}
-          />
+          {/* {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <Tab
+              id="development"
+              title="Development"
+              panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
+            />
+          )} */}
+
+          {/* {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <Tab
+              id="publish-dev"
+              title="Publish"
+              panel={<PublishSettingsPanel />} //onRequestClose={props.onRequestClose}
+            />
+          )} */}
 
           {/*<Tabs.Expander />
           <Button minimal icon="cog" />*/}

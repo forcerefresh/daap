@@ -46,39 +46,44 @@ function TextToolbar(props: IToolbarMergedProps): React.ReactElement {
     <>
       {object && values && (
         <div className={css.inputsHolder}>
-          <Popover
-            content={
-              <AIContextMenu onLoading={() => undefined} object={object} />
-            }
-            placement="bottom-end"
-            // tslint:disable-next-line jsx-no-lambda
-            renderTarget={({ isOpen, ...p }) => (
-              <Button
-                {...p}
-                minimal
-                style={{ color: "rgb(110 240 239)" }}
-                className={cx(css.button, css.squareButton)}
-                icon={
-                  isAILoading ? (
-                    <Spinner
-                      size={18}
-                      className={css.inlineSpinner}
-                      style={{
-                        marginLeft: "0px",
-                        marginRight: "15px",
-                        color: "rgb(110 240 239)",
-                      }}
-                    />
-                  ) : (
-                    <Icon
-                      icon={"clean"}
-                      style={{ marginRight: "5px", color: "rgb(110 240 239)" }}
-                    />
-                  )
-                }
-              ></Button>
-            )}
-          />
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <Popover
+              content={
+                <AIContextMenu onLoading={() => undefined} object={object} />
+              }
+              placement="bottom-end"
+              // tslint:disable-next-line jsx-no-lambda
+              renderTarget={({ isOpen, ...p }) => (
+                <Button
+                  {...p}
+                  minimal
+                  style={{ color: "rgb(110 240 239)" }}
+                  className={cx(css.button, css.squareButton)}
+                  icon={
+                    isAILoading ? (
+                      <Spinner
+                        size={18}
+                        className={css.inlineSpinner}
+                        style={{
+                          marginLeft: "0px",
+                          marginRight: "15px",
+                          color: "rgb(110 240 239)",
+                        }}
+                      />
+                    ) : (
+                      <Icon
+                        icon={"clean"}
+                        style={{
+                          marginRight: "5px",
+                          color: "rgb(110 240 239)",
+                        }}
+                      />
+                    )
+                  }
+                ></Button>
+              )}
+            />
+          )}
 
           {getFontFamilyField(
             "",

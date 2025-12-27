@@ -192,58 +192,59 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
             />
           )}
 
-          {includes(panelsToShow, Panels.MyImages) && (
-            <Tab
-              id="images"
-              title="Library Images"
-              panel={
-                <MediaManagementPanel
-                  type="image"
-                  key={forceUpdate}
-                  deleteMediaFunc={deleteLibraryMedias}
-                  fetchMediasFunc={fetchLibraryMedias}
-                  uploadComponent={<></>}
-                  selectionType={selectionType}
-                  onRequestClose={onRequestClose}
-                  isAddObject={addObject}
-                  onSelect={onSelect}
-                  onAdd={(mediaItem) => {
-                    if (
-                      replaceItem?.type === "image" ||
-                      replaceItem?.type === "background"
-                    ) {
-                      _replaceObject(
-                        replaceItem.objectId!,
-                        IMAGE,
-                        replaceItem.objectProps,
-                        {
-                          ...replaceItem.values,
-                          image: includeMediaRequiredProps(mediaItem.media),
-                        }
-                      );
-                      return;
-                    }
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+            includes(panelsToShow, Panels.MyImages) && (
+              <Tab
+                id="images"
+                title="Library Images"
+                panel={
+                  <MediaManagementPanel
+                    type="image"
+                    key={forceUpdate}
+                    deleteMediaFunc={deleteLibraryMedias}
+                    fetchMediasFunc={fetchLibraryMedias}
+                    uploadComponent={<></>}
+                    selectionType={selectionType}
+                    onRequestClose={onRequestClose}
+                    isAddObject={addObject}
+                    onSelect={onSelect}
+                    onAdd={(mediaItem) => {
+                      if (
+                        replaceItem?.type === "image" ||
+                        replaceItem?.type === "background"
+                      ) {
+                        _replaceObject(
+                          replaceItem.objectId!,
+                          IMAGE,
+                          replaceItem.objectProps,
+                          {
+                            ...replaceItem.values,
+                            image: includeMediaRequiredProps(mediaItem.media),
+                          }
+                        );
+                        return;
+                      }
 
-                    const sizeRect = getNewMediaObjectBounds({
-                      media: mediaItem.media,
-                      breakpointConfig,
-                    });
+                      const sizeRect = getNewMediaObjectBounds({
+                        media: mediaItem.media,
+                        breakpointConfig,
+                      });
 
-                    if (activeLayerId) {
-                      _addNewObject(
-                        activeLayerId,
-                        IMAGE,
-                        { ...sizeRect },
-                        {
-                          image: includeMediaRequiredProps(mediaItem.media),
-                        }
-                      );
-                    }
-                  }}
-                />
-              }
-            />
-          )}
+                      if (activeLayerId) {
+                        _addNewObject(
+                          activeLayerId,
+                          IMAGE,
+                          { ...sizeRect },
+                          {
+                            image: includeMediaRequiredProps(mediaItem.media),
+                          }
+                        );
+                      }
+                    }}
+                  />
+                }
+              />
+            )}
 
           {includes(panelsToShow, Panels.MyVideos) && (
             <Tab
@@ -390,42 +391,43 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
             />
           )}
 
-          {includes(panelsToShow, Panels.Vectors) && (
-            <Tab
-              id="vectors"
-              title="Vectors"
-              panel={
-                <MediaManagementPanel
-                  type="vector"
-                  key={forceUpdate}
-                  deleteMediaFunc={deleteLibraryMedias}
-                  fetchMediasFunc={fetchLibraryMedias}
-                  uploadComponent={<></>}
-                  selectionType={selectionType}
-                  onRequestClose={onRequestClose}
-                  isAddObject={addObject}
-                  onSelect={onSelect}
-                  onAdd={(mediaItem) => {
-                    const sizeRect = getNewMediaObjectBounds({
-                      media: mediaItem.media,
-                      breakpointConfig,
-                    });
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+            includes(panelsToShow, Panels.Vectors) && (
+              <Tab
+                id="vectors"
+                title="Vectors"
+                panel={
+                  <MediaManagementPanel
+                    type="vector"
+                    key={forceUpdate}
+                    deleteMediaFunc={deleteLibraryMedias}
+                    fetchMediasFunc={fetchLibraryMedias}
+                    uploadComponent={<></>}
+                    selectionType={selectionType}
+                    onRequestClose={onRequestClose}
+                    isAddObject={addObject}
+                    onSelect={onSelect}
+                    onAdd={(mediaItem) => {
+                      const sizeRect = getNewMediaObjectBounds({
+                        media: mediaItem.media,
+                        breakpointConfig,
+                      });
 
-                    if (activeLayerId) {
-                      _addNewObject(
-                        activeLayerId,
-                        IMAGE,
-                        { ...sizeRect },
-                        {
-                          image: includeMediaRequiredProps(mediaItem.media),
-                        }
-                      );
-                    }
-                  }}
-                />
-              }
-            />
-          )}
+                      if (activeLayerId) {
+                        _addNewObject(
+                          activeLayerId,
+                          IMAGE,
+                          { ...sizeRect },
+                          {
+                            image: includeMediaRequiredProps(mediaItem.media),
+                          }
+                        );
+                      }
+                    }}
+                  />
+                }
+              />
+            )}
 
           {includes(panelsToShow, Panels.MyFonts) && (
             <Tab
