@@ -317,7 +317,9 @@ const SearchPage = ({
             Go to Editor
           </Button>
 
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" && <AccountButton />}
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+            <AccountButton logoutOnly={true} />
+          )}
         </div>
       </>
 

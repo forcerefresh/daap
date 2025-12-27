@@ -25,10 +25,12 @@ type IAccountButtonProps = typeof mapDispatchToProps &
     className?: string;
     buttonStyle?: any;
     autoShowPrompt?: boolean;
+    logoutOnly?: boolean;
   };
 
 export function AccountButton(props: IAccountButtonProps) {
-  const { account, theme, _setTheme, buttonStyle, autoShowPrompt } = props;
+  const { account, theme, _setTheme, buttonStyle, autoShowPrompt, logoutOnly } =
+    props;
 
   const [loginOpen, setLoginOpen] = useState(false);
 
@@ -128,17 +130,20 @@ export function AccountButton(props: IAccountButtonProps) {
         content={
           <Menu className={css.contextMenu}>
             <MenuDivider title="Account" />
-            <MenuItem
-              text="Settings"
-              icon="cog"
-              // labelElement={
-              //   <Icon icon={theme === "dark" ? "tick" : undefined} />
-              // }
-              onClick={() => {
-                const event = new CustomEvent("OPEN_ACCOUNT_SETTINGS");
-                window.dispatchEvent(event);
-              }}
-            />
+            {!logoutOnly && (
+              <MenuItem
+                text="Settings"
+                icon="cog"
+                // labelElement={
+                //   <Icon icon={theme === "dark" ? "tick" : undefined} />
+                // }
+                onClick={() => {
+                  const event = new CustomEvent("OPEN_ACCOUNT_SETTINGS");
+                  window.dispatchEvent(event);
+                }}
+              />
+            )}
+
             {/* <MenuDivider title="Theme" />
             <MenuItem
               text="Dark"
@@ -165,7 +170,7 @@ export function AccountButton(props: IAccountButtonProps) {
             <MenuDivider />
 
             <a href={AUTH_LOGOUT}>
-              <MenuItem icon="logout" text="Logout" />
+              <MenuItem icon="log-out" text="Logout" />
             </a>
           </Menu>
         }
