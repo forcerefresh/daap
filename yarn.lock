@@ -206,6 +206,15 @@
     classnames "^2.3.1"
     tslib "~2.6.2"
 
+"@blueprintjs/icons@^6.3.2":
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-6.3.2.tgz#574e3b78850d95984328c9aa638a9ce06d5a124b"
+  integrity sha512-rOdSg7yPmjtqy3e+wD66tXCrzt57M59htVOikwunTaCyQ61+bsF0PyqLfNlhsw1mXqZm8uxSINs1bhnwXhQCiw==
+  dependencies:
+    change-case "^4.1.2"
+    classnames "^2.3.1"
+    tslib "~2.6.2"
+
 "@blueprintjs/popover2@^2.0.15":
   version "2.1.32"
   resolved "https://registry.yarnpkg.com/@blueprintjs/popover2/-/popover2-2.1.32.tgz#87cffac632e9e29d30b801816ff2a3052d195fa1"
