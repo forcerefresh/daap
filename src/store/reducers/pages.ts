@@ -98,7 +98,7 @@ export function pages(state: IPages = getPagesDefault(), action: ActionTypes) {
       return update(state, {
         pageById: {
           [layer.pageId]: {
-            layerIds: { $push: [layer.id] },
+            layerIds: { $unshift: [layer.id] },
             nextLayerNameNumber: (idx) => idx + 1,
           },
         },

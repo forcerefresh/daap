@@ -251,7 +251,10 @@ const SearchPage = ({
   }, []);
 
   useLayoutEffect(() => {
-    document.body.className = `bp5-${theme}`;
+    const root = document.getElementById("daap-forcerefresh-root");
+    if (root) {
+      root.className = `bp5-${theme}`;
+    }
   }, [theme]);
 
   useEffect(() => {

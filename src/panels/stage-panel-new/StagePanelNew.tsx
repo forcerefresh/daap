@@ -857,9 +857,12 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
                 )}
 
                 {!isPreview &&
-                  layerArr?.map((layer) => (
-                    <StageLayer key={layer.id} layer={layer} />
-                  ))}
+                  layerArr
+                    ?.slice()
+                    .reverse()
+                    .map((layer) => (
+                      <StageLayer key={layer.id} layer={layer} />
+                    ))}
               </div>
 
               <div style={outlineStyle}></div>

@@ -131,6 +131,10 @@ function initWP(onSelect: (attachments: any) => void, wpType?: string[]) {
         onSelect(attachment);
       });
 
+      imageUploader.on("open", function () {
+        jQuery(".media-modal").addClass("is-dark");
+      });
+
       imageUploader.open();
     });
   });

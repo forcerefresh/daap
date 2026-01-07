@@ -180,17 +180,17 @@ export function AccountButton(props: IAccountButtonProps) {
           rightIcon="caret-down"
           style={{ marginRight: "0px", ...buttonStyle }}
           icon={
-            account.userData?.profilePicture ? (
-              <img
-                style={{ borderRadius: "50%" }}
-                width="30"
-                height="30"
-                alt="Profile avatar"
-                src={account.userData?.profilePicture}
-              />
-            ) : (
-              "person"
-            )
+            // account.userData?.profilePicture ? (
+            //   <img
+            //     style={{ borderRadius: "50%" }}
+            //     width="30"
+            //     height="30"
+            //     alt="Profile avatar"
+            //     src={account.userData?.profilePicture}
+            //   />
+            // ) : (
+            "person"
+            // )
           }
         >
           {account.userData?.displayName}

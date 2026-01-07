@@ -120,23 +120,26 @@ export function StageLayer(props: IStageLayer) {
         })}
         style={layerStyle}
       >
-        {layer.objectIds.map((objectId: string) => {
-          const object = objectById[objectId]; //objectByIdLocalRef
+        {layer.objectIds
+          .slice()
+          .reverse()
+          .map((objectId: string) => {
+            const object = objectById[objectId]; //objectByIdLocalRef
 
-          const layoutChildren = layer.properties?.hasLayoutChildren
-            ? layer.properties.layoutChildren
-            : undefined;
-          return (
-            <StageObject
-              key={objectId}
-              object={object}
-              layer={layer}
-              layoutChildren={layoutChildren}
-              objectZoom={object.scale ?? 1}
-              // stageZoom={stageZoom}
-            />
-          );
-        })}
+            const layoutChildren = layer.properties?.hasLayoutChildren
+              ? layer.properties.layoutChildren
+              : undefined;
+            return (
+              <StageObject
+                key={objectId}
+                object={object}
+                layer={layer}
+                layoutChildren={layoutChildren}
+                objectZoom={object.scale ?? 1}
+                // stageZoom={stageZoom}
+              />
+            );
+          })}
       </div>
     </div>
   );
