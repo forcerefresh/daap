@@ -175,18 +175,18 @@ export const PropertiesPanel: React.FC<IPropertiesPanel> = (props) => {
       <>
         <div className={css.actionHolder}>
           <Button
-            disabled={isFirst}
+            disabled={isLast}
             onClick={() => {
-              _moveLayers(layerArr[idx - 1].id, "above", [layer.id]);
+              _moveLayers(layerArr[idx + 1].id, "below", [layer.id]);
             }}
             icon="arrow-up"
           >
             Move up
           </Button>
           <Button
-            disabled={isLast}
+            disabled={isFirst}
             onClick={() => {
-              _moveLayers(layerArr[idx + 1].id, "below", [layer.id]);
+              _moveLayers(layerArr[idx - 1].id, "above", [layer.id]);
             }}
             icon="arrow-down"
           >

@@ -185,19 +185,25 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
   const objectsForDnd = useMemo(() => {
     const objectsForDndInternal: ObjectForDND[] = [];
 
-    page?.layerIds.forEach((layerId) => {
-      layerById[layerId].objectIds.forEach((objectId) => {
-        objectsForDndInternal.push({
-          parentType: "layer",
-          parentId: layerId,
-          parentName: layerById[layerId].name,
-          layerId: layerId,
-          layerName: layerById[layerId].name,
+    page?.layerIds
+      .slice()
+      .reverse()
+      .forEach((layerId) => {
+        layerById[layerId].objectIds
+          .slice()
+          .reverse()
+          .forEach((objectId) => {
+            objectsForDndInternal.push({
+              parentType: "layer",
+              parentId: layerId,
+              parentName: layerById[layerId].name,
+              layerId: layerId,
+              layerName: layerById[layerId].name,
 
-          objectId: objectById[objectId].id,
-        });
-      });
-    }) ?? [];
+              objectId: objectById[objectId].id,
+            });
+          });
+      }) ?? [];
 
     return objectsForDndInternal;
 
@@ -364,161 +370,168 @@ const LayersSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
               <ScrollingComponent className={cx(css.objectsHolder, {})}>
                 {/* {(sortedObjectIds ?? objectsForDnd)?.length > 0 ? ( */}
                 <>
-                  {page?.layerIds.map((layerId) => {
-                    return (
-                      <React.Fragment key={`layer-${layerId}`}>
-                        <LayerButton
-                          layerId={layerId}
-                          activeLayerId={activeLayerId}
-                          layerName={layerById[layerId].name}
-                          onSelect={(layerId) => {
-                            _activateLayer(layerId);
-                            _selectLayers([layerId]);
-                            _selectForProperties({
-                              type: "layer",
-                              id: layerId,
-                            });
-                          }}
-                          onDrop={(layerId, item) => {
-                            _moveObjects(layerId, "layer", [item.id]);
-                            setSortedObjectIds(undefined);
-                            setToLayerId(null);
-                            setFromLayerId(null);
-                            setHoverIndex(-1);
-                          }}
-                        />
-                        {/* {layerById[layerId].objectIds?.length === 0 && (
+                  {page?.layerIds
+                    .slice()
+                    .reverse()
+                    .map((layerId) => {
+                      return (
+                        <React.Fragment key={`layer-${layerId}`}>
+                          <LayerButton
+                            layerId={layerId}
+                            activeLayerId={activeLayerId}
+                            layerName={layerById[layerId].name}
+                            onSelect={(layerId) => {
+                              _activateLayer(layerId);
+                              _selectLayers([layerId]);
+                              _selectForProperties({
+                                type: "layer",
+                                id: layerId,
+                              });
+                            }}
+                            onDrop={(layerId, item) => {
+                              _moveObjects(layerId, "layer", [item.id]);
+                              setSortedObjectIds(undefined);
+                              setToLayerId(null);
+                              setFromLayerId(null);
+                              setHoverIndex(-1);
+                            }}
+                          />
+                          {/* {layerById[layerId].objectIds?.length === 0 && (
                           <span className="bp5-text-disabled">
                             No objects found
                           </span>
                         )} */}
 
-                        {(sortedObjectIds ?? objectsForDnd)?.map(
-                          (objectForDnd, idx) => {
-                            if (objectForDnd.layerId !== layerId) {
-                              return;
-                            }
+                          {(sortedObjectIds ?? objectsForDnd)?.map(
+                            (objectForDnd, idx) => {
+                              if (objectForDnd.layerId !== layerId) {
+                                return;
+                              }
 
-                            const objectId = objectForDnd.objectId;
+                              const objectId = objectForDnd.objectId;
 
-                            //sortedObjectIds
-                            const object = objectById[objectForDnd.objectId];
+                              //sortedObjectIds
+                              const object = objectById[objectForDnd.objectId];
 
-                            // let layerName: JSX.Element | null = null;
-                            // if (
-                            //   prevLayerIdRef.current !== objectForDnd.layerId
-                            // ) {
-                            //   layerName = (
-                            //     <Button
-                            //       // key={layerId}
-                            //       className={css.smallButton}
-                            //       intent={"primary"}
-                            //       active={layerId === activeLayerId}
-                            //       minimal
-                            //       small
-                            //       onClick={() => {
-                            //         _activateLayer(layerId);
-                            //         _selectLayers([layerId]);
-                            //         _selectForProperties({
-                            //           type: "layer",
-                            //           id: layerId,
-                            //         });
-                            //       }}
-                            //     >
-                            //       {objectForDnd.layerName}
-                            //     </Button>
-                            //   );
-                            // }
+                              // let layerName: JSX.Element | null = null;
+                              // if (
+                              //   prevLayerIdRef.current !== objectForDnd.layerId
+                              // ) {
+                              //   layerName = (
+                              //     <Button
+                              //       // key={layerId}
+                              //       className={css.smallButton}
+                              //       intent={"primary"}
+                              //       active={layerId === activeLayerId}
+                              //       minimal
+                              //       small
+                              //       onClick={() => {
+                              //         _activateLayer(layerId);
+                              //         _selectLayers([layerId]);
+                              //         _selectForProperties({
+                              //           type: "layer",
+                              //           id: layerId,
+                              //         });
+                              //       }}
+                              //     >
+                              //       {objectForDnd.layerName}
+                              //     </Button>
+                              //   );
+                              // }
 
-                            // prevLayerIdRef.current = objectForDnd.layerId;
+                              // prevLayerIdRef.current = objectForDnd.layerId;
 
-                            return (
-                              <React.Fragment key={`object-${objectId}`}>
-                                {/* <div>{layerName}</div> */}
-                                <ObjectRow
-                                  isHovered={hoverIndex === idx}
-                                  moveObject={moveObject}
-                                  dropCancel={() => {
-                                    setSortedObjectIds(undefined);
-                                    setToLayerId(null);
-                                    setFromLayerId(null);
-                                    setHoverIndex(-1);
-                                  }}
-                                  dropDone={() => {
-                                    const toLayer = cloneDeep(
-                                      layerById[toLayerId!]
-                                    );
-                                    toLayer.objectIds = sortedObjectIds!
-                                      .filter((id) => id.layerId === toLayerId)
-                                      .map((id) => id.objectId);
-                                    _updateLayer(toLayer);
+                              return (
+                                <React.Fragment key={`object-${objectId}`}>
+                                  {/* <div>{layerName}</div> */}
+                                  <ObjectRow
+                                    isHovered={hoverIndex === idx}
+                                    moveObject={moveObject}
+                                    dropCancel={() => {
+                                      setSortedObjectIds(undefined);
+                                      setToLayerId(null);
+                                      setFromLayerId(null);
+                                      setHoverIndex(-1);
+                                    }}
+                                    dropDone={() => {
+                                      const toLayer = cloneDeep(
+                                        layerById[toLayerId!]
+                                      );
+                                      toLayer.objectIds = sortedObjectIds!
+                                        .filter(
+                                          (id) => id.layerId === toLayerId
+                                        )
+                                        .map((id) => id.objectId)
+                                        .reverse();
+                                      _updateLayer(toLayer);
 
-                                    toLayer.objectIds.map((objectId) => {
-                                      if (
-                                        objectById[objectId].layerId !==
-                                        toLayer.id
-                                      ) {
-                                        const objectClone = cloneDeep(
-                                          objectById[objectId]
-                                        );
-                                        objectClone.layerId = toLayer.id;
-                                        _updateObject(objectClone);
-                                      }
-                                    });
+                                      toLayer.objectIds.map((objectId) => {
+                                        if (
+                                          objectById[objectId].layerId !==
+                                          toLayer.id
+                                        ) {
+                                          const objectClone = cloneDeep(
+                                            objectById[objectId]
+                                          );
+                                          objectClone.layerId = toLayer.id;
+                                          _updateObject(objectClone);
+                                        }
+                                      });
 
-                                    const fromLayer = cloneDeep(
-                                      layerById[fromLayerId!]
-                                    );
-                                    fromLayer.objectIds = sortedObjectIds!
-                                      .filter(
-                                        (id) => id.layerId === fromLayerId
-                                      )
-                                      .map((id) => id.objectId);
-                                    _updateLayer(fromLayer);
+                                      const fromLayer = cloneDeep(
+                                        layerById[fromLayerId!]
+                                      );
+                                      fromLayer.objectIds = sortedObjectIds!
+                                        .filter(
+                                          (id) => id.layerId === fromLayerId
+                                        )
+                                        .map((id) => id.objectId)
+                                        .reverse();
+                                      _updateLayer(fromLayer);
 
-                                    fromLayer.objectIds.map((objectId) => {
-                                      if (
-                                        objectById[objectId].layerId !==
-                                        fromLayer.id
-                                      ) {
-                                        const objectClone = cloneDeep(
-                                          objectById[objectId]
-                                        );
-                                        objectClone.layerId = fromLayer.id;
-                                        _updateObject(objectClone);
-                                      }
-                                    });
+                                      fromLayer.objectIds.map((objectId) => {
+                                        if (
+                                          objectById[objectId].layerId !==
+                                          fromLayer.id
+                                        ) {
+                                          const objectClone = cloneDeep(
+                                            objectById[objectId]
+                                          );
+                                          objectClone.layerId = fromLayer.id;
+                                          _updateObject(objectClone);
+                                        }
+                                      });
 
-                                    setSortedObjectIds(undefined);
-                                    setToLayerId(null);
-                                    setFromLayerId(null);
-                                    setHoverIndex(-1);
-                                  }}
-                                  objectById={objectById}
-                                  onObjectClick={onObjectClick}
-                                  onObjectDblClick={onObjectDblClick}
-                                  breakpointConfig={breakpointConfig}
-                                  selectedObjectIds={selectedObjectIds}
-                                  object={object}
-                                  layer={layerById[objectForDnd.layerId]} // TODO
-                                  rowIndex={idx}
-                                />
-                                {/* <div
+                                      setSortedObjectIds(undefined);
+                                      setToLayerId(null);
+                                      setFromLayerId(null);
+                                      setHoverIndex(-1);
+                                    }}
+                                    objectById={objectById}
+                                    onObjectClick={onObjectClick}
+                                    onObjectDblClick={onObjectDblClick}
+                                    breakpointConfig={breakpointConfig}
+                                    selectedObjectIds={selectedObjectIds}
+                                    object={object}
+                                    layer={layerById[objectForDnd.layerId]} // TODO
+                                    rowIndex={idx}
+                                  />
+                                  {/* <div
                                                   className={cx(css.objectItem, {
                                                     [css.selected]: object.id === activeObjectId,
                                                   })}
                                                 >
                                                   {object.name}
                                                 </div> */}
-                              </React.Fragment>
-                            );
+                                </React.Fragment>
+                              );
 
-                            // ---
-                          }
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
+                              // ---
+                            }
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
                 </>
               </ScrollingComponent>
               <div style={{ display: "flex", marginTop: "10px" }}>
