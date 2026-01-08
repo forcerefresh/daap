@@ -63,7 +63,7 @@ export function layers(
         return update(state, {
           layerById: {
             [object.layerId]: {
-              objectIds: { $unshift: [object.id] },
+              objectIds: { $push: [object.id] },
             },
           },
         });
