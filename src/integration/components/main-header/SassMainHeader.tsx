@@ -152,7 +152,7 @@ const MainHeader = (props: IMainHeader) => {
                   Templates
                 </Button>
 
-                {account.userData?.enableLayouts && (
+                {account.userData?.enableLayouts && false && (
                   <>
                     <Divider dir="horizontal" />
                     <Button
@@ -176,7 +176,7 @@ const MainHeader = (props: IMainHeader) => {
                   </>
                 )}
 
-                {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+                {import.meta.env.VITE_APP_INTEGRATION === "saas" && false && (
                   <>
                     <Divider dir="horizontal" />
 
