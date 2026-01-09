@@ -128,7 +128,7 @@ const MainHeader = (props: IMainHeader) => {
                     {missingExtensions.length}
                   </Tag>
                 )} */}
-                  Files
+                  Documents
                 </Button>
 
                 <Divider dir="horizontal" />
