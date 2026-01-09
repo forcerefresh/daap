@@ -256,7 +256,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
         <div>TEMPLATES</div>
       </RightPanelHeader>
 
-      <UploadComponent
+      {/* <UploadComponent
         type="template"
         onComplete={() => {
           debounceFetchData(1);
@@ -266,7 +266,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
           debounceFetchData(1);
           //setForceUpdate(Math.random());
         }}
-      />
+      /> */}
       <div className={css.headerSection}>
         <InputGroup
           large
@@ -298,7 +298,7 @@ const MyTemplatesPanel: React.FC<ITemplatesMergedProps> = (props) => {
       <div className={cx(css.headerSection, css.tableHeader)}>
         <div className={css.thumb}>Preview</div>
         <div className={css.name}>Name &amp; Description</div>
-        <div className={css.slides}>Slides</div>
+        <div className={css.slides}>Pages</div>
         <div className={css.created}>Created</div>
         <div className={css.action}>Action</div>
       </div>

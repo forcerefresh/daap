@@ -313,7 +313,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
         {/* <div className={css.id}>ID</div> */}
         <div className={css.thumb}>Preview</div>
         <div className={css.name}>Name &amp; Description</div>
-        <div className={css.slides}>Slides</div>
+        <div className={css.slides}>Pages</div>
         <div className={css.created}>Created</div>
         <div className={css.modified}>Modified</div>
         <div className={css.action}>Action</div>
