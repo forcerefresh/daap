@@ -559,7 +559,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
         onClose={() => {
           setSaveTemplateDialogOpen(false);
         }}
-        title="Save project as Template"
+        title="Save as Template"
         canOutsideClickClose={false}
       >
         <div style={{ margin: "20px" }}>

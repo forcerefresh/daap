@@ -418,8 +418,8 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                 <>
                   {/* <div>No custom fonts found.</div> */}
                   <Label>
-                    It looks like you haven’t uploaded any custom fonts yet. To
-                    use custom fonts, please upload them.
+                    No custom fonts uploaded yet. Upload font files to use them
+                    in your designs.
                   </Label>
                 </>
               )}
