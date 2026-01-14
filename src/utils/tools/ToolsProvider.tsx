@@ -39,6 +39,7 @@ import { ILayer } from "../../store/reducers/i-layers";
 import { IPage } from "../../store/reducers/i-pages";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
+import { AppToaster } from "../components/app-toaster/AppToaster";
 
 export interface ToolsContextInterface {
   isToolActive: boolean;
@@ -273,6 +274,14 @@ export const ToolsProvider = (
     reactivate: boolean;
   }) => {
     if (!params.isEdit) {
+      if (!storeRef.current.activeLayerId) {
+        AppToaster.show({
+          intent: "warning",
+          message: `No layer selected. Please choose a layer first.`,
+        });
+        return;
+      }
+
       dispatch(
         addNewObject(
           storeRef.current.activeLayerId!,

@@ -130,7 +130,7 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
         </div>
       )} */}
       {!activeLayerId && (
-        <div className="info">
+        <div className={css.info}>
           No active layer found. Please select layer before adding objects.
         </div>
       )}

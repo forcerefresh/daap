@@ -1,0 +1,1772 @@
+[
+  {
+    "id": "DigitalWeb",
+    "name": "Digital & Web",
+    "name_en": "Digital & Web",
+    "name_es": "Digital y web",
+    "name_fr": "Numérique et web",
+    "name_pt": "Digital e web",
+    "name_de": "Digital & Web",
+    "name_it": "Digitale e web",
+    "parentId": null,
+    "level": 1,
+    "widthMm": null,
+    "heightMm": null,
+    "widthInch": null,
+    "heightInch": null,
+    "widthPx": null,
+    "heightPx": null,
+    "margin": null,
+    "children": [
+      {
+        "id": "DigitalWeb:BlogGraphics",
+        "name": "Blog Graphics",
+        "name_en": "Blog Graphics",
+        "name_es": "Gráficos para blog",
+        "name_fr": "Visuels de blog",
+        "name_pt": "Gráficos para blog",
+        "name_de": "Blog-Grafiken",
+        "name_it": "Grafica per blog",
+        "parentId": "DigitalWeb",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "DigitalWeb:BlogGraphics:FeaturedImage",
+            "name": "Featured Image",
+            "name_en": "Featured Image",
+            "name_es": "Imagen destacada",
+            "name_fr": "Image à la une",
+            "name_pt": "Imagem em destaque",
+            "name_de": "Beitragsbild",
+            "name_it": "Immagine in evidenza",
+            "parentId": "DigitalWeb:BlogGraphics",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1200,
+            "heightPx": 630,
+            "margin": {
+              "common": {
+                "px": 60
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "DigitalWeb:BlogGraphics:Thumbnail",
+            "name": "Thumbnail",
+            "name_en": "Thumbnail",
+            "name_es": "Miniatura",
+            "name_fr": "Vignette",
+            "name_pt": "Miniatura",
+            "name_de": "Vorschaubild",
+            "name_it": "Miniatura",
+            "parentId": "DigitalWeb:BlogGraphics",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 300,
+            "heightPx": 300,
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "DigitalWeb:EmailHeaders",
+        "name": "Email Headers",
+        "name_en": "Email Headers",
+        "name_es": "Encabezados de correo electrónico",
+        "name_fr": "En-têtes d’e-mail",
+        "name_pt": "Cabeçalhos de e-mail",
+        "name_de": "E-Mail-Header",
+        "name_it": "Intestazioni e-mail",
+        "parentId": "DigitalWeb",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "DigitalWeb:EmailHeaders:FullWidth",
+            "name": "Full-Width",
+            "name_en": "Full-Width",
+            "name_es": "Ancho completo",
+            "name_fr": "Pleine largeur",
+            "name_pt": "Largura total",
+            "name_de": "Volle Breite",
+            "name_it": "A tutta larghezza",
+            "parentId": "DigitalWeb:EmailHeaders",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1200,
+            "heightPx": 400,
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "DigitalWeb:EmailHeaders:Standard",
+            "name": "Standard",
+            "name_en": "Standard",
+            "name_es": "Estándar",
+            "name_fr": "Standard",
+            "name_pt": "Padrão",
+            "name_de": "Standard",
+            "name_it": "Standard",
+            "parentId": "DigitalWeb:EmailHeaders",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 600,
+            "heightPx": 200,
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "DigitalWeb:WebsiteBanners",
+        "name": "Website Banners",
+        "name_en": "Website Banners",
+        "name_es": "Banners para sitio web",
+        "name_fr": "Bannières de site web",
+        "name_pt": "Banners para site",
+        "name_de": "Website-Banner",
+        "name_it": "Banner per sito web",
+        "parentId": "DigitalWeb",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "DigitalWeb:WebsiteBanners:Billboard",
+            "name": "Billboard",
+            "name_en": "Billboard",
+            "name_es": "Billboard",
+            "name_fr": "Billboard",
+            "name_pt": "Billboard",
+            "name_de": "Billboard",
+            "name_it": "Billboard",
+            "parentId": "DigitalWeb:WebsiteBanners",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 970,
+            "heightPx": 250,
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "DigitalWeb:WebsiteBanners:Leaderboard",
+            "name": "Leaderboard",
+            "name_en": "Leaderboard",
+            "name_es": "Leaderboard",
+            "name_fr": "Leaderboard",
+            "name_pt": "Leaderboard",
+            "name_de": "Leaderboard",
+            "name_it": "Leaderboard",
+            "parentId": "DigitalWeb:WebsiteBanners",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 728,
+            "heightPx": 90,
+            "margin": {
+              "left": {
+                "px": 20
+              },
+              "right": {
+                "px": 20
+              },
+              "top": {
+                "px": 10
+              },
+              "bottom": {
+                "px": 10
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "DigitalWeb:WebsiteBanners:Skyscraper",
+            "name": "Skyscraper",
+            "name_en": "Skyscraper",
+            "name_es": "Rascacielos",
+            "name_fr": "Skyscraper",
+            "name_pt": "Skyscraper",
+            "name_de": "Skyscraper",
+            "name_it": "Skyscraper",
+            "parentId": "DigitalWeb:WebsiteBanners",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 160,
+            "heightPx": 600,
+            "margin": {
+              "left": {
+                "px": 15
+              },
+              "right": {
+                "px": 15
+              },
+              "top": {
+                "px": 40
+              },
+              "bottom": {
+                "px": 40
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "PrintMaterials",
+    "name": "Print Materials",
+    "name_en": "Print Materials",
+    "name_es": "Materiales impresos",
+    "name_fr": "Supports imprimés",
+    "name_pt": "Materiais impressos",
+    "name_de": "Printmaterialien",
+    "name_it": "Materiali stampati",
+    "parentId": null,
+    "level": 1,
+    "widthMm": null,
+    "heightMm": null,
+    "widthInch": null,
+    "heightInch": null,
+    "widthPx": null,
+    "heightPx": null,
+    "margin": null,
+    "children": [
+      {
+        "id": "PrintMaterials:BooksMagazines",
+        "name": "Books & Magazines",
+        "name_en": "Books & Magazines",
+        "name_es": "Libros y revistas",
+        "name_fr": "Livres et magazines",
+        "name_pt": "Livros e revistas",
+        "name_de": "Bücher & Magazine",
+        "name_it": "Libri e riviste",
+        "parentId": "PrintMaterials",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "PrintMaterials:BooksMagazines:A5",
+            "name": "A5",
+            "name_en": "A5",
+            "name_es": "A5",
+            "name_fr": "A5",
+            "name_pt": "A5",
+            "name_de": "A5",
+            "name_it": "A5",
+            "parentId": "PrintMaterials:BooksMagazines",
+            "level": 3,
+            "widthMm": 148,
+            "heightMm": 210,
+            "widthInch": 5.83,
+            "heightInch": 8.27,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:BooksMagazines:Digest",
+            "name": "Digest",
+            "name_en": "Digest",
+            "name_es": "Digest",
+            "name_fr": "Format digest",
+            "name_pt": "Formato digest",
+            "name_de": "Digest-Format",
+            "name_it": "Formato digest",
+            "parentId": "PrintMaterials:BooksMagazines",
+            "level": 3,
+            "widthMm": 140,
+            "heightMm": 216,
+            "widthInch": 5.5,
+            "heightInch": 8.5,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:BooksMagazines:USTradePaperback",
+            "name": "US Trade Paperback",
+            "name_en": "US Trade Paperback",
+            "name_es": "Tamaño trade paperback (US)",
+            "name_fr": "Format US trade paperback",
+            "name_pt": "Formato trade paperback (US)",
+            "name_de": "US-Trade-Paperback-Format",
+            "name_it": "Formato trade paperback (US)",
+            "parentId": "PrintMaterials:BooksMagazines",
+            "level": 3,
+            "widthMm": 152,
+            "heightMm": 229,
+            "widthInch": 6,
+            "heightInch": 9,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "mm": 15,
+                "inch": 0.6
+              },
+              "right": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "top": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "bottom": {
+                "mm": 10,
+                "inch": 0.4
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "PrintMaterials:Brochures",
+        "name": "Brochures",
+        "name_en": "Brochures",
+        "name_es": "Folletos",
+        "name_fr": "Brochures",
+        "name_pt": "Brochuras",
+        "name_de": "Broschüren",
+        "name_it": "Brochure",
+        "parentId": "PrintMaterials",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "PrintMaterials:Brochures:A4TriFold",
+            "name": "A4 Tri-Fold",
+            "name_en": "A4 Tri-Fold",
+            "name_es": "Tríptico A4",
+            "name_fr": "A4 plié en trois volets",
+            "name_pt": "Tríptico A4",
+            "name_de": "A4-Flyer (Dreifachfalz)",
+            "name_it": "Brochure A4 a tre ante",
+            "parentId": "PrintMaterials:Brochures",
+            "level": 3,
+            "widthMm": 210,
+            "heightMm": 297,
+            "widthInch": 8.27,
+            "heightInch": 11.69,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:Brochures:DLFolded",
+            "name": "DL (Folded)",
+            "name_en": "DL (Folded)",
+            "name_es": "DL (plegado)",
+            "name_fr": "DL (plié)",
+            "name_pt": "DL (dobrado)",
+            "name_de": "DL (gefalzt)",
+            "name_it": "DL (piegato)",
+            "parentId": "PrintMaterials:Brochures",
+            "level": 3,
+            "widthMm": 98,
+            "heightMm": 210,
+            "widthInch": 3.86,
+            "heightInch": 8.66,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "mm": 10,
+                "inch": 0.4
+              },
+              "right": {
+                "mm": 5,
+                "inch": 0.2
+              },
+              "top": {
+                "mm": 5,
+                "inch": 0.2
+              },
+              "bottom": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:Brochures:SquareBrochure",
+            "name": "Square Brochure",
+            "name_en": "Square Brochure",
+            "name_es": "Folleto cuadrado",
+            "name_fr": "Brochure carrée",
+            "name_pt": "Brochura quadrada",
+            "name_de": "Quadratische Broschüre",
+            "name_it": "Brochure quadrata",
+            "parentId": "PrintMaterials:Brochures",
+            "level": 3,
+            "widthMm": 216,
+            "heightMm": 216,
+            "widthInch": 8.5,
+            "heightInch": 8.5,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "PrintMaterials:BusinessCards",
+        "name": "Business Cards",
+        "name_en": "Business Cards",
+        "name_es": "Tarjetas de presentación",
+        "name_fr": "Cartes de visite",
+        "name_pt": "Cartões de visita",
+        "name_de": "Visitenkarten",
+        "name_it": "Biglietti da visita",
+        "parentId": "PrintMaterials",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "PrintMaterials:BusinessCards:EuropeanA8",
+            "name": "European (A8)",
+            "name_en": "European (A8)",
+            "name_es": "Europea (A8)",
+            "name_fr": "Européen (A8)",
+            "name_pt": "Europeu (A8)",
+            "name_de": "Europäisch (A8)",
+            "name_it": "Europeo (A8)",
+            "parentId": "PrintMaterials:BusinessCards",
+            "level": 3,
+            "widthMm": 52,
+            "heightMm": 74,
+            "widthInch": 2.04,
+            "heightInch": 2.91,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:BusinessCards:Square",
+            "name": "Square",
+            "name_en": "Square",
+            "name_es": "Cuadrada",
+            "name_fr": "Carré",
+            "name_pt": "Quadrado",
+            "name_de": "Quadratisch",
+            "name_it": "Quadrato",
+            "parentId": "PrintMaterials:BusinessCards",
+            "level": 3,
+            "widthMm": 64,
+            "heightMm": 64,
+            "widthInch": 2.5,
+            "heightInch": 2.5,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:BusinessCards:StandardUS",
+            "name": "Standard (US)",
+            "name_en": "Standard (US)",
+            "name_es": "Estándar (US)",
+            "name_fr": "Standard (US)",
+            "name_pt": "Padrão (US)",
+            "name_de": "Standard (US)",
+            "name_it": "Standard (US)",
+            "parentId": "PrintMaterials:BusinessCards",
+            "level": 3,
+            "widthMm": 89,
+            "heightMm": 51,
+            "widthInch": 3.5,
+            "heightInch": 2,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 3,
+                "inch": 0.12
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "PrintMaterials:FlyersPosters",
+        "name": "Flyers & Posters",
+        "name_en": "Flyers & Posters",
+        "name_es": "Folletos y carteles",
+        "name_fr": "Flyers et affiches",
+        "name_pt": "Folhetos e cartazes",
+        "name_de": "Flyer & Plakate",
+        "name_it": "Volantini e poster",
+        "parentId": "PrintMaterials",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "PrintMaterials:FlyersPosters:A4",
+            "name": "A4",
+            "name_en": "A4",
+            "name_es": "A4",
+            "name_fr": "A4",
+            "name_pt": "A4",
+            "name_de": "A4",
+            "name_it": "A4",
+            "parentId": "PrintMaterials:FlyersPosters",
+            "level": 3,
+            "widthMm": 210,
+            "heightMm": 297,
+            "widthInch": 8.27,
+            "heightInch": 11.69,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:FlyersPosters:A5",
+            "name": "A5",
+            "name_en": "A5",
+            "name_es": "A5",
+            "name_fr": "A5",
+            "name_pt": "A5",
+            "name_de": "A5",
+            "name_it": "A5",
+            "parentId": "PrintMaterials:FlyersPosters",
+            "level": 3,
+            "widthMm": 148,
+            "heightMm": 210,
+            "widthInch": 5.83,
+            "heightInch": 8.27,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:FlyersPosters:LetterUS",
+            "name": "Letter (US)",
+            "name_en": "Letter (US)",
+            "name_es": "Carta (US)",
+            "name_fr": "Letter (US)",
+            "name_pt": "Carta (US)",
+            "name_de": "Letter (US)",
+            "name_it": "Letter (US)",
+            "parentId": "PrintMaterials:FlyersPosters",
+            "level": 3,
+            "widthMm": 216,
+            "heightMm": 279,
+            "widthInch": 8.5,
+            "heightInch": 11,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:FlyersPosters:SquarePoster",
+            "name": "Square Poster",
+            "name_en": "Square Poster",
+            "name_es": "Póster cuadrado",
+            "name_fr": "Affiche carrée",
+            "name_pt": "Cartaz quadrado",
+            "name_de": "Quadratisches Plakat",
+            "name_it": "Poster quadrato",
+            "parentId": "PrintMaterials:FlyersPosters",
+            "level": 3,
+            "widthMm": 305,
+            "heightMm": 305,
+            "widthInch": 12,
+            "heightInch": 12,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "PrintMaterials:FlyersPosters:Tabloid",
+            "name": "Tabloid",
+            "name_en": "Tabloid",
+            "name_es": "Tabloide",
+            "name_fr": "Tabloïd",
+            "name_pt": "Tablóide",
+            "name_de": "Tabloid",
+            "name_it": "Tabloid",
+            "parentId": "PrintMaterials:FlyersPosters",
+            "level": 3,
+            "widthMm": 279,
+            "heightMm": 432,
+            "widthInch": 11,
+            "heightInch": 17,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "mm": 5,
+                "inch": 0.2
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "SignageLargeFormat",
+    "name": "Signage & Large Format",
+    "name_en": "Signage & Large Format",
+    "name_es": "Señalización y gran formato",
+    "name_fr": "Signalétique et grand format",
+    "name_pt": "Sinalização e grande formato",
+    "name_de": "Beschilderung & Großformat",
+    "name_it": "Segnaletica e grande formato",
+    "parentId": null,
+    "level": 1,
+    "widthMm": null,
+    "heightMm": null,
+    "widthInch": null,
+    "heightInch": null,
+    "widthPx": null,
+    "heightPx": null,
+    "margin": null,
+    "children": [
+      {
+        "id": "SignageLargeFormat:Banners",
+        "name": "Banners",
+        "name_en": "Banners",
+        "name_es": "Banners",
+        "name_fr": "Bannières",
+        "name_pt": "Banners",
+        "name_de": "Banner",
+        "name_it": "Banner",
+        "parentId": "SignageLargeFormat",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SignageLargeFormat:Banners:RetractableConference",
+            "name": "Retractable (Conference)",
+            "name_en": "Retractable (Conference)",
+            "name_es": "Enrollable (conferencia)",
+            "name_fr": "Enroulable (conférence)",
+            "name_pt": "Retrátil (conferência)",
+            "name_de": "Roll-up (Konferenz)",
+            "name_it": "Roll-up (conferenza)",
+            "parentId": "SignageLargeFormat:Banners",
+            "level": 3,
+            "widthMm": 838,
+            "heightMm": 2032,
+            "widthInch": 33,
+            "heightInch": 80,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "inch": 2,
+                "mm": 51
+              },
+              "right": {
+                "inch": 2,
+                "mm": 51
+              },
+              "top": {
+                "inch": 3,
+                "mm": 76
+              },
+              "bottom": {
+                "inch": 3,
+                "mm": 76
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SignageLargeFormat:Banners:VinylStreet",
+            "name": "Vinyl (Street)",
+            "name_en": "Vinyl (Street)",
+            "name_es": "Vinilo (calle)",
+            "name_fr": "Bâche vinyle (rue)",
+            "name_pt": "Vinil (rua)",
+            "name_de": "Vinylbanner (Straße)",
+            "name_it": "Vinile (strada)",
+            "parentId": "SignageLargeFormat:Banners",
+            "level": 3,
+            "widthMm": 914,
+            "heightMm": 2438,
+            "widthInch": 36,
+            "heightInch": 96,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "inch": 3,
+                "mm": 76
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SignageLargeFormat:Billboards",
+        "name": "Billboards",
+        "name_en": "Billboards",
+        "name_es": "Vallas publicitarias",
+        "name_fr": "Panneaux d’affichage",
+        "name_pt": "Outdoors",
+        "name_de": "Billboards",
+        "name_it": "Cartelloni pubblicitari",
+        "parentId": "SignageLargeFormat",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SignageLargeFormat:Billboards:BulletinLarge",
+            "name": "Bulletin (Large)",
+            "name_en": "Bulletin (Large)",
+            "name_es": "Cartelera (grande)",
+            "name_fr": "Bulletin (grand)",
+            "name_pt": "Bulletin (grande)",
+            "name_de": "Bulletin (groß)",
+            "name_it": "Bulletin (grande)",
+            "parentId": "SignageLargeFormat:Billboards",
+            "level": 3,
+            "widthMm": 4267,
+            "heightMm": 14630,
+            "widthInch": 168,
+            "heightInch": 576,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "left": {
+                "inch": 12,
+                "mm": 305
+              },
+              "right": {
+                "inch": 12,
+                "mm": 305
+              },
+              "top": {
+                "inch": 24,
+                "mm": 610
+              },
+              "bottom": {
+                "inch": 24,
+                "mm": 610
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SignageLargeFormat:Billboards:PosterSmall",
+            "name": "Poster (Small)",
+            "name_en": "Poster (Small)",
+            "name_es": "Póster (pequeño)",
+            "name_fr": "Affiche (petite)",
+            "name_pt": "Cartaz (pequeno)",
+            "name_de": "Plakat (klein)",
+            "name_it": "Poster (piccolo)",
+            "parentId": "SignageLargeFormat:Billboards",
+            "level": 3,
+            "widthMm": 3658,
+            "heightMm": 7315,
+            "widthInch": 144,
+            "heightInch": 288,
+            "widthPx": null,
+            "heightPx": null,
+            "margin": {
+              "common": {
+                "inch": 6,
+                "mm": 152
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "SocialMedia",
+    "name": "Social Media",
+    "name_en": "Social Media",
+    "name_es": "Redes sociales",
+    "name_fr": "Réseaux sociaux",
+    "name_pt": "Redes sociais",
+    "name_de": "Soziale Medien",
+    "name_it": "Social media",
+    "parentId": null,
+    "level": 1,
+    "widthMm": null,
+    "heightMm": null,
+    "widthInch": null,
+    "heightInch": null,
+    "widthPx": null,
+    "heightPx": null,
+    "margin": null,
+    "children": [
+      {
+        "id": "SocialMedia:Facebook",
+        "name": "Facebook",
+        "name_en": "Facebook",
+        "name_es": "Facebook",
+        "name_fr": "Facebook",
+        "name_pt": "Facebook",
+        "name_de": "Facebook",
+        "name_it": "Facebook",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:Facebook:CoverPhoto",
+            "name": "Cover Photo",
+            "name_en": "Cover Photo",
+            "name_es": "Foto de portada",
+            "name_fr": "Photo de couverture",
+            "name_pt": "Foto de capa",
+            "name_de": "Titelbild",
+            "name_it": "Foto di copertina",
+            "parentId": "SocialMedia:Facebook",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 820,
+            "heightPx": 312,
+            "margin": {
+              "left": {
+                "px": 100
+              },
+              "right": {
+                "px": 100
+              },
+              "top": {
+                "px": 30
+              },
+              "bottom": {
+                "px": 30
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Facebook:PostImage",
+            "name": "Post Image",
+            "name_en": "Post Image",
+            "name_es": "Imagen de publicación",
+            "name_fr": "Image de publication",
+            "name_pt": "Imagem da publicação",
+            "name_de": "Beitragsbild",
+            "name_it": "Immagine del post",
+            "parentId": "SocialMedia:Facebook",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1200,
+            "heightPx": 630,
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Facebook:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:Facebook",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 180,
+            "heightPx": 180,
+            "margin": {
+              "common": {
+                "px": 15
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Facebook:StoryReel",
+            "name": "Story/Reel",
+            "name_en": "Story/Reel",
+            "name_es": "Historia/Reel",
+            "name_fr": "Story/Reel",
+            "name_pt": "Story/Reel",
+            "name_de": "Story/Reel",
+            "name_it": "Storia/Reel",
+            "parentId": "SocialMedia:Facebook",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1080,
+            "heightPx": 1920,
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:Instagram",
+        "name": "Instagram",
+        "name_en": "Instagram",
+        "name_es": "Instagram",
+        "name_fr": "Instagram",
+        "name_pt": "Instagram",
+        "name_de": "Instagram",
+        "name_it": "Instagram",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:Instagram:PortraitPost",
+            "name": "Portrait Post",
+            "name_en": "Portrait Post",
+            "name_es": "Publicación vertical",
+            "name_fr": "Publication verticale",
+            "name_pt": "Publicação vertical",
+            "name_de": "Hochformat-Beitrag",
+            "name_it": "Post verticale",
+            "parentId": "SocialMedia:Instagram",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1080,
+            "heightPx": 1350,
+            "margin": {
+              "left": {
+                "px": 80
+              },
+              "right": {
+                "px": 80
+              },
+              "top": {
+                "px": 120
+              },
+              "bottom": {
+                "px": 120
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Instagram:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:Instagram",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 110,
+            "heightPx": 110,
+            "margin": {
+              "common": {
+                "px": 10
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Instagram:SquarePost",
+            "name": "Square Post",
+            "name_en": "Square Post",
+            "name_es": "Publicación cuadrada",
+            "name_fr": "Publication carrée",
+            "name_pt": "Publicação quadrada",
+            "name_de": "Quadratischer Beitrag",
+            "name_it": "Post quadrato",
+            "parentId": "SocialMedia:Instagram",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1080,
+            "heightPx": 1080,
+            "margin": {
+              "common": {
+                "px": 80
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Instagram:StoryReel",
+            "name": "Story/Reel",
+            "name_en": "Story/Reel",
+            "name_es": "Historia/Reel",
+            "name_fr": "Story/Reel",
+            "name_pt": "Story/Reel",
+            "name_de": "Story/Reel",
+            "name_it": "Storia/Reel",
+            "parentId": "SocialMedia:Instagram",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1080,
+            "heightPx": 1920,
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:LinkedIn",
+        "name": "LinkedIn",
+        "name_en": "LinkedIn",
+        "name_es": "LinkedIn",
+        "name_fr": "LinkedIn",
+        "name_pt": "LinkedIn",
+        "name_de": "LinkedIn",
+        "name_it": "LinkedIn",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:LinkedIn:CoverPhoto",
+            "name": "Cover Photo",
+            "name_en": "Cover Photo",
+            "name_es": "Foto de portada",
+            "name_fr": "Photo de couverture",
+            "name_pt": "Foto de capa",
+            "name_de": "Titelbild",
+            "name_it": "Foto di copertina",
+            "parentId": "SocialMedia:LinkedIn",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1584,
+            "heightPx": 396,
+            "margin": {
+              "left": {
+                "px": 100
+              },
+              "right": {
+                "px": 100
+              },
+              "top": {
+                "px": 30
+              },
+              "bottom": {
+                "px": 30
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:LinkedIn:PostImage",
+            "name": "Post Image",
+            "name_en": "Post Image",
+            "name_es": "Imagen de publicación",
+            "name_fr": "Image de publication",
+            "name_pt": "Imagem da publicação",
+            "name_de": "Beitragsbild",
+            "name_it": "Immagine del post",
+            "parentId": "SocialMedia:LinkedIn",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1200,
+            "heightPx": 627,
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:LinkedIn:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:LinkedIn",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 400,
+            "heightPx": 400,
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:Pinterest",
+        "name": "Pinterest",
+        "name_en": "Pinterest",
+        "name_es": "Pinterest",
+        "name_fr": "Pinterest",
+        "name_pt": "Pinterest",
+        "name_de": "Pinterest",
+        "name_it": "Pinterest",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:Pinterest:Pin",
+            "name": "Pin",
+            "name_en": "Pin",
+            "name_es": "Pin",
+            "name_fr": "Épingle",
+            "name_pt": "Pin",
+            "name_de": "Pin",
+            "name_it": "Pin",
+            "parentId": "SocialMedia:Pinterest",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1000,
+            "heightPx": 1500,
+            "margin": {
+              "left": {
+                "px": 50
+              },
+              "right": {
+                "px": 50
+              },
+              "top": {
+                "px": 100
+              },
+              "bottom": {
+                "px": 100
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:Pinterest:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:Pinterest",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 165,
+            "heightPx": 165,
+            "margin": {
+              "common": {
+                "px": 15
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:TikTok",
+        "name": "TikTok",
+        "name_en": "TikTok",
+        "name_es": "TikTok",
+        "name_fr": "TikTok",
+        "name_pt": "TikTok",
+        "name_de": "TikTok",
+        "name_it": "TikTok",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:TikTok:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:TikTok",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 200,
+            "heightPx": 200,
+            "margin": {
+              "common": {
+                "px": 20
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:TikTok:VideoStory",
+            "name": "Video/Story",
+            "name_en": "Video/Story",
+            "name_es": "Vídeo/Historia",
+            "name_fr": "Vidéo/Story",
+            "name_pt": "Vídeo/Story",
+            "name_de": "Video/Story",
+            "name_it": "Video/Storia",
+            "parentId": "SocialMedia:TikTok",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1080,
+            "heightPx": 1920,
+            "margin": {
+              "left": {
+                "px": 60
+              },
+              "right": {
+                "px": 60
+              },
+              "top": {
+                "px": 160
+              },
+              "bottom": {
+                "px": 160
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:TwitterX",
+        "name": "Twitter/X",
+        "name_en": "Twitter/X",
+        "name_es": "Twitter/X",
+        "name_fr": "Twitter/X",
+        "name_pt": "Twitter/X",
+        "name_de": "Twitter/X",
+        "name_it": "Twitter/X",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:TwitterX:Header",
+            "name": "Header",
+            "name_en": "Header",
+            "name_es": "Encabezado",
+            "name_fr": "Bannière",
+            "name_pt": "Cabeçalho",
+            "name_de": "Headerbild",
+            "name_it": "Intestazione",
+            "parentId": "SocialMedia:TwitterX",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1500,
+            "heightPx": 500,
+            "margin": {
+              "common": {
+                "px": 50
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:TwitterX:PostImage",
+            "name": "Post Image",
+            "name_en": "Post Image",
+            "name_es": "Imagen de publicación",
+            "name_fr": "Image de publication",
+            "name_pt": "Imagem da publicação",
+            "name_de": "Beitragsbild",
+            "name_it": "Immagine del post",
+            "parentId": "SocialMedia:TwitterX",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1200,
+            "heightPx": 675,
+            "margin": {
+              "common": {
+                "px": 40
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:TwitterX:ProfilePhoto",
+            "name": "Profile Photo",
+            "name_en": "Profile Photo",
+            "name_es": "Foto de perfil",
+            "name_fr": "Photo de profil",
+            "name_pt": "Foto de perfil",
+            "name_de": "Profilbild",
+            "name_it": "Foto profilo",
+            "parentId": "SocialMedia:TwitterX",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 400,
+            "heightPx": 400,
+            "margin": {
+              "common": {
+                "px": 30
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      },
+      {
+        "id": "SocialMedia:YouTube",
+        "name": "YouTube",
+        "name_en": "YouTube",
+        "name_es": "YouTube",
+        "name_fr": "YouTube",
+        "name_pt": "YouTube",
+        "name_de": "YouTube",
+        "name_it": "YouTube",
+        "parentId": "SocialMedia",
+        "level": 2,
+        "widthMm": null,
+        "heightMm": null,
+        "widthInch": null,
+        "heightInch": null,
+        "widthPx": null,
+        "heightPx": null,
+        "margin": null,
+        "children": [
+          {
+            "id": "SocialMedia:YouTube:ChannelCover",
+            "name": "Channel Cover",
+            "name_en": "Channel Cover",
+            "name_es": "Portada del canal",
+            "name_fr": "Bannière de chaîne",
+            "name_pt": "Capa do canal",
+            "name_de": "Kanalbanner",
+            "name_it": "Copertina del canale",
+            "parentId": "SocialMedia:YouTube",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 2560,
+            "heightPx": 1440,
+            "margin": {
+              "left": {
+                "px": 400
+              },
+              "right": {
+                "px": 400
+              },
+              "top": {
+                "px": 200
+              },
+              "bottom": {
+                "px": 200
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          },
+          {
+            "id": "SocialMedia:YouTube:Thumbnail",
+            "name": "Thumbnail",
+            "name_en": "Thumbnail",
+            "name_es": "Miniatura",
+            "name_fr": "Vignette",
+            "name_pt": "Miniatura",
+            "name_de": "Vorschaubild",
+            "name_it": "Miniatura",
+            "parentId": "SocialMedia:YouTube",
+            "level": 3,
+            "widthMm": null,
+            "heightMm": null,
+            "widthInch": null,
+            "heightInch": null,
+            "widthPx": 1280,
+            "heightPx": 720,
+            "margin": {
+              "common": {
+                "px": 60
+              }
+            },
+            "_count": {
+              "layouts": 0
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

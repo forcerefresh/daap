@@ -22,6 +22,7 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { getNewMediaObjectBounds } from "./add-object-utils";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import { IMAGE } from "../../objects/image/image";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 export enum Panels {
   MyImages = "myImages",
@@ -185,6 +186,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 />
@@ -239,6 +245,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                             image: includeMediaRequiredProps(mediaItem.media),
                           }
                         );
+                      } else {
+                        AppToaster.show({
+                          intent: "warning",
+                          message: `No layer selected. Please choose a layer first.`,
+                        });
                       }
                     }}
                   />
@@ -286,6 +297,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 />
@@ -384,6 +400,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           image: includeMediaRequiredProps(mediaItem.media),
                         }
                       );
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 />
@@ -422,6 +443,11 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                             image: includeMediaRequiredProps(mediaItem.media),
                           }
                         );
+                      } else {
+                        AppToaster.show({
+                          intent: "warning",
+                          message: `No layer selected. Please choose a layer first.`,
+                        });
                       }
                     }}
                   />

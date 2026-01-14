@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import cx from "classnames";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -35,8 +35,8 @@ import {
 } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IGlobalSlideOverlapTime } from "webslider-sdk/lib/common/i-slider-duration";
 import { cloneDeep } from "lodash-es";
-import { useDocumentsType } from "../../template-generator/hooks/useDocumentType";
 import { getDocumentsOptionFromThree } from "../../utils/document/documents-type-utils";
+import { IntegrationContext } from "../../integration";
 
 enum ProjectPanelSections {
   Project = "Project",
@@ -86,7 +86,9 @@ const ProjectPanel = (props: IProjectPanelMergedProps) => {
     { label: string; value: string }[]
   >([]);
 
-  const { getDocumentTypeTree } = useDocumentsType();
+  const globalContext = useContext(IntegrationContext);
+  const { getDocumentTypeTree } = globalContext.useDocumentsTypeHook();
+
   useEffect(() => {
     const load = async () => {
       const documentsThree = await getDocumentTypeTree();

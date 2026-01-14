@@ -29,6 +29,7 @@ import {
   LineValues,
 } from "../../objects/line/line";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 enum ShapeSections {
   Line = "line",
@@ -483,6 +484,11 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         obj.properties
                       );
                       onRequestClose();
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 >
@@ -557,6 +563,11 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         obj.properties
                       );
                       onRequestClose();
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 >
@@ -631,6 +642,11 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         obj.properties
                       );
                       onRequestClose();
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 >
@@ -709,6 +725,11 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         obj.properties
                       );
                       onRequestClose();
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 >
@@ -787,6 +808,11 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         obj.properties
                       );
                       onRequestClose();
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                   }}
                 >

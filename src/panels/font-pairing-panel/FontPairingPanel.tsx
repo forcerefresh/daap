@@ -63,6 +63,7 @@ import mysticalFontPairing from "../../jsons/pairing/mystical-font-pairing.json"
 import { FontPreloader } from "../../objects/font-preloader";
 
 import allFontsPairings from "../../utils/fonts/all-fonts-pairings.json";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 // const fontPairing = urbanFontPairing.futuristic_pairings[0].fontPairing;
 
@@ -215,7 +216,13 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
       }
     >
   ) => {
-    if (!activeLayerId) return;
+    if (!activeLayerId) {
+      AppToaster.show({
+        intent: "warning",
+        message: `No layer selected. Please choose a layer first.`,
+      });
+      return;
+    }
 
     // ["primary", "secondary", "accent"]
 

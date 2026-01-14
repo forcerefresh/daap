@@ -23,6 +23,14 @@ import { WpFullscreenButton } from "./integration/components/fullscreen-button/w
 import { FullscreenButton } from "./integration/components/fullscreen-button/fullscreen-button";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 
+export interface Document {
+  id: string;
+  parentId: string;
+  level: string;
+  name: string;
+  children: Document[];
+}
+
 export interface getFullscreenButtonComponentProps {
   isFullscreen: boolean;
   toggle: () => void;
@@ -380,6 +388,13 @@ export const IntegrationContext = React.createContext({
     scaleUI: (zoom: number): Promise<void> => Promise.resolve(undefined),
   }),
 
+  useDocumentsTypeHook: () => ({
+    getDocumentTypeTree: (): Promise<{ documents: Document[] }> =>
+      Promise.resolve({
+        documents: [],
+      }),
+  }),
+
   useProjectHook: () => ({
     /* returns project */
     getProject: (id: string): Promise<any> => Promise.resolve({}), // todo: add interface for api response
@@ -606,13 +621,25 @@ function useSettingsHookFactory() {
   if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
     return require("./integration/hooks/settings-hook/saas-use-settings-hook")
       .useSettingsHook;
-  }
-  if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
     return require("./integration/hooks/settings-hook/wp-use-settings-hook")
       .useSettingsHook;
   } else {
     return require("./integration/hooks/settings-hook/saas-use-settings-hook")
       .useSettingsHook;
+  }
+}
+
+function useDocumentsTypeHookFactory() {
+  if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+    return require("./integration/hooks/document-type-hook/saas-use-document-type-hook")
+      .useDocumentsTypeHook;
+  } else if (import.meta.env.VITE_APP_INTEGRATION === "wp") {
+    return require("./integration/hooks/document-type-hook/wp-use-document-type-hook")
+      .useDocumentsTypeHook;
+  } else {
+    return require("./integration/hooks/document-type-hook/saas-use-document-type-hook")
+      .useDocumentsTypeHook;
   }
 }
 
@@ -749,6 +776,7 @@ export const IntegrationContextProvider = (
         useProjectHook: useProjectHookFactory(),
         useTemplateHook: useTemplateHookFactory(),
         useSettingsHook: useSettingsHookFactory(),
+        useDocumentsTypeHook: useDocumentsTypeHookFactory(),
         //useAssetsHook: useAssetsHookFactory(),
         usePresets: usePresetsHookFactory(),
         useObjectStorageHook: useObjectStorageFactory(),

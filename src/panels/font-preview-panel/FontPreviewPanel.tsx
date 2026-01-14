@@ -41,6 +41,7 @@ import { addStyle } from "../../utils/doom-utils/css-utils";
 import { debounce, isArray } from "lodash-es";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
 
 enum FontSections {
   MyFonts = "my-fonts",
@@ -165,6 +166,11 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
         }
       );
       onRequestClose();
+    } else {
+      AppToaster.show({
+        intent: "warning",
+        message: `No layer selected. Please choose a layer first.`,
+      });
     }
   };
 
@@ -636,6 +642,11 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                     }
                   );
                   onRequestClose();
+                } else {
+                  AppToaster.show({
+                    intent: "warning",
+                    message: `No layer selected. Please choose a layer first.`,
+                  });
                 }
               }}
             >
