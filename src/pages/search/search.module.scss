@@ -359,6 +359,7 @@ $dark-border-color: #4f4f4f;
 
 .logo {
   margin-left: 5px;
+  width: 106px;
 }
 
 :global(.bp5-dark) {
@@ -366,4 +367,12 @@ $dark-border-color: #4f4f4f;
     color: white;
     fill: #ddd;
   }
+}
+
+a .showOnHover {
+  opacity: 0 !important;
+}
+
+a:hover .showOnHover {
+  opacity: 0.7 !important;
 }

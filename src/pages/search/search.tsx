@@ -7,6 +7,7 @@ import {
   Icon,
   Spinner,
   TextArea,
+  Text,
 } from "@blueprintjs/core";
 import styles from "./search.module.scss";
 import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
@@ -34,6 +35,7 @@ import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { IStore } from "../../store/store";
 import { ISettings } from "../../store/reducers/i-settings";
 import { IPages } from "../../store/reducers/i-pages";
+
 import {
   preloadFonts,
   updateProjectWithNewIds,
@@ -49,6 +51,7 @@ import "../../AppNew.scss";
 import { identity } from "lodash-es";
 import { getPendingTemplate } from "./utils/pending-template";
 import SearchFooter from "./components/footer/SearchFooter";
+import { Link } from "react-router-dom";
 
 interface ISearchProps {
   onClose: () => void;
@@ -281,10 +284,33 @@ const SearchPage = ({
             padding: "6px",
             zIndex: 1000,
             display: "flex",
-            gap: "10px",
+            alignItems: "center",
+            gap: "40px",
           }}
         >
           <DaapLogo className={styles.logo} />
+          <Link
+            to={"https://learn.daap.forcerefresh.io/docs"}
+            target="_blank"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              // textDecoration: "none",
+              // color: "inherit",
+              gap: "6px",
+            }}
+          >
+            <Text style={{ display: "inline" }}>Documentation</Text>
+            <Icon
+              icon="share"
+              size={14}
+              style={{
+                opacity: 0,
+                transition: "opacity 0.2s ease",
+              }}
+              className={styles.showOnHover}
+            />
+          </Link>
         </div>
         <div
           style={{
@@ -412,7 +438,7 @@ const SearchPage = ({
             </div>
           </>
         )}
-        <SearchFooter />
+        {!isExpanded && <SearchFooter />}
       </div>
       {showRedirectMessage && renderSpinner()}
     </>
