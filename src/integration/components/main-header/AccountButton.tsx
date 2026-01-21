@@ -38,6 +38,7 @@ export function AccountButton(props: IAccountButtonProps) {
     return (
       <Dialog
         canOutsideClickClose={false}
+        canEscapeKeyClose={false} // ← This disables ESC closing
         isCloseButtonShown={false}
         // {...props}
         isOpen={loginOpen}
