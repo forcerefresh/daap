@@ -1069,7 +1069,6 @@ export function selectObjects(selectedObjectIds: string[]): any {
 
     // dispatch(normalizeObjectGroups(unselectedObjectGroup));
     // // >>> Normalize group on unselect - END
-
     const selectionPath: string[] = [];
     // use first one to get selection path (selectedObjectIds[0])
     populateObjectThreeIds(
@@ -1648,12 +1647,38 @@ export function _groupObjects(
   };
 }
 
-export function groupObjects(objectIds: string[]): any {
+export function groupObjects(objectIdsFromProps: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    if (objectIdsFromProps.length === 0) return;
+
     const objectById = getState().project.objects.objectById;
     const settings = getState().project.settings;
     const layerById = getState().project.layers.layerById;
     const { selectedDevice } = getState().stage;
+
+    // sort objectIds
+    const firstObjectID = objectIdsFromProps[0];
+    const oneObject = objectById[firstObjectID];
+
+    const maybeLayer = layerById[oneObject.parentId!];
+    const objectIds: string[] = [];
+    // layer, we use layer.objectIds
+    if (maybeLayer) {
+      maybeLayer.objectIds.forEach((objId) => {
+        if (objectIdsFromProps.includes(objId)) {
+          objectIds.push(objId);
+        }
+      });
+    }
+    // group, we use group.objectIds
+    else {
+      const parentGroup = objectById[oneObject.parentId!];
+      parentGroup?.objectIds?.forEach((objId) => {
+        if (objectIdsFromProps.includes(objId)) {
+          objectIds.push(objId);
+        }
+      });
+    }
 
     // ***********
     // 1. UNGROUP

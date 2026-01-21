@@ -107,6 +107,7 @@ export function StageObjectInternal(props: IStageLayer) {
     selectionPath,
     parentGroup,
     clipboard,
+    forceRefreshRand,
   } = props;
 
   const objectMeta = getAppObjectDefinition(
@@ -406,7 +407,7 @@ export function StageObjectInternal(props: IStageLayer) {
   }
 
   return (
-    <>
+    <React.Fragment key={forceRefreshRand}>
       {/* NOTE: FOR DEBUGING */}
       {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
       <div dangerouslySetInnerHTML={{ __html: clipMaskHtml }}></div>
@@ -649,7 +650,7 @@ export function StageObjectInternal(props: IStageLayer) {
           </div>
         </WithRotationHandle>
       </WithResizeHandle>
-    </>
+    </React.Fragment>
   );
 }
 

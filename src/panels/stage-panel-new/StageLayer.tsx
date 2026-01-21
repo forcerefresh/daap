@@ -27,6 +27,7 @@ export function StageLayer(props: IStageLayer) {
     breakpointConfig,
     objectById,
     stageZoom,
+    forceRefreshRand,
   } = props;
 
   // const disableVisibility =

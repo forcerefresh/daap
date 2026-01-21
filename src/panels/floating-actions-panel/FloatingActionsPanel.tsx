@@ -99,7 +99,10 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
   const [opacity, setOpacity] = useState(1);
 
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
-  const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
+  const groupingDisabled =
+    selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+
+  // const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
 
   // useEffect(() => {
@@ -208,7 +211,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
                 />
               ) : null}
               <ButtonGroup minimal={true}>
-                {groupingAllowed && (
+                {!groupingDisabled && (
                   <Button
                     icon="group-objects"
                     onClick={() => {

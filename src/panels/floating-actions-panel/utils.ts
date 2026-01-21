@@ -64,6 +64,7 @@ export function isGroupingPossible(
 ) {
   return selectedObjectIds.length > 1;
 }
+
 export function isUngroupingPossible(
   objectById: {
     [id: string]: IObject<{}>;

@@ -19,7 +19,9 @@ export function populateObjectThreeIds(
   const object = objectById[currentId];
 
   if (object) {
-    if (!first) ids.unshift(object.id); // do not add selectedObject
+    if (!first) {
+      ids.unshift(object.id); // do not add selectedObject
+    }
     if (object.parentId) {
       populateObjectThreeIds(
         ids,

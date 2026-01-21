@@ -27,6 +27,7 @@ import {
 } from "../floating-actions-panel/utils";
 import { IClipboard } from "../../store/reducers/i-clipboard";
 import css from "./ContextMenu.module.scss";
+import { isObjectGroup } from "../../store/actions/actions-utils";
 
 export interface MoreMenuProps extends Props {
   shouldDismissPopover?: boolean;
@@ -52,7 +53,11 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
     _updateObject,
   } = props;
 
-  const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
+  const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
+  const groupingDisabled =
+    selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+
+  // const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
 
   const object = objectById[selectedObjectIds[0]];
@@ -104,7 +109,7 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
       />
       <MenuDivider />
 
-      {groupingAllowed && (
+      {!groupingDisabled && (
         <MenuItem
           text="Group"
           icon="group-objects"
@@ -137,7 +142,7 @@ const ContextMenu: React.FC<IContextMenu> = (props: IContextMenu) => {
         />
       )}
 
-      {(ungroupingAllowed || groupingAllowed) && <MenuDivider />}
+      {(ungroupingAllowed || !groupingDisabled) && <MenuDivider />}
 
       {!!object?.mask && (
         <>
