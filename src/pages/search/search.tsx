@@ -78,7 +78,7 @@ const SearchPage = ({
   theme,
 }: ISearchMergedProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [selectedDocumentType, setSelectedDocumentType] = useState(
     "SocialMedia:Instagram:SquarePost",
   );
