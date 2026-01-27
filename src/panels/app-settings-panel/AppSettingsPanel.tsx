@@ -93,7 +93,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   _updateGlobalConfiguration({
                     snapToObject,
                   });
-                }
+                },
               )}
             </div>
 
@@ -121,7 +121,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                     snapToObjectThreshold: snapToObjectThreshold,
                   });
                 },
-                { disabled: !globals.snapToObject }
+                { disabled: !globals.snapToObject },
               )}
             </div>
 
@@ -142,7 +142,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   _updateGlobalConfiguration({
                     snapToMargin,
                   });
-                }
+                },
               )}
             </div>
 
@@ -167,10 +167,10 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 
                   //update store
                   _updateGlobalConfiguration({
-                    snapToObjectThreshold: snapToMarginThreshold,
+                    snapToMarginThreshold: snapToMarginThreshold,
                   });
                 },
-                { disabled: !globals.snapToObject }
+                { disabled: !globals.snapToMargin },
               )}
             </div>
 
@@ -191,7 +191,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   _updateGlobalConfiguration({
                     snapToDocument,
                   });
-                }
+                },
               )}
             </div>
 
@@ -219,7 +219,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                     snapToDocumentThreshold,
                   });
                 },
-                { disabled: !globals.snapToObject }
+                { disabled: !globals.snapToDocument },
               )}
             </div>
 
@@ -241,7 +241,7 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                     outlineColor,
                   });
                 },
-                ""
+                "",
               )}
             </div>
           </div>

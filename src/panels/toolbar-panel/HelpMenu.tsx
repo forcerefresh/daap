@@ -24,12 +24,12 @@ export const HelpMenu: React.FC<IHelpMenu> = (props) => {
       /> */}
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
-        text="Live Documentation"
+        text="Documentation"
         // onClick={() => {
         //   openExternalLink("https://forcerefresh.io/docs/introduction");
         // }}
         // }}
-        href="https://forcerefresh.io/docs/introduction"
+        href="https://learn.daap.forcerefresh.io"
         target="_blank"
       />
       <MenuItem
@@ -41,16 +41,16 @@ export const HelpMenu: React.FC<IHelpMenu> = (props) => {
         href="https://support.forcerefresh.io"
         target="_blank"
       />
-      <MenuDivider />
+      {/* <MenuDivider />
       <MenuItem
         icon={<LinkOut style={{ width: "15px", height: "19px" }} />}
         text="DAAP website"
-        href="https://forcerefresh.io"
+        href="https://daap.forcerefresh.io"
         target="_blank"
         // onClick={() => {
         //   openExternalLink("https://forcerefresh.io/");
         // }}
-      />
+      /> */}
     </Menu>
   );
 };

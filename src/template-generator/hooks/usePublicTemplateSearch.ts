@@ -5,7 +5,8 @@ export const usePublicTemplateSearch = () => {
   const searchPublicTemplate = (
     from: number,
     search: string,
-    perPage = 10
+    language = "en",
+    perPage = 10,
   ): Promise<any> => {
     return axios
       .get(
@@ -14,9 +15,10 @@ export const usePublicTemplateSearch = () => {
           params: {
             page: from,
             limit: perPage,
+            language: language,
             ...(!isEmpty(search) ? { search } : {}),
           },
-        }
+        },
       )
       .then((response) => response.data)
       .catch(console.log);

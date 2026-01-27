@@ -78,6 +78,7 @@ interface TemplatesResponse {
 
 interface TemplatesGridV2Props {
   baseUrl?: string;
+  language?: string;
   searchQuery?: string;
   initialTemplates?: TemplateItem[];
   onLike: (templateId: string) => void;
@@ -86,7 +87,7 @@ interface TemplatesGridV2Props {
     templateId: string,
     lang: string,
     previewUid: string,
-    documentType: string
+    documentType: string,
   ) => void;
 }
 
@@ -109,6 +110,7 @@ const getAspectRatioClass = (width: number, height: number): string => {
 
 const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   baseUrl = "",
+  language = "en",
   searchQuery = "",
   initialTemplates,
   onLike,
@@ -173,7 +175,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
       if (attempt < 3) {
         setTimeout(
           () => attemptInitialCalculation(attempt + 1),
-          100 * (attempt + 1)
+          100 * (attempt + 1),
         );
       }
     };
@@ -205,7 +207,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   const distributeTemplatesToColumns = (allTemplates: TemplateItem[]) => {
     const columns: TemplateItem[][] = Array.from(
       { length: columnCount },
-      () => []
+      () => [],
     );
 
     // Simple round-robin distribution that maintains order
@@ -237,7 +239,8 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         const response: TemplatesResponse = await searchPublicTemplate(
           1,
           searchQuery,
-          20
+          language,
+          20,
         );
 
         // Track page for initial templates
@@ -302,7 +305,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
       const response: TemplatesResponse = await searchPublicTemplate(
         nextPage,
         searchQuery,
-        12
+        12,
       );
 
       // Track page for new templates
@@ -314,7 +317,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
       setTemplates((prev) => {
         const newTemplates = response.data.filter(
           (newItem) =>
-            !prev.some((existingItem) => existingItem.id === newItem.id)
+            !prev.some((existingItem) => existingItem.id === newItem.id),
         );
         return [...prev, ...newTemplates];
       });
@@ -382,7 +385,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
             {columnTemplates.map((template) => {
               const aspectRatioClass = getAspectRatioClass(
                 template.template.documentType.widthPx,
-                template.template.documentType.heightPx
+                template.template.documentType.heightPx,
               );
 
               return (
@@ -408,7 +411,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                       <div className={styles.similarityBadge}>
                         <span
                           className={`${styles.similarity} ${getSimilarityColor(
-                            template.similarity
+                            template.similarity,
                           )}`}
                         >
                           {formatSimilarity(template.similarity)}
@@ -449,7 +452,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                                   template.id,
                                   template.template.language,
                                   template.template.previewUid,
-                                  template.template.documentTypeStr
+                                  template.template.documentTypeStr,
                                 );
                               }}
                             >

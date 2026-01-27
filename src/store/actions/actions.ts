@@ -143,7 +143,7 @@ export function initializeSlideAndLayer(): any {
       // layer
       dispatch(addNewLayer(slide.id));
       dispatch(
-        updateEditor({ sliderChanged: false, isExistingProject: false })
+        updateEditor({ sliderChanged: false, isExistingProject: false }),
       );
     }
   };
@@ -152,7 +152,7 @@ export function initializeSlideAndLayer(): any {
 export function addNewPage(
   pageType = PageType.Normal,
   addLayer = false,
-  position?: number
+  position?: number,
 ): any {
   return function (dispatch: Dispatch | any, getState: () => IStore) {
     const slide: IPage = {
@@ -215,8 +215,8 @@ export function deleteSlideThree(pageId: string) {
     const rootObjectIds = getState().project.objects.allObjects.filter(
       (objectId: string) =>
         layerIds.indexOf(
-          getState().project.objects.objectById[objectId].parentId!
-        ) !== -1
+          getState().project.objects.objectById[objectId].parentId!,
+        ) !== -1,
     );
 
     const objectIds = rootObjectIds.reduce(
@@ -225,7 +225,7 @@ export function deleteSlideThree(pageId: string) {
         populateObjectThreeIds(threeIds, objectId, objectById, layerById);
         return [...acc, ...threeIds];
       },
-      []
+      [],
     );
     dispatch(deleteObjects(objectIds));
     dispatch(deleteLayers(layerIds));
@@ -279,7 +279,7 @@ export type IDuplicateSchema = {
 }[];
 
 function _duplicateSlides(
-  duplicateSlidesSchema: IDuplicateSchema
+  duplicateSlidesSchema: IDuplicateSchema,
 ): DuplicateSlidesAction {
   return {
     type: DUPLICATE,
@@ -370,7 +370,7 @@ export function addNewLayer(pageId: string): any {
     const breakpointsConfiguration =
       getState().project.settings.breakpoints.breakpointsConfiguration;
     const breakpointConfig = breakpointsConfiguration.find(
-      (p: any) => p.type === "device-independent"
+      (p: any) => p.type === "device-independent",
     );
     const absoluteSize = breakpointConfig?.normal.maxSliderSize;
     const gridSize = breakpointConfig?.normal.grid;
@@ -521,8 +521,8 @@ export function deleteLayersThree(layerIds: string[]) {
     const objectIds = getState().project.objects.allObjects.filter(
       (objectId: string) =>
         layerIds.indexOf(
-          getState().project.objects.objectById[objectId].layerId
-        ) !== -1
+          getState().project.objects.objectById[objectId].layerId,
+        ) !== -1,
     );
 
     dispatch(deleteObjects(objectIds));
@@ -715,7 +715,7 @@ export interface SelectForPropertiesAction extends IUndoableAction<true, true> {
 }
 
 function _selectForProperties(
-  payload: selectForPropertiesProps
+  payload: selectForPropertiesProps,
 ): SelectForPropertiesAction {
   return {
     type: SELECT_FOR_PROPERTIES,
@@ -733,7 +733,7 @@ export function selectForProperties(payload: selectForPropertiesProps): any {
       getState().project.selection.selectionForProperties?.id === payload.id
     ) {
       logger.app.debug(
-        `Layer '${payload.id}' is already selected for properties.`
+        `Layer '${payload.id}' is already selected for properties.`,
       );
       return;
     }
@@ -815,12 +815,12 @@ export function selectSlides(slideIds: string[]) {
       differenceWith(
         slideIds,
         getState().project.selection.selectedSlideIds,
-        isEqual
+        isEqual,
       ).length === 0 &&
       differenceWith(
         getState().project.selection.selectedSlideIds,
         slideIds,
-        isEqual
+        isEqual,
       ).length === 0
     ) {
       return;
@@ -867,14 +867,16 @@ export function selectLayers(layerIds: string[]): any {
 
 export const ADD_SLIDES_TO_SELECTION = "Add slides to selection";
 
-export interface AddSlidesToSelectionAction
-  extends IUndoableAction<true, true> {
+export interface AddSlidesToSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof ADD_SLIDES_TO_SELECTION;
   payload: string[];
 }
 
 export function addSlidesToSelection(
-  slides: string[]
+  slides: string[],
 ): AddSlidesToSelectionAction {
   return {
     type: ADD_SLIDES_TO_SELECTION,
@@ -887,14 +889,16 @@ export function addSlidesToSelection(
 // ***
 export const REMOVE_SLIDES_FROM_SELECTION = "Remove slides from selection";
 
-export interface RemoveSlidesFromSelectionAction
-  extends IUndoableAction<true, true> {
+export interface RemoveSlidesFromSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof REMOVE_SLIDES_FROM_SELECTION;
   payload: string[];
 }
 
 export function removeSlidesFromSelection(
-  slideIds: string[]
+  slideIds: string[],
 ): RemoveSlidesFromSelectionAction {
   return {
     type: REMOVE_SLIDES_FROM_SELECTION,
@@ -908,14 +912,16 @@ export function removeSlidesFromSelection(
 // ****
 export const ADD_LAYERS_TO_SELECTION = "Add layers to selection";
 
-export interface AddLayersToSelectionAction
-  extends IUndoableAction<true, true> {
+export interface AddLayersToSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof ADD_LAYERS_TO_SELECTION;
   payload: string[];
 }
 
 export function addLayersToSelection(
-  layerIds: string[]
+  layerIds: string[],
 ): AddLayersToSelectionAction {
   return {
     type: ADD_LAYERS_TO_SELECTION,
@@ -928,14 +934,16 @@ export function addLayersToSelection(
 // ***
 export const REMOVE_LAYERS_FROM_SELECTION = "Remove layers from selection";
 
-export interface RemoveLayersFromSelectionAction
-  extends IUndoableAction<true, true> {
+export interface RemoveLayersFromSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof REMOVE_LAYERS_FROM_SELECTION;
   payload: string[];
 }
 
 export function removeLayersFromSelection(
-  layerIds: string[]
+  layerIds: string[],
 ): RemoveLayersFromSelectionAction {
   return {
     type: REMOVE_LAYERS_FROM_SELECTION,
@@ -965,8 +973,10 @@ export function selectObjectsByRect(rect: IRect): SelectObjectsByRectAction {
 
 export const NORMALIZE_OBJECT_GROUP = "Normalize object group";
 
-export interface NormalizeObjectGroupAction
-  extends IUndoableAction<true, true> {
+export interface NormalizeObjectGroupAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof NORMALIZE_OBJECT_GROUP;
   payload: {
     objects: IObject[];
@@ -978,7 +988,7 @@ export interface NormalizeObjectGroupAction
 export function _normalizeObjectGroups(
   objects: IObject[],
   breakpointConfiguration: BreakpointConfiguration,
-  layerById: { [key: string]: ILayer }
+  layerById: { [key: string]: ILayer },
 ): NormalizeObjectGroupAction {
   return {
     type: NORMALIZE_OBJECT_GROUP,
@@ -995,7 +1005,7 @@ export function normalizeObjectGroups(objects: IObject[]): any {
     const breakpointConfig: BreakpointConfiguration | undefined =
       project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig: any) =>
-          breakpointConfig.type === stage.selectedDevice
+          breakpointConfig.type === stage.selectedDevice,
       );
 
     dispatch(
@@ -1003,8 +1013,8 @@ export function normalizeObjectGroups(objects: IObject[]): any {
         objects,
         breakpointConfig ??
           project.settings.breakpoints.breakpointsConfiguration[0],
-        project.layers.layerById
-      )
+        project.layers.layerById,
+      ),
     );
   };
 }
@@ -1019,7 +1029,7 @@ export interface SelectObjectAction extends IUndoableAction<true, true> {
 
 export function _selectObjects(
   selectedObjectIds: string[],
-  selectionPath: string[]
+  selectionPath: string[],
 ): SelectObjectAction {
   return {
     type: SELECT_OBJECTS,
@@ -1075,7 +1085,7 @@ export function selectObjects(selectedObjectIds: string[]): any {
       selectionPath,
       selectedObjectIds[0],
       objectById,
-      layerById
+      layerById,
     );
 
     dispatch(_selectObjects(selectedObjectIds, selectionPath));
@@ -1092,7 +1102,7 @@ export function selectObjectsByRect(rect: IRect): any {
       const breakpointConfig: BreakpointConfiguration | undefined =
         getState().project.settings.breakpoints.breakpointsConfiguration.find(
           (breakpointConfig: any) =>
-            breakpointConfig.type === getState().stage.selectedDevice
+            breakpointConfig.type === getState().stage.selectedDevice,
         );
 
       const calculatedObjectSize = calculateObjectSize(
@@ -1101,7 +1111,7 @@ export function selectObjectsByRect(rect: IRect): any {
         breakpointConfig!,
         {
           resetPosition: false,
-        }
+        },
       );
 
       if (
@@ -1122,14 +1132,16 @@ export function selectObjectsByRect(rect: IRect): any {
 // ****
 export const ADD_OBJECTS_TO_SELECTION = "Add objects to selection";
 
-export interface AddObjectsToSelectionAction
-  extends IUndoableAction<true, true> {
+export interface AddObjectsToSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof ADD_OBJECTS_TO_SELECTION;
   payload: string[];
 }
 
 export function addObjectsToSelection(
-  objectIds: string[]
+  objectIds: string[],
 ): AddObjectsToSelectionAction {
   return {
     type: ADD_OBJECTS_TO_SELECTION,
@@ -1142,14 +1154,16 @@ export function addObjectsToSelection(
 // ***
 export const REMOVE_OBJECTS_FROM_SELECTION = "Remove objects from selection";
 
-export interface RemoveObjectsFromSelectionAction
-  extends IUndoableAction<true, true> {
+export interface RemoveObjectsFromSelectionAction extends IUndoableAction<
+  true,
+  true
+> {
   type: typeof REMOVE_OBJECTS_FROM_SELECTION;
   payload: string[];
 }
 
 export function removeObjectsFromSelection(
-  objectIds: string[]
+  objectIds: string[],
 ): RemoveObjectsFromSelectionAction {
   return {
     type: REMOVE_OBJECTS_FROM_SELECTION,
@@ -1176,7 +1190,7 @@ export interface MoveObjectsAction extends IUndoableAction<true, false> {
 export function moveObjects(
   refId: string,
   where: "above" | "below" | "layer" | "slide" | "bottom",
-  moveIds: string[]
+  moveIds: string[],
 ): MoveObjectsAction {
   return {
     type: MOVE_OBJECTS,
@@ -1203,7 +1217,7 @@ export interface MoveLayersAction extends IUndoableAction<true, false> {
 export function moveLayers(
   refId: string,
   where: "above" | "below" | "layer" | "slide" | "bottom",
-  moveIds: string[]
+  moveIds: string[],
 ): MoveLayersAction {
   return {
     type: MOVE_LAYERS,
@@ -1230,7 +1244,7 @@ export interface MoveSlidesAction extends IUndoableAction<true, false> {
 export function moveSlides(
   refId: string,
   where: "above" | "bottom" | string,
-  moveIds: string[]
+  moveIds: string[],
 ): MoveSlidesAction {
   return {
     type: MOVE_SLIDES,
@@ -1274,7 +1288,7 @@ export function addNewObject(
   layerId: string,
   type: string,
   objectProps: Partial<IObject>,
-  values?: { [key: string]: string }
+  values?: { [key: string]: string },
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     let object: IObject = {
@@ -1351,7 +1365,7 @@ export function replaceObject(
   replaceObjectId: string,
   type: string,
   objectProps: Partial<IObject>,
-  values?: { [key: string]: any }
+  values?: { [key: string]: any },
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const layerId =
@@ -1412,7 +1426,7 @@ export function replaceObject(
 
 export function _replaceObject(
   replaceObjectId: string,
-  object: IObject
+  object: IObject,
 ): ReplaceObjectAction {
   return {
     type: REPLACE_OBJECT,
@@ -1454,7 +1468,7 @@ export function deleteObjects(objectToDeleteIds: string[]) {
         // check if after delete group will be empty
         const group = objectById[objectToDelete.parentId!];
         const newIds = group.objectIds?.filter(
-          (objId) => !objectToDeleteIds.includes(objId)
+          (objId) => !objectToDeleteIds.includes(objId),
         );
 
         // if group will be empty return group id - we are deleting group as well
@@ -1574,7 +1588,7 @@ export function _ungroupObject(
   groupId: string,
   objectIds: string[],
   parentId: string,
-  transformPerObject: any
+  transformPerObject: any,
 ): UngroupObjectAction {
   return {
     type: UNGROUP_OBJECTS,
@@ -1598,7 +1612,7 @@ export function ungroupObject(objectId: string): any {
     const breakpointConfig: BreakpointConfiguration | undefined =
       settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig: any) =>
-          breakpointConfig.type === state.stage.selectedDevice
+          breakpointConfig.type === state.stage.selectedDevice,
       );
 
     const transformPerObject = getUngroupObjectsCalculation({
@@ -1610,7 +1624,7 @@ export function ungroupObject(objectId: string): any {
 
     if (objectIds && parentId) {
       dispatch(
-        _ungroupObject(groupId, objectIds, parentId, transformPerObject)
+        _ungroupObject(groupId, objectIds, parentId, transformPerObject),
       );
 
       dispatch(activateObject(objectIds[0]));
@@ -1638,7 +1652,7 @@ export function _groupObjects(
   group: IObject,
   objectIds: string[],
   updatedObjectsById: { [id: string]: IObject<{}> },
-  groupIdsForRemoval: string[]
+  groupIdsForRemoval: string[],
 ): GroupObjectsAction {
   return {
     type: GROUP_OBJECTS,
@@ -1696,13 +1710,13 @@ export function groupObjects(objectIdsFromProps: string[]): any {
 
         const breakpointConfig: BreakpointConfiguration | undefined =
           settings.breakpoints.breakpointsConfiguration.find(
-            (breakpointConfig: any) => breakpointConfig.type === selectedDevice
+            (breakpointConfig: any) => breakpointConfig.type === selectedDevice,
           );
 
         const transformPerObject = getUngroupObjectsCalculation({
           group: groupObject,
           objects: groupObject.objectIds!.map(
-            (objectId) => objectById[objectId]
+            (objectId) => objectById[objectId],
           ),
           breakpointConfig: breakpointConfig!,
           parentLayer: getAncestorLayer(groupObject, layerById, objectById),
@@ -1828,8 +1842,8 @@ export function groupObjects(objectIdsFromProps: string[]): any {
         groupObject,
         allObjectsIds,
         allObjectsById,
-        groupIdsForRemoval
-      )
+        groupIdsForRemoval,
+      ),
     );
     dispatch(activateObject(groupObject.id));
     dispatch(selectObjects([groupObject.id]));
@@ -1843,7 +1857,7 @@ function handleObjectUpdate(
   object: IObject,
   dispatch: Dispatch,
   getState: () => IStore,
-  isPreview = false
+  isPreview = false,
 ) {
   const state = getState();
 
@@ -1940,7 +1954,7 @@ function handleObjectUpdate(
 function handleBulletsUpdate(
   object: IObject,
   dispatch: Dispatch,
-  getState: () => IStore
+  getState: () => IStore,
 ): void {
   //postProcessBullet(object, getState);
   dispatch(_updateObject(object));
@@ -2033,7 +2047,7 @@ function postProcessButton(object: IObject, getState: () => IStore): void {
 function handleButtonUpdate(
   object: IObject,
   dispatch: Dispatch,
-  getState: () => IStore
+  getState: () => IStore,
 ): void {
   postProcessButton(object, getState);
   dispatch(_updateObject(object));
@@ -2043,7 +2057,7 @@ function handleButtonUpdate(
 function processTextObjectAutoSize(
   object: IObject,
   isAdd: boolean,
-  getState: any
+  getState: any,
 ) {
   const objectValues = object.properties as any;
   if (objectValues.autoHeight === true) {
@@ -2051,7 +2065,7 @@ function processTextObjectAutoSize(
     const breakpointConfig: BreakpointConfiguration | undefined =
       getState().project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig: any) =>
-          breakpointConfig.type === getState().stage.selectedDevice
+          breakpointConfig.type === getState().stage.selectedDevice,
       );
     // todo: calculate for all not only for one
     const calculatedObjectSize = calculateObjectSize(
@@ -2060,13 +2074,13 @@ function processTextObjectAutoSize(
       breakpointConfig!,
       {
         resetPosition: false,
-      }
+      },
     );
 
     // Note: We are using getPlayerObjectDefinition in order to get html form player object
     const objDeff = getPlayerObjectDefinition(
       object.type,
-      "latest" /* object.version*/
+      "latest" /* object.version*/,
     );
     let html = "";
     if (!!objDeff?.getHtml) {
@@ -2121,7 +2135,7 @@ function handleTextUpdate(
   getState: () => IStore,
   isAdd = false,
   isUndoable = true,
-  reposition = true
+  reposition = true,
 ): void {
   // * handle auto height
   const objectValues = object.properties as TextValues;
@@ -2227,7 +2241,7 @@ function handleTextUpdate(
 
       if (fontObj) {
         const fontFileName = fontObj.mediaSizes.find(
-          (size) => size.sizeType === "original"
+          (size) => size.sizeType === "original",
         )?.sourceFilename;
 
         const fontUrl = `/api/v1/media/${fontFileName}`;
@@ -2309,7 +2323,7 @@ export function updateObject(object: IObject): any {
 
 export function _updateObject(
   object: IObject,
-  isUndoable = true
+  isUndoable = true,
 ): UpdateObjectAction {
   return {
     type: UPDATE_OBJECT,
@@ -2328,7 +2342,7 @@ export interface SetDocumentSizeAction extends IUndoableAction<false> {
 }
 
 export function setDocumentSize(
-  stageSize: IDocumentSize
+  stageSize: IDocumentSize,
 ): SetDocumentSizeAction {
   return {
     type: SET_DOCUMENT_SIZE,
@@ -2426,7 +2440,7 @@ export function setAIEnabled(
   payload: {
     objectType: string;
     enabled: boolean;
-  }[]
+  }[],
 ): AIEnableAction {
   return {
     type: AI_ENABLE,
@@ -2481,7 +2495,7 @@ export interface ShowSimplifiedLayersAction extends IUndoableAction<false> {
 }
 
 export function showSimplifiedLayers(
-  show: boolean
+  show: boolean,
 ): ShowSimplifiedLayersAction {
   return {
     type: SHOW_SIMPLIFIED_LAYERS,
@@ -2570,7 +2584,7 @@ export interface CutToClipboardAction extends IUndoableAction<false> {
 }
 
 export function cutToClipboard(
-  payload: Pick<IClipboard, "entityType" | "entityIds">
+  payload: Pick<IClipboard, "entityType" | "entityIds">,
 ): CutToClipboardAction {
   return {
     type: CLIPBOARD_CUT,
@@ -2589,7 +2603,7 @@ export interface CopyToClipboardAction extends IUndoableAction<false> {
 }
 
 export function copyToClipboard(
-  payload: Pick<IClipboard, "entityType" | "entityIds">
+  payload: Pick<IClipboard, "entityType" | "entityIds">,
 ): CopyToClipboardAction {
   return {
     type: CLIPBOARD_COPY,
@@ -2604,8 +2618,7 @@ export function copyToClipboard(
 
 export const CLIPBOARD_PASTE_OBJECTS = "Paste objects from clipboard";
 
-export interface PasteObjectsFromClipboardAction
-  extends IUndoableAction<false> {
+export interface PasteObjectsFromClipboardAction extends IUndoableAction<false> {
   type: typeof CLIPBOARD_PASTE_OBJECTS;
   payload: {
     objectIds: string[];
@@ -2672,8 +2685,8 @@ export function pasteObjectsFromClipboard(toLayerId: string): any {
         _pasteObjectsFromClipboard(
           objectIds,
           newObjectMapping,
-          clipboard.operation
-        )
+          clipboard.operation,
+        ),
       );
 
       dispatch(activateObject(newObjectIds[0]));
@@ -2702,7 +2715,7 @@ export function _pasteObjectsFromClipboard(
         }[]
       | undefined;
   }[],
-  operation: "cut" | "copy"
+  operation: "cut" | "copy",
 ): PasteObjectsFromClipboardAction {
   return {
     type: CLIPBOARD_PASTE_OBJECTS,
@@ -2721,7 +2734,7 @@ export interface SetStagePreviewAction extends IUndoableAction<false> {
 }
 
 export function setStagePreview(
-  preview: Partial<IPreviewState>
+  preview: Partial<IPreviewState>,
 ): SetStagePreviewAction {
   return {
     type: SET_STAGE_PREVIEW,
@@ -2739,7 +2752,7 @@ export interface UpdateProjectSettingsAction extends IUndoableAction<true> {
 }
 
 export function updateProjectSettings(
-  settings: Partial<ISettings>
+  settings: Partial<ISettings>,
 ): UpdateProjectSettingsAction {
   return {
     type: UPDATE_PROJECT_SETTINGS,
@@ -2757,7 +2770,7 @@ export interface UpdateSlideDurationAction extends IUndoableAction<true> {
 }
 
 export function updateSlideDuration(
-  duration: string
+  duration: string,
 ): UpdateSlideDurationAction {
   return {
     type: UPDATE_SLIDE_DURATION,
@@ -2776,7 +2789,7 @@ export interface UpdateSlideBreakpointsAction extends IUndoableAction<true> {
 }
 
 export function updateSlideBreakpoints(
-  slideBreakpoints: Breakpoints
+  slideBreakpoints: Breakpoints,
 ): UpdateSlideBreakpointsAction {
   return {
     type: UPDATE_SLIDE_BREAKPOINTS,
@@ -2795,7 +2808,7 @@ export interface SetGlobalConfigurationAction extends IUndoableAction<false> {
 }
 
 export function updateGlobalConfiguration(
-  globals: Partial<IAppSettings>
+  globals: Partial<IAppSettings>,
 ): SetGlobalConfigurationAction {
   return {
     type: SET_GLOBALS,
@@ -2867,7 +2880,7 @@ export interface CreateNewProjectAction extends IUndoableAction<false> {
 }
 
 export function createNewProject(
-  payload: CreateNewProjectActionPayload
+  payload: CreateNewProjectActionPayload,
 ): CreateNewProjectAction {
   return {
     type: CREATE_NEW_PROJECT,
@@ -2881,14 +2894,13 @@ export function createNewProject(
 export const CREATE_NEW_PROJECT_FROM_EXISTING =
   "Create new project from existing";
 
-export interface CreateNewProjectFromExistingAction
-  extends IUndoableAction<false> {
+export interface CreateNewProjectFromExistingAction extends IUndoableAction<false> {
   type: typeof CREATE_NEW_PROJECT_FROM_EXISTING;
   payload: CreateNewProjectActionPayload;
 }
 
 export function createNewProjectFromExisting(
-  payload: CreateNewProjectActionPayload
+  payload: CreateNewProjectActionPayload,
 ): CreateNewProjectFromExistingAction {
   return {
     type: CREATE_NEW_PROJECT_FROM_EXISTING,
@@ -2939,7 +2951,7 @@ export interface UpdateColorsStateAction extends IUndoableAction<false> {
 }
 
 export function updateColorsState(
-  colorsState: Partial<IColors>
+  colorsState: Partial<IColors>,
 ): UpdateColorsStateAction {
   return {
     type: UPDATE_COLORS_STATE,
@@ -2959,7 +2971,7 @@ export interface UpdateBrandColorsAction extends IUndoableAction<false> {
 }
 
 export function _updateBrandColors(
-  brandColors: { name: string; colors: RGBColor[] }[]
+  brandColors: { name: string; colors: RGBColor[] }[],
 ): UpdateBrandColorsAction {
   return {
     type: UPDATE_BRAND_COLORS,
@@ -2969,7 +2981,7 @@ export function _updateBrandColors(
 }
 
 export function updateBrandColors(
-  brandColors: { name: string; colors: RGBColor[] }[]
+  brandColors: { name: string; colors: RGBColor[] }[],
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     dispatch(_updateBrandColors(brandColors));
@@ -3018,7 +3030,7 @@ function _collectColors(colors: RGBColor[]): CollectColorsAction {
 }
 
 function getColorFromColorOrGradient(
-  color: RGBColor | { points: { color: RGBColor }[] }
+  color: RGBColor | { points: { color: RGBColor }[] },
 ) {
   const colorPoints: { points: { color: RGBColor }[] } = color as any;
   const colorRGB: RGBColor = color as any;
@@ -3155,7 +3167,7 @@ export interface SetStageToolAction extends IUndoableAction<false> {
 
 export function setStageTool(
   tool: StageTools,
-  objectType?: string
+  objectType?: string,
 ): SetStageToolAction {
   return {
     type: SET_STAGE_TOOL,
@@ -3174,7 +3186,7 @@ export interface OverrideStageToolAction extends IUndoableAction<false> {
 
 export function overrideStageTool(
   tool: StageTools,
-  objectType?: string
+  objectType?: string,
 ): OverrideStageToolAction {
   return {
     type: OVERRIDE_STAGE_TOOL,
@@ -3221,7 +3233,7 @@ export interface ExternalFontLoadedAction extends IUndoableAction<false> {
 }
 
 export function setExternalFontLoaded(
-  fontFamilyName: string
+  fontFamilyName: string,
 ): ExternalFontLoadedAction {
   return {
     type: EXTERNAL_FONT_LOADED,
@@ -3257,7 +3269,7 @@ export interface UpdateProjectMetaAction extends IUndoableAction<false> {
 }
 
 export function updateProjectMeta(
-  meta: Partial<IMeta>
+  meta: Partial<IMeta>,
 ): UpdateProjectMetaAction {
   return {
     type: UPDATE_PROJECT_META,
@@ -3344,6 +3356,10 @@ export function updateUserDataError(error?: {
 
 export function loadUserData(): any {
   return function (dispatch: Dispatch | any, _getState: () => IStore) {
+    if (import.meta.env.VITE_APP_INTEGRATION !== "saas") {
+      return;
+    }
+
     axios
       .get("/api/v1/me")
       .then(function (response) {
@@ -3367,7 +3383,7 @@ export function loadUserData(): any {
           updateUserDataError({
             error: "USER_DATA_ERROR_1",
             errorMessage: "User authentication has API has failed.",
-          })
+          }),
         );
 
         console.log(error);

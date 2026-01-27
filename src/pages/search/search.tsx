@@ -78,7 +78,11 @@ const SearchPage = ({
   theme,
 }: ISearchMergedProps) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedLanguage, setSelectedLanguage] = useState("english-auto");
+  const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [selectedDocumentType, setSelectedDocumentType] = useState(
+    "SocialMedia:Instagram:SquarePost",
+  );
+
   const [isTextAreaFocused, setIsTextAreaFocused] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -119,16 +123,16 @@ const SearchPage = ({
     );
   };
   const languages = [
-    { value: "auto", label: "English (auto)" },
-    { value: "spanish", label: "Spanish" },
-    { value: "french", label: "French" },
-    { value: "german", label: "German" },
-    { value: "chinese", label: "Chinese" },
-    { value: "japanese", label: "Japanese" },
+    { value: "en", label: "English" },
+    { value: "es", label: "Spanish" },
+    { value: "fr", label: "French" },
+    { value: "pt", label: "Portuguese" },
+    { value: "de", label: "German" },
+    { value: "sr", label: "Serbian" },
+    { value: "it", label: "Italian" },
   ];
 
   const documents = [
-    { value: "auto", label: "Square post (auto)" },
     { value: "SocialMedia:Instagram:SquarePost", label: "Square post" },
     { value: "SocialMedia:Instagram:StoryReel", label: "Story/Reel" },
   ];
@@ -230,7 +234,7 @@ const SearchPage = ({
     publicTemplateId: string,
     lang: string,
     previewUid: string,
-    documentType: string
+    documentType: string,
   ) => {
     if (!isAuthenticated) {
       localStorage.setItem(
@@ -240,7 +244,7 @@ const SearchPage = ({
           language: lang,
           previewUid,
           documentType,
-        })
+        }),
       );
     } else {
       localStorage.removeItem("pendingTemplate");
@@ -266,7 +270,7 @@ const SearchPage = ({
       if (template) {
         localStorage.removeItem("pendingTemplate");
         navigate(
-          `/editor?template=${template.id}&language=${template.language}`
+          `/editor?template=${template.id}&language=${template.language}`,
         );
       }
     }
@@ -288,8 +292,15 @@ const SearchPage = ({
             gap: "40px",
           }}
         >
-          <DaapLogo className={styles.logo} />
-          <Link
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
+            <Link to={"/search"} style={{ outline: "none" }}>
+              <DaapLogo className={styles.logo} />
+            </Link>
+          ) : (
+            <DaapLogo className={styles.logo} />
+          )}
+
+          {/* <Link
             to={"https://learn.daap.forcerefresh.io/docs"}
             target="_blank"
             style={{
@@ -310,7 +321,7 @@ const SearchPage = ({
               }}
               className={styles.showOnHover}
             />
-          </Link>
+          </Link> */}
         </div>
         <div
           style={{
@@ -380,7 +391,7 @@ const SearchPage = ({
                     onFocus={handleFocus}
                     onBlur={handleBlur}
                     className={styles.searchTextArea}
-                    placeholder="Describe what you want to search for..."
+                    placeholder="Search for Instagram templates to customize..."
                     growVertically={false}
                     large
                   />
@@ -398,8 +409,8 @@ const SearchPage = ({
                       <SelectBadge
                         label="Document"
                         options={documents} // Fixed: using documents array instead of languages
-                        value={selectedLanguage}
-                        onChange={setSelectedLanguage}
+                        value={selectedDocumentType}
+                        onChange={setSelectedDocumentType}
                         minimal={false}
                       />
                     </div>
@@ -430,6 +441,7 @@ const SearchPage = ({
 
               {isExpanded && (
                 <TemplatesGridV2
+                  language={selectedLanguage}
                   searchQuery={searchQuery}
                   baseUrl="/"
                   onUseTemplate={handleUseTemplate}
@@ -458,7 +470,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _openProject: (project: any) => openProject(project),

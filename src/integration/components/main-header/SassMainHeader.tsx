@@ -38,6 +38,7 @@ import { IntegrationContext } from "../../../integration";
 import AccountButton from "./AccountButton";
 import { useNavigate } from "react-router";
 import { IEditor } from "../../../store/reducers/editor";
+import { Link } from "react-router-dom";
 // import { settings } from "../../../store/reducers/settings";
 
 type IMainHeader = typeof mapDispatchToProps &
@@ -79,14 +80,19 @@ const MainHeader = (props: IMainHeader) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
-    if (typeof account.userData?.displayName !== "undefined") {
-      const intervalHandle = setInterval(() => {
-        //TODO: replace with keepalive/ping
-        axios.get("/api/v1/me").then(() => {});
-      }, 1 * 60 * 1000);
-      return () => {
-        clearInterval(intervalHandle);
-      };
+    if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+      if (typeof account.userData?.displayName !== "undefined") {
+        const intervalHandle = setInterval(
+          () => {
+            //TODO: replace with keepalive/ping
+            axios.get("/api/v1/me").then(() => {});
+          },
+          1 * 60 * 1000,
+        );
+        return () => {
+          clearInterval(intervalHandle);
+        };
+      }
     }
   }, [account]);
 
@@ -94,7 +100,14 @@ const MainHeader = (props: IMainHeader) => {
     <>
       <div className={cx(css.mainHeader, className)}>
         <div className={css.left}>
-          <DaapLogo className={css.logo} />
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
+            <Link to={"/search"} style={{ outline: "none" }}>
+              <DaapLogo className={css.logo} />
+            </Link>
+          ) : (
+            <DaapLogo className={css.logo} />
+          )}
+
           <div className={css.leftActionHolder}>
             <div>
               <ButtonGroup minimal={true} className={css.mainButtons}>
@@ -152,7 +165,7 @@ const MainHeader = (props: IMainHeader) => {
                   Templates
                 </Button>
 
-                {account.userData?.enableLayouts && false && (
+                {account.userData?.enableLayouts && (
                   <>
                     <Divider dir="horizontal" />
                     <Button
@@ -176,35 +189,36 @@ const MainHeader = (props: IMainHeader) => {
                   </>
                 )}
 
-                {import.meta.env.VITE_APP_INTEGRATION === "saas" && false && (
-                  <>
-                    <Divider dir="horizontal" />
+                {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+                  account.userData?.enableLayouts && (
+                    <>
+                      <Divider dir="horizontal" />
 
-                    <Button
-                      minimal
-                      // large
-                      className={css.largeButton}
-                      icon={<ExtensionsIcon width={25} height={25} />} //
-                      //active={showPanel === VisiblePanel.ProjectsLibrary}
-                      onClick={() => {
-                        const event = new CustomEvent("OPEN_EXTENSIONS");
-                        window.dispatchEvent(event);
-                      }}
-                    >
-                      {outdatedExtensions?.length > 0 && (
-                        <Tag
-                          intent={"danger"}
-                          round
-                          className={css.buttonTag}
-                          large={false}
-                        >
-                          {outdatedExtensions.length}
-                        </Tag>
-                      )}
-                      Extensions
-                    </Button>
-                  </>
-                )}
+                      <Button
+                        minimal
+                        // large
+                        className={css.largeButton}
+                        icon={<ExtensionsIcon width={25} height={25} />} //
+                        //active={showPanel === VisiblePanel.ProjectsLibrary}
+                        onClick={() => {
+                          const event = new CustomEvent("OPEN_EXTENSIONS");
+                          window.dispatchEvent(event);
+                        }}
+                      >
+                        {outdatedExtensions?.length > 0 && (
+                          <Tag
+                            intent={"danger"}
+                            round
+                            className={css.buttonTag}
+                            large={false}
+                          >
+                            {outdatedExtensions.length}
+                          </Tag>
+                        )}
+                        Extensions
+                      </Button>
+                    </>
+                  )}
 
                 <Divider dir="horizontal" />
 
@@ -354,7 +368,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   return {
