@@ -62,11 +62,11 @@ const SearchTemplates = (props: ISearchTemplatesMergedProps): ReactElement => {
   const [search, setSearch] = useState("");
 
   // TODO: TMP:
-  const { searchPublicTemplate } = usePublicTemplateSearch();
+  // const { searchPublicTemplate } = usePublicTemplateSearch();
 
-  const reload = () => {
-    if (searchValue.length > 2) searchPublicTemplate(1, searchValue, 100);
-  };
+  // const reload = () => {
+  //   if (searchValue.length > 2) searchPublicTemplate(1, searchValue, 100);
+  // };
 
   return (
     <Dialog
@@ -109,8 +109,8 @@ const mapStateToProps = (state: IStore) => {
   // NOTE: get largest enabled
   const breakpointConfig: BreakpointConfiguration | undefined = last(
     state.project.settings.breakpoints.breakpointsConfiguration.filter(
-      (bc) => bc.enabled
-    )
+      (bc) => bc.enabled,
+    ),
   );
 
   return {
@@ -138,7 +138,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),

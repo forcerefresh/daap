@@ -6,6 +6,7 @@ export const usePublicTemplateSearch = () => {
     from: number,
     search: string,
     language = "en",
+    documentType: string,
     perPage = 10,
   ): Promise<any> => {
     return axios
@@ -16,6 +17,7 @@ export const usePublicTemplateSearch = () => {
             page: from,
             limit: perPage,
             language: language,
+            documentType: documentType,
             ...(!isEmpty(search) ? { search } : {}),
           },
         },

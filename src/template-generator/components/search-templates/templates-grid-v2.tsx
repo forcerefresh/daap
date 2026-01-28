@@ -79,6 +79,7 @@ interface TemplatesResponse {
 interface TemplatesGridV2Props {
   baseUrl?: string;
   language?: string;
+  documentType?: string;
   searchQuery?: string;
   initialTemplates?: TemplateItem[];
   onLike: (templateId: string) => void;
@@ -111,6 +112,7 @@ const getAspectRatioClass = (width: number, height: number): string => {
 const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   baseUrl = "",
   language = "en",
+  documentType = "SocialMedia:Instagram:SquarePost",
   searchQuery = "",
   initialTemplates,
   onLike,
@@ -240,6 +242,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
           1,
           searchQuery,
           language,
+          documentType,
           20,
         );
 

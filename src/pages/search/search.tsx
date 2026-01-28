@@ -442,6 +442,7 @@ const SearchPage = ({
               {isExpanded && (
                 <TemplatesGridV2
                   language={selectedLanguage}
+                  documentType={selectedDocumentType}
                   searchQuery={searchQuery}
                   baseUrl="/"
                   onUseTemplate={handleUseTemplate}
