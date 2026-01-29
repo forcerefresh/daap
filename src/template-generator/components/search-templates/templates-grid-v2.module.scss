@@ -248,7 +248,7 @@
   padding: 16px;
   border-radius: 8px;
   margin-bottom: 24px;
-  border-left: 4px solid #d99a0d;
+  // border-left: 4px solid #d99a0d;
   text-align: center;
 }
 
@@ -409,5 +409,8 @@
 
 /* Add transition to all items */
 .masonryItem {
-  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease,
+    transform 0.3s ease;
 }

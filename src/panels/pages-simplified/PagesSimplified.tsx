@@ -101,17 +101,17 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
 
   const onPageClick = (
     event: React.MouseEvent<HTMLDivElement>,
-    pageId: string
+    pageId: string,
   ) => {
-    if (event.shiftKey) {
-      selectedSlideIds.indexOf(pageId) === -1
-        ? _addSlidesToSelection([pageId])
-        : _removeSlidesFromSelection([pageId]);
-    } else {
-      _activateSlide(pageId);
-      _selectSlides([pageId]);
-      _selectForProperties({ id: pageId, type: "slide" });
-    }
+    // if (event.shiftKey) {
+    //   selectedSlideIds.indexOf(pageId) === -1
+    //     ? _addSlidesToSelection([pageId])
+    //     : _removeSlidesFromSelection([pageId]);
+    // } else {
+    _activateSlide(pageId);
+    _selectSlides([pageId]);
+    _selectForProperties({ id: pageId, type: "slide" });
+    // }
   };
 
   const [forceUpdatePreviewIdx, setForceUpdatePreviewIdx] = useState(0);
@@ -150,10 +150,10 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
             [dragIndex, 1],
             [hoverIndex, 0, (prev ?? pagesIds)[dragIndex] as string],
           ],
-        })
+        }),
       );
     },
-    [pagesIds, setSortedPageIds]
+    [pagesIds, setSortedPageIds],
   );
 
   // if (!parentLayerId) return null;
@@ -245,7 +245,7 @@ const PagesSimplifiedPanel: React.FC<ISlidesPanel> = (props) => {
                               <Button
                                 className={cx(
                                   css.smallButton,
-                                  css.addPageSmall
+                                  css.addPageSmall,
                                 )}
                                 small
                                 minimal
@@ -336,8 +336,8 @@ const mapStateToProps = (state: IStore) => {
 
   const breakpointConfig: BreakpointConfiguration | undefined = last(
     state.project.settings.breakpoints.breakpointsConfiguration.filter(
-      (bc) => bc.enabled
-    )
+      (bc) => bc.enabled,
+    ),
   );
 
   return {
@@ -375,7 +375,7 @@ const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
     type: string,
-    objectProps: Partial<IObject>
+    objectProps: Partial<IObject>,
   ) => addNewObject(layerId, type, objectProps),
   _activateObject: (objectId: string) => activateObject(objectId),
   _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
@@ -390,7 +390,7 @@ const mapDispatchToProps = {
   _moveObjects: (
     refId: string,
     where: "above" | "below" | "layer" | "slide" | "bottom",
-    moveIds: string[]
+    moveIds: string[],
   ) => moveObjects(refId, where, moveIds),
 
   _duplicateLayers: (ids: string[]): any => duplicateLayers(ids),
@@ -398,7 +398,7 @@ const mapDispatchToProps = {
   _moveLayers: (
     refId: string,
     where: "above" | "below" | "layer" | "slide" | "bottom",
-    moveIds: string[]
+    moveIds: string[],
   ) => moveLayers(refId, where, moveIds),
   _activateSlide: (id: string): any => activateSlide(id),
   _selectSlides: (ids: string[]): any => selectSlides(ids),
@@ -410,5 +410,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(PagesSimplifiedPanel);

@@ -8,7 +8,7 @@ import {
 import { createInputLabel } from "../input-helpers";
 
 export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
-  props
+  props,
 ) => {
   const {
     displayName,
@@ -25,7 +25,7 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
 
   const throttledOnChange = useCallback(
     debounce((value: any) => onInputRef.current(value), 500),
-    []
+    [],
   );
 
   const [localValue, setLocalValue] = useState(value);
@@ -46,8 +46,9 @@ export const TextAreaInputForm: React.FC<ITextAreaInput & IUpdateInput> = (
 
   const inputLabel = (
     <>
-      {createInputLabel(displayName, propertyName)}{" "}
-      <Button small minimal icon="duplicate" intent="none"></Button>
+      {createInputLabel(displayName, propertyName)}
+      {/* {" "}
+      <Button small minimal icon="duplicate" intent="none"></Button> */}
     </>
   );
 

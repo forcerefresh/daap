@@ -104,10 +104,10 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
 
         (error) => {
           logger.app.error(error);
-        }
+        },
       );
     },
-    [fetchMedias]
+    [fetchMedias],
   );
 
   useEffect(() => {
@@ -163,7 +163,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
           //fontSize: previewSize.size.toString() + "px",
           fontSize: "20px",
           text: "Sample text",
-        }
+        },
       );
       onRequestClose();
     } else {
@@ -254,7 +254,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
 
   const debounceFetchData = debounce(
     (searchString?: string) => fetchData(searchString),
-    200
+    200,
   );
 
   useEffect(() => {
@@ -314,7 +314,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
         .filter((font, idx) => {
           return visibleFontsInx[idx];
         }),
-    [googleFonts, visibleFontsInx]
+    [googleFonts, visibleFontsInx],
   );
 
   const renderFont = (font: IFontPreview & { idx: number }) => {
@@ -330,7 +330,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
           {
             [css.active]: font.fontFamily === selectedFontObj?.font.fontFamily,
           },
-          css.fontsSprite
+          css.fontsSprite,
         )}
         // onClick={() => {
         //   setSelectedFont({ font, add: true });
@@ -371,7 +371,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
 
   return (
     <div className={cx(themeClass, css.fontPreviewPanel)}>
-      <div style={{ position: "absolute", top: "10px", right: "10px" }}>
+      <div style={{ position: "absolute", top: "2px", right: "2px" }}>
         <Button icon="cross" minimal onClick={onRequestClose} />
       </div>
       <div className={css.fontList}>
@@ -379,6 +379,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
           {getTextField("", searchString, filterFonts, "", {
             placeholder: "Search fonts",
             autoFocus: true,
+            style: { width: "100%" },
           })}
         </div>
 
@@ -431,12 +432,12 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
               )}
               {myFonts.map((font) => {
                 const previewFileName = font.previewSizes.find(
-                  (size) => size.sizeType === "original"
+                  (size) => size.sizeType === "original",
                 )?.sourceFilename;
                 const previewImageUrl = getMediaSrc(
                   font,
                   "original",
-                  "previewSizes"
+                  "previewSizes",
                 );
                 // `/api/v1/media/${previewFileName}`;
 
@@ -539,7 +540,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                   //totalCount={200}
                   itemContent={(
                     index: number,
-                    font: IFontPreview & { idx: number }
+                    font: IFontPreview & { idx: number },
                   ) => renderFont(font)}
                 />
                 {googleFonts.map((font, idx) => {
@@ -616,7 +617,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                       type: previewSize.textType,
                       text: "Sample text",
                       ...replaceItem.values,
-                    }
+                    },
                   );
                   onRequestClose();
                   return;
@@ -639,7 +640,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                       fontSize: previewSize.size.toString() + "px",
                       type: previewSize.textType,
                       text: "Sample text",
-                    }
+                    },
                   );
                   onRequestClose();
                 } else {
@@ -678,7 +679,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values: { [key: string]: any }
+    values: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _setExternalFontLoaded: (fontFamilyName: string) =>
     setExternalFontLoaded(fontFamilyName),

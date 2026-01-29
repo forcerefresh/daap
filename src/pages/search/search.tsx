@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
   Button,
@@ -13,7 +13,9 @@ import styles from "./search.module.scss";
 import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
 import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
 import SelectBadge from "./components/select-badge/SelectBadge";
-import TemplatesGridV2 from "../../template-generator/components/search-templates/templates-grid-v2";
+import TemplatesGridV2, {
+  TemplateItem,
+} from "../../template-generator/components/search-templates/templates-grid-v2";
 import { IDocument } from "../../store/reducers/document";
 import { IMeta } from "../../store/reducers/meta";
 import { connect } from "react-redux";
@@ -52,6 +54,7 @@ import { identity } from "lodash-es";
 import { getPendingTemplate } from "./utils/pending-template";
 import SearchFooter from "./components/footer/SearchFooter";
 import { Link } from "react-router-dom";
+import { usePublicTemplateSearch } from "../../template-generator/hooks/usePublicTemplateSearch";
 
 interface ISearchProps {
   onClose: () => void;
@@ -89,6 +92,13 @@ const SearchPage = ({
   const navigate = useNavigate();
 
   const [showRedirectMessage, setShowRedirectMessage] = useState(false);
+
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    // Auto-focus on mount
+    textAreaRef.current?.focus();
+  }, []);
 
   useEffect(() => {
     // Check for pending template
@@ -141,11 +151,19 @@ const SearchPage = ({
 
   const handleSearch = () => {
     setIsExpanded(true);
+    loadTemplates();
     // Add your search logic here
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
+      // If Shift + Enter → allow new line (default behavior)
+      if (e.shiftKey) {
+        return; // Let the default new line happen
+      }
+
+      // If just Enter → prevent default and handle search
+      e.preventDefault();
       handleSearch();
     }
   };
@@ -157,6 +175,93 @@ const SearchPage = ({
   const handleBlur = () => {
     setIsTextAreaFocused(false);
   };
+
+  // -________________-
+
+  // State for templates grid
+  const [templates, setTemplates] = useState<TemplateItem[]>([]);
+  const [metadata, setMetadata] = useState<any>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const { searchPublicTemplate } = usePublicTemplateSearch();
+
+  // Load initial templates
+
+  const loadTemplates = async ({ documentType }: { documentType?: string }) => {
+    if (searchQuery.length < 1) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await searchPublicTemplate(
+        1,
+        searchQuery,
+        selectedLanguage,
+        documentType ?? selectedDocumentType,
+        20,
+      );
+
+      setTemplates(response.data);
+      setMetadata(response.metadata);
+      setHasMore(response.pagination.hasNext);
+      setCurrentPage(1);
+    } catch (err) {
+      setError("Failed to load templates");
+      console.error("Error loading templates:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Load more templates
+  const handleLoadMore = async () => {
+    if (isLoadingMore || !hasMore) return;
+
+    setIsLoadingMore(true);
+    setError(null);
+
+    try {
+      const nextPage = currentPage + 1;
+      const response = await searchPublicTemplate(
+        nextPage,
+        searchQuery,
+        selectedLanguage,
+        selectedDocumentType,
+        12,
+      );
+
+      setTemplates((prev) => {
+        const newTemplates = response.data.filter(
+          (newItem) =>
+            !prev.some((existingItem) => existingItem.id === newItem.id),
+        );
+        return [...prev, ...newTemplates];
+      });
+
+      setHasMore(response.pagination.hasNext);
+      setCurrentPage(nextPage);
+    } catch (err) {
+      setError("Failed to load more templates");
+      console.error("Error loading more templates:", err);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  const handleLike = (templateId: string) => {
+    // Handle like
+  };
+
+  const handleDislike = (templateId: string) => {
+    // Handle dislike
+  };
+
+  // -_________________-
 
   // const applyTemplate = (templateProject: any) => {
   //   // debugger;
@@ -385,6 +490,7 @@ const SearchPage = ({
                   } ${isExpanded ? styles.expanded : ""}`}
                 >
                   <TextArea
+                    inputRef={textAreaRef} // Pass the ref here
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={handleKeyPress}
@@ -402,7 +508,12 @@ const SearchPage = ({
                         label="Language"
                         options={languages}
                         value={selectedLanguage}
-                        onChange={setSelectedLanguage}
+                        onChange={(value) => {
+                          setSelectedLanguage(value);
+                          setTimeout(() => {
+                            loadTemplates();
+                          }, 10);
+                        }}
                         minimal={false}
                       />
 
@@ -410,7 +521,10 @@ const SearchPage = ({
                         label="Document"
                         options={documents} // Fixed: using documents array instead of languages
                         value={selectedDocumentType}
-                        onChange={setSelectedDocumentType}
+                        onChange={(value) => {
+                          setSelectedDocumentType(value);
+                          loadTemplates({ documentType: value });
+                        }}
                         minimal={false}
                       />
                     </div>
@@ -420,7 +534,7 @@ const SearchPage = ({
                         intent="primary"
                         onClick={handleSearch}
                         className={styles.searchButton}
-                        disabled={!searchQuery.trim()}
+                        disabled={searchQuery.trim().length < 1}
                         rightIcon="arrow-right"
                       >
                         Search
@@ -441,11 +555,17 @@ const SearchPage = ({
 
               {isExpanded && (
                 <TemplatesGridV2
-                  language={selectedLanguage}
-                  documentType={selectedDocumentType}
-                  searchQuery={searchQuery}
-                  baseUrl="/"
+                  templates={templates}
+                  metadata={metadata}
+                  isLoading={isLoading}
+                  isLoadingMore={isLoadingMore}
+                  hasMore={hasMore}
+                  error={error}
+                  onLoadMore={handleLoadMore}
                   onUseTemplate={handleUseTemplate}
+                  onLike={handleLike}
+                  onDislike={handleDislike}
+                  selectedLanguage={selectedLanguage}
                 />
               )}
             </div>

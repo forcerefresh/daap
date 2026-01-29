@@ -81,7 +81,7 @@ const SearchSuggestions: React.FC<SearchSuggestionsProps> = ({
 
   return (
     <div className={styles.suggestionsContainer}>
-      <p className={styles.suggestionsLabel}>Popular searches this week</p>
+      <p className={styles.suggestionsLabel}>Popular searches</p>
       <div className={styles.buttonsContainer}>
         {suggestions.map((suggestion, index) => (
           <Button

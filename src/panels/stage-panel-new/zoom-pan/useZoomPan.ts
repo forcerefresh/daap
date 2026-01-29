@@ -25,7 +25,7 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
 
   const setRefs = (
     parentElementRef: DivRefType,
-    targetElementRef: DivRefType
+    targetElementRef: DivRefType,
   ) => {
     parentElementRefRef.current = parentElementRef;
     targetElementRefRef.current = targetElementRef;
@@ -35,7 +35,7 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
 
   const setCanvasTransformInternal = (
     transform: TransformType,
-    skipStateUpdate = false
+    skipStateUpdate = false,
   ) => {
     const targetEl = targetElementRefRef.current?.current;
     const targetElParent = (targetEl?.parentNode as HTMLDivElement) ?? targetEl;
@@ -44,11 +44,11 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       targetElParent.style.setProperty("--scale", `${transform.scale}`);
       targetElParent.style.setProperty(
         "--translateX",
-        `${transform.translateX}px`
+        `${transform.translateX}px`,
       );
       targetElParent.style.setProperty(
         "--translateY",
-        `${transform.translateY}px`
+        `${transform.translateY}px`,
       );
     }
 
@@ -161,7 +161,7 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       return () => {
         parentElementRefRef.current?.current?.removeEventListener(
           "wheel",
-          handler
+          handler,
         );
 
         window.document.removeEventListener("touchstart", touchstartHandler);
@@ -232,17 +232,17 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
 
       parentElementRefRef.current?.current.addEventListener(
         "mousedown",
-        mouseDownHandler
+        mouseDownHandler,
       );
 
       return () => {
         parentElementRefRef.current?.current?.removeEventListener(
           "mousedown",
-          mouseDownHandler
+          mouseDownHandler,
         );
         parentElementRefRef.current?.current?.removeEventListener(
           "mousemove",
-          mouseMoveHandler
+          mouseMoveHandler,
         );
         document.removeEventListener("mouseup", mouseUpHandler);
       };
@@ -252,6 +252,7 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
   const handleScaleChange = (scale: number) => {
     if (scale === transformRef.current.scale) return;
 
+    debugger;
     const parentEl = parentElementRefRef.current?.current;
     const targetEl = targetElementRefRef.current?.current;
 
@@ -298,7 +299,7 @@ function calculateNewTransform(
     currentTranslateY?: number;
     currentScale?: number;
     round?: boolean;
-  } = {}
+  } = {},
 ) {
   const {
     x = 0,

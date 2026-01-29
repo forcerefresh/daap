@@ -126,6 +126,7 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     _addNewObject,
     _setTheme,
     theme,
+    globals,
   } = props;
 
   const { setReplaceItem } = useContext(GlobalEventsContext);
@@ -225,12 +226,12 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
     window.addEventListener("OPEN_EXTENSIONS", openExtensionsCallback);
     window.addEventListener(
       "OPEN_LAYOUT2TEMPLATE",
-      openLayoutToTemplateCallback
+      openLayoutToTemplateCallback,
     );
 
     window.addEventListener(
       "OPEN_LAYOUT2TEMPLATE_OLD",
-      openLayoutToTemplateOldCallback
+      openLayoutToTemplateOldCallback,
     );
 
     return () => {
@@ -241,12 +242,12 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
       window.removeEventListener(
         "OPEN_MEDIA_IMAGES_PANEL",
-        openMediaImagesCallback
+        openMediaImagesCallback,
       );
 
       window.removeEventListener(
         "OPEN_MEDIA_FONTS_PANEL",
-        openMediaFontsCallback
+        openMediaFontsCallback,
       );
       window.removeEventListener("OPEN_CREATE_NEW", openCreateNewCallback);
       window.removeEventListener("OPEN_SAVE", openSaveCallback);
@@ -261,12 +262,12 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
 
       window.removeEventListener(
         "OPEN_LAYOUT2TEMPLATE",
-        openLayoutToTemplateCallback
+        openLayoutToTemplateCallback,
       );
 
       window.removeEventListener(
         "OPEN_LAYOUT2TEMPLATE_OLD",
-        openLayoutToTemplateOldCallback
+        openLayoutToTemplateOldCallback,
       );
     };
   }, []);
@@ -391,7 +392,8 @@ const ToolbarPanel: React.FC<IToolbarPanel> = (props) => {
             <AddObjectIcon />
           </Button> */}
 
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+          globals.publishSettings?.enabled ? (
             <>
               <Button
                 className={css.largeButton}
@@ -982,6 +984,7 @@ const mapStateToProps = (state: IStore) => {
   const zoom = getZoom(stage, settings);
 
   return {
+    globals: globals,
     activeLayerId: state.project.selection.activeLayerId,
     appVersion: globals.appVersion,
     availableVersion: globals.availableVersion,
@@ -1006,7 +1009,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _setTheme: (theme: ITheme) => setTheme(theme),
 };

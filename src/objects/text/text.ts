@@ -78,7 +78,7 @@ export interface TextValues {
 
 export type TextPropertiesTuple = [
   ITextAreaInput<"text">,
-  ISelectInput<"type">,
+  // ISelectInput<"type">,
   ICheckboxInput<"autoHeight">,
   IFontSelectInput<"font">,
   IColorInput<"color">,
@@ -90,12 +90,12 @@ export type TextPropertiesTuple = [
   // IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
   IUnitsNumberInput<"letterSpacing">,
-  ICheckboxInput<"fontKerning">
+  ICheckboxInput<"fontKerning">,
   // ICheckboxInput<"preload">
 ];
 
 export function createTextObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(TEXT);
 
@@ -136,24 +136,23 @@ export function getTextObjectForm(): TextPropertiesTuple {
       defaultValue: "",
       // extraOptions: { devices: true, exportForWizard: true },
     },
-    {
-      displayName: "Type",
-      propertyName: "type",
-      inputType: InputType.SELECT,
-      value: "Body",
-      defaultValue: "Body",
-      options: [
-        { value: "h1", label: "H1" },
-        { value: "h2", label: "H2" },
-        { value: "h3", label: "H3" },
-        { value: "h4", label: "H4" },
-        { value: "h5", label: "H5" },
-        { value: "body", label: "Body" },
-        { value: "caption", label: "Caption" },
-        { value: "tiny", label: "Tiny" },
-      ],
-    },
-
+    // {
+    //   displayName: "Type",
+    //   propertyName: "type",
+    //   inputType: InputType.SELECT,
+    //   value: "Body",
+    //   defaultValue: "Body",
+    //   options: [
+    //     { value: "h1", label: "H1" },
+    //     { value: "h2", label: "H2" },
+    //     { value: "h3", label: "H3" },
+    //     { value: "h4", label: "H4" },
+    //     { value: "h5", label: "H5" },
+    //     { value: "body", label: "Body" },
+    //     { value: "caption", label: "Caption" },
+    //     { value: "tiny", label: "Tiny" },
+    //   ],
+    // },
     {
       displayName: "Auto height",
       propertyName: "autoHeight",
@@ -276,7 +275,7 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
 
   const textValues = getObjectValuesForDevice(
     object.properties as TextValues,
-    deviceType
+    deviceType,
   );
 
   // const textPropertiesMeta = object.definition.valuesMetadata as {
@@ -329,7 +328,7 @@ export function getTextHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function textSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -344,13 +343,13 @@ export async function textSizeUpdate(
   } = props;
   const textValues = getObjectValuesForDevice(
     properties as TextValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   //const textValue = getObjectValue(textValues, "text", deviceType);
@@ -403,7 +402,7 @@ export async function textSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);
@@ -429,7 +428,7 @@ export async function preloadText(props: {
   }
 
   const p = (window as any).WSFontPreloader.subscribe(
-    textValues.font.fontFamily
+    textValues.font.fontFamily,
   );
 
   try {
@@ -440,7 +439,7 @@ export async function preloadText(props: {
 }
 
 export const getFonts = (
-  props: GetFontsFuncPropsType
+  props: GetFontsFuncPropsType,
 ): GetFontsFuncReturnType => {
   const textValues = props.values as TextValues;
 

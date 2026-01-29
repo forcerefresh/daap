@@ -107,7 +107,7 @@ export function AccountButton(props: IAccountButtonProps) {
     return (
       <>
         <Button
-          intent="primary"
+          minimal
           icon="person"
           loading={account.userDataLoading}
           style={{ marginRight: "0px", ...buttonStyle }}
@@ -206,7 +206,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   return {

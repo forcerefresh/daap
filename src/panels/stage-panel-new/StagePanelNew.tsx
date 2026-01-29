@@ -185,20 +185,34 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   const { setRefs, canvasTransform, setTransform, handleScaleChange } =
     useZoomPan({ spaceDown });
 
+  const disableZoomUpdateRef = useRef<boolean>(false);
+  // if (currentAppZoomRef.current) currentAppZoomRef.current = appZoom;
+
   useEffect(() => {
+    // if (currentAppZoomRef.current === appZoom) {
+    //   return;
+    // }
+
+    if (disableZoomUpdateRef.current) return;
+
+    // currentAppZoomRef.current = appZoom;
     const newTransform = getInitialStageTransform(
       viewPortSize,
       breakpointConfig,
       showSimplifiedLayerPanel,
       showSimplifiedPagesPanel,
-      appZoom
+      appZoom,
     );
 
     if (newTransform.scale > 0) {
       setTransform(newTransform);
       setZoomFit(false);
     }
-  }, [viewPortSize, breakpointConfig, appZoom]);
+
+    setTimeout(() => {
+      disableZoomUpdateRef.current = true;
+    }, 2000);
+  }, [appZoom, breakpointConfig, viewPortSize]); //
 
   const [customBPWidth, setCustomBPWidth] = useState<number | undefined>();
   const [manualProgress, setManualProgress] = useState(0);
@@ -316,7 +330,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       _duplicateObjects,
       clipboard,
       activeLayerId,
-    ]
+    ],
   );
   const {} = useHotkeys(hotkeys);
 
@@ -370,8 +384,8 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
           breakpointConfig,
           showSimplifiedLayerPanel,
           showSimplifiedPagesPanel,
-          appZoom
-        )
+          appZoom,
+        ),
       );
       setZoomFit(false);
     }
@@ -444,7 +458,7 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       breakpoints,
       settings,
       undefined,
-      { isSave: false }
+      { isSave: false },
     );
 
     //let totalDuration = 0;
@@ -996,7 +1010,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   // const zoom = getZoom2(
@@ -1075,7 +1089,7 @@ const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
     type: string,
-    objectProps: Partial<IObject>
+    objectProps: Partial<IObject>,
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
   _setStageTool: (tool: StageTools) => setStageTool(tool),
@@ -1091,10 +1105,10 @@ const mapDispatchToProps = {
   _duplicateObjects: (ids: string[]): any => duplicateObjects(ids),
   _deleteObjects: (ids: string[]): any => deleteObjects(ids),
   _cutToClipboard: (
-    payload: Pick<IClipboard, "entityType" | "entityIds">
+    payload: Pick<IClipboard, "entityType" | "entityIds">,
   ): any => cutToClipboard(payload),
   _copyToClipboard: (
-    payload: Pick<IClipboard, "entityType" | "entityIds">
+    payload: Pick<IClipboard, "entityType" | "entityIds">,
   ): any => copyToClipboard(payload),
 
   _pasteObjectsFromClipboard: (toLayerId: string): any =>
@@ -1107,5 +1121,5 @@ const mapDispatchToProps = {
 };
 
 export default withErrorBoundary(
-  connect(mapStateToProps, mapDispatchToProps)(StagePanelNew)
+  connect(mapStateToProps, mapDispatchToProps)(StagePanelNew),
 );

@@ -1,7 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Spinner } from "@blueprintjs/core";
 import styles from "./templates-grid-v2.module.scss";
-import { usePublicTemplateSearch } from "../../hooks/usePublicTemplateSearch";
+
+interface TemplatesGridV2Props {
+  templates: TemplateItem[];
+  metadata?: {
+    searchTime: number;
+    strategy: string;
+    totalResults: number;
+    language: string;
+  };
+  isLoading: boolean;
+  isLoadingMore: boolean;
+  hasMore: boolean;
+  error: string | null;
+  onLoadMore?: () => Promise<void> | void; // Optional if you handle loading in parent
+  onLike: (templateId: string) => void;
+  onDislike: (templateId: string) => void;
+  onUseTemplate: (
+    templateId: string,
+    lang: string,
+    previewUid: string,
+    documentType: string,
+  ) => void;
+  selectedLanguage?: string; // Optional for image URLs
+}
 
 const languageMappings = {
   en: { name: "English", iso3: "eng" },
@@ -47,6 +70,7 @@ interface Template {
   aiPromptId: string;
   industry: Industry;
   documentType: DocumentType;
+  language?: string; // Add this
 }
 
 export interface TemplateItem {
@@ -58,30 +82,19 @@ export interface TemplateItem {
   similarity: number;
 }
 
-interface TemplatesResponse {
-  data: TemplateItem[];
-  metadata: {
+interface TemplatesGridV2Props {
+  templates: TemplateItem[];
+  metadata?: {
     searchTime: number;
     strategy: string;
     totalResults: number;
     language: string;
   };
-  pagination: {
-    page: number;
-    limit: number;
-    total: number;
-    totalPages: number;
-    hasNext: boolean;
-    hasPrev: boolean;
-  };
-}
-
-interface TemplatesGridV2Props {
-  baseUrl?: string;
-  language?: string;
-  documentType?: string;
-  searchQuery?: string;
-  initialTemplates?: TemplateItem[];
+  isLoading: boolean;
+  isLoadingMore: boolean;
+  hasMore: boolean;
+  error: string | null;
+  onLoadMore?: () => Promise<void> | void;
   onLike: (templateId: string) => void;
   onDislike: (templateId: string) => void;
   onUseTemplate: (
@@ -90,6 +103,7 @@ interface TemplatesGridV2Props {
     previewUid: string,
     documentType: string,
   ) => void;
+  selectedLanguage?: string;
 }
 
 // Helper function to determine aspect ratio class
@@ -110,42 +124,33 @@ const getAspectRatioClass = (width: number, height: number): string => {
 };
 
 const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
-  baseUrl = "",
-  language = "en",
-  documentType = "SocialMedia:Instagram:SquarePost",
-  searchQuery = "",
-  initialTemplates,
+  templates,
+  metadata,
+  isLoading,
+  isLoadingMore,
+  hasMore,
+  error,
+  onLoadMore,
   onLike,
   onDislike,
   onUseTemplate,
+  selectedLanguage = "en",
 }) => {
-  const { searchPublicTemplate } = usePublicTemplateSearch();
-  const [templates, setTemplates] = useState<TemplateItem[]>([]);
-  const [metadata, setMetadata] = useState<TemplatesResponse["metadata"]>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [hasMore, setHasMore] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [columnCount, setColumnCount] = useState<number>(4);
   const containerRef = useRef<HTMLDivElement>(null);
   const lastWidthRef = useRef<number>(0);
-
-  // Track which page each template belongs to
-  const templatePagesRef = useRef<Map<string, number>>(new Map());
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   // Calculate column count based on container width with more precise breakpoints
   const calculateColumnCount = (currentWidth: number) => {
-    // Use window.innerWidth as fallback for more consistent measurement
     const containerWidth =
       currentWidth || (containerRef.current?.offsetWidth ?? 0);
 
-    // More precise breakpoints with buffer to prevent flickering
-    if (containerWidth >= 1580) return 6; // 1601 - buffer
-    if (containerWidth >= 1380) return 5; // 1401 - buffer
-    if (containerWidth >= 1180) return 4; // 1201 - buffer
-    if (containerWidth >= 880) return 3; // 901 - buffer
-    if (containerWidth >= 580) return 2; // 601 - buffer
+    if (containerWidth >= 1580) return 6;
+    if (containerWidth >= 1380) return 5;
+    if (containerWidth >= 1180) return 4;
+    if (containerWidth >= 880) return 3;
+    if (containerWidth >= 580) return 2;
     return 1;
   };
 
@@ -154,26 +159,20 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     const container = containerRef.current;
     if (!container) return;
 
-    // Get the actual rendered width
     const currentWidth = container.offsetWidth;
 
-    // Only update if width actually changed significantly (more than 10px)
     if (Math.abs(currentWidth - lastWidthRef.current) < 10) return;
 
     lastWidthRef.current = currentWidth;
     const newColumnCount = calculateColumnCount(currentWidth);
-
-    // Force update even if count is the same to handle redistribution
     setColumnCount(newColumnCount);
   };
 
   // Update column count on resize and initial load
   useEffect(() => {
-    // Initial calculation with multiple attempts to ensure accurate measurement
     const attemptInitialCalculation = (attempt = 0) => {
       updateColumnCount();
 
-      // Try up to 3 times with increasing delays to ensure DOM is ready
       if (attempt < 3) {
         setTimeout(
           () => attemptInitialCalculation(attempt + 1),
@@ -184,7 +183,6 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
     attemptInitialCalculation();
 
-    // Set up resize listener with proper debouncing
     let resizeTimeoutId: NodeJS.Timeout;
     const handleResize = () => {
       clearTimeout(resizeTimeoutId);
@@ -205,14 +203,13 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     return () => clearTimeout(timeoutId);
   }, [templates.length]);
 
-  // Distribute templates into columns - this now handles redistribution properly
+  // Distribute templates into columns
   const distributeTemplatesToColumns = (allTemplates: TemplateItem[]) => {
     const columns: TemplateItem[][] = Array.from(
       { length: columnCount },
       () => [],
     );
 
-    // Simple round-robin distribution that maintains order
     allTemplates.forEach((template, index) => {
       const columnIndex = index % columnCount;
       columns[columnIndex].push(template);
@@ -221,65 +218,10 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     return columns;
   };
 
-  // Load initial templates when component mounts or search query changes
-  useEffect(() => {
-    if (!searchQuery || searchQuery.length < 3) return;
-
-    const loadInitialTemplates = async () => {
-      if (initialTemplates && initialTemplates.length > 0) {
-        initialTemplates.forEach((template) => {
-          templatePagesRef.current.set(template.id, 1);
-        });
-        setTemplates(initialTemplates);
-        return;
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response: TemplatesResponse = await searchPublicTemplate(
-          1,
-          searchQuery,
-          language,
-          documentType,
-          20,
-        );
-
-        // Track page for initial templates
-        response.data.forEach((template) => {
-          templatePagesRef.current.set(template.id, 1);
-        });
-
-        setTemplates(response.data);
-        setMetadata(response.metadata);
-        setHasMore(response.pagination.hasNext);
-        setCurrentPage(1);
-      } catch (err) {
-        setError("Failed to load templates");
-        console.error("Error loading templates:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadInitialTemplates();
-  }, [searchQuery]);
-
-  // Add this state at the top of your component, after other useState declarations:
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-
-  // Add this handler function:
+  // Handle item click
   const handleItemClick = (templateId: string, e: React.MouseEvent) => {
-    // Prevent event bubbling to parent elements
     e.stopPropagation();
-
-    // // If clicking the same item, deselect it
-    // if (selectedId === templateId) {
-    //   setSelectedId(null);
-    // } else {
-    //   setSelectedId(templateId);
-    // }
+    // Selection logic if needed
   };
 
   // Add click handler to container to deselect when clicking outside
@@ -297,43 +239,6 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
     };
   }, [selectedId]);
 
-  const handleLoadMore = async (): Promise<void> => {
-    if (isLoadingMore || !hasMore) return;
-
-    setIsLoadingMore(true);
-    setError(null);
-
-    try {
-      const nextPage = currentPage + 1;
-      const response: TemplatesResponse = await searchPublicTemplate(
-        nextPage,
-        searchQuery,
-        12,
-      );
-
-      // Track page for new templates
-      response.data.forEach((template) => {
-        templatePagesRef.current.set(template.id, nextPage);
-      });
-
-      // Append new templates
-      setTemplates((prev) => {
-        const newTemplates = response.data.filter(
-          (newItem) =>
-            !prev.some((existingItem) => existingItem.id === newItem.id),
-        );
-        return [...prev, ...newTemplates];
-      });
-      setHasMore(response.pagination.hasNext);
-      setCurrentPage(nextPage);
-    } catch (err) {
-      setError("Failed to load more templates");
-      console.error("Error loading more templates:", err);
-    } finally {
-      setIsLoadingMore(false);
-    }
-  };
-
   const getSimilarityColor = (similarity: number): string => {
     if (similarity > 0.7) return styles.highSimilarity;
     if (similarity > 0.65) return styles.mediumSimilarity;
@@ -347,7 +252,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
   // Distribute current templates to columns
   const columns = distributeTemplatesToColumns(templates);
 
-  if (isLoading) {
+  if (isLoading && templates.length === 0) {
     return (
       <div className={styles.loadingContainer}>
         <Spinner size={50} />
@@ -406,7 +311,7 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                           import.meta.env.VITE_SAAS_API_URL
                         }/public/public-media/${
                           template.template.previewUid
-                        }.jpeg?language=${metadata?.language}`}
+                        }.jpeg?language=${metadata?.language || selectedLanguage}`}
                         alt={template.promptStr}
                         className={styles.image}
                         loading="lazy"
@@ -423,37 +328,18 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
 
                       <div className={styles.templateActionsHolder}>
                         <div className={styles.buttonContainer}>
-                          <div>
-                            {/* <Button
-                              icon="thumbs-up"
-                              className={styles.templateButton}
-                              minimal
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onLike(template.id);
-                              }}
-                            ></Button>
-                            <Button
-                              icon="thumbs-down"
-                              className={styles.templateButton}
-                              minimal
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDislike(template.id);
-                              }}
-                            ></Button> */}
-                          </div>
+                          <div>{/* Like/Dislike buttons if needed */}</div>
                           <div style={{ flexGrow: "1" }}>
                             <Button
                               style={{ width: "100%" }}
-                              // icon="send-to"
                               intent="primary"
                               className={`${styles.templateButton} ${styles.useTemplateButton}`}
                               onClick={(e) => {
                                 e.stopPropagation();
                                 onUseTemplate(
                                   template.id,
-                                  template.template.language,
+                                  template.template.language ||
+                                    selectedLanguage,
                                   template.template.previewUid,
                                   template.template.documentTypeStr,
                                 );
@@ -466,54 +352,6 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                       </div>
                     </div>
 
-                    {/* Add buttons when selected */}
-                    {/* {selectedId === template.id && (
-                      <>
-                        <div className={styles.buttonContainer}>
-                          <div>
-                            <Button
-                              icon="thumbs-up"
-                              className={styles.templateButton}
-                              minimal
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onLike(template.id);
-                              }}
-                            >
-                              Like
-                            </Button>
-                            <Button
-                              icon="thumbs-down"
-                              className={styles.templateButton}
-                              minimal
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDislike(template.id);
-                              }}
-                            >
-                              Dislike
-                            </Button>
-                          </div>
-                          <div style={{ flexGrow: "1" }}>
-                            <Button
-                              large
-                              style={{ width: "100%" }}
-                              // icon="send-to"
-                              intent="primary"
-                              className={`${styles.templateButton} ${styles.useTemplateButton}`}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onUseTemplate(template.id);
-                              }}
-                            >
-                              Use Template
-                            </Button>{" "}
-                          </div>
-                        </div>
-                      </>
-                    )} */}
-
-                    {/* {selectedId !== template.id && ( */}
                     <div className={styles.cardContent}>
                       <p className={styles.prompt}>
                         {template.promptStr ?? template.template?.promptStr}
@@ -530,22 +368,20 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
                         </span>
                       </div>
                     </div>
-                    {/* )} */}
                   </div>
                 </div>
               );
-              // ----
             })}
           </div>
         ))}
       </div>
 
-      {hasMore && templates && templates.length > 0 && (
+      {hasMore && templates.length > 0 && onLoadMore && (
         <div className={styles.loadMoreContainer}>
           <Button
             large
             intent="primary"
-            onClick={handleLoadMore}
+            onClick={onLoadMore}
             disabled={isLoadingMore}
             className={styles.loadMoreButton}
           >
@@ -561,13 +397,13 @@ const TemplatesGridV2: React.FC<TemplatesGridV2Props> = ({
         </div>
       )}
 
-      {!hasMore && templates && templates.length > 0 && (
+      {!hasMore && templates.length > 0 && (
         <div className={styles.endMessage}>
           <p>All templates loaded • {templates.length} templates</p>
         </div>
       )}
 
-      {searchQuery && templates && templates.length === 0 && !isLoading && (
+      {!isLoading && templates.length === 0 && (
         <div className={styles.emptyState}>
           <h3>No templates found</h3>
           <p>Try adjusting your search criteria or browse all templates</p>

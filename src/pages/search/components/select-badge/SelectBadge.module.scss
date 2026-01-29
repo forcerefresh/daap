@@ -9,7 +9,7 @@
   display: inline-flex;
   border-radius: 4px; // Reduced from 6px
   overflow: hidden;
-  border: 1px solid $pt-panel-border-color;
+  // border: 1px solid $pt-panel-border-color;
   background-color: white;
   height: 24px; // Reduced from 32px
 
@@ -27,13 +27,13 @@
   font-size: 0.75rem; // Reduced from 0.85rem
   display: flex;
   align-items: center;
-  border-right: 1px solid $pt-panel-border-color;
+  // border-right: 1px solid $pt-panel-border-color;
   white-space: nowrap;
 
   :global(.bp5-dark) & {
     background-color: $pt-dark-layer-header-color;
-    color: $pt-dark-text-color;
-    border-right-color: $pt-dark-panel-border-color;
+    color: $pt-dark-text-color-disabled;
+    // border-right-color: $pt-dark-panel-border-color;
   }
 }
 
