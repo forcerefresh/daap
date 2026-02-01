@@ -59,6 +59,7 @@ const MainHeader = (props: IMainHeader) => {
     missingExtensions,
     outdatedExtensions,
     _updateEditor,
+    fullScreen,
   } = props;
 
   const navigate = useNavigate();
@@ -333,7 +334,17 @@ const MainHeader = (props: IMainHeader) => {
                 />
               }
               onAllow={() => {
+                //setTimeout(() => {
                 navigate(`/search`);
+                //  }, 10);
+
+                // setTimeout(() => {
+                //   if (fullScreen) {
+                //     // _updateEditor({ fullScreen: false });
+                //     scaleUI(appZoom);
+                //   }
+                // }, 10);
+
                 // _updateUserData(undefined, { autoShowLoginPrompt: true });
                 // // setAutoOpenLogin(true);
                 // onClose();
@@ -349,11 +360,10 @@ const MainHeader = (props: IMainHeader) => {
 
             <FullscreenButtonComponent
               toggle={() => {
-                setIsFullscreen(!isFullscreen);
-                scaleUI(appZoom);
+                _updateEditor({ fullScreen: !fullScreen });
               }}
-              isFullscreen={isFullscreen}
-              className={css.fullscreenButton}
+              isFullscreen={fullScreen}
+              // className={css.fullscreenButton}
             />
           </>
 
@@ -378,6 +388,8 @@ const mapStateToProps = (state: IStore) => {
     theme: state.project.settings.theme,
     account: state.account,
     breakpointConfig,
+
+    fullScreen: state.editor.fullScreen,
 
     missingExtensions: state.editor.missingExtensions,
     outdatedExtensions: state.editor.outdatedExtensions,

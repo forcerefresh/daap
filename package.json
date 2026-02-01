@@ -11,9 +11,9 @@
   "main": "electron/main.js",
   "scripts": {
     "start:app:saas": "vite --mode saas",
-    "build:app:saas": "vite build --mode saas",
+    "build:app:saas": "NODE_OPTIONS=--max-old-space-size=4096 vite build --mode saas",
     "start:app:wp": "vite  --mode wp",
-    "build:app:wp": "vite build --mode wp",
+    "build:app:wp": "NODE_OPTIONS=--max-old-space-size=4096 vite build --mode wp",
     "start:wp-dist-server": "npx http-server ./dist",
     "delimiter---": "---",
     "start:app": "env-cmd -f env/.env react-scripts start",

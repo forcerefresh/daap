@@ -6,6 +6,7 @@ export interface IEditor {
   isExistingProject: boolean;
   missingExtensions: IExtensionItem[];
   outdatedExtensions: IExtensionItem[];
+  fullScreen: boolean;
 }
 
 export function editor(
@@ -14,8 +15,9 @@ export function editor(
     isExistingProject: false,
     missingExtensions: [],
     outdatedExtensions: [],
+    fullScreen: false,
   },
-  action: ActionTypes
+  action: ActionTypes,
 ) {
   switch (action.type) {
     case UPDATE_EDITOR: {

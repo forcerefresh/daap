@@ -41,7 +41,7 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
 
   useEffect(() => {
     setPortalRoot(
-      document.getElementsByClassName("daap-forcerefresh-app")?.[0]
+      document.getElementsByClassName("daap-forcerefresh-app")?.[0],
     );
   });
 
@@ -100,7 +100,7 @@ function application(): {
 const data = application();
 ReactDOM.render(
   data.component,
-  document.getElementById((data.useAppRootSelector as any)())
+  document.getElementById((data.useAppRootSelector as any)()),
 );
 
 // If you want your app to work offline and load faster, you can change

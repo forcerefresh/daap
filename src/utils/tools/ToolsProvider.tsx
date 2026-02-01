@@ -87,7 +87,7 @@ export const ToolsContext = React.createContext<ToolsContextInterface>({
 });
 
 export const ToolsProvider = (
-  props: React.PropsWithChildren<React.ReactNode>
+  props: React.PropsWithChildren<React.ReactNode>,
 ) => {
   const { children } = props;
 
@@ -110,7 +110,7 @@ export const ToolsProvider = (
     const breakpointConfig: BreakpointConfiguration | undefined =
       _state.project.settings.breakpoints.breakpointsConfiguration.find(
         (breakpointConfig: any) =>
-          breakpointConfig.type === _state.stage.selectedDevice
+          breakpointConfig.type === _state.stage.selectedDevice,
       );
 
     return {
@@ -307,8 +307,8 @@ export const ToolsProvider = (
           },
           {
             ...(params.objectValues as any),
-          }
-        )
+          },
+        ),
       );
     } else {
       const newObj = cloneDeep(storeRef.current.objectById[params.objectId!]);
@@ -368,11 +368,11 @@ export const ToolsProvider = (
 
   const getMousePoint = (e: MouseEvent) => {
     const appRootEl = document.getElementById(
-      "daap-forcerefresh-root"
+      "daap-forcerefresh-root",
     ) as HTMLDivElement;
 
     const stageEl = getCanvas().getElementsByClassName(
-      "MainToolStage"
+      "MainToolStage",
     )[0] as HTMLDivElement;
 
     const stageRect = stageEl?.getBoundingClientRect()!;
@@ -392,7 +392,7 @@ export const ToolsProvider = (
     options?: { includeTranslate?: boolean; skipStageScale?: boolean },
     overrideObjectSize?: {
       [key: string]: Pick<IObject, "left" | "top" | "width" | "height">;
-    }
+    },
   ): DOMMatrix => {
     // >>>>>>>>>>>>>>>>>>
     // duplicate 123
@@ -402,14 +402,14 @@ export const ToolsProvider = (
       objectPath,
       objectId,
       storeRef.current.objectById,
-      storeRef.current.layerById
+      storeRef.current.layerById,
     );
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
       storeRef.current.objectById,
       options,
-      overrideObjectSize
+      overrideObjectSize,
     );
 
     //groupsMatrix.e = groupsMatrix.f = 0;
@@ -425,12 +425,12 @@ export const ToolsProvider = (
   const objectPointToStageSpace = (
     objectId: string,
     p: Point,
-    includeTranslate = true
+    includeTranslate = true,
   ) => {
     return objectPointToStageSpace_New(
       [storeRef.current.objectById[objectId]],
       p,
-      1 // stageZoom - do not send stage zoom as we have same scale.
+      1, // stageZoom - do not send stage zoom as we have same scale.
     );
     // const objTransform = getObjectTransform(objectId, {
     //   includeTranslate,
@@ -454,7 +454,7 @@ export const ToolsProvider = (
     objectId: string,
     p: Point,
     overrideObjectSize?: Pick<IObject, "left" | "top" | "width" | "height">,
-    includeTranslate: boolean = true
+    includeTranslate: boolean = true,
   ) => {
     // return stagePointToObjectSpace_New(
     //   [storeRef.current.objectById[objectId]],
@@ -468,11 +468,11 @@ export const ToolsProvider = (
         includeTranslate,
         skipStageScale: true,
       },
-      overrideObjectSize ? { [objectId!]: overrideObjectSize } : {}
+      overrideObjectSize ? { [objectId!]: overrideObjectSize } : {},
     );
 
     const pointMatrix = new DOMMatrix(
-      `translateX(${p.x}px) translateY(${p.y}px)`
+      `translateX(${p.x}px) translateY(${p.y}px)`,
     );
 
     // return objTransform.transformPoint(p);
@@ -644,7 +644,7 @@ export function getObjectPath(objectId: string, objectById: any) {
 function populateObjectPathRec(
   objectPathArr: IObject[],
   objectId: string,
-  objectById: any
+  objectById: any,
 ) {
   const object = objectById[objectId];
 

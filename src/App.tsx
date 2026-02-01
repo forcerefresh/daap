@@ -46,6 +46,7 @@ import { IMeta } from "./store/reducers/meta";
 import { preloadFonts } from "./utils/project/project-utils";
 import { generateFilename } from "./panels/create-panel/utils";
 import { useWPPublicTemplate } from "./template-generator/hooks/useWPPublicTemplate";
+import { useFullscreen } from "./integration/hooks/fullscreen-hook/fullscreen-hook";
 
 gsap.install(window);
 (window as any).animejs = animejs;
@@ -71,6 +72,8 @@ function App(props: IAppProps) {
     _activateSlide,
     _selectForProperties,
     _selectSlides,
+    appZoom: appZoomFromStore,
+    fullScreen,
   } = props;
 
   // const { template, language } = useParams();
@@ -117,12 +120,12 @@ function App(props: IAppProps) {
     _setDevice(
       [...updatedProject.settings.breakpoints.breakpointsConfiguration]
         .reverse()
-        .find((bc) => bc.enabled)?.type || "device-independent"
+        .find((bc) => bc.enabled)?.type || "device-independent",
     );
 
     // missing extensions >>>
     const missingExtensions = getMissingExtensionsFromProject(
-      templateProject.extensions
+      templateProject.extensions,
     );
     _updateEditor({ missingExtensions });
     if (missingExtensions.length > 0) {
@@ -177,7 +180,7 @@ function App(props: IAppProps) {
 
         applyTemplate(
           JSON.parse(response?.data?.template),
-          last(docType.split(":")) ?? "Document"
+          last(docType.split(":")) ?? "Document",
         );
       } else {
         console.warn("Something went wrong!");
@@ -187,12 +190,14 @@ function App(props: IAppProps) {
 
   const globalContext = useContext(IntegrationContext);
 
+  const { getSettings, scaleUI } = globalContext.useSettingsHook();
+
+  useFullscreen(fullScreen, scaleUI, appZoomFromStore);
+
   const { getInstalledExtensions, getExtensions } =
     globalContext.useExtensionsHook();
   // const { getSettings: getAppSettings, scaleUI } =
   //   globalContext.useAppSettingsHook();
-
-  const { getSettings, scaleUI } = globalContext.useSettingsHook();
 
   const { fetchMedias } = globalContext.useMyMediaHook();
 
@@ -211,7 +216,7 @@ function App(props: IAppProps) {
 
       (error) => {
         logger.app.error(error);
-      }
+      },
     );
   };
 
@@ -225,7 +230,7 @@ function App(props: IAppProps) {
       const installedExtensions = await getInstalledExtensions();
 
       const latestInstalledExtensions = Array.from(
-        getLatestVersionsMap(installedExtensions.data).values()
+        getLatestVersionsMap(installedExtensions.data).values(),
       );
 
       getExtensions(0).then((extensionsRest) => {
@@ -233,7 +238,7 @@ function App(props: IAppProps) {
 
         const outdatedExtensions = getOutdatedExtensions(
           extensions,
-          installedExtensions.data
+          installedExtensions.data,
         );
 
         _updateEditor({ outdatedExtensions });
@@ -272,7 +277,7 @@ function App(props: IAppProps) {
           e.preventDefault();
         }
       },
-      { passive: false }
+      { passive: false },
     );
   }, []);
 
@@ -294,7 +299,8 @@ function App(props: IAppProps) {
   useLayoutEffect(() => {
     const root = document.getElementById("daap-forcerefresh-root");
     if (root) {
-      root.className = `bp5-${theme}`;
+      root.classList.remove(`bp5-${theme}`);
+      root.classList.add(`bp5-${theme}`);
     }
   }, [theme]);
 
@@ -351,6 +357,8 @@ const mapStateToProps = (state: IStore) => {
     theme: state.globals.theme,
     isAuthenticated:
       !!state.account.userData?.displayName && !state.account.userDataLoading,
+    fullScreen: state.editor.fullScreen,
+    appZoom: state.globals.appZoom,
   };
 };
 

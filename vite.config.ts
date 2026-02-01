@@ -30,7 +30,8 @@ export default defineConfig({
       transform(code, id) {
         if (
           id.endsWith("FontPreviewPanel.module.scss") ||
-          id.endsWith("FontPairingPanel.module.scss")
+          id.endsWith("FontPairingPanel.module.scss") ||
+          id.endsWith("IntroPage.module.scss")
         ) {
           // Find all image URLs in the CSS file
           const regex = /url\("([^"]+\.(png|jpg|jpeg|gif|svg))"\)/g;

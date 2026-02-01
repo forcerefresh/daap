@@ -103,7 +103,8 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
   useLayoutEffect(() => {
     const root = document.getElementById("daap-forcerefresh-root");
     if (root) {
-      root.className = `bp5-${theme}`;
+      root.classList.remove(`bp5-${theme}`);
+      root.classList.add(`bp5-${theme}`);
     }
   }, [theme]);
 
@@ -114,7 +115,7 @@ const Login: React.FC<IAlignPanelMergedProps> = (props) => {
 
     if (template)
       setPreviewUrl(
-        `/api/v1/public/public-media/${template.previewUid}.jpeg?language=${template?.language}`
+        `/api/v1/public/public-media/${template.previewUid}.jpeg?language=${template?.language}`,
       );
   }, []);
 

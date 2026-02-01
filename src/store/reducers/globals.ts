@@ -25,6 +25,7 @@ export interface IAppSettings {
     key?: string;
     secretKey?: string;
   };
+  homePage?: "search" | "editor" | string | undefined;
 }
 
 export function globals(
@@ -43,7 +44,7 @@ export function globals(
     outlineColor: { r: 0, g: 0, b: 0, a: 1 },
     appVersion: __APP_VERSION__,
   },
-  action: ActionTypes
+  action: ActionTypes,
 ) {
   switch (action.type) {
     case SET_GLOBALS: {

@@ -92,14 +92,12 @@ export function stage(state: IStage = getStageDefault(), action: ActionTypes) {
       };
     }
     case SET_STAGE_ZOOM: {
-      debugger;
       return {
         ...state,
         zoom: action.payload,
       };
     }
     case ZOOM_FIT: {
-      debugger;
       return {
         ...state,
         zoomFit: action.payload,

@@ -316,6 +316,39 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
         </div>
         {visibleSectionIds[GlobalPanelSections.OtherSettings] && (
           <div className={css.panel}>
+            {import.meta.env.VITE_APP_INTEGRATION === "wp" && (
+              <FormGroup
+                label="Home page"
+                labelFor="homePage"
+                //requiredLabel={true}
+              >
+                <HTMLSelect
+                  name="homePage"
+                  value={`${globals.homePage}`}
+                  options={[
+                    { value: "search", label: "Search" },
+                    { value: "editor", label: "Editor" },
+                    { value: "", label: "Intro (reset only)" },
+                  ]}
+                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                    const homePage = event.currentTarget.value;
+                    // save settings
+                    patchSettings({
+                      appSettings: {
+                        ...globals,
+                        homePage: homePage,
+                      },
+                    });
+
+                    //update store
+                    _updateGlobalConfiguration({
+                      homePage: homePage,
+                    });
+                  }}
+                ></HTMLSelect>
+              </FormGroup>
+            )}
+
             <FormGroup
               helperText={
                 <>

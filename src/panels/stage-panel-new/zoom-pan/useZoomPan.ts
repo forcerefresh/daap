@@ -252,7 +252,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
   const handleScaleChange = (scale: number) => {
     if (scale === transformRef.current.scale) return;
 
-    debugger;
     const parentEl = parentElementRefRef.current?.current;
     const targetEl = targetElementRefRef.current?.current;
 

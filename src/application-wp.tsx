@@ -34,6 +34,8 @@ import { HotkeysProvider, PortalProvider } from "@blueprintjs/core";
 import { ExportProvider } from "./utils/export-provider/ExportProvider";
 import SearchPage from "./pages/search/search";
 
+import IntroPage from "./pages/intro/Intro";
+
 import "./AppNew.scss";
 
 const global = window as any;
@@ -45,27 +47,25 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
 
   useEffect(() => {
     setPortalRoot(
-      document.getElementsByClassName("daap-forcerefresh-app")?.[0]
+      document.getElementsByClassName("daap-forcerefresh-app")?.[0],
     );
   });
 
   return (
     <PortalProvider portalContainer={portalRoot}>
       <DevelopmentContextProvider>
-        <IntegrationContextProvider>
-          <DevelopmentManager />
-          <ExportProvider>
-            <PreviewTimelineContextProvider>
-              <div className={cx(css.main, "daap-forcerefresh-app")}>
-                <div>
-                  <MainHeader className={css.saasHeader} />
-                  <App className={css.editor} />
-                </div>
+        <DevelopmentManager />
+        <ExportProvider>
+          <PreviewTimelineContextProvider>
+            <div className={cx(css.main, "daap-forcerefresh-app")}>
+              <div>
+                <MainHeader className={css.saasHeader} />
+                <App className={css.editor} />
               </div>
-              <div ref={overlayRef} />
-            </PreviewTimelineContextProvider>
-          </ExportProvider>
-        </IntegrationContextProvider>
+            </div>
+            <div ref={overlayRef} />
+          </PreviewTimelineContextProvider>
+        </ExportProvider>
       </DevelopmentContextProvider>
     </PortalProvider>
   );
@@ -81,30 +81,35 @@ function application(): {
   component: React.ReactElement;
   useAppRootSelector: any;
 } {
+  const homePage = window.daapForcerefreshSettings?.homePage || "intro";
+
   return {
     component: (
       // <React.StrictMode>
-      <MemoryRouter initialEntries={["/search"]}>
+      <MemoryRouter initialEntries={[`/${homePage}`]}>
         <Provider store={store}>
-          <HotkeysProvider>
-            <Routes>
-              <Route path="/" element={<Navigate to="/search" />} />
-              <Route path="/editor" element={<EditorConnected />} />
-              <Route path="/search" element={<SearchPage />} />
-              {/* ADD THIS CATCH-ALL ROUTE */}
-              <Route
-                path="*"
-                element={
-                  <div style={{ padding: "20px" }}>
-                    {/* You can redirect to search or show the Editor */}
-                    <Navigate to="/search" replace />
-                    {/* OR show Editor directly: */}
-                    {/* <EditorConnected /> */}
-                  </div>
-                }
-              />
-            </Routes>
-          </HotkeysProvider>
+          <IntegrationContextProvider>
+            <HotkeysProvider>
+              <Routes>
+                <Route path="/" element={<Navigate to="/search" />} />
+                <Route path="/intro" element={<IntroPage />} />
+                <Route path="/editor" element={<EditorConnected />} />
+                <Route path="/search" element={<SearchPage />} />
+                {/* ADD THIS CATCH-ALL ROUTE */}
+                <Route
+                  path="*"
+                  element={
+                    <div style={{ padding: "20px" }}>
+                      {/* You can redirect to search or show the Editor */}
+                      <Navigate to="/search" replace />
+                      {/* OR show Editor directly: */}
+                      {/* <EditorConnected /> */}
+                    </div>
+                  }
+                />
+              </Routes>
+            </HotkeysProvider>
+          </IntegrationContextProvider>
         </Provider>
       </MemoryRouter>
 

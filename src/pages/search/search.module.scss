@@ -219,6 +219,7 @@ $dark-border-color: #4f4f4f;
       outline: none;
       font-size: 0.85rem;
       min-width: 140px;
+      min-height: 20px !important;
 
       :global(.bp5-dark) & {
         color: $pt-dark-text-color;

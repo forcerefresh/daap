@@ -1,4 +1,11 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Alert,
   Button,
@@ -55,6 +62,8 @@ import { getPendingTemplate } from "./utils/pending-template";
 import SearchFooter from "./components/footer/SearchFooter";
 import { Link } from "react-router-dom";
 import { usePublicTemplateSearch } from "../../template-generator/hooks/usePublicTemplateSearch";
+import { IntegrationContext } from "../../integration";
+import { useFullscreen } from "../../integration/hooks/fullscreen-hook/fullscreen-hook";
 
 interface ISearchProps {
   onClose: () => void;
@@ -79,7 +88,18 @@ const SearchPage = ({
   _loadUserData,
   account,
   theme,
+  fullScreen,
+  appZoom: appZoomFromStore,
 }: ISearchMergedProps) => {
+  const {
+    getFullscreenButtonComponent: FullscreenButtonComponent,
+    useSettingsHook,
+  } = useContext(IntegrationContext);
+
+  const { scaleUI } = useSettingsHook();
+
+  useFullscreen(fullScreen, scaleUI, appZoomFromStore);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("en");
   const [selectedDocumentType, setSelectedDocumentType] = useState(
@@ -150,6 +170,11 @@ const SearchPage = ({
   // const [autoOpenLogin, setAutoOpenLogin] = useState(false);
 
   const handleSearch = () => {
+    // if (fullScreen) {
+    //   _updateEditor({ fullScreen: false });
+
+    //   scaleUI(appZoom);
+    // }
     setIsExpanded(true);
     loadTemplates();
     // Add your search logic here
@@ -191,8 +216,15 @@ const SearchPage = ({
 
   // Load initial templates
 
-  const loadTemplates = async ({ documentType }: { documentType?: string }) => {
-    if (searchQuery.length < 1) return;
+  const stateRef = useRef({
+    searchQuery: "",
+    selectedLanguage: "en",
+    selectedDocumentType: "SocialMedia:Instagram:SquarePost",
+  });
+
+  const loadTemplates = async () => {
+    //{ documentType }: { documentType?: string }
+    if (stateRef.current.searchQuery.length < 1) return;
 
     setIsLoading(true);
     setError(null);
@@ -200,9 +232,9 @@ const SearchPage = ({
     try {
       const response = await searchPublicTemplate(
         1,
-        searchQuery,
-        selectedLanguage,
-        documentType ?? selectedDocumentType,
+        stateRef.current.searchQuery,
+        stateRef.current.selectedLanguage,
+        stateRef.current.selectedDocumentType, // documentType ??
         20,
       );
 
@@ -365,7 +397,8 @@ const SearchPage = ({
   useLayoutEffect(() => {
     const root = document.getElementById("daap-forcerefresh-root");
     if (root) {
-      root.className = `bp5-${theme}`;
+      root.classList.remove(`bp5-${theme}`);
+      root.classList.add(`bp5-${theme}`);
     }
   }, [theme]);
 
@@ -465,6 +498,14 @@ const SearchPage = ({
           {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
             <AccountButton logoutOnly={true} />
           )}
+
+          <FullscreenButtonComponent
+            toggle={() => {
+              _updateEditor({ fullScreen: !fullScreen });
+            }}
+            isFullscreen={fullScreen}
+            // className={css.fullscreenButton}
+          />
         </div>
       </>
 
@@ -492,7 +533,10 @@ const SearchPage = ({
                   <TextArea
                     inputRef={textAreaRef} // Pass the ref here
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      stateRef.current.searchQuery = e.target.value;
+                      setSearchQuery(e.target.value);
+                    }}
                     onKeyDown={handleKeyPress}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
@@ -509,10 +553,9 @@ const SearchPage = ({
                         options={languages}
                         value={selectedLanguage}
                         onChange={(value) => {
+                          stateRef.current.selectedLanguage = value;
                           setSelectedLanguage(value);
-                          setTimeout(() => {
-                            loadTemplates();
-                          }, 10);
+                          loadTemplates();
                         }}
                         minimal={false}
                       />
@@ -522,8 +565,10 @@ const SearchPage = ({
                         options={documents} // Fixed: using documents array instead of languages
                         value={selectedDocumentType}
                         onChange={(value) => {
+                          stateRef.current.selectedDocumentType = value;
+
                           setSelectedDocumentType(value);
-                          loadTemplates({ documentType: value });
+                          loadTemplates();
                         }}
                         minimal={false}
                       />
@@ -547,8 +592,9 @@ const SearchPage = ({
               {!isExpanded && (
                 <SearchSuggestions
                   onSuggestionClick={(value) => {
+                    stateRef.current.searchQuery = value;
                     setSearchQuery(value);
-                    setIsExpanded(true);
+                    handleSearch();
                   }}
                 />
               )}
@@ -584,6 +630,8 @@ const mapStateToProps = (state: IStore) => ({
   isAuthenticated:
     !!state.account.userData?.displayName && !state.account.userDataLoading,
   account: state.account,
+  fullScreen: state.editor.fullScreen,
+  appZoom: state.globals.appZoom,
 });
 
 const mapDispatchToProps = {
