@@ -31,6 +31,7 @@ import { ExportProvider } from "./utils/export-provider/ExportProvider";
 import SearchPage from "./pages/search/search";
 
 import "./AppNew.scss";
+import MobileRestriction from "./integration/components/mobile-restriction/MobileRestriction";
 
 const global = window as any;
 
@@ -53,6 +54,7 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
           <ExportProvider>
             <PreviewTimelineContextProvider>
               <div className={cx(css.main, "daap-forcerefresh-app")}>
+                <MobileRestriction />
                 <div>
                   <MainHeader className={css.saasHeader} />
                   <App className={css.editor} />

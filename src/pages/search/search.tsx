@@ -121,15 +121,17 @@ const SearchPage = ({
   }, []);
 
   useEffect(() => {
-    // Check for pending template
-    const pendingTemplate = getPendingTemplate();
+    if (import.meta.env.VITE_APP_INTEGRATION === "saas") {
+      // Check for pending template
+      const pendingTemplate = getPendingTemplate();
 
-    if (account.userDataLoading && pendingTemplate) {
-      setShowRedirectMessage(true);
-    }
+      if (account.userDataLoading && pendingTemplate) {
+        setShowRedirectMessage(true);
+      }
 
-    if (!account.userDataLoading) {
-      setShowRedirectMessage(false);
+      if (!account.userDataLoading) {
+        setShowRedirectMessage(false);
+      }
     }
   }, [account, navigate]);
 

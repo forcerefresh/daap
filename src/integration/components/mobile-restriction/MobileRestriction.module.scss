@@ -1,0 +1,56 @@
+@import "../../../theme"; // Adjust path to your theme file
+
+.mobileContainer {
+  position: absolute;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+
+  background-color: $pt-app-background-color;
+
+  :global(.bp5-dark) & {
+    background-color: $pt-dark-app-background-color;
+  }
+}
+
+.mobileCard {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.mobileIcon {
+  margin-bottom: 20px;
+}
+
+.title {
+  margin-bottom: 10px;
+  //   color: #2c3e50;
+}
+
+.message {
+  //   color: #666;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

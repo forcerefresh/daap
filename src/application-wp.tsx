@@ -37,6 +37,7 @@ import SearchPage from "./pages/search/search";
 import IntroPage from "./pages/intro/Intro";
 
 import "./AppNew.scss";
+import MobileRestriction from "./integration/components/mobile-restriction/MobileRestriction";
 
 const global = window as any;
 
@@ -59,6 +60,8 @@ const Editor = (props: ReturnType<typeof mapStateToProps>) => {
           <PreviewTimelineContextProvider>
             <div className={cx(css.main, "daap-forcerefresh-app")}>
               <div>
+                <MobileRestriction />
+
                 <MainHeader className={css.saasHeader} />
                 <App className={css.editor} />
               </div>

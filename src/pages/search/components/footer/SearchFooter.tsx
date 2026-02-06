@@ -12,10 +12,7 @@ const SearchFooter = () => {
         gap: "20px",
       }}
     >
-      <Link
-        to={"https://demo.daap.forcerefresh.io/documentation"}
-        target="_blank"
-      >
+      <Link to={"https://learn.daap.forcerefresh.io"} target="_blank">
         <Text style={{ display: "inline" }}>Documentation</Text>
       </Link>
       <Link

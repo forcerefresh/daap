@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 import { Text } from "@blueprintjs/core";
 import css from "./HeadlineRandomizer.module.scss";
 const HeadlineRandomizer = () => {
@@ -30,7 +30,7 @@ const HeadlineRandomizer = () => {
     return headlineCombinations[randomIndex];
   };
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Set initial combination
     setCurrentCombination(getRandomCombination());
 
