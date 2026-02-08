@@ -16,6 +16,7 @@ import {
   TextArea,
   Text,
 } from "@blueprintjs/core";
+import cx from "classnames";
 import styles from "./search.module.scss";
 import HeadlineRandomizer from "./components/headline/HeadlineRandomizer";
 import SearchSuggestions from "./components/search-suggest/SearchSuggestions";
@@ -424,44 +425,69 @@ const SearchPage = ({
             position: "absolute",
             left: "0px",
             top: "0px",
-            height: "52px",
-            padding: "6px",
+            // height: "52px",
+            overflow: "visible",
+            padding: "8px 16px",
             zIndex: 1000,
             display: "flex",
             alignItems: "center",
-            gap: "40px",
+            // gap: "40px",
           }}
         >
-          {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
-            <Link to={"/search"} style={{ outline: "none" }}>
-              <DaapLogo className={styles.logo} />
-            </Link>
-          ) : (
-            <DaapLogo className={styles.logo} />
-          )}
-
-          {/* <Link
-            to={"https://learn.daap.forcerefresh.io/docs"}
-            target="_blank"
+          <div
             style={{
-              display: "inline-flex",
               alignItems: "center",
-              // textDecoration: "none",
-              // color: "inherit",
-              gap: "6px",
+              display: "flex",
+              flex: "1",
+              minWidth: "0",
+              height: "44px",
             }}
           >
-            <Text style={{ display: "inline" }}>Documentation</Text>
-            <Icon
-              icon="share"
-              size={14}
-              style={{
-                opacity: 0,
-                transition: "opacity 0.2s ease",
-              }}
-              className={styles.showOnHover}
-            />
-          </Link> */}
+            {import.meta.env.VITE_APP_INTEGRATION === "saas" ? (
+              <Link
+                to={"/search"}
+                style={{
+                  outline: "none",
+                  marginRight: "24px",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <DaapLogo className={styles.logo} />
+              </Link>
+            ) : (
+              <DaapLogo className={styles.logo} />
+            )}
+
+            {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
+              <>
+                <Link
+                  to={"https://daap.forcerefresh.io"}
+                  className={cx(styles.headerLink, styles.headerLinkHome)}
+                >
+                  <Text style={{ display: "inline" }}>Home</Text>
+                </Link>
+                <Link
+                  to={"https://learn.daap.forcerefresh.io/docs"}
+                  className={styles.headerLink}
+                >
+                  <Text style={{ display: "inline" }}>Documentation</Text>
+                </Link>
+                <Link
+                  to={"https://learn.daap.forcerefresh.io/wordpress"}
+                  className={styles.headerLink}
+                >
+                  <Text style={{ display: "inline" }}>Wordpress</Text>
+                </Link>
+                <Link
+                  to={"https://learn.daap.forcerefresh.io/contact"}
+                  className={styles.headerLink}
+                >
+                  <Text style={{ display: "inline" }}>Contact</Text>
+                </Link>
+              </>
+            )}
+          </div>
         </div>
         <div
           style={{
