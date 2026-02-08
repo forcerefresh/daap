@@ -1,0 +1,21 @@
+.footerLink {
+  display: inline-flex;
+  align-items: center;
+  color: #aab3bf !important;
+  font-size: 16px;
+  gap: 6px;
+  padding: 0.25em 0.75em;
+  text-decoration: none !important;
+}
+
+.footerLink:hover {
+  color: #f64780 !important;
+}
+
+.copyright {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  color: #aab3bf;
+}
