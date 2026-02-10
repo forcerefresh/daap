@@ -19,12 +19,33 @@ export const usePublicTemplate = () => {
       .catch(console.log);
   };
 
+  const updatePublicTemplate = async (
+    id: string,
+    {
+      isPublic,
+    }: {
+      isPublic: boolean;
+    },
+  ): Promise<{
+    id: string;
+  }> => {
+    const json = {
+      isPublic,
+    };
+
+    const response = await axios.put(
+      `/api/v1/public-templates-private/${id}`,
+      json,
+    );
+    return response.data.data;
+  };
+
   const getPublicTemplate = (id: string, lang: string): Promise<any> => {
     return axios
       .get(
         `${
           import.meta.env.VITE_SAAS_API_URL
-        }/public-templates/${id}?language=${lang}`
+        }/public-templates/${id}?language=${lang}`,
       )
       .then((response) => response.data)
       .catch(console.log);
@@ -33,5 +54,6 @@ export const usePublicTemplate = () => {
   return {
     getPublicTemplate,
     addPublicTemplate,
+    updatePublicTemplate,
   };
 };

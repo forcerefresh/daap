@@ -10,7 +10,7 @@ export const useExtensionsHook = () => {
     search?: string,
     tags?: string[],
     missingExtensions?: string[],
-    apiKey?: string
+    apiKey?: string,
   ): Promise<{ data: IExtensionItem[] }> => {
     // const apiUrl = `${
     //   import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
@@ -32,14 +32,14 @@ export const useExtensionsHook = () => {
     const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
     return fetch(url).then(async (res) => ({
-      data: await res.json(),
+      data: await Promise.resolve([]), //await res.json(),
     }));
   };
 
   /* returns installed extensions */
   const getInstalledExtensions = (): Promise<{ data: IExtensionItem[] }> => {
     const extensions: IExtensionItem[] = JSON.parse(
-      localStorage.getItem("extensions") || "[]"
+      localStorage.getItem("extensions") || "[]",
     );
 
     return new Promise((resolve) => {
@@ -49,11 +49,11 @@ export const useExtensionsHook = () => {
 
   /*install extension from directory*/
   const installExtension = async (
-    extension: IExtensionItem
+    extension: IExtensionItem,
   ): Promise<IExtensionItem> => {
     // 1. add script
     const extensionsStorage = JSON.parse(
-      localStorage.getItem("extensionStorage") || "{}"
+      localStorage.getItem("extensionStorage") || "{}",
     );
 
     const zipPackage = await fetch(extension.packageUrl);
@@ -64,13 +64,13 @@ export const useExtensionsHook = () => {
     const playerObjectSource = await zip
       .file(
         extension.packageFiles.appObjectFilename ||
-          extension.packageFiles.appAnimationFilename!
+          extension.packageFiles.appAnimationFilename!,
       )
       ?.async("string");
     const appObjectSource = await zip
       .file(
         extension.packageFiles.appObjectFilename ||
-          extension.packageFiles.appAnimationFilename!
+          extension.packageFiles.appAnimationFilename!,
       )
       ?.async("string");
 
@@ -106,7 +106,7 @@ export const useExtensionsHook = () => {
 
     // remove script
     const extensionsStorage = JSON.parse(
-      localStorage.getItem("extensionStorage") || "{}"
+      localStorage.getItem("extensionStorage") || "{}",
     );
     delete extensionsStorage[foundItem.type];
     localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));

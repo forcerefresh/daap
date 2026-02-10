@@ -11,7 +11,7 @@ export const useExtensionsHook = () => {
     search?: string,
     tags?: string[],
     missingExtensions?: string[],
-    apiKey?: string
+    apiKey?: string,
   ): Promise<{ data: IExtensionItem[] }> => {
     // const apiUrl = `${
     //   import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
@@ -33,14 +33,14 @@ export const useExtensionsHook = () => {
     const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
     return fetch(url).then(async (res) => ({
-      data: await res.json(),
+      data: await Promise.resolve([]), //await res.json(),
     }));
   };
 
   /* returns installed extensions */
   const getInstalledExtensions = (): Promise<{ data: IExtensionItem[] }> => {
     const extensions: IExtensionItem[] = JSON.parse(
-      localStorage.getItem("extensions") || "[]"
+      localStorage.getItem("extensions") || "[]",
     );
 
     return new Promise((resolve) => {
@@ -50,7 +50,7 @@ export const useExtensionsHook = () => {
 
   /*install extension from directory*/
   const installExtension = async (
-    extension: IExtensionItem
+    extension: IExtensionItem,
   ): Promise<IExtensionItem> => {
     const response = await axios.post(
       `${daapForcerefreshSettings.root}daap/v1/extensions/install?type=${extension.type}&version=${extension.version}`,
@@ -59,7 +59,7 @@ export const useExtensionsHook = () => {
         headers: {
           "X-WP-Nonce": daapForcerefreshSettings.nonce,
         },
-      }
+      },
     );
 
     // // 1. add script
@@ -117,7 +117,7 @@ export const useExtensionsHook = () => {
 
     // remove script
     const extensionsStorage = JSON.parse(
-      localStorage.getItem("extensionStorage") || "{}"
+      localStorage.getItem("extensionStorage") || "{}",
     );
     delete extensionsStorage[foundItem.type];
     localStorage.setItem("extensionStorage", JSON.stringify(extensionsStorage));

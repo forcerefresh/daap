@@ -11,6 +11,7 @@ export const PromptItems = ({
   updatePrompt,
   onEditNewLayout,
   onCreateKeywords,
+  onChangeTemplatePublic,
 }: {
   aiPrompts: AiPrompt[];
   onGenerateAll: (id: string) => void;
@@ -21,6 +22,7 @@ export const PromptItems = ({
   updatePrompt: PromptCardProps["updatePrompt"];
   onEditNewLayout: (response: any) => void;
   onCreateKeywords?: (id: string) => void;
+  onChangeTemplatePublic?: (id: string, isPublic: boolean) => void;
 }) => {
   return (
     <div
@@ -45,6 +47,7 @@ export const PromptItems = ({
           updatePrompt={updatePrompt}
           onEditNewLayout={onEditNewLayout}
           onCreateKeywords={onCreateKeywords}
+          onChangeTemplatePublic={onChangeTemplatePublic}
         />
       ))}
     </div>

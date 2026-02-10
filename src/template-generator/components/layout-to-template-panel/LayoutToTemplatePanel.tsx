@@ -120,6 +120,7 @@ import ProcessTemplates from "../process-templates/process-templates";
 import SearchTemplates from "../search-templates/search-templates";
 import { useTemplateTranslate } from "../../hooks/useTranslation";
 import { useTemplateKeywords } from "../../hooks/useTemplateKeywords";
+import { usePublicTemplate } from "../../hooks/usePublicTemplate";
 
 export const THUMB_WIDTH = 200;
 
@@ -132,7 +133,7 @@ export type ILayout2TemplateMergedProps = typeof mapDispatchToProps &
   ILayout2TemplateProps;
 
 const LayoutToTemplate = (
-  props: PropsWithChildren<ILayout2TemplateMergedProps>
+  props: PropsWithChildren<ILayout2TemplateMergedProps>,
 ): ReactElement | null => {
   const {
     project,
@@ -161,6 +162,8 @@ const LayoutToTemplate = (
     _setDevice,
   } = props;
   const { getLayoutSetsWithLayouts } = useGeneratorHook();
+
+  const { updatePublicTemplate } = usePublicTemplate();
 
   const { templateKeywords } = useTemplateKeywords();
   const [processTemplatesOpen, setProcessTemplatesOpen] = useState(false);
@@ -219,6 +222,12 @@ const LayoutToTemplate = (
     layoutId: localStorage.getItem("ai-generator-layout") ?? "layout-1000",
   });
 
+  // useEffect(() => {
+  //   if(filtersRef.current.filterLayout){
+  //     restartPolling()
+  //   }
+  // }, [formState.layoutId]);
+
   useEffect(() => {
     const filter = formState?.documentTypeId
       ? { documentTypeId: formState?.documentTypeId }
@@ -230,7 +239,7 @@ const LayoutToTemplate = (
         label?: string;
         value: string;
         reviewState?: LayoutReviewStatus;
-      }[] = [{ label: "Select layout ....", value: "" }];
+      }[] = [{ label: "Select layout (or reset) ....", value: "" }];
 
       response.forEach((layoutSet) => {
         options.push({
@@ -321,7 +330,7 @@ const LayoutToTemplate = (
     aiGenCurrentUser: localStorage?.getItem("aiGenCurrentUser"),
     aiGenProcessingComplete: localStorage?.getItem("aiGenProcessingComplete"),
     aiGenProcessingStatus: localStorage?.getItem("aiGenProcessingStatus"),
-    filterLayout: localStorage?.getItem("filterLayout") === "true",
+    aiGenLayoutId: localStorage?.getItem("aiGenLayoutId"),
   });
 
   const poolingFunc = useCallback(() => {
@@ -346,9 +355,9 @@ const LayoutToTemplate = (
           }
         : {}),
 
-      ...(filtersRef.current.filterLayout && formState.layoutId
+      ...(filtersRef.current.aiGenLayoutId
         ? {
-            layoutId: formState.layoutId,
+            layoutId: filtersRef.current.aiGenLayoutId,
           }
         : {}),
 
@@ -403,7 +412,7 @@ const LayoutToTemplate = (
       const perPage = parseInt(
         filtersRef.current.aiGenPerPage ??
           localStorage?.getItem("aiGenPerPage") ??
-          "5"
+          "5",
       );
       if (perPage <= 10) {
         restartPolingOriginal();
@@ -481,7 +490,7 @@ const LayoutToTemplate = (
   const onGenerateImagesOrVectors = async (
     parentPromptId: string,
     promptKind: AiPromptKind.IMAGE | AiPromptKind.VECTOR,
-    onlyObjectId?: string
+    onlyObjectId?: string,
   ) => {
     const aiPrompt = aiPrompts?.find((p) => p.id === parentPromptId);
     // debugger;
@@ -509,7 +518,7 @@ const LayoutToTemplate = (
             layoutResponse.project.objects.objectById[iPrompt.objectId!];
 
           const imageOnePerson = simplifiedLayoutObj.find(
-            (item) => item.objectId === iPrompt.objectId
+            (item) => item.objectId === iPrompt.objectId,
           )?.prompt?.imageOnePerson;
 
           const response = await addImagePrompt({
@@ -561,7 +570,7 @@ const LayoutToTemplate = (
         const aiTemplateWithSimplifiedLayout =
           mergeAiTemplateAndSimplifiedLayout(
             JSON.parse(aiPrompt.simplifiedLayout),
-            aiPrompt.aiResponseJson
+            aiPrompt.aiResponseJson,
           );
 
         for (let i = 0; i < howMany; i++) {
@@ -620,12 +629,12 @@ const LayoutToTemplate = (
     _setDevice(
       [...updatedProject.settings.breakpoints.breakpointsConfiguration]
         .reverse()
-        .find((bc) => bc.enabled)?.type || "device-independent"
+        .find((bc) => bc.enabled)?.type || "device-independent",
     );
 
     // missing extensions >>>
     const missingExtensions = getMissingExtensionsFromProject(
-      response.extensions
+      response.extensions,
     );
     _updateEditor({ missingExtensions });
     if (missingExtensions.length > 0) {
@@ -724,14 +733,28 @@ const LayoutToTemplate = (
         </div>
 
         <div>
-          {getCheckboxField(
+          <LayoutSelect
+            industriesOptions={layoutOptions}
+            value={filters.aiGenLayoutId ?? undefined}
+            onChange={(layoutId: string) => {
+              localStorage?.setItem("aiGenLayoutId", layoutId);
+              setFilters({ ...filters, aiGenLayoutId: layoutId });
+              restartPolling();
+            }}
+          />
+          {/* {getCheckboxField(
             "Layout",
             filtersRef.current.filterLayout,
             (filterLayout) => {
               filtersRef.current.filterLayout = filterLayout;
+              localStorage?.setItem(
+                "aiGenFilterLayout",
+                filterLayout ? "true" : "false",
+              );
+              setFilters({ ...filters, filterLayout: filterLayout });
               restartPolling();
-            }
-          )}
+            },
+          )} */}
         </div>
         <>
           {getSelectField(
@@ -762,7 +785,7 @@ const LayoutToTemplate = (
               localStorage?.setItem("aiGenPerPage", value);
               setFilters({ ...filters, aiGenPerPage: value });
               restartPolling();
-            }
+            },
           )}
         </>
 
@@ -790,7 +813,7 @@ const LayoutToTemplate = (
               localStorage?.setItem("aiGenCurrentUser", value ?? "");
               setFilters({ ...filters, aiGenCurrentUser: value });
               restartPolling();
-            }
+            },
           )}
         </>
 
@@ -809,7 +832,7 @@ const LayoutToTemplate = (
               localStorage?.setItem("aiGenProcessingComplete", value!);
               setFilters({ ...filters, aiGenProcessingComplete: value });
               restartPolling();
-            }
+            },
           )}
         </>
 
@@ -832,7 +855,7 @@ const LayoutToTemplate = (
               localStorage?.setItem("aiGenProcessingStatus", value ?? "");
               setFilters({ ...filters, aiGenProcessingStatus: value });
               restartPolling();
-            }
+            },
           )}
         </>
       </RightPanelHeader>
@@ -848,8 +871,9 @@ const LayoutToTemplate = (
                 (document) => {
                   setFormState({ ...formState, documentTypeId: document });
                   localStorage.setItem("ai-generator-document", document!);
+                  setTimeout(() => restartPolling(), 50);
                 },
-                { placeholder: "Select industry" }
+                { placeholder: "Select industry" },
               )}
             </div>
             {/* <div className={cx("input100percent-force", css.inputHolder)}>
@@ -904,7 +928,7 @@ const LayoutToTemplate = (
                   setFormState({ ...formState, neutralColors });
                 },
                 "",
-                { alignIndicator: "left" }
+                { alignIndicator: "left" },
               )}
             </div>
             <div className={cx("input60", css.inputHolder)}>
@@ -915,7 +939,7 @@ const LayoutToTemplate = (
                   setFormState({ ...formState, uncrowdedImages });
                 },
                 "",
-                { alignIndicator: "left" }
+                { alignIndicator: "left" },
               )}
             </div>
             <div className={cx("input60", css.inputHolder)}>
@@ -926,7 +950,7 @@ const LayoutToTemplate = (
                   setFormState({ ...formState, noAnyWritingsInImages });
                 },
                 "",
-                { alignIndicator: "left" }
+                { alignIndicator: "left" },
               )}
             </div>
             <div className={cx("input60", css.inputHolder)}>
@@ -937,7 +961,7 @@ const LayoutToTemplate = (
                   setFormState({ ...formState, noHandsInImages });
                 },
                 "",
-                { alignIndicator: "left" }
+                { alignIndicator: "left" },
               )}
             </div>
           </div>
@@ -983,7 +1007,7 @@ const LayoutToTemplate = (
                     set(
                       clone,
                       `${formState.layoutId}.layout.reviewState`,
-                      value
+                      value,
                     );
 
                     setLayoutDataById(clone);
@@ -992,7 +1016,7 @@ const LayoutToTemplate = (
                     const newLayoutOptions = cloneDeep(layoutOptions);
 
                     const opt = newLayoutOptions.find(
-                      (op) => op.value === formState.layoutId
+                      (op) => op.value === formState.layoutId,
                     );
                     if (opt) {
                       opt.reviewState = value;
@@ -1001,10 +1025,10 @@ const LayoutToTemplate = (
                     setLayoutOptions(newLayoutOptions);
 
                     //
-                  }
+                  },
                 );
               },
-              layoutReviewStatusOptions
+              layoutReviewStatusOptions,
             )}
           </div>
           <div className={css.actionRow}>
@@ -1065,6 +1089,22 @@ const LayoutToTemplate = (
         </section>
 
         <section>
+          {isLoading && (
+            <div
+              style={{
+                position: "absolute",
+                zIndex: 1000,
+                right: "0px",
+                top: "0px",
+                color: "#888",
+              }}
+            >
+              Loading ....
+            </div>
+          )}
+          {!isLoading && (!aiPrompts || aiPrompts.length === 0) ? (
+            <>No templates found...</>
+          ) : null}
           {aiPrompts ? (
             <PromptItems
               aiPrompts={aiPrompts}
@@ -1072,25 +1112,25 @@ const LayoutToTemplate = (
               onGenerateColors={onGenerateColors}
               onGenerateImages={(
                 parentPromptId: string,
-                onlyObjectId?: string
+                onlyObjectId?: string,
               ) => {
                 stopPolling();
                 onGenerateImagesOrVectors(
                   parentPromptId,
                   AiPromptKind.IMAGE,
-                  onlyObjectId
+                  onlyObjectId,
                 );
                 restartPolling();
               }}
               onGenerateVectors={(
                 parentPromptId: string,
-                onlyObjectId?: string
+                onlyObjectId?: string,
               ) => {
                 stopPolling();
                 onGenerateImagesOrVectors(
                   parentPromptId,
                   AiPromptKind.VECTOR,
-                  onlyObjectId
+                  onlyObjectId,
                 );
                 restartPolling();
               }}
@@ -1103,6 +1143,11 @@ const LayoutToTemplate = (
               onEditNewLayout={onEditNewLayout}
               onCreateKeywords={(parentPromptId) => {
                 templateKeywords({ aiPromptId: parentPromptId });
+              }}
+              onChangeTemplatePublic={async (id, isPublic) => {
+                stopPolling();
+                await updatePublicTemplate(id, { isPublic });
+                restartPolling();
               }}
             />
           ) : (
@@ -1132,8 +1177,8 @@ const mapStateToProps = (state: IStore) => {
   // NOTE: get largest enabled
   const breakpointConfig: BreakpointConfiguration | undefined = last(
     state.project.settings.breakpoints.breakpointsConfiguration.filter(
-      (bc) => bc.enabled
-    )
+      (bc) => bc.enabled,
+    ),
   );
 
   return {
@@ -1161,7 +1206,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),
@@ -1181,7 +1226,7 @@ function replaceLayoutObject(
   objectProps: Partial<IObject<{}>>,
   values?: {
     [key: string]: any;
-  }
+  },
 ) {
   let object: IObject = {
     ...createObject(type, objectProps, {

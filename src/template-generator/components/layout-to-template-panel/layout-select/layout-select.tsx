@@ -25,7 +25,7 @@ const filterFilm: ItemPredicate<LayoutOptionType> = (
   query,
   industryOption,
   _index,
-  exactMatch
+  exactMatch,
 ) => {
   const normalizedTitle = industryOption.label.toLowerCase();
   const normalizedQuery = query.toLowerCase();
@@ -39,7 +39,7 @@ const filterFilm: ItemPredicate<LayoutOptionType> = (
 
 const renderFilm: ItemRenderer<LayoutOptionType> = (
   film,
-  { handleClick, handleFocus, modifiers, query }
+  { handleClick, handleFocus, modifiers, query },
 ) => {
   if (!modifiers.matchesPredicate) {
     return null;

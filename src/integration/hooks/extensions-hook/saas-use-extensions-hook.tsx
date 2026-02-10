@@ -2,6 +2,7 @@
 
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import axios from "axios";
+import extensions from "./extensions.json";
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */
@@ -10,7 +11,7 @@ export const useExtensionsHook = () => {
     search?: string,
     tags?: string[],
     missingExtensions?: string[],
-    apiKey?: string
+    apiKey?: string,
   ): Promise<{ data: IExtensionItem[] }> => {
     // const apiUrl = `${
     //   import.meta.env.VITE_APP_EXTENSIONS_BASE_URL
@@ -32,7 +33,7 @@ export const useExtensionsHook = () => {
     const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
     return fetch(url).then(async (res) => ({
-      data: await res.json(),
+      data: await Promise.resolve(extensions), // await res.json(),
     }));
   };
 
@@ -43,7 +44,7 @@ export const useExtensionsHook = () => {
 
   /*install extension from directory*/
   const installExtension = async (
-    extension: IExtensionItem
+    extension: IExtensionItem,
   ): Promise<IExtensionItem> => {
     const response = await axios.post(`/api/v1/extensions`, extension);
 

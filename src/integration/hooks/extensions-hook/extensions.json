@@ -1,0 +1,34 @@
+[
+  {
+    "extensionType": "object",
+    "type": "io.forcerefresh.layout.object",
+    "name": "Layout object",
+    "version": "1.0.18",
+    "description": "Placeholder object for Background, Image, Text, Vector and Shape",
+    "tags": [],
+    "categories": [],
+    "author": "Force Refresh team",
+    "license": "EULA",
+    "homepage": {
+      "title": "",
+      "url": ""
+    },
+    "doc": {
+      "title": "",
+      "url": ""
+    },
+    "support": {
+      "title": "",
+      "url": ""
+    },
+    "packageFiles": {
+      "appObjectFilename": "io.forcerefresh.layout.object-app.js",
+      "playerObjectFilename": "io.forcerefresh.layout.object-player.js",
+      "icon": "icon.svg"
+    },
+    "packageUrl": "",
+    "logoUrl": "",
+    "created": "2025-07-07",
+    "modified": "2022-08-12"
+  }
+]

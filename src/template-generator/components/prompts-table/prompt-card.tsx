@@ -69,11 +69,12 @@ export interface PromptCardProps {
       metadata?: { approved: ColorTheme[] };
       overrideObjectProperties?: Record<string, any>;
       textTranslation?: string;
-    }
+    },
   ) => void;
   isChild?: boolean;
   onEditNewLayout: (response: any) => void;
   onCreateKeywords?: (id: string) => void;
+  onChangeTemplatePublic?: (id: string, isPublic: boolean) => void;
 }
 
 const PromptCard: React.FC<PromptCardProps> = ({
@@ -86,10 +87,11 @@ const PromptCard: React.FC<PromptCardProps> = ({
   updatePrompt,
   onEditNewLayout,
   onCreateKeywords,
+  onChangeTemplatePublic,
   isChild,
 }) => {
   const [isExpanded, setIsExpanded] = useState(
-    !isChild && prompt.childPrompts?.length === 0
+    !isChild && prompt.childPrompts?.length === 0,
   );
 
   // const aiResponseJsonObj = useMemo(
@@ -98,7 +100,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
   // );
 
   const [selectedColorPalette, setSelectedColorPalette] = useState<ColorTheme>(
-    prompt.aiResponseJson?.brandColors
+    prompt.aiResponseJson?.brandColors,
   );
 
   const [large, setLarge] = useState(false);
@@ -117,12 +119,12 @@ const PromptCard: React.FC<PromptCardProps> = ({
     promptId: string,
     idx: number,
     status: boolean | undefined,
-    ct: ColorTheme[]
+    ct: ColorTheme[],
   ) => {
     const newApproved = set(
       cloneDeep(approvedColorPalette),
       `${promptId}.${idx}`,
-      status
+      status,
     );
     setApprovedColorPalette(newApproved);
     updatePrompt?.(promptId, {
@@ -136,7 +138,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
 
   const setImageProcessingStatus = (
     promptId: string,
-    status: AiProcessingStatus | undefined
+    status: AiProcessingStatus | undefined,
   ) => {
     updatePrompt?.(promptId, {
       processingStatus: status,
@@ -194,7 +196,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
     useState<Record<string, any>>(
       prompt.overrideObjectProperties
         ? JSON.parse(prompt.overrideObjectProperties)
-        : {}
+        : {},
     );
 
   const debouncedUpdatePrompt = useDebounce(updatePrompt, 500);
@@ -223,7 +225,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
       vectorPrompts
         .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
         .map((ip) => ip.metadata) as any,
-      overridesObjectProperties
+      overridesObjectProperties,
     );
 
     setTemplate(newTemplate);
@@ -418,7 +420,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                         partial = {
                           textTranslation: JSON.stringify({
                             en: texts.map((item) =>
-                              pick(item, "objectId", "properties")
+                              pick(item, "objectId", "properties"),
                             ),
                           }),
                         };
@@ -448,7 +450,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                         partial = {
                           textTranslation: JSON.stringify({
                             en: texts.map((item) =>
-                              pick(item, "objectId", "properties")
+                              pick(item, "objectId", "properties"),
                             ),
                           }),
                         };
@@ -506,6 +508,27 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 <Tag intent={"success"} round>
                   Template generated
                 </Tag>
+
+                {prompt.PublicTemplate && (
+                  <Button
+                    large
+                    intent={
+                      !prompt.PublicTemplate?.[0]?.isPublic
+                        ? "primary"
+                        : "danger"
+                    }
+                    onClick={(e) => {
+                      onChangeTemplatePublic?.(
+                        prompt.PublicTemplate?.[0]?.id,
+                        !prompt.PublicTemplate?.[0]?.isPublic,
+                      );
+                    }}
+                  >
+                    {prompt.PublicTemplate?.[0]?.isPublic
+                      ? "Remove from public"
+                      : "Go Public"}
+                  </Button>
+                )}
               </>
             )}
             {prompt.hasTranslation &&
@@ -832,7 +855,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                               text.properties.text,
                             (newText) => {
                               const newState = cloneDeep(
-                                overridesObjectProperties
+                                overridesObjectProperties,
                               );
                               const prevProperties = newState[text.objectId]
                                 ? { ...newState[text.objectId] }
@@ -844,7 +867,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                               setOverridesObjectProperties(newState);
                             },
                             "",
-                            { rows: 2 }
+                            { rows: 2 },
                           )}
                           <Tag minimal large>
                             {text.tag}
@@ -854,11 +877,11 @@ const PromptCard: React.FC<PromptCardProps> = ({
                               "FS",
                               parseInt(
                                 overridesObjectProperties[text.objectId]
-                                  ?.fontSize ?? text.properties.fontSize
+                                  ?.fontSize ?? text.properties.fontSize,
                               ),
                               (newFontSize) => {
                                 const newState = cloneDeep(
-                                  overridesObjectProperties
+                                  overridesObjectProperties,
                                 );
                                 const prevProperties = newState[text.objectId]
                                   ? { ...newState[text.objectId] }
@@ -868,17 +891,17 @@ const PromptCard: React.FC<PromptCardProps> = ({
                                 newState[text.objectId] = prevProperties;
 
                                 setOverridesObjectProperties(newState);
-                              }
+                              },
                             )}
                             {getNumericFiled(
                               "LH",
                               parseInt(
                                 overridesObjectProperties[text.objectId]
-                                  ?.lineHeight ?? text.properties.lineHeight
+                                  ?.lineHeight ?? text.properties.lineHeight,
                               ),
                               (newLineHeight) => {
                                 const newState = cloneDeep(
-                                  overridesObjectProperties
+                                  overridesObjectProperties,
                                 );
                                 const prevProperties = newState[text.objectId]
                                   ? { ...newState[text.objectId] }
@@ -888,7 +911,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                                 newState[text.objectId] = prevProperties;
 
                                 setOverridesObjectProperties(newState);
-                              }
+                              },
                             )}
 
                             {/* const alignArr = ["left", "center", "right", "justify"]; */}
@@ -900,7 +923,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                                 ?.textAlign ?? text.properties.textAlign,
                               (newTextAlign) => {
                                 const newState = cloneDeep(
-                                  overridesObjectProperties
+                                  overridesObjectProperties,
                                 );
                                 const prevProperties = newState[text.objectId]
                                   ? { ...newState[text.objectId] }
@@ -916,7 +939,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                                 { label: "R", value: "right" },
                                 { label: "C", value: "center" },
                                 { label: "J", value: "justify" },
-                              ]
+                              ],
                             )}
                           </div>
                           {overridesObjectProperties?.[text.objectId] && (
@@ -925,7 +948,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                               intent="primary"
                               onClick={() => {
                                 const newState = cloneDeep(
-                                  overridesObjectProperties
+                                  overridesObjectProperties,
                                 );
                                 delete newState[text.objectId];
 
