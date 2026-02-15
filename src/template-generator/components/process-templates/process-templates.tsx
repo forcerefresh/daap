@@ -9,7 +9,7 @@ import React, {
 import cx from "classnames";
 import { cloneDeep, forEach, last, omit } from "lodash-es";
 import { connect } from "react-redux";
-import { Dialog } from "@blueprintjs/core";
+import { Button, Dialog } from "@blueprintjs/core";
 import { IStore } from "../../../store/store";
 import css from "./process-template.module.scss";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
@@ -65,7 +65,7 @@ export type IProcessTemplatesMergedProps = typeof mapDispatchToProps &
   IProcessTemplatesProps;
 
 const ProcessTemplates = (
-  props: IProcessTemplatesMergedProps
+  props: IProcessTemplatesMergedProps,
 ): ReactElement => {
   const {
     open,
@@ -94,6 +94,8 @@ const ProcessTemplates = (
     _setDevice,
   } = props;
 
+  const stopRef = useRef(false);
+
   const { getTemplateGeneratorPrompts, updatePrompt } = useAiPrompt(); // <<< here
   const { getLayout } = useLayoutHook();
 
@@ -108,6 +110,8 @@ const ProcessTemplates = (
   const { addPublicTemplate } = usePublicTemplate();
 
   const process = async () => {
+    if (stopRef.current) return;
+
     const aiPromptResponse = await getTemplateGeneratorPrompts({
       limit: "1",
       page: "1",
@@ -174,7 +178,7 @@ const ProcessTemplates = (
       // apply translation
       forEach(translation[lang] ?? [], (trans, index) => {
         let obj = oneAiPrompt.aiResponseJson.objects.find(
-          (fObj) => fObj.objectId === trans.objectId
+          (fObj) => fObj.objectId === trans.objectId,
         );
         obj.properties.text = trans.properties.text;
       });
@@ -193,7 +197,7 @@ const ProcessTemplates = (
           .map((ip) => ip.metadata) as any,
         oneAiPrompt.overrideObjectProperties
           ? JSON.parse(oneAiPrompt.overrideObjectProperties)
-          : undefined
+          : undefined,
       );
 
       setTemplate(newTemplate);
@@ -234,15 +238,15 @@ const ProcessTemplates = (
   const takeScreenShot = async () => {
     const breakpointConfig: BreakpointConfiguration | undefined = last(
       templateRef.current.settings.breakpoints.breakpointsConfiguration.filter(
-        (bc) => bc.enabled
-      )
+        (bc) => bc.enabled,
+      ),
     );
     const exportSize = resizeProportionally(
       {
         width: breakpointConfig!.normal.maxSliderSize.width,
         height: breakpointConfig!.normal.maxSliderSize.height,
       },
-      PREVIEW_WIDTH
+      PREVIEW_WIDTH,
     );
 
     // const scale =
@@ -295,6 +299,14 @@ const ProcessTemplates = (
       title="Process templates"
       canOutsideClickClose={false}
     >
+      <Button
+        onClick={() => {
+          stopRef.current = true;
+        }}
+      >
+        Stop
+      </Button>
+
       <div style={{ width: "500px", height: "500px" }}>
         <AITemplatePreview currentProject={template} width={PREVIEW_WIDTH} />
       </div>
@@ -306,8 +318,8 @@ const mapStateToProps = (state: IStore) => {
   // NOTE: get largest enabled
   const breakpointConfig: BreakpointConfiguration | undefined = last(
     state.project.settings.breakpoints.breakpointsConfiguration.filter(
-      (bc) => bc.enabled
-    )
+      (bc) => bc.enabled,
+    ),
   );
 
   return {
@@ -335,7 +347,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _openProject: (project: any) => openProject(project),
   _doClearHistory: () => doClearHistory(),

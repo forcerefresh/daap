@@ -17,6 +17,7 @@ import {
   Checkbox,
   Spinner,
   SpinnerSize,
+  Popover,
 } from "@blueprintjs/core";
 import {
   AiProcessingStatus,
@@ -371,6 +372,10 @@ const PromptCard: React.FC<PromptCardProps> = ({
     return Object.keys(trObj);
   }, [prompt]);
 
+  const textTranslationObj = useMemo(() => {
+    return JSON.parse(prompt.textTranslation);
+  }, [prompt.textTranslation]);
+
   return (
     <Card elevation={Elevation.TWO} style={{ position: "relative" }}>
       <div
@@ -533,9 +538,22 @@ const PromptCard: React.FC<PromptCardProps> = ({
             )}
             {prompt.hasTranslation &&
               translatedToArr.map((lg) => (
-                <Tag intent="primary" minimal round>
-                  {lg}
-                </Tag>
+                <Popover
+                  content={
+                    <pre>
+                      {JSON.stringify(textTranslationObj?.[lg], undefined, 2)}
+                    </pre>
+                  }
+                >
+                  <Tag
+                    intent="primary"
+                    minimal
+                    round
+                    style={{ cursor: "pointer" }}
+                  >
+                    {lg}
+                  </Tag>
+                </Popover>
               ))}
           </div>
 
