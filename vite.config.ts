@@ -60,13 +60,11 @@ export default defineConfig({
   build: {
     // build assets inline
     assetsInlineLimit: 0,
-    sourcemap: true,
     outDir: "dist",
     rollupOptions: {
       input: "index.html", // Entry point
       output: {
         entryFileNames: "[name].js",
-
         format: "iife", // Immediately Invoked Function Expression
         name: "DaapForcerefresh",
       },
