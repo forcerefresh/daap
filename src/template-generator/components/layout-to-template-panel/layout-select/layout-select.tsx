@@ -83,21 +83,22 @@ type LayoutOptionType = {
 };
 
 export const LayoutSelect = ({
-  industriesOptions,
+  layoutOptions,
   value,
   onChange,
 }: {
-  industriesOptions: LayoutOptionType[];
+  layoutOptions: LayoutOptionType[];
   value: string | undefined;
   onChange: (value: string) => void;
+  randomButton?: boolean;
 }) => {
   const [selected, setSelected] = React.useState<
     LayoutOptionType | undefined
   >();
 
   const selectedOption = React.useMemo(() => {
-    return industriesOptions.find((item) => item.value === value);
-  }, [value, industriesOptions]);
+    return layoutOptions.find((item) => item.value === value);
+  }, [value, layoutOptions]);
 
   let color = "";
 
@@ -114,40 +115,54 @@ export const LayoutSelect = ({
   }
 
   return (
-    <Select<LayoutOptionType>
-      items={industriesOptions}
-      itemPredicate={filterFilm}
-      itemRenderer={renderFilm}
-      noResults={
-        <MenuItem
-          disabled={true}
-          text="No results."
-          roleStructure="listoption"
-        />
-      }
-      onItemSelect={(item) => {
-        onChange(item.value);
-      }}
-      popoverProps={{
-        popoverClassName: css.selectPopover,
-        minimal: true,
-        modifiers: {
-          preventOverflow: { enabled: true },
-          flip: { enabled: true },
-        },
-      }}
-    >
-      <Button
-        style={{ marginTop: "10px", marginBottom: "10px" }}
-        // text={ ?? "Select a industry"}
-        rightIcon="double-caret-vertical"
+    <>
+      <Select<LayoutOptionType>
+        items={layoutOptions}
+        itemPredicate={filterFilm}
+        itemRenderer={renderFilm}
+        noResults={
+          <MenuItem
+            disabled={true}
+            text="No results."
+            roleStructure="listoption"
+          />
+        }
+        onItemSelect={(item) => {
+          onChange(item.value);
+        }}
+        popoverProps={{
+          popoverClassName: css.selectPopover,
+          minimal: true,
+          modifiers: {
+            preventOverflow: { enabled: true },
+            flip: { enabled: true },
+          },
+        }}
       >
-        {selectedOption?.disabled ? (
-          <span style={{ color: "gray" }}>{selectedOption?.label}</span>
-        ) : (
-          <span style={{ color }}>{selectedOption?.label} </span>
-        )}
+        <Button
+          style={{ marginTop: "10px", marginBottom: "10px" }}
+          // text={ ?? "Select a industry"}
+          rightIcon="double-caret-vertical"
+        >
+          {selectedOption?.disabled ? (
+            <span style={{ color: "gray" }}>{selectedOption?.label}</span>
+          ) : (
+            <span style={{ color }}>{selectedOption?.label} </span>
+          )}
+        </Button>
+      </Select>
+      <Button
+        onClick={() => {
+          const options = layoutOptions.filter((item) => !item.disabled);
+          const idx = randomBetween(1, options.length - 1);
+          onChange(options[idx].value);
+        }}
+      >
+        Random
       </Button>
-    </Select>
+    </>
   );
 };
+
+const randomBetween = (min: number, max: number) =>
+  Math.floor(Math.random() * (max - min + 1)) + min;

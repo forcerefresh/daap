@@ -12,7 +12,7 @@ import { LayoutReviewStatus } from "../../template-generator/types/layout";
 export const useLayoutHook = () => {
   const patchLayout = (
     id: string,
-    payload: { reviewState: LayoutReviewStatus }
+    payload: { reviewState: LayoutReviewStatus },
   ): Promise<any> => {
     return axios
       .patch(`/api/v1/layouts/${id}`, payload)
@@ -26,7 +26,7 @@ export const useLayoutHook = () => {
   const getLayouts = (
     from: number,
     search: string,
-    perPage = 10
+    perPage = 10,
   ): Promise<any> => {
     return axios
       .get(`/api/v1/layouts`, {
@@ -51,6 +51,7 @@ export const useLayoutHook = () => {
     assetsUrls,
     fonts,
     extensions,
+    parentId,
   }: {
     id: string;
     name: string;
@@ -92,6 +93,7 @@ export const useLayoutHook = () => {
       assetsUrls,
       fonts,
       extensions,
+      parentId,
     };
 
     const response = await axios.post(`/api/v1/layouts`, json);
@@ -130,7 +132,7 @@ export const useLayoutHook = () => {
       assetsUrls: GetAssetsUrlFuncReturnType;
       fonts: GetFontsFuncReturnType;
       extensions: IExtensionItem[];
-    }
+    },
   ): Promise<{
     id: string;
     name: string;

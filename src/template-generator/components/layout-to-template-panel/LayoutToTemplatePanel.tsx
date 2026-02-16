@@ -212,6 +212,7 @@ const LayoutToTemplate = (
     uncrowdedImages?: boolean;
     noAnyWritingsInImages?: boolean;
     noHandsInImages?: boolean;
+    adjustPrompt?: string;
   }>({
     documentTypeId:
       localStorage.getItem("ai-generator-document") ??
@@ -602,7 +603,12 @@ const LayoutToTemplate = (
     });
   };
 
-  const onEditNewLayout = (response: any) => {
+  const onEditNewLayout = (prompt: AiPrompt, response: any) => {
+    // store connection to parent
+    const parentLayoutId = prompt.layoutId;
+
+    localStorage?.setItem("aiGenEditLayout_ParentLayoutId", parentLayoutId);
+
     const meta: IMeta = {
       id: undefined, //response.project.id,
       name: response.name,
@@ -734,7 +740,7 @@ const LayoutToTemplate = (
 
         <div>
           <LayoutSelect
-            industriesOptions={layoutOptions}
+            layoutOptions={layoutOptions}
             value={filters.aiGenLayoutId ?? undefined}
             onChange={(layoutId: string) => {
               localStorage?.setItem("aiGenLayoutId", layoutId);
@@ -889,7 +895,8 @@ const LayoutToTemplate = (
               )}
             </div> */}
             <LayoutSelect
-              industriesOptions={layoutOptions}
+              randomButton={true}
+              layoutOptions={layoutOptions}
               value={formState.layoutId}
               onChange={(layoutId: string) => {
                 restartPolling();
@@ -919,6 +926,16 @@ const LayoutToTemplate = (
                 localStorage.setItem("ai-generator-industry", industryId!);
               }}
             />
+
+            <div className={cx("input60", css.inputHolder)}>
+              {getTextArea(
+                "Adjust prompt",
+                formState.adjustPrompt,
+                (adjustPrompt) => {
+                  setFormState({ ...formState, adjustPrompt });
+                },
+              )}
+            </div>
 
             <div className={cx("input60", css.inputHolder)}>
               {getCheckboxField(
@@ -1049,6 +1066,7 @@ const LayoutToTemplate = (
                     layoutId,
                     neutralColors,
                     uncrowdedImages,
+                    adjustPrompt,
                     noAnyWritingsInImages,
                     noHandsInImages,
                   } = formState;
@@ -1066,6 +1084,7 @@ const LayoutToTemplate = (
                       noHandsInImages: noHandsInImages ? "true" : "false",
                       simplifiedLayout:
                         layoutDataById[formState?.layoutId!].simplifiedLayout,
+                      adjustPrompt,
                     })
                       .then((response) => {
                         // reload.....

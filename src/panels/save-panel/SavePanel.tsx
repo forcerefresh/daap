@@ -109,7 +109,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
           width: breakpointConfig!.normal.maxSliderSize.width,
           height: breakpointConfig!.normal.maxSliderSize.height,
         },
-        THUMB_WIDTH
+        THUMB_WIDTH,
       );
 
       // const scale =
@@ -166,7 +166,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpoints,
       settings,
       installedExtensions.data,
-      { isSave: true }
+      { isSave: true },
     );
 
     let updatedProject = project;
@@ -247,7 +247,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
               intent: "success",
               message: "Slider is successfully saved.",
             });
-          }
+          },
         )
         .catch((e) => {
           _updateProjectMeta({ inSaving: false });
@@ -289,6 +289,10 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             assetsUrls,
             //publishRevision,
           }) => {
+            if (localStorage?.getItem("aiGenEditLayout_ParentLayoutId")) {
+              localStorage?.setItem("aiGenEditLayout_SavedProjectId", id);
+            }
+
             _updateProjectMeta({
               id,
               name,
@@ -307,7 +311,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
               intent: "success",
               message: "Slider is successfully saved.",
             });
-          }
+          },
         )
         .catch((e) => {
           _updateProjectMeta({ inSaving: false });
@@ -335,7 +339,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
       breakpoints,
       settings,
       installedExtensions.data,
-      { isSave: true }
+      { isSave: true },
     );
 
     const assetsUrls = getAllAssetsUrls(objects);
@@ -447,7 +451,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
             (name: any) => {
               setLocalMeta({ ...localMeta, name });
             },
-            ""
+            "",
           )}
         </div>
 
@@ -459,7 +463,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
               setLocalMeta({ ...localMeta, description });
             },
             "",
-            { disabledDebounce: true }
+            { disabledDebounce: true },
           )}
         </div>
         <div className={css.actionRow}>
@@ -573,7 +577,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
                   name,
                 }));
               },
-              ""
+              "",
             )}
           </div>
 
@@ -588,7 +592,7 @@ const SavePanel: React.FC<ISavePanelMergedProps> = (props) => {
                 }));
               },
               "",
-              { disabledDebounce: true }
+              { disabledDebounce: true },
             )}
           </div>
         </div>
@@ -623,8 +627,8 @@ const mapStateToProps = (state: IStore) => {
   // NOTE: get largest enabled
   const breakpointConfig: BreakpointConfiguration | undefined = last(
     state.project.settings.breakpoints.breakpointsConfiguration.filter(
-      (bc) => bc.enabled
-    )
+      (bc) => bc.enabled,
+    ),
   );
 
   return {

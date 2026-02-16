@@ -26,7 +26,7 @@ export const ColorSetPromptCard = ({
     promptId: string,
     idx: number,
     status: boolean | undefined,
-    ct: ColorTheme[]
+    ct: ColorTheme[],
   ) => void;
 }) => {
   const colorPalettes = useMemo(() => {
@@ -65,9 +65,11 @@ export const ColorSetPromptCardView = ({
     promptId: string,
     idx: number,
     status: boolean | undefined,
-    ct: ColorTheme[]
+    ct: ColorTheme[],
   ) => void;
 }) => {
+  console.log(colorPalettes);
+
   if (!colorPalettes) return null;
 
   return (
@@ -88,19 +90,19 @@ export const ColorSetPromptCardView = ({
                   cpsClone[idx] = true;
 
                   const approvedColorSets = colorPalettes.filter(
-                    (cp, idx) => !!cpsClone[idx]
+                    (cp, idx) => !!cpsClone[idx],
                   );
                   setColorPaletteStatus(promptId, idx, true, approvedColorSets);
                 } else {
                   delete cpsClone[idx];
                   const approvedColorSets = colorPalettes.filter(
-                    (cp, idx) => !!cpsClone[idx]
+                    (cp, idx) => !!cpsClone[idx],
                   );
                   setColorPaletteStatus(
                     promptId,
                     idx,
                     undefined,
-                    approvedColorSets
+                    approvedColorSets,
                   );
                 }
               }}

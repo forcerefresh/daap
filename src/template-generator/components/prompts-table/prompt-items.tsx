@@ -20,7 +20,7 @@ export const PromptItems = ({
   onGenerateVectors?: (id: string, onlyObjectId?: string) => void;
   onGenerateLayouts?: (id: string) => void;
   updatePrompt: PromptCardProps["updatePrompt"];
-  onEditNewLayout: (response: any) => void;
+  onEditNewLayout: (prompt: AiPrompt, response: any) => void;
   onCreateKeywords?: (id: string) => void;
   onChangeTemplatePublic?: (id: string, isPublic: boolean) => void;
 }) => {

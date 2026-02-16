@@ -69,7 +69,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
   const { getLayout, updateLayout, saveLayout } = useLayoutHook();
 
   const [latestPagination, setLatestPagination] = useState<Pagination | null>(
-    null
+    null,
   );
 
   const globalContext = useContext(IntegrationContext);
@@ -113,7 +113,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
         (error) => {
           logger.app.error(error);
-        }
+        },
       );
     }
   };
@@ -124,7 +124,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
   const debounceFetchData = debounce(
     (fromPage?: number) => fetchData(fromPage),
-    100
+    100,
   );
 
   const deleteIdRef = useRef<{ id: string; name: string } | null>(null);
@@ -176,12 +176,17 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       layout = await getLayout(id);
     } catch (ex) {}
 
+    project.parentId = localStorage?.getItem("aiGenEditLayout_ParentLayoutId");
+
     // debugger;
     if (layout) {
-      updateLayout(id, project);
+      await updateLayout(id, project);
     } else {
-      saveLayout(project);
+      await saveLayout(project);
     }
+
+    localStorage.removeItem("aiGenEditLayout_ParentLayoutId");
+    localStorage.removeItem("aiGenEditLayout_SavedProjectId");
 
     axios
       .post(`/api/v1/publish/${id}`, props)
@@ -237,7 +242,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
       _setDevice(
         [...project.settings.breakpoints.breakpointsConfiguration]
           .reverse()
-          .find((bc) => bc.enabled)?.type || "device-independent"
+          .find((bc) => bc.enabled)?.type || "device-independent",
       );
 
       // NOTE: Backward compatibility: Front slide is added on 1st February 2023
@@ -252,7 +257,7 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
 
       // missing extensions >>>
       const missingExtensions = getMissingExtensionsFromProject(
-        responseProject.extensions
+        responseProject.extensions,
       );
       _updateEditor({ missingExtensions });
       if (missingExtensions.length > 0) {
@@ -416,6 +421,9 @@ const ProjectsPanel: React.FC<IProjectsMergedProps> = (props) => {
                     </Button>
                   ) : null}
 
+                  {localStorage?.getItem("aiGenEditLayout_SavedProjectId") ===
+                    project.id && <div>Will link to parent</div>}
+
                   {/* {account?.userData?.enableLayouts &&
                   project.saveRevision !== project.publishRevision ? (
                     <Button
@@ -474,7 +482,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _updateProjectMeta: (meta: Partial<IMeta>) => updateProjectMeta(meta),
   _openProject: (project: any) => openProject(project),

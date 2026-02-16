@@ -30,7 +30,7 @@ export const useAiPrompt = () => {
         perPage?: string;
         page?: string;
         limit?: string;
-      } = {}
+      } = {},
     ): Promise<{
       data: AiPrompt[];
       pagination: Pagination;
@@ -44,7 +44,7 @@ export const useAiPrompt = () => {
         .then((response) => response.data)
         .catch(console.log);
     },
-    []
+    [],
   );
 
   const updatePrompt = (id: string, prompt: Partial<AiPrompt>) => {
@@ -64,6 +64,7 @@ export const useAiPrompt = () => {
     uncrowdedImages: string; // "true" : "false",
     noAnyWritingsInImages: string; // "true" : "false",
     noHandsInImages: string; // "true" : "false",
+    adjustPrompt?: string;
   }): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator-prompt`, props)
@@ -126,7 +127,7 @@ export const useAiPrompt = () => {
   };
 
   const generateTemplate = (
-    iaPromptId: string
+    iaPromptId: string,
   ): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/template-generator`, { id: iaPromptId })
@@ -135,7 +136,7 @@ export const useAiPrompt = () => {
   };
 
   const generateImageOrVector = (
-    iaPromptId: string
+    iaPromptId: string,
   ): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/image-generator`, {
@@ -146,7 +147,7 @@ export const useAiPrompt = () => {
   };
 
   const generateLayout = (
-    iaPromptId: string
+    iaPromptId: string,
   ): Promise<{ output?: string; error?: string }> => {
     return axios
       .post(`/api/v1/generator/layout-generator`, {

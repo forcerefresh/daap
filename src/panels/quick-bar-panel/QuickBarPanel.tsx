@@ -103,7 +103,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
   if (activeTool) {
     toolBarComponent = getObjectToolDefinitions(
       activeTool.tool,
-      activeTool.version
+      activeTool.version,
     );
     mode = ToolbarMode.Edit;
   } else if (
@@ -112,7 +112,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
   ) {
     toolBarComponent = getObjectToolDefinitions(
       activeObject.type,
-      "latest"
+      "latest",
       // activeObject.version
     );
     mode = ToolbarMode.Selection;
@@ -309,7 +309,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                       if (!retObj.style) retObj.style = {};
                       retObj.style.opacity = parseInt(opacity);
                       updateObjectForPreview(retObj);
-                    }
+                    },
                   )}
                 </div>
               </div>
@@ -366,7 +366,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                   onSelect={(item) => {
                     if (activeObject) {
                       const newObject = cloneDeep(activeObject);
-                      debugger;
+                      //debugger;
                       if (item?.initialValues?.svg) {
                         newObject.mask = {
                           type: "svg",
@@ -529,7 +529,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
 

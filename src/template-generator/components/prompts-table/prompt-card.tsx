@@ -73,7 +73,7 @@ export interface PromptCardProps {
     },
   ) => void;
   isChild?: boolean;
-  onEditNewLayout: (response: any) => void;
+  onEditNewLayout: (prompt: AiPrompt, response: any) => void;
   onCreateKeywords?: (id: string) => void;
   onChangeTemplatePublic?: (id: string, isPublic: boolean) => void;
 }
@@ -622,6 +622,13 @@ const PromptCard: React.FC<PromptCardProps> = ({
                   {prompt.noHandsInImages ? "Yes" : "No"}
                 </Tag>
               </FormGroup>
+              {prompt.adjustPrompt && (
+                <FormGroup label="Adjust prompt" style={{ margin: 0 }}>
+                  <Tag large minimal>
+                    {prompt.adjustPrompt}
+                  </Tag>
+                </FormGroup>
+              )}
             </ControlGroup>
 
             <ControlGroup
@@ -991,7 +998,9 @@ const PromptCard: React.FC<PromptCardProps> = ({
                     selectedColorPalette={selectedColorPalette}
                     imagePrompts={imagePrompts ?? []}
                     vectorPrompts={vectorPrompts ?? []}
-                    onEditNewLayout={onEditNewLayout}
+                    onEditNewLayout={(response: any) => {
+                      onEditNewLayout(prompt, response);
+                    }}
                     // setLayoutProcessingStatus={setImageProcessingStatus}
                     // onApply={() => onApplyImages(imagePrompts)}
                   />
