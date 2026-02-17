@@ -27,18 +27,14 @@ const SearchFooter = () => {
           <Text style={{ display: "inline" }}>Documentation</Text>
         </Link>
         <Link
-          to={
-            "https://demo.daap.forcerefresh.io/documents/privacy-policy-v1.html"
-          }
+          to={"https://daap.forcerefresh.io/documents/privacy-policy-v1.html"}
           target="_blank"
           className={css.footerLink}
         >
           <Text style={{ display: "inline" }}>Privacy Policy</Text>
         </Link>
         <Link
-          to={
-            "https://demo.daap.forcerefresh.io/documents/terms-of-service-v1.html"
-          }
+          to={"https://daap.forcerefresh.io/documents/terms-of-service-v1.html"}
           target="_blank"
           className={css.footerLink}
         >
