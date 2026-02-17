@@ -417,6 +417,11 @@ const SearchPage = ({
     }
   }, [isAuthenticated]);
 
+  const searchPageContainerWP =
+    import.meta.env.VITE_APP_INTEGRATION === "wp" && !fullScreen
+      ? styles.searchPageContainerWP
+      : "";
+
   return (
     <>
       <>
@@ -538,7 +543,11 @@ const SearchPage = ({
       </>
 
       <div
-        className={`${styles.searchPageContainer}  ${
+        // style={{
+        //   height:
+        //     import.meta.env.VITE_APP_INTEGRATION === "wp" ? "100vh" : "100vh",
+        // }}
+        className={`${styles.searchPageContainer} ${searchPageContainerWP}  ${
           isExpanded ? styles.expanded : ""
         }`}
       >

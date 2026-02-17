@@ -24,7 +24,7 @@ export const useMyMediaHook = () => {
   const upload = async (
     type: MediaType,
     file: File,
-    fileMetadata: MediaDataInfo
+    fileMetadata: MediaDataInfo,
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     logger.app.log(type, fileMetadata);
 
@@ -99,7 +99,7 @@ export const useMyMediaHook = () => {
     if (type === "font") {
       const mediaSizes = JSON.parse(response.data.data.addedMedia.mediaSizes);
       const fontFilename = mediaSizes.find(
-        (item: any) => item.sizeType === "original"
+        (item: any) => item.sizeType === "original",
       ).sourceFilename;
       const fontUrl = `/api/v1/media/${fontFilename}`;
 
@@ -120,6 +120,8 @@ export const useMyMediaHook = () => {
         url: fontUrl,
         name: response.data.data.addedMedia.name,
         type: response.data.data.addedMedia.format,
+        // holder: document.body,
+        holder: document.querySelector("#daap-font-preview-holder"),
       });
 
       if (imageBlob) {
@@ -127,7 +129,7 @@ export const useMyMediaHook = () => {
         const previevJson = { previewImageBase64 };
         const responsePreviewImage = await axios.patch(
           `/api/v1/medias/${type}/${response.data.data.addedMedia.id}`,
-          previevJson
+          previevJson,
         );
       }
     }
@@ -223,7 +225,7 @@ export const useMyMediaHook = () => {
 
   const deleteMedias = async (
     type: MediaType,
-    ids: string[]
+    ids: string[],
   ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
     try {
       await axios.delete(`/api/v1/media/${ids[0]}`);

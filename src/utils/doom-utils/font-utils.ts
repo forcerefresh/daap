@@ -5,14 +5,18 @@ export async function createFontPreviewImage({
   url,
   name,
   type,
+  holder,
+  position = "relative",
 }: {
   url: string;
   name: string;
   type: string;
+  position?: string;
 }) {
   // add rootEl
   const rootEl = document.createElement("div");
-  rootEl.style.position = "absolute";
+  rootEl.style.position = position;
+
   rootEl.style.zIndex = "-100";
   rootEl.style.overflow = "visible";
   rootEl.style.fontSize = "36px";
@@ -26,7 +30,7 @@ export async function createFontPreviewImage({
   rootEl.style.height = "60px";
   rootEl.style.fontFamily = `"${name}"`;
 
-  document.body.appendChild(rootEl);
+  holder.appendChild(rootEl);
 
   const html = `
     <div style="height: 60px; display: flex; align-items: center;">
@@ -52,7 +56,7 @@ export async function createFontPreviewImage({
   });
 
   // remove rootEl
-  document.body.removeChild(rootEl);
+  holder.removeChild(rootEl);
 
   return imageBlob;
   //

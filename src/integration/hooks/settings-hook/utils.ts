@@ -1,6 +1,6 @@
 export function scaleApp(zoom: number) {
   const appEl = document.getElementsByClassName(
-    "daap-forcerefresh-app"
+    "daap-forcerefresh-app",
   )?.[0] as HTMLDivElement;
 
   if (appEl) {

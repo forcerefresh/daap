@@ -48,7 +48,7 @@ interface MyImageSelectProps {
 }
 */
 export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
-  props
+  props,
 ) => {
   const { onStop, onComplete, type, inputs = {} } = props;
 
@@ -56,18 +56,18 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
     type === "image"
       ? "image/jpeg, image/png, image/gif"
       : type === "video"
-      ? "video/mp4"
-      : type === "audio"
-      ? "audio/mp3, audio/mpeg"
-      : type === "vector"
-      ? "image/svg+xml"
-      : type === "font"
-      ? "font/otf, font/ttf, font/woff2"
-      : type === "extension"
-      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
-      : type === "template"
-      ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
-      : undefined;
+        ? "video/mp4"
+        : type === "audio"
+          ? "audio/mp3, audio/mpeg"
+          : type === "vector"
+            ? "image/svg+xml"
+            : type === "font"
+              ? "font/otf, font/ttf, font/woff2"
+              : type === "extension"
+                ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+                : type === "template"
+                  ? "application/zip, application/octet-stream, application/x-zip-compressed, multipart/x-zip"
+                  : undefined;
 
   const {
     acceptedFiles,
@@ -88,7 +88,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
       ...(isDragAccept ? dzAcceptStyle : {}),
       ...(isDragReject ? dzRejectStyle : {}),
     }),
-    [isFocused, isDragAccept, isDragReject]
+    [isFocused, isDragAccept, isDragReject],
   );
 
   useEffect(() => {
@@ -134,7 +134,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
                 const newArr = [...formData];
                 newArr[idx].name = value;
                 setFormData(newArr);
-              }
+              },
             )}
           </div>
         )}
@@ -159,7 +159,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
                 const newArr = [...formData];
                 newArr[idx].tags = value;
                 setFormData(newArr);
-              }
+              },
             )}
           </div>
         )}
@@ -174,7 +174,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
                 newArr[idx].filename = value;
                 setFormData(newArr);
               },
-              "Override original filename"
+              "Override original filename",
             )}
           </div>
         )}
@@ -307,7 +307,7 @@ export const WpMyImageSelect_Upload: React.FC<getMyUploadComponentProps> = (
             setUploadInProgress(false);
 
             const errorMessage = statusArr.find(
-              (s) => (s.status = "ERROR")
+              (s) => (s.status = "ERROR"),
             )?.errorMessage;
 
             if (errorMessage) {
@@ -336,7 +336,7 @@ interface UploadDialogProps {
   filesInfoArr: UploadFileInfo[];
   onFile: (file: File) => void;
   onAll: (
-    statusArr: { status: "OK" | "ERROR"; errorMessage?: string }[]
+    statusArr: { status: "OK" | "ERROR"; errorMessage?: string }[],
   ) => void;
   onCancel: () => void;
 }
@@ -376,7 +376,7 @@ function UploadDialog(props: UploadDialogProps) {
     }).then((status) => {
       statusesArrRef.current.push(status);
       logger.app.debug(
-        `File has been uploaded (${filesInfo.filename} > ${filesInfo.filename})`
+        `File has been uploaded (${filesInfo.filename} > ${filesInfo.filename})`,
       );
 
       if (isUnMounted.current) return;
@@ -403,7 +403,7 @@ function UploadDialog(props: UploadDialogProps) {
           Currently uploading <strong>{currentUploadIndex + 1}</strong> of{" "}
           <strong>{totalFiles}</strong>
         </div>
-
+        <div id="daap-font-preview-holder"></div>
         <div className="">
           Uploaded: <strong>{currentUploadIndex}</strong>
         </div>

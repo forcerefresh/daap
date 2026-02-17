@@ -153,6 +153,8 @@ export const useMyMediaHook = () => {
         url: fontUrl,
         name: response.data.data.addedMedia.name,
         type: response.data.data.addedMedia.format,
+        holder: document.querySelector("#daap-font-preview-holder"),
+        position: "static",
       });
 
       if (imageBlob) {
