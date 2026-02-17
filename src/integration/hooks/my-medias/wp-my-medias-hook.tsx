@@ -23,7 +23,7 @@ import { delayPromise } from "../../../utils/common/delay-utils";
 export const useMyMediaHook = () => {
   const uploadToWP = async (
     filename: string,
-    fileBase64: string ///File
+    fileBase64: string, ///File
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     const json = {
       fileBase64, //: file2Base64(file),
@@ -37,7 +37,7 @@ export const useMyMediaHook = () => {
         headers: {
           "X-WP-Nonce": daapForcerefreshSettings.nonce,
         },
-      }
+      },
     );
 
     return response.data;
@@ -46,7 +46,7 @@ export const useMyMediaHook = () => {
   const upload = async (
     type: MediaType,
     file: File,
-    fileMetadata: MediaDataInfo
+    fileMetadata: MediaDataInfo,
   ): Promise<{ status: "OK" | "ERROR"; errorMessage?: string }> => {
     logger.app.log(type, fileMetadata);
 
@@ -120,25 +120,28 @@ export const useMyMediaHook = () => {
           headers: {
             "X-WP-Nonce": daapForcerefreshSettings.nonce,
           },
-        }
+        },
       );
     } catch (ex: any) {
       return { status: "ERROR", errorMessage: ex?.response?.data?.message };
     }
 
     if (type === "font") {
-      const mediaSizes = JSON.parse(response.data.data.addedMedia.mediaSizes);
+      const mediaSizes = response.data.data.addedMedia.mediaSizes;
       const fontFilename = mediaSizes.find(
-        (item: any) => item.sizeType === "original"
+        (item: any) => item.sizeType === "original",
       ).sourceFilename;
+
       const fontUrl = `${daapForcerefreshSettings.baseMediaUrl}/${fontFilename}`;
 
-      addStyle(`
+      const style = `
         @font-face{
           font-family: "${response.data.data.addedMedia.name}";
           src: url("${fontUrl}");
         }
-      `);
+      `;
+
+      addStyle(style);
 
       await delayPromise(300);
       await delayPromise(300);
@@ -163,7 +166,7 @@ export const useMyMediaHook = () => {
             headers: {
               "X-WP-Nonce": daapForcerefreshSettings.nonce,
             },
-          }
+          },
         );
 
         // const responsePreviewImage = await axios.patch(
@@ -257,7 +260,7 @@ export const useMyMediaHook = () => {
 
   const deleteMedias = async (
     type: MediaType,
-    ids: string[]
+    ids: string[],
   ): Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }> => {
     try {
       await axios.delete(
@@ -266,7 +269,7 @@ export const useMyMediaHook = () => {
           headers: {
             "X-WP-Nonce": daapForcerefreshSettings.nonce,
           },
-        }
+        },
       );
 
       return { response: [{ status: "SUCCESS", id: ids[0] }] };

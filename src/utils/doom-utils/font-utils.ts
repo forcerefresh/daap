@@ -1,6 +1,7 @@
 import * as htmlToImage from "html-to-image";
+import { delayPromise } from "../common/delay-utils";
 
-export function createFontPreviewImage({
+export async function createFontPreviewImage({
   url,
   name,
   type,
@@ -37,7 +38,13 @@ export function createFontPreviewImage({
 
   rootEl.innerHTML = html;
 
-  const imageBlob = htmlToImage.toBlob(rootEl, {
+  await delayPromise(300);
+  await delayPromise(300);
+  await delayPromise(300);
+  await delayPromise(300);
+  await delayPromise(300);
+
+  const imageBlob = await htmlToImage.toBlob(rootEl, {
     canvasHeight: 60,
     canvasWidth: 500,
     height: 60,
