@@ -294,8 +294,6 @@ async function prepareFontsForExport(root = document) {
     }
   }
 
-  console.log("Fonts ready:", [...usedFonts]);
-
   return safeFontCSS;
 }
 
