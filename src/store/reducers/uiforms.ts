@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import { ActionTypes, SET_FORM_STATE } from "../actions/actions";
 import { IFormState } from "./i-uiforms";
 
@@ -10,7 +10,7 @@ export function uiforms(
   state: IUIForms = {
     uiFormSate: {},
   },
-  action: ActionTypes
+  action: ActionTypes,
 ) {
   switch (action.type) {
     case SET_FORM_STATE: {

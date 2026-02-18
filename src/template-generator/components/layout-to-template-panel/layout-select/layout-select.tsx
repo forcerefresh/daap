@@ -6,7 +6,6 @@ import { Industry } from "../../../types/industry";
 import { getIndustriesOptionFromThree } from "../industry-utils";
 
 import css from "./layout-select.module.scss";
-import { color } from "html2canvas/dist/types/css/types/color";
 import { LayoutReviewStatus } from "../../../types/layout";
 
 // export interface Film {

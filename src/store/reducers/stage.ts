@@ -1,4 +1,4 @@
-import { omit } from "lodash";
+import { omit } from "lodash-es";
 import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
 import {
   ActionTypes,

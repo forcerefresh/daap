@@ -5,7 +5,6 @@ import { getSliderOptionsFromLocalStorage } from "./utils";
 import css from "./PlayerDev.module.scss";
 import cx from "classnames";
 import { IPlayerData } from "../export/i-export-html";
-import { viewport } from "@popperjs/core";
 
 interface IParentDivConfig {
   top: number;
@@ -29,11 +28,11 @@ function PlayerDev() {
   const [selectedSlider, setSelectedSlider] = useState<string | undefined>();
   const [latestPlayerData, setLatestPlayerData] = useState<any>();
   const [playerHolderStyle, setPlayerHolderStyle] = useState(
-    getPlayerHolderStyle(0)
+    getPlayerHolderStyle(0),
   );
 
   const [sliderReference, setSliderReference] = useState<"viewport" | "parent">(
-    "viewport"
+    "viewport",
   );
   const [parentDivConfig, setParentDivConfig] = useState<IParentDivConfig>({
     top: 0,
@@ -54,13 +53,13 @@ function PlayerDev() {
     }
 
     setSliderReference(
-      selectedPlayerData.config.breakpointReference || "viewport"
+      selectedPlayerData.config.breakpointReference || "viewport",
     );
 
     setPlayerHolderStyle(
       getPlayerHolderStyle(
-        selectedPlayerData.config.breakpointReference === "parent" ? 100 : 0
-      )
+        selectedPlayerData.config.breakpointReference === "parent" ? 100 : 0,
+      ),
     );
 
     playerRef.current = new Player(selectedPlayerData, playerRootRef.current!);
@@ -81,7 +80,7 @@ function PlayerDev() {
             {bp.type}
           </Button>
         );
-      }
+      },
     );
   };
 
@@ -112,7 +111,7 @@ function PlayerDev() {
 
           playerRef.current = new Player(
             latestPlayerData,
-            playerRootRef.current!
+            playerRootRef.current!,
           );
           playerRef.current.play();
         }}
@@ -174,7 +173,7 @@ function PlayerDev() {
                   setSliderReference(bpRef);
 
                   setPlayerHolderStyle(
-                    getPlayerHolderStyle(bpRef === "viewport" ? 0 : 100)
+                    getPlayerHolderStyle(bpRef === "viewport" ? 0 : 100),
                   );
 
                   setTimeout(() => {

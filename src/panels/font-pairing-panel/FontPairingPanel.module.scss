@@ -149,7 +149,8 @@
 }
 
 .fontsSprite {
-  background: url("../../utils/fonts2/google-font-pairing-image.png");
+  // background: url("../../utils/fonts2/google-font-pairing-image.png");
+  background: url("../../utils/fonts2/google-font-pairing-image-dark.png");
   width: 300px;
   height: 103px;
   margin-left: 5px;
@@ -171,6 +172,6 @@
     // border-right: 1px solid #555;
   }
   .fontsSprite {
-    background: url("../../utils/fonts2/google-font-pairing-image-dark.png");
+    // background: url("../../utils/fonts2/google-font-pairing-image-dark.png");
   }
 }

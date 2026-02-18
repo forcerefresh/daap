@@ -5,13 +5,13 @@ import {
   IColorArrayInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import css from "./color-array-input.module.scss";
 
 const getDefaultColor = () => ({ r: 256, g: 256, b: 256, a: 1 });
 
 export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
-  props
+  props,
 ) => {
   const { displayName, value, onChange } = props;
 
@@ -48,7 +48,7 @@ export const ColorArrayInputForm: React.FC<IColorArrayInput & IUpdateInput> = (
                   valueClone[index] = colorValue;
                   onChange(valueClone);
                 },
-                ""
+                "",
               )}
 
               {value.length > 1 && (

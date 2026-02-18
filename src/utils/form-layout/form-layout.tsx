@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { InputType } from "webslider-sdk/lib/inputs/i-inputs";
 import { AppToaster } from "../components/app-toaster/AppToaster";
 import css from "./form-layout.module.scss";
-import { flatten } from "lodash";
+import { flatten } from "lodash-es";
 import { IFormState } from "../../store/reducers/i-uiforms";
 import { connect } from "react-redux";
 import { IStore } from "../../store/store";
@@ -68,7 +68,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
   };
 
   const renderElement = (
-    element: IFormLayoutItem
+    element: IFormLayoutItem,
   ): React.ReactElement | undefined => {
     if (element.type === FormType.GROUP) {
       return (
@@ -99,7 +99,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       <>
         {findInputWithWrapper(element.propertyName, inputs, element.duplicate)}
         {perDeviceInputs.map((dInput) =>
-          findInputWithWrapper(dInput.propertyName, inputs, element.duplicate)
+          findInputWithWrapper(dInput.propertyName, inputs, element.duplicate),
         )}
       </>
     );
@@ -113,7 +113,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
       propertyName: string;
       elements?: IFormLayoutItem[] | undefined;
     }[],
-    values: any
+    values: any,
   ) => {
     return groups.map((group) => {
       if (values[propertyName] === group.groupValue) {
@@ -135,7 +135,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
     inputs: any,
     values: any,
     indexInArray: number,
-    skipOpeningGroupByDefault = false
+    skipOpeningGroupByDefault = false,
   ) => {
     const shouldBeOpenAnyhow =
       typeof visibleSectionIds[title] === "undefined" &&
@@ -227,7 +227,7 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
                 inputs,
                 values,
                 idx,
-                skipOpeningGroupByDefault
+                skipOpeningGroupByDefault,
               )}
             </div>
           );
@@ -244,12 +244,12 @@ const FormWithLayout: React.FC<FormWithLayoutProps> = (props) => {
               {findInputWithWrapper(
                 formItem.propertyName,
                 inputs,
-                formItem.duplicate
+                formItem.duplicate,
               )}
               {renderSwitchGroups(
                 formItem.propertyName,
                 formItem.groups!,
-                values
+                values,
               )}
             </div>
           );
@@ -274,7 +274,7 @@ const mapDispatchToProps = {
 
 const FormWithLayoutConnected = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FormWithLayout);
 export default FormWithLayoutConnected;
 
@@ -286,7 +286,7 @@ export function flattenForm(form: IFormLayoutItem[]): IFormLayoutItem[] {
 
 export function flattenFormRec(
   itemsArr: IFormLayoutItem[],
-  form: IFormLayoutItem[]
+  form: IFormLayoutItem[],
 ): void {
   if (!form) return;
 
@@ -327,7 +327,7 @@ export function flattenFormRec(
         });
 
         const allElements = flatten(
-          formItem?.groups?.map((group) => group.elements!)
+          formItem?.groups?.map((group) => group.elements!),
         );
 
         flattenFormRec(itemsArr, allElements ?? []);
@@ -348,10 +348,11 @@ const findInput = (
     input: React.ReactElement | undefined;
     duplicate?: string;
   }[],
-  duplicate = ""
+  duplicate = "",
 ): React.ReactElement | undefined => {
   return inputs.find(
-    (item) => item.propertyName === propertyName && item.duplicate === duplicate
+    (item) =>
+      item.propertyName === propertyName && item.duplicate === duplicate,
   )?.input;
 };
 
@@ -362,7 +363,7 @@ const findInputWithWrapper = (
     input: React.ReactElement | undefined;
     duplicate?: string;
   }[],
-  duplicate = ""
+  duplicate = "",
 ): React.ReactElement | undefined => {
   return (
     <div key={"input_with_wrapper_" + propertyName} className={css.input}>

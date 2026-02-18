@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import html2canvas from "html2canvas";
 import { connect } from "react-redux";
 import { Alert, Button, Icon, Intent, Portal, Switch } from "@blueprintjs/core";
 import css from "./ActionPanel.module.scss";
@@ -130,7 +129,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const isExistingProject = editor.isExistingProject;
 
   const [assignedBuckets, setAssignedBuckets] = useState<ObjectStorageItem[]>(
-    []
+    [],
   );
   const reloadAssignedStorageObjects = () => {
     if (supportStorageObjects) {
@@ -146,7 +145,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
   const publishedToAll =
     assignedBuckets.length === 0 ||
     !assignedBuckets.find(
-      (bucket) => bucket.assignedProject?.revision !== meta.saveRevision
+      (bucket) => bucket.assignedProject?.revision !== meta.saveRevision,
     );
 
   const createNew = () => {
@@ -172,7 +171,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
           size.w,
           size.h,
           "lightgray",
-          conf.portrait
+          conf.portrait,
         )}
         className={cx(css.responsiveButton, {
           // [css.disabledButton]: !conf.enabled,
@@ -320,7 +319,7 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
         <Button
           onClick={() => {
             var node = document.getElementsByClassName(
-              "pan-and-zoom"
+              "pan-and-zoom",
             )[0] as HTMLElement;
 
             htmlToImage
@@ -343,20 +342,6 @@ export const ActionPanel: React.FC<IActionPanel> = (props) => {
               });
             //
             return;
-            html2canvas(
-              document.getElementsByClassName("pan-and-zoom")[0] as HTMLElement,
-              { scale: 1 }
-            ).then(function (canvas) {
-              canvas.style!.zIndex = "2300";
-              canvas.style!.position = "absolute";
-              canvas.style!.bottom = "0px";
-              canvas.style!.left = "0px";
-              canvas.style!.width = "300px";
-
-              canvas.style!.height = "300px";
-
-              document.body.appendChild(canvas);
-            });
           }}
         >
           SS

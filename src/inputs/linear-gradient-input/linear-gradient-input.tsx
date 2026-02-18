@@ -5,7 +5,7 @@ import {
   IGradientInput,
   IUpdateInput,
 } from "webslider-sdk/lib/inputs/i-inputs";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import css from "./linear-gradient-input.module.scss";
 import { RGBColor } from "react-color";
 
@@ -65,7 +65,7 @@ export const LinearGradientInputForm: React.FC<
                   const valueClone = cloneDeep(value);
                   valueClone.points[index].color = colorValue;
                   onPreview?.(valueClone);
-                }
+                },
               )}
               {/* <div> {index === 0 ? "Start" : "End"}</div> */}
 
@@ -107,7 +107,7 @@ export const LinearGradientInputForm: React.FC<
             const valueClone = cloneDeep(value);
             valueClone.angle = angle;
             onPreview?.(valueClone);
-          }
+          },
         )}
       </div>
       {renderAddBtn()}

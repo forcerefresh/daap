@@ -1,4 +1,4 @@
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import { ActionTypes, AI_REQUEST_LOADING, AI_ENABLE } from "../actions/actions";
 
 export interface IAI {
@@ -14,7 +14,7 @@ export function ai(
       "io.forcerefresh.text.object": false,
     },
   },
-  action: ActionTypes
+  action: ActionTypes,
 ) {
   switch (action.type) {
     case AI_REQUEST_LOADING: {

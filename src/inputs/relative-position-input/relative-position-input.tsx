@@ -10,7 +10,7 @@ import {
   getSelectField,
   getUnitNumericFiled,
 } from "../input-utils";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import css from "./relative-position-input.module.scss";
 import { Label } from "@blueprintjs/core";
 
@@ -35,7 +35,7 @@ export const RelativePositionInputForm: React.FC<
               },
               undefined,
               undefined,
-              units
+              units,
             )}
           </div>
         </div>

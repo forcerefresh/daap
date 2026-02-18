@@ -1,6 +1,6 @@
 import React from "react";
 import cx from "classnames";
-import { cloneDeep } from "lodash";
+import { cloneDeep } from "lodash-es";
 import {
   getCheckboxField,
   getNumericFiled,
@@ -50,7 +50,7 @@ export const RelativeRotationInputForm: React.FC<
                   const valueClone = cloneDeep(value);
                   valueClone.position = position;
                   onChange(valueClone);
-                }
+                },
               )}
               {getNumericFiled("", value.value, (newValue: any) => {
                 const valueClone = cloneDeep(value);
@@ -65,7 +65,7 @@ export const RelativeRotationInputForm: React.FC<
                   const valueClone = cloneDeep(value);
                   valueClone.direction = direction;
                   onChange(valueClone);
-                }
+                },
               )}
             </div>
           ) : (

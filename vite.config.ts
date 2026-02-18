@@ -5,11 +5,19 @@ import svgr from "vite-plugin-svgr";
 import path from "path";
 import fs from "fs";
 import pkg from "./package.json";
+import { visualizer } from "rollup-plugin-visualizer";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   //   base: "/",
   plugins: [
+    // visualizer({
+    //   open: true,
+    //   filename: "bundle-analysis.html",
+    //   gzipSize: true,
+    //   brotliSize: true,
+    // }),
+
     // {
     //   name: "exclude-components",
     //   transform(code, id) {
@@ -60,6 +68,7 @@ export default defineConfig({
   build: {
     // build assets inline
     assetsInlineLimit: 0,
+    sourcemap: false,
     outDir: "dist",
     rollupOptions: {
       input: "index.html", // Entry point

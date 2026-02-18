@@ -6,7 +6,7 @@ import Draggable, {
 } from "react-draggable";
 import cx from "classnames";
 import { Button, HTMLSelect } from "@blueprintjs/core";
-import { cloneDeep, debounce } from "lodash";
+import { cloneDeep, debounce } from "lodash-es";
 import {
   ITimelinesInput,
   InputType,
@@ -102,7 +102,7 @@ const formDefinition = [
 ];
 
 export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
-  props
+  props,
 ) => {
   const { value, onChange } = props;
   const lineRef = React.useRef(null);
@@ -165,7 +165,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
     debounce((newValue: ITimelinesValue) => {
       onChange(newValue);
     }, 100),
-    [onChange]
+    [onChange],
   );
 
   useEffect(() => {
@@ -264,8 +264,8 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
                 getDefaultPoint(
                   newTime + "ms",
                   true,
-                  newValue.timelines[timelineIdx].property
-                )
+                  newValue.timelines[timelineIdx].property,
+                ),
               );
               setLocalValueSorted(newValue);
               setSelectedIndex({
@@ -331,7 +331,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
                           selectedIndex.pointIdx === idx &&
                           selectedIndex.timelineIdx === timelineIdx,
                       },
-                      "handle"
+                      "handle",
                     )}
                   ></div>
                 </Draggable>
@@ -412,7 +412,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
 
   const renderPointInput = (
     timeline: ITimelineValue,
-    point: ITimelinePoint
+    point: ITimelinePoint,
   ) => {
     const pointFromDefinition = formDefinition.find((item) => {
       return item.propertyName === timeline.property;
@@ -439,7 +439,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
       pointFromDefinition!.inputType,
       { ...pointFromDefinition, value: val },
       onChange,
-      onChange
+      onChange,
     );
   };
 
@@ -468,13 +468,13 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           },
           "",
           { style: { width: "110px" } },
-          ["ms", "s"]
+          ["ms", "s"],
         )}
 
         {selectedPoint.enabled &&
           renderPointInput(
             localValue.timelines[selectedIndex.timelineIdx],
-            selectedPoint
+            selectedPoint,
           )}
 
         <div className={css.configurationTitle}>
@@ -489,7 +489,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
             const newLocalValue = cloneDeep(localValue);
             newLocalValue.timelines[selectedIndex.timelineIdx].ease = value;
             setLocalValueSorted(newLocalValue);
-          }
+          },
         )}
       </>
     );
@@ -518,7 +518,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
             },
             ...(errorMaxDuration ? { intent: "warning" } : {}),
           },
-          ["ms", "s"]
+          ["ms", "s"],
         )}
         {errorMaxDuration && (
           <span className="warning">
@@ -543,7 +543,7 @@ export const TimelinesInputForm: React.FC<ITimelinesInput & IUpdateInput> = (
           onChange={(event: ChangeEvent) => {
             const value = (event.currentTarget as any).value;
             const label = getTimelineOptions().find(
-              (item) => item.value === value
+              (item) => item.value === value,
             )?.label;
             addNewTimeline(label!, value);
           }}

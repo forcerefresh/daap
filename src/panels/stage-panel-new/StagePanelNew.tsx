@@ -114,7 +114,6 @@ import StageToolsCanvas from "./StageToolsCanvas";
 import { IClipboard } from "../../store/reducers/i-clipboard";
 import { useZoomPan } from "./zoom-pan/useZoomPan";
 import ContextMenu from "../context-menu/ContextMenu";
-import { zIndex } from "html2canvas/dist/types/css/property-descriptors/z-index";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
