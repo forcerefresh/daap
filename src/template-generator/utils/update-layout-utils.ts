@@ -47,7 +47,7 @@ export function updateTemplate(
   selectedColorSet: ColorTheme,
   imageMeta?: { mediaId: string; objectId: string }[],
   vectorMeta?: { mediaId: string; objectId: string }[],
-  overridesObjectProperties?: Record<string, any>
+  overridesObjectProperties?: Record<string, any>,
 ) {
   if (!iaResponseJson) return;
 
@@ -72,7 +72,7 @@ export function updateTemplate(
 
     aiResponseStrUpdated = aiResponseStrUpdated.replaceAll(
       `"{COLOR_${alias.toUpperCase()}}"`,
-      JSON.stringify(hexToRGB(color))
+      JSON.stringify(hexToRGB(color)),
     );
   });
 
@@ -108,7 +108,7 @@ export function updateTemplate(
             // type: previewSize.textType,
             // text: "Sample text",
             // ...replaceItem.values,
-          }
+          },
         );
       } else if (obj.type === "background") {
         if (obj.subType === "solid") {
@@ -122,7 +122,7 @@ export function updateTemplate(
               strokeWidth: 0,
               strokeColor: undefined,
               fill: obj.properties.color,
-            }
+            },
           );
         } else if (obj.subType === "gradient") {
           replaceLayoutObject(
@@ -138,7 +138,7 @@ export function updateTemplate(
                 points: obj.properties.gradient.points,
                 angle: 0,
               },
-            }
+            },
           );
         }
       } else if (obj.type === "shape") {
@@ -152,7 +152,7 @@ export function updateTemplate(
               strokeWidth: 0,
               strokeColor: undefined,
               fill: obj.properties.color,
-            }
+            },
           );
         }
       }
@@ -170,7 +170,7 @@ export function updateTemplate(
 
         {
           image: getImageProperties(mediaId!),
-        }
+        },
       );
     });
 
@@ -186,7 +186,7 @@ export function updateTemplate(
 
         {
           image: getVectorProperties(mediaId!),
-        }
+        },
       );
     });
   } catch (ex) {
@@ -204,7 +204,7 @@ export function replaceLayoutObject(
   objectProps: Partial<IObject<{}>>,
   values?: {
     [key: string]: any;
-  }
+  },
 ) {
   if (!replaceObject) {
     return;
@@ -359,7 +359,7 @@ export function getVectorProperties(mediaId: string) {
   return {
     width: 1024,
     height: 1024,
-    sourceType: "local",
+    sourceType: "library",
     sizeType: "original",
     mediaSizes: [
       {
