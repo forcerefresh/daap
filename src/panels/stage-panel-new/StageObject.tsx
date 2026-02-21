@@ -112,7 +112,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   const objectMeta = getAppObjectDefinition(
     object.type,
-    "latest" /*object.version*/
+    "latest" /*object.version*/,
   )?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
@@ -187,7 +187,7 @@ export function StageObjectInternal(props: IStageLayer) {
     breakpointConfig!,
     {
       resetPosition: false,
-    }
+    },
   );
 
   //debug
@@ -204,7 +204,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   useLayoutEffect(() => {
     const objectHolder = document.getElementsByClassName(
-      `object-holder-${object.id}`
+      `object-holder-${object.id}`,
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
@@ -238,7 +238,7 @@ export function StageObjectInternal(props: IStageLayer) {
       object.mask?.svg!,
       clipMaskId,
       calculatedObjectSize.width as any, // TODO <<
-      calculatedObjectSize.height as any // TODO <<
+      calculatedObjectSize.height as any, // TODO <<
     );
   }
 
@@ -397,12 +397,12 @@ export function StageObjectInternal(props: IStageLayer) {
     groupStyle = addCommonPropertiesToStyle(
       groupStyle,
       object,
-      breakpointConfig?.type
+      breakpointConfig?.type,
     );
     groupStyle = addTransformPropertiesToStyle(
       groupStyle,
       object,
-      breakpointConfig?.type
+      breakpointConfig?.type,
     );
   }
 
@@ -410,7 +410,10 @@ export function StageObjectInternal(props: IStageLayer) {
     <React.Fragment key={forceRefreshRand}>
       {/* NOTE: FOR DEBUGING */}
       {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
-      <div dangerouslySetInnerHTML={{ __html: clipMaskHtml }}></div>
+      <div
+        className="clipping-mask-daap"
+        dangerouslySetInnerHTML={{ __html: clipMaskHtml }}
+      ></div>
 
       <WithResizeHandle
         key={`object-${object.id}`}
@@ -467,12 +470,12 @@ export function StageObjectInternal(props: IStageLayer) {
                       objectPath,
                       object.id,
                       objectById,
-                      layerById
+                      layerById,
                     );
 
                     const groupsMatrix = getGroupMatrixFromSelectionPath(
                       [...objectPath, object.id],
-                      objectById
+                      objectById,
                     );
                     // <<
 
@@ -576,12 +579,12 @@ export function StageObjectInternal(props: IStageLayer) {
                         calculatedObjectSizeForObject,
                         false,
                         false,
-                        breakpointConfig?.type
+                        breakpointConfig?.type,
                         // thumbnailHtmlArr,
                         // slidesCounter
                       ) ||
                       getObjectPlaceholder(
-                        `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`
+                        `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`,
                       ),
                   }}
                   style={{
@@ -610,7 +613,7 @@ export function StageObjectInternal(props: IStageLayer) {
                         calculatedObjectSizeForObject,
                         false,
                         false,
-                        breakpointConfig?.type
+                        breakpointConfig?.type,
                         // thumbnailHtmlArr,
                         // slidesCounter
                       )
@@ -619,7 +622,7 @@ export function StageObjectInternal(props: IStageLayer) {
               key={object.id}
               className={cx(
                 css[object.type],
-                "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN"
+                "OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN",
               )}
               style={{
                 ...objectStyle,
@@ -635,7 +638,7 @@ export function StageObjectInternal(props: IStageLayer) {
             <div
               className={cx(
                 css.resizeHandleHolder,
-                "resize-handle-holder-" + object.id
+                "resize-handle-holder-" + object.id,
               )}
               style={{
                 // TODO: will be removed when we remove "selection" outside
@@ -671,7 +674,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   const zoom = getZoom(stage, settings);
@@ -742,7 +745,7 @@ const mapDispatchToProps = {
 };
 
 const StageObject = withErrorBoundary(
-  connect(mapStateToProps, mapDispatchToProps)(StageObjectInternal)
+  connect(mapStateToProps, mapDispatchToProps)(StageObjectInternal),
 );
 
 export default StageObject;
@@ -750,7 +753,7 @@ export default StageObject;
 function calculateBounds(
   objectById: any,
   changedObj: IObject,
-  useChangeObject: boolean
+  useChangeObject: boolean,
 ): Rect | undefined {
   if (changedObj?.parentId) {
     const parentObj = objectById[changedObj.parentId];
@@ -797,7 +800,7 @@ const styleStringToObject = (styleString: string) => {
     if (key && value) {
       const trimmedKey = key.trim();
       const camelCaseKey = trimmedKey.replace(/-([a-z])/g, (g) =>
-        g[1].toUpperCase()
+        g[1].toUpperCase(),
       );
       (styleObject as any)[camelCaseKey] = value.trim();
     }

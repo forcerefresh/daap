@@ -84,8 +84,8 @@ export async function generateImages(
       { isSave: false, isForThumbnail: true },
     );
 
-    // await delayPromise(200);
-    // await delayPromise(200);
+    await delayPromise(200);
+    await delayPromise(200);
     // await delayPromise(200);
 
     try {

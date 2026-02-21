@@ -16,6 +16,7 @@ import { IItemsData } from "./i-export-html";
 import { IObjects } from "../store/reducers/i-objects";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
+import { getClipMaskFromSvg } from "../utils/doom-utils/clip-path";
 
 export function generateObjectData(
   objects: IObjects,
@@ -27,7 +28,7 @@ export function generateObjectData(
   breakpoints: Breakpoints,
   layerValues: ILayerValues,
   layerTransformValues: Record<string, any> | undefined,
-  options: { isSave: boolean; isForThumbnail?: boolean }
+  options: { isSave: boolean; isForThumbnail?: boolean },
 ) {
   let html = "";
 
@@ -83,14 +84,14 @@ export function generateObjectData(
     breakpointConfig,
     { resetPosition: false },
     undefined,
-    { skipHeight: !!object.properties?.autoHeight }
+    { skipHeight: !!object.properties?.autoHeight },
   );
 
   const calculatedObjectSizePerDevice = calculateObjectSizePerDevice(
     object,
     layer,
     breakpoints,
-    { skipHeight: !!object.properties?.autoHeight }
+    { skipHeight: !!object.properties?.autoHeight },
   );
 
   let style = "";
@@ -142,6 +143,20 @@ export function generateObjectData(
   objectAnimWrapperStyle += trOrigin;
   // }
 
+  // clip mask
+  const clipMaskId = `clip-mask-${object.id}`;
+  let clipMaskHtml = "";
+  let maskStyle: string = "";
+  if (object.mask?.type === "svg") {
+    maskStyle = `clip-path: url(#${clipMaskId});`;
+    clipMaskHtml = getClipMaskFromSvg(
+      object.mask?.svg!,
+      clipMaskId,
+      calculatedObjectSize.width as any, // TODO <<
+      calculatedObjectSize.height as any, // TODO <<
+    );
+  }
+
   // style+=
   // wrapperStyle
   // TODO: check this
@@ -151,12 +166,15 @@ export function generateObjectData(
   html += effectWrappers
     .map(
       (cn) =>
-        `<div class="animation-wrapper ${cn}" style='${objectAnimWrapperStyle}position:absolute;width:100%;height:100%;'>`
+        `<div class="animation-wrapper ${cn}" style='${objectAnimWrapperStyle}position:absolute;width:100%;height:100%;'>`,
     )
     .join("");
+
+  html += `      <div>${clipMaskHtml}</div>`;
+
   html += `      <div class="object ${objectClass} ${getCustomIdClass(
-    object
-  )}" style='${style}'>`; // open object
+    object,
+  )}" style='${style}${maskStyle}'>`; // open object
 
   let objectHtml = "";
   if (object.type === "group") {
@@ -174,7 +192,7 @@ export function generateObjectData(
         breakpoints,
         layerValues,
         layerTransformValues,
-        options
+        options,
       );
 
       innerObjectsHtml += objectData.html;
@@ -184,12 +202,12 @@ export function generateObjectData(
     groupStyle = addCommonPropertiesToStyle(
       groupStyle,
       object,
-      breakpointConfig.type
+      breakpointConfig.type,
     );
     groupStyle = addTransformPropertiesToStyle(
       groupStyle,
       object,
-      breakpointConfig.type
+      breakpointConfig.type,
     );
     objectHtml += `<div style="${groupStyle}">${innerObjectsHtml}</div>`;
   } else {
@@ -199,7 +217,7 @@ export function generateObjectData(
       true,
       options.isSave,
       breakpointConfig.type,
-      options.isForThumbnail
+      options.isForThumbnail,
     );
   }
 

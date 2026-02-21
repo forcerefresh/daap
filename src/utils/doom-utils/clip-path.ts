@@ -5,27 +5,26 @@ export function getClipMaskFromSvg(
   svgInput: string,
   clipMaskId: string,
   width: string,
-  height: string
+  height: string,
 ) {
   const svg = svgInput; //await outlineStroke(svgInput);
 
   const svgEl = createElementFromHTML(svg) as SVGElement;
 
-  const svgWidth = parseInt(svgEl.getAttribute("width") ?? "0");
-  const svgHeight = parseInt(svgEl.getAttribute("height") ?? "0");
+  const { width: svgWidth, height: svgHeight } = getSvgDimensions(svgEl);
 
   const scaleX = 1 / svgWidth;
   const scaleY = 1 / svgHeight;
 
   const svgClipMask = document.createElementNS(
     "http://www.w3.org/2000/svg",
-    "svg"
+    "svg",
   );
   svgClipMask.setAttribute("width", "0");
   svgClipMask.setAttribute("height", "0");
   const clipRect = document.createElementNS(
     "http://www.w3.org/2000/svg",
-    "clipPath"
+    "clipPath",
   );
   clipRect.setAttribute("id", clipMaskId);
   clipRect.setAttribute("clipPathUnits", "objectBoundingBox");
@@ -35,7 +34,7 @@ export function getClipMaskFromSvg(
     if ("setAttribute" in child) {
       (child as SVGElement).setAttribute(
         "transform",
-        `scale(${scaleX},${scaleY})`
+        `scale(${scaleX},${scaleY})`,
       );
     }
     clipRect.append(child);
@@ -62,4 +61,28 @@ function createElementFromHTML(htmlString: string) {
   return Array.from(div.childNodes).find((child) => {
     return child.nodeName !== "#comment";
   });
+}
+
+function getSvgDimensions(svgEl: SVGElement) {
+  // Try width/height attributes first
+  let width = parseInt(svgEl.getAttribute("width") ?? "");
+  let height = parseInt(svgEl.getAttribute("height") ?? "");
+
+  // If invalid, try viewBox
+  if (isNaN(width) || isNaN(height) || width === 0 || height === 0) {
+    const viewBox = svgEl.getAttribute("viewBox");
+    if (viewBox) {
+      const [, , w, h] = viewBox.split(/\s+/).map(Number);
+      if (!isNaN(w) && !isNaN(h)) {
+        width = w;
+        height = h;
+      }
+    }
+  }
+
+  // Last resort: client dimensions
+  if (isNaN(width) || width === 0) width = svgEl.clientWidth;
+  if (isNaN(height) || height === 0) height = svgEl.clientHeight;
+
+  return { width, height };
 }

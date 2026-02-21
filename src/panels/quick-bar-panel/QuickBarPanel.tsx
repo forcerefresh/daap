@@ -41,7 +41,7 @@ import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { object } from "yup";
 import { getSelectSlider } from "../../inputs/input-utils";
 import AlignPanel from "../align-panel/AlignPanel";
-import LayoutToTemplatePanel from "../layout-to-template-panel/LayoutToTemplatePanel";
+import { getMediaSrc } from "../../integration/utils/local-media";
 
 const PANEL_ICON_SIZE = 22;
 
@@ -344,7 +344,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
           </Popover>
         </div>
 
-        {/* <div>
+        <div>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.BOTTOM}
@@ -363,14 +363,18 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                   addObject={false}
                   instaSelect={true}
                   showRemoveItem={!!activeObject?.mask}
-                  onSelect={(item) => {
+                  onSelect={async (item) => {
                     if (activeObject) {
                       const newObject = cloneDeep(activeObject);
                       //debugger;
-                      if (item?.initialValues?.svg) {
+                      item?.media;
+                      if (item?.media) {
+                        const imageUrl = getMediaSrc(item.media);
+                        const svg = await fetchSVG(imageUrl);
+
                         newObject.mask = {
                           type: "svg",
-                          svg: item.initialValues.svg,
+                          svg,
                         };
                       } else {
                         newObject.mask = null;
@@ -399,7 +403,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               disabled={selectedObjectIds.length !== 1}
             ></Button>
           </Popover>
-        </div> */}
+        </div>
 
         {/* <div>
           <Button
@@ -540,3 +544,19 @@ const mapDispatchToProps = {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuickBarPanel);
+
+async function fetchSVG(url: string): Promise<string> {
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const svgText = await response.text();
+    return svgText;
+  } catch (error) {
+    console.error("Error fetching SVG:", error);
+    throw error;
+  }
+}
