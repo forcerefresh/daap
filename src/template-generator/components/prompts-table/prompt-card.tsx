@@ -834,11 +834,7 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 <ColorSetPromptCardView
                   selectedColorPalette={selectedColorPalette}
                   // title={"Additional colors"}
-                  colorPalettes={
-                    isArray(prompt.aiResponseJson!.brandColors)
-                      ? prompt.aiResponseJson!.brandColors
-                      : [prompt.aiResponseJson!.brandColors]
-                  }
+                  colorPalettes={[prompt.aiResponseJson!.brandColors]}
                   promptId={prompt.id}
                   onSelect={(colorTheme) => {
                     setSelectedColorPalette(colorTheme);

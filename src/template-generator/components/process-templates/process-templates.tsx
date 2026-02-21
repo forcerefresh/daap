@@ -188,8 +188,7 @@ const ProcessTemplates = (
         layoutResponseProject,
         layoutResponseProject,
         oneAiPrompt.aiResponseJson!,
-        oneAiPrompt.aiResponseJson!.brandColors?.[0] ??
-          oneAiPrompt.aiResponseJson!.brandColors, // color palette
+        oneAiPrompt.aiResponseJson!.brandColors, // color palette
         imagePrompts
           .filter((vp) => vp.processingStatus !== AiProcessingStatus.REJECTED)
           .map((ip) => ip.metadata) as any,
