@@ -344,7 +344,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
           </Popover>
         </div>
 
-        <div>
+        {/* <div>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.BOTTOM}
@@ -403,7 +403,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               disabled={selectedObjectIds.length !== 1}
             ></Button>
           </Popover>
-        </div>
+        </div> */}
 
         {/* <div>
           <Button
