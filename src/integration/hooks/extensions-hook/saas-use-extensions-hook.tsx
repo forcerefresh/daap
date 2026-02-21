@@ -30,11 +30,15 @@ export const useExtensionsHook = () => {
     //     .join(",")}`;
     // }
 
-    const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
+    // const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
-    return fetch(url).then(async (res) => ({
-      data: await Promise.resolve(extensions), // await res.json(),
-    }));
+    // return fetch(url).then(async (res) => ({
+    //   data: await Promise.resolve(extensions), // await res.json(),
+    // }));
+
+    return new Promise((resolve) => {
+      resolve({ data: extensions });
+    });
   };
 
   /* returns installed extensions */

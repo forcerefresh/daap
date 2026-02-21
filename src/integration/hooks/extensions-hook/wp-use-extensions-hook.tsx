@@ -3,6 +3,7 @@
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import JSZip from "jszip";
 import axios from "axios";
+import extensions from "./extensions.json";
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */
@@ -30,11 +31,15 @@ export const useExtensionsHook = () => {
     //     .join(",")}`;
     // }
 
-    const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
+    // const url = "https://extensions.bucket.forcerefresh.io/extensions.json";
 
-    return fetch(url).then(async (res) => ({
-      data: await Promise.resolve([]), //await res.json(),
-    }));
+    // return fetch(url).then(async (res) => ({
+    //   data: await Promise.resolve([]), //await res.json(),
+    // }));
+
+    return new Promise((resolve) => {
+      resolve({ data: extensions });
+    });
   };
 
   /* returns installed extensions */
