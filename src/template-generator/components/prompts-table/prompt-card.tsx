@@ -38,7 +38,7 @@ import {
   updateTemplate,
 } from "../../utils/update-layout-utils";
 import { ImagePromptListView } from "./image-prompt-card";
-import { after, cloneDeep, pick, set } from "lodash-es";
+import { after, cloneDeep, isArray, pick, set } from "lodash-es";
 import { string } from "yup";
 import { LayoutPromptListView } from "./layout-prompt-card";
 import {
@@ -834,7 +834,11 @@ const PromptCard: React.FC<PromptCardProps> = ({
                 <ColorSetPromptCardView
                   selectedColorPalette={selectedColorPalette}
                   // title={"Additional colors"}
-                  colorPalettes={[prompt.aiResponseJson!.brandColors]}
+                  colorPalettes={
+                    isArray(prompt.aiResponseJson!.brandColors)
+                      ? prompt.aiResponseJson!.brandColors
+                      : [prompt.aiResponseJson!.brandColors]
+                  }
                   promptId={prompt.id}
                   onSelect={(colorTheme) => {
                     setSelectedColorPalette(colorTheme);
