@@ -2,7 +2,7 @@
 
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
 import axios from "axios";
-import extensions from "./extensions.json";
+// import extensions from "./extensions.json";
 
 export const useExtensionsHook = () => {
   /* returns available extensions from directory */
@@ -36,9 +36,17 @@ export const useExtensionsHook = () => {
     //   data: await Promise.resolve(extensions), // await res.json(),
     // }));
 
-    return new Promise((resolve) => {
-      resolve({ data: extensions });
+    return axios.get(`/api/v1/available-extensions`).then((response) => {
+      return { data: response.data };
     });
+
+    // return fetch(url).then(async (res) => ({
+    //   data: await Promise.resolve(extensions), // await res.json(),
+    // }));
+
+    // return new Promise((resolve) => {
+    //   resolve({ data: extensions });
+    // });
   };
 
   /* returns installed extensions */

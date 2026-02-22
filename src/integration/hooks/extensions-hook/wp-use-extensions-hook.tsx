@@ -37,9 +37,13 @@ export const useExtensionsHook = () => {
     //   data: await Promise.resolve([]), //await res.json(),
     // }));
 
-    return new Promise((resolve) => {
-      resolve({ data: extensions });
+    return axios.get(`/api/v1/available-extensions`).then((response) => {
+      return { data: response.data };
     });
+
+    // return new Promise((resolve) => {
+    //   resolve({ data: extensions });
+    // });
   };
 
   /* returns installed extensions */
