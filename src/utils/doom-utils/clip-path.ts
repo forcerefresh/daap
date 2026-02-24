@@ -1,6 +1,29 @@
 // const outlineStroke = require("svg-outline-stroke");
 // const outlineStroke = require("svg-outline-stroke");
 
+export function updateClipPaths(
+  svgString: string,
+  clipPathAttr: { id: string; clipPathUnits: string; transform?: string },
+) {
+  // Parse the SVG string
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, "image/svg+xml");
+
+  // Find all clipPath elements
+  const clipPaths = doc.querySelectorAll("clipPath");
+
+  // Process each clipPath
+  clipPaths.forEach((clipPath, index) => {
+    clipPath.id = clipPathAttr.id;
+    clipPath.setAttribute("clipPathUnits", clipPathAttr.clipPathUnits);
+    clipPath.setAttribute("transform", clipPathAttr.transform ?? "");
+  });
+
+  // Return modified SVG as string
+  const serializer = new XMLSerializer();
+  return serializer.serializeToString(doc);
+}
+
 export function getClipMaskFromSvg(
   svgInput: string,
   clipMaskId: string,
@@ -9,35 +32,40 @@ export function getClipMaskFromSvg(
 ) {
   const svg = svgInput; //await outlineStroke(svgInput);
 
-  const svgEl = createElementFromHTML(svg) as SVGElement;
+  const updateSVG = updateClipPaths(svg, {
+    id: clipMaskId,
+    clipPathUnits: "objectBoundingBox",
+  });
 
-  const { width: svgWidth, height: svgHeight } = getSvgDimensions(svgEl);
+  const svgClipMask = createElementFromHTML(updateSVG) as SVGElement;
+
+  const { width: svgWidth, height: svgHeight } = getSvgDimensions(svgClipMask);
 
   const scaleX = 1 / svgWidth;
   const scaleY = 1 / svgHeight;
 
-  const svgClipMask = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "svg",
-  );
-  svgClipMask.setAttribute("width", "0");
-  svgClipMask.setAttribute("height", "0");
-  const clipRect = document.createElementNS(
-    "http://www.w3.org/2000/svg",
-    "clipPath",
-  );
-  clipRect.setAttribute("id", clipMaskId);
-  clipRect.setAttribute("clipPathUnits", "objectBoundingBox");
-  svgClipMask.appendChild(clipRect);
+  // const svgClipMask = document.createElementNS(
+  //   "http://www.w3.org/2000/svg",
+  //   "svg",
+  // );
+  svgClipMask.setAttribute("width", svgWidth.toString());
+  svgClipMask.setAttribute("height", svgHeight.toString());
+  // const clipRect = document.createElementNS(
+  //   "http://www.w3.org/2000/svg",
+  //   "clipPath",
+  // );
+  // clipRect.setAttribute("id", clipMaskId);
+  // clipRect.setAttribute("clipPathUnits", "objectBoundingBox");
+  // svgClipMask.appendChild(clipRect);
 
-  Array.from(svgEl.childNodes).forEach((child) => {
+  Array.from(svgClipMask.childNodes).forEach((child) => {
     if ("setAttribute" in child) {
       (child as SVGElement).setAttribute(
         "transform",
         `scale(${scaleX},${scaleY})`,
       );
     }
-    clipRect.append(child);
+    // clipRect.append(child);
   });
 
   return svgClipMask.outerHTML;

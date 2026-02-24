@@ -1,29 +1,3 @@
-// type UpdateType = React.Dispatch<React.SetStateAction<DevelopmentItem[]>>;
-// const defaultUpdate: UpdateType = () => [];
-
-// export const DevelopmentContext = React.createContext({
-//   developmentItems: [] as DevelopmentItem[],
-//   setDevelopmentItems: defaultUpdate,
-// });
-
-// export const DevelopmentContextProvider = (
-//   props: React.PropsWithChildren<React.ReactNode>
-// ) => {
-//   const [developmentItems, setDevelopmentItems] = useState<DevelopmentItem[]>(
-//     []
-//   );
-//   return (
-//     <DevelopmentContext.Provider
-//       value={{
-//         developmentItems,
-//         setDevelopmentItems,
-//       }}
-//     >
-//       {props.children}
-//     </DevelopmentContext.Provider>
-//   );
-// };
-
 import React, {
   CSSProperties,
   useContext,
@@ -44,12 +18,9 @@ export interface ICursorStyle {
 }
 
 export interface ICursorContext {
-  // setCursorStyle: (cursorStyle: ICursorStyle) => void;
 }
 
-export const CursorContext = React.createContext<ICursorContext>({
-  // setCursorStyle: (cursorStyle: ICursorStyle) => undefined,
-});
+export const CursorContext = React.createContext<ICursorContext>({});
 
 const SUPPORTED_CURSORS = [false, "pointer", "right", "left"];
 
@@ -65,10 +36,6 @@ export const CursorProvider = ({
 
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursor, setCursor] = useState<string | undefined>("circle");
-  //   const [cursorStyle, setCursorStyleInternal] = useState<ICursorStyle>({
-  //     size: 5,
-  //     style: {},
-  //   });
 
   const [visible, setVisible] = useState(true);
 
@@ -97,10 +64,6 @@ export const CursorProvider = ({
       (SUPPORTED_CURSORS.includes(cursorType) && cursorType) || undefined;
     setCursor(cursor);
   };
-
-  //   const setCursorStyle = (cStyle: ICursorStyle) => {
-  //     setCursorStyleInternal(cStyle);
-  //   };
 
   const [stageRect, setStageRect] = useState({ x: 0, y: 0 });
 

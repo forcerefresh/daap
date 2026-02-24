@@ -30,16 +30,7 @@ export function StageLayer(props: IStageLayer) {
     forceRefreshRand,
   } = props;
 
-  // const disableVisibility =
-  //   !layer.responsiveVisibility.showAll &&
-  //   !includes(layer.responsiveVisibility.displayOn, selectedDevice);
-
-  // if (disableVisibility) {
-  //   return null;
-  // }
-
   const isLayerActive = forceShowLayerId && forceShowLayerId === layer.id;
-  // const hasLayout = layer.layout !== "none";
   const hasLayout = false;
 
   const layerValues = layer.properties ?? {};
@@ -54,8 +45,6 @@ export function StageLayer(props: IStageLayer) {
 
   const layerStyle = { ...calculatedLayerSize };
   layerStyle.position = "absolute";
-  //layerStyle.width = parseInt(layerStyle.width as string) * stageZoom + "px";
-  //layerStyle.border = "1px solid red";
 
   const layerClassName = "layer-" + layer.id;
   let layerCss = "";
@@ -85,24 +74,8 @@ export function StageLayer(props: IStageLayer) {
           }
         `;
     } else {
-      // layerValues.layoutChildren.itemsGap.eachValues.forEach(
-      //   (eachValue, idx) => {
-      //     layerCss += `.${layerClassName} > *:nth-child(${idx + 1}) {
-      //           ${
-      //             t === "column" ? "margin-bottom" : "margin-right"
-      //           }: ${eachValue};
-      //       }
-      //       `;
-      //   }
-      // );
     }
   }
-
-  // layerCss += `.${layerClassName} {
-  //        ${addCommonPropertiesToStyle("", layer, breakpointConfig?.type)}
-  //        ${addTransformPropertiesToStyle("", layer, breakpointConfig?.type)}
-  //        z-index: 100;
-  //       }`;
 
   const layerHolderStyle: React.CSSProperties = {};
   if (layer.transform?.hasPerspective) {
@@ -134,7 +107,6 @@ export function StageLayer(props: IStageLayer) {
               layer={layer}
               layoutChildren={layoutChildren}
               objectZoom={object.scale ?? 1}
-              // stageZoom={stageZoom}
             />
           );
         })}
@@ -170,17 +142,10 @@ const mapStateToProps = (state: IStore) => {
       ? selection.selectionForProperties?.id
       : undefined;
 
-  // let showGrid = false;
-  // if (selection.selectionForProperties?.type === "layer") {
-  //   showGrid =
-  //     layers.layerById[selection.selectionForProperties?.id].layout === "grid";
-  // }
-
   return {
     pages,
     layers,
     objects,
-    // stageSize: document.documentSize,
     stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,

@@ -1,15 +1,5 @@
-/* eslint-disable */
-import {
-  cloneDeep,
-  includes,
-  isEqual,
-  mapValues,
-  pick,
-  round,
-  set,
-} from "lodash-es";
-import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
-import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import { round } from "lodash-es";
+import { withErrorBoundary } from "react-use-error-boundary";
 
 import React, {
   CSSProperties,
@@ -19,22 +9,15 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  ContextMenu as ContextMenuBP,
-  Icon,
-  Menu,
-  MenuItem,
-  useHotkeys,
-} from "@blueprintjs/core";
+import { ContextMenu as ContextMenuBP, useHotkeys } from "@blueprintjs/core";
 import { connect } from "react-redux";
 import cx from "classnames";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 
 import css from "./StagePanelNew.module.scss";
-import { generatePlayerData, getObjectHtml } from "../../export/export-html";
+import { generatePlayerData } from "../../export/export-html";
 
-import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { IPage } from "../../store/reducers/i-pages";
 import {
   cancelOverrideStageTool,
@@ -66,47 +49,19 @@ import {
   clearClipboard,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
-import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import {
-  applyRectValuesToElement,
-  getMousePosition,
-  getPointsDiff,
-  getRectFromPoints,
-  IRect,
-  multiplyRect,
-} from "../../utils/doom-utils/common";
+import { getMousePosition, IRect } from "../../utils/doom-utils/common";
 import { useKeyDown } from "../../utils/hooks/key-down";
 import { AppPlayer } from "../../player/AppPlayer";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
-import {
-  convertTimeUnitToMs,
-  convertRGBColor2CSSProperties,
-} from "../../utils/utils";
-import ProjectSmallTimeline, {
-  ProjectTimelineData,
-  SlideTimelineData,
-} from "../project-small-timeline/ProjectSmallTimeline";
+import { convertRGBColor2CSSProperties } from "../../utils/utils";
+import { ProjectTimelineData } from "../project-small-timeline/ProjectSmallTimeline";
 import { IPlayerData } from "../../export/i-export-html";
 import { useWindowSize } from "../../utils/hooks/window-size";
-import {
-  getInitialStageTransform,
-  getZoom,
-  getZoom2,
-} from "../../store/helpers/calculateZoom";
-import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
-import ViewportSize from "../viewport-size/ViewportSize";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
-import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
-import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
+import { getInitialStageTransform } from "../../store/helpers/calculateZoom";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-// import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
-import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
 import StageLayer from "./StageLayer";
-import { getObjectIdToSelect } from "../../store/actions/actions-utils";
-import { getGlobalProp } from "./utils";
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
@@ -133,35 +88,22 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     selectionParentId,
     activeLayerId,
     viewPortSize,
-    _setStageTool,
     _setStagePreview,
-    _updateObject,
     _selectObjects,
     _activateObject,
-    _addObjectsToSelection,
-    _removeObjectsFromSelection,
-    _deactivateObject,
-    _selectObjectsByRect,
-    _addNewObject,
     _setViewPortSize,
     _selectForProperties,
-    _resetStageTool,
     _overrideStageTool,
     _cancelOverrideStageTool,
     activeStageTool,
-    stagePan,
     stageTool,
-    stageToolObjectType,
     breakpointConfig,
     settings,
-    forceShowLayerId,
     selectedDevice,
     breakpoints,
     showSimplifiedLayerPanel,
     showSimplifiedPagesPanel,
     forceRefreshRand: _forceRefreshRand, // NOTE: check this
-    _forceRefresh,
-    enableDeveloper,
     showGrid,
     zoomFit,
     _setStageZoom,
@@ -185,16 +127,10 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
     useZoomPan({ spaceDown });
 
   const disableZoomUpdateRef = useRef<boolean>(false);
-  // if (currentAppZoomRef.current) currentAppZoomRef.current = appZoom;
 
   useEffect(() => {
-    // if (currentAppZoomRef.current === appZoom) {
-    //   return;
-    // }
-
     if (disableZoomUpdateRef.current) return;
 
-    // currentAppZoomRef.current = appZoom;
     const newTransform = getInitialStageTransform(
       viewPortSize,
       breakpointConfig,
@@ -333,7 +269,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   );
   const {} = useHotkeys(hotkeys);
 
-  // const stageToolCanvasRef = useRef(); // TODO check this
   const { stageManager } = useContext(StageManagerContext);
 
   const [isLocalPan, setLocalPan] = useState(false);
@@ -350,11 +285,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
       }
     }
   }, [spaceDown]);
-  // const objectByIdRef = useRef(objectById);
-  // objectByIdRef.current = objectById;
-
-  // const stageZoomRef = useRef(1);
-  // stageZoomRef.current = stageZoom;
 
   useEffect(() => {
     if (stageZoom !== canvasTransform.scale && canvasTransform.scale > 0) {
@@ -371,7 +301,6 @@ const StagePanelNew: React.FC<IStagePanel> = (props) => {
   useEffect(() => {
     if (stageZoom !== canvasTransform.scale) {
       handleScaleChange(stageZoom);
-      // setTransform({ scale: stageZoom });
     }
   }, [stageZoom]);
 
@@ -1012,13 +941,7 @@ const mapStateToProps = (state: IStore) => {
         breakpointConfig.type === state.stage.selectedDevice,
     );
 
-  // const zoom = getZoom2(
-  //   stage.zoomFit,
-  //   stage.stageViewportSize,
-  //   breakpointConfig
-  // );
-
-  const zoom = stage.zoom; //getZoom(stage, settings);
+  const zoom = stage.zoom;
 
   const forceShowLayerId =
     selection.selectionForProperties?.type === "layer"
@@ -1043,7 +966,6 @@ const mapStateToProps = (state: IStore) => {
     pages,
     layers,
     objects,
-    // stageSize: document.documentSize,
     stageZoom: zoom,
     stagePan: stage.pan,
     previewState: stage.previewState,
@@ -1116,7 +1038,6 @@ const mapDispatchToProps = {
   _clearClipboard: () => clearClipboard(),
   _setZoomFit: (fit: boolean) => setZoomFit(fit),
   _forceRefresh: () => forceRefresh(),
-  //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 
 export default withErrorBoundary(

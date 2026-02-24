@@ -1,17 +1,11 @@
 import React, {
   CSSProperties,
-  MouseEventHandler,
-  SyntheticEvent,
-  useCallback,
   useContext,
-  useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import cx from "classnames";
-import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
@@ -46,15 +40,10 @@ import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-regist
 import { StageTools } from "../../store/reducers/stage";
 import { IRect, getMousePosition } from "../../utils/doom-utils/common";
 import {
-  getUngroupObjectsCalculation,
   createTransformForPath,
-  decomposeMatrix2DW3,
-  getFullMatrixFromTransformArr,
   getGroupMatrixFromSelectionPath,
   getObjectTransform,
 } from "./stage-panel-utils";
-import RotateIcon from "../../assets/icons/rotate-icon.svg?react";
-import { setGlobalProp } from "./utils";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import {
@@ -68,12 +57,9 @@ import {
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
-import { group } from "console";
 import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
-
-const groupSelectionColor = "#48aff0"; /// "#48f08d";
-const objectSelectionColor = "#48aff0";
+import { IMAGE } from "../../objects/image/image";
 
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -92,28 +78,16 @@ export function StageObjectInternal(props: IStageLayer) {
     breakpointConfig,
     objectById,
     stageZoom,
-    activeObjectId,
     selectedObjectIds,
     layerById,
     activeStageTool,
-    _updateObject,
-    _addObjectsToSelection,
-    _removeObjectsFromSelection,
-    _deactivateObject,
-    _activateObject,
-    _selectObjects,
-    _selectForProperties,
     objectZoom,
     selectionPath,
-    parentGroup,
     clipboard,
     forceRefreshRand,
   } = props;
 
-  const objectMeta = getAppObjectDefinition(
-    object.type,
-    "latest" /*object.version*/,
-  )?.meta;
+  const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
   // ++
@@ -154,33 +128,11 @@ export function StageObjectInternal(props: IStageLayer) {
   const { activeTool, activeObjectId: activeEditObjectId } =
     useContext(ToolsContext);
 
-  // const isRotationInProgress = useRef(false);
-  // const handleRotationStart = () => {
-  //   isRotationInProgress.current = true;
-  // };
-  // const handleRotationDone = (rotation: number) => {
-  //   isRotationInProgress.current = false;
-
-  //   // not using object as there is a caching
-  //   const obj = cloneDeep(objectRef.current); //(objectByIdRef.current[object.id]);
-  //   //obj.absoluteLayout!.common!.top = "300px"; //TODO
-  //   obj.rotation = rotation;
-  //   _updateObject(obj);
-  // };
-
   const objectId = object.id;
   const isSelected = selectedObjectIds.indexOf(objectId) !== -1;
   const isInSelectionPath = selectionPath.indexOf(objectId) !== -1;
-  //const isAbsolutePosition = object.layout === "absolute" && !layoutChildren;
-
-  //const cssPosition = !layoutChildren ? "absolute" : "static";
   const cssPosition = "absolute";
-  // *** NOTE: we are rendering different for selected and non selected object
 
-  // 1. NON SELECTED  (NON-DRAGGABLE)
-
-  //if (!isSelected || !isAbsolutePosition) {
-  //
   const calculatedObjectSize = calculateObjectSize(
     object,
     parentLayer,
@@ -190,42 +142,26 @@ export function StageObjectInternal(props: IStageLayer) {
     },
   );
 
-  //debug
-  // useEffect(() => {
-  //   if (object?.objectIds && object.objectIds.length > 0) {
-  //     getUngroupObjectsCalculation({
-  //       group: object,
-  //       objects: object.objectIds.map((objectId) => objectById[objectId]),
-  //       breakpointConfig: breakpointConfig!,
-  //       parentLayer,
-  //     });
-  //   }
-  // });
-
   useLayoutEffect(() => {
     const objectHolder = document.getElementsByClassName(
       `object-holder-${object.id}`,
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      objectHolder.style.transform = getObjectTransform(object);
+      const newTransform = getObjectTransform(object);
+      console.log("[SO useLayoutEffect]", {
+        objectId: object.id,
+        rotation: object.rotation,
+        scale: object.scale,
+        newTransform,
+        prevStyleTransform: objectHolder.style.transform,
+      });
+      objectHolder.style.transform = newTransform;
 
       objectHolder.style.visibility =
         activeEditObjectId === objectId ? "hidden" : "visible";
-      //return null;
-
-      // translateX(" +
-      // translateX +
-      // "px) translateY(" +
-      // translateY +
-      // "px)";
     }
   }, [object.rotation, object.scale, object.id, object, activeEditObjectId]);
-
-  // TODO: mode this to parent
-  // if (activeEditObjectId === objectId) {
-  //   return null;
-  // }
 
   const clipMaskId = `clip-mask-${objectId}`;
   let clipMaskHtml = "";
@@ -240,6 +176,12 @@ export function StageObjectInternal(props: IStageLayer) {
       calculatedObjectSize.width as any, // TODO <<
       calculatedObjectSize.height as any, // TODO <<
     );
+  }
+
+  if (object.type === IMAGE) {
+    maskStyle = {
+      clipPath: `url(#c123)`,
+    };
   }
 
   const objectStyle = {
@@ -265,10 +207,6 @@ export function StageObjectInternal(props: IStageLayer) {
   const top =
     parseFloat(calculatedObjectSize.top as string) + Math.random() / 100 + "px";
 
-  const selectedColor = object.isLocked
-    ? "rgba(72, 175,240, 0.5)"
-    : "rgba(72, 175,240, 1)";
-
   const hoverColor = "rgba(72, 175,240, 0.5)";
 
   const commonObjectRect: CSSProperties = {
@@ -278,6 +216,8 @@ export function StageObjectInternal(props: IStageLayer) {
     height: calculatedObjectSize.height ?? "0px",
   };
 
+  // Selection outline for group-parent (in-path) and hover cases only.
+  // The selected-object outline is rendered by StageToolsCanvas.
   const selectionStyle: CSSProperties = {
     ...commonObjectRect,
     zIndex: 200,
@@ -286,12 +226,8 @@ export function StageObjectInternal(props: IStageLayer) {
     position: "absolute",
     pointerEvents: "none",
     transformOrigin: "top left",
-    ...((isSelected || (isInSelectionPath && !isSelected)) && !activeTool
-      ? {
-          boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
-            object.objectIds && !isSelected ? "#444444" : selectedColor
-          }`,
-        }
+    ...(isInSelectionPath && !isSelected && !activeTool
+      ? { boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px #444444` }
       : {}),
   };
 
@@ -314,57 +250,18 @@ export function StageObjectInternal(props: IStageLayer) {
     objectHolderStyle.display = "inline-block";
   }
 
-  objectHolderStyle.pointerEvents = "none"; // "all";
+  objectHolderStyle.pointerEvents = "none";
 
   objectHolderStyle.transformOrigin = "top left";
+  objectHolderStyle.transform = getObjectTransform(object);
 
   if (clipboard?.entityIds?.includes(object.id)) {
     if (clipboard?.operation === "cut") objectHolderStyle.opacity = 0.5;
-    // const copyBoxShadow = `,0 0 0 ${
-    //   1.5 / objectZoom / stageZoom
-    // }px ${"yellow"}`;
-    // objectHolderStyle.boxShadow += copyBoxShadow;
-    //objectHolderStyle.borderStyle = "dotted";
   }
 
-  // NOTE: FOR TEXT
   const calculatedObjectSizeForObject = { ...calculatedObjectSize };
   if (object.properties?.autoHeight) {
-    //calculatedObjectSizeForObject.height = "auto";
-    //objectStyle.height = "auto";
   }
-
-  const isOnlyThisObjectSelected =
-    selectedObjectIds.length === 1 &&
-    selectedObjectIds[0] === objectRef.current.id;
-
-  // const onObjectClick = (
-  //   event: React.MouseEvent<HTMLDivElement>,
-  //   objectId: string
-  // ) => {
-  //   if (event.shiftKey) {
-  //     selectedObjectIds.indexOf(objectId) === -1
-  //       ? _addObjectsToSelection([objectId])
-  //       : _removeObjectsFromSelection([objectId]);
-  //     if (activeObjectId === objectId) {
-  //       _deactivateObject(objectId);
-  //     }
-
-  //     //setSelectionStartPosition(null);
-  //   } else {
-  //     if (isOnlyThisObjectSelected) {
-  //       // NOTE: activate tool editor
-  //       const deff = getAppObjectDefinition(objectById[objectId].type);
-  //       if (deff?.meta.isEditable) {
-  //         // TODO>TODO>>
-  //         //activateTool(objectById[objectId].type, objectId);
-  //       }
-  //     }
-  //     _activateObject(objectId);
-  //     _selectObjects([objectId]);
-  //     _selectForProperties({ type: "object", id: objectId });
-  //   }
-  // };
 
   const rootObjectSelection =
     selectedObjectIds.length === 0 && !!layerById[object.parentId!];
@@ -408,8 +305,6 @@ export function StageObjectInternal(props: IStageLayer) {
 
   return (
     <React.Fragment key={forceRefreshRand}>
-      {/* NOTE: FOR DEBUGING */}
-      {/* <div className={cx(`object-bounds-${object.id}`, css.objectBounds)}></div> */}
       <div
         className="clipping-mask-daap"
         dangerouslySetInnerHTML={{ __html: clipMaskHtml }}
@@ -439,10 +334,7 @@ export function StageObjectInternal(props: IStageLayer) {
           <div
             ref={childRef}
             style={objectHolderStyle}
-            className={cx(`object-holder-${object.id}`, {
-              // [css.layoutChildrenSelected]: isSelected && !activeTool,
-              // [css.ancestorGroupSelected]: isInSelectionPath && !isSelected,
-            })}
+            className={cx(`object-holder-${object.id}`)}
             onMouseEnter={() => {
               !activeTool && !isSelected && setIsHover(true);
             }}
@@ -457,10 +349,6 @@ export function StageObjectInternal(props: IStageLayer) {
                     if (activeStageTool === StageTools.PAN) {
                       return;
                     }
-
-                    // if (object.isLocked) {
-                    //   return; // TODO: does not work as we cannot select object
-                    // }
 
                     e.stopPropagation();
 
@@ -477,9 +365,6 @@ export function StageObjectInternal(props: IStageLayer) {
                       [...objectPath, object.id],
                       objectById,
                     );
-                    // <<
-
-                    // setRectangleOrigin(childRef.current, "bottom right");
 
                     stageManager.start(StageToolEnum.MOVE, {
                       boundingClientRects: [
@@ -498,40 +383,6 @@ export function StageObjectInternal(props: IStageLayer) {
                 : undefined
             }
           >
-            {/* {object.type === "group" && (
-              <div
-                style={{
-                  ...objectHolderStyle,
-                  height:
-                    parseFloat(objectHolderStyle.height as string) + 100 + "px",
-                  width:
-                    parseFloat(objectHolderStyle.width as string) + 100 + "px",
-                }}
-              ></div>
-            )} */}
-            <div
-              className={cx(css.rotationHandle)}
-              style={{
-                // TODO: will be removed when we remove "selection" outside
-                top: -(35 / objectZoom / stageZoom) + "px",
-              }}
-            >
-              {!activeTool && ( //&& !object.isLocked && sizeType === "rect"
-                <div
-                  className={cx(css.circle, "rotation-handle")}
-                  style={{
-                    // TODO: will be removed when we remove "selection" outside
-                    transform: `scale(${1 / objectZoom / stageZoom})`,
-                    display: isOnlyThisObjectSelected ? "block" : "none",
-                    pointerEvents: "all",
-                    boxShadow: "0 0 0 " + 1 + "px white",
-                    background: object.objectIds
-                      ? groupSelectionColor
-                      : objectSelectionColor,
-                  }}
-                />
-              )}
-            </div>
             {object.type === "group" ? (
               <>
                 <style
@@ -562,7 +413,6 @@ export function StageObjectInternal(props: IStageLayer) {
                         layer={parentLayer}
                         layoutChildren={layoutChildren}
                         objectZoom={objectZoom * (childObject.scale ?? 1)}
-                        //stageZoom={stageZoom}
                       />
                     );
                   })}
@@ -592,19 +442,11 @@ export function StageObjectInternal(props: IStageLayer) {
                     ...maskStyle,
                     overflow: object.style?.overflow ?? "visible",
                   }}
-                  // className={cx({
-                  //   [css.notVisible]: !object.isVisible,
-                  //   [css.layoutChildrenSelected]: isSelected,
-                  // })}
                 />
               </>
             )}
-            {/* {allowObjectSelection && ( */}
             <div
-              onClick={(event) => {
-                //event.stopPropagation();
-                //onObjectClick(event, objectId);
-              }}
+              onClick={(event) => {}}
               dangerouslySetInnerHTML={{
                 __html:
                   sizeType === "line"
@@ -614,8 +456,6 @@ export function StageObjectInternal(props: IStageLayer) {
                         false,
                         false,
                         breakpointConfig?.type,
-                        // thumbnailHtmlArr,
-                        // slidesCounter
                       )
                     : "",
               }}
@@ -629,26 +469,8 @@ export function StageObjectInternal(props: IStageLayer) {
                 position: "relative",
                 pointerEvents: "all",
                 opacity: 0,
-                //transform: "translateX(100) translateY(100)",
-                //left: "0px",
-                //top: "0px",
               }}
             />
-            {/* )} */}
-            <div
-              className={cx(
-                css.resizeHandleHolder,
-                "resize-handle-holder-" + object.id,
-              )}
-              style={{
-                // TODO: will be removed when we remove "selection" outside
-                ...objectStyle,
-                display: isOnlyThisObjectSelected ? "block" : "none",
-                position: "absolute",
-                top: "0px",
-                left: "0px",
-              }}
-            ></div>
             <div className="object-selection" style={selectionStyle} />
           </div>
         </WithRotationHandle>
@@ -684,18 +506,11 @@ const mapStateToProps = (state: IStore) => {
       ? selection.selectionForProperties?.id
       : undefined;
 
-  // let showGrid = false;
-  // if (selection.selectionForProperties?.type === "layer") {
-  //   showGrid =
-  //     layers.layerById[selection.selectionForProperties?.id].layout === "grid";
-  // }
-
   return {
     clipboard,
     pages,
     layers,
     objects,
-    // stageSize: document.documentSize,
     stageZoom: zoom,
     previewState: stage.previewState,
     layerArr,
@@ -720,8 +535,6 @@ const mapStateToProps = (state: IStore) => {
   };
 };
 const mapDispatchToProps = {
-  // _setStagePreview: (preview: Partial<IPreviewState>) =>
-  //   setStagePreview(preview),
   _updateObject: (object: IObject) => updateObject(object),
   _activateObject: (objectId: string | null) => activateObject(objectId),
   _selectObjects: (objectIds: string[]) => selectObjects(objectIds),
@@ -731,17 +544,11 @@ const mapDispatchToProps = {
     removeObjectsFromSelection(objectIds),
   _deactivateObject: (objectId: string) => deactivateObject(objectId),
   _selectObjectsByRect: (rect: IRect) => selectObjectsByRect(rect),
-  // _addNewObject: (
-  //   layerId: string,
-  //   type: ObjectType,
-  //   objectProps: Partial<IObject>
-  // ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
   _setViewPortSize: (size: { w: number; h: number }) => setViewPortSize(size),
   _selectForProperties: (payload: selectForPropertiesProps) =>
     selectForProperties(payload),
   _setStageZoom: (zoom: number) => setStageZoom(zoom),
-  //_setCustomBPSize: (size: { w: number; h: number }) => setCustomBPSize(size),
 };
 
 const StageObject = withErrorBoundary(

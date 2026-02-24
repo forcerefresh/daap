@@ -23,6 +23,7 @@ import { getNewMediaObjectBounds } from "./add-object-utils";
 import { GlobalEventsContext } from "../../utils/global-events/GlobalEvents";
 import { IMAGE } from "../../objects/image/image";
 import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { SVG_MASK } from "../../objects/svg-mask/svg-mask";
 
 export enum Panels {
   MyImages = "myImages",
@@ -32,6 +33,7 @@ export enum Panels {
   MyFonts = "myFonts",
   Images = "images",
   Vectors = "vectors",
+  SvgMask = "svg-mask",
 }
 
 export enum SelectionType {
@@ -74,6 +76,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       Panels.MyFonts,
       Panels.Images,
       Panels.Vectors,
+      Panels.SvgMask,
     ],
     themeClass,
     _addNewObject,
@@ -113,7 +116,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       "sourceType",
       "sizeType",
       "mediaSizes",
-      "id"
+      "id",
     );
   };
 
@@ -167,7 +170,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         {
                           ...replaceItem.values,
                           image: includeMediaRequiredProps(mediaItem.media),
-                        }
+                        },
                       );
                       return;
                     }
@@ -184,7 +187,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
-                        }
+                        },
                       );
                     } else {
                       AppToaster.show({
@@ -226,7 +229,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           {
                             ...replaceItem.values,
                             image: includeMediaRequiredProps(mediaItem.media),
-                          }
+                          },
                         );
                         return;
                       }
@@ -243,7 +246,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           { ...sizeRect },
                           {
                             image: includeMediaRequiredProps(mediaItem.media),
-                          }
+                          },
                         );
                       } else {
                         AppToaster.show({
@@ -295,7 +298,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
-                        }
+                        },
                       );
                     } else {
                       AppToaster.show({
@@ -398,7 +401,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                         { ...sizeRect },
                         {
                           image: includeMediaRequiredProps(mediaItem.media),
-                        }
+                        },
                       );
                     } else {
                       AppToaster.show({
@@ -441,7 +444,50 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           { ...sizeRect },
                           {
                             image: includeMediaRequiredProps(mediaItem.media),
-                          }
+                          },
+                        );
+                      } else {
+                        AppToaster.show({
+                          intent: "warning",
+                          message: `No layer selected. Please choose a layer first.`,
+                        });
+                      }
+                    }}
+                  />
+                }
+              />
+            )}
+
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+            includes(panelsToShow, Panels.SvgMask) && (
+              <Tab
+                id="svg-mask"
+                title="Masks"
+                panel={
+                  <MediaManagementPanel
+                    type="svg-mask"
+                    key={forceUpdate}
+                    deleteMediaFunc={deleteLibraryMedias}
+                    fetchMediasFunc={fetchLibraryMedias}
+                    uploadComponent={<></>}
+                    selectionType={selectionType}
+                    onRequestClose={onRequestClose}
+                    isAddObject={addObject}
+                    onSelect={onSelect}
+                    onAdd={(mediaItem) => {
+                      const sizeRect = getNewMediaObjectBounds({
+                        media: mediaItem.media,
+                        breakpointConfig,
+                      });
+
+                      if (activeLayerId) {
+                        _addNewObject(
+                          activeLayerId,
+                          SVG_MASK,
+                          { ...sizeRect },
+                          {
+                            mask: includeMediaRequiredProps(mediaItem.media),
+                          },
                         );
                       } else {
                         AppToaster.show({
@@ -601,7 +647,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   return {
@@ -616,7 +662,7 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
 
   _replaceObject: replaceObject,

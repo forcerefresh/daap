@@ -34,7 +34,7 @@ interface IMediaManagementPanelProps {
   }) => Promise<{ pagination: Pagination; data: any[] }>;
   deleteMediaFunc?: (
     type: MediaType,
-    ids: string[]
+    ids: string[],
   ) => Promise<{ response: { status: "SUCCESS" | "ERROR"; id: string }[] }>;
 
   selectionType?: SelectionType;
@@ -49,7 +49,7 @@ export type IMediaMManagementPanelMergedProps = typeof mapDispatchToProps &
   IMediaManagementPanelProps;
 
 const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
-  props
+  props,
 ) => {
   const {
     type,
@@ -69,7 +69,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
   const [searchValue, setSearchValue] = useState<string>("");
   const [requestReload, setRequestReload] = useState<number>(0);
   const [latestPagination, setLatestPagination] = useState<Pagination | null>(
-    null
+    null,
   );
   const [errorMessage] = useState<string | undefined>();
 
@@ -77,7 +77,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
 
   const debounceFetchData = debounce(
     (fromPage?: number) => fetchData(fromPage),
-    100
+    100,
   );
 
   const reload = useCallback(() => {
@@ -129,7 +129,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
 
         (error) => {
           logger.app.error(error);
-        }
+        },
       );
     }
   };
@@ -147,7 +147,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
       resetImages();
       reload();
     }, 500),
-    [resetImages, reload]
+    [resetImages, reload],
   );
 
   const renderPreviewImage = (url: string, type: string) => {
@@ -228,7 +228,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
             const previewImageUrl = getMediaSrc(
               mediaItem,
               "small",
-              "previewSizes"
+              "previewSizes",
             );
 
             let originalImageUrl: string | undefined;
@@ -307,7 +307,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
 
                           const newImages = mediaItems.filter(
                             (image) =>
-                              image.id !== deleteResponse?.response[0].id
+                              image.id !== deleteResponse?.response[0].id,
                           );
 
                           setMediaItems(newImages);
@@ -368,11 +368,11 @@ const mapDispatchToProps = {
     layerId: string,
     type: string,
     objectProps: Partial<IObject>,
-    values?: { [key: string]: any }
+    values?: { [key: string]: any },
   ) => addNewObject(layerId, type, objectProps, values),
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MediaManagementPanel);
