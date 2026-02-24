@@ -344,7 +344,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
           </Popover>
         </div>
 
-        {/* <div>
+        <div>
           <Popover
             interactionKind={PopoverInteractionKind.CLICK}
             position={Position.BOTTOM}
@@ -388,7 +388,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                     // });
                     // setLibraryOpen(false);
                   }}
-                  panelsToShow={[Panels.MyVectors]}
+                  panelsToShow={[Panels.SvgMask]}
                 />
               </div>
             }
@@ -403,7 +403,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               disabled={selectedObjectIds.length !== 1}
             ></Button>
           </Popover>
-        </div> */}
+        </div>
 
         {/* <div>
           <Button
@@ -545,7 +545,7 @@ const mapDispatchToProps = {
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuickBarPanel);
 
-async function fetchSVG(url: string): Promise<string> {
+export async function fetchSVG(url: string): Promise<string> {
   try {
     const response = await fetch(url);
 

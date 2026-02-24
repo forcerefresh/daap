@@ -191,6 +191,17 @@ import {
   lineSizeUpdate,
 } from "./line/line";
 import LineStageTool from "./line/line-stage-tool";
+import {
+  createSvgMaskObject,
+  getSvgMaskAssetsUrls,
+  getSvgMaskHtml,
+  getSvgMaskObjectForm,
+  preloadSvgMaskImage,
+  SVG_MASK,
+  svgMaskMeta,
+  svgMaskPostProcess,
+  svgMaskSizeUpdate,
+} from "./svg-mask/svg-mask";
 
 // -------------------------
 
@@ -209,7 +220,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  getFonts
+  getFonts,
 );
 
 registerObjectTool({
@@ -261,7 +272,23 @@ registerObject(
   undefined,
   undefined,
   imagePostProcess,
-  getAssetsUrls
+  getAssetsUrls,
+);
+
+registerObject(
+  SVG_MASK,
+  "1.0.0",
+  "media",
+  svgMaskMeta,
+  createSvgMaskObject,
+  getSvgMaskObjectForm,
+  svgMaskSizeUpdate,
+  getSvgMaskHtml,
+  preloadSvgMaskImage,
+  undefined,
+  undefined,
+  svgMaskPostProcess,
+  getSvgMaskAssetsUrls,
 );
 
 registerObjectTool({
@@ -311,7 +338,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  undefined
+  undefined,
 );
 
 registerObjectTool({
@@ -375,7 +402,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  undefined
+  undefined,
 );
 
 registerObject(
@@ -391,7 +418,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  undefined
+  undefined,
 );
 
 registerObject(
@@ -407,7 +434,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  undefined
+  undefined,
 );
 
 registerObject(
@@ -423,7 +450,7 @@ registerObject(
   undefined,
   undefined,
   undefined,
-  undefined
+  undefined,
 );
 
 registerObject(
@@ -439,7 +466,7 @@ registerObject(
   undefined,
   undefined,
   linePostProcess,
-  undefined
+  undefined,
 );
 
 registerObjectTool({

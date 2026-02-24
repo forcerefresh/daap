@@ -1,17 +1,11 @@
 import React, {
   CSSProperties,
-  MouseEventHandler,
-  SyntheticEvent,
-  useCallback,
   useContext,
-  useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import cx from "classnames";
-import { cloneDeep, includes, last } from "lodash-es";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { getZoom } from "../../store/helpers/calculateZoom";
@@ -46,15 +40,10 @@ import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-regist
 import { StageTools } from "../../store/reducers/stage";
 import { IRect, getMousePosition } from "../../utils/doom-utils/common";
 import {
-  getUngroupObjectsCalculation,
   createTransformForPath,
-  decomposeMatrix2DW3,
-  getFullMatrixFromTransformArr,
   getGroupMatrixFromSelectionPath,
   getObjectTransform,
 } from "./stage-panel-utils";
-import RotateIcon from "../../assets/icons/rotate-icon.svg?react";
-import { setGlobalProp } from "./utils";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
 import useDeepCompareEffect from "use-deep-compare-effect";
 import {
@@ -68,9 +57,9 @@ import {
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
-import { group } from "console";
 import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
+import { IMAGE } from "../../objects/image/image";
 
 const groupSelectionColor = "#48aff0"; /// "#48f08d";
 const objectSelectionColor = "#48aff0";
@@ -92,28 +81,16 @@ export function StageObjectInternal(props: IStageLayer) {
     breakpointConfig,
     objectById,
     stageZoom,
-    activeObjectId,
     selectedObjectIds,
     layerById,
     activeStageTool,
-    _updateObject,
-    _addObjectsToSelection,
-    _removeObjectsFromSelection,
-    _deactivateObject,
-    _activateObject,
-    _selectObjects,
-    _selectForProperties,
     objectZoom,
     selectionPath,
-    parentGroup,
     clipboard,
     forceRefreshRand,
   } = props;
 
-  const objectMeta = getAppObjectDefinition(
-    object.type,
-    "latest" /*object.version*/,
-  )?.meta;
+  const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
   // ++
@@ -240,6 +217,12 @@ export function StageObjectInternal(props: IStageLayer) {
       calculatedObjectSize.width as any, // TODO <<
       calculatedObjectSize.height as any, // TODO <<
     );
+  }
+
+  if (object.type === IMAGE) {
+    maskStyle = {
+      clipPath: `url(#c123)`,
+    };
   }
 
   const objectStyle = {
