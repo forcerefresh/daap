@@ -980,7 +980,7 @@ function processScaleChangeEvent(
       if (eData.handle === "left" || eData.handle === "width") {
         if (eData.handle === "left") {
           newLeft =
-            objectSize.x + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
+            objectSize.x + realMove.x / (getObjectScale(object) ?? 1) + "px";
           objectHolder.style.left = newLeft;
         }
 
@@ -988,7 +988,7 @@ function processScaleChangeEvent(
 
         newWidth =
           objectSize.width +
-          widthDirection * (mouseMoveX / (getObjectScale(object) ?? 1)) +
+          widthDirection * (realMove.x / (getObjectScale(object) ?? 1)) +
           "px";
         objectHolder.style.width = newWidth;
 
@@ -1004,7 +1004,7 @@ function processScaleChangeEvent(
       } else if (eData.handle === "top" || eData.handle === "height") {
         if (eData.handle === "top") {
           newTop =
-            objectSize.y + mouseMoveY / (getObjectScale(object) ?? 1) + "px";
+            objectSize.y + realMove.y / (getObjectScale(object) ?? 1) + "px";
           objectHolder.style.top = newTop;
         }
 
@@ -1012,7 +1012,7 @@ function processScaleChangeEvent(
 
         newHeight =
           objectSize.height +
-          widthDirection * (mouseMoveY / (getObjectScale(object) ?? 1)) +
+          widthDirection * (realMove.y / (getObjectScale(object) ?? 1)) +
           "px";
         objectHolder.style.height = newHeight;
 

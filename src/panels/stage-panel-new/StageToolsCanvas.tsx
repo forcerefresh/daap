@@ -7,7 +7,6 @@ import React, {
   useContext,
   useEffect,
   useLayoutEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -43,12 +42,9 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 import { getZoom } from "../../store/helpers/calculateZoom";
 
 import { populateObjectThreeIds } from "../../store/actions/actions-utils";
-import {
-  StageManagerContext,
-  degrees_to_radians,
-} from "./StageManagerProvider";
+import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
-import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
+import { Point } from "../../webslider-sdk/object/i-tool-class";
 import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
 
 type IStagePanel = typeof mapDispatchToProps &
@@ -57,6 +53,7 @@ type IStagePanel = typeof mapDispatchToProps &
 const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
     stageZoom,
+    appZoom,
     objectById,
     layerById,
     selectedObjectIds,
@@ -66,18 +63,107 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   const [forceRerender, setForceRerender] = useState(1);
 
-  const groupsMatrixRef = useRef(new DOMMatrix());
   const holderRef = useRef<HTMLDivElement | null>(null);
 
   const { stageManager } = useContext(StageManagerContext);
 
-  const handleMouseDown = useCallback(
-    (e: MouseEvent) => {
-      e.stopPropagation();
+  const selectedObjectId = selectedObjectIds[0];
+  const selectedObject = objectById[selectedObjectId];
 
-      const handle = (e.currentTarget as HTMLElement)?.getAttribute(
-        "data-scale-handle",
-      );
+  // Trigger re-renders during drag so useLayoutEffect can re-sync handles
+  useEffect(() => {
+    const handleChange = () => setForceRerender((v) => v + 1);
+    stageManager.addEventListener("change", handleChange as EventListener);
+    return () => {
+      stageManager.removeEventListener("change", handleChange as EventListener);
+    };
+  }, [stageManager]);
+
+  // Apply selection-rect styles imperatively AFTER every DOM commit.
+  // This prevents flicker: by the time useLayoutEffect runs, StageObject has
+  // already committed its Redux-driven DOM updates, so getBoundingClientRect()
+  // and getComputedStyle() reflect the true final state.
+  useLayoutEffect(() => {
+    if (!holderRef.current || !selectedObjectId) return;
+
+    const objectHolder = document.getElementsByClassName(
+      `object-holder-${selectedObjectId}`,
+    )[0] as HTMLDivElement;
+    const stageToolsCanvas = document.getElementsByClassName(
+      `stage-tools-canvas`,
+    )[0] as HTMLDivElement;
+
+    if (!objectHolder || !stageToolsCanvas) return;
+
+    const objectPath: string[] = [];
+    populateObjectThreeIds(objectPath, selectedObjectId, objectById, layerById);
+
+    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
+      objectPath,
+      objectById,
+    );
+    parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
+
+    const stageToolsCanvasBbox = stageToolsCanvas.getBoundingClientRect();
+    const cstyle = getComputedStyle(objectHolder);
+    const h = parseFloat(cstyle.height);
+    const w = parseFloat(cstyle.width);
+
+    const domTransformStr = cstyle.transform;
+    const objectDomMatrix =
+      domTransformStr !== "none"
+        ? new DOMMatrix(domTransformStr)
+        : new DOMMatrix();
+    objectDomMatrix.e = objectDomMatrix.f = 0;
+
+    // stage-tools-canvas lives inside .pan-and-zoom which already has
+    // transform: scale(stageZoom). Do NOT add scale(stageZoom) here — it
+    // would double the zoom. The object rotation/scale is all that's needed.
+    const transform = parentGroupsMatrix.multiply(objectDomMatrix).toString();
+
+    const bbox = objectHolder.getBoundingClientRect();
+    const cy = bbox.top + bbox.height / 2;
+    const cx = bbox.left + bbox.width / 2;
+    // getBoundingClientRect() is in screen pixels (affected by both stageZoom
+    // and appZoom). CSS left/top inside the zoom container are in stage pixels,
+    // so divide by both.
+    const y = (cy - stageToolsCanvasBbox.top) / stageZoom / appZoom - h / 2;
+    const x = (cx - stageToolsCanvasBbox.left) / stageZoom / appZoom - w / 2;
+
+    // Extract live scale from the DOM transform matrix (a = scaleX * cos, b = scaleX * sin)
+    const liveScale =
+      Math.sqrt(
+        objectDomMatrix.a * objectDomMatrix.a +
+          objectDomMatrix.b * objectDomMatrix.b,
+      ) || 1;
+
+    holderRef.current.style.left = `${x}px`;
+    holderRef.current.style.top = `${y}px`;
+    holderRef.current.style.width = `${w}px`;
+    holderRef.current.style.height = `${h}px`;
+    holderRef.current.style.transform = transform;
+    // CSS variables consumed by child handle divs — keeps handle visual size constant
+    holderRef.current.style.setProperty(
+      "--hs",
+      `${HANDLE_SIZE / liveScale / stageZoom / appZoom}px`,
+    );
+    holderRef.current.style.setProperty(
+      "--hw",
+      `${1 / liveScale / stageZoom / appZoom}px`,
+    );
+  }, [
+    selectedObjectId,
+    selectedObject,
+    objectById,
+    layerById,
+    stageZoom,
+    appZoom,
+    forceRerender,
+  ]);
+
+  const handleScaleMouseDown = useCallback(
+    (e: React.MouseEvent, handle: string) => {
+      e.stopPropagation();
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         selectionPath,
@@ -85,343 +171,176 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       );
 
       const object = objectById[selectedObjectIds[0]];
+      const objectHolder = document.getElementsByClassName(
+        `object-holder-${selectedObjectIds[0]}`,
+      )[0] as HTMLDivElement;
 
       stageManager.start(StageToolEnum.SCALE, {
-        mousePosition: getMousePosition(e),
+        mousePosition: getMousePosition(e.nativeEvent),
         contextMatrix: groupsMatrix,
-        objectId: selectedObjectIds[0], //object.id,
+        objectId: selectedObjectIds[0],
         objectRotation: object.rotation ?? 0,
         objectScale: object.scale ?? 1,
-        originalMouseEvent: e,
-        handle: handle ?? "",
-        boundingClientRects: [new DOMRect()], // TODO: not needed
+        originalMouseEvent: e.nativeEvent,
+        handle,
+        boundingClientRects: [
+          objectHolder?.getBoundingClientRect() ?? new DOMRect(),
+        ],
       });
     },
-    [objectById],
+    [objectById, selectionPath, selectedObjectIds, stageManager],
   );
 
-  const initialRect = useRef<Rect>({ x: 0, y: 0, width: 1, height: 1 });
-  const firstObject = objectById[selectedObjectIds[0]];
-  const selectedObjectId = selectedObjectIds[0];
-  const selectedObject = objectById[selectedObjectId];
-
-  useEffect(() => {
-    setTimeout(() => {
-      setForceRerender(forceRerender + 1);
-    }, 1);
-  }, [selectedObject]);
-
-  const style: CSSProperties = useMemo(() => {
-    if (selectedObjectId) {
-      // >>>>>>>>>>>>>>>>>>
-      // duplicate 123
-      const objectPath: string[] = [];
-
-      populateObjectThreeIds(
-        objectPath,
-        selectedObjectId,
-        objectById,
-        layerById,
-      );
+  const handleRotateMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
-        [...objectPath, selectedObjectId],
+        selectionPath,
         objectById,
       );
 
-      groupsMatrix.e = groupsMatrix.f = 0;
-
-      const transform = groupsMatrix
-        .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
-        .toString();
-
-      /////
-
-      const stageToolsCanvas = document.getElementsByClassName(
-        `stage-tools-canvas`,
-      )[0] as HTMLDivElement;
-      const stageToolsCanvasBbox = stageToolsCanvas.getBoundingClientRect();
-
+      const object = objectById[selectedObjectIds[0]];
       const objectHolder = document.getElementsByClassName(
-        `object-holder-${selectedObjectId}`,
+        `object-holder-${selectedObjectIds[0]}`,
       )[0] as HTMLDivElement;
 
-      if (objectHolder) {
-        const cstyle = getComputedStyle(objectHolder);
-        const h = parseFloat(cstyle.height);
-        const w = parseFloat(cstyle.width);
-        const height = `${h}px`;
-        const width = `${w}px`;
-
-        // Then, align "d" to "c" using their center points.
-        const bbox = objectHolder.getBoundingClientRect();
-        const cy = bbox.top + bbox.height / 2;
-        const cx = bbox.left + bbox.width / 2;
-
-        const y = cy - h / 2 - stageToolsCanvasBbox.top;
-        const x = cx - w / 2 - stageToolsCanvasBbox.left;
-        const left = `${x}px`;
-        const top = `${y}px`;
-
-        initialRect.current = {
-          width: w,
-          height: h,
-          x,
-          y,
-        };
-
-        groupsMatrixRef.current = groupsMatrix;
-
-        return { top, left, height, width, transform };
-      } else {
-        return {};
-      }
-    }
-    return {};
-  }, [
-    stageZoom,
-    selectedObject,
-    selectedObjectIds,
-    selectedObjectId,
-    objectById,
-    layerById,
-    forceRerender,
-  ]);
-
-  // <<<<<<<<<<<<<<<<
-
-  const [move, setMove] = useState<Point>({ x: 0, y: 0 });
-  const [diff, setDiff] = useState<Point>({ x: 0, y: 0 });
-
-  const handleRef = useRef<HTMLDivElement | null>(null);
-  const initialMousePosition = useRef<Point>({ x: 0, y: 0 });
-  const handlesRef = useRef<{
-    tl?: HTMLElement;
-    tr?: HTMLElement;
-    bl?: HTMLElement;
-    br?: HTMLElement;
-    width?: HTMLElement;
-    height?: HTMLElement;
-  }>({});
-
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-    const mousePosition = getMousePosition(e);
-
-    const a2x = mousePosition.x - initialMousePosition.current.x;
-    const a2y = mousePosition.y - initialMousePosition.current.y;
-
-    const a1x = 0;
-    const a1y = 0;
-
-    var len = Math.sqrt(Math.pow(a2x - a1x, 2) + Math.pow(a2y - a1y, 2));
-
-    var hDif = Math.sin(degrees_to_radians(firstObject.rotation ?? 0)) * len;
-    var wDif = Math.cos(degrees_to_radians(firstObject.rotation ?? 0)) * len;
-
-    setDiff({ x: wDif, y: hDif });
-    setMove({ x: a2x, y: a2y });
-  }, []);
-
-  const handleMouseUp = useCallback((e: MouseEvent) => {
-    e.stopPropagation();
-    const mousePosition = getMousePosition(e);
-
-    const x = mousePosition.x - initialMousePosition.current.x;
-    const y = mousePosition.y - initialMousePosition.current.y;
-
-    setMove({ x, y });
-
-    (window as any).removeEventListener("mousemove", handleMouseMove);
-    (window as any).removeEventListener("mouseup", handleMouseUp);
-  }, []);
-
-  useEffect(() => {
-    handleRef.current?.addEventListener("mousedown", handleMouseDown);
-
-    return () => {
-      handleRef.current?.removeEventListener("mousedown", handleMouseDown);
-    };
-  }, [handleMouseDown, selectedObjectIds]);
+      stageManager.start(StageToolEnum.ROTATE, {
+        mousePosition: getMousePosition(e.nativeEvent),
+        contextMatrix: groupsMatrix,
+        objectId: selectedObjectIds[0],
+        objectRotation: object.rotation ?? 0,
+        objectScale: object.scale ?? 1,
+        originalMouseEvent: e.nativeEvent,
+        handle: "",
+        boundingClientRects: [
+          objectHolder?.getBoundingClientRect() ?? new DOMRect(),
+        ],
+      });
+    },
+    [objectById, selectionPath, selectedObjectIds, stageManager],
+  );
 
   const HANDLE_SIZE = 15;
-  const scaledHandleSize =
-    HANDLE_SIZE / (selectedObject?.scale ?? 1) / stageZoom;
+  const ROTATION_HANDLE_GAP = 4;
 
-  const handleStyle: CSSProperties = {
+  const objectMeta = selectedObject
+    ? getAppObjectDefinition(selectedObject.type, "latest")?.meta
+    : null;
+  const showWidthResize = objectMeta?.supportWidthResize ?? false;
+  const showHeightResize = objectMeta?.supportHeightResize ?? false;
+
+  const handleColor = "#48aff0";
+  const borderRadius = "10%";
+
+  // --hs and --hw are CSS variables set imperatively in useLayoutEffect
+  // using the live DOM scale, so handle sizes stay constant during drag.
+  const cornerStyle: CSSProperties = {
     position: "absolute",
-    left: "-" + scaledHandleSize + "px",
-    top: "-" + scaledHandleSize + "px",
-    width: scaledHandleSize + "px",
-    height: scaledHandleSize + "px",
-    background: "red",
-    //border: "0.1px solid red",
-    transform: `translateX(${move.x}px) translateY(${move.y}px)`,
+    width: "var(--hs)",
+    height: "var(--hs)",
+    background: handleColor,
+    boxShadow: "0 0 0 var(--hw) white",
+    borderRadius,
     pointerEvents: "all",
   };
 
-  useLayoutEffect(() => {
-    if (!selectedObject) return;
-    if (selectedObject.isLocked) return;
-
-    const handleColor = "transparent"; //"48aff0"
-
-    const scaledHandleSize =
-      HANDLE_SIZE / (selectedObject?.scale ?? 1) / stageZoom;
-
-    if (holderRef.current) {
-      let el: HTMLDivElement;
-
-      el = document.createElement("div");
-      el.style.left = "-" + scaledHandleSize + "px";
-      el.style.top = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.background = handleColor;
-      el.style.border = "0.1px solid " + handleColor;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "tl");
-      el.setAttribute("class", "resize-handle");
-      holderRef.current.appendChild(el);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.tl = el;
-
-      el = document.createElement("div");
-      el.style.right = "-" + scaledHandleSize + "px";
-      el.style.top = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.background = handleColor;
-      el.style.border = "0.1px solid " + handleColor;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "tr");
-      el.setAttribute("class", "resize-handle");
-
-      holderRef.current.appendChild(el);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.tr = el;
-
-      el = document.createElement("div");
-      el.style.bottom = "-" + scaledHandleSize + "px";
-      el.style.left = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.background = handleColor;
-      el.style.border = "0.1px solid " + handleColor;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "bl");
-      el.setAttribute("class", "resize-handle");
-      holderRef.current.appendChild(el);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.bl = el;
-
-      el = document.createElement("div");
-      el.style.bottom = "-" + scaledHandleSize + "px";
-      el.style.right = "-" + scaledHandleSize + "px";
-      el.style.width = scaledHandleSize + "px";
-      el.style.height = scaledHandleSize + "px";
-      el.style.background = handleColor;
-      el.style.border = "0.1px solid" + handleColor;
-      el.style.position = "absolute";
-      el.style.pointerEvents = "all";
-      el.setAttribute("data-scale-handle", "br");
-      el.setAttribute("class", "resize-handle");
-      holderRef.current.appendChild(el);
-      el.addEventListener("mousedown", handleMouseDown);
-      handlesRef.current.br = el;
-
-      // width resize
-      const object = objectById[selectedObjectIds[0]];
-      const toolDef = getAppObjectDefinition(object.type, "latest");
-
-      if (toolDef?.meta.supportWidthResize) {
-        el = document.createElement("div");
-        el.style.top = `calc(50% - ${scaledHandleSize / 1.25}px)`;
-        el.style.right = "-" + scaledHandleSize / 1.5 + "px";
-        el.style.width = scaledHandleSize / 1.5 + "px";
-        el.style.height = scaledHandleSize * 1.5 + "px";
-        el.style.background = "transparent"; // "rgba(255,0,255,0.4)"; // handleColor;
-        el.style.border = "0.1px solid" + handleColor;
-        el.style.position = "absolute";
-        el.style.pointerEvents = "all";
-        el.setAttribute("data-scale-handle", "width");
-        el.setAttribute("class", "resize-handle");
-        holderRef.current.appendChild(el);
-        el.addEventListener("mousedown", handleMouseDown);
-        handlesRef.current.width = el;
-      }
-
-      if (toolDef?.meta.supportHeightResize) {
-        el = document.createElement("div");
-        el.style.bottom = "-" + scaledHandleSize / 1.5 + "px";
-        el.style.right = `calc(50% - ${scaledHandleSize / 1.25}px)`;
-        el.style.width = scaledHandleSize * 1.5 + "px";
-        el.style.height = scaledHandleSize / 1.5 + "px";
-        el.style.background = "transparent"; // "rgba(255,0,255,0.4)"; // handleColor;
-        el.style.border = "0.1px solid" + handleColor;
-        el.style.position = "absolute";
-        el.style.pointerEvents = "all";
-        el.setAttribute("data-scale-handle", "height");
-        el.setAttribute("class", "resize-handle");
-        holderRef.current.appendChild(el);
-        el.addEventListener("mousedown", handleMouseDown);
-        handlesRef.current.height = el;
-      }
-    }
-
-    return () => {
-      if (handlesRef.current?.tl && holderRef.current) {
-        handlesRef.current.tl.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current?.removeChild(handlesRef.current.tl);
-      }
-      if (handlesRef.current?.tr && holderRef.current) {
-        handlesRef.current.tr.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current?.removeChild(handlesRef.current.tr);
-      }
-      if (handlesRef.current?.bl && holderRef.current) {
-        handlesRef.current.bl.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current?.removeChild(handlesRef.current.bl);
-      }
-      if (handlesRef.current?.br && holderRef.current) {
-        handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
-        holderRef.current?.removeChild(handlesRef.current.br);
-      }
-      if (handlesRef.current?.width && holderRef.current) {
-        handlesRef.current.width.removeEventListener(
-          "mousedown",
-          handleMouseDown,
-        );
-        holderRef.current?.removeChild(handlesRef.current.width);
-      }
-      if (handlesRef.current?.height && holderRef.current) {
-        handlesRef.current.height.removeEventListener(
-          "mousedown",
-          handleMouseDown,
-        );
-        holderRef.current?.removeChild(handlesRef.current.height);
-      }
-    };
-  }, [selectedObject, handleMouseDown, stageZoom]);
-
   return (
     <div>
-      {selectedObject && (
+      {selectedObject && !selectedObject.isLocked && (
         <div
           ref={holderRef}
           className="selection-rect"
-          style={{
-            position: "absolute",
-            //background: "rgba(234,0,222,0.2)",
-            ...style,
-            left: initialRect.current.x - diff.x + "px",
-            top: initialRect.current.y - diff.y + "px",
-            width: initialRect.current.width + diff.x + "px",
-            height: initialRect.current.height + diff.y + "px",
-          }}
-        ></div>
+          style={{ position: "absolute" }}
+        >
+          {/* Rotation handle */}
+          <div
+            style={{
+              position: "absolute",
+              top: `calc(-2 * var(--hs) - ${ROTATION_HANDLE_GAP} * var(--hw))`,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "var(--hs)",
+              height: "var(--hs)",
+              background: handleColor,
+              boxShadow: "0 0 0 var(--hw) white",
+              borderRadius: "50%",
+              pointerEvents: "all",
+              cursor: "grab",
+            }}
+            onMouseDown={handleRotateMouseDown}
+          />
+
+          {/* Corner handles */}
+          <div
+            style={{
+              ...cornerStyle,
+              left: "calc(-1 * var(--hs))",
+              top: "calc(-1 * var(--hs))",
+            }}
+            onMouseDown={(e) => handleScaleMouseDown(e, "tl")}
+          />
+          <div
+            style={{
+              ...cornerStyle,
+              right: "calc(-1 * var(--hs))",
+              top: "calc(-1 * var(--hs))",
+            }}
+            onMouseDown={(e) => handleScaleMouseDown(e, "tr")}
+          />
+          <div
+            style={{
+              ...cornerStyle,
+              left: "calc(-1 * var(--hs))",
+              bottom: "calc(-1 * var(--hs))",
+            }}
+            onMouseDown={(e) => handleScaleMouseDown(e, "bl")}
+          />
+          <div
+            style={{
+              ...cornerStyle,
+              right: "calc(-1 * var(--hs))",
+              bottom: "calc(-1 * var(--hs))",
+            }}
+            onMouseDown={(e) => handleScaleMouseDown(e, "br")}
+          />
+
+          {/* Edge handles */}
+          {showWidthResize && (
+            <div
+              style={{
+                position: "absolute",
+                right: "calc(var(--hs) / -1.5)",
+                top: "calc(50% - var(--hs) / 1.25)",
+                width: "calc(var(--hs) / 1.5)",
+                height: "calc(var(--hs) * 1.5)",
+                background: handleColor,
+                boxShadow: "0 0 0 var(--hw) white",
+                borderTopRightRadius: "15%",
+                borderBottomRightRadius: "15%",
+                pointerEvents: "all",
+              }}
+              onMouseDown={(e) => handleScaleMouseDown(e, "width")}
+            />
+          )}
+          {showHeightResize && (
+            <div
+              style={{
+                position: "absolute",
+                bottom: "calc(var(--hs) / -1.5)",
+                left: "calc(50% - var(--hs) / 1.25)",
+                width: "calc(var(--hs) * 1.5)",
+                height: "calc(var(--hs) / 1.5)",
+                background: handleColor,
+                boxShadow: "0 0 0 var(--hw) white",
+                borderBottomLeftRadius: "15%",
+                borderBottomRightRadius: "15%",
+                pointerEvents: "all",
+              }}
+              onMouseDown={(e) => handleScaleMouseDown(e, "height")}
+            />
+          )}
+        </div>
       )}
     </div>
   );
@@ -464,6 +383,7 @@ const mapStateToProps = (state: IStore) => {
     layers,
     objects,
     stageZoom: zoom,
+    appZoom: state.globals.appZoom,
     stagePan: stage.pan,
     previewState: stage.previewState,
     layerArr,

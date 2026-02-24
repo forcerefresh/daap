@@ -61,8 +61,6 @@ import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IMAGE } from "../../objects/image/image";
 
-const groupSelectionColor = "#48aff0"; /// "#48f08d";
-const objectSelectionColor = "#48aff0";
 
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
@@ -263,9 +261,6 @@ export function StageObjectInternal(props: IStageLayer) {
   if (object.properties?.autoHeight) {
   }
 
-  const isOnlyThisObjectSelected =
-    selectedObjectIds.length === 1 &&
-    selectedObjectIds[0] === objectRef.current.id;
 
   const rootObjectSelection =
     selectedObjectIds.length === 0 && !!layerById[object.parentId!];
@@ -387,29 +382,6 @@ export function StageObjectInternal(props: IStageLayer) {
                 : undefined
             }
           >
-            <div
-              className={cx(css.rotationHandle)}
-              style={{
-                // TODO: will be removed when we remove "selection" outside
-                top: -(35 / objectZoom / stageZoom) + "px",
-              }}
-            >
-              {!activeTool && (
-                <div
-                  className={cx(css.circle, "rotation-handle")}
-                  style={{
-                    // TODO: will be removed when we remove "selection" outside
-                    transform: `scale(${1 / objectZoom / stageZoom})`,
-                    display: isOnlyThisObjectSelected ? "block" : "none",
-                    pointerEvents: "all",
-                    boxShadow: "0 0 0 " + 1 + "px white",
-                    background: object.objectIds
-                      ? groupSelectionColor
-                      : objectSelectionColor,
-                  }}
-                />
-              )}
-            </div>
             {object.type === "group" ? (
               <>
                 <style
@@ -498,20 +470,6 @@ export function StageObjectInternal(props: IStageLayer) {
                 opacity: 0,
               }}
             />
-            <div
-              className={cx(
-                css.resizeHandleHolder,
-                "resize-handle-holder-" + object.id,
-              )}
-              style={{
-                // TODO: will be removed when we remove "selection" outside
-                ...objectStyle,
-                display: isOnlyThisObjectSelected ? "block" : "none",
-                position: "absolute",
-                top: "0px",
-                left: "0px",
-              }}
-            ></div>
             <div className="object-selection" style={selectionStyle} />
           </div>
         </WithRotationHandle>
