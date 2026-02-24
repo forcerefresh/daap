@@ -61,7 +61,6 @@ import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IMAGE } from "../../objects/image/image";
 
-
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     object: IObject;
@@ -149,7 +148,15 @@ export function StageObjectInternal(props: IStageLayer) {
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
-      objectHolder.style.transform = getObjectTransform(object);
+      const newTransform = getObjectTransform(object);
+      console.log("[SO useLayoutEffect]", {
+        objectId: object.id,
+        rotation: object.rotation,
+        scale: object.scale,
+        newTransform,
+        prevStyleTransform: objectHolder.style.transform,
+      });
+      objectHolder.style.transform = newTransform;
 
       objectHolder.style.visibility =
         activeEditObjectId === objectId ? "hidden" : "visible";
@@ -200,10 +207,6 @@ export function StageObjectInternal(props: IStageLayer) {
   const top =
     parseFloat(calculatedObjectSize.top as string) + Math.random() / 100 + "px";
 
-  const selectedColor = object.isLocked
-    ? "rgba(72, 175,240, 0.5)"
-    : "rgba(72, 175,240, 1)";
-
   const hoverColor = "rgba(72, 175,240, 0.5)";
 
   const commonObjectRect: CSSProperties = {
@@ -213,6 +216,8 @@ export function StageObjectInternal(props: IStageLayer) {
     height: calculatedObjectSize.height ?? "0px",
   };
 
+  // Selection outline for group-parent (in-path) and hover cases only.
+  // The selected-object outline is rendered by StageToolsCanvas.
   const selectionStyle: CSSProperties = {
     ...commonObjectRect,
     zIndex: 200,
@@ -221,12 +226,8 @@ export function StageObjectInternal(props: IStageLayer) {
     position: "absolute",
     pointerEvents: "none",
     transformOrigin: "top left",
-    ...((isSelected || (isInSelectionPath && !isSelected)) && !activeTool
-      ? {
-          boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px ${
-            object.objectIds && !isSelected ? "#444444" : selectedColor
-          }`,
-        }
+    ...(isInSelectionPath && !isSelected && !activeTool
+      ? { boxShadow: `0 0 0 ${1 / objectZoom / stageZoom}px #444444` }
       : {}),
   };
 
@@ -252,6 +253,7 @@ export function StageObjectInternal(props: IStageLayer) {
   objectHolderStyle.pointerEvents = "none";
 
   objectHolderStyle.transformOrigin = "top left";
+  objectHolderStyle.transform = getObjectTransform(object);
 
   if (clipboard?.entityIds?.includes(object.id)) {
     if (clipboard?.operation === "cut") objectHolderStyle.opacity = 0.5;
@@ -260,7 +262,6 @@ export function StageObjectInternal(props: IStageLayer) {
   const calculatedObjectSizeForObject = { ...calculatedObjectSize };
   if (object.properties?.autoHeight) {
   }
-
 
   const rootObjectSelection =
     selectedObjectIds.length === 0 && !!layerById[object.parentId!];

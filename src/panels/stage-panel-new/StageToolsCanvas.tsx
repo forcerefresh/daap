@@ -8,7 +8,6 @@ import React, {
   useEffect,
   useLayoutEffect,
   useRef,
-  useState,
 } from "react";
 import { connect } from "react-redux";
 import { ILayer } from "../../store/reducers/i-layers";
@@ -50,6 +49,9 @@ import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
+const HANDLE_SIZE = 15;
+const ROTATION_HANDLE_GAP = 4;
+
 const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
     stageZoom,
@@ -58,45 +60,31 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     layerById,
     selectedObjectIds,
     selectionPath,
-    forceRefreshRand: _forceRefreshRand, // NOTE: check this,
+    forceRefreshRand: _forceRefreshRand,
   } = props;
 
-  const [forceRerender, setForceRerender] = useState(1);
-
   const holderRef = useRef<HTMLDivElement | null>(null);
+  // Refs for secondary selected objects (outline only, no handles).
+  const secondaryRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
 
-  const { stageManager } = useContext(StageManagerContext);
+  const { stageManager, afterDomUpdateRef } = useContext(StageManagerContext);
 
   const selectedObjectId = selectedObjectIds[0];
   const selectedObject = objectById[selectedObjectId];
 
-  // Trigger re-renders during drag so useLayoutEffect can re-sync handles
-  useEffect(() => {
-    const handleChange = () => setForceRerender((v) => v + 1);
-    stageManager.addEventListener("change", handleChange as EventListener);
-    return () => {
-      stageManager.removeEventListener("change", handleChange as EventListener);
-    };
-  }, [stageManager]);
-
-  // Apply selection-rect styles imperatively AFTER every DOM commit.
-  // This prevents flicker: by the time useLayoutEffect runs, StageObject has
-  // already committed its Redux-driven DOM updates, so getBoundingClientRect()
-  // and getComputedStyle() reflect the true final state.
-  useLayoutEffect(() => {
-    if (!holderRef.current || !selectedObjectId) return;
-
+  // Position one overlay div to match its object-holder in the DOM.
+  // Defined inline so it always closes over the latest stageZoom/appZoom/objectById/layerById.
+  const positionOverlay = (objectId: string, overlayEl: HTMLDivElement) => {
     const objectHolder = document.getElementsByClassName(
-      `object-holder-${selectedObjectId}`,
+      `object-holder-${objectId}`,
     )[0] as HTMLDivElement;
     const stageToolsCanvas = document.getElementsByClassName(
-      `stage-tools-canvas`,
+      "stage-tools-canvas",
     )[0] as HTMLDivElement;
-
     if (!objectHolder || !stageToolsCanvas) return;
 
     const objectPath: string[] = [];
-    populateObjectThreeIds(objectPath, selectedObjectId, objectById, layerById);
+    populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
     const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
       objectPath,
@@ -105,61 +93,77 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
 
     const stageToolsCanvasBbox = stageToolsCanvas.getBoundingClientRect();
-    const cstyle = getComputedStyle(objectHolder);
-    const h = parseFloat(cstyle.height);
-    const w = parseFloat(cstyle.width);
+    const computedStyle = getComputedStyle(objectHolder);
+    const h = parseFloat(computedStyle.height);
+    const w = parseFloat(computedStyle.width);
 
-    const domTransformStr = cstyle.transform;
+    const domTransformStr = computedStyle.transform;
     const objectDomMatrix =
       domTransformStr !== "none"
         ? new DOMMatrix(domTransformStr)
         : new DOMMatrix();
     objectDomMatrix.e = objectDomMatrix.f = 0;
 
-    // stage-tools-canvas lives inside .pan-and-zoom which already has
-    // transform: scale(stageZoom). Do NOT add scale(stageZoom) here — it
-    // would double the zoom. The object rotation/scale is all that's needed.
-    const transform = parentGroupsMatrix.multiply(objectDomMatrix).toString();
+    const combinedMatrix = parentGroupsMatrix.multiply(objectDomMatrix);
 
     const bbox = objectHolder.getBoundingClientRect();
     const cy = bbox.top + bbox.height / 2;
     const cx = bbox.left + bbox.width / 2;
-    // getBoundingClientRect() is in screen pixels (affected by both stageZoom
-    // and appZoom). CSS left/top inside the zoom container are in stage pixels,
-    // so divide by both.
     const y = (cy - stageToolsCanvasBbox.top) / stageZoom / appZoom - h / 2;
     const x = (cx - stageToolsCanvasBbox.left) / stageZoom / appZoom - w / 2;
 
-    // Extract live scale from the DOM transform matrix (a = scaleX * cos, b = scaleX * sin)
-    const liveScale =
+    const combinedScale =
       Math.sqrt(
-        objectDomMatrix.a * objectDomMatrix.a +
-          objectDomMatrix.b * objectDomMatrix.b,
+        combinedMatrix.a * combinedMatrix.a +
+          combinedMatrix.b * combinedMatrix.b,
       ) || 1;
 
-    holderRef.current.style.left = `${x}px`;
-    holderRef.current.style.top = `${y}px`;
-    holderRef.current.style.width = `${w}px`;
-    holderRef.current.style.height = `${h}px`;
-    holderRef.current.style.transform = transform;
-    // CSS variables consumed by child handle divs — keeps handle visual size constant
-    holderRef.current.style.setProperty(
+    overlayEl.style.left = `${x}px`;
+    overlayEl.style.top = `${y}px`;
+    overlayEl.style.width = `${w}px`;
+    overlayEl.style.height = `${h}px`;
+    overlayEl.style.transform = combinedMatrix.toString();
+    overlayEl.style.setProperty(
       "--hs",
-      `${HANDLE_SIZE / liveScale / stageZoom / appZoom}px`,
+      `${HANDLE_SIZE / combinedScale / stageZoom / appZoom}px`,
     );
-    holderRef.current.style.setProperty(
+    overlayEl.style.setProperty(
       "--hw",
-      `${1 / liveScale / stageZoom / appZoom}px`,
+      `${1 / combinedScale / stageZoom / appZoom}px`,
     );
-  }, [
-    selectedObjectId,
-    selectedObject,
-    objectById,
-    layerById,
-    stageZoom,
-    appZoom,
-    forceRerender,
-  ]);
+  };
+
+  const positionAll = () => {
+    if (holderRef.current && selectedObjectId) {
+      positionOverlay(selectedObjectId, holderRef.current);
+    }
+    for (const [id, el] of secondaryRefs.current.entries()) {
+      if (el) positionOverlay(id, el);
+    }
+  };
+
+  // Updated every render so StageManagerProvider always calls the latest closure.
+  const positionAllRef = useRef(positionAll);
+  positionAllRef.current = positionAll;
+  // StageManagerProvider calls afterDomUpdateRef.current() immediately after
+  // each DOM mutation batch — guaranteed order, no event-listener ambiguity.
+  afterDomUpdateRef.current = positionAll;
+
+  // After Redux-driven updates (selection change, zoom, object props): wait 1ms
+  // for StageObject.useLayoutEffect to apply its imperative transform first.
+  useLayoutEffect(() => {
+    // positionAllRef.current();
+    const timerId = setTimeout(() => positionAllRef.current(), 1);
+    return () => clearTimeout(timerId);
+  }, [selectedObjectIds, objectById, layerById, stageZoom, appZoom]);
+
+  // Remove stale secondary refs when the selection changes.
+  useEffect(() => {
+    const currentIds = new Set(selectedObjectIds.slice(1));
+    for (const id of secondaryRefs.current.keys()) {
+      if (!currentIds.has(id)) secondaryRefs.current.delete(id);
+    }
+  }, [selectedObjectIds]);
 
   const handleScaleMouseDown = useCallback(
     (e: React.MouseEvent, handle: string) => {
@@ -221,9 +225,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     [objectById, selectionPath, selectedObjectIds, stageManager],
   );
 
-  const HANDLE_SIZE = 15;
-  const ROTATION_HANDLE_GAP = 4;
-
   const objectMeta = selectedObject
     ? getAppObjectDefinition(selectedObject.type, "latest")?.meta
     : null;
@@ -247,101 +248,143 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   return (
     <div>
-      {selectedObject && !selectedObject.isLocked && (
+      {selectedObject && (
         <div
           ref={holderRef}
           className="selection-rect"
           style={{ position: "absolute" }}
         >
-          {/* Rotation handle */}
+          {/* Selection outline */}
           <div
             style={{
               position: "absolute",
-              top: `calc(-2 * var(--hs) - ${ROTATION_HANDLE_GAP} * var(--hw))`,
-              left: "50%",
-              transform: "translateX(-50%)",
-              width: "var(--hs)",
-              height: "var(--hs)",
-              background: handleColor,
-              boxShadow: "0 0 0 var(--hw) white",
-              borderRadius: "50%",
-              pointerEvents: "all",
-              cursor: "grab",
+              inset: 0,
+              boxShadow: `0 0 0 var(--hw) ${
+                selectedObject.isLocked ? "rgba(72,175,240,0.5)" : handleColor
+              }`,
+              pointerEvents: "none",
             }}
-            onMouseDown={handleRotateMouseDown}
           />
 
-          {/* Corner handles */}
-          <div
-            style={{
-              ...cornerStyle,
-              left: "calc(-1 * var(--hs))",
-              top: "calc(-1 * var(--hs))",
-            }}
-            onMouseDown={(e) => handleScaleMouseDown(e, "tl")}
-          />
-          <div
-            style={{
-              ...cornerStyle,
-              right: "calc(-1 * var(--hs))",
-              top: "calc(-1 * var(--hs))",
-            }}
-            onMouseDown={(e) => handleScaleMouseDown(e, "tr")}
-          />
-          <div
-            style={{
-              ...cornerStyle,
-              left: "calc(-1 * var(--hs))",
-              bottom: "calc(-1 * var(--hs))",
-            }}
-            onMouseDown={(e) => handleScaleMouseDown(e, "bl")}
-          />
-          <div
-            style={{
-              ...cornerStyle,
-              right: "calc(-1 * var(--hs))",
-              bottom: "calc(-1 * var(--hs))",
-            }}
-            onMouseDown={(e) => handleScaleMouseDown(e, "br")}
-          />
+          {!selectedObject.isLocked && selectedObjectIds.length === 1 && (
+            <>
+              {/* Rotation handle */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: `calc(-2 * var(--hs) - ${ROTATION_HANDLE_GAP} * var(--hw))`,
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "var(--hs)",
+                  height: "var(--hs)",
+                  background: handleColor,
+                  boxShadow: "0 0 0 var(--hw) white",
+                  borderRadius: "50%",
+                  pointerEvents: "all",
+                  cursor: "grab",
+                }}
+                onMouseDown={handleRotateMouseDown}
+              />
 
-          {/* Edge handles */}
-          {showWidthResize && (
-            <div
-              style={{
-                position: "absolute",
-                right: "calc(var(--hs) / -1.5)",
-                top: "calc(50% - var(--hs) / 1.25)",
-                width: "calc(var(--hs) / 1.5)",
-                height: "calc(var(--hs) * 1.5)",
-                background: handleColor,
-                boxShadow: "0 0 0 var(--hw) white",
-                borderTopRightRadius: "15%",
-                borderBottomRightRadius: "15%",
-                pointerEvents: "all",
-              }}
-              onMouseDown={(e) => handleScaleMouseDown(e, "width")}
-            />
-          )}
-          {showHeightResize && (
-            <div
-              style={{
-                position: "absolute",
-                bottom: "calc(var(--hs) / -1.5)",
-                left: "calc(50% - var(--hs) / 1.25)",
-                width: "calc(var(--hs) * 1.5)",
-                height: "calc(var(--hs) / 1.5)",
-                background: handleColor,
-                boxShadow: "0 0 0 var(--hw) white",
-                borderBottomLeftRadius: "15%",
-                borderBottomRightRadius: "15%",
-                pointerEvents: "all",
-              }}
-              onMouseDown={(e) => handleScaleMouseDown(e, "height")}
-            />
+              {/* Corner handles */}
+              <div
+                style={{
+                  ...cornerStyle,
+                  left: "calc(-1 * var(--hs))",
+                  top: "calc(-1 * var(--hs))",
+                }}
+                onMouseDown={(e) => handleScaleMouseDown(e, "tl")}
+              />
+              <div
+                style={{
+                  ...cornerStyle,
+                  right: "calc(-1 * var(--hs))",
+                  top: "calc(-1 * var(--hs))",
+                }}
+                onMouseDown={(e) => handleScaleMouseDown(e, "tr")}
+              />
+              <div
+                style={{
+                  ...cornerStyle,
+                  left: "calc(-1 * var(--hs))",
+                  bottom: "calc(-1 * var(--hs))",
+                }}
+                onMouseDown={(e) => handleScaleMouseDown(e, "bl")}
+              />
+              <div
+                style={{
+                  ...cornerStyle,
+                  right: "calc(-1 * var(--hs))",
+                  bottom: "calc(-1 * var(--hs))",
+                }}
+                onMouseDown={(e) => handleScaleMouseDown(e, "br")}
+              />
+
+              {/* Edge handles */}
+              {showWidthResize && (
+                <div
+                  style={{
+                    position: "absolute",
+                    right: "calc(var(--hs) / -1.5)",
+                    top: "calc(50% - var(--hs) / 1.25)",
+                    width: "calc(var(--hs) / 1.5)",
+                    height: "calc(var(--hs) * 1.5)",
+                    background: handleColor,
+                    boxShadow: "0 0 0 var(--hw) white",
+                    borderTopRightRadius: "15%",
+                    borderBottomRightRadius: "15%",
+                    pointerEvents: "all",
+                  }}
+                  onMouseDown={(e) => handleScaleMouseDown(e, "width")}
+                />
+              )}
+              {showHeightResize && (
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: "calc(var(--hs) / -1.5)",
+                    left: "calc(50% - var(--hs) / 1.25)",
+                    width: "calc(var(--hs) * 1.5)",
+                    height: "calc(var(--hs) / 1.5)",
+                    background: handleColor,
+                    boxShadow: "0 0 0 var(--hw) white",
+                    borderBottomLeftRadius: "15%",
+                    borderBottomRightRadius: "15%",
+                    pointerEvents: "all",
+                  }}
+                  onMouseDown={(e) => handleScaleMouseDown(e, "height")}
+                />
+              )}
+            </>
           )}
         </div>
       )}
+
+      {/* Secondary selected objects: outline only, no handles */}
+      {selectedObjectIds.slice(1).map((objId) => {
+        const obj = objectById[objId];
+        if (!obj) return null;
+        return (
+          <div
+            key={objId}
+            ref={(el) => {
+              secondaryRefs.current.set(objId, el);
+            }}
+            style={{ position: "absolute" }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                boxShadow: `0 0 0 var(--hw) ${
+                  obj.isLocked ? "rgba(72,175,240,0.5)" : handleColor
+                }`,
+                pointerEvents: "none",
+              }}
+            />
+          </div>
+        );
+      })}
     </div>
   );
 };

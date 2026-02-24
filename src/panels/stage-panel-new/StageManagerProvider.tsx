@@ -52,11 +52,16 @@ type StageManagerProviderProps = typeof mapDispatchToProps &
 
 export interface StageManagerContextInterface {
   stageManager: StageManager;
+  /** Called by StageManagerProvider immediately after each DOM mutation batch,
+   *  so consumers (e.g. StageToolsCanvas) can reposition overlays without any
+   *  event-listener ordering uncertainty. */
+  afterDomUpdateRef: React.MutableRefObject<(() => void) | null>;
 }
 
 export const StageManagerContext =
   React.createContext<StageManagerContextInterface>({
     stageManager: {} as StageManager,
+    afterDomUpdateRef: { current: null },
   });
 
 export const StageManagerProviderInternal = (
@@ -88,6 +93,9 @@ export const StageManagerProviderInternal = (
   selectedObjectIdsRef.current = selectedObjectIds;
 
   const recentlySelectedRef = useRef(false);
+
+  /** Consumers register a callback here; we call it after every DOM mutation. */
+  const afterDomUpdateRef = useRef<(() => void) | null>(null);
 
   const [stageManager] = useState(new StageManager());
 
@@ -176,6 +184,9 @@ export const StageManagerProviderInternal = (
           );
           break;
       }
+      // All DOM mutations are done — notify StageToolsCanvas so it can
+      // reposition selection overlays immediately, in the same call stack.
+      afterDomUpdateRef.current?.();
     };
 
     const stopHandler = (e: StageToolEvent) => {
@@ -285,6 +296,7 @@ export const StageManagerProviderInternal = (
     <StageManagerContext.Provider
       value={{
         stageManager: stageManager,
+        afterDomUpdateRef,
       }}
     >
       {children}
@@ -852,7 +864,15 @@ function processScaleChangeEvent(
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
 
-    const groupsMatrix = new DOMMatrix(getObjectTransform(object));
+    const objectPath: string[] = [];
+    populateObjectThreeIds(objectPath, objectId, objectById, layerById);
+    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
+      objectPath,
+      objectById,
+    );
+    parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
+    const objectOwnMatrix = new DOMMatrix(getObjectTransform(object));
+    const fullContextMatrix = parentGroupsMatrix.multiply(objectOwnMatrix);
 
     const mouseMoveX = eData.mouseMove.x / zoom;
     const mouseMoveY = eData.mouseMove.y / zoom;
@@ -860,7 +880,7 @@ function processScaleChangeEvent(
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
-      groupsMatrix,
+      fullContextMatrix,
       0,
       getObjectScale(object),
     );
@@ -1109,16 +1129,20 @@ function processScaleStopEvent(
 
     // >>>>>>>>>>>>>>>>>>
     const objectPath: string[] = [];
-
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
-
-    const groupsMatrix = new DOMMatrix(getObjectTransform(object));
+    const parentGroupsMatrix = getGroupMatrixFromSelectionPath(
+      objectPath,
+      objectById,
+    );
+    parentGroupsMatrix.e = parentGroupsMatrix.f = 0;
+    const objectOwnMatrix = new DOMMatrix(getObjectTransform(object));
+    const fullContextMatrix = parentGroupsMatrix.multiply(objectOwnMatrix);
     // <<<<<<<<<<<<<<<<
 
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
-      groupsMatrix,
+      fullContextMatrix,
       0,
       getObjectScale(object),
     );
