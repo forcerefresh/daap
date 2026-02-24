@@ -61,6 +61,8 @@ import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IMAGE } from "../../objects/image/image";
 
+//
+
 type IStageLayer = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps> & {
     object: IObject;
