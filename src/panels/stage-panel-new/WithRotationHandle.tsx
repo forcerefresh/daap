@@ -91,11 +91,6 @@ export function WithRotationHandle(
           handleMouseDown
         );
         rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
-
-        // const handleBoxShadow =
-        //   "0 0 0 " + 1 / Math.abs(object.scale) / stageZoom + "px white";
-
-        // rotationHandle.current.style.boxShadow = handleBoxShadow;
       }
 
       return () => {
@@ -104,10 +99,6 @@ export function WithRotationHandle(
           handleMouseDown
         );
       };
-
-      // (window as any).addEventListener("blur", windowBlurHandler);
-      // (window as any).addEventListener("mouseup", documentMouseUpHandler);
-      // document.addEventListener("mouseout", documentMouseOutHandler);
     }
   }, [handleMouseDown, initialRotation, props.object.id, forceHide]);
 

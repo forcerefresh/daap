@@ -52,7 +52,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
       );
     }
 
-    // if (!skipStateUpdate)
     setCanvasTransform(transform);
   };
 
@@ -169,8 +168,6 @@ export function useZoomPan({ spaceDown }: { spaceDown: boolean }) {
         window.document.removeEventListener("touchend", touchEndHandler);
       };
     }
-
-    // return () => console.log("REMOVE EVENT HANDLER");
   }, [parentElement]);
 
   const panPointRef = useRef<{ clientX: number; clientY: number } | null>(null);

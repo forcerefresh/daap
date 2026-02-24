@@ -1,38 +1,20 @@
-/* eslint-disable */
-import {
-  cloneDeep,
-  includes,
-  isEqual,
-  mapValues,
-  pick,
-  round,
-  set,
-} from "lodash-es";
-import { withErrorBoundary, useErrorBoundary } from "react-use-error-boundary";
+import { withErrorBoundary } from "react-use-error-boundary";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
 import React, {
   CSSProperties,
-  forwardRef,
   useCallback,
   useContext,
   useEffect,
-  useImperativeHandle,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import { Icon } from "@blueprintjs/core";
 import { connect } from "react-redux";
-import cx from "classnames";
 import { ILayer } from "../../store/reducers/i-layers";
 import { IStore } from "../../store/store";
 
-import css from "./StagePanelNew.module.scss";
-import { generatePlayerData, getObjectHtml } from "../../export/export-html";
-
-import SlideSmallTimeline from "../slide-small-timeline/SlideSmallTimeline";
 import { IPage } from "../../store/reducers/i-pages";
 import {
   cancelOverrideStageTool,
@@ -54,159 +36,57 @@ import {
   setStagePan,
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
-import Draggable, { DraggableEvent, DraggableData } from "react-draggable";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import {
-  applyRectValuesToElement,
-  getMousePosition,
-  getPointsDiff,
-  getRectFromPoints,
-  IRect,
-  multiplyRect,
-} from "../../utils/doom-utils/common";
-import { useKeyDown } from "../../utils/hooks/key-down";
-import { AppPlayer } from "../../player/AppPlayer";
+import { getMousePosition, IRect } from "../../utils/doom-utils/common";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
-import {
-  convertTimeUnitToMs,
-  convertRGBColor2CSSProperties,
-} from "../../utils/utils";
-import ProjectSmallTimeline, {
-  ProjectTimelineData,
-  SlideTimelineData,
-} from "../project-small-timeline/ProjectSmallTimeline";
-import { IPlayerData } from "../../export/i-export-html";
-import { useWindowSize } from "../../utils/hooks/window-size";
 import { getZoom } from "../../store/helpers/calculateZoom";
-import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
-import ViewportSize from "../viewport-size/ViewportSize";
-import { logger } from "webslider-sdk/lib/utils/logger/logger";
-import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
-import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
-import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
-import { ToolsContext } from "../../utils/tools/ToolsProvider";
-// import { getCursorStyle } from "../../objects/free-draw/free-draw-stage-tool";
-import { calculateObjectSize } from "../stage-panel/StagePanelUtils";
-import StageLayer from "./StageLayer";
-import {
-  getObjectIdToSelect,
-  populateObjectThreeIds,
-} from "../../store/actions/actions-utils";
-import { getGlobalProp } from "./utils";
+
+import { populateObjectThreeIds } from "../../store/actions/actions-utils";
 import {
   StageManagerContext,
   degrees_to_radians,
 } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point, Rect } from "../../webslider-sdk/object/i-tool-class";
-import {
-  decomposeMatrix2DW3,
-  getGroupMatrixFromSelectionPath,
-  screenPointToLocal,
-} from "./stage-panel-utils";
+import { getGroupMatrixFromSelectionPath } from "./stage-panel-utils";
 
 type IStagePanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const {
-    // innerRef, // do wee need this
-    pages,
-    layers,
-    objects,
     stageZoom,
-    previewState,
-    layerArr,
     objectById,
     layerById,
-    activeObjectId,
     selectedObjectIds,
     selectionPath,
-    selectionParentId,
-    activeLayerId,
-    viewPortSize,
-    _setStageTool,
-    _setStagePreview,
-    _updateObject,
-    _selectObjects,
-    _activateObject,
-    _addObjectsToSelection,
-    _removeObjectsFromSelection,
-    _deactivateObject,
-    _selectObjectsByRect,
-    _addNewObject,
-    _setViewPortSize,
-    _selectForProperties,
-    _resetStageTool,
-    _overrideStageTool,
-    _cancelOverrideStageTool,
-    activeStageTool,
-    stagePan,
-    stageTool,
-    stageToolObjectType,
-    breakpointConfig,
-    settings,
-    forceShowLayerId,
-    selectedDevice,
-    breakpoints,
-    forceRefreshRand: _forceRefreshRand, // NOTE: check this
-    enableDeveloper,
-    showGrid,
-    _setStageZoom,
-    _setStagePan,
+    forceRefreshRand: _forceRefreshRand, // NOTE: check this,
   } = props;
 
   const [forceRerender, setForceRerender] = useState(1);
-
-  // TODO check this
-  // useImperativeHandle(innerRef, () => ({
-  //   handleStageScaleChange(stageScale: number) {
-
-  // if (holderRef.current && groupsMatrixRef.current) {
-  //   const transform = groupsMatrixRef.current
-  //     .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
-  //     .toString();
-  //   holderRef.current.style.transform = transform;
-  // }
-  // },
-  // }));
 
   const groupsMatrixRef = useRef(new DOMMatrix());
   const holderRef = useRef<HTMLDivElement | null>(null);
 
   const { stageManager } = useContext(StageManagerContext);
 
-  // useLayoutEffect(() => {
-  //   if (holderRef.current && groupsMatrixRef.current) {
-  //     const transform = groupsMatrixRef.current
-  //       .multiply(new DOMMatrix("scale(" + stageZoom + ")"))
-  //       .toString();
-  //     holderRef.current.style.transform = transform;
-  //   }
-  // }, [stageZoom]);
-
   const handleMouseDown = useCallback(
     (e: MouseEvent) => {
       e.stopPropagation();
 
       const handle = (e.currentTarget as HTMLElement)?.getAttribute(
-        "data-scale-handle"
+        "data-scale-handle",
       );
-
-      // if (handle === "width") {
-      //   return;
-      // }
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         selectionPath,
-        objectById
+        objectById,
       );
 
       const object = objectById[selectedObjectIds[0]];
 
       stageManager.start(StageToolEnum.SCALE, {
-        //boundingClientRects: [childRef.current!.getBoundingClientRect()],
         mousePosition: getMousePosition(e),
         contextMatrix: groupsMatrix,
         objectId: selectedObjectIds[0], //object.id,
@@ -217,12 +97,11 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         boundingClientRects: [new DOMRect()], // TODO: not needed
       });
     },
-    [objectById]
+    [objectById],
   );
 
   const initialRect = useRef<Rect>({ x: 0, y: 0, width: 1, height: 1 });
   const firstObject = objectById[selectedObjectIds[0]];
-  //const objectStyleYArr = selectedObjectIds.map((objectId) => {
   const selectedObjectId = selectedObjectIds[0];
   const selectedObject = objectById[selectedObjectId];
 
@@ -242,12 +121,12 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         objectPath,
         selectedObjectId,
         objectById,
-        layerById
+        layerById,
       );
 
       const groupsMatrix = getGroupMatrixFromSelectionPath(
         [...objectPath, selectedObjectId],
-        objectById
+        objectById,
       );
 
       groupsMatrix.e = groupsMatrix.f = 0;
@@ -259,12 +138,12 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       /////
 
       const stageToolsCanvas = document.getElementsByClassName(
-        `stage-tools-canvas`
+        `stage-tools-canvas`,
       )[0] as HTMLDivElement;
       const stageToolsCanvasBbox = stageToolsCanvas.getBoundingClientRect();
 
       const objectHolder = document.getElementsByClassName(
-        `object-holder-${selectedObjectId}`
+        `object-holder-${selectedObjectId}`,
       )[0] as HTMLDivElement;
 
       if (objectHolder) {
@@ -311,43 +190,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   // <<<<<<<<<<<<<<<<
 
-  // >>>>>>>>>>>>>>>>
-
-  // const localMatrix = new DOMMatrix(
-  //   `rotate(${object.rotation}deg) scale(${
-  //     object.scale
-  //   }) translateX(${parseFloat(
-  //     object.absoluteLayout?.common.left!
-  //   )}px) translateY(${parseFloat(object.absoluteLayout?.common.top!)}px)`
-  // );
-
-  // const pointMatrix = new DOMMatrix();
-
-  // const objectMatrix = localMatrix.multiply(pointMatrix);
-
-  // const objectDecMatrix = decomposeMatrix2DW3(objectMatrix);
-
-  // const realXY = {
-  //   x: objectDecMatrix.translateX,
-  //   y: objectDecMatrix.translateY,
-  // };
-
-  // second aproach -------------------
-
-  // const realXY = screenPointToLocal(
-  //   {
-  //     x: parseFloat(object.absoluteLayout?.common.left!),
-  //     y: parseFloat(object.absoluteLayout?.common.top!),
-  //   },
-  //   groupsMatrix,
-
-  //   object.rotation,
-  //   object.scale
-  // );
-  // <<<<<<<<<<<<<<<<
-  // return realXY;
-  //});
-
   const [move, setMove] = useState<Point>({ x: 0, y: 0 });
   const [diff, setDiff] = useState<Point>({ x: 0, y: 0 });
 
@@ -362,20 +204,9 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     height?: HTMLElement;
   }>({});
 
-  // const handleMouseDown = useCallback((e: MouseEvent) => {
-  //   setMove({ x: 0, y: 0 });
-  //   e.stopImmediatePropagation();
-
-  //   initialMousePosition.current = getMousePosition(e);
-
-  //   (window as any).addEventListener("mousemove", handleMouseMove);
-  //   (window as any).addEventListener("mouseup", handleMouseUp);
-  // }, []);
-
   const handleMouseMove = useCallback((e: MouseEvent) => {
     e.stopPropagation();
     const mousePosition = getMousePosition(e);
-    //const angle = this.getAngle(mousePosition);
 
     const a2x = mousePosition.x - initialMousePosition.current.x;
     const a2y = mousePosition.y - initialMousePosition.current.y;
@@ -386,7 +217,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     var len = Math.sqrt(Math.pow(a2x - a1x, 2) + Math.pow(a2y - a1y, 2));
 
     var hDif = Math.sin(degrees_to_radians(firstObject.rotation ?? 0)) * len;
-    //line from a1 to H
     var wDif = Math.cos(degrees_to_radians(firstObject.rotation ?? 0)) * len;
 
     setDiff({ x: wDif, y: hDif });
@@ -396,7 +226,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const handleMouseUp = useCallback((e: MouseEvent) => {
     e.stopPropagation();
     const mousePosition = getMousePosition(e);
-    //const angle = this.getAngle(mousePosition);
 
     const x = mousePosition.x - initialMousePosition.current.x;
     const y = mousePosition.y - initialMousePosition.current.y;
@@ -435,18 +264,10 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     if (!selectedObject) return;
     if (selectedObject.isLocked) return;
 
-    // childRef.current = document.getElementsByClassName(
-    //   `object-holder-${props.object.id}`
-    // )[0] as HTMLDivElement;
-
-    // holderRef.current = document.getElementsByClassName(
-    //   `resize-handle-holder-${props.object.id}`
-    // )[0] as HTMLDivElement;
-
     const handleColor = "transparent"; //"48aff0"
 
     const scaledHandleSize =
-      HANDLE_SIZE / (selectedObject?.scale ?? 1) / stageZoom; //initialRotationRef.current = initialRotation;
+      HANDLE_SIZE / (selectedObject?.scale ?? 1) / stageZoom;
 
     if (holderRef.current) {
       let el: HTMLDivElement;
@@ -463,7 +284,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       el.setAttribute("data-scale-handle", "tl");
       el.setAttribute("class", "resize-handle");
       holderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.tl = el;
 
@@ -480,7 +300,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       el.setAttribute("class", "resize-handle");
 
       holderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.tr = el;
 
@@ -496,7 +315,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       el.setAttribute("data-scale-handle", "bl");
       el.setAttribute("class", "resize-handle");
       holderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.bl = el;
 
@@ -512,7 +330,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       el.setAttribute("data-scale-handle", "br");
       el.setAttribute("class", "resize-handle");
       holderRef.current.appendChild(el);
-      // el.removeEventListener("mousedown", handleMouseDown);
       el.addEventListener("mousedown", handleMouseDown);
       handlesRef.current.br = el;
 
@@ -526,14 +343,13 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         el.style.right = "-" + scaledHandleSize / 1.5 + "px";
         el.style.width = scaledHandleSize / 1.5 + "px";
         el.style.height = scaledHandleSize * 1.5 + "px";
-        el.style.background = "transparent"; //"rgba(255,0,255,0.4)"; //handleColor;
+        el.style.background = "transparent"; // "rgba(255,0,255,0.4)"; // handleColor;
         el.style.border = "0.1px solid" + handleColor;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "width");
         el.setAttribute("class", "resize-handle");
         holderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.width = el;
       }
@@ -544,14 +360,13 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         el.style.right = `calc(50% - ${scaledHandleSize / 1.25}px)`;
         el.style.width = scaledHandleSize * 1.5 + "px";
         el.style.height = scaledHandleSize / 1.5 + "px";
-        el.style.background = "transparent"; //"rgba(255,0,255,0.4)"; //handleColor;
+        el.style.background = "transparent"; // "rgba(255,0,255,0.4)"; // handleColor;
         el.style.border = "0.1px solid" + handleColor;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "height");
         el.setAttribute("class", "resize-handle");
         holderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.height = el;
       }
@@ -577,37 +392,18 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       if (handlesRef.current?.width && holderRef.current) {
         handlesRef.current.width.removeEventListener(
           "mousedown",
-          handleMouseDown
+          handleMouseDown,
         );
         holderRef.current?.removeChild(handlesRef.current.width);
       }
       if (handlesRef.current?.height && holderRef.current) {
         handlesRef.current.height.removeEventListener(
           "mousedown",
-          handleMouseDown
+          handleMouseDown,
         );
         holderRef.current?.removeChild(handlesRef.current.height);
       }
     };
-    // if (childRef.current) {
-    //   const objectRootEl = childRef.current as HTMLElement;
-
-    //   rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
-
-    //   rotationHandle.current?.removeEventListener("mousedown", handleMouseDown);
-    //   rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
-
-    //   return () => {
-    //     rotationHandle.current?.removeEventListener(
-    //       "mousedown",
-    //       handleMouseDown
-    //     );
-    //   };
-
-    //   // (window as any).addEventListener("blur", windowBlurHandler);
-    //   // (window as any).addEventListener("mouseup", documentMouseUpHandler);
-    //   // document.addEventListener("mouseout", documentMouseOutHandler);
-    // }
   }, [selectedObject, handleMouseDown, stageZoom]);
 
   return (
@@ -618,7 +414,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
           className="selection-rect"
           style={{
             position: "absolute",
-
             //background: "rgba(234,0,222,0.2)",
             ...style,
             left: initialRect.current.x - diff.x + "px",
@@ -626,17 +421,14 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
             width: initialRect.current.width + diff.x + "px",
             height: initialRect.current.height + diff.y + "px",
           }}
-        >
-          {/* <div ref={handleRef} style={handleStyle}></div> */}
-        </div>
+        ></div>
       )}
     </div>
   );
 };
 
 const mapStateToProps = (state: IStore) => {
-  const { pages, layers, objects, selection, document, settings } =
-    state.project;
+  const { pages, layers, objects, selection, settings } = state.project;
   const { stage } = state;
 
   let layerArr: ILayer[] | null = null;
@@ -651,7 +443,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   const zoom = getZoom(stage, settings);
@@ -660,12 +452,6 @@ const mapStateToProps = (state: IStore) => {
     selection.selectionForProperties?.type === "layer"
       ? selection.selectionForProperties?.id
       : undefined;
-
-  // let showGrid = false;
-  // if (selection.selectionForProperties?.type === "layer") {
-  //   showGrid =
-  //     layers.layerById[selection.selectionForProperties?.id].layout === "grid";
-  // }
 
   // TODO: later selection
   const selectionParentId =
@@ -677,7 +463,6 @@ const mapStateToProps = (state: IStore) => {
     pages,
     layers,
     objects,
-    // stageSize: document.documentSize,
     stageZoom: zoom,
     stagePan: stage.pan,
     previewState: stage.previewState,
@@ -720,7 +505,7 @@ const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
     type: string,
-    objectProps: Partial<IObject>
+    objectProps: Partial<IObject>,
   ) => addNewObject(layerId, type, objectProps),
   _resetStageTool: () => setStageTool(StageTools.SELECT),
   _setStageTool: (tool: StageTools) => setStageTool(tool),
@@ -735,5 +520,5 @@ const mapDispatchToProps = {
 };
 
 export default withErrorBoundary(
-  connect(mapStateToProps, mapDispatchToProps)(StageToolsCanvas)
+  connect(mapStateToProps, mapDispatchToProps)(StageToolsCanvas),
 );

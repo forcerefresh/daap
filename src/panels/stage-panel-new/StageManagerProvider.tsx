@@ -18,45 +18,28 @@ import { cloneDeep, remove } from "lodash-es";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import {
   StageToolEvent,
-  StageToolEventDataUnion,
   StageToolMoveEventData,
   StageToolPanEventData,
   StageToolRotateEventData,
   StageToolScaleEventData,
 } from "../../utils/selection-manager/events/StageToolEvent";
 import {
-  ICorners,
-  addCornerMarkers,
   decomposeMatrix2DW3,
-  getBottomRightFromCorners,
-  getCorners,
   getElementByClass,
   getElementBySelector,
   getGroupMatrixFromSelectionPath,
-  getLeftTopFromCorners,
-  getObjectBBoxRelativeToParent,
   getObjectTransform,
-  getUngroupObjectsCalculation,
-  removeCornerMarkers,
   screenPointToLocal,
-  tmpDrawNewGroup,
 } from "./stage-panel-utils";
 import { Bounds, Point, Rect } from "../../webslider-sdk/object/i-tool-class";
-import { selection } from "../../store/reducers/selection";
 import { populateObjectThreeIds } from "../../store/actions/actions-utils";
-import {
-  boundsUnion,
-  getObjectBoundingBox,
-} from "../../store/helpers/objectBoundingBox";
+
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
-import { normalizeGroup } from "./normalize-group-utils";
-import { HANDLE_SIZE } from "./WithResizeHandle";
+
 import { setFloatingActionPanelVisibility } from "../floating-actions-panel/utils";
 import { ToolsContext } from "../../utils/tools/ToolsProvider";
-import { TextValues } from "../../objects/text/text";
 import { ILayer } from "../../store/reducers/i-layers";
 import { getObjectRotation, getObjectScale } from "../../objects/object-utils";
-import { lineObjectBounds } from "../stage-panel/StagePanelUtils";
 import {
   getObjectBounds,
   stagePointToObjectSpace_New,
@@ -77,7 +60,7 @@ export const StageManagerContext =
   });
 
 export const StageManagerProviderInternal = (
-  props: StageManagerProviderProps
+  props: StageManagerProviderProps,
 ) => {
   const {
     children,
@@ -89,7 +72,6 @@ export const StageManagerProviderInternal = (
     selectionPath,
     stagePan,
     breakpointConfig,
-    activeStageTool,
     _updateObject,
     _activateObject,
     _selectObjects,
@@ -135,7 +117,7 @@ export const StageManagerProviderInternal = (
               _removeObjectsFromSelection,
               _deactivateObject,
               _selectForProperties,
-            }
+            },
           );
           break;
         case StageToolEnum.SCALE:
@@ -155,7 +137,7 @@ export const StageManagerProviderInternal = (
               _addObjectsToSelection,
               _removeObjectsFromSelection,
               _deactivateObject,
-            }
+            },
           );
           break;
       }
@@ -190,7 +172,7 @@ export const StageManagerProviderInternal = (
             },
             {
               _setStagePan,
-            }
+            },
           );
           break;
       }
@@ -200,7 +182,6 @@ export const StageManagerProviderInternal = (
       const eData = e.detail;
       switch (eData.eventType) {
         case StageToolEnum.SELECT:
-          //processSelectStopEvent(e, objectById, _updateObject);
           break;
         case StageToolEnum.ROTATE:
           processRotateStopEvent(
@@ -215,7 +196,7 @@ export const StageManagerProviderInternal = (
               _updateObject,
               _activateObject,
               _selectObjects,
-            }
+            },
           );
           break;
         case StageToolEnum.MOVE:
@@ -236,7 +217,7 @@ export const StageManagerProviderInternal = (
               _selectObjects,
               _selectForProperties,
               activateTool: activateTool,
-            }
+            },
           );
           break;
         case StageToolEnum.SCALE:
@@ -248,7 +229,7 @@ export const StageManagerProviderInternal = (
               selectedObjectIdsRef,
               zoom,
             },
-            { _updateObject }
+            { _updateObject },
           );
 
           break;
@@ -263,7 +244,7 @@ export const StageManagerProviderInternal = (
             },
             {
               _setStagePan,
-            }
+            },
           );
           break;
       }
@@ -296,7 +277,7 @@ export const StageManagerProviderInternal = (
     layerById,
     breakpointConfig,
     activateTool,
-    selectedObjectIds, // NOTE:  this do not remove it
+    selectedObjectIds,
     snapBounds,
   ]);
 
@@ -318,7 +299,7 @@ const mapStateToProps = (state: IStore) => {
   const breakpointConfig: BreakpointConfiguration | undefined =
     settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   return {
@@ -350,7 +331,7 @@ const mapDispatchToProps = {
 
 const StageManagerProvider = connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(StageManagerProviderInternal);
 
 export default StageManagerProvider;
@@ -362,7 +343,7 @@ export default StageManagerProvider;
 function processRotateStartEvent(
   eData: StageToolRotateEventData,
   objectById: any,
-  _updateObject: any
+  _updateObject: any,
 ) {
   // do nothing
 }
@@ -370,13 +351,12 @@ function processRotateStartEvent(
 function processRotateChangeEvent(
   eData: StageToolRotateEventData,
   objectById: any,
-  _updateObject: any
+  _updateObject: any,
 ) {
   const objectId = eData.objectId;
   const object = objectById[objectId];
   const angle = eData.angle;
 
-  // NOTE: LAYOUT CHANGE
   const objectSize: Rect = {
     x: object.left!,
     y: object.top!,
@@ -393,7 +373,7 @@ function processRotateChangeEvent(
   m.rotateSelf(getObjectRotation(object));
   m.translateSelf(
     (objectSize.width / 2) * getObjectScale(object),
-    (objectSize.height / 2) * getObjectScale(object)
+    (objectSize.height / 2) * getObjectScale(object),
   );
   m.rotateSelf(angle);
   m.scaleSelf(getObjectScale(object));
@@ -406,7 +386,7 @@ function processRotateChangeEvent(
   const transform = "rotate(" + d.rotateZ + "deg) scale(" + d.scaleX + ")";
 
   const objectHolder = document.getElementsByClassName(
-    `object-holder-${objectId}`
+    `object-holder-${objectId}`,
   )[0] as HTMLDivElement;
 
   if (objectHolder) {
@@ -428,7 +408,7 @@ function processRotateStopEvent(
     _updateObject: any;
     _activateObject: any;
     _selectObjects: any;
-  }
+  },
 ) {
   const { breakpointConfig } = storeProps;
   const { _updateObject } = storeActions;
@@ -437,7 +417,6 @@ function processRotateStopEvent(
   const object = objectById[objectId];
   const angle = eData.angle;
 
-  // NOTE: LAYOUT CHANGE
   const objectSize: Rect = {
     x: object.left!,
     y: object.top!,
@@ -454,7 +433,7 @@ function processRotateStopEvent(
   m.rotateSelf(getObjectRotation(object));
   m.translateSelf(
     (objectSize.width / 2) * (getObjectScale(object) ?? 1),
-    (objectSize.height / 2) * (getObjectScale(object) ?? 1)
+    (objectSize.height / 2) * (getObjectScale(object) ?? 1),
   );
   m.rotateSelf(angle);
   m.scaleSelf(getObjectScale(object));
@@ -468,60 +447,12 @@ function processRotateStopEvent(
 
   const newObject = cloneDeep(object);
 
-  // NOTE: LAYOUT CHANGE
   newObject.rotation = d.rotateZ;
   newObject.left = left;
   newObject.top = top;
 
   _updateObject(newObject);
-
-  // LOGIC FOR NORMALIZATION
-  // const parentGroup =
-  //   newObject.objectIds && objectById[newObject.id] ? newObject : undefined;
-
-  // if (parentGroup) {
-  //   // normalize >>>>
-  //   const { group, objects } = normalizeGroup(parentGroup, [], {
-  //     breakpointConfig,
-  //     objectById,
-  //   });
-
-  //   objects.forEach((object) => _updateObject(object));
-  //   _updateObject(group);
-  //   // normalize <<<
-  // } else {
-  //   _updateObject(newObject);
-  // }
 }
-
-// function processSelectStopEvent(
-//   e: StageToolChangeEvent,
-//   objectById: { [key: string]: IObject },
-//   _updateObject: any,
-//   orgEvent: MouseEvent
-// ) {
-//   if (event.shiftKey) {
-//     selectedObjectIds.indexOf(objectId) === -1
-//       ? _addObjectsToSelection([objectId])
-//       : _removeObjectsFromSelection([objectId]);
-//     if (activeObjectId === objectId) {
-//       _deactivateObject(objectId);
-//     }
-
-//     //setSelectionStartPosition(null);
-//   } else {
-//     if (isOnlyThisObjectSelected) {
-//       // NOTE: activate tool editor
-//       const deff = getAppObjectDefinition(objectById[objectId].type);
-//       if (deff?.meta.isEditable) {
-//         activateTool(objectById[objectId].type, objectId);
-//       }
-//     }
-//     _activateObject(objectId);
-//     _selectObjects([objectId]);
-//     _selectForProperties({ type: "object", id: objectId });
-//   }
-// }
 
 // ++++++++
 
@@ -543,7 +474,7 @@ function processMoveStartEvent(
     _addObjectsToSelection: any;
     _removeObjectsFromSelection: any;
     _deactivateObject: any;
-  }
+  },
 ) {
   const {
     selectedObjectIdsRef,
@@ -563,8 +494,6 @@ function processMoveStartEvent(
     _deactivateObject,
     _selectForProperties,
   } = storeActions;
-
-  //const [_, ...selectionPathWithoutLayerId] = selectionPath;
 
   const objectId = eData.objectId;
   const object = objectById[objectId];
@@ -613,7 +542,6 @@ function processMoveStartEvent(
   }
 }
 
-//let latestRect: Rect;
 function processMoveChangeEvent(
   eData: StageToolMoveEventData,
   objectById: { [key: string]: IObject },
@@ -625,7 +553,7 @@ function processMoveChangeEvent(
       bounds: Bounds;
       objectId: string;
     }[];
-  }
+  },
 ) {
   setFloatingActionPanelVisibility(false);
 
@@ -652,15 +580,16 @@ function processMoveChangeEvent(
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
-      objectById
+      objectById,
     );
     // <<<<<<<<<<<<<<<<
+
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
       groupsMatrix,
       getObjectRotation(object),
-      getObjectScale(object)
+      getObjectScale(object),
     );
     // <<<<<<<<<<<<<<<<
 
@@ -680,7 +609,7 @@ function processMoveChangeEvent(
           snapBounds,
           selectedObjectIds,
           zoom,
-          object.scale ?? 1
+          object.scale ?? 1,
         );
 
         if (snapDelta.x !== 0 || snapDelta.y !== 0) {
@@ -690,21 +619,20 @@ function processMoveChangeEvent(
     }
   }
 
-  // if (snapDeltaGlobal.x !== 0 || snapDeltaGlobal.y !== 0) {
   selectedObjectIds.map((objectId) => {
     const object = objectById[objectId];
 
     if (object.isLocked) return;
 
     const objectHolder = document.getElementsByClassName(
-      `object-holder-${objectId}`
+      `object-holder-${objectId}`,
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
       const objSnapDelta = stagePointToObjectSpace_New(
         [object],
         snapDeltaGlobal,
-        1
+        1,
       );
 
       const left = objectByIdClone[objectId].left! + objSnapDelta.x;
@@ -738,13 +666,11 @@ function processMoveStopEvent(
     activateTool: (
       tool: string,
       version?: string,
-      objectId?: string | undefined
+      objectId?: string | undefined,
     ) => void;
-  }
+  },
 ) {
   clearSnapHolder();
-
-  // setFloatingActionPanelVisibility(true);
 
   const {
     selectedObjectIdsRef,
@@ -763,7 +689,6 @@ function processMoveStopEvent(
     activateTool,
   } = storeActions;
   const objectId = eData.objectId;
-  //const object = objectById[objectId];
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
 
@@ -777,11 +702,7 @@ function processMoveStopEvent(
           objectById[objectId].type === "io.forcerefresh.line.object") &&
         !recentlySelectedRef.current
       ) {
-        activateTool(
-          objectById[objectId].type,
-          "latest", // objectById[objectId].version,
-          objectId
-        );
+        activateTool(objectById[objectId].type, "latest", objectId);
       }
     }
 
@@ -797,25 +718,6 @@ function processMoveStopEvent(
   const parentGroup = objectById[selectedObjectIds[0]].parentId
     ? objectById[objectById[selectedObjectIds[0]].parentId!]
     : undefined;
-
-  let prevBounds: Rect = { x: 0, y: 0, width: 1, height: 1 };
-  if (parentGroup) {
-    // const groupObjects =
-    //   parentGroup.objectIds?.map((objectId) => {
-    //     return objectById[objectId];
-    //   }) ?? [];
-    // prevBounds = getObjectBoundingBox(groupObjects[0]);
-    // groupObjects.forEach((object) => {
-    //   const bounds = getObjectBoundingBox(object);
-    //   prevBounds = boundsUnion(prevBounds, bounds);
-    // });
-    // const newParentGroup = cloneDeep(parentGroup);
-    // newParentGroup.absoluteLayout!.common!.left = latestRect.x + "px";
-    // newParentGroup.absoluteLayout!.common!.top = latestRect.y + "px";
-    // newParentGroup.absoluteLayout!.common!.width = latestRect.width + "px";
-    // newParentGroup.absoluteLayout!.common!.height = latestRect.height + "px";
-    // _updateObject(newParentGroup);
-  }
 
   const selectedObjectIdsClone = [...selectedObjectIds];
 
@@ -834,15 +736,16 @@ function processMoveStopEvent(
 
     const groupsMatrix = getGroupMatrixFromSelectionPath(
       [...objectPath, objectId],
-      objectById
+      objectById,
     );
     // <<<<<<<<<<<<<<<<
+
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
       groupsMatrix,
       getObjectRotation(object),
-      getObjectScale(object)
+      getObjectScale(object),
     );
     // <<<<<<<<<<<<<<<<
 
@@ -862,7 +765,7 @@ function processMoveStopEvent(
           snapBounds,
           selectedObjectIds,
           zoom,
-          object.scale ?? 1
+          object.scale ?? 1,
         );
 
         if (snapDelta.x !== 0 || snapDelta.y !== 0) {
@@ -883,7 +786,7 @@ function processMoveStopEvent(
     const objSnapDelta = stagePointToObjectSpace_New(
       [object],
       snapDeltaGlobal,
-      1
+      1,
     );
 
     const left = objectByIdClone[objectId].left! + objSnapDelta.x;
@@ -929,30 +832,9 @@ function processScaleStartEvent(
     _addObjectsToSelection: any;
     _removeObjectsFromSelection: any;
     _deactivateObject: any;
-  }
+  },
 ) {
-  const { selectedObjectIdsRef, activeObjectId, zoom, selectionPath } =
-    storeProps;
-  const selectedObjectIds = selectedObjectIdsRef.current;
-
-  const {
-    _updateObject,
-    _activateObject,
-    _addObjectsToSelection,
-    _removeObjectsFromSelection,
-    _selectObjects,
-    _deactivateObject,
-  } = storeActions;
-
-  //const [_, ...selectionPathWithoutLayerId] = selectionPath;
-
-  const objectId = eData.objectId;
-  const object = objectById[objectId];
-
-  // let hasSelectedParent = false;
-  // if (object.parentId && selectedObjectIds.length > 0) {
-  //   hasSelectedParent = selectedObjectIds.includes(object.parentId);
-  // }
+  // do nothing
 }
 
 function processScaleChangeEvent(
@@ -962,40 +844,13 @@ function processScaleChangeEvent(
   storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
-  }
+  },
 ) {
   const { selectedObjectIdsRef, zoom } = storeProps;
   const selectedObjectIds = selectedObjectIdsRef.current;
-  //const objectId = eData.objectId;
-
-  // asd
-  // // const x = eData.x! / zoom;
-  // // const y = eData.y! / zoom;
-
-  // // // >>>>>>>>>>>>>>>>>>
-  // // const objectPath: string[] = [];
-  // // const firstObjectId = selectedObjectIdsRef.current![0];
-  // // populateObjectThreeIds(objectPath, firstObjectId, objectById, layerById);
-
-  // // const groupsMatrix = getGroupMatrixFromSelectionPath(
-  // //   [...objectPath, firstObjectId],
-  // //   objectById
-  // // );
-  // // // <<<<<<<<<<<<<<<<
 
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
-
-    // >>>>>>>>>>>>>>>>>>
-    const objectPath: string[] = [];
-
-    // populateObjectThreeIds(objectPath, objectId, objectById, layerById);
-
-    // const groupsMatrix = getGroupMatrixFromSelectionPath(
-    //   [...objectPath, objectId],
-    //   objectById
-    // );
-    // <<<<<<<<<<<<<<<<
 
     const groupsMatrix = new DOMMatrix(getObjectTransform(object));
 
@@ -1006,13 +861,13 @@ function processScaleChangeEvent(
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
       groupsMatrix,
-      0, //getObjectRotation(object),
-      getObjectScale(object)
+      0,
+      getObjectScale(object),
     );
     // <<<<<<<<<<<<<<<<
 
     const objectHolder = document.getElementsByClassName(
-      `object-holder-${objectId}`
+      `object-holder-${objectId}`,
     )[0] as HTMLDivElement;
 
     if (objectHolder) {
@@ -1021,23 +876,14 @@ function processScaleChangeEvent(
       let newTop: string | undefined = undefined;
 
       let newHeight: string | undefined = undefined;
-      //       //    const currentAngle = getObjectRotation(object) + angle;
-      //       // objectHolder.style.transform =
-      //       //   "translateX(" + x + "px) translateY(" + y + "px)";
-      // sd
-      const realMoveXY = realMove.x; // Math.max(realMove.x, realMove.y);
 
-      //       // var s = Math.sin(degrees_to_radians(getObjectRotation(object)));
-      //       // var c = Math.cos(degrees_to_radians(getObjectRotation(object)));
-      //       // var mouseLocalX = c * realMoveXY + s * realMoveXY;
-      //       // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
-      // sf
-      // NOTE: LAYOUT CHANGE
+      const realMoveXY = realMove.x;
+
       const objectSize: Rect = {
         x: object.left!,
         y: object.top!,
-        width: object.width!, //* getObjectScale(object),
-        height: object.height!, //* getObjectScale(object),
+        width: object.width!,
+        height: object.height!,
       };
 
       let left = objectSize.x;
@@ -1057,14 +903,14 @@ function processScaleChangeEvent(
       if (eData.handle === "tr") {
         m.rotateSelf(getObjectRotation(object));
         m.translateSelf(
-          0, //objectSize.width * getObjectScale(object) - objectSize.width,
-          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height
-        ); // old scale here
+          0,
+          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+        );
 
-        m.scaleSelf(scale); // new scale here
+        m.scaleSelf(scale);
         m.translateSelf(
-          0, //-(objectSize.width * scale - objectSize.width) / scale,
-          -(objectSize.height * scale - objectSize.height) / scale
+          0,
+          -(objectSize.height * scale - objectSize.height) / scale,
         );
 
         const d = decomposeMatrix2DW3(m);
@@ -1082,13 +928,13 @@ function processScaleChangeEvent(
         m.rotateSelf(getObjectRotation(object));
         m.translateSelf(
           objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-          0 //objectSize.height * getObjectScale(object) - objectSize.height
-        ); // old scale here
+          0,
+        );
 
-        m.scaleSelf(scale); // new scale here
+        m.scaleSelf(scale);
         m.translateSelf(
           -(objectSize.width * scale - objectSize.width) / scale,
-          0 //-(objectSize.height * scale - objectSize.height) / scale
+          0,
         );
 
         const d = decomposeMatrix2DW3(m);
@@ -1106,13 +952,13 @@ function processScaleChangeEvent(
         m.rotateSelf(getObjectRotation(object));
         m.translateSelf(
           objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height
-        ); // old scale here
+          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+        );
 
-        m.scaleSelf(scale); // new scale here
+        m.scaleSelf(scale);
         m.translateSelf(
           -(objectSize.width * scale - objectSize.width) / scale,
-          -(objectSize.height * scale - objectSize.height) / scale
+          -(objectSize.height * scale - objectSize.height) / scale,
         );
 
         const d = decomposeMatrix2DW3(m);
@@ -1147,39 +993,15 @@ function processScaleChangeEvent(
         objectHolder.style.width = newWidth;
 
         const contentEl = objectHolder.getElementsByClassName(
-          "object-content"
+          "object-content",
         )[0] as HTMLElement;
         if (contentEl) contentEl.style.width = newWidth;
 
         const resizeHolderEl = objectHolder.getElementsByClassName(
-          "resize-handle-holder-" + objectId
+          "resize-handle-holder-" + objectId,
         )[0] as HTMLElement;
-        if (resizeHolderEl) resizeHolderEl.style.width = newWidth; //+ 0.001; // NOTE:  0.001 is to trigger change
-
-        // objectHolder.style.boxShadow = `0 0 0 ${1 / getObjectScale(object) / zoom}px ${
-        //   object.objectIds ? "#444444" : "#48aff0"
-        // }`;
-      }
-      // else if (eData.handle === "left") {
-      //   newLeft =
-      //     objectSize.x + mouseMoveX / (getObjectScale(object) ?? 1) + "px";
-      //   objectHolder.style.left = newLeft;
-
-      // const contentEl = objectHolder.getElementsByClassName(
-      //   "object-content"
-      // )[0] as HTMLElement;
-      // if (contentEl) contentEl.style.left = newLeft;
-
-      // const resizeHolderEl = objectHolder.getElementsByClassName(
-      //   "resize-handle-holder-" + objectId
-      // )[0] as HTMLElement;
-      // if (resizeHolderEl) resizeHolderEl.style.left = newLeft; //+ 0.001; // NOTE:  0.001 is to trigger change
-
-      // objectHolder.style.boxShadow = `0 0 0 ${1 / getObjectScale(object) / zoom}px ${
-      //   object.objectIds ? "#444444" : "#48aff0"
-      // }`;
-      // }
-      else if (eData.handle === "top" || eData.handle === "height") {
+        if (resizeHolderEl) resizeHolderEl.style.width = newWidth;
+      } else if (eData.handle === "top" || eData.handle === "height") {
         if (eData.handle === "top") {
           newTop =
             objectSize.y + mouseMoveY / (getObjectScale(object) ?? 1) + "px";
@@ -1195,18 +1017,14 @@ function processScaleChangeEvent(
         objectHolder.style.height = newHeight;
 
         const contentEl = objectHolder.getElementsByClassName(
-          "object-content"
+          "object-content",
         )[0] as HTMLElement;
         if (contentEl) contentEl.style.height = newHeight;
 
         const resizeHolderEl = objectHolder.getElementsByClassName(
-          "resize-handle-holder-" + objectId
+          "resize-handle-holder-" + objectId,
         )[0] as HTMLElement;
-        if (resizeHolderEl) resizeHolderEl.style.height = newHeight; //+ 0.001; // NOTE:  0.001 is to trigger change
-
-        // objectHolder.style.boxShadow = `0 0 0 ${1 / getObjectScale(object) / zoom}px ${
-        //   object.objectIds ? "#444444" : "#48aff0"
-        // }`;
+        if (resizeHolderEl) resizeHolderEl.style.height = newHeight;
       } else {
         objectHolder.style.left = left + "px";
         objectHolder.style.top = top + "px";
@@ -1214,7 +1032,7 @@ function processScaleChangeEvent(
 
         // HANDLES
         const handlesEls = Array.from(
-          document.getElementsByClassName(`resize-handle-${objectId}`)
+          document.getElementsByClassName(`resize-handle-${objectId}`),
         ) as HTMLDivElement[];
 
         handlesEls.forEach((handleEL) => {
@@ -1222,7 +1040,7 @@ function processScaleChangeEvent(
         });
 
         const selEl = objectHolder.getElementsByClassName(
-          "object-selection"
+          "object-selection",
         )?.[0] as HTMLDivElement | undefined;
         if (selEl) {
           selEl.style.boxShadow = `0 0 0 ${1 / scale / zoom}px ${
@@ -1249,17 +1067,15 @@ function processScaleChangeEvent(
       if (el?.parentElement && html) {
         el.parentElement.style.height = newHeight ?? object.height + "px";
         el.parentElement.style.width = newWidth ?? object.width + "px";
-        // el.parentElement.style.left = newLeft ?? object.left + "px";
 
         el.parentElement.innerHTML = html;
 
         const objectSelectorEl = getElementBySelector(
-          ".object-holder-" + object.id + " > .object-selection"
+          ".object-holder-" + object.id + " > .object-selection",
         ) as HTMLElement;
 
         if (objectSelectorEl) {
           objectSelectorEl.style.width = newWidth ?? object.width + "px";
-          // objectSelectorEl.style.left = newLeft ?? object.left + "px";
           objectSelectorEl.style.height = newHeight ?? object.height + "px";
         }
       }
@@ -1277,27 +1093,15 @@ function processScaleStopEvent(
   },
   storeActions: {
     _updateObject: any;
-  }
+  },
 ) {
   const { selectedObjectIdsRef, zoom } = storeProps;
   const { _updateObject } = storeActions;
 
   const selectedObjectIds = selectedObjectIdsRef.current;
-  //const objectId = eData.objectId;
 
   const x = eData.x! / zoom;
   const y = eData.y! / zoom;
-
-  // // >>>>>>>>>>>>>>>>>>
-  // const objectPath: string[] = [];
-  // const firstObjectId = selectedObjectIdsRef.current![0];
-  // populateObjectThreeIds(objectPath, firstObjectId, objectById, layerById);
-
-  // const groupsMatrix = getGroupMatrixFromSelectionPath(
-  //   [...objectPath, firstObjectId],
-  //   objectById
-  // );
-  // // <<<<<<<<<<<<<<<<
 
   selectedObjectIds.forEach((objectId) => {
     const object = objectById[objectId];
@@ -1308,56 +1112,27 @@ function processScaleStopEvent(
 
     populateObjectThreeIds(objectPath, objectId, objectById, layerById);
 
-    // const groupsMatrix = getGroupMatrixFromSelectionPath(
-    //   [...objectPath, objectId],
-    //   objectById
-    // );
-
     const groupsMatrix = new DOMMatrix(getObjectTransform(object));
-
     // <<<<<<<<<<<<<<<<
 
     // >>>>>>>>>>>>>>>>
     const realMove = screenPointToLocal(
       { x: eData.mouseMove.x / zoom, y: eData.mouseMove.y / zoom },
       groupsMatrix,
-      0, //getObjectRotation(object),
-      getObjectScale(object)
+      0,
+      getObjectScale(object),
     );
     // <<<<<<<<<<<<<<<<
-
-    // const objectHolder = document.getElementsByClassName(
-    //   `object-holder-${objectId}`
-    // )[0] as HTMLDivElement;
-
-    //    const currentAngle = getObjectRotation(object) + angle;
-    // objectHolder.style.transform =
-    //   "translateX(" + x + "px) translateY(" + y + "px)";
 
     const realMoveX = realMove.x; // Math.max(realMove.x, realMove.y);
     const realMoveY = realMove.y; // Math.max(realMove.x, realMove.y);
 
-    // var s = Math.sin(degrees_to_radians(getObjectRotation(object)));
-    // var c = Math.cos(degrees_to_radians(getObjectRotation(object)));
-    // var mouseLocalX = c * realMoveXY + s * realMoveXY;
-    // var mouseLocalY = -s * realMoveXY + c * realMoveXY;
-
-    // NOTE: LAYOUT CHANGE
     const objectSize: Rect = {
       x: object.left!,
       y: object.top!,
-      width: object.width!, // * getObjectScale(object),
-      height: object.height!, //* getObjectScale(object),
+      width: object.width!,
+      height: object.height!,
     };
-
-    // var len = Math.sqrt(Math.pow(realMoveXY, 2) + Math.pow(realMoveXY, 2));
-    // var hDif = Math.sin(degrees_to_radians(getObjectRotation(object))) * len;
-    // var wDif = Math.cos(degrees_to_radians(getObjectRotation(object))) * len;
-
-    // const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
-    // let scale =
-    //   (objectSize.width * getObjectScale(object) - dir * realMoveXY * getObjectScale(object)) /
-    //   objectSize.width; //(realMoveXY + objectSize.x);
 
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
@@ -1368,70 +1143,19 @@ function processScaleStopEvent(
     let left = objectSize.x;
     let top = objectSize.y;
 
-    // const bb = getObjectBoundingBox(object);
-    // const scaledBB = getObjectBoundingBox(object);
-
-    // // if (eData.handle === "tl") {
-    // //   const diff = {
-    // //     x: scaledBB.width - bb.width,
-    // //     y: scaledBB.height - bb.height,
-    // //   };
-
-    // //   left = objectSize.x + diff.x; //(scale * hDif) / 2; //
-    // //   // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
-    // //   top = objectSize.y + diff.y;
-    // //   //  ((scale * wDif) / 2) * (objectSize.height / objectSize.width);
-    // //   //   Math.cos(degrees_to_radians(getObjectRotation(object)));
-    // // }
-    // lk
-    // if (!getObjectRotation(object)) {
-    //   if (eData.handle === "tl") {
-    //     left = objectSize.x + realMoveXY / 2; //
-    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //     top =
-    //       objectSize.y +
-    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
-    //     //   Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //   }
-    //   if (eData.handle === "bl") {
-    //     left = objectSize.x + realMoveXY / 2; //
-    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //     top =
-    //       objectSize.y -
-    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
-    //     // Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //   }
-    //   if (eData.handle === "br") {
-    //     left = objectSize.x + realMoveXY / 2; //
-    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //     top =
-    //       objectSize.y +
-    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
-    //     // Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //   }
-    //   if (eData.handle === "tr") {
-    //     left = objectSize.x + realMoveXY / 2; //
-    //     // (realMoveXY / 2) * Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //     top =
-    //       objectSize.y -
-    //       (realMoveXY / 2) * (objectSize.height / objectSize.width);
-    //     // Math.cos(degrees_to_radians(getObjectRotation(object)));
-    //   }
-    // }
-
     let transform = "";
     const m = new DOMMatrix();
     if (eData.handle === "tr") {
       m.rotateSelf(getObjectRotation(object));
       m.translateSelf(
-        0, //objectSize.width * getObjectScale(object) - objectSize.width,
-        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height
-      ); // old scale here
+        0,
+        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+      );
 
-      m.scaleSelf(scale); // new scale here
+      m.scaleSelf(scale);
       m.translateSelf(
-        0, //-(objectSize.width * scale - objectSize.width) / scale,
-        -(objectSize.height * scale - objectSize.height) / scale
+        0,
+        -(objectSize.height * scale - objectSize.height) / scale,
       );
 
       const d = decomposeMatrix2DW3(m);
@@ -1445,13 +1169,13 @@ function processScaleStopEvent(
       m.rotateSelf(getObjectRotation(object));
       m.translateSelf(
         objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-        0 //objectSize.height * getObjectScale(object) - objectSize.height
-      ); // old scale here
+        0,
+      );
 
-      m.scaleSelf(scale); // new scale here
+      m.scaleSelf(scale);
       m.translateSelf(
         -(objectSize.width * scale - objectSize.width) / scale,
-        0 //-(objectSize.height * scale - objectSize.height) / scale
+        0,
       );
 
       const d = decomposeMatrix2DW3(m);
@@ -1465,13 +1189,13 @@ function processScaleStopEvent(
       m.rotateSelf(getObjectRotation(object));
       m.translateSelf(
         objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height
-      ); // old scale here
+        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+      );
 
-      m.scaleSelf(scale); // new scale here
+      m.scaleSelf(scale);
       m.translateSelf(
         -(objectSize.width * scale - objectSize.width) / scale,
-        -(objectSize.height * scale - objectSize.height) / scale
+        -(objectSize.height * scale - objectSize.height) / scale,
       );
 
       const d = decomposeMatrix2DW3(m);
@@ -1485,7 +1209,6 @@ function processScaleStopEvent(
         "rotate(" + getObjectRotation(object) + "deg) scale(" + scale + ")";
     }
 
-    // NOTE: LAYOUT CHANGE
     if (eData.handle === "left" || eData.handle === "width") {
       if (eData.handle === "left") {
         objectClone.left =
@@ -1527,13 +1250,13 @@ function processPanChangeEvent(
   },
   storeActions: {
     _setStagePan: any;
-  }
+  },
 ) {
   const { zoom } = storeProps;
   const { _setStagePan } = storeActions;
 
-  const x = eData.x!; //* zoom;
-  const y = eData.y!; //* zoom;
+  const x = eData.x!;
+  const y = eData.y!;
 
   _setStagePan({ currentX: x, currentY: y });
 }
@@ -1548,7 +1271,7 @@ function processPanStopEvent(
   },
   storeActions: {
     _setStagePan: any;
-  }
+  },
 ) {
   const { zoom, stagePan } = storeProps;
   const { _setStagePan } = storeActions;
@@ -1565,9 +1288,7 @@ function processPanStopEvent(
 }
 
 export function degrees_to_radians(degrees: number) {
-  // Store the value of pi.
   var pi = Math.PI;
-  // Multiply degrees by pi divided by 180 to convert to radians.
   return degrees * (pi / 180);
 }
 
@@ -1592,34 +1313,22 @@ function renderSnapLines(
   }[],
   skipObjectIds: string[],
   stageScale: number,
-  objectScale: number
-  // skipX: boolean,
-  // skipY: boolean
+  objectScale: number,
 ) {
-  //return { x: 0, y: 0 }; // TODO xx
-
   const snapHolderEl = clearSnapHolder();
 
-  // // 1. HIDE ALL
-  // const snapLines = document.getElementsByClassName(
-  //   "snap-line"
-  // ) as HTMLCollectionOf<HTMLElement>;
-  // Array.from(snapLines).forEach((snapLine) => {
-  //   snapLine.style.opacity = "0";
-  // });
-
   const snapDelta = { x: 0, y: 0 };
-  // 2. FIND AND SHOW
+
   snapBounds.forEach((snapBound) => {
     if (skipObjectIds.includes(snapBound.objectId)) return;
 
     const objectSelectorEl = getElementBySelector(
-      ".object-holder-" + snapBound.objectId + " > .object-selection"
+      ".object-holder-" + snapBound.objectId + " > .object-selection",
     ) as HTMLDivElement;
     if (objectSelectorEl) {
       objectSelectorEl.style.setProperty(
         "--snap-border-width",
-        `${1.2 / objectScale}px`
+        `${1.2 / objectScale}px`,
       );
 
       objectSelectorEl.classList.remove("snap-highlight-object");
@@ -1633,7 +1342,7 @@ function renderSnapLines(
       "left",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
     renderSnapLine(
       newObjectBounds,
@@ -1643,7 +1352,7 @@ function renderSnapLines(
       "top",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
     renderSnapLine(
       newObjectBounds,
@@ -1653,7 +1362,7 @@ function renderSnapLines(
       "right",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
     renderSnapLine(
       newObjectBounds,
@@ -1663,7 +1372,7 @@ function renderSnapLines(
       "bottom",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
 
     renderSnapLine(
@@ -1674,7 +1383,7 @@ function renderSnapLines(
       "vcenter",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
     renderSnapLine(
       newObjectBounds,
@@ -1684,7 +1393,7 @@ function renderSnapLines(
       "hcenter",
       snapDelta,
       stageScale,
-      snapHolderEl
+      snapHolderEl,
     );
   });
 
@@ -1708,22 +1417,8 @@ function renderSnapLine(
     y: number;
   },
   stageScale: number,
-  snapHolderEl: HTMLElement
+  snapHolderEl: HTMLElement,
 ) {
-  // let sides: SideType[] = [];
-
-  // let isHorizontal = true;
-  // if (
-  //   propertyName === "left" ||
-  //   propertyName === "right" ||
-  //   propertyName === "vcenter"
-  // ) {
-  //   sides = ["left", "right", "vcenter"];
-  // } else {
-  //   sides = ["top", "bottom", "hcenter"];
-  //   isHorizontal = false;
-  // }
-
   sides.forEach((side) => {
     // TODO
     if (
@@ -1744,14 +1439,9 @@ function renderSnapLine(
       isNear(
         newObjectBounds[propertyName],
         snapBounds.bounds[side],
-        snapBounds.snapThreshold / stageScale
+        snapBounds.snapThreshold / stageScale,
       )
     ) {
-      //
-      // class={
-      //   "snap-line snap-line-bottom snap-line-bottom-" +
-      //   p.objectId
-      // }
       if (isHorizontal) {
         snapHolderEl.innerHTML += `
           <div
@@ -1783,23 +1473,15 @@ function renderSnapLine(
       }
 
       const objectSelectorEl = getElementBySelector(
-        ".object-holder-" + snapBounds.objectId + " > .object-selection"
+        ".object-holder-" + snapBounds.objectId + " > .object-selection",
       );
       objectSelectorEl?.classList.add("snap-highlight-object");
-
-      // const snapLines = document.getElementsByClassName(
-      //   "snap-line-" + side + "-" + snapBounds.objectId
-      // ) as HTMLCollectionOf<HTMLElement>;
 
       const deltaProp =
         side == "left" || side == "right" || side === "vcenter" ? "x" : "y";
 
       snapDelta[deltaProp] =
         snapBounds.bounds[side] - newObjectBounds[propertyName];
-
-      // Array.from(snapLines).forEach((snapLine) => {
-      //   snapLine.style.opacity = "1";
-      // });
     }
   });
 

@@ -39,9 +39,6 @@ export function normalizeGroup(
   });
 
   groupObjectsToUpdate.forEach((object: IObject) => {
-    // NOTE: LAYOUT CHANGE
-    // object.absoluteLayout!.common.left = calc[object.id].left + "px";
-    // object.absoluteLayout!.common.top = calc[object.id].top + "px";
     object.left = calc[object.id].left;
     object.top = calc[object.id].top;
     object.rotation = calc[object.id].rotation;
@@ -62,11 +59,6 @@ export function normalizeGroup(
   //  normalize object pos
   const retObject: IObject[] = [];
   groupObjectsToUpdate.forEach((object) => {
-    // NOTE: LAYOUT CHANGE
-    // object.absoluteLayout!.common.top =
-    //   parseFloat(object.absoluteLayout!.common.top) - groupBounds.y + "px";
-    // object.absoluteLayout!.common.left =
-    //   parseFloat(object.absoluteLayout!.common.left) - groupBounds.x + "px";
     object.top = object.top! - groupBounds.y;
     object.left = object.left! - groupBounds.x;
     retObject.push(object);
@@ -74,11 +66,6 @@ export function normalizeGroup(
 
   const retGroup = cloneDeep(parentGroup);
 
-  // NOTE: LAYOUT CHANGE
-  // retGroup.absoluteLayout!.common.left = groupBounds.x + "px";
-  // retGroup.absoluteLayout!.common.top = groupBounds.y + "px";
-  // retGroup.absoluteLayout!.common.width = groupBounds.width + "px";
-  // retGroup.absoluteLayout!.common.height = groupBounds.height + "px";
   retGroup.left = groupBounds.x;
   retGroup.top = groupBounds.y;
   retGroup.width = groupBounds.width;

@@ -46,7 +46,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   } = props;
 
   const { stageManager } = useContext(StageManagerContext);
-
   const { activeTool } = useContext(ToolsContext);
 
   const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
@@ -64,12 +63,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
 
   const showScaleHandles = sizeType === "rect" && !objectMeta?.disableScale;
   const showPointsHandles = false; //sizeType === "line";
-
-  // const initialRotationRef = useRef(initialRotation);
-  // initialRotationRef.current = initialRotation;
-
-  // const initialScaleRef = useRef(initialScale);
-  // initialScaleRef.current = initialScale;
 
   const childRef = useRef<HTMLDivElement>();
   const resizeHolderRef = useRef<HTMLDivElement>();
@@ -124,9 +117,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
   useLayoutEffect(() => {
     if (!isSelected || forceHide) return;
     if (object.isLocked) return;
-    // if (isObjectInGroup(object, objectById)) {
-    //   return;
-    // }
 
     childRef.current = document.getElementsByClassName(
       `object-holder-${props.object.id}`
@@ -138,9 +128,7 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
 
     const scaledHandleSize = HANDLE_SIZE / Math.abs(initialScale) / stageZoom;
 
-    const borderRadius = "10%"; //  2 / Math.abs(initialScale) / stageZoom;
-
-    //initialRotationRef.current = initialRotation;
+    const borderRadius = "10%";
     if (resizeHolderRef.current) {
       let el: HTMLDivElement;
 
@@ -154,28 +142,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "center center";
-        // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
-
-        // el.style.transform = "scale(" + stageZoom + ")";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "p1");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.p1 = el;
-        // ----
 
         el = document.createElement("div");
         el.style.left = object.x2 + "px";
@@ -183,26 +161,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "bottom left";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "tr");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.p2 = el;
-        // ----
       }
       if (showScaleHandles) {
         el = document.createElement("div");
@@ -211,28 +181,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "bottom right";
-        // el.style.transform = `scale(${1 / object.scale! / stageZoom})`;
-
-        // el.style.transform = "scale(" + stageZoom + ")";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "tl");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.tl = el;
-        // ----
 
         el = document.createElement("div");
         el.style.right = "-" + scaledHandleSize + "px";
@@ -240,26 +200,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "bottom left";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "tr");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
-
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.tr = el;
-        // ----
 
         el = document.createElement("div");
         el.style.bottom = "-" + scaledHandleSize + "px";
@@ -267,26 +219,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "top right";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "bl");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.bl = el;
-
-        // ----
 
         el = document.createElement("div");
         el.style.bottom = "-" + scaledHandleSize + "px";
@@ -294,28 +238,19 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.width = scaledHandleSize + "px";
         el.style.height = scaledHandleSize + "px";
         el.style.transformOrigin = "top left";
-
         el.style.background = `${
           object.objectIds ? groupSelectionColor : objectSelectionColor
         }`;
-        // el.style.border =
-        //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
         el.style.boxShadow = handleBoxShadow;
         el.style.borderRadius = borderRadius;
-
-        // el.style.border = `0.1px solid ${
-        //   object.objectIds ? groupSelectionColor : objectSelectionColor
-        // }`;
         el.style.position = "absolute";
         el.style.pointerEvents = "all";
         el.setAttribute("data-scale-handle", "br");
         el.setAttribute("class", "resize-handle resize-handle-" + object.id);
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.br = el;
       }
-      // ----
 
       if (showWidthResize) {
         // width handle
@@ -381,12 +316,10 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.transformOrigin = "top center";
 
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.height = el;
       }
       if (showTopResize) {
-        // top
         el = createSizeHandleElement({
           scaledHandleSize,
           handleBoxShadow,
@@ -404,7 +337,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         el.style.transformOrigin = "top center";
 
         resizeHolderRef.current.appendChild(el);
-        // el.removeEventListener("mousedown", handleMouseDown);
         el.addEventListener("mousedown", handleMouseDown);
         handlesRef.current.top = el;
       }
@@ -427,29 +359,18 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         handlesRef.current.br.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current?.removeChild(handlesRef.current.br);
       }
-      //
       if (handlesRef.current?.width && resizeHolderRef.current) {
-        handlesRef.current.width.removeEventListener(
-          "mousedown",
-          handleMouseDown
-        );
+        handlesRef.current.width.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current?.removeChild(handlesRef.current.width);
       }
       if (handlesRef.current?.left && resizeHolderRef.current) {
-        handlesRef.current.left.removeEventListener(
-          "mousedown",
-          handleMouseDown
-        );
+        handlesRef.current.left.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current?.removeChild(handlesRef.current.left);
       }
       if (handlesRef.current?.height && resizeHolderRef.current) {
-        handlesRef.current.height.removeEventListener(
-          "mousedown",
-          handleMouseDown
-        );
+        handlesRef.current.height.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current?.removeChild(handlesRef.current.height);
       }
-      //
       if (handlesRef.current?.p1 && resizeHolderRef.current) {
         handlesRef.current.p1.removeEventListener("mousedown", handleMouseDown);
         resizeHolderRef.current?.removeChild(handlesRef.current.p1);
@@ -459,25 +380,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
         resizeHolderRef.current?.removeChild(handlesRef.current.p2);
       }
     };
-    // if (childRef.current) {
-    //   const objectRootEl = childRef.current as HTMLElement;
-
-    //   rotationHandle.current = objectRootEl.querySelector(".rotation-handle");
-
-    //   rotationHandle.current?.removeEventListener("mousedown", handleMouseDown);
-    //   rotationHandle.current?.addEventListener("mousedown", handleMouseDown);
-
-    //   return () => {
-    //     rotationHandle.current?.removeEventListener(
-    //       "mousedown",
-    //       handleMouseDown
-    //     );
-    //   };
-
-    //   // (window as any).addEventListener("blur", windowBlurHandler);
-    //   // (window as any).addEventListener("mouseup", documentMouseUpHandler);
-    //   // document.addEventListener("mouseout", documentMouseOutHandler);
-    // }
   }, [
     initialRotation,
     props.object.id,
@@ -493,14 +395,6 @@ export function WithResizeHandle(props: WithResizeHandleProps): JSX.Element {
     initialScale,
     showHeightResize,
   ]);
-
-  // initialRotation,
-  // props.object.id,
-  // isSelected,
-  // handleMouseDown,
-  // stageZoom,
-  // forceHide,
-  // showWidthResize,
 
   const renderChildren = () => {
     return React.Children.map(props.children, (child) => {
@@ -529,13 +423,7 @@ function createSizeHandleElement({
   el.style.background = `${
     isGroup ? groupSelectionColor : objectSelectionColor
   }`;
-  // el.style.border =
-  //   1 / Math.abs(object.scale) / stageZoom + "px solid white";
   el.style.boxShadow = handleBoxShadow;
-
-  // el.style.border = `0.1px solid ${
-  //   object.objectIds ? groupSelectionColor : objectSelectionColor
-  // }`;
   el.style.position = "absolute";
   el.style.pointerEvents = "all";
   el.setAttribute("data-scale-handle", position);

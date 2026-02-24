@@ -27,22 +27,6 @@ export function getUngroupObjectsCalculation(
 } {
   const { group, parentLayer, objects, breakpointConfig } = props;
 
-  // const calculatedGroupObjectSize = calculateObjectSize(
-  //   group,
-  //   parentLayer,
-  //   breakpointConfig!,
-  //   {
-  //     resetPosition: false,
-  //   }
-  // );
-
-  // NOTE: LAYOUT CHANGE
-  // const groupObjectSize = {
-  //   x: parseFloat(group.absoluteLayout?.common.left!),
-  //   y: parseFloat(group.absoluteLayout?.common.top!),
-  //   width: parseFloat(group.absoluteLayout?.common.width!),
-  //   height: parseFloat(group.absoluteLayout?.common.height!),
-  // };
   const groupObjectSize = {
     x: group.left!,
     y: group.top!,
@@ -68,13 +52,6 @@ export function getUngroupObjectsCalculation(
   } = {};
 
   objects?.map((obj) => {
-    // NOTE: LAYOUT CHANGE
-    // const objectSize = {
-    //   x: parseFloat(obj.absoluteLayout?.common.left!),
-    //   y: parseFloat(obj.absoluteLayout?.common.top!),
-    //   width: parseFloat(obj.absoluteLayout?.common.width!),
-    //   height: parseFloat(obj.absoluteLayout?.common.height!),
-    // };
     const objectSize = {
       x: obj.left!,
       y: obj.top!,
@@ -329,10 +306,6 @@ export function createTransformForPath(
 
     const rotationSign = config?.inverseRotation ? "-" : "";
 
-    // NOTE: LAYOUT CHANGE
-    // const translate = config?.includeTranslate
-    //   ? `translateX(${object.absoluteLayout?.common.left}) translateY(${object.absoluteLayout?.common.top})`
-    //   : "";
     const translate = config?.includeTranslate
       ? `translateX(${object.left}px) translateY(${object.top}px)`
       : "";
@@ -468,19 +441,6 @@ export function getCorners(
   let tr = GetPoint(X, Y, r, cx, -cy);
 
   return { tl, tr, bl, br };
-
-  // TweenMax.set("#top-left", { x: tl.x, y: tl.y });
-  // TweenMax.set("#bot-left", { x: bl.x, y: bl.y });
-  // TweenMax.set("#bot-right", { x: br.x, y: br.y });
-  // TweenMax.set("#top-right", { x: tr.x, y: tr.y });
-
-  // $("textarea#data").val(
-  //   JSON.stringify(
-  //     { botRight: br, botLeft: bl, topRight: tr, topLeft: tl },
-  //     null,
-  //     4
-  //   )
-  // );
 }
 
 function GetPoint(X: number, Y: number, rot: number, Xos: number, Yos: number) {
@@ -584,11 +544,6 @@ export function tmpDrawNewGroup(
 ) {
   const layerEl = getElementByClass("layer-" + parentLayer.id);
 
-  // NOTE: LAYOUT CHANGE
-  // const x = parseFloat(parentGroup.absoluteLayout?.common!.left!);
-  // const y = parseFloat(parentGroup.absoluteLayout?.common!.top!);
-  // const width = parseFloat(parentGroup.absoluteLayout?.common!.width!);
-  // const height = parseFloat(parentGroup.absoluteLayout?.common!.height!);
   const x = parentGroup.left!;
   const y = parentGroup.top!;
   const width = parentGroup.width!;
