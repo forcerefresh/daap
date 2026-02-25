@@ -34,8 +34,9 @@ import {
   updateObject,
 } from "../../store/actions/actions";
 import { getObjectHtml } from "../../export/export-html";
-import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { ILayoutChildrenValue } from "webslider-sdk/lib/inputs/i-inputs";
+import { StageGroupObject } from "./StageGroupObject";
+import { StageLeafObject } from "./StageLeafObject";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 import { StageTools } from "../../store/reducers/stage";
 import { IRect, getMousePosition } from "../../utils/doom-utils/common";
@@ -386,66 +387,24 @@ export function StageObjectInternal(props: IStageLayer) {
             }
           >
             {object.type === "group" ? (
-              <>
-                <style
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      ".group-object-" + object.id + "{" + groupStyle + "}",
-                  }}
-                ></style>
-                <div
-                  className={"group-object-" + object.id}
-                  style={{
-                    ...objectStyle,
-                    ...maskStyle,
-                    overflow: object.style?.overflow ?? "visible",
-                  }}
-                >
-                  {object.objectIds?.map((objectId) => {
-                    const childObject = objectById[objectId]; //objectByIdLocalRef
-                    const layoutChildren = parentLayer.properties
-                      ?.hasLayoutChildren
-                      ? parentLayer.properties.layoutChildren
-                      : undefined;
-                    return (
-                      <StageObject
-                        key={objectId}
-                        object={childObject}
-                        parentGroup={object}
-                        layer={parentLayer}
-                        layoutChildren={layoutChildren}
-                        objectZoom={objectZoom * (childObject.scale ?? 1)}
-                      />
-                    );
-                  })}
-                </div>
-              </>
+              <StageGroupObject
+                object={object}
+                objectStyle={objectStyle}
+                maskStyle={maskStyle}
+                groupStyle={groupStyle}
+                objectById={objectById}
+                parentLayer={parentLayer}
+                objectZoom={objectZoom}
+                breakpointConfig={breakpointConfig}
+              />
             ) : (
-              <>
-                <div
-                  key={object.id + "_1"}
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      getObjectHtml(
-                        object,
-                        calculatedObjectSizeForObject,
-                        false,
-                        false,
-                        breakpointConfig?.type,
-                        // thumbnailHtmlArr,
-                        // slidesCounter
-                      ) ||
-                      getObjectPlaceholder(
-                        `Object '${object.type}' is not installed.<br/>Go to Library > Extensions (or My Extensions) to install missing extension.`,
-                      ),
-                  }}
-                  style={{
-                    ...objectStyle,
-                    ...maskStyle,
-                    overflow: object.style?.overflow ?? "visible",
-                  }}
-                />
-              </>
+              <StageLeafObject
+                object={object}
+                objectStyle={objectStyle}
+                maskStyle={maskStyle}
+                calculatedObjectSizeForObject={calculatedObjectSizeForObject}
+                breakpointConfig={breakpointConfig}
+              />
             )}
             <div
               onClick={(event) => {}}
@@ -482,7 +441,7 @@ export function StageObjectInternal(props: IStageLayer) {
 }
 
 const mapStateToProps = (state: IStore) => {
-  const { pages, layers, objects, selection, document, settings, clipboard } =
+  const { pages, layers, objects, selection, settings, clipboard } =
     state.project;
   const { stage } = state;
 
@@ -554,7 +513,7 @@ const mapDispatchToProps = {
 };
 
 const StageObject = withErrorBoundary(
-  connect(mapStateToProps, mapDispatchToProps)(StageObjectInternal),
+  connect(mapStateToProps, mapDispatchToProps)(StageObjectInternal) as React.ComponentType<any>,
 );
 
 export default StageObject;

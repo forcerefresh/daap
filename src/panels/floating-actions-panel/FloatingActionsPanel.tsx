@@ -53,7 +53,7 @@ type IFloatingActionPanel = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
-  props: IFloatingActionPanel
+  props: IFloatingActionPanel,
 ) => {
   const {
     selectedObjectIds,
@@ -82,14 +82,15 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
     deleteObject,
   } = useContext(ToolsContext);
 
+  const activeObject = objectById[selectedObjectIds[0]];
+
   const mSelectionType: MultiSelectionType =
-    !selectedObjectIds || selectedObjectIds.length === 0
+    !selectedObjectIds || selectedObjectIds.length === 0 || !activeObject
       ? MultiSelectionType.None
       : selectedObjectIds.length === 1
-      ? MultiSelectionType.Single
-      : MultiSelectionType.Multiple;
+        ? MultiSelectionType.Single
+        : MultiSelectionType.Multiple;
 
-  const activeObject = objectById[selectedObjectIds[0]];
   const FloatingBarComponent =
     mSelectionType === MultiSelectionType.Single &&
     getObjectToolDefinitions(activeObject?.type, activeObject.version)
@@ -120,7 +121,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
       // tmpRef.current &&
       if (mainRef.current) {
         const stageEl = document.getElementsByClassName(
-          "layout-center-area"
+          "layout-center-area",
         )[0] as HTMLElement;
 
         const rect = getFloatingRect(selectedObjectIds);
@@ -142,7 +143,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
           let maxLeft = stageWidth - width - 10;
 
           const layersSimplifiedEl = document.getElementsByClassName(
-            "layers-simplified-panel"
+            "layers-simplified-panel",
           )[0] as HTMLElement;
 
           if (layersSimplifiedEl) {
@@ -285,5 +286,5 @@ const mapDispatchToProps = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(FloatingActionPanel);

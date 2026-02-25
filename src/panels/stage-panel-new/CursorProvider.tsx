@@ -2,7 +2,6 @@ import React, {
   CSSProperties,
   useContext,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 import cx from "classnames";
@@ -17,16 +16,11 @@ export interface ICursorStyle {
   style: CSSProperties;
 }
 
-export interface ICursorContext {
-}
-
-export const CursorContext = React.createContext<ICursorContext>({});
-
 const SUPPORTED_CURSORS = [false, "pointer", "right", "left"];
 
 export const CursorProvider = ({
   children,
-}: React.PropsWithChildren<React.ReactNode>) => {
+}: { children?: React.ReactNode }) => {
   const { cursorStyle, appZoom = 1 } = useContext(ToolsContext);
   const {
     stage,
@@ -78,30 +72,27 @@ export const CursorProvider = ({
   }, [cursorStyle]);
 
   return (
-    <CursorContext.Provider value={{}}>
-      <div
-        className={cx({
-          [css.hideCursor]: !!cursor && !!activeTool && cursorStyle,
-        })}
-      >
-        {cursorStyle && (
-          <ins
-            className={cx(css.movable, {
-              [css.active]: cursorStyle && !!cursor && visible && !!activeTool,
-              //[`cursor-${cursor}`]: !!cursor,
-            })}
-            style={{
-              left: `${(x - stageRect.x) / appZoom}px`,
-              top: `${(y - stageRect.y) / appZoom}px`,
-              ...cursorStyle.style,
-              width: zoom * cursorStyle.size + "px",
-              height: zoom * cursorStyle.size + "px",
-            }}
-          />
-        )}
-        {children}
-      </div>
-    </CursorContext.Provider>
+    <div
+      className={cx({
+        [css.hideCursor]: !!cursor && !!activeTool && cursorStyle,
+      })}
+    >
+      {cursorStyle && (
+        <ins
+          className={cx(css.movable, {
+            [css.active]: cursorStyle && !!cursor && visible && !!activeTool,
+          })}
+          style={{
+            left: `${(x - stageRect.x) / appZoom}px`,
+            top: `${(y - stageRect.y) / appZoom}px`,
+            ...cursorStyle.style,
+            width: zoom * cursorStyle.size + "px",
+            height: zoom * cursorStyle.size + "px",
+          }}
+        />
+      )}
+      {children}
+    </div>
   );
 };
 

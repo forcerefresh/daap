@@ -19,8 +19,6 @@ import { useSelector, useStore } from "react-redux";
 import { cloneDeep, forEach, forOwn } from "lodash-es";
 import { IToolConfig } from "./types";
 import {
-  CursorContext,
-  ICursorContext,
   ICursorStyle,
 } from "../../panels/stage-panel-new/CursorProvider";
 import { getZoom } from "../../store/helpers/calculateZoom";

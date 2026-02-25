@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 type DivRefType = React.MutableRefObject<HTMLDivElement | null>;
-type TransformType = { scale: number; translateX: number; translateY: number };
+export type TransformType = { scale: number; translateX: number; translateY: number };
 
 const MIN_SCALE = 0.1;
 const MAX_SCALE = 10;
