@@ -1,6 +1,7 @@
 import { forOwn } from "lodash-es";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { ILayer } from "../reducers/i-layers";
+import { IRect } from "../../utils/doom-utils/common";
 
 /**
  * Return array of ids from object to root layer. Includes provided objectId as first element and layer id as last one.
@@ -122,6 +123,40 @@ export function getObjectIdToSelect({
 
 export function isObjectGroup(object: IObject): boolean {
   return !!object?.objectIds && object.objectIds.length > 0;
+}
+
+/**
+ * Compute the bounding rect of an object after applying
+ * rotation and scale from its top-left corner (transform-origin: top left).
+ */
+export function getTransformedObjectBounds(
+  left: number,
+  top: number,
+  w: number,
+  h: number,
+  rotation: number,
+  scale: number,
+): IRect {
+  const r = (rotation * Math.PI) / 180;
+  const cos = Math.cos(r);
+  const sin = Math.sin(r);
+
+  const corners = [
+    [0, 0],
+    [w, 0],
+    [0, h],
+    [w, h],
+  ].map(([lx, ly]) => ({
+    x: left + lx * scale * cos - ly * scale * sin,
+    y: top + lx * scale * sin + ly * scale * cos,
+  }));
+
+  const minX = Math.min(...corners.map((c) => c.x));
+  const minY = Math.min(...corners.map((c) => c.y));
+  const maxX = Math.max(...corners.map((c) => c.x));
+  const maxY = Math.max(...corners.map((c) => c.y));
+
+  return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
 }
 
 export function isObjectInGroup(

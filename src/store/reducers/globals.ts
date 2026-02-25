@@ -28,10 +28,14 @@ export interface IAppSettings {
   homePage?: "search" | "editor" | string | undefined;
 }
 
+const appZoomFromLocalStorage = parseFloat(
+  localStorage.getItem(`appZoom`) ?? "1",
+);
+
 export function globals(
   state: IAppSettings = {
     // layoutType: "default-layers",
-    appZoom: 1,
+    appZoom: !isNaN(appZoomFromLocalStorage) ? appZoomFromLocalStorage : 1,
     enableDeveloper: true,
     devTools: false,
     theme: "dark",

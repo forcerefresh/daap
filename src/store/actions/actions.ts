@@ -79,6 +79,7 @@ import {
 import { getUngroupObjectsCalculation } from "../../panels/stage-panel-new/stage-panel-utils";
 import {
   getAncestorLayer,
+  getTransformedObjectBounds,
   isObjectGroup,
   isObjectInGroup,
   populateObjectThreeIds,
@@ -1114,14 +1115,16 @@ export function selectObjectsByRect(rect: IRect): any {
         },
       );
 
-      if (
-        isIntersectingRect(rect, {
-          x: parseInt(calculatedObjectSize.left!.toString(), 10),
-          y: parseInt(calculatedObjectSize.top!.toString(), 10),
-          w: parseInt(calculatedObjectSize.width!.toString(), 10),
-          h: parseInt(calculatedObjectSize.height!.toString(), 10),
-        })
-      ) {
+      const objectBounds = getTransformedObjectBounds(
+        parseInt(calculatedObjectSize.left!.toString(), 10),
+        parseInt(calculatedObjectSize.top!.toString(), 10),
+        parseInt(calculatedObjectSize.width!.toString(), 10),
+        parseInt(calculatedObjectSize.height!.toString(), 10),
+        object.rotation || 0,
+        object.scale || 1,
+      );
+
+      if (isIntersectingRect(rect, objectBounds)) {
         objectToSelectIds.push(object.id);
       }
     });

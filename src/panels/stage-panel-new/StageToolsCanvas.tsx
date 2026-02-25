@@ -35,7 +35,12 @@ import {
 } from "../../store/actions/actions";
 import { IPreviewState, StageTools } from "../../store/reducers/stage";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
-import { getMousePosition, IRect } from "../../utils/doom-utils/common";
+import {
+  applyRectValuesToElement,
+  getRectFromPoints,
+  getMousePosition,
+  IRect,
+} from "../../utils/doom-utils/common";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 import { getZoom } from "../../store/helpers/calculateZoom";
@@ -63,9 +68,86 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     forceRefreshRand: _forceRefreshRand,
   } = props;
 
+  const {
+    activeStageTool,
+    previewState,
+    _selectObjectsByRect,
+  } = props;
+
   const holderRef = useRef<HTMLDivElement | null>(null);
   // Refs for secondary selected objects (outline only, no handles).
   const secondaryRefs = useRef<Map<string, HTMLDivElement | null>>(new Map());
+
+  // ── Rectangle selection ─────────────────────────────────────────────────────
+  const selectionBoxRef = useRef<HTMLDivElement | null>(null);
+  const dragStartRef = useRef<{ x: number; y: number } | null>(null);
+
+  // Always-current refs so event handlers don't capture stale values.
+  const stageZoomRef = useRef(stageZoom);
+  stageZoomRef.current = stageZoom;
+  const appZoomRef = useRef(appZoom);
+  appZoomRef.current = appZoom;
+  const activeStageToolRef = useRef(activeStageTool);
+  activeStageToolRef.current = activeStageTool;
+  const isPreviewRef = useRef(previewState.isPreview);
+  isPreviewRef.current = previewState.isPreview;
+
+  useEffect(() => {
+    const toStageCoords = (clientX: number, clientY: number) => {
+      const el = document.getElementsByClassName("stage-tools-canvas")[0];
+      const bbox = el?.getBoundingClientRect() ?? new DOMRect();
+      return {
+        x: (clientX - bbox.left) / stageZoomRef.current / appZoomRef.current,
+        y: (clientY - bbox.top) / stageZoomRef.current / appZoomRef.current,
+      };
+    };
+
+    const onMouseDown = (e: MouseEvent) => {
+      if (e.button !== 0) return;
+      if (isPreviewRef.current) return;
+      if (activeStageToolRef.current === StageTools.PAN) return;
+      const target = e.target as Element;
+      // Only act on empty-stage clicks (objects and handles stop React propagation,
+      // but native listeners still fire — so we filter by target class).
+      if (!target.closest?.(".StagePanel")) return;
+      if (target.classList.contains("OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN")) return;
+      if (target.closest?.(".selection-rect")) return;
+      dragStartRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!dragStartRef.current || !selectionBoxRef.current) return;
+      const start = toStageCoords(dragStartRef.current.x, dragStartRef.current.y);
+      const current = toStageCoords(e.clientX, e.clientY);
+      applyRectValuesToElement(selectionBoxRef.current, getRectFromPoints(start, current));
+      selectionBoxRef.current.style.display = "block";
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      if (!dragStartRef.current) return;
+      const start = dragStartRef.current;
+      dragStartRef.current = null;
+      if (selectionBoxRef.current) {
+        selectionBoxRef.current.style.display = "none";
+      }
+      const startCoords = toStageCoords(start.x, start.y);
+      const endCoords = toStageCoords(e.clientX, e.clientY);
+      const rect = getRectFromPoints(startCoords, endCoords);
+      if (rect.w > 1 && rect.h > 1) {
+        _selectObjectsByRect(rect);
+      }
+    };
+
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+    return () => {
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+    };
+  }, [_selectObjectsByRect]);
+  // ────────────────────────────────────────────────────────────────────────────
 
   const { stageManager, afterDomUpdateRef } = useContext(StageManagerContext);
 
@@ -248,6 +330,18 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
   return (
     <div>
+      {/* Rectangle selection box — hidden by default, shown during drag */}
+      <div
+        ref={selectionBoxRef}
+        style={{
+          display: "none",
+          position: "absolute",
+          border: `${1 / stageZoom / appZoom}px dotted #48aff0`,
+          pointerEvents: "none",
+          zIndex: 500,
+        }}
+      />
+
       {selectedObject && (
         <div
           ref={holderRef}
