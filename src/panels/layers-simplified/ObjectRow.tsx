@@ -51,7 +51,6 @@ export interface IObjectRowProps {
 export function ObjectRow(props: IObjectRowProps) {
   const {
     object,
-    isHovered,
     layer,
     onObjectClick,
     onObjectDblClick,
@@ -161,9 +160,6 @@ export function ObjectRow(props: IObjectRowProps) {
     },
   });
 
-  const opacity = isHovered ? 0 : 1;
-  // const opacity = isDragging ? 0 : 1;
-
   drag(drop(ref));
 
   // DND <<<<
@@ -225,7 +221,7 @@ export function ObjectRow(props: IObjectRowProps) {
         onObjectDblClick(event, isGroup, object.id);
       }}
       style={{
-        ...(isOver && isHovered ? { border: "1px dashed green" } : { opacity }),
+        ...(isOver ? { border: "1px dashed green" } : {}),
       }}
       data-handler-id={handlerId}
     >
@@ -238,7 +234,6 @@ export function ObjectRow(props: IObjectRowProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          opacity,
         }}
       >
         <StageObjectMinimap
