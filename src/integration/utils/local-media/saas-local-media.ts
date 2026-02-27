@@ -7,15 +7,17 @@ import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 export function getMediaSrc(
   mediaItem: SaaSMediaData,
   preferredSize = "original",
-  propertyToUse: "previewSizes" | "mediaSizes" = "mediaSizes"
+  propertyToUse: "previewSizes" | "mediaSizes" = "mediaSizes",
 ): string {
+  if (!mediaItem[propertyToUse]) return "";
+
   let originalSize = mediaItem[propertyToUse].find(
-    (size) => size.sizeType === preferredSize
+    (size) => size.sizeType === preferredSize,
   );
 
   if (!originalSize) {
     originalSize = mediaItem[propertyToUse].find(
-      (size) => size.sizeType === "original"
+      (size) => size.sizeType === "original",
     );
   }
 

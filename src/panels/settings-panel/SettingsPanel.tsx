@@ -25,6 +25,7 @@ export type ISettingsPanelMergedProps = typeof mapDispatchToProps &
 const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
   onRequestClose,
   defaultSelectedTabId = "project",
+  globals,
 }) => {
   const globalContext = useContext(IntegrationContext);
   const { supportStorageObjects } = globalContext.useObjectStorageHook();
@@ -87,13 +88,14 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
             />
           )} */}
 
-          {/* {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
-            <Tab
-              id="development"
-              title="Development"
-              panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
-            />
-          )} */}
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+            globals.publishSettings?.enabled && (
+              <Tab
+                id="development"
+                title="Development"
+                panel={<DevelopmentPanel />} //onRequestClose={props.onRequestClose}
+              />
+            )}
 
           {/* {import.meta.env.VITE_APP_INTEGRATION === "saas" && (
             <Tab
@@ -111,7 +113,11 @@ const SettingsPanel: React.FC<ISettingsPanelMergedProps> = ({
   );
 };
 
-const mapStateToProps = (state: IStore) => ({});
+const mapStateToProps = (state: IStore) => {
+  const { globals } = state;
+
+  return { globals };
+};
 
 const mapDispatchToProps = {};
 

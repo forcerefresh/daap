@@ -1,5 +1,6 @@
 import {
   ExecutionCodeFuncType,
+  ICalculatedObjectSize,
   UpdateTimeFuncType,
 } from "webslider-sdk/lib/objects/objects-register";
 import { getConnectorBySourceId } from "webslider-sdk/lib/connectors/connector-manager";
@@ -8,13 +9,13 @@ import { logger } from "webslider-sdk/lib/utils/logger/logger";
 export const EXEC_CODE_ANIMATION = "exec-code";
 
 export interface IExecCodeConfig {
-  execStart?: ExecutionCodeFuncType;
-  execStop?: ExecutionCodeFuncType;
-  updateTime?: UpdateTimeFuncType;
-  values: { [key: string]: any };
+  onStart?: ExecutionCodeFuncType;
+  onStop?: ExecutionCodeFuncType;
+  onTimeUpdate?: UpdateTimeFuncType;
+  values: Record<string, unknown>;
   id: string;
   className: string;
-  calculatedObjectSize: any;
+  calculatedObjectSize: ICalculatedObjectSize;
 }
 
 export function execCodeAnimation() {
@@ -37,9 +38,9 @@ export function execCodeAnimation() {
   function start(config: any, isManual?: boolean) {
     logger.player.debug("exec-code: start");
 
-    const { id, values, className, calculatedObjectSize, execStart } = config;
+    const { id, values, className, calculatedObjectSize, onStart } = config;
 
-    execStart?.({
+    onStart?.({
       id,
       className,
       values,
@@ -53,9 +54,9 @@ export function execCodeAnimation() {
   function stop(config: any, isManual?: boolean, isReverse?: boolean) {
     logger.player.debug("exec-code: stop");
 
-    const { id, values, className, calculatedObjectSize, execStop } = config;
+    const { id, values, className, calculatedObjectSize, onStop } = config;
 
-    execStop?.({
+    onStop?.({
       id,
       className,
       values,
@@ -73,10 +74,10 @@ export function execCodeAnimation() {
       className,
       calculatedObjectSize,
       duration,
-      updateTime,
+      onTimeUpdate,
     } = config;
 
-    updateTime?.({
+    onTimeUpdate?.({
       id,
       className,
       values,
@@ -102,9 +103,9 @@ export function execCodeAnimation() {
   function destroy(config: any) {
     logger.player.debug("exec-code:destroy");
 
-    const { id, values, className, calculatedObjectSize, execStop } = config;
+    const { id, values, className, calculatedObjectSize, onStop } = config;
 
-    execStop?.({
+    onStop?.({
       id,
       className,
       values,

@@ -613,8 +613,8 @@ export class Player {
       ); // TODO VERSION
 
       if (transitionData.itemType === "layer") {
-        // NOTE: be cerful as we set only sizeUpdate
-        objDef = { sizeUpdate: layerSizeUpdate } as any;
+        // NOTE: be cerful as we set only onResize
+        objDef = { onResize: layerSizeUpdate } as any;
       }
 
       // if (textValues.applyObjectScale) {
@@ -657,7 +657,7 @@ export class Player {
       // getBooleanValue(transitionData.layout.layoutAdvance?.updateScale, true);
 
       try {
-        objDef?.sizeUpdate(
+        objDef?.onResize?.(
           {
             id: transitionData.itemId,
             properties: transitionData.properties,
@@ -689,12 +689,11 @@ export class Player {
             //   );
             // },
             isInitial,
-          },
-          true
+          }
         );
       } catch (ex) {
         console.error(
-          "Function sizeUpdate() has crashed for object " + objDef?.type + ""
+          "Function onResize() has crashed for object " + objDef?.type + ""
         );
         console.error(ex);
       }
@@ -1170,7 +1169,7 @@ export class Player {
       //const diff = Date.now() - this.timeOffsetCorrection;
       //  debugger;
       this.slideTransitionTimeline.start(); //(prevTlTime + 30);
-      // this will call sizeUpdate for slideTransitionTimeline
+      // this will call onResize for slideTransitionTimeline
       this.bpUpdateSlideAnimations();
 
       if (isManual) {
@@ -1568,24 +1567,23 @@ export class Player {
       ); // TODO VERSION
 
       /*
-      objDef?.sizeUpdate(
+      objDef?.onResize?.(
         {
           id: transitionData.itemId,
           values: transitionData.itemValues,
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
-        },
-        true
+        }
       );
       */
 
       // execution code for objects
-      if (!!objDef?.execStart || !!objDef?.execStop || !!objDef?.updateTime) {
+      if (!!objDef?.onStart || !!objDef?.onStop || !!objDef?.onTimeUpdate) {
         const execTl = createTimelineForExecutionCode(
           itemData,
-          objDef.execStart,
-          objDef.execStop,
-          objDef.updateTime,
+          objDef.onStart,
+          objDef.onStop,
+          objDef.onTimeUpdate,
           itemData.properties,
           calObjSize
         );
@@ -1598,7 +1596,7 @@ export class Player {
           id: itemData.itemId,
           values: itemData.properties,
           className: itemData.objectClass,
-          calculatedObjectSize: calObjSize,
+          calculatedObjectSize: calObjSize!,
         });
         this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
           preloadPromise
@@ -1741,24 +1739,23 @@ export class Player {
       ); // TODO VERSION
 
       /*
-      objDef?.sizeUpdate(
+      objDef?.onResize?.(
         {
           id: transitionData.itemId,
           values: transitionData.itemValues,
           className: transitionData.objectClass,
           calculatedObjectSize: calObjSize,
-        },
-        true
+        }
       );
       */
 
       // execution code for objects
-      if (!!objDef?.execStart || !!objDef?.execStop || !!objDef?.updateTime) {
+      if (!!objDef?.onStart || !!objDef?.onStop || !!objDef?.onTimeUpdate) {
         const execTl = createTimelineForExecutionCode(
           itemData,
-          objDef.execStart,
-          objDef.execStop,
-          objDef.updateTime,
+          objDef.onStart,
+          objDef.onStop,
+          objDef.onTimeUpdate,
           itemData.properties,
           calObjSize
         );
@@ -1771,7 +1768,7 @@ export class Player {
           id: itemData.itemId,
           values: itemData.properties,
           className: itemData.objectClass,
-          calculatedObjectSize: calObjSize,
+          calculatedObjectSize: calObjSize!,
         });
         this.preloaders[objDef.preloadOrder || PreloadOrder.MIDDLE].push(
           preloadPromise

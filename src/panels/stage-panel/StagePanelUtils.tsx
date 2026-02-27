@@ -3,6 +3,7 @@
 import { mapValues, pick, size } from "lodash-es";
 import React from "react";
 import cx from "classnames";
+import { ICalculatedObjectSize } from "webslider-sdk/lib/objects/objects-register";
 import { RGBColor } from "webslider-sdk/lib/utils/i-rgb-color";
 import {
   IAbsoluteLayout,
@@ -39,8 +40,8 @@ export function calculateObjectSizePerDevice(
   parentLayer: ILayer | undefined,
   breakpoints: Breakpoints,
   options?: { skipHeight: boolean }
-): { [key: string]: React.CSSProperties } {
-  const ret: { [key: string]: React.CSSProperties } = {};
+): { [key: string]: ICalculatedObjectSize } {
+  const ret: { [key: string]: ICalculatedObjectSize } = {};
 
   breakpoints.breakpointsConfiguration.forEach((bp) => {
     ret[bp.type] = calculateObjectSize(
@@ -138,7 +139,7 @@ export function calculateObjectSize(
   { resetPosition }: { resetPosition: boolean },
   scaleParams: { wScale: number; hScale: number } = { wScale: 1, hScale: 1 },
   options?: { skipHeight: boolean }
-): React.CSSProperties {
+): ICalculatedObjectSize {
   // if (object.x1 || object.x2 || object.y1 || object.y2) {
   //   return lineObjectBounds(object);
   // }

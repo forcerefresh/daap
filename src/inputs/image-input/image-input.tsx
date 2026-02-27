@@ -170,7 +170,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
                     addObject={false}
                     onSelect={(mediaItem: { media: SaaSMediaData }) => {
                       const newValue = cloneDeep(mediaItem.media);
-                      newValue.sizeType = value?.sizeType; // keep existing size
+                      newValue.sizeType = value?.sizeType || "original"; // keep existing size
                       onChange(newValue);
                       console.log("value---");
                       console.log(value);
@@ -235,6 +235,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
       </FormGroup>
 
       {value &&
+        value.mediaSizes &&
         value.format !== "svg" &&
         getSelectField(
           "Size",
@@ -244,7 +245,7 @@ export const ImageInputForm: React.FC<IImageInput & IUpdateInput> = (props) => {
             const valueClone = cloneDeep(value);
             valueClone.sizeType = size;
             onChange(valueClone);
-          }
+          },
         )}
 
       {/* {sourceType === "local" || sourceType === "library" ? (

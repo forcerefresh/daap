@@ -1,6 +1,5 @@
-import React from "react";
 import { IExtensionItem } from "webslider-sdk/lib/objects/i-extensions";
-import { CoreObjectType } from "webslider-sdk/lib/objects/objects-register";
+import { CoreObjectType, ICalculatedObjectSize } from "webslider-sdk/lib/objects/objects-register";
 import {
   IDefinition,
   ILayout,
@@ -36,8 +35,8 @@ export interface IItemsData {
   transform: Record<string, any>;
 
   itemSystemType?: CoreObjectType;
-  calculatedObjectSize?: React.CSSProperties;
-  calculatedObjectSizePerDevice?: { [key: string]: React.CSSProperties };
+  calculatedObjectSize?: ICalculatedObjectSize;
+  calculatedObjectSizePerDevice?: { [key: string]: ICalculatedObjectSize };
   objectClass: string;
   // transitions: ITransitions;
   events?: INavigationValues;

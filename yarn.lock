@@ -10873,10 +10873,21 @@ webpack@^5.70.0:
     watchpack "^2.4.4"
     webpack-sources "^3.3.3"
 
-webslider-sdk@^1.1.144, webslider-sdk@^1.1.179:
+webslider-sdk@^1.1.144:
   version "1.1.179"
   resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-1.1.179.tgz#6942f93c9aa01951bbe1d05b177cd249e8fc9e15"
   integrity sha512-1B1zx5+0OjBe01vyRpOF0SefvmQM2zbLMmOtRsZBoiEscTYSVoxWGauta9mNn5op8Lw1K7sTXgvRkV9LoleNyA==
+  dependencies:
+    "@types/lodash-es" "^4.17.12"
+    "@types/semver" "^7.7.0"
+    lodash-es "^4.17.21"
+    semver "^7.7.2"
+    webslider-sdk "^1.1.144"
+
+webslider-sdk@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/webslider-sdk/-/webslider-sdk-2.0.0.tgz#30d299f86f28a4c05eed7053e0027d39fbd91ff6"
+  integrity sha512-QugNcA2HH240i6xm7gl0HqKRwTzmlSljYosG1IzAoqMIAgMY5Yw7FFQ2W9l6Qo5FpYdWDdUuRB6Lupsyj9zFdQ==
   dependencies:
     "@types/lodash-es" "^4.17.12"
     "@types/semver" "^7.7.0"

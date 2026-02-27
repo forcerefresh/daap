@@ -174,9 +174,9 @@ function createTimelineForAnimation(
 
 export function createTimelineForExecutionCode(
   data: IItemsData,
-  execStart: ExecutionCodeFuncType | undefined,
-  execStop: ExecutionCodeFuncType | undefined,
-  updateTime: UpdateTimeFuncType | undefined,
+  onStart: ExecutionCodeFuncType | undefined,
+  onStop: ExecutionCodeFuncType | undefined,
+  onTimeUpdate: UpdateTimeFuncType | undefined,
   values: { [key: string]: any },
   calculatedObjectSize: any
 ): Timeline {
@@ -186,9 +186,9 @@ export function createTimelineForExecutionCode(
     delay: 0,
     duration: 10000, //convertTimeUnitToMs(data.data.slideDuration.customValue),
     //
-    execStart,
-    execStop,
-    updateTime,
+    onStart,
+    onStop,
+    onTimeUpdate,
     values: values,
     id: data.itemId,
     className: data.objectClass,

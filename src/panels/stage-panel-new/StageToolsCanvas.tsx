@@ -1,6 +1,8 @@
 import { withErrorBoundary } from "react-use-error-boundary";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
 
+import { ToolsContext } from "../../utils/tools/ToolsProvider";
+
 import React, {
   CSSProperties,
   useCallback,
@@ -68,11 +70,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
     forceRefreshRand: _forceRefreshRand,
   } = props;
 
-  const {
-    activeStageTool,
-    previewState,
-    _selectObjectsByRect,
-  } = props;
+  const { activeStageTool, previewState, _selectObjectsByRect } = props;
 
   const holderRef = useRef<HTMLDivElement | null>(null);
   // Refs for secondary selected objects (outline only, no handles).
@@ -92,6 +90,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   const isPreviewRef = useRef(previewState.isPreview);
   isPreviewRef.current = previewState.isPreview;
 
+  const { activeTool } = useContext(ToolsContext);
+
   useEffect(() => {
     const toStageCoords = (clientX: number, clientY: number) => {
       const el = document.getElementsByClassName("stage-tools-canvas")[0];
@@ -110,16 +110,25 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       // Only act on empty-stage clicks (objects and handles stop React propagation,
       // but native listeners still fire — so we filter by target class).
       if (!target.closest?.(".StagePanel")) return;
-      if (target.classList.contains("OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN")) return;
+      if (
+        target.classList.contains("OVO_SELEKTUJE_ELEMENT_KOJI_NIJE_SELEKTOVAN")
+      )
+        return;
       if (target.closest?.(".selection-rect")) return;
       dragStartRef.current = { x: e.clientX, y: e.clientY };
     };
 
     const onMouseMove = (e: MouseEvent) => {
       if (!dragStartRef.current || !selectionBoxRef.current) return;
-      const start = toStageCoords(dragStartRef.current.x, dragStartRef.current.y);
+      const start = toStageCoords(
+        dragStartRef.current.x,
+        dragStartRef.current.y,
+      );
       const current = toStageCoords(e.clientX, e.clientY);
-      applyRectValuesToElement(selectionBoxRef.current, getRectFromPoints(start, current));
+      applyRectValuesToElement(
+        selectionBoxRef.current,
+        getRectFromPoints(start, current),
+      );
       selectionBoxRef.current.style.display = "block";
     };
 
@@ -342,7 +351,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         }}
       />
 
-      {selectedObject && (
+      {!activeTool && selectedObject && (
         <div
           ref={holderRef}
           className="selection-rect"
@@ -455,30 +464,31 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       )}
 
       {/* Secondary selected objects: outline only, no handles */}
-      {selectedObjectIds.slice(1).map((objId) => {
-        const obj = objectById[objId];
-        if (!obj) return null;
-        return (
-          <div
-            key={objId}
-            ref={(el) => {
-              secondaryRefs.current.set(objId, el);
-            }}
-            style={{ position: "absolute" }}
-          >
+      {!activeTool &&
+        selectedObjectIds.slice(1).map((objId) => {
+          const obj = objectById[objId];
+          if (!obj) return null;
+          return (
             <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                boxShadow: `0 0 0 var(--hw) ${
-                  obj.isLocked ? "rgba(72,175,240,0.5)" : handleColor
-                }`,
-                pointerEvents: "none",
+              key={objId}
+              ref={(el) => {
+                secondaryRefs.current.set(objId, el);
               }}
-            />
-          </div>
-        );
-      })}
+              style={{ position: "absolute" }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  boxShadow: `0 0 0 var(--hw) ${
+                    obj.isLocked ? "rgba(72,175,240,0.5)" : handleColor
+                  }`,
+                  pointerEvents: "none",
+                }}
+              />
+            </div>
+          );
+        })}
     </div>
   );
 };
