@@ -1,10 +1,6 @@
 import {
-  ICheckboxInput,
-  ICornerRadiusValue,
-  ICoverPlacementInput,
-  ICoverPlacementValue,
-  IImageInput,
-  IImageInputValue,
+  ISvgMaskInput,
+  ISvgMaskInputValue,
   InputType,
 } from "webslider-sdk/lib/inputs/i-inputs";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
@@ -23,22 +19,8 @@ import {
 } from "webslider-sdk/lib/objects/objects-register";
 import svg from "./svg-mask-icon.svg?react";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
-import {
-  getCommonObjectPropertiesDefinition,
-  getCommonPropertiesMetadataValues,
-  getCommonPropertiesValues,
-} from "webslider-sdk/lib/objects/common-properties";
 import { getMediaSrc } from "../../integration/utils/local-media";
-import { ImageItem } from "webslider-sdk/lib/common/i-media-types";
-import { cloneDeep, isEmpty, isEqual } from "lodash-es";
-import {
-  addTransformPropertiesToStyle,
-  // addTransformPropertiesToStyle,
-  getTransformObjectPropertiesDefinition,
-  getTransformPropertiesValues,
-  TransformPropertiesValues,
-} from "webslider-sdk/lib/objects/transform-properties";
-// import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
+import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import {
   addCommonStyleToObjectElementContent,
   addTransformStyleToObjectElementContent,
@@ -46,29 +28,130 @@ import {
   getObjectWrapperElementById,
 } from "../../animations/animation-utils";
 import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils";
-import { DeviceType } from "webslider-sdk/lib/common/i-device-type";
-import {
-  addBackgroundColor,
-  addBorder,
-  addClipMask,
-  addCommonPropertiesToStyle,
-  addPaddingColor,
-} from "webslider-sdk/lib/objects/common-properties-player";
-import { nlRemove } from "webslider-sdk/lib/utils/utils";
+import { TransformPropertiesValues } from "webslider-sdk/lib/objects/transform-properties";
+import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { fetchSVG } from "../../panels/quick-bar-panel/QuickBarPanel";
-import { updateClipPaths } from "../../utils/doom-utils/clip-path";
-
-import { IStore, store } from "../../store/store";
-
-const GLOBAL_SVG_CACHE = {};
+import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
+// NOTE: temporary — direct store access to resolve the target object for clip-path transform.
+// TODO: thread target context through the object registration/callback system instead.
+import { store, IStore } from "../../store/store";
 
 export const SVG_MASK = "io.forcerefresh.svg-mask.object";
 
-export interface SvgMaskValues {
-  mask: IImageInputValue;
+const svgCache = new Map<string, string>();
+
+/**
+ * Resolves the target object (prev sibling in layer objectIds), reads both
+ * mask and target positions from the DOM, and sets the correct
+ * clipPathUnits + transform on the <clipPath> element so that the mask's
+ * on-stage position drives the clipped region on the target.
+ *
+ * NOTE: uses direct store access — temporary until context is threaded through
+ * the registration system.
+ */
+export function updateSvgMaskClipTransform(
+  maskId: string,
+  maskCalcSize: { left: string; top: string; width: string; height: string },
+): void {
+  const state: IStore = store.getState() as IStore;
+  const { layers, objects } = state.project;
+
+  // Mask sits one position above the target in objectIds: target = objectIds[maskIndex - 1]
+  let targetId: string | undefined;
+  for (const layerId of Object.keys(layers.layerById)) {
+    const layer = layers.layerById[layerId];
+    const maskIndex = layer.objectIds.indexOf(maskId);
+    if (maskIndex > 0) {
+      targetId = layer.objectIds[maskIndex - 1];
+      break;
+    }
+  }
+  if (!targetId) return;
+
+  // Editor uses object-holder-*, player uses object-wrapper-*
+  const targetHolderEl = (
+    document.querySelector(`.object-holder-${targetId}`) ??
+    document.querySelector(`.object-wrapper-${targetId}`)
+  ) as HTMLElement | null;
+  if (!targetHolderEl) return;
+
+  const maskLeft = parseFloat(maskCalcSize.left);
+  const maskTop = parseFloat(maskCalcSize.top);
+  const maskWidth = parseFloat(maskCalcSize.width);
+  const maskHeight = parseFloat(maskCalcSize.height);
+  const targetLeft = parseFloat(targetHolderEl.style.left);
+  const targetTop = parseFloat(targetHolderEl.style.top);
+
+  const clipPathEl = document.getElementById(`svg-mask-${maskId}`);
+  if (!clipPathEl) return;
+
+  // SVG width/height are mandatory attributes — safe to read directly
+  const svgEl = clipPathEl.closest("svg");
+  const svgWidth = parseFloat(svgEl?.getAttribute("width") ?? "1");
+  const svgHeight = parseFloat(svgEl?.getAttribute("height") ?? "1");
+
+  const maskObject = objects.objectById[maskId];
+  // Read mask transform from DOM — always current even during drag
+  const maskHolderEl = (
+    document.querySelector(`.object-holder-${maskId}`) ??
+    document.querySelector(`.object-wrapper-${maskId}`)
+  ) as HTMLElement | null;
+  const maskTransformStr = maskHolderEl?.style.transform ?? "";
+  const maskRotationMatch = maskTransformStr.match(/rotate\((-?[\d.]+)deg\)/);
+  const maskScaleMatch = maskTransformStr.match(/scale\((-?[\d.]+)\)/);
+  const maskRotation = maskRotationMatch
+    ? parseFloat(maskRotationMatch[1])
+    : (maskObject?.rotation ?? 0);
+  const maskScale = maskScaleMatch
+    ? parseFloat(maskScaleMatch[1])
+    : (maskObject?.scale ?? 1);
+
+  const targetObject = objects.objectById[targetId];
+  // Read target transform from DOM — store is stale during processScaleChangeEvent / processRotateChangeEvent
+  const targetTransformStr = targetHolderEl.style.transform ?? "";
+  const targetRotationMatch = targetTransformStr.match(/rotate\((-?[\d.]+)deg\)/);
+  const targetScaleMatch = targetTransformStr.match(/scale\((-?[\d.]+)\)/);
+  const targetRotation = targetRotationMatch
+    ? parseFloat(targetRotationMatch[1])
+    : (targetObject?.rotation ?? 0);
+  const targetScale = targetScaleMatch
+    ? parseFloat(targetScaleMatch[1])
+    : (targetObject?.scale ?? 1);
+
+  // Stage-space offset from target origin to mask origin
+  const dx = maskLeft - targetLeft;
+  const dy = maskTop - targetTop;
+
+  // The clipPath coordinates live in the target's LOCAL space (before its CSS transform).
+  // Apply the inverse of target's CSS transform (rotate(-R_t) then scale(1/S_t)) to the
+  // stage-space offset to get the local-space translation.
+  const R_t = (targetRotation * Math.PI) / 180;
+  const tx = (Math.cos(R_t) * dx + Math.sin(R_t) * dy) / targetScale;
+  const ty = (-Math.sin(R_t) * dx + Math.cos(R_t) * dy) / targetScale;
+
+  // Scale: SVG coords → mask visual pixel size, expressed in target local units (÷ S_target)
+  const scaleX = (maskScale * maskWidth) / (svgWidth * targetScale);
+  const scaleY = (maskScale * maskHeight) / (svgHeight * targetScale);
+
+  // Relative rotation: mask rotation in target's local coordinate system
+  const relativeRotation = maskRotation - targetRotation;
+
+  // Transform order (SVG applies right-to-left):
+  //   1. scale(scaleX, scaleY)        — SVG space → mask visual size in target local units
+  //   2. rotate(relativeRotation)     — mask rotation relative to target's orientation
+  //   3. translate(tx, ty)            — mask origin in target local space
+  clipPathEl.setAttribute("clipPathUnits", "userSpaceOnUse");
+  clipPathEl.setAttribute(
+    "transform",
+    `translate(${tx},${ty}) rotate(${relativeRotation}) scale(${scaleX},${scaleY})`,
+  );
 }
 
-export type SvgMaskPropertiesTuple = [];
+export interface SvgMaskValues {
+  mask: ISvgMaskInputValue;
+}
+
+export type SvgMaskPropertiesTuple = [ISvgMaskInput<"mask">];
 
 export function createSvgMaskObject(
   initialValue?: Record<string, any>,
@@ -76,7 +159,7 @@ export function createSvgMaskObject(
   const object = createCommonObject(SVG_MASK);
 
   const values: SvgMaskValues = {
-    mask: initialValue?.mask || { mask: { sourceType: "local" } },
+    mask: initialValue?.mask || ({ sourceType: "local" } as ISvgMaskInputValue),
   };
 
   object.properties = values;
@@ -85,120 +168,93 @@ export function createSvgMaskObject(
 }
 
 export function getSvgMaskObjectForm(): SvgMaskPropertiesTuple {
-  const form: SvgMaskPropertiesTuple = [];
-
-  return form;
+  return [
+    {
+      displayName: "Mask",
+      propertyName: "mask",
+      inputType: InputType.SVG_MASK_INPUT,
+      value: undefined,
+      defaultValue: undefined,
+    },
+  ];
 }
 
 export function getSvgMaskHtml(props: GetHtmlFuncPropsType) {
-  const {
-    object,
-    isPlayer,
-    isSave,
-    isForThumbnail,
-    deviceType,
-    calculatedObjectSize,
-  } = props;
+  const { object, isPlayer, deviceType, calculatedObjectSize } = props;
+  const values = object.properties as SvgMaskValues;
 
-  const svgMaskValues = object.properties as SvgMaskValues;
+  const hasMask =
+    values.mask?.sourceType &&
+    (values.mask.sourceType !== "local" || values.mask.id) &&
+    (values.mask.sourceType !== "url" || values.mask.url);
 
-  if (!isPlayer) {
-    if (
-      !svgMaskValues.mask.sourceType ||
-      (svgMaskValues.mask.sourceType === "url" && !svgMaskValues.mask.url) ||
-      (svgMaskValues.mask.sourceType === "local" && !svgMaskValues.mask.id) ||
-      (svgMaskValues.mask.sourceType === "library" &&
-        !svgMaskValues.mask.url &&
-        !svgMaskValues.mask.id)
-    ) {
-      return getObjectPlaceholder(`IMAGE<br/>(placeholder)`);
-    }
+  if (!isPlayer && !hasMask) {
+    return getObjectPlaceholder(`SVG MASK<br/>(placeholder)`);
   }
-
-  // const svgMaskItem = getMediaSrc("mask", svgMaskValues.mask, {
-  //   useId: isSave,
-  //   filename: svgMaskValues.mask.filename,
-  // });
-
-  const state = store.getState() as IStore;
-  const imgObject =
-    state.project.objects.objectById["b2d10a11-63e0-40a3-a557-153b36d317fb"];
-
-  if (!imgObject) return "";
-  // imgObject
-  //  transform: `translate(${parseInt(calculatedObjectSize.left)} ${parseInt(calculatedObjectSize.top)}) scale(${object.scale} ${object.scale}) rotate(${object.rotation ?? 0})`,
-
-  const absTransform = calculateClipMaskTransform(
-    {
-      left: parseInt(imgObject.left),
-      top: parseInt(imgObject.top),
-      scale: imgObject.scale ?? 1,
-      rotation: imgObject.rotation ?? 0,
-    },
-    {
-      left: parseInt(calculatedObjectSize.left),
-      top: parseInt(calculatedObjectSize.top),
-      scale: object.scale ?? 1,
-      rotation: object.rotation ?? 0,
-    },
-  );
-
-  // const absX =
-  //   imgObject.left +
-  //   parseInt(calculatedObjectSize.left) * (imgObject.scale ?? 1);
-  // const absY =
-  //   imgObject.top + parseInt(calculatedObjectSize.top) * (imgObject.scale ?? 1);
-  // const absScale = (object.scale ?? 1) * (imgObject.scale ?? 1);
-  // const absRotate = (object.rotation ?? 0) - (imgObject.rotation ?? 0);
-
-  const svgMaskUrl = getMediaSrc(
-    svgMaskValues.mask,
-    svgMaskValues.mask.sizeType,
-  );
-
-  // const fileName = svgMaskValues.mask.mediaSizes.find(
-  //   (size) => size.sizeType === svgMaskValues.mask.sizeType
-  // )?.sourceFilename;
-
-  // // TODO: important
-  // const svgMaskUrl = `/api/v1/media/${fileName}`;
 
   let style = "";
   style = addCommonPropertiesToStyle(style, object, deviceType);
   style = addTransformPropertiesToStyle(style, object, deviceType);
-  style += "width: 100%;";
-  style += "height: 100%;";
+  style += "width:100%;height:100%;";
 
-  if (GLOBAL_SVG_CACHE[object.id]) {
-    const updateSVG = updateClipPaths(GLOBAL_SVG_CACHE[object.id], {
-      id: "c123",
-      clipPathUnits: "userSpaceOnUse",
-      transform: `translate(${absTransform.x} ${absTransform.y}) scale(${absTransform.scale}) rotate(${absTransform.rotation})`,
-    });
+  const maskUrl = getMediaSrc(values.mask as any, values.mask?.sizeType);
+  const clipMaskId = `svg-mask-${object.id}`;
 
-    return `<div class="object-content object-content-${object.id}" style="${style}">${updateSVG}</div>`;
-  }
+  if (maskUrl) {
+    const applySvg = (svgContent: string) => {
+      const el = document.querySelector<HTMLElement>(
+        `.object-content-${object.id}`,
+      );
+      if (el) {
+        el.innerHTML = getClipMaskFromSvg(svgContent, clipMaskId, "", "");
+        updateSvgMaskClipTransform(object.id, calculatedObjectSize);
+      }
+    };
 
-  fetchSVG(svgMaskUrl).then((response) => {
-    const updateSVG = updateClipPaths(response, {
-      id: "c123",
-      clipPathUnits: "userSpaceOnUse",
-      transform: `translate(${absTransform.x} ${absTransform.y}) scale(${absTransform.scale}) rotate(${absTransform.rotation})`,
-    });
-
-    const el = document.querySelector(`.object-content-${object.id}`);
-    if (el) {
-      el.innerHTML = updateSVG;
+    const cached = svgCache.get(maskUrl);
+    if (cached) {
+      applySvg(cached);
+    } else {
+      fetchSVG(maskUrl).then((svgContent) => {
+        svgCache.set(maskUrl, svgContent);
+        applySvg(svgContent);
+      });
     }
-    GLOBAL_SVG_CACHE[object.id] = response;
-  });
+  }
 
   return `<div class="object-content object-content-${object.id}" style="${style}"></div>`;
 }
 
 export async function svgMaskSizeUpdate(
   props: UpdateObjectSizeFuncPropsType,
-): Promise<void> {}
+): Promise<void> {
+  const { id, calculatedObjectSize, style, deviceType, transform } = props;
+
+  const objectWrapperEl = getObjectWrapperElementById(id);
+  const objectEl = getObjectElementById(id);
+  objectWrapperEl.style.width = calculatedObjectSize.width;
+  objectWrapperEl.style.height = calculatedObjectSize.height;
+  objectWrapperEl.style.left = calculatedObjectSize.left;
+  objectWrapperEl.style.top = calculatedObjectSize.top;
+
+  objectEl.style.width = calculatedObjectSize.width;
+  objectEl.style.height = calculatedObjectSize.height;
+
+  const objectContentEl = objectEl.getElementsByClassName(
+    "object-content",
+  )[0] as HTMLElement;
+  addCommonStyleToObjectElementContent(objectContentEl, style, deviceType);
+  addTransformStyleToObjectElementContent(objectContentEl, transform, deviceType);
+
+  const transformProperties = getObjectValuesForDevice(
+    transform as unknown as TransformPropertiesValues,
+    deviceType,
+  );
+
+  if (transformProperties?.transformOriginX) {
+    objectWrapperEl.style.transformOrigin = `${transformProperties.transformOriginX ?? "left"} ${transformProperties.transformOriginY ?? "top"}`;
+  }
+}
 
 export async function preloadSvgMaskImage(props: {
   id: string;
@@ -212,157 +268,35 @@ export async function preloadSvgMaskImage(props: {
 export function svgMaskPostProcess(
   props: PostProcessFuncPropsType,
 ): PostProcessFuncReturnType {
-  const { object } = props;
-
-  return object;
+  return props.object;
 }
 
 export const getSvgMaskAssetsUrls = (
   props: GetAssetsUrlFuncPropsType,
 ): GetAssetsUrlFuncReturnType => {
-  const svgMaskValues = props.values as SvgMaskValues;
+  const values = props.values as unknown as SvgMaskValues;
 
-  if (!svgMaskValues.mask.sourceType) {
+  if (!values.mask?.sourceType) {
     return [];
   }
 
   return [
     {
-      id: svgMaskValues.mask.id,
-      url: svgMaskValues.mask.url,
-      filename: svgMaskValues.mask.filename,
-      localFilename: svgMaskValues.mask.filename,
-      sourceType: svgMaskValues.mask.sourceType,
+      id: values.mask.id,
+      url: values.mask.url,
+      filename: values.mask.filename,
+      localFilename: values.mask.filename,
+      sourceType: values.mask.sourceType,
       mediaType: "svg-mask",
-      // baseUrl: svgMaskValues.mask.baseUrl,
     },
   ];
 };
 
 export const svgMaskMeta = {
-  name: "Svg MAsk",
+  name: "SVG Mask",
   description: "Add SVG Mask Object",
   preloadOrder: PreloadOrder.FIRST,
   icon: svg,
   supportWidthResize: true,
   supportHeightResize: true,
 };
-
-function calculateAbsoluteTransform(target, relative) {
-  // Convert to radians for calculations
-  const targetRad = ((target.rotation || 0) * Math.PI) / 180;
-  const relativeRad = ((relative.rotation || 0) * Math.PI) / 180;
-
-  // Combined rotation
-  const totalRad = targetRad + relativeRad;
-  const totalRotation = (totalRad * 180) / Math.PI;
-
-  // Combined scale
-  const totalScale = (target.scale || 1) * (relative.scale || 1);
-
-  // Calculate relative position in target's rotated space
-  const cos = Math.cos(targetRad);
-  const sin = Math.sin(targetRad);
-
-  // Transform relative point by target's rotation and scale
-  const relativeX = (relative.left || 0) * (target.scale || 1);
-  const relativeY = (relative.top || 0) * (target.scale || 1);
-
-  const rotatedX = relativeX * cos - relativeY * sin;
-  const rotatedY = relativeX * sin + relativeY * cos;
-
-  // Add to target position
-  const absX = (target.left || 0) + rotatedX;
-  const absY = (target.top || 0) + rotatedY;
-
-  return {
-    x: absX,
-    y: absY,
-    scale: totalScale,
-    rotation: totalRotation,
-  };
-}
-
-// function calculateClipMaskTransform(targetTransform, relativeClipTransform) {
-//   // For the mask to stay in place, we need to apply transforms in reverse order
-//   // with inverse values
-
-//   // Step 1: Start with relative clip position (in target's local space)
-//   let x = relativeClipTransform.left || 0;
-//   let y = relativeClipTransform.top || 0;
-//   let scale = relativeClipTransform.scale || 1;
-//   let rotation = relativeClipTransform.rotation || 0;
-
-//   // Step 2: Apply inverse of target's scale
-//   const invScale = 1 / (targetTransform.scale || 1);
-//   scale *= invScale;
-
-//   // Step 3: Apply inverse of target's rotation (to the position)
-//   // Convert to radians
-//   const invRotRad = (-(targetTransform.rotation || 0) * Math.PI) / 180;
-//   const cos = Math.cos(invRotRad);
-//   const sin = Math.sin(invRotRad);
-
-//   // Rotate the position around the origin
-//   const rotatedX = x * cos - y * sin;
-//   const rotatedY = x * sin + y * cos;
-//   x = rotatedX;
-//   y = rotatedY;
-
-//   // Step 4: Apply inverse of target's translation
-//   x -= targetTransform.left || 0;
-//   y -= targetTransform.top || 0;
-
-//   // Step 5: Handle rotation of the mask itself (inverse of target rotation + relative rotation)
-//   rotation =
-//     -(targetTransform.rotation || 0) + (relativeClipTransform.rotation || 0);
-
-//   return {
-//     x,
-//     y,
-//     scale,
-//     rotation,
-//   };
-// }
-
-function calculateClipMaskTransform(
-  target: {
-    left: number;
-    top: number;
-    scale: number;
-    rotation: number;
-  },
-  clipmask: {
-    left: number;
-    top: number;
-    scale: number;
-    rotation: number;
-  },
-) {
-  // Convert target rotation to radians
-  const targetRad = (target.rotation * Math.PI) / 180;
-
-  // Offset of clipmask from target in world space
-  const dx = clipmask.left - target.left;
-  const dy = clipmask.top - target.top;
-
-  // Rotate that offset into target's local space (inverse rotation)
-  const cos = Math.cos(-targetRad);
-  const sin = Math.sin(-targetRad);
-
-  const localX = (cos * dx - sin * dy) / target.scale;
-  const localY = (sin * dx + cos * dy) / target.scale;
-
-  // Scale: clipmask world scale relative to target's scale
-  const localScale = clipmask.scale / target.scale;
-
-  // Rotation: clipmask world rotation relative to target's rotation
-  const localRotation = clipmask.rotation - target.rotation;
-
-  return {
-    x: localX,
-    y: localY,
-    scale: localScale,
-    rotation: localRotation,
-  };
-}

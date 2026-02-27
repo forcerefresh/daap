@@ -9,6 +9,7 @@ import { CoverPlacementInputForm } from "./cover-placement/cover-placement";
 import { FontSelectInputForm } from "./font-input/font-input";
 import { GridPlacementInputForm } from "./grid-layout-input/grid-layout-input";
 import { ImageInputForm } from "./image-input/image-input";
+import { SvgMaskInputForm } from "./svg-mask-input/svg-mask-input";
 import { NumberInputForm } from "./number-input/number-input";
 import { NumericTimelineInputForm } from "./numberic-timeline-input/numeric-timeline-input";
 import { ParallaxInputForm } from "./parallax-input/parallax-input";
@@ -326,6 +327,9 @@ export function getInputForm<T>(
     }
     case InputType.IMAGE: {
       return <ImageInputForm key={key} {...inputProps} onChange={onChange} />;
+    }
+    case InputType.SVG_MASK_INPUT: {
+      return <SvgMaskInputForm key={key} {...inputProps} onChange={onChange} />;
     }
     case InputType.MULTI_IMAGE: {
       return (

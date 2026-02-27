@@ -55,16 +55,15 @@ type StageManagerProviderProps = typeof mapDispatchToProps &
 
 export interface StageManagerContextInterface {
   stageManager: StageManager;
-  /** Called by StageManagerProvider immediately after each DOM mutation batch,
-   *  so consumers (e.g. StageToolsCanvas) can reposition overlays without any
-   *  event-listener ordering uncertainty. */
-  afterDomUpdateRef: React.MutableRefObject<(() => void) | null>;
+  /** Called by StageManagerProvider immediately after each DOM mutation batch.
+   *  Supports multiple subscribers — add/delete via the Set. */
+  afterDomUpdateRef: React.MutableRefObject<Set<() => void>>;
 }
 
 export const StageManagerContext =
   React.createContext<StageManagerContextInterface>({
     stageManager: {} as StageManager,
-    afterDomUpdateRef: { current: null },
+    afterDomUpdateRef: { current: new Set<() => void>() },
   });
 
 export const StageManagerProviderInternal = (
@@ -98,7 +97,7 @@ export const StageManagerProviderInternal = (
   const recentlySelectedRef = useRef(false);
 
   /** Consumers register a callback here; we call it after every DOM mutation. */
-  const afterDomUpdateRef = useRef<(() => void) | null>(null);
+  const afterDomUpdateRef = useRef(new Set<() => void>());
 
   const [stageManager] = useState(new StageManager());
 
@@ -189,7 +188,7 @@ export const StageManagerProviderInternal = (
       }
       // All DOM mutations are done — notify StageToolsCanvas so it can
       // reposition selection overlays immediately, in the same call stack.
-      afterDomUpdateRef.current?.();
+      afterDomUpdateRef.current.forEach((fn) => fn());
     };
 
     const stopHandler = (e: StageToolEvent) => {

@@ -236,9 +236,13 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
   // Updated every render so StageManagerProvider always calls the latest closure.
   const positionAllRef = useRef(positionAll);
   positionAllRef.current = positionAll;
-  // StageManagerProvider calls afterDomUpdateRef.current() immediately after
-  // each DOM mutation batch — guaranteed order, no event-listener ambiguity.
-  afterDomUpdateRef.current = positionAll;
+  // Register a stable wrapper in the Set once; the wrapper always delegates to
+  // the latest positionAll via positionAllRef so no re-subscription is needed.
+  useEffect(() => {
+    const fn = () => positionAllRef.current();
+    afterDomUpdateRef.current.add(fn);
+    return () => { afterDomUpdateRef.current.delete(fn); };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // After Redux-driven updates (selection change, zoom, object props): wait 1ms
   // for StageObject.useLayoutEffect to apply its imperative transform first.

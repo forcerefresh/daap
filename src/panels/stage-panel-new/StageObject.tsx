@@ -1,6 +1,7 @@
 import React, {
   CSSProperties,
   useContext,
+  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -58,9 +59,11 @@ import {
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
-import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
 import { ILayer } from "../../store/reducers/i-layers";
-import { IMAGE } from "../../objects/image/image";
+import {
+  SVG_MASK,
+  updateSvgMaskClipTransform,
+} from "../../objects/svg-mask/svg-mask";
 
 //
 
@@ -116,7 +119,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   const childRef = useRef<HTMLDivElement | null>(null);
 
-  const { stageManager } = useContext(StageManagerContext);
+  const { stageManager, afterDomUpdateRef } = useContext(StageManagerContext);
 
   const [mouseDiff, setMouseDiff] = useState({ x: 0, y: 0 });
 
@@ -166,26 +169,48 @@ export function StageObjectInternal(props: IStageLayer) {
     }
   }, [object.rotation, object.scale, object.id, object, activeEditObjectId]);
 
-  const clipMaskId = `clip-mask-${objectId}`;
-  let clipMaskHtml = "";
+  const clipMaskHtml = "";
   let maskStyle: CSSProperties = {};
-  if (object.mask?.type === "svg") {
+
+  // Layer order is reversed — the mask sits one position after the target.
+  // If the next sibling in the layer is an SVG Mask object, apply its
+  // clipPath to this object using the id injected by getSvgMaskHtml.
+  const objectIndex = parentLayer.objectIds.indexOf(objectId);
+  const nextSiblingId = parentLayer.objectIds[objectIndex + 1];
+  const nextSibling = objectById[nextSiblingId];
+  if (nextSibling?.type === SVG_MASK) {
     maskStyle = {
-      clipPath: `url(#${clipMaskId})`,
+      clipPath: `url(#svg-mask-${nextSiblingId})`,
     };
-    clipMaskHtml = getClipMaskFromSvg(
-      object.mask?.svg!,
-      clipMaskId,
-      calculatedObjectSize.width as any, // TODO <<
-      calculatedObjectSize.height as any, // TODO <<
-    );
   }
 
-  if (object.type === IMAGE) {
-    maskStyle = {
-      clipPath: `url(#c123)`,
-    };
-  }
+  // When this object is the clip target, keep a ref to the latest update logic
+  // and subscribe it to afterDomUpdateRef so drag events trigger a re-sync.
+  const clipSyncRef = useRef<() => void>(() => {});
+  clipSyncRef.current = () => {
+    if (!nextSiblingId || nextSibling?.type !== SVG_MASK) return;
+    const maskEl = (
+      document.querySelector(`.object-holder-${nextSiblingId}`) ??
+      document.querySelector(`.object-wrapper-${nextSiblingId}`)
+    ) as HTMLElement | null;
+    if (maskEl) {
+      updateSvgMaskClipTransform(nextSiblingId, {
+        left: maskEl.style.left,
+        top: maskEl.style.top,
+        width: maskEl.style.width,
+        height: maskEl.style.height,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (nextSibling?.type !== SVG_MASK || !nextSiblingId) return;
+    const fn = () => clipSyncRef.current();
+    afterDomUpdateRef.current.add(fn);
+    return () => { afterDomUpdateRef.current.delete(fn); };
+  // Re-subscribe only when the mask relationship changes
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextSibling?.type, nextSiblingId]);
 
   const objectStyle = {
     ...calculatedObjectSize,
