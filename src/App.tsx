@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useLayoutEffect } from "react";
 import { connect } from "react-redux";
-//import "./App.scss";
 import "./AppNew.scss";
 import { IntegrationContext } from "./integration";
 import { loadAndRegisterExternalComponent } from "./objects/external-object-utils";
