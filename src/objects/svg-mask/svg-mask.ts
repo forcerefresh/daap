@@ -56,7 +56,8 @@ export function updateSvgMaskClipTransform(
   const state: IStore = store.getState() as IStore;
   const { layers, objects } = state.project;
 
-  // Mask sits one position above the target in objectIds: target = objectIds[maskIndex - 1]
+  // Mask sits one position above the target in objectIds: target = objectIds[maskIndex - 1].
+  // Search layers first, then group objects (mask and target may be grouped together).
   let targetId: string | undefined;
   for (const layerId of Object.keys(layers.layerById)) {
     const layer = layers.layerById[layerId];
@@ -64,6 +65,18 @@ export function updateSvgMaskClipTransform(
     if (maskIndex > 0) {
       targetId = layer.objectIds[maskIndex - 1];
       break;
+    }
+  }
+  if (!targetId) {
+    for (const objId of Object.keys(objects.objectById)) {
+      const obj = objects.objectById[objId];
+      if (obj.objectIds?.length) {
+        const maskIndex = obj.objectIds.indexOf(maskId);
+        if (maskIndex > 0) {
+          targetId = obj.objectIds[maskIndex - 1];
+          break;
+        }
+      }
     }
   }
   if (!targetId) return;

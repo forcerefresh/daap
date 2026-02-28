@@ -175,8 +175,18 @@ export function StageObjectInternal(props: IStageLayer) {
   // Layer order is reversed — the mask sits one position after the target.
   // If the next sibling in the layer is an SVG Mask object, apply its
   // clipPath to this object using the id injected by getSvgMaskHtml.
-  const objectIndex = parentLayer.objectIds.indexOf(objectId);
-  const nextSiblingId = parentLayer.objectIds[objectIndex + 1];
+  //
+  // StageGroupObject passes the top-level parentLayer down to each child,
+  // so grouped objects won't appear in parentLayer.objectIds. In that case,
+  // look up the sibling through the group object's own objectIds instead.
+  const parentGroupObj =
+    object.parentId && !layerById[object.parentId]
+      ? objectById[object.parentId]
+      : null;
+  const containerObjectIds =
+    parentGroupObj?.objectIds ?? parentLayer.objectIds;
+  const objectIndex = containerObjectIds.indexOf(objectId);
+  const nextSiblingId = containerObjectIds[objectIndex + 1];
   const nextSibling = objectById[nextSiblingId];
   if (nextSibling?.type === SVG_MASK) {
     maskStyle = {
