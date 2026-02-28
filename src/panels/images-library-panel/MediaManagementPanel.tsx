@@ -150,8 +150,16 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
     [resetImages, reload],
   );
 
-  const renderPreviewImage = (url: string, type: string) => {
-    return <img src={url} alt="" />;
+  const renderPreviewImage = (mediaItem: SaaSMediaData) => {
+    if (mediaItem.inlineSvgPreview) {
+      return (
+        <div
+          className={css.inlineSvgPreview}
+          dangerouslySetInnerHTML={{ __html: mediaItem.inlineSvgPreview }}
+        />
+      );
+    }
+    return <img src={getMediaSrc(mediaItem, "small", "previewSizes")} alt="" />;
   };
 
   return (
@@ -224,12 +232,6 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
             // }
 
             // const previewImageUrl = `/api/v1/media/${previewFileName}`;
-
-            const previewImageUrl = getMediaSrc(
-              mediaItem,
-              "small",
-              "previewSizes",
-            );
 
             let originalImageUrl: string | undefined;
             if (mediaItem.type === "video") {
@@ -341,7 +343,7 @@ const MediaManagementPanel: React.FC<IMediaMManagementPanelMergedProps> = (
                         src={originalImageUrl}
                       />
                     ) : (
-                      renderPreviewImage(previewImageUrl, type)
+                      renderPreviewImage(mediaItem)
                     )}
                   </div>
 

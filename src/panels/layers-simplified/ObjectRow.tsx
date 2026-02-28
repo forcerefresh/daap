@@ -15,8 +15,15 @@ import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { ILayer } from "../../store/reducers/i-layers";
 import { DragItem, ItemTypes } from "./types";
+import { SVG_MASK } from "../../objects/svg-mask/svg-mask";
+import MaskIcon from "./assets/mask-icon.svg?react";
 
 const ITEM_WIDTH = 86;
+const ITEM_PADDING = 2;
+const OBJECT_HEIGHT = 65;
+const OBJECT_CONTENT_HEIGHT = OBJECT_HEIGHT - ITEM_PADDING * 2 - 2; // subtract padding + border
+const MASK_HEIGHT = 35;
+const MASK_CONTENT_HEIGHT = MASK_HEIGHT - ITEM_PADDING * 2 - 2;
 
 export interface IObjectRowProps {
   object: IObject;
@@ -193,14 +200,18 @@ export function ObjectRow(props: IObjectRowProps) {
       true
     );
 
+    const contentH = object.type === SVG_MASK ? MASK_CONTENT_HEIGHT : OBJECT_CONTENT_HEIGHT;
     const scaleX = ITEM_WIDTH / parseInt(calculatedObjectSize?.width as string);
-    const scaleY = 61 / parseInt(calculatedObjectSize?.height as string);
+    const scaleY = contentH / parseInt(calculatedObjectSize?.height as string);
     const scale = Math.min(scaleX, !isNaN(scaleY) ? scaleY : scaleX);
 
     setObjectHtml({ scale, html, calculatedObjectSize });
   }, [breakpointConfig, layer, object]);
 
   const isGroup = !!(object?.objectIds && object?.objectIds?.length > 0);
+  const isSvgMask = object.type === SVG_MASK;
+  const itemHeight = isSvgMask ? MASK_HEIGHT : OBJECT_HEIGHT;
+  const contentHeight = isSvgMask ? MASK_CONTENT_HEIGHT : OBJECT_CONTENT_HEIGHT;
 
   return (
     <div
@@ -222,35 +233,43 @@ export function ObjectRow(props: IObjectRowProps) {
       }}
       style={{
         ...(isOver ? { border: "1px dashed green" } : {}),
+        height: itemHeight,
       }}
       data-handler-id={handlerId}
     >
-      <div
-        style={{
-          transform: `scale(${objectHtml.scale})`,
-          transformOrigin: "0 0",
-          width: ITEM_WIDTH / objectHtml.scale,
-          height: 61 / objectHtml.scale,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <StageObjectMinimap
-          isRoot={true}
-          parentLayer={layer}
-          object={object}
-          objectById={objectById}
-          breakpointConfig={breakpointConfig!}
-        />
-        {/* <div
+      {isSvgMask ? (
+        <div style={{ display: "flex", height: "100%", alignItems: "center" }}>
+          <div
+            className={css.maskSvgPreview}
+            dangerouslySetInnerHTML={{
+              __html: object.properties?.mask?.inlineSvgPreview ?? "",
+            }}
+          />
+          <div className={css.maskIconWrapper}>
+            <MaskIcon style={{ width: 20, height: 20 }} />
+          </div>
+        </div>
+      ) : (
+        <div
           style={{
-            width: objectHtml.calculatedObjectSize.width as string,
-            height: objectHtml.calculatedObjectSize.height as string,
+            transform: `scale(${objectHtml.scale})`,
+            transformOrigin: "0 0",
+            width: ITEM_WIDTH / objectHtml.scale,
+            height: contentHeight / objectHtml.scale,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
-          dangerouslySetInnerHTML={{ __html: objectHtml.html }}
-        ></div> */}
-      </div>
+        >
+          <StageObjectMinimap
+            isRoot={true}
+            parentLayer={layer}
+            object={object}
+            objectById={objectById}
+            breakpointConfig={breakpointConfig!}
+          />
+        </div>
+      )}
       {isGroup && (
         <Tag className={css.groupObjectsCounter}>
           {object?.objectIds?.length}

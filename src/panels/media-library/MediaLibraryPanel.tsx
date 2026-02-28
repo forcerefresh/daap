@@ -118,6 +118,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       "sourceType",
       "sizeType",
       "mediaSizes",
+      "inlineSvgPreview",
       "id",
     );
   };
