@@ -207,13 +207,33 @@ export function getSvgMaskHtml(props: GetHtmlFuncPropsType) {
       );
       if (el) {
         el.innerHTML = getClipMaskFromSvg(svgContent, clipMaskId, "", "");
-        updateSvgMaskClipTransform(object.id, calculatedObjectSize);
+        // Read from the holder's current DOM state so async fetch picks up the
+        // actual rendered position rather than the stale render-closure value.
+        const maskHolderEl = (
+          document.querySelector(`.object-holder-${object.id}`) ??
+          document.querySelector(`.object-wrapper-${object.id}`)
+        ) as HTMLElement | null;
+        updateSvgMaskClipTransform(
+          object.id,
+          maskHolderEl
+            ? {
+                left: maskHolderEl.style.left,
+                top: maskHolderEl.style.top,
+                width: maskHolderEl.style.width,
+                height: maskHolderEl.style.height,
+              }
+            : calculatedObjectSize,
+        );
       }
     };
 
     const cached = svgCache.get(maskUrl);
     if (cached) {
-      applySvg(cached);
+      const svgHtml = getClipMaskFromSvg(cached, clipMaskId, "", "");
+      // Return SVG inline so processScaleChangeEvent's innerHTML replacement
+      // preserves the <clipPath> element during mask resize/scale drag.
+      // The clipPath transform is set post-commit by useLayoutEffect in StageObject.
+      return `<div class="object-content object-content-${object.id}" style="${style}">${svgHtml}</div>`;
     } else {
       fetchSVG(maskUrl).then((svgContent) => {
         svgCache.set(maskUrl, svgContent);

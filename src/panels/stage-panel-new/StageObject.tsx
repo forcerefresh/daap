@@ -212,6 +212,51 @@ export function StageObjectInternal(props: IStageLayer) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextSibling?.type, nextSiblingId]);
 
+  // When this object IS the SVG mask, keep the <clipPath> transform in sync
+  // while the mask itself is being dragged / resized / scaled.
+  const maskClipSyncRef = useRef<() => void>(() => {});
+  maskClipSyncRef.current = () => {
+    if (object.type !== SVG_MASK) return;
+    const maskHolderEl = document.getElementsByClassName(
+      `object-holder-${object.id}`,
+    )[0] as HTMLElement | null;
+    if (maskHolderEl) {
+      updateSvgMaskClipTransform(object.id, {
+        left: maskHolderEl.style.left,
+        top: maskHolderEl.style.top,
+        width: maskHolderEl.style.width,
+        height: maskHolderEl.style.height,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (object.type !== SVG_MASK) return;
+    const fn = () => maskClipSyncRef.current();
+    afterDomUpdateRef.current.add(fn);
+    return () => { afterDomUpdateRef.current.delete(fn); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [object.type]);
+
+  // Re-sync clipPath transform after every commit of the SVG mask.
+  // dangerouslySetInnerHTML may replace the <clipPath> element with a new
+  // stale one (objectBoundingBox default) when an unrelated store change
+  // causes a style-string change (e.g. delete/group other objects).
+  // Reading from the DOM here is safe — React has already committed.
+  useLayoutEffect(() => {
+    if (object.type !== SVG_MASK) return;
+    const maskHolderEl = document.getElementsByClassName(
+      `object-holder-${object.id}`,
+    )[0] as HTMLElement | null;
+    if (!maskHolderEl) return;
+    updateSvgMaskClipTransform(object.id, {
+      left: maskHolderEl.style.left,
+      top: maskHolderEl.style.top,
+      width: maskHolderEl.style.width,
+      height: maskHolderEl.style.height,
+    });
+  }); // no deps — run after every commit of this component
+
   const objectStyle = {
     ...calculatedObjectSize,
     left: "0px",
