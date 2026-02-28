@@ -57,7 +57,7 @@ export const useMyMediaHook = () => {
       videoSize = size;
       previewImageBase64 = "data:image/jpeg;base64," + blobBase64;
       //"data:image/jpeg;base64," + (await resizeFile(blob!, 10000, 10000, 75));
-    } else if (type === "vector") {
+    } else if (type === "vector" || type === "svg-mask") {
       videoSize = { width: 100, height: 100 };
       let svgString = await textFile2Text(file);
 

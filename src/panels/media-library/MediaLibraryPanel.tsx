@@ -33,7 +33,8 @@ export enum Panels {
   MyFonts = "myFonts",
   Images = "images",
   Vectors = "vectors",
-  SvgMask = "svg-mask",
+  SvgMask = "svgMask",
+  MySvgMask = "mySvgMask",
 }
 
 export enum SelectionType {
@@ -76,6 +77,7 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
       Panels.MyFonts,
       Panels.Images,
       Panels.Vectors,
+      Panels.MySvgMask,
       Panels.SvgMask,
     ],
     themeClass,
@@ -444,6 +446,59 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
                           { ...sizeRect },
                           {
                             image: includeMediaRequiredProps(mediaItem.media),
+                          },
+                        );
+                      } else {
+                        AppToaster.show({
+                          intent: "warning",
+                          message: `No layer selected. Please choose a layer first.`,
+                        });
+                      }
+                    }}
+                  />
+                }
+              />
+            )}
+
+          {import.meta.env.VITE_APP_INTEGRATION === "saas" &&
+            includes(panelsToShow, Panels.MySvgMask) && (
+              <Tab
+                id="my-svg-mask"
+                title="My Masks"
+                panel={
+                  <MediaManagementPanel
+                    type="svg-mask"
+                    key={forceUpdate}
+                    deleteMediaFunc={deleteMedias}
+                    fetchMediasFunc={fetchMedias}
+                    uploadComponent={
+                      <UploadComponent
+                        type="svg-mask"
+                        onComplete={() => {
+                          setForceUpdate(Math.random());
+                        }}
+                        onStop={() => {
+                          setForceUpdate(Math.random());
+                        }}
+                      />
+                    }
+                    selectionType={selectionType}
+                    onRequestClose={onRequestClose}
+                    isAddObject={addObject}
+                    onSelect={onSelect}
+                    onAdd={(mediaItem) => {
+                      const sizeRect = getNewMediaObjectBounds({
+                        media: mediaItem.media,
+                        breakpointConfig,
+                      });
+
+                      if (activeLayerId) {
+                        _addNewObject(
+                          activeLayerId,
+                          SVG_MASK,
+                          { ...sizeRect },
+                          {
+                            mask: includeMediaRequiredProps(mediaItem.media),
                           },
                         );
                       } else {

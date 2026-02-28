@@ -57,7 +57,7 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
         ? "video/mp4"
         : type === "audio"
           ? "audio/mp3, audio/mpeg"
-          : type === "vector"
+          : type === "vector" || type === "svg-mask"
             ? "image/svg+xml"
             : type === "font"
               ? "font/otf, font/ttf, font/woff2"
@@ -220,6 +220,11 @@ export const MyImageSelect: React.FC<getMyUploadComponentProps> = (props) => {
               dialog.
             </p>
           ) : type === "vector" ? (
+            <p>
+              Drop <strong>SVGs</strong> here or click to open the selection
+              dialog.
+            </p>
+          ) : type === "svg-mask" ? (
             <p>
               Drop <strong>SVGs</strong> here or click to open the selection
               dialog.
