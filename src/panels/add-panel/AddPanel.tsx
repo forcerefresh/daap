@@ -25,7 +25,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
   const {
     _addNewObject,
     // documentSize,
-    activeObject,
     activeLayerId,
     onRequestClose,
     onRequestFontPreview,
@@ -63,15 +62,15 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
     "io.forcerefresh.vector.object",
     "io.forcerefresh.free-draw.object",
     "io.forcerefresh.text.object",
-    "io.forcerefresh.rectangle.object",
-    "io.forcerefresh.polygon.object",
+    // "io.forcerefresh.rectangle.object",
+    // "io.forcerefresh.polygon.object",
   ];
 
   const renderObjectsCards = (group: string) => {
     const objDeffsAll = getAppObjectDefinitionsByGroup(group);
 
     const objDeffs = objDeffsAll.filter(
-      (objDeff) => hideObjects.indexOf(objDeff.type) === -1
+      (objDeff) => hideObjects.indexOf(objDeff.type) === -1,
     );
 
     return (
@@ -92,10 +91,6 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
               if (activeLayerId) {
                 _addNewObject(activeLayerId, deff.type, {
                   ...getObjectSizeFromMeta(deff.meta, breakpointConfig),
-                  parentId:
-                    activeObject?.type === "group"
-                      ? activeObject.id
-                      : undefined,
                 });
                 onRequestClose();
               }
@@ -171,21 +166,14 @@ const AddPanel: React.FC<IAddPanelMergedProps> = (props) => {
 };
 
 const mapStateToProps = (state: IStore) => {
-  const activeObject =
-    state.project.objects.objectById[
-      state.project.selection.activeObjectId as string
-    ];
-
   const breakpointConfig: BreakpointConfiguration | undefined =
     state.project.settings.breakpoints.breakpointsConfiguration.find(
       (breakpointConfig: any) =>
-        breakpointConfig.type === state.stage.selectedDevice
+        breakpointConfig.type === state.stage.selectedDevice,
     );
 
   return {
     activeLayerId: state.project.selection.activeLayerId,
-    activeObject: activeObject,
-    // documentSize: state.project.document.documentSize,
     themeClass: state.project.settings.themeClass,
     breakpointConfig,
   };
@@ -195,7 +183,7 @@ const mapDispatchToProps = {
   _addNewObject: (
     layerId: string,
     type: string,
-    objectProps: Partial<IObject>
+    objectProps: Partial<IObject>,
   ) => addNewObject(layerId, type, objectProps),
 };
 

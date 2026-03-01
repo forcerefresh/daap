@@ -28,6 +28,7 @@ import {
 } from "../../store/actions/actions";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { isObjectGroup } from "../../store/actions/actions-utils";
+import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 
 import PropertiesIcon from "../../panels/properties-sections-panel/icons/properties.svg?react";
 import TransformIcon from "../../panels/properties-sections-panel/icons/transform.svg?react";
@@ -35,13 +36,19 @@ import TransformIcon from "../../panels/properties-sections-panel/icons/transfor
 import OpacityIcon from "../../assets/icons/opacity2.svg?react";
 import ColorPaletteIcon from "./assets/color-palette.svg?react";
 
-import MediaLibraryPanel, { Panels } from "../media-library/MediaLibraryPanel";
+import MediaLibraryPanel, {
+  includeMediaRequiredProps,
+  Panels,
+} from "../media-library/MediaLibraryPanel";
 import { cloneDeep } from "lodash-es";
 import useOnClickOutside from "../../utils/hooks/on-click-outside";
 import { object } from "yup";
 import { getSelectSlider } from "../../inputs/input-utils";
 import AlignPanel from "../align-panel/AlignPanel";
 import { getMediaSrc } from "../../integration/utils/local-media";
+import { SVG_MASK } from "../../objects/svg-mask/svg-mask";
+import { AppToaster } from "../../utils/components/app-toaster/AppToaster";
+import { getNewMediaObjectBounds } from "../../panels/media-library/add-object-utils";
 
 const PANEL_ICON_SIZE = 22;
 
@@ -63,6 +70,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
     _showSimplifiedPages,
     showSimplifiedPagesPanel,
     layout2TemplateEnabled,
+    breakpointConfig,
   } = props;
   const {
     toolConfig,
@@ -129,7 +137,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
     selectedObjectIds.length === 1 &&
     objectById[selectedObjectIds[0]]?.type === "group"
   );
-  // const firstSelectedObject = objectById[selectedObjectIds[0]];
+  const firstSelectedObject = objectById[selectedObjectIds[0]];
   // const isFirstSelectedGroup = !!(
   //   firstSelectedObject?.objectIds && firstSelectedObject?.objectIds?.length > 0
   // );
@@ -196,7 +204,6 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
             modifiers={{ preventOverflow: { enabled: true } }}
             usePortal={true}
             minimal
-            // isOpen={isMaskOpen}
             content={<AlignPanel />}
           >
             <Button
@@ -261,7 +268,6 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
             modifiers={{ preventOverflow: { enabled: true } }}
             usePortal={true}
             minimal
-            // isOpen={isMaskOpen}
             content={<AlignPanel />}
           >
             <Button
@@ -280,7 +286,6 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
             modifiers={{ preventOverflow: { enabled: true } }}
             usePortal={true}
             minimal
-            // isOpen={isMaskOpen}
             content={
               <div className={css.sliderHolder}>
                 <div>
@@ -363,24 +368,27 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                   addObject={false}
                   instaSelect={true}
                   showRemoveItem={!!activeObject?.mask}
-                  onSelect={async (item) => {
-                    if (activeObject) {
-                      const newObject = cloneDeep(activeObject);
-                      //debugger;
-                      item?.media;
-                      if (item?.media) {
-                        const imageUrl = getMediaSrc(item.media);
-                        const svg = await fetchSVG(imageUrl);
+                  onSelect={async (mediaItem) => {
+                    const sizeRect = getNewMediaObjectBounds({
+                      media: mediaItem.media,
+                      breakpointConfig,
+                    });
 
-                        newObject.mask = {
-                          type: "svg",
-                          svg,
-                        };
-                      } else {
-                        newObject.mask = null;
-                      }
-
-                      updateObject(newObject);
+                    if (activeLayerId) {
+                      _addNewObject(
+                        activeLayerId,
+                        SVG_MASK,
+                        { ...sizeRect },
+                        {
+                          mask: includeMediaRequiredProps(mediaItem.media),
+                        },
+                        firstSelectedObject?.id,
+                      );
+                    } else {
+                      AppToaster.show({
+                        intent: "warning",
+                        message: `No layer selected. Please choose a layer first.`,
+                      });
                     }
                     // onInput({
                     //   ...localValue,
@@ -388,7 +396,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
                     // });
                     // setLibraryOpen(false);
                   }}
-                  panelsToShow={[Panels.SvgMask]}
+                  panelsToShow={[Panels.MySvgMask, Panels.SvgMask]}
                 />
               </div>
             }
@@ -400,7 +408,10 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
               onClick={() => {
                 setIsMaskOpen(!isMaskOpen);
               }}
-              disabled={selectedObjectIds.length !== 1}
+              disabled={
+                selectedObjectIds.length !== 1 ||
+                firstSelectedObject?.type === SVG_MASK
+              }
             ></Button>
           </Popover>
         </div>
@@ -509,7 +520,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
 
 const mapStateToProps = (state: IStore) => {
   const { globals } = state;
-  const { objects, selection } = state.project;
+  const { objects, selection, settings } = state.project;
 
   const { activeObjectId, activeLayerId } = selection;
 
@@ -517,7 +528,14 @@ const mapStateToProps = (state: IStore) => {
     ? objects.objectById[activeObjectId]
     : null;
 
+  const breakpointConfig: BreakpointConfiguration | undefined =
+    settings.breakpoints.breakpointsConfiguration.find(
+      (breakpointConfig: any) =>
+        breakpointConfig.type === state.stage.selectedDevice,
+    );
+
   return {
+    breakpointConfig,
     layout2TemplateEnabled: globals.publishSettings?.enabled,
     activeLayerId,
     activeObject,
@@ -534,7 +552,8 @@ const mapDispatchToProps = {
     type: string,
     objectProps: Partial<IObject>,
     values?: { [key: string]: any },
-  ) => addNewObject(layerId, type, objectProps, values),
+    afterObjectId?: string,
+  ) => addNewObject(layerId, type, objectProps, values, afterObjectId),
   _groupObjects: (objectIds: string[]) => groupObjects(objectIds),
 
   _ungroupObject: (groupId: string) => ungroupObject(groupId),

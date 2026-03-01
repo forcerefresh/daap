@@ -18,7 +18,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./text-icon.svg?react";
+import svg from "./text-icon.svg?raw";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,

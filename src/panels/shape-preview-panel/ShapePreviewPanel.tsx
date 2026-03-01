@@ -477,9 +477,10 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         activeLayerId,
                         LINE,
                         {
-                          left: 100, //(documentSize.width - 960) / 2,
-                          top: 100, //(documentSize.height - 540) / 2,
+                          left: 100,
+                          top: 100,
                           ...obj.object,
+
                         },
                         obj.properties
                       );
@@ -556,9 +557,10 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         activeLayerId,
                         RECTANGLE,
                         {
-                          left: 100, //(documentSize.width - 960) / 2,
-                          top: 100, //(documentSize.height - 540) / 2,
+                          left: 100,
+                          top: 100,
                           ...obj.object,
+
                         },
                         obj.properties
                       );
@@ -635,9 +637,10 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         activeLayerId,
                         CIRCLE,
                         {
-                          left: 100, //(documentSize.width - 960) / 2,
-                          top: 100, //(documentSize.height - 540) / 2,
+                          left: 100,
+                          top: 100,
                           ...obj.object,
+
                         },
                         obj.properties
                       );
@@ -718,9 +721,10 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         activeLayerId,
                         STAR,
                         {
-                          left: 100, //(documentSize.width - 960) / 2,
-                          top: 100, //(documentSize.height - 540) / 2,
+                          left: 100,
+                          top: 100,
                           ...obj.object,
+
                         },
                         obj.properties
                       );
@@ -801,9 +805,10 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
                         activeLayerId,
                         POLYGON,
                         {
-                          left: 100, //(documentSize.width - 960) / 2,
-                          top: 100, //(documentSize.height - 540) / 2,
+                          left: 100,
+                          top: 100,
                           ...obj.object,
+
                         },
                         obj.properties
                       );
@@ -836,10 +841,12 @@ const ShapePreviewPanel: React.FC<IShapePreviewPanelMergedProps> = (props) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-  themeClass: state.project.settings.themeClass,
-});
+const mapStateToProps = (state: IStore) => {
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+    themeClass: state.project.settings.themeClass,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (

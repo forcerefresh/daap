@@ -53,6 +53,7 @@ export interface IObjectRowProps {
   dropDone: () => void;
   dropCancel: () => void;
   isHovered?: boolean;
+  isInvalidMask?: boolean;
 }
 
 export function ObjectRow(props: IObjectRowProps) {
@@ -79,6 +80,7 @@ export function ObjectRow(props: IObjectRowProps) {
     dropDone,
     dropCancel,
     // DND <<<
+    isInvalidMask,
   } = props;
 
   // DND >>>>
@@ -246,7 +248,7 @@ export function ObjectRow(props: IObjectRowProps) {
             }}
           />
           <div className={css.maskIconWrapper}>
-            <MaskIcon style={{ width: 20, height: 20 }} />
+            <MaskIcon style={{ width: 20, height: 20, color: isInvalidMask ? "red" : undefined }} />
           </div>
         </div>
       ) : (

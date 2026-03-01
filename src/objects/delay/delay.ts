@@ -9,7 +9,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./delay-icon.svg?react";
+import svg from "./delay-icon.svg?raw";
 import { convertTimeUnitToMs } from "../../utils/utils";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 
@@ -30,7 +30,7 @@ export function createDelayObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<DelayPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"

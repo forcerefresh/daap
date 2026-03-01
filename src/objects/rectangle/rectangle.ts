@@ -14,7 +14,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./rectangle-icon.svg?react";
+import svg from "./rectangle-icon.svg?raw";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import {
@@ -51,11 +51,11 @@ export type RectanglePropertiesTuple = [
   INumberInput<"strokeWidth">,
   IColorInput<"strokeColor">,
   IColorGradientInput<"fill">,
-  ICornerRadiusInput<"cornerRadius">
+  ICornerRadiusInput<"cornerRadius">,
 ];
 
 export function createRectangleObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(RECTANGLE);
 
@@ -114,7 +114,7 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
 
   const rectValues = getObjectValuesForDevice(
     object.properties as RectangleValues,
-    deviceType
+    deviceType,
   );
 
   let r = { tl: 0, bl: 0, tr: 0, br: 0 };
@@ -146,7 +146,7 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
     r.tl,
     r.tr,
     r.br,
-    r.bl
+    r.bl,
   );
 
   const fillObj = getSVGFill(rectValues.fill, object.id);
@@ -155,14 +155,14 @@ export function getRectangleHtml(props: GetHtmlFuncPropsType) {
     <svg viewBox="0 0 ${width} ${height}" height="${height}"  width="${width}" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   ${fillObj.gradient}
       <path  d="${path}" stroke-width="${rectValues.strokeWidth}" stroke="${
-    convertRGBColor2CSSStyle(rectValues.strokeColor).backgroundColor
-  }" ${fillObj.fillAttr}></path>
+        convertRGBColor2CSSStyle(rectValues.strokeColor).backgroundColor
+      }" ${fillObj.fillAttr}></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }
 
 export async function rectangleSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -177,13 +177,13 @@ export async function rectangleSizeUpdate(
   } = props;
   const rectValues = getObjectValuesForDevice(
     properties as RectangleValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   const child = objectEl.firstChild! as HTMLDivElement;
@@ -201,7 +201,7 @@ export async function rectangleSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);
@@ -228,7 +228,7 @@ const svgRectWithCornerRadius = (
   topLeftRadius: number,
   topRightRadius: number,
   bottomRightRadius: number,
-  bottomLeftRadius: number
+  bottomLeftRadius: number,
 ) => {
   return `M${positionX + topLeftRadius},${positionY}\
       h${width - (topLeftRadius + topRightRadius)}\

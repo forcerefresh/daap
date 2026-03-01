@@ -31,7 +31,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import bulletsIcon from "./bullets-icon.svg?react";
+import bulletsIcon from "./bullets-icon.svg?raw";
 import { addBorderRadius } from "../../utils/utils";
 import {
   FormType,
@@ -109,7 +109,7 @@ export type BulletsPropertiesTuple = [
     "bulletsType",
     [
       IFormSwitchGroup<[INumberInput<"bulletsNumber">]>,
-      IFormSwitchGroup<[IMultiImageInput<"thumbnails">]>
+      IFormSwitchGroup<[IMultiImageInput<"thumbnails">]>,
     ]
   >,
   IFormGroupItem<
@@ -120,12 +120,12 @@ export type BulletsPropertiesTuple = [
           IFormSwitchGroup<[IUnitsNumberInput<"circleWidth">]>,
           IFormSwitchGroup<
             [IUnitsNumberInput<"rectWidth">, IUnitsNumberInput<"rectHeight">]
-          >
+          >,
         ]
       >,
       IUnitsNumberInput<"gap">,
       ICheckboxInput<"useThumbnails">,
-      IUnitsNumberInput<"thumbnailSize">
+      IUnitsNumberInput<"thumbnailSize">,
     ]
   >,
 
@@ -134,7 +134,7 @@ export type BulletsPropertiesTuple = [
       ISelectInput<"borderStyle">,
       IBoxInput<"borderSize">,
       IColorInput<"borderColor">,
-      ICornerRadiusInput<"borderRadius">
+      ICornerRadiusInput<"borderRadius">,
     ]
   >,
   IFormGroupItem<
@@ -146,11 +146,11 @@ export type BulletsPropertiesTuple = [
           IFormSwitchGroup<
             [
               IColorInput<"backgroundGradientColor1">,
-              IColorInput<"backgroundGradientColor2">
+              IColorInput<"backgroundGradientColor2">,
             ]
-          >
+          >,
         ]
-      >
+      >,
     ]
   >,
   IFormGroupItem<
@@ -158,7 +158,7 @@ export type BulletsPropertiesTuple = [
       ISelectInput<"hoverBorderStyle">,
       IBoxInput<"hoverBorderSize">,
       IColorInput<"hoverBorderColor">,
-      ICornerRadiusInput<"hoverBorderRadius">
+      ICornerRadiusInput<"hoverBorderRadius">,
     ]
   >,
   IFormGroupItem<
@@ -170,11 +170,11 @@ export type BulletsPropertiesTuple = [
           IFormSwitchGroup<
             [
               IColorInput<"hoverBackgroundGradientColor1">,
-              IColorInput<"hoverBackgroundGradientColor2">
+              IColorInput<"hoverBackgroundGradientColor2">,
             ]
-          >
+          >,
         ]
-      >
+      >,
     ]
   >,
   INumberInput<"hoverTransitionDuration">,
@@ -183,7 +183,7 @@ export type BulletsPropertiesTuple = [
       ISelectInput<"activeBorderStyle">,
       IBoxInput<"activeBorderSize">,
       IColorInput<"activeBorderColor">,
-      ICornerRadiusInput<"activeBorderRadius">
+      ICornerRadiusInput<"activeBorderRadius">,
     ]
   >,
   IFormGroupItem<
@@ -195,13 +195,13 @@ export type BulletsPropertiesTuple = [
           IFormSwitchGroup<
             [
               IColorInput<"activeBackgroundGradientColor1">,
-              IColorInput<"activeBackgroundGradientColor2">
+              IColorInput<"activeBackgroundGradientColor2">,
             ]
-          >
+          >,
         ]
-      >
+      >,
     ]
-  >
+  >,
 ];
 
 export function createBulletsObject(initialValue?: {
@@ -771,7 +771,7 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
     cssHoverStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
     cssHoverStyle = addBorderRadius(
       cssHoverStyle,
-      bulletsValues.hoverBorderRadius
+      bulletsValues.hoverBorderRadius,
     );
   } else {
     //cssHoverStyle += "border-style: none;";
@@ -806,7 +806,7 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
   if (bulletsValues.hasActiveBorder) {
     cssActiveStyle = addBorderBox(
       cssActiveStyle,
-      bulletsValues.activeBorderSize
+      bulletsValues.activeBorderSize,
     );
 
     cssActiveStyle += `border-style: ${bulletsValues.activeBorderStyle};`;
@@ -814,7 +814,7 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
     cssActiveStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
     cssActiveStyle = addBorderRadius(
       cssActiveStyle,
-      bulletsValues.activeBorderRadius
+      bulletsValues.activeBorderRadius,
     );
   } else {
     //cssActiveStyle += "border-style: none;";
@@ -881,7 +881,7 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
         {
           useId: isSave,
           filename: bulletsValues.thumbnails[i].filename,
-        }
+        },
       );
 
       bulletsHtml += `<div class="object-content-item-${object.id}">
@@ -900,7 +900,7 @@ export function getBulletsHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function bulletsSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const { id, calculatedObjectSize, className /*calculateSize, values*/ } =
     props;
@@ -929,7 +929,7 @@ export async function bulletsSizeUpdate(
 }
 
 export const getBulletsAssetsUrls = (
-  props: GetAssetsUrlFuncPropsType
+  props: GetAssetsUrlFuncPropsType,
 ): GetAssetsUrlFuncReturnType => {
   const bulletsValues = props.values as BulletsValues;
 

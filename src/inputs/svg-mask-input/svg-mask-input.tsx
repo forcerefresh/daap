@@ -13,6 +13,7 @@ import {
 import { SaaSMediaData } from "webslider-sdk/lib/common/i-media-types";
 import { Portal } from "@blueprintjs/core";
 import css from "./svg-mask-input.module.scss";
+import { Panel } from "@blueprintjs/icons/lib/esm/generated/16px/paths";
 
 export const SvgMaskInputForm: React.FC<ISvgMaskInput & IUpdateInput> = (
   props,
@@ -65,7 +66,7 @@ export const SvgMaskInputForm: React.FC<ISvgMaskInput & IUpdateInput> = (
                 onChange(newValue);
                 setLibraryOpen(false);
               }}
-              panelsToShow={[Panels.SvgMask]}
+              panelsToShow={[Panels.MySvgMask, Panels.SvgMask]}
             />
           </div>
         )}

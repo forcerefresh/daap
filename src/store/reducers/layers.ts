@@ -294,6 +294,16 @@ export function layers(
         });
       }
 
+      // add object below object id
+      if (payload.where === "below") {
+        forIn(layerById, function (layer, _layerId) {
+          const idx = layer.objectIds.indexOf(payload.refId);
+          if (idx != -1) {
+            layer.objectIds.splice(idx + 1, 0, ...payload.moveIds);
+          }
+        });
+      }
+
       // add object in layer (at bottom)
       if (payload.where === "layer") {
         layerById[payload.refId].objectIds.splice(

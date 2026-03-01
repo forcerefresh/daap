@@ -11,7 +11,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
-import svg from "./multiple-images-icon.svg?react";
+import svg from "./multiple-images-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { cloneDeep } from "lodash-es";
@@ -37,7 +37,7 @@ export interface MultiImageValues {
 
 export type MultiImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IMultiImageInput<"images">
+  IMultiImageInput<"images">,
 ];
 
 export function createMultiImageObject(
@@ -46,7 +46,7 @@ export function createMultiImageObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<MultiImagePropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
@@ -177,7 +177,7 @@ export function getMultiImageHtml(props: {
         styleOne += `z-index: ${100 - idx};`;
       }
       ret += `<div class="object-content-item" style="${styleOne}"></div>`;
-    }
+    },
   );
   ret += `</div>`;
   return ret;
@@ -228,7 +228,7 @@ export async function preloadMultiImage(props: {
 }
 
 export function multiImagePostProcess(
-  props: PostProcessFuncPropsType
+  props: PostProcessFuncPropsType,
 ): PostProcessFuncReturnType {
   const { object, prevObject } = props;
 
@@ -242,7 +242,7 @@ export function multiImagePostProcess(
       const prevImages = prevValues.images[idx];
       if (newImage.image.sourceType !== prevImages.image.sourceType) {
         newValues.images[idx] = getDefaultValuesForSourceType(
-          newImage.image.sourceType
+          newImage.image.sourceType,
         );
       }
     });
@@ -252,13 +252,13 @@ export function multiImagePostProcess(
 }
 
 function getDefaultValuesForSourceType(
-  sourceType: "local" | "library" | "url" | string | undefined
+  sourceType: "local" | "library" | "url" | string | undefined,
 ) {
   return { image: { sourceType }, filename: "" };
 }
 
 export const getMultiImageAssetsUrls = (
-  props: GetAssetsUrlFuncPropsType
+  props: GetAssetsUrlFuncPropsType,
 ): GetAssetsUrlFuncReturnType => {
   const imageValues = props.values as MultiImageValues;
 

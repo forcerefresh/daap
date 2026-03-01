@@ -18,7 +18,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./text-target.svg?react";
+import svg from "./text-target.svg?raw";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
@@ -63,7 +63,7 @@ export type TextTargetTuple = [
   ICheckboxInput<"underline">,
   IUnitsNumberInput<"lineHeight">,
   ISelectInput<"textAlign">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
 ];
 
 export function createTextTarget(
@@ -72,7 +72,7 @@ export function createTextTarget(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<IObject<TextTargetTuple>, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(TEXT_TARGET);
 
@@ -323,7 +323,7 @@ export async function textTargetStart(props: {
     text = await conn.getDataByPath(values.jsonPath);
   } else {
     console.warn(
-      `Connector with source id '${values.sourceId}' is not available. Make sure that you have source object and make sure it is in front or same slide as target object.`
+      `Connector with source id '${values.sourceId}' is not available. Make sure that you have source object and make sure it is in front or same slide as target object.`,
     );
   }
 
@@ -350,7 +350,7 @@ export async function preloadTextTarget(props: {
   }
 
   const p = (window as any).WSFontPreloader.subscribe(
-    textValues.font.fontFamily
+    textValues.font.fontFamily,
   );
 
   try {

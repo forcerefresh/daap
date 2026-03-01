@@ -46,7 +46,7 @@ import {
 } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IMeta } from "../reducers/meta";
 import { IObjects } from "../reducers/i-objects";
-import { ISelection } from "../reducers/selection";
+import { ISelection, SelectionScope } from "../reducers/selection";
 import {
   calculateObjectSize,
   getSnapLayoutSize,
@@ -1025,16 +1025,17 @@ export const SELECT_OBJECTS = "Select objects";
 
 export interface SelectObjectAction extends IUndoableAction<true, true> {
   type: typeof SELECT_OBJECTS;
-  payload: { selectedObjectIds: string[]; selectionPath: string[] };
+  payload: { selectedObjectIds: string[]; selectionPath: string[]; currentScope: SelectionScope };
 }
 
 export function _selectObjects(
   selectedObjectIds: string[],
   selectionPath: string[],
+  currentScope: SelectionScope,
 ): SelectObjectAction {
   return {
     type: SELECT_OBJECTS,
-    payload: { selectedObjectIds, selectionPath },
+    payload: { selectedObjectIds, selectionPath, currentScope },
     isUndoable: true,
     skipHistory: true,
   };
@@ -1089,7 +1090,15 @@ export function selectObjects(selectedObjectIds: string[]): any {
       layerById,
     );
 
-    dispatch(_selectObjects(selectedObjectIds, selectionPath));
+    const selectedObject = objectById[selectedObjectIds[0]];
+    const currentScope: SelectionScope =
+      selectedObject?.type === "group"
+        ? { type: "group", groupId: selectedObject.id }
+        : objectById[selectedObject?.parentId!]?.type === "group"
+          ? { type: "group", groupId: selectedObject!.parentId! }
+          : { type: "layer" };
+
+    dispatch(_selectObjects(selectedObjectIds, selectionPath, currentScope));
   };
 }
 export function selectObjectsByRect(rect: IRect): any {
@@ -1292,15 +1301,19 @@ export function addNewObject(
   type: string,
   objectProps: Partial<IObject>,
   values?: { [key: string]: string },
+  afterObjectId?: string,
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
+    const scope = getState().project.selection.currentScope;
+    const parentId = scope.type === "group" ? scope.groupId : layerId;
+
     let object: IObject = {
       ...createObject(type, objectProps, {
         ...values,
         //text: "Sample test",
       }),
       layerId,
-      parentId: layerId,
+      parentId,
     };
 
     const nextNameIdx =
@@ -1333,6 +1346,9 @@ export function addNewObject(
     if (!object.parentId) object.parentId = object.layerId;
 
     dispatch(addObject(object));
+    if (afterObjectId) {
+      dispatch(moveObjects(afterObjectId, "below", [object.id]));
+    }
     dispatch(activateObject(object.id));
     dispatch(selectObjects([object.id]));
     dispatch(selectForProperties({ id: object.id, type: "object" }));

@@ -21,7 +21,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./image-icon.svg?react";
+import svg from "./image-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   getCommonObjectPropertiesDefinition,
@@ -67,13 +67,13 @@ export interface ImageValues {
 
 export type ImagePropertiesTuple = [
   ICoverPlacementInput<"fit">,
-  IImageInput<"image">
+  IImageInput<"image">,
   // ICheckboxInput<"useForThumbnail">,
   // ICheckboxInput<"preload">
 ];
 
 export function createImageObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(IMAGE);
 
@@ -192,7 +192,7 @@ export function getImageHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function imageSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const { id, calculatedObjectSize, style, deviceType, transform } = props;
 
@@ -207,18 +207,18 @@ export async function imageSizeUpdate(
   objectEl.style.height = calculatedObjectSize.height;
 
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
   addCommonStyleToObjectElementContent(objectContentEl, style, deviceType);
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(
     transform as TransformPropertiesValues,
-    deviceType
+    deviceType,
   );
 
   if (transformProperties?.transformOriginX) {
@@ -276,7 +276,7 @@ export async function preloadImage(props: {
   }
 
   const el = getObjectElementById(id).getElementsByClassName(
-    "object-content-" + id
+    "object-content-" + id,
   )[0] as HTMLDivElement;
 
   el.style.backgroundImage = `url('${imageSrc}')`;
@@ -285,7 +285,7 @@ export async function preloadImage(props: {
 }
 
 export function imagePostProcess(
-  props: PostProcessFuncPropsType
+  props: PostProcessFuncPropsType,
 ): PostProcessFuncReturnType {
   const { object, prevObject } = props;
 
@@ -307,13 +307,13 @@ export function imagePostProcess(
 }
 
 function getDefaultValuesForSourceType(
-  sourceType: "local" | "library" | "url" | string | undefined
+  sourceType: "local" | "library" | "url" | string | undefined,
 ) {
   return { image: { sourceType }, filename: "" };
 }
 
 export const getAssetsUrls = (
-  props: GetAssetsUrlFuncPropsType
+  props: GetAssetsUrlFuncPropsType,
 ): GetAssetsUrlFuncReturnType => {
   const imageValues = props.values as ImageValues;
 

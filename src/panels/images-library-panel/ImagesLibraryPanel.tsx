@@ -1040,9 +1040,11 @@ const ImagesLibraryPanel: React.FC<IImagesPanelMergedProps> = (props) => {
 };
 
 /*          */
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-});
+const mapStateToProps = (state: IStore) => {
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (
@@ -1053,7 +1055,7 @@ const mapDispatchToProps = {
   ) => addNewObject(layerId, type, objectProps, values),
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ImagesLibraryPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(ImagesLibraryPanel) as React.ComponentType<IMediaLibraryPanelProps>;
 
 function prepareText(text: string, textLimit = 20) {
   var returnString = text;

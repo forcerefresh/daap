@@ -3,7 +3,7 @@ import { getUnitNumericFiled } from "../../inputs/input-utils";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
 import { cloneDeep } from "lodash-es";
 import Pencil from "./assets/pencil2.svg?react";
-import Eraser from "./assets/eraser.svg?react";
+import Eraser from "./assets/eraser.svg?raw";
 import { FreeDrawValues } from "./free-draw";
 import { Button } from "@blueprintjs/core";
 import { IFreeDrawToolConfig } from "./types";
@@ -54,7 +54,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
               className: css.strokeInput,
               showIncDec: true,
             },
-            ["px"]
+            ["px"],
           )}
 
           <div className={css.colorInputHolder}>
@@ -225,7 +225,7 @@ export function FreeDrawToolbar(props: IToolbarProps): React.ReactElement {
                 className: css.strokeInput,
                 showIncDec: true,
               },
-              ["px"]
+              ["px"],
             )}
           </div>
 

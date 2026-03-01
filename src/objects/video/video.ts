@@ -27,7 +27,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import video from "./video-icon.svg?react";
+import video from "./video-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   getCommonObjectPropertiesDefinition,
@@ -72,7 +72,7 @@ export type VideoPropertiesTuple = [
   ICheckboxInput<"autoplay">,
   IUnitsNumberInput<"delayTime">,
   IUnitsNumberInput<"initialTime">,
-  IInfoInput<"info">
+  IInfoInput<"info">,
 ];
 
 export interface VideoValues {
@@ -95,7 +95,7 @@ export function createVideoObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<VideoPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
@@ -276,7 +276,7 @@ export function getVideoHtml(props: GetHtmlFuncPropsType) {
     } else {
       if (videoValues.video.video.sourceType === "url") {
         return getObjectPlaceholder(
-          `VIDEO URL<br/>${videoValues.video.video.url}`
+          `VIDEO URL<br/>${videoValues.video.video.url}`,
         );
       }
       // in the app show preview image
@@ -365,7 +365,7 @@ export function getVideoHtml(props: GetHtmlFuncPropsType) {
  * This function execute when timeline starts
  */
 export function video_objectStart(
-  props: ExecutionCodeFuncPropsType
+  props: ExecutionCodeFuncPropsType,
 ): ExecutionCodeFuncReturnType {
   logger.object.debug(`video:objectStart()`);
 
@@ -373,7 +373,7 @@ export function video_objectStart(
   const values = props.values as VideoValues;
 
   const videoElm = document.getElementsByClassName(
-    `video-content-${id}`
+    `video-content-${id}`,
   )[0] as HTMLVideoElement;
 
   if (values.autoplay) {
@@ -398,7 +398,7 @@ export function video_objectStart(
  * This function execute when timeline stop
  */
 export function video_objectStop(
-  props: ExecutionCodeFuncPropsType
+  props: ExecutionCodeFuncPropsType,
 ): ExecutionCodeFuncReturnType {
   logger.object.debug(`video:objectStop()`);
 
@@ -408,7 +408,7 @@ export function video_objectStop(
   if (timeout) clearTimeout(timeout);
 
   const videoElm = document.getElementsByClassName(
-    `video-content-${id}`
+    `video-content-${id}`,
   )[0] as HTMLAudioElement;
 
   videoElm.currentTime = 0;
@@ -416,7 +416,7 @@ export function video_objectStop(
 }
 
 export async function videoSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -442,17 +442,17 @@ export async function videoSizeUpdate(
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
-    deviceType
+    deviceType,
   );
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transformDefinition,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(
     transformDefinition?.values as TransformPropertiesValues,
-    deviceType
+    deviceType,
   );
 
   if (transformProperties?.transformOriginX) {
@@ -463,7 +463,7 @@ export async function videoSizeUpdate(
 }
 
 export function videoPostProcess(
-  props: PostProcessFuncPropsType
+  props: PostProcessFuncPropsType,
 ): PostProcessFuncReturnType {
   const { object, prevObject } = props;
 
@@ -474,7 +474,7 @@ export function videoPostProcess(
 
   if (prevValues.video.video.sourceType !== newValues.video.video.sourceType) {
     newValues.video = getDefaultValuesForSourceType(
-      newValues.video.video.sourceType
+      newValues.video.video.sourceType,
     );
   }
 
@@ -482,7 +482,7 @@ export function videoPostProcess(
 }
 
 function getDefaultValuesForSourceType(
-  sourceType: "local" | "url" | string | undefined
+  sourceType: "local" | "url" | string | undefined,
 ) {
   return {
     video: { sourceType },
@@ -573,7 +573,7 @@ export async function preloadVideo(props: {
 }
 
 export const getAssetsUrls = (
-  props: GetAssetsUrlFuncPropsType
+  props: GetAssetsUrlFuncPropsType,
 ): GetAssetsUrlFuncReturnType => {
   const videoValues = props.values as VideoValues;
 

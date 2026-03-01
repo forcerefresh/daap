@@ -25,6 +25,10 @@ import {
 import update from "immutability-helper";
 import { cloneDeep, uniq } from "lodash-es";
 
+export type SelectionScope =
+  | { type: "layer" }
+  | { type: "group"; groupId: string };
+
 export interface ISelection {
   activeSlideId: string | null;
   activeLayerId: string | null;
@@ -38,17 +42,21 @@ export interface ISelection {
 
   // array og object id starting from selectedObject to root (e.g. [object, objectGroup, objectGroup])
   selectionPath: string[];
+
+  // where newly added objects will be placed — layer or inside a group
+  currentScope: SelectionScope;
 }
 
-const getSelectionDefault = () => ({
+const getSelectionDefault = (): ISelection => ({
   activeSlideId: null,
   activeLayerId: null,
   activeObjectId: null,
   selectedSlideIds: [],
   selectedLayerIds: [],
   selectedObjectIds: [],
-  selectionForProperties: null, //{ type: "none", id: "" },
+  selectionForProperties: null,
   selectionPath: [],
+  currentScope: { type: "layer" },
 });
 
 export function selection(
@@ -67,6 +75,7 @@ export function selection(
         selectedLayerIds: [],
         activeObjectId: null,
         selectedObjectIds: [],
+        currentScope: { type: "layer" },
       };
     }
     case ACTIVATE_LAYER: {
@@ -78,6 +87,7 @@ export function selection(
         activeLayerId,
         activeObjectId: null,
         selectedObjectIds: [],
+        currentScope: { type: "layer" },
       };
     }
     case SELECT_FOR_PROPERTIES: {
@@ -123,9 +133,9 @@ export function selection(
       });
     }
     case SELECT_OBJECTS: {
-      const { selectedObjectIds, selectionPath } = action.payload;
+      const { selectedObjectIds, selectionPath, currentScope } = action.payload;
 
-      return { ...state, selectedObjectIds, selectionPath };
+      return { ...state, selectedObjectIds, selectionPath, currentScope };
     }
 
     case ADD_OBJECTS_TO_SELECTION: {
@@ -219,7 +229,7 @@ export function selection(
     case UNGROUP_OBJECTS: {
       const { groupId } = action.payload;
 
-      const newState = update(state, {
+      const newState = update(state as any, {
         activeObjectId: {
           $apply: (activeId) => {
             return [groupId].indexOf(activeId as string) !== -1
@@ -241,6 +251,7 @@ export function selection(
       });
 
       newState.selectionPath = [];
+      newState.currentScope = { type: "layer" };
 
       return newState;
     }
@@ -253,6 +264,7 @@ export function selection(
         selectedObjectIds: [],
         selectionForProperties: null,
         selectionPath: [],
+        currentScope: { type: "layer" },
       };
       // return update(state, {
       //   activeObjectId: {

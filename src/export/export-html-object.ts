@@ -1,6 +1,9 @@
 import { forOwn, mapValues, pick } from "lodash-es";
 import { ILayerValues, IObject } from "webslider-sdk/lib/objects/i-object";
-import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+import {
+  getAppObjectDefinition,
+  ICalculatedObjectSize,
+} from "webslider-sdk/lib/objects/objects-register";
 import {
   calculateObjectSize,
   calculateObjectSizePerDevice,
@@ -16,7 +19,10 @@ import { IItemsData } from "./i-export-html";
 import { IObjects } from "../store/reducers/i-objects";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
-import { getClipMaskFromSvg } from "../utils/doom-utils/clip-path";
+
+// Avoid importing svg-mask.ts directly — it imports store.ts which creates a
+// circular dependency during store initialization. Use the type string directly.
+const SVG_MASK = "io.forcerefresh.svg-mask.object";
 
 export function generateObjectData(
   objects: IObjects,
@@ -29,6 +35,7 @@ export function generateObjectData(
   layerValues: ILayerValues,
   layerTransformValues: Record<string, any> | undefined,
   options: { isSave: boolean; isForThumbnail?: boolean },
+  containerObjectIds?: string[],
 ) {
   let html = "";
 
@@ -143,18 +150,38 @@ export function generateObjectData(
   objectAnimWrapperStyle += trOrigin;
   // }
 
-  // clip mask
-  const clipMaskId = `clip-mask-${object.id}`;
+  // SVG mask: detect whether the next sibling is an SVG_MASK object.
+  // If so, apply clip-path on this object's wrapper and pass target data
+  // to the mask's getHtml for static transform computation.
+  const effectiveContainerIds = containerObjectIds ?? layer.objectIds;
+  const objectIndex = effectiveContainerIds.indexOf(object.id);
+  const nextSiblingId = effectiveContainerIds[objectIndex + 1];
+  const nextSibling = nextSiblingId ? objects.objectById[nextSiblingId] : undefined;
+
   let clipMaskHtml = "";
-  let maskStyle: string = "";
-  if (object.mask?.type === "svg") {
-    maskStyle = `clip-path: url(#${clipMaskId});`;
-    clipMaskHtml = getClipMaskFromSvg(
-      object.mask?.svg!,
-      clipMaskId,
-      calculatedObjectSize.width as any, // TODO <<
-      calculatedObjectSize.height as any, // TODO <<
-    );
+  let maskStyle = "";
+  if (nextSibling?.type === SVG_MASK) {
+    maskStyle = `clip-path: url(#svg-mask-${nextSiblingId});`;
+  }
+  wrapperStyle += maskStyle;
+
+  // When this object IS the SVG_MASK, find its target (prev sibling) and
+  // pre-compute the target's size so getSvgMaskHtml can bake the clip transform.
+  let targetObject: IObject | undefined;
+  let targetCalculatedObjectSize: ICalculatedObjectSize | undefined;
+  if (object.type === SVG_MASK && objectIndex > 0) {
+    const prevSiblingId = effectiveContainerIds[objectIndex - 1];
+    targetObject = prevSiblingId ? objects.objectById[prevSiblingId] : undefined;
+    if (targetObject) {
+      targetCalculatedObjectSize = calculateObjectSize(
+        targetObject as IObject<{}>,
+        layer,
+        breakpointConfig,
+        { resetPosition: false },
+        undefined,
+        { skipHeight: !!targetObject.properties?.autoHeight },
+      ) as ICalculatedObjectSize;
+    }
   }
 
   // style+=
@@ -174,7 +201,7 @@ export function generateObjectData(
 
   html += `      <div class="object ${objectClass} ${getCustomIdClass(
     object,
-  )}" style='${style}${maskStyle}'>`; // open object
+  )}" style='${style}'>`; // open object
 
   let objectHtml = "";
   if (object.type === "group") {
@@ -193,6 +220,7 @@ export function generateObjectData(
         layerValues,
         layerTransformValues,
         options,
+        object.objectIds,  // pass group's objectIds so sibling detection works inside a group
       );
 
       innerObjectsHtml += objectData.html;
@@ -218,6 +246,8 @@ export function generateObjectData(
       options.isSave,
       breakpointConfig.type,
       options.isForThumbnail,
+      targetObject,
+      targetCalculatedObjectSize,
     );
   }
 

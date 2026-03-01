@@ -18,6 +18,7 @@ import {
 import {
   getAppObjectDefinition,
   getPlayerObjectDefinition,
+  ICalculatedObjectSize,
 } from "webslider-sdk/lib/objects/objects-register";
 import {
   IAnimation,
@@ -651,7 +652,9 @@ export function getObjectHtml(
   isPlayer: boolean,
   isSave: boolean,
   deviceType?: DeviceType,
-  isForThumbnail?: boolean
+  isForThumbnail?: boolean,
+  targetObject?: IObject,
+  targetCalculatedObjectSize?: ICalculatedObjectSize
   // thumbnailHtmlArr: (string | undefined)[],
   // slidesCounter = 3
 ) {
@@ -678,6 +681,8 @@ export function getObjectHtml(
           isSave,
           deviceType,
           isForThumbnail,
+          targetObject,
+          targetCalculatedObjectSize,
           // calculateSize: (
           //   value: string,
           //   propertyName: "width" | "height" | "left" | "top"

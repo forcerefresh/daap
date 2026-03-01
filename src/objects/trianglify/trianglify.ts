@@ -13,7 +13,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./trianglify-icon.svg?react";
+import svg from "./trianglify-icon.svg?raw";
 import trianglify from "trianglify";
 import {
   FormType,
@@ -57,7 +57,7 @@ export type TrianglifyPropertiesTuple = [
       IFormSwitchGroup<[IColorArrayInput<"colors">]>,
       IFormSwitchGroup<
         [IColorArrayInput<"colorsX">, IColorArrayInput<"colorsY">]
-      >
+      >,
     ]
   >,
   INumberInput<"cellSize">,
@@ -67,7 +67,7 @@ export type TrianglifyPropertiesTuple = [
   IFormSwitchGroupItem<
     "strokeColorSG",
     [IFormSwitchGroup<[]>, IFormSwitchGroup<[IColorInput<"strokeColor">]>]
-  >
+  >,
 ];
 
 export function createTrianglifyObject(
@@ -76,7 +76,7 @@ export function createTrianglifyObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<TrianglifyPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"

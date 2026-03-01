@@ -18,7 +18,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./svg-icon.svg?react";
+import svg from "./svg-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
 import {
@@ -51,7 +51,7 @@ export type SvgPropertiesTuple = [
   IFormGroupItem<
     [IColorInput<"fill">, IColorInput<"stroke">, IColorInput<"color">]
   >,
-  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
 ];
 
 export interface SvgValues {
@@ -70,7 +70,7 @@ export function createSvgObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<SvgPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
@@ -212,7 +212,7 @@ export function getSvgHtml(props: GetHtmlFuncPropsType) {
   const fill =
     !svgValuesMetadata["fill"].disabled && svgValues.hasFillAndStroke
       ? `fill: ${convertRGBColor2RGBAString(
-          svgValues.fill
+          svgValues.fill,
         )}; color: ${convertRGBColor2RGBAString(svgValues.fill)};`
       : "";
   const stroke =
@@ -260,7 +260,7 @@ export function getSvgHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function svgSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -282,22 +282,22 @@ export async function svgSizeUpdate(
   objectEl.style.height = calculatedObjectSize.height;
 
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
-    deviceType
+    deviceType,
   );
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transformDefinition,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(
     transformDefinition?.values as TransformPropertiesValues,
-    deviceType
+    deviceType,
   );
 
   if (transformProperties?.transformOriginX) {

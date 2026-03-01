@@ -632,7 +632,7 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
                       top: 0, //documentSize.height / 4,
                       width: 200, //documentSize.width / 2,
                       height: 50, //documentSize.height / 2,
-                    },
+                                },
                     {
                       font: previewFont!,
                       autoHeight: true,
@@ -667,12 +667,13 @@ const FontPreviewPanel = (props: IFontPreviewPanelMergedProps) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-  loadedFontFamilies: state.fonts.loadedFontFamilies,
-  // documentSize: state.project.document.documentSize,
-  themeClass: state.project.settings.themeClass,
-});
+const mapStateToProps = (state: IStore) => {
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+    loadedFontFamilies: state.fonts.loadedFontFamilies,
+    themeClass: state.project.settings.themeClass,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (

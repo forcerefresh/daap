@@ -9,7 +9,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./frame-icon.svg?react";
+import svg from "./frame-icon.svg?raw";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
@@ -42,7 +42,7 @@ export function createFrameObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<FramePropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
@@ -94,7 +94,7 @@ export function getFrameHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function frameSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -119,22 +119,22 @@ export async function frameSizeUpdate(
 
   // update style and transform
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
   addCommonStyleToObjectElementContent(
     objectContentEl,
     commonStyleDefinition,
-    deviceType
+    deviceType,
   );
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transformDefinition,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(
     transformDefinition?.values as TransformPropertiesValues,
-    deviceType
+    deviceType,
   );
 
   if (transformProperties?.transformOriginX) {

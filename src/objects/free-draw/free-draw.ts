@@ -14,7 +14,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./free-draw.svg?react";
+import svg from "./free-draw.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   getCommonObjectPropertiesDefinition,
@@ -48,11 +48,11 @@ export interface FreeDrawValues {
 
 export type FreeDrawPropertiesTuple = [
   INumberInput<"strokeWidth">,
-  IColorInput<"color">
+  IColorInput<"color">,
 ];
 
 export function createFreeDrawObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(FREE_DRAW);
 
@@ -134,7 +134,7 @@ export function getFreeDrawHtml(props: GetHtmlFuncPropsType) {
 }
 
 export async function freeDrawSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {}
 
 export const freeDrawMeta = {

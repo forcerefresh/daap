@@ -13,7 +13,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./polygon-icon.svg?react";
+import svg from "./polygon-icon.svg?raw";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
 import {
@@ -47,11 +47,11 @@ export type PolygonPropertiesTuple = [
   IButtonGroupInput<"strokeLineJoin">,
   IColorGradientInput<"fill">,
   INumberInput<"sides">,
-  ICheckboxInput<"shiftAngle">
+  ICheckboxInput<"shiftAngle">,
 ];
 
 export function createPolygonObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(POLYGON);
 
@@ -137,7 +137,7 @@ export function getPolygonHtml(props: GetHtmlFuncPropsType) {
 
   const polygonValues = getObjectValuesForDevice(
     object.properties as PolygonValues,
-    deviceType
+    deviceType,
   );
 
   let style = "";
@@ -148,27 +148,27 @@ export function getPolygonHtml(props: GetHtmlFuncPropsType) {
     parseFloat(calculatedObjectSize.width) / 2,
     parseFloat(calculatedObjectSize.height) / 2,
     polygonValues.sides ?? 6,
-    polygonValues.shiftAngle
+    polygonValues.shiftAngle,
   );
 
   const fillObj = getSVGFill(polygonValues.fill, object.id);
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
-    object.height
-  }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      object.height
+    }" style="overflow:visible" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       ${fillObj.gradient}   
       <path  d="${path}" stroke-width="${polygonValues.strokeWidth}" stroke="${
-    convertRGBColor2CSSStyle(polygonValues.strokeColor).backgroundColor
-  }" ${fillObj.fillAttr}  stroke-linejoin="${
-    polygonValues.strokeLineJoin
-  }"></path>
+        convertRGBColor2CSSStyle(polygonValues.strokeColor).backgroundColor
+      }" ${fillObj.fillAttr}  stroke-linejoin="${
+        polygonValues.strokeLineJoin
+      }"></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }
 
 export async function polygonSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -183,13 +183,13 @@ export async function polygonSizeUpdate(
   } = props;
   const polygonValues = getObjectValuesForDevice(
     properties as PolygonValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   const child = objectEl.firstChild! as HTMLDivElement;
@@ -207,7 +207,7 @@ export async function polygonSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);
@@ -230,7 +230,7 @@ const svgPolygonPath = (
   w: number,
   h: number,
   sides: number,
-  shiftAngle?: boolean
+  shiftAngle?: boolean,
 ) => {
   const radius = Math.min(w, h);
   const angle = (2 * Math.PI) / sides;

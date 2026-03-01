@@ -468,9 +468,11 @@ const VectorsLibraryPanel: React.FC<IVectorPanelMergedProps> = (props) => {
 };
 
 /*          */
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-});
+const mapStateToProps = (state: IStore) => {
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (
@@ -484,4 +486,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(VectorsLibraryPanel);
+)(VectorsLibraryPanel) as React.ComponentType<IMediaLibraryPanelProps>;

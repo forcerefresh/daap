@@ -11,7 +11,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import htmlIcon from "./html-icon.svg?react";
+import htmlIcon from "./html-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import {
   getCommonObjectPropertiesDefinition,
@@ -34,7 +34,7 @@ export function createHtmlObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<HtmlPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"

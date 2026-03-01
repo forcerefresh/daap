@@ -15,7 +15,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
-import arrowIcon from "./arrow-icon.svg?react";
+import arrowIcon from "./arrow-icon.svg?raw";
 import { FormType, IFormGroupItem } from "webslider-sdk/lib/form/i-form-layout";
 import { RGBColor } from "react-color";
 import { replaceColors } from "../../export/export-html";
@@ -33,11 +33,11 @@ export type ArrowPropertiesTuple = [
     [
       IColorInput<"hoverFill">,
       IColorInput<"hoverStroke">,
-      IColorInput<"hoverColor">
+      IColorInput<"hoverColor">,
     ]
   >,
   INumberInput<"hoverTransitionDuration">,
-  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>
+  IFormGroupItem<[ISVGCustomColorsInput<"svg">]>,
 ];
 
 export interface ArrowValues {
@@ -61,7 +61,7 @@ export function createArrowObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<ArrowPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"

@@ -21,4 +21,9 @@
   background-size: contain;
   background-repeat: no-repeat;
   margin-bottom: 5px;
+
+  svg {
+    width: 100% !important;
+    height: 100% !important;
+  }
 }

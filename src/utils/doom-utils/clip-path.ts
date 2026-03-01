@@ -1,6 +1,26 @@
 // const outlineStroke = require("svg-outline-stroke");
 // const outlineStroke = require("svg-outline-stroke");
 
+/**
+ * If the SVG has no <clipPath> element, wraps all its children in one.
+ * This normalizes plain SVGs (e.g. icons) so they can be used as clip masks.
+ */
+function ensureClipPathWrapper(svgString: string): string {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgString, "image/svg+xml");
+  const svgEl = doc.querySelector("svg");
+  if (!svgEl || svgEl.querySelector("clipPath")) return svgString;
+
+  const clipPath = doc.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "clipPath",
+  );
+  Array.from(svgEl.childNodes).forEach((child) => clipPath.appendChild(child));
+  svgEl.appendChild(clipPath);
+
+  return new XMLSerializer().serializeToString(doc);
+}
+
 export function updateClipPaths(
   svgString: string,
   clipPathAttr: { id: string; clipPathUnits: string; transform?: string },
@@ -30,7 +50,7 @@ export function getClipMaskFromSvg(
   width: string,
   height: string,
 ) {
-  const svg = svgInput; //await outlineStroke(svgInput);
+  const svg = ensureClipPathWrapper(svgInput);
 
   const updateSVG = updateClipPaths(svg, {
     id: clipMaskId,
@@ -79,6 +99,63 @@ export function getClipMaskFromSvg(
   //       </defs>
   //     </svg>
   //     `;
+}
+
+/**
+ * Builds clipPath SVG HTML with a statically computed userSpaceOnUse transform
+ * for use in player/export HTML where there is no live DOM to update afterwards.
+ */
+export function getClipMaskFromSvgForExport(
+  svgInput: string,
+  clipMaskId: string,
+  maskCalcSize: { left: string; top: string; width: string; height: string },
+  targetCalcSize: { left: string; top: string; width: string; height: string },
+  maskRotation: number,
+  maskScale: number,
+  targetRotation: number,
+  targetScale: number,
+): string {
+  const normalizedInput = ensureClipPathWrapper(svgInput);
+  const svgEl = createElementFromHTML(normalizedInput) as SVGElement;
+  if (!svgEl) return "";
+
+  const { width: svgWidth, height: svgHeight } = getSvgDimensions(svgEl);
+  if (svgWidth === 0 || svgHeight === 0) {
+    return getClipMaskFromSvg(svgInput, clipMaskId, "", "");
+  }
+
+  const maskLeft = parseFloat(maskCalcSize.left);
+  const maskTop = parseFloat(maskCalcSize.top);
+  const maskWidth = parseFloat(maskCalcSize.width);
+  const maskHeight = parseFloat(maskCalcSize.height);
+  const targetLeft = parseFloat(targetCalcSize.left);
+  const targetTop = parseFloat(targetCalcSize.top);
+
+  const dx = maskLeft - targetLeft;
+  const dy = maskTop - targetTop;
+
+  const R_t = (targetRotation * Math.PI) / 180;
+  const tx = (Math.cos(R_t) * dx + Math.sin(R_t) * dy) / targetScale;
+  const ty = (-Math.sin(R_t) * dx + Math.cos(R_t) * dy) / targetScale;
+
+  const scaleX = (maskScale * maskWidth) / (svgWidth * targetScale);
+  const scaleY = (maskScale * maskHeight) / (svgHeight * targetScale);
+  const relativeRotation = maskRotation - targetRotation;
+
+  const transform = `translate(${tx},${ty}) rotate(${relativeRotation}) scale(${scaleX},${scaleY})`;
+
+  const updatedSvg = updateClipPaths(normalizedInput, {
+    id: clipMaskId,
+    clipPathUnits: "userSpaceOnUse",
+    transform,
+  });
+
+  const resultEl = createElementFromHTML(updatedSvg) as SVGElement;
+  if (!resultEl) return "";
+  resultEl.setAttribute("width", svgWidth.toString());
+  resultEl.setAttribute("height", svgHeight.toString());
+
+  return resultEl.outerHTML;
 }
 
 function createElementFromHTML(htmlString: string) {

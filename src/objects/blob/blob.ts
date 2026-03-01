@@ -21,7 +21,7 @@ import {
 } from "webslider-sdk/lib/objects/i-object";
 import { v4 as uuid } from "uuid";
 import { createCommonObject } from "webslider-sdk/lib/objects/create-common-object";
-import svg from "./blob-icon.svg?react";
+import svg from "./blob-icon.svg?raw";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
@@ -67,11 +67,11 @@ export type TextPropertiesTuple = [
   IColorInput<"fillColor">,
   INumberInput<"growth">,
   INumberInput<"edges">,
-  INumberInput<"seed">
+  INumberInput<"seed">,
 ];
 
 export function createBlobObject(
-  initialValue?: Record<string, any>
+  initialValue?: Record<string, any>,
 ): Omit<IObject, keyof ICommonObjectProperties | "layerId"> {
   const object = createCommonObject(BLOB);
 
@@ -146,7 +146,7 @@ export function getBlobHtml(props: GetHtmlFuncPropsType) {
 
   const blobValues = getObjectValuesForDevice(
     object.properties as BlobValues,
-    deviceType
+    deviceType,
   );
 
   let style = "";
@@ -162,19 +162,19 @@ export function getBlobHtml(props: GetHtmlFuncPropsType) {
 
   const svg = `
     <svg viewBox="0 0 ${object.width} ${
-    object.width
-  }" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      object.width
+    }" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
       <path  d="${path}" stroke-width="${blobValues.strokeWidth}" stroke="${
-    convertRGBColor2CSSStyle(blobValues.strokeColor).backgroundColor
-  }" fill="${
-    convertRGBColor2CSSStyle(blobValues.fillColor).backgroundColor
-  }"></path>
+        convertRGBColor2CSSStyle(blobValues.strokeColor).backgroundColor
+      }" fill="${
+        convertRGBColor2CSSStyle(blobValues.fillColor).backgroundColor
+      }"></path>
      </svg>`;
   return `<div class="object-content object-content-${object.id}" style="${style}">${svg}</div>`;
 }
 
 export async function blobSizeUpdate(
-  props: UpdateObjectSizeFuncPropsType
+  props: UpdateObjectSizeFuncPropsType,
 ): Promise<void> {
   const {
     id,
@@ -189,13 +189,13 @@ export async function blobSizeUpdate(
   } = props;
   const textValues = getObjectValuesForDevice(
     properties as BlobValues,
-    deviceType
+    deviceType,
   );
 
   const objectWrapperEl = getObjectWrapperElementById(id);
   const objectEl = getObjectElementById(id);
   const objectContentEl = objectEl.getElementsByClassName(
-    "object-content"
+    "object-content",
   )[0] as HTMLElement;
 
   const child = objectEl.firstChild! as HTMLDivElement;
@@ -213,7 +213,7 @@ export async function blobSizeUpdate(
   addTransformStyleToObjectElementContent(
     objectContentEl,
     transform,
-    deviceType
+    deviceType,
   );
 
   const transformProperties = getObjectValuesForDevice(transform);

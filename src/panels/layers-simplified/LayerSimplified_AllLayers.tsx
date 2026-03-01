@@ -28,6 +28,7 @@ import { Button } from "@blueprintjs/core";
 import withScrolling from "react-dnd-scrolling";
 import { LayerButton } from "./LayerButton";
 import { DndItem, useDndObjectList, toStoreOrder } from "./useDndObjectList";
+import { SVG_MASK } from "../../objects/svg-mask/svg-mask";
 
 const ScrollingComponent = withScrolling("div");
 
@@ -133,10 +134,17 @@ const LayersSimplified_AllLayers = (props: ISlidesPanel) => {
                 {displayItems.map((item, idx) => {
                   if (item.layerId !== layerId) return null;
                   const object = objectById[item.objectId];
+                  const nextItem = displayItems[idx + 1];
+                  const isInvalidMask =
+                    object.type === SVG_MASK &&
+                    !!nextItem &&
+                    nextItem.layerId === item.layerId &&
+                    objectById[nextItem.objectId]?.type === SVG_MASK;
                   return (
                     <React.Fragment key={`object-${item.objectId}`}>
                       <ObjectRow
                         isHovered={hoverIndex === idx}
+                        isInvalidMask={isInvalidMask}
                         moveObject={moveObject}
                         dropCancel={reset}
                         dropDone={() => {

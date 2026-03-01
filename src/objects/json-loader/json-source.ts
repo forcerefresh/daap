@@ -14,7 +14,7 @@ import {
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { PreloadOrder } from "webslider-sdk/lib/objects/objects-register";
 import { getOrCreateConnectorById } from "webslider-sdk/lib/connectors/connector-manager";
-import logo from "./json-source-logo.svg?react";
+import logo from "./json-source-logo.svg?raw";
 import { JSONSourceConnector } from "./json-source-connector";
 
 export const JSON_SOURCE = "json_source";
@@ -22,7 +22,7 @@ export const JSON_SOURCE = "json_source";
 export type JSONSourceTuple = [
   ITextInput<"sourceId">,
   ITextInput<"url">,
-  ICheckboxInput<"preload">
+  ICheckboxInput<"preload">,
 ];
 
 export interface JsonSourceValues {
@@ -38,7 +38,7 @@ export function createJsonSource(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<IObject<JSONSourceTuple>, keyof ICommonObjectProperties | "layerId"> {
   const object = {
     ...createCommonObject(JSON_SOURCE),
@@ -150,7 +150,7 @@ export async function jsonSourceStart(props: {
   const conn = getOrCreateConnectorById(
     JSONSourceConnector,
     id,
-    jsonSourceValues.sourceId
+    jsonSourceValues.sourceId,
   );
 
   if (!jsonSourceValues.preload) {
@@ -177,7 +177,7 @@ export async function jsonSourcePreload(props: {
   const conn = getOrCreateConnectorById(
     JSONSourceConnector,
     id,
-    jsonSourceValues.sourceId
+    jsonSourceValues.sourceId,
   );
 
   await conn.loadData(jsonSourceValues.url);

@@ -65,13 +65,16 @@ export function objects(
       //   ? newState.nextObjectNameNumber[object.type]+1
       //   : 2;
 
-      // add to parent object parentObject.objectIds
-      if (object.parentId && newState.objectById[object.parentId]) {
-        if (!newState.objectById[object.parentId].objectIds) {
-          newState.objectById[object.parentId].objectIds = [];
-        }
-
-        newState.objectById[object.parentId].objectIds!.push(object.id);
+      // add to parent group's objectIds (immutable update)
+      if (object.parentId && newState.objectById[object.parentId]?.objectIds !== undefined) {
+        const parentGroup = newState.objectById[object.parentId];
+        newState.objectById = {
+          ...newState.objectById,
+          [object.parentId]: {
+            ...parentGroup,
+            objectIds: [...(parentGroup.objectIds ?? []), object.id],
+          },
+        };
       }
 
       return newState;
@@ -357,6 +360,19 @@ export function objects(
             object.parentId = toLayerId;
           }
         });
+      } else if (payload.where === "below") {
+        // handle ordering within a group when refId is a group child
+        const refObject = state.objectById[payload.refId];
+        if (refObject?.parentId && objectById[refObject.parentId]?.objectIds) {
+          const parentGroup = objectById[refObject.parentId];
+          parentGroup.objectIds = parentGroup.objectIds!.filter(
+            (id) => payload.moveIds.indexOf(id) === -1,
+          );
+          const idx = parentGroup.objectIds!.indexOf(payload.refId);
+          if (idx !== -1) {
+            parentGroup.objectIds!.splice(idx + 1, 0, ...payload.moveIds);
+          }
+        }
       }
 
       return { ...state, objectById };

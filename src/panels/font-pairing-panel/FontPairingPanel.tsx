@@ -467,12 +467,13 @@ const FontPairingPanel = (props: IFontPairingPanelMergedProps) => {
   );
 };
 
-const mapStateToProps = (state: IStore) => ({
-  activeLayerId: state.project.selection.activeLayerId,
-  loadedFontFamilies: state.fonts.loadedFontFamilies,
-  // documentSize: state.project.document.documentSize,
-  themeClass: state.project.settings.themeClass,
-});
+const mapStateToProps = (state: IStore) => {
+  return {
+    activeLayerId: state.project.selection.activeLayerId,
+    loadedFontFamilies: state.fonts.loadedFontFamilies,
+    themeClass: state.project.settings.themeClass,
+  };
+};
 
 const mapDispatchToProps = {
   _addNewObject: (

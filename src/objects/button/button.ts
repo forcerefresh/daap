@@ -33,7 +33,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 
-import buttonIcon from "./button-icon.svg?react";
+import buttonIcon from "./button-icon.svg?raw";
 
 export const BUTTON = "button";
 
@@ -47,9 +47,9 @@ export type ButtonPropertiesTuple = [
           IFormSwitchGroup<[IBoxInput<"sizePadding">]>,
           IFormSwitchGroup<
             [IUnitsNumberInput<"sizeWidth">, IUnitsNumberInput<"sizeHeight">]
-          >
+          >,
         ]
-      >
+      >,
     ]
   >,
   IFormGroupItem<
@@ -57,7 +57,7 @@ export type ButtonPropertiesTuple = [
       IFontSelectInput<"font">,
       IUnitsNumberInput<"fontSize">,
       IColorInput<"fontColor">,
-      ISelectInput<"fontWeight">
+      ISelectInput<"fontWeight">,
     ]
   >,
   IFormGroupItem<
@@ -65,7 +65,7 @@ export type ButtonPropertiesTuple = [
       ISelectInput<"borderStyle">,
       IBoxInput<"borderSize">,
       IColorInput<"borderColor">,
-      ICornerRadiusInput<"borderRadius">
+      ICornerRadiusInput<"borderRadius">,
     ]
   >,
   IFormGroupItem<
@@ -77,11 +77,11 @@ export type ButtonPropertiesTuple = [
           IFormSwitchGroup<
             [
               IColorInput<"backgroundGradientColor1">,
-              IColorInput<"backgroundGradientColor2">
+              IColorInput<"backgroundGradientColor2">,
             ]
-          >
+          >,
         ]
-      >
+      >,
     ]
   >,
   IFormGroupItem<
@@ -89,7 +89,7 @@ export type ButtonPropertiesTuple = [
       IUnitsNumberInput<"textShadowDistanceX">,
       IUnitsNumberInput<"textShadowDistanceY">,
       IUnitsNumberInput<"textShadowBlur">,
-      IColorInput<"textShadowColor">
+      IColorInput<"textShadowColor">,
     ]
   >,
   IFormGroupItem<
@@ -99,7 +99,7 @@ export type ButtonPropertiesTuple = [
       IUnitsNumberInput<"boxShadowBlur">,
       IUnitsNumberInput<"boxShadowSpread">,
       IColorInput<"boxShadowColor">,
-      ICheckboxInput<"boxShadowInset">
+      ICheckboxInput<"boxShadowInset">,
     ]
   >,
   IFormGroupItem<
@@ -107,7 +107,7 @@ export type ButtonPropertiesTuple = [
       ISelectInput<"hoverBorderStyle">,
       IBoxInput<"hoverBorderSize">,
       IColorInput<"hoverBorderColor">,
-      ICornerRadiusInput<"hoverBorderRadius">
+      ICornerRadiusInput<"hoverBorderRadius">,
     ]
   >,
   IFormGroupItem<
@@ -119,14 +119,14 @@ export type ButtonPropertiesTuple = [
           IFormSwitchGroup<
             [
               IColorInput<"hoverBackgroundGradientColor1">,
-              IColorInput<"hoverBackgroundGradientColor2">
+              IColorInput<"hoverBackgroundGradientColor2">,
             ]
-          >
+          >,
         ]
-      >
+      >,
     ]
   >,
-  INumberInput<"hoverTransitionDuration">
+  INumberInput<"hoverTransitionDuration">,
 ];
 
 export interface ButtonValues extends CommonObjectValues {
@@ -768,7 +768,7 @@ export function getButtonHtml(props: {
   if (buttonProperties.hasHoverBorder) {
     cssHoverStyle = addBorderBox(
       cssHoverStyle,
-      buttonProperties.hoverBorderSize
+      buttonProperties.hoverBorderSize,
     );
 
     cssHoverStyle += `border-style: ${buttonProperties.hoverBorderStyle};`;
@@ -776,7 +776,7 @@ export function getButtonHtml(props: {
     cssHoverStyle += `border-color: rgba(${bhc?.r},${bhc?.g},${bhc?.b},${bhc?.a});`;
     cssHoverStyle = addBorderRadius(
       cssHoverStyle,
-      buttonProperties.hoverBorderRadius
+      buttonProperties.hoverBorderRadius,
     );
   } else {
     //cssHoverStyle += "border-style: none;";

@@ -17,7 +17,7 @@ import {
   PreloadOrder,
   UpdateObjectSizeFuncPropsType,
 } from "webslider-sdk/lib/objects/objects-register";
-import svg from "./svg-mask-icon.svg?react";
+import svg from "./svg-mask-icon.svg?raw";
 import { getObjectPlaceholder } from "webslider-sdk/lib/objects/object-helpers";
 import { getMediaSrc } from "../../integration/utils/local-media";
 import { addTransformPropertiesToStyle } from "webslider-sdk/lib/objects/transform-properties";
@@ -31,7 +31,10 @@ import { getObjectValuesForDevice } from "webslider-sdk/lib/objects/object-utils
 import { TransformPropertiesValues } from "webslider-sdk/lib/objects/transform-properties";
 import { addCommonPropertiesToStyle } from "webslider-sdk/lib/objects/common-properties-player";
 import { fetchSVG } from "../../panels/quick-bar-panel/QuickBarPanel";
-import { getClipMaskFromSvg } from "../../utils/doom-utils/clip-path";
+import {
+  getClipMaskFromSvg,
+  getClipMaskFromSvgForExport,
+} from "../../utils/doom-utils/clip-path";
 // NOTE: temporary — direct store access to resolve the target object for clip-path transform.
 // TODO: thread target context through the object registration/callback system instead.
 import { store, IStore } from "../../store/store";
@@ -242,10 +245,25 @@ export function getSvgMaskHtml(props: GetHtmlFuncPropsType) {
 
     const cached = svgCache.get(maskUrl);
     if (cached) {
-      const svgHtml = getClipMaskFromSvg(cached, clipMaskId, "", "");
-      // Return SVG inline so processScaleChangeEvent's innerHTML replacement
-      // preserves the <clipPath> element during mask resize/scale drag.
-      // The clipPath transform is set post-commit by useLayoutEffect in StageObject.
+      let svgHtml: string;
+      if (isPlayer && props.targetObject && props.targetCalculatedObjectSize) {
+        // Static export/player: bake the clip transform from data — no live DOM update.
+        svgHtml = getClipMaskFromSvgForExport(
+          cached,
+          clipMaskId,
+          calculatedObjectSize,
+          props.targetCalculatedObjectSize,
+          object.rotation ?? 0,
+          object.scale ?? 1,
+          props.targetObject.rotation ?? 0,
+          props.targetObject.scale ?? 1,
+        );
+      } else {
+        // Editor: return SVG inline so processScaleChangeEvent's innerHTML
+        // replacement preserves the <clipPath> element during mask drag.
+        // The clipPath transform is set post-commit by useLayoutEffect in StageObject.
+        svgHtml = getClipMaskFromSvg(cached, clipMaskId, "", "");
+      }
       return `<div class="object-content object-content-${object.id}" style="${style}">${svgHtml}</div>`;
     } else {
       fetchSVG(maskUrl).then((svgContent) => {

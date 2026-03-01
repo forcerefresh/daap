@@ -42,6 +42,18 @@ export enum SelectionType {
   Multiple = "multiple",
 }
 
+export const includeMediaRequiredProps = (media: any) => {
+  return pick(
+    media,
+    "width",
+    "height",
+    "sourceType",
+    "sizeType",
+    "mediaSizes",
+    "inlineSvgPreview",
+    "id",
+  );
+};
 interface IMediaLibraryPanelProps {
   selectionType?: SelectionType;
   panelsToShow?: Panels[];
@@ -109,19 +121,6 @@ const MediaLibraryPanel: React.FC<IMediaLibraryPanelMergedProps> = (props) => {
   }/api/v1?api-key=${apiKey}`;
 
   //if (apiKey === null) return null;
-
-  const includeMediaRequiredProps = (media: any) => {
-    return pick(
-      media,
-      "width",
-      "height",
-      "sourceType",
-      "sizeType",
-      "mediaSizes",
-      "inlineSvgPreview",
-      "id",
-    );
-  };
 
   const { replaceItem } = useContext(GlobalEventsContext);
 
@@ -724,4 +723,6 @@ const mapDispatchToProps = {
   _replaceObject: replaceObject,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MediaLibraryPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  MediaLibraryPanel,
+) as React.ComponentType<IMediaLibraryPanelProps>;

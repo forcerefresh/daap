@@ -19,7 +19,7 @@ import {
   IObject,
 } from "webslider-sdk/lib/objects/i-object";
 import { convertRGBColor2RGBAString } from "webslider-sdk/lib/utils/utils";
-import svg from "./spinner-icon.svg?react";
+import svg from "./spinner-icon.svg?raw";
 import {
   getCommonObjectPropertiesDefinition,
   getCommonPropertiesMetadataValues,
@@ -43,7 +43,7 @@ export type SpinnerPropertiesTuple = [
   ISelectInput<"type">,
   IColorInput<"color">,
   IUnitsNumberInput<"fadeInTime">,
-  IUnitsNumberInput<"fadeOutTime">
+  IUnitsNumberInput<"fadeOutTime">,
 ];
 
 export interface SpinnerValues {
@@ -60,7 +60,7 @@ export function createSpinnerObject(
   },
   commonProperties?: {
     hasOverflowProperty: boolean;
-  }
+  },
 ): Omit<
   IObject<SpinnerPropertiesTuple>,
   keyof ICommonObjectProperties | "layerId"
@@ -256,7 +256,7 @@ function getFade(randId: string, spinnerValues: SpinnerValues) {
 function getPlane(
   spinnerValues: SpinnerValues,
   randId: string,
-  isPlayer: boolean | undefined
+  isPlayer: boolean | undefined,
 ) {
   let css = `
     ${getFade(randId, spinnerValues)}
@@ -283,7 +283,7 @@ function getPlane(
 function getChase(
   spinnerValues: SpinnerValues,
   randId: string,
-  isPlayer: boolean | undefined
+  isPlayer: boolean | undefined,
 ) {
   let css = `
     ${getFade(randId, spinnerValues)}
@@ -347,7 +347,7 @@ function getChase(
 function getDot(
   spinnerValues: SpinnerValues,
   randId: string,
-  isPlayer: boolean | undefined
+  isPlayer: boolean | undefined,
 ) {
   let css = `
     ${getFade(randId, spinnerValues)}
@@ -391,7 +391,7 @@ function getDot(
 function getBars(
   spinnerValues: SpinnerValues,
   randId: string,
-  isPlayer: boolean | undefined
+  isPlayer: boolean | undefined,
 ) {
   let css = `
     ${getFade(randId, spinnerValues)}
