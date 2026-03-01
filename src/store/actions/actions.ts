@@ -289,54 +289,57 @@ function _duplicateSlides(
   };
 }
 
+/**
+ * Recursively build the duplicate schema for an object and all its descendants.
+ * Handles arbitrarily deep group nesting.
+ */
+function buildObjectSchema(
+  objectId: string,
+  newParentId: string,
+  objectById: { [id: string]: IObject },
+): IDuplicateSchema[number] {
+  const newObjectId = uuid();
+  const object = objectById[objectId];
+
+  const childSchemas: IDuplicateSchema = [];
+  const newChildObjectIds: string[] = [];
+
+  if (isObjectGroup(object)) {
+    object.objectIds?.forEach((childId) => {
+      const childSchema = buildObjectSchema(childId, newObjectId, objectById);
+      childSchemas.push(childSchema);
+      newChildObjectIds.push(childSchema.toId as string);
+    });
+  }
+
+  return {
+    fromId: objectId,
+    toId: newObjectId,
+    newParentId,
+    newObjectIds: newChildObjectIds.length > 0 ? newChildObjectIds : undefined,
+    childs: childSchemas,
+  };
+}
+
 export function duplicateSlides(slideIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const objectById = getState().project.objects.objectById;
-
     const duplicateSlidesSchema: IDuplicateSchema = [];
-
-    const newObjectIds: string[] = [];
 
     slideIds.forEach((pageId) => {
       const duplicateLayersSchema: IDuplicateSchema = [];
       const layerIds = getState().project.pages.pageById[pageId].layerIds;
+
       layerIds.forEach((layerId) => {
-        const duplicateObjectSchema: IDuplicateSchema = [];
-
-        const objectIds =
-          getState().project.layers.layerById[layerId].objectIds;
-
-        objectIds.forEach((objectId) => {
-          const newObjectId = uuid();
-          newObjectIds.push(newObjectId);
-
-          // child objects
-          const duplicateChildObjectSchema: IDuplicateSchema = [];
-          const toChildObjectIds: string[] = [];
-          if (isObjectGroup(objectById[objectId])) {
-            objectById[objectId].objectIds?.forEach((childObjectId) => {
-              const toChildObjectId = uuid();
-              duplicateChildObjectSchema.push({
-                fromId: childObjectId,
-                toId: toChildObjectId,
-                childs: [],
-                newParentId: newObjectId,
-              });
-              toChildObjectIds.push(toChildObjectId);
-            });
-          }
-
-          duplicateObjectSchema.push({
-            fromId: objectId,
-            toId: newObjectId,
-            childs: duplicateChildObjectSchema,
-            newObjectIds: toChildObjectIds,
-          });
-        });
+        const newLayerId = uuid();
+        const objectIds = getState().project.layers.layerById[layerId].objectIds;
+        const duplicateObjectSchema: IDuplicateSchema = objectIds.map((objectId) =>
+          buildObjectSchema(objectId, newLayerId, objectById),
+        );
 
         duplicateLayersSchema.push({
           fromId: layerId,
-          toId: uuid(),
+          toId: newLayerId,
           childs: duplicateObjectSchema,
         });
       });
@@ -349,7 +352,6 @@ export function duplicateSlides(slideIds: string[]) {
     });
 
     dispatch(_duplicateSlides(duplicateSlidesSchema));
-    //dispatch(selectObjects(newObjectIds));
   };
 }
 
@@ -538,7 +540,6 @@ export function deleteLayersThree(layerIds: string[]) {
 export function duplicateLayers(layerIds: string[]) {
   return function (dispatch: Dispatch, getState: () => IStore) {
     const objectById = getState().project.objects.objectById;
-
     const duplicateSlidesSchema: IDuplicateSchema = [];
 
     const pages = getState().project.pages;
@@ -550,50 +551,21 @@ export function duplicateLayers(layerIds: string[]) {
     ];
 
     allSlides.forEach((allSlideId) => {
-      const duplicateLayersSchema: IDuplicateSchema = [];
-      const allLayerIds =
-        getState().project.pages.pageById[allSlideId].layerIds;
+      const allLayerIds = getState().project.pages.pageById[allSlideId].layerIds;
       const currentLayersIds = intersection(allLayerIds, layerIds);
 
-      currentLayersIds.forEach((currentLayerId) => {
-        const duplicateObjectSchema: IDuplicateSchema = [];
+      const duplicateLayersSchema: IDuplicateSchema = currentLayersIds.map((currentLayerId) => {
+        const newLayerId = uuid();
+        const objectIds = getState().project.layers.layerById[currentLayerId].objectIds;
+        const duplicateObjectSchema: IDuplicateSchema = objectIds.map((objectId) =>
+          buildObjectSchema(objectId, newLayerId, objectById),
+        );
 
-        const objectIds =
-          getState().project.layers.layerById[currentLayerId].objectIds;
-
-        objectIds.forEach((objectId) => {
-          const newObjectId = uuid();
-          //newObjectIds.push(newObjectId);
-
-          // child objects
-          const duplicateChildObjectSchema: IDuplicateSchema = [];
-          const toChildObjectIds: string[] = [];
-          if (isObjectGroup(objectById[objectId])) {
-            objectById[objectId].objectIds?.forEach((childObjectId) => {
-              const toChildObjectId = uuid();
-              duplicateChildObjectSchema.push({
-                fromId: childObjectId,
-                toId: toChildObjectId,
-                childs: [],
-                newParentId: newObjectId,
-              });
-              toChildObjectIds.push(toChildObjectId);
-            });
-          }
-
-          duplicateObjectSchema.push({
-            fromId: objectId,
-            toId: newObjectId,
-            childs: duplicateChildObjectSchema,
-            newObjectIds: toChildObjectIds,
-          });
-        });
-
-        duplicateLayersSchema.push({
+        return {
           fromId: currentLayerId,
-          toId: uuid(),
+          toId: newLayerId,
           childs: duplicateObjectSchema,
-        });
+        };
       });
 
       duplicateSlidesSchema.push({
@@ -1092,11 +1064,9 @@ export function selectObjects(selectedObjectIds: string[]): any {
 
     const selectedObject = objectById[selectedObjectIds[0]];
     const currentScope: SelectionScope =
-      selectedObject?.type === "group"
-        ? { type: "group", groupId: selectedObject.id }
-        : objectById[selectedObject?.parentId!]?.type === "group"
-          ? { type: "group", groupId: selectedObject!.parentId! }
-          : { type: "layer" };
+      objectById[selectedObject?.parentId!]?.type === "group"
+        ? { type: "group", groupId: selectedObject!.parentId! }
+        : { type: "layer" };
 
     dispatch(_selectObjects(selectedObjectIds, selectionPath, currentScope));
   };

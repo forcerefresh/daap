@@ -91,10 +91,31 @@ export function StageObjectInternal(props: IStageLayer) {
     selectionPath,
     clipboard,
     forceRefreshRand,
+    currentScope,
   } = props;
 
   const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
+
+  // A group is "focused" when it's the single selected object at layer scope — not yet entered
+  const focusedGroupId =
+    currentScope.type === "layer" &&
+    selectedObjectIds.length === 1 &&
+    objectById[selectedObjectIds[0]]?.type === "group"
+      ? selectedObjectIds[0]
+      : null;
+
+  // Sibling of the focused group: disable pointer events (no opacity) so clicks reach group children
+  const isOutsideFocusedGroup =
+    focusedGroupId !== null &&
+    object.id !== focusedGroupId &&
+    object.parentId !== focusedGroupId;
+
+  // Entered the group: object is outside the active group scope — dim + disable pointer events
+  const isOutsideActiveGroup =
+    currentScope.type === "group" &&
+    object.id !== currentScope.groupId &&
+    object.parentId !== currentScope.groupId;
 
   // ++
   const groupsPath = [...selectionPath];
@@ -338,6 +359,10 @@ export function StageObjectInternal(props: IStageLayer) {
   objectHolderStyle.transformOrigin = "top left";
   objectHolderStyle.transform = getObjectTransform(object);
 
+  if (isOutsideActiveGroup) {
+    objectHolderStyle.opacity = 0.35;
+  }
+
   if (clipboard?.entityIds?.includes(object.id)) {
     if (clipboard?.operation === "cut") objectHolderStyle.opacity = 0.5;
   }
@@ -366,9 +391,9 @@ export function StageObjectInternal(props: IStageLayer) {
   }
 
   let allowObjectSelection =
-    rootObjectSelection ||
-    childObjectInGroupSelection ||
-    siblingObjectSelection;
+    !isOutsideActiveGroup &&
+    !isOutsideFocusedGroup &&
+    (rootObjectSelection || childObjectInGroupSelection || siblingObjectSelection);
 
   const objectInGroup = isObjectInGroup(object, objectById);
 
@@ -388,6 +413,11 @@ export function StageObjectInternal(props: IStageLayer) {
 
   return (
     <React.Fragment key={forceRefreshRand}>
+      {(isOutsideActiveGroup || isOutsideFocusedGroup) && (
+        <style dangerouslySetInnerHTML={{
+          __html: `.object-holder-${object.id}, .object-holder-${object.id} * { pointer-events: none !important; }`
+        }} />
+      )}
       <div
         className="clipping-mask-daap"
         dangerouslySetInnerHTML={{ __html: clipMaskHtml }}
@@ -419,7 +449,7 @@ export function StageObjectInternal(props: IStageLayer) {
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`)}
             onMouseEnter={() => {
-              !activeTool && !isSelected && setIsHover(true);
+              !activeTool && !isSelected && !isOutsideActiveGroup && !isOutsideFocusedGroup && setIsHover(true);
             }}
             onMouseLeave={() => {
               if (isHover) setIsHover(false);
@@ -562,6 +592,7 @@ const mapStateToProps = (state: IStore) => {
     activeLayerId: selection.activeLayerId,
     selectedObjectIds: selection.selectedObjectIds,
     selectionPath: selection.selectionPath,
+    currentScope: selection.currentScope,
     activeStageTool: state.stage.activeStageTool.tool,
     stageToolObjectType: state.stage.stageTool.objectType,
     breakpointConfig,

@@ -101,7 +101,9 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
 
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
   const groupingDisabled =
-    selectedObjectIds.length < 2 || isObjectGroup(objectById[parentId!]);
+    (selectedObjectIds.length === 1 &&
+      isObjectGroup(objectById[selectedObjectIds[0]])) ||
+    isObjectGroup(objectById[parentId!]);
 
   // const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);

@@ -10,6 +10,7 @@ import {
   CREATE_NEW_PROJECT,
   DELETE_OBJECTS,
   DUPLICATE,
+  IDuplicateSchema,
   OPEN_PROJECT,
   UPDATE_OBJECT,
   MOVE_OBJECTS,
@@ -306,35 +307,34 @@ export function objects(
       return newState;
     }
     case DUPLICATE: {
-      // Note: this part duplicate object
       const newState = cloneDeep(state);
       const dS = action.payload;
+
+      function applyObjectItem(
+        objectItem: IDuplicateSchema[number],
+        layerId: string,
+      ) {
+        const fromObject = state.objectById[objectItem.fromId];
+        const toObject = cloneDeep(fromObject);
+        toObject.id = objectItem.toId!;
+        toObject.name = getCopyName(newState.objectById, toObject.name);
+        toObject.layerId = layerId;
+        if (objectItem.newObjectIds) toObject.objectIds = objectItem.newObjectIds;
+        if (objectItem.newParentId) toObject.parentId = objectItem.newParentId;
+        if (objectItem.positionMove) {
+          toObject.left = toObject.left! + 20;
+          toObject.top = toObject.top! + 20;
+        }
+        newState.allObjects.push(toObject.id);
+        newState.objectById[toObject.id] = toObject;
+        // recurse into children (handles nested groups of any depth)
+        objectItem.childs.forEach((childItem) => applyObjectItem(childItem, layerId));
+      }
+
       dS.forEach((slideItem) => {
         slideItem.childs.forEach((layerItem) => {
           layerItem.childs.forEach((rootObjectItem) => {
-            [...[rootObjectItem], ...rootObjectItem.childs].forEach(
-              (objectItem) => {
-                const fromObject = state.objectById[objectItem.fromId];
-                const toObject = cloneDeep(fromObject);
-                toObject.id = objectItem.toId!; // CHEK THI !
-                toObject.name = getCopyName(newState.objectById, toObject.name);
-                toObject.layerId = layerItem.toId!;
-                if (objectItem.newObjectIds)
-                  toObject.objectIds = objectItem.newObjectIds;
-                if (objectItem.newParentId)
-                  toObject.parentId = objectItem.newParentId;
-
-                if (objectItem.positionMove) {
-                  // NOTE: LAYOUT CHANGE
-                  toObject.left = toObject.left! + 20;
-                  toObject.top = toObject.top! + 20;
-                }
-
-                //applyNewAnimationIdsToTransitionAbleElement(toObject);
-                newState.allObjects.push(toObject.id);
-                newState.objectById[toObject.id] = toObject;
-              }
-            );
+            applyObjectItem(rootObjectItem, layerItem.toId!);
           });
         });
       });
