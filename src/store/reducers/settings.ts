@@ -210,7 +210,7 @@ const getSettingsDefault = (props?: {
       width: "1080px",
       height: "1080px",
       margins: { left: 80, top: 80, bottom: 80, right: 80 },
-    }
+    },
   ),
   //theme
   theme: "dark",
@@ -219,7 +219,7 @@ const getSettingsDefault = (props?: {
 
 export function settings(
   state: ISettings = getSettingsDefault(),
-  action: ActionTypes
+  action: ActionTypes,
 ) {
   switch (action.type) {
     case UPDATE_PROJECT_SETTINGS: {

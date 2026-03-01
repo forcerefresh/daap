@@ -332,9 +332,10 @@ export function duplicateSlides(slideIds: string[]) {
 
       layerIds.forEach((layerId) => {
         const newLayerId = uuid();
-        const objectIds = getState().project.layers.layerById[layerId].objectIds;
-        const duplicateObjectSchema: IDuplicateSchema = objectIds.map((objectId) =>
-          buildObjectSchema(objectId, newLayerId, objectById),
+        const objectIds =
+          getState().project.layers.layerById[layerId].objectIds;
+        const duplicateObjectSchema: IDuplicateSchema = objectIds.map(
+          (objectId) => buildObjectSchema(objectId, newLayerId, objectById),
         );
 
         duplicateLayersSchema.push({
@@ -551,22 +552,26 @@ export function duplicateLayers(layerIds: string[]) {
     ];
 
     allSlides.forEach((allSlideId) => {
-      const allLayerIds = getState().project.pages.pageById[allSlideId].layerIds;
+      const allLayerIds =
+        getState().project.pages.pageById[allSlideId].layerIds;
       const currentLayersIds = intersection(allLayerIds, layerIds);
 
-      const duplicateLayersSchema: IDuplicateSchema = currentLayersIds.map((currentLayerId) => {
-        const newLayerId = uuid();
-        const objectIds = getState().project.layers.layerById[currentLayerId].objectIds;
-        const duplicateObjectSchema: IDuplicateSchema = objectIds.map((objectId) =>
-          buildObjectSchema(objectId, newLayerId, objectById),
-        );
+      const duplicateLayersSchema: IDuplicateSchema = currentLayersIds.map(
+        (currentLayerId) => {
+          const newLayerId = uuid();
+          const objectIds =
+            getState().project.layers.layerById[currentLayerId].objectIds;
+          const duplicateObjectSchema: IDuplicateSchema = objectIds.map(
+            (objectId) => buildObjectSchema(objectId, newLayerId, objectById),
+          );
 
-        return {
-          fromId: currentLayerId,
-          toId: newLayerId,
-          childs: duplicateObjectSchema,
-        };
-      });
+          return {
+            fromId: currentLayerId,
+            toId: newLayerId,
+            childs: duplicateObjectSchema,
+          };
+        },
+      );
 
       duplicateSlidesSchema.push({
         fromId: allSlideId,
@@ -997,7 +1002,11 @@ export const SELECT_OBJECTS = "Select objects";
 
 export interface SelectObjectAction extends IUndoableAction<true, true> {
   type: typeof SELECT_OBJECTS;
-  payload: { selectedObjectIds: string[]; selectionPath: string[]; currentScope: SelectionScope };
+  payload: {
+    selectedObjectIds: string[];
+    selectionPath: string[];
+    currentScope: SelectionScope;
+  };
 }
 
 export function _selectObjects(
@@ -1654,6 +1663,8 @@ export function groupObjects(objectIdsFromProps: string[]): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
     if (objectIdsFromProps.length === 0) return;
 
+    const globals = getState().globals;
+
     const objectById = getState().project.objects.objectById;
     const settings = getState().project.settings;
     const layerById = getState().project.layers.layerById;
@@ -1683,86 +1694,62 @@ export function groupObjects(objectIdsFromProps: string[]): any {
       });
     }
 
+    const groupNesting = globals.groupNesting ?? "one";
+
     // ***********
-    // 1. UNGROUP
+    // 1. UNGROUP (only in "one" mode — flatten selected groups into their children)
     // ***********
     let allObjectsIds: string[] = [];
     const allObjectsById: { [id: string]: IObject<{}> } = {};
     const groupIdsForRemoval: string[] = [];
-    objectIds.forEach((objectId) => {
-      const object = objectById[objectId];
-      if (isObjectGroup(object)) {
-        const groupObject = objectById[objectId];
-        const parentLayerId = groupObject.parentId;
-        const groupId = groupObject.id;
-        const objectIds = groupObject.objectIds;
 
-        const breakpointConfig: BreakpointConfiguration | undefined =
-          settings.breakpoints.breakpointsConfiguration.find(
-            (breakpointConfig: any) => breakpointConfig.type === selectedDevice,
-          );
-
-        const transformPerObject = getUngroupObjectsCalculation({
-          group: groupObject,
-          objects: groupObject.objectIds!.map(
-            (objectId) => objectById[objectId],
-          ),
-          breakpointConfig: breakpointConfig!,
-          parentLayer: getAncestorLayer(groupObject, layerById, objectById),
-        });
-
-        //////
-        objectIds?.forEach((objId: string) => {
-          const obj = cloneDeep(objectById[objId]);
-          //const obj: IObject = {
-          //  ...objectById[objId],
-          obj.scale = transformPerObject[objId].scale;
-          obj.rotation = transformPerObject[objId].rotation;
-
-          // NOTE: LAYOUT CHANGE
-          obj.left = transformPerObject[objId].left;
-          obj.top = transformPerObject[objId].top;
-
-          obj.parentId = groupObject.parentId;
-          obj.layerId = groupObject.layerId;
-          // obj.absoluteLayout!.common.left =
-          //   parseInt(obj.absoluteLayout!.common.left) +
-          //   parseInt(groupObject.absoluteLayout!.common.left) +
-          //   "px";
-          // obj.absoluteLayout!.common.top =
-          //   parseInt(obj.absoluteLayout!.common.top) +
-          //   parseInt(groupObject.absoluteLayout!.common.top) +
-          //   "px";
-          allObjectsById[objId] = obj;
-
-          allObjectsIds.push(objId);
-        });
-        // ///
-        //
-        groupIdsForRemoval.push(objectId);
-
-        //if (objectIds && parentId) {
-        //dispatch(
-        //   _ungroupObject(
-        //     groupId,
-        //     objectIds,
-        //     parentLayerId,
-        //     transformPerObject
-        //   )
-        // );
-
-        // dispatch(activateObject(objectIds[0]));
-        // dispatch(selectObjects(objectIds));
-        // dispatch(selectForProperties({ id: objectIds[0], type: "object" }));
-        // }
-        // TODO
-        //
-        //allObjectsIds = [...allObjectsIds];
-      } else {
+    if (groupNesting === "unlimited") {
+      // Keep selected groups intact as direct children of the new group
+      objectIds.forEach((objectId) => {
         allObjectsIds.push(objectId);
         allObjectsById[objectId] = cloneDeep(objectById[objectId]);
-      }
-    });
+      });
+    } else {
+      objectIds.forEach((objectId) => {
+        const object = objectById[objectId];
+        if (isObjectGroup(object)) {
+          const groupObject = objectById[objectId];
+          const objectIds = groupObject.objectIds;
+
+          const breakpointConfig: BreakpointConfiguration | undefined =
+            settings.breakpoints.breakpointsConfiguration.find(
+              (breakpointConfig: any) =>
+                breakpointConfig.type === selectedDevice,
+            );
+
+          const transformPerObject = getUngroupObjectsCalculation({
+            group: groupObject,
+            objects: groupObject.objectIds!.map(
+              (objectId) => objectById[objectId],
+            ),
+            breakpointConfig: breakpointConfig!,
+            parentLayer: getAncestorLayer(groupObject, layerById, objectById),
+          });
+
+          objectIds?.forEach((objId: string) => {
+            const obj = cloneDeep(objectById[objId]);
+            obj.scale = transformPerObject[objId].scale;
+            obj.rotation = transformPerObject[objId].rotation;
+            obj.left = transformPerObject[objId].left;
+            obj.top = transformPerObject[objId].top;
+            obj.parentId = groupObject.parentId;
+            obj.layerId = groupObject.layerId;
+            allObjectsById[objId] = obj;
+            allObjectsIds.push(objId);
+          });
+
+          groupIdsForRemoval.push(objectId);
+        } else {
+          allObjectsIds.push(objectId);
+          allObjectsById[objectId] = cloneDeep(objectById[objectId]);
+        }
+      });
+    }
 
     // ***********
     // 2. GROUP

@@ -12,6 +12,7 @@ import {
 } from "@blueprintjs/core";
 import {
   updateGlobalConfiguration,
+  updateProjectSettings,
   updateSlideDuration,
 } from "../../store/actions/actions";
 import {
@@ -35,7 +36,12 @@ export type IAppSettingsPanelMergedProps = typeof mapDispatchToProps &
   ReturnType<typeof mapStateToProps>;
 
 const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
-  const { globals, _updateGlobalConfiguration } = props;
+  const {
+    globals,
+    _updateGlobalConfiguration,
+    projectSettings,
+    _updateProjectSettings,
+  } = props;
 
   const globalContext = useContext(IntegrationContext);
   const { patchSettings, scaleUI } = globalContext.useSettingsHook();
@@ -242,6 +248,30 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
                   });
                 },
                 "",
+              )}
+            </div>
+
+            <div className="input60">
+              {getSelectField(
+                "Group nesting",
+                globals.groupNesting ?? "one",
+                [
+                  { value: "one", label: "One level (default)" },
+                  { value: "unlimited", label: "Unlimited" },
+                ],
+                (groupNesting) => {
+                  // save settings
+                  patchSettings({
+                    appSettings: {
+                      ...globals,
+                      groupNesting,
+                    },
+                  });
+
+                  _updateProjectSettings({
+                    groupNesting: groupNesting as "one" | "unlimited",
+                  });
+                },
               )}
             </div>
           </div>
@@ -534,12 +564,14 @@ const AppSettingsPanel: React.FC<IAppSettingsPanelMergedProps> = (props) => {
 const mapStateToProps = (state: IStore) => ({
   slideDuration: state.project.settings.slideDuration,
   globals: state.globals,
+  projectSettings: state.project.settings,
 });
 
 const mapDispatchToProps = {
   _updateSlideDuration: (newValue: string) => updateSlideDuration(newValue),
   _updateGlobalConfiguration: (globals: Partial<IAppSettings>) =>
     updateGlobalConfiguration(globals),
+  _updateProjectSettings: updateProjectSettings,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppSettingsPanel);

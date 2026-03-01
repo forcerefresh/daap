@@ -6,6 +6,33 @@ import React, {
   useRef,
   useState,
 } from "react";
+
+// ---------- module-level shift-key tracker (single listener, no per-instance overhead) ----------
+const _shiftListeners = new Set<(pressed: boolean) => void>();
+let _isShiftDown = false;
+if (typeof window !== "undefined") {
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Shift" && !_isShiftDown) {
+      _isShiftDown = true;
+      _shiftListeners.forEach((fn) => fn(true));
+    }
+  });
+  window.addEventListener("keyup", (e) => {
+    if (e.key === "Shift") {
+      _isShiftDown = false;
+      _shiftListeners.forEach((fn) => fn(false));
+    }
+  });
+}
+function useShiftKey(): boolean {
+  const [pressed, setPressed] = useState(_isShiftDown);
+  useEffect(() => {
+    _shiftListeners.add(setPressed);
+    return () => { _shiftListeners.delete(setPressed); };
+  }, []);
+  return pressed;
+}
+// ---------------------------------------------------------------------------------------------
 import cx from "classnames";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import { IObject } from "webslider-sdk/lib/objects/i-object";
@@ -55,6 +82,7 @@ import {
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import {
+  isDescendantOfGroup,
   isObjectInGroup,
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
@@ -94,14 +122,20 @@ export function StageObjectInternal(props: IStageLayer) {
     currentScope,
   } = props;
 
+  const isShiftPressed = useShiftKey();
+
   const objectMeta = getAppObjectDefinition(object.type, "latest")?.meta;
   const sizeType = objectMeta?.sizeType ?? "rect";
 
-  // A group is "focused" when it's the single selected object at layer scope — not yet entered
+  // A group is "focused" when it's the single selected object and not yet entered.
+  // Works at any depth: layer scope (root group) or group scope (nested sub-group).
   const focusedGroupId =
-    currentScope.type === "layer" &&
     selectedObjectIds.length === 1 &&
-    objectById[selectedObjectIds[0]]?.type === "group"
+    objectById[selectedObjectIds[0]]?.type === "group" &&
+    (
+      (currentScope.type === "layer" && !!layerById[objectById[selectedObjectIds[0]]?.parentId!]) ||
+      (currentScope.type === "group" && objectById[selectedObjectIds[0]]?.parentId === currentScope.groupId)
+    )
       ? selectedObjectIds[0]
       : null;
 
@@ -111,11 +145,12 @@ export function StageObjectInternal(props: IStageLayer) {
     object.id !== focusedGroupId &&
     object.parentId !== focusedGroupId;
 
-  // Entered the group: object is outside the active group scope — dim + disable pointer events
+  // Entered the group: object is outside the active group scope — dim + disable pointer events.
+  // Uses descendant check so grandchildren inside nested sub-groups are not wrongly blocked.
   const isOutsideActiveGroup =
     currentScope.type === "group" &&
     object.id !== currentScope.groupId &&
-    object.parentId !== currentScope.groupId;
+    !isDescendantOfGroup(object.id, currentScope.groupId, objectById);
 
   // ++
   const groupsPath = [...selectionPath];
@@ -392,7 +427,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   let allowObjectSelection =
     !isOutsideActiveGroup &&
-    !isOutsideFocusedGroup &&
+    !(isOutsideFocusedGroup && !isShiftPressed) &&
     (rootObjectSelection || childObjectInGroupSelection || siblingObjectSelection);
 
   const objectInGroup = isObjectInGroup(object, objectById);
@@ -413,7 +448,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   return (
     <React.Fragment key={forceRefreshRand}>
-      {(isOutsideActiveGroup || isOutsideFocusedGroup) && (
+      {(isOutsideActiveGroup || (isOutsideFocusedGroup && !isShiftPressed)) && (
         <style dangerouslySetInnerHTML={{
           __html: `.object-holder-${object.id}, .object-holder-${object.id} * { pointer-events: none !important; }`
         }} />
@@ -449,7 +484,7 @@ export function StageObjectInternal(props: IStageLayer) {
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`)}
             onMouseEnter={() => {
-              !activeTool && !isSelected && !isOutsideActiveGroup && !isOutsideFocusedGroup && setIsHover(true);
+              !activeTool && !isSelected && !isOutsideActiveGroup && !(isOutsideFocusedGroup && !isShiftPressed) && setIsHover(true);
             }}
             onMouseLeave={() => {
               if (isHover) setIsHover(false);

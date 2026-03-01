@@ -26,6 +26,8 @@ export interface IAppSettings {
     secretKey?: string;
   };
   homePage?: "search" | "editor" | string | undefined;
+  // editor behaviour
+  groupNesting?: "one" | "unlimited";
 }
 
 const appZoomFromLocalStorage = parseFloat(

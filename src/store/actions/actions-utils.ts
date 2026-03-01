@@ -165,3 +165,19 @@ export function isObjectInGroup(
 ): boolean {
   return objectById[object?.parentId!]?.type === "group";
 }
+
+/**
+ * Returns true if objectId is a direct or indirect descendant of groupId.
+ */
+export function isDescendantOfGroup(
+  objectId: string,
+  groupId: string,
+  objectById: { [key: string]: IObject },
+): boolean {
+  let current = objectById[objectId];
+  while (current?.parentId) {
+    if (current.parentId === groupId) return true;
+    current = objectById[current.parentId];
+  }
+  return false;
+}
