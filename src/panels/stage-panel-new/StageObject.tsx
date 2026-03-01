@@ -82,6 +82,7 @@ import {
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import {
+  isAncestorOfGroup,
   isDescendantOfGroup,
   isObjectInGroup,
   populateObjectThreeIds,
@@ -139,18 +140,20 @@ export function StageObjectInternal(props: IStageLayer) {
       ? selectedObjectIds[0]
       : null;
 
-  // Sibling of the focused group: disable pointer events (no opacity) so clicks reach group children
+  // When a group is focused (selected but not yet entered), suppress only that group's own
+  // transparent overlay so clicks pass through to its children directly.
+  // Siblings must remain clickable — we do NOT block them here.
   const isOutsideFocusedGroup =
     focusedGroupId !== null &&
-    object.id !== focusedGroupId &&
-    object.parentId !== focusedGroupId;
+    object.id === focusedGroupId;
 
   // Entered the group: object is outside the active group scope — dim + disable pointer events.
-  // Uses descendant check so grandchildren inside nested sub-groups are not wrongly blocked.
+  // Ancestors of the active group are excluded so their opacity does not stack with descendants.
   const isOutsideActiveGroup =
     currentScope.type === "group" &&
     object.id !== currentScope.groupId &&
-    !isDescendantOfGroup(object.id, currentScope.groupId, objectById);
+    !isDescendantOfGroup(object.id, currentScope.groupId, objectById) &&
+    !isAncestorOfGroup(object.id, currentScope.groupId, objectById);
 
   // ++
   const groupsPath = [...selectionPath];
@@ -425,9 +428,14 @@ export function StageObjectInternal(props: IStageLayer) {
     }
   }
 
+  // The group you are currently "inside" should never be selectable via a click from within.
+  const isCurrentScopeGroup =
+    currentScope.type === "group" && object.id === currentScope.groupId;
+
   let allowObjectSelection =
     !isOutsideActiveGroup &&
     !(isOutsideFocusedGroup && !isShiftPressed) &&
+    !isCurrentScopeGroup &&
     (rootObjectSelection || childObjectInGroupSelection || siblingObjectSelection);
 
   const objectInGroup = isObjectInGroup(object, objectById);
@@ -448,7 +456,7 @@ export function StageObjectInternal(props: IStageLayer) {
 
   return (
     <React.Fragment key={forceRefreshRand}>
-      {(isOutsideActiveGroup || (isOutsideFocusedGroup && !isShiftPressed)) && (
+      {isOutsideActiveGroup && (
         <style dangerouslySetInnerHTML={{
           __html: `.object-holder-${object.id}, .object-holder-${object.id} * { pointer-events: none !important; }`
         }} />
@@ -573,7 +581,7 @@ export function StageObjectInternal(props: IStageLayer) {
               style={{
                 ...objectStyle,
                 position: "relative",
-                pointerEvents: "all",
+                pointerEvents: isOutsideFocusedGroup && !isShiftPressed ? "none" : "all",
                 opacity: 0,
               }}
             />

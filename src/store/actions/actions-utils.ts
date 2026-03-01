@@ -181,3 +181,19 @@ export function isDescendantOfGroup(
   }
   return false;
 }
+
+/**
+ * Returns true if objectId is a direct or indirect ancestor of groupId.
+ */
+export function isAncestorOfGroup(
+  objectId: string,
+  groupId: string,
+  objectById: { [key: string]: IObject },
+): boolean {
+  let current = objectById[groupId];
+  while (current?.parentId) {
+    if (current.parentId === objectId) return true;
+    current = objectById[current.parentId];
+  }
+  return false;
+}

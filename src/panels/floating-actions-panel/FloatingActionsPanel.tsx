@@ -58,6 +58,7 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
   const {
     selectedObjectIds,
     objectById,
+    groupNesting,
     _groupObjects,
     _ungroupObject,
     _duplicateObjects,
@@ -101,9 +102,11 @@ const FloatingActionPanel: React.FC<IFloatingActionPanel> = (
 
   const parentId = objectById[selectedObjectIds?.[0]]?.parentId;
   const groupingDisabled =
-    (selectedObjectIds.length === 1 &&
-      isObjectGroup(objectById[selectedObjectIds[0]])) ||
-    isObjectGroup(objectById[parentId!]);
+    groupNesting === "unlimited"
+      ? false
+      : (selectedObjectIds.length === 1 &&
+          isObjectGroup(objectById[selectedObjectIds[0]])) ||
+        isObjectGroup(objectById[parentId!]);
 
   // const groupingAllowed = isGroupingPossible(objectById, selectedObjectIds);
   const ungroupingAllowed = isUngroupingPossible(objectById, selectedObjectIds);
@@ -268,6 +271,7 @@ const mapStateToProps = (state: IStore) => {
 
   return {
     appZoom: state.globals.appZoom,
+    groupNesting: state.globals.groupNesting,
     objectById: objects.objectById,
     selectedObjectIds: selection.selectedObjectIds,
     zoom: state.stage.zoom,
