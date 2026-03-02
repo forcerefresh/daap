@@ -35,8 +35,15 @@ export function getContentAreaBounds(): DOMRect {
 
 function getObjectRect(objectId: string): DOMRect {
   const objectEl = document.getElementsByClassName(
-    `object-holder-${objectId}`
+    `object-holder-${objectId}`,
   )[0];
+
+  // The object-selection div is positioned/sized to reflect the actual visual
+  // bounds (for groups this is the recursive children union, not stored bounds).
+  const selectionEl = objectEl?.querySelector(":scope > .object-selection");
+  if (selectionEl) {
+    return selectionEl.getBoundingClientRect();
+  }
 
   return objectEl?.getBoundingClientRect();
 }

@@ -6,9 +6,8 @@ import { ILayer } from "../../../store/reducers/i-layers";
 import {
   StageToolScaleEventData,
 } from "../../../utils/selection-manager/events/StageToolEvent";
-import { populateObjectThreeIds } from "../../../store/actions/actions-utils";
+import { populateObjectThreeIds, computeGroupChildrenBounds } from "../../../store/actions/actions-utils";
 import {
-  decomposeMatrix2DW3,
   getElementBySelector,
   getGroupMatrixFromSelectionPath,
   getObjectTransform,
@@ -16,6 +15,62 @@ import {
 } from "../stage-panel-utils";
 import { getObjectRotation, getObjectScale } from "../../../objects/object-utils";
 import { getAppObjectDefinition } from "webslider-sdk/lib/objects/objects-register";
+
+/**
+ * For corner scale handles, returns the fixed corner (in object LOCAL coords)
+ * and the reference width/height to use in the scale formula.
+ * For groups, uses children bounds so the visual opposite corner stays fixed.
+ * For non-groups, falls back to stored bounds (identical to previous behaviour).
+ */
+function getCornerScaleParams(
+  handle: string,
+  object: IObject,
+  objectById: { [key: string]: IObject },
+): { px: number; py: number; refW: number } {
+  let bx = 0;
+  let by = 0;
+  let bw = object.width ?? 0;
+  let bh = object.height ?? 0;
+
+  if (object.type === "group") {
+    const bounds = computeGroupChildrenBounds(object.id, objectById);
+    if (bounds) {
+      bx = bounds.x;
+      by = bounds.y;
+      bw = bounds.w;
+      bh = bounds.h;
+    }
+  }
+
+  switch (handle) {
+    case "br": return { px: bx,      py: by,      refW: bw };
+    case "tr": return { px: bx,      py: by + bh, refW: bw };
+    case "bl": return { px: bx + bw, py: by,      refW: bw };
+    case "tl": return { px: bx + bw, py: by + bh, refW: bw };
+    default:   return { px: 0,       py: 0,        refW: object.width ?? 0 };
+  }
+}
+
+/**
+ * Given the old scale, new scale, rotation, and the fixed-corner local coords,
+ * returns the Δleft / Δtop required to keep that corner stationary in parent space.
+ */
+function fixedCornerDelta(
+  oldScale: number,
+  newScale: number,
+  rotationDeg: number,
+  px: number,
+  py: number,
+): { dLeft: number; dTop: number } {
+  const r = (rotationDeg * Math.PI) / 180;
+  const cos = Math.cos(r);
+  const sin = Math.sin(r);
+  const ds = oldScale - newScale;
+  return {
+    dLeft: ds * (px * cos - py * sin),
+    dTop:  ds * (px * sin + py * cos),
+  };
+}
 
 export function processScaleStartEvent(
   eData: StageToolScaleEventData,
@@ -95,90 +150,25 @@ export function processScaleChangeEvent(
 
       let left = objectSize.x;
       let top = objectSize.y;
-      let scale = getObjectScale(object) ?? 1;
 
+      const oldScale = getObjectScale(object) ?? 1;
+      const { px, py, refW } = getCornerScaleParams(eData.handle, object, objectById);
       const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
-      scale =
-        ((getObjectScale(object) ?? 1) * objectSize.width - dir * realMoveXY) /
-        objectSize.width;
-
-      let m = new DOMMatrix();
+      const scale = (oldScale * refW - dir * realMoveXY) / refW;
 
       let transform = "";
 
-      if (eData.handle === "tr") {
-        m.rotateSelf(getObjectRotation(object));
-        m.translateSelf(
-          0,
-          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+      if (["tr", "bl", "tl", "br"].includes(eData.handle)) {
+        const { dLeft, dTop } = fixedCornerDelta(
+          oldScale,
+          scale,
+          getObjectRotation(object),
+          px,
+          py,
         );
-
-        m.scaleSelf(scale);
-        m.translateSelf(
-          0,
-          -(objectSize.height * scale - objectSize.height) / scale,
-        );
-
-        const d = decomposeMatrix2DW3(m);
-
-        left = left + d.translateX;
-        top = top + d.translateY;
-        transform =
-          "rotate(" +
-          getObjectRotation(object) +
-          "deg) scale(" +
-          d.scaleX +
-          ")";
-      }
-      if (eData.handle === "bl") {
-        m.rotateSelf(getObjectRotation(object));
-        m.translateSelf(
-          objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-          0,
-        );
-
-        m.scaleSelf(scale);
-        m.translateSelf(
-          -(objectSize.width * scale - objectSize.width) / scale,
-          0,
-        );
-
-        const d = decomposeMatrix2DW3(m);
-
-        left = left + d.translateX;
-        top = top + d.translateY;
-        transform =
-          "rotate(" +
-          getObjectRotation(object) +
-          "deg) scale(" +
-          d.scaleX +
-          ")";
-      }
-      if (eData.handle === "tl") {
-        m.rotateSelf(getObjectRotation(object));
-        m.translateSelf(
-          objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-          objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
-        );
-
-        m.scaleSelf(scale);
-        m.translateSelf(
-          -(objectSize.width * scale - objectSize.width) / scale,
-          -(objectSize.height * scale - objectSize.height) / scale,
-        );
-
-        const d = decomposeMatrix2DW3(m);
-
-        left = left + d.translateX;
-        top = top + d.translateY;
-        transform =
-          "rotate(" +
-          getObjectRotation(object) +
-          "deg) scale(" +
-          d.scaleX +
-          ")";
-      } else if (eData.handle === "br") {
+        left += dLeft;
+        top += dTop;
         transform =
           "rotate(" + getObjectRotation(object) + "deg) scale(" + scale + ")";
       }
@@ -341,77 +331,26 @@ export function processScaleStopEvent(
       height: object.height!,
     };
 
+    const oldScale = getObjectScale(object) ?? 1;
+    const { px, py, refW } = getCornerScaleParams(eData.handle, object, objectById);
     const dir = eData.handle === "br" || eData.handle === "tr" ? -1 : 1;
 
-    let scale =
-      ((getObjectScale(object) ?? 1) * objectSize.width - dir * realMoveX) /
-      objectSize.width;
+    const scale = (oldScale * refW - dir * realMoveX) / refW;
 
     let left = objectSize.x;
     let top = objectSize.y;
-
     let transform = "";
-    const m = new DOMMatrix();
-    if (eData.handle === "tr") {
-      m.rotateSelf(getObjectRotation(object));
-      m.translateSelf(
-        0,
-        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
+
+    if (["tr", "bl", "tl", "br"].includes(eData.handle)) {
+      const { dLeft, dTop } = fixedCornerDelta(
+        oldScale,
+        scale,
+        getObjectRotation(object),
+        px,
+        py,
       );
-
-      m.scaleSelf(scale);
-      m.translateSelf(
-        0,
-        -(objectSize.height * scale - objectSize.height) / scale,
-      );
-
-      const d = decomposeMatrix2DW3(m);
-
-      left = left + d.translateX;
-      top = top + d.translateY;
-      transform =
-        "rotate(" + getObjectRotation(object) + "deg) scale(" + d.scaleX + ")";
-    }
-    if (eData.handle === "bl") {
-      m.rotateSelf(getObjectRotation(object));
-      m.translateSelf(
-        objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-        0,
-      );
-
-      m.scaleSelf(scale);
-      m.translateSelf(
-        -(objectSize.width * scale - objectSize.width) / scale,
-        0,
-      );
-
-      const d = decomposeMatrix2DW3(m);
-
-      left = left + d.translateX;
-      top = top + d.translateY;
-      transform =
-        "rotate(" + getObjectRotation(object) + "deg) scale(" + d.scaleX + ")";
-    }
-    if (eData.handle === "tl") {
-      m.rotateSelf(getObjectRotation(object));
-      m.translateSelf(
-        objectSize.width * (getObjectScale(object) ?? 1) - objectSize.width,
-        objectSize.height * (getObjectScale(object) ?? 1) - objectSize.height,
-      );
-
-      m.scaleSelf(scale);
-      m.translateSelf(
-        -(objectSize.width * scale - objectSize.width) / scale,
-        -(objectSize.height * scale - objectSize.height) / scale,
-      );
-
-      const d = decomposeMatrix2DW3(m);
-
-      left = left + d.translateX;
-      top = top + d.translateY;
-      transform =
-        "rotate(" + getObjectRotation(object) + "deg) scale(" + d.scaleX + ")";
-    } else if (eData.handle === "br") {
+      left += dLeft;
+      top += dTop;
       transform =
         "rotate(" + getObjectRotation(object) + "deg) scale(" + scale + ")";
     }

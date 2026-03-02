@@ -85,6 +85,7 @@ import {
   isAncestorOfGroup,
   isDescendantOfGroup,
   isObjectInGroup,
+  computeGroupChildrenBounds,
   populateObjectThreeIds,
 } from "../../store/actions/actions-utils";
 import { WithResizeHandle } from "./WithResizeHandle";
@@ -358,13 +359,21 @@ export function StageObjectInternal(props: IStageLayer) {
     height: calculatedObjectSize.height ?? "0px",
   };
 
+  // For groups, compute the actual union bounding box recursively from all leaf
+  // descendants so the outline covers children at any depth that overflow the
+  // group's stored left/top/width/height.
+  const groupChildrenBounds =
+    object.type === "group" ? computeGroupChildrenBounds(object.id, objectById) : null;
+
   // Selection outline for group-parent (in-path) and hover cases only.
   // The selected-object outline is rendered by StageToolsCanvas.
   const selectionStyle: CSSProperties = {
     ...commonObjectRect,
     zIndex: 200,
-    left: "0px",
-    top: "0px",
+    left: groupChildrenBounds ? `${groupChildrenBounds.x}px` : "0px",
+    top: groupChildrenBounds ? `${groupChildrenBounds.y}px` : "0px",
+    width: groupChildrenBounds ? `${groupChildrenBounds.w}px` : commonObjectRect.width,
+    height: groupChildrenBounds ? `${groupChildrenBounds.h}px` : commonObjectRect.height,
     position: "absolute",
     pointerEvents: "none",
     transformOrigin: "top left",

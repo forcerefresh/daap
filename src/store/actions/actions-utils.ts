@@ -183,6 +183,70 @@ export function isDescendantOfGroup(
 }
 
 /**
+ * Recursively computes the union bounding box of all leaf descendants of a group,
+ * returned in the group's LOCAL coordinate system.
+ * Handles arbitrarily deep nesting — child groups are recursed into rather than
+ * using their stored (possibly stale) left/top/width/height.
+ */
+export function computeGroupChildrenBounds(
+  groupId: string,
+  objectById: { [key: string]: IObject },
+): { x: number; y: number; w: number; h: number } | null {
+  const group = objectById[groupId];
+  if (!group?.objectIds?.length) return null;
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+  for (const childId of group.objectIds) {
+    const child = objectById[childId];
+    if (!child) continue;
+
+    let corners: { x: number; y: number }[];
+
+    if (child.type === "group" && child.objectIds?.length) {
+      // Recurse: get content bounds in child's local coords, then transform to parent.
+      const childBounds = computeGroupChildrenBounds(childId, objectById);
+      if (!childBounds) continue;
+      const { x: bx, y: by, w: bw, h: bh } = childBounds;
+      const r = ((child.rotation ?? 0) * Math.PI) / 180;
+      const cos = Math.cos(r);
+      const sin = Math.sin(r);
+      const scale = child.scale ?? 1;
+      corners = [
+        [bx, by], [bx + bw, by], [bx, by + bh], [bx + bw, by + bh],
+      ].map(([px, py]) => ({
+        x: (child.left ?? 0) + (px * cos - py * sin) * scale,
+        y: (child.top ?? 0) + (px * sin + py * cos) * scale,
+      }));
+    } else {
+      const r = ((child.rotation ?? 0) * Math.PI) / 180;
+      const cos = Math.cos(r);
+      const sin = Math.sin(r);
+      const scale = child.scale ?? 1;
+      const lft = child.left ?? 0;
+      const top = child.top ?? 0;
+      const w = child.width ?? 0;
+      const h = child.height ?? 0;
+      corners = (
+        [[0, 0], [w, 0], [0, h], [w, h]] as [number, number][]
+      ).map(([lx, ly]) => ({
+        x: lft + (lx * cos - ly * sin) * scale,
+        y: top + (lx * sin + ly * cos) * scale,
+      }));
+    }
+
+    for (const { x, y } of corners) {
+      minX = Math.min(minX, x);
+      minY = Math.min(minY, y);
+      maxX = Math.max(maxX, x);
+      maxY = Math.max(maxY, y);
+    }
+  }
+
+  return isFinite(minX) ? { x: minX, y: minY, w: maxX - minX, h: maxY - minY } : null;
+}
+
+/**
  * Returns true if objectId is a direct or indirect ancestor of groupId.
  */
 export function isAncestorOfGroup(

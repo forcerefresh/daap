@@ -6,6 +6,44 @@ import { Rect } from "../../../webslider-sdk/object/i-tool-class";
 import { StageToolRotateEventData } from "../../../utils/selection-manager/events/StageToolEvent";
 import { decomposeMatrix2DW3 } from "../stage-panel-utils";
 import { getObjectRotation, getObjectScale } from "../../../objects/object-utils";
+import { computeGroupChildrenBounds } from "../../../store/actions/actions-utils";
+
+/**
+ * Returns the rotation pivot in the object's LOCAL coordinate space.
+ * For groups, uses the visual children bounds center so the rotation
+ * matches the overlay handle position. For other objects, uses the
+ * stored bounds center.
+ */
+function getRotationPivot(
+  object: IObject,
+  objectById: { [key: string]: IObject },
+): { pivotX: number; pivotY: number } {
+  if (object.type === "group") {
+    const bounds = computeGroupChildrenBounds(object.id, objectById);
+    if (bounds) {
+      return { pivotX: bounds.x + bounds.w / 2, pivotY: bounds.y + bounds.h / 2 };
+    }
+  }
+  return { pivotX: (object.width ?? 0) / 2, pivotY: (object.height ?? 0) / 2 };
+}
+
+function buildRotationMatrix(
+  objectSize: Rect,
+  currentRotation: number,
+  scale: number,
+  pivotX: number,
+  pivotY: number,
+  angle: number,
+): DOMMatrix {
+  const m = new DOMMatrix();
+  m.translateSelf(objectSize.x, objectSize.y);
+  m.rotateSelf(currentRotation);
+  m.translateSelf(pivotX * scale, pivotY * scale);
+  m.rotateSelf(angle);
+  m.scaleSelf(scale);
+  m.translateSelf(-pivotX, -pivotY);
+  return m;
+}
 
 export function processRotateStartEvent(
   eData: StageToolRotateEventData,
@@ -31,25 +69,17 @@ export function processRotateChangeEvent(
     height: object.height!,
   };
 
-  let left = objectSize.x;
-  let top = objectSize.y;
-
-  const m = new DOMMatrix();
-
-  m.translateSelf(objectSize.x, objectSize.y);
-  m.rotateSelf(getObjectRotation(object));
-  m.translateSelf(
-    (objectSize.width / 2) * getObjectScale(object),
-    (objectSize.height / 2) * getObjectScale(object),
+  const { pivotX, pivotY } = getRotationPivot(object, objectById);
+  const m = buildRotationMatrix(
+    objectSize,
+    getObjectRotation(object),
+    getObjectScale(object),
+    pivotX,
+    pivotY,
+    angle,
   );
-  m.rotateSelf(angle);
-  m.scaleSelf(getObjectScale(object));
-  m.translateSelf(-(objectSize.width / 2), -(objectSize.height / 2));
 
   const d = decomposeMatrix2DW3(m);
-
-  left = d.translateX;
-  top = d.translateY;
   const transform = "rotate(" + d.rotateZ + "deg) scale(" + d.scaleX + ")";
 
   const objectHolder = document.getElementsByClassName(
@@ -57,8 +87,8 @@ export function processRotateChangeEvent(
   )[0] as HTMLDivElement;
 
   if (objectHolder) {
-    objectHolder.style.left = left + "px";
-    objectHolder.style.top = top + "px";
+    objectHolder.style.left = d.translateX + "px";
+    objectHolder.style.top = d.translateY + "px";
     objectHolder.style.transform = transform;
   }
 }
@@ -66,7 +96,7 @@ export function processRotateChangeEvent(
 export function processRotateStopEvent(
   eData: StageToolRotateEventData,
   objectById: { [key: string]: IObject },
-  storeProps: {
+  _storeProps: {
     selectedObjectIdsRef: React.MutableRefObject<string[]>;
     zoom: number;
     breakpointConfig?: BreakpointConfiguration;
@@ -77,7 +107,6 @@ export function processRotateStopEvent(
     _selectObjects: any;
   },
 ) {
-  const { breakpointConfig } = storeProps;
   const { _updateObject } = storeActions;
 
   const objectId = eData.objectId;
@@ -91,32 +120,22 @@ export function processRotateStopEvent(
     height: object.height!,
   };
 
-  let left = objectSize.x;
-  let top = objectSize.y;
-
-  const m = new DOMMatrix();
-
-  m.translateSelf(objectSize.x, objectSize.y);
-  m.rotateSelf(getObjectRotation(object));
-  m.translateSelf(
-    (objectSize.width / 2) * (getObjectScale(object) ?? 1),
-    (objectSize.height / 2) * (getObjectScale(object) ?? 1),
+  const { pivotX, pivotY } = getRotationPivot(object, objectById);
+  const m = buildRotationMatrix(
+    objectSize,
+    getObjectRotation(object),
+    getObjectScale(object) ?? 1,
+    pivotX,
+    pivotY,
+    angle,
   );
-  m.rotateSelf(angle);
-  m.scaleSelf(getObjectScale(object));
-  m.translateSelf(-(objectSize.width / 2), -(objectSize.height / 2));
 
   const d = decomposeMatrix2DW3(m);
 
-  left = d.translateX;
-  top = d.translateY;
-  const transform = "rotate(" + d.rotateZ + "deg) scale(" + d.scaleX + ")";
-
   const newObject = cloneDeep(object);
-
   newObject.rotation = d.rotateZ;
-  newObject.left = left;
-  newObject.top = top;
+  newObject.left = d.translateX;
+  newObject.top = d.translateY;
 
   _updateObject(newObject);
 }

@@ -47,7 +47,10 @@ import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-c
 
 import { getZoom } from "../../store/helpers/calculateZoom";
 
-import { populateObjectThreeIds } from "../../store/actions/actions-utils";
+import {
+  populateObjectThreeIds,
+  computeGroupChildrenBounds,
+} from "../../store/actions/actions-utils";
 import { StageManagerContext } from "./StageManagerProvider";
 import { StageToolEnum } from "../../utils/selection-manager/types";
 import { Point } from "../../webslider-sdk/object/i-tool-class";
@@ -185,8 +188,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
     const stageToolsCanvasBbox = stageToolsCanvas.getBoundingClientRect();
     const computedStyle = getComputedStyle(objectHolder);
-    const h = parseFloat(computedStyle.height);
-    const w = parseFloat(computedStyle.width);
+    const storedW = parseFloat(computedStyle.width);
+    const storedH = parseFloat(computedStyle.height);
 
     const domTransformStr = computedStyle.transform;
     const objectDomMatrix =
@@ -197,11 +200,41 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
 
     const combinedMatrix = parentGroupsMatrix.multiply(objectDomMatrix);
 
+    // For groups, recursively compute the actual children union bounds so the
+    // selection handles cover children at any depth that overflow stored bounds.
+    let w = storedW;
+    let h = storedH;
+    let localOffsetX = 0;
+    let localOffsetY = 0;
+    const object = objectById[objectId];
+    if (object?.type === "group") {
+      const bounds = computeGroupChildrenBounds(objectId, objectById);
+      if (bounds) {
+        localOffsetX = bounds.x;
+        localOffsetY = bounds.y;
+        w = bounds.w;
+        h = bounds.h;
+      }
+    }
+
     const bbox = objectHolder.getBoundingClientRect();
     const cy = bbox.top + bbox.height / 2;
     const cx = bbox.left + bbox.width / 2;
-    const y = (cy - stageToolsCanvasBbox.top) / stageZoom / appZoom - h / 2;
-    const x = (cx - stageToolsCanvasBbox.left) / stageZoom / appZoom - w / 2;
+
+    // Base center in stage-canvas coords (center of the stored group div).
+    let centerX = (cx - stageToolsCanvasBbox.left) / stageZoom / appZoom;
+    let centerY = (cy - stageToolsCanvasBbox.top) / stageZoom / appZoom;
+
+    // If children bounds differ from stored bounds, shift center accordingly.
+    // The delta is in group-local coords; transform it through combinedMatrix
+    // (rotation+scale only, translation zeroed) to get the delta in stage coords.
+    const dX = (localOffsetX + w / 2) - storedW / 2;
+    const dY = (localOffsetY + h / 2) - storedH / 2;
+    if (dX !== 0 || dY !== 0) {
+      const delta = combinedMatrix.transformPoint({ x: dX, y: dY });
+      centerX += delta.x;
+      centerY += delta.y;
+    }
 
     const combinedScale =
       Math.sqrt(
@@ -209,8 +242,8 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
           combinedMatrix.b * combinedMatrix.b,
       ) || 1;
 
-    overlayEl.style.left = `${x}px`;
-    overlayEl.style.top = `${y}px`;
+    overlayEl.style.left = `${centerX - w / 2}px`;
+    overlayEl.style.top = `${centerY - h / 2}px`;
     overlayEl.style.width = `${w}px`;
     overlayEl.style.height = `${h}px`;
     overlayEl.style.transform = combinedMatrix.toString();
@@ -270,9 +303,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       );
 
       const object = objectById[selectedObjectIds[0]];
-      const objectHolder = document.getElementsByClassName(
-        `object-holder-${selectedObjectIds[0]}`,
-      )[0] as HTMLDivElement;
 
       stageManager.start(StageToolEnum.SCALE, {
         mousePosition: getMousePosition(e.nativeEvent),
@@ -283,7 +313,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         originalMouseEvent: e.nativeEvent,
         handle,
         boundingClientRects: [
-          objectHolder?.getBoundingClientRect() ?? new DOMRect(),
+          holderRef.current?.getBoundingClientRect() ?? new DOMRect(),
         ],
       });
     },
@@ -300,9 +330,6 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
       );
 
       const object = objectById[selectedObjectIds[0]];
-      const objectHolder = document.getElementsByClassName(
-        `object-holder-${selectedObjectIds[0]}`,
-      )[0] as HTMLDivElement;
 
       stageManager.start(StageToolEnum.ROTATE, {
         mousePosition: getMousePosition(e.nativeEvent),
@@ -313,7 +340,7 @@ const StageToolsCanvas: React.FC<IStagePanel> = (props) => {
         originalMouseEvent: e.nativeEvent,
         handle: "",
         boundingClientRects: [
-          objectHolder?.getBoundingClientRect() ?? new DOMRect(),
+          holderRef.current?.getBoundingClientRect() ?? new DOMRect(),
         ],
       });
     },
