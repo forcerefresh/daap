@@ -76,7 +76,9 @@ import {
   boundsUnion,
   getObjectBoundingBox,
 } from "../helpers/objectBoundingBox";
-import { getUngroupObjectsCalculation } from "../../panels/stage-panel-new/stage-panel-utils";
+import {
+  getUngroupObjectsCalculation,
+} from "../../panels/stage-panel-new/stage-panel-utils";
 import {
   getAncestorLayer,
   getTransformedObjectBounds,
@@ -1283,7 +1285,8 @@ export function addNewObject(
   afterObjectId?: string,
 ): any {
   return function (dispatch: Dispatch, getState: () => IStore) {
-    const scope = getState().project.selection.currentScope;
+    const state = getState();
+    const scope = state.project.selection.currentScope;
     const parentId = scope.type === "group" ? scope.groupId : layerId;
 
     let object: IObject = {

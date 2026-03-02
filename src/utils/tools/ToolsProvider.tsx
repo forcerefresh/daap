@@ -89,7 +89,8 @@ export const ToolsProvider = (
 ) => {
   const { children } = props;
 
-  const { dispatch } = useStore<IStore>();
+  const store = useStore<IStore>();
+  const { dispatch } = store;
 
   const {
     stageZoom,
@@ -280,15 +281,88 @@ export const ToolsProvider = (
         return;
       }
 
+      // When inside a group scope, all coordinates from getMousePoint are in
+      // stage-space. Convert bounds and bezier paths to group-local space so
+      // the new object lands at the correct position with the correct shape.
+      let effectiveBounds = params.bounds;
+      let effectiveObjectValues = params.objectValues;
+      const scope = store.getState().project.selection.currentScope;
+      if (scope.type === "group" && params.bounds) {
+        const groupId = scope.groupId;
+
+        // Transform bounding-box origin to group-local absolute coords.
+        const localOrigin = stagePointToObjectSpace(groupId, {
+          x: params.bounds.x,
+          y: params.bounds.y,
+        });
+
+        // Transform bezier control points (free-draw uses them; other objects
+        // may not have them, in which case we fall through to the else branch).
+        const rawBeziers = (params.objectValues as any)?.beziers as
+          | ([number, number][])[]
+          | undefined;
+
+        if (rawBeziers && rawBeziers.length > 0) {
+          let minBx = Infinity,
+            maxBx = -Infinity;
+          let minBy = Infinity,
+            maxBy = -Infinity;
+
+          // Each bezier point (bx, by) is relative to params.bounds origin.
+          // Convert: absolute stage pt → absolute group-local pt → relative.
+          const transformed = rawBeziers.map((curve) =>
+            curve.map(([bx, by]) => {
+              const absLocal = stagePointToObjectSpace(groupId, {
+                x: params.bounds!.x + bx,
+                y: params.bounds!.y + by,
+              });
+              const relX = absLocal.x - localOrigin.x;
+              const relY = absLocal.y - localOrigin.y;
+              minBx = Math.min(minBx, relX);
+              maxBx = Math.max(maxBx, relX);
+              minBy = Math.min(minBy, relY);
+              maxBy = Math.max(maxBy, relY);
+              return [relX, relY];
+            }),
+          );
+
+          // If rotation causes some relative coords to go negative, shift them
+          // all so the bounding box starts at (0, 0) and adjust the origin.
+          const adjustX = minBx < 0 ? -minBx : 0;
+          const adjustY = minBy < 0 ? -minBy : 0;
+
+          effectiveBounds = {
+            x: localOrigin.x - adjustX,
+            y: localOrigin.y - adjustY,
+            width: maxBx + adjustX,
+            height: maxBy + adjustY,
+          };
+          effectiveObjectValues = {
+            ...(params.objectValues as any),
+            beziers: transformed.map((curve) =>
+              curve.map(([bx, by]) => [bx + adjustX, by + adjustY]),
+            ),
+          };
+        } else {
+          // No beziers — just reposition; keep width/height as-is.
+          effectiveBounds = {
+            x: localOrigin.x,
+            y: localOrigin.y,
+            width: params.bounds.width,
+            height: params.bounds.height,
+          };
+        }
+      }
+
       dispatch(
         addNewObject(
           storeRef.current.activeLayerId!,
           activeToolRef.current!.tool, // TODO VERSION
           {
-            left: params.bounds?.x ?? 100,
-            top: params.bounds?.y ?? 100,
-            width: params.bounds?.width ?? 100,
-            height: params.bounds?.height ?? 100,
+            left: effectiveBounds?.x ?? 100,
+            top: effectiveBounds?.y ?? 100,
+            width: effectiveBounds?.width ?? 100,
+            height: effectiveBounds?.height ?? 100,
             // layout: "absolute" as "absolute",
             // absoluteLayout: {
             //   type: "common" as "common",
@@ -304,7 +378,7 @@ export const ToolsProvider = (
             // },
           },
           {
-            ...(params.objectValues as any),
+            ...(effectiveObjectValues as any),
           },
         ),
       );
