@@ -445,6 +445,7 @@ export function StageObjectInternal(props: IStageLayer) {
     !isOutsideActiveGroup &&
     !(isOutsideFocusedGroup && !isShiftPressed) &&
     !isCurrentScopeGroup &&
+    !object.isLocked &&
     (rootObjectSelection || childObjectInGroupSelection || siblingObjectSelection);
 
   const objectInGroup = isObjectInGroup(object, objectById);
@@ -501,7 +502,7 @@ export function StageObjectInternal(props: IStageLayer) {
             style={objectHolderStyle}
             className={cx(`object-holder-${object.id}`)}
             onMouseEnter={() => {
-              !activeTool && !isSelected && !isOutsideActiveGroup && !(isOutsideFocusedGroup && !isShiftPressed) && setIsHover(true);
+              !activeTool && !isSelected && !isOutsideActiveGroup && !(isOutsideFocusedGroup && !isShiftPressed) && !object.isLocked && setIsHover(true);
             }}
             onMouseLeave={() => {
               if (isHover) setIsHover(false);
@@ -590,7 +591,7 @@ export function StageObjectInternal(props: IStageLayer) {
               style={{
                 ...objectStyle,
                 position: "relative",
-                pointerEvents: isOutsideFocusedGroup && !isShiftPressed ? "none" : "all",
+                pointerEvents: (isOutsideFocusedGroup && !isShiftPressed) || object.isLocked ? "none" : "all",
                 opacity: 0,
               }}
             />

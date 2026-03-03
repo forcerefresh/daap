@@ -72,7 +72,7 @@ const LayersSimplified_AllLayers = (props: ISlidesPanel) => {
   };
 
   const onObjectDblClick = (
-    event: React.MouseEvent<HTMLDivElement>,
+    _event: React.MouseEvent<HTMLDivElement>,
     isGroup: boolean,
     objectId: string,
   ) => {
@@ -148,37 +148,34 @@ const LayersSimplified_AllLayers = (props: ISlidesPanel) => {
                         moveObject={moveObject}
                         dropCancel={reset}
                         dropDone={() => {
-                          const toLayer = cloneDeep(layerById[toLayerId!]);
-                          toLayer.objectIds = toStoreOrder(
-                            sortedItems!
-                              .filter((i) => i.layerId === toLayerId)
-                              .map((i) => i.objectId),
-                          );
-                          _updateLayer(toLayer);
-                          toLayer.objectIds.forEach((objectId) => {
-                            if (objectById[objectId].layerId !== toLayer.id) {
-                              const clone = cloneDeep(objectById[objectId]);
-                              clone.layerId = toLayer.id;
-                              _updateObject(clone);
-                            }
+                          if (!sortedItems) { reset(); return; }
+
+                          // Collect all layer IDs that need updating: target layers
+                          // (from sortedItems) plus original layers of any item that
+                          // changed layer (so the source layer loses those object IDs).
+                          const affectedLayerIds = new Set<string>();
+                          sortedItems.forEach((item) => {
+                            affectedLayerIds.add(item.layerId);
+                            const originalLayerId = objectById[item.objectId]?.layerId;
+                            if (originalLayerId) affectedLayerIds.add(originalLayerId);
                           });
 
-                          if (fromLayerId && fromLayerId !== toLayerId) {
-                            const fromLayer = cloneDeep(layerById[fromLayerId]);
-                            fromLayer.objectIds = toStoreOrder(
-                              sortedItems!
-                                .filter((i) => i.layerId === fromLayerId)
+                          affectedLayerIds.forEach((layerId) => {
+                            const layer = cloneDeep(layerById[layerId]);
+                            layer.objectIds = toStoreOrder(
+                              sortedItems
+                                .filter((i) => i.layerId === layerId)
                                 .map((i) => i.objectId),
                             );
-                            _updateLayer(fromLayer);
-                            fromLayer.objectIds.forEach((objectId) => {
-                              if (objectById[objectId].layerId !== fromLayer.id) {
+                            _updateLayer(layer);
+                            layer.objectIds.forEach((objectId) => {
+                              if (objectById[objectId].layerId !== layerId) {
                                 const clone = cloneDeep(objectById[objectId]);
-                                clone.layerId = fromLayer.id;
+                                clone.layerId = layerId;
                                 _updateObject(clone);
                               }
                             });
-                          }
+                          });
 
                           reset();
                         }}

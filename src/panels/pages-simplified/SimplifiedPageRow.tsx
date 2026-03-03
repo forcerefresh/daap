@@ -1,9 +1,8 @@
 import cx from "classnames";
 import css from "./SimplifiedPageRow.module.scss";
-import React from "react";
+import React, { useRef } from "react";
 import { BreakpointConfiguration } from "webslider-sdk/lib/common/i-breakpoint-configuration";
 import type { Identifier, XYCoord } from "dnd-core";
-import { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { IPage } from "../../store/reducers/i-pages";
 import PagePreview from "./PagePreview";
@@ -44,6 +43,8 @@ export function SimplifiedPageRow(props: ISimplifiedPageRowProps) {
   } = props;
 
   const ref = useRef<HTMLDivElement>(null);
+  // Tracks whether onMouseDown already fired the selection handler so onClick skips it.
+  const mouseDownFiredClick = useRef(false);
   const [{ handlerId, isOver }, drop] = useDrop<
     DragItem,
     void,
@@ -101,7 +102,16 @@ export function SimplifiedPageRow(props: ISimplifiedPageRowProps) {
       className={cx(css.objectItem, {
         [css.selected]: selectedPageIds.length > 0 && selectedPageIds.indexOf(page.id) !== -1,
       })}
-      onClick={(event) => onPageClick(event, page.id)}
+      onMouseDown={(event) => {
+        mouseDownFiredClick.current = true;
+        onPageClick(event, page.id);
+      }}
+      onClick={(event) => {
+        if (!mouseDownFiredClick.current) {
+          onPageClick(event, page.id);
+        }
+        mouseDownFiredClick.current = false;
+      }}
       style={isOver ? { border: "1px dashed green" } : { opacity: isDragging ? 0 : 1 }}
       data-handler-id={handlerId}
     >

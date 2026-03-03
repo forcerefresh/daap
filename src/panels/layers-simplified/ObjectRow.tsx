@@ -37,19 +37,11 @@ export interface IObjectRowProps {
     isGroup: boolean,
     objectId: string
   ) => void;
-  //   activeObjectId: string | null;
   selectedObjectIds: string[];
-  //   selectionForProperties: selectForPropertiesProps | null;
-  //   slideDuration: number;
-  //   slideExitDuration: number;
-  //   disableVisibility: boolean;
-  //   updateObject: (object: IObject) => void;
-  //   deleteObjects: (objectIds: string[]) => void;
-  //   onDragingChange: (isDragging: boolean) => void;
   breakpointConfig?: BreakpointConfiguration;
   objectById: any;
   rowIndex: number;
-  moveObject: (dragIndex: number, hoverIndex: number) => void;
+  moveObject: (dragIndex: number, hoverIndex: number, draggingIds: string[]) => number;
   dropDone: () => void;
   dropCancel: () => void;
   isHovered?: boolean;
@@ -85,6 +77,14 @@ export function ObjectRow(props: IObjectRowProps) {
 
   // DND >>>>
   const ref = useRef<HTMLDivElement>(null);
+
+  // Keep a ref so the useDrag item factory always sees the latest selectedObjectIds.
+  const selectedObjectIdsRef = useRef(selectedObjectIds);
+  selectedObjectIdsRef.current = selectedObjectIds;
+
+  // Tracks whether onMouseDown already fired the click handler so onClick skips it.
+  const mouseDownFiredClick = useRef(false);
+
   const [{ handlerId, isOver }, drop] = useDrop<
     DragItem,
     void,
@@ -99,71 +99,47 @@ export function ObjectRow(props: IObjectRowProps) {
     },
 
     hover(item: DragItem, monitor) {
-      if (!ref.current) {
-        return;
-      }
+      if (!ref.current) return;
 
       const dragIndex = item.index;
       const hoverIndex = rowIndex;
 
-      // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
+      if (dragIndex === hoverIndex) return;
 
-      // Determine rectangle on screen
-      const hoverBoundingRect = ref.current?.getBoundingClientRect();
-
-      // Get vertical middle
-      const hoverMiddleY =
-        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-
-      // Determine mouse position
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       const clientOffset = monitor.getClientOffset();
-
-      // Get pixels to the top
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
 
-      // Only perform the move when the mouse has crossed half of the items height
-      // When dragging downwards, only move when the cursor is below 50%
-      // When dragging upwards, only move when the cursor is above 50%
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
-      // Dragging downwards
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) {
-        return;
-      }
-
-      // Dragging upwards
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
-        return;
-      }
-
-      // Time to actually perform the action
-      moveObject(dragIndex, hoverIndex);
-
-      // Note: we're mutating the monitor item here!
-      // Generally it's better to avoid mutations,
-      // but it's good here for the sake of performance
-      // to avoid expensive index searches.
-      item.index = hoverIndex;
+      // Move the item (or the whole group) and track the new primary index.
+      const newIndex = moveObject(dragIndex, hoverIndex, item.draggingIds);
+      item.index = newIndex;
     },
-    drop: (item) => {
+    drop: () => {
       dropDone();
     },
   });
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     type: ItemTypes.OBJECT,
     item: () => {
-      return { id: object.id, index: rowIndex };
+      const ids = selectedObjectIdsRef.current;
+      const isSelected = ids.includes(object.id);
+      return {
+        id: object.id,
+        index: rowIndex,
+        // If dragging from a selected item, carry the entire selection.
+        draggingIds: isSelected ? [...ids] : [object.id],
+      };
     },
     collect: (monitor: any) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      const { id: droppedId, index: originalIndex } = item;
-      const didDrop = monitor.didDrop();
-      if (!didDrop) {
+    end: (_item, monitor) => {
+      if (!monitor.didDrop()) {
         dropCancel();
       }
     },
@@ -227,8 +203,22 @@ export function ObjectRow(props: IObjectRowProps) {
         },
         "layers-simplified-object-item-" + object.id
       )}
+      onMouseDown={(event) => {
+        if (!event.shiftKey && selectedObjectIds.indexOf(object.id) === -1) {
+          mouseDownFiredClick.current = true;
+          onObjectClick(event, object.id);
+        } else {
+          mouseDownFiredClick.current = false;
+        }
+      }}
       onClick={(event) => {
-        onObjectClick(event, object.id);
+        if (event.shiftKey) {
+          onObjectClick(event, object.id);
+        } else if (!mouseDownFiredClick.current) {
+          // Item was already selected on mousedown — narrow selection to just this one.
+          onObjectClick(event, object.id);
+        }
+        mouseDownFiredClick.current = false;
       }}
       onDoubleClick={(event) => {
         onObjectDblClick(event, isGroup, object.id);
@@ -276,6 +266,9 @@ export function ObjectRow(props: IObjectRowProps) {
         <Tag className={css.groupObjectsCounter}>
           {object?.objectIds?.length}
         </Tag>
+      )}
+      {object.isLocked && (
+        <Icon icon="lock" size={12} className={css.lockIcon} />
       )}
     </div>
   );

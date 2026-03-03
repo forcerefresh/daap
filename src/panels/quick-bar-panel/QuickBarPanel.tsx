@@ -35,6 +35,7 @@ import TransformIcon from "../../panels/properties-sections-panel/icons/transfor
 
 import OpacityIcon from "../../assets/icons/opacity2.svg?react";
 import ColorPaletteIcon from "./assets/color-palette.svg?react";
+import MaskIcon from "../../panels/layers-simplified/assets/mask-icon.svg?react";
 
 import MediaLibraryPanel, {
   includeMediaRequiredProps,
@@ -404,7 +405,7 @@ const QuickBarPanel: React.FC<IQuickBarPanel> = (props: IQuickBarPanel) => {
             <Button
               minimal
               className={cx(css.button, css.squareButton)}
-              icon={"clip"}
+              icon={<MaskIcon />}
               onClick={() => {
                 setIsMaskOpen(!isMaskOpen);
               }}

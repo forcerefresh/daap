@@ -40,6 +40,15 @@
   background-color: #5c5c5c;
 }
 
+.lockIcon {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  color: #fa999c;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
 .groupObjectsCounter {
   background-color: #48aff0 !important;
   position: absolute;
