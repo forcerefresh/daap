@@ -80,22 +80,16 @@ export function processPointsRepositionStopEvent(
   const newX2 = newLocalX2 - minLX;
   const newY2 = newLocalY2 - minLY;
 
-  // The holderRef transform-origin is the CSS center (obj.left + obj.width/2).
-  // When the local midpoint shifts, the CSS center shifts by:
-  //   objectOwnMatrix × (local_midpoint_delta)
-  // This correctly accounts for scale and rotation without mixing coordinate spaces.
-  const oldWidth = obj.width ?? 0;
-  const oldHeight = obj.height ?? 0;
-  const objectOwnMatrix = new DOMMatrix(
+  // The object holder uses transform-origin: top-left.
+  // The new bounding box origin (local 0,0) maps to stage coords via:
+  //   new_left = obj.left + M * (minLX, minLY)
+  // where M = rotate(R) scale(S) (the object's own transform, no parent groups).
+  const M = new DOMMatrix(
     `rotate(${obj.rotation ?? 0}deg) scale(${obj.scale ?? 1})`,
   );
-  const midDeltaX = (newLocalX1 + newLocalX2) / 2 - oldWidth / 2;
-  const midDeltaY = (newLocalY1 + newLocalY2) / 2 - oldHeight / 2;
-  const midShift = objectOwnMatrix.transformPoint(new DOMPoint(midDeltaX, midDeltaY));
-  const newCenterX = (obj.left ?? 0) + oldWidth / 2 + midShift.x;
-  const newCenterY = (obj.top ?? 0) + oldHeight / 2 + midShift.y;
-  const newLeft = newCenterX - newWidth / 2;
-  const newTop  = newCenterY - newHeight / 2;
+  const originShift = M.transformPoint(new DOMPoint(minLX, minLY));
+  const newLeft = (obj.left ?? 0) + originShift.x;
+  const newTop  = (obj.top ?? 0) + originShift.y;
 
   // Imperatively reset the dragged handle's DOM position to prevent React
   // reconciliation from skipping the update when x1/x2 stays 0.
